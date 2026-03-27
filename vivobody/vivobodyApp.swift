@@ -5,14 +5,17 @@
 //  Created by Adrian Stanciu on 11.03.2026.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
-struct vivobodyApp: App {
+struct VivobodyApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Exercise.self,
+            Workout.self,
+            WorkoutExercise.self,
+            ExerciseSet.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,7 +28,7 @@ struct vivobodyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootTabView()
         }
         .modelContainer(sharedModelContainer)
     }

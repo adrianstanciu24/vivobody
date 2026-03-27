@@ -1,0 +1,11 @@
+--exclude .git,vivobody.xcodeproj
+--indent 4
+--linebreaks lf
+--maxwidth 120
+--commas inline
+--self remove
+--header ignore
+--stripunusedargs closure-only
+--wraparguments preserve
+--wrapparameters preserve
+--wrapcollections preserve

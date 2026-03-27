@@ -7,8 +7,7 @@
 
 import XCTest
 
-final class vivobodyUITestsLaunchTests: XCTestCase {
-
+final class VivobodyUITestsLaunchTests: XCTestCase {
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
@@ -18,7 +17,7 @@ final class vivobodyUITestsLaunchTests: XCTestCase {
     }
 
     @MainActor
-    func testLaunch() throws {
+    func testLaunch() {
         let app = XCUIApplication()
         app.launch()
 
