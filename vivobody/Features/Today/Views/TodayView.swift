@@ -2,33 +2,30 @@ import SwiftUI
 
 struct TodayView: View {
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.vivoBackground.ignoresSafeArea()
+        ZStack {
+            Color.vivoBackground.ignoresSafeArea()
 
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        greetingHeader
-                        bigDate
-                        sessionInfo
-                        statsRow
-                        weekStrip
-                        sectionDivider
-                        sectionHeader("UP NEXT")
-                        TodayHeroCard()
-                        sectionDivider
-                        sectionHeader("WEEKLY VOLUME")
-                        weeklyVolumeChart
-                        volumeTotals
-                        sectionDivider
-                        sectionHeader("RECENT SESSIONS")
-                        recentSessionsList
-                        footerSection
-                    }
-                    .padding(.bottom, 32)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    greetingHeader
+                    bigDate
+                    sessionInfo
+                    statsRow
+                    weekStrip
+                    sectionDivider
+                    sectionHeader("UP NEXT")
+                    TodayHeroCard()
+                    sectionDivider
+                    sectionHeader("WEEKLY VOLUME")
+                    weeklyVolumeChart
+                    volumeTotals
+                    sectionDivider
+                    sectionHeader("RECENT SESSIONS")
+                    recentSessionsList
+                    footerSection
                 }
+                .padding(.bottom, 32)
             }
-            .toolbar(.hidden, for: .navigationBar)
         }
     }
 

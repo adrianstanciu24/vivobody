@@ -2,24 +2,49 @@ import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
+    @State private var session = WorkoutSession()
+    @State private var showWorkout = false
+
     var body: some View {
-        TabView {
-            Tab("Today", systemImage: "flame") {
-                TodayView()
+        ZStack(alignment: .bottom) {
+            TabView {
+                Tab("Today", systemImage: "flame") {
+                    TodayView()
+                }
+                Tab("Workouts", systemImage: "figure.strengthtraining.traditional") {
+                    WorkoutCompleteView()
+                }
+                Tab("Exercises", systemImage: "dumbbell") {
+                    ExerciseLibraryView()
+                }
+                Tab("History", systemImage: "chart.bar") {
+                    HistoryView()
+                }
+                Tab("Settings", systemImage: "gear") {
+                    SettingsView()
+                }
             }
-            Tab("Workouts", systemImage: "figure.strengthtraining.traditional") {
-                WorkoutCompleteView()
-            }
-            Tab("Exercises", systemImage: "dumbbell") {
-                ExerciseLibraryView()
-            }
-            Tab("History", systemImage: "chart.bar") {
-                HistoryView()
-            }
-            Tab("Settings", systemImage: "gear") {
-                SettingsView()
+
+            if session.isActive, !showWorkout {
+                WorkoutMiniBar {
+                    showWorkout = true
+                }
+                .padding(.bottom, 50)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: session.isActive)
+        .animation(.easeInOut(duration: 0.25), value: showWorkout)
+        .onChange(of: session.isActive) { _, isActive in
+            if isActive {
+                showWorkout = true
+            }
+        }
+        .fullScreenCover(isPresented: $showWorkout) {
+            EmptyWorkoutView()
+                .environment(session)
+        }
+        .environment(session)
         .preferredColorScheme(.dark)
         .tint(Color.vivoAccent)
     }

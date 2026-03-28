@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TodayHeroCard: View {
+    @Environment(WorkoutSession.self) private var session: WorkoutSession?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             scheduledLabel
@@ -82,8 +84,8 @@ struct TodayHeroCard: View {
     // MARK: - Start Button
 
     private var startButton: some View {
-        NavigationLink {
-            EmptyWorkoutView()
+        Button {
+            session?.start(name: "Upper Body Push A")
         } label: {
             Text("START WORKOUT \u{2192}")
                 .font(.vivoMono(14, weight: .bold))

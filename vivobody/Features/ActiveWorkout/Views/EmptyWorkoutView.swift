@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EmptyWorkoutView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(WorkoutSession.self) var session: WorkoutSession?
 
     var body: some View {
         ZStack {
@@ -30,7 +31,6 @@ struct EmptyWorkoutView: View {
                 bottomBar
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -52,6 +52,7 @@ private extension EmptyWorkoutView {
             Spacer()
 
             Button {
+                session?.finish()
                 dismiss()
             } label: {
                 Text("FINISH \u{2192}")
@@ -94,19 +95,22 @@ private extension EmptyWorkoutView {
 private extension EmptyWorkoutView {
     var statsBar: some View {
         HStack(spacing: 0) {
-            statItem(value: "00:14", label: "ELAPSED")
+            statItem(value: session?.elapsedFormatted ?? "00:00", label: "ELAPSED")
 
             Rectangle()
                 .fill(Color.vivoSurface)
                 .frame(width: 1, height: 28)
 
-            statItem(value: "0", label: "VOLUME", suffix: "LB")
+            statItem(
+                value: "\(session?.totalVolume ?? 0)",
+                label: "VOLUME", suffix: "LB"
+            )
 
             Rectangle()
                 .fill(Color.vivoSurface)
                 .frame(width: 1, height: 28)
 
-            statItem(value: "0", label: "SETS DONE")
+            statItem(value: "\(session?.setsDone ?? 0)", label: "SETS DONE")
         }
         .padding(.horizontal, 24)
         .padding(.top, 10)

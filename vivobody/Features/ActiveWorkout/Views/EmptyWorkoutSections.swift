@@ -95,6 +95,7 @@ extension EmptyWorkoutView {
     var bottomBar: some View {
         HStack(spacing: 10) {
             Button {
+                session?.discard()
                 dismiss()
             } label: {
                 Text("DISCARD")
