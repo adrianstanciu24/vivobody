@@ -200,12 +200,11 @@ private extension ExerciseLibraryView {
                 .foregroundStyle(Color.vivoPrimary)
                 .lineLimit(2)
 
-            (Text(exercise.muscleGroup)
-                .foregroundStyle(Color.vivoAccent)
-                + Text(" · \(exercise.category)")
-                .foregroundStyle(Color.vivoSecondary))
-                .font(.vivoMono(12))
-                .tracking(0.5)
+            Text(
+                "\(Text(exercise.muscleGroup).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.category)").foregroundStyle(Color.vivoSecondary))"
+            )
+            .font(.vivoMono(12))
+            .tracking(0.5)
 
             Spacer()
 

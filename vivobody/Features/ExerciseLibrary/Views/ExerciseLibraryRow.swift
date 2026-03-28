@@ -24,14 +24,13 @@ struct ExerciseLibraryRow: View {
                 Text(exercise.name)
                     .font(.vivoDisplay(16))
                     .foregroundStyle(Color.vivoPrimary)
-                (Text(exercise.primaryTag)
-                    .foregroundStyle(Color.vivoAccent)
-                    + Text(" · \(exercise.secondaryTags)")
-                    .foregroundStyle(Color.vivoMuted))
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                Text(
+                    "\(Text(exercise.primaryTag).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.secondaryTags)").foregroundStyle(Color.vivoMuted))"
+                )
+                .font(.vivoMono(12))
+                .tracking(0.5)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()

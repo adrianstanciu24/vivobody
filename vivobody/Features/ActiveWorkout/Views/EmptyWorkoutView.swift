@@ -3,11 +3,36 @@ import SwiftUI
 struct EmptyWorkoutView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(WorkoutSession.self) var session: WorkoutSession?
+    @State var showExercisePicker = false
+    @State var showComplete = false
+
+    private var hasExercises: Bool {
+        session?.exercises.isEmpty == false
+    }
 
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
 
+            if showComplete {
+                WorkoutCompleteView {
+                    showComplete = false
+                    dismiss()
+                }
+            } else {
+                workoutContent
+            }
+        }
+        .sheet(isPresented: $showExercisePicker) {
+            ExercisePickerView()
+                .environment(session)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+        }
+    }
+
+    private var workoutContent: some View {
+        ZStack {
             VStack(spacing: 0) {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
@@ -16,19 +41,26 @@ struct EmptyWorkoutView: View {
                         statsBar
                         progressSegments
                         divider
-                        emptyStateCard
-                        quickPicksSection
+
+                        if hasExercises {
+                            activeContent
+                        } else {
+                            emptyStateCard
+                            quickPicksSection
+                        }
                         footerLabel
                     }
-                    .padding(.bottom, 100)
+                    .padding(.bottom, hasExercises ? 100 : 32)
                 }
 
                 Spacer(minLength: 0)
             }
 
-            VStack {
-                Spacer()
-                bottomBar
+            if hasExercises {
+                VStack {
+                    Spacer()
+                    activeBottomBar
+                }
             }
         }
     }
@@ -52,8 +84,18 @@ private extension EmptyWorkoutView {
             Spacer()
 
             Button {
-                session?.finish()
+                session?.discard()
                 dismiss()
+            } label: {
+                Text("DISCARD")
+                    .font(.vivoMono(12, weight: .bold))
+                    .tracking(0.5)
+                    .foregroundStyle(Color.vivoMuted)
+            }
+
+            Button {
+                session?.finish()
+                showComplete = true
             } label: {
                 Text("FINISH \u{2192}")
                     .font(.vivoMono(14, weight: .bold))
@@ -204,31 +246,16 @@ private extension EmptyWorkoutView {
                            detail: "Use the same TE control panel style as the add-exercise flow.")
                 .padding(.bottom, 16)
 
-            HStack(spacing: 8) {
-                Button {} label: {
-                    Text("+ ADD FIRST")
-                        .font(.vivoMono(12, weight: .bold))
-                        .tracking(1)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 32)
-                        .background(Color.vivoAccent)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
-                }
-
-                Button {} label: {
-                    Text("USE TEMPLATE")
-                        .font(.vivoMono(12, weight: .bold))
-                        .tracking(1)
-                        .foregroundStyle(Color.vivoMuted)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 32)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.vivoSurface, lineWidth: 1.5)
-                        )
-                }
+            Button { showExercisePicker = true } label: {
+                Text("+ ADD FIRST EXERCISE")
+                    .font(.vivoMono(12, weight: .bold))
+                    .tracking(1)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 38)
+                    .background(Color.vivoAccent)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
             }
         }
         .padding(16)

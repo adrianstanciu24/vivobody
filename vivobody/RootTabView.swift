@@ -12,7 +12,13 @@ struct RootTabView: View {
                     TodayView()
                 }
                 Tab("Workouts", systemImage: "figure.strengthtraining.traditional") {
-                    WorkoutCompleteView()
+                    ZStack {
+                        Color.vivoBackground.ignoresSafeArea()
+                        Text("COMING SOON")
+                            .font(.vivoMono(14))
+                            .tracking(2)
+                            .foregroundStyle(Color.vivoMuted)
+                    }
                 }
                 Tab("Exercises", systemImage: "dumbbell") {
                     ExerciseLibraryView()
@@ -40,9 +46,13 @@ struct RootTabView: View {
                 showWorkout = true
             }
         }
-        .fullScreenCover(isPresented: $showWorkout) {
+        .sheet(isPresented: $showWorkout) {
             EmptyWorkoutView()
                 .environment(session)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+                .presentationBackgroundInteraction(.disabled)
+                .interactiveDismissDisabled(false)
         }
         .environment(session)
         .preferredColorScheme(.dark)

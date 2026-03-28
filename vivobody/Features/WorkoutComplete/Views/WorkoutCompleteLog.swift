@@ -123,7 +123,7 @@ extension WorkoutCompleteView {
 extension WorkoutCompleteView {
     var actionButtons: some View {
         VStack(spacing: 8) {
-            Button {} label: {
+            Button { onDismiss?() } label: {
                 Text("SAVE & CLOSE")
                     .font(.vivoMono(12, weight: .bold))
                     .tracking(1.5)

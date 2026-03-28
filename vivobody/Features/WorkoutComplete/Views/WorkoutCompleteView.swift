@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct WorkoutCompleteView: View {
+    var onDismiss: (() -> Void)?
+
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
