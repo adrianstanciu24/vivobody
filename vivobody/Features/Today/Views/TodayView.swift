@@ -33,16 +33,16 @@ struct TodayView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private func sectionHeader(_ title: String) -> some View {
         Text(title)
-            .font(.vivoMono(12))
-            .tracking(2)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 16)
             .padding(.bottom, 10)
     }
@@ -54,8 +54,8 @@ private extension TodayView {
     var greetingHeader: some View {
         HStack {
             Text("GOOD MORNING, ALEX")
-                .font(.vivoMono(12))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoSecondary)
 
             Spacer()
@@ -65,35 +65,35 @@ private extension TodayView {
                 .frame(width: 32, height: 32)
                 .overlay(
                     Text("AS")
-                        .font(.vivoMono(11, weight: .bold))
+                        .font(.vivoMono(VivoFont.monoCaption, weight: .bold))
                         .foregroundStyle(Color.vivoPrimary)
                 )
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
 
     var bigDate: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Wednesday")
-                .font(.vivoDisplay(34, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text("March 18")
-                .font(.vivoDisplay(34, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                 .foregroundStyle(Color.vivoSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 2)
     }
 
     var sessionInfo: some View {
         Text("SESSION #128 TODAY · WEEK 12")
-            .font(.vivoMono(12))
-            .tracking(1)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.normal)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 4)
             .padding(.bottom, 14)
     }
@@ -109,18 +109,18 @@ private extension TodayView {
             statItem(value: "86%", label: "ADHERENCE")
             statItem(value: "42", label: "TOTAL PRs")
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 14)
     }
 
     func statItem(value: String, label: String) -> some View {
         VStack(spacing: 6) {
             Text(value)
-                .font(.vivoDisplay(24, weight: .bold))
+                .font(.vivoDisplay(VivoFont.headlineLG, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(label)
-                .font(.vivoMono(10))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoXS))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(maxWidth: .infinity)
@@ -153,7 +153,7 @@ private extension TodayView {
             ForEach(Self.weekDays) { day in
                 VStack(spacing: 6) {
                     Text(day.letter)
-                        .font(.vivoMono(12))
+                        .font(.vivoMono(VivoFont.monoSM))
                         .foregroundStyle(Color.vivoMuted)
 
                     Circle()
@@ -166,13 +166,13 @@ private extension TodayView {
                         )
 
                     Text(day.date)
-                        .font(.vivoMono(10))
+                        .font(.vivoMono(VivoFont.monoXS))
                         .foregroundStyle(Color.vivoMuted)
                 }
                 .frame(maxWidth: .infinity)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 14)
     }
 

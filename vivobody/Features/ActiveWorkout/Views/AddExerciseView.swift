@@ -68,16 +68,16 @@ struct AddExerciseView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private func sectionLabel(_ title: String) -> some View {
         Text(title)
-            .font(.vivoMono(12))
-            .tracking(2)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 16)
             .padding(.bottom, 10)
     }
@@ -90,22 +90,22 @@ private extension AddExerciseView {
         HStack {
             Button { dismiss() } label: {
                 Text("\u{2190} BACK")
-                    .font(.vivoMono(14))
+                    .font(.vivoMono(VivoFont.monoMD))
                     .foregroundStyle(Color.vivoMuted)
             }
             Spacer()
             Text("ADD EXERCISE")
-                .font(.vivoMono(14))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoMD))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
             Spacer()
             Button { saveAndDismiss() } label: {
                 Text("SAVE")
-                    .font(.vivoMono(14, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                     .foregroundStyle(Color.vivoAccent)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 12)
     }
 
@@ -130,23 +130,23 @@ private extension AddExerciseView {
     var exerciseInfo: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("EXERCISE \(String(format: "%02d", (session?.exerciseCount ?? 0) + 1)) / 06")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
 
             let parts = exerciseName.split(separator: " ", maxSplits: 1)
             if parts.count > 1 {
                 Text(String(parts[0]))
-                    .font(.vivoDisplay(34, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                     .tracking(-1)
                 Text(String(parts[1]))
-                    .font(.vivoDisplay(34, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                     .tracking(-1)
             } else {
                 Text(exerciseName)
-                    .font(.vivoDisplay(34, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                     .tracking(-1)
             }
@@ -154,7 +154,7 @@ private extension AddExerciseView {
             tagsLabel
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 4)
     }
 
@@ -170,8 +170,8 @@ private extension AddExerciseView {
                     .foregroundStyle(Color.vivoMuted)
             }
         }
-        .font(.vivoMono(12))
-        .tracking(1)
+        .font(.vivoMono(VivoFont.monoSM))
+        .tracking(VivoTracking.normal)
     }
 }
 

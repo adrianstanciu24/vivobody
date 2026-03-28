@@ -23,7 +23,7 @@ extension TodayView {
         HStack(alignment: .bottom, spacing: 0) {
             ForEach(Self.volumeData) { data in
                 VStack(spacing: 4) {
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: VivoRadius.bar)
                         .fill(
                             data.height > 0
                                 ? Color.vivoAccent.opacity(0.3 + data.height * 0.7)
@@ -32,7 +32,7 @@ extension TodayView {
                         .frame(height: max(1, data.height * 65))
 
                     Text(data.day)
-                        .font(.vivoMono(10))
+                        .font(.vivoMono(VivoFont.monoXS))
                         .foregroundStyle(Color.vivoMuted)
                 }
                 .frame(maxWidth: .infinity)
@@ -40,22 +40,22 @@ extension TodayView {
             }
         }
         .frame(height: 80)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     var volumeTotals: some View {
         HStack {
             Text("TOTAL: 58,240 LB")
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoMuted)
             Spacer()
             Text("AVG: 11,648 LB/DAY")
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoMuted)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
         .padding(.bottom, 14)
     }
@@ -85,7 +85,7 @@ extension TodayView {
                 sessionRow(session)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     func sessionRow(_ session: RecentSession) -> some View {
@@ -96,21 +96,21 @@ extension TodayView {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(session.name)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(session.stats)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
 
             Spacer()
 
             Text(session.date)
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
             Text("\u{203A}")
-                .font(.vivoDisplay(18))
+                .font(.vivoDisplay(VivoFont.sectionTitle))
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(height: 56)
@@ -128,12 +128,12 @@ extension TodayView {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 1) {
                 Text("VIVOBODY DASHBOARD · V5.0")
-                    .font(.vivoMono(9))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
                 Text("127 SESSIONS · SINCE SEP 2025")
-                    .font(.vivoMono(9))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -150,7 +150,7 @@ extension TodayView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
         .padding(.bottom, 8)
     }

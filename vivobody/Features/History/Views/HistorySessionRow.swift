@@ -12,21 +12,21 @@ struct HistorySessionRow: View {
         HStack(spacing: 12) {
             VStack(spacing: 2) {
                 Text(day)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(month)
-                    .font(.vivoMono(8))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoTiny))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
             }
             .frame(width: 42)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(name)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(detail)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -34,21 +34,21 @@ struct HistorySessionRow: View {
 
             VStack(alignment: .trailing, spacing: 1) {
                 Text(volume)
-                    .font(.vivoMono(11))
+                    .font(.vivoMono(VivoFont.monoCaption))
                     .foregroundStyle(Color.vivoPrimary)
                 Text("VOLUME")
-                    .font(.vivoMono(7))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoSecondary)
                 if let prText {
                     Text(prText)
-                        .font(.vivoMono(8))
+                        .font(.vivoMono(VivoFont.monoTiny))
                         .foregroundStyle(Color.vivoGreen)
                 }
             }
 
             Text("›")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(minHeight: 65)
@@ -70,6 +70,6 @@ struct HistorySessionRow: View {
             volume: "12,650", prText: nil
         )
     }
-    .padding(.horizontal, 24)
+    .padding(.horizontal, VivoSpacing.screenH)
     .background(Color.vivoBackground)
 }

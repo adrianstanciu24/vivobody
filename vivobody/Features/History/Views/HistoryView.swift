@@ -28,7 +28,7 @@ struct HistoryView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 }
 
@@ -42,18 +42,18 @@ private extension HistoryView {
             headerStat(value: "18", label: "THIS MONTH")
             headerStat(value: "42", label: "TOTAL PRs")
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 10)
     }
 
     func headerStat(value: String, label: String) -> some View {
         VStack(spacing: 4) {
             Text(value)
-                .font(.vivoDisplay(18, weight: .bold))
+                .font(.vivoDisplay(VivoFont.sectionTitle, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(label)
-                .font(.vivoMono(7))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoSecondary)
         }
         .frame(maxWidth: .infinity)
@@ -124,11 +124,11 @@ private extension HistoryView {
     var recentSessionsSection: some View {
         VStack(spacing: 0) {
             Text("RECENT SESSIONS")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -144,7 +144,7 @@ private extension HistoryView {
                     )
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
         }
     }
 }
@@ -160,12 +160,12 @@ private extension HistoryView {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 Text("VIVOBODY HISTORY · V5.0")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
                 Text("127 SESSIONS · SINCE SEP 2025")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -182,7 +182,7 @@ private extension HistoryView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 20)
         .padding(.bottom, 8)
     }

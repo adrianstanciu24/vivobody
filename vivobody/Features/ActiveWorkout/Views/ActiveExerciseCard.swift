@@ -13,14 +13,14 @@ struct ActiveExerciseCard: View {
         .padding(.vertical, 12)
         .padding(.horizontal, 14)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .stroke(Color.vivoAccent, lineWidth: 1.5)
         )
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     // MARK: - Header
@@ -28,26 +28,26 @@ struct ActiveExerciseCard: View {
     private var exerciseHeader: some View {
         HStack(spacing: 10) {
             Text(String(format: "%02d", 1))
-                .font(.vivoMono(14))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoAccent)
 
             Text(exercise.name)
-                .font(.vivoDisplay(20, weight: .bold))
+                .font(.vivoDisplay(VivoFont.headlineSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
             Spacer()
 
             Text(exercise.setProgress)
-                .font(.vivoMono(12))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoAccent)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
                         .fill(Color.vivoAccent.opacity(0.1))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 4)
+                            RoundedRectangle(cornerRadius: VivoRadius.badge)
                                 .stroke(Color.vivoAccent, lineWidth: 1)
                         )
                 )
@@ -67,8 +67,8 @@ struct ActiveExerciseCard: View {
                     .foregroundStyle(Color.vivoMuted)
             }
         }
-        .font(.vivoMono(12))
-        .tracking(1)
+        .font(.vivoMono(VivoFont.monoSM))
+        .tracking(VivoTracking.normal)
         .padding(.leading, 28)
         .padding(.top, 4)
         .padding(.bottom, 8)
@@ -98,7 +98,7 @@ struct ActiveExerciseCard: View {
 
         return HStack(spacing: 0) {
             Text(String(format: "%02d", exerciseSet.order))
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 28, alignment: .leading)
 
@@ -114,11 +114,11 @@ struct ActiveExerciseCard: View {
 
             if exerciseSet.completed {
                 Text("\u{2713}")
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoGreen)
             } else {
                 Text("\u{25CB}")
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoSurface)
             }
         }
@@ -126,7 +126,7 @@ struct ActiveExerciseCard: View {
         .padding(.horizontal, isCurrent ? 8 : 0)
         .background(
             isCurrent
-                ? RoundedRectangle(cornerRadius: 4)
+                ? RoundedRectangle(cornerRadius: VivoRadius.badge)
                 .fill(Color.vivoAccent.opacity(0.05))
                 : nil
         )
@@ -145,16 +145,16 @@ struct ActiveExerciseCard: View {
     private func completedSetText(_ exerciseSet: SessionSet) -> some View {
         HStack(spacing: 0) {
             Text("\(exerciseSet.reps)")
-                .font(.vivoMono(15, weight: .bold))
+                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" reps · ")
-                .font(.vivoMono(15))
+                .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoMuted)
             Text("\(exerciseSet.weight)")
-                .font(.vivoMono(15, weight: .bold))
+                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" lb · RIR \(exerciseSet.rir)")
-                .font(.vivoMono(15))
+                .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoMuted)
         }
     }
@@ -162,23 +162,23 @@ struct ActiveExerciseCard: View {
     private func currentSetText(_ exerciseSet: SessionSet) -> some View {
         HStack(spacing: 0) {
             Text("\(exerciseSet.reps)")
-                .font(.vivoMono(15, weight: .bold))
+                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" reps · ")
-                .font(.vivoMono(15))
+                .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoPrimary)
             Text("\(exerciseSet.weight)")
-                .font(.vivoMono(15, weight: .bold))
+                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" lb · RIR ?")
-                .font(.vivoMono(15))
+                .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoPrimary)
         }
     }
 
     private func plannedSetText(_ exerciseSet: SessionSet) -> some View {
         Text("\(exerciseSet.reps) reps · \(exerciseSet.weight) lb · planned")
-            .font(.vivoMono(15))
+            .font(.vivoMono(VivoFont.monoBody))
             .foregroundStyle(Color.vivoMuted)
     }
 }

@@ -24,11 +24,11 @@ struct HistoryActivityGrid: View {
 
     private var sectionHeader: some View {
         Text("ACTIVITY · LAST 12 WEEKS")
-            .font(.vivoMono(12))
-            .tracking(2)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 16)
             .padding(.bottom, 10)
     }
@@ -45,7 +45,7 @@ struct HistoryActivityGrid: View {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private func cellColor(_ level: Int) -> Color {
@@ -62,8 +62,8 @@ struct HistoryActivityGrid: View {
     private var legendRow: some View {
         HStack(spacing: 6) {
             Text("LESS")
-                .font(.vivoMono(7))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
 
             HStack(spacing: 2) {
@@ -75,8 +75,8 @@ struct HistoryActivityGrid: View {
             }
 
             Text("MORE")
-                .font(.vivoMono(7))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
 
             Circle()
@@ -85,13 +85,13 @@ struct HistoryActivityGrid: View {
                 .padding(.leading, 6)
 
             Text("PR DAY")
-                .font(.vivoMono(7))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
 
             Spacer()
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
 }

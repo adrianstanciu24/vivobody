@@ -15,8 +15,8 @@ struct RootTabView: View {
                     ZStack {
                         Color.vivoBackground.ignoresSafeArea()
                         Text("COMING SOON")
-                            .font(.vivoMono(14))
-                            .tracking(2)
+                            .font(.vivoMono(VivoFont.monoMD))
+                            .tracking(VivoTracking.wide)
                             .foregroundStyle(Color.vivoMuted)
                     }
                 }

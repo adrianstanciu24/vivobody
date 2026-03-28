@@ -56,11 +56,11 @@ extension WorkoutCompleteView {
     var exerciseLogSection: some View {
         VStack(spacing: 0) {
             Text("EXERCISE LOG")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -69,7 +69,7 @@ extension WorkoutCompleteView {
                     logExerciseRow(exercise)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.bottom, 16)
         }
     }
@@ -78,15 +78,15 @@ extension WorkoutCompleteView {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(exercise.number)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
                 Text(exercise.name)
-                    .font(.vivoDisplay(12))
+                    .font(.vivoDisplay(VivoFont.caption))
                     .foregroundStyle(Color.vivoPrimary)
                 Spacer()
                 Text(exercise.setCount)
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoSecondary)
             }
             .padding(.top, 10)
@@ -104,12 +104,12 @@ extension WorkoutCompleteView {
         let text = set.hasPR ? "\(set.label) PR" : set.label
 
         return Text(text)
-            .font(.vivoMono(12))
+            .font(.vivoMono(VivoFont.monoSM))
             .foregroundStyle(set.hasPR ? Color.vivoGreen : Color.vivoSecondary)
             .padding(.horizontal, 9)
             .padding(.vertical, 5)
             .background(
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: VivoRadius.badge)
                     .stroke(
                         set.hasPR ? Color.vivoGreen : Color.vivoSurface,
                         lineWidth: 1
@@ -125,30 +125,30 @@ extension WorkoutCompleteView {
         VStack(spacing: 8) {
             Button { onDismiss?() } label: {
                 Text("SAVE & CLOSE")
-                    .font(.vivoMono(12, weight: .bold))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 49)
                     .background(Color.vivoAccent)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipShape(RoundedRectangle(cornerRadius: VivoRadius.card))
                     .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
             }
 
             Button {} label: {
                 Text("SHARE RECEIPT")
-                    .font(.vivoMono(12, weight: .bold))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoSecondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: VivoRadius.card)
                             .stroke(Color.vivoSurface, lineWidth: 1.5)
                     )
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
     }
 }
@@ -181,15 +181,15 @@ extension WorkoutCompleteView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 20)
         .padding(.bottom, 8)
     }
 
     func footerLine(_ text: String) -> some View {
         Text(text)
-            .font(.vivoMono(7))
-            .tracking(1.5)
+            .font(.vivoMono(VivoFont.monoMin))
+            .tracking(VivoTracking.medium)
             .foregroundStyle(Color.vivoMuted)
             .padding(.vertical, 0.5)
     }

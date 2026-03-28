@@ -41,16 +41,16 @@ struct SettingsView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 
     func sectionHeader(_ title: String) -> some View {
         Text(title)
-            .font(.vivoMono(12))
-            .tracking(2)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 20)
             .padding(.bottom, 10)
     }
@@ -66,27 +66,27 @@ private extension SettingsView {
                 .frame(width: 48, height: 48)
                 .overlay(
                     Text("AS")
-                        .font(.vivoMono(14, weight: .bold))
+                        .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                         .foregroundStyle(Color.vivoPrimary)
                 )
 
             VStack(alignment: .leading, spacing: 3) {
                 Text("Alex S.")
-                    .font(.vivoDisplay(16, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.body, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                 Text("MEMBER SINCE SEP 2025 · 127 SESSIONS")
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoSecondary)
                 Text("SN: VIVO-USR-0041-AS")
-                    .font(.vivoMono(7))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
             }
 
             Spacer()
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 20)
     }
 }

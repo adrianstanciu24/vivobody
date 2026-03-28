@@ -13,18 +13,18 @@ struct TodayHeroCard: View {
         }
         .padding(18)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: VivoRadius.large)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     // MARK: - Scheduled Label
 
     private var scheduledLabel: some View {
         Text("SCHEDULED · UPPER BODY")
-            .font(.vivoMono(12))
-            .tracking(1.5)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.medium)
             .foregroundStyle(Color.vivoMuted)
     }
 
@@ -33,10 +33,10 @@ struct TodayHeroCard: View {
     private var workoutTitle: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Upper Body")
-                .font(.vivoDisplay(28, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text("Push A")
-                .font(.vivoDisplay(28, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
         }
         .padding(.top, 6)
@@ -47,10 +47,10 @@ struct TodayHeroCard: View {
     private var workoutDetails: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("06 exercises · 22 sets · ~55 min")
-                .font(.vivoMono(14))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoSecondary)
             Text("LAST: MAR 15 · 13,580 lb volume")
-                .font(.vivoMono(14))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoMuted)
         }
         .padding(.top, 8)
@@ -67,13 +67,13 @@ struct TodayHeroCard: View {
         return FlowLayout(spacing: 6) {
             ForEach(exercises, id: \.self) { exercise in
                 Text(exercise)
-                    .font(.vivoMono(11))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoSecondary)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
                     .background(
-                        RoundedRectangle(cornerRadius: 6)
+                        RoundedRectangle(cornerRadius: VivoRadius.pill)
                             .fill(Color.vivoSurface)
                     )
             }
@@ -88,13 +88,13 @@ struct TodayHeroCard: View {
             session?.start(name: "Upper Body Push A")
         } label: {
             Text("START WORKOUT \u{2192}")
-                .font(.vivoMono(14, weight: .bold))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 45)
                 .background(Color.vivoAccent)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: VivoRadius.button))
         }
         .padding(.top, 16)
     }

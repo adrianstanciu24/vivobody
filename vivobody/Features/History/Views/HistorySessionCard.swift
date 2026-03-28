@@ -27,27 +27,27 @@ struct HistorySessionCard: View {
         }
         .padding(17.5)
         .background(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: VivoRadius.stepper)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private var headerRow: some View {
         HStack {
             Text("Wednesday, Mar 18")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoPrimary)
             Spacer()
             Text("#127")
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoSecondary)
         }
     }
 
     private var titleRow: some View {
         Text("Upper Body Push A")
-            .font(.vivoDisplay(18, weight: .bold))
+            .font(.vivoDisplay(VivoFont.sectionTitle, weight: .bold))
             .foregroundStyle(Color.vivoPrimary)
             .padding(.top, 10)
     }
@@ -65,11 +65,11 @@ struct HistorySessionCard: View {
     private func cardStat(value: String, label: String) -> some View {
         VStack(spacing: 4) {
             Text(value)
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoPrimary)
             Text(label)
-                .font(.vivoMono(7))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoSecondary)
         }
         .frame(maxWidth: .infinity)
@@ -80,24 +80,24 @@ struct HistorySessionCard: View {
             ForEach(exercises) { exercise in
                 HStack(spacing: 8) {
                     Text(exercise.id)
-                        .font(.vivoMono(8))
+                        .font(.vivoMono(VivoFont.monoTiny))
                         .foregroundStyle(Color.vivoMuted)
                         .frame(width: 16, alignment: .leading)
 
                     Text(exercise.name)
-                        .font(.vivoDisplay(11))
+                        .font(.vivoDisplay(VivoFont.captionSmall))
                         .foregroundStyle(Color.vivoPrimary)
 
                     Spacer()
 
                     Text(exercise.detail)
-                        .font(.vivoMono(12))
+                        .font(.vivoMono(VivoFont.monoSM))
                         .foregroundStyle(Color.vivoSecondary)
 
                     if exercise.hasPR {
                         Text("PR")
-                            .font(.vivoMono(8))
-                            .tracking(0.5)
+                            .font(.vivoMono(VivoFont.monoTiny))
+                            .tracking(VivoTracking.tight)
                             .foregroundStyle(Color.vivoGreen)
                     }
                 }
@@ -110,13 +110,13 @@ struct HistorySessionCard: View {
     private var viewReceiptButton: some View {
         Button {} label: {
             Text("VIEW FULL RECEIPT →")
-                .font(.vivoMono(10, weight: .bold))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoXS, weight: .bold))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoAccent)
                 .frame(maxWidth: .infinity)
                 .frame(height: 37)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: VivoRadius.pill)
                         .stroke(Color.vivoSurface, lineWidth: 1)
                 )
         }

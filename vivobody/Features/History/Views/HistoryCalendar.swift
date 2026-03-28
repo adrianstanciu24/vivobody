@@ -20,11 +20,11 @@ struct HistoryCalendar: View {
 
     private var sectionHeader: some View {
         Text("CALENDAR")
-            .font(.vivoMono(12))
-            .tracking(2)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 16)
             .padding(.bottom, 10)
     }
@@ -33,7 +33,7 @@ struct HistoryCalendar: View {
         HStack {
             Button {} label: {
                 Text("‹")
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoSecondary)
                     .frame(width: 26, height: 32)
             }
@@ -42,10 +42,10 @@ struct HistoryCalendar: View {
 
             HStack(spacing: 0) {
                 Text("March")
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoPrimary)
                 Text("2026")
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoSecondary)
                     .padding(.leading, 4)
             }
@@ -54,12 +54,12 @@ struct HistoryCalendar: View {
 
             Button {} label: {
                 Text("›")
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoSecondary)
                     .frame(width: 26, height: 32)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.bottom, 8)
     }
 
@@ -70,13 +70,13 @@ struct HistoryCalendar: View {
         ) {
             ForEach(dayNames, id: \.self) { day in
                 Text(day)
-                    .font(.vivoMono(7))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
                     .frame(height: 20)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private var calendarGrid: some View {
@@ -97,7 +97,7 @@ struct HistoryCalendar: View {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private func calendarCell(day: Int) -> some View {
@@ -106,7 +106,7 @@ struct HistoryCalendar: View {
 
         return VStack(spacing: 4) {
             Text(String(format: "%02d", day))
-                .font(.vivoMono(11))
+                .font(.vivoMono(VivoFont.monoCaption))
                 .foregroundStyle(
                     isToday ? Color.vivoAccent :
                         hasWorkout ? Color.vivoPrimary : Color.vivoMuted
@@ -121,7 +121,7 @@ struct HistoryCalendar: View {
         .frame(maxWidth: .infinity)
         .background(
             isToday
-                ? RoundedRectangle(cornerRadius: 6)
+                ? RoundedRectangle(cornerRadius: VivoRadius.pill)
                 .stroke(Color.vivoAccent, lineWidth: 1)
                 : nil
         )

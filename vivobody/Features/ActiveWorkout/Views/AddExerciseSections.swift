@@ -37,7 +37,7 @@ extension AddExerciseView {
                 load += 5
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     func stepperColumn(
@@ -51,19 +51,19 @@ extension AddExerciseView {
         VStack(spacing: 8) {
             HStack(spacing: 4) {
                 Text(value)
-                    .font(.vivoDisplay(48, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.heroXL, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                 if let suffix {
                     Text(suffix)
-                        .font(.vivoMono(13))
+                        .font(.vivoMono(VivoFont.monoDefault))
                         .foregroundStyle(Color.vivoMuted)
                         .offset(y: 12)
                 }
             }
 
             Text(label)
-                .font(.vivoMono(10))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoXS))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
 
             HStack(spacing: 12) {
@@ -73,8 +73,8 @@ extension AddExerciseView {
 
             if let hint {
                 Text(hint)
-                    .font(.vivoMono(9))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
                     .padding(.top, 2)
             }
@@ -85,15 +85,15 @@ extension AddExerciseView {
     func stepperButton(_ symbol: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(symbol)
-                .font(.vivoMono(20))
+                .font(.vivoMono(VivoFont.monoXL))
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 44, height: 44)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: VivoRadius.stepper)
                         .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: VivoRadius.stepper)
                         .stroke(Color.vivoSurface, lineWidth: 1.5)
                 )
         }
@@ -108,23 +108,23 @@ extension AddExerciseView {
     var recentLoads: some View {
         HStack(spacing: 10) {
             Text("RECENT")
-                .font(.vivoMono(10))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoXS))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
 
             HStack(spacing: 6) {
                 ForEach(Self.recentLoads, id: \.self) { weight in
                     Button { load = weight } label: {
                         Text("\(weight)")
-                            .font(.vivoMono(14, weight: .bold))
-                            .tracking(0.5)
+                            .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                            .tracking(VivoTracking.tight)
                             .foregroundStyle(
                                 load == weight ? Color.vivoAccent : Color.vivoMuted
                             )
                             .frame(maxWidth: .infinity)
                             .frame(height: 36)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 6)
+                                RoundedRectangle(cornerRadius: VivoRadius.pill)
                                     .stroke(
                                         load == weight ? Color.vivoAccent : Color.vivoSurface,
                                         lineWidth: 1.5
@@ -134,7 +134,7 @@ extension AddExerciseView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 10)
     }
 }
@@ -149,12 +149,12 @@ extension AddExerciseView {
 
                 HStack(spacing: 8) {
                     Text(String(format: "%02d", rir))
-                        .font(.vivoDisplay(40, weight: .bold))
+                        .font(.vivoDisplay(VivoFont.heroLG, weight: .bold))
                         .foregroundStyle(rirColor)
 
                     Text("REPS LEFT IN TANK")
-                        .font(.vivoMono(12))
-                        .tracking(1)
+                        .font(.vivoMono(VivoFont.monoSM))
+                        .tracking(VivoTracking.normal)
                         .foregroundStyle(Color.vivoMuted)
                 }
 
@@ -165,7 +165,7 @@ extension AddExerciseView {
 
             HStack(spacing: 4) {
                 ForEach(0 ..< 10, id: \.self) { index in
-                    RoundedRectangle(cornerRadius: 3)
+                    RoundedRectangle(cornerRadius: VivoRadius.bar)
                         .fill(index <= rir ? rirBarColor(index) : Color.vivoSurface)
                         .frame(height: 6)
                 }
@@ -173,17 +173,17 @@ extension AddExerciseView {
 
             HStack {
                 Text("FAILURE")
-                    .font(.vivoMono(9))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
                 Spacer()
                 Text("EASY")
-                    .font(.vivoMono(9))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoMuted)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.bottom, 10)
     }
 
@@ -213,22 +213,22 @@ extension AddExerciseView {
                 let isSelected = selection.wrappedValue == option
                 Button { selection.wrappedValue = option } label: {
                     Text(option)
-                        .font(.vivoMono(12, weight: isSelected ? .bold : .regular))
-                        .tracking(0.5)
+                        .font(.vivoMono(VivoFont.monoSM, weight: isSelected ? .bold : .regular))
+                        .tracking(VivoTracking.tight)
                         .foregroundStyle(segmentForeground(isSelected, accent: accentSelected))
                         .frame(maxWidth: .infinity)
                         .frame(height: 38)
                         .background(segmentBackground(isSelected, accent: accentSelected))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .clipShape(RoundedRectangle(cornerRadius: VivoRadius.pill))
                         .overlay(
                             isSelected ? nil :
-                                RoundedRectangle(cornerRadius: 6)
+                                RoundedRectangle(cornerRadius: VivoRadius.pill)
                                 .stroke(Color.vivoSurface, lineWidth: 1.5)
                         )
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
     }
 
     func segmentForeground(_ selected: Bool, accent: Bool) -> Color {
@@ -248,16 +248,16 @@ extension AddExerciseView {
     var logSetButton: some View {
         Button { logCurrentSet() } label: {
             Text("LOG SET \u{2193}")
-                .font(.vivoMono(14, weight: .bold))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
                 .background(Color.vivoAccent)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: VivoRadius.card))
                 .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
     }
 
@@ -281,8 +281,8 @@ extension AddExerciseView {
             if !loggedSets.isEmpty {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("LOGGED SETS")
-                        .font(.vivoMono(12))
-                        .tracking(2)
+                        .font(.vivoMono(VivoFont.monoSM))
+                        .tracking(VivoTracking.wide)
                         .foregroundStyle(Color.vivoMuted)
                         .padding(.top, 16)
                         .padding(.bottom, 10)
@@ -291,7 +291,7 @@ extension AddExerciseView {
                         loggedSetRow(index: index + 1, logged: logged)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
             }
         }
     }
@@ -299,22 +299,22 @@ extension AddExerciseView {
     func loggedSetRow(index: Int, logged: LoggedSet) -> some View {
         HStack {
             Text(String(format: "%02d", index))
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 20, alignment: .leading)
 
             HStack(spacing: 0) {
                 Text("\(logged.reps)")
-                    .font(.vivoMono(13, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(" reps \u{00B7} ")
-                    .font(.vivoMono(13))
+                    .font(.vivoMono(VivoFont.monoDefault))
                     .foregroundStyle(Color.vivoMuted)
                 Text("\(logged.load)")
-                    .font(.vivoMono(13, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(" lb \u{00B7} RIR \(logged.rir) \u{00B7} \(logged.rom) \u{00B7} \(logged.tempo)")
-                    .font(.vivoMono(13))
+                    .font(.vivoMono(VivoFont.monoDefault))
                     .foregroundStyle(Color.vivoMuted)
                     .lineLimit(1)
             }
@@ -322,7 +322,7 @@ extension AddExerciseView {
             Spacer()
 
             Text("\u{2713}")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoGreen)
         }
         .padding(.vertical, 10)
@@ -341,12 +341,12 @@ extension AddExerciseView {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 1) {
                 Text("\(exerciseName.uppercased()) \u{00B7} COMPOUND")
-                    .font(.vivoMono(9))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
                 Text("LAST PR: 225 LB \u{00B7} FEB 28")
-                    .font(.vivoMono(9))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMicro))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -361,7 +361,7 @@ extension AddExerciseView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
     }
 }

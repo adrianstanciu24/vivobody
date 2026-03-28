@@ -23,11 +23,11 @@ extension WorkoutCompleteView {
     var prSection: some View {
         VStack(spacing: 0) {
             Text("PERSONAL RECORDS · 02 NEW")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -36,7 +36,7 @@ extension WorkoutCompleteView {
                     prRow(pr)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.bottom, 8)
         }
     }
@@ -44,29 +44,29 @@ extension WorkoutCompleteView {
     func prRow(_ pr: PRRecord) -> some View {
         HStack(spacing: 10) {
             Text("NEW PR")
-                .font(.vivoMono(8))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoTiny))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(.white)
                 .padding(.horizontal, 9)
                 .padding(.vertical, 4)
                 .background(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
                         .fill(Color.vivoGreen)
                 )
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(pr.exercise)
-                    .font(.vivoDisplay(12))
+                    .font(.vivoDisplay(VivoFont.caption))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(pr.detail)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoSecondary)
             }
 
             Spacer()
 
             Text(pr.weight)
-                .font(.vivoDisplay(16, weight: .bold))
+                .font(.vivoDisplay(VivoFont.body, weight: .bold))
                 .foregroundStyle(Color.vivoGreen)
         }
         .frame(height: 52)
@@ -93,11 +93,11 @@ extension WorkoutCompleteView {
     var muscleVolumeSection: some View {
         VStack(spacing: 0) {
             Text("MUSCLE VOLUME SPLIT")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -106,7 +106,7 @@ extension WorkoutCompleteView {
                     muscleBar(muscle)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.bottom, 8)
         }
     }
@@ -114,16 +114,16 @@ extension WorkoutCompleteView {
     func muscleBar(_ muscle: MuscleVolume) -> some View {
         HStack(spacing: 10) {
             Text(muscle.name)
-                .font(.vivoMono(12))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoSecondary)
                 .frame(width: 72, alignment: .leading)
 
             GeometryReader { proxy in
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: VivoRadius.badge)
                     .fill(Color.vivoSurface)
                     .overlay(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
+                        RoundedRectangle(cornerRadius: VivoRadius.badge)
                             .fill(Color.vivoAccent)
                             .frame(width: proxy.size.width * muscle.percentage)
                     }
@@ -131,8 +131,8 @@ extension WorkoutCompleteView {
             .frame(height: 8)
 
             Text(muscle.label)
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
                 .frame(width: 30, alignment: .trailing)
         }
@@ -161,24 +161,24 @@ extension WorkoutCompleteView {
     var comparisonSection: some View {
         VStack(spacing: 0) {
             Text("VS LAST SESSION · MAR 11")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("TODAY")
-                        .font(.vivoMono(8))
-                        .tracking(1)
+                        .font(.vivoMono(VivoFont.monoTiny))
+                        .tracking(VivoTracking.normal)
                         .foregroundStyle(Color.vivoMuted)
                         .frame(height: 22)
                     ForEach(Self.comparisons) { row in
                         Text(row.today)
-                            .font(.vivoMono(11))
+                            .font(.vivoMono(VivoFont.monoCaption))
                             .foregroundStyle(Color.vivoPrimary)
                             .frame(height: 33)
                     }
@@ -189,8 +189,8 @@ extension WorkoutCompleteView {
                     Color.clear.frame(height: 22)
                     ForEach(Self.comparisons) { row in
                         Text(row.label)
-                            .font(.vivoMono(8))
-                            .tracking(1)
+                            .font(.vivoMono(VivoFont.monoTiny))
+                            .tracking(VivoTracking.normal)
                             .foregroundStyle(Color.vivoMuted)
                             .frame(height: 33)
                     }
@@ -199,20 +199,20 @@ extension WorkoutCompleteView {
 
                 VStack(alignment: .trailing, spacing: 0) {
                     Text("MAR 11")
-                        .font(.vivoMono(8))
-                        .tracking(1)
+                        .font(.vivoMono(VivoFont.monoTiny))
+                        .tracking(VivoTracking.normal)
                         .foregroundStyle(Color.vivoMuted)
                         .frame(height: 22)
                     ForEach(Self.comparisons) { row in
                         Text(row.previous)
-                            .font(.vivoMono(11))
+                            .font(.vivoMono(VivoFont.monoCaption))
                             .foregroundStyle(Color.vivoSecondary)
                             .frame(height: 33)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.bottom, 8)
         }
     }

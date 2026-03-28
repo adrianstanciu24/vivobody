@@ -39,7 +39,7 @@ struct ExerciseLibraryView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 }
 
@@ -49,33 +49,33 @@ private extension ExerciseLibraryView {
     var searchBar: some View {
         HStack(spacing: 10) {
             Text("⚲")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
 
             Text("Search exercises...")
-                .font(.vivoMono(11))
+                .font(.vivoMono(VivoFont.monoCaption))
                 .foregroundStyle(Color.vivoMuted)
 
             Spacer()
 
             Text("248 TOTAL")
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 3)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
                         .stroke(Color.vivoSurface, lineWidth: 1)
                 )
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, VivoSpacing.cardPadding)
         .frame(height: 48)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
 }
@@ -100,7 +100,7 @@ private extension ExerciseLibraryView {
                     filterPill(filter.name, count: filter.count)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
         }
         .padding(.vertical, 12)
     }
@@ -111,18 +111,18 @@ private extension ExerciseLibraryView {
 
         return Button { selectedFilter = name } label: {
             Text(label)
-                .font(.vivoMono(10, weight: isSelected ? .bold : .regular))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoXS, weight: isSelected ? .bold : .regular))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(isSelected ? Color.vivoBackground : Color.vivoSecondary)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, VivoSpacing.cardPadding)
                 .padding(.vertical, 9)
                 .background(
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: VivoRadius.pill)
                         .fill(isSelected ? Color.vivoPrimary : Color.clear)
                 )
                 .overlay(
                     isSelected ? nil :
-                        RoundedRectangle(cornerRadius: 6)
+                        RoundedRectangle(cornerRadius: VivoRadius.pill)
                         .stroke(Color.vivoSurface, lineWidth: 1.5)
                 )
         }
@@ -174,10 +174,10 @@ private extension ExerciseLibraryView {
     var recentSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("RECENT · LAST 7 DAYS")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -187,7 +187,7 @@ private extension ExerciseLibraryView {
                         recentCard(exercise)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
             }
             .padding(.bottom, 10)
         }
@@ -196,27 +196,27 @@ private extension ExerciseLibraryView {
     func recentCard(_ exercise: RecentExercise) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(exercise.name)
-                .font(.vivoDisplay(16))
+                .font(.vivoDisplay(VivoFont.body))
                 .foregroundStyle(Color.vivoPrimary)
                 .lineLimit(2)
 
             Text(
                 "\(Text(exercise.muscleGroup).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.category)").foregroundStyle(Color.vivoSecondary))"
             )
-            .font(.vivoMono(12))
-            .tracking(0.5)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.tight)
 
             Spacer()
 
             Text(exercise.lastWeight)
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoMuted)
         }
         .padding(14)
         .frame(width: 180, height: 130, alignment: .topLeading)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
     }
@@ -233,15 +233,15 @@ private extension ExerciseLibraryView {
         VStack(spacing: 0) {
             HStack {
                 Text(title)
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoPrimary)
                 Spacer()
                 Text("\(count) EXERCISES")
-                    .font(.vivoMono(12))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoSecondary)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 14)
             .padding(.bottom, 10)
 
@@ -250,7 +250,7 @@ private extension ExerciseLibraryView {
                     ExerciseLibraryRow(exercise: exercise)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
         }
     }
 }
@@ -262,21 +262,21 @@ private extension ExerciseLibraryView {
         Button {} label: {
             HStack(spacing: 8) {
                 Text("+")
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoAccent)
                 Text("CREATE CUSTOM EXERCISE")
-                    .font(.vivoMono(11))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoSecondary)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 55)
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: VivoRadius.card)
                     .stroke(Color.vivoSurface, lineWidth: 1.5)
             )
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
     }
 }
@@ -292,12 +292,12 @@ private extension ExerciseLibraryView {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 Text("VIVOBODY EXERCISE DB · V5.0")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
                 Text("248 EXERCISES · 7 CATEGORIES")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -314,7 +314,7 @@ private extension ExerciseLibraryView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 20)
         .padding(.bottom, 8)
     }

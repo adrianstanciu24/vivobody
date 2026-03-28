@@ -16,19 +16,19 @@ struct ExerciseLibraryRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Text(exercise.number)
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 18, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(
                     "\(Text(exercise.primaryTag).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.secondaryTags)").foregroundStyle(Color.vivoMuted))"
                 )
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
             }
@@ -37,11 +37,11 @@ struct ExerciseLibraryRow: View {
 
             VStack(alignment: .trailing, spacing: 1) {
                 Text(exercise.bestWeight)
-                    .font(.vivoMono(14))
+                    .font(.vivoMono(VivoFont.monoMD))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(exercise.bestLabel)
-                    .font(.vivoMono(11))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(
                         exercise.bestLabel == "1RM PR"
                             ? Color.vivoGreen : Color.vivoSecondary
@@ -49,7 +49,7 @@ struct ExerciseLibraryRow: View {
             }
 
             Text("›")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(height: 72)
@@ -143,6 +143,6 @@ extension ExerciseLibraryView {
         ExerciseLibraryRow(exercise: ExerciseLibraryView.chestExercises[0])
         ExerciseLibraryRow(exercise: ExerciseLibraryView.chestExercises[1])
     }
-    .padding(.horizontal, 24)
+    .padding(.horizontal, VivoSpacing.screenH)
     .background(Color.vivoBackground)
 }

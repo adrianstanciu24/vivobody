@@ -13,18 +13,18 @@ struct WorkoutMiniBar: View {
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(session.workoutName.uppercased())
-                        .font(.vivoMono(12, weight: .bold))
-                        .tracking(0.5)
+                        .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                        .tracking(VivoTracking.tight)
                         .foregroundStyle(Color.vivoPrimary)
                     Text(session.currentExercise ?? "No exercises yet")
-                        .font(.vivoMono(11))
+                        .font(.vivoMono(VivoFont.monoCaption))
                         .foregroundStyle(Color.vivoMuted)
                 }
 
                 Spacer()
 
                 Text(session.elapsedFormatted)
-                    .font(.vivoMono(16, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoLG, weight: .bold))
                     .foregroundStyle(Color.vivoAccent)
                     .monospacedDigit()
 
@@ -32,10 +32,10 @@ struct WorkoutMiniBar: View {
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(Color.vivoMuted)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, VivoSpacing.cardPadding)
             .padding(.vertical, 10)
             .background(Color.vivoSurface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .clipShape(RoundedRectangle(cornerRadius: VivoRadius.large))
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 12)

@@ -76,8 +76,8 @@ private extension EmptyWorkoutView {
                     .fill(Color.vivoAccent)
                     .frame(width: 8, height: 8)
                 Text("RECORDING")
-                    .font(.vivoMono(12, weight: .bold))
-                    .tracking(2)
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.wide)
                     .foregroundStyle(Color.vivoAccent)
             }
 
@@ -88,8 +88,8 @@ private extension EmptyWorkoutView {
                 dismiss()
             } label: {
                 Text("DISCARD")
-                    .font(.vivoMono(12, weight: .bold))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -98,12 +98,12 @@ private extension EmptyWorkoutView {
                 showComplete = true
             } label: {
                 Text("FINISH \u{2192}")
-                    .font(.vivoMono(14, weight: .bold))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoAccent)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
 }
@@ -114,20 +114,20 @@ private extension EmptyWorkoutView {
     var workoutTitle: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Custom")
-                .font(.vivoDisplay(32, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleLG, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text("Workout")
-                .font(.vivoDisplay(32, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleLG, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
             Text("ADD MOVES ON THE FLY · SAVES AUTOMATICALLY")
-                .font(.vivoMono(10))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoXS))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
                 .padding(.top, 4)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
 }
@@ -154,7 +154,7 @@ private extension EmptyWorkoutView {
 
             statItem(value: "\(session?.setsDone ?? 0)", label: "SETS DONE")
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 10)
     }
 
@@ -162,19 +162,19 @@ private extension EmptyWorkoutView {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 4) {
                 Text(value)
-                    .font(.vivoDisplay(22, weight: .bold))
+                    .font(.vivoDisplay(VivoFont.headlineMD, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                 if let suffix {
                     Text(suffix)
-                        .font(.vivoMono(10))
-                        .tracking(1)
+                        .font(.vivoMono(VivoFont.monoXS))
+                        .tracking(VivoTracking.normal)
                         .foregroundStyle(Color.vivoMuted)
                         .offset(y: 4)
                 }
             }
             Text(label)
-                .font(.vivoMono(10))
-                .tracking(1.5)
+                .font(.vivoMono(VivoFont.monoXS))
+                .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -187,12 +187,12 @@ private extension EmptyWorkoutView {
     var progressSegments: some View {
         HStack(spacing: 3) {
             ForEach(0 ..< 6, id: \.self) { _ in
-                RoundedRectangle(cornerRadius: 2)
+                RoundedRectangle(cornerRadius: VivoRadius.dot)
                     .fill(Color.vivoSurface)
                     .frame(height: 4)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 12)
     }
 
@@ -200,7 +200,7 @@ private extension EmptyWorkoutView {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 14)
     }
 }
@@ -211,22 +211,22 @@ private extension EmptyWorkoutView {
     var emptyStateCard: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .top, spacing: 12) {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: VivoRadius.card)
                     .stroke(Color.vivoAccent, lineWidth: 1.5)
                     .frame(width: 44, height: 44)
                     .overlay(
                         Text("+")
-                            .font(.vivoDisplay(28, weight: .bold))
+                            .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                             .foregroundStyle(Color.vivoAccent)
                     )
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("NO EXERCISES YET")
-                        .font(.vivoMono(14, weight: .bold))
-                        .tracking(1.5)
+                        .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                        .tracking(VivoTracking.medium)
                         .foregroundStyle(Color.vivoAccent)
                     Text("Build this session as you go, or pull something in from a template.")
-                        .font(.vivoMono(11))
+                        .font(.vivoMono(VivoFont.monoCaption))
                         .lineSpacing(2)
                         .foregroundStyle(Color.vivoMuted)
                 }
@@ -248,42 +248,42 @@ private extension EmptyWorkoutView {
 
             Button { showExercisePicker = true } label: {
                 Text("+ ADD FIRST EXERCISE")
-                    .font(.vivoMono(12, weight: .bold))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 38)
                     .background(Color.vivoAccent)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipShape(RoundedRectangle(cornerRadius: VivoRadius.card))
                     .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
             }
         }
         .padding(16)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .stroke(Color.vivoAccent, lineWidth: 1.5)
         )
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 14)
     }
 
     func instructionRow(number: String, title: String, detail: String) -> some View {
         HStack(alignment: .top, spacing: 14) {
             Text(number)
-                .font(.vivoMono(11))
+                .font(.vivoMono(VivoFont.monoCaption))
                 .foregroundStyle(Color.vivoMuted)
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
-                    .font(.vivoMono(13, weight: .bold))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoPrimary)
                 Text(detail)
-                    .font(.vivoMono(11))
+                    .font(.vivoMono(VivoFont.monoCaption))
                     .lineSpacing(2)
                     .foregroundStyle(Color.vivoMuted)
             }

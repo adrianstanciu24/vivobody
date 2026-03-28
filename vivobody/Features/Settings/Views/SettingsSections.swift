@@ -126,21 +126,21 @@ extension SettingsView {
     var brandingFooter: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("VIVOBODY")
-                .font(.vivoDisplay(28, weight: .bold))
+                .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
             Text("VERSION 5.0.0 (127)")
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
 
             Text("BUILD 2026.03.18 · TEENAGE ENGINEERING INSPIRED")
-                .font(.vivoMono(7))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoMin))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoMuted)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 20)
         .padding(.bottom, 16)
     }
@@ -153,12 +153,12 @@ extension SettingsView {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 Text("VIVOBODY CONFIG · V5.0")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
                 Text("DEVICE: IPHONE 15 PRO")
-                    .font(.vivoMono(7))
-                    .tracking(1.5)
+                    .font(.vivoMono(VivoFont.monoMin))
+                    .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -175,7 +175,7 @@ extension SettingsView {
                 }
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 12)
         .padding(.bottom, 8)
     }
@@ -192,16 +192,16 @@ extension SettingsView {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(subtitle)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
             Spacer()
             trailing()
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .frame(height: 62)
     }
 
@@ -209,10 +209,10 @@ extension SettingsView {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(subtitle)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
             Spacer()
@@ -220,7 +220,7 @@ extension SettingsView {
                 .labelsHidden()
                 .tint(Color.vivoAccent)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .frame(height: 62)
     }
 
@@ -232,25 +232,25 @@ extension SettingsView {
     ) -> some View {
         HStack(spacing: 12) {
             Text(icon)
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .frame(width: 20)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(titleColor)
                 Text(subtitle)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
 
             Spacer()
 
             Text("›")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .frame(height: 62)
     }
 
@@ -262,15 +262,15 @@ extension SettingsView {
     ) -> some View {
         HStack(spacing: 12) {
             Text(icon)
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .frame(width: 20)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(subtitle)
-                    .font(.vivoMono(12))
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
             }
 
@@ -280,7 +280,7 @@ extension SettingsView {
                 .labelsHidden()
                 .tint(Color.vivoAccent)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .frame(height: 62)
     }
 
@@ -290,19 +290,19 @@ extension SettingsView {
                 let isSelected = selection.wrappedValue == option
                 Button { selection.wrappedValue = option } label: {
                     Text(option)
-                        .font(.vivoMono(10, weight: isSelected ? .bold : .regular))
+                        .font(.vivoMono(VivoFont.monoXS, weight: isSelected ? .bold : .regular))
                         .foregroundStyle(
                             isSelected ? Color.vivoBackground : Color.vivoSecondary
                         )
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, VivoSpacing.cardPadding)
                         .padding(.vertical, 8)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
+                            RoundedRectangle(cornerRadius: VivoRadius.pill)
                                 .fill(isSelected ? Color.vivoPrimary : Color.clear)
                         )
                         .overlay(
                             isSelected ? nil :
-                                RoundedRectangle(cornerRadius: 6)
+                                RoundedRectangle(cornerRadius: VivoRadius.pill)
                                 .stroke(Color.vivoSurface, lineWidth: 1)
                         )
                 }
@@ -318,27 +318,27 @@ extension SettingsView {
         HStack(spacing: 10) {
             Button(action: onMinus) {
                 Text("−")
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoSecondary)
                     .frame(width: 32, height: 32)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 6)
+                        RoundedRectangle(cornerRadius: VivoRadius.pill)
                             .stroke(Color.vivoSurface, lineWidth: 1)
                     )
             }
 
             Text(value)
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoPrimary)
                 .frame(minWidth: 42)
 
             Button(action: onPlus) {
                 Text("+")
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoSecondary)
                     .frame(width: 32, height: 32)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 6)
+                        RoundedRectangle(cornerRadius: VivoRadius.pill)
                             .stroke(Color.vivoSurface, lineWidth: 1)
                     )
             }

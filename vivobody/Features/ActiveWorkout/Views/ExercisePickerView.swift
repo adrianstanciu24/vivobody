@@ -58,7 +58,7 @@ struct ExercisePickerView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
     }
 
     private func selectExercise(_ name: String, tags: String = "") {
@@ -79,24 +79,24 @@ private extension ExercisePickerView {
         HStack {
             Button { dismiss() } label: {
                 Text("\u{2190} BACK")
-                    .font(.vivoMono(14))
+                    .font(.vivoMono(VivoFont.monoMD))
                     .foregroundStyle(Color.vivoPrimary)
             }
 
             Spacer()
 
             Text("ADD EXERCISE")
-                .font(.vivoMono(14, weight: .bold))
-                .tracking(1)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoPrimary)
 
             Spacer()
 
             Text("\u{2190} BACK")
-                .font(.vivoMono(14))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(.clear)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 12)
     }
 }
@@ -107,33 +107,33 @@ private extension ExercisePickerView {
     var searchBar: some View {
         HStack(spacing: 10) {
             Text("\u{26B2}")
-                .font(.vivoDisplay(14))
+                .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
 
             Text("Search exercises...")
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
             Spacer()
 
             Text("248 TOTAL")
-                .font(.vivoMono(12))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 3)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
                         .stroke(Color.vivoSurface, lineWidth: 1)
                 )
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, VivoSpacing.cardPadding)
         .frame(height: 48)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: VivoRadius.card)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 4)
     }
 }
@@ -150,7 +150,7 @@ private extension ExercisePickerView {
                     filterPill(name)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
         }
         .padding(.vertical, 12)
     }
@@ -159,20 +159,20 @@ private extension ExercisePickerView {
         let isSelected = name == selectedFilter
         return Button { selectedFilter = name } label: {
             Text(name)
-                .font(.vivoMono(11, weight: isSelected ? .bold : .regular))
-                .tracking(0.5)
+                .font(.vivoMono(VivoFont.monoCaption, weight: isSelected ? .bold : .regular))
+                .tracking(VivoTracking.tight)
                 .foregroundStyle(
                     isSelected ? Color.vivoBackground : Color.vivoSecondary
                 )
-                .padding(.horizontal, 16)
+                .padding(.horizontal, VivoSpacing.cardPadding)
                 .padding(.vertical, 9)
                 .background(
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: VivoRadius.pill)
                         .fill(isSelected ? Color.vivoPrimary : .clear)
                 )
                 .overlay(
                     isSelected ? nil :
-                        RoundedRectangle(cornerRadius: 6)
+                        RoundedRectangle(cornerRadius: VivoRadius.pill)
                         .stroke(Color.vivoSurface, lineWidth: 1.5)
                 )
         }
@@ -185,10 +185,10 @@ private extension ExercisePickerView {
     var recentSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("RECENT · LAST 7 DAYS")
-                .font(.vivoMono(12))
-                .tracking(2)
+                .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
@@ -198,7 +198,7 @@ private extension ExercisePickerView {
                         recentCard(pick)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, VivoSpacing.screenH)
             }
             .padding(.bottom, 10)
         }
@@ -208,27 +208,27 @@ private extension ExercisePickerView {
         Button { selectExercise(pick.name, tags: pick.tags) } label: {
             VStack(alignment: .leading, spacing: 6) {
                 Text(pick.name)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
                 Text(pick.tags)
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoMuted)
 
                 Spacer()
 
                 Text(pick.detail)
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoMuted)
             }
             .padding(14)
             .frame(width: 180, height: 130, alignment: .topLeading)
             .background(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: VivoRadius.card)
                     .stroke(Color.vivoSurface, lineWidth: 1)
             )
         }
@@ -246,15 +246,15 @@ private extension ExercisePickerView {
         VStack(spacing: 0) {
             HStack {
                 Text(title)
-                    .font(.vivoDisplay(18))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoPrimary)
                 Spacer()
                 Text("\(exercises.count) EXERCISES")
-                    .font(.vivoMono(12))
-                    .tracking(1)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.normal)
                     .foregroundStyle(Color.vivoSecondary)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 14)
             .padding(.bottom, 10)
 
@@ -266,24 +266,24 @@ private extension ExercisePickerView {
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, VivoSpacing.screenH)
         }
     }
 
     func pickerRow(_ exercise: PickerExercise) -> some View {
         HStack(spacing: 12) {
             Text(exercise.number)
-                .font(.vivoMono(12))
+                .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 18, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
-                    .font(.vivoDisplay(16))
+                    .font(.vivoDisplay(VivoFont.body))
                     .foregroundStyle(Color.vivoPrimary)
                 Text(exercise.tags)
-                    .font(.vivoMono(12))
-                    .tracking(0.5)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
                     .foregroundStyle(Color.vivoMuted)
             }
 
