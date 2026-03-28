@@ -1,46 +1,195 @@
-import SwiftData
 import SwiftUI
 
 struct HistoryView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(
-        filter: #Predicate<Workout> { $0.completedAt != nil },
-        sort: \Workout.startedAt,
-        order: .reverse
-    ) private var completedWorkouts: [Workout]
-    @State private var viewModel: HistoryViewModel?
-
     var body: some View {
-        NavigationStack {
-            Group {
-                if completedWorkouts.isEmpty {
-                    ContentUnavailableView(
-                        "No History",
-                        systemImage: "chart.bar",
-                        description: Text("Completed workouts will appear here.")
+        ZStack {
+            Color.vivoBackground.ignoresSafeArea()
+
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    statsHeader
+                    vivoDivider
+                    HistoryActivityGrid()
+                    vivoDivider
+                        .padding(.top, 14)
+                    HistoryCalendar()
+                    todaySessionCard
+                    vivoDivider
+                        .padding(.top, 16)
+                    recentSessionsSection
+                    footerSection
+                }
+                .padding(.bottom, 32)
+            }
+        }
+    }
+
+    private var vivoDivider: some View {
+        Rectangle()
+            .fill(Color.vivoSurface)
+            .frame(height: 1)
+            .padding(.horizontal, 24)
+    }
+}
+
+// MARK: - Stats Header
+
+private extension HistoryView {
+    var statsHeader: some View {
+        HStack(spacing: 0) {
+            headerStat(value: "12", label: "DAY STREAK")
+            headerStat(value: "127", label: "TOTAL SESSIONS")
+            headerStat(value: "18", label: "THIS MONTH")
+            headerStat(value: "42", label: "TOTAL PRs")
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 10)
+    }
+
+    func headerStat(value: String, label: String) -> some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.vivoDisplay(18, weight: .bold))
+                .foregroundStyle(Color.vivoPrimary)
+            Text(label)
+                .font(.vivoMono(7))
+                .tracking(1.5)
+                .foregroundStyle(Color.vivoSecondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Today Session Card
+
+private extension HistoryView {
+    var todaySessionCard: some View {
+        HistorySessionCard()
+            .padding(.top, 16)
+    }
+}
+
+// MARK: - Recent Sessions
+
+private extension HistoryView {
+    struct RecentSession: Identifiable {
+        let id: String
+        let day: String
+        let month: String
+        let name: String
+        let detail: String
+        let volume: String
+        let prText: String?
+    }
+
+    static let sessions: [RecentSession] = [
+        RecentSession(
+            id: "s1",
+            day: "17",
+            month: "MAR",
+            name: "Lower Body A",
+            detail: "58 min · 24 sets · 5 exercises",
+            volume: "18,240",
+            prText: "1 PR"
+        ),
+        RecentSession(
+            id: "s2",
+            day: "16",
+            month: "MAR",
+            name: "Upper Pull B",
+            detail: "49 min · 20 sets · 5 exercises",
+            volume: "12,650",
+            prText: nil
+        ),
+        RecentSession(
+            id: "s3",
+            day: "15",
+            month: "MAR",
+            name: "Upper Push A",
+            detail: "51 min · 22 sets · 6 exercises",
+            volume: "13,580",
+            prText: nil
+        ),
+        RecentSession(
+            id: "s4",
+            day: "13",
+            month: "MAR",
+            name: "Lower Body B",
+            detail: "62 min · 26 sets · 6 exercises",
+            volume: "21,300",
+            prText: "2 PRs"
+        )
+    ]
+
+    var recentSessionsSection: some View {
+        VStack(spacing: 0) {
+            Text("RECENT SESSIONS")
+                .font(.vivoMono(12))
+                .tracking(2)
+                .foregroundStyle(Color.vivoMuted)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                .padding(.bottom, 10)
+
+            VStack(spacing: 0) {
+                ForEach(Self.sessions) { session in
+                    HistorySessionRow(
+                        day: session.day,
+                        month: session.month,
+                        name: session.name,
+                        detail: session.detail,
+                        volume: session.volume,
+                        prText: session.prText
                     )
-                } else {
-                    List {
-                        ForEach(completedWorkouts) { workout in
-                            HistoryRowView(workout: workout)
-                        }
-                    }
                 }
             }
-            .navigationTitle("History")
-        }
-        .task {
-            if viewModel == nil {
-                viewModel = HistoryViewModel(modelContext: modelContext)
-            }
+            .padding(.horizontal, 24)
         }
     }
 }
 
+// MARK: - Footer
+
+private extension HistoryView {
+    static let barcodeHeights: [CGFloat] = [
+        16, 10, 16, 5, 14, 16, 4, 12, 16, 8, 16, 10
+    ]
+
+    var footerSection: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("VIVOBODY HISTORY · V5.0")
+                    .font(.vivoMono(7))
+                    .tracking(1.5)
+                    .foregroundStyle(Color.vivoMuted)
+                Text("127 SESSIONS · SINCE SEP 2025")
+                    .font(.vivoMono(7))
+                    .tracking(1.5)
+                    .foregroundStyle(Color.vivoMuted)
+            }
+
+            Spacer()
+
+            HStack(alignment: .bottom, spacing: 1) {
+                ForEach(
+                    Array(Self.barcodeHeights.enumerated()),
+                    id: \.offset
+                ) { _, height in
+                    Rectangle()
+                        .fill(Color.vivoMuted)
+                        .frame(width: 1, height: height)
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20)
+        .padding(.bottom, 8)
+    }
+}
+
+// MARK: - Preview
+
 #Preview {
     HistoryView()
-        .modelContainer(
-            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
-            inMemory: true
-        )
 }

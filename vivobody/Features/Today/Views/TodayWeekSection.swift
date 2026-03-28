@@ -1,0 +1,157 @@
+import SwiftUI
+
+// MARK: - Weekly Volume Chart
+
+struct VolumeDay: Identifiable {
+    let id: String
+    let day: String
+    let height: CGFloat
+}
+
+extension TodayView {
+    static let volumeData: [VolumeDay] = [
+        VolumeDay(id: "0", day: "M", height: 0.68),
+        VolumeDay(id: "1", day: "T", height: 0.89),
+        VolumeDay(id: "2", day: "W", height: 0.59),
+        VolumeDay(id: "3", day: "T", height: 0.0),
+        VolumeDay(id: "4", day: "F", height: 0.49),
+        VolumeDay(id: "5", day: "S", height: 1.0),
+        VolumeDay(id: "6", day: "S", height: 0.06)
+    ]
+
+    var weeklyVolumeChart: some View {
+        HStack(alignment: .bottom, spacing: 0) {
+            ForEach(Self.volumeData) { data in
+                VStack(spacing: 4) {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(
+                            data.height > 0
+                                ? Color.vivoAccent.opacity(0.3 + data.height * 0.7)
+                                : Color.vivoSurface
+                        )
+                        .frame(height: max(1, data.height * 65))
+
+                    Text(data.day)
+                        .font(.vivoMono(10))
+                        .foregroundStyle(Color.vivoMuted)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 2)
+            }
+        }
+        .frame(height: 80)
+        .padding(.horizontal, 24)
+    }
+
+    var volumeTotals: some View {
+        HStack {
+            Text("TOTAL: 58,240 LB")
+                .font(.vivoMono(12))
+                .tracking(0.5)
+                .foregroundStyle(Color.vivoMuted)
+            Spacer()
+            Text("AVG: 11,648 LB/DAY")
+                .font(.vivoMono(12))
+                .tracking(0.5)
+                .foregroundStyle(Color.vivoMuted)
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 8)
+        .padding(.bottom, 14)
+    }
+}
+
+// MARK: - Recent Sessions
+
+struct RecentSession: Identifiable {
+    let id: String
+    let name: String
+    let stats: String
+    let date: String
+    let hasPR: Bool
+}
+
+extension TodayView {
+    static let recentSessions: [RecentSession] = [
+        RecentSession(id: "0", name: "Lower Body A", stats: "58 min · 18,240 lb · 1 PR", date: "MAR 17", hasPR: true),
+        RecentSession(id: "1", name: "Upper Pull B", stats: "49 min · 12,650 lb", date: "MAR 16", hasPR: false),
+        RecentSession(id: "2", name: "Upper Push A", stats: "51 min · 13,580 lb", date: "MAR 15", hasPR: false),
+        RecentSession(id: "3", name: "Lower Body B", stats: "62 min · 21,300 lb · 2 PRs", date: "MAR 13", hasPR: true)
+    ]
+
+    var recentSessionsList: some View {
+        VStack(spacing: 0) {
+            ForEach(Self.recentSessions) { session in
+                sessionRow(session)
+            }
+        }
+        .padding(.horizontal, 24)
+    }
+
+    func sessionRow(_ session: RecentSession) -> some View {
+        HStack(spacing: 12) {
+            Circle()
+                .fill(session.hasPR ? Color.vivoGreen : Color.vivoSurface)
+                .frame(width: 8, height: 8)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(session.name)
+                    .font(.vivoDisplay(16))
+                    .foregroundStyle(Color.vivoPrimary)
+                Text(session.stats)
+                    .font(.vivoMono(12))
+                    .foregroundStyle(Color.vivoMuted)
+            }
+
+            Spacer()
+
+            Text(session.date)
+                .font(.vivoMono(12))
+                .foregroundStyle(Color.vivoMuted)
+
+            Text("\u{203A}")
+                .font(.vivoDisplay(18))
+                .foregroundStyle(Color.vivoMuted)
+        }
+        .frame(height: 56)
+    }
+}
+
+// MARK: - Footer
+
+extension TodayView {
+    static let barcodeHeights: [CGFloat] = [
+        16, 10, 16, 5, 14, 16, 4, 12, 16, 8, 16, 10
+    ]
+
+    var footerSection: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text("VIVOBODY DASHBOARD · V5.0")
+                    .font(.vivoMono(9))
+                    .tracking(1)
+                    .foregroundStyle(Color.vivoMuted)
+                Text("127 SESSIONS · SINCE SEP 2025")
+                    .font(.vivoMono(9))
+                    .tracking(1)
+                    .foregroundStyle(Color.vivoMuted)
+            }
+
+            Spacer()
+
+            HStack(alignment: .bottom, spacing: 1) {
+                ForEach(
+                    Array(Self.barcodeHeights.enumerated()),
+                    id: \.offset
+                ) { _, height in
+                    Rectangle()
+                        .fill(Color.vivoMuted)
+                        .frame(width: 1, height: height)
+                }
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 16)
+        .padding(.bottom, 8)
+    }
+}

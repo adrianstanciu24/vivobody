@@ -4,8 +4,11 @@ import SwiftUI
 struct RootTabView: View {
     var body: some View {
         TabView {
+            Tab("Today", systemImage: "flame") {
+                TodayView()
+            }
             Tab("Workouts", systemImage: "figure.strengthtraining.traditional") {
-                WorkoutLogView()
+                WorkoutCompleteView()
             }
             Tab("Exercises", systemImage: "dumbbell") {
                 ExerciseLibraryView()
@@ -17,6 +20,8 @@ struct RootTabView: View {
                 SettingsView()
             }
         }
+        .preferredColorScheme(.dark)
+        .tint(Color.vivoAccent)
     }
 }
 
