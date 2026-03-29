@@ -1,40 +1,98 @@
+import SwiftData
 import SwiftUI
 
 struct WorkoutsHistoryView: View {
+    @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var selectedFilter = "ALL"
+
+    private var totalVolume: Int {
+        workouts.reduce(0) { $0 + $1.totalVolume }
+    }
+
+    private var avgDuration: Int {
+        guard !workouts.isEmpty else { return 0 }
+        let total = workouts.compactMap(\.duration).reduce(0, +)
+        return Int(total) / 60 / max(1, workouts.count)
+    }
+
+    private var groupedWorkouts: [(String, [Workout])] {
+        let calendar = Calendar.current
+        let now = Date.now
+        let startOfThisWeek = calendar.dateInterval(of: .weekOfYear, for: now)?.start ?? now
+        let startOfLastWeek = calendar.date(byAdding: .weekOfYear, value: -1, to: startOfThisWeek) ?? now
+
+        var thisWeek: [Workout] = []
+        var lastWeek: [Workout] = []
+        var older: [Workout] = []
+
+        for workout in workouts {
+            if workout.startedAt >= startOfThisWeek {
+                thisWeek.append(workout)
+            } else if workout.startedAt >= startOfLastWeek {
+                lastWeek.append(workout)
+            } else {
+                older.append(workout)
+            }
+        }
+
+        var sections: [(String, [Workout])] = []
+        if !thisWeek.isEmpty { sections.append(("THIS WEEK", thisWeek)) }
+        if !lastWeek.isEmpty { sections.append(("LAST WEEK", lastWeek)) }
+        if !older.isEmpty { sections.append(("OLDER", older)) }
+        return sections
+    }
 
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    WorkoutsHistoryHeader()
-                    divider
-                    WorkoutsHistoryFilterPills(selectedFilter: $selectedFilter)
-                    divider
-
-                    WorkoutsHistoryWeekSection(
-                        label: "THIS WEEK",
-                        sessions: Self.thisWeekSessions,
-                        highlightFirst: true
-                    )
-                    divider
-                    WorkoutsHistoryWeekSection(
-                        label: "LAST WEEK",
-                        sessions: Self.lastWeekSessions
-                    )
-                    divider
-                    WorkoutsHistoryWeekSection(
-                        label: "MAR 02 \u{2014} MAR 08",
-                        sessions: Self.olderSessions
-                    )
-
-                    divider
-                    VivoFooter()
-                }
-                .padding(.bottom, 32)
+            if workouts.isEmpty {
+                emptyState
+            } else {
+                workoutList
             }
+        }
+    }
+
+    private var workoutList: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                WorkoutsHistoryHeader()
+                WorkoutsHistoryStatsRow(
+                    sessions: workouts.count,
+                    volume: totalVolume,
+                    avgDuration: avgDuration
+                )
+                divider
+                WorkoutsHistoryFilterPills(selectedFilter: $selectedFilter)
+                divider
+
+                ForEach(Array(groupedWorkouts.enumerated()), id: \.offset) { sectionIndex, section in
+                    WorkoutsHistoryWeekSection(
+                        label: section.0,
+                        workouts: section.1,
+                        highlightFirst: sectionIndex == 0
+                    )
+                    divider
+                }
+
+                VivoFooter()
+            }
+            .padding(.bottom, 32)
+        }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            Spacer()
+            Text("NO WORKOUTS YET")
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
+                .tracking(VivoTracking.wide)
+                .foregroundStyle(Color.vivoMuted)
+            Text("Start your first session from the Today tab")
+                .font(.vivoMono(VivoFont.monoSM))
+                .foregroundStyle(Color.vivoSecondary)
+            Spacer()
         }
     }
 
@@ -50,33 +108,51 @@ struct WorkoutsHistoryView: View {
 
 struct WorkoutsHistoryHeader: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("WORKOUT LOG")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-                .padding(.top, 12)
-
-            Text("Workouts")
-                .font(.vivoDisplay(VivoFont.titleLG, weight: .bold))
+        HStack(spacing: 8) {
+            Text("12")
+                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
+                .foregroundStyle(Color.vivoAccent)
+            Text("Day Streak")
+                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
-                .padding(.top, 4)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 42)
+        .padding(.bottom, 16)
+    }
+}
 
-            HStack(spacing: 0) {
-                VivoStatColumn(
-                    value: "127", label: "SESSIONS",
-                    valueColor: .vivoAccent
-                )
-                verticalDivider
-                VivoStatColumn(value: "48K", label: "VOL. LB")
-                verticalDivider
-                VivoStatColumn(value: "07", label: "PRs")
-                verticalDivider
-                VivoStatColumn(value: "12", label: "STREAK")
-            }
-            .padding(.top, 8)
+// MARK: - Stats Row
+
+struct WorkoutsHistoryStatsRow: View {
+    let sessions: Int
+    let volume: Int
+    let avgDuration: Int
+
+    private var volumeLabel: String {
+        if volume >= 1000 {
+            return "\(volume / 1000)K"
+        }
+        return "\(volume)"
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            VivoStatColumn(
+                value: "\(sessions)", label: "SESSIONS",
+                valueColor: .vivoAccent
+            )
+            verticalDivider
+            VivoStatColumn(value: volumeLabel, label: "VOL. LB")
+            verticalDivider
+            VivoStatColumn(value: "07", label: "PRs")
+            verticalDivider
+            VivoStatColumn(value: "\(avgDuration)m", label: "AVG DUR.")
         }
         .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 8)
         .padding(.bottom, 12)
     }
 
@@ -106,6 +182,7 @@ struct WorkoutsHistoryFilterPills: View {
                         .foregroundStyle(
                             selectedFilter == filter ? Color.vivoAccent : Color.vivoMuted
                         )
+                        .fixedSize()
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
                         .background(pillBackground(selected: selectedFilter == filter))
@@ -134,7 +211,7 @@ struct WorkoutsHistoryFilterPills: View {
 
 struct WorkoutsHistoryWeekSection: View {
     let label: String
-    let sessions: [HistorySession]
+    let workouts: [Workout]
     var highlightFirst = false
 
     var body: some View {
@@ -147,9 +224,9 @@ struct WorkoutsHistoryWeekSection: View {
                 .padding(.top, 12)
                 .padding(.bottom, 10)
 
-            ForEach(Array(sessions.enumerated()), id: \.element.id) { index, session in
+            ForEach(Array(workouts.enumerated()), id: \.element.persistentModelID) { index, workout in
                 WorkoutSessionRow(
-                    session: session,
+                    workout: workout,
                     highlight: highlightFirst && index == 0
                 )
             }
@@ -161,4 +238,8 @@ struct WorkoutsHistoryWeekSection: View {
 
 #Preview {
     WorkoutsHistoryView()
+        .modelContainer(
+            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+            inMemory: true
+        )
 }

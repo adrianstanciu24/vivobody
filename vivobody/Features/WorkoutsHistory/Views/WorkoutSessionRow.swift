@@ -1,23 +1,24 @@
 import SwiftUI
 
 struct WorkoutSessionRow: View {
-    let session: HistorySession
+    let workout: Workout
     var highlight = false
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
-                WorkoutSessionDateColumn(session: session)
+                WorkoutSessionDateColumn(workout: workout)
                     .frame(width: 72)
+                    .padding(.trailing, 12)
 
-                WorkoutSessionDetails(session: session)
+                WorkoutSessionDetails(workout: workout)
 
                 Spacer()
 
-                WorkoutSessionTrailing(session: session)
+                WorkoutSessionTrailing(workout: workout)
             }
             .padding(.vertical, 14)
-            .frame(minHeight: session.prCount > 0 ? 120 : 96)
+            .frame(minHeight: 96)
             .background(highlight ? Color.vivoAccent.opacity(0.04) : .clear)
             .overlay(alignment: .leading) {
                 if highlight {
@@ -39,21 +40,21 @@ struct WorkoutSessionRow: View {
 // MARK: - Date Column
 
 struct WorkoutSessionDateColumn: View {
-    let session: HistorySession
+    let workout: Workout
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(session.dayNumber)
+            Text(workout.dayOfWeekIndex)
                 .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
-            Text(session.dayName)
+            Text(workout.dayOfWeek)
                 .font(.vivoMono(VivoFont.monoSM, weight: .bold))
                 .tracking(VivoTracking.normal)
                 .foregroundStyle(Color.vivoSecondary)
 
-            Text(session.date)
-                .font(.vivoMono(VivoFont.body, weight: .bold))
+            Text(workout.dayNumber)
+                .font(.vivoMono(VivoFont.sectionTitle, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
         }
         .padding(.leading, VivoSpacing.screenH)
@@ -63,24 +64,20 @@ struct WorkoutSessionDateColumn: View {
 // MARK: - Session Details
 
 struct WorkoutSessionDetails: View {
-    let session: HistorySession
+    let workout: Workout
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(session.name)
-                .font(.vivoDisplay(VivoFont.body, weight: .bold))
+            Text(workout.notes.isEmpty ? "Custom Workout" : workout.notes)
+                .font(.vivoDisplay(VivoFont.sectionTitle, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
-            Text(session.muscles)
-                .font(.vivoMono(VivoFont.monoSM))
+            Text(workout.exerciseSummary)
+                .font(.vivoMono(VivoFont.monoMD))
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
 
-            WorkoutSessionStatsLine(session: session)
-
-            if session.prCount > 0 {
-                PRBadge(count: session.prCount)
-            }
+            WorkoutSessionStatsLine(workout: workout)
         }
     }
 }
@@ -88,24 +85,24 @@ struct WorkoutSessionDetails: View {
 // MARK: - Stats Line
 
 struct WorkoutSessionStatsLine: View {
-    let session: HistorySession
+    let workout: Workout
 
     var body: some View {
         HStack(spacing: 0) {
-            Text(session.duration)
-                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+            Text(workout.durationFormatted)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" \u{00B7} ")
-                .font(.vivoMono(VivoFont.monoSM))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoMuted)
-            Text(session.volume)
-                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+            Text(workout.volumeFormatted)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
             Text(" \u{00B7} ")
-                .font(.vivoMono(VivoFont.monoSM))
+                .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoMuted)
-            Text(session.sets)
-                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+            Text(workout.setsFormatted)
+                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
         }
     }
@@ -114,45 +111,18 @@ struct WorkoutSessionStatsLine: View {
 // MARK: - Trailing (Checkmark + Time)
 
 struct WorkoutSessionTrailing: View {
-    let session: HistorySession
+    let workout: Workout
 
     var body: some View {
         VStack(spacing: 4) {
             Text("\u{2713}")
                 .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoGreen)
-            Text(session.timeAgo)
+            Text(workout.relativeTimeAgo)
                 .font(.vivoMono(VivoFont.monoXS))
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
         }
         .padding(.trailing, VivoSpacing.screenH)
     }
-}
-
-// MARK: - Preview
-
-#Preview {
-    VStack(spacing: 0) {
-        WorkoutSessionRow(
-            session: HistorySession(
-                id: "p1", dayNumber: "03", dayName: "WED", date: "18",
-                name: "Upper Body Push",
-                muscles: "6 exercises \u{00B7} chest, delts, triceps",
-                duration: "52:10", volume: "14,820 lb", sets: "22 sets",
-                prCount: 2, timeAgo: "2h ago"
-            ),
-            highlight: true
-        )
-        WorkoutSessionRow(
-            session: HistorySession(
-                id: "p2", dayNumber: "02", dayName: "TUE", date: "17",
-                name: "Lower Body",
-                muscles: "6 exercises \u{00B7} quads, hams, glutes",
-                duration: "52:10", volume: "8,420 lb", sets: "20 sets",
-                prCount: 0, timeAgo: "Yesterday"
-            )
-        )
-    }
-    .background(Color.vivoBackground)
 }
