@@ -67,8 +67,8 @@ extension AddExerciseView {
                 .foregroundStyle(Color.vivoMuted)
 
             HStack(spacing: 12) {
-                stepperButton("\u{2212}", action: onMinus)
-                stepperButton("+", action: onPlus)
+                VivoStepperButton(symbol: "\u{2212}", action: onMinus)
+                VivoStepperButton(symbol: "+", action: onPlus)
             }
 
             if let hint {
@@ -80,23 +80,6 @@ extension AddExerciseView {
             }
         }
         .frame(maxWidth: .infinity)
-    }
-
-    func stepperButton(_ symbol: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(symbol)
-                .font(.vivoMono(VivoFont.monoXL))
-                .foregroundStyle(Color.vivoMuted)
-                .frame(width: 44, height: 44)
-                .background(
-                    RoundedRectangle(cornerRadius: VivoRadius.stepper)
-                        .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: VivoRadius.stepper)
-                        .stroke(Color.vivoSurface, lineWidth: 1.5)
-                )
-        }
     }
 }
 
@@ -145,7 +128,7 @@ extension AddExerciseView {
     var rirControl: some View {
         VStack(spacing: 8) {
             HStack(spacing: 16) {
-                stepperButton("\u{2212}") { rir = max(0, rir - 1) }
+                VivoStepperButton(symbol: "\u{2212}") { rir = max(0, rir - 1) }
 
                 HStack(spacing: 8) {
                     Text(String(format: "%02d", rir))
@@ -160,7 +143,7 @@ extension AddExerciseView {
 
                 Spacer()
 
-                stepperButton("+") { rir = min(9, rir + 1) }
+                VivoStepperButton(symbol: "+") { rir = min(9, rir + 1) }
             }
 
             HStack(spacing: 4) {
@@ -197,48 +180,6 @@ extension AddExerciseView {
         if index <= 1 { return Color.vivoAccent }
         if index <= 3 { return Color.vivoYellow }
         return Color.vivoGreen
-    }
-}
-
-// MARK: - Segment Picker
-
-extension AddExerciseView {
-    func segmentPicker(
-        options: [String],
-        selection: Binding<String>,
-        accentSelected: Bool = false
-    ) -> some View {
-        HStack(spacing: 6) {
-            ForEach(options, id: \.self) { option in
-                let isSelected = selection.wrappedValue == option
-                Button { selection.wrappedValue = option } label: {
-                    Text(option)
-                        .font(.vivoMono(VivoFont.monoSM, weight: isSelected ? .bold : .regular))
-                        .tracking(VivoTracking.tight)
-                        .foregroundStyle(segmentForeground(isSelected, accent: accentSelected))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 38)
-                        .background(segmentBackground(isSelected, accent: accentSelected))
-                        .clipShape(RoundedRectangle(cornerRadius: VivoRadius.pill))
-                        .overlay(
-                            isSelected ? nil :
-                                RoundedRectangle(cornerRadius: VivoRadius.pill)
-                                .stroke(Color.vivoSurface, lineWidth: 1.5)
-                        )
-                }
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-    }
-
-    func segmentForeground(_ selected: Bool, accent: Bool) -> Color {
-        if !selected { return Color.vivoMuted }
-        return accent ? .white : Color.vivoBackground
-    }
-
-    func segmentBackground(_ selected: Bool, accent: Bool) -> Color {
-        if !selected { return .clear }
-        return accent ? Color.vivoAccent : Color.vivoPrimary
     }
 }
 

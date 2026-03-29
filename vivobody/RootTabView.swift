@@ -12,13 +12,7 @@ struct RootTabView: View {
                     TodayView()
                 }
                 Tab("Workouts", systemImage: "figure.strengthtraining.traditional") {
-                    ZStack {
-                        Color.vivoBackground.ignoresSafeArea()
-                        Text("COMING SOON")
-                            .font(.vivoMono(VivoFont.monoMD))
-                            .tracking(VivoTracking.wide)
-                            .foregroundStyle(Color.vivoMuted)
-                    }
+                    WorkoutsHistoryView()
                 }
                 Tab("Exercises", systemImage: "dumbbell") {
                     ExerciseLibraryView()

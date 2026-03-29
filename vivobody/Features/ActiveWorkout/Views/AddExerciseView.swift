@@ -33,26 +33,30 @@ struct AddExerciseView: View {
                         rirControl
                         divider
                         sectionLabel("RANGE OF MOTION")
-                        segmentPicker(
+                        VivoSegmentPicker(
                             options: ["PARTIAL", "FULL", "DEEP"],
                             selection: $rom
                         )
+                        .padding(.horizontal, VivoSpacing.screenH)
                         sectionLabel("TEMPO")
-                        segmentPicker(
+                        VivoSegmentPicker(
                             options: ["EXPLOSIVE", "CONTROLLED", "SLOW", "PAUSED"],
                             selection: $tempo,
                             accentSelected: true
                         )
+                        .padding(.horizontal, VivoSpacing.screenH)
                         sectionLabel("GRIP")
-                        segmentPicker(
+                        VivoSegmentPicker(
                             options: ["WIDE", "NORMAL", "NARROW"],
                             selection: $grip
                         )
+                        .padding(.horizontal, VivoSpacing.screenH)
                         sectionLabel("STANCE")
-                        segmentPicker(
+                        VivoSegmentPicker(
                             options: ["WIDE", "NORMAL", "NARROW"],
                             selection: $stance
                         )
+                        .padding(.horizontal, VivoSpacing.screenH)
                         divider
                         logSetButton
                         loggedSetsSection

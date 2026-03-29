@@ -156,41 +156,7 @@ extension WorkoutCompleteView {
 // MARK: - Footer
 
 extension WorkoutCompleteView {
-    static let barcodeHeights: [CGFloat] = [
-        20, 12, 20, 6, 18, 20, 5, 14, 20, 9, 20, 12, 7, 20, 11, 20
-    ]
-
     var footerSection: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 0) {
-                footerLine("SESSION #127 · UPPER PUSH A")
-                footerLine("08:54 — 09:46 · MAR 18 2026")
-                footerLine("SN: VIVO-2026-0318-127")
-            }
-
-            Spacer()
-
-            HStack(alignment: .bottom, spacing: 1.5) {
-                ForEach(
-                    Array(Self.barcodeHeights.enumerated()),
-                    id: \.offset
-                ) { _, height in
-                    Rectangle()
-                        .fill(Color.vivoMuted)
-                        .frame(width: 1.5, height: height)
-                }
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 20)
-        .padding(.bottom, 8)
-    }
-
-    func footerLine(_ text: String) -> some View {
-        Text(text)
-            .font(.vivoMono(VivoFont.monoMin))
-            .tracking(VivoTracking.medium)
-            .foregroundStyle(Color.vivoMuted)
-            .padding(.vertical, 0.5)
+        VivoFooter()
     }
 }

@@ -120,38 +120,7 @@ extension TodayView {
 // MARK: - Footer
 
 extension TodayView {
-    static let barcodeHeights: [CGFloat] = [
-        16, 10, 16, 5, 14, 16, 4, 12, 16, 8, 16, 10
-    ]
-
     var footerSection: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text("VIVOBODY DASHBOARD · V5.0")
-                    .font(.vivoMono(VivoFont.monoMicro))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoMuted)
-                Text("127 SESSIONS · SINCE SEP 2025")
-                    .font(.vivoMono(VivoFont.monoMicro))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-
-            Spacer()
-
-            HStack(alignment: .bottom, spacing: 1) {
-                ForEach(
-                    Array(Self.barcodeHeights.enumerated()),
-                    id: \.offset
-                ) { _, height in
-                    Rectangle()
-                        .fill(Color.vivoMuted)
-                        .frame(width: 1, height: height)
-                }
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 16)
-        .padding(.bottom, 8)
+        VivoFooter()
     }
 }

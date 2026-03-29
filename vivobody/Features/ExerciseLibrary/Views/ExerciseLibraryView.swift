@@ -284,39 +284,8 @@ private extension ExerciseLibraryView {
 // MARK: - Footer
 
 private extension ExerciseLibraryView {
-    static let barcodeHeights: [CGFloat] = [
-        16, 10, 16, 5, 14, 16, 4, 12, 16, 8, 16, 10
-    ]
-
     var footerSection: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 0) {
-                Text("VIVOBODY EXERCISE DB · V5.0")
-                    .font(.vivoMono(VivoFont.monoMin))
-                    .tracking(VivoTracking.medium)
-                    .foregroundStyle(Color.vivoMuted)
-                Text("248 EXERCISES · 7 CATEGORIES")
-                    .font(.vivoMono(VivoFont.monoMin))
-                    .tracking(VivoTracking.medium)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-
-            Spacer()
-
-            HStack(alignment: .bottom, spacing: 1) {
-                ForEach(
-                    Array(Self.barcodeHeights.enumerated()),
-                    id: \.offset
-                ) { _, height in
-                    Rectangle()
-                        .fill(Color.vivoMuted)
-                        .frame(width: 1, height: height)
-                }
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 20)
-        .padding(.bottom, 8)
+        VivoFooter()
     }
 }
 
