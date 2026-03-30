@@ -6,6 +6,7 @@ struct WorkoutTemplatesView: View {
     private var templates: [WorkoutTemplate]
 
     @State private var showCreate = false
+    @State private var editingTemplate: WorkoutTemplate?
 
     var body: some View {
         if templates.isEmpty {
@@ -24,6 +25,11 @@ struct WorkoutTemplatesView: View {
                         .presentationDetents([.large])
                         .presentationDragIndicator(.hidden)
                 }
+                .sheet(item: $editingTemplate) { template in
+                    CreateTemplateView(template: template)
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.hidden)
+                }
         }
     }
 
@@ -32,7 +38,6 @@ struct WorkoutTemplatesView: View {
             VStack(spacing: 0) {
                 ForEach(templates) { template in
                     templateRow(template)
-                    divider
                 }
 
                 createButton
@@ -43,57 +48,35 @@ struct WorkoutTemplatesView: View {
     }
 
     private func templateRow(_ template: WorkoutTemplate) -> some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(template.name.uppercased())
-                    .font(.vivoDisplay(VivoFont.body, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-
-                Text(
-                    "\(template.exercises.count) EXERCISES · USED \(template.timesUsed)×"
-                )
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(Color.vivoMuted)
-            }
-
-            Spacer()
-
-            Text("›")
-                .font(.vivoDisplay(VivoFont.bodySmall))
-                .foregroundStyle(Color.vivoMuted)
+        Button { editingTemplate = template } label: {
+            TemplateCardView(template: template)
         }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .frame(height: 72)
+        .buttonStyle(.plain)
     }
 
     private var createButton: some View {
         Button { showCreate = true } label: {
             HStack(spacing: 8) {
                 Text("+")
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoAccent)
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .foregroundStyle(Color.vivoMuted)
                 Text("CREATE TEMPLATE")
                     .font(.vivoMono(VivoFont.monoCaption))
                     .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoSecondary)
+                    .foregroundStyle(Color.vivoMuted)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 55)
+            .frame(height: 44)
             .overlay(
                 RoundedRectangle(cornerRadius: VivoRadius.card)
-                    .stroke(Color.vivoSurface, lineWidth: 1.5)
+                    .stroke(
+                        Color.vivoSurface,
+                        style: StrokeStyle(lineWidth: 1, dash: [6, 4])
+                    )
             )
         }
         .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 16)
-    }
-
-    private var divider: some View {
-        Rectangle()
-            .fill(Color.vivoSurface)
-            .frame(height: 1)
-            .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 12)
     }
 }
 

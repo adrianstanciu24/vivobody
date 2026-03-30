@@ -1,23 +1,66 @@
+import SwiftData
 import SwiftUI
 
 struct CreateTemplateView: View {
     @Environment(\.dismiss) private var dismiss
-    @State var templateName = "Upper Body Push B"
-    @State var selectedDays: Set<Int> = [0, 2]
-    @State var selectedMuscles: Set<String> = ["CHEST", "SHOULDERS", "TRICEPS"]
-    @State var exercises: [TemplateExerciseItem] = TemplateExerciseItem.sampleData
-    @State var notes = """
-    Focus on mind-muscle connection for flys.
-    Push B uses DB variants of Push A compounds.
-    Alternate A/B each push day.
-    """
+    @Environment(\.modelContext) private var modelContext
+
+    var existingTemplate: WorkoutTemplate?
+
+    @State var templateName: String
+    @State var selectedDays: Set<Int>
+    @State var selectedMuscles: Set<String>
+    @State var exercises: [TemplateExerciseItem]
+    @State var notes: String
+
+    private var isEditing: Bool {
+        existingTemplate != nil
+    }
+
+    init(template: WorkoutTemplate? = nil) {
+        existingTemplate = template
+        if let template {
+            _templateName = State(initialValue: template.name)
+            _selectedDays = State(initialValue: Set(template.scheduleDays))
+            _selectedMuscles = State(
+                initialValue: Set(template.muscleGroups.map { $0.displayName.uppercased() })
+            )
+            _exercises = State(
+                initialValue: template.exercises
+                    .sorted { $0.order < $1.order }
+                    .map { ex in
+                        let mins = ex.restSeconds / 60
+                        let secs = ex.restSeconds % 60
+                        return TemplateExerciseItem(
+                            name: ex.name,
+                            primaryTag: ex.primaryTag,
+                            secondaryTags: ex.secondaryTags,
+                            sets: ex.targetSets,
+                            targetReps: ex.targetReps,
+                            restLabel: String(format: "%d:%02d", mins, secs)
+                        )
+                    }
+            )
+            _notes = State(initialValue: template.notes)
+        } else {
+            _templateName = State(initialValue: "")
+            _selectedDays = State(initialValue: [])
+            _selectedMuscles = State(initialValue: [])
+            _exercises = State(initialValue: [])
+            _notes = State(initialValue: "")
+        }
+    }
 
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                createTemplateHeader(dismiss: dismiss)
+                createTemplateHeader(
+                    title: isEditing ? "EDIT TEMPLATE" : "NEW TEMPLATE",
+                    dismiss: dismiss,
+                    onSave: saveTemplate
+                )
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         CreateTemplateNameSection(
@@ -74,11 +117,69 @@ struct CreateTemplateView: View {
             .padding(.horizontal, VivoSpacing.screenH)
     }
 
+    private func saveTemplate() {
+        let muscleGroups = Array(Set(selectedMuscles.compactMap { Self.muscleGroup(from: $0) }))
+
+        let template: WorkoutTemplate
+        if let existingTemplate {
+            template = existingTemplate
+            template.name = templateName
+            template.muscleGroups = muscleGroups
+            template.scheduleDays = Array(selectedDays).sorted()
+            template.notes = notes
+            for exercise in template.exercises {
+                modelContext.delete(exercise)
+            }
+            template.exercises.removeAll()
+        } else {
+            template = WorkoutTemplate(
+                name: templateName,
+                muscleGroups: muscleGroups,
+                scheduleDays: Array(selectedDays).sorted(),
+                notes: notes
+            )
+            modelContext.insert(template)
+        }
+
+        for (index, item) in exercises.enumerated() {
+            let parts = item.restLabel.split(separator: ":")
+            let restSeconds = parts.count == 2
+                ? (Int(parts[0]) ?? 0) * 60 + (Int(parts[1]) ?? 0)
+                : 60
+
+            let templateExercise = TemplateExercise(
+                order: index,
+                targetSets: item.sets,
+                targetReps: item.targetReps,
+                restSeconds: restSeconds,
+                name: item.name,
+                primaryTag: item.primaryTag,
+                secondaryTags: item.secondaryTags,
+                template: template
+            )
+            template.exercises.append(templateExercise)
+        }
+    }
+
+    private static func muscleGroup(from name: String) -> MuscleGroup? {
+        switch name {
+        case "CHEST": .chest
+        case "BACK": .back
+        case "SHOULDERS": .shoulders
+        case "BICEPS": .biceps
+        case "TRICEPS": .triceps
+        case "QUADS", "HAMSTRINGS", "GLUTES", "CALVES": .legs
+        case "CORE": .core
+        default: nil
+        }
+    }
+
     private var saveButton: some View {
         Button {
+            saveTemplate()
             dismiss()
         } label: {
-            Text("SAVE TEMPLATE \u{2193}")
+            Text(isEditing ? "UPDATE TEMPLATE \u{2193}" : "SAVE TEMPLATE \u{2193}")
                 .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)
@@ -95,7 +196,7 @@ struct CreateTemplateView: View {
     private var templateFooter: some View {
         VivoFooter(
             line1: "VIVOBODY TEMPLATE EDITOR",
-            line2: "NEW \u{00B7} UNSAVED DRAFT",
+            line2: isEditing ? "EDITING \u{00B7} \(templateName.uppercased())" : "NEW \u{00B7} UNSAVED DRAFT",
             line3: ""
         )
     }
@@ -103,7 +204,11 @@ struct CreateTemplateView: View {
 
 // MARK: - Header
 
-func createTemplateHeader(dismiss: DismissAction) -> some View {
+func createTemplateHeader(
+    title: String = "NEW TEMPLATE",
+    dismiss: DismissAction,
+    onSave: @escaping () -> Void
+) -> some View {
     HStack {
         Button { dismiss() } label: {
             Text("\u{2190} CANCEL")
@@ -111,12 +216,15 @@ func createTemplateHeader(dismiss: DismissAction) -> some View {
                 .foregroundStyle(Color.vivoMuted)
         }
         Spacer()
-        Text("NEW TEMPLATE")
+        Text(title)
             .font(.vivoMono(VivoFont.monoCaption))
             .tracking(VivoTracking.medium)
             .foregroundStyle(Color.vivoMuted)
         Spacer()
-        Button { dismiss() } label: {
+        Button {
+            onSave()
+            dismiss()
+        } label: {
             Text("SAVE")
                 .font(.vivoMono(VivoFont.monoSM, weight: .bold))
                 .foregroundStyle(Color.vivoAccent)
@@ -168,4 +276,8 @@ struct TemplateExerciseItem: Identifiable {
 
 #Preview {
     CreateTemplateView()
+        .modelContainer(
+            for: [WorkoutTemplate.self, TemplateExercise.self],
+            inMemory: true
+        )
 }
