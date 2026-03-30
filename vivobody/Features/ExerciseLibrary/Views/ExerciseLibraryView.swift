@@ -4,34 +4,37 @@ struct ExerciseLibraryView: View {
     @State private var selectedFilter = "ALL"
 
     var body: some View {
-        ZStack {
-            Color.vivoBackground.ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                Color.vivoBackground.ignoresSafeArea()
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    searchBar
-                    filterPills
-                    vivoDivider
-                    recentSection
-                    vivoDivider
-                        .padding(.top, 10)
-                    muscleGroupSection(
-                        title: "Chest",
-                        count: 32,
-                        exercises: Self.chestExercises
-                    )
-                    vivoDivider
-                    muscleGroupSection(
-                        title: "Back",
-                        count: 41,
-                        exercises: Self.backExercises
-                    )
-                    vivoDivider
-                    createCustomButton
-                    footerSection
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        searchBar
+                        filterPills
+                        vivoDivider
+                        recentSection
+                        vivoDivider
+                            .padding(.top, 10)
+                        muscleGroupSection(
+                            title: "Chest",
+                            count: 32,
+                            exercises: Self.chestExercises
+                        )
+                        vivoDivider
+                        muscleGroupSection(
+                            title: "Back",
+                            count: 41,
+                            exercises: Self.backExercises
+                        )
+                        vivoDivider
+                        createCustomButton
+                        footerSection
+                    }
+                    .padding(.bottom, 32)
                 }
-                .padding(.bottom, 32)
             }
+            .navigationBarHidden(true)
         }
     }
 
@@ -247,7 +250,10 @@ private extension ExerciseLibraryView {
 
             VStack(spacing: 0) {
                 ForEach(exercises) { exercise in
-                    ExerciseLibraryRow(exercise: exercise)
+                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                        ExerciseLibraryRow(exercise: exercise)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, VivoSpacing.screenH)

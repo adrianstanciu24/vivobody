@@ -15,7 +15,9 @@ struct VivobodyApp: App {
             Exercise.self,
             Workout.self,
             WorkoutExercise.self,
-            ExerciseSet.self
+            ExerciseSet.self,
+            WorkoutTemplate.self,
+            TemplateExercise.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

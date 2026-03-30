@@ -3,10 +3,17 @@ import SwiftUI
 
 struct WorkoutsHistoryView: View {
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
+    @State private var selectedTab = "HISTORY"
     @State private var selectedFilter = "ALL"
 
     private var totalVolume: Int {
         workouts.reduce(0) { $0 + $1.totalVolume }
+    }
+
+    private var thisWeekCount: Int {
+        let calendar = Calendar.current
+        let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: .now)?.start ?? .now
+        return workouts.count(where: { $0.startedAt >= startOfWeek })
     }
 
     private var avgDuration: Int {
@@ -46,21 +53,31 @@ struct WorkoutsHistoryView: View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
 
-            if workouts.isEmpty {
-                emptyState
-            } else {
-                workoutList
+            VStack(spacing: 0) {
+                WorkoutsHistoryHeader()
+                WorkoutsTabToggle(selectedTab: $selectedTab)
+                divider
+
+                if selectedTab == "HISTORY" {
+                    if workouts.isEmpty {
+                        emptyState
+                    } else {
+                        historyContent
+                    }
+                } else {
+                    WorkoutTemplatesView()
+                }
             }
         }
     }
 
-    private var workoutList: some View {
+    private var historyContent: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
-                WorkoutsHistoryHeader()
                 WorkoutsHistoryStatsRow(
                     sessions: workouts.count,
                     volume: totalVolume,
+                    thisWeek: thisWeekCount,
                     avgDuration: avgDuration
                 )
                 divider
@@ -104,6 +121,45 @@ struct WorkoutsHistoryView: View {
     }
 }
 
+// MARK: - Tab Toggle
+
+struct WorkoutsTabToggle: View {
+    @Binding var selectedTab: String
+    private let tabs = ["HISTORY", "TEMPLATES"]
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(tabs, id: \.self) { tab in
+                let isSelected = selectedTab == tab
+                Button { selectedTab = tab } label: {
+                    Text(tab)
+                        .font(.vivoMono(
+                            VivoFont.monoXS,
+                            weight: isSelected ? .bold : .regular
+                        ))
+                        .tracking(VivoTracking.tight)
+                        .foregroundStyle(
+                            isSelected ? Color.vivoBackground : Color.vivoSecondary
+                        )
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 9)
+                        .background(
+                            RoundedRectangle(cornerRadius: VivoRadius.pill)
+                                .fill(isSelected ? Color.vivoPrimary : Color.clear)
+                        )
+                        .overlay(
+                            isSelected ? nil :
+                                RoundedRectangle(cornerRadius: VivoRadius.pill)
+                                .stroke(Color.vivoSurface, lineWidth: 1.5)
+                        )
+                }
+            }
+        }
+        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.bottom, 12)
+    }
+}
+
 // MARK: - Header
 
 struct WorkoutsHistoryHeader: View {
@@ -129,6 +185,7 @@ struct WorkoutsHistoryHeader: View {
 struct WorkoutsHistoryStatsRow: View {
     let sessions: Int
     let volume: Int
+    let thisWeek: Int
     let avgDuration: Int
 
     private var volumeLabel: String {
@@ -147,7 +204,7 @@ struct WorkoutsHistoryStatsRow: View {
             verticalDivider
             VivoStatColumn(value: volumeLabel, label: "VOL. LB")
             verticalDivider
-            VivoStatColumn(value: "07", label: "PRs")
+            VivoStatColumn(value: String(format: "%02d", thisWeek), label: "THIS WEEK")
             verticalDivider
             VivoStatColumn(value: "\(avgDuration)m", label: "AVG DUR.")
         }
@@ -239,7 +296,10 @@ struct WorkoutsHistoryWeekSection: View {
 #Preview {
     WorkoutsHistoryView()
         .modelContainer(
-            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+            for: [
+                Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self,
+                WorkoutTemplate.self, TemplateExercise.self
+            ],
             inMemory: true
         )
 }
