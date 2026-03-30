@@ -10,7 +10,7 @@ struct WorkoutTemplatesView: View {
 
     var body: some View {
         if templates.isEmpty {
-            WorkoutTemplatesEmptyState {
+            WorkoutTemplatesEmptyStateView {
                 showCreate = true
             }
             .sheet(isPresented: $showCreate) {

@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct TemplateCardView: View {
@@ -141,4 +142,13 @@ struct TemplateCardView: View {
             .compactMap { $0 < labels.count ? labels[$0] : nil }
             .joined(separator: " \u{00B7} ")
     }
+}
+
+#Preview {
+    TemplateCardView(template: WorkoutTemplate(name: "Push Day", muscleGroups: [.chest, .shoulders]))
+        .background(Color.vivoBackground)
+        .modelContainer(
+            for: [WorkoutTemplate.self, TemplateExercise.self],
+            inMemory: true
+        )
 }

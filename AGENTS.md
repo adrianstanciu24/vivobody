@@ -73,16 +73,59 @@ Do not guess which tool family to use. Follow these rules exactly.
 
 - `vivobody/` — app source
 - `vivobody/vivobodyApp.swift` — app entry point and `SwiftData` container setup
-- `vivobody/ContentView.swift` — current root UI
-- `vivobody/Item.swift` — current `SwiftData` model
+- `vivobody/RootTabView.swift` — root tab navigation
+- `vivobody/Core/Models/` — `SwiftData` `@Model` types
+- `vivobody/Core/Data/` — persistence helpers (`PersistenceController`)
+- `vivobody/Core/Theme/` — design tokens and shared UI components
+- `vivobody/Core/Workout/` — workout session logic
+- `vivobody/Features/*/Views/` — SwiftUI views per feature
+- `vivobody/Features/*/ViewModels/` — `@Observable` view models per feature
 - `vivobodyTests/` — unit tests using the Swift `Testing` framework
+- `vivobodyTests/Features/*/` — ViewModel tests mirroring feature folders
 - `vivobodyUITests/` — UI tests using `XCTest`
+- `scripts/lint-architecture.sh` — architecture lint rules (see Architecture Lint Rules)
+- `scripts/lint-swift.sh` — runs SwiftFormat lint, SwiftLint, and architecture lint
+- `scripts/format-swift.sh` — runs SwiftFormat in-place
 
 ## Architecture Overview
 
 - The app currently uses `SwiftUI` for UI and `SwiftData` for persistence.
 - `vivobodyApp` owns the shared model container and injects it into the view hierarchy.
 - Keep persistence concerns in models / data-facing code and keep views focused on presentation and user interaction.
+- `PersistenceController` (in `Core/Data/`) wraps `ModelContext` and is injected into the environment. Views that need mutation access use it via `@Environment(PersistenceController.self)` and pass the context to their ViewModel.
+- `@Query` is allowed in views (Apple-blessed observation pattern). Direct `modelContext.insert/delete/fetch/save` calls must live in ViewModels, not views.
+
+## Architecture Lint Rules
+
+`scripts/lint-architecture.sh` enforces project-specific structure beyond style. It runs automatically as part of `scripts/lint-swift.sh`. Each rule and its rationale:
+
+### Rule 1: ViewModel file placement
+**What:** Any file named `*ViewModel.swift` inside `Features/` must live in a `ViewModels/` subdirectory.
+**Why:** Agents and humans can reliably find and create ViewModels by convention. Prevents logic files from drifting into `Views/` folders.
+
+### Rule 2: ViewModel test coverage
+**What:** Every `*ViewModel.swift` in `Features/*/ViewModels/` must have a matching `*Tests.swift` in `vivobodyTests/Features/<Feature>/`.
+**Why:** New logic must ship with tests. The rule catches missing test files before code review.
+
+### Rule 3: No persistence mutations in feature views
+**What:** Files in `Features/*/Views/` must not call `modelContext.insert()`, `.delete()`, `.fetch()`, or `.save()` directly.
+**Why:** Separation of concerns. Views observe data; ViewModels mutate it. `@Query` and `@Environment(\.modelContext)` are allowed since they are Apple-blessed access patterns. The rule targets the actual layering violation (mutations), not the access pattern.
+
+### Rule 4: Cross-feature import boundaries
+**What:** A file in `Features/X/` must not reference View or ViewModel types defined in `Features/Y/` unless the pair is in the allowed list. The index is built from filenames in `Views/` and `ViewModels/` (the public surfaces), so no inner-file scanning is needed.
+**Why:** Prevents hidden coupling between feature folders. Allowed exceptions are documented in the script for legitimate navigation flows (e.g., ExerciseLibrary navigates to ExerciseDetail). New cross-feature dependencies must be added to the allowed list with a comment explaining why.
+
+### Rule 5: Core never imports Features
+**What:** No file in `Core/` may reference a type defined in `Features/`.
+**Why:** Classic layering. Core is the foundation; Features depend on Core, never the reverse. If a Feature type is needed in Core, extract the shared part into Core first.
+
+### Rule 6: Naming conventions
+**What:** Files in `Views/` must end with a recognized UI suffix: `View`, `Row`, `Card`, `Section`, `Sections`, `Grid`, `Calendar`, `Chart`, `Timeline`, `List`, `Bar`, `Picker`, `Column`, `Header`, `Footer`. Files in `ViewModels/` must end with `ViewModel`. Non-view helpers (data extensions, sample data) belong in `Helpers/`.
+**Why:** Predictable naming lets agents place and find files deterministically. A loose suffix list that includes domain terms (Stats, Notes, Config) defeats the purpose -- it should only contain UI-pattern names.
+
+### Rule 7: Every view file must contain a #Preview
+**What:** Any file in `Views/` that defines a `struct ... : View` must contain a `#Preview` block. Extension-only files (no own struct) are excluded since the parent view's preview covers them.
+**Why:** Previews are the fastest feedback loop for SwiftUI changes. Agents and humans should always be able to render any view in isolation.
 
 ## iOS Conventions
 

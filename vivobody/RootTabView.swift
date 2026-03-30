@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var session = WorkoutSession()
     @State private var showWorkout = false
 
@@ -49,8 +50,10 @@ struct RootTabView: View {
                 .interactiveDismissDisabled(false)
         }
         .environment(session)
+        .withPersistence()
         .preferredColorScheme(.dark)
         .tint(Color.vivoAccent)
+        .task { session.modelContext = modelContext }
     }
 }
 

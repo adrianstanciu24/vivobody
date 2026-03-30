@@ -21,11 +21,11 @@ struct ExerciseDetailView: View {
                     divider
                     ExerciseDetailPRTimeline()
                     divider
-                    ExerciseDetailBestSets()
+                    ExerciseDetailBestSetsView()
                     divider
-                    ExerciseDetailRecentHistory()
+                    ExerciseDetailRecentHistoryView()
                     divider
-                    ExerciseDetailFormNotes()
+                    ExerciseDetailFormNotesView()
                     VivoFooter(
                         line1: "VIVOBODY WORKOUT SYS",
                         line2: "EXERCISE: \(exercise.name.uppercased())",

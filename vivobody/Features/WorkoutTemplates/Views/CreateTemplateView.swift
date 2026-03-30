@@ -3,9 +3,10 @@ import SwiftUI
 
 struct CreateTemplateView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
+    @Environment(PersistenceController.self) private var persistence
 
     var existingTemplate: WorkoutTemplate?
+    @State private var viewModel: CreateTemplateViewModel?
 
     @State var templateName: String
     @State var selectedDays: Set<Int>
@@ -93,6 +94,11 @@ struct CreateTemplateView: View {
                 }
             }
         }
+        .task {
+            if viewModel == nil {
+                viewModel = CreateTemplateViewModel(modelContext: persistence.modelContext)
+            }
+        }
     }
 
     private var estimatedMinutes: Int {
@@ -118,60 +124,14 @@ struct CreateTemplateView: View {
     }
 
     private func saveTemplate() {
-        let muscleGroups = Array(Set(selectedMuscles.compactMap { Self.muscleGroup(from: $0) }))
-
-        let template: WorkoutTemplate
-        if let existingTemplate {
-            template = existingTemplate
-            template.name = templateName
-            template.muscleGroups = muscleGroups
-            template.scheduleDays = Array(selectedDays).sorted()
-            template.notes = notes
-            for exercise in template.exercises {
-                modelContext.delete(exercise)
-            }
-            template.exercises.removeAll()
-        } else {
-            template = WorkoutTemplate(
-                name: templateName,
-                muscleGroups: muscleGroups,
-                scheduleDays: Array(selectedDays).sorted(),
-                notes: notes
-            )
-            modelContext.insert(template)
-        }
-
-        for (index, item) in exercises.enumerated() {
-            let parts = item.restLabel.split(separator: ":")
-            let restSeconds = parts.count == 2
-                ? (Int(parts[0]) ?? 0) * 60 + (Int(parts[1]) ?? 0)
-                : 60
-
-            let templateExercise = TemplateExercise(
-                order: index,
-                targetSets: item.sets,
-                targetReps: item.targetReps,
-                restSeconds: restSeconds,
-                name: item.name,
-                primaryTag: item.primaryTag,
-                secondaryTags: item.secondaryTags,
-                template: template
-            )
-            template.exercises.append(templateExercise)
-        }
-    }
-
-    private static func muscleGroup(from name: String) -> MuscleGroup? {
-        switch name {
-        case "CHEST": .chest
-        case "BACK": .back
-        case "SHOULDERS": .shoulders
-        case "BICEPS": .biceps
-        case "TRICEPS": .triceps
-        case "QUADS", "HAMSTRINGS", "GLUTES", "CALVES": .legs
-        case "CORE": .core
-        default: nil
-        }
+        let draft = TemplateDraft(
+            name: templateName,
+            selectedMuscles: selectedMuscles,
+            scheduleDays: selectedDays,
+            notes: notes,
+            exercises: exercises
+        )
+        viewModel?.save(existingTemplate: existingTemplate, draft: draft)
     }
 
     private var saveButton: some View {
@@ -276,6 +236,7 @@ struct TemplateExerciseItem: Identifiable {
 
 #Preview {
     CreateTemplateView()
+        .withPersistence()
         .modelContainer(
             for: [WorkoutTemplate.self, TemplateExercise.self],
             inMemory: true

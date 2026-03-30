@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct WorkoutSessionRow: View {
@@ -109,6 +110,15 @@ struct WorkoutSessionStatsLine: View {
 }
 
 // MARK: - Trailing (Checkmark + Time)
+
+#Preview {
+    WorkoutSessionRow(workout: Workout(startedAt: .now))
+        .background(Color.vivoBackground)
+        .modelContainer(
+            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+            inMemory: true
+        )
+}
 
 struct WorkoutSessionTrailing: View {
     let workout: Workout

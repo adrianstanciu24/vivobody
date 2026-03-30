@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct WorkoutLogView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(PersistenceController.self) private var persistence
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var viewModel: WorkoutLogViewModel?
     @State private var activeWorkout: Workout?
@@ -41,7 +41,7 @@ struct WorkoutLogView: View {
         }
         .task {
             if viewModel == nil {
-                viewModel = WorkoutLogViewModel(modelContext: modelContext)
+                viewModel = WorkoutLogViewModel(modelContext: persistence.modelContext)
             }
         }
     }
@@ -63,6 +63,7 @@ private struct WorkoutRowView: View {
 
 #Preview {
     WorkoutLogView()
+        .withPersistence()
         .modelContainer(
             for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
             inMemory: true

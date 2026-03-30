@@ -10,6 +10,7 @@ final class WorkoutSession {
     var elapsedSeconds = 0
     var exercises: [SessionExercise] = []
     var currentExercise: String?
+    var modelContext: ModelContext?
 
     private var timer: Timer?
 
@@ -66,7 +67,8 @@ final class WorkoutSession {
         stopTimer()
     }
 
-    func save(modelContext: ModelContext) {
+    func save() {
+        guard let modelContext else { return }
         let workout = Workout(startedAt: startTime ?? .now)
         workout.completedAt = .now
 

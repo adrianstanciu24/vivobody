@@ -8,7 +8,7 @@ excluded:
 
 allow_zero_lintable_files: false
 reporter: "xcode"
-strict: false
+strict: true
 
 disabled_rules:
   - static_over_final_class
@@ -20,9 +20,11 @@ opt_in_rules:
   - empty_string
   - explicit_init
   - first_where
+  - force_try
   - force_unwrapping
   - modifier_order
   - sorted_imports
+  - todo
   - vertical_whitespace_closing_braces
 
 line_length:

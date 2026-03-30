@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExerciseDetailFormNotes: View {
+struct ExerciseDetailFormNotesView: View {
     private static let notes: [FormNote] = [
         FormNote(
             text: "Focus on controlled eccentric — 3 sec down. Keep shoulder blades pinched throughout.",
@@ -72,6 +72,6 @@ struct FormNoteRow: View {
 }
 
 #Preview {
-    ExerciseDetailFormNotes()
+    ExerciseDetailFormNotesView()
         .background(Color.vivoBackground)
 }

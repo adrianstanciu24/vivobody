@@ -1,9 +1,7 @@
-import SwiftData
 import SwiftUI
 
 struct EmptyWorkoutView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) private var modelContext
     @Environment(WorkoutSession.self) var session: WorkoutSession?
     @State var showExercisePicker = false
     @State var showComplete = false
@@ -98,7 +96,7 @@ private extension EmptyWorkoutView {
 
             Button {
                 session?.finish()
-                session?.save(modelContext: modelContext)
+                session?.save()
                 showComplete = true
             } label: {
                 Text("FINISH \u{2192}")

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExerciseDetailBestSets: View {
+struct ExerciseDetailBestSetsView: View {
     private static let rows: [BestSetRow] = [
         BestSetRow(reps: "01", weight: "225 LB", e1rm: "225", date: "MAR 15"),
         BestSetRow(reps: "02", weight: "215 LB", e1rm: "222", date: "FEB 28"),
@@ -87,6 +87,6 @@ struct BestSetTableRow: View {
 }
 
 #Preview {
-    ExerciseDetailBestSets()
+    ExerciseDetailBestSetsView()
         .background(Color.vivoBackground)
 }

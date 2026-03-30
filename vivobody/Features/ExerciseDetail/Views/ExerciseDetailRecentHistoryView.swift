@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExerciseDetailRecentHistory: View {
+struct ExerciseDetailRecentHistoryView: View {
     private static let sessions: [ExerciseHistorySession] = [
         ExerciseHistorySession(
             date: "MAR 15 · PUSH DAY",
@@ -128,6 +128,6 @@ struct ExerciseHistorySessionRow: View {
 }
 
 #Preview {
-    ExerciseDetailRecentHistory()
+    ExerciseDetailRecentHistoryView()
         .background(Color.vivoBackground)
 }

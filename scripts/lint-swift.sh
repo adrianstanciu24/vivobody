@@ -18,3 +18,4 @@ fi
 cd "$ROOT_DIR"
 swiftformat vivobody vivobodyTests vivobodyUITests --config "$ROOT_DIR/.swiftformat" --lint
 swiftlint lint --strict --config "$ROOT_DIR/.swiftlint.yml"
+"$ROOT_DIR/scripts/lint-architecture.sh"

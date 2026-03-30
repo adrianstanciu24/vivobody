@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct WorkoutTemplatesEmptyState: View {
+struct WorkoutTemplatesEmptyStateView: View {
     let onCreate: () -> Void
 
     var body: some View {
@@ -111,6 +111,6 @@ struct WorkoutTemplatesEmptyState: View {
 }
 
 #Preview {
-    WorkoutTemplatesEmptyState {}
+    WorkoutTemplatesEmptyStateView {}
         .background(Color.vivoBackground)
 }
