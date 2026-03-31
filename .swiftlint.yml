@@ -73,3 +73,12 @@ nesting:
 
 vertical_whitespace:
   max_empty_lines: 1
+
+custom_rules:
+  no_print:
+    name: "No print() in app code"
+    regex: "\\bprint\\s*\\("
+    message: "Use os.Logger instead of print(). print() is allowed in tests only."
+    severity: warning
+    included: "vivobody/.*\\.swift"
+    excluded: "vivobodyTests/.*\\.swift|vivobodyUITests/.*\\.swift"
