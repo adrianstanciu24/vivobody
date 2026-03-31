@@ -46,14 +46,17 @@ final class WorkoutSession {
         startTimer()
     }
 
-    func addExercise(name: String, tags: String, sets: [SessionSet]? = nil) {
+    func addExercise(_ selectedExercise: Exercise, sets: [SessionSet]? = nil) {
         let exercise = SessionExercise(
-            name: name,
-            tags: tags,
+            catalogID: selectedExercise.catalogID,
+            name: selectedExercise.name,
+            primaryTag: selectedExercise.primaryTag,
+            secondaryTags: selectedExercise.secondaryTags,
+            muscleGroup: selectedExercise.muscleGroup,
             sets: sets ?? Self.defaultSets()
         )
         exercises.append(exercise)
-        currentExercise = name
+        currentExercise = exercise.name
     }
 
     func logSet(exerciseID: UUID) {
@@ -74,12 +77,16 @@ final class WorkoutSession {
 
         for (index, sessionExercise) in exercises.enumerated() {
             let exercise = findOrCreateExercise(
-                name: sessionExercise.name,
-                tags: sessionExercise.tags,
+                sessionExercise,
                 modelContext: modelContext
             )
             let workoutExercise = WorkoutExercise(
                 order: index,
+                exerciseCatalogIDSnapshot: sessionExercise.catalogID,
+                exerciseNameSnapshot: sessionExercise.name,
+                exercisePrimaryTagSnapshot: sessionExercise.primaryTag,
+                exerciseSecondaryTagsSnapshot: sessionExercise.secondaryTags,
+                exerciseMuscleGroupSnapshot: sessionExercise.muscleGroup.displayName,
                 workout: workout,
                 exercise: exercise
             )
@@ -102,35 +109,39 @@ final class WorkoutSession {
     }
 
     private func findOrCreateExercise(
-        name: String,
-        tags: String,
+        _ sessionExercise: SessionExercise,
         modelContext: ModelContext
     ) -> Exercise {
+        let catalogID = sessionExercise.catalogID
         let descriptor = FetchDescriptor<Exercise>(
-            predicate: #Predicate { $0.name == name }
+            predicate: #Predicate { $0.catalogID == catalogID }
         )
         if let existing = try? modelContext.fetch(descriptor).first {
             return existing
         }
-        let muscleGroup = parseMuscleGroup(from: tags)
-        let category = parseCategory(from: tags)
-        let exercise = Exercise(name: name, muscleGroup: muscleGroup, category: category)
+
+        let name = sessionExercise.name
+        let fallbackDescriptor = FetchDescriptor<Exercise>(
+            predicate: #Predicate { $0.name == name }
+        )
+        if let existingByName = try? modelContext.fetch(fallbackDescriptor).first {
+            existingByName.catalogID = sessionExercise.catalogID
+            existingByName.primaryTag = sessionExercise.primaryTag
+            existingByName.secondaryTags = sessionExercise.secondaryTags
+            existingByName.muscleGroup = sessionExercise.muscleGroup
+            return existingByName
+        }
+
+        let exercise = Exercise(
+            catalogID: sessionExercise.catalogID,
+            name: sessionExercise.name,
+            muscleGroup: sessionExercise.muscleGroup,
+            category: parseCategory(from: sessionExercise.tags),
+            primaryTag: sessionExercise.primaryTag,
+            secondaryTags: sessionExercise.secondaryTags
+        )
         modelContext.insert(exercise)
         return exercise
-    }
-
-    private func parseMuscleGroup(from tags: String) -> MuscleGroup {
-        let lower = tags.lowercased()
-        for group in MuscleGroup.allCases where lower.contains(group.rawValue) {
-            return group
-        }
-        if lower.contains("chest") { return .chest }
-        if lower.contains("back") { return .back }
-        if lower.contains("shoulder") || lower.contains("delt") { return .shoulders }
-        if lower.contains("bicep") { return .biceps }
-        if lower.contains("tricep") { return .triceps }
-        if lower.contains("leg") || lower.contains("quad") || lower.contains("ham") { return .legs }
-        return .other
     }
 
     private func parseCategory(from tags: String) -> ExerciseCategory {
@@ -179,9 +190,17 @@ final class WorkoutSession {
 
 struct SessionExercise: Identifiable {
     let id = UUID()
+    let catalogID: String
     let name: String
-    let tags: String
+    let primaryTag: String
+    let secondaryTags: String
+    let muscleGroup: MuscleGroup
     var sets: [SessionSet]
+
+    var tags: String {
+        guard !secondaryTags.isEmpty else { return primaryTag }
+        return "\(primaryTag) · \(secondaryTags)"
+    }
 
     var currentSetNumber: Int {
         (sets.firstIndex(where: { !$0.completed }) ?? sets.count) + 1

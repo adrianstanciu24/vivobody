@@ -281,7 +281,7 @@ extension AddExerciseView {
     var footerInfo: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 1) {
-                Text("\(exerciseName.uppercased()) \u{00B7} COMPOUND")
+                Text("\(exercise.name.uppercased()) \u{00B7} \(exercise.primaryTag)")
                     .font(.vivoMono(VivoFont.monoMicro))
                     .tracking(VivoTracking.medium)
                     .foregroundStyle(Color.vivoMuted)

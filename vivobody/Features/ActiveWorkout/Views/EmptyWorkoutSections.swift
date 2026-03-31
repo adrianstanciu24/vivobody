@@ -1,39 +1,12 @@
 import SwiftUI
 
-// MARK: - Quick Pick Data
-
-struct QuickPick: Identifiable {
-    let id: String
-    let number: String
-    let name: String
-    let tags: String
-    let badge: String
-    let isRecent: Bool
-}
-
-// MARK: - Quick Picks
-
 extension EmptyWorkoutView {
-    static let quickPicks: [QuickPick] = [
-        QuickPick(
-            id: "1", number: "01",
-            name: "Barbell Bench Press",
-            tags: "CHEST · COMPOUND · BARBELL",
-            badge: "RECENT", isRecent: true
-        ),
-        QuickPick(
-            id: "2", number: "02",
-            name: "Back Squat",
-            tags: "QUADS · COMPOUND · BARBELL",
-            badge: "RECENT", isRecent: false
-        ),
-        QuickPick(
-            id: "3", number: "03",
-            name: "Pull-Up",
-            tags: "BACK · BODYWEIGHT · VERTICAL",
-            badge: "FAVORITE", isRecent: false
-        )
-    ]
+    private var quickPicks: [Exercise] {
+        let recentExercises = ExerciseCatalogPresenter.recentExercises(from: workouts, limit: 3)
+        return recentExercises.isEmpty
+            ? ExerciseCatalogPresenter.quickPicks(from: catalogExercises, limit: 3)
+            : recentExercises
+    }
 
     var quickPicksSection: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -43,11 +16,11 @@ extension EmptyWorkoutView {
                 .foregroundStyle(Color.vivoMuted)
                 .padding(.top, 20)
 
-            ForEach(Self.quickPicks) { pick in
+            ForEach(quickPicks.enumerated(), id: \.element.persistentModelID) { index, pick in
                 Button {
-                    session?.addExercise(name: pick.name, tags: pick.tags)
+                    session?.addExercise(pick)
                 } label: {
-                    quickPickRow(pick)
+                    quickPickRow(pick, number: String(format: "%02d", index + 1))
                 }
                 .buttonStyle(.plain)
             }
@@ -55,9 +28,9 @@ extension EmptyWorkoutView {
         .padding(.horizontal, VivoSpacing.screenH)
     }
 
-    func quickPickRow(_ pick: QuickPick) -> some View {
+    func quickPickRow(_ pick: Exercise, number: String) -> some View {
         HStack(spacing: 12) {
-            Text(pick.number)
+            Text(number)
                 .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
@@ -72,18 +45,15 @@ extension EmptyWorkoutView {
 
             Spacer()
 
-            Text(pick.badge)
+            Text("CATALOG")
                 .font(.vivoMono(VivoFont.monoXS))
                 .tracking(VivoTracking.normal)
-                .foregroundStyle(pick.isRecent ? Color.vivoAccent : Color.vivoMuted)
+                .foregroundStyle(Color.vivoAccent)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: VivoRadius.badge)
-                        .stroke(
-                            pick.isRecent ? Color.vivoAccent : Color.vivoSurface,
-                            lineWidth: 1
-                        )
+                        .stroke(Color.vivoAccent, lineWidth: 1)
                 )
         }
         .padding(14)
@@ -99,8 +69,8 @@ extension EmptyWorkoutView {
 extension EmptyWorkoutView {
     var activeContent: some View {
         VStack(spacing: 14) {
-            ForEach(session?.exercises ?? []) { exercise in
-                ActiveExerciseCard(exercise: exercise)
+            ForEach((session?.exercises ?? []).enumerated(), id: \.element.id) { index, exercise in
+                ActiveExerciseCard(exercise: exercise, number: index + 1)
             }
 
             if let exercise = session?.exercises.last {
@@ -122,11 +92,11 @@ extension EmptyWorkoutView {
                 .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
 
-            ForEach(Self.suggestions) { suggestion in
+            ForEach(suggestions.enumerated(), id: \.element.persistentModelID) { index, suggestion in
                 Button {
-                    session?.addExercise(name: suggestion.name, tags: suggestion.tags)
+                    session?.addExercise(suggestion)
                 } label: {
-                    suggestionRow(suggestion)
+                    suggestionRow(suggestion, number: String(format: "%02d", index + 1))
                 }
                 .buttonStyle(.plain)
             }
@@ -134,9 +104,18 @@ extension EmptyWorkoutView {
         .padding(.horizontal, VivoSpacing.screenH)
     }
 
-    func suggestionRow(_ item: SuggestionItem) -> some View {
+    private var suggestions: [Exercise] {
+        let excludedCatalogIDs = Set(session?.exercises.map(\.catalogID) ?? [])
+        return ExerciseCatalogPresenter.suggestions(
+            from: catalogExercises,
+            excluding: excludedCatalogIDs,
+            limit: 3
+        )
+    }
+
+    func suggestionRow(_ item: Exercise, number: String) -> some View {
         HStack(spacing: 12) {
-            Text(item.number)
+            Text(number)
                 .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
@@ -146,18 +125,15 @@ extension EmptyWorkoutView {
 
             Spacer()
 
-            Text(item.badge)
+            Text("CATALOG")
                 .font(.vivoMono(VivoFont.monoXS))
                 .tracking(VivoTracking.normal)
-                .foregroundStyle(item.isRecent ? Color.vivoAccent : Color.vivoMuted)
+                .foregroundStyle(Color.vivoAccent)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .overlay(
                     RoundedRectangle(cornerRadius: VivoRadius.badge)
-                        .stroke(
-                            item.isRecent ? Color.vivoAccent : Color.vivoSurface,
-                            lineWidth: 1
-                        )
+                        .stroke(Color.vivoAccent, lineWidth: 1)
                 )
         }
         .padding(14)
@@ -166,40 +142,6 @@ extension EmptyWorkoutView {
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
     }
-}
-
-// MARK: - Suggestion Data
-
-struct SuggestionItem: Identifiable {
-    let id: String
-    let number: String
-    let name: String
-    let tags: String
-    let badge: String
-    let isRecent: Bool
-}
-
-extension EmptyWorkoutView {
-    static let suggestions: [SuggestionItem] = [
-        SuggestionItem(
-            id: "s1", number: "02",
-            name: "Incline DB Press",
-            tags: "CHEST · COMPOUND · DUMBBELL",
-            badge: "RECENT", isRecent: true
-        ),
-        SuggestionItem(
-            id: "s2", number: "03",
-            name: "OHP",
-            tags: "SHOULDERS · COMPOUND · BARBELL",
-            badge: "RECENT", isRecent: false
-        ),
-        SuggestionItem(
-            id: "s3", number: "04",
-            name: "Cable Fly",
-            tags: "CHEST · ISOLATION · CABLE",
-            badge: "FAVORITE", isRecent: false
-        )
-    ]
 }
 
 // MARK: - Active Bottom Bar

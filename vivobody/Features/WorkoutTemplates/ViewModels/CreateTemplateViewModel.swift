@@ -47,15 +47,23 @@ final class CreateTemplateViewModel {
                 ? (Int(parts[0]) ?? 0) * 60 + (Int(parts[1]) ?? 0)
                 : 60
 
+            let catalogID = item.catalogID
+            let exerciseDescriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate { $0.catalogID == catalogID }
+            )
+            let exercise = try? modelContext.fetch(exerciseDescriptor).first
+
             let templateExercise = TemplateExercise(
                 order: index,
+                catalogID: item.catalogID,
                 targetSets: item.sets,
                 targetReps: item.targetReps,
                 restSeconds: restSeconds,
                 name: item.name,
                 primaryTag: item.primaryTag,
                 secondaryTags: item.secondaryTags,
-                template: template
+                template: template,
+                exercise: exercise
             )
             template.exercises.append(templateExercise)
         }

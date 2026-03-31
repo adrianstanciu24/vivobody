@@ -1,8 +1,11 @@
+import SwiftData
 import SwiftUI
 
 struct EmptyWorkoutView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(WorkoutSession.self) var session: WorkoutSession?
+    @Query(sort: \Exercise.name) var catalogExercises: [Exercise]
+    @Query(sort: \Workout.startedAt, order: .reverse) var workouts: [Workout]
     @State var showExercisePicker = false
     @State var showComplete = false
 
@@ -35,7 +38,7 @@ struct EmptyWorkoutView: View {
     private var workoutContent: some View {
         ZStack {
             VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     VStack(spacing: 0) {
                         recordingHeader
                         workoutTitle
@@ -53,6 +56,7 @@ struct EmptyWorkoutView: View {
                     }
                     .padding(.bottom, hasExercises ? 100 : 32)
                 }
+                .scrollIndicators(.hidden)
 
                 Spacer(minLength: 0)
             }
@@ -299,4 +303,8 @@ private extension EmptyWorkoutView {
     NavigationStack {
         EmptyWorkoutView()
     }
+    .modelContainer(
+        for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+        inMemory: true
+    )
 }

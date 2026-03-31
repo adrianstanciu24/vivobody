@@ -1,10 +1,16 @@
+import SwiftData
 import SwiftUI
 
 struct ExercisePickerView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(WorkoutSession.self) private var session: WorkoutSession?
+    @Query(sort: \Exercise.name) private var exercises: [Exercise]
+    @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var selectedFilter = "ALL"
-    @State private var selectedExercise: PickerExercise?
+    @State private var selectedExercise: Exercise?
+    @State private var filters: [ExerciseCatalogFilter] = []
+    @State private var sections: [ExerciseCatalogSection] = []
+    @State private var recentExercises: [Exercise] = []
 
     var body: some View {
         ZStack {
@@ -12,45 +18,54 @@ struct ExercisePickerView: View {
 
             VStack(spacing: 0) {
                 pickerHeader
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     VStack(spacing: 0) {
-                        searchBar
-                        filterPills
+                        CatalogSearchBar(totalCount: exercises.count)
+                        CatalogFilterBar(filters: filters, selectedFilter: $selectedFilter)
                         divider
-                        recentSection
-                        divider
-                        muscleGroupSection(
-                            title: "Chest",
-                            exercises: Self.chestExercises
-                        )
-                        divider
-                        muscleGroupSection(
-                            title: "Back",
-                            exercises: Self.backExercises
-                        )
-                        divider
-                        muscleGroupSection(
-                            title: "Legs",
-                            exercises: Self.legExercises
-                        )
+
+                        if !recentExercises.isEmpty {
+                            recentSection
+                            divider
+                        }
+
+                        ForEach(sections.enumerated(), id: \.element.id) { index, section in
+                            muscleGroupSection(section)
+                            if index < sections.count - 1 {
+                                divider
+                            }
+                        }
                     }
                     .padding(.bottom, 32)
                 }
+                .scrollIndicators(.hidden)
             }
         }
         .sheet(item: $selectedExercise) { exercise in
-            AddExerciseView(
-                exerciseName: exercise.name,
-                exerciseTags: exercise.tags
-            )
-            .environment(session)
-            .presentationDetents([.large])
-            .presentationDragIndicator(.hidden)
-            .onDisappear {
-                if session?.exercises.last?.name == exercise.name {
-                    dismiss()
+            AddExerciseView(exercise: exercise)
+                .environment(session)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+                .onDisappear {
+                    if session?.exercises.last?.catalogID == exercise.catalogID {
+                        dismiss()
+                    }
                 }
-            }
+        }
+        .onChange(of: exercises) { _, newValue in
+            filters = ExerciseCatalogPresenter.filters(from: newValue)
+            sections = ExerciseCatalogPresenter.sections(from: newValue, selectedFilter: selectedFilter)
+        }
+        .onChange(of: selectedFilter) { _, newValue in
+            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: newValue)
+        }
+        .onChange(of: workouts) { _, newValue in
+            recentExercises = ExerciseCatalogPresenter.recentExercises(from: newValue)
+        }
+        .onAppear {
+            filters = ExerciseCatalogPresenter.filters(from: exercises)
+            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: selectedFilter)
+            recentExercises = ExerciseCatalogPresenter.recentExercises(from: workouts)
         }
     }
 
@@ -60,19 +75,7 @@ struct ExercisePickerView: View {
             .frame(height: 1)
             .padding(.horizontal, VivoSpacing.screenH)
     }
-
-    private func selectExercise(_ name: String, tags: String = "") {
-        selectedExercise = PickerExercise(
-            id: UUID().uuidString,
-            number: "",
-            name: name,
-            tags: tags,
-            detail: ""
-        )
-    }
 }
-
-// MARK: - Header
 
 private extension ExercisePickerView {
     var pickerHeader: some View {
@@ -99,92 +102,10 @@ private extension ExercisePickerView {
         .padding(.horizontal, VivoSpacing.screenH)
         .padding(.vertical, 12)
     }
-}
 
-// MARK: - Search Bar
-
-private extension ExercisePickerView {
-    var searchBar: some View {
-        HStack(spacing: 10) {
-            Text("\u{26B2}")
-                .font(.vivoDisplay(VivoFont.bodySmall))
-                .foregroundStyle(Color.vivoMuted)
-
-            Text("Search exercises...")
-                .font(.vivoMono(VivoFont.monoSM))
-                .foregroundStyle(Color.vivoMuted)
-
-            Spacer()
-
-            Text("248 TOTAL")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(Color.vivoSecondary)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 3)
-                .overlay(
-                    RoundedRectangle(cornerRadius: VivoRadius.badge)
-                        .stroke(Color.vivoSurface, lineWidth: 1)
-                )
-        }
-        .padding(.horizontal, VivoSpacing.cardPadding)
-        .frame(height: 48)
-        .background(
-            RoundedRectangle(cornerRadius: VivoRadius.card)
-                .stroke(Color.vivoSurface, lineWidth: 1)
-        )
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 4)
-    }
-}
-
-// MARK: - Filter Pills
-
-private extension ExercisePickerView {
-    static let filters = ["ALL", "CHEST", "BACK", "LEGS", "SHOULDERS", "ARMS"]
-
-    var filterPills: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                ForEach(Self.filters, id: \.self) { name in
-                    filterPill(name)
-                }
-            }
-            .padding(.horizontal, VivoSpacing.screenH)
-        }
-        .padding(.vertical, 12)
-    }
-
-    func filterPill(_ name: String) -> some View {
-        let isSelected = name == selectedFilter
-        return Button { selectedFilter = name } label: {
-            Text(name)
-                .font(.vivoMono(VivoFont.monoCaption, weight: isSelected ? .bold : .regular))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(
-                    isSelected ? Color.vivoBackground : Color.vivoSecondary
-                )
-                .padding(.horizontal, VivoSpacing.cardPadding)
-                .padding(.vertical, 9)
-                .background(
-                    RoundedRectangle(cornerRadius: VivoRadius.pill)
-                        .fill(isSelected ? Color.vivoPrimary : .clear)
-                )
-                .overlay(
-                    isSelected ? nil :
-                        RoundedRectangle(cornerRadius: VivoRadius.pill)
-                        .stroke(Color.vivoSurface, lineWidth: 1.5)
-                )
-        }
-    }
-}
-
-// MARK: - Recent Section
-
-private extension ExercisePickerView {
     var recentSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("RECENT · LAST 7 DAYS")
+            Text("RECENT \u{00B7} CATALOG MATCHES")
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
@@ -192,76 +113,30 @@ private extension ExercisePickerView {
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 HStack(spacing: 8) {
-                    ForEach(Self.recentPicks) { pick in
-                        recentCard(pick)
+                    ForEach(recentExercises) { exercise in
+                        Button { selectedExercise = exercise } label: {
+                            CatalogRecentCard(exercise: exercise)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, VivoSpacing.screenH)
             }
+            .scrollIndicators(.hidden)
             .padding(.bottom, 10)
         }
     }
 
-    func recentCard(_ pick: PickerExercise) -> some View {
-        Button { selectExercise(pick.name, tags: pick.tags) } label: {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(pick.name)
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoPrimary)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-
-                Text(pick.tags)
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.tight)
-                    .foregroundStyle(Color.vivoMuted)
-
-                Spacer()
-
-                Text(pick.detail)
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.tight)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-            .padding(14)
-            .frame(width: 180, height: 130, alignment: .topLeading)
-            .background(
-                RoundedRectangle(cornerRadius: VivoRadius.card)
-                    .stroke(Color.vivoSurface, lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Muscle Group Section
-
-private extension ExercisePickerView {
-    func muscleGroupSection(
-        title: String,
-        exercises: [PickerExercise]
-    ) -> some View {
+    func muscleGroupSection(_ section: ExerciseCatalogSection) -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text(title)
-                    .font(.vivoDisplay(VivoFont.sectionTitle))
-                    .foregroundStyle(Color.vivoPrimary)
-                Spacer()
-                Text("\(exercises.count) EXERCISES")
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoSecondary)
-            }
-            .padding(.horizontal, VivoSpacing.screenH)
-            .padding(.top, 14)
-            .padding(.bottom, 10)
+            CatalogSectionHeader(title: section.title, exerciseCount: section.exercises.count)
 
             VStack(spacing: 0) {
-                ForEach(exercises) { exercise in
-                    Button { selectExercise(exercise.name, tags: exercise.tags) } label: {
-                        pickerRow(exercise)
+                ForEach(section.exercises.enumerated(), id: \.element.persistentModelID) { index, exercise in
+                    Button { selectedExercise = exercise } label: {
+                        CatalogExerciseRow(exercise: exercise, number: String(format: "%02d", index + 1))
                     }
                     .buttonStyle(.plain)
                 }
@@ -269,37 +144,13 @@ private extension ExercisePickerView {
             .padding(.horizontal, VivoSpacing.screenH)
         }
     }
-
-    func pickerRow(_ exercise: PickerExercise) -> some View {
-        HStack(spacing: 12) {
-            Text(exercise.number)
-                .font(.vivoMono(VivoFont.monoSM))
-                .foregroundStyle(Color.vivoMuted)
-                .frame(width: 18, alignment: .leading)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.name)
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoPrimary)
-                Text(exercise.tags)
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.tight)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-
-            Spacer()
-
-            Image(systemName: "plus.circle")
-                .font(.system(size: 20))
-                .foregroundStyle(Color.vivoAccent)
-        }
-        .frame(height: 72)
-    }
 }
-
-// MARK: - Preview
 
 #Preview {
     ExercisePickerView()
         .environment(WorkoutSession())
+        .modelContainer(
+            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+            inMemory: true
+        )
 }

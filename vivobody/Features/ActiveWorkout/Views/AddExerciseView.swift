@@ -4,8 +4,7 @@ struct AddExerciseView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(WorkoutSession.self) private var session: WorkoutSession?
 
-    let exerciseName: String
-    let exerciseTags: String
+    let exercise: Exercise
 
     @State var reps = 8
     @State var load = 185
@@ -22,7 +21,7 @@ struct AddExerciseView: View {
 
             VStack(spacing: 0) {
                 header
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     VStack(spacing: 0) {
                         exerciseInfo
                         sectionLabel("SET CONFIGURATION")
@@ -64,6 +63,7 @@ struct AddExerciseView: View {
                     }
                     .padding(.bottom, 32)
                 }
+                .scrollIndicators(.hidden)
             }
         }
     }
@@ -123,7 +123,7 @@ private extension AddExerciseView {
                 completed: true
             )
         }
-        session?.addExercise(name: exerciseName, tags: exerciseTags, sets: sets)
+        session?.addExercise(exercise, sets: sets)
         dismiss()
     }
 }
@@ -138,7 +138,7 @@ private extension AddExerciseView {
                 .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
 
-            let parts = exerciseName.split(separator: " ", maxSplits: 1)
+            let parts = exercise.name.split(separator: " ", maxSplits: 1)
             if parts.count > 1 {
                 Text(String(parts[0]))
                     .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
@@ -149,7 +149,7 @@ private extension AddExerciseView {
                     .foregroundStyle(Color.vivoPrimary)
                     .tracking(-1)
             } else {
-                Text(exerciseName)
+                Text(exercise.name)
                     .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
                     .tracking(-1)
@@ -163,7 +163,7 @@ private extension AddExerciseView {
     }
 
     var tagsLabel: some View {
-        let tagParts = exerciseTags.components(separatedBy: " \u{00B7} ")
+        let tagParts = exercise.tags.components(separatedBy: " \u{00B7} ")
         return HStack(spacing: 0) {
             if let first = tagParts.first {
                 Text(first)
@@ -183,8 +183,14 @@ private extension AddExerciseView {
 
 #Preview {
     AddExerciseView(
-        exerciseName: "Barbell Bench Press",
-        exerciseTags: "CHEST · COMPOUND · BARBELL"
+        exercise: Exercise(
+            catalogID: "front_squat",
+            name: "Front Squat",
+            muscleGroup: .legs,
+            category: .barbell,
+            primaryTag: "QUADS",
+            secondaryTags: "BILATERAL SQUAT · BILATERAL"
+        )
     )
     .environment(WorkoutSession())
 }

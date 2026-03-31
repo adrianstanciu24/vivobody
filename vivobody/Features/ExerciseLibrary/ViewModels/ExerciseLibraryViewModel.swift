@@ -1,20 +1,16 @@
 import Foundation
-import SwiftData
 
+@MainActor
 @Observable
 final class ExerciseLibraryViewModel {
-    private let modelContext: ModelContext
-
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+    func filters(for exercises: [Exercise]) -> [ExerciseCatalogFilter] {
+        ExerciseCatalogPresenter.filters(from: exercises)
     }
 
-    func addExercise(name: String, muscleGroup: MuscleGroup, category: ExerciseCategory) {
-        let exercise = Exercise(name: name, muscleGroup: muscleGroup, category: category)
-        modelContext.insert(exercise)
-    }
-
-    func delete(_ exercise: Exercise) {
-        modelContext.delete(exercise)
+    func sections(
+        for exercises: [Exercise],
+        selectedFilter: String
+    ) -> [ExerciseCatalogSection] {
+        ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: selectedFilter)
     }
 }

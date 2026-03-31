@@ -6,6 +6,7 @@ final class TemplateExercise {
     #Index<TemplateExercise>([\.order])
 
     var order: Int
+    var catalogID: String
     var targetSets: Int
     var targetReps: Int
     var restSeconds: Int
@@ -17,6 +18,7 @@ final class TemplateExercise {
 
     init(
         order: Int = 0,
+        catalogID: String = "",
         targetSets: Int = 3,
         targetReps: Int = 10,
         restSeconds: Int = 120,
@@ -27,6 +29,7 @@ final class TemplateExercise {
         exercise: Exercise? = nil
     ) {
         self.order = order
+        self.catalogID = catalogID
         self.targetSets = targetSets
         self.targetReps = targetReps
         self.restSeconds = restSeconds

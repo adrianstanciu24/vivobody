@@ -14,6 +14,11 @@ final class ActiveWorkoutViewModel {
     func addExercise(_ exercise: Exercise) {
         let workoutExercise = WorkoutExercise(
             order: workout.exercises.count,
+            exerciseCatalogIDSnapshot: exercise.catalogID,
+            exerciseNameSnapshot: exercise.name,
+            exercisePrimaryTagSnapshot: exercise.primaryTag,
+            exerciseSecondaryTagsSnapshot: exercise.secondaryTags,
+            exerciseMuscleGroupSnapshot: exercise.muscleGroup.displayName,
             workout: workout,
             exercise: exercise
         )

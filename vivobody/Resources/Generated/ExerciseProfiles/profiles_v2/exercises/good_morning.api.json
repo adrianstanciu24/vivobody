@@ -1,0 +1,612 @@
+{
+  "schema_version": "exercise_profile_api_v2",
+  "method": "heuristic_v2",
+  "exercise": {
+    "id": "good_morning",
+    "display_name": "Good Morning",
+    "description": "Approximate good morning profile using the v2 hip hinge motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+    "motion_family": "hip_hinge",
+    "bilateral": true,
+    "rep_duration_sec": 2.6,
+    "movement_tags": [
+      "bilateral",
+      "hip_hinge",
+      "glutes_dominant",
+      "deep_hip_flexion",
+      "forward_torso_lean"
+    ]
+  },
+  "targets": {
+    "primary": [
+      {
+        "id": "glutes",
+        "label": "Glutes",
+        "share": 0.36,
+        "role": "primary",
+        "relative_rank_score_10": 10
+      },
+      {
+        "id": "adductors",
+        "label": "Adductors",
+        "share": 0.296,
+        "role": "primary",
+        "relative_rank_score_10": 8
+      }
+    ],
+    "secondary": [
+      {
+        "id": "hamstrings",
+        "label": "Hamstrings",
+        "share": 0.158,
+        "role": "secondary",
+        "relative_rank_score_10": 4
+      },
+      {
+        "id": "quads",
+        "label": "Quads",
+        "share": 0.136,
+        "role": "secondary",
+        "relative_rank_score_10": 4
+      }
+    ],
+    "stabilizers": [
+      {
+        "id": "calves",
+        "label": "Calves",
+        "share": 0.05,
+        "role": "stabilizer",
+        "relative_rank_score_10": 1
+      }
+    ],
+    "all": [
+      {
+        "id": "glutes",
+        "label": "Glutes",
+        "share": 0.36,
+        "role": "primary",
+        "relative_rank_score_10": 10
+      },
+      {
+        "id": "adductors",
+        "label": "Adductors",
+        "share": 0.296,
+        "role": "primary",
+        "relative_rank_score_10": 8
+      },
+      {
+        "id": "hamstrings",
+        "label": "Hamstrings",
+        "share": 0.158,
+        "role": "secondary",
+        "relative_rank_score_10": 4
+      },
+      {
+        "id": "quads",
+        "label": "Quads",
+        "share": 0.136,
+        "role": "secondary",
+        "relative_rank_score_10": 4
+      },
+      {
+        "id": "calves",
+        "label": "Calves",
+        "share": 0.05,
+        "role": "stabilizer",
+        "relative_rank_score_10": 1
+      }
+    ]
+  },
+  "demands": {
+    "joint_actions": [
+      {
+        "action": "hip_extension",
+        "label": "Hip extension",
+        "share": 0.814,
+        "dominant_group": "glutes",
+        "dominant_group_share": 0.442,
+        "absolute_level_score_10": 10
+      },
+      {
+        "action": "knee_extension",
+        "label": "Knee extension",
+        "share": 0.136,
+        "dominant_group": "quads",
+        "dominant_group_share": 1.0,
+        "absolute_level_score_10": 4
+      },
+      {
+        "action": "ankle_plantarflexion",
+        "label": "Ankle plantarflexion",
+        "share": 0.05,
+        "dominant_group": "calves",
+        "dominant_group_share": 1.0,
+        "absolute_level_score_10": 1
+      }
+    ],
+    "joint_stress": [
+      {
+        "joint": "hip",
+        "label": "Hip",
+        "share": 0.814,
+        "level": "high",
+        "absolute_level_score_10": 10,
+        "summary": "Hip demand is high relative to the other main joints in this exercise."
+      },
+      {
+        "joint": "knee",
+        "label": "Knee",
+        "share": 0.136,
+        "level": "low",
+        "absolute_level_score_10": 4,
+        "summary": "Knee demand is low relative to the other main joints in this exercise."
+      },
+      {
+        "joint": "ankle",
+        "label": "Ankle",
+        "share": 0.05,
+        "level": "low",
+        "absolute_level_score_10": 1,
+        "summary": "Ankle demand is low relative to the other main joints in this exercise."
+      }
+    ],
+    "stability": {
+      "level": "medium",
+      "score": 0.55,
+      "absolute_level_score_10": 7,
+      "summary": "This variation has a noticeable stability requirement, but not an extreme one."
+    },
+    "tempo_sensitivity": {
+      "level": "medium",
+      "score": 0.45,
+      "absolute_level_score_10": 6,
+      "summary": "Tempo changes should meaningfully alter how hard the exercise feels, but not completely change the target pattern.",
+      "slower_tempo_bias": [
+        "Glutes",
+        "Adductors"
+      ],
+      "faster_tempo_bias": [
+        "power_output",
+        "less_time_under_tension"
+      ]
+    },
+    "phase_breakdown": [
+      {
+        "phase": "ascent",
+        "label": "Ascent",
+        "primary_targets": [
+          {
+            "id": "glutes",
+            "label": "Glutes"
+          },
+          {
+            "id": "quads",
+            "label": "Quads"
+          },
+          {
+            "id": "calves",
+            "label": "Calves"
+          }
+        ],
+        "main_joint_actions": [
+          {
+            "action": "hip_extension",
+            "label": "Hip extension",
+            "dominant_group": {
+              "id": "glutes",
+              "label": "Glutes"
+            }
+          },
+          {
+            "action": "knee_extension",
+            "label": "Knee extension",
+            "dominant_group": {
+              "id": "quads",
+              "label": "Quads"
+            }
+          },
+          {
+            "action": "ankle_plantarflexion",
+            "label": "Ankle plantarflexion",
+            "dominant_group": {
+              "id": "calves",
+              "label": "Calves"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "descent",
+        "label": "Descent",
+        "primary_targets": [
+          {
+            "id": "glutes",
+            "label": "Glutes"
+          },
+          {
+            "id": "quads",
+            "label": "Quads"
+          },
+          {
+            "id": "calves",
+            "label": "Calves"
+          }
+        ],
+        "main_joint_actions": [
+          {
+            "action": "hip_extension",
+            "label": "Hip extension",
+            "dominant_group": {
+              "id": "glutes",
+              "label": "Glutes"
+            }
+          },
+          {
+            "action": "knee_extension",
+            "label": "Knee extension",
+            "dominant_group": {
+              "id": "quads",
+              "label": "Quads"
+            }
+          },
+          {
+            "action": "ankle_plantarflexion",
+            "label": "Ankle plantarflexion",
+            "dominant_group": {
+              "id": "calves",
+              "label": "Calves"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "biases": {
+    "knee_vs_hip": {
+      "bias": "hip_dominant",
+      "knee_share": 0.143,
+      "hip_share": 0.857,
+      "absolute_level_score_10": 10,
+      "summary": "This variation leans more toward hip extension demand than knee extension demand."
+    },
+    "stretch": {
+      "level": "high",
+      "peak_rep_position": "deep_position",
+      "top_groups": [
+        {
+          "id": "hamstrings",
+          "label": "Hamstrings",
+          "share": 0.427
+        },
+        {
+          "id": "glutes",
+          "label": "Glutes",
+          "share": 0.235
+        },
+        {
+          "id": "adductors",
+          "label": "Adductors",
+          "share": 0.197
+        }
+      ],
+      "absolute_level_score_10": 8,
+      "summary": "Loaded stretch is most likely near the deepest position of the rep."
+    }
+  },
+  "kinematics": {
+    "range_of_motion": [
+      {
+        "joint": "hip_flexion",
+        "label": "Hip Flexion",
+        "min_deg": 10.0,
+        "max_deg": 102.0,
+        "range_deg": 92.0
+      },
+      {
+        "joint": "knee_flexion",
+        "label": "Knee Flexion",
+        "min_deg": 6.0,
+        "max_deg": 20.0,
+        "range_deg": 14.0
+      },
+      {
+        "joint": "ankle_dorsiflexion",
+        "label": "Ankle Dorsiflexion",
+        "min_deg": -6.0,
+        "max_deg": 4.0,
+        "range_deg": 10.0
+      },
+      {
+        "joint": "trunk_flexion",
+        "label": "Trunk Flexion",
+        "min_deg": 10.0,
+        "max_deg": 48.0,
+        "range_deg": 38.0
+      }
+    ],
+    "phase_windows": [
+      {
+        "phase": "descent",
+        "start": 0.0,
+        "end": 0.5,
+        "intensity": 0.75
+      },
+      {
+        "phase": "ascent",
+        "start": 0.5,
+        "end": 1.0,
+        "intensity": 1.0
+      }
+    ]
+  },
+  "top_muscles": [
+    {
+      "muscle": "glmax3",
+      "group": "glutes",
+      "group_label": "Glutes",
+      "estimated_relative_load": 1.0,
+      "load_bucket": "high",
+      "phase_bias": "ascent",
+      "display_score_10": 10,
+      "relative_rank_score_10": 10
+    },
+    {
+      "muscle": "glmax2",
+      "group": "glutes",
+      "group_label": "Glutes",
+      "estimated_relative_load": 0.846,
+      "load_bucket": "high",
+      "phase_bias": "ascent",
+      "display_score_10": 8,
+      "relative_rank_score_10": 8
+    },
+    {
+      "muscle": "glmax1",
+      "group": "glutes",
+      "group_label": "Glutes",
+      "estimated_relative_load": 0.678,
+      "load_bucket": "medium",
+      "phase_bias": "ascent",
+      "display_score_10": 7,
+      "relative_rank_score_10": 7
+    },
+    {
+      "muscle": "addmagDist",
+      "group": "adductors",
+      "group_label": "Adductors",
+      "estimated_relative_load": 0.616,
+      "load_bucket": "medium",
+      "phase_bias": "ascent",
+      "display_score_10": 6,
+      "relative_rank_score_10": 6
+    },
+    {
+      "muscle": "semiten",
+      "group": "hamstrings",
+      "group_label": "Hamstrings",
+      "estimated_relative_load": 0.541,
+      "load_bucket": "medium",
+      "phase_bias": "ascent",
+      "display_score_10": 5,
+      "relative_rank_score_10": 5
+    },
+    {
+      "muscle": "addmagIsch",
+      "group": "adductors",
+      "group_label": "Adductors",
+      "estimated_relative_load": 0.522,
+      "load_bucket": "medium",
+      "phase_bias": "ascent",
+      "display_score_10": 5,
+      "relative_rank_score_10": 5
+    }
+  ],
+  "confidence": {
+    "level": "approximate",
+    "label": "Approximate model-based estimate",
+    "summary": "Generated from synthetic exercise kinematics and OpenSim moment-arm scoring rather than captured subject data.",
+    "validation": {
+      "profile_label": "good_morning",
+      "pass": true,
+      "checks": [
+        {
+          "name": "motion_spec_valid",
+          "pass": true,
+          "errors": []
+        },
+        {
+          "name": "has_action_demands",
+          "pass": true
+        },
+        {
+          "name": "has_targets",
+          "pass": true
+        },
+        {
+          "name": "has_range_of_motion",
+          "pass": true
+        },
+        {
+          "name": "inherited_reference_validation",
+          "pass": true,
+          "source_profile_label": "good_morning_v2",
+          "failed_checks": 0
+        }
+      ],
+      "inherited_reference_validation": {
+        "profile_label": "good_morning_v2",
+        "pass": true,
+        "passed_checks": 7,
+        "failed_checks": 0,
+        "checks": [
+          {
+            "name": "glutes remain meaningful overall",
+            "section": "muscle_groups",
+            "pass": true,
+            "expected": {
+              "group": "glutes",
+              "min_share": 0.18
+            },
+            "actual": {
+              "group": "glutes",
+              "share": 0.36
+            }
+          },
+          {
+            "name": "hamstrings remain meaningful overall",
+            "section": "muscle_groups",
+            "pass": true,
+            "expected": {
+              "group": "hamstrings",
+              "min_share": 0.08
+            },
+            "actual": {
+              "group": "hamstrings",
+              "share": 0.158
+            }
+          },
+          {
+            "name": "hip extension should favor glutes over hamstrings",
+            "section": "joint_contribution",
+            "pass": true,
+            "expected": {
+              "lhs_group": "glutes",
+              "rhs_group": "hamstrings",
+              "comparison": "greater_equal"
+            },
+            "actual": {
+              "lhs_group": "glutes",
+              "lhs_share": 0.442,
+              "rhs_group": "hamstrings",
+              "rhs_share": 0.194
+            }
+          },
+          {
+            "name": "hip demand exceeds knee demand",
+            "section": "action_demand",
+            "pass": true,
+            "expected": {
+              "lhs_action": "hip_extension",
+              "rhs_action": "knee_extension",
+              "comparison": "greater"
+            },
+            "actual": {
+              "lhs_action": "hip_extension",
+              "lhs_share": 0.814,
+              "rhs_action": "knee_extension",
+              "rhs_share": 0.136
+            }
+          },
+          {
+            "name": "hip flexion range stays very large",
+            "section": "joint_rom",
+            "pass": true,
+            "expected": {
+              "joint": "hip_flexion",
+              "metric": "range",
+              "min_value": 85.0
+            },
+            "actual": {
+              "joint": "hip_flexion",
+              "metric": "range",
+              "value": 92.0
+            }
+          },
+          {
+            "name": "trunk stays very inclined",
+            "section": "joint_rom",
+            "pass": true,
+            "expected": {
+              "joint": "trunk_flexion",
+              "metric": "max",
+              "min_value": 40.0
+            },
+            "actual": {
+              "joint": "trunk_flexion",
+              "metric": "max",
+              "value": 48.0
+            }
+          },
+          {
+            "name": "knee flexion stays very limited",
+            "section": "joint_rom",
+            "pass": true,
+            "expected": {
+              "joint": "knee_flexion",
+              "metric": "range",
+              "max_value": 18.0
+            },
+            "actual": {
+              "joint": "knee_flexion",
+              "metric": "range",
+              "value": 14.0
+            }
+          }
+        ]
+      }
+    }
+  },
+  "assumptions": [
+    "This is an approximate profile, not a subject-specific measurement.",
+    "No force plates, motion capture, or subject-specific scaling are used.",
+    "The rep is generated from a v2 mirrored spline motion-family DSL rather than captured data.",
+    "The model is a generic RajagopalLaiUhlrich2023 lower-body model, not a subject-specific athlete.",
+    "This good morning proxy uses very large hip flexion, minimal knee bend, and a more pronounced forward torso lean than the romanian deadlift proxy."
+  ],
+  "runtime_context": {
+    "motion_family": "hip_hinge",
+    "target_groups": [
+      {
+        "id": "glutes",
+        "role": "primary",
+        "share": 0.36,
+        "stretch_share": 0.235
+      },
+      {
+        "id": "adductors",
+        "role": "primary",
+        "share": 0.296,
+        "stretch_share": 0.197
+      },
+      {
+        "id": "hamstrings",
+        "role": "secondary",
+        "share": 0.158,
+        "stretch_share": 0.427
+      },
+      {
+        "id": "quads",
+        "role": "secondary",
+        "share": 0.136,
+        "stretch_share": 0.0
+      },
+      {
+        "id": "calves",
+        "role": "stabilizer",
+        "share": 0.05,
+        "stretch_share": 0.0
+      }
+    ],
+    "joint_base_demands": [
+      {
+        "joint": "hip",
+        "share": 0.814
+      },
+      {
+        "joint": "knee",
+        "share": 0.136
+      },
+      {
+        "joint": "ankle",
+        "share": 0.05
+      }
+    ],
+    "range_of_motion_map": {
+      "hip_flexion": 92.0,
+      "knee_flexion": 14.0,
+      "ankle_dorsiflexion": 10.0,
+      "trunk_flexion": 38.0
+    },
+    "stability_score": 0.55,
+    "tempo_sensitivity_score": 0.45
+  }
+}

@@ -5,6 +5,8 @@ struct RootTabView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var session = WorkoutSession()
     @State private var showWorkout = false
+    @State private var hasSyncedExerciseCatalog = false
+    @State private var catalogSyncError: String?
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -53,14 +55,39 @@ struct RootTabView: View {
         .withPersistence()
         .preferredColorScheme(.dark)
         .tint(Color.vivoAccent)
-        .task { session.modelContext = modelContext }
+        .task {
+            session.modelContext = modelContext
+
+            guard !hasSyncedExerciseCatalog else { return }
+
+            do {
+                let store = try BundledExerciseProfileStore()
+                try ExerciseCatalogSeeder(store: store).sync(modelContext: modelContext)
+            } catch {
+                catalogSyncError = error.localizedDescription
+            }
+
+            hasSyncedExerciseCatalog = true
+        }
+        .alert(
+            "Exercise Catalog Error",
+            isPresented: Binding(
+                get: { catalogSyncError != nil },
+                set: { if !$0 { catalogSyncError = nil } }
+            )
+        ) {} message: {
+            Text(catalogSyncError ?? "Failed to load bundled exercises.")
+        }
     }
 }
 
 #Preview {
     RootTabView()
         .modelContainer(
-            for: [Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self],
+            for: [
+                Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self,
+                WorkoutTemplate.self, TemplateExercise.self
+            ],
             inMemory: true
         )
 }

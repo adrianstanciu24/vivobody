@@ -1,0 +1,60 @@
+{
+  "schema_version": "exercise_profile_index_v2",
+  "method": "heuristic_v2",
+  "exercises": [
+    {
+      "id": "bulgarian_split_squat",
+      "display_name": "Bulgarian Split Squat",
+      "description": "Approximate bulgarian split squat profile using the v2 split squat motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "split_squat",
+      "bilateral": false,
+      "internal_path": "profiles_v2/exercises/bulgarian_split_squat.internal.json",
+      "api_path": "profiles_v2/exercises/bulgarian_split_squat.api.json"
+    },
+    {
+      "id": "front_squat",
+      "display_name": "Front Squat",
+      "description": "Approximate front squat profile using the v2 bilateral squat motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "bilateral_squat",
+      "bilateral": true,
+      "internal_path": "profiles_v2/exercises/front_squat.internal.json",
+      "api_path": "profiles_v2/exercises/front_squat.api.json"
+    },
+    {
+      "id": "good_morning",
+      "display_name": "Good Morning",
+      "description": "Approximate good morning profile using the v2 hip hinge motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "hip_hinge",
+      "bilateral": true,
+      "internal_path": "profiles_v2/exercises/good_morning.internal.json",
+      "api_path": "profiles_v2/exercises/good_morning.api.json"
+    },
+    {
+      "id": "high_bar_back_squat",
+      "display_name": "High-Bar Back Squat",
+      "description": "Approximate high-bar back squat profile using the v2 bilateral squat motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "bilateral_squat",
+      "bilateral": true,
+      "internal_path": "profiles_v2/exercises/high_bar_back_squat.internal.json",
+      "api_path": "profiles_v2/exercises/high_bar_back_squat.api.json"
+    },
+    {
+      "id": "low_bar_back_squat",
+      "display_name": "Low-Bar Back Squat",
+      "description": "Approximate low-bar back squat profile using the v2 bilateral squat motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "bilateral_squat",
+      "bilateral": true,
+      "internal_path": "profiles_v2/exercises/low_bar_back_squat.internal.json",
+      "api_path": "profiles_v2/exercises/low_bar_back_squat.api.json"
+    },
+    {
+      "id": "romanian_deadlift",
+      "display_name": "Romanian Deadlift",
+      "description": "Approximate romanian deadlift profile using the v2 hip hinge motion family and the RajagopalLaiUhlrich2023 lower-body model.",
+      "motion_family": "hip_hinge",
+      "bilateral": true,
+      "internal_path": "profiles_v2/exercises/romanian_deadlift.internal.json",
+      "api_path": "profiles_v2/exercises/romanian_deadlift.api.json"
+    }
+  ]
+}

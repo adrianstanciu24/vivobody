@@ -1,41 +1,43 @@
 import Foundation
-import SwiftData
 import Testing
 @testable import vivobody
 
+@MainActor
 struct ExerciseLibraryViewModelTests {
-    private func makeContext() throws -> ModelContext {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(
-            for: Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self,
-            configurations: config
-        )
-        return ModelContext(container)
+    private func makeExercises() -> [Exercise] {
+        [
+            Exercise(
+                catalogID: "front_squat",
+                name: "Front Squat",
+                muscleGroup: .legs,
+                category: .barbell,
+                primaryTag: "QUADS",
+                secondaryTags: "BILATERAL SQUAT · BILATERAL"
+            ),
+            Exercise(
+                catalogID: "romanian_deadlift",
+                name: "Romanian Deadlift",
+                muscleGroup: .legs,
+                category: .barbell,
+                primaryTag: "GLUTES",
+                secondaryTags: "HIP HINGE · BILATERAL"
+            )
+        ]
     }
 
-    @Test func addExerciseInsertsIntoContext() throws {
-        let context = try makeContext()
-        let vm = ExerciseLibraryViewModel(modelContext: context)
+    @Test func filtersAreDerivedFromCatalogTags() {
+        let vm = ExerciseLibraryViewModel()
+        let filters = vm.filters(for: makeExercises())
 
-        vm.addExercise(name: "Deadlift", muscleGroup: .back, category: .barbell)
-        try context.save()
-
-        let count = try context.fetchCount(FetchDescriptor<Exercise>())
-        #expect(count == 1)
+        #expect(filters.map(\.name) == ["ALL", "GLUTES", "QUADS"])
     }
 
-    @Test func deleteExerciseRemovesFromContext() throws {
-        let context = try makeContext()
-        let vm = ExerciseLibraryViewModel(modelContext: context)
+    @Test func sectionsRespectSelectedFilter() {
+        let vm = ExerciseLibraryViewModel()
+        let sections = vm.sections(for: makeExercises(), selectedFilter: "QUADS")
 
-        vm.addExercise(name: "Curl", muscleGroup: .biceps, category: .dumbbell)
-        try context.save()
-
-        let exercises = try context.fetch(FetchDescriptor<Exercise>())
-        vm.delete(exercises[0])
-        try context.save()
-
-        let count = try context.fetchCount(FetchDescriptor<Exercise>())
-        #expect(count == 0)
+        #expect(sections.count == 1)
+        #expect(sections.first?.title == "Quads")
+        #expect(sections.first?.exercises.map(\.name) == ["Front Squat"])
     }
 }

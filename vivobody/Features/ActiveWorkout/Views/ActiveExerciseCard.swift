@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ActiveExerciseCard: View {
     let exercise: SessionExercise
+    let number: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -27,7 +28,7 @@ struct ActiveExerciseCard: View {
 
     private var exerciseHeader: some View {
         HStack(spacing: 10) {
-            Text(String(format: "%02d", 1))
+            Text(String(format: "%02d", number))
                 .font(.vivoMono(VivoFont.monoMD))
                 .foregroundStyle(Color.vivoAccent)
 
@@ -185,8 +186,11 @@ struct ActiveExerciseCard: View {
 
 #Preview {
     let exercise = SessionExercise(
-        name: "Barbell Bench Press",
-        tags: "CHEST · COMPOUND · BARBELL",
+        catalogID: "front_squat",
+        name: "Front Squat",
+        primaryTag: "QUADS",
+        secondaryTags: "BILATERAL SQUAT · BILATERAL",
+        muscleGroup: .legs,
         sets: [
             SessionSet(order: 1, reps: 8, weight: 185, rir: 3, completed: true),
             SessionSet(order: 2, reps: 8, weight: 185, rir: 2, completed: true),
@@ -194,6 +198,6 @@ struct ActiveExerciseCard: View {
             SessionSet(order: 4, reps: 8, weight: 185, rir: 0)
         ]
     )
-    ActiveExerciseCard(exercise: exercise)
+    ActiveExerciseCard(exercise: exercise, number: 1)
         .background(Color.vivoBackground)
 }

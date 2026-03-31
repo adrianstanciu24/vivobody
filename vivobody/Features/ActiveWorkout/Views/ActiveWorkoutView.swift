@@ -19,7 +19,7 @@ struct ActiveWorkoutView: View {
                 } else {
                     List {
                         ForEach(workout.exercises.sorted { $0.order < $1.order }) { workoutExercise in
-                            Section(workoutExercise.exercise?.name ?? "Unknown") {
+                            Section(workoutExercise.displayName.isEmpty ? "Unknown" : workoutExercise.displayName) {
                                 ForEach(workoutExercise.sets.sorted { $0.order < $1.order }) { exerciseSet in
                                     ExerciseSetRowView(exerciseSet: exerciseSet)
                                 }

@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct ExerciseDetailView: View {
-    let exercise: LibraryExercise
+    let exercise: Exercise
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
 
-            ScrollView(showsIndicators: false) {
+            ScrollView {
                 VStack(spacing: 0) {
                     header
                     divider
@@ -34,6 +34,7 @@ struct ExerciseDetailView: View {
                 }
                 .padding(.bottom, 32)
             }
+            .scrollIndicators(.hidden)
         }
         .navigationBarHidden(true)
     }
@@ -84,12 +85,14 @@ struct ExerciseDetailView: View {
 
     private var tagRow: some View {
         HStack(spacing: 0) {
-            Text(exercise.primaryTag)
+            Text(exercise.primaryTag.isEmpty ? exercise.muscleGroup.displayName.uppercased() : exercise.primaryTag)
                 .foregroundStyle(Color.vivoAccent)
-            Text(" · ")
-                .foregroundStyle(Color.vivoMuted)
-            Text(exercise.secondaryTags)
-                .foregroundStyle(Color.vivoMuted)
+            if !exercise.secondaryTags.isEmpty {
+                Text(" · ")
+                    .foregroundStyle(Color.vivoMuted)
+                Text(exercise.secondaryTags)
+                    .foregroundStyle(Color.vivoMuted)
+            }
         }
         .font(.vivoMono(VivoFont.monoSM))
         .tracking(VivoTracking.tight)
@@ -109,7 +112,14 @@ struct ExerciseDetailView: View {
 #Preview {
     NavigationStack {
         ExerciseDetailView(
-            exercise: ExerciseLibraryView.chestExercises[0]
+            exercise: Exercise(
+                catalogID: "front_squat",
+                name: "Front Squat",
+                muscleGroup: .legs,
+                category: .barbell,
+                primaryTag: "QUADS",
+                secondaryTags: "BILATERAL SQUAT · BILATERAL"
+            )
         )
     }
 }

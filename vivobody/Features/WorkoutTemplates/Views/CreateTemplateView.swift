@@ -33,6 +33,7 @@ struct CreateTemplateView: View {
                         let mins = ex.restSeconds / 60
                         let secs = ex.restSeconds % 60
                         return TemplateExerciseItem(
+                            catalogID: ex.catalogID,
                             name: ex.name,
                             primaryTag: ex.primaryTag,
                             secondaryTags: ex.secondaryTags,
@@ -196,8 +197,9 @@ func createTemplateHeader(
 
 // MARK: - Exercise Item
 
-struct TemplateExerciseItem: Identifiable {
+struct TemplateExerciseItem: Identifiable, Equatable {
     let id = UUID()
+    let catalogID: String
     let name: String
     let primaryTag: String
     let secondaryTags: String
@@ -207,28 +209,33 @@ struct TemplateExerciseItem: Identifiable {
 
     static let sampleData: [TemplateExerciseItem] = [
         TemplateExerciseItem(
-            name: "Dumbbell Bench Press",
-            primaryTag: "CHEST", secondaryTags: "COMPOUND \u{00B7} DUMBBELL",
+            catalogID: "front_squat",
+            name: "Front Squat",
+            primaryTag: "QUADS", secondaryTags: "BILATERAL SQUAT \u{00B7} BILATERAL",
             sets: 4, targetReps: 8, restLabel: "2:00"
         ),
         TemplateExerciseItem(
-            name: "Incline Barbell Press",
-            primaryTag: "CHEST", secondaryTags: "COMPOUND \u{00B7} BARBELL",
+            catalogID: "high_bar_back_squat",
+            name: "High-Bar Back Squat",
+            primaryTag: "QUADS", secondaryTags: "BILATERAL SQUAT \u{00B7} BILATERAL",
             sets: 3, targetReps: 10, restLabel: "2:00"
         ),
         TemplateExerciseItem(
-            name: "Arnold Press",
-            primaryTag: "SHOULDERS", secondaryTags: "COMPOUND \u{00B7} DUMBBELL",
+            catalogID: "low_bar_back_squat",
+            name: "Low-Bar Back Squat",
+            primaryTag: "GLUTES", secondaryTags: "BILATERAL SQUAT \u{00B7} BILATERAL",
             sets: 3, targetReps: 12, restLabel: "1:30"
         ),
         TemplateExerciseItem(
-            name: "Pec Deck Fly",
-            primaryTag: "CHEST", secondaryTags: "ISOLATION \u{00B7} MACHINE",
+            catalogID: "bulgarian_split_squat",
+            name: "Bulgarian Split Squat",
+            primaryTag: "QUADS", secondaryTags: "SPLIT SQUAT \u{00B7} UNILATERAL",
             sets: 3, targetReps: 12, restLabel: "1:00"
         ),
         TemplateExerciseItem(
-            name: "Overhead Tri Extension",
-            primaryTag: "TRICEPS", secondaryTags: "ISOLATION \u{00B7} CABLE",
+            catalogID: "romanian_deadlift",
+            name: "Romanian Deadlift",
+            primaryTag: "GLUTES", secondaryTags: "HIP HINGE \u{00B7} BILATERAL",
             sets: 3, targetReps: 15, restLabel: "1:00"
         )
     ]
@@ -238,7 +245,7 @@ struct TemplateExerciseItem: Identifiable {
     CreateTemplateView()
         .withPersistence()
         .modelContainer(
-            for: [WorkoutTemplate.self, TemplateExercise.self],
+            for: [WorkoutTemplate.self, TemplateExercise.self, Exercise.self],
             inMemory: true
         )
 }

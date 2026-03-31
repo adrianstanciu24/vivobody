@@ -2,8 +2,7 @@ import SwiftUI
 
 struct TemplateExerciseConfigView: View {
     @Environment(\.dismiss) private var dismiss
-    let exerciseName: String
-    let exerciseTags: String
+    let exercise: Exercise
     let onAdd: (TemplateExerciseItem) -> Void
 
     @State private var sets = 3
@@ -16,12 +15,12 @@ struct TemplateExerciseConfigView: View {
     }
 
     private var primaryTag: String {
-        let parts = exerciseTags.components(separatedBy: " \u{00B7} ")
-        return parts.first ?? exerciseTags
+        let parts = exercise.tags.components(separatedBy: " \u{00B7} ")
+        return parts.first ?? exercise.tags
     }
 
     private var secondaryTags: String {
-        let parts = exerciseTags.components(separatedBy: " \u{00B7} ")
+        let parts = exercise.tags.components(separatedBy: " \u{00B7} ")
         if parts.count > 1 {
             return parts.dropFirst().joined(separator: " \u{00B7} ")
         }
@@ -34,7 +33,7 @@ struct TemplateExerciseConfigView: View {
 
             VStack(spacing: 0) {
                 header
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     VStack(spacing: 0) {
                         exerciseHeader
                         divider
@@ -49,6 +48,7 @@ struct TemplateExerciseConfigView: View {
                     }
                     .padding(.bottom, 32)
                 }
+                .scrollIndicators(.hidden)
             }
         }
     }
@@ -91,11 +91,11 @@ private extension TemplateExerciseConfigView {
 private extension TemplateExerciseConfigView {
     var exerciseHeader: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(exerciseName)
+            Text(exercise.name)
                 .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
-            Text(exerciseTags)
+            Text(exercise.tags)
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoAccent)
@@ -289,7 +289,8 @@ private extension TemplateExerciseConfigView {
     var addButton: some View {
         Button {
             let item = TemplateExerciseItem(
-                name: exerciseName,
+                catalogID: exercise.catalogID,
+                name: exercise.name,
                 primaryTag: primaryTag,
                 secondaryTags: secondaryTags,
                 sets: sets,
@@ -352,7 +353,13 @@ private extension TemplateExerciseConfigView {
 
 #Preview {
     TemplateExerciseConfigView(
-        exerciseName: "Barbell Bench Press",
-        exerciseTags: "COMPOUND \u{00B7} BARBELL"
+        exercise: Exercise(
+            catalogID: "front_squat",
+            name: "Front Squat",
+            muscleGroup: .legs,
+            category: .barbell,
+            primaryTag: "QUADS",
+            secondaryTags: "BILATERAL SQUAT \u{00B7} BILATERAL"
+        )
     ) { _ in }
 }

@@ -1,40 +1,64 @@
+import SwiftData
 import SwiftUI
 
 struct ExerciseLibraryView: View {
+    @Query(sort: \Exercise.name) private var exercises: [Exercise]
+    @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var selectedFilter = "ALL"
+    @State private var filters: [ExerciseCatalogFilter] = []
+    @State private var sections: [ExerciseCatalogSection] = []
+    @State private var recentExercises: [Exercise] = []
 
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.vivoBackground.ignoresSafeArea()
 
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     VStack(spacing: 0) {
                         searchBar
-                        filterPills
+                        CatalogFilterBar(filters: filters, selectedFilter: $selectedFilter)
                         vivoDivider
-                        recentSection
-                        vivoDivider
-                            .padding(.top, 10)
-                        muscleGroupSection(
-                            title: "Chest",
-                            count: 32,
-                            exercises: Self.chestExercises
-                        )
-                        vivoDivider
-                        muscleGroupSection(
-                            title: "Back",
-                            count: 41,
-                            exercises: Self.backExercises
-                        )
-                        vivoDivider
-                        createCustomButton
+
+                        if !recentExercises.isEmpty {
+                            recentSection
+                            vivoDivider
+                                .padding(.top, 10)
+                        }
+
+                        if sections.isEmpty {
+                            emptySection
+                        } else {
+                            ForEach(sections.enumerated(), id: \.element.id) { index, section in
+                                muscleGroupSection(section, sectionIndex: index)
+                                if index < sections.count - 1 {
+                                    vivoDivider
+                                }
+                            }
+                        }
+
                         footerSection
                     }
                     .padding(.bottom, 32)
                 }
+                .scrollIndicators(.hidden)
             }
             .navigationBarHidden(true)
+        }
+        .onChange(of: exercises) { _, newValue in
+            filters = ExerciseCatalogPresenter.filters(from: newValue)
+            sections = ExerciseCatalogPresenter.sections(from: newValue, selectedFilter: selectedFilter)
+        }
+        .onChange(of: selectedFilter) { _, newValue in
+            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: newValue)
+        }
+        .onChange(of: workouts) { _, newValue in
+            recentExercises = ExerciseCatalogPresenter.recentExercises(from: newValue)
+        }
+        .onAppear {
+            filters = ExerciseCatalogPresenter.filters(from: exercises)
+            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: selectedFilter)
+            recentExercises = ExerciseCatalogPresenter.recentExercises(from: workouts)
         }
     }
 
@@ -46,8 +70,6 @@ struct ExerciseLibraryView: View {
     }
 }
 
-// MARK: - Search Bar
-
 private extension ExerciseLibraryView {
     var searchBar: some View {
         HStack(spacing: 10) {
@@ -55,13 +77,13 @@ private extension ExerciseLibraryView {
                 .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
 
-            Text("Search exercises...")
+            Text("Bundled exercise catalog")
                 .font(.vivoMono(VivoFont.monoCaption))
                 .foregroundStyle(Color.vivoMuted)
 
             Spacer()
 
-            Text("248 TOTAL")
+            Text("\(exercises.count) TOTAL")
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoSecondary)
@@ -81,102 +103,10 @@ private extension ExerciseLibraryView {
         .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 8)
     }
-}
-
-// MARK: - Filter Pills
-
-private extension ExerciseLibraryView {
-    static let filters: [(name: String, count: Int?)] = [
-        ("ALL", nil),
-        ("CHEST", 32),
-        ("BACK", 41),
-        ("LEGS", 48),
-        ("SHOULDERS", 28),
-        ("ARMS", 36),
-        ("CORE", 22)
-    ]
-
-    var filterPills: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                ForEach(Self.filters, id: \.name) { filter in
-                    filterPill(filter.name, count: filter.count)
-                }
-            }
-            .padding(.horizontal, VivoSpacing.screenH)
-        }
-        .padding(.vertical, 12)
-    }
-
-    func filterPill(_ name: String, count: Int?) -> some View {
-        let isSelected = name == selectedFilter
-        let label: String = if let count { "\(name)\(count)" } else { name }
-
-        return Button { selectedFilter = name } label: {
-            Text(label)
-                .font(.vivoMono(VivoFont.monoXS, weight: isSelected ? .bold : .regular))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(isSelected ? Color.vivoBackground : Color.vivoSecondary)
-                .padding(.horizontal, VivoSpacing.cardPadding)
-                .padding(.vertical, 9)
-                .background(
-                    RoundedRectangle(cornerRadius: VivoRadius.pill)
-                        .fill(isSelected ? Color.vivoPrimary : Color.clear)
-                )
-                .overlay(
-                    isSelected ? nil :
-                        RoundedRectangle(cornerRadius: VivoRadius.pill)
-                        .stroke(Color.vivoSurface, lineWidth: 1.5)
-                )
-        }
-    }
-}
-
-// MARK: - Recent Section
-
-private extension ExerciseLibraryView {
-    struct RecentExercise: Identifiable {
-        let id: String
-        let name: String
-        let muscleGroup: String
-        let category: String
-        let lastWeight: String
-    }
-
-    static let recentExercises: [RecentExercise] = [
-        RecentExercise(
-            id: "r1",
-            name: "Barbell Bench Press",
-            muscleGroup: "CHEST",
-            category: "COMPOUND",
-            lastWeight: "LAST: 185 LB × 08"
-        ),
-        RecentExercise(
-            id: "r2",
-            name: "Barbell Squat",
-            muscleGroup: "LEGS",
-            category: "COMPOUND",
-            lastWeight: "LAST: 275 LB × 05"
-        ),
-        RecentExercise(
-            id: "r3",
-            name: "Pull-Up",
-            muscleGroup: "BACK",
-            category: "COMPOUND",
-            lastWeight: "LAST: BW+25 × 08"
-        ),
-        RecentExercise(
-            id: "r4",
-            name: "OHP",
-            muscleGroup: "SHOULDERS",
-            category: "COMPOUND",
-            lastWeight: "LAST: 135 LB × 06"
-        )
-    ]
 
     var recentSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("RECENT · LAST 7 DAYS")
+            Text("RECENT \u{00B7} CATALOG MATCHES")
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
@@ -184,74 +114,36 @@ private extension ExerciseLibraryView {
                 .padding(.top, 16)
                 .padding(.bottom, 10)
 
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 HStack(spacing: 8) {
-                    ForEach(Self.recentExercises) { exercise in
-                        recentCard(exercise)
+                    ForEach(recentExercises) { exercise in
+                        NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                            CatalogRecentCard(exercise: exercise)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, VivoSpacing.screenH)
             }
+            .scrollIndicators(.hidden)
             .padding(.bottom, 10)
         }
     }
 
-    func recentCard(_ exercise: RecentExercise) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(exercise.name)
-                .font(.vivoDisplay(VivoFont.body))
-                .foregroundStyle(Color.vivoPrimary)
-                .lineLimit(2)
-
-            Text(
-                "\(Text(exercise.muscleGroup).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.category)").foregroundStyle(Color.vivoSecondary))"
-            )
-            .font(.vivoMono(VivoFont.monoSM))
-            .tracking(VivoTracking.tight)
-
-            Spacer()
-
-            Text(exercise.lastWeight)
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(Color.vivoMuted)
-        }
-        .padding(14)
-        .frame(width: 180, height: 130, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: VivoRadius.card)
-                .stroke(Color.vivoSurface, lineWidth: 1)
-        )
-    }
-}
-
-// MARK: - Muscle Group Section
-
-private extension ExerciseLibraryView {
     func muscleGroupSection(
-        title: String,
-        count: Int,
-        exercises: [LibraryExercise]
+        _ section: ExerciseCatalogSection,
+        sectionIndex: Int
     ) -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text(title)
-                    .font(.vivoDisplay(VivoFont.sectionTitle))
-                    .foregroundStyle(Color.vivoPrimary)
-                Spacer()
-                Text("\(count) EXERCISES")
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoSecondary)
-            }
-            .padding(.horizontal, VivoSpacing.screenH)
-            .padding(.top, 14)
-            .padding(.bottom, 10)
+            CatalogSectionHeader(title: section.title, exerciseCount: section.exercises.count)
 
             VStack(spacing: 0) {
-                ForEach(exercises) { exercise in
+                ForEach(section.exercises.enumerated(), id: \.element.persistentModelID) { index, exercise in
                     NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
-                        ExerciseLibraryRow(exercise: exercise)
+                        ExerciseLibraryRow(
+                            exercise: exercise,
+                            number: String(format: "%02d", index + 1)
+                        )
                     }
                     .buttonStyle(.plain)
                 }
@@ -259,44 +151,34 @@ private extension ExerciseLibraryView {
             .padding(.horizontal, VivoSpacing.screenH)
         }
     }
-}
 
-// MARK: - Create Custom Button
-
-private extension ExerciseLibraryView {
-    var createCustomButton: some View {
-        Button {} label: {
-            HStack(spacing: 8) {
-                Text("+")
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoAccent)
-                Text("CREATE CUSTOM EXERCISE")
-                    .font(.vivoMono(VivoFont.monoCaption))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoSecondary)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 55)
-            .overlay(
-                RoundedRectangle(cornerRadius: VivoRadius.card)
-                    .stroke(Color.vivoSurface, lineWidth: 1.5)
-            )
+    var emptySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("NO CATALOG EXERCISES")
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                .tracking(VivoTracking.wide)
+                .foregroundStyle(Color.vivoMuted)
+            Text("The bundled JSON catalog did not load any exercises for this filter.")
+                .font(.vivoMono(VivoFont.monoCaption))
+                .foregroundStyle(Color.vivoSecondary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 16)
     }
-}
 
-// MARK: - Footer
-
-private extension ExerciseLibraryView {
     var footerSection: some View {
         VivoFooter()
     }
 }
 
-// MARK: - Preview
-
 #Preview {
     ExerciseLibraryView()
+        .modelContainer(
+            for: [
+                Exercise.self, Workout.self, WorkoutExercise.self, ExerciseSet.self,
+                WorkoutTemplate.self, TemplateExercise.self
+            ],
+            inMemory: true
+        )
 }

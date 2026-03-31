@@ -51,7 +51,7 @@ final class Workout {
     }
 
     var exerciseSummary: String {
-        let muscles = exercises.compactMap { $0.exercise?.muscleGroup.displayName.lowercased() }
+        let muscles = exercises.map { $0.displayMuscleGroup.lowercased() }
         let unique = Array(Set(muscles)).sorted()
         let prefix = "\(exerciseCount) exercises"
         if unique.isEmpty { return prefix }

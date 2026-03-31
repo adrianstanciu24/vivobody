@@ -25,9 +25,10 @@ struct CreateTemplateViewModelTests {
             notes: "Focus on compound lifts",
             exercises: [
                 TemplateExerciseItem(
-                    name: "Bench Press",
-                    primaryTag: "CHEST",
-                    secondaryTags: "COMPOUND",
+                    catalogID: "front_squat",
+                    name: "Front Squat",
+                    primaryTag: "QUADS",
+                    secondaryTags: "BILATERAL SQUAT · BILATERAL",
                     sets: 4,
                     targetReps: 8,
                     restLabel: "2:00"
