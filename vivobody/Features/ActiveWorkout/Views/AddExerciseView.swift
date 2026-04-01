@@ -57,8 +57,8 @@ struct AddExerciseView: View {
                         )
                         .padding(.horizontal, VivoSpacing.screenH)
                         divider
-                        logSetButton
                         loggedSetsSection
+                        logSetButton
                         footerInfo
                     }
                     .padding(.bottom, 32)

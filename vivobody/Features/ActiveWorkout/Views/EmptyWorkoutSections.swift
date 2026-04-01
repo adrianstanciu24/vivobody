@@ -18,7 +18,7 @@ extension EmptyWorkoutView {
 
             ForEach(quickPicks.enumerated(), id: \.element.persistentModelID) { index, pick in
                 Button {
-                    session?.addExercise(pick)
+                    selectedQuickPick = pick
                 } label: {
                     quickPickRow(pick, number: String(format: "%02d", index + 1))
                 }
@@ -70,7 +70,19 @@ extension EmptyWorkoutView {
     var activeContent: some View {
         VStack(spacing: 14) {
             ForEach((session?.exercises ?? []).enumerated(), id: \.element.id) { index, exercise in
-                ActiveExerciseCard(exercise: exercise, number: index + 1)
+                ActiveExerciseCard(
+                    exercise: exercise,
+                    number: index + 1,
+                    onLogSet: {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            session?.logSet(exerciseID: exercise.id)
+                        }
+                    },
+                    onEditSet: {
+                        editingExerciseID = exercise.id
+                        showEditSet = true
+                    }
+                )
             }
 
             if let exercise = session?.exercises.last {
@@ -94,7 +106,7 @@ extension EmptyWorkoutView {
 
             ForEach(suggestions.enumerated(), id: \.element.persistentModelID) { index, suggestion in
                 Button {
-                    session?.addExercise(suggestion)
+                    selectedQuickPick = suggestion
                 } label: {
                     suggestionRow(suggestion, number: String(format: "%02d", index + 1))
                 }
@@ -170,6 +182,34 @@ extension EmptyWorkoutView {
                     alignment: .top
                 )
         )
+    }
+}
+
+// MARK: - Edit Set Sheet
+
+extension EmptyWorkoutView {
+    private var editingSessionExercise: SessionExercise? {
+        guard let exerciseID = editingExerciseID else { return nil }
+        return session?.exercises.first(where: { $0.id == exerciseID })
+    }
+
+    @ViewBuilder
+    var editSetSheet: some View {
+        if let sessionExercise = editingSessionExercise {
+            EditSetView(exercise: sessionExercise) { reps, weight, rir in
+                if let exerciseID = editingExerciseID {
+                    session?.updateCurrentSet(
+                        exerciseID: exerciseID,
+                        reps: reps,
+                        weight: weight,
+                        rir: rir
+                    )
+                    session?.logSet(exerciseID: exerciseID)
+                }
+            }
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.hidden)
+        }
     }
 }
 

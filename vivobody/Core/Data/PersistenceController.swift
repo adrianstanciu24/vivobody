@@ -8,6 +8,11 @@ final class PersistenceController {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
+
+    func delete(_ object: any PersistentModel) {
+        modelContext.delete(object)
+        try? modelContext.save()
+    }
 }
 
 private struct PersistenceInjector: ViewModifier {

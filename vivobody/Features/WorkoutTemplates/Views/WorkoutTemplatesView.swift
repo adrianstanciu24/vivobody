@@ -2,11 +2,13 @@ import SwiftData
 import SwiftUI
 
 struct WorkoutTemplatesView: View {
+    @Environment(PersistenceController.self) private var persistence
     @Query(sort: \WorkoutTemplate.createdAt, order: .reverse)
     private var templates: [WorkoutTemplate]
 
     @State private var showCreate = false
     @State private var editingTemplate: WorkoutTemplate?
+    @State private var templateToDelete: WorkoutTemplate?
 
     var body: some View {
         if templates.isEmpty {
@@ -34,16 +36,46 @@ struct WorkoutTemplatesView: View {
     }
 
     private var templateList: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                ForEach(templates) { template in
-                    templateRow(template)
-                }
-
-                createButton
-                VivoFooter()
+        List {
+            ForEach(templates) { template in
+                templateRow(template)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            templateToDelete = template
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
-            .padding(.bottom, 32)
+
+            createButton
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+
+            VivoFooter()
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+        .scrollIndicators(.hidden)
+        .alert("Delete Template?", isPresented: Binding(
+            get: { templateToDelete != nil },
+            set: { if !$0 { templateToDelete = nil } }
+        )) {
+            Button("Cancel", role: .cancel) { templateToDelete = nil }
+            Button("Delete", role: .destructive) {
+                if let template = templateToDelete {
+                    persistence.delete(template)
+                }
+                templateToDelete = nil
+            }
+        } message: {
+            Text("This action cannot be undone.")
         }
     }
 

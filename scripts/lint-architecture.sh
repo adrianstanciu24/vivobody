@@ -55,10 +55,15 @@ echo "Checking cross-feature boundaries..."
 ALLOWED_CROSS_FEATURE=(
   # WorkoutsHistory embeds the templates tab
   "Features/WorkoutsHistory/.*:WorkoutTemplatesView"
+  # WorkoutsHistory start-workout picker shows template cards
+  "Features/WorkoutsHistory/.*:TemplateCardView"
   # ActiveWorkout shows the completion screen
   "Features/ActiveWorkout/.*:WorkoutCompleteView"
   # ExerciseLibrary navigates to ExerciseDetail
   "Features/ExerciseLibrary/.*:ExerciseDetailView"
+  # WorkoutsHistory navigates to WorkoutDetail
+  "Features/WorkoutsHistory/.*:WorkoutDetailView"
+  "Features/WorkoutsHistory/.*:WorkoutDetailExerciseCard"
   # ExerciseDetail preview uses ExerciseLibrary sample data
   "Features/ExerciseDetail/.*:ExerciseLibraryView"
   # WorkoutLog presents ActiveWorkout

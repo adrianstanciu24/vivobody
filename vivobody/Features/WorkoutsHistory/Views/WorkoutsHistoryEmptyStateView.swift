@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct WorkoutTemplatesEmptyStateView: View {
-    let onCreate: () -> Void
+struct WorkoutsHistoryEmptyStateView: View {
+    @Environment(WorkoutSession.self) private var session: WorkoutSession?
+    @State private var showStartPicker = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -9,8 +10,8 @@ struct WorkoutTemplatesEmptyStateView: View {
                 emptyCard
                 VivoFooter(
                     line1: "VIVOBODY WORKOUT SYS",
-                    line2: "TEMPLATES: 0 CREATED",
-                    line3: "BUILD ONCE · REUSE FOREVER"
+                    line2: "SESSIONS: 0 LOGGED",
+                    line3: "TRAIN HARD · LOG EVERYTHING"
                 )
             }
             .padding(.bottom, 32)
@@ -24,18 +25,18 @@ struct WorkoutTemplatesEmptyStateView: View {
                     .stroke(Color.vivoAccent, lineWidth: 1.5)
                     .frame(width: 44, height: 44)
                     .overlay(
-                        Text("+")
-                            .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
+                        Image(systemName: "figure.strengthtraining.traditional")
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundStyle(Color.vivoAccent)
                     )
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("NO TEMPLATES YET")
+                    Text("NO WORKOUTS YET")
                         .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                         .tracking(VivoTracking.medium)
                         .foregroundStyle(Color.vivoAccent)
                     Text(
-                        "Create a reusable workout template to speed up your sessions."
+                        "Complete your first session to start tracking your progress."
                     )
                     .font(.vivoMono(VivoFont.monoDefault))
                     .lineSpacing(2)
@@ -51,20 +52,22 @@ struct WorkoutTemplatesEmptyStateView: View {
 
             instructionRow(
                 number: "01",
-                title: "BUILD YOUR TEMPLATE",
-                detail: "Pick exercises, set target reps and sets for each move."
+                title: "START A SESSION",
+                detail: "Tap the button below or go to the Today tab to begin."
             )
             .padding(.bottom, 14)
 
             instructionRow(
                 number: "02",
-                title: "USE IT ANYTIME",
-                detail: "Start a session from any template — adjust on the fly as needed."
+                title: "TRACK YOUR PROGRESS",
+                detail: "Every completed workout appears here with full stats and history."
             )
             .padding(.bottom, 16)
 
-            Button(action: onCreate) {
-                Text("+ CREATE TEMPLATE")
+            Button {
+                showStartPicker = true
+            } label: {
+                Text("START WORKOUT \u{2192}")
                     .font(.vivoMono(VivoFont.monoSM, weight: .bold))
                     .tracking(VivoTracking.normal)
                     .foregroundStyle(.white)
@@ -73,6 +76,11 @@ struct WorkoutTemplatesEmptyStateView: View {
                     .background(Color.vivoAccent)
                     .clipShape(RoundedRectangle(cornerRadius: VivoRadius.card))
                     .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
+            }
+            .sheet(isPresented: $showStartPicker) {
+                StartWorkoutPicker()
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.hidden)
             }
         }
         .padding(VivoSpacing.cardPadding)
@@ -111,6 +119,7 @@ struct WorkoutTemplatesEmptyStateView: View {
 }
 
 #Preview {
-    WorkoutTemplatesEmptyStateView {}
+    WorkoutsHistoryEmptyStateView()
         .background(Color.vivoBackground)
+        .environment(WorkoutSession())
 }

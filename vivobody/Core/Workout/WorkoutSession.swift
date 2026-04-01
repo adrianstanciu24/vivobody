@@ -46,6 +46,33 @@ final class WorkoutSession {
         startTimer()
     }
 
+    func start(from template: WorkoutTemplate) {
+        start(name: template.name)
+        let sorted = template.exercises.sorted { $0.order < $1.order }
+        for templateExercise in sorted {
+            let muscleGroup = templateExercise.exercise?.muscleGroup ?? .other
+            let exercise = SessionExercise(
+                catalogID: templateExercise.catalogID,
+                name: templateExercise.name,
+                primaryTag: templateExercise.primaryTag,
+                secondaryTags: templateExercise.secondaryTags,
+                muscleGroup: muscleGroup,
+                sets: (1 ... templateExercise.targetSets).map { order in
+                    SessionSet(
+                        order: order,
+                        reps: templateExercise.targetReps,
+                        weight: 0,
+                        rir: max(0, 4 - order)
+                    )
+                }
+            )
+            exercises.append(exercise)
+        }
+        currentExercise = exercises.first?.name
+        template.timesUsed += 1
+        template.lastUsedAt = .now
+    }
+
     func addExercise(_ selectedExercise: Exercise, sets: [SessionSet]? = nil) {
         let exercise = SessionExercise(
             catalogID: selectedExercise.catalogID,
@@ -57,6 +84,15 @@ final class WorkoutSession {
         )
         exercises.append(exercise)
         currentExercise = exercise.name
+    }
+
+    func updateCurrentSet(exerciseID: UUID, reps: Int, weight: Int, rir: Int) {
+        guard let index = exercises.firstIndex(where: { $0.id == exerciseID }) else { return }
+        if let setIndex = exercises[index].sets.firstIndex(where: { !$0.completed }) {
+            exercises[index].sets[setIndex].reps = reps
+            exercises[index].sets[setIndex].weight = weight
+            exercises[index].sets[setIndex].rir = rir
+        }
     }
 
     func logSet(exerciseID: UUID) {

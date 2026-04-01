@@ -8,6 +8,9 @@ struct EmptyWorkoutView: View {
     @Query(sort: \Workout.startedAt, order: .reverse) var workouts: [Workout]
     @State var showExercisePicker = false
     @State var showComplete = false
+    @State var selectedQuickPick: Exercise?
+    @State var editingExerciseID: UUID?
+    @State var showEditSet = false
 
     private var hasExercises: Bool {
         session?.exercises.isEmpty == false
@@ -32,6 +35,15 @@ struct EmptyWorkoutView: View {
                 .environment(session)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
+        }
+        .sheet(item: $selectedQuickPick) { exercise in
+            AddExerciseView(exercise: exercise)
+                .environment(session)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+        }
+        .sheet(isPresented: $showEditSet) {
+            editSetSheet
         }
     }
 

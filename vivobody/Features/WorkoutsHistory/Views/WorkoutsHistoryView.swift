@@ -2,9 +2,14 @@ import SwiftData
 import SwiftUI
 
 struct WorkoutsHistoryView: View {
+    @Environment(PersistenceController.self) private var persistence
+    @Environment(WorkoutSession.self) private var session: WorkoutSession?
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
     @State private var selectedTab = "HISTORY"
     @State private var selectedFilter = "ALL"
+    @State private var workoutToDelete: Workout?
+    @State private var selectedWorkout: Workout?
+    @State private var showStartPicker = false
 
     private var totalVolume: Int {
         workouts.reduce(0) { $0 + $1.totalVolume }
@@ -72,45 +77,122 @@ struct WorkoutsHistoryView: View {
     }
 
     private var historyContent: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                WorkoutsHistoryStatsRow(
-                    sessions: workouts.count,
-                    volume: totalVolume,
-                    thisWeek: thisWeekCount,
-                    avgDuration: avgDuration
-                )
-                divider
-                WorkoutsHistoryFilterPills(selectedFilter: $selectedFilter)
-                divider
+        List {
+            statsSection
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-                ForEach(Array(groupedWorkouts.enumerated()), id: \.offset) { sectionIndex, section in
-                    WorkoutsHistoryWeekSection(
-                        label: section.0,
-                        workouts: section.1,
-                        highlightFirst: sectionIndex == 0
-                    )
-                    divider
+            ForEach(Array(groupedWorkouts.enumerated()), id: \.offset) { sectionIndex, section in
+                Section {
+                    ForEach(
+                        Array(section.1.enumerated()),
+                        id: \.element.persistentModelID
+                    ) { index, workout in
+                        Button {
+                            selectedWorkout = workout
+                        } label: {
+                            WorkoutSessionRow(
+                                workout: workout,
+                                highlight: sectionIndex == 0 && index == 0
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                workoutToDelete = workout
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
+                } header: {
+                    WorkoutsHistorySectionHeader(label: section.0)
                 }
-
-                VivoFooter()
             }
-            .padding(.bottom, 32)
+
+            startWorkoutButton
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+
+            VivoFooter()
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+        .scrollIndicators(.hidden)
+        .alert("Delete Workout?", isPresented: Binding(
+            get: { workoutToDelete != nil },
+            set: { if !$0 { workoutToDelete = nil } }
+        )) {
+            Button("Cancel", role: .cancel) { workoutToDelete = nil }
+            Button("Delete", role: .destructive) {
+                if let workout = workoutToDelete {
+                    persistence.delete(workout)
+                }
+                workoutToDelete = nil
+            }
+        } message: {
+            Text("This action cannot be undone.")
+        }
+        .sheet(item: $selectedWorkout) { workout in
+            WorkoutDetailView(workout: workout)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+        }
+    }
+
+    private var statsSection: some View {
+        VStack(spacing: 0) {
+            WorkoutsHistoryStatsRow(
+                sessions: workouts.count,
+                volume: totalVolume,
+                thisWeek: thisWeekCount,
+                avgDuration: avgDuration
+            )
+            divider
+            WorkoutsHistoryFilterPills(selectedFilter: $selectedFilter)
+            divider
+        }
+    }
+
+    private var startWorkoutButton: some View {
+        Button { showStartPicker = true } label: {
+            HStack(spacing: 8) {
+                Text("+")
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .foregroundStyle(Color.vivoMuted)
+                Text("START WORKOUT")
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .tracking(VivoTracking.normal)
+                    .foregroundStyle(Color.vivoMuted)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+            .overlay(
+                RoundedRectangle(cornerRadius: VivoRadius.card)
+                    .stroke(
+                        Color.vivoSurface,
+                        style: StrokeStyle(lineWidth: 1, dash: [6, 4])
+                    )
+            )
+        }
+        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 12)
+        .sheet(isPresented: $showStartPicker) {
+            StartWorkoutPicker()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
         }
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Spacer()
-            Text("NO WORKOUTS YET")
-                .font(.vivoMono(VivoFont.monoMD, weight: .bold))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-            Text("Start your first session from the Today tab")
-                .font(.vivoMono(VivoFont.monoSM))
-                .foregroundStyle(Color.vivoSecondary)
-            Spacer()
-        }
+        WorkoutsHistoryEmptyStateView()
     }
 
     private var divider: some View {
@@ -134,7 +216,7 @@ struct WorkoutsTabToggle: View {
                 Button { selectedTab = tab } label: {
                     Text(tab)
                         .font(.vivoMono(
-                            VivoFont.monoXS,
+                            VivoFont.monoSM,
                             weight: isSelected ? .bold : .regular
                         ))
                         .tracking(VivoTracking.tight)
@@ -142,14 +224,14 @@ struct WorkoutsTabToggle: View {
                             isSelected ? Color.vivoBackground : Color.vivoSecondary
                         )
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 9)
+                        .frame(height: 38)
                         .background(
-                            RoundedRectangle(cornerRadius: VivoRadius.pill)
+                            RoundedRectangle(cornerRadius: VivoRadius.card)
                                 .fill(isSelected ? Color.vivoPrimary : Color.clear)
                         )
                         .overlay(
                             isSelected ? nil :
-                                RoundedRectangle(cornerRadius: VivoRadius.pill)
+                                RoundedRectangle(cornerRadius: VivoRadius.card)
                                 .stroke(Color.vivoSurface, lineWidth: 1.5)
                         )
                 }
@@ -264,30 +346,18 @@ struct WorkoutsHistoryFilterPills: View {
     }
 }
 
-// MARK: - Week Section
+// MARK: - Section Header
 
-struct WorkoutsHistoryWeekSection: View {
+struct WorkoutsHistorySectionHeader: View {
     let label: String
-    let workouts: [Workout]
-    var highlightFirst = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(label)
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-                .padding(.horizontal, VivoSpacing.screenH)
-                .padding(.top, 12)
-                .padding(.bottom, 10)
-
-            ForEach(Array(workouts.enumerated()), id: \.element.persistentModelID) { index, workout in
-                WorkoutSessionRow(
-                    workout: workout,
-                    highlight: highlightFirst && index == 0
-                )
-            }
-        }
+        Text(label)
+            .font(.vivoMono(VivoFont.monoSM))
+            .tracking(VivoTracking.wide)
+            .foregroundStyle(Color.vivoMuted)
+            .textCase(nil)
+            .listRowInsets(EdgeInsets(top: 12, leading: VivoSpacing.screenH, bottom: 10, trailing: VivoSpacing.screenH))
     }
 }
 

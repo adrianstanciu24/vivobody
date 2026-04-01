@@ -188,7 +188,7 @@ extension AddExerciseView {
 extension AddExerciseView {
     var logSetButton: some View {
         Button { logCurrentSet() } label: {
-            Text("LOG SET \u{2193}")
+            Text("LOG SET \(String(format: "%02d", loggedSets.count + 1)) \u{2193}")
                 .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)
@@ -210,7 +210,9 @@ extension AddExerciseView {
             rom: rom,
             tempo: tempo
         )
-        loggedSets.append(logged)
+        withAnimation(.easeOut(duration: 0.25)) {
+            loggedSets.append(logged)
+        }
     }
 }
 
@@ -220,16 +222,14 @@ extension AddExerciseView {
     var loggedSetsSection: some View {
         Group {
             if !loggedSets.isEmpty {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("LOGGED SETS")
-                        .font(.vivoMono(VivoFont.monoSM))
-                        .tracking(VivoTracking.wide)
-                        .foregroundStyle(Color.vivoMuted)
+                VStack(alignment: .leading, spacing: 8) {
+                    loggedSetsHeader
                         .padding(.top, 16)
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 2)
 
                     ForEach(Array(loggedSets.enumerated()), id: \.element.id) { index, logged in
-                        loggedSetRow(index: index + 1, logged: logged)
+                        loggedSetCard(index: index + 1, logged: logged)
+                            .transition(.move(edge: .top).combined(with: .opacity))
                     }
                 }
                 .padding(.horizontal, VivoSpacing.screenH)
@@ -237,41 +237,94 @@ extension AddExerciseView {
         }
     }
 
-    func loggedSetRow(index: Int, logged: LoggedSet) -> some View {
-        HStack {
-            Text(String(format: "%02d", index))
+    private var loggedSetsHeader: some View {
+        HStack(spacing: 6) {
+            Text("LOGGED SETS")
                 .font(.vivoMono(VivoFont.monoSM))
+                .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
-                .frame(width: 20, alignment: .leading)
 
+            Text("\(loggedSets.count)")
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                .foregroundStyle(Color.vivoAccent)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
+                        .fill(Color.vivoAccent.opacity(0.1))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: VivoRadius.badge)
+                                .stroke(Color.vivoAccent, lineWidth: 1)
+                        )
+                )
+        }
+    }
+
+    func loggedSetCard(index: Int, logged: LoggedSet) -> some View {
+        HStack(spacing: 12) {
+            loggedSetBadge(index)
+            loggedSetDetails(logged)
+            Spacer()
+            Text("\u{2713}")
+                .font(.vivoDisplay(VivoFont.body))
+                .foregroundStyle(Color.vivoGreen)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: VivoRadius.card)
+                .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: VivoRadius.card)
+                .stroke(Color.vivoSurface, lineWidth: 1)
+        )
+    }
+
+    private func loggedSetBadge(_ index: Int) -> some View {
+        Text(String(format: "%02d", index))
+            .font(.vivoMono(VivoFont.monoLG, weight: .bold))
+            .foregroundStyle(Color.vivoAccent)
+            .frame(width: 36, height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: VivoRadius.pill)
+                    .fill(Color.vivoAccent.opacity(0.1))
+            )
+    }
+
+    private func loggedSetDetails(_ logged: LoggedSet) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 0) {
                 Text("\(logged.reps)")
-                    .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
-                Text(" reps \u{00B7} ")
-                    .font(.vivoMono(VivoFont.monoDefault))
+                Text(" reps  \u{00B7}  ")
+                    .font(.vivoMono(VivoFont.monoBody))
                     .foregroundStyle(Color.vivoMuted)
                 Text("\(logged.load)")
-                    .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
+                    .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                     .foregroundStyle(Color.vivoPrimary)
-                Text(" lb \u{00B7} RIR \(logged.rir) \u{00B7} \(logged.rom) \u{00B7} \(logged.tempo)")
-                    .font(.vivoMono(VivoFont.monoDefault))
+                Text(" lb")
+                    .font(.vivoMono(VivoFont.monoBody))
+                    .foregroundStyle(Color.vivoMuted)
+            }
+
+            HStack(spacing: 0) {
+                Text("RIR \(logged.rir)")
+                    .font(.vivoMono(VivoFont.monoSM, weight: .semibold))
+                    .foregroundStyle(loggedRirColor(logged.rir))
+                Text("  \u{00B7}  \(logged.rom)  \u{00B7}  \(logged.tempo)")
+                    .font(.vivoMono(VivoFont.monoSM))
                     .foregroundStyle(Color.vivoMuted)
                     .lineLimit(1)
             }
-
-            Spacer()
-
-            Text("\u{2713}")
-                .font(.vivoDisplay(VivoFont.bodySmall))
-                .foregroundStyle(Color.vivoGreen)
         }
-        .padding(.vertical, 10)
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(Color.vivoSurface)
-                .frame(height: 1)
-        }
+    }
+
+    private func loggedRirColor(_ rir: Int) -> Color {
+        if rir <= 1 { return Color.vivoAccent }
+        if rir <= 3 { return Color.vivoYellow }
+        return Color.vivoGreen
     }
 }
 

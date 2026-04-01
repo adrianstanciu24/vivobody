@@ -9,6 +9,7 @@ struct BundledExerciseProfileStore {
     private let decoder: JSONDecoder
     private let fileManager: FileManager
     private let resourcesRoot: URL
+    private let bundle: Bundle?
 
     init(
         resourcesRoot: URL,
@@ -18,6 +19,7 @@ struct BundledExerciseProfileStore {
         self.resourcesRoot = resourcesRoot
         self.decoder = decoder
         self.fileManager = fileManager
+        bundle = nil
     }
 
     init(
@@ -27,7 +29,14 @@ struct BundledExerciseProfileStore {
     ) throws {
         self.decoder = decoder
         self.fileManager = fileManager
-        resourcesRoot = try Self.resolveResourcesRoot(in: bundle, fileManager: fileManager)
+        self.bundle = bundle
+        if let root = try? Self.resolveResourcesRoot(in: bundle, fileManager: fileManager) {
+            resourcesRoot = root
+        } else if let resourceURL = bundle.resourceURL {
+            resourcesRoot = resourceURL
+        } else {
+            throw StoreError.missingResourcesRoot
+        }
     }
 
     func loadIndex() throws -> ExerciseProfileIndex {
@@ -57,6 +66,19 @@ struct BundledExerciseProfileStore {
 
     private func decode<T: Decodable>(_ type: T.Type, fromRelativePath relativePath: String) throws -> T {
         let url = resourcesRoot.appendingPathComponent(relativePath)
+        if fileManager.fileExists(atPath: url.path()) {
+            let data = try Data(contentsOf: url)
+            return try decoder.decode(T.self, from: data)
+        }
+
+        let fileURL = URL(fileURLWithPath: relativePath)
+        let name = fileURL.deletingPathExtension().lastPathComponent
+        let ext = fileURL.pathExtension
+        if let flatURL = bundle?.url(forResource: name, withExtension: ext) {
+            let data = try Data(contentsOf: flatURL)
+            return try decoder.decode(T.self, from: data)
+        }
+
         let data = try Data(contentsOf: url)
         return try decoder.decode(T.self, from: data)
     }

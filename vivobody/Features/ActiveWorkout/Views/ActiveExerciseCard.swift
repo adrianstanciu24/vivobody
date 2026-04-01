@@ -3,6 +3,12 @@ import SwiftUI
 struct ActiveExerciseCard: View {
     let exercise: SessionExercise
     let number: Int
+    var onLogSet: (() -> Void)?
+    var onEditSet: (() -> Void)?
+
+    private var hasUncompletedSets: Bool {
+        exercise.sets.contains(where: { !$0.completed })
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -10,6 +16,9 @@ struct ActiveExerciseCard: View {
             tagsRow
             divider
             setsList
+            if hasUncompletedSets {
+                actionButtons
+            }
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 14)
@@ -92,6 +101,35 @@ struct ActiveExerciseCard: View {
         }
     }
 
+    private var actionButtons: some View {
+        HStack(spacing: 8) {
+            Button { onLogSet?() } label: {
+                Text("LOG SET \(String(format: "%02d", exercise.currentSetNumber))")
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.tight)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 36)
+                    .background(Color.vivoAccent)
+                    .clipShape(RoundedRectangle(cornerRadius: VivoRadius.badge))
+            }
+
+            Button { onEditSet?() } label: {
+                Text("EDIT")
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.tight)
+                    .foregroundStyle(Color.vivoAccent)
+                    .frame(width: 64)
+                    .frame(height: 36)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: VivoRadius.badge)
+                            .stroke(Color.vivoAccent, lineWidth: 1.5)
+                    )
+            }
+        }
+        .padding(.top, 10)
+    }
+
     private func setRow(_ exerciseSet: SessionSet) -> some View {
         let isCurrent = !exerciseSet.completed
             && exercise.sets.first(where: { !$0.completed })?.id == exerciseSet.id
@@ -113,33 +151,32 @@ struct ActiveExerciseCard: View {
 
             Spacer()
 
-            if exerciseSet.completed {
-                Text("\u{2713}")
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoGreen)
-            } else {
-                Text("\u{25CB}")
-                    .font(.vivoDisplay(VivoFont.body))
-                    .foregroundStyle(Color.vivoSurface)
-            }
+            setTrailingAction(isCompleted: exerciseSet.completed)
         }
         .padding(.vertical, 6)
-        .padding(.horizontal, isCurrent ? 8 : 0)
+        .padding(.horizontal, 8)
         .background(
             isCurrent
                 ? RoundedRectangle(cornerRadius: VivoRadius.badge)
                 .fill(Color.vivoAccent.opacity(0.05))
                 : nil
         )
-
-        // Add divider between rows except after current
         .overlay(alignment: .bottom) {
-            if !isCurrent, !isPlanned || exerciseSet.order < exercise.totalSets {
+            if !isCurrent {
                 Rectangle()
                     .fill(Color.vivoSurface)
                     .frame(height: 1)
-                    .padding(.leading, isCurrent ? 0 : 28)
+                    .padding(.leading, 36)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func setTrailingAction(isCompleted: Bool) -> some View {
+        if isCompleted {
+            Text("\u{2713}")
+                .font(.vivoDisplay(VivoFont.body))
+                .foregroundStyle(Color.vivoGreen)
         }
     }
 
@@ -148,13 +185,13 @@ struct ActiveExerciseCard: View {
             Text("\(exerciseSet.reps)")
                 .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
-            Text(" reps · ")
+            Text(" reps \u{00B7} ")
                 .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoMuted)
             Text("\(exerciseSet.weight)")
                 .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
-            Text(" lb · RIR \(exerciseSet.rir)")
+            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
                 .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoMuted)
         }
@@ -165,22 +202,34 @@ struct ActiveExerciseCard: View {
             Text("\(exerciseSet.reps)")
                 .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
-            Text(" reps · ")
+            Text(" reps \u{00B7} ")
                 .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoPrimary)
             Text("\(exerciseSet.weight)")
                 .font(.vivoMono(VivoFont.monoBody, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
-            Text(" lb · RIR ?")
+            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
                 .font(.vivoMono(VivoFont.monoBody))
                 .foregroundStyle(Color.vivoPrimary)
         }
+        .lineLimit(1)
     }
 
     private func plannedSetText(_ exerciseSet: SessionSet) -> some View {
-        Text("\(exerciseSet.reps) reps · \(exerciseSet.weight) lb · planned")
-            .font(.vivoMono(VivoFont.monoBody))
-            .foregroundStyle(Color.vivoMuted)
+        HStack(spacing: 0) {
+            Text("\(exerciseSet.reps)")
+                .font(.vivoMono(VivoFont.monoBody))
+                .foregroundStyle(Color.vivoMuted)
+            Text(" reps \u{00B7} ")
+                .font(.vivoMono(VivoFont.monoBody))
+                .foregroundStyle(Color.vivoMuted)
+            Text("\(exerciseSet.weight)")
+                .font(.vivoMono(VivoFont.monoBody))
+                .foregroundStyle(Color.vivoMuted)
+            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
+                .font(.vivoMono(VivoFont.monoBody))
+                .foregroundStyle(Color.vivoMuted)
+        }
     }
 }
 
