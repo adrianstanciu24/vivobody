@@ -186,8 +186,8 @@ struct WorkoutsHistoryView: View {
         .padding(.top, 12)
         .sheet(isPresented: $showStartPicker) {
             StartWorkoutPicker()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
     }
 

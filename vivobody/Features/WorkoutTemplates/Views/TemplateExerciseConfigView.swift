@@ -2,25 +2,58 @@ import SwiftUI
 
 struct TemplateExerciseConfigView: View {
     @Environment(\.dismiss) private var dismiss
-    let exercise: Exercise
-    let onAdd: (TemplateExerciseItem) -> Void
+    let catalogID: String
+    let exerciseName: String
+    let tags: String
+    let isEditing: Bool
+    let onSave: (TemplateExerciseItem) -> Void
 
-    @State private var sets = 3
-    @State private var targetReps = 10
-    @State private var restMinutes = 2
-    @State private var restSeconds = 0
+    @State private var sets: Int
+    @State private var targetReps: Int
+    @State private var restMinutes: Int
+    @State private var restSeconds: Int
+
+    init(exercise: Exercise, onAdd: @escaping (TemplateExerciseItem) -> Void) {
+        catalogID = exercise.catalogID
+        exerciseName = exercise.name
+        tags = exercise.tags
+        isEditing = false
+        onSave = onAdd
+        _sets = State(initialValue: 3)
+        _targetReps = State(initialValue: 10)
+        _restMinutes = State(initialValue: 2)
+        _restSeconds = State(initialValue: 0)
+    }
+
+    init(item: TemplateExerciseItem, onUpdate: @escaping (TemplateExerciseItem) -> Void) {
+        catalogID = item.catalogID
+        exerciseName = item.name
+        let combined = item.secondaryTags.isEmpty
+            ? item.primaryTag
+            : "\(item.primaryTag) \u{00B7} \(item.secondaryTags)"
+        tags = combined
+        isEditing = true
+        onSave = onUpdate
+        _sets = State(initialValue: item.sets)
+        _targetReps = State(initialValue: item.targetReps)
+        let parts = item.restLabel.split(separator: ":")
+        let mins = parts.count == 2 ? Int(parts[0]) ?? 2 : 2
+        let secs = parts.count == 2 ? Int(parts[1]) ?? 0 : 0
+        _restMinutes = State(initialValue: mins)
+        _restSeconds = State(initialValue: secs)
+    }
 
     private var restLabel: String {
         String(format: "%d:%02d", restMinutes, restSeconds)
     }
 
     private var primaryTag: String {
-        let parts = exercise.tags.components(separatedBy: " \u{00B7} ")
-        return parts.first ?? exercise.tags
+        let parts = tags.components(separatedBy: " \u{00B7} ")
+        return parts.first ?? tags
     }
 
     private var secondaryTags: String {
-        let parts = exercise.tags.components(separatedBy: " \u{00B7} ")
+        let parts = tags.components(separatedBy: " \u{00B7} ")
         if parts.count > 1 {
             return parts.dropFirst().joined(separator: " \u{00B7} ")
         }
@@ -72,7 +105,7 @@ private extension TemplateExerciseConfigView {
                     .foregroundStyle(Color.vivoMuted)
             }
             Spacer()
-            Text("CONFIGURE EXERCISE")
+            Text(isEditing ? "EDIT EXERCISE" : "CONFIGURE EXERCISE")
                 .font(.vivoMono(VivoFont.monoCaption))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
@@ -91,11 +124,11 @@ private extension TemplateExerciseConfigView {
 private extension TemplateExerciseConfigView {
     var exerciseHeader: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(exercise.name)
+            Text(exerciseName)
                 .font(.vivoDisplay(VivoFont.titleSM, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
 
-            Text(exercise.tags)
+            Text(tags)
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoAccent)
@@ -289,18 +322,18 @@ private extension TemplateExerciseConfigView {
     var addButton: some View {
         Button {
             let item = TemplateExerciseItem(
-                catalogID: exercise.catalogID,
-                name: exercise.name,
+                catalogID: catalogID,
+                name: exerciseName,
                 primaryTag: primaryTag,
                 secondaryTags: secondaryTags,
                 sets: sets,
                 targetReps: targetReps,
                 restLabel: restLabel
             )
-            onAdd(item)
+            onSave(item)
             dismiss()
         } label: {
-            Text("ADD TO TEMPLATE \u{2193}")
+            Text(isEditing ? "SAVE CHANGES \u{2193}" : "ADD TO TEMPLATE \u{2193}")
                 .font(.vivoMono(VivoFont.monoDefault, weight: .bold))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)

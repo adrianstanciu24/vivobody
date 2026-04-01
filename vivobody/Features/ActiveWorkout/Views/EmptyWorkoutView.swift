@@ -48,105 +48,70 @@ struct EmptyWorkoutView: View {
     }
 
     private var workoutContent: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        recordingHeader
-                        workoutTitle
-                        statsBar
-                        progressSegments
-                        divider
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    recordingIndicator
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, VivoSpacing.screenH)
+                    statsBar
+                    progressSegments
+                    divider
 
-                        if hasExercises {
-                            activeContent
-                        } else {
-                            emptyStateCard
-                            quickPicksSection
-                        }
-                        footerLabel
+                    if hasExercises {
+                        activeContent
+                        activeBottomBar
+                        slideToFinish
+                    } else {
+                        emptyStateCard
+                        quickPicksSection
                     }
-                    .padding(.bottom, hasExercises ? 100 : 32)
+                    footerLabel
                 }
-                .scrollIndicators(.hidden)
-
-                Spacer(minLength: 0)
+                .padding(.bottom, 32)
             }
-
-            if hasExercises {
-                VStack {
-                    Spacer()
-                    activeBottomBar
+            .scrollIndicators(.hidden)
+            .navigationTitle(session?.workoutName ?? "Custom Workout")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        session?.discard()
+                        dismiss()
+                    } label: {
+                        Text("DISCARD")
+                            .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                            .tracking(VivoTracking.tight)
+                            .foregroundStyle(Color.vivoMuted)
+                    }
                 }
             }
         }
     }
-}
 
-// MARK: - Recording Header
-
-private extension EmptyWorkoutView {
-    var recordingHeader: some View {
-        HStack {
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(Color.vivoAccent)
-                    .frame(width: 8, height: 8)
-                Text("RECORDING")
-                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
-                    .tracking(VivoTracking.wide)
-                    .foregroundStyle(Color.vivoAccent)
-            }
-
-            Spacer()
-
-            Button {
-                session?.discard()
-                dismiss()
-            } label: {
-                Text("DISCARD")
-                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
-                    .tracking(VivoTracking.tight)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-
-            Button {
-                session?.finish()
-                session?.save()
-                showComplete = true
-            } label: {
-                Text("FINISH \u{2192}")
-                    .font(.vivoMono(VivoFont.monoMD, weight: .bold))
-                    .tracking(VivoTracking.tight)
-                    .foregroundStyle(Color.vivoAccent)
-            }
+    private var slideToFinish: some View {
+        SlideToFinishBar {
+            session?.finish()
+            session?.save()
+            showComplete = true
         }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 8)
+        .padding(.top, 24)
     }
 }
 
-// MARK: - Workout Title
+// MARK: - Recording Indicator
 
 private extension EmptyWorkoutView {
-    var workoutTitle: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Custom")
-                .font(.vivoDisplay(VivoFont.titleLG, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text("Workout")
-                .font(.vivoDisplay(VivoFont.titleLG, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-
-            Text("ADD MOVES ON THE FLY · SAVES AUTOMATICALLY")
-                .font(.vivoMono(VivoFont.monoXS))
-                .tracking(VivoTracking.normal)
-                .foregroundStyle(Color.vivoMuted)
-                .padding(.top, 4)
+    var recordingIndicator: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(Color.vivoAccent)
+                .frame(width: 8, height: 8)
+            Text("REC")
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                .tracking(VivoTracking.wide)
+                .foregroundStyle(Color.vivoAccent)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 8)
     }
 }
 

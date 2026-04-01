@@ -8,40 +8,28 @@ struct StartWorkoutPicker: View {
     private var templates: [WorkoutTemplate]
 
     var body: some View {
-        ZStack {
-            Color.vivoBackground.ignoresSafeArea()
-
-            VStack(spacing: 0) {
-                header
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        emptyOption
-                        divider
-                        templatesList
+        NavigationStack {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 12) {
+                    emptyOption
+                    templatesList
+                }
+                .padding(.top, 8)
+                .padding(.bottom, 32)
+            }
+            .background(Color.vivoBackground)
+            .navigationTitle("Start Workout")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { dismiss() } label: {
+                        Text("CANCEL")
+                            .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                            .foregroundStyle(Color.vivoMuted)
                     }
-                    .padding(.bottom, 32)
                 }
             }
         }
-    }
-
-    private var header: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Text("\u{2190} CANCEL")
-                    .font(.vivoMono(VivoFont.monoMD))
-                    .foregroundStyle(Color.vivoMuted)
-            }
-            Spacer()
-            Text("START WORKOUT")
-                .font(.vivoMono(VivoFont.monoMD))
-                .tracking(VivoTracking.medium)
-                .foregroundStyle(Color.vivoMuted)
-            Spacer()
-            Color.clear.frame(width: 60)
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.vertical, 12)
     }
 
     private var emptyOption: some View {
@@ -89,13 +77,6 @@ struct StartWorkoutPicker: View {
         .padding(.top, 16)
     }
 
-    private var divider: some View {
-        Rectangle()
-            .fill(Color.vivoSurface)
-            .frame(height: 1)
-            .padding(.horizontal, VivoSpacing.screenH)
-    }
-
     @ViewBuilder
     private var templatesList: some View {
         if templates.isEmpty {
@@ -106,14 +87,13 @@ struct StartWorkoutPicker: View {
     }
 
     private var templatesSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 8) {
             Text("FROM TEMPLATE")
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.wide)
                 .foregroundStyle(Color.vivoMuted)
                 .padding(.horizontal, VivoSpacing.screenH)
-                .padding(.top, 16)
-                .padding(.bottom, 10)
+                .padding(.top, 8)
 
             ForEach(templates) { template in
                 templateRow(template)

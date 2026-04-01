@@ -14,6 +14,7 @@ struct AddExerciseView: View {
     @State var grip = "NORMAL"
     @State var stance = "NORMAL"
     @State var loggedSets: [LoggedSet] = []
+    @State var showAdvanced = false
 
     var body: some View {
         ZStack {
@@ -31,32 +32,11 @@ struct AddExerciseView: View {
                         sectionLabel("REPS IN RESERVE")
                         rirControl
                         divider
-                        sectionLabel("RANGE OF MOTION")
-                        VivoSegmentPicker(
-                            options: ["PARTIAL", "FULL", "DEEP"],
-                            selection: $rom
-                        )
-                        .padding(.horizontal, VivoSpacing.screenH)
-                        sectionLabel("TEMPO")
-                        VivoSegmentPicker(
-                            options: ["EXPLOSIVE", "CONTROLLED", "SLOW", "PAUSED"],
-                            selection: $tempo,
-                            accentSelected: true
-                        )
-                        .padding(.horizontal, VivoSpacing.screenH)
-                        sectionLabel("GRIP")
-                        VivoSegmentPicker(
-                            options: ["WIDE", "NORMAL", "NARROW"],
-                            selection: $grip
-                        )
-                        .padding(.horizontal, VivoSpacing.screenH)
-                        sectionLabel("STANCE")
-                        VivoSegmentPicker(
-                            options: ["WIDE", "NORMAL", "NARROW"],
-                            selection: $stance
-                        )
-                        .padding(.horizontal, VivoSpacing.screenH)
-                        divider
+                        advancedToggle
+                        if showAdvanced {
+                            advancedOptions
+                            divider
+                        }
                         loggedSetsSection
                         logSetButton
                         footerInfo
@@ -75,7 +55,7 @@ struct AddExerciseView: View {
             .padding(.horizontal, VivoSpacing.screenH)
     }
 
-    private func sectionLabel(_ title: String) -> some View {
+    func sectionLabel(_ title: String) -> some View {
         Text(title)
             .font(.vivoMono(VivoFont.monoSM))
             .tracking(VivoTracking.wide)
@@ -120,6 +100,10 @@ private extension AddExerciseView {
                 reps: logged.reps,
                 weight: logged.load,
                 rir: logged.rir,
+                rom: logged.rom,
+                tempo: logged.tempo,
+                grip: logged.grip,
+                stance: logged.stance,
                 completed: true
             )
         }

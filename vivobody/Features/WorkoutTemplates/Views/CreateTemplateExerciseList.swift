@@ -1,8 +1,15 @@
 import SwiftUI
 
+extension Int: @retroactive Identifiable {
+    public var id: Int {
+        self
+    }
+}
+
 struct CreateTemplateExerciseList: View {
     @Binding var exercises: [TemplateExerciseItem]
     @State private var showPicker = false
+    @State private var editingIndex: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -17,6 +24,17 @@ struct CreateTemplateExerciseList: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.hidden)
         }
+        .sheet(item: $editingIndex) { index in
+            if exercises.indices.contains(index) {
+                TemplateExerciseConfigView(
+                    item: exercises[index]
+                ) { updated in
+                    exercises[index] = updated
+                }
+                .presentationDetents([.large])
+                .presentationDragIndicator(.hidden)
+            }
+        }
     }
 
     private var sectionHeader: some View {
@@ -29,15 +47,30 @@ struct CreateTemplateExerciseList: View {
     }
 
     private var exerciseRows: some View {
-        VStack(spacing: 0) {
+        List {
             ForEach(Array(exercises.enumerated()), id: \.element.id) { index, exercise in
-                TemplateExerciseRow(
-                    exercise: exercise,
-                    number: String(format: "%02d", index + 1),
-                    onDelete: { exercises.remove(at: index) }
-                )
+                Button { editingIndex = index } label: {
+                    TemplateExerciseRow(
+                        exercise: exercise,
+                        number: String(format: "%02d", index + 1)
+                    )
+                }
+                .buttonStyle(.plain)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        exercises.remove(at: index)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
             }
         }
+        .listStyle(.plain)
+        .scrollDisabled(true)
+        .frame(minHeight: CGFloat(exercises.count) * 92)
     }
 
     private var addButton: some View {
@@ -70,15 +103,15 @@ struct CreateTemplateExerciseList: View {
 struct TemplateExerciseRow: View {
     let exercise: TemplateExerciseItem
     let number: String
-    let onDelete: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
-            dragHandle
             numberLabel
             exerciseInfo
             Spacer(minLength: 4)
-            actionButtons
+            Image(systemName: "chevron.right")
+                .font(.vivoMono(VivoFont.monoSM))
+                .foregroundStyle(Color.vivoMuted)
         }
         .frame(height: 92)
         .overlay(
@@ -87,12 +120,6 @@ struct TemplateExerciseRow: View {
                 .frame(height: 1),
             alignment: .bottom
         )
-    }
-
-    private var dragHandle: some View {
-        Text("\u{22EE}")
-            .font(.vivoMono(VivoFont.monoMD))
-            .foregroundStyle(Color.vivoMuted)
     }
 
     private var numberLabel: some View {
@@ -188,34 +215,6 @@ struct TemplateExerciseRow: View {
             RoundedRectangle(cornerRadius: VivoRadius.badge)
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
-    }
-
-    private var actionButtons: some View {
-        HStack(spacing: 4) {
-            Button {} label: {
-                Text("\u{270E}")
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .foregroundStyle(Color.vivoMuted)
-                    .frame(width: 28, height: 28)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: VivoRadius.pill)
-                            .stroke(Color.vivoSurface, lineWidth: 1)
-                    )
-            }
-            Button(action: onDelete) {
-                Text("\u{00D7}")
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .foregroundStyle(Color(red: 1, green: 0.27, blue: 0.23))
-                    .frame(width: 28, height: 28)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: VivoRadius.pill)
-                            .stroke(
-                                Color(red: 1, green: 0.27, blue: 0.23).opacity(0.2),
-                                lineWidth: 1
-                            )
-                    )
-            }
-        }
     }
 }
 

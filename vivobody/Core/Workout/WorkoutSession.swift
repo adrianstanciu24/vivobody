@@ -11,6 +11,7 @@ final class WorkoutSession {
     var exercises: [SessionExercise] = []
     var currentExercise: String?
     var modelContext: ModelContext?
+    var restTimers: [UUID: Int] = [:]
 
     private var timer: Timer?
 
@@ -64,7 +65,8 @@ final class WorkoutSession {
                         weight: 0,
                         rir: max(0, 4 - order)
                     )
-                }
+                },
+                targetRestSeconds: templateExercise.restSeconds
             )
             exercises.append(exercise)
         }
@@ -80,25 +82,36 @@ final class WorkoutSession {
             primaryTag: selectedExercise.primaryTag,
             secondaryTags: selectedExercise.secondaryTags,
             muscleGroup: selectedExercise.muscleGroup,
-            sets: sets ?? Self.defaultSets()
+            sets: sets ?? Self.defaultSets(),
+            targetRestSeconds: 120
         )
         exercises.append(exercise)
         currentExercise = exercise.name
     }
 
-    func updateCurrentSet(exerciseID: UUID, reps: Int, weight: Int, rir: Int) {
-        guard let index = exercises.firstIndex(where: { $0.id == exerciseID }) else { return }
-        if let setIndex = exercises[index].sets.firstIndex(where: { !$0.completed }) {
-            exercises[index].sets[setIndex].reps = reps
-            exercises[index].sets[setIndex].weight = weight
-            exercises[index].sets[setIndex].rir = rir
-        }
+    func updateSet(exerciseID: UUID, setIndex: Int, values: SetValues) {
+        guard let exIndex = exercises.firstIndex(where: { $0.id == exerciseID }),
+              exercises[exIndex].sets.indices.contains(setIndex)
+        else { return }
+        exercises[exIndex].sets[setIndex].reps = values.reps
+        exercises[exIndex].sets[setIndex].weight = values.weight
+        exercises[exIndex].sets[setIndex].rir = values.rir
+        exercises[exIndex].sets[setIndex].rom = values.rom
+        exercises[exIndex].sets[setIndex].tempo = values.tempo
+        exercises[exIndex].sets[setIndex].grip = values.grip
+        exercises[exIndex].sets[setIndex].stance = values.stance
     }
 
     func logSet(exerciseID: UUID) {
         guard let index = exercises.firstIndex(where: { $0.id == exerciseID }) else { return }
         if let setIndex = exercises[index].sets.firstIndex(where: { !$0.completed }) {
             exercises[index].sets[setIndex].completed = true
+            let hasMore = exercises[index].sets.contains(where: { !$0.completed })
+            if hasMore {
+                restTimers[exerciseID] = exercises[index].targetRestSeconds
+            } else {
+                restTimers.removeValue(forKey: exerciseID)
+            }
         }
     }
 
@@ -132,6 +145,11 @@ final class WorkoutSession {
                     order: sessionSet.order,
                     reps: sessionSet.reps,
                     weight: Double(sessionSet.weight),
+                    rir: sessionSet.rir,
+                    rom: sessionSet.rom,
+                    tempo: sessionSet.tempo,
+                    grip: sessionSet.grip,
+                    stance: sessionSet.stance,
                     isCompleted: true,
                     workoutExercise: workoutExercise
                 )
@@ -198,6 +216,7 @@ final class WorkoutSession {
         elapsedSeconds = 0
         exercises = []
         currentExercise = nil
+        restTimers = [:]
     }
 
     private func startTimer() {
@@ -206,8 +225,25 @@ final class WorkoutSession {
             guard let self else { return }
             MainActor.assumeIsolated {
                 self.elapsedSeconds += 1
+                self.tickRestTimers()
             }
         }
+    }
+
+    private func tickRestTimers() {
+        for key in restTimers.keys {
+            if let remaining = restTimers[key], remaining > 0 {
+                restTimers[key] = remaining - 1
+            }
+        }
+    }
+
+    func restTimeRemaining(for exerciseID: UUID) -> Int {
+        restTimers[exerciseID] ?? 0
+    }
+
+    func skipRestTimer(for exerciseID: UUID) {
+        restTimers[exerciseID] = 0
     }
 
     private func stopTimer() {
@@ -232,6 +268,7 @@ struct SessionExercise: Identifiable {
     let secondaryTags: String
     let muscleGroup: MuscleGroup
     var sets: [SessionSet]
+    var targetRestSeconds: Int = 120
 
     var tags: String {
         guard !secondaryTags.isEmpty else { return primaryTag }
@@ -249,6 +286,28 @@ struct SessionExercise: Identifiable {
     var setProgress: String {
         "SET \(String(format: "%02d", currentSetNumber))/\(String(format: "%02d", totalSets))"
     }
+
+    var hasLoggedSet: Bool {
+        sets.contains(where: \.completed)
+    }
+
+    var allSetsCompleted: Bool {
+        !sets.isEmpty && sets.allSatisfy(\.completed)
+    }
+
+    var restTimerVisible: Bool {
+        hasLoggedSet && !allSetsCompleted
+    }
+}
+
+struct SetValues {
+    let reps: Int
+    let weight: Int
+    let rir: Int
+    let rom: String
+    let tempo: String
+    let grip: String
+    let stance: String
 }
 
 struct SessionSet: Identifiable {
@@ -257,5 +316,31 @@ struct SessionSet: Identifiable {
     var reps: Int
     var weight: Int
     var rir: Int
+    var rom: String
+    var tempo: String
+    var grip: String
+    var stance: String
     var completed = false
+
+    init(
+        order: Int,
+        reps: Int,
+        weight: Int,
+        rir: Int,
+        rom: String = "FULL",
+        tempo: String = "CONTROLLED",
+        grip: String = "NORMAL",
+        stance: String = "NORMAL",
+        completed: Bool = false
+    ) {
+        self.order = order
+        self.reps = reps
+        self.weight = weight
+        self.rir = rir
+        self.rom = rom
+        self.tempo = tempo
+        self.grip = grip
+        self.stance = stance
+        self.completed = completed
+    }
 }

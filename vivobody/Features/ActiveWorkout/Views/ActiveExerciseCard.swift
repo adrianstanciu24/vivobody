@@ -3,11 +3,21 @@ import SwiftUI
 struct ActiveExerciseCard: View {
     let exercise: SessionExercise
     let number: Int
+    var restSecondsRemaining: Int = 0
     var onLogSet: (() -> Void)?
     var onEditSet: (() -> Void)?
+    var onSkipRest: (() -> Void)?
 
     private var hasUncompletedSets: Bool {
         exercise.sets.contains(where: { !$0.completed })
+    }
+
+    private var allSetsCompleted: Bool {
+        !exercise.sets.isEmpty && exercise.sets.allSatisfy(\.completed)
+    }
+
+    private var showRestTimer: Bool {
+        restSecondsRemaining > 0 && exercise.restTimerVisible
     }
 
     var body: some View {
@@ -16,11 +26,16 @@ struct ActiveExerciseCard: View {
             tagsRow
             divider
             setsList
+            if showRestTimer {
+                inlineRestTimer
+            }
             if hasUncompletedSets {
                 actionButtons
+            } else if allSetsCompleted {
+                editCompletedButton
             }
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, 16)
         .padding(.horizontal, 14)
         .overlay(
             RoundedRectangle(cornerRadius: VivoRadius.card)
@@ -81,7 +96,7 @@ struct ActiveExerciseCard: View {
         .tracking(VivoTracking.normal)
         .padding(.leading, 28)
         .padding(.top, 4)
-        .padding(.bottom, 8)
+        .padding(.bottom, 10)
     }
 
     private var divider: some View {
@@ -94,11 +109,12 @@ struct ActiveExerciseCard: View {
     // MARK: - Sets
 
     private var setsList: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 4) {
             ForEach(exercise.sets) { exerciseSet in
                 setRow(exerciseSet)
             }
         }
+        .padding(.top, 6)
     }
 
     private var actionButtons: some View {
@@ -130,6 +146,22 @@ struct ActiveExerciseCard: View {
         .padding(.top, 10)
     }
 
+    private var editCompletedButton: some View {
+        Button { onEditSet?() } label: {
+            Text("EDIT")
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                .tracking(VivoTracking.tight)
+                .foregroundStyle(Color.vivoAccent)
+                .frame(maxWidth: .infinity)
+                .frame(height: 36)
+                .overlay(
+                    RoundedRectangle(cornerRadius: VivoRadius.badge)
+                        .stroke(Color.vivoAccent, lineWidth: 1.5)
+                )
+        }
+        .padding(.top, 10)
+    }
+
     private func setRow(_ exerciseSet: SessionSet) -> some View {
         let isCurrent = !exerciseSet.completed
             && exercise.sets.first(where: { !$0.completed })?.id == exerciseSet.id
@@ -153,7 +185,7 @@ struct ActiveExerciseCard: View {
 
             setTrailingAction(isCompleted: exerciseSet.completed)
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 10)
         .padding(.horizontal, 8)
         .background(
             isCurrent
@@ -170,67 +202,6 @@ struct ActiveExerciseCard: View {
             }
         }
     }
-
-    @ViewBuilder
-    private func setTrailingAction(isCompleted: Bool) -> some View {
-        if isCompleted {
-            Text("\u{2713}")
-                .font(.vivoDisplay(VivoFont.body))
-                .foregroundStyle(Color.vivoGreen)
-        }
-    }
-
-    private func completedSetText(_ exerciseSet: SessionSet) -> some View {
-        HStack(spacing: 0) {
-            Text("\(exerciseSet.reps)")
-                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text(" reps \u{00B7} ")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-            Text("\(exerciseSet.weight)")
-                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-        }
-    }
-
-    private func currentSetText(_ exerciseSet: SessionSet) -> some View {
-        HStack(spacing: 0) {
-            Text("\(exerciseSet.reps)")
-                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text(" reps \u{00B7} ")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoPrimary)
-            Text("\(exerciseSet.weight)")
-                .font(.vivoMono(VivoFont.monoBody, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoPrimary)
-        }
-        .lineLimit(1)
-    }
-
-    private func plannedSetText(_ exerciseSet: SessionSet) -> some View {
-        HStack(spacing: 0) {
-            Text("\(exerciseSet.reps)")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-            Text(" reps \u{00B7} ")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-            Text("\(exerciseSet.weight)")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-            Text(" lb \u{00B7} RIR \(exerciseSet.rir)")
-                .font(.vivoMono(VivoFont.monoBody))
-                .foregroundStyle(Color.vivoMuted)
-        }
-    }
 }
 
 #Preview {
@@ -245,8 +216,9 @@ struct ActiveExerciseCard: View {
             SessionSet(order: 2, reps: 8, weight: 185, rir: 2, completed: true),
             SessionSet(order: 3, reps: 8, weight: 185, rir: 1),
             SessionSet(order: 4, reps: 8, weight: 185, rir: 0)
-        ]
+        ],
+        targetRestSeconds: 120
     )
-    ActiveExerciseCard(exercise: exercise, number: 1)
+    ActiveExerciseCard(exercise: exercise, number: 1, restSecondsRemaining: 87)
         .background(Color.vivoBackground)
 }

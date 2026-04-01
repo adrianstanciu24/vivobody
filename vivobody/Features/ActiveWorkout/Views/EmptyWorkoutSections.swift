@@ -68,11 +68,12 @@ extension EmptyWorkoutView {
 
 extension EmptyWorkoutView {
     var activeContent: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 24) {
             ForEach((session?.exercises ?? []).enumerated(), id: \.element.id) { index, exercise in
                 ActiveExerciseCard(
                     exercise: exercise,
                     number: index + 1,
+                    restSecondsRemaining: session?.restTimeRemaining(for: exercise.id) ?? 0,
                     onLogSet: {
                         withAnimation(.easeOut(duration: 0.2)) {
                             session?.logSet(exerciseID: exercise.id)
@@ -81,14 +82,10 @@ extension EmptyWorkoutView {
                     onEditSet: {
                         editingExerciseID = exercise.id
                         showEditSet = true
+                    },
+                    onSkipRest: {
+                        session?.skipRestTimer(for: exercise.id)
                     }
-                )
-            }
-
-            if let exercise = session?.exercises.last {
-                RestTimerCard(
-                    currentSet: exercise.currentSetNumber,
-                    totalSets: exercise.totalSets
                 )
             }
 
@@ -172,16 +169,7 @@ extension EmptyWorkoutView {
                 .shadow(color: Color.vivoAccentShadow, radius: 0, x: 0, y: 2)
         }
         .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.vertical, 12)
-        .background(
-            Color.vivoBackground
-                .overlay(
-                    Rectangle()
-                        .fill(Color.vivoSurface)
-                        .frame(height: 1),
-                    alignment: .top
-                )
-        )
+        .padding(.top, 14)
     }
 }
 
@@ -196,19 +184,15 @@ extension EmptyWorkoutView {
     @ViewBuilder
     var editSetSheet: some View {
         if let sessionExercise = editingSessionExercise {
-            EditSetView(exercise: sessionExercise) { reps, weight, rir in
+            EditSetView(exercise: sessionExercise) { setIndex, values in
                 if let exerciseID = editingExerciseID {
-                    session?.updateCurrentSet(
-                        exerciseID: exerciseID,
-                        reps: reps,
-                        weight: weight,
-                        rir: rir
-                    )
-                    session?.logSet(exerciseID: exerciseID)
+                    let wasCompleted = sessionExercise.sets[setIndex].completed
+                    session?.updateSet(exerciseID: exerciseID, setIndex: setIndex, values: values)
+                    if !wasCompleted {
+                        session?.logSet(exerciseID: exerciseID)
+                    }
                 }
             }
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.hidden)
         }
     }
 }

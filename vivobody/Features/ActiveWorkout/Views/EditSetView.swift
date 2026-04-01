@@ -4,19 +4,45 @@ struct EditSetView: View {
     @Environment(\.dismiss) private var dismiss
 
     let exercise: SessionExercise
-    let onSave: (Int, Int, Int) -> Void
+    let onSave: (Int, SetValues) -> Void
 
-    @State private var reps: Int
-    @State private var load: Int
-    @State private var rir: Int
+    @State var selectedSetIndex: Int
+    @State var reps: Int
+    @State var load: Int
+    @State var rir: Int
+    @State var rom: String
+    @State var tempo: String
+    @State var grip: String
+    @State var stance: String
+    @State var showAdvanced = false
 
-    init(exercise: SessionExercise, onSave: @escaping (Int, Int, Int) -> Void) {
+    private var selectedSet: SessionSet {
+        exercise.sets[selectedSetIndex]
+    }
+
+    private var isCompletedSet: Bool {
+        selectedSet.completed
+    }
+
+    init(
+        exercise: SessionExercise,
+        initialSetIndex: Int? = nil,
+        onSave: @escaping (Int, SetValues) -> Void
+    ) {
         self.exercise = exercise
         self.onSave = onSave
-        let currentSet = exercise.sets.first(where: { !$0.completed })
-        _reps = State(initialValue: currentSet?.reps ?? 8)
-        _load = State(initialValue: currentSet?.weight ?? 0)
-        _rir = State(initialValue: currentSet?.rir ?? 2)
+        let startIndex = initialSetIndex
+            ?? exercise.sets.firstIndex(where: { !$0.completed })
+            ?? 0
+        _selectedSetIndex = State(initialValue: startIndex)
+        let set = exercise.sets[startIndex]
+        _reps = State(initialValue: set.reps)
+        _load = State(initialValue: set.weight)
+        _rir = State(initialValue: set.rir)
+        _rom = State(initialValue: set.rom)
+        _tempo = State(initialValue: set.tempo)
+        _grip = State(initialValue: set.grip)
+        _stance = State(initialValue: set.stance)
     }
 
     var body: some View {
@@ -28,19 +54,27 @@ struct EditSetView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         exerciseInfo
+                        setPicker
                         sectionLabel("SET CONFIGURATION")
                         setConfiguration
                         divider
                         sectionLabel("REPS IN RESERVE")
                         rirControl
                         divider
-                        logSetButton
+                        advancedToggle
+                        if showAdvanced {
+                            advancedOptions
+                            divider
+                        }
+                        saveButton
                     }
                     .padding(.bottom, 32)
                 }
                 .scrollIndicators(.hidden)
             }
         }
+        .presentationDetents(showAdvanced ? [.large] : [.fraction(0.7), .large])
+        .presentationDragIndicator(.hidden)
     }
 
     private var divider: some View {
@@ -50,7 +84,7 @@ struct EditSetView: View {
             .padding(.horizontal, VivoSpacing.screenH)
     }
 
-    private func sectionLabel(_ title: String) -> some View {
+    func sectionLabel(_ title: String) -> some View {
         Text(title)
             .font(.vivoMono(VivoFont.monoSM))
             .tracking(VivoTracking.wide)
@@ -59,6 +93,27 @@ struct EditSetView: View {
             .padding(.horizontal, VivoSpacing.screenH)
             .padding(.top, 16)
             .padding(.bottom, 10)
+    }
+
+    private func saveCurrentSet() {
+        let values = SetValues(
+            reps: reps, weight: load, rir: rir,
+            rom: rom, tempo: tempo, grip: grip, stance: stance
+        )
+        onSave(selectedSetIndex, values)
+        dismiss()
+    }
+
+    private func loadSet(at index: Int) {
+        selectedSetIndex = index
+        let set = exercise.sets[index]
+        reps = set.reps
+        load = set.weight
+        rir = set.rir
+        rom = set.rom
+        tempo = set.tempo
+        grip = set.grip
+        stance = set.stance
     }
 }
 
@@ -73,16 +128,13 @@ private extension EditSetView {
                     .foregroundStyle(Color.vivoMuted)
             }
             Spacer()
-            Text("EDIT SET \(String(format: "%02d", exercise.currentSetNumber))")
+            Text("EDIT SET \(String(format: "%02d", selectedSet.order))")
                 .font(.vivoMono(VivoFont.monoMD))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(Color.vivoMuted)
             Spacer()
-            Button {
-                onSave(reps, load, rir)
-                dismiss()
-            } label: {
-                Text("LOG \u{2193}")
+            Button { saveCurrentSet() } label: {
+                Text(isCompletedSet ? "SAVE" : "LOG \u{2193}")
                     .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                     .foregroundStyle(Color.vivoAccent)
             }
@@ -92,18 +144,62 @@ private extension EditSetView {
     }
 }
 
+// MARK: - Set Picker
+
+private extension EditSetView {
+    var setPicker: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
+                    let isSelected = index == selectedSetIndex
+                    Button { loadSet(at: index) } label: {
+                        Text("SET \(String(format: "%02d", set.order))")
+                            .font(.vivoMono(VivoFont.monoSM, weight: isSelected ? .bold : .regular))
+                            .tracking(VivoTracking.tight)
+                            .foregroundStyle(pillForeground(isSelected: isSelected, isCompleted: set.completed))
+                            .padding(.horizontal, 12)
+                            .frame(height: 32)
+                            .background(pillBackground(isSelected: isSelected, isCompleted: set.completed))
+                            .clipShape(RoundedRectangle(cornerRadius: VivoRadius.pill))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: VivoRadius.pill)
+                                    .stroke(
+                                        pillBorder(isSelected: isSelected, isCompleted: set.completed),
+                                        lineWidth: 1.5
+                                    )
+                            )
+                    }
+                }
+            }
+            .padding(.horizontal, VivoSpacing.screenH)
+        }
+        .padding(.bottom, 8)
+    }
+
+    func pillForeground(isSelected: Bool, isCompleted: Bool) -> Color {
+        if isSelected { return .white }
+        if isCompleted { return Color.vivoGreen }
+        return Color.vivoMuted
+    }
+
+    func pillBackground(isSelected: Bool, isCompleted: Bool) -> Color {
+        if isSelected, isCompleted { return Color.vivoGreen }
+        if isSelected { return Color.vivoAccent }
+        return .clear
+    }
+
+    func pillBorder(isSelected: Bool, isCompleted: Bool) -> Color {
+        if isSelected { return .clear }
+        if isCompleted { return Color.vivoGreen.opacity(0.4) }
+        return Color.vivoSurface
+    }
+}
+
 // MARK: - Exercise Info
 
 private extension EditSetView {
     var exerciseInfo: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(
-                "SET \(String(format: "%02d", exercise.currentSetNumber)) / \(String(format: "%02d", exercise.totalSets))"
-            )
-            .font(.vivoMono(VivoFont.monoSM))
-            .tracking(VivoTracking.wide)
-            .foregroundStyle(Color.vivoMuted)
-
             Text(exercise.name)
                 .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
                 .foregroundStyle(Color.vivoPrimary)
@@ -114,6 +210,7 @@ private extension EditSetView {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, VivoSpacing.screenH)
         .padding(.top, 4)
+        .padding(.bottom, 8)
     }
 
     var tagsLabel: some View {
@@ -195,76 +292,14 @@ private extension EditSetView {
     }
 }
 
-// MARK: - RIR Control
+// MARK: - Save / Log Button
 
-private extension EditSetView {
-    var rirControl: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 16) {
-                VivoStepperButton(symbol: "\u{2212}") { rir = max(0, rir - 1) }
-
-                HStack(spacing: 8) {
-                    Text(String(format: "%02d", rir))
-                        .font(.vivoDisplay(VivoFont.heroLG, weight: .bold))
-                        .foregroundStyle(rirColor)
-
-                    Text("REPS LEFT IN TANK")
-                        .font(.vivoMono(VivoFont.monoSM))
-                        .tracking(VivoTracking.normal)
-                        .foregroundStyle(Color.vivoMuted)
-                }
-
-                Spacer()
-
-                VivoStepperButton(symbol: "+") { rir = min(9, rir + 1) }
-            }
-
-            HStack(spacing: 4) {
-                ForEach(0 ..< 10, id: \.self) { index in
-                    RoundedRectangle(cornerRadius: VivoRadius.bar)
-                        .fill(index <= rir ? rirBarColor(index) : Color.vivoSurface)
-                        .frame(height: 6)
-                }
-            }
-
-            HStack {
-                Text("FAILURE")
-                    .font(.vivoMono(VivoFont.monoMicro))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoMuted)
-                Spacer()
-                Text("EASY")
-                    .font(.vivoMono(VivoFont.monoMicro))
-                    .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoMuted)
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.bottom, 10)
-    }
-
-    var rirColor: Color {
-        if rir <= 1 { return Color.vivoAccent }
-        if rir <= 3 { return Color.vivoYellow }
-        return Color.vivoGreen
-    }
-
-    func rirBarColor(_ index: Int) -> Color {
-        if index <= 1 { return Color.vivoAccent }
-        if index <= 3 { return Color.vivoYellow }
-        return Color.vivoGreen
-    }
-}
-
-// MARK: - Log Set Button
-
-private extension EditSetView {
-    var logSetButton: some View {
-        Button {
-            onSave(reps, load, rir)
-            dismiss()
-        } label: {
-            Text("LOG SET \(String(format: "%02d", exercise.currentSetNumber)) \u{2193}")
+extension EditSetView {
+    var saveButton: some View {
+        Button { saveCurrentSet() } label: {
+            Text(isCompletedSet
+                ? "SAVE SET \(String(format: "%02d", selectedSet.order))"
+                : "LOG SET \(String(format: "%02d", selectedSet.order)) \u{2193}")
                 .font(.vivoMono(VivoFont.monoMD, weight: .bold))
                 .tracking(VivoTracking.medium)
                 .foregroundStyle(.white)
@@ -290,10 +325,10 @@ private extension EditSetView {
         muscleGroup: .legs,
         sets: [
             SessionSet(order: 1, reps: 8, weight: 185, rir: 3, completed: true),
-            SessionSet(order: 2, reps: 8, weight: 185, rir: 2),
+            SessionSet(order: 2, reps: 8, weight: 185, rir: 2, completed: true),
             SessionSet(order: 3, reps: 8, weight: 185, rir: 1)
         ]
     )
-    EditSetView(exercise: exercise) { _, _, _ in }
+    EditSetView(exercise: exercise) { _, _ in }
         .background(Color.vivoBackground)
 }

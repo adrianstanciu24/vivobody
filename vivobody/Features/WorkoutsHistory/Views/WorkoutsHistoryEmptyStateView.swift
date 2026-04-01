@@ -79,8 +79,8 @@ struct WorkoutsHistoryEmptyStateView: View {
             }
             .sheet(isPresented: $showStartPicker) {
                 StartWorkoutPicker()
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.hidden)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
             }
         }
         .padding(VivoSpacing.cardPadding)
