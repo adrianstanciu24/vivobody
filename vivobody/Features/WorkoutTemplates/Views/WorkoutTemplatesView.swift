@@ -1,7 +1,7 @@
 import SwiftData
 import SwiftUI
 
-struct WorkoutTemplatesView: View {
+struct WorkoutTemplatesView<Header: View>: View {
     @Environment(PersistenceController.self) private var persistence
     @Query(sort: \WorkoutTemplate.createdAt, order: .reverse)
     private var templates: [WorkoutTemplate]
@@ -10,9 +10,15 @@ struct WorkoutTemplatesView: View {
     @State private var editingTemplate: WorkoutTemplate?
     @State private var templateToDelete: WorkoutTemplate?
 
+    var header: Header
+
+    init(header: Header) {
+        self.header = header
+    }
+
     var body: some View {
         if templates.isEmpty {
-            WorkoutTemplatesEmptyStateView {
+            WorkoutTemplatesEmptyStateView(tabToggle: header) {
                 showCreate = true
             }
             .sheet(isPresented: $showCreate) {
@@ -37,6 +43,11 @@ struct WorkoutTemplatesView: View {
 
     private var templateList: some View {
         List {
+            header
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+
             ForEach(templates) { template in
                 templateRow(template)
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -91,11 +102,11 @@ struct WorkoutTemplatesView: View {
             HStack(spacing: 8) {
                 Text("+")
                     .font(.vivoMono(VivoFont.monoSM))
-                    .foregroundStyle(Color.vivoMuted)
+                    .foregroundStyle(Color.vivoAccent)
                 Text("CREATE TEMPLATE")
                     .font(.vivoMono(VivoFont.monoCaption))
                     .tracking(VivoTracking.normal)
-                    .foregroundStyle(Color.vivoMuted)
+                    .foregroundStyle(Color.vivoAccent)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 44)
@@ -113,7 +124,7 @@ struct WorkoutTemplatesView: View {
 }
 
 #Preview {
-    WorkoutTemplatesView()
+    WorkoutTemplatesView(header: EmptyView())
         .background(Color.vivoBackground)
         .modelContainer(
             for: [

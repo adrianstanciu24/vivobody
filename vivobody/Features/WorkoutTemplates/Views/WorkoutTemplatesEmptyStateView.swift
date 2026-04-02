@@ -1,11 +1,13 @@
 import SwiftUI
 
-struct WorkoutTemplatesEmptyStateView: View {
+struct WorkoutTemplatesEmptyStateView<TabToggle: View>: View {
+    var tabToggle: TabToggle
     let onCreate: () -> Void
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
+                tabToggle
                 emptyCard
                 VivoFooter(
                     line1: "VIVOBODY WORKOUT SYS",
@@ -111,6 +113,6 @@ struct WorkoutTemplatesEmptyStateView: View {
 }
 
 #Preview {
-    WorkoutTemplatesEmptyStateView {}
+    WorkoutTemplatesEmptyStateView(tabToggle: EmptyView()) {}
         .background(Color.vivoBackground)
 }

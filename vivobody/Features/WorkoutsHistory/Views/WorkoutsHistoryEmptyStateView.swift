@@ -1,12 +1,14 @@
 import SwiftUI
 
-struct WorkoutsHistoryEmptyStateView: View {
+struct WorkoutsHistoryEmptyStateView<TabToggle: View>: View {
     @Environment(WorkoutSession.self) private var session: WorkoutSession?
     @State private var showStartPicker = false
+    var tabToggle: TabToggle
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
+                tabToggle
                 emptyCard
                 VivoFooter(
                     line1: "VIVOBODY WORKOUT SYS",
@@ -119,7 +121,7 @@ struct WorkoutsHistoryEmptyStateView: View {
 }
 
 #Preview {
-    WorkoutsHistoryEmptyStateView()
+    WorkoutsHistoryEmptyStateView(tabToggle: EmptyView())
         .background(Color.vivoBackground)
         .environment(WorkoutSession())
 }
