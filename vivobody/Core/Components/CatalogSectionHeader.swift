@@ -6,22 +6,25 @@ struct CatalogSectionHeader: View {
 
     var body: some View {
         HStack {
-            Text(title)
-                .font(.vivoDisplay(VivoFont.sectionTitle))
-                .foregroundStyle(Color.vivoPrimary)
+            Text(title.uppercased())
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                .tracking(VivoTracking.wide)
+                .foregroundStyle(Color.vivoAccent)
             Spacer()
-            Text("\(exerciseCount) EXERCISES")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.normal)
+            Text("\(exerciseCount)")
+                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
                 .foregroundStyle(Color.vivoSecondary)
         }
         .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 14)
-        .padding(.bottom, 10)
+        .padding(.vertical, 10)
+        .background(Color.vivoSurface.opacity(0.3))
     }
 }
 
 #Preview {
-    CatalogSectionHeader(title: "Quads", exerciseCount: 3)
-        .background(Color.vivoBackground)
+    VStack(spacing: 0) {
+        CatalogSectionHeader(title: "Quads", exerciseCount: 3)
+        CatalogSectionHeader(title: "Glutes", exerciseCount: 5)
+    }
+    .background(Color.vivoBackground)
 }

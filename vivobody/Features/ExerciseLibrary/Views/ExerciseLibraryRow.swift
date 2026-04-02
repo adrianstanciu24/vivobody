@@ -3,6 +3,17 @@ import SwiftUI
 struct ExerciseLibraryRow: View {
     let exercise: Exercise
     let number: String
+    var showPrimaryTag = true
+
+    private var tagLine: Text {
+        if showPrimaryTag {
+            let primary = Text(exercise.primaryTag).foregroundStyle(Color.vivoAccent)
+            let secondary = Text(" · \(exercise.secondaryTags)").foregroundStyle(Color.vivoMuted)
+            return Text("\(primary)\(secondary)")
+        } else {
+            return Text(exercise.secondaryTags).foregroundStyle(Color.vivoMuted)
+        }
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -13,15 +24,13 @@ struct ExerciseLibraryRow: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.name)
-                    .font(.vivoDisplay(VivoFont.body))
+                    .font(.vivoDisplay(VivoFont.sectionTitle))
                     .foregroundStyle(Color.vivoPrimary)
-                Text(
-                    "\(Text(exercise.primaryTag).foregroundStyle(Color.vivoAccent))\(Text(" · \(exercise.secondaryTags)").foregroundStyle(Color.vivoMuted))"
-                )
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.tight)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
+                tagLine
+                    .font(.vivoMono(VivoFont.monoSM))
+                    .tracking(VivoTracking.tight)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()
@@ -29,6 +38,7 @@ struct ExerciseLibraryRow: View {
             Text("›")
                 .font(.vivoDisplay(VivoFont.bodySmall))
                 .foregroundStyle(Color.vivoMuted)
+                .accessibilityHidden(true)
         }
         .frame(height: 72)
     }

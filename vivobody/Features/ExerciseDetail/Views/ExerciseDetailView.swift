@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ExerciseDetailView: View {
     let exercise: Exercise
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
@@ -10,8 +9,6 @@ struct ExerciseDetailView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    header
-                    divider
                     exerciseTitle
                     tagRow
                     divider
@@ -36,38 +33,16 @@ struct ExerciseDetailView: View {
             }
             .scrollIndicators(.hidden)
         }
-        .navigationBarHidden(true)
-    }
-
-    private var header: some View {
-        HStack {
-            Button { dismiss() } label: {
-                HStack(spacing: 6) {
-                    Text("‹")
-                        .font(.vivoDisplay(VivoFont.headlineSM))
-                        .foregroundStyle(Color.vivoAccent)
-                    Text("LIBRARY")
-                        .font(.vivoMono(VivoFont.monoSM))
-                        .tracking(VivoTracking.medium)
-                        .foregroundStyle(Color.vivoAccent)
-                }
-            }
-            Spacer()
-            Text("EXERCISE")
-                .font(.vivoMono(VivoFont.monoXS))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-            Spacer()
-            Button {} label: {
-                Text("EDIT")
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.medium)
-                    .foregroundStyle(Color.vivoSecondary)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("EXERCISE")
+                    .font(.vivoMono(VivoFont.monoXS))
+                    .tracking(VivoTracking.wide)
+                    .foregroundStyle(Color.vivoMuted)
             }
         }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 12)
-        .padding(.bottom, 12)
     }
 
     private var exerciseTitle: some View {

@@ -4,10 +4,17 @@ import SwiftUI
 struct ExerciseLibraryView: View {
     @Query(sort: \Exercise.name) private var exercises: [Exercise]
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
-    @State private var selectedFilter = "ALL"
+    @State private var searchText = ""
+    @State private var selectedFilter = ExerciseCatalogPresenter.allFilter
     @State private var filters: [ExerciseCatalogFilter] = []
     @State private var sections: [ExerciseCatalogSection] = []
-    @State private var recentExercises: [Exercise] = []
+    @State private var flatList: [Exercise] = []
+    @State private var stats = ExerciseLibraryStats()
+
+    private var isSpecialFilter: Bool {
+        [ExerciseCatalogPresenter.recentFilter,
+         ExerciseCatalogPresenter.favoritesFilter].contains(selectedFilter)
+    }
 
     var body: some View {
         NavigationStack {
@@ -16,24 +23,18 @@ struct ExerciseLibraryView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
+                        statsRow
+                        vivoDivider
                         searchBar
                         CatalogFilterBar(filters: filters, selectedFilter: $selectedFilter)
-                        vivoDivider
 
-                        if !recentExercises.isEmpty {
-                            recentSection
-                            vivoDivider
-                                .padding(.top, 10)
-                        }
-
-                        if sections.isEmpty {
+                        if isSpecialFilter {
+                            specialFilterContent
+                        } else if sections.isEmpty {
                             emptySection
                         } else {
                             ForEach(sections.enumerated(), id: \.element.id) { index, section in
                                 muscleGroupSection(section, sectionIndex: index)
-                                if index < sections.count - 1 {
-                                    vivoDivider
-                                }
                             }
                         }
 
@@ -42,23 +43,52 @@ struct ExerciseLibraryView: View {
                     .padding(.bottom, 32)
                 }
                 .scrollIndicators(.hidden)
+                .scrollDismissesKeyboard(.interactively)
             }
-            .navigationBarHidden(true)
+            .navigationTitle("Exercises")
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
-        .onChange(of: exercises) { _, newValue in
-            filters = ExerciseCatalogPresenter.filters(from: newValue)
-            sections = ExerciseCatalogPresenter.sections(from: newValue, selectedFilter: selectedFilter)
-        }
-        .onChange(of: selectedFilter) { _, newValue in
-            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: newValue)
-        }
-        .onChange(of: workouts) { _, newValue in
-            recentExercises = ExerciseCatalogPresenter.recentExercises(from: newValue)
-        }
-        .onAppear {
-            filters = ExerciseCatalogPresenter.filters(from: exercises)
-            sections = ExerciseCatalogPresenter.sections(from: exercises, selectedFilter: selectedFilter)
-            recentExercises = ExerciseCatalogPresenter.recentExercises(from: workouts)
+        .onChange(of: exercises) { _, _ in rebuildAll() }
+        .onChange(of: workouts) { _, _ in rebuildAll() }
+        .onChange(of: searchText) { _, _ in rebuildContent() }
+        .onChange(of: selectedFilter) { _, _ in rebuildContent() }
+        .onAppear { rebuildAll() }
+    }
+
+    private var isSearching: Bool {
+        !searchText.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    private func searchFilter(_ exercise: Exercise) -> Bool {
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        guard !query.isEmpty else { return true }
+        return exercise.name.localizedCaseInsensitiveContains(query)
+            || exercise.primaryTag.localizedCaseInsensitiveContains(query)
+            || exercise.secondaryTags.localizedCaseInsensitiveContains(query)
+            || exercise.muscleGroup.displayName.localizedCaseInsensitiveContains(query)
+            || exercise.category.displayName.localizedCaseInsensitiveContains(query)
+            || exercise.motionFamily.replacing("_", with: " ")
+            .localizedCaseInsensitiveContains(query)
+    }
+
+    private func rebuildAll() {
+        stats = ExerciseLibraryStats(exercises: exercises)
+        filters = ExerciseCatalogPresenter.filters(from: exercises)
+        rebuildContent()
+    }
+
+    private func rebuildContent() {
+        if selectedFilter == ExerciseCatalogPresenter.recentFilter {
+            flatList = ExerciseCatalogPresenter.recentExercises(from: workouts, limit: 20)
+                .filter(searchFilter)
+            sections = []
+        } else if selectedFilter == ExerciseCatalogPresenter.favoritesFilter {
+            flatList = exercises.filter(\.isFavorite).filter(searchFilter)
+            sections = []
+        } else {
+            let base = exercises.filter(searchFilter)
+            sections = ExerciseCatalogPresenter.sections(from: base, selectedFilter: selectedFilter)
+            flatList = []
         }
     }
 
@@ -70,75 +100,67 @@ struct ExerciseLibraryView: View {
     }
 }
 
+// MARK: - Subviews
+
 private extension ExerciseLibraryView {
+    var statsRow: some View {
+        HStack(spacing: 10) {
+            VivoStatColumn(
+                value: "\(stats.total)", label: "CATALOG",
+                valueColor: .vivoAccent
+            )
+            statDivider
+            VivoStatColumn(value: "\(stats.muscleGroups)", label: "GROUPS")
+            statDivider
+            VivoStatColumn(value: "\(stats.performed)", label: "PERFORMED")
+            statDivider
+            VivoStatColumn(value: stats.topGroup, label: "TOP GROUP")
+        }
+        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
+    }
+
+    var statDivider: some View {
+        Rectangle()
+            .fill(Color.vivoSurface)
+            .frame(width: 1, height: 28)
+    }
+
     var searchBar: some View {
         HStack(spacing: 10) {
-            Text("⚲")
-                .font(.vivoDisplay(VivoFont.bodySmall))
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(Color.vivoMuted)
+                .accessibilityHidden(true)
 
-            Text("Bundled exercise catalog")
-                .font(.vivoMono(VivoFont.monoCaption))
-                .foregroundStyle(Color.vivoMuted)
-
-            Spacer()
-
-            Text("\(exercises.count) TOTAL")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.tight)
-                .foregroundStyle(Color.vivoSecondary)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 3)
-                .overlay(
-                    RoundedRectangle(cornerRadius: VivoRadius.badge)
-                        .stroke(Color.vivoSurface, lineWidth: 1)
-                )
+            TextField("", text: $searchText, prompt: Text("Search exercises...")
+                .font(.vivoMono(VivoFont.monoDefault))
+                .foregroundStyle(Color.vivoMuted))
+                .font(.vivoMono(VivoFont.monoDefault))
+                .foregroundStyle(Color.vivoPrimary)
+                .submitLabel(.done)
         }
-        .padding(.horizontal, VivoSpacing.cardPadding)
-        .frame(height: 48)
+        .padding(.horizontal, 12)
+        .frame(height: 44)
         .background(
             RoundedRectangle(cornerRadius: VivoRadius.card)
+                .fill(Color(red: 0.094, green: 0.094, blue: 0.094))
                 .stroke(Color.vivoSurface, lineWidth: 1)
         )
         .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 8)
+        .padding(.top, 10)
     }
 
-    var recentSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("RECENT \u{00B7} CATALOG MATCHES")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-                .padding(.horizontal, VivoSpacing.screenH)
-                .padding(.top, 16)
-                .padding(.bottom, 10)
+    // MARK: Special Filter (RECENT / FAVORITES)
 
-            ScrollView(.horizontal) {
-                HStack(spacing: 8) {
-                    ForEach(recentExercises) { exercise in
-                        NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
-                            CatalogRecentCard(exercise: exercise)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, VivoSpacing.screenH)
-            }
-            .scrollIndicators(.hidden)
-            .padding(.bottom, 10)
-        }
-    }
-
-    func muscleGroupSection(
-        _ section: ExerciseCatalogSection,
-        sectionIndex: Int
-    ) -> some View {
-        VStack(spacing: 0) {
-            CatalogSectionHeader(title: section.title, exerciseCount: section.exercises.count)
-
+    @ViewBuilder
+    var specialFilterContent: some View {
+        if flatList.isEmpty {
+            specialFilterEmptyState
+        } else {
             VStack(spacing: 0) {
-                ForEach(section.exercises.enumerated(), id: \.element.persistentModelID) { index, exercise in
+                ForEach(flatList.enumerated(), id: \.element.persistentModelID) { index, exercise in
                     NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
                         ExerciseLibraryRow(
                             exercise: exercise,
@@ -152,15 +174,101 @@ private extension ExerciseLibraryView {
         }
     }
 
+    var specialFilterEmptyState: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if selectedFilter == ExerciseCatalogPresenter.recentFilter {
+                if isSearching {
+                    Text("NO RESULTS")
+                        .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                        .tracking(VivoTracking.wide)
+                        .foregroundStyle(Color.vivoMuted)
+                    Text(
+                        "No recent exercises matched \"\(searchText.trimmingCharacters(in: .whitespaces))\"."
+                    )
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .foregroundStyle(Color.vivoSecondary)
+                } else {
+                    Text("NO RECENT EXERCISES")
+                        .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                        .tracking(VivoTracking.wide)
+                        .foregroundStyle(Color.vivoMuted)
+                    Text("Exercises from your workouts will appear here.")
+                        .font(.vivoMono(VivoFont.monoCaption))
+                        .foregroundStyle(Color.vivoSecondary)
+                }
+            } else {
+                if isSearching {
+                    Text("NO RESULTS")
+                        .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                        .tracking(VivoTracking.wide)
+                        .foregroundStyle(Color.vivoMuted)
+                    Text(
+                        "No favorites matched \"\(searchText.trimmingCharacters(in: .whitespaces))\"."
+                    )
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .foregroundStyle(Color.vivoSecondary)
+                } else {
+                    Text("NO FAVORITES YET")
+                        .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                        .tracking(VivoTracking.wide)
+                        .foregroundStyle(Color.vivoMuted)
+                    Text("Tap the heart on any exercise to save it here.")
+                        .font(.vivoMono(VivoFont.monoCaption))
+                        .foregroundStyle(Color.vivoSecondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.top, 16)
+    }
+
+    // MARK: Muscle Group Sections (ALL + specific groups)
+
+    func muscleGroupSection(
+        _ section: ExerciseCatalogSection,
+        sectionIndex: Int
+    ) -> some View {
+        VStack(spacing: 0) {
+            CatalogSectionHeader(title: section.title, exerciseCount: section.exercises.count)
+
+            VStack(spacing: 0) {
+                ForEach(section.exercises.enumerated(), id: \.element.persistentModelID) { index, exercise in
+                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                        ExerciseLibraryRow(
+                            exercise: exercise,
+                            number: String(format: "%02d", index + 1),
+                            showPrimaryTag: false
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, VivoSpacing.screenH)
+        }
+    }
+
     var emptySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("NO CATALOG EXERCISES")
-                .font(.vivoMono(VivoFont.monoSM, weight: .bold))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-            Text("The bundled JSON catalog did not load any exercises for this filter.")
+            if isSearching {
+                Text("NO RESULTS")
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.wide)
+                    .foregroundStyle(Color.vivoMuted)
+                Text(
+                    "Nothing matched \"\(searchText.trimmingCharacters(in: .whitespaces))\". Try a different name, muscle group, or equipment type."
+                )
                 .font(.vivoMono(VivoFont.monoCaption))
                 .foregroundStyle(Color.vivoSecondary)
+            } else {
+                Text("NO CATALOG EXERCISES")
+                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
+                    .tracking(VivoTracking.wide)
+                    .foregroundStyle(Color.vivoMuted)
+                Text("The bundled exercise catalog is empty.")
+                    .font(.vivoMono(VivoFont.monoCaption))
+                    .foregroundStyle(Color.vivoSecondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, VivoSpacing.screenH)

@@ -13,6 +13,7 @@ final class Exercise {
     var secondaryTags: String
     var motionFamily: String
     var isBilateral: Bool
+    var isFavorite: Bool
     var notes: String
 
     @Relationship(deleteRule: .nullify, inverse: \WorkoutExercise.exercise)
@@ -27,6 +28,7 @@ final class Exercise {
         secondaryTags: String = "",
         motionFamily: String = "",
         isBilateral: Bool = false,
+        isFavorite: Bool = false,
         notes: String = ""
     ) {
         self.catalogID = catalogID
@@ -37,6 +39,7 @@ final class Exercise {
         self.secondaryTags = secondaryTags
         self.motionFamily = motionFamily
         self.isBilateral = isBilateral
+        self.isFavorite = isFavorite
         self.notes = notes
         workoutExercises = []
     }

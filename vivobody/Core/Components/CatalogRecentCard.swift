@@ -21,7 +21,7 @@ struct CatalogRecentCard: View {
             Text(exercise.motionFamily.replacing("_", with: " ").uppercased())
                 .font(.vivoMono(VivoFont.monoSM))
                 .tracking(VivoTracking.tight)
-                .foregroundStyle(Color.vivoMuted)
+                .foregroundStyle(Color.vivoAccent)
         }
         .padding(14)
         .frame(width: 180, height: 130, alignment: .topLeading)

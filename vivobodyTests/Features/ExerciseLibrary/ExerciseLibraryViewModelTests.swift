@@ -29,7 +29,7 @@ struct ExerciseLibraryViewModelTests {
         let vm = ExerciseLibraryViewModel()
         let filters = vm.filters(for: makeExercises())
 
-        #expect(filters.map(\.name) == ["ALL", "GLUTES", "QUADS"])
+        #expect(filters.map(\.name) == ["RECENT", "ALL", "FAVORITES", "GLUTES", "QUADS"])
     }
 
     @Test func sectionsRespectSelectedFilter() {

@@ -3,6 +3,7 @@ import Foundation
 struct ExerciseCatalogFilter: Identifiable, Hashable {
     let name: String
     let count: Int?
+    var isSpecial: Bool = false
 
     var id: String {
         name
@@ -20,14 +21,24 @@ struct ExerciseCatalogSection: Identifiable {
 
 @MainActor
 enum ExerciseCatalogPresenter {
+    static let recentFilter = "RECENT"
+    static let allFilter = "ALL"
+    static let favoritesFilter = "FAVORITES"
+
     static func filters(from exercises: [Exercise]) -> [ExerciseCatalogFilter] {
         let grouped = Dictionary(grouping: exercises, by: filterName(for:))
 
-        let filters = grouped.keys.sorted().map { key in
+        let muscleGroupFilters = grouped.keys.sorted().map { key in
             ExerciseCatalogFilter(name: key, count: grouped[key]?.count)
         }
 
-        return [ExerciseCatalogFilter(name: "ALL", count: nil)] + filters
+        let special: [ExerciseCatalogFilter] = [
+            ExerciseCatalogFilter(name: recentFilter, count: nil, isSpecial: true),
+            ExerciseCatalogFilter(name: allFilter, count: nil, isSpecial: true),
+            ExerciseCatalogFilter(name: favoritesFilter, count: nil, isSpecial: true)
+        ]
+
+        return special + muscleGroupFilters
     }
 
     static func sections(
