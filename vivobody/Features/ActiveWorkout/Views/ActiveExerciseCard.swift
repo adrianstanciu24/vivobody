@@ -165,8 +165,6 @@ struct ActiveExerciseCard: View {
     private func setRow(_ exerciseSet: SessionSet) -> some View {
         let isCurrent = !exerciseSet.completed
             && exercise.sets.first(where: { !$0.completed })?.id == exerciseSet.id
-        let isPlanned = !exerciseSet.completed && !isCurrent
-
         return HStack(spacing: 0) {
             Text(String(format: "%02d", exerciseSet.order))
                 .font(.vivoMono(VivoFont.monoSM))

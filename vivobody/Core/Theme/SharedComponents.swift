@@ -224,7 +224,64 @@ struct VivoFlowLayout: Layout {
     }
 }
 
+// MARK: - Exercise Name + Tag Row
+
+struct ExerciseNameTagRow: View {
+    let name: String
+    let primaryTag: String
+    let secondaryTags: String
+    var showPrimaryTag = true
+    var nameFont: CGFloat = VivoFont.sectionTitle
+    var tagFont: CGFloat = VivoFont.monoSM
+
+    private var tagLine: Text {
+        if showPrimaryTag {
+            let primary = Text(primaryTag).foregroundStyle(Color.vivoAccent)
+            let secondary = Text(" · \(secondaryTags)").foregroundStyle(Color.vivoMuted)
+            return Text("\(primary)\(secondary)")
+        } else {
+            let parts = secondaryTags.split(separator: " · ", maxSplits: 1)
+            let movement = Text(parts.first ?? "").foregroundStyle(Color.vivoAccent)
+            if parts.count > 1 {
+                let rest = Text(" · \(parts[1])").foregroundStyle(Color.vivoMuted)
+                return Text("\(movement)\(rest)")
+            }
+            return movement
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(name)
+                .font(.vivoDisplay(nameFont))
+                .foregroundStyle(Color.vivoPrimary)
+            tagLine
+                .font(.vivoMono(tagFont))
+                .tracking(VivoTracking.tight)
+                .lineLimit(1)
+        }
+    }
+}
+
 // MARK: - Previews
+
+#Preview("Exercise Name Tag Row") {
+    VStack(alignment: .leading, spacing: 20) {
+        ExerciseNameTagRow(
+            name: "Bulgarian Split Squat",
+            primaryTag: "QUADS",
+            secondaryTags: "SPLIT SQUAT · UNILATERAL"
+        )
+        ExerciseNameTagRow(
+            name: "Front Squat",
+            primaryTag: "QUADS",
+            secondaryTags: "BILATERAL SQUAT · BILATERAL",
+            showPrimaryTag: false
+        )
+    }
+    .padding(.horizontal, VivoSpacing.screenH)
+    .background(Color.vivoBackground)
+}
 
 #Preview("PR Badge") {
     HStack {

@@ -5,16 +5,6 @@ struct ExerciseLibraryRow: View {
     let number: String
     var showPrimaryTag = true
 
-    private var tagLine: Text {
-        if showPrimaryTag {
-            let primary = Text(exercise.primaryTag).foregroundStyle(Color.vivoAccent)
-            let secondary = Text(" · \(exercise.secondaryTags)").foregroundStyle(Color.vivoMuted)
-            return Text("\(primary)\(secondary)")
-        } else {
-            return Text(exercise.secondaryTags).foregroundStyle(Color.vivoMuted)
-        }
-    }
-
     var body: some View {
         HStack(spacing: 12) {
             Text(number)
@@ -22,16 +12,12 @@ struct ExerciseLibraryRow: View {
                 .foregroundStyle(Color.vivoMuted)
                 .frame(width: 18, alignment: .leading)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.name)
-                    .font(.vivoDisplay(VivoFont.sectionTitle))
-                    .foregroundStyle(Color.vivoPrimary)
-                tagLine
-                    .font(.vivoMono(VivoFont.monoSM))
-                    .tracking(VivoTracking.tight)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            ExerciseNameTagRow(
+                name: exercise.name,
+                primaryTag: exercise.primaryTag,
+                secondaryTags: exercise.secondaryTags,
+                showPrimaryTag: showPrimaryTag
+            )
 
             Spacer()
 

@@ -14,19 +14,15 @@ struct WorkoutsHistoryView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                tabToggleDivider
-
-                Group {
-                    if selectedTab == .history {
-                        if workouts.isEmpty {
-                            WorkoutsHistoryEmptyStateView(tabToggle: EmptyView())
-                        } else {
-                            historyList
-                        }
+            Group {
+                if selectedTab == .history {
+                    if workouts.isEmpty {
+                        WorkoutsHistoryEmptyStateView(tabToggle: tabToggleDivider)
                     } else {
-                        WorkoutTemplatesView(header: EmptyView())
+                        historyList
                     }
+                } else {
+                    WorkoutTemplatesView(header: tabToggleDivider)
                 }
             }
             .background(Color.vivoBackground)
@@ -53,6 +49,11 @@ struct WorkoutsHistoryView: View {
 
     private var historyList: some View {
         List {
+            tabToggleDivider
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+
             WorkoutsHistoryStatsSection(stats: cachedStats)
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)

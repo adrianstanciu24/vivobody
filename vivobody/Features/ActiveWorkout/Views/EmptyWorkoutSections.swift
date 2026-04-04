@@ -34,27 +34,14 @@ extension EmptyWorkoutView {
                 .font(.vivoMono(VivoFont.monoSM))
                 .foregroundStyle(Color.vivoMuted)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(pick.name)
-                    .font(.vivoDisplay(VivoFont.body, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-                Text(pick.tags)
-                    .font(.vivoMono(VivoFont.monoSM, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-            }
+            ExerciseNameTagRow(
+                name: pick.name,
+                primaryTag: pick.primaryTag,
+                secondaryTags: pick.secondaryTags,
+                showPrimaryTag: false
+            )
 
             Spacer()
-
-            Text("CATALOG")
-                .font(.vivoMono(VivoFont.monoXS))
-                .tracking(VivoTracking.normal)
-                .foregroundStyle(Color.vivoAccent)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .overlay(
-                    RoundedRectangle(cornerRadius: VivoRadius.badge)
-                        .stroke(Color.vivoAccent, lineWidth: 1)
-                )
         }
         .padding(14)
         .overlay(

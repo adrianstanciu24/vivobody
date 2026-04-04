@@ -17,14 +17,13 @@ struct AddExerciseView: View {
     @State var showAdvanced = false
 
     var body: some View {
-        ZStack {
-            Color.vivoBackground.ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                Color.vivoBackground.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                header
                 ScrollView {
                     VStack(spacing: 0) {
-                        exerciseInfo
+                        exerciseSubtitle
                         sectionLabel("SET CONFIGURATION")
                         setConfiguration
                         recentLoads
@@ -37,14 +36,33 @@ struct AddExerciseView: View {
                             advancedOptions
                             divider
                         }
-                        loggedSetsSection
                         logSetButton
+                        loggedSetsSection
                         footerInfo
                     }
                     .padding(.bottom, 32)
                 }
                 .scrollIndicators(.hidden)
             }
+            .navigationTitle("Add Exercise")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                if !loggedSets.isEmpty {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Discard", role: .destructive) { dismiss() }
+                            .tint(Color.vivoMuted)
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button { saveAndDismiss() } label: {
+                        Text("Save")
+                            .fontWeight(.semibold)
+                    }
+                    .tint(Color.vivoAccent)
+                }
+            }
+            .interactiveDismissDisabled(!loggedSets.isEmpty)
         }
     }
 
@@ -67,32 +85,9 @@ struct AddExerciseView: View {
     }
 }
 
-// MARK: - Header
+// MARK: - Save Action
 
 private extension AddExerciseView {
-    var header: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Text("\u{2190} BACK")
-                    .font(.vivoMono(VivoFont.monoMD))
-                    .foregroundStyle(Color.vivoMuted)
-            }
-            Spacer()
-            Text("ADD EXERCISE")
-                .font(.vivoMono(VivoFont.monoMD))
-                .tracking(VivoTracking.medium)
-                .foregroundStyle(Color.vivoMuted)
-            Spacer()
-            Button { saveAndDismiss() } label: {
-                Text("SAVE")
-                    .font(.vivoMono(VivoFont.monoMD, weight: .bold))
-                    .foregroundStyle(Color.vivoAccent)
-            }
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.vertical, 12)
-    }
-
     func saveAndDismiss() {
         let sets = loggedSets.enumerated().map { index, logged in
             SessionSet(
@@ -112,54 +107,20 @@ private extension AddExerciseView {
     }
 }
 
-// MARK: - Exercise Info
+// MARK: - Exercise Subtitle
 
 private extension AddExerciseView {
-    var exerciseInfo: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("EXERCISE \(String(format: "%02d", (session?.exerciseCount ?? 0) + 1)) / 06")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.wide)
-                .foregroundStyle(Color.vivoMuted)
-
-            let parts = exercise.name.split(separator: " ", maxSplits: 1)
-            if parts.count > 1 {
-                Text(String(parts[0]))
-                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-                    .tracking(-1)
-                Text(String(parts[1]))
-                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-                    .tracking(-1)
-            } else {
-                Text(exercise.name)
-                    .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
-                    .foregroundStyle(Color.vivoPrimary)
-                    .tracking(-1)
-            }
-
-            tagsLabel
-        }
+    var exerciseSubtitle: some View {
+        ExerciseNameTagRow(
+            name: exercise.name,
+            primaryTag: exercise.primaryTag,
+            secondaryTags: exercise.secondaryTags,
+            showPrimaryTag: false,
+            nameFont: VivoFont.titleXL
+        )
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 4)
-    }
-
-    var tagsLabel: some View {
-        let tagParts = exercise.tags.components(separatedBy: " \u{00B7} ")
-        return HStack(spacing: 0) {
-            if let first = tagParts.first {
-                Text(first)
-                    .foregroundStyle(Color.vivoAccent)
-            }
-            if tagParts.count > 1 {
-                Text(" \u{00B7} " + tagParts.dropFirst().joined(separator: " \u{00B7} "))
-                    .foregroundStyle(Color.vivoMuted)
-            }
-        }
-        .font(.vivoMono(VivoFont.monoSM))
-        .tracking(VivoTracking.normal)
+        .padding(.top, 16)
     }
 }
 

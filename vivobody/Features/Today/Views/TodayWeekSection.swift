@@ -40,7 +40,7 @@ extension TodayView {
             }
         }
         .frame(height: 80)
-        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.horizontal, navInset)
     }
 
     var volumeTotals: some View {
@@ -55,7 +55,7 @@ extension TodayView {
                 .tracking(VivoTracking.tight)
                 .foregroundStyle(Color.vivoMuted)
         }
-        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.horizontal, navInset)
         .padding(.top, 8)
         .padding(.bottom, 14)
     }
@@ -85,7 +85,7 @@ extension TodayView {
                 sessionRow(session)
             }
         }
-        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.horizontal, navInset)
     }
 
     func sessionRow(_ session: RecentSession) -> some View {

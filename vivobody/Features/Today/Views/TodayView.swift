@@ -1,31 +1,41 @@
 import SwiftUI
 
 struct TodayView: View {
-    var body: some View {
-        ZStack {
-            Color.vivoBackground.ignoresSafeArea()
+    let navInset: CGFloat = 20
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    greetingHeader
-                    bigDate
-                    sessionInfo
-                    statsRow
-                    weekStrip
-                    sectionDivider
-                    sectionHeader("UP NEXT")
-                    TodayHeroCard()
-                    sectionDivider
-                    sectionHeader("WEEKLY VOLUME")
-                    weeklyVolumeChart
-                    volumeTotals
-                    sectionDivider
-                    sectionHeader("RECENT SESSIONS")
-                    recentSessionsList
-                    footerSection
+    private var dateLabel: String {
+        Date.now.formatted(.dateTime.weekday(.wide)) + ", "
+            + Date.now.formatted(.dateTime.month(.abbreviated).day())
+    }
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.vivoBackground.ignoresSafeArea()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        bigDate
+                        sessionInfo
+                        statsRow
+                        weekStrip
+                        sectionDivider
+                        sectionHeader("UP NEXT")
+                        TodayHeroCard()
+                        sectionDivider
+                        sectionHeader("WEEKLY VOLUME")
+                        weeklyVolumeChart
+                        volumeTotals
+                        sectionDivider
+                        sectionHeader("RECENT SESSIONS")
+                        recentSessionsList
+                        footerSection
+                    }
+                    .padding(.bottom, 32)
                 }
-                .padding(.bottom, 32)
             }
+            .navigationTitle("Today")
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }
 
@@ -33,7 +43,7 @@ struct TodayView: View {
         Rectangle()
             .fill(Color.vivoSurface)
             .frame(height: 1)
-            .padding(.horizontal, VivoSpacing.screenH)
+            .padding(.horizontal, navInset)
     }
 
     private func sectionHeader(_ title: String) -> some View {
@@ -42,7 +52,7 @@ struct TodayView: View {
             .tracking(VivoTracking.wide)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, VivoSpacing.screenH)
+            .padding(.horizontal, navInset)
             .padding(.top, 16)
             .padding(.bottom, 10)
     }
@@ -51,40 +61,13 @@ struct TodayView: View {
 // MARK: - Greeting & Date
 
 private extension TodayView {
-    var greetingHeader: some View {
-        HStack {
-            Text("GOOD MORNING, ALEX")
-                .font(.vivoMono(VivoFont.monoSM))
-                .tracking(VivoTracking.medium)
-                .foregroundStyle(Color.vivoSecondary)
-
-            Spacer()
-
-            Circle()
-                .fill(Color.vivoSurface)
-                .frame(width: 32, height: 32)
-                .overlay(
-                    Text("AS")
-                        .font(.vivoMono(VivoFont.monoCaption, weight: .bold))
-                        .foregroundStyle(Color.vivoPrimary)
-                )
-        }
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 8)
-    }
-
     var bigDate: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Wednesday")
-                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
-                .foregroundStyle(Color.vivoPrimary)
-            Text("March 18")
-                .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
-                .foregroundStyle(Color.vivoSecondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, VivoSpacing.screenH)
-        .padding(.top, 2)
+        Text(dateLabel)
+            .font(.vivoDisplay(VivoFont.titleXL, weight: .bold))
+            .foregroundStyle(Color.vivoSecondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, navInset)
+            .padding(.top, 2)
     }
 
     var sessionInfo: some View {
@@ -93,7 +76,7 @@ private extension TodayView {
             .tracking(VivoTracking.normal)
             .foregroundStyle(Color.vivoMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, VivoSpacing.screenH)
+            .padding(.horizontal, navInset)
             .padding(.top, 4)
             .padding(.bottom, 14)
     }
@@ -109,7 +92,7 @@ private extension TodayView {
             statItem(value: "86%", label: "ADHERENCE")
             statItem(value: "42", label: "TOTAL PRs")
         }
-        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.horizontal, navInset)
         .padding(.vertical, 14)
     }
 
@@ -172,7 +155,7 @@ private extension TodayView {
                 .frame(maxWidth: .infinity)
             }
         }
-        .padding(.horizontal, VivoSpacing.screenH)
+        .padding(.horizontal, navInset)
         .padding(.vertical, 14)
     }
 

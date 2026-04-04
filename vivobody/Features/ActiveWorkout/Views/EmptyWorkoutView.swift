@@ -125,6 +125,7 @@ private extension EmptyWorkoutView {
             Rectangle()
                 .fill(Color.vivoSurface)
                 .frame(width: 1, height: 28)
+                .padding(.horizontal, 12)
 
             statItem(
                 value: "\(session?.totalVolume ?? 0)",
@@ -134,6 +135,7 @@ private extension EmptyWorkoutView {
             Rectangle()
                 .fill(Color.vivoSurface)
                 .frame(width: 1, height: 28)
+                .padding(.horizontal, 12)
 
             statItem(value: "\(session?.setsDone ?? 0)", label: "SETS DONE")
         }
