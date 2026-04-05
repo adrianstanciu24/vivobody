@@ -3,6 +3,8 @@ import SwiftUI
 struct ExerciseDetailView: View {
     let exercise: Exercise
 
+    @State private var viewModel = ExerciseDetailViewModel()
+
     var body: some View {
         ZStack {
             Color.vivoBackground.ignoresSafeArea()
@@ -11,6 +13,35 @@ struct ExerciseDetailView: View {
                 VStack(spacing: 0) {
                     exerciseTitle
                     tagRow
+
+                    if let profile = viewModel.profile {
+                        divider
+                        ExerciseDetailMuscleTargetsView(targets: profile.targets.all)
+                        divider
+                        ExerciseDetailTopMusclesView(muscles: profile.topMuscles)
+                        divider
+                        ExerciseDetailJointDemandView(
+                            jointStress: profile.demands.jointStress,
+                            kneeVsHip: profile.biases.kneeVsHip
+                        )
+                        divider
+                        ExerciseDetailRangeOfMotionView(rangeOfMotion: profile.kinematics.rangeOfMotion)
+                        divider
+                        ExerciseDetailMovementProfileView(
+                            stability: profile.demands.stability,
+                            tempoSensitivity: profile.demands.tempoSensitivity,
+                            repDurationSec: profile.exercise.repDurationSec,
+                            movementTags: profile.exercise.movementTags
+                        )
+                        divider
+                        ExerciseDetailStretchProfileView(stretch: profile.biases.stretch)
+                        divider
+                        ExerciseDetailPhaseBreakdownView(
+                            phases: profile.demands.phaseBreakdown,
+                            phaseWindows: profile.kinematics.phaseWindows
+                        )
+                    }
+
                     divider
                     ExerciseDetailStatsRow()
                     divider
@@ -43,6 +74,7 @@ struct ExerciseDetailView: View {
                     .foregroundStyle(Color.vivoMuted)
             }
         }
+        .onAppear { viewModel.loadProfile(for: exercise) }
     }
 
     private var exerciseTitle: some View {
