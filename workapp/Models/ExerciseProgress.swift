@@ -69,6 +69,110 @@ struct ExerciseProgress: Identifiable, Hashable {
     }
 }
 
+// MARK: - Last instance lookup
+
+/// What the user did the last time they performed a given exercise.
+/// Used by the ExercisePickerSheet rows to decorate each entry with
+/// fresh context ("LAST · 145 lb × 8 · 3d ago") instead of just the
+/// catalog's default values.
+struct LastExerciseInstance: Hashable {
+    /// Weight (canonical lb) of the heaviest completed set in the
+    /// most recent session that included this exercise.
+    let topWeight: Double
+
+    /// Reps of that top set.
+    let topReps: Int
+
+    /// Date the session was completed (or started, if completion
+    /// timestamp is missing — defensive only, archived sessions
+    /// always have completedAt set).
+    let sessionDate: Date
+
+    /// True when this top set matches the all-time best weight for
+    /// the exercise. Lets the picker show a subtle "PR" indicator
+    /// next to the last-used line.
+    let isAllTimeBest: Bool
+}
+
+extension Array where Element == WorkoutSession {
+    /// Build a name → LastExerciseInstance lookup in one pass over
+    /// the archive. Picker rows do O(1) lookups against this map
+    /// instead of re-scanning history per row.
+    ///
+    /// Match is by exercise name (case-insensitive). Templates and
+    /// active workouts already copy the name at pick-time, so equal
+    /// strings imply equal lifts — same convention as
+    /// `progressByExercise` above.
+    func lastInstanceByExercise() -> [String: LastExerciseInstance] {
+        // Step 1: gather every "top set per session per exercise"
+        // tuple. The arrays inside the dictionary are appended in
+        // archive order, not by date — sorting comes next.
+        var rawByName: [String: [(date: Date, top: WorkoutSet)]] = [:]
+
+        for session in self {
+            let date = session.completedAt ?? session.startedAt
+            for exercise in session.orderedExercises {
+                let completed = exercise.sets.filter(\.isCompleted)
+                guard !completed.isEmpty else { continue }
+                let top = completed.max { a, b in
+                    if a.weight == b.weight { return a.reps < b.reps }
+                    return a.weight < b.weight
+                }!
+                let key = exercise.name.lowercased()
+                rawByName[key, default: []].append((date: date, top: top))
+            }
+        }
+
+        // Step 2: for each exercise, find the most recent session's
+        // top set AND the all-time best top set. Two separate scans
+        // on a small list — each exercise typically has at most a
+        // few hundred sessions tied to it.
+        var result: [String: LastExerciseInstance] = [:]
+        for (name, entries) in rawByName {
+            guard let mostRecent = entries.max(by: { $0.date < $1.date }) else { continue }
+            let allTimeBestWeight = entries.map(\.top.weight).max() ?? 0
+            result[name] = LastExerciseInstance(
+                topWeight: mostRecent.top.weight,
+                topReps: mostRecent.top.reps,
+                sessionDate: mostRecent.date,
+                isAllTimeBest: mostRecent.top.weight >= allTimeBestWeight
+            )
+        }
+        return result
+    }
+}
+
+// MARK: - Relative date
+
+/// Compact relative-date helper for picker decorations. Returns short
+/// strings the picker can fit next to a weight × reps line:
+///   • "today", "yesterday"
+///   • "2d ago", "5d ago"
+///   • "2w ago", "5w ago"
+///   • "3mo ago"
+///   • "6+ mo ago" (clamp for stale entries — old data isn't
+///     actionable, so we don't waste space on exact months/years)
+///
+/// Reads off a passed `now` for testability. Caller-side the default
+/// is `Date()`.
+enum RelativeDate {
+    static func short(_ date: Date, now: Date = Date(), calendar: Calendar = .current) -> String {
+        if calendar.isDateInToday(date) { return "today" }
+        if calendar.isDateInYesterday(date) { return "yesterday" }
+
+        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date), to: calendar.startOfDay(for: now)).day ?? 0
+        if days < 0 { return "today" }            // Defensive — future-stamped data
+        if days < 14 { return "\(days)d ago" }
+
+        let weeks = days / 7
+        if weeks < 8 { return "\(weeks)w ago" }
+
+        let months = days / 30
+        if months < 6 { return "\(months)mo ago" }
+        return "6+ mo ago"
+    }
+}
+
 extension Array where Element == WorkoutSession {
     /// Group archived sessions by exercise name and produce a
     /// chronological progress series for each. Only sessions with at

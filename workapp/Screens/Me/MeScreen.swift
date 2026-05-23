@@ -22,6 +22,12 @@ import SwiftData
 struct MeScreen: View {
     @Bindable var appState: AppState
 
+    /// SwiftData context — needed for the Reset Catalog action,
+    /// which wipes and re-seeds the ExerciseCatalogItem store.
+    /// Pulled from the environment lazily so MeScreen continues
+    /// to render via @Bindable without any constructor changes.
+    @Environment(\.modelContext) private var modelContext
+
     /// All archived sessions. Drives the stats header — we sum
     /// across the full set rather than relying on cached counters,
     /// so the totals stay correct after any edit/delete in History.
@@ -52,6 +58,10 @@ struct MeScreen: View {
     /// card. Populated state navigates to detail (which has its own
     /// log sheet) so the same affordance never collides.
     @State private var logTarget: BodyWeightLogTarget? = nil
+
+    /// Controls the destructive-confirmation alert for "Reset
+    /// Exercise Catalog." Bound to the alert's `isPresented`.
+    @State private var isConfirmingCatalogReset: Bool = false
 
     /// Common rest values that cover the bulk of strength-training
     /// programs. Surfaced as a horizontal chip selector — picking a
@@ -590,6 +600,8 @@ struct MeScreen: View {
                 restRow
                 rowDivider
                 hapticsRow
+                rowDivider
+                resetCatalogRow
             }
             .padding(20)
             .background(
@@ -601,6 +613,49 @@ struct MeScreen: View {
                     .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
             )
         }
+        .alert(
+            "Reset Exercise Catalog?",
+            isPresented: $isConfirmingCatalogReset
+        ) {
+            Button("Reset", role: .destructive) {
+                ExerciseCatalogItem.resetToDefaults(in: modelContext)
+                Haptics.thunk()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Restores the original 90 exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
+        }
+    }
+
+    /// Destructive-action row inside Preferences. Tapping the whole
+    /// row opens a confirmation alert — never single-tap destructive,
+    /// per the rest of the app's pattern (delete set, cancel
+    /// workout, etc.).
+    private var resetCatalogRow: some View {
+        Button {
+            Haptics.soft()
+            isConfirmingCatalogReset = true
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Reset Exercise Catalog")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white)
+                    Text("Restore the original 90 exercises")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(0.45))
+                }
+                Spacer()
+                Image(systemName: "arrow.counterclockwise")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Wipes and reseeds the exercise catalog")
     }
 
     private var weightUnitRow: some View {

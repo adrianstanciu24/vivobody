@@ -29,6 +29,17 @@ struct ExercisePickerSheet: View {
 
     @Query private var items: [ExerciseCatalogItem]
 
+    /// Archived sessions — drives the "last-used" decoration on each
+    /// row. Filtering to completedAt != nil at the query level means
+    /// the in-flight session never contributes (it would otherwise
+    /// surface a "LAST" line for a set you're still doing).
+    @Query(
+        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
+        sort: \WorkoutSession.completedAt,
+        order: .reverse
+    )
+    private var completedSessions: [WorkoutSession]
+
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -38,6 +49,20 @@ struct ExercisePickerSheet: View {
     @State private var editorTarget: CatalogEditorTarget?
     @State private var pendingDeleteItem: ExerciseCatalogItem?
 
+    /// Optional equipment filter. Nil means "all equipment." Chip
+    /// strip at the top of the picker toggles between this and the
+    /// individual Equipment cases.
+    @State private var equipmentFilter: Equipment? = nil
+
+    /// One-time-per-render lookup of "what did you last do for this
+    /// exercise?" keyed by lowercased name. Rebuilt whenever the
+    /// underlying completed sessions list changes — SwiftUI handles
+    /// that via the @Query observation. Single O(N) sweep over
+    /// history; picker rows do O(1) lookups.
+    private var lastInstanceLookup: [String: LastExerciseInstance] {
+        completedSessions.lastInstanceByExercise()
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -45,6 +70,7 @@ struct ExercisePickerSheet: View {
 
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 18) {
+                        equipmentFilterStrip
                         ForEach(filteredGroups, id: \.group) { section in
                             groupSection(group: section.group, items: section.items)
                         }
@@ -102,13 +128,89 @@ struct ExercisePickerSheet: View {
 
     private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
         let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
-        let scope: [ExerciseCatalogItem]
-        if trimmed.isEmpty {
-            scope = items
-        } else {
-            scope = items.filter { $0.name.lowercased().contains(trimmed) }
+
+        // First narrow by equipment filter — the chip strip toggles
+        // a global "show only this equipment" lens. Nil = all.
+        var scope = items
+        if let filter = equipmentFilter {
+            scope = scope.filter { $0.equipment == filter }
+        }
+
+        // Then narrow by search query — matches against name OR any
+        // alias. Aliases let "BP" find "Bench Press"; case-insensitive
+        // substring keeps the matching forgiving.
+        if !trimmed.isEmpty {
+            scope = scope.filter { item in
+                if item.name.lowercased().contains(trimmed) { return true }
+                return item.aliases.contains { $0.lowercased().contains(trimmed) }
+            }
         }
         return scope.groupedByMuscle
+    }
+
+    // MARK: - Equipment filter strip
+
+    /// Horizontal chip strip at the top of the picker. "All" + one
+    /// chip per Equipment case. Wraps the existing list so users can
+    /// narrow by gear before scrolling. Hidden when no items would
+    /// be filtered anyway (e.g., catalog has only one equipment
+    /// type — unusual but cleanly handled).
+    @ViewBuilder
+    private var equipmentFilterStrip: some View {
+        if availableEquipment.count > 1 {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    equipmentFilterChip(nil, label: "All", symbol: nil)
+                    ForEach(Equipment.allCases, id: \.self) { e in
+                        if availableEquipment.contains(e) {
+                            equipmentFilterChip(e, label: e.displayName, symbol: e.symbol)
+                        }
+                    }
+                }
+                // Bleed past the LazyVStack horizontal padding so the
+                // strip can scroll edge-to-edge.
+                .padding(.horizontal, 2)
+            }
+            // Counter the LazyVStack's padding so the chips align
+            // with the screen edges, not the content insets.
+            .padding(.horizontal, -22)
+            .padding(.horizontal, 22)
+        }
+    }
+
+    /// All distinct equipment values represented in the visible
+    /// catalog (post text-search, pre equipment-filter). Hides chips
+    /// for equipment with no entries so the strip stays honest.
+    private var availableEquipment: Set<Equipment> {
+        Set(items.map(\.equipment))
+    }
+
+    private func equipmentFilterChip(_ value: Equipment?, label: String, symbol: String?) -> some View {
+        let isSelected = equipmentFilter == value
+        return Button {
+            Haptics.selection()
+            equipmentFilter = value
+        } label: {
+            HStack(spacing: 5) {
+                if let symbol {
+                    Image(systemName: symbol)
+                        .font(.system(size: 10, weight: .semibold))
+                }
+                Text(label)
+                    .font(.system(size: 12, weight: .semibold))
+            }
+            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
+            .padding(.horizontal, 12)
+            .frame(minHeight: 32)
+            .background(
+                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+            )
+            .overlay(
+                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     // MARK: - Sections / rows
@@ -131,22 +233,46 @@ struct ExercisePickerSheet: View {
     }
 
     private func pickerRow(_ item: ExerciseCatalogItem) -> some View {
-        Button {
+        let last = lastInstanceLookup[item.name.lowercased()]
+
+        return Button {
             onPick(item)
             Haptics.soft()
             dismiss()
         } label: {
-            HStack {
-                Text(item.name)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(.white)
-                Spacer()
-                Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
+            HStack(spacing: 10) {
+                // Equipment glyph — small, dim, telegraphs the gear
+                // before the user reads the name. Helps scan a long
+                // back day for "any dumbbell rows in here?"
+                Image(systemName: item.equipment.symbol)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .frame(width: 18)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(item.name)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(.white)
+                    // Subtitle line — equipment label and pattern
+                    // (or "Isolation") as a tiny disambiguator for
+                    // exercises with similar names ("Bench Press"
+                    // barbell vs. "Bench Press" dumbbell).
+                    Text(rowSubtitle(item))
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
+                        .tracking(0.8)
+                        .foregroundStyle(.white.opacity(0.35))
+                }
+
+                Spacer(minLength: 8)
+
+                // Right side flips between "default" (never lifted)
+                // and "last" (have history). Last-side is the high-
+                // value variant — it answers "what should I aim to
+                // beat?" while the picker is still open.
+                rowRightSide(item: item, last: last)
             }
             .padding(.horizontal, 14)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(Color.white.opacity(0.04))
@@ -170,6 +296,59 @@ struct ExercisePickerSheet: View {
                 Label("Delete", systemImage: "trash")
             }
         }
+    }
+
+    /// Right-side rendering of a picker row. Branches on whether
+    /// we have a recent log of this exercise:
+    ///   • No history → show the catalog's default (`135 lb · 8 reps`)
+    ///     so brand-new users still see useful starting numbers.
+    ///   • Has history → show `LAST · 145 lb × 8` plus the relative
+    ///     date below in dim mono. If that last top set is also the
+    ///     all-time best, mark it with a small "PR" pill so the
+    ///     user knows their last bench WAS their PR.
+    @ViewBuilder
+    private func rowRightSide(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
+        if let last {
+            VStack(alignment: .trailing, spacing: 2) {
+                HStack(spacing: 4) {
+                    if last.isAllTimeBest {
+                        Text("PR")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .tracking(0.8)
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 1)
+                            .background(
+                                Capsule().fill(Color(.sRGB, red: 0.96, green: 0.78, blue: 0.32, opacity: 1))
+                            )
+                    }
+                    Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
+                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.85))
+                }
+                Text(RelativeDate.short(last.sessionDate))
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.40))
+            }
+        } else {
+            Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
+                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.40))
+        }
+    }
+
+    /// Subtitle line for a picker row. Equipment first, then mechanic
+    /// label (compound lifts get their pattern, isolation lifts get
+    /// "Isolation"). Uppercased mono for the "metadata strip" feel
+    /// shared with the rest of the app.
+    private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
+        var parts: [String] = [item.equipment.displayName.uppercased()]
+        if item.mechanic == .compound, let pattern = item.pattern {
+            parts.append(pattern.displayName.uppercased())
+        } else if item.mechanic == .isolation {
+            parts.append("ISOLATION")
+        }
+        return parts.joined(separator: " · ")
     }
 
     // MARK: - Empty state

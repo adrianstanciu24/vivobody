@@ -66,6 +66,12 @@ struct CustomExerciseEditorSheet: View {
                     VStack(alignment: .leading, spacing: 22) {
                         nameField
                         muscleGroupField
+                        equipmentField
+                        mechanicField
+                        if draft.mechanic == .compound {
+                            patternField
+                        }
+                        aliasesField
                         defaultsRow
                     }
                     .padding(.horizontal, 22)
@@ -168,6 +174,175 @@ struct CustomExerciseEditorSheet: View {
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
+    // MARK: - Equipment
+
+    private var equipmentField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("EQUIPMENT")
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .tracking(2)
+                .foregroundStyle(.white.opacity(0.50))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Equipment.allCases, id: \.self) { e in
+                        equipmentChip(e)
+                    }
+                }
+            }
+        }
+    }
+
+    private func equipmentChip(_ e: Equipment) -> some View {
+        let isSelected = draft.equipment == e
+        return Button {
+            Haptics.selection()
+            draft.equipment = e
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: e.symbol)
+                    .font(.system(size: 11, weight: .semibold))
+                Text(e.displayName)
+                    .font(.system(size: 13, weight: .semibold))
+            }
+            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
+            .padding(.horizontal, 14)
+            .frame(minHeight: 44)
+            .background(
+                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+            )
+            .overlay(
+                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    // MARK: - Mechanic
+
+    private var mechanicField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("MECHANIC")
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .tracking(2)
+                .foregroundStyle(.white.opacity(0.50))
+
+            HStack(spacing: 8) {
+                ForEach(Mechanic.allCases, id: \.self) { m in
+                    mechanicChip(m)
+                }
+            }
+        }
+    }
+
+    private func mechanicChip(_ m: Mechanic) -> some View {
+        let isSelected = draft.mechanic == m
+        return Button {
+            Haptics.selection()
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                draft.mechanic = m
+                // Switching to isolation clears the pattern; switching
+                // back to compound leaves the pattern at whatever it
+                // was previously (or nil if it was never set).
+                if m == .isolation {
+                    draft.pattern = nil
+                }
+            }
+        } label: {
+            Text(m.displayName)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 44)
+                .background(
+                    Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                )
+                .overlay(
+                    Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    // MARK: - Pattern (compound only)
+
+    private var patternField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("MOVEMENT PATTERN")
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .tracking(2)
+                .foregroundStyle(.white.opacity(0.50))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    patternChip(nil)  // "None" sentinel — explicit unset
+                    ForEach(MovementPattern.allCases, id: \.self) { p in
+                        patternChip(p)
+                    }
+                }
+            }
+        }
+    }
+
+    private func patternChip(_ p: MovementPattern?) -> some View {
+        let isSelected = draft.pattern == p
+        let label = p?.displayName ?? "None"
+        return Button {
+            Haptics.selection()
+            draft.pattern = p
+        } label: {
+            Text(label)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
+                .padding(.horizontal, 14)
+                .frame(minHeight: 44)
+                .background(
+                    Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                )
+                .overlay(
+                    Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    // MARK: - Aliases
+
+    private var aliasesField: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("ALIASES")
+                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .tracking(2)
+                    .foregroundStyle(.white.opacity(0.50))
+                Spacer()
+                Text("comma-separated")
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.35))
+            }
+
+            TextField("", text: $draft.aliasesInput, prompt: Text("e.g. BP, Flat Bench")
+                .foregroundStyle(.white.opacity(0.35)))
+                .font(.system(size: 15))
+                .foregroundStyle(.white)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.words)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Color.white.opacity(0.05))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                )
+        }
+    }
+
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("DEFAULTS")
@@ -205,6 +380,8 @@ struct CustomExerciseEditorSheet: View {
         let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedName.isEmpty else { return }
 
+        let parsedAliases = draft.parsedAliases
+
         switch target {
         case .create:
             let item = ExerciseCatalogItem(
@@ -212,6 +389,10 @@ struct CustomExerciseEditorSheet: View {
                 group: draft.group,
                 defaultWeight: draft.defaultWeight,
                 defaultReps: draft.defaultReps,
+                equipment: draft.equipment,
+                mechanic: draft.mechanic,
+                pattern: draft.mechanic == .compound ? draft.pattern : nil,
+                aliases: parsedAliases,
                 isUserCreated: true
             )
             modelContext.insert(item)
@@ -221,6 +402,13 @@ struct CustomExerciseEditorSheet: View {
             item.group = draft.group
             item.defaultWeight = draft.defaultWeight
             item.defaultReps = draft.defaultReps
+            item.equipment = draft.equipment
+            // Setting mechanic to isolation auto-clears pattern via
+            // the model's didSet hook, so we don't need to clear it
+            // here explicitly. Order matters: mechanic first.
+            item.mechanic = draft.mechanic
+            item.pattern = draft.mechanic == .compound ? draft.pattern : nil
+            item.aliases = parsedAliases
         }
 
         try? modelContext.save()
@@ -241,19 +429,45 @@ struct CatalogDraft {
     var group: MuscleGroup
     var defaultWeight: Double
     var defaultReps: Int
+    var equipment: Equipment
+    var mechanic: Mechanic
+    var pattern: MovementPattern?
+
+    /// Raw editor input for aliases — comma-separated free text.
+    /// Parsed into `[String]` on save via `parsedAliases`. Keeping
+    /// the raw form here lets the user keep typing without us
+    /// reformatting their input mid-stream.
+    var aliasesInput: String
 
     static let empty = CatalogDraft(
         name: "",
         group: .chest,
         defaultWeight: 0,
-        defaultReps: 8
+        defaultReps: 8,
+        equipment: .barbell,
+        mechanic: .compound,
+        pattern: nil,
+        aliasesInput: ""
     )
 
-    init(name: String, group: MuscleGroup, defaultWeight: Double, defaultReps: Int) {
+    init(
+        name: String,
+        group: MuscleGroup,
+        defaultWeight: Double,
+        defaultReps: Int,
+        equipment: Equipment,
+        mechanic: Mechanic,
+        pattern: MovementPattern?,
+        aliasesInput: String
+    ) {
         self.name = name
         self.group = group
         self.defaultWeight = defaultWeight
         self.defaultReps = defaultReps
+        self.equipment = equipment
+        self.mechanic = mechanic
+        self.pattern = pattern
+        self.aliasesInput = aliasesInput
     }
 
     init(from item: ExerciseCatalogItem) {
@@ -261,5 +475,30 @@ struct CatalogDraft {
         self.group = item.group
         self.defaultWeight = item.defaultWeight
         self.defaultReps = item.defaultReps
+        self.equipment = item.equipment
+        self.mechanic = item.mechanic
+        self.pattern = item.pattern
+        // Rebuild the comma-separated string so the editor's text
+        // field reflects the stored list. Two-space readability for
+        // long lists, but the parser tolerates either.
+        self.aliasesInput = item.aliases.joined(separator: ", ")
+    }
+
+    /// Split the comma-separated `aliasesInput` into a clean array.
+    /// Trims whitespace per item, drops empties + duplicates (case-
+    /// insensitive), preserves first-appearance order so the user's
+    /// typing order isn't shuffled.
+    var parsedAliases: [String] {
+        var seen: Set<String> = []
+        var result: [String] = []
+        for piece in aliasesInput.split(separator: ",") {
+            let trimmed = piece.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { continue }
+            let key = trimmed.lowercased()
+            if seen.insert(key).inserted {
+                result.append(trimmed)
+            }
+        }
+        return result
     }
 }
