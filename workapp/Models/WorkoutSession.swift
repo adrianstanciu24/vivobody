@@ -32,6 +32,13 @@ final class WorkoutSession: Identifiable {
     /// per-session so the user could change defaults over time.
     var restDuration: TimeInterval = 90
 
+    /// Free-form notes captured for this workout — "felt great",
+    /// "shoulder bothered me on press", "stayed late, did extra
+    /// curls". Empty by default; surfaced on the Summary card (live
+    /// + historical) with an inline editor sheet. Additive — no
+    /// migration needed.
+    var notes: String = ""
+
     /// Exercises that make up this session. Cascade-deletes when the
     /// session is removed. Order is determined by `Exercise.sortOrder`
     /// — use `orderedExercises` for UI iteration.

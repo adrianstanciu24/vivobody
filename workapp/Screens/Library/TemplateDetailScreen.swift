@@ -24,6 +24,11 @@ struct TemplateDetailScreen: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -133,10 +138,25 @@ struct TemplateDetailScreen: View {
                 .frame(width: 4, height: 38)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(exercise.name)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
-                Text("\(exercise.plannedSets) × \(exercise.plannedReps) @ \(Int(exercise.plannedWeight)) lb")
+                HStack(spacing: 6) {
+                    Text(exercise.name)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white)
+                    if exercise.hasPerSetData {
+                        Text("PER SET")
+                            .font(.system(size: 8, weight: .bold, design: .monospaced))
+                            .tracking(1.2)
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(
+                                Capsule().fill(
+                                    Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
+                                )
+                            )
+                    }
+                }
+                Text(exerciseSummary(exercise))
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.50))
             }
@@ -158,6 +178,26 @@ struct TemplateDetailScreen: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .stroke(Color.white.opacity(0.05), lineWidth: 0.5)
         )
+    }
+
+    /// Per-set templates show a count + weight range; uniform ones
+    /// keep the existing "3 × 8 @ 135 lb" style. Mirrors the editor's
+    /// collapsed-row summary so the two surfaces read consistently.
+    /// All weight values route through WeightFormatter so the unit
+    /// (lb / kg) follows the user's Preferences setting.
+    private func exerciseSummary(_ exercise: TemplateExercise) -> String {
+        if exercise.hasPerSetData {
+            let sets = exercise.orderedSets
+            let weights = sets.map(\.weight)
+            guard let lo = weights.min(), let hi = weights.max() else { return "" }
+            if lo == hi, let first = sets.first {
+                return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+            }
+            let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
+            let hiStr = WeightFormatter.string(hi, unit: unit)
+            return "\(sets.count) sets · \(loStr)–\(hiStr)"
+        }
+        return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
     }
 
     // MARK: - Stat helpers

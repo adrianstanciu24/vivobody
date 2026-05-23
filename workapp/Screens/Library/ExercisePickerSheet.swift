@@ -2,23 +2,41 @@
 //  ExercisePickerSheet.swift
 //  workapp
 //
-//  Modal browser for the static exercise catalog. Presented from
-//  inside the TemplateEditorScreen when the user taps "Add
-//  Exercise". Returns a single picked item via callback and
-//  dismisses; the caller decides what to do with it (build an
-//  ExerciseDraft, append to the template, etc).
+//  Modal browser for the exercise catalog. Presented from the
+//  TemplateEditorScreen ("Add Exercise") and from the active workout
+//  Summary card ("Add Exercise" mid-workout). Returns a single picked
+//  item via callback and dismisses; the caller decides what to do
+//  with it.
 //
-//  Sectioned by muscle group, .searchable across the entire
-//  catalog. No selection state held here — single-tap pick.
+//  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so
+//  users can extend it inline:
+//    • Toolbar "+" — create a new custom exercise.
+//    • Long-press on any row — context menu with Edit and Delete.
+//      Edit opens the same CustomExerciseEditorSheet in edit mode;
+//      Delete asks for confirmation, then removes the row.
+//
+//  Sectioned by muscle group, searchable across the full list.
 //
 
 import SwiftUI
+import SwiftData
 
 struct ExercisePickerSheet: View {
     let onPick: (ExerciseCatalogItem) -> Void
 
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+
+    @Query private var items: [ExerciseCatalogItem]
+
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     @State private var query: String = ""
+    @State private var editorTarget: CatalogEditorTarget?
+    @State private var pendingDeleteItem: ExerciseCatalogItem?
 
     var body: some View {
         NavigationStack {
@@ -31,11 +49,7 @@ struct ExercisePickerSheet: View {
                             groupSection(group: section.group, items: section.items)
                         }
                         if filteredGroups.isEmpty {
-                            Text("No exercises match \"\(query)\"")
-                                .font(.system(size: 13))
-                                .foregroundStyle(.white.opacity(0.40))
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.top, 40)
+                            emptyState
                         }
                     }
                     .padding(.horizontal, 22)
@@ -49,19 +63,55 @@ struct ExercisePickerSheet: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        editorTarget = .create
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .accessibilityLabel("Create custom exercise")
+                }
             }
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
+            .sheet(item: $editorTarget) { target in
+                CustomExerciseEditorSheet(target: target)
+            }
+            .alert(
+                "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
+                isPresented: Binding(
+                    get: { pendingDeleteItem != nil },
+                    set: { if !$0 { pendingDeleteItem = nil } }
+                )
+            ) {
+                Button("Delete", role: .destructive) {
+                    if let item = pendingDeleteItem {
+                        delete(item)
+                    }
+                    pendingDeleteItem = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingDeleteItem = nil
+                }
+            } message: {
+                Text("This removes the exercise from the picker. Templates and history that already reference it stay intact.")
+            }
         }
     }
 
+    // MARK: - Filtering / grouping
+
     private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
         let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
-        guard !trimmed.isEmpty else { return ExerciseCatalogItem.grouped }
-        return ExerciseCatalogItem.grouped.compactMap { section in
-            let matches = section.items.filter { $0.name.lowercased().contains(trimmed) }
-            return matches.isEmpty ? nil : (group: section.group, items: matches)
+        let scope: [ExerciseCatalogItem]
+        if trimmed.isEmpty {
+            scope = items
+        } else {
+            scope = items.filter { $0.name.lowercased().contains(trimmed) }
         }
+        return scope.groupedByMuscle
     }
+
+    // MARK: - Sections / rows
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -91,7 +141,7 @@ struct ExercisePickerSheet: View {
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.white)
                 Spacer()
-                Text("\(Int(item.defaultWeight)) lb · \(item.defaultReps) reps")
+                Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.40))
             }
@@ -107,5 +157,63 @@ struct ExercisePickerSheet: View {
             )
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button {
+                editorTarget = .edit(item)
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+
+            Button(role: .destructive) {
+                pendingDeleteItem = item
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+
+    // MARK: - Empty state
+
+    private var emptyState: some View {
+        VStack(spacing: 14) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 28, weight: .light))
+                .foregroundStyle(.white.opacity(0.30))
+            Text(emptyStateMessage)
+                .font(.system(size: 13))
+                .foregroundStyle(.white.opacity(0.45))
+                .multilineTextAlignment(.center)
+            Button {
+                editorTarget = .create
+            } label: {
+                Label("Create custom exercise", systemImage: "plus.circle.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 44)
+                    .background(
+                        Capsule().fill(Color.white.opacity(0.10))
+                    )
+            }
+            .buttonStyle(.plain)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 60)
+    }
+
+    private var emptyStateMessage: String {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        if trimmed.isEmpty {
+            return "Your catalog is empty.\nTap below to add an exercise."
+        }
+        return "No exercises match \"\(trimmed)\"."
+    }
+
+    // MARK: - Mutations
+
+    private func delete(_ item: ExerciseCatalogItem) {
+        modelContext.delete(item)
+        try? modelContext.save()
+        Haptics.soft()
     }
 }

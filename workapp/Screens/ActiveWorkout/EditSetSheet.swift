@@ -35,13 +35,11 @@ struct EditSetSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 14) {
-                NumberScrubber(
-                    value: weightBinding,
-                    range: 0...600,
-                    step: 5,
-                    pointsPerStep: 8,
-                    unit: "lb",
+                WeightScrubber(
+                    canonicalWeight: weightBinding,
+                    purpose: .strength,
                     label: "weight",
+                    pointsPerStep: 8,
                     valueFontSize: 40,
                     verticalPadding: 14
                 )

@@ -39,6 +39,11 @@ struct ActiveWorkoutScreen: View {
     /// Drives the catalog picker for mid-workout exercise add.
     @State private var showAddExercisePicker: Bool = false
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     init(
         session: WorkoutSession = .sample,
         onDismiss: (() -> Void)? = nil,
@@ -72,7 +77,7 @@ struct ActiveWorkoutScreen: View {
                 isPresented: prPresentationBinding,
                 title: "PERSONAL RECORD",
                 value: session.pendingPRValue ?? "",
-                unit: "lb",
+                unit: unit.symbol,
                 detail: session.pendingPRDetail
             )
             .zIndex(20)
@@ -171,14 +176,37 @@ struct ActiveWorkoutScreen: View {
                         .foregroundStyle(.white.opacity(0.65))
                         .frame(width: 26, height: 26)
                         .background(Circle().fill(Color.white.opacity(0.08)))
+                        // Visual chip stays compact; outer frame +
+                        // contentShape expand the tap area to the
+                        // 44pt HIG minimum.
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 10)
                 .accessibilityLabel("Cancel workout")
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 8)
+        // Opaque backdrop keeps card content from bleeding through
+        // the bar; the soft gradient fade BELOW the bar (rendered
+        // outside the bar's frame via overlay alignment) gives a
+        // subtle "the bar floats above content" depth cue instead
+        // of a hard divider line.
+        .background(Color.black)
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color.black.opacity(0.65),
+                    Color.black.opacity(0)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 16)
+            .offset(y: 16)
+            .allowsHitTesting(false)
+        }
     }
 
     private var pager: some View {

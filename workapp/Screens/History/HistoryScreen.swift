@@ -85,6 +85,11 @@ struct HistoryScreen: View {
 private struct SessionRow: View {
     let session: WorkoutSession
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     private let completedGreen = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
 
     var body: some View {
@@ -102,7 +107,7 @@ private struct SessionRow: View {
             HStack(spacing: 0) {
                 stat(value: "\(Int(session.duration / 60))", unit: "min", label: "TIME")
                 statDivider
-                stat(value: volumeLabel(session.totalVolume), unit: "lb", label: "VOLUME")
+                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "VOLUME")
                 statDivider
                 stat(value: "\(session.totalSets)", unit: nil, label: "SETS")
             }
@@ -189,7 +194,7 @@ private struct SessionRow: View {
     }
 
     private func volumeLabel(_ value: Double) -> String {
-        Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+        WeightFormatter.volumeValue(value, unit: unit)
     }
 
     private static let relativeDateFormatter: DateFormatter = {
@@ -205,12 +210,6 @@ private struct SessionRow: View {
         return f
     }()
 
-    private static let volumeFormatter: NumberFormatter = {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.groupingSeparator = ","
-        return f
-    }()
 }
 
 // MARK: - Detail

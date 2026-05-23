@@ -20,6 +20,9 @@ struct workappApp: App {
             WorkoutSet.self,
             WorkoutTemplate.self,
             TemplateExercise.self,
+            TemplateSet.self,
+            ExerciseCatalogItem.self,
+            BodyWeightEntry.self,
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {

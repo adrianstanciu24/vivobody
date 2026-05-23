@@ -249,15 +249,34 @@ struct TemplateEditorScreen: View {
 
     private func attachExercises(to template: WorkoutTemplate) {
         for (i, ed) in draft.exercises.enumerated() {
+            // In per-set mode, persist the FIRST row's values into the
+            // uniform fields too — they act as a fallback for any
+            // legacy code that hasn't learned about `sets` yet.
+            let fallbackReps  = ed.isPerSet ? (ed.sets.first?.reps ?? ed.plannedReps) : ed.plannedReps
+            let fallbackWeight = ed.isPerSet ? (ed.sets.first?.weight ?? ed.plannedWeight) : ed.plannedWeight
+            let fallbackCount  = ed.isPerSet ? max(1, ed.sets.count) : ed.plannedSets
+
             let ex = TemplateExercise(
                 name: ed.name,
                 group: ed.group,
-                plannedSets: ed.plannedSets,
-                plannedReps: ed.plannedReps,
-                plannedWeight: ed.plannedWeight,
+                plannedSets: fallbackCount,
+                plannedReps: fallbackReps,
+                plannedWeight: fallbackWeight,
                 sortOrder: i
             )
             template.exercises.append(ex)
+
+            if ed.isPerSet {
+                for (j, setDraft) in ed.sets.enumerated() {
+                    ex.sets.append(
+                        TemplateSet(
+                            weight: setDraft.weight,
+                            reps: setDraft.reps,
+                            sortOrder: j
+                        )
+                    )
+                }
+            }
         }
     }
 }
@@ -269,6 +288,16 @@ private struct ExerciseDraftRow: View {
     let isExpanded: Bool
     let onToggle: () -> Void
     let onRemove: () -> Void
+
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
+    /// Shown when the user taps "Uniform" while in per-set mode with
+    /// non-matching rows. Explains the constraint instead of silently
+    /// flattening values.
+    @State private var showCollapseBlockedAlert: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -296,10 +325,25 @@ private struct ExerciseDraftRow: View {
                     .frame(width: 4, height: 36)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(exercise.name)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white)
-                    Text("\(exercise.plannedSets) × \(exercise.plannedReps) @ \(Int(exercise.plannedWeight)) lb")
+                    HStack(spacing: 6) {
+                        Text(exercise.name)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+                        if exercise.isPerSet {
+                            Text("PER SET")
+                                .font(.system(size: 8, weight: .bold, design: .monospaced))
+                                .tracking(1.2)
+                                .foregroundStyle(.black)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 2)
+                                .background(
+                                    Capsule().fill(
+                                        Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
+                                    )
+                                )
+                        }
+                    }
+                    Text(exercise.summary(unit: unit))
                         .font(.system(size: 11, weight: .medium, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.50))
                 }
@@ -319,57 +363,221 @@ private struct ExerciseDraftRow: View {
 
     private var expandedControls: some View {
         VStack(spacing: 14) {
-            Divider()
-                .background(Color.white.opacity(0.06))
+            Divider().background(Color.white.opacity(0.06))
 
-            HStack(spacing: 10) {
-                scrubber(
-                    label: "SETS",
-                    value: Binding(
-                        get: { Double(exercise.plannedSets) },
-                        set: { exercise.plannedSets = Int($0) }
-                    ),
-                    range: 1...10,
-                    step: 1
-                )
-                scrubber(
-                    label: "REPS",
-                    value: Binding(
-                        get: { Double(exercise.plannedReps) },
-                        set: { exercise.plannedReps = Int($0) }
-                    ),
-                    range: 1...30,
-                    step: 1
-                )
-                scrubber(
-                    label: "WEIGHT",
-                    value: $exercise.plannedWeight,
-                    range: 0...600,
-                    step: 5,
-                    unit: "lb"
-                )
+            modeToggle
+
+            if exercise.isPerSet {
+                perSetRows
+            } else {
+                uniformControls
             }
 
-            Button(role: .destructive, action: onRemove) {
-                HStack(spacing: 6) {
-                    Image(systemName: "trash")
-                        .font(.system(size: 12, weight: .semibold))
-                    Text("Remove")
-                        .font(.system(size: 13, weight: .semibold))
-                }
-                .foregroundStyle(.red.opacity(0.85))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(Color.red.opacity(0.08))
-                )
-            }
-            .buttonStyle(.plain)
+            removeButton
         }
         .padding(.horizontal, 14)
         .padding(.bottom, 14)
     }
+
+    // MARK: - Mode toggle
+
+    private var modeToggle: some View {
+        HStack(spacing: 0) {
+            modeChip(title: "Uniform", isSelected: !exercise.isPerSet) {
+                guard exercise.isPerSet else { return }
+                if exercise.canCollapseToUniform {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        exercise.switchToUniform()
+                    }
+                    Haptics.selection()
+                } else {
+                    Haptics.rigid()
+                    showCollapseBlockedAlert = true
+                }
+            }
+            modeChip(title: "Per Set", isSelected: exercise.isPerSet) {
+                guard !exercise.isPerSet else { return }
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    exercise.switchToPerSet()
+                }
+                Haptics.selection()
+            }
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.white.opacity(0.04))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
+        )
+        .alert("Sets aren't uniform", isPresented: $showCollapseBlockedAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("To switch back to uniform, every set must share the same weight and reps. Edit them to match first.")
+        }
+    }
+
+    private func modeChip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.75))
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(isSelected ? Color.white : Color.clear)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Uniform mode
+
+    private var uniformControls: some View {
+        HStack(spacing: 10) {
+            scrubber(
+                label: "SETS",
+                value: Binding(
+                    get: { Double(exercise.plannedSets) },
+                    set: { exercise.plannedSets = Int($0) }
+                ),
+                range: 1...10,
+                step: 1
+            )
+            scrubber(
+                label: "REPS",
+                value: Binding(
+                    get: { Double(exercise.plannedReps) },
+                    set: { exercise.plannedReps = Int($0) }
+                ),
+                range: 1...30,
+                step: 1
+            )
+            weightScrubber(
+                label: "WEIGHT",
+                value: $exercise.plannedWeight
+            )
+        }
+    }
+
+    // MARK: - Per-set mode
+
+    private var perSetRows: some View {
+        VStack(spacing: 8) {
+            ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { idx, _ in
+                perSetRow(index: idx)
+            }
+
+            Button {
+                addSet()
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 14))
+                    Text("Add Set")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(.white.opacity(0.85))
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(Color.white.opacity(0.04))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func perSetRow(index: Int) -> some View {
+        HStack(spacing: 8) {
+            Text("\(index + 1)")
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.55))
+                .frame(width: 18, alignment: .center)
+
+            weightScrubber(
+                label: "WEIGHT",
+                value: Binding(
+                    get: { exercise.sets[index].weight },
+                    set: { exercise.sets[index].weight = $0 }
+                )
+            )
+            scrubber(
+                label: "REPS",
+                value: Binding(
+                    get: { Double(exercise.sets[index].reps) },
+                    set: { exercise.sets[index].reps = max(1, Int($0)) }
+                ),
+                range: 1...30,
+                step: 1
+            )
+
+            Button {
+                removeSet(at: index)
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(canRemoveSets ? .white.opacity(0.55) : .white.opacity(0.15))
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(!canRemoveSets)
+            .accessibilityLabel("Remove set \(index + 1)")
+        }
+    }
+
+    private var canRemoveSets: Bool { exercise.sets.count > 1 }
+
+    private func addSet() {
+        // Default new sets to the last row's values — most natural
+        // starting point for a pyramid (user typically goes "heavier"
+        // and only edits the new one).
+        let template = exercise.sets.last
+            ?? SetDraft(weight: exercise.plannedWeight, reps: exercise.plannedReps)
+        withAnimation(.easeInOut(duration: 0.18)) {
+            exercise.sets.append(SetDraft(weight: template.weight, reps: template.reps))
+        }
+        Haptics.soft()
+    }
+
+    private func removeSet(at index: Int) {
+        guard canRemoveSets, exercise.sets.indices.contains(index) else { return }
+        withAnimation(.easeInOut(duration: 0.18)) {
+            // remove(at:) returns the removed element; discard so the
+            // closure resolves to Void (otherwise withAnimation's
+            // generic Result inference produces an "unused" warning).
+            _ = exercise.sets.remove(at: index)
+        }
+        Haptics.soft()
+    }
+
+    // MARK: - Remove exercise
+
+    private var removeButton: some View {
+        Button(role: .destructive, action: onRemove) {
+            HStack(spacing: 6) {
+                Image(systemName: "trash")
+                    .font(.system(size: 13, weight: .semibold))
+                Text("Remove")
+                    .font(.system(size: 14, weight: .semibold))
+            }
+            .foregroundStyle(.red.opacity(0.85))
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(Color.red.opacity(0.08))
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Scrubber helper
 
     private func scrubber(
         label: String,
@@ -383,6 +591,23 @@ private struct ExerciseDraftRow: View {
             range: range,
             step: step,
             unit: unit,
+            label: label,
+            valueFontSize: 28,
+            verticalPadding: 10
+        )
+    }
+
+    /// Unit-aware weight scrubber sized to match the editor's
+    /// compact `scrubber` helper. Bindings remain canonical lb;
+    /// WeightScrubber converts to/from the user's chosen unit
+    /// internally and uses the unit's natural step + range.
+    private func weightScrubber(
+        label: String,
+        value: Binding<Double>
+    ) -> some View {
+        WeightScrubber(
+            canonicalWeight: value,
+            purpose: .strength,
             label: label,
             valueFontSize: 28,
             verticalPadding: 10

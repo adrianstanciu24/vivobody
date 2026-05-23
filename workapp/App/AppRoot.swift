@@ -41,6 +41,10 @@ struct AppRoot: View {
                 if appState.modelContext == nil {
                     appState.modelContext = modelContext
                 }
+                // Seed the exercise catalog on a brand-new install.
+                // Idempotent — bails if anything's already there, so
+                // re-runs after migrations are cheap.
+                ExerciseCatalogItem.seedIfEmpty(in: modelContext)
             }
             .sheet(isPresented: $appState.isWorkoutExpanded) {
                 if let session = appState.activeSession {

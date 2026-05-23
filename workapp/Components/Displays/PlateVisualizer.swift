@@ -17,23 +17,10 @@
 
 import SwiftUI
 
-enum WeightUnit: String, Hashable {
-    case lb, kg
-
-    var standardBarWeight: Double {
-        switch self {
-        case .lb: return 45
-        case .kg: return 20
-        }
-    }
-
-    var standardPlates: [Double] {
-        switch self {
-        case .lb: return [45, 35, 25, 10, 5, 2.5, 1.25]
-        case .kg: return [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
-        }
-    }
-}
+// `WeightUnit` (lb / kg) lives in Models/WeightUnit.swift now so
+// every layer (formatter, scrubber, display) shares one source of
+// truth. PlateVisualizer just consumes the enum's `standardBarWeight`
+// and `standardPlates` accessors here.
 
 struct LoadedPlate: Identifiable, Hashable {
     let weight: Double

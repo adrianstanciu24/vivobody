@@ -20,6 +20,11 @@ import SwiftData
 struct TodayScreen: View {
     @Bindable var appState: AppState
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     /// All archived sessions, most-recent first. Drives the streak
     /// calendar, the "X this month" stat, and the "Last Workout"
     /// card. SwiftUI re-renders this screen automatically when a new
@@ -258,7 +263,7 @@ struct TodayScreen: View {
             HStack(spacing: 0) {
                 stat(value: "\(Int(session.duration / 60))", unit: "min", label: "TIME")
                 statDivider
-                stat(value: volumeLabel(session.totalVolume), unit: "lb", label: "VOLUME")
+                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "VOLUME")
                 statDivider
                 stat(value: "\(session.totalSets)", unit: nil, label: "SETS")
             }
@@ -385,7 +390,7 @@ struct TodayScreen: View {
     }
 
     private func volumeLabel(_ value: Double) -> String {
-        Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+        WeightFormatter.volumeValue(value, unit: unit)
     }
 
     // MARK: - Formatters
@@ -406,13 +411,6 @@ struct TodayScreen: View {
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "h:mm a"
-        return f
-    }()
-
-    private static let volumeFormatter: NumberFormatter = {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.groupingSeparator = ","
         return f
     }()
 }

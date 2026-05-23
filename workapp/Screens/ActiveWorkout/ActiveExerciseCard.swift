@@ -31,6 +31,11 @@ struct ActiveExerciseCard: View {
     /// recorded set for this exercise (i.e., is a personal record).
     @Environment(\.modelContext) private var modelContext
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     /// Holds the ID of the set whose completion animation is still
     /// playing. While set, the SetCompleteButton renders as complete
     /// even though the session hasn't advanced yet.
@@ -45,6 +50,15 @@ struct ActiveExerciseCard: View {
     /// never accidentally trigger both.
     @State private var deletingSet: WorkoutSet? = nil
 
+    /// Drives the per-exercise notes editor sheet.
+    @State private var isEditingNotes: Bool = false
+
+    /// User toggle for expanding the full set list when it exceeds
+    /// the collapse threshold (pyramid templates with many sets).
+    /// Per-exercise state — the toggle resets when the user pages
+    /// to a different exercise.
+    @State private var setListExpanded: Bool = false
+
     /// Universal "this exercise is done" green — matches the per-set
     /// completion green so the card-level signal harmonizes with the
     /// rows inside it.
@@ -56,16 +70,16 @@ struct ActiveExerciseCard: View {
     private let inProgressTint = Color(.sRGB, red: 0.42, green: 0.55, blue: 0.78, opacity: 1.0)
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 10) {
             header
             plateBlock
             inputBlock
             setList
             Spacer(minLength: 0)
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 18)
-        .padding(.bottom, 22)
+        .padding(.horizontal, 16)
+        .padding(.top, 14)
+        .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
@@ -86,9 +100,19 @@ struct ActiveExerciseCard: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: { setToDelete in
-            Text("\(Int(setToDelete.weight)) lb · \(setToDelete.reps) reps. This can't be undone.")
+            Text("\(WeightFormatter.string(setToDelete.weight, unit: unit)) · \(setToDelete.reps) reps. This can't be undone.")
+        }
+        .sheet(isPresented: $isEditingNotes) {
+            NotesEditorSheet(
+                title: "\(exercise.name) Notes",
+                placeholder: "Form cues, plate setup, how it felt…",
+                initialValue: exercise.notes,
+                onSave: { newNotes in exercise.notes = newNotes }
+            )
         }
     }
+
+
 
     // MARK: - Edit / delete plumbing
 
@@ -180,17 +204,70 @@ struct ActiveExerciseCard: View {
                     .foregroundStyle(exercise.group.accent)
             }
 
-            Text(exercise.name)
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(.white)
-                .padding(.top, 2)
+            HStack(alignment: .center, spacing: 10) {
+                Text(exercise.name)
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(.white)
+
+                Spacer(minLength: 8)
+
+                // Notes affordance lives in the header so the body
+                // of the card stays focused on the active set. Icon
+                // state telegraphs whether notes exist: filled +
+                // accent dot = populated, outline + dim = empty.
+                notesHeaderButton
+            }
+            .padding(.top, 2)
         }
+    }
+
+    /// Compact notes affordance in the exercise card header. Tappable
+    /// 44pt zone with a smaller visual chip — no real estate spent
+    /// on a full button at the bottom of the card. A small accent
+    /// dot in the corner indicates "notes exist for this exercise."
+    private var notesHeaderButton: some View {
+        Button {
+            Haptics.soft()
+            isEditingNotes = true
+        } label: {
+            ZStack(alignment: .topTrailing) {
+                Image(systemName: exercise.notes.isEmpty
+                      ? "square.and.pencil"
+                      : "text.badge.plus")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(exercise.notes.isEmpty ? 0.45 : 0.85))
+                    .frame(width: 30, height: 30)
+                    .background(
+                        Circle()
+                            .fill(Color.white.opacity(exercise.notes.isEmpty ? 0.04 : 0.10))
+                    )
+
+                if !exercise.notes.isEmpty {
+                    Circle()
+                        .fill(exercise.group.accent)
+                        .frame(width: 6, height: 6)
+                        .offset(x: 2, y: -2)
+                }
+            }
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(exercise.notes.isEmpty ? "Add notes" : "Edit notes")
     }
 
     private var plateBlock: some View {
         HStack {
             Spacer()
-            PlateVisualizer(weight: displayedWeight, unit: .lb)
+            // PlateVisualizer renders plates in the user's unit
+            // (bar weight + plate sizes follow the gym's reality).
+            // displayedWeight is canonical lb so we convert before
+            // feeding the visualizer.
+            PlateVisualizer(
+                weight: WeightFormatter.toDisplay(displayedWeight, unit: unit),
+                barWeight: unit.standardBarWeight,
+                unit: unit
+            )
             Spacer()
         }
         .padding(.vertical, 4)
@@ -198,13 +275,11 @@ struct ActiveExerciseCard: View {
 
     private var inputBlock: some View {
         VStack(spacing: 8) {
-            NumberScrubber(
-                value: weightBinding,
-                range: 0...600,
-                step: 5,
-                pointsPerStep: 8,
-                unit: "lb",
+            WeightScrubber(
+                canonicalWeight: weightBinding,
+                purpose: .strength,
                 label: "weight",
+                pointsPerStep: 8,
                 valueFontSize: 40,
                 verticalPadding: 14
             )
@@ -224,6 +299,44 @@ struct ActiveExerciseCard: View {
         .opacity(activeIndex == nil ? 0.5 : 1.0)
     }
 
+    /// Maximum total set rows shown in the collapsed state. For
+    /// pyramid templates with 5+ sets we hide the tail behind a
+    /// "Show all" disclosure to keep the card from overflowing.
+    /// Picked 4 (active row + 1 above + 2 below, or equivalent
+    /// window) — comfortably fits any iPhone we care about.
+    private static let setListCollapsedLimit = 4
+
+    /// Which set indices to render when the list is collapsed.
+    /// Strategy: always include the active row + a small window
+    /// around it. When the user is mid-exercise this keeps the
+    /// most recent completed set and the next pending one in view.
+    private var collapsedVisibleIndices: Set<Int> {
+        let total = sets.count
+        guard total > Self.setListCollapsedLimit else {
+            return Set(0..<total)
+        }
+        let anchor = activeIndex ?? max(0, total - 1)
+        var indices: Set<Int> = [anchor]
+        // Add 1 row before + 2 rows after the anchor when possible.
+        // Tail-heavy because the user cares more about "what's next"
+        // than "what's already done."
+        if anchor - 1 >= 0 { indices.insert(anchor - 1) }
+        if anchor + 1 < total { indices.insert(anchor + 1) }
+        if anchor + 2 < total { indices.insert(anchor + 2) }
+        return indices
+    }
+
+    /// Number of set rows that the collapse hides. Drives the
+    /// "Show N more" button label.
+    private var hiddenSetCount: Int {
+        max(0, sets.count - collapsedVisibleIndices.count)
+    }
+
+    /// True when collapse is in effect and there are rows to reveal.
+    private var canExpandSetList: Bool {
+        !setListExpanded && hiddenSetCount > 0
+    }
+
     private var setList: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -240,37 +353,75 @@ struct ActiveExerciseCard: View {
                 }
             }
 
+            let visibleIndices = setListExpanded
+                ? Set(0..<sets.count)
+                : collapsedVisibleIndices
+
             ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
-                if idx == activeIndex {
-                    activeRow(set: set)
-                } else {
-                    SetSummaryRow(
-                        index: idx + 1,
-                        weight: set.weight,
-                        reps: set.reps,
-                        isCompleted: set.isCompleted
-                    )
-                    // Long-press to edit or delete — only when the
-                    // row represents a completed set. Pending/future
-                    // sets are reached for editing by becoming the
-                    // active row.
-                    .contextMenu {
-                        if set.isCompleted {
-                            Button {
-                                editingSet = set
-                            } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            Button(role: .destructive) {
-                                deletingSet = set
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                if visibleIndices.contains(idx) {
+                    if idx == activeIndex {
+                        activeRow(set: set)
+                    } else {
+                        SetSummaryRow(
+                            index: idx + 1,
+                            weight: set.weight,
+                            reps: set.reps,
+                            isCompleted: set.isCompleted
+                        )
+                        .contextMenu {
+                            if set.isCompleted {
+                                Button {
+                                    editingSet = set
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                Button(role: .destructive) {
+                                    deletingSet = set
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
                     }
                 }
             }
+
+            if canExpandSetList {
+                setListDisclosure(expanding: true, count: hiddenSetCount)
+            } else if setListExpanded && sets.count > Self.setListCollapsedLimit {
+                setListDisclosure(expanding: false, count: 0)
+            }
         }
+    }
+
+    /// The "Show N more" / "Show less" toggle row underneath the
+    /// set list. Same visual weight as a summary row so it doesn't
+    /// pull attention away from the active set.
+    private func setListDisclosure(expanding: Bool, count: Int) -> some View {
+        Button {
+            Haptics.soft()
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                setListExpanded = expanding
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: expanding ? "chevron.down" : "chevron.up")
+                    .font(.system(size: 10, weight: .bold))
+                Text(expanding
+                     ? "Show \(count) more set\(count == 1 ? "" : "s")"
+                     : "Show less")
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .tracking(1)
+            }
+            .foregroundStyle(.white.opacity(0.50))
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 44)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func activeRow(set: WorkoutSet) -> some View {
@@ -308,8 +459,12 @@ struct ActiveExerciseCard: View {
                         // The hero number is always the weight lifted —
                         // that's the "thing you picked up." The detail
                         // line varies by which axis of progression
-                        // triggered the PR.
-                        session.pendingPRValue = "\(Int(weight))"
+                        // triggered the PR. We format the value in the
+                        // user's currently selected unit at the moment
+                        // it's captured; the PRCelebration overlay
+                        // reads it as a plain string with the unit
+                        // already embedded.
+                        session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
                         session.pendingPRDetail = detailLine(
                             exerciseName: exerciseName,
                             reps: reps,

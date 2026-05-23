@@ -16,6 +16,11 @@ struct SetSummaryRow: View {
     let reps: Int
     let isCompleted: Bool
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     /// Universal "set complete" green — matches SetCompleteButton's
     /// completion accent. Not muscle-group specific because completion
     /// has a single semantic across all exercises.
@@ -26,9 +31,9 @@ struct SetSummaryRow: View {
             statusChip
 
             HStack(spacing: 4) {
-                Text("\(Int(weight))")
+                Text(WeightFormatter.string(weight, unit: unit, includeUnit: false))
                     .monospacedDigit()
-                Text("lb")
+                Text(unit.symbol)
                     .foregroundStyle(.white.opacity(isCompleted ? 0.45 : 0.30))
                 Text("·")
                     .foregroundStyle(.white.opacity(isCompleted ? 0.30 : 0.20))
@@ -53,8 +58,8 @@ struct SetSummaryRow: View {
         .accessibilityLabel("Set \(index)")
         .accessibilityValue(
             isCompleted
-                ? "Completed at \(Int(weight)) pounds for \(reps) reps"
-                : "Planned at \(Int(weight)) pounds for \(reps) reps"
+                ? "Completed at \(WeightFormatter.string(weight, unit: unit)) for \(reps) reps"
+                : "Planned at \(WeightFormatter.string(weight, unit: unit)) for \(reps) reps"
         )
     }
 

@@ -70,6 +70,12 @@ final class Exercise: Identifiable {
     /// inverse relationship declared on `WorkoutSession.exercises`.
     var session: WorkoutSession?
 
+    /// Free-form per-exercise notes — form cues ("brace harder
+    /// before unrack"), pin / plate setup ("safety pins at 4"),
+    /// how it felt ("light"). Surfaced on the active exercise card
+    /// + summary row. Additive — no migration needed.
+    var notes: String = ""
+
     /// The actual logged sets for this exercise. Cascade-deletes when
     /// the exercise (or its session) is removed.
     @Relationship(deleteRule: .cascade, inverse: \WorkoutSet.exercise)
