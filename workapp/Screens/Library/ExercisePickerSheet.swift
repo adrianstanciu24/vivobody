@@ -98,6 +98,18 @@ struct ExercisePickerSheet: View {
                     .accessibilityLabel("Create custom exercise")
                 }
             }
+            .navigationDestination(for: ExerciseCatalogItem.self) { destination in
+                ExerciseDetailScreen(
+                    item: destination,
+                    // CTA on the detail picks the exercise and
+                    // dismisses the entire picker sheet — same
+                    // commit point the old tap-to-pick row had.
+                    onPickAndDismiss: { picked in
+                        onPick(picked)
+                        dismiss()
+                    }
+                )
+            }
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
             .sheet(item: $editorTarget) { target in
                 CustomExerciseEditorSheet(target: target)
@@ -235,11 +247,11 @@ struct ExercisePickerSheet: View {
     private func pickerRow(_ item: ExerciseCatalogItem) -> some View {
         let last = lastInstanceLookup[item.name.lowercased()]
 
-        return Button {
-            onPick(item)
-            Haptics.soft()
-            dismiss()
-        } label: {
+        // Row taps navigate to detail instead of immediately picking;
+        // the user commits via the "Add to Workout" CTA on the detail
+        // screen. Long-press still surfaces Edit / Delete via the
+        // attached contextMenu — that gesture is unchanged.
+        return NavigationLink(value: item) {
             HStack(spacing: 10) {
                 // Equipment glyph — small, dim, telegraphs the gear
                 // before the user reads the name. Helps scan a long

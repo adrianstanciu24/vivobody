@@ -278,7 +278,7 @@ struct ActiveExerciseCard: View {
             WeightScrubber(
                 canonicalWeight: weightBinding,
                 purpose: .strength,
-                label: "weight",
+                label: nil,
                 pointsPerStep: 8,
                 valueFontSize: 40,
                 verticalPadding: 14
@@ -290,7 +290,7 @@ struct ActiveExerciseCard: View {
                 step: 1,
                 pointsPerStep: 16,
                 unit: "reps",
-                label: "reps",
+                label: nil,
                 valueFontSize: 32,
                 verticalPadding: 12
             )
