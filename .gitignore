@@ -1,0 +1,14 @@
+# Build artifacts
+build/
+DerivedData/
+
+# Verification artifacts (Scripts/verify.sh output)
+.verify/
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+
+# macOS junk
+.DS_Store
