@@ -70,25 +70,69 @@ struct SetCompleteButton: View {
     // MARK: - Layers
 
     private var background: some View {
-        RoundedRectangle(cornerRadius: 22, style: .continuous)
-            .fill(isComplete ? accent.opacity(0.95) : Color.white.opacity(0.06))
+        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        return shape
+            .fill(isComplete ? accent.opacity(0.95) : Color.white.opacity(0.07))
+            // Top specular sheen — strongest on the idle state where
+            // the surface needs the most cue that it's pressable glass.
+            .overlay {
+                GeometryReader { geo in
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(isComplete ? 0.18 : 0.20),
+                            Color.white.opacity(0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: geo.size.height * 0.55)
+                    .frame(maxWidth: .infinity, alignment: .top)
+                }
+                .clipShape(shape)
+                .allowsHitTesting(false)
+            }
+            // Bottom inner darkening — the puck has a base lip the
+            // light doesn't reach, which is what makes the top read
+            // as raised.
+            .overlay {
+                GeometryReader { geo in
+                    LinearGradient(
+                        colors: [
+                            Color.clear,
+                            Color.black.opacity(isComplete ? 0.25 : 0.30)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: geo.size.height * 0.50)
+                    .frame(maxWidth: .infinity, alignment: .bottom)
+                }
+                .clipShape(shape)
+                .blendMode(.multiply)
+                .allowsHitTesting(false)
+            }
             .overlay(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                shape
                     .stroke(
                         LinearGradient(
                             colors: isComplete
-                                ? [Color.white.opacity(0.50), Color.white.opacity(0.10)]
-                                : [Color.white.opacity(0.22), Color.white.opacity(0.06)],
+                                ? [Color.white.opacity(0.55), Color.white.opacity(0.10)]
+                                : [Color.white.opacity(0.28), Color.white.opacity(0.05)],
                             startPoint: .top,
                             endPoint: .bottom
                         ),
-                        lineWidth: 0.8
+                        lineWidth: 0.9
                     )
             )
+            // Ambient bloom — green when complete (celebration glow),
+            // a faint white sheen otherwise so the puck still feels
+            // lifted off the card even in idle state.
             .shadow(
-                color: isComplete ? accent.opacity(0.50) : .clear,
-                radius: 24, y: 8
+                color: isComplete ? accent.opacity(0.55) : Color.white.opacity(0.05),
+                radius: isComplete ? 26 : 10,
+                y: isComplete ? 10 : 4
             )
+            .shadow(color: .black.opacity(0.50), radius: 6, y: 3)
             .animation(.spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 

@@ -23,6 +23,10 @@ import SwiftUI
 import SwiftData
 
 struct ActiveExerciseCard: View {
+    /// Card corner radius. Hoisted to a constant so the clip,
+    /// bevel, sheen, and sweep all stay in lockstep.
+    static let cardCornerRadius: CGFloat = 28
+
     let exercise: Exercise
     @Bindable var session: WorkoutSession
 
@@ -84,26 +88,15 @@ struct ActiveExerciseCard: View {
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            Surface.edgeBright,
-                            Surface.edge.opacity(0.6),
-                            Surface.edge.opacity(0.2)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 0.6
-                )
-        )
+        .clipShape(RoundedRectangle(cornerRadius: Self.cardCornerRadius, style: .continuous))
+        .topSpecularSheen(cornerRadius: Self.cardCornerRadius, intensity: 0.10, height: 0.42)
+        .glassRimBevel(cornerRadius: Self.cardCornerRadius, outerWidth: 0.7, innerInset: 1.2)
         .shadow(
-            color: (activeIndex == nil ? completedGreen : inProgressTint).opacity(0.35),
-            radius: 28, y: 10
+            color: (activeIndex == nil ? completedGreen : inProgressTint).opacity(0.38),
+            radius: 28, y: 12
         )
+        .shadow(color: .black.opacity(0.55), radius: 8, y: 4)
+        .shadow(color: .black.opacity(0.35), radius: 1.5, y: 1)
         .sheet(item: $editingSet) { set in
             EditSetSheet(set: set)
         }
@@ -214,14 +207,7 @@ struct ActiveExerciseCard: View {
 
                 Spacer()
 
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(exercise.group.accent)
-                        .frame(width: 7, height: 7)
-                    Text(exercise.group.displayName)
-                        .font(Typography.sectionLabel)
-                        .foregroundStyle(exercise.group.accent)
-                }
+                muscleGroupBead
             }
 
             HStack(alignment: .center, spacing: 10) {
@@ -235,6 +221,61 @@ struct ActiveExerciseCard: View {
             }
             .padding(.top, 2)
         }
+    }
+
+    /// Muscle-group identifier rendered as a tiny crystalline bead
+    /// inside a glass pill. A small spec dot on the colored sphere
+    /// sells "this is a 3D bead" rather than a flat fill — the same
+    /// reading the rest of the card aims for.
+    private var muscleGroupBead: some View {
+        HStack(spacing: 7) {
+            ZStack {
+                Circle()
+                    .fill(exercise.group.accent)
+                    .frame(width: 9, height: 9)
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                Color.white.opacity(0.55),
+                                Color.clear
+                            ],
+                            center: UnitPoint(x: 0.30, y: 0.28),
+                            startRadius: 0,
+                            endRadius: 5
+                        )
+                    )
+                    .frame(width: 9, height: 9)
+                Circle()
+                    .stroke(Color.black.opacity(0.35), lineWidth: 0.4)
+                    .frame(width: 9, height: 9)
+            }
+            .shadow(color: exercise.group.accent.opacity(0.55), radius: 3, y: 0)
+
+            Text(exercise.group.displayName)
+                .font(Typography.sectionLabel)
+                .foregroundStyle(exercise.group.accent)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(
+            Capsule(style: .continuous)
+                .fill(Color.white.opacity(0.06))
+        )
+        .overlay(
+            Capsule(style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.30),
+                            Color.white.opacity(0.05)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.6
+                )
+        )
     }
 
     /// Compact notes affordance in the exercise card header. Tappable
@@ -275,12 +316,19 @@ struct ActiveExerciseCard: View {
     private var plateBlock: some View {
         HStack {
             Spacer()
-            PlateVisualizer(
-                weight: WeightFormatter.toDisplay(displayedWeight, unit: unit),
-                barWeight: unit.standardBarWeight,
-                unit: unit
-            )
-            .frame(height: 150)
+            VStack(spacing: -8) {
+                PlateVisualizer(
+                    weight: WeightFormatter.toDisplay(displayedWeight, unit: unit),
+                    barWeight: unit.standardBarWeight,
+                    unit: unit
+                )
+                .frame(height: 150)
+                // Ground shadow underneath the barbell. Sells "this
+                // is sitting on the floor of the card" instead of
+                // hovering in space.
+                GlassPedestal(width: 240, shadowOpacity: 0.50)
+                    .offset(y: -6)
+            }
             Spacer()
         }
         .padding(.vertical, 4)
@@ -589,27 +637,53 @@ struct ActiveExerciseCard: View {
         let isComplete = activeIndex == nil
         let accent = isComplete ? completedGreen : inProgressTint
         return ZStack {
-            Color(red: 0.06, green: 0.06, blue: 0.08)
+            // Slightly cooler black at the bottom, warmer near the
+            // top — gives the card body a vertical gradient that
+            // reads as a curved glass surface instead of a flat fill.
+            LinearGradient(
+                colors: [
+                    Color(red: 0.085, green: 0.080, blue: 0.090),
+                    Color(red: 0.045, green: 0.045, blue: 0.055)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
 
+            // Hot quadrant — the ambient warm light source.
             RadialGradient(
                 colors: [
-                    accent.opacity(isComplete ? 0.22 : 0.18),
+                    accent.opacity(isComplete ? 0.26 : 0.22),
                     Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,
-                endRadius: 320
+                endRadius: 340
             )
 
+            // Diagonal counter-glow — adds dimension by suggesting
+            // a second softer light bouncing off the opposite side.
             RadialGradient(
                 colors: [
-                    accent.opacity(0.08),
+                    accent.opacity(0.10),
                     Color.clear
                 ],
                 center: .bottom,
                 startRadius: 0,
-                endRadius: 280
+                endRadius: 300
             )
+
+            // Bottom inner shadow — the rim "drops" into the surface
+            // it's sitting on, so the lower edge reads as recessed.
+            LinearGradient(
+                colors: [
+                    Color.clear,
+                    Color.clear,
+                    Color.black.opacity(0.35)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .blendMode(.multiply)
         }
     }
 }

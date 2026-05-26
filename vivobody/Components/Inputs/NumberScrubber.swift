@@ -76,6 +76,34 @@ struct NumberScrubber: View {
             )
         }
         .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil)
+        .topSpecularSheen(cornerRadius: 22, intensity: isDragging ? 0.18 : 0.12, height: 0.50)
+        .overlay {
+            // Bottom inner shadow — gives the chip a sense of
+            // containment, like the liquid is sitting in a real
+            // vessel with a darker base lip.
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.clear,
+                            Color.clear,
+                            Color.black.opacity(0.35)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 1.0
+                )
+                .blur(radius: 0.6)
+                .blendMode(.multiply)
+                .allowsHitTesting(false)
+        }
+        .shadow(
+            color: isDragging ? Tint.primary.opacity(0.35) : Color.black.opacity(0.45),
+            radius: isDragging ? 14 : 8,
+            y: isDragging ? 5 : 3
+        )
+        .shadow(color: .black.opacity(0.25), radius: 1, y: 1)
         .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .gesture(scrubGesture)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)

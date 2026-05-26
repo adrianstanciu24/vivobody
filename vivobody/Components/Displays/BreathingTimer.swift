@@ -86,9 +86,12 @@ struct BreathingTimer: View {
             let color = lerpColor(cool, warm, t: warmth)
 
             ZStack {
-                background
+                background(color: color)
+                breathRipples(elapsed: elapsed, accelerated: accelerated, color: color)
                 breathLayers(scale: scale, color: color, progress: progress)
                 centerContent(remaining: remainingExact)
+                restPillOverlay
+                swipeAffordances
                 hints
                 nextSet
             }
@@ -112,37 +115,109 @@ struct BreathingTimer: View {
 
     // MARK: - Layers
 
-    private var background: some View {
-        LinearGradient(
-            colors: [Color.black, Color(.sRGB, white: 0.04, opacity: 1), Color.black],
-            startPoint: .top, endPoint: .bottom
-        )
+    /// Atmospheric backdrop: a radial vignette that pulls the eye
+    /// toward the orb (which is the light source) and a faint ambient
+    /// grain layer to kill banding and add photographic depth.
+    private func background(color: Color) -> some View {
+        ZStack {
+            Color.black
+            RadialGradient(
+                colors: [
+                    color.opacity(0.10),
+                    Color(.sRGB, white: 0.025, opacity: 1),
+                    Color.black
+                ],
+                center: .center,
+                startRadius: 80,
+                endRadius: 460
+            )
+            Grain(intensity: 0.7)
+                .blendMode(.plusLighter)
+                .opacity(0.55)
+        }
         .ignoresSafeArea()
     }
 
+    /// Concentric breath rings emanating from the orb on each cycle.
+    /// Three rings staggered by 1/3 of the breath period — together
+    /// they read as a slow sonar pulse synchronised to the orb's
+    /// inhale/exhale, reinforcing the metaphor without competing
+    /// with the timer's information density.
+    private func breathRipples(elapsed: Double, accelerated: Bool, color: Color) -> some View {
+        let period = accelerated ? 2.0 : 5.0
+        let ringCount = 3
+        return ZStack {
+            ForEach(0..<ringCount, id: \.self) { i in
+                let offset = Double(i) * (period / Double(ringCount))
+                let phase = ((elapsed + offset).truncatingRemainder(dividingBy: period)) / period
+                let scale = 1.0 + phase * 1.8
+                let alpha = max(0, (1.0 - phase) * 0.10)
+                Circle()
+                    .stroke(color.opacity(alpha), lineWidth: 1.2)
+                    .frame(width: 240, height: 240)
+                    .scaleEffect(scale)
+            }
+        }
+        .blendMode(.plusLighter)
+        .allowsHitTesting(false)
+    }
+
+    /// The signature element. Layered to read as a translucent glass
+    /// sphere on dark ground:
+    ///   1. Atmospheric halo (scaled, soft).
+    ///   2. Contact shadow ellipse below (pedestal).
+    ///   3. Sphere body with a Fresnel rim — bright spec upper-left,
+    ///      mid body, dark edge — the single biggest cue that "this
+    ///      is round, not a disc."
+    ///   4. Inner rim shadow ring (subtle dark gradient on the lip).
+    ///   5. Bounce-light arc on the lower edge (light reflecting up
+    ///      off the floor).
+    ///   6. Specular cap glow.
+    ///   7. Progress ring — full circumference, fixed size so the
+    ///      reading stays stable while the body breathes.
     private func breathLayers(scale: Double, color: Color, progress: Double) -> some View {
         ZStack {
-            // Atmosphere — soft outer halo. Larger blur as the timer
-            // warms gives the impression of heat radiating outward.
+            // 1. Atmosphere — soft outer halo. Larger blur as the
+            // timer warms gives the impression of heat radiating
+            // outward.
             Circle()
-                .fill(color.opacity(0.22))
+                .fill(color.opacity(0.28))
                 .frame(width: 380, height: 380)
                 .scaleEffect(scale * 1.05)
                 .blur(radius: 56)
 
-            // Body — filled gradient disc. Self-illuminated orb feel,
-            // now with a soft top-left key light so it reads as a
-            // glass sphere rather than a flat disc.
+            // 2. Contact shadow — anchors the orb on a notional floor.
+            Ellipse()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            Color.black.opacity(0.65),
+                            Color.black.opacity(0.30),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 130
+                    )
+                )
+                .frame(width: 260, height: 36)
+                .offset(y: 138)
+                .blur(radius: 10)
+
+            // 3. Sphere body — Fresnel-shaded radial gradient. The
+            // mid-tone is brightest; the rim darkens; the upper-left
+            // is the spec hot spot. This is what makes it a sphere.
             Circle()
                 .fill(
                     RadialGradient(
                         gradient: Gradient(stops: [
-                            .init(color: color.opacity(0.62), location: 0.0),
-                            .init(color: color.opacity(0.38), location: 0.55),
-                            .init(color: color.opacity(0.12), location: 0.92),
-                            .init(color: color.opacity(0.00), location: 1.0),
+                            .init(color: color.opacity(0.68), location: 0.00),
+                            .init(color: color.opacity(0.50), location: 0.40),
+                            .init(color: color.opacity(0.22), location: 0.78),
+                            .init(color: color.opacity(0.06), location: 0.95),
+                            .init(color: color.opacity(0.00), location: 1.00),
                         ]),
-                        center: UnitPoint(x: 0.42, y: 0.36),
+                        center: UnitPoint(x: 0.38, y: 0.32),
                         startRadius: 0,
                         endRadius: 130
                     )
@@ -151,75 +226,179 @@ struct BreathingTimer: View {
                 .scaleEffect(scale)
                 .blendMode(.plusLighter)
 
-            // A second softer disc bloom that lags the breath slightly.
-            // Keeps the body from looking flat.
+            // 4. Inner rim shadow — a faint dark inner stroke that
+            // sells "this is the lip of a glass sphere" by darkening
+            // the edge where the body curves away.
             Circle()
-                .fill(color.opacity(0.24))
-                .frame(width: 180, height: 180)
+                .stroke(
+                    RadialGradient(
+                        colors: [
+                            Color.clear,
+                            Color.black.opacity(0.35)
+                        ],
+                        center: .center,
+                        startRadius: 100,
+                        endRadius: 120
+                    ),
+                    lineWidth: 14
+                )
+                .frame(width: 240, height: 240)
                 .scaleEffect(scale)
-                .blur(radius: 28)
+                .blendMode(.multiply)
 
-            // Specular cap — small bright spot upper-left so the orb
-            // reads as a glass sphere catching light, not a 2D disc.
+            // 5. Bounce light — a thin warm arc along the lower rim,
+            // simulating light reflecting up off the ground onto the
+            // underside of the sphere. Sells dimensionality.
             Circle()
-                .fill(Color.white.opacity(0.18))
-                .frame(width: 60, height: 60)
-                .blur(radius: 18)
-                .offset(x: -40, y: -38)
+                .trim(from: 0.58, to: 0.92)
+                .stroke(
+                    color.opacity(0.45),
+                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
+                )
+                .blur(radius: 2.5)
+                .frame(width: 234, height: 234)
                 .scaleEffect(scale)
                 .blendMode(.plusLighter)
 
-            // Track — the rim that holds the progress marker.
+            // 6. Specular cap — small bright spot upper-left so the
+            // orb reads as a glass sphere catching light, not a 2D
+            // disc.
             Circle()
-                .stroke(color.opacity(0.30), lineWidth: 4)
-                .frame(width: 240, height: 240)
+                .fill(Color.white.opacity(0.22))
+                .frame(width: 70, height: 70)
+                .blur(radius: 22)
+                .offset(x: -44, y: -42)
                 .scaleEffect(scale)
+                .blendMode(.plusLighter)
 
-            // Marker — progress arc traveling along the track.
-            Circle()
-                .trim(from: 0, to: progress)
-                .stroke(color, style: StrokeStyle(lineWidth: 7, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-                .frame(width: 240, height: 240)
-                .scaleEffect(scale)
-                .shadow(color: color.opacity(0.55), radius: 12)
+            // 7. Progress ring — full circumference. NOT scaled with
+            // the breath so the progress arc stays a stable reading.
+            // Track sits at very low opacity; the traveled portion
+            // pops with a glow that haloes the leading edge.
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.10), lineWidth: 2.5)
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        color,
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+                    .shadow(color: color.opacity(0.65), radius: 10)
+                    .shadow(color: color.opacity(0.35), radius: 22)
+            }
+            .frame(width: 256, height: 256)
         }
     }
 
+    /// Center content: only the big time and a small total under it
+    /// so the orb's body has room to breathe. The "Rest" / "Go"
+    /// label is hoisted out to its own glass pill above the orb in
+    /// `restPillOverlay` — that's the composition fix.
     private func centerContent(remaining: TimeInterval) -> some View {
-        VStack(spacing: 8) {
-            Text(hasFinished ? "Go" : "Rest")
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white.opacity(hasFinished ? 0.85 : 0.50))
-
+        VStack(spacing: 4) {
             DigitTicker(
                 value: remaining,
-                font: .system(size: 68, weight: .bold, design: .rounded),
+                font: .system(size: 76, weight: .bold, design: .rounded),
                 color: .white,
                 formatter: { time in
                     let total = Int(time.rounded(.up))
                     return String(format: "%d:%02d", total / 60, total % 60)
                 }
             )
+            .shadow(color: .black.opacity(0.55), radius: 8, y: 2)
 
             Text("of \(formatted(totalDuration))")
                 .font(Typography.caption)
                 .foregroundStyle(.white.opacity(0.40))
                 .opacity(hasFinished ? 0 : 1)
+                .padding(.top, 4)
         }
     }
 
+    /// "Rest" / "Go" surfaced as a small glass pill floating above
+    /// the orb. Owning its own surface gives the composition a
+    /// header beat — eyes land here first, then drop into the
+    /// number, then read the progress ring around the body.
+    private var restPillOverlay: some View {
+        VStack {
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(hasFinished ? Tint.success : Tint.primary)
+                    .frame(width: 6, height: 6)
+                    .shadow(color: (hasFinished ? Tint.success : Tint.primary).opacity(0.7), radius: 3)
+                Text(hasFinished ? "Go" : "Rest")
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.90))
+                    .tracking(0.6)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .glassPill()
+            .padding(.top, 64)
+            Spacer()
+        }
+        .allowsHitTesting(false)
+    }
+
+    /// Two always-visible swipe affordances at the top and bottom
+    /// edges of the screen, brightening as the user crosses each
+    /// commit threshold. Without these the gestures are invisible
+    /// until you start dragging — discoverability suffers.
+    private var swipeAffordances: some View {
+        VStack {
+            affordanceChip(
+                symbol: "chevron.compact.down",
+                label: "Skip",
+                visibility: hintVisibility(dragOffset, direction: .down)
+            )
+            .padding(.top, 130)
+            Spacer()
+            affordanceChip(
+                symbol: "chevron.compact.up",
+                label: "+30s",
+                visibility: hintVisibility(dragOffset, direction: .up)
+            )
+            .padding(.bottom, 140)
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func affordanceChip(symbol: String, label: String, visibility: Double) -> some View {
+        // visibility goes 0 → 1 as the user pulls toward the
+        // threshold. We map it onto opacity + a faint scale so the
+        // chip "wakes up" mid-drag without disappearing at rest.
+        let restingOpacity = 0.22
+        let activeOpacity = 0.95
+        let opacity = restingOpacity + (activeOpacity - restingOpacity) * visibility
+        return VStack(spacing: 2) {
+            Image(systemName: symbol)
+                .font(.system(size: 18, weight: .bold))
+            Text(label)
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                .tracking(0.6)
+        }
+        .foregroundStyle(.white.opacity(opacity))
+        .scaleEffect(0.96 + 0.06 * visibility)
+    }
+
+    /// Legacy mid-drag hint pill kept around for the strong commit
+    /// affordance — appears centered over the action zone with full
+    /// "Skip rest" / "+30 sec" copy once the user passes the
+    /// threshold. The thin always-on chevrons handle discoverability;
+    /// these handle confirmation.
     private var hints: some View {
         VStack {
-            // Skip hint at top — appears when dragging DOWN
             hintPill(symbol: "arrow.down", label: "Skip rest",
                      visibility: hintVisibility(dragOffset, direction: .down))
                 .padding(.top, 92)
+                .opacity(dragOffset > 0 ? 1 : 0)
             Spacer()
-            // Extend hint at bottom — appears when dragging UP
             hintPill(symbol: "arrow.up", label: "+30 sec",
                      visibility: hintVisibility(dragOffset, direction: .up))
                 .padding(.bottom, 100)
+                .opacity(dragOffset < 0 ? 1 : 0)
         }
     }
 
@@ -400,5 +579,55 @@ struct BreathingTimer: View {
         let m = total / 60
         let s = total % 60
         return String(format: "%d:%02d", m, s)
+    }
+}
+
+/// Static ambient grain overlay. Drawn once into a Canvas with a
+/// fixed seed of randomised dots so the noise stays the same across
+/// frames (Canvas re-running with `Double.random` would re-roll the
+/// pattern every animation tick and read as static interference,
+/// not film grain). 600 dots is plenty for screen-sized surfaces;
+/// the layer is composed with `.plusLighter` upstream so the dots
+/// contribute a faint highlight, not a darkening texture.
+private struct Grain: View {
+    var intensity: Double = 1.0
+
+    @State private var dots: [Dot] = []
+
+    private struct Dot {
+        let x: Double      // 0..1
+        let y: Double      // 0..1
+        let alpha: Double
+        let size: Double   // points
+    }
+
+    var body: some View {
+        Canvas { ctx, size in
+            for d in dots {
+                let rect = CGRect(
+                    x: d.x * size.width,
+                    y: d.y * size.height,
+                    width: d.size,
+                    height: d.size
+                )
+                ctx.fill(
+                    Path(ellipseIn: rect),
+                    with: .color(Color.white.opacity(d.alpha * intensity))
+                )
+            }
+        }
+        .onAppear {
+            if dots.isEmpty {
+                dots = (0..<600).map { _ in
+                    Dot(
+                        x: Double.random(in: 0...1),
+                        y: Double.random(in: 0...1),
+                        alpha: Double.random(in: 0.012...0.038),
+                        size: Double.random(in: 0.6...1.4)
+                    )
+                }
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
