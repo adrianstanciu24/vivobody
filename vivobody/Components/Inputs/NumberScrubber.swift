@@ -38,6 +38,8 @@ struct NumberScrubber: View {
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
 
+    @Environment(\.isEnabled) private var isEnabled
+
     var body: some View {
         VStack(spacing: 4) {
             if let label {
@@ -65,6 +67,14 @@ struct NumberScrubber: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, verticalPadding)
+        .background {
+            LiquidFill(
+                fraction: fillFraction,
+                cornerRadius: 22,
+                tint: fluidTint,
+                isDragging: isDragging
+            )
+        }
         .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil)
         .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .gesture(scrubGesture)
@@ -160,5 +170,86 @@ struct NumberScrubber: View {
     private var formattedValue: String {
         let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
         return isIntegerStep ? "\(Int(value))" : String(format: "%.1f", value)
+    }
+
+    /// Position of the value within `range`, clamped to [0, 1] and
+    /// floored at a tiny minimum so the fluid is always visible at
+    /// the very bottom of the range. The minimum is the affordance:
+    /// even at zero, a sliver of liquid hints that the chip *holds*
+    /// something — and that the level is what you adjust.
+    private var fillFraction: Double {
+        let span = range.upperBound - range.lowerBound
+        guard span > 0 else { return 0 }
+        let raw = (value - range.lowerBound) / span
+        return max(0.06, min(1.0, raw))
+    }
+
+    private var fluidTint: Color {
+        isEnabled ? Tint.primary : Color.white.opacity(0.6)
+    }
+}
+
+/// Beaker-style fluid fill that sits inside the glass chip and rises
+/// with the scrubber's value. A soft warm-white halo at the top of
+/// the fluid plays the role of the meniscus — light catching the
+/// waterline rather than a drawn separator. The level is the value,
+/// and the value is something you can move.
+///
+/// Drawn as a `.background` on the scrubber content so the digits
+/// always read on top of the liquid. The whole view is clipped to
+/// the chip's rounded rectangle so the fluid hugs the corners.
+private struct LiquidFill: View {
+    let fraction: Double
+    let cornerRadius: CGFloat
+    let tint: Color
+    let isDragging: Bool
+
+    /// Warm cream-white. Light reflecting off a tinted fluid is
+    /// brighter and less saturated than the fluid's body colour,
+    /// which is what stops the highlight reading as a UI rule.
+    private static let highlight = Color(.sRGB, red: 1.00, green: 0.93, blue: 0.84, opacity: 1.0)
+
+    var body: some View {
+        GeometryReader { geo in
+            let h = geo.size.height
+            let fillH = max(0, h * CGFloat(fraction))
+            let bottomOpacity: Double = isDragging ? 0.42 : 0.30
+            let topOpacity: Double = isDragging ? 0.14 : 0.08
+            let haloPeak: Double = isDragging ? 0.55 : 0.40
+
+            VStack(spacing: 0) {
+                Spacer(minLength: 0)
+                ZStack(alignment: .top) {
+                    LinearGradient(
+                        colors: [
+                            tint.opacity(topOpacity),
+                            tint.opacity(bottomOpacity)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+
+                    LinearGradient(
+                        colors: [
+                            Self.highlight.opacity(0),
+                            Self.highlight.opacity(haloPeak),
+                            Self.highlight.opacity(0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 5)
+                    .offset(y: -2.5)
+                    .blur(radius: 0.6)
+                    .opacity(fraction > 0.02 ? 1 : 0)
+                }
+                .frame(height: fillH)
+            }
+            .frame(width: geo.size.width, height: h, alignment: .bottom)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: fraction)
+        .animation(.easeInOut(duration: 0.18), value: isDragging)
+        .allowsHitTesting(false)
     }
 }
