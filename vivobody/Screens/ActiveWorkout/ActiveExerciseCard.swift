@@ -59,21 +59,35 @@ struct ActiveExerciseCard: View {
     /// to a different exercise.
     @State private var setListExpanded: Bool = false
 
+    /// Tap-to-complete state for the hero billboard. The billboard
+    /// is the primary tap target now that the duplicate "active set"
+    /// row has been dropped from the Sets list, so it needs the same
+    /// swipe-safe gesture handling — and the same crescendo of
+    /// animations — that the old SetCompleteButton used inside the
+    /// SwipePager.
+    @State private var heroPressScale: CGFloat = 1
+    @State private var heroNumberScale: CGFloat = 1
+    @State private var heroDragCanceled: Bool = false
+    @State private var heroSize: CGSize = .zero
+    @State private var heroRippleId: Int = 0
+    @State private var heroRipplePoint: CGPoint = .zero
+
     /// Universal "this exercise is done" green — matches the per-set
     /// completion green so the card-level signal harmonizes with the
     /// rows inside it.
-    private let completedGreen = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
+    private let completedGreen = Tint.success
 
-    /// Neutral cool tone used by every card while there's still work
-    /// left on the exercise. Exercise identity comes from the muscle-
-    /// group tag in the header, not from the gradient.
-    private let inProgressTint = Color(.sRGB, red: 0.42, green: 0.55, blue: 0.78, opacity: 1.0)
+    /// Warm in-progress tint that ties into the global primary
+    /// accent. Exercise identity still comes from the muscle-group
+    /// dot in the header, but the card's ambient glow reads as the
+    /// "hot" focus zone of the screen.
+    private let inProgressTint = Tint.primary
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 14) {
             header
             plateBlock
-            inputBlock
+            heroBlock
             setList
             Spacer(minLength: 0)
         }
@@ -85,7 +99,22 @@ struct ActiveExerciseCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Surface.edgeBright,
+                            Surface.edge.opacity(0.6),
+                            Surface.edge.opacity(0.2)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.6
+                )
+        )
+        .shadow(
+            color: (activeIndex == nil ? completedGreen : inProgressTint).opacity(0.35),
+            radius: 28, y: 10
         )
         .sheet(item: $editingSet) { set in
             EditSetSheet(set: set)
@@ -192,16 +221,19 @@ struct ActiveExerciseCard: View {
                 Text(String(format: "%02d / %02d",
                             exerciseIndex + 1,
                             session.orderedExercises.count))
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.50))
 
                 Spacer()
 
-                Text(exercise.group.displayName.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(exercise.group.accent)
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(exercise.group.accent)
+                        .frame(width: 7, height: 7)
+                    Text(exercise.group.displayName)
+                        .font(Typography.sectionLabel)
+                        .foregroundStyle(exercise.group.accent)
+                }
             }
 
             HStack(alignment: .center, spacing: 10) {
@@ -211,10 +243,6 @@ struct ActiveExerciseCard: View {
 
                 Spacer(minLength: 8)
 
-                // Notes affordance lives in the header so the body
-                // of the card stays focused on the active set. Icon
-                // state telegraphs whether notes exist: filled +
-                // accent dot = populated, outline + dim = empty.
                 notesHeaderButton
             }
             .padding(.top, 2)
@@ -259,45 +287,147 @@ struct ActiveExerciseCard: View {
     private var plateBlock: some View {
         HStack {
             Spacer()
-            // PlateVisualizer renders plates in the user's unit
-            // (bar weight + plate sizes follow the gym's reality).
-            // displayedWeight is canonical lb so we convert before
-            // feeding the visualizer.
             PlateVisualizer(
                 weight: WeightFormatter.toDisplay(displayedWeight, unit: unit),
                 barWeight: unit.standardBarWeight,
                 unit: unit
             )
+            .scaleEffect(0.78, anchor: .center)
+            .frame(height: 100)
             Spacer()
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 2)
     }
 
-    private var inputBlock: some View {
-        VStack(spacing: 8) {
-            WeightScrubber(
-                canonicalWeight: weightBinding,
-                purpose: .strength,
-                label: nil,
-                pointsPerStep: 8,
-                valueFontSize: 40,
-                verticalPadding: 14
-            )
+    /// The hero block. A single "10 × 105 lb" billboard that *is*
+    /// the active set — tap it to mark the set complete. Inline
+    /// scrubbers underneath edit reps/weight without competing with
+    /// the headline numbers. Removing the duplicate active row from
+    /// the Sets list means the headline IS the action.
+    private var heroBlock: some View {
+        VStack(spacing: 10) {
+            heroBillboard
+            heroScrubbers
+        }
+        .opacity(activeIndex == nil ? 0.55 : 1.0)
+    }
 
+    private var heroBillboard: some View {
+        let isPending = pendingCompletionSetID != nil
+        let isExerciseComplete = activeIndex == nil
+        let tint: Color = (isPending || isExerciseComplete) ? completedGreen : inProgressTint
+        let isFilled = isPending || isExerciseComplete
+
+        return HStack(alignment: .lastTextBaseline, spacing: 14) {
+            VStack(spacing: 0) {
+                Text("\(displayedReps)")
+                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .scaleEffect(heroNumberScale)
+                Text("reps")
+                    .font(Typography.metricUnit)
+                    .opacity(0.50)
+            }
+
+            Text("×")
+                .font(.system(size: 36, weight: .light, design: .rounded))
+                .opacity(0.35)
+                .padding(.bottom, 14)
+
+            VStack(spacing: 0) {
+                HStack(alignment: .lastTextBaseline, spacing: 4) {
+                    Text(WeightFormatter.string(displayedWeight, unit: unit, includeUnit: false))
+                        .font(.system(size: 64, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .scaleEffect(heroNumberScale)
+                    Text(unit.symbol)
+                        .font(.system(size: 24, weight: .semibold, design: .monospaced))
+                        .opacity(0.55)
+                        .padding(.bottom, 6)
+                }
+                Text("weight")
+                    .font(Typography.metricUnit)
+                    .opacity(0.50)
+            }
+        }
+        .padding(.vertical, 14)
+        .padding(.horizontal, 18)
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(isFilled ? Color.black : Color.white)
+        .background(heroBackground(tint: tint, isFilled: isFilled))
+        .animation(.spring(response: 0.45, dampingFraction: 0.78), value: isFilled)
+        .scaleEffect(heroPressScale)
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear { heroSize = geo.size }
+                    .onChange(of: geo.size) { _, new in heroSize = new }
+            }
+        )
+        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
+        .gesture(heroTapGesture)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(displayedReps) reps at \(Int(displayedWeight)) \(unit.symbol)")
+        .accessibilityHint(isExerciseComplete ? "Exercise complete." : "Double tap to complete this set.")
+        .accessibilityAddTraits(isExerciseComplete ? [] : .isButton)
+    }
+
+    /// Layered background for the hero. Bottom is the always-on
+    /// glass card; on top of that a solid completion pad fades in
+    /// during the pending hold (so the card reads as a single
+    /// emphatic green panel); above that a radial ripple expands
+    /// from the tap point and fades out. Mirrors SetCompleteButton's
+    /// signature crescendo, scaled up for the hero's larger surface.
+    @ViewBuilder
+    private func heroBackground(tint: Color, isFilled: Bool) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                .fill(Color.clear)
+                .glassCard(tint: tint)
+
+            RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                .fill(completedGreen.opacity(0.95))
+                .opacity(isFilled ? 1 : 0)
+
+            HeroRipple(
+                triggerId: heroRippleId,
+                origin: heroRipplePoint,
+                color: isFilled ? .white : completedGreen
+            )
+            .allowsHitTesting(false)
+            .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
+        }
+    }
+
+    private var heroScrubbers: some View {
+        HStack(spacing: 10) {
             NumberScrubber(
                 value: repsBinding,
                 range: 1...30,
                 step: 1,
                 pointsPerStep: 16,
-                unit: "reps",
-                label: nil,
-                valueFontSize: 32,
-                verticalPadding: 12
+                unit: "",
+                label: "Reps",
+                valueFontSize: 18,
+                verticalPadding: 8
+            )
+            WeightScrubber(
+                canonicalWeight: weightBinding,
+                purpose: .strength,
+                label: "Weight",
+                pointsPerStep: 8,
+                valueFontSize: 18,
+                verticalPadding: 8
             )
         }
         .disabled(activeIndex == nil)
-        .opacity(activeIndex == nil ? 0.5 : 1.0)
     }
+
+
 
     /// Maximum total set rows shown in the collapsed state. For
     /// pyramid templates with 5+ sets we hide the tail behind a
@@ -337,49 +467,48 @@ struct ActiveExerciseCard: View {
         !setListExpanded && hiddenSetCount > 0
     }
 
+    /// Index set of rows to render inside the Sets list. The active
+    /// set IS included — it renders as a slim "Lifting now" marker
+    /// (no duplicate numbers, those live in the hero) so the user
+    /// can still see all sets accounted for in sequence.
+    private var setListVisibleIndices: Set<Int> {
+        setListExpanded ? Set(0..<sets.count) : collapsedVisibleIndices
+    }
+
+    @ViewBuilder
     private var setList: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("SETS")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.4))
+                Text("Sets")
+                    .sectionLabelStyle(0.50)
                 Spacer()
                 if activeIndex == nil {
-                    Text("EXERCISE COMPLETE")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .tracking(2)
+                    Text("Exercise complete")
+                        .font(Typography.sectionLabel)
                         .foregroundStyle(completedGreen)
                 }
             }
 
-            let visibleIndices = setListExpanded
-                ? Set(0..<sets.count)
-                : collapsedVisibleIndices
-
             ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
-                if visibleIndices.contains(idx) {
-                    if idx == activeIndex {
-                        activeRow(set: set)
-                    } else {
-                        SetSummaryRow(
-                            index: idx + 1,
-                            weight: set.weight,
-                            reps: set.reps,
-                            isCompleted: set.isCompleted
-                        )
-                        .contextMenu {
-                            if set.isCompleted {
-                                Button {
-                                    editingSet = set
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                Button(role: .destructive) {
-                                    deletingSet = set
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+                if setListVisibleIndices.contains(idx) {
+                    SetSummaryRow(
+                        index: idx + 1,
+                        weight: set.weight,
+                        reps: set.reps,
+                        isCompleted: set.isCompleted,
+                        isActive: idx == activeIndex
+                    )
+                    .contextMenu {
+                        if set.isCompleted {
+                            Button {
+                                editingSet = set
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                deletingSet = set
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
                         }
                     }
@@ -406,96 +535,149 @@ struct ActiveExerciseCard: View {
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: expanding ? "chevron.down" : "chevron.up")
-                    .font(.system(size: 10, weight: .bold))
+                    .font(.system(size: 11, weight: .bold))
                 Text(expanding
                      ? "Show \(count) more set\(count == 1 ? "" : "s")"
                      : "Show less")
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .tracking(1)
+                    .font(Typography.sectionLabel)
             }
-            .foregroundStyle(.white.opacity(0.50))
+            .foregroundStyle(.white.opacity(0.55))
             .frame(maxWidth: .infinity)
             .frame(minHeight: 44)
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 12)
         }
         .buttonStyle(.plain)
     }
 
-    private func activeRow(set: WorkoutSet) -> some View {
-        SetCompleteButton(
-            reps: set.reps,
-            weight: set.weight,
-            isComplete: pendingCompletionSetID == set.id,
-            intensity: (activeIndex == sets.count - 1) ? .peak : .standard,
-            onToggle: {
-                // Capture the about-to-be-completed values now so the
-                // PR check after the 550ms animation delay sees the
-                // same numbers the user actually saw on the button.
-                let weight = set.weight
-                let reps = set.reps
-                let exerciseName = exercise.name
+    // MARK: - Hero tap gesture
 
-                pendingCompletionSetID = set.id
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(550))
+    /// Drag-cancel distance — past this we lock in "this is a swipe,
+    /// not a tap" and let the SwipePager take over. Matches the
+    /// proven 10pt value from the old SetCompleteButton.
+    private static let heroDragCancelDistance: CGFloat = 10
 
-                    // Check PR BEFORE marking the set complete so the
-                    // set itself isn't included in the comparison.
-                    let prKind = detectPersonalRecord(
-                        exerciseName: exerciseName,
-                        weight: weight,
-                        reps: reps
-                    )
+    /// Predicted-end-translation threshold for catching short fast
+    /// flicks before they reach the drag-cancel distance.
+    private static let heroFlickCancelDistance: CGFloat = 35
 
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
-                        session.completeActiveSet(for: exercise)
-                    }
-                    pendingCompletionSetID = nil
-
-                    if let prKind {
-                        // The hero number is always the weight lifted —
-                        // that's the "thing you picked up." The detail
-                        // line varies by which axis of progression
-                        // triggered the PR. We format the value in the
-                        // user's currently selected unit at the moment
-                        // it's captured; the PRCelebration overlay
-                        // reads it as a plain string with the unit
-                        // already embedded.
-                        session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
-                        session.pendingPRDetail = detailLine(
-                            exerciseName: exerciseName,
-                            reps: reps,
-                            kind: prKind
-                        )
-                    }
-
-                    // Auto-advance to the next card if this set
-                    // finished the current exercise. Pager goes to
-                    // the next exercise (or the summary card past
-                    // the last one). The PR overlay, if up, layers
-                    // over the slide so the user dismisses into the
-                    // new context.
-                    let exerciseNowDone = exercise.orderedSets.allSatisfy(\.isCompleted)
-                    if exerciseNowDone {
-                        let exercises = session.orderedExercises
-                        let currentIdx = exercises.firstIndex { $0.id == exercise.id } ?? 0
-                        let nextIdx = currentIdx + 1
-                        let cardCount = exercises.count + 1   // +1 for the summary card
-                        if nextIdx < cardCount {
-                            // Brief pause so the checkmark draw-on
-                            // settles before the card glides away.
-                            try? await Task.sleep(for: .milliseconds(300))
-                            withAnimation(.spring(response: 0.55, dampingFraction: 0.85)) {
-                                session.activeExerciseIndex = nextIdx
-                            }
-                        }
+    private var heroTapGesture: some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                guard activeIndex != nil, pendingCompletionSetID == nil else { return }
+                if !heroDragCanceled, isOverHeroDragThreshold(value) {
+                    heroDragCanceled = true
+                }
+                let inside = isInsideHero(value.location)
+                let target: CGFloat = (inside && !heroDragCanceled) ? 0.975 : 1
+                if heroPressScale != target {
+                    withAnimation(.spring(response: 0.22, dampingFraction: 0.7)) {
+                        heroPressScale = target
                     }
                 }
             }
-        )
+            .onEnded { value in
+                defer { heroDragCanceled = false }
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
+                    heroPressScale = 1
+                }
+                guard activeIndex != nil,
+                      pendingCompletionSetID == nil,
+                      let activeSet = session.activeSet(for: exercise),
+                      !heroDragCanceled,
+                      !isFlickHero(value),
+                      isInsideHero(value.location)
+                else { return }
+                fireSetCompletion(activeSet, at: value.location)
+            }
+    }
+
+    private func isInsideHero(_ p: CGPoint) -> Bool {
+        guard heroSize.width > 0, heroSize.height > 0 else { return false }
+        return p.x >= 0 && p.x <= heroSize.width && p.y >= 0 && p.y <= heroSize.height
+    }
+
+    private func isOverHeroDragThreshold(_ value: DragGesture.Value) -> Bool {
+        let dx = abs(value.translation.width)
+        let dy = abs(value.translation.height)
+        return max(dx, dy) > Self.heroDragCancelDistance
+    }
+
+    private func isFlickHero(_ value: DragGesture.Value) -> Bool {
+        let pdx = abs(value.predictedEndTranslation.width)
+        let pdy = abs(value.predictedEndTranslation.height)
+        return max(pdx, pdy) > Self.heroFlickCancelDistance
+    }
+
+    /// Commit the active set and run the PR-detect + auto-advance
+    /// pipeline. Holds the visual "pending" state for 550ms so the
+    /// ripple + green fill + number pulse can land before the card
+    /// transitions to the next set (or next exercise).
+    private func fireSetCompletion(_ set: WorkoutSet, at point: CGPoint) {
+        // Capture the about-to-be-completed values now so the PR
+        // check after the 550ms animation delay sees the same
+        // numbers the user actually saw on the hero.
+        let weight = set.weight
+        let reps = set.reps
+        let exerciseName = exercise.name
+        let isPeakSet = (activeIndex == sets.count - 1)
+
+        switch isPeakSet ? SetIntensity.peak : .standard {
+        case .standard: Haptics.crescendo()
+        case .peak:     Haptics.swell()
+        }
+
+        heroRipplePoint = point
+        heroRippleId &+= 1
+        pendingCompletionSetID = set.id
+
+        withAnimation(.spring(response: 0.18, dampingFraction: 0.55)) {
+            heroNumberScale = 1.06
+        }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6).delay(0.08)) {
+            heroNumberScale = 1
+        }
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(550))
+
+            // Check PR BEFORE marking the set complete so the set
+            // itself isn't included in the comparison.
+            let prKind = detectPersonalRecord(
+                exerciseName: exerciseName,
+                weight: weight,
+                reps: reps
+            )
+
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                session.completeActiveSet(for: exercise)
+            }
+            pendingCompletionSetID = nil
+
+            if let prKind {
+                session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
+                session.pendingPRDetail = detailLine(
+                    exerciseName: exerciseName,
+                    reps: reps,
+                    kind: prKind
+                )
+            }
+
+            // Auto-advance to the next card if this set finished
+            // the current exercise.
+            let exerciseNowDone = exercise.orderedSets.allSatisfy(\.isCompleted)
+            if exerciseNowDone {
+                let exercises = session.orderedExercises
+                let currentIdx = exercises.firstIndex { $0.id == exercise.id } ?? 0
+                let nextIdx = currentIdx + 1
+                let cardCount = exercises.count + 1   // +1 for the summary card
+                if nextIdx < cardCount {
+                    try? await Task.sleep(for: .milliseconds(300))
+                    withAnimation(.spring(response: 0.55, dampingFraction: 0.85)) {
+                        session.activeExerciseIndex = nextIdx
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - PR detection
@@ -570,9 +752,9 @@ struct ActiveExerciseCard: View {
     ) -> String {
         switch kind {
         case .weight:
-            return "\(exerciseName.uppercased()) · NEW MAX"
+            return "\(exerciseName) · New max"
         case .volume:
-            return "\(exerciseName.uppercased()) · \(reps) REPS"
+            return "\(exerciseName) · \(reps) reps"
         }
     }
 
@@ -580,17 +762,61 @@ struct ActiveExerciseCard: View {
 
     private var cardBackground: some View {
         let isComplete = activeIndex == nil
+        let accent = isComplete ? completedGreen : inProgressTint
         return ZStack {
-            Color(red: 0.08, green: 0.08, blue: 0.10)
-            LinearGradient(
+            Color(red: 0.06, green: 0.06, blue: 0.08)
+
+            RadialGradient(
                 colors: [
-                    (isComplete ? completedGreen : inProgressTint).opacity(isComplete ? 0.26 : 0.20),
+                    accent.opacity(isComplete ? 0.22 : 0.18),
                     Color.clear
                 ],
-                startPoint: .topLeading,
-                endPoint: .center
+                center: .topLeading,
+                startRadius: 0,
+                endRadius: 320
+            )
+
+            RadialGradient(
+                colors: [
+                    accent.opacity(0.08),
+                    Color.clear
+                ],
+                center: .bottom,
+                startRadius: 0,
+                endRadius: 280
             )
         }
+    }
+}
+
+/// Radial ring that expands from the tap point and fades — the
+/// signature "yes, you tapped" confirmation borrowed from
+/// SetCompleteButton, scaled up for the hero billboard's larger
+/// surface. The triggerId pattern lets the parent fire a fresh
+/// animation on every tap without re-creating the view.
+private struct HeroRipple: View {
+    let triggerId: Int
+    let origin: CGPoint
+    let color: Color
+
+    @State private var scale: CGFloat = 0
+    @State private var opacity: Double = 0
+
+    var body: some View {
+        Circle()
+            .stroke(color, lineWidth: 2)
+            .frame(width: 80, height: 80)
+            .position(origin == .zero ? CGPoint(x: 0, y: 0) : origin)
+            .scaleEffect(scale, anchor: .center)
+            .opacity(opacity)
+            .onChange(of: triggerId) { _, _ in
+                scale = 0.2
+                opacity = 0.7
+                withAnimation(.easeOut(duration: 0.65)) {
+                    scale = 5.0
+                    opacity = 0
+                }
+            }
     }
 }
 

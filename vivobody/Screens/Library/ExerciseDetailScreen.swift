@@ -92,7 +92,7 @@ struct ExerciseDetailScreen: View {
         }
     }
 
-    private let prColor = Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
+    private let prColor = Tint.primary
 
     var body: some View {
         ScrollView {
@@ -178,9 +178,8 @@ struct ExerciseDetailScreen: View {
             // (active card, summary row, picker subtitle).
             HStack(spacing: 8) {
                 Circle().fill(item.group.accent).frame(width: 8, height: 8)
-                Text(item.group.displayName.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
+                Text(item.group.displayName)
+                    .font(Typography.sectionLabel)
                     .foregroundStyle(item.group.accent)
             }
 
@@ -227,57 +226,46 @@ struct ExerciseDetailScreen: View {
     private var statsRow: some View {
         HStack(spacing: 0) {
             statCard(
-                label: "LAST",
+                label: "Last",
                 value: lastValueString,
                 detail: lastDetailString
             )
             statDivider
             statCard(
-                label: "BEST",
+                label: "Best",
                 value: bestValueString,
                 detail: bestDetailString
             )
             statDivider
             statCard(
-                label: "TIMES",
+                label: "Times",
                 value: countString,
                 detail: countDetailString
             )
         }
-        .padding(.vertical, 14)
+        .padding(.vertical, 16)
         .padding(.horizontal, 4)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(0.04))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassCard()
     }
 
     private func statCard(label: String, value: String, detail: String?) -> some View {
         VStack(spacing: 6) {
             Text(label)
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.50))
+                .sectionLabelStyle(0.55)
             Text(value)
-                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .font(.system(size: 22, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             if let detail {
                 Text(detail)
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
                     .lineLimit(1)
             } else {
-                // Reserves a baseline so columns with detail and
-                // columns without it stay vertically aligned.
                 Text(" ")
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .font(Typography.caption)
             }
         }
         .frame(maxWidth: .infinity)
@@ -293,10 +281,8 @@ struct ExerciseDetailScreen: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("PROGRESS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Progress")
+                .sectionLabelStyle(0.60)
 
             chart
 
@@ -369,13 +355,29 @@ struct ExerciseDetailScreen: View {
             range = r
         } label: {
             Text(r.label)
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.75))
+                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                .background {
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Tint.primary)
+                    } else {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Color.white.opacity(0.06))
+                    }
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(
+                            isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                            lineWidth: 0.5
+                        )
+                )
+                .shadow(
+                    color: isSelected ? Tint.primary.opacity(0.35) : .clear,
+                    radius: 10, y: 2
                 )
         }
         .buttonStyle(.plain)
@@ -387,10 +389,8 @@ struct ExerciseDetailScreen: View {
     private var formCuesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("FORM CUES")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.50))
+                Text("Form cues")
+                    .sectionLabelStyle(0.60)
                 Spacer()
                 if !item.notes.isEmpty {
                     Button {
@@ -399,11 +399,11 @@ struct ExerciseDetailScreen: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "square.and.pencil")
-                                .font(.system(size: 11, weight: .semibold))
-                            Text("Edit")
                                 .font(.system(size: 12, weight: .semibold))
+                            Text("Edit")
+                                .font(.system(size: 13, weight: .semibold))
                         }
-                        .foregroundStyle(.white.opacity(0.70))
+                        .foregroundStyle(.white.opacity(0.75))
                         .padding(.horizontal, 10)
                         .frame(minHeight: 44)
                         .contentShape(Rectangle())
@@ -426,35 +426,28 @@ struct ExerciseDetailScreen: View {
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "square.and.pencil")
-                        .font(.system(size: 13, weight: .semibold))
-                    Text("Add form cues")
                         .font(.system(size: 14, weight: .semibold))
+                    Text("Add form cues")
+                        .font(.system(size: 15, weight: .semibold))
                     Spacer()
                 }
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(.white.opacity(0.60))
                 .padding(.horizontal, 16)
                 .frame(minHeight: 56)
                 .background(
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                        .stroke(Color.white.opacity(0.12), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
                 )
             }
             .buttonStyle(.plain)
         } else {
             Text(item.notes)
-                .font(.system(size: 14))
+                .font(Typography.body)
                 .foregroundStyle(.white.opacity(0.85))
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Color.white.opacity(0.04))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-                )
+                .glassChip(cornerRadius: 16)
         }
     }
 
@@ -462,10 +455,8 @@ struct ExerciseDetailScreen: View {
 
     private var recentSessionsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("RECENT SESSIONS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Recent sessions")
+                .sectionLabelStyle(0.60)
 
             let rows = recentRows
             VStack(alignment: .leading, spacing: 0) {
@@ -479,14 +470,7 @@ struct ExerciseDetailScreen: View {
                 }
             }
             .padding(.horizontal, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-            )
+            .glassCard(cornerRadius: 18)
         }
     }
 
@@ -494,30 +478,29 @@ struct ExerciseDetailScreen: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(Self.dayFormatter.string(from: row.date))
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.85))
                 Text(RelativeDate.short(row.date))
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
             }
             .frame(width: 90, alignment: .leading)
 
             Text("\(WeightFormatter.string(row.topWeight, unit: unit)) × \(row.topReps)")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.white)
 
             Spacer()
 
             Text("× \(row.setCount)")
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .font(Typography.caption)
                 .foregroundStyle(.white.opacity(0.55))
 
             if row.isPR {
                 Text("PR")
-                    .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .tracking(1)
+                    .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(.black)
-                    .padding(.horizontal, 6)
+                    .padding(.horizontal, 7)
                     .padding(.vertical, 2)
                     .background(Capsule().fill(prColor))
             }
@@ -529,42 +512,31 @@ struct ExerciseDetailScreen: View {
 
     private var defaultsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("DEFAULTS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Defaults")
+                .sectionLabelStyle(0.60)
 
             HStack(spacing: 16) {
-                defaultStat(label: "WEIGHT", value: WeightFormatter.string(item.defaultWeight, unit: unit))
+                defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight, unit: unit))
                 Rectangle()
                     .fill(Color.white.opacity(0.08))
                     .frame(width: 0.5, height: 32)
-                defaultStat(label: "REPS", value: "\(item.defaultReps)")
+                defaultStat(label: "Reps", value: "\(item.defaultReps)")
                 Spacer()
                 Text("Used when first picked")
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
             }
             .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 16)
         }
     }
 
     private func defaultStat(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
-                .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.45))
+                .sectionLabelStyle(0.55)
             Text(value)
-                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                .font(.system(size: 15, weight: .semibold, design: .monospaced))
                 .foregroundStyle(.white)
         }
     }
@@ -578,12 +550,12 @@ struct ExerciseDetailScreen: View {
         } label: {
             HStack {
                 Image(systemName: "plus")
-                    .font(.system(size: 14, weight: .bold))
+                    .font(.system(size: 15, weight: .bold))
                 Text("Add to Workout")
                     .font(.system(size: 16, weight: .semibold))
                 Spacer()
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 14, weight: .bold))
             }
             .foregroundStyle(.black)
             .padding(.horizontal, 20)
@@ -591,18 +563,26 @@ struct ExerciseDetailScreen: View {
             .frame(maxWidth: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(Color.white)
+                    .fill(Tint.primary)
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.40), Color.white.opacity(0.05)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.8
+                    )
+            )
+            .primaryGlow(Tint.primary)
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 22)
         .padding(.bottom, 8)
         .padding(.top, 12)
         .background(
-            // Slight backdrop fade keeps the CTA legible over
-            // whatever's behind it when the scroll content reaches
-            // the bottom — and gives the pinned bar a sense of
-            // floating above the page.
             LinearGradient(
                 colors: [Color.black.opacity(0), Color.black],
                 startPoint: .top,

@@ -40,19 +40,29 @@ struct HistoryScreen: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "clock.arrow.circlepath")
-                .font(.system(size: 40, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
-            Text("NO WORKOUTS YET")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
-            Text("Finish your first session and it lands here.")
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.55))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .frame(width: 132, height: 132)
+                    .glassCard(cornerRadius: 999, tint: Tint.primary)
+
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.system(size: 56, weight: .light))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Tint.primary, .white.opacity(0.30))
+                    .symbolEffect(.breathe.pulse, options: .repeating)
+            }
+            .primaryGlow(Tint.primary, radius: 32, y: 0)
+
+            VStack(spacing: 6) {
+                Text("No workouts yet")
+                    .sectionHeadingStyle()
+                Text("Finish your first session and it lands here.")
+                    .font(Typography.body)
+                    .foregroundStyle(.white.opacity(0.55))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
         }
     }
 
@@ -100,26 +110,25 @@ private struct SessionRow: View {
                     .foregroundStyle(.white)
                 Spacer()
                 Text(timeLine)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.50))
             }
 
             HStack(spacing: 0) {
-                stat(value: "\(Int(session.duration / 60))", unit: "min", label: "TIME")
+                stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time")
                 statDivider
-                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "VOLUME")
+                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume")
                 statDivider
-                stat(value: "\(session.totalSets)", unit: nil, label: "SETS")
+                stat(value: "\(session.totalSets)", unit: nil, label: "Sets")
             }
 
             if !muscleGroupTags.isEmpty {
                 HStack(spacing: 6) {
                     ForEach(muscleGroupTags, id: \.self) { group in
-                        Text(group.displayName.uppercased())
-                            .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                            .tracking(1.5)
+                        Text(group.displayName)
+                            .font(Typography.caption)
                             .foregroundStyle(group.accent)
-                            .padding(.horizontal, 8)
+                            .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(
                                 Capsule().fill(group.accent.opacity(0.14))
@@ -130,14 +139,7 @@ private struct SessionRow: View {
             }
         }
         .padding(18)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white.opacity(0.04))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassCard(cornerRadius: 20)
     }
 
     // MARK: - Pieces
@@ -146,19 +148,17 @@ private struct SessionRow: View {
         VStack(spacing: 6) {
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(value)
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .font(Typography.statValue)
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
             }
             Text(label)
-                .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.45))
+                .sectionLabelStyle(0.50)
         }
         .frame(maxWidth: .infinity)
     }

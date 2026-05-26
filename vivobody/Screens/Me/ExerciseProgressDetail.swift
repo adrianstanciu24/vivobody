@@ -69,7 +69,7 @@ struct ExerciseProgressDetail: View {
         }
     }
 
-    private let prColor = Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
+    private let prColor = Tint.primary
 
     var body: some View {
         ScrollView {
@@ -94,19 +94,18 @@ struct ExerciseProgressDetail: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(progress.group.displayName.uppercased())
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
+            Text(progress.group.displayName)
+                .font(Typography.sectionLabel)
                 .foregroundStyle(progress.group.accent)
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(WeightFormatter.string(progress.bestWeight, unit: unit, includeUnit: false))
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 Text(unit.symbol)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.55))
 
                 Spacer()
 
@@ -115,29 +114,26 @@ struct ExerciseProgressDetail: View {
                 }
             }
 
-            Text("ALL-TIME BEST")
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.40))
+            Text("All-time best")
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.45))
         }
     }
 
     private func deltaChip(delta: Double) -> some View {
         let isUp = delta > 0
-        let chipColor: Color = isUp
-            ? Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
-            : Color(.sRGB, red: 0.96, green: 0.42, blue: 0.42, opacity: 1.0)
+        let chipColor: Color = isUp ? Tint.success : Tint.danger
         return HStack(spacing: 4) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 11, weight: .bold))
             Text(WeightFormatter.deltaString(delta, unit: unit))
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
         }
         .foregroundStyle(chipColor)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .background(
-            Capsule().fill(chipColor.opacity(0.15))
+            Capsule().fill(chipColor.opacity(0.16))
         )
     }
 
@@ -158,14 +154,20 @@ struct ExerciseProgressDetail: View {
             metric = m
         } label: {
             Text(m.shortLabel)
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .tracking(1)
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.75))
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
                 .padding(.horizontal, 14)
                 .frame(minHeight: 44)
                 .background(
-                    Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                    Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
                 )
+                .overlay(
+                    Capsule().stroke(
+                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                        lineWidth: 0.5
+                    )
+                )
+                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
     }
@@ -243,14 +245,22 @@ struct ExerciseProgressDetail: View {
             range = r
         } label: {
             Text(r.label)
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.75))
+                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
                 .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
                 )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(
+                            isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                            lineWidth: 0.5
+                        )
+                )
+                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
     }
@@ -260,21 +270,19 @@ struct ExerciseProgressDetail: View {
     private var recentTable: some View {
         let visible = visiblePoints
         return VStack(alignment: .leading, spacing: 10) {
-            Text("RECENT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Recent")
+                .sectionLabelStyle(0.60)
 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(visible.reversed().enumerated()), id: \.offset) { idx, point in
                     HStack(spacing: 12) {
                         Text(Self.dayFormatter.string(from: point.date))
-                            .font(.system(size: 12, weight: .medium, design: .monospaced))
-                            .foregroundStyle(.white.opacity(0.55))
+                            .font(.system(size: 13, weight: .medium, design: .monospaced))
+                            .foregroundStyle(.white.opacity(0.60))
                             .frame(width: 90, alignment: .leading)
 
                         Text("\(WeightFormatter.string(point.topWeight, unit: unit)) × \(point.topReps)")
-                            .font(.system(size: 13, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(.white)
 
                         Spacer()
@@ -282,7 +290,6 @@ struct ExerciseProgressDetail: View {
                         if point.isWeightPR {
                             Text("PR")
                                 .font(.system(size: 10, weight: .bold, design: .monospaced))
-                                .tracking(1.2)
                                 .foregroundStyle(.black)
                                 .padding(.horizontal, 7)
                                 .padding(.vertical, 3)
@@ -299,14 +306,7 @@ struct ExerciseProgressDetail: View {
                 }
             }
             .padding(.horizontal, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-            )
+            .glassCard(cornerRadius: 18)
         }
     }
 

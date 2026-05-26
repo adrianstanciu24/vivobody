@@ -105,31 +105,27 @@ struct TemplateDetailScreen: View {
 
     private var statsCard: some View {
         HStack(spacing: 14) {
-            stat(value: "\(template.orderedExercises.count)", label: "EXERCISES")
+            stat(value: "\(template.orderedExercises.count)", label: "Exercises")
             statDivider
-            stat(value: "\(template.totalPlannedSets)", label: "SETS")
+            stat(value: "\(template.totalPlannedSets)", label: "Sets")
             if !template.muscleGroups.isEmpty {
                 statDivider
-                stat(value: "\(template.muscleGroups.count)", label: "GROUPS")
+                stat(value: "\(template.muscleGroups.count)", label: "Groups")
             }
             Spacer(minLength: 0)
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color.white.opacity(0.05))
-        )
+        .glassCard(cornerRadius: 18)
     }
 
     private var muscleGroupChips: some View {
         HStack(spacing: 6) {
             ForEach(template.muscleGroups, id: \.self) { group in
-                Text(group.displayName.uppercased())
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(1.5)
+                Text(group.displayName)
+                    .font(Typography.caption)
                     .foregroundStyle(group.accent)
-                    .padding(.horizontal, 9)
+                    .padding(.horizontal, 10)
                     .padding(.vertical, 5)
                     .background(
                         Capsule().fill(group.accent.opacity(0.16))
@@ -176,10 +172,8 @@ struct TemplateDetailScreen: View {
                     }
                 }
             } header: {
-                Text("EXERCISES")
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.55))
+                Text("Exercises")
+                    .sectionLabelStyle(0.60)
                     .padding(.leading, 22)
                     .padding(.top, 6)
                     .padding(.bottom, 6)
@@ -191,23 +185,25 @@ struct TemplateDetailScreen: View {
     }
 
     private var emptyExercisesPrompt: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "plus.circle")
-                .font(.system(size: 28, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
+        VStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(Tint.primary.opacity(0.10))
+                    .frame(width: 96, height: 96)
+                Image(systemName: "plus.circle")
+                    .font(.system(size: 36, weight: .light))
+                    .foregroundStyle(Tint.primary.opacity(0.85))
+            }
             Text("No exercises yet")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.55))
-            Text("Tap the + above to add one.")
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.40))
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.70))
+            Text("Tap + above to add one")
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.45))
         }
-        .padding(28)
+        .padding(32)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(Color.white.opacity(0.08), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
-        )
+        .glassChip(cornerRadius: 20)
     }
 
     private func exerciseRow(_ exercise: TemplateExercise) -> some View {
@@ -222,16 +218,13 @@ struct TemplateDetailScreen: View {
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.white)
                     if exercise.hasPerSetData {
-                        Text("PER SET")
-                            .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .tracking(1.2)
+                        Text("Per set")
+                            .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(.black)
-                            .padding(.horizontal, 5)
+                            .padding(.horizontal, 7)
                             .padding(.vertical, 2)
                             .background(
-                                Capsule().fill(
-                                    Color(.sRGB, red: 1.0, green: 0.78, blue: 0.30, opacity: 1.0)
-                                )
+                                Capsule().fill(Tint.primary)
                             )
                     }
                 }
@@ -242,22 +235,14 @@ struct TemplateDetailScreen: View {
 
             Spacer()
 
-            Text(exercise.group.displayName.uppercased())
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
+            Text(exercise.group.displayName)
+                .font(Typography.caption)
                 .foregroundStyle(exercise.group.accent.opacity(0.85))
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 16)
         .frame(minHeight: 60)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white.opacity(0.05))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
-        )
+        .glassChip(cornerRadius: 14)
     }
 
     private func exerciseSummary(_ exercise: TemplateExercise) -> String {
@@ -280,13 +265,11 @@ struct TemplateDetailScreen: View {
     private func stat(value: String, label: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(Typography.statValue)
                 .foregroundStyle(.white)
                 .monospacedDigit()
             Text(label)
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.50))
+                .sectionLabelStyle(0.55)
         }
     }
 

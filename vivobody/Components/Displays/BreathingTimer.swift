@@ -46,8 +46,13 @@ struct BreathingTimer: View {
     private let threshold: CGFloat = 90
     private let maxDrag: CGFloat = 140
 
-    private let cool = Color(.sRGB, red: 0.42, green: 0.72, blue: 0.96, opacity: 1)
-    private let warm = Color(.sRGB, red: 0.98, green: 0.58, blue: 0.20, opacity: 1)
+    // Cool start → warm-orange landing. The cool side was originally
+    // a vivid blue; toned to a desaturated slate so it harmonises with
+    // the warm app palette while still reading as a calm "low energy"
+    // state. The warm side lands on Tint.primary so the timer feels
+    // like part of the same world as the rest of the app.
+    private let cool = Color(.sRGB, red: 0.55, green: 0.65, blue: 0.78, opacity: 1)
+    private let warm = Tint.primary
 
     init(
         duration: TimeInterval,
@@ -117,26 +122,29 @@ struct BreathingTimer: View {
 
     private func breathLayers(scale: Double, color: Color, progress: Double) -> some View {
         ZStack {
-            // Atmosphere — soft outer halo
+            // Atmosphere — soft outer halo. Larger blur as the timer
+            // warms gives the impression of heat radiating outward.
             Circle()
-                .fill(color.opacity(0.18))
-                .frame(width: 360, height: 360)
+                .fill(color.opacity(0.22))
+                .frame(width: 380, height: 380)
                 .scaleEffect(scale * 1.05)
-                .blur(radius: 50)
+                .blur(radius: 56)
 
-            // Body — filled gradient disc. Self-illuminated orb feel.
+            // Body — filled gradient disc. Self-illuminated orb feel,
+            // now with a soft top-left key light so it reads as a
+            // glass sphere rather than a flat disc.
             Circle()
                 .fill(
                     RadialGradient(
                         gradient: Gradient(stops: [
-                            .init(color: color.opacity(0.55), location: 0.0),
-                            .init(color: color.opacity(0.35), location: 0.55),
+                            .init(color: color.opacity(0.62), location: 0.0),
+                            .init(color: color.opacity(0.38), location: 0.55),
                             .init(color: color.opacity(0.12), location: 0.92),
                             .init(color: color.opacity(0.00), location: 1.0),
                         ]),
-                        center: .center,
+                        center: UnitPoint(x: 0.42, y: 0.36),
                         startRadius: 0,
-                        endRadius: 120
+                        endRadius: 130
                     )
                 )
                 .frame(width: 240, height: 240)
@@ -146,10 +154,20 @@ struct BreathingTimer: View {
             // A second softer disc bloom that lags the breath slightly.
             // Keeps the body from looking flat.
             Circle()
-                .fill(color.opacity(0.22))
+                .fill(color.opacity(0.24))
                 .frame(width: 180, height: 180)
                 .scaleEffect(scale)
                 .blur(radius: 28)
+
+            // Specular cap — small bright spot upper-left so the orb
+            // reads as a glass sphere catching light, not a 2D disc.
+            Circle()
+                .fill(Color.white.opacity(0.18))
+                .frame(width: 60, height: 60)
+                .blur(radius: 18)
+                .offset(x: -40, y: -38)
+                .scaleEffect(scale)
+                .blendMode(.plusLighter)
 
             // Track — the rim that holds the progress marker.
             Circle()
@@ -164,19 +182,19 @@ struct BreathingTimer: View {
                 .rotationEffect(.degrees(-90))
                 .frame(width: 240, height: 240)
                 .scaleEffect(scale)
+                .shadow(color: color.opacity(0.55), radius: 12)
         }
     }
 
     private func centerContent(remaining: TimeInterval) -> some View {
-        VStack(spacing: 6) {
-            Text(hasFinished ? "GO" : "REST")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(3)
-                .foregroundStyle(.white.opacity(0.45))
+        VStack(spacing: 8) {
+            Text(hasFinished ? "Go" : "Rest")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white.opacity(hasFinished ? 0.85 : 0.50))
 
             DigitTicker(
                 value: remaining,
-                font: .system(size: 64, weight: .bold, design: .rounded),
+                font: .system(size: 68, weight: .bold, design: .rounded),
                 color: .white,
                 formatter: { time in
                     let total = Int(time.rounded(.up))
@@ -185,8 +203,8 @@ struct BreathingTimer: View {
             )
 
             Text("of \(formatted(totalDuration))")
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.35))
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.40))
                 .opacity(hasFinished ? 0 : 1)
         }
     }
@@ -194,21 +212,30 @@ struct BreathingTimer: View {
     private var hints: some View {
         VStack {
             // Skip hint at top — appears when dragging DOWN
-            hintView(label: "↓  SKIP REST", visibility: hintVisibility(dragOffset, direction: .down))
-                .padding(.top, 90)
+            hintPill(symbol: "arrow.down", label: "Skip rest",
+                     visibility: hintVisibility(dragOffset, direction: .down))
+                .padding(.top, 92)
             Spacer()
             // Extend hint at bottom — appears when dragging UP
-            hintView(label: "↑  +30 SEC", visibility: hintVisibility(dragOffset, direction: .up))
-                .padding(.bottom, 110)
+            hintPill(symbol: "arrow.up", label: "+30 sec",
+                     visibility: hintVisibility(dragOffset, direction: .up))
+                .padding(.bottom, 100)
         }
     }
 
-    private func hintView(label: String, visibility: Double) -> some View {
-        Text(label)
-            .font(.system(size: 12, weight: .semibold, design: .monospaced))
-            .tracking(2)
-            .foregroundStyle(.white.opacity(visibility))
-            .scaleEffect(0.92 + 0.08 * visibility)
+    private func hintPill(symbol: String, label: String, visibility: Double) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: symbol)
+                .font(.system(size: 12, weight: .bold))
+            Text(label)
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+        }
+        .foregroundStyle(.white.opacity(0.85))
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .glassPill(tint: Tint.primary)
+        .opacity(visibility)
+        .scaleEffect(0.92 + 0.08 * visibility)
     }
 
     @ViewBuilder
@@ -216,17 +243,22 @@ struct BreathingTimer: View {
         if let nextSetLabel {
             VStack {
                 Spacer()
-                VStack(spacing: 4) {
-                    Text("NEXT")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                        .foregroundStyle(.white.opacity(0.35))
+                HStack(spacing: 10) {
+                    Text("Next")
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Tint.primary)
+                    Rectangle()
+                        .fill(Color.white.opacity(0.18))
+                        .frame(width: 1, height: 12)
                     Text(nextSetLabel)
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
                         .monospacedDigit()
-                        .foregroundStyle(.white.opacity(0.75))
+                        .foregroundStyle(.white.opacity(0.85))
                 }
-                .padding(.bottom, 40)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .glassPill()
+                .padding(.bottom, 44)
             }
         }
     }

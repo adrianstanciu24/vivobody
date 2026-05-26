@@ -123,10 +123,8 @@ struct BodyWeightLogSheet: View {
 
     private var dateField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("DATE")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Date")
+                .sectionLabelStyle(0.60)
 
             DatePicker(
                 "Date",
@@ -136,16 +134,14 @@ struct BodyWeightLogSheet: View {
             )
             .labelsHidden()
             .datePickerStyle(.compact)
-            .tint(.white)
+            .tint(Tint.primary)
         }
     }
 
     private var weightScrubber: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("WEIGHT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Weight")
+                .sectionLabelStyle(0.60)
 
             WeightScrubber(
                 canonicalWeight: $weight,

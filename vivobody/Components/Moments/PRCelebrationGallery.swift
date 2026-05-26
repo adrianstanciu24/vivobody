@@ -23,13 +23,13 @@ struct PRCelebrationGallery: View {
             // Triggers
             VStack(spacing: 14) {
                 Spacer()
-                triggerButton(label: "WEIGHT PR  ·  225 lb") {
+                triggerButton(label: "Weight PR · 225 lb") {
                     showWeightPR = true
                 }
-                triggerButton(label: "REP PR  ·  12 @ 185 lb") {
+                triggerButton(label: "Rep PR · 12 @ 185 lb") {
                     showRepsPR = true
                 }
-                triggerButton(label: "VOLUME PR  ·  14,250 lb") {
+                triggerButton(label: "Volume PR · 14,250 lb") {
                     showVolumePR = true
                 }
                 Spacer().frame(height: 36)
@@ -39,26 +39,26 @@ struct PRCelebrationGallery: View {
             // The celebrations — three instances, only one fires at a time.
             PRCelebration(
                 isPresented: $showWeightPR,
-                title: "PERSONAL RECORD",
+                title: "Personal record",
                 value: "225",
                 unit: "lb",
-                detail: "BENCH PRESS  ·  1RM"
+                detail: "Bench press · 1RM"
             )
 
             PRCelebration(
                 isPresented: $showRepsPR,
-                title: "REP RECORD",
+                title: "Rep record",
                 value: "12",
                 unit: "reps",
-                detail: "BACK SQUAT  ·  185 lb"
+                detail: "Back squat · 185 lb"
             )
 
             PRCelebration(
                 isPresented: $showVolumePR,
-                title: "VOLUME RECORD",
+                title: "Volume record",
                 value: "14,250",
                 unit: "lb",
-                detail: "TOTAL · TUESDAY SESSION"
+                detail: "Total · Tuesday session"
             )
         }
         .background(Color.black.ignoresSafeArea())
@@ -69,16 +69,14 @@ struct PRCelebrationGallery: View {
         VStack(alignment: .leading, spacing: 26) {
             // Header strip
             VStack(alignment: .leading, spacing: 8) {
-                Text("PR CELEBRATION")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
+                Text("PR celebration")
+                    .sectionLabelStyle(0.55)
                 Text("Earn it, then taste it.")
                     .font(.system(size: 32, weight: .bold))
                     .foregroundStyle(.white)
                 Text("Tap a button to fire the moment. Tap anywhere on the celebration to dismiss.")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.body)
+                    .foregroundStyle(.white.opacity(0.55))
                     .padding(.top, 2)
             }
             .padding(.horizontal, 22)
@@ -86,15 +84,13 @@ struct PRCelebrationGallery: View {
 
             // Faux summary stats
             VStack(alignment: .leading, spacing: 14) {
-                Text("TUESDAY  ·  47 MIN  ·  8 SETS")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
+                Text("Tuesday · 47 min · 8 sets")
+                    .sectionLabelStyle(0.55)
 
                 HStack(spacing: 18) {
-                    statBlock(value: "14,250", unit: "lb", label: "VOLUME")
-                    statBlock(value: "47", unit: "min", label: "DURATION")
-                    statBlock(value: "3", unit: nil, label: "EXERCISES")
+                    statBlock(value: "14,250", unit: "lb", label: "Volume")
+                    statBlock(value: "47", unit: "min", label: "Duration")
+                    statBlock(value: "3", unit: nil, label: "Exercises")
                 }
             }
             .padding(.horizontal, 22)
@@ -108,18 +104,16 @@ struct PRCelebrationGallery: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
                     .foregroundStyle(.white.opacity(0.92))
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.4))
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
             }
             Text(label)
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.35))
+                .sectionLabelStyle(0.55)
         }
     }
 
@@ -127,25 +121,17 @@ struct PRCelebrationGallery: View {
         Button(action: action) {
             HStack {
                 Text(label)
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.88))
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.90))
                 Spacer()
                 Image(systemName: "play.fill")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(Tint.primary)
             }
             .padding(.horizontal, 18)
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.white.opacity(0.06))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 16)
         }
         .buttonStyle(.plain)
     }
@@ -162,10 +148,23 @@ struct PRCelebrationGallery: View {
         Color.black.ignoresSafeArea()
         PRCelebration(
             isPresented: $show,
-            title: "PERSONAL RECORD",
+            title: "Personal record",
             value: "315",
             unit: "lb",
-            detail: "DEADLIFT  ·  1RM"
+            detail: "Deadlift · 1RM"
+        )
+    }
+    .preferredColorScheme(.dark)
+}
+
+#Preview("Celebration — frozen") {
+    ZStack {
+        Color.black.ignoresSafeArea()
+        PRCelebrationFrozen(
+            title: "Personal record",
+            value: "225",
+            unit: "lb",
+            detail: "Bench press · 1RM"
         )
     }
     .preferredColorScheme(.dark)

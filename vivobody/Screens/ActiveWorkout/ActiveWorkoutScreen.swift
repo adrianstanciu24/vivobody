@@ -75,7 +75,7 @@ struct ActiveWorkoutScreen: View {
             // already in progress — no time stolen by the ceremony.
             PRCelebration(
                 isPresented: prPresentationBinding,
-                title: "PERSONAL RECORD",
+                title: "Personal record",
                 value: session.pendingPRValue ?? "",
                 unit: unit.symbol,
                 detail: session.pendingPRDetail
@@ -150,17 +150,14 @@ struct ActiveWorkoutScreen: View {
 
     private var topBar: some View {
         HStack(spacing: 0) {
-            Text("ACTIVE WORKOUT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
+            Text("Active workout")
+                .sectionLabelStyle(0.55)
 
             Spacer()
 
             Text("\(completedSetCount) / \(totalSetCount)")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.45))
+                .font(Typography.metricUnit)
+                .foregroundStyle(.white.opacity(0.55))
 
             // Trailing: X — cancel workout (with confirmation alert).
             // Logged sets are lost. To minimize, swipe the sheet

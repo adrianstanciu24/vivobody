@@ -41,7 +41,7 @@ struct SetCompleteButton: View {
     /// could "rescue" a tap they didn't actually intend.
     @State private var dragCanceled: Bool = false
 
-    private let accent = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
+    private let accent = Tint.success
 
     var body: some View {
         ZStack {
@@ -71,13 +71,23 @@ struct SetCompleteButton: View {
 
     private var background: some View {
         RoundedRectangle(cornerRadius: 22, style: .continuous)
-            .fill(isComplete ? accent.opacity(0.92) : Color.white.opacity(0.06))
+            .fill(isComplete ? accent.opacity(0.95) : Color.white.opacity(0.06))
             .overlay(
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .strokeBorder(
-                        isComplete ? Color.white.opacity(0.0) : Color.white.opacity(0.08),
-                        lineWidth: 1
+                    .stroke(
+                        LinearGradient(
+                            colors: isComplete
+                                ? [Color.white.opacity(0.50), Color.white.opacity(0.10)]
+                                : [Color.white.opacity(0.22), Color.white.opacity(0.06)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.8
                     )
+            )
+            .shadow(
+                color: isComplete ? accent.opacity(0.50) : .clear,
+                radius: 24, y: 8
             )
             .animation(.spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
@@ -108,10 +118,9 @@ struct SetCompleteButton: View {
                 .font(.system(size: 40, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .scaleEffect(numberScale)
-            Text(unit.uppercased())
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .opacity(isComplete ? 0.55 : 0.45)
+            Text(unit)
+                .font(Typography.metricUnit)
+                .opacity(isComplete ? 0.65 : 0.55)
         }
     }
 

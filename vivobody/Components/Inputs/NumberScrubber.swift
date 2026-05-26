@@ -41,10 +41,8 @@ struct NumberScrubber: View {
     var body: some View {
         VStack(spacing: 4) {
             if let label {
-                Text(label.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
+                Text(label)
+                    .sectionLabelStyle(0.50)
             }
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
@@ -57,8 +55,8 @@ struct NumberScrubber: View {
 
                 if !unit.isEmpty {
                     Text(unit)
-                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
             }
             .offset(y: rubberOffset)
@@ -67,11 +65,7 @@ struct NumberScrubber: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, verticalPadding)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(isDragging ? 0.10 : 0.06))
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil)
         .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .gesture(scrubGesture)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)

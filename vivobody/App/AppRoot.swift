@@ -30,6 +30,7 @@ struct AppRoot: View {
 
     var body: some View {
         tabView
+            .tint(Tint.primary)
             .miniBarAccessory(
                 session: appState.activeSession,
                 onExpand: { appState.expandWorkout() }

@@ -269,33 +269,43 @@ private struct LibraryTemplatesContent: View {
     // MARK: - Empty states
 
     private var emptyState: some View {
-        VStack(spacing: 18) {
+        VStack(spacing: 20) {
             Spacer()
-            Image(systemName: "books.vertical.fill")
-                .font(.system(size: 44, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
 
-            Text("NO TEMPLATES YET")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
+            ZStack {
+                Circle()
+                    .frame(width: 132, height: 132)
+                    .glassCard(cornerRadius: 999, tint: Tint.primary)
 
-            Text("Build a reusable workout — pick exercises, set target reps and weight. Start any time from here.")
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.55))
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 280)
+                Image(systemName: "books.vertical.fill")
+                    .font(.system(size: 56, weight: .light))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Tint.primary, .white.opacity(0.30))
+                    .symbolEffect(.breathe.pulse, options: .repeating)
+            }
+            .primaryGlow(Tint.primary, radius: 32, y: 0)
+
+            VStack(spacing: 8) {
+                Text("No templates yet")
+                    .sectionHeadingStyle()
+
+                Text("Build a reusable workout — pick exercises, set target reps and weight. Start any time from here.")
+                    .font(Typography.body)
+                    .foregroundStyle(.white.opacity(0.55))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 280)
+            }
 
             Button(action: onRequestNew) {
                 Text("Create Template")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.black)
                     .frame(maxWidth: 220)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 13)
                     .background(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color.white)
+                        Capsule().fill(Tint.primary)
                     )
+                    .primaryGlow(Tint.primary)
             }
             .buttonStyle(.plain)
             .padding(.top, 6)
@@ -311,11 +321,11 @@ private struct LibraryTemplatesContent: View {
         VStack(spacing: 12) {
             Spacer()
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 28, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
+                .font(.system(size: 30, weight: .light))
+                .foregroundStyle(.white.opacity(0.35))
             Text("No templates match \"\(searchText)\".")
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.50))
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.55))
                 .multilineTextAlignment(.center)
             Spacer()
             Spacer()
@@ -468,11 +478,22 @@ private struct LibraryExercisesContent: View {
             .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
             .padding(.horizontal, 16)
             .frame(minHeight: 40)
-            .background(
-                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
-            )
-            .overlay(
-                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+            .background {
+                if isSelected {
+                    Capsule().fill(Tint.primary)
+                } else {
+                    Capsule().fill(Color.white.opacity(0.06))
+                }
+            }
+            .overlay {
+                Capsule().stroke(
+                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.12),
+                    lineWidth: 0.5
+                )
+            }
+            .shadow(
+                color: isSelected ? Tint.primary.opacity(0.40) : .clear,
+                radius: 14, y: 2
             )
         }
         .buttonStyle(.plain)
@@ -497,10 +518,8 @@ private struct LibraryExercisesContent: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Circle().fill(group.accent).frame(width: 8, height: 8)
-                Text(group.displayName.uppercased())
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.60))
+                Text(group.displayName)
+                    .sectionLabelStyle(0.70)
             }
             .padding(.bottom, 2)
             VStack(spacing: 8) {
@@ -530,9 +549,8 @@ private struct LibraryExercisesContent: View {
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.white)
                     Text(rowSubtitle(item))
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .tracking(0.8)
-                        .foregroundStyle(.white.opacity(0.40))
+                        .font(Typography.caption)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
 
                 Spacer(minLength: 8)
@@ -542,14 +560,7 @@ private struct LibraryExercisesContent: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
             .frame(minHeight: 60)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.white.opacity(0.05))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 14)
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -582,7 +593,7 @@ private struct LibraryExercisesContent: View {
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
                             .background(
-                                Capsule().fill(Color(.sRGB, red: 0.96, green: 0.78, blue: 0.32, opacity: 1))
+                                Capsule().fill(Tint.primary)
                             )
                     }
                     Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
@@ -590,22 +601,22 @@ private struct LibraryExercisesContent: View {
                         .foregroundStyle(.white.opacity(0.90))
                 }
                 Text(RelativeDate.short(last.sessionDate))
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.50))
             }
         } else {
             Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.45))
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.50))
         }
     }
 
     private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
-        var parts: [String] = [item.equipment.displayName.uppercased()]
+        var parts: [String] = [item.equipment.displayName]
         if item.mechanic == .compound, let pattern = item.pattern {
-            parts.append(pattern.displayName.uppercased())
+            parts.append(pattern.displayName)
         } else if item.mechanic == .isolation {
-            parts.append("ISOLATION")
+            parts.append("Isolation")
         }
         return parts.joined(separator: " · ")
     }
@@ -613,14 +624,14 @@ private struct LibraryExercisesContent: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             Spacer()
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 28, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
+                .font(.system(size: 30, weight: .light))
+                .foregroundStyle(.white.opacity(0.35))
             Text(emptyMessage)
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.50))
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.55))
                 .multilineTextAlignment(.center)
             Button {
                 customExerciseTarget = .create
@@ -628,9 +639,9 @@ private struct LibraryExercisesContent: View {
                 Label("Create custom exercise", systemImage: "plus.circle.fill")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 18)
                     .frame(minHeight: 44)
-                    .background(Capsule().fill(Color.white.opacity(0.10)))
+                    .glassPill(tint: Tint.primary)
             }
             .buttonStyle(.plain)
             Spacer()
@@ -676,25 +687,23 @@ private struct TemplateCard: View {
                     .foregroundStyle(.white)
                 Spacer()
                 if let used = template.lastUsedAt {
-                    Text(Self.relative.localizedString(for: used, relativeTo: Date()).uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .tracking(1.5)
-                        .foregroundStyle(.white.opacity(0.45))
+                    Text(Self.relative.localizedString(for: used, relativeTo: Date()))
+                        .font(Typography.caption)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
             }
 
-            Text("\(template.orderedExercises.count) exercises  ·  \(template.totalPlannedSets) sets")
-                .font(.system(size: 13, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.50))
+            Text("\(template.orderedExercises.count) exercises · \(template.totalPlannedSets) sets")
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.60))
 
             if !template.muscleGroups.isEmpty {
                 HStack(spacing: 6) {
                     ForEach(template.muscleGroups, id: \.self) { group in
-                        Text(group.displayName.uppercased())
-                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                            .tracking(1.5)
+                        Text(group.displayName)
+                            .font(Typography.caption)
                             .foregroundStyle(group.accent)
-                            .padding(.horizontal, 9)
+                            .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                             .background(
                                 Capsule().fill(group.accent.opacity(0.16))
@@ -706,14 +715,7 @@ private struct TemplateCard: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.white.opacity(0.05))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
-        )
+        .glassCard(cornerRadius: 18)
     }
 
     private static let relative: RelativeDateTimeFormatter = {

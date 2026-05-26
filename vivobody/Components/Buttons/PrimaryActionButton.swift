@@ -24,7 +24,7 @@ struct PrimaryActionButton: View {
     let title: String
     var subtitle: String? = nil
     var icon: String? = "arrow.right"
-    var accent: Color = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
+    var accent: Color = Tint.primary
     let action: () -> Void
 
     @State private var pressScale: CGFloat = 1.0
@@ -45,9 +45,8 @@ struct PrimaryActionButton: View {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
                     if let subtitle {
-                        Text(subtitle.uppercased())
-                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                            .tracking(2)
+                        Text(subtitle)
+                            .font(Typography.caption)
                             .foregroundStyle(.black.opacity(0.55))
                     }
                     Text(title)
@@ -72,9 +71,16 @@ struct PrimaryActionButton: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.05)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.8
+                    )
             )
-            .shadow(color: accent.opacity(0.25), radius: 10, y: 4)
+            .primaryGlow(accent)
         }
         .buttonStyle(.plain)
         .scaleEffect(pressScale)

@@ -40,13 +40,12 @@ struct BreathingTimerGallery: View {
             Haptics.rigid()
             resetCount &+= 1
         } label: {
-            Text("RESTART")
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.7))
+            Text("Restart")
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.85))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
-                .background(Capsule().fill(Color.white.opacity(0.08)))
+                .glassPill()
         }
         .buttonStyle(.plain)
     }
@@ -62,13 +61,13 @@ struct BreathingTimerGallery: View {
                     }
                 } label: {
                     Text("\(secs)s")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(duration == TimeInterval(secs) ? .black : .white.opacity(0.55))
-                        .padding(.horizontal, 8)
+                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(duration == TimeInterval(secs) ? .black : .white.opacity(0.65))
+                        .padding(.horizontal, 9)
                         .padding(.vertical, 6)
                         .background {
                             if duration == TimeInterval(secs) {
-                                Capsule().fill(Color.white)
+                                Capsule().fill(Tint.primary)
                             }
                         }
                 }
@@ -76,7 +75,7 @@ struct BreathingTimerGallery: View {
             }
         }
         .padding(3)
-        .background(Capsule().fill(Color.white.opacity(0.06)))
+        .glassPill()
     }
 }
 

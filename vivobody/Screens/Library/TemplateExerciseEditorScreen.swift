@@ -105,9 +105,8 @@ struct TemplateExerciseEditorScreen: View {
                 Text(exercise.name)
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
-                Text(exercise.group.displayName.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(1.5)
+                Text(exercise.group.displayName)
+                    .font(Typography.caption)
                     .foregroundStyle(exercise.group.accent.opacity(0.85))
             }
             Spacer()
@@ -115,14 +114,7 @@ struct TemplateExerciseEditorScreen: View {
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.white.opacity(0.05))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
-        )
+        .glassCard(cornerRadius: 18)
     }
 
     // MARK: - Per-set notice
@@ -137,24 +129,17 @@ struct TemplateExerciseEditorScreen: View {
                 Image(systemName: "chart.bar.doc.horizontal")
                     .font(.system(size: 13, weight: .semibold))
                 Text("Per-set programming")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
             }
             .foregroundStyle(.white.opacity(0.85))
 
             Text("This exercise uses pyramid / wave programming with \(exercise.orderedSets.count) explicit set rows. The values above are fallbacks — the per-set rows are the source of truth at runtime.")
-                .font(.system(size: 12))
+                .font(Typography.caption)
                 .foregroundStyle(.white.opacity(0.55))
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white.opacity(0.04))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassChip(cornerRadius: 14)
     }
 
     // MARK: - Bindings

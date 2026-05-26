@@ -66,10 +66,8 @@ struct TodayScreen: View {
     /// large title. The title says where you are ("Today"); this strip
     /// gives you the calendar context.
     private var dateStrip: some View {
-        Text(Self.dayFormatter.string(from: Date()).uppercased())
-            .font(.system(size: 11, weight: .semibold, design: .monospaced))
-            .tracking(2)
-            .foregroundStyle(.white.opacity(0.45))
+        Text(Self.dayFormatter.string(from: Date()))
+            .sectionLabelStyle(0.50)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -79,10 +77,8 @@ struct TodayScreen: View {
                 streakHeading
                 Spacer()
                 if !workoutDates.isEmpty {
-                    Text("\(monthCount(in: Date())) THIS MONTH")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .tracking(1.5)
-                        .foregroundStyle(.white.opacity(0.40))
+                    Text("\(monthCount(in: Date())) this month")
+                        .sectionLabelStyle(0.45)
                 }
             }
 
@@ -93,22 +89,13 @@ struct TodayScreen: View {
             .padding(.top, 4)
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(0.04))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassCard()
     }
 
     private var streakHeading: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text("STREAK")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Streak")
+                .sectionLabelStyle(0.60)
 
             Text("·")
                 .foregroundStyle(.white.opacity(0.30))
@@ -118,10 +105,9 @@ struct TodayScreen: View {
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
-                Text("DAYS")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(1.5)
-                    .foregroundStyle(.white.opacity(0.45))
+                Text(currentStreakDays == 1 ? "day" : "days")
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.50))
             }
         }
     }
@@ -129,9 +115,7 @@ struct TodayScreen: View {
     private var startSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(startSectionTitle)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+                .sectionLabelStyle(0.60)
 
             HStack(spacing: 14) {
                 Image(systemName: "dumbbell.fill")
@@ -177,10 +161,8 @@ struct TodayScreen: View {
     /// templates trailing in their original Library order.
     private var templatesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("TEMPLATES")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Templates")
+                .sectionLabelStyle(0.60)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
@@ -204,8 +186,8 @@ struct TodayScreen: View {
                     .lineLimit(1)
 
                 Text("\(template.orderedExercises.count) ex · \(template.totalPlannedSets) sets")
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.50))
 
                 HStack(spacing: 4) {
                     ForEach(template.muscleGroups.prefix(4), id: \.self) { group in
@@ -217,14 +199,7 @@ struct TodayScreen: View {
             }
             .padding(14)
             .frame(width: 150, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color.white.opacity(0.05))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
-            )
+            .glassChip()
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Start \(template.name)")
@@ -232,17 +207,15 @@ struct TodayScreen: View {
 
     private var lastWorkoutSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("LAST WORKOUT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Last workout")
+                .sectionLabelStyle(0.60)
 
             if let session = completedSessions.first {
                 lastWorkoutCard(for: session)
             } else {
                 Text("Nothing logged yet — your first session lands here.")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .font(Typography.body)
+                    .foregroundStyle(.white.opacity(0.50))
             }
         }
     }
@@ -256,46 +229,37 @@ struct TodayScreen: View {
                     .foregroundStyle(.white)
                 Spacer()
                 Text(Self.timeFormatter.string(from: date))
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.50))
             }
 
             HStack(spacing: 0) {
-                stat(value: "\(Int(session.duration / 60))", unit: "min", label: "TIME")
+                stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time")
                 statDivider
-                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "VOLUME")
+                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume")
                 statDivider
-                stat(value: "\(session.totalSets)", unit: nil, label: "SETS")
+                stat(value: "\(session.totalSets)", unit: nil, label: "Sets")
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(Color.white.opacity(0.04))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassCard()
     }
 
     private func stat(value: String, unit: String?, label: String) -> some View {
         VStack(spacing: 6) {
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(value)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(Typography.statValue)
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.50))
                 }
             }
             Text(label)
-                .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.45))
+                .sectionLabelStyle(0.50)
         }
         .frame(maxWidth: .infinity)
     }
@@ -347,7 +311,7 @@ struct TodayScreen: View {
     }
 
     private var startSectionTitle: String {
-        hasLastSession ? "REPEAT LAST WORKOUT" : "TODAY'S WORKOUT"
+        hasLastSession ? "Repeat last workout" : "Today's workout"
     }
 
     private var startButtonTitle: String {

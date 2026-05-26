@@ -87,4 +87,42 @@ extension Array where Element == WorkoutSession {
 
         return WeeklyComparison(thisWeek: thisWeek, lastWeek: lastWeek)
     }
+
+    /// Returns rolling weekly totals for the last `weeks` calendar
+    /// weeks (oldest first). Used by the Your Journey sparklines on
+    /// the Me-tab card. Weeks with no logged sessions appear as
+    /// zero entries — preserves the time axis so the spark line
+    /// reads as time-forward.
+    func weeklySeries(
+        weeks: Int = 12,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> [WeeklyTotals] {
+        guard weeks > 0,
+              let thisWeekRange = calendar.dateInterval(of: .weekOfYear, for: now) else {
+            return []
+        }
+
+        // Pre-compute the chronological list of week ranges from
+        // oldest → current.
+        var ranges: [DateInterval] = []
+        for i in stride(from: weeks - 1, through: 0, by: -1) {
+            guard
+                let weekStart = calendar.date(byAdding: .weekOfYear, value: -i, to: thisWeekRange.start),
+                let range = calendar.dateInterval(of: .weekOfYear, for: weekStart)
+            else { continue }
+            ranges.append(range)
+        }
+
+        var totals: [WeeklyTotals] = Array<WeeklyTotals>(repeating: WeeklyTotals.zero, count: ranges.count)
+        for session in self {
+            guard let completed = session.completedAt else { continue }
+            if let idx = ranges.firstIndex(where: { $0.contains(completed) }) {
+                totals[idx].workouts += 1
+                totals[idx].sets += session.totalSets
+                totals[idx].volume += session.totalVolume
+            }
+        }
+        return totals
+    }
 }

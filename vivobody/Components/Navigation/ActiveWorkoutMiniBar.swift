@@ -39,8 +39,8 @@ struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
     var onExpand: () -> Void
 
-    private let completedGreen = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
-    private let restTint       = Color(.sRGB, red: 0.46, green: 0.74, blue: 0.96, opacity: 1.0)
+    private let completedGreen = Tint.success
+    private let restTint       = Tint.primary
     private let readyTint      = Color.white.opacity(0.55)
 
     var body: some View {
@@ -90,32 +90,29 @@ struct ActiveWorkoutMiniBar: View {
                 .lineLimit(1)
 
             Text(subtitleText)
-                .font(.system(size: 10, weight: .medium, design: .monospaced))
-                .tracking(1)
-                .foregroundStyle(.white.opacity(0.50))
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.55))
                 .lineLimit(1)
         }
     }
 
-    /// Right-side state badge — switches between REST countdown, READY,
-    /// or TAP TO FINISH. Tinted to match its meaning (blue for rest,
-    /// white for ready, green for complete).
+    /// Right-side state badge — switches between Rest countdown, Ready,
+    /// or Tap to finish. Tinted to match its meaning.
     @ViewBuilder
     private func statusBadge(now: Date) -> some View {
         if session.isAllComplete {
-            badgeText("TAP TO FINISH", tint: completedGreen)
+            badgeText("Tap to finish", tint: completedGreen)
         } else if session.isResting {
             let remaining = max(0, Int(session.restRemaining.rounded(.up)))
-            badgeText("REST \(formatTime(remaining))", tint: restTint)
+            badgeText("Rest \(formatTime(remaining))", tint: restTint)
         } else {
-            badgeText("READY", tint: readyTint)
+            badgeText("Ready", tint: readyTint)
         }
     }
 
     private func badgeText(_ text: String, tint: Color) -> some View {
         Text(text)
-            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-            .tracking(1.5)
+            .font(.system(size: 12, weight: .semibold, design: .monospaced))
             .foregroundStyle(tint)
             .monospacedDigit()
     }
@@ -155,12 +152,12 @@ struct ActiveWorkoutMiniBar: View {
     }
 
     private var subtitleText: String {
-        if session.isAllComplete { return "ALL SETS LOGGED" }
+        if session.isAllComplete { return "All sets logged" }
         guard let exercise = displayExercise else { return "" }
         if let nextIndex = session.activeSetIndex(for: exercise) {
-            return "SET \(nextIndex + 1) OF \(exercise.plannedSets)"
+            return "Set \(nextIndex + 1) of \(exercise.plannedSets)"
         }
-        return "ALL SETS DONE"
+        return "All sets done"
     }
 
     private var accessibilityDescription: String {

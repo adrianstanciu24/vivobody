@@ -106,19 +106,17 @@ struct BodyWeightDetail: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("CURRENT")
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Current")
+                .sectionLabelStyle(0.60)
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(currentWeightLabel)
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 Text(unit.symbol)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.55))
 
                 Spacer()
 
@@ -128,15 +126,13 @@ struct BodyWeightDetail: View {
             }
 
             if let last = entries.latest {
-                Text("LAST LOGGED \(Self.dayFormatter.string(from: last.date).uppercased())")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(1.5)
-                    .foregroundStyle(.white.opacity(0.40))
+                Text("Last logged \(Self.dayFormatter.string(from: last.date))")
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
             } else {
-                Text("NO ENTRIES YET")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(1.5)
-                    .foregroundStyle(.white.opacity(0.40))
+                Text("No entries yet")
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
             }
         }
     }
@@ -175,16 +171,28 @@ struct BodyWeightDetail: View {
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 15, weight: .semibold))
-                Text("Log Weight")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
+                Text("Log weight")
+                    .font(.system(size: 16, weight: .semibold))
             }
             .foregroundStyle(.black)
-            .frame(maxWidth: .infinity, minHeight: 50)
+            .frame(maxWidth: .infinity, minHeight: 52)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.white)
+                    .fill(Tint.primary)
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.40), Color.white.opacity(0.05)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.8
+                    )
+            )
+            .primaryGlow(Tint.primary)
         }
         .buttonStyle(.plain)
     }
@@ -239,19 +247,12 @@ struct BodyWeightDetail: View {
         HStack {
             Spacer()
             Text("Log another entry to see your trend")
-                .font(.system(size: 12, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.45))
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.55))
             Spacer()
         }
         .frame(height: 120)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white.opacity(0.03))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-        )
+        .glassChip(cornerRadius: 16)
     }
 
     // MARK: - Range strip
@@ -271,14 +272,22 @@ struct BodyWeightDetail: View {
             range = r
         } label: {
             Text(r.label)
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.75))
+                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
                 .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
                 )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(
+                            isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                            lineWidth: 0.5
+                        )
+                )
+                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
     }
@@ -287,10 +296,8 @@ struct BodyWeightDetail: View {
 
     private var recentTable: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("RECENT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Recent")
+                .sectionLabelStyle(0.60)
 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(reversedEntries.enumerated()), id: \.element.id) { idx, entry in
@@ -322,14 +329,7 @@ struct BodyWeightDetail: View {
                     }
                 }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-            )
+            .glassCard(cornerRadius: 18)
         }
     }
 

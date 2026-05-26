@@ -106,36 +106,25 @@ struct CustomExerciseEditorSheet: View {
 
     private var nameField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("NAME")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Name")
+                .sectionLabelStyle(0.60)
 
             TextField("", text: $draft.name, prompt: Text("e.g. Bulgarian Split Squat")
                 .foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.white)
                 .focused($nameFieldFocused)
                 .submitLabel(.done)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 14)
-                .background(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(Color.white.opacity(0.05))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-                )
+                .glassChip(cornerRadius: 14)
         }
     }
 
     private var muscleGroupField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("MUSCLE GROUP")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Muscle group")
+                .sectionLabelStyle(0.60)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -158,17 +147,21 @@ struct CustomExerciseEditorSheet: View {
                     .fill(g.accent)
                     .frame(width: 7, height: 7)
                 Text(g.displayName)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
             }
             .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
             .padding(.horizontal, 14)
             .frame(minHeight: 44)
             .background(
-                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
             )
             .overlay(
-                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                Capsule().stroke(
+                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                    lineWidth: 0.5
+                )
             )
+            .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -178,10 +171,8 @@ struct CustomExerciseEditorSheet: View {
 
     private var equipmentField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("EQUIPMENT")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Equipment")
+                .sectionLabelStyle(0.60)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -201,19 +192,23 @@ struct CustomExerciseEditorSheet: View {
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: e.symbol)
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                 Text(e.displayName)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
             }
             .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
             .padding(.horizontal, 14)
             .frame(minHeight: 44)
             .background(
-                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
             )
             .overlay(
-                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                Capsule().stroke(
+                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                    lineWidth: 0.5
+                )
             )
+            .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -223,10 +218,8 @@ struct CustomExerciseEditorSheet: View {
 
     private var mechanicField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("MECHANIC")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Mechanic")
+                .sectionLabelStyle(0.60)
 
             HStack(spacing: 8) {
                 ForEach(Mechanic.allCases, id: \.self) { m in
@@ -242,25 +235,26 @@ struct CustomExerciseEditorSheet: View {
             Haptics.selection()
             withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
                 draft.mechanic = m
-                // Switching to isolation clears the pattern; switching
-                // back to compound leaves the pattern at whatever it
-                // was previously (or nil if it was never set).
                 if m == .isolation {
                     draft.pattern = nil
                 }
             }
         } label: {
             Text(m.displayName)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
                 .background(
-                    Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                    Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
                 )
                 .overlay(
-                    Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                    Capsule().stroke(
+                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                        lineWidth: 0.5
+                    )
                 )
+                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -270,14 +264,12 @@ struct CustomExerciseEditorSheet: View {
 
     private var patternField: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("MOVEMENT PATTERN")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Movement pattern")
+                .sectionLabelStyle(0.60)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    patternChip(nil)  // "None" sentinel — explicit unset
+                    patternChip(nil)
                     ForEach(MovementPattern.allCases, id: \.self) { p in
                         patternChip(p)
                     }
@@ -294,16 +286,20 @@ struct CustomExerciseEditorSheet: View {
             draft.pattern = p
         } label: {
             Text(label)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
                 .padding(.horizontal, 14)
                 .frame(minHeight: 44)
                 .background(
-                    Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                    Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
                 )
                 .overlay(
-                    Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                    Capsule().stroke(
+                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                        lineWidth: 0.5
+                    )
                 )
+                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -314,47 +310,36 @@ struct CustomExerciseEditorSheet: View {
     private var aliasesField: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text("ALIASES")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.50))
+                Text("Aliases")
+                    .sectionLabelStyle(0.60)
                 Spacer()
                 Text("comma-separated")
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.35))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.40))
             }
 
             TextField("", text: $draft.aliasesInput, prompt: Text("e.g. BP, Flat Bench")
                 .foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 15))
+                .font(.system(size: 16))
                 .foregroundStyle(.white)
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.words)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 14)
-                .background(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(Color.white.opacity(0.05))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-                )
+                .glassChip(cornerRadius: 14)
         }
     }
 
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("DEFAULTS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.50))
+            Text("Defaults")
+                .sectionLabelStyle(0.60)
 
             HStack(spacing: 12) {
                 WeightScrubber(
                     canonicalWeight: $draft.defaultWeight,
                     purpose: .strength,
-                    label: "WEIGHT",
+                    label: "Weight",
                     valueFontSize: 28,
                     verticalPadding: 12
                 )
@@ -366,7 +351,7 @@ struct CustomExerciseEditorSheet: View {
                     range: 1...100,
                     step: 1,
                     unit: "reps",
-                    label: "REPS",
+                    label: "Reps",
                     valueFontSize: 28,
                     verticalPadding: 12
                 )

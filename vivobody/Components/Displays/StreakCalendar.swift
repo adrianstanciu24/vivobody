@@ -17,7 +17,7 @@ import SwiftUI
 struct StreakCalendar: View {
     let workoutDates: Set<Date>
     var month: Date = Date()
-    var fillColor: Color = Color(red: 0.50, green: 0.80, blue: 0.60)
+    var fillColor: Color = Tint.primary
 
     private let cellWidth: CGFloat = 48
     private let dotSize: CGFloat = 36
@@ -87,9 +87,8 @@ struct StreakCalendar: View {
         HStack(spacing: 0) {
             ForEach(Array(weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                 Text(symbol)
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(1)
-                    .foregroundStyle(.white.opacity(0.32))
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.40))
                     .frame(width: cellWidth)
             }
         }
@@ -100,14 +99,13 @@ struct StreakCalendar: View {
         HStack(spacing: 4) {
             DigitTicker(
                 value: Double(monthSessionCount),
-                font: .system(size: 11, weight: .semibold, design: .monospaced),
-                color: .white.opacity(0.4)
+                font: .system(size: 13, weight: .semibold),
+                color: .white.opacity(0.55)
             )
-            Text("SESSION\(monthSessionCount == 1 ? "" : "S")")
+            Text(monthSessionCount == 1 ? "session" : "sessions")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.white.opacity(0.55))
         }
-        .font(.system(size: 11, weight: .semibold, design: .monospaced))
-        .tracking(2)
-        .foregroundStyle(.white.opacity(0.4))
     }
 
     // MARK: - Grid math
@@ -185,7 +183,7 @@ private struct DayDot: View {
 
     private var numberColor: Color {
         if isWorkout {
-            return Color(red: 0.08, green: 0.14, blue: 0.10)
+            return Color.black.opacity(0.85)
         }
         return Color.white.opacity(isInMonth ? 0.55 : 0.45)
     }

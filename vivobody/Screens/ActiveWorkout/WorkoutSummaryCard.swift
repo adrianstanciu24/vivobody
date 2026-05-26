@@ -72,8 +72,8 @@ struct WorkoutSummaryCard: View {
         isHistorical ? session.totalVolume : animatedVolume
     }
 
-    private let completedGreen = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
-    private let inProgressTint = Color(.sRGB, red: 0.42, green: 0.55, blue: 0.78, opacity: 1.0)
+    private let completedGreen = Tint.success
+    private let inProgressTint = Tint.primary
 
     private var isComplete: Bool { session.isAllComplete }
     private var accent: Color { isComplete ? completedGreen : inProgressTint }
@@ -126,8 +126,20 @@ struct WorkoutSummaryCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Surface.edgeBright,
+                            Surface.edge.opacity(0.6),
+                            Surface.edge.opacity(0.2)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.6
+                )
         )
+        .shadow(color: accent.opacity(0.30), radius: 28, y: 10)
         .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
             // Skip the count-up animation entirely for historical
             // sessions — `displayMinutes`/`displayVolume` already
@@ -165,13 +177,13 @@ struct WorkoutSummaryCard: View {
                     Text("Add notes")
                         .font(.system(size: 13, weight: .semibold))
                 }
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(.white.opacity(0.60))
                 .padding(.horizontal, 14)
                 .frame(minHeight: 44)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color.white.opacity(0.10), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                        .stroke(Color.white.opacity(0.12), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
                 )
             }
             .buttonStyle(.plain)
@@ -184,28 +196,20 @@ struct WorkoutSummaryCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 6) {
                         Image(systemName: "square.and.pencil")
-                            .font(.system(size: 10, weight: .semibold))
-                        Text("NOTES")
-                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                            .tracking(1.8)
+                            .font(.system(size: 11, weight: .semibold))
+                        Text("Notes")
+                            .font(Typography.sectionLabel)
                     }
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(.white.opacity(0.55))
 
                     Text(session.notes)
-                        .font(.system(size: 14))
+                        .font(Typography.body)
                         .foregroundStyle(.white.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(14)
-                .background(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(Color.white.opacity(0.05))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-                )
+                .glassChip(cornerRadius: 14)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -223,15 +227,13 @@ struct WorkoutSummaryCard: View {
             Text(String(format: "%02d / %02d",
                         session.orderedExercises.count + 1,
                         session.orderedExercises.count + 1))
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
+                .font(Typography.metricUnit)
+                .foregroundStyle(.white.opacity(0.50))
 
             Spacer()
 
-            Text(isComplete ? "WORKOUT COMPLETE" : "WORKOUT IN PROGRESS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .tracking(2)
+            Text(isComplete ? "Workout complete" : "In progress")
+                .font(Typography.sectionLabel)
                 .foregroundStyle(accent)
         }
     }
@@ -246,8 +248,8 @@ struct WorkoutSummaryCard: View {
                 .foregroundStyle(.white)
 
             Text(dateString)
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.50))
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.55))
         }
     }
 
@@ -263,15 +265,13 @@ struct WorkoutSummaryCard: View {
                     fractionalDigits: 0
                 )
                 Text("min")
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(.white.opacity(0.50))
 
                 Spacer()
 
-                Text("DURATION")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.40))
+                Text("Duration")
+                    .sectionLabelStyle(0.45)
             }
 
             HStack(alignment: .lastTextBaseline, spacing: 6) {
@@ -284,17 +284,15 @@ struct WorkoutSummaryCard: View {
                     }
                 )
                 Text(unit.symbol)
-                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.55))
                     .padding(.bottom, 4)
 
                 Spacer()
             }
 
-            Text("TOTAL VOLUME")
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.40))
+            Text("Total volume")
+                .sectionLabelStyle(0.45)
         }
     }
 
@@ -317,10 +315,14 @@ struct WorkoutSummaryCard: View {
         return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(exercise.group.displayName.uppercased())
-                        .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                        .tracking(1.5)
-                        .foregroundStyle(exercise.group.accent)
+                    HStack(spacing: 5) {
+                        Circle()
+                            .fill(exercise.group.accent)
+                            .frame(width: 6, height: 6)
+                        Text(exercise.group.displayName)
+                            .font(Typography.caption)
+                            .foregroundStyle(exercise.group.accent)
+                    }
                     Text(exercise.name)
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white)
@@ -330,12 +332,12 @@ struct WorkoutSummaryCard: View {
 
                 if let top {
                     Text("\(WeightFormatter.string(top.weight, unit: unit, includeUnit: false)) × \(top.reps)")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.65))
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.85))
                 } else {
                     Text("—")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.30))
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.35))
                 }
 
                 HStack(spacing: 4) {
@@ -351,12 +353,12 @@ struct WorkoutSummaryCard: View {
             if !exercise.notes.isEmpty {
                 HStack(alignment: .top, spacing: 6) {
                     Image(systemName: "text.alignleft")
-                        .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.35))
-                        .padding(.top, 2)
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.40))
+                        .padding(.top, 3)
                     Text(exercise.notes)
-                        .font(.system(size: 12))
-                        .foregroundStyle(.white.opacity(0.65))
+                        .font(Typography.caption)
+                        .foregroundStyle(.white.opacity(0.70))
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -372,9 +374,9 @@ struct WorkoutSummaryCard: View {
             Spacer()
 
             HStack(spacing: 22) {
-                stat(value: session.totalSets, of: session.totalPlannedSets, label: "SETS")
+                stat(value: session.totalSets, of: session.totalPlannedSets, label: "Sets")
                 statDivider
-                stat(value: session.totalReps, label: "REPS")
+                stat(value: session.totalReps, label: "Reps")
             }
 
             Spacer()
@@ -385,19 +387,17 @@ struct WorkoutSummaryCard: View {
         VStack(spacing: 4) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text("\(value)")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .font(Typography.statValue)
                     .foregroundStyle(.white)
                     .monospacedDigit()
                 if let total, total != value {
                     Text("/ \(total)")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.40))
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.45))
                 }
             }
             Text(label)
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
+                .sectionLabelStyle(0.50)
         }
     }
 
@@ -426,14 +426,7 @@ struct WorkoutSummaryCard: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.white.opacity(0.06))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(Color.white.opacity(0.10), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 14)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Add another exercise")
@@ -448,9 +441,8 @@ struct WorkoutSummaryCard: View {
             Haptics.thunk()
             onDone()
         } label: {
-            Text("DONE")
-                .font(.system(size: 13, weight: .bold, design: .monospaced))
-                .tracking(3)
+            Text("Done")
+                .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(.black)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
@@ -458,6 +450,7 @@ struct WorkoutSummaryCard: View {
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .fill(completedGreen)
                 )
+                .primaryGlow(completedGreen)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Finish workout and return to home")
@@ -473,14 +466,24 @@ struct WorkoutSummaryCard: View {
 
     private var cardBackground: some View {
         ZStack {
-            Color(red: 0.08, green: 0.08, blue: 0.10)
-            LinearGradient(
+            Color(red: 0.06, green: 0.06, blue: 0.08)
+            RadialGradient(
                 colors: [
-                    accent.opacity(isComplete ? 0.26 : 0.20),
+                    accent.opacity(isComplete ? 0.24 : 0.18),
                     Color.clear
                 ],
-                startPoint: .topLeading,
-                endPoint: .center
+                center: .topLeading,
+                startRadius: 0,
+                endRadius: 360
+            )
+            RadialGradient(
+                colors: [
+                    accent.opacity(0.10),
+                    Color.clear
+                ],
+                center: .bottom,
+                startRadius: 0,
+                endRadius: 320
             )
         }
     }

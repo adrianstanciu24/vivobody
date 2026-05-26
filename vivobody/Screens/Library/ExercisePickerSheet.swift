@@ -206,19 +206,26 @@ struct ExercisePickerSheet: View {
             HStack(spacing: 5) {
                 if let symbol {
                     Image(systemName: symbol)
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.system(size: 11, weight: .semibold))
                 }
                 Text(label)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
             }
             .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 14)
             .frame(minHeight: 32)
             .background(
-                Capsule().fill(isSelected ? Color.white : Color.white.opacity(0.06))
+                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
             )
             .overlay(
-                Capsule().stroke(Color.white.opacity(isSelected ? 0 : 0.10), lineWidth: 0.5)
+                Capsule().stroke(
+                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                    lineWidth: 0.5
+                )
+            )
+            .shadow(
+                color: isSelected ? Tint.primary.opacity(0.35) : .clear,
+                radius: 10, y: 2
             )
         }
         .buttonStyle(.plain)
@@ -231,10 +238,8 @@ struct ExercisePickerSheet: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Circle().fill(group.accent).frame(width: 7, height: 7)
-                Text(group.displayName.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.55))
+                Text(group.displayName)
+                    .sectionLabelStyle(0.60)
             }
             VStack(spacing: 6) {
                 ForEach(items) { item in
@@ -270,9 +275,8 @@ struct ExercisePickerSheet: View {
                     // exercises with similar names ("Bench Press"
                     // barbell vs. "Bench Press" dumbbell).
                     Text(rowSubtitle(item))
-                        .font(.system(size: 10, weight: .medium, design: .monospaced))
-                        .tracking(0.8)
-                        .foregroundStyle(.white.opacity(0.35))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.50))
                 }
 
                 Spacer(minLength: 8)
@@ -285,14 +289,7 @@ struct ExercisePickerSheet: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.white.opacity(0.04))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(Color.white.opacity(0.06), lineWidth: 0.5)
-            )
+            .glassChip(cornerRadius: 14)
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -325,27 +322,24 @@ struct ExercisePickerSheet: View {
                 HStack(spacing: 4) {
                     if last.isAllTimeBest {
                         Text("PR")
-                            .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .tracking(0.8)
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
                             .foregroundStyle(.black)
-                            .padding(.horizontal, 4)
+                            .padding(.horizontal, 5)
                             .padding(.vertical, 1)
-                            .background(
-                                Capsule().fill(Color(.sRGB, red: 0.96, green: 0.78, blue: 0.32, opacity: 1))
-                            )
+                            .background(Capsule().fill(Tint.primary))
                     }
                     Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
-                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.85))
                 }
                 Text(RelativeDate.short(last.sessionDate))
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.45))
             }
         } else {
             Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.40))
+                .font(Typography.caption)
+                .foregroundStyle(.white.opacity(0.45))
         }
     }
 
@@ -354,11 +348,11 @@ struct ExercisePickerSheet: View {
     /// "Isolation"). Uppercased mono for the "metadata strip" feel
     /// shared with the rest of the app.
     private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
-        var parts: [String] = [item.equipment.displayName.uppercased()]
+        var parts: [String] = [item.equipment.displayName]
         if item.mechanic == .compound, let pattern = item.pattern {
-            parts.append(pattern.displayName.uppercased())
+            parts.append(pattern.displayName)
         } else if item.mechanic == .isolation {
-            parts.append("ISOLATION")
+            parts.append("Isolation")
         }
         return parts.joined(separator: " · ")
     }
@@ -366,25 +360,29 @@ struct ExercisePickerSheet: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 14) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 28, weight: .light))
-                .foregroundStyle(.white.opacity(0.30))
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .fill(Tint.primary.opacity(0.10))
+                    .frame(width: 110, height: 110)
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 36, weight: .light))
+                    .foregroundStyle(Tint.primary.opacity(0.85))
+            }
             Text(emptyStateMessage)
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.45))
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.55))
                 .multilineTextAlignment(.center)
             Button {
                 editorTarget = .create
             } label: {
                 Label("Create custom exercise", systemImage: "plus.circle.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 18)
                     .frame(minHeight: 44)
-                    .background(
-                        Capsule().fill(Color.white.opacity(0.10))
-                    )
+                    .background(Capsule().fill(Tint.primary))
+                    .primaryGlow(Tint.primary)
             }
             .buttonStyle(.plain)
         }
