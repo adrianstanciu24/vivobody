@@ -157,6 +157,79 @@ private struct TopSpecularSheenModifier: ViewModifier {
     }
 }
 
+/// A Fresnel-shaded translucent sphere — the same vocabulary used
+/// for the rest-timer orb, packaged for reuse anywhere a circular
+/// glass element should read as 3D rather than as a flat tinted
+/// disc. Layers (in z-order):
+///   1. Sphere body — radial gradient with bright spec mid, dark
+///      rim. This is the Fresnel cue that sells "round, not flat."
+///   2. Inner rim shadow — a darker stroke at the edge so the
+///      sphere has a visible lip.
+///   3. Bounce-light arc — warm crescent on the lower rim,
+///      suggesting light reflecting up off a notional floor.
+///   4. Specular cap — small white highlight upper-left, the
+///      light catching on the polished surface.
+///
+/// Compose with an outer `.primaryGlow(...)` or an Image overlay
+/// to get the full empty-state treatment (atmosphere + icon).
+struct GlassSphere: View {
+    var size: CGFloat = 132
+    var tint: Color = Tint.primary
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    RadialGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: tint.opacity(0.58), location: 0.00),
+                            .init(color: tint.opacity(0.42), location: 0.45),
+                            .init(color: tint.opacity(0.20), location: 0.78),
+                            .init(color: tint.opacity(0.06), location: 0.95),
+                            .init(color: tint.opacity(0.00), location: 1.00),
+                        ]),
+                        center: UnitPoint(x: 0.38, y: 0.32),
+                        startRadius: 0,
+                        endRadius: size * 0.55
+                    )
+                )
+
+            Circle()
+                .stroke(
+                    RadialGradient(
+                        colors: [
+                            Color.clear,
+                            Color.black.opacity(0.40)
+                        ],
+                        center: .center,
+                        startRadius: size * 0.40,
+                        endRadius: size * 0.50
+                    ),
+                    lineWidth: size * 0.06
+                )
+                .blendMode(.multiply)
+
+            Circle()
+                .trim(from: 0.58, to: 0.92)
+                .stroke(
+                    tint.opacity(0.55),
+                    style: StrokeStyle(lineWidth: size * 0.015, lineCap: .round)
+                )
+                .blur(radius: size * 0.012)
+                .padding(size * 0.012)
+                .blendMode(.plusLighter)
+
+            Circle()
+                .fill(Color.white.opacity(0.28))
+                .frame(width: size * 0.30, height: size * 0.30)
+                .blur(radius: size * 0.09)
+                .offset(x: -size * 0.18, y: -size * 0.18)
+                .blendMode(.plusLighter)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 /// Pedestal beneath a centered subject: a soft elliptical ground
 /// shadow plus a faint mirrored reflection wedge below it. Drop
 /// underneath a hero element (like the plate visualizer) to make

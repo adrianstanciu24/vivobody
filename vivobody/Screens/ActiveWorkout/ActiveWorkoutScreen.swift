@@ -186,24 +186,15 @@ struct ActiveWorkoutScreen: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 8)
         // Opaque backdrop keeps card content from bleeding through
-        // the bar; the soft gradient fade BELOW the bar (rendered
-        // outside the bar's frame via overlay alignment) gives a
-        // subtle "the bar floats above content" depth cue instead
-        // of a hard divider line.
+        // the bar. Previously this overlay also painted a soft
+        // black-to-clear gradient ~16pt below itself to suggest the
+        // bar floated above the cards — but the carved-glass card
+        // upgrade gave every card its own bright top sheen + bevel
+        // that already reads as "the bar's edge catches the card's
+        // glass." The fade-down overlay was darkening the top of
+        // each card on top of that, producing a "bent" crescent.
+        // Removed.
         .background(Color.black)
-        .overlay(alignment: .bottom) {
-            LinearGradient(
-                colors: [
-                    Color.black.opacity(0.65),
-                    Color.black.opacity(0)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 16)
-            .offset(y: 16)
-            .allowsHitTesting(false)
-        }
     }
 
     private var pager: some View {

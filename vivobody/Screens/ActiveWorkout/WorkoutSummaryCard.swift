@@ -20,6 +20,10 @@
 import SwiftUI
 
 struct WorkoutSummaryCard: View {
+    /// Card corner radius. Hoisted to a constant so the clip,
+    /// bevel, and sheen stay in lockstep.
+    private static let cardCornerRadius: CGFloat = 28
+
     @Bindable var session: WorkoutSession
 
     @AppStorage(SettingsKey.weightUnit)
@@ -83,63 +87,48 @@ struct WorkoutSummaryCard: View {
     @State private var isEditingWorkoutNotes: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            topBadges
-
-            Spacer(minLength: 20)
-
-            VStack(alignment: .leading, spacing: 14) {
-                titleAndDate
-                divider
-                heroStats
-                divider
-            }
-
-            Spacer(minLength: 16)
-
-            exerciseList
-
-            Spacer(minLength: 16)
-
-            notesBlock
-
-            VStack(alignment: .leading, spacing: 14) {
-                divider
-                footerStats
-            }
-
-            if !isHistorical, let onAddExercise {
-                addExerciseButton(onAddExercise: onAddExercise)
-                    .padding(.top, 18)
-            }
-
-            if isComplete, let onDone {
-                doneButton(onDone: onDone)
-                    .padding(.top, 10)
+        // Layout contract:
+        //   • Content (title, stats, exercises, notes) anchors to
+        //     the top of the card.
+        //   • Action bar (Add Exercise / Done) anchors to the
+        //     bottom of the card.
+        //   • A flexible Spacer between them claims any remaining
+        //     space when the workout is short — no dead band of
+        //     empty card surface above the buttons.
+        //   • When the workout is long enough that content +
+        //     action bar exceed the card height, the Spacer
+        //     collapses to 0 and the whole stack scrolls.
+        //
+        // `minHeight: geo.size.height` on the inner VStack is what
+        // makes the Spacer behave: it sets the natural height to
+        // exactly the visible card height, so the Spacer fills the
+        // gap; when content forces the stack taller, the minHeight
+        // becomes irrelevant and the ScrollView takes over.
+        GeometryReader { geo in
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 22) {
+                    titleAndDate
+                    statStrip
+                    exerciseList
+                    quietNotesBlock
+                    Spacer(minLength: 12)
+                    actionBar
+                }
+                .padding(.horizontal, 18)
+                .padding(.top, 22)
+                .padding(.bottom, 22)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(minHeight: geo.size.height, alignment: .top)
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 18)
-        .padding(.bottom, 22)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            Surface.edgeBright,
-                            Surface.edge.opacity(0.6),
-                            Surface.edge.opacity(0.2)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 0.6
-                )
-        )
-        .shadow(color: accent.opacity(0.30), radius: 28, y: 10)
+        .clipShape(RoundedRectangle(cornerRadius: Self.cardCornerRadius, style: .continuous))
+        .topSpecularSheen(cornerRadius: Self.cardCornerRadius, intensity: 0.10, height: 0.42)
+        .glassRimBevel(cornerRadius: Self.cardCornerRadius, outerWidth: 0.7, innerInset: 1.2)
+        .shadow(color: accent.opacity(0.38), radius: 28, y: 12)
+        .shadow(color: .black.opacity(0.55), radius: 8, y: 4)
+        .shadow(color: .black.opacity(0.35), radius: 1.5, y: 1)
         .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
             // Skip the count-up animation entirely for historical
             // sessions — `displayMinutes`/`displayVolume` already
@@ -158,14 +147,15 @@ struct WorkoutSummaryCard: View {
         }
     }
 
-    // MARK: - Notes
+    // MARK: - Quiet notes
 
-    /// Per-workout notes block. Empty state shows a subtle inline
-    /// "Add notes" affordance; populated state renders the text in a
-    /// soft card the user can tap to edit. Same surface in both
-    /// in-flight and historical modes.
+    /// One-line "Add notes" link when empty; soft glass card with
+    /// the notes text when populated. Demoted from the previous
+    /// dashed-border full-width box — that read as a primary CTA
+    /// in a card whose primary CTAs (Add Exercise / Done) already
+    /// live in the pinned action bar.
     @ViewBuilder
-    private var notesBlock: some View {
+    private var quietNotesBlock: some View {
         if session.notes.isEmpty {
             Button {
                 Haptics.soft()
@@ -177,17 +167,11 @@ struct WorkoutSummaryCard: View {
                     Text("Add notes")
                         .font(.system(size: 13, weight: .semibold))
                 }
-                .foregroundStyle(.white.opacity(0.60))
-                .padding(.horizontal, 14)
-                .frame(minHeight: 44)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color.white.opacity(0.12), style: StrokeStyle(lineWidth: 0.5, dash: [4]))
-                )
+                .foregroundStyle(.white.opacity(0.55))
+                .padding(.vertical, 8)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .padding(.bottom, 16)
         } else {
             Button {
                 Haptics.soft()
@@ -213,87 +197,103 @@ struct WorkoutSummaryCard: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .padding(.bottom, 16)
         }
     }
 
     // MARK: - Header pieces
 
-    /// Tiny identifying badges at the very top of the card. Index on
-    /// the left, completion-state label on the right. Stays anchored
-    /// to the top so the card edge always identifies itself.
-    private var topBadges: some View {
-        HStack {
-            Text(String(format: "%02d / %02d",
-                        session.orderedExercises.count + 1,
-                        session.orderedExercises.count + 1))
-                .font(Typography.metricUnit)
-                .foregroundStyle(.white.opacity(0.50))
-
-            Spacer()
-
-            Text(isComplete ? "Workout complete" : "In progress")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(accent)
-        }
-    }
-
-    /// Title and date — pulled down to sit with the hero stats block
-    /// so they read as a sub-header for the big numbers rather than
-    /// floating alone at the top of the card.
+    /// Title block. Date is suppressed for in-flight sessions
+    /// (the user knows it's today) and kept only when the card is
+    /// viewed historically, where the date is the primary identity.
     private var titleAndDate: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(titleString)
-                .font(.system(size: 26, weight: .bold))
+                .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(.white)
 
-            Text(dateString)
-                .font(Typography.caption)
-                .foregroundStyle(.white.opacity(0.55))
+            if isHistorical {
+                Text(dateString)
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.55))
+            }
         }
     }
 
-    // MARK: - Hero stats
+    // MARK: - Stat grid
 
-    private var heroStats: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .lastTextBaseline, spacing: 6) {
-                DigitTicker(
-                    value: displayMinutes,
-                    font: .system(size: 24, weight: .bold, design: .rounded),
-                    color: .white,
-                    fractionalDigits: 0
-                )
-                Text("min")
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(.white.opacity(0.50))
-
-                Spacer()
-
-                Text("Duration")
-                    .sectionLabelStyle(0.45)
-            }
-
-            HStack(alignment: .lastTextBaseline, spacing: 6) {
-                DigitTicker(
-                    value: WeightFormatter.toDisplay(displayVolume, unit: unit),
-                    font: .system(size: 56, weight: .bold, design: .rounded),
-                    color: .white,
-                    formatter: { value in
-                        Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+    /// 2x2 stat grid — Duration / Volume on the top row, Sets /
+    /// Reps on the bottom. Two columns per row instead of four
+    /// gives the Volume cell enough horizontal room for big
+    /// comma-grouped numbers (e.g. "14,145 lb") without crushing
+    /// neighbours. Each cell takes half the row so the layout is
+    /// stable regardless of digit count.
+    private var statStrip: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .firstTextBaseline, spacing: 14) {
+                statCell(label: "Duration") {
+                    HStack(alignment: .lastTextBaseline, spacing: 4) {
+                        DigitTicker(
+                            value: displayMinutes,
+                            font: Self.statValueFont,
+                            color: .white,
+                            fractionalDigits: 0
+                        )
+                        Text("min")
+                            .font(Typography.metricUnit)
+                            .foregroundStyle(.white.opacity(0.50))
                     }
-                )
-                Text(unit.symbol)
-                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.55))
-                    .padding(.bottom, 4)
-
-                Spacer()
+                }
+                statCell(label: "Volume") {
+                    HStack(alignment: .lastTextBaseline, spacing: 4) {
+                        DigitTicker(
+                            value: WeightFormatter.toDisplay(displayVolume, unit: unit),
+                            font: Self.statValueFont,
+                            color: .white,
+                            formatter: { value in
+                                Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+                            }
+                        )
+                        Text(unit.symbol)
+                            .font(Typography.metricUnit)
+                            .foregroundStyle(.white.opacity(0.50))
+                    }
+                }
             }
 
-            Text("Total volume")
+            HStack(alignment: .firstTextBaseline, spacing: 14) {
+                statCell(label: "Sets") {
+                    HStack(alignment: .lastTextBaseline, spacing: 4) {
+                        Text("\(session.totalSets)")
+                            .font(Self.statValueFont)
+                            .foregroundStyle(.white)
+                            .monospacedDigit()
+                        if session.totalPlannedSets != session.totalSets {
+                            Text("/ \(session.totalPlannedSets)")
+                                .font(Typography.metricUnit)
+                                .foregroundStyle(.white.opacity(0.45))
+                        }
+                    }
+                }
+                statCell(label: "Reps") {
+                    Text("\(session.totalReps)")
+                        .font(Self.statValueFont)
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                }
+            }
+        }
+    }
+
+    private static let statValueFont = Font.system(size: 28, weight: .bold, design: .rounded)
+
+    @ViewBuilder
+    private func statCell<Content: View>(label: String, @ViewBuilder value: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            value()
+            Text(label)
                 .sectionLabelStyle(0.45)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Exercise list
@@ -367,44 +367,21 @@ struct WorkoutSummaryCard: View {
         }
     }
 
-    // MARK: - Footer
+    // MARK: - Action bar
 
-    private var footerStats: some View {
-        HStack {
-            Spacer()
-
-            HStack(spacing: 22) {
-                stat(value: session.totalSets, of: session.totalPlannedSets, label: "Sets")
-                statDivider
-                stat(value: session.totalReps, label: "Reps")
+    /// Pinned bottom action region. Add Exercise (when supported)
+    /// sits above Done (when shown). Both stay reachable regardless
+    /// of how far the user has scrolled the content above.
+    @ViewBuilder
+    private var actionBar: some View {
+        VStack(spacing: 10) {
+            if !isHistorical, let onAddExercise {
+                addExerciseButton(onAddExercise: onAddExercise)
             }
-
-            Spacer()
-        }
-    }
-
-    private func stat(value: Int, of total: Int? = nil, label: String) -> some View {
-        VStack(spacing: 4) {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(value)")
-                    .font(Typography.statValue)
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                if let total, total != value {
-                    Text("/ \(total)")
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.45))
-                }
+            if isComplete, let onDone {
+                doneButton(onDone: onDone)
             }
-            Text(label)
-                .sectionLabelStyle(0.50)
         }
-    }
-
-    private var statDivider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.10))
-            .frame(width: 0.5, height: 28)
     }
 
     // MARK: - Done
@@ -458,33 +435,54 @@ struct WorkoutSummaryCard: View {
 
     // MARK: - Misc bits
 
-    private var divider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.07))
-            .frame(height: 0.5)
-    }
-
     private var cardBackground: some View {
         ZStack {
-            Color(red: 0.06, green: 0.06, blue: 0.08)
+            // Slightly cooler black at the bottom, warmer near the
+            // top — gives the card body a vertical gradient that
+            // reads as a curved glass surface instead of a flat fill.
+            LinearGradient(
+                colors: [
+                    Color(red: 0.085, green: 0.080, blue: 0.090),
+                    Color(red: 0.045, green: 0.045, blue: 0.055)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            // Hot quadrant — ambient light source.
             RadialGradient(
                 colors: [
-                    accent.opacity(isComplete ? 0.24 : 0.18),
+                    accent.opacity(isComplete ? 0.28 : 0.22),
                     Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,
                 endRadius: 360
             )
+
+            // Diagonal counter-glow.
             RadialGradient(
                 colors: [
-                    accent.opacity(0.10),
+                    accent.opacity(0.12),
                     Color.clear
                 ],
                 center: .bottom,
                 startRadius: 0,
                 endRadius: 320
             )
+
+            // Bottom inner darkening — the rim recedes into shadow,
+            // pairing with the bright top sheen overlay.
+            LinearGradient(
+                colors: [
+                    Color.clear,
+                    Color.clear,
+                    Color.black.opacity(0.35)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .blendMode(.multiply)
         }
     }
 

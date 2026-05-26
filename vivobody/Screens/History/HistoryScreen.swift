@@ -42,9 +42,7 @@ struct HistoryScreen: View {
     private var emptyState: some View {
         VStack(spacing: 18) {
             ZStack {
-                Circle()
-                    .frame(width: 132, height: 132)
-                    .glassCard(cornerRadius: 999, tint: Tint.primary)
+                GlassSphere(size: 132, tint: Tint.primary)
 
                 Image(systemName: "clock.arrow.circlepath")
                     .font(.system(size: 56, weight: .light))

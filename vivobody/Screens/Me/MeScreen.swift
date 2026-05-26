@@ -139,9 +139,7 @@ struct MeScreen: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 14) {
                 ZStack {
-                    Circle()
-                        .frame(width: 64, height: 64)
-                        .glassCard(cornerRadius: 999, tint: Tint.primary)
+                    GlassSphere(size: 64, tint: Tint.primary)
                     Image(systemName: "scalemass.fill")
                         .font(.system(size: 26, weight: .light))
                         .symbolRenderingMode(.palette)
@@ -599,9 +597,7 @@ struct MeScreen: View {
     private var emptyJourneyTile: some View {
         HStack(spacing: 14) {
             ZStack {
-                Circle()
-                    .frame(width: 56, height: 56)
-                    .glassCard(cornerRadius: 999, tint: Tint.primary)
+                GlassSphere(size: 56, tint: Tint.primary)
                 Image(systemName: "flame.fill")
                     .font(.system(size: 22, weight: .semibold))
                     .symbolRenderingMode(.palette)

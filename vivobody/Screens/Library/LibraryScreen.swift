@@ -273,9 +273,7 @@ private struct LibraryTemplatesContent: View {
             Spacer()
 
             ZStack {
-                Circle()
-                    .frame(width: 132, height: 132)
-                    .glassCard(cornerRadius: 999, tint: Tint.primary)
+                GlassSphere(size: 132, tint: Tint.primary)
 
                 Image(systemName: "books.vertical.fill")
                     .font(.system(size: 56, weight: .light))
