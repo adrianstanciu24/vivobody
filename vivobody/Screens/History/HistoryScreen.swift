@@ -7,13 +7,21 @@
 //  card: a sparkline + the three weekly totals so the page has a
 //  pulse before you start scrolling rows. Below it, sessions are
 //  grouped by date bucket (Today / Yesterday / This Week / Last
-//  Week / month) and rendered with two row styles:
+//  Week / month) and rendered with two row styles, both built on
+//  the same Liquid Glass language — restraint, typography, and
+//  carved depth:
 //
-//    • Recent (today's sessions) — full rich card on a clean
-//      Liquid Glass surface, with a muscle-tinted left stripe,
-//      hero volume number, and PR / streak badges in the corner.
-//    • Earlier — compact row: colored left edge, date, volume,
-//      muscle dots, time, chevron. Same identity, less weight.
+//    • Recent (today's sessions) — rich tile with a workout-
+//      title header, meta column on the left, and a large
+//      volume number carved into the glass on the right. Muscle
+//      groups read as small monospaced labels beneath a hairline
+//      divider, in their accent colors.
+//    • Earlier — single-row layout: date + muscle summary + time
+//      on the left, smaller carved volume on the right. Same
+//      vocabulary, half the height.
+//
+//  PR sessions add a thin gold underline beneath the carved
+//  volume — a typographic accent only, no badge chrome.
 //
 //  Tapping any row pushes a detail view that reuses
 //  WorkoutSummaryCard — the same "receipt" the user saw at the end
@@ -299,22 +307,7 @@ private struct WeeklyHeroCard: View {
             .padding(.top, 2)
         }
         .padding(18)
-        .background {
-            ZStack {
-                LinearGradient(
-                    gradient: Gradient(stops: [
-                        .init(color: Tint.primary.opacity(0.28), location: 0.0),
-                        .init(color: Tint.primary.opacity(0.08), location: 0.55),
-                        .init(color: Tint.primary.opacity(0.00), location: 1.0)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                Color.white.opacity(0.02)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        }
-        .glassCard(cornerRadius: 24)
+        .glassCard(cornerRadius: 24, tint: Tint.primary)
         .primaryGlow(Tint.primary.opacity(0.55), radius: 22, y: 6)
     }
 
@@ -375,7 +368,7 @@ private struct DateGroupSection: View {
             }
             .padding(.horizontal, 4)
 
-            VStack(spacing: 10) {
+            VStack(spacing: 12) {
                 ForEach(group.sessions) { session in
                     NavigationLink {
                         SessionDetailScreen(session: session)
@@ -405,9 +398,12 @@ private struct DateGroupSection: View {
 
 // MARK: - Rich row (recent sessions)
 
-/// Today's sessions get the dramatic treatment: a clean Liquid
-/// Glass card carrying a muscle-tinted left edge stripe, a hero
-/// volume number, and any PR / streak badges in the top-right.
+/// Today's sessions get the editorial treatment: a clean glass
+/// card with the volume number carved into its surface as the
+/// hero. Identity comes from typographic hierarchy and material
+/// depth, not from decoration. PR workouts add a thin gold
+/// hairline beneath the carved volume — a typographic accent,
+/// not a badge.
 private struct RichSessionRow: View {
     let session: WorkoutSession
     let unit: WeightUnit
@@ -415,164 +411,112 @@ private struct RichSessionRow: View {
     let isStreakDay: Bool
 
     private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
-    private var dominant: MuscleGroup { muscleTags.first ?? .chest }
-    private var accent: Color { dominant.accent }
+
+    private static let cornerRadius: CGFloat = 22
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
-            // Colored stripe down the left edge — the unique fingerprint
-            // for this session's muscle mix.
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [accent.opacity(0.95), accent.opacity(0.45)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+        VStack(alignment: .leading, spacing: 14) {
+            header
+
+            HStack(alignment: .bottom, spacing: 14) {
+                metaColumn
+                Spacer(minLength: 8)
+                CarvedVolumeText(
+                    value: WeightFormatter.volumeValue(session.totalVolume, unit: unit),
+                    unit: unit.symbol,
+                    size: 38,
+                    isPR: hasPR
                 )
-                .frame(width: 3)
-                .padding(.vertical, 14)
-                .padding(.leading, 14)
-
-            VStack(alignment: .leading, spacing: 14) {
-                header
-
-                HStack(alignment: .lastTextBaseline, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(alignment: .lastTextBaseline, spacing: 4) {
-                            Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                                .monospacedDigit()
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                            Text(unit.symbol)
-                                .font(Typography.metricUnit)
-                                .foregroundStyle(.white.opacity(0.55))
-                        }
-                        Text("Volume")
-                            .sectionLabelStyle(0.55)
-                    }
-
-                    Spacer(minLength: 0)
-
-                    secondaryStat(value: "\(session.totalSets)", label: session.totalSets == 1 ? "set" : "sets")
-
-                    if displayMinutes >= 1 {
-                        secondaryStat(value: "\(displayMinutes)", label: "min")
-                    }
-                }
-
-                if !muscleTags.isEmpty {
-                    muscleDots
-                }
             }
-            .padding(.vertical, 16)
-            .padding(.leading, 14)
-            .padding(.trailing, 18)
+
+            if !muscleTags.isEmpty {
+                Divider().background(Color.white.opacity(0.06))
+                muscleStrip
+            }
         }
+        .padding(.vertical, 16)
+        .padding(.horizontal, 18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: 22)
-        .topSpecularSheen(cornerRadius: 22, intensity: 0.08, height: 0.42)
-        .shadow(color: .black.opacity(0.45), radius: 14, y: 8)
+        .glassCard(cornerRadius: Self.cornerRadius)
+        .topSpecularSheen(cornerRadius: Self.cornerRadius, intensity: 0.08, height: 0.42)
+        .glassRimBevel(cornerRadius: Self.cornerRadius, outerWidth: 0.6, innerInset: 1.2)
+        .shadow(color: .black.opacity(0.35), radius: 10, y: 6)
     }
 
     private var header: some View {
-        HStack(alignment: .top, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(workoutTitle)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                Text(timeString)
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.55))
-            }
-
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Text(workoutTitle)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.92))
+                .lineLimit(1)
             Spacer(minLength: 4)
+            if isStreakDay { streakIndicator }
+            if hasPR { prLabel }
+        }
+    }
 
+    private var metaColumn: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(timeString.uppercased())
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.45))
+                .tracking(1.2)
             HStack(spacing: 6) {
-                if isStreakDay { streakBadge }
-                if hasPR { prBadge }
+                Text("\(session.totalSets) \(session.totalSets == 1 ? "set" : "sets")")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.70))
+                    .monospacedDigit()
+                if displayMinutes >= 1 {
+                    metaDivider
+                    Text("\(displayMinutes) min")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.70))
+                        .monospacedDigit()
+                }
             }
         }
     }
 
-    private var prBadge: some View {
-        HStack(spacing: 3) {
-            Image(systemName: "star.fill")
-                .font(.system(size: 9, weight: .bold))
-            Text("PR")
-                .font(.system(size: 10, weight: .bold, design: .rounded))
-                .tracking(0.5)
-        }
-        .foregroundStyle(.black)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(
-            Capsule().fill(
-                LinearGradient(
-                    colors: [Color(red: 1.0, green: 0.85, blue: 0.35), Color(red: 1.0, green: 0.70, blue: 0.20)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-        )
-        .shadow(color: Color(red: 1.0, green: 0.78, blue: 0.30).opacity(0.45), radius: 6, y: 2)
+    private var metaDivider: some View {
+        Text("·")
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.30))
     }
 
-    private var streakBadge: some View {
-        HStack(spacing: 3) {
-            Image(systemName: "flame.fill")
-                .font(.system(size: 10, weight: .semibold))
-            Text("Streak")
-                .font(.system(size: 10, weight: .bold, design: .rounded))
-                .tracking(0.5)
-        }
-        .foregroundStyle(.white)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(
-            Capsule().fill(Tint.primary.opacity(0.85))
-        )
-        .shadow(color: Tint.primary.opacity(0.50), radius: 6, y: 2)
-    }
-
-    private func secondaryStat(value: String, label: String) -> some View {
-        VStack(spacing: 2) {
-            Text(value)
-                .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white)
-                .monospacedDigit()
-            Text(label)
-                .sectionLabelStyle(0.55)
-        }
-        .fixedSize()
-    }
-
-    private var muscleDots: some View {
-        HStack(spacing: 8) {
+    private var muscleStrip: some View {
+        HStack(spacing: 14) {
             ForEach(muscleTags.prefix(4), id: \.self) { group in
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(group.accent)
-                        .frame(width: 7, height: 7)
-                        .shadow(color: group.accent.opacity(0.65), radius: 3)
-                    Text(group.displayName)
-                        .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.70))
+                HStack(spacing: 6) {
+                    Rectangle()
+                        .fill(group.accent.opacity(0.85))
+                        .frame(width: 8, height: 2)
+                    Text(group.displayName.uppercased())
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.65))
+                        .tracking(0.8)
                 }
             }
             if muscleTags.count > 4 {
                 Text("+\(muscleTags.count - 4)")
-                    .font(Typography.caption)
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.40))
             }
             Spacer(minLength: 0)
         }
     }
 
-    // MARK: - Derived
+    private var prLabel: some View {
+        Text("PR")
+            .font(.system(size: 10, weight: .bold, design: .rounded))
+            .tracking(1.0)
+            .foregroundStyle(Color(red: 1.0, green: 0.78, blue: 0.30))
+    }
+
+    private var streakIndicator: some View {
+        Image(systemName: "flame.fill")
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(Tint.primary.opacity(0.85))
+    }
 
     private var workoutTitle: String {
         switch muscleTags.count {
@@ -595,10 +539,11 @@ private struct RichSessionRow: View {
 
 // MARK: - Compact row (earlier sessions)
 
-/// Earlier sessions get a single-line treatment: colored left edge,
-/// relative day, volume, muscle dots, time, chevron. PR / streak
-/// presence shows as a tiny indicator dot rather than a full badge
-/// — every entry the same height, scannable.
+/// Earlier sessions get the same carved-glass vocabulary, just
+/// tighter. Date / muscle / time stack on the left; the carved
+/// volume number sits on the right as the visual anchor. No
+/// decoration — identity comes from the typography and the glass
+/// material's own rim lighting.
 private struct CompactSessionRow: View {
     let session: WorkoutSession
     let unit: WeightUnit
@@ -606,94 +551,65 @@ private struct CompactSessionRow: View {
     let isStreakDay: Bool
 
     private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
-    private var dominant: MuscleGroup { muscleTags.first ?? .chest }
-    private var accent: Color { dominant.accent }
+
+    private static let cornerRadius: CGFloat = 18
 
     var body: some View {
-        HStack(spacing: 0) {
-            // Colored stripe — same idea as the rich row, just
-            // shorter overall.
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        colors: [accent.opacity(0.90), accent.opacity(0.40)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .frame(width: 3)
-
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 6) {
-                        Text(dateLine)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                        if hasPR { tinyPRDot }
-                        if isStreakDay { tinyFlame }
-                    }
-                    HStack(spacing: 6) {
-                        ForEach(muscleTags.prefix(4), id: \.self) { group in
-                            Circle()
-                                .fill(group.accent)
-                                .frame(width: 6, height: 6)
-                        }
-                        if muscleTags.count > 4 {
-                            Text("+\(muscleTags.count - 4)")
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundStyle(.white.opacity(0.40))
-                        }
-                        Text(timeString)
-                            .font(Typography.caption)
-                            .foregroundStyle(.white.opacity(0.40))
-                            .padding(.leading, 4)
+        HStack(alignment: .center, spacing: 14) {
+            VStack(alignment: .leading, spacing: 5) {
+                HStack(spacing: 6) {
+                    Text(dateLine)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.92))
+                    if isStreakDay {
+                        Image(systemName: "flame.fill")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(Tint.primary.opacity(0.80))
                     }
                 }
 
-                Spacer(minLength: 8)
-
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                        .monospacedDigit()
-                    Text(unit.symbol)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.45))
+                HStack(spacing: 8) {
+                    Text(muscleSummary.uppercased())
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.55))
+                        .tracking(1.0)
+                        .lineLimit(1)
+                    Text("·")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.25))
+                    Text(timeString)
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.40))
+                        .tracking(0.4)
                 }
+            }
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.30))
-            }
-            .padding(.vertical, 14)
-            .padding(.horizontal, 14)
+            Spacer(minLength: 8)
+
+            CarvedVolumeText(
+                value: WeightFormatter.volumeValue(session.totalVolume, unit: unit),
+                unit: unit.symbol,
+                size: 24,
+                isPR: hasPR
+            )
         }
-        .frame(maxWidth: .infinity, minHeight: 62, alignment: .leading)
-        .background {
-            ZStack {
-                LinearGradient(
-                    colors: [accent.opacity(0.16), accent.opacity(0.02)],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                Color.white.opacity(0.025)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        }
-        .glassCard(cornerRadius: 16)
+        .padding(.vertical, 14)
+        .padding(.horizontal, 18)
+        .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
+        .glassCard(cornerRadius: Self.cornerRadius)
+        .glassRimBevel(cornerRadius: Self.cornerRadius, outerWidth: 0.5, innerInset: 1.0)
     }
 
-    private var tinyPRDot: some View {
-        Image(systemName: "star.fill")
-            .font(.system(size: 9, weight: .bold))
-            .foregroundStyle(Color(red: 1.0, green: 0.78, blue: 0.30))
-    }
-
-    private var tinyFlame: some View {
-        Image(systemName: "flame.fill")
-            .font(.system(size: 9, weight: .bold))
-            .foregroundStyle(Tint.primary)
+    /// Single-line muscle summary — abbreviated for compact rows.
+    /// Two muscles get joined with "+"; three or more collapse to
+    /// "Full body" so the row stays clean.
+    private var muscleSummary: String {
+        switch muscleTags.count {
+        case 0: return "Workout"
+        case 1: return muscleTags[0].displayName
+        case 2: return "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
+        default: return "Full body"
+        }
     }
 
     private var dateLine: String {
@@ -834,6 +750,68 @@ private extension WorkoutSession {
             }
         }
         return ordered
+    }
+}
+
+// MARK: - Carved volume text
+
+/// "Pressed into the glass" numerical hero. The value is rendered
+/// in tabular monospaced figures with a top-down vertical gradient
+/// (darker top, brighter bottom) plus a thin dark shadow above and
+/// a faint white halo below — together they read as a number
+/// physically carved into the card surface, the way an engraved
+/// metal plate catches light only on its lower lip.
+///
+/// Layout: large carved value, tiny unit subscript baseline-aligned
+/// to the right. PR sessions add a hairline gold underline beneath
+/// the digits — typographic accent only, no badge chrome.
+private struct CarvedVolumeText: View {
+    let value: String
+    let unit: String
+    var size: CGFloat = 36
+    var isPR: Bool = false
+
+    private static let prGold = Color(red: 1.0, green: 0.78, blue: 0.30)
+
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 3) {
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text(value)
+                    .font(.system(size: size, weight: .heavy, design: .rounded))
+                    .monospacedDigit()
+                    .kerning(-0.6)
+                    .foregroundStyle(
+                        LinearGradient(
+                            stops: [
+                                .init(color: .white.opacity(0.58), location: 0.0),
+                                .init(color: .white.opacity(0.94), location: 1.0),
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .shadow(color: .black.opacity(0.55), radius: 0.6, x: 0, y: -0.5)
+                    .shadow(color: .white.opacity(0.10), radius: 0.4, x: 0, y: 0.8)
+
+                Text(unit)
+                    .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.40))
+                    .padding(.bottom, 2)
+            }
+
+            if isPR {
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Self.prGold.opacity(0.0), Self.prGold.opacity(0.85), Self.prGold.opacity(0.0)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(height: 1)
+                    .frame(maxWidth: size * 1.6)
+            }
+        }
     }
 }
 
