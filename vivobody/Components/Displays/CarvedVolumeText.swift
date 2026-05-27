@@ -48,10 +48,12 @@ struct CarvedVolumeText: View {
                     .shadow(color: .black.opacity(0.55), radius: 0.6, x: 0, y: -0.5)
                     .shadow(color: .white.opacity(0.10), radius: 0.4, x: 0, y: 0.8)
 
-                Text(unit)
-                    .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.40))
-                    .padding(.bottom, 2)
+                if !unit.isEmpty {
+                    Text(unit)
+                        .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.40))
+                        .padding(.bottom, 2)
+                }
             }
 
             if isPR {

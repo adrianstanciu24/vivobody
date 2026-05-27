@@ -22,6 +22,15 @@
 //  segment is active: templates match by name; exercises match by
 //  name or alias.
 //
+//  The Exercises segment shares the History list's journal
+//  vocabulary: monospaced caps group headers with a "12 EXERCISES
+//  · 5 TRACKED" right-aligned subtitle; and a two-tier row split
+//  keyed on recency. Anything lifted in the last 14 days gets the
+//  rich glass-card treatment with `CarvedVolumeText` on the right
+//  (weight×reps, gold underline if all-time best). Everything else
+//  collapses to a tighter chip — smaller carved digits if there's
+//  older history, a quiet catalog default if there isn't.
+//
 
 import SwiftUI
 import SwiftData
@@ -94,17 +103,19 @@ struct LibraryScreen: View {
 
     // MARK: - Segment picker
 
+    /// Custom Liquid Glass segmented picker. Replaces the stock
+    /// `.segmented` Picker style — which renders as a flat UIKit
+    /// pill that doesn't speak the rest of the app's carved-glass
+    /// vocabulary — with a capsule that uses `.glassEffect()`,
+    /// a rim stroke, and a brighter glass pill that slides between
+    /// segments via `matchedGeometryEffect`. Same material language
+    /// as the equipment chip strip directly below it.
     private var segmentPicker: some View {
-        Picker("Library segment", selection: $segment) {
-            ForEach(LibrarySegment.allCases) { s in
-                Text(s.label).tag(s)
-            }
-        }
-        .pickerStyle(.segmented)
-        .controlSize(.large)
-        .padding(.horizontal, 22)
-        .padding(.top, 10)
-        .padding(.bottom, 14)
+        GlassSegmentedPicker(selection: $segment)
+            .accessibilityLabel("Library segment")
+            .padding(.horizontal, 22)
+            .padding(.top, 10)
+            .padding(.bottom, 14)
     }
 
     // MARK: - Toolbar
@@ -180,6 +191,106 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
         case .templates: return "Templates"
         case .exercises: return "Exercises"
         }
+    }
+}
+
+// MARK: - Glass segmented picker
+
+/// Two-segment glass capsule. Outer shell is a `.glassEffect()`
+/// pill with the project's standard rim stroke. The selection
+/// indicator is a second, brighter glass pill that sits inside —
+/// it animates between segments via `matchedGeometryEffect`, so
+/// switching from Templates → Exercises feels like the highlight
+/// glides through liquid rather than swapping in place. Selection
+/// fires a `Haptics.selection()` tick to match the equipment
+/// chip strip below.
+private struct GlassSegmentedPicker: View {
+    @Binding var selection: LibrarySegment
+    @Namespace private var indicatorNamespace
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(LibrarySegment.allCases) { segment in
+                segmentButton(segment)
+            }
+        }
+        .padding(4)
+        .background {
+            Capsule().fill(Surface.cardTint)
+        }
+        .glassEffect(.regular, in: Capsule())
+        .overlay {
+            Capsule()
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Surface.edgeBright,
+                            Surface.edge.opacity(0.6),
+                            Surface.edge.opacity(0.2)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.5
+                )
+        }
+    }
+
+    private func segmentButton(_ segment: LibrarySegment) -> some View {
+        let isSelected = selection == segment
+        return Button {
+            guard selection != segment else { return }
+            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                selection = segment
+            }
+            Haptics.selection()
+        } label: {
+            ZStack {
+                if isSelected {
+                    Capsule()
+                        .fill(Color.white.opacity(0.10))
+                        .overlay {
+                            Capsule()
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.32),
+                                            Color.white.opacity(0.10)
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    ),
+                                    lineWidth: 0.6
+                                )
+                        }
+                        .overlay {
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.10),
+                                            Color.clear
+                                        ],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .allowsHitTesting(false)
+                        }
+                        .matchedGeometryEffect(id: "selectionPill", in: indicatorNamespace)
+                        .shadow(color: .black.opacity(0.25), radius: 6, y: 2)
+                }
+                Text(segment.label)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(isSelected ? Color.white.opacity(0.95) : Color.white.opacity(0.55))
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 38)
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityLabel(segment.label)
     }
 }
 
@@ -268,20 +379,27 @@ private struct LibraryTemplatesContent: View {
 
     // MARK: - Empty states
 
+    /// Empty state. The orange CTA is the single accent anchor on
+    /// the page — so the sphere goes neutral (white-glass pearl)
+    /// and the icon goes neutral too (ghostly chalk-on-glass). The
+    /// two-tone white palette keeps the secondary spines readable
+    /// against the sphere's mid-tone radial without re-introducing
+    /// orange that would compete with the CTA below.
     private var emptyState: some View {
         VStack(spacing: 20) {
             Spacer()
 
             ZStack {
-                GlassSphere(size: 132, tint: Tint.primary)
+                GlassSphere(size: 132, tint: .white)
 
                 Image(systemName: "books.vertical.fill")
                     .font(.system(size: 56, weight: .light))
                     .symbolRenderingMode(.palette)
-                    .foregroundStyle(Tint.primary, .white.opacity(0.30))
+                    .foregroundStyle(.white.opacity(0.80), .white.opacity(0.40))
                     .symbolEffect(.breathe.pulse, options: .repeating)
             }
-            .primaryGlow(Tint.primary, radius: 32, y: 0)
+            .shadow(color: .white.opacity(0.10), radius: 24, y: 0)
+            .shadow(color: .black.opacity(0.50), radius: 18, y: 8)
 
             VStack(spacing: 8) {
                 Text("No templates yet")
@@ -513,14 +631,13 @@ private struct LibraryExercisesContent: View {
     }
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 8) {
-                Circle().fill(group.accent).frame(width: 8, height: 8)
-                Text(group.displayName)
-                    .sectionLabelStyle(0.70)
-            }
-            .padding(.bottom, 2)
-            VStack(spacing: 8) {
+        let trackedCount = items.reduce(into: 0) { acc, item in
+            if lastInstanceLookup[item.name.lowercased()] != nil { acc += 1 }
+        }
+
+        return VStack(alignment: .leading, spacing: 10) {
+            sectionHeader(group: group, total: items.count, tracked: trackedCount)
+            VStack(spacing: 12) {
                 ForEach(items) { item in
                     row(item)
                 }
@@ -528,37 +645,74 @@ private struct LibraryExercisesContent: View {
         }
     }
 
+    /// Journal-style group header — accent dash + monospaced caps
+    /// muscle name on the left, "12 EXERCISES · 5 TRACKED" subtitle
+    /// on the right. Mirrors the History list's date-group header
+    /// rhythm so the two surfaces share one vocabulary.
+    private func sectionHeader(group: MuscleGroup, total: Int, tracked: Int) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            HStack(spacing: 8) {
+                Rectangle()
+                    .fill(group.accent.opacity(0.85))
+                    .frame(width: 10, height: 2)
+                Text(group.displayName.uppercased())
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.80))
+                    .tracking(0.8)
+            }
+            Spacer()
+            Text(sectionSubtitle(total: total, tracked: tracked))
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.40))
+                .tracking(0.6)
+        }
+        .padding(.horizontal, 4)
+    }
+
+    private func sectionSubtitle(total: Int, tracked: Int) -> String {
+        let exercises = total == 1 ? "1 EXERCISE" : "\(total) EXERCISES"
+        guard tracked > 0 else { return exercises }
+        return "\(exercises) · \(tracked) TRACKED"
+    }
+
+    /// Row classifier: an exercise lifted within the last 14 days
+    /// gets the rich journal-card treatment; everything else falls
+    /// back to a compact chip. Mirrors the History list's
+    /// rich-today / compact-earlier split, just keyed on the
+    /// exercise's last-performed date instead of the session date.
     private func row(_ item: ExerciseCatalogItem) -> some View {
-        // Detail screen receives no onPickAndDismiss callback — in
-        // the Library context there's nothing to "pick into," so the
-        // detail's bottom CTA hides automatically.
         let last = lastInstanceLookup[item.name.lowercased()]
-        return NavigationLink {
+        let isRecent: Bool = {
+            guard let last else { return false }
+            let days = Calendar.current.dateComponents(
+                [.day],
+                from: Calendar.current.startOfDay(for: last.sessionDate),
+                to: Calendar.current.startOfDay(for: Date())
+            ).day ?? .max
+            return days <= 14
+        }()
+
+        return Group {
+            if let last, isRecent {
+                richRow(item: item, last: last)
+            } else {
+                compactRow(item: item, last: last)
+            }
+        }
+    }
+
+    /// Detail screen receives no onPickAndDismiss callback — in the
+    /// Library context there's nothing to "pick into," so the
+    /// detail's bottom CTA hides automatically. Extracted so both
+    /// row tiers share one navigation site + one context menu.
+    private func rowLink<Content: View>(
+        item: ExerciseCatalogItem,
+        @ViewBuilder label: () -> Content
+    ) -> some View {
+        NavigationLink {
             ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
         } label: {
-            HStack(spacing: 14) {
-                Image(systemName: item.equipment.symbol)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.50))
-                    .frame(width: 24)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
-                    Text(rowSubtitle(item))
-                        .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.50))
-                }
-
-                Spacer(minLength: 8)
-
-                rowRightSide(item: item, last: last)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .frame(minHeight: 60)
-            .glassChip(cornerRadius: 14)
+            label()
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -575,41 +729,122 @@ private struct LibraryExercisesContent: View {
         }
     }
 
-    /// Same branching as the picker — when we have history, surface
-    /// "LAST · 145 × 8" + relative date with optional gold PR pill;
-    /// otherwise show the catalog defaults.
-    @ViewBuilder
-    private func rowRightSide(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
-        if let last {
-            VStack(alignment: .trailing, spacing: 3) {
-                HStack(spacing: 5) {
-                    if last.isAllTimeBest {
-                        Text("PR")
-                            .font(.system(size: 10, weight: .bold, design: .monospaced))
-                            .tracking(0.8)
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 2)
-                            .background(
-                                Capsule().fill(Tint.primary)
-                            )
-                    }
-                    Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
-                        .font(.system(size: 14, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.90))
+    // MARK: Rich row (recent lifts)
+
+    /// Carved-glass journal card for exercises lifted in the last
+    /// two weeks. Name + caps meta line on the left; the last
+    /// session's heaviest set rendered as `CarvedVolumeText` on the
+    /// right with a gold underline if the weight ties or beats the
+    /// all-time best. A small relative-date caption sits below the
+    /// carved digits so the row keeps the "when" anchored without
+    /// a second number competing for attention.
+    private func richRow(item: ExerciseCatalogItem, last: LastExerciseInstance) -> some View {
+        let cornerRadius: CGFloat = 18
+        return rowLink(item: item) {
+            HStack(alignment: .center, spacing: 14) {
+                Image(systemName: item.equipment.symbol)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .frame(width: 24)
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(item.name)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.95))
+                        .lineLimit(1)
+                    Text(metaCapsLine(item).uppercased())
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.55))
+                        .tracking(0.9)
+                        .lineLimit(1)
                 }
-                Text(RelativeDate.short(last.sessionDate))
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.50))
+
+                Spacer(minLength: 8)
+
+                VStack(alignment: .trailing, spacing: 3) {
+                    CarvedVolumeText(
+                        value: "\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)",
+                        unit: "",
+                        size: 22,
+                        isPR: last.isAllTimeBest
+                    )
+                    Text(RelativeDate.short(last.sessionDate))
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.45))
+                        .tracking(0.5)
+                }
             }
-        } else {
-            Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
-                .font(Typography.caption)
-                .foregroundStyle(.white.opacity(0.50))
+            .padding(.vertical, 14)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
+            .glassCard(cornerRadius: cornerRadius)
+            .topSpecularSheen(cornerRadius: cornerRadius, intensity: 0.08, height: 0.40)
+            .glassRimBevel(cornerRadius: cornerRadius, outerWidth: 0.5, innerInset: 1.0)
         }
     }
 
-    private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
+    // MARK: Compact row (older history or untracked)
+
+    /// Tighter chip for exercises with stale history (>14 days) or
+    /// none at all. Same equipment icon + name + caps meta line on
+    /// the left. The right side carries either a smaller carved
+    /// weight×reps + relative date (older history) or a quiet dim
+    /// default (untracked) so the row tier stays legible without
+    /// pretending freshness it doesn't have.
+    private func compactRow(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
+        let cornerRadius: CGFloat = 14
+        return rowLink(item: item) {
+            HStack(alignment: .center, spacing: 14) {
+                Image(systemName: item.equipment.symbol)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .frame(width: 22)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(item.name)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.90))
+                        .lineLimit(1)
+                    Text(metaCapsLine(item).uppercased())
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.45))
+                        .tracking(0.8)
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: 8)
+
+                if let last {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        CarvedVolumeText(
+                            value: "\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)",
+                            unit: "",
+                            size: 16,
+                            isPR: last.isAllTimeBest
+                        )
+                        Text(RelativeDate.short(last.sessionDate))
+                            .font(.system(size: 9, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(.white.opacity(0.35))
+                            .tracking(0.5)
+                    }
+                } else {
+                    Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
+                        .font(Typography.caption)
+                        .foregroundStyle(.white.opacity(0.42))
+                }
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+            .glassChip(cornerRadius: cornerRadius)
+            .glassRimBevel(cornerRadius: cornerRadius, outerWidth: 0.5, innerInset: 1.0)
+        }
+    }
+
+    /// Monospaced-caps meta line shared by both row tiers — same
+    /// vocabulary as History's muscle strip: "BARBELL · PUSH" or
+    /// "DUMBBELL · ISOLATION".
+    private func metaCapsLine(_ item: ExerciseCatalogItem) -> String {
         var parts: [String] = [item.equipment.displayName]
         if item.mechanic == .compound, let pattern = item.pattern {
             parts.append(pattern.displayName)
