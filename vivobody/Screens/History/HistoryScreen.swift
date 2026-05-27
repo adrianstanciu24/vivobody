@@ -736,11 +736,11 @@ struct HistoryDateGroup: Identifiable {
 
 // MARK: - Helpers
 
-private extension WorkoutSession {
+extension WorkoutSession {
     /// Distinct muscle groups touched by this session, in plan order
     /// (i.e. the order the user worked through them). Used by the
     /// row chrome to derive the workout title and the muscle-dot
-    /// strip.
+    /// strip — and by the session detail screen for the same.
     var distinctMuscleGroupsInOrder: [MuscleGroup] {
         var seen = Set<MuscleGroup>()
         var ordered: [MuscleGroup] = []
@@ -750,68 +750,6 @@ private extension WorkoutSession {
             }
         }
         return ordered
-    }
-}
-
-// MARK: - Carved volume text
-
-/// "Pressed into the glass" numerical hero. The value is rendered
-/// in tabular monospaced figures with a top-down vertical gradient
-/// (darker top, brighter bottom) plus a thin dark shadow above and
-/// a faint white halo below — together they read as a number
-/// physically carved into the card surface, the way an engraved
-/// metal plate catches light only on its lower lip.
-///
-/// Layout: large carved value, tiny unit subscript baseline-aligned
-/// to the right. PR sessions add a hairline gold underline beneath
-/// the digits — typographic accent only, no badge chrome.
-private struct CarvedVolumeText: View {
-    let value: String
-    let unit: String
-    var size: CGFloat = 36
-    var isPR: Bool = false
-
-    private static let prGold = Color(red: 1.0, green: 0.78, blue: 0.30)
-
-    var body: some View {
-        VStack(alignment: .trailing, spacing: 3) {
-            HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(value)
-                    .font(.system(size: size, weight: .heavy, design: .rounded))
-                    .monospacedDigit()
-                    .kerning(-0.6)
-                    .foregroundStyle(
-                        LinearGradient(
-                            stops: [
-                                .init(color: .white.opacity(0.58), location: 0.0),
-                                .init(color: .white.opacity(0.94), location: 1.0),
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .shadow(color: .black.opacity(0.55), radius: 0.6, x: 0, y: -0.5)
-                    .shadow(color: .white.opacity(0.10), radius: 0.4, x: 0, y: 0.8)
-
-                Text(unit)
-                    .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.40))
-                    .padding(.bottom, 2)
-            }
-
-            if isPR {
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [Self.prGold.opacity(0.0), Self.prGold.opacity(0.85), Self.prGold.opacity(0.0)],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(height: 1)
-                    .frame(maxWidth: size * 1.6)
-            }
-        }
     }
 }
 
@@ -827,28 +765,6 @@ private enum HistoryFormatters {
         f.dateFormat = "EEE MMM d"
         return f
     }()
-}
-
-// MARK: - Detail
-
-/// Pushed when the user taps a history row. Reuses WorkoutSummaryCard
-/// — the same end-of-workout receipt, just looking at the past instead
-/// of the present. The card reads the session's totals/exercises
-/// directly, so no transformation is needed.
-private struct SessionDetailScreen: View {
-    let session: WorkoutSession
-
-    var body: some View {
-        ScrollView {
-            WorkoutSummaryCard(session: session, isHistorical: true)
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-                .padding(.bottom, 24)
-        }
-        .background(Color.black.ignoresSafeArea())
-        .navigationTitle("Session")
-        .navigationBarTitleDisplayMode(.inline)
-    }
 }
 
 #Preview {
