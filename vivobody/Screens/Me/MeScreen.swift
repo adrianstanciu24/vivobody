@@ -135,22 +135,26 @@ struct MeScreen: View {
         }
     }
 
+    /// Empty body-weight state: a dashed-glass phantom of the
+    /// populated card (latest weight + sparkline) previews the
+    /// result, with the explanatory line and Log Weight CTA below.
     private var bodyWeightEmptyCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 14) {
-                ZStack {
-                    GlassSphere(size: 64, tint: Tint.primary)
-                    Image(systemName: "scalemass.fill")
-                        .font(.system(size: 26, weight: .light))
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(Tint.primary, .white.opacity(0.30))
+        VStack(alignment: .leading, spacing: 14) {
+            GhostCard {
+                HStack(alignment: .center, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        GhostBar(width: 88, height: 28, cornerRadius: 8, opacity: 0.18)
+                        GhostBar(width: 120, height: 10, opacity: 0.10)
+                    }
+                    Spacer(minLength: 12)
+                    GhostBar(width: 96, height: 34, cornerRadius: 8, opacity: 0.06)
                 }
-
-                Text("Track your body weight to see how it trends alongside your training.")
-                    .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.60))
-                    .fixedSize(horizontal: false, vertical: true)
             }
+
+            Text("Track your body weight to see how it trends alongside your training.")
+                .font(Typography.body)
+                .foregroundStyle(.white.opacity(0.60))
+                .fixedSize(horizontal: false, vertical: true)
 
             Button {
                 Haptics.soft()
@@ -166,13 +170,10 @@ struct MeScreen: View {
                 .padding(.horizontal, 18)
                 .frame(minHeight: 44)
                 .background(Capsule().fill(Tint.primary))
-                .primaryGlow(Tint.primary)
+                .softElevation()
             }
             .buttonStyle(.plain)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard()
     }
 
     private var bodyWeightPopulatedCard: some View {
@@ -573,11 +574,7 @@ struct MeScreen: View {
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassChip(cornerRadius: 18, tint: trendingUp ? Tint.primary : nil)
-        .shadow(
-            color: trendingUp ? Tint.primary.opacity(0.30) : .clear,
-            radius: 14, y: 4
-        )
+        .glassChip(cornerRadius: 18, bright: true)
     }
 
     /// Compares the trailing 4-week average vs the prior 8-week
@@ -594,15 +591,15 @@ struct MeScreen: View {
         return recentAvg > earlierAvg
     }
 
+    /// Empty journey: three dashed-glass phantoms of the real
+    /// `journeyTile`s (hero number + sparkline + label) above the
+    /// prompt, previewing what populated stats will look like.
     private var emptyJourneyTile: some View {
-        HStack(spacing: 14) {
-            ZStack {
-                GlassSphere(size: 56, tint: Tint.primary)
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 22, weight: .semibold))
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Tint.primary, .white.opacity(0.30))
-                    .symbolEffect(.breathe.pulse, options: .repeating)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                journeyGhostTile
+                journeyGhostTile
+                journeyGhostTile
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -612,11 +609,17 @@ struct MeScreen: View {
                     .font(Typography.body)
                     .foregroundStyle(.white.opacity(0.55))
             }
-            Spacer(minLength: 0)
         }
-        .padding(18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard()
+    }
+
+    private var journeyGhostTile: some View {
+        GhostCard(cornerRadius: 18, padding: 14) {
+            VStack(alignment: .leading, spacing: 10) {
+                GhostBar(width: 40, height: 22, cornerRadius: 6, opacity: 0.18)
+                GhostBar(height: 26, cornerRadius: 6, opacity: 0.06)
+                GhostBar(width: 46, height: 9, cornerRadius: 4, opacity: 0.11)
+            }
+        }
     }
 
     // MARK: - Preferences
@@ -739,10 +742,6 @@ struct MeScreen: View {
                         lineWidth: 0.5
                     )
             )
-            .shadow(
-                color: isSelected ? Tint.primary.opacity(0.40) : .clear,
-                radius: 14, y: 2
-            )
         }
         .buttonStyle(.plain)
         .accessibilityLabel(unit.displayName)
@@ -802,10 +801,6 @@ struct MeScreen: View {
                             isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
                             lineWidth: 0.5
                         )
-                )
-                .shadow(
-                    color: isSelected ? Tint.primary.opacity(0.35) : .clear,
-                    radius: 12, y: 2
                 )
         }
         .buttonStyle(.plain)

@@ -126,8 +126,8 @@ struct WorkoutSummaryCard: View {
         .clipShape(RoundedRectangle(cornerRadius: Self.cardCornerRadius, style: .continuous))
         .topSpecularSheen(cornerRadius: Self.cardCornerRadius, intensity: 0.10, height: 0.42)
         .glassRimBevel(cornerRadius: Self.cardCornerRadius, outerWidth: 0.7, innerInset: 1.2)
-        .shadow(color: accent.opacity(0.38), radius: 28, y: 12)
-        .shadow(color: .black.opacity(0.55), radius: 8, y: 4)
+        .shadow(color: .black.opacity(0.55), radius: 18, y: 12)
+        .shadow(color: .black.opacity(0.45), radius: 8, y: 4)
         .shadow(color: .black.opacity(0.35), radius: 1.5, y: 1)
         .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
             // Skip the count-up animation entirely for historical
@@ -427,7 +427,7 @@ struct WorkoutSummaryCard: View {
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .fill(completedGreen)
                 )
-                .primaryGlow(completedGreen)
+                .softElevation()
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Finish workout and return to home")

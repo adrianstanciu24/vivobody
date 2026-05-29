@@ -24,31 +24,35 @@ extension View {
     /// against the pure-black backdrop.
     func glassCard(
         cornerRadius: CGFloat = Radius.card,
-        tint: Color? = nil
+        tint: Color? = nil,
+        bright: Bool = false
     ) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint))
+        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
     }
 
     /// Chip / small surface — same idea, tighter radius.
     func glassChip(
         cornerRadius: CGFloat = Radius.chip,
-        tint: Color? = nil
+        tint: Color? = nil,
+        bright: Bool = false
     ) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint))
+        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
     }
 
     /// Pill / capsule glass — used for floating buttons and chips
     /// where the shape is fully rounded.
-    func glassPill(tint: Color? = nil) -> some View {
-        modifier(GlassCardModifier(cornerRadius: Radius.pill, tint: tint))
+    func glassPill(tint: Color? = nil, bright: Bool = false) -> some View {
+        modifier(GlassCardModifier(cornerRadius: Radius.pill, tint: tint, bright: bright))
     }
 
-    /// Primary-action glow. Pairs an orange-tinted shadow with a
-    /// subtle inner specular gradient so the button reads as the
-    /// hot spot of the screen.
-    func primaryGlow(_ accent: Color = Tint.primary, radius: CGFloat = 22, y: CGFloat = 6) -> some View {
-        self.shadow(color: accent.opacity(0.45), radius: radius, y: y)
-            .shadow(color: accent.opacity(0.18), radius: 4, y: 1)
+    /// Neutral elevation. Lifts a CTA or card off the pure-black
+    /// backdrop with a soft black shadow — no colored bloom. The
+    /// warm orange / green halos stay reserved for the genuine
+    /// moments that own their own glow (PR celebration, active-card
+    /// focus, set completion), so those finally read as special
+    /// rather than every button faking importance.
+    func softElevation(radius: CGFloat = 12, y: CGFloat = 6, opacity: Double = 0.35) -> some View {
+        self.shadow(color: .black.opacity(opacity), radius: radius, y: y)
     }
 
     /// Carved-glass rim: a bright outer stroke plus a darker inner
@@ -170,7 +174,7 @@ private struct TopSpecularSheenModifier: ViewModifier {
 ///   4. Specular cap — small white highlight upper-left, the
 ///      light catching on the polished surface.
 ///
-/// Compose with an outer `.primaryGlow(...)` or an Image overlay
+/// Compose with an outer `.softElevation(...)` or an Image overlay
 /// to get the full empty-state treatment (atmosphere + icon).
 struct GlassSphere: View {
     var size: CGFloat = 132
@@ -265,6 +269,7 @@ struct GlassPedestal: View {
 private struct GlassCardModifier: ViewModifier {
     let cornerRadius: CGFloat
     let tint: Color?
+    var bright: Bool = false
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -274,7 +279,7 @@ private struct GlassCardModifier: ViewModifier {
                     if let tint {
                         shape.fill(tint.opacity(0.14))
                     } else {
-                        shape.fill(Surface.cardTint)
+                        shape.fill(bright ? Surface.cardTintBright : Surface.cardTint)
                     }
                 }
             }
@@ -291,7 +296,7 @@ private struct GlassCardModifier: ViewModifier {
                             startPoint: .top,
                             endPoint: .bottom
                         ),
-                        lineWidth: 0.5
+                        lineWidth: bright ? 0.75 : 0.5
                     )
             }
     }

@@ -161,7 +161,6 @@ struct CustomExerciseEditorSheet: View {
                     lineWidth: 0.5
                 )
             )
-            .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -208,7 +207,6 @@ struct CustomExerciseEditorSheet: View {
                     lineWidth: 0.5
                 )
             )
-            .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -254,7 +252,6 @@ struct CustomExerciseEditorSheet: View {
                         lineWidth: 0.5
                     )
                 )
-                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -299,7 +296,6 @@ struct CustomExerciseEditorSheet: View {
                         lineWidth: 0.5
                     )
                 )
-                .shadow(color: isSelected ? Tint.primary.opacity(0.35) : .clear, radius: 10, y: 2)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

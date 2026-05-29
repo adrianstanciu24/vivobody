@@ -44,6 +44,10 @@ enum Radius {
 enum Surface {
     static let background = Color.black
     static let cardTint   = Color.white.opacity(0.04)
+    /// Brighter neutral fill for hero / primary stat cards — lets
+    /// them read as "raised, important" through luminance rather
+    /// than a colored tint wash (which skews muddy over black).
+    static let cardTintBright = Color.white.opacity(0.07)
     static let edge       = Color.white.opacity(0.10)
     static let edgeBright = Color.white.opacity(0.22)
 }

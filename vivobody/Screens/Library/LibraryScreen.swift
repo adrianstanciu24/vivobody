@@ -43,9 +43,13 @@ struct LibraryScreen: View {
     @State private var segment: LibrarySegment = .templates
     @State private var searchText: String = ""
 
-    /// New-template name-prompt alert state.
-    @State private var isCreatingTemplate: Bool = false
-    @State private var newTemplateName: String = ""
+    /// Programmatic push target. Set when the user taps the new-
+    /// template "+" — we insert an empty `WorkoutTemplate` and let
+    /// the navigation stack push straight into its detail screen,
+    /// the same surface tapping a row would land on. Rename happens
+    /// in-place via the title binding; backing out without making
+    /// any edits triggers auto-cleanup so we don't leave stub rows.
+    @State private var pendingNewTemplate: WorkoutTemplate? = nil
 
     /// Custom-exercise editor sheet target. `.create` for the "+"
     /// toolbar on the Exercises segment; `.edit(item)` for context
@@ -67,7 +71,7 @@ struct LibraryScreen: View {
                     LibraryTemplatesContent(
                         appState: appState,
                         searchText: searchText,
-                        onRequestNew: presentNewTemplateAlert
+                        onRequestNew: createAndOpenTemplate
                     )
                 case .exercises:
                     LibraryExercisesContent(
@@ -83,18 +87,18 @@ struct LibraryScreen: View {
             prompt: searchPrompt
         )
         .toolbar { toolbar }
-        .alert("New Template", isPresented: $isCreatingTemplate) {
-            TextField("Name", text: $newTemplateName)
-                .textInputAutocapitalization(.words)
-            Button("Cancel", role: .cancel) {
-                newTemplateName = ""
+        // System-native flow, Notes-style: tap "+" → land directly
+        // in the new template's detail screen with the title in
+        // rename mode. Wired through the parent NavigationStack via
+        // a bound item; SwiftUI nils the binding when the user pops
+        // back, which `onChange` catches to clean up untouched stubs.
+        .navigationDestination(item: $pendingNewTemplate) { template in
+            TemplateDetailScreen(template: template, appState: appState)
+        }
+        .onChange(of: pendingNewTemplate) { oldValue, newValue in
+            if let abandoned = oldValue, newValue == nil {
+                cleanupIfUntouched(abandoned)
             }
-            Button("Create") {
-                createTemplate(named: newTemplateName)
-                newTemplateName = ""
-            }
-        } message: {
-            Text("Pick a name. You can rename it later by tapping the title on its detail screen.")
         }
         .sheet(item: $customExerciseTarget) { target in
             CustomExerciseEditorSheet(target: target)
@@ -134,7 +138,7 @@ struct LibraryScreen: View {
     private func handlePlus() {
         switch segment {
         case .templates:
-            presentNewTemplateAlert()
+            createAndOpenTemplate()
         case .exercises:
             customExerciseTarget = .create
         }
@@ -161,22 +165,32 @@ struct LibraryScreen: View {
 
     // MARK: - Mutations
 
-    private func presentNewTemplateAlert() {
-        newTemplateName = ""
-        isCreatingTemplate = true
-    }
-
-    private func createTemplate(named name: String) {
-        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-
+    /// Insert a blank "New Template" and push into its detail screen
+    /// in one step — mirrors Notes' "New Note" behavior. The detail
+    /// screen surfaces the system rename UI via
+    /// `.navigationTitle($template.name)`, so the user can edit the
+    /// title and add exercises without a second hop.
+    private func createAndOpenTemplate() {
         let descriptor = FetchDescriptor<WorkoutTemplate>()
         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
 
-        let template = WorkoutTemplate(name: trimmed, sortOrder: count)
+        let template = WorkoutTemplate(sortOrder: count)
         modelContext.insert(template)
         try? modelContext.save()
         Haptics.soft()
+
+        pendingNewTemplate = template
+    }
+
+    /// If the user pops back from the new-template detail without
+    /// renaming or adding anything, treat it as a cancel and delete
+    /// the stub so the list doesn't accumulate empty rows.
+    private func cleanupIfUntouched(_ template: WorkoutTemplate) {
+        guard template.modelContext != nil else { return }
+        guard template.name == "New Template",
+              template.exercises.isEmpty else { return }
+        modelContext.delete(template)
+        try? modelContext.save()
     }
 }
 
@@ -379,27 +393,18 @@ private struct LibraryTemplatesContent: View {
 
     // MARK: - Empty states
 
-    /// Empty state. The orange CTA is the single accent anchor on
-    /// the page — so the sphere goes neutral (white-glass pearl)
-    /// and the icon goes neutral too (ghostly chalk-on-glass). The
-    /// two-tone white palette keeps the secondary spines readable
-    /// against the sphere's mid-tone radial without re-introducing
-    /// orange that would compete with the CTA below.
+    /// Empty state. Instead of a decorative orb, the hero is a
+    /// dashed-rim "ghost" of a real template card — the exact shape
+    /// the user is about to create (name + meta line + two muscle
+    /// chips), rendered as dim placeholder bars in the same glass
+    /// material as a populated card. It previews the result and
+    /// keeps the orange CTA as the single accent anchor below.
     private var emptyState: some View {
         VStack(spacing: 20) {
             Spacer()
 
-            ZStack {
-                GlassSphere(size: 132, tint: .white)
-
-                Image(systemName: "books.vertical.fill")
-                    .font(.system(size: 56, weight: .light))
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white.opacity(0.80), .white.opacity(0.40))
-                    .symbolEffect(.breathe.pulse, options: .repeating)
-            }
-            .shadow(color: .white.opacity(0.10), radius: 24, y: 0)
-            .shadow(color: .black.opacity(0.50), radius: 18, y: 8)
+            templateGhost
+                .frame(maxWidth: 300)
 
             VStack(spacing: 8) {
                 Text("No templates yet")
@@ -421,7 +426,7 @@ private struct LibraryTemplatesContent: View {
                     .background(
                         Capsule().fill(Tint.primary)
                     )
-                    .primaryGlow(Tint.primary)
+                    .softElevation()
             }
             .buttonStyle(.plain)
             .padding(.top, 6)
@@ -431,6 +436,27 @@ private struct LibraryTemplatesContent: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 22)
+    }
+
+    /// Dashed-glass phantom matching `TemplateCard`'s layout:
+    /// a title bar + "last used" stub, an "N exercises · N sets"
+    /// line, and two muscle-group chip placeholders.
+    private var templateGhost: some View {
+        GhostCard(cornerRadius: 18) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .firstTextBaseline) {
+                    GhostBar(width: 122, height: 18, cornerRadius: 6, opacity: 0.18)
+                    Spacer()
+                    GhostBar(width: 44, height: 10, opacity: 0.10)
+                }
+                GhostBar(width: 168, height: 12, opacity: 0.11)
+                HStack(spacing: 6) {
+                    GhostBar(width: 64, height: 24, cornerRadius: 12, opacity: 0.10)
+                    GhostBar(width: 52, height: 24, cornerRadius: 12, opacity: 0.10)
+                }
+                .padding(.top, 4)
+            }
+        }
     }
 
     private var noMatchesState: some View {
@@ -607,10 +633,6 @@ private struct LibraryExercisesContent: View {
                     lineWidth: 0.5
                 )
             }
-            .shadow(
-                color: isSelected ? Tint.primary.opacity(0.40) : .clear,
-                radius: 14, y: 2
-            )
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

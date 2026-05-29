@@ -80,7 +80,7 @@ struct PrimaryActionButton: View {
                         lineWidth: 0.8
                     )
             )
-            .primaryGlow(accent)
+            .softElevation()
         }
         .buttonStyle(.plain)
         .scaleEffect(pressScale)

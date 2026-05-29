@@ -65,16 +65,8 @@ struct HistoryScreen: View {
 
     private var emptyState: some View {
         VStack(spacing: 18) {
-            ZStack {
-                GlassSphere(size: 132, tint: Tint.primary)
-
-                Image(systemName: "clock.arrow.circlepath")
-                    .font(.system(size: 56, weight: .light))
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(Tint.primary, .white.opacity(0.30))
-                    .symbolEffect(.breathe.pulse, options: .repeating)
-            }
-            .primaryGlow(Tint.primary, radius: 32, y: 0)
+            sessionGhost
+                .frame(maxWidth: 300)
 
             VStack(spacing: 6) {
                 Text("No workouts yet")
@@ -84,6 +76,44 @@ struct HistoryScreen: View {
                     .foregroundStyle(.white.opacity(0.55))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
+            }
+        }
+    }
+
+    /// Dashed-glass phantom matching `RichSessionRow`: a workout
+    /// title, a meta column (time + sets·min), the carved volume
+    /// block on the right, then a hairline and a muscle strip. It
+    /// previews a logged session in the same material the real
+    /// rows use.
+    private var sessionGhost: some View {
+        GhostCard(cornerRadius: 22) {
+            VStack(alignment: .leading, spacing: 14) {
+                GhostBar(width: 112, height: 16, cornerRadius: 6, opacity: 0.18)
+
+                HStack(alignment: .bottom, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        GhostBar(width: 64, height: 9, cornerRadius: 4, opacity: 0.10)
+                        GhostBar(width: 92, height: 13, opacity: 0.11)
+                    }
+                    Spacer(minLength: 12)
+                    GhostBar(width: 96, height: 34, cornerRadius: 8, opacity: 0.16)
+                }
+
+                Rectangle()
+                    .fill(Color.white.opacity(0.06))
+                    .frame(height: 0.5)
+
+                HStack(spacing: 14) {
+                    ForEach(0..<3, id: \.self) { _ in
+                        HStack(spacing: 6) {
+                            Rectangle()
+                                .fill(Color.white.opacity(0.20))
+                                .frame(width: 8, height: 2)
+                            GhostBar(width: 34, height: 8, cornerRadius: 4, opacity: 0.10)
+                        }
+                    }
+                    Spacer(minLength: 0)
+                }
             }
         }
     }
@@ -232,8 +262,10 @@ struct HistoryScreen: View {
 
 /// "This week" hero card. Sparkline of the last 8 weeks of volume
 /// on the left, three weekly stat columns on the right (workouts /
-/// sets / volume). The whole card sits inside a primary-tinted
-/// glass surface so the page reads as alive before the first row.
+/// sets / volume). Distinguished from the session rows below by a
+/// brighter neutral glass surface plus an orange accent dash on the
+/// header — the warm accent lives in the dash and sparkline, not as
+/// a fill wash that would skew muddy over black.
 private struct WeeklyHeroCard: View {
     let comparison: WeeklyComparison
     let weeklyVolumeSeries: [Double]
@@ -243,11 +275,16 @@ private struct WeeklyHeroCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .firstTextBaseline) {
-                Text("This week")
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.70))
-                    .tracking(0.5)
-                    .textCase(.uppercase)
+                HStack(spacing: 8) {
+                    Rectangle()
+                        .fill(Tint.primary)
+                        .frame(width: 16, height: 2)
+                    Text("This week")
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.70))
+                        .tracking(0.5)
+                        .textCase(.uppercase)
+                }
                 Spacer()
                 if comparison.lastWeek.workouts > 0 || comparison.thisWeek.workouts > 0 {
                     Text("vs last week")
@@ -307,8 +344,8 @@ private struct WeeklyHeroCard: View {
             .padding(.top, 2)
         }
         .padding(18)
-        .glassCard(cornerRadius: 24, tint: Tint.primary)
-        .primaryGlow(Tint.primary.opacity(0.55), radius: 22, y: 6)
+        .glassCard(cornerRadius: 24, bright: true)
+        .softElevation(radius: 16, y: 8, opacity: 0.4)
     }
 
     private func heroStat(
