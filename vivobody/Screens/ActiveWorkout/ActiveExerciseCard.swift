@@ -165,10 +165,65 @@ struct ActiveExerciseCard: View {
     private var setPips: some View {
         HStack(spacing: Space.md) {
             ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
-                pip(isCompleted: set.isCompleted, isActive: idx == activeIndex)
+                let pipView = pip(isCompleted: set.isCompleted, isActive: idx == activeIndex)
+                // Skip the menu on a lone pending set — there'd be
+                // nothing to offer (can't remove the last set, nothing
+                // logged to edit).
+                if set.isCompleted || sets.count > 1 {
+                    pipView.contextMenu { pipMenu(for: set) }
+                } else {
+                    pipView
+                }
+            }
+            addSetButton
+        }
+        .frame(height: 44)
+    }
+
+    /// Per-set long-press menu, surfaced from the pips. Completed sets
+    /// can be edited or deleted; a pending set can be removed outright
+    /// (so long as it isn't the only one).
+    @ViewBuilder
+    private func pipMenu(for set: WorkoutSet) -> some View {
+        if set.isCompleted {
+            Button {
+                editingSet = set
+            } label: {
+                Label("Edit set", systemImage: "pencil")
+            }
+            Button(role: .destructive) {
+                deletingSet = set
+            } label: {
+                Label("Delete set", systemImage: "trash")
+            }
+        } else if sets.count > 1 {
+            Button(role: .destructive) {
+                removeSet(set)
+            } label: {
+                Label("Remove set", systemImage: "minus.circle")
             }
         }
-        .frame(height: 22)
+    }
+
+    /// One-tap "add a set" — a quiet outlined plus that lives at the
+    /// end of the pip row, where the count is already shown. Tapping
+    /// it appends a set seeded from the current working set, so "one
+    /// more" matches the weight you're already lifting. Adding a set
+    /// to a finished exercise re-opens it for the new set.
+    private var addSetButton: some View {
+        Button {
+            addSet()
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(Ink.tertiary)
+                .frame(width: 26, height: 26)
+                .overlay(Circle().strokeBorder(Ink.quaternary, lineWidth: 2))
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Add a set")
     }
 
     @ViewBuilder
@@ -317,6 +372,40 @@ struct ActiveExerciseCard: View {
         )
     }
 
+    /// Append a fresh pending set, seeded from the current working
+    /// set (or the last set, or the plan) so it lands at the weight
+    /// and reps you're already using. Keeps `plannedSets` in step so
+    /// every "of N" readout agrees.
+    private func addSet() {
+        let seed = session.activeSet(for: exercise) ?? sets.last
+        let newSet = WorkoutSet(
+            weight: seed?.weight ?? exercise.plannedWeight,
+            reps: seed?.reps ?? exercise.plannedReps,
+            sortOrder: exercise.sets.count
+        )
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+            exercise.sets.append(newSet)
+        }
+        exercise.plannedSets = exercise.sets.count
+        Haptics.tick()
+    }
+
+    /// Remove a still-pending set (the count went too high). Never
+    /// drops the last remaining set — an exercise needs at least one.
+    private func removeSet(_ set: WorkoutSet) {
+        guard exercise.sets.count > 1,
+              let idx = exercise.sets.firstIndex(where: { $0.id == set.id })
+        else { return }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+            _ = exercise.sets.remove(at: idx)
+        }
+        for (i, remaining) in exercise.orderedSets.enumerated() {
+            remaining.sortOrder = i
+        }
+        exercise.plannedSets = exercise.sets.count
+        Haptics.soft()
+    }
+
     /// Remove a completed set from this exercise. The remaining sets'
     /// `sortOrder` is re-packed so indices in the UI stay 1..N.
     private func deleteSet(_ set: WorkoutSet) {
@@ -325,6 +414,7 @@ struct ActiveExerciseCard: View {
         for (i, remaining) in exercise.orderedSets.enumerated() {
             remaining.sortOrder = i
         }
+        exercise.plannedSets = exercise.sets.count
         Haptics.soft()
         deletingSet = nil
     }

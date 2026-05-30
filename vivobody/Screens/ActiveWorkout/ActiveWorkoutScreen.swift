@@ -13,9 +13,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ActiveWorkoutScreen: View {
     @State private var session: WorkoutSession
+
+    /// Read-only access to archived sessions — used to seed a freshly
+    /// added exercise with the set count / reps / weight from the
+    /// last time the user logged it (see `makeAddedExercise`).
+    @Environment(\.modelContext) private var modelContext
 
     /// Optional archive callback. Wired to the Summary card's DONE
     /// button — that's the canonical "workout is over, save it"
@@ -125,7 +131,7 @@ struct ActiveWorkoutScreen: View {
         // there means the add came from the Summary card.
         let fromSummary = session.activeExerciseIndex >= session.orderedExercises.count
 
-        let newExercise = Exercise(
+        let newExercise = makeAddedExercise(
             from: item,
             sortOrder: session.exercises.count
         )
@@ -142,6 +148,34 @@ struct ActiveWorkoutScreen: View {
         // leave the pager where it is — earlier indices are
         // unaffected by an append.
         Haptics.soft()
+    }
+
+    /// Build the exercise to append. Rather than a blunt "always 3
+    /// sets" default, mirror the user's most recent logged version of
+    /// this exercise — same number of sets, at the reps and weight
+    /// they actually used. A first-time exercise falls back to the
+    /// catalog defaults (3 sets at the catalog reps × weight). Either
+    /// way the count is then adjustable in the card (+ / − a set).
+    private func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
+        if let last = mostRecentLoggedExercise(named: item.name) {
+            let copy = Exercise.freshCopy(of: last)
+            copy.sortOrder = sortOrder
+            return copy
+        }
+        return Exercise(from: item, sortOrder: sortOrder)
+    }
+
+    /// The same-named exercise from the most recently completed
+    /// session, or nil if the user has never logged it. The current
+    /// in-flight session is un-inserted, so it never matches here.
+    private func mostRecentLoggedExercise(named name: String) -> Exercise? {
+        let descriptor = FetchDescriptor<Exercise>(
+            predicate: #Predicate { $0.name == name }
+        )
+        let matches = (try? modelContext.fetch(descriptor)) ?? []
+        return matches
+            .filter { $0.session?.completedAt != nil }
+            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
     }
 
     /// Two-way binding for PRCelebration. When the user taps to

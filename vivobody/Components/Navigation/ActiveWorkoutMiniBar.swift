@@ -155,7 +155,7 @@ struct ActiveWorkoutMiniBar: View {
         if session.isAllComplete { return "All sets logged" }
         guard let exercise = displayExercise else { return "" }
         if let nextIndex = session.activeSetIndex(for: exercise) {
-            return "Set \(nextIndex + 1) of \(exercise.plannedSets)"
+            return "Set \(nextIndex + 1) of \(exercise.orderedSets.count)"
         }
         return "All sets done"
     }
