@@ -320,6 +320,9 @@ private struct LibraryTemplatesContent: View {
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
+                    // Force red: the app's global lime .tint would
+                    // otherwise override the destructive role's color.
+                    .tint(.red)
                 }
                 .contextMenu {
                     Button {
