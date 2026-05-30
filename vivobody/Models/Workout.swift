@@ -32,18 +32,13 @@ enum MuscleGroup: String, Hashable, CaseIterable {
         }
     }
 
-    /// Accent color per muscle group. Read by exercise cards, set-row
-    /// progress chips, and (eventually) the streak-calendar fill.
-    var accent: Color {
-        switch self {
-        case .chest:     return Color(red: 0.82, green: 0.30, blue: 0.30)
-        case .back:      return Color(red: 0.28, green: 0.62, blue: 0.38)
-        case .shoulders: return Color(red: 0.96, green: 0.66, blue: 0.26)
-        case .legs:      return Color(red: 0.36, green: 0.54, blue: 0.82)
-        case .arms:      return Color(red: 0.66, green: 0.38, blue: 0.76)
-        case .core:      return Color(red: 0.52, green: 0.80, blue: 0.62)
-        }
-    }
+    /// Neutral marker tint for muscle-group affordances. Deliberately
+    /// a single grayscale value for every group: the app has ONE
+    /// accent (Volt), and muscle identity is carried by the text
+    /// label, not a rainbow of dots. Kept as a property so existing
+    /// call sites (dots, chips, calendar) compile while the screens
+    /// migrate to text-only group labels.
+    var accent: Color { Color.white.opacity(0.40) }
 }
 
 // MARK: - Exercise

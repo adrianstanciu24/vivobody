@@ -14,42 +14,47 @@
 import SwiftUI
 
 enum Typography {
-    /// Sentence-case section header. Use in place of the legacy
-    /// "ALL-CAPS · TRACKED" mono labels.
-    static let sectionLabel = Font.system(size: 13, weight: .medium)
+    // The scale is six roles. If a new site needs a size that isn't
+    // here, the answer is almost always one of these — not a new one.
 
-    /// Slightly bigger sentence-case label for empty states and
-    /// foregrounded card titles.
-    static let sectionHeading = Font.system(size: 15, weight: .semibold)
-
-    /// Hero metric — used as the dominant number on a card. Rounded
-    /// design gives the digits a friendlier silhouette than the
-    /// default system face.
+    /// Hero metric — the single dominant number on a screen/card.
+    /// Rounded gives the digits a confident, friendly silhouette.
+    /// Apply `.monospacedDigit()` at the site so it never jitters.
     static let metricHero = Font.system(size: 56, weight: .bold, design: .rounded)
 
-    /// Big metric used for stat rows in cards (workouts / sets /
-    /// volume on the Me screen, time / volume / sets in Today's
-    /// last-workout card).
-    static let statValue = Font.system(size: 26, weight: .bold, design: .rounded)
+    /// Secondary big number — stat-strip values (workouts / sets /
+    /// volume). Same rounded family as the hero, one step down.
+    static let statValue = Font.system(size: 28, weight: .bold, design: .rounded)
 
-    /// Unit suffix sized to sit next to `metricHero` / `statValue`.
-    /// Monospaced so units don't shift horizontally as the digit
-    /// before them changes width.
-    static let metricUnit = Font.system(size: 13, weight: .medium, design: .monospaced)
+    /// Card / row title — the name of a thing (exercise, template,
+    /// session). The largest non-numeric role.
+    static let title = Font.system(size: 20, weight: .semibold)
 
-    /// Inline body text — sets descriptions, captions, supporting
-    /// copy on cards.
-    static let body = Font.system(size: 15, weight: .regular)
+    /// Inline body text — descriptions, supporting copy, list values.
+    static let body = Font.system(size: 16, weight: .regular)
 
-    /// Smaller secondary copy — chip subtitles, sub-captions.
+    /// Small sentence-case label. Replaces every legacy
+    /// "ALL-CAPS · TRACKED" mono label. Section headers, stat labels.
+    static let sectionLabel = Font.system(size: 13, weight: .medium)
+
+    /// Slightly bigger sentence-case label for empty-state headings
+    /// and foregrounded card titles where `title` is too large.
+    static let sectionHeading = Font.system(size: 15, weight: .semibold)
+
+    /// Smallest copy — chip subtitles, sub-captions, metadata.
     static let caption = Font.system(size: 12, weight: .medium)
+
+    /// Unit suffix sized to sit next to a number. Monospaced is
+    /// reserved for digits/units so they don't shift horizontally as
+    /// the value before them changes width.
+    static let metricUnit = Font.system(size: 13, weight: .medium, design: .monospaced)
 }
 
 extension View {
     /// Convenience for the "small dim sentence-case label" pattern
-    /// that replaces all the tracked-uppercase labels. Equivalent to
-    /// applying `Typography.sectionLabel` + 55% white foreground.
-    func sectionLabelStyle(_ opacity: Double = 0.55) -> some View {
+    /// that replaces all the tracked-uppercase labels. Sentence case,
+    /// no tracking, tertiary ink by default.
+    func sectionLabelStyle(_ opacity: Double = 0.45) -> some View {
         self
             .font(Typography.sectionLabel)
             .foregroundStyle(.white.opacity(opacity))

@@ -2,26 +2,21 @@
 //  HistoryScreen.swift
 //  vivobody
 //
-//  Live list of every archived workout — but framed as a journal,
-//  not a stats table. Top of the screen carries a "This week" hero
-//  card: a sparkline + the three weekly totals so the page has a
-//  pulse before you start scrolling rows. Below it, sessions are
+//  Live list of every archived workout, rendered as an instrument:
+//  no cards, no carved glass — structure comes from type, whitespace,
+//  and hairlines on black. The screen opens with the week's defining
+//  numeral (Total volume) as a large monospaced hero, a colored
+//  trend delta, and a card-free stat strip. Below it, sessions are
 //  grouped by date bucket (Today / Yesterday / This Week / Last
-//  Week / month) and rendered with two row styles, both built on
-//  the same Liquid Glass language — restraint, typography, and
-//  carved depth:
+//  Week / month) and laid out as full-width hairline-separated rows:
 //
-//    • Recent (today's sessions) — rich tile with a workout-
-//      title header, meta column on the left, and a large
-//      volume number carved into the glass on the right. Muscle
-//      groups read as small monospaced labels beneath a hairline
-//      divider, in their accent colors.
-//    • Earlier — single-row layout: date + muscle summary + time
-//      on the left, smaller carved volume on the right. Same
-//      vocabulary, half the height.
+//    • Today — elevated rows: workout title + meta on the left, a
+//      larger volume numeral on the right.
+//    • Earlier — same row, tighter: date + muscle summary + time on
+//      the left, a smaller volume numeral on the right.
 //
-//  PR sessions add a thin gold underline beneath the carved
-//  volume — a typographic accent only, no badge chrome.
+//  PR sessions render their volume numeral in the gold completion
+//  accent — a typographic cue only, no badge chrome.
 //
 //  Tapping any row pushes a detail view that reuses
 //  WorkoutSummaryCard — the same "receipt" the user saw at the end
@@ -57,64 +52,20 @@ struct HistoryScreen: View {
                 content
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
+        .screenBackground()
     }
 
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 18) {
-            sessionGhost
-                .frame(maxWidth: 300)
-
-            VStack(spacing: 6) {
-                Text("No workouts yet")
-                    .sectionHeadingStyle()
-                Text("Finish your first session and it lands here.")
-                    .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.55))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
-            }
-        }
-    }
-
-    /// Dashed-glass phantom matching `RichSessionRow`: a workout
-    /// title, a meta column (time + sets·min), the carved volume
-    /// block on the right, then a hairline and a muscle strip. It
-    /// previews a logged session in the same material the real
-    /// rows use.
-    private var sessionGhost: some View {
-        GhostCard(cornerRadius: 22) {
-            VStack(alignment: .leading, spacing: 14) {
-                GhostBar(width: 112, height: 16, cornerRadius: 6, opacity: 0.18)
-
-                HStack(alignment: .bottom, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        GhostBar(width: 64, height: 9, cornerRadius: 4, opacity: 0.10)
-                        GhostBar(width: 92, height: 13, opacity: 0.11)
-                    }
-                    Spacer(minLength: 12)
-                    GhostBar(width: 96, height: 34, cornerRadius: 8, opacity: 0.16)
-                }
-
-                Rectangle()
-                    .fill(Color.white.opacity(0.06))
-                    .frame(height: 0.5)
-
-                HStack(spacing: 14) {
-                    ForEach(0..<3, id: \.self) { _ in
-                        HStack(spacing: 6) {
-                            Rectangle()
-                                .fill(Color.white.opacity(0.20))
-                                .frame(width: 8, height: 2)
-                            GhostBar(width: 34, height: 8, cornerRadius: 4, opacity: 0.10)
-                        }
-                    }
-                    Spacer(minLength: 0)
-                }
-            }
+        VStack(spacing: Space.sm) {
+            Text("No workouts yet")
+                .sectionHeadingStyle()
+            Text("Finish your first session and it lands here.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.tertiary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
         }
     }
 
@@ -123,31 +74,29 @@ struct HistoryScreen: View {
     private var content: some View {
         let groups = groupedSessions
         let prSet = sessionsWithPR
-        let streakSet = streakDaySessions
 
         return ScrollView {
-            LazyVStack(spacing: 22) {
+            LazyVStack(alignment: .leading, spacing: Space.section) {
                 if showsWeeklyHero {
-                    WeeklyHeroCard(
+                    WeeklyHero(
                         comparison: sessions.weeklyComparison(),
-                        weeklyVolumeSeries: sessions.weeklySeries(weeks: 8).map(\.volume),
                         currentStreakDays: currentStreakDays,
                         unit: unit
                     )
+                    SectionDivider()
                 }
 
                 ForEach(Array(groups.enumerated()), id: \.element.id) { _, group in
                     DateGroupSection(
                         group: group,
                         unit: unit,
-                        prSessions: prSet,
-                        streakSessions: streakSet
+                        prSessions: prSet
                     )
                 }
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 4)
-            .padding(.bottom, 28)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.xs)
+            .padding(.bottom, Space.xxl)
         }
     }
 
@@ -231,154 +180,79 @@ struct HistoryScreen: View {
         return count
     }
 
-    /// IDs of sessions on a date that's part of a 2+ day streak
-    /// (yesterday OR tomorrow also had at least one logged session).
-    /// Surfaced as a flame badge so the user feels the rhythm of
-    /// consecutive training days.
-    private var streakDaySessions: Set<UUID> {
-        let calendar = Calendar.current
-        var sessionsByDay: [Date: [WorkoutSession]] = [:]
-        for session in sessions {
-            let day = calendar.startOfDay(for: session.completedAt ?? session.startedAt)
-            sessionsByDay[day, default: []].append(session)
-        }
-        let workoutDays = Set(sessionsByDay.keys)
-
-        var result: Set<UUID> = []
-        for (day, daySessions) in sessionsByDay {
-            guard
-                let yesterday = calendar.date(byAdding: .day, value: -1, to: day),
-                let tomorrow = calendar.date(byAdding: .day, value: 1, to: day)
-            else { continue }
-            if workoutDays.contains(yesterday) || workoutDays.contains(tomorrow) {
-                for s in daySessions { result.insert(s.id) }
-            }
-        }
-        return result
-    }
 }
 
-// MARK: - Weekly hero card
+// MARK: - Weekly hero
 
-/// "This week" hero card. Sparkline of the last 8 weeks of volume
-/// on the left, three weekly stat columns on the right (workouts /
-/// sets / volume). Distinguished from the session rows below by a
-/// brighter neutral glass surface plus an orange accent dash on the
-/// header — the warm accent lives in the dash and sparkline, not as
-/// a fill wash that would skew muddy over black.
-private struct WeeklyHeroCard: View {
+/// The week as an instrument: a "This week" kicker, the Total volume
+/// numeral as the dominant monospaced hero, a colored trend delta
+/// against last week, and a card-free stat strip (workouts / sets /
+/// streak). No surface, no sparkline — type and a single hairline
+/// carry it.
+private struct WeeklyHero: View {
     let comparison: WeeklyComparison
-    let weeklyVolumeSeries: [Double]
     let currentStreakDays: Int
     let unit: WeightUnit
 
+    private static let volumeHero = Font.system(size: 60, weight: .bold, design: .monospaced)
+    private static let monoStat = Font.system(size: 28, weight: .bold, design: .monospaced)
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .firstTextBaseline) {
-                HStack(spacing: 8) {
-                    Rectangle()
-                        .fill(Tint.primary)
-                        .frame(width: 16, height: 2)
-                    Text("This week")
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.70))
-                        .tracking(0.5)
-                        .textCase(.uppercase)
+        VStack(alignment: .leading, spacing: Space.lg) {
+            SectionHeader(
+                title: "This week",
+                trailing: comparison.lastWeek.workouts > 0 ? "vs last week" : nil
+            )
+
+            HStack(alignment: .lastTextBaseline, spacing: Space.md) {
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    Text(WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit))
+                        .font(Self.volumeHero)
+                        .foregroundStyle(Ink.primary)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    Text(unit.symbol)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.tertiary)
                 }
-                Spacer()
-                if comparison.lastWeek.workouts > 0 || comparison.thisWeek.workouts > 0 {
-                    Text("vs last week")
-                        .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.40))
-                }
+                Spacer(minLength: Space.sm)
+                trendDelta
             }
 
-            HStack(alignment: .center, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(alignment: .lastTextBaseline, spacing: 4) {
-                        Text(WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit))
-                            .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.6)
-                        Text(unit.symbol)
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(.white.opacity(0.50))
-                    }
-                    Text("Total volume")
-                        .sectionLabelStyle(0.55)
-                }
+            Text("Total volume")
+                .sectionLabelStyle(0.45)
 
-                Spacer(minLength: 8)
-
-                if weeklyVolumeSeries.count >= 2 && weeklyVolumeSeries.contains(where: { $0 > 0 }) {
-                    MiniChart(
-                        values: weeklyVolumeSeries,
-                        lineColor: Tint.primary,
-                        fillColor: Tint.primary
-                    )
-                    .frame(width: 92, height: 38)
-                }
-            }
-
-            HStack(spacing: 0) {
-                heroStat(
-                    value: "\(comparison.thisWeek.workouts)",
-                    delta: comparison.workoutsDelta,
-                    label: "Workouts"
-                )
-                heroDivider
-                heroStat(
-                    value: "\(comparison.thisWeek.sets)",
-                    delta: comparison.setsDelta,
-                    label: "Sets"
-                )
-                heroDivider
-                heroStat(
-                    value: streakLabel,
-                    label: "Streak",
-                    accentOverride: streakAccent
-                )
-            }
-            .padding(.top, 2)
+            StatStrip(
+                stats: [
+                    Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
+                    Stat(value: "\(comparison.thisWeek.sets)", label: "Sets"),
+                    Stat(value: streakLabel, label: "Streak", accent: currentStreakDays >= 2),
+                ],
+                valueFont: Self.monoStat
+            )
+            .padding(.top, Space.sm)
         }
-        .padding(18)
-        .glassCard(cornerRadius: 24, bright: true)
-        .softElevation(radius: 16, y: 8, opacity: 0.4)
     }
 
-    private func heroStat(
-        value: String,
-        delta: Int = 0,
-        label: String,
-        accentOverride: Color? = nil
-    ) -> some View {
-        VStack(spacing: 6) {
-            Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(accentOverride ?? .white)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-            Text(label)
-                .sectionLabelStyle(0.55)
+    /// Direction-of-change against last week, as a colored numeral
+    /// rather than a chart: lime when up, dim when flat/down. Hidden
+    /// when there's no prior week to compare against.
+    @ViewBuilder
+    private var trendDelta: some View {
+        if comparison.lastWeek.volume > 0 {
+            let pct = Int((comparison.volumeDelta / comparison.lastWeek.volume * 100).rounded())
+            HStack(spacing: 2) {
+                Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
+                Text("\(abs(pct))%")
+            }
+            .font(.system(size: 14, weight: .semibold, design: .monospaced))
+            .foregroundStyle(pct >= 0 ? Tint.inProgress : Ink.tertiary)
         }
-        .frame(maxWidth: .infinity)
-    }
-
-    private var heroDivider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.08))
-            .frame(width: 0.5, height: 28)
     }
 
     private var streakLabel: String {
         currentStreakDays <= 0 ? "—" : "\(currentStreakDays)d"
-    }
-
-    private var streakAccent: Color? {
-        currentStreakDays >= 2 ? Tint.primary : nil
     }
 }
 
@@ -388,43 +262,23 @@ private struct DateGroupSection: View {
     let group: HistoryDateGroup
     let unit: WeightUnit
     let prSessions: Set<UUID>
-    let streakSessions: Set<UUID>
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(group.title)
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.55))
-                    .tracking(0.6)
-                    .textCase(.uppercase)
-                Spacer()
-                Text(group.subtitle)
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.35))
-            }
-            .padding(.horizontal, 4)
+        VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(title: group.title, trailing: group.subtitle)
 
-            VStack(spacing: 12) {
-                ForEach(group.sessions) { session in
+            VStack(spacing: 0) {
+                ForEach(Array(group.sessions.enumerated()), id: \.element.id) { index, session in
+                    if index > 0 { SectionDivider() }
                     NavigationLink {
                         SessionDetailScreen(session: session)
                     } label: {
-                        if group.style == .rich {
-                            RichSessionRow(
-                                session: session,
-                                unit: unit,
-                                hasPR: prSessions.contains(session.id),
-                                isStreakDay: streakSessions.contains(session.id)
-                            )
-                        } else {
-                            CompactSessionRow(
-                                session: session,
-                                unit: unit,
-                                hasPR: prSessions.contains(session.id),
-                                isStreakDay: streakSessions.contains(session.id)
-                            )
-                        }
+                        SessionRow(
+                            session: session,
+                            unit: unit,
+                            hasPR: prSessions.contains(session.id),
+                            prominent: group.style == .rich
+                        )
                     }
                     .buttonStyle(.plain)
                 }
@@ -433,126 +287,74 @@ private struct DateGroupSection: View {
     }
 }
 
-// MARK: - Rich row (recent sessions)
+// MARK: - Session row
 
-/// Today's sessions get the editorial treatment: a clean glass
-/// card with the volume number carved into its surface as the
-/// hero. Identity comes from typographic hierarchy and material
-/// depth, not from decoration. PR workouts add a thin gold
-/// hairline beneath the carved volume — a typographic accent,
-/// not a badge.
-private struct RichSessionRow: View {
+/// One archived session as a full-width hairline row — no card, no
+/// carved glass. The left column carries identity (a workout title
+/// for today, a date for earlier sessions) plus a muscle/time meta
+/// line; the right column anchors the volume numeral in monospace.
+/// `prominent` (today's sessions) enlarges the numeral and promotes
+/// the title. A PR renders its numeral in the gold completion accent.
+private struct SessionRow: View {
     let session: WorkoutSession
     let unit: WeightUnit
     let hasPR: Bool
-    let isStreakDay: Bool
+    let prominent: Bool
 
     private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
 
-    private static let cornerRadius: CGFloat = 22
-
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            header
-
-            HStack(alignment: .bottom, spacing: 14) {
-                metaColumn
-                Spacer(minLength: 8)
-                CarvedVolumeText(
-                    value: WeightFormatter.volumeValue(session.totalVolume, unit: unit),
-                    unit: unit.symbol,
-                    size: 38,
-                    isPR: hasPR
-                )
+        HStack(alignment: .center, spacing: Space.lg) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text(titleLine)
+                    .font(prominent ? Typography.title : Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                Text(metaLine)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
             }
 
-            if !muscleTags.isEmpty {
-                Divider().background(Color.white.opacity(0.06))
-                muscleStrip
-            }
-        }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 18)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: Self.cornerRadius)
-        .topSpecularSheen(cornerRadius: Self.cornerRadius, intensity: 0.08, height: 0.42)
-        .glassRimBevel(cornerRadius: Self.cornerRadius, outerWidth: 0.6, innerInset: 1.2)
-        .shadow(color: .black.opacity(0.35), radius: 10, y: 6)
-    }
+            Spacer(minLength: Space.sm)
 
-    private var header: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text(workoutTitle)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.92))
-                .lineLimit(1)
-            Spacer(minLength: 4)
-            if isStreakDay { streakIndicator }
-            if hasPR { prLabel }
-        }
-    }
-
-    private var metaColumn: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text(timeString.uppercased())
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.45))
-                .tracking(1.2)
-            HStack(spacing: 6) {
-                Text("\(session.totalSets) \(session.totalSets == 1 ? "set" : "sets")")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.70))
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
+                    .font(.system(size: prominent ? 30 : 22, weight: .bold, design: .monospaced))
+                    .foregroundStyle(hasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
-                if displayMinutes >= 1 {
-                    metaDivider
-                    Text("\(displayMinutes) min")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.70))
-                        .monospacedDigit()
-                }
+                Text(unit.symbol)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
             }
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Ink.quaternary)
         }
+        .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
+        .padding(.vertical, Space.md)
+        .contentShape(Rectangle())
     }
 
-    private var metaDivider: some View {
-        Text("·")
-            .font(.system(size: 13, weight: .semibold))
-            .foregroundStyle(.white.opacity(0.30))
+    /// Today's rows lead with the workout's muscle identity; earlier
+    /// rows lead with their date.
+    private var titleLine: String {
+        prominent ? workoutTitle : dateLine
     }
 
-    private var muscleStrip: some View {
-        HStack(spacing: 14) {
-            ForEach(muscleTags.prefix(4), id: \.self) { group in
-                HStack(spacing: 6) {
-                    Rectangle()
-                        .fill(group.accent.opacity(0.85))
-                        .frame(width: 8, height: 2)
-                    Text(group.displayName.uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.65))
-                        .tracking(0.8)
-                }
-            }
-            if muscleTags.count > 4 {
-                Text("+\(muscleTags.count - 4)")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.40))
-            }
-            Spacer(minLength: 0)
+    /// Secondary line: today shows sets · minutes · time; earlier
+    /// shows the muscle summary · time. Either way the numeral on the
+    /// right stays the anchor.
+    private var metaLine: String {
+        if prominent {
+            var parts = ["\(session.totalSets) \(session.totalSets == 1 ? "set" : "sets")"]
+            if displayMinutes >= 1 { parts.append("\(displayMinutes) min") }
+            parts.append(timeString)
+            return parts.joined(separator: "  ·  ")
+        } else {
+            return "\(muscleSummary)  ·  \(timeString)"
         }
-    }
-
-    private var prLabel: some View {
-        Text("PR")
-            .font(.system(size: 10, weight: .bold, design: .rounded))
-            .tracking(1.0)
-            .foregroundStyle(Color(red: 1.0, green: 0.78, blue: 0.30))
-    }
-
-    private var streakIndicator: some View {
-        Image(systemName: "flame.fill")
-            .font(.system(size: 11, weight: .semibold))
-            .foregroundStyle(Tint.primary.opacity(0.85))
     }
 
     private var workoutTitle: String {
@@ -564,82 +366,6 @@ private struct RichSessionRow: View {
         }
     }
 
-    private var displayMinutes: Int {
-        Int(session.duration / 60)
-    }
-
-    private var timeString: String {
-        let date = session.completedAt ?? session.startedAt
-        return HistoryFormatters.time.string(from: date)
-    }
-}
-
-// MARK: - Compact row (earlier sessions)
-
-/// Earlier sessions get the same carved-glass vocabulary, just
-/// tighter. Date / muscle / time stack on the left; the carved
-/// volume number sits on the right as the visual anchor. No
-/// decoration — identity comes from the typography and the glass
-/// material's own rim lighting.
-private struct CompactSessionRow: View {
-    let session: WorkoutSession
-    let unit: WeightUnit
-    let hasPR: Bool
-    let isStreakDay: Bool
-
-    private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
-
-    private static let cornerRadius: CGFloat = 18
-
-    var body: some View {
-        HStack(alignment: .center, spacing: 14) {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 6) {
-                    Text(dateLine)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.92))
-                    if isStreakDay {
-                        Image(systemName: "flame.fill")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(Tint.primary.opacity(0.80))
-                    }
-                }
-
-                HStack(spacing: 8) {
-                    Text(muscleSummary.uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.55))
-                        .tracking(1.0)
-                        .lineLimit(1)
-                    Text("·")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.25))
-                    Text(timeString)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.40))
-                        .tracking(0.4)
-                }
-            }
-
-            Spacer(minLength: 8)
-
-            CarvedVolumeText(
-                value: WeightFormatter.volumeValue(session.totalVolume, unit: unit),
-                unit: unit.symbol,
-                size: 24,
-                isPR: hasPR
-            )
-        }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 18)
-        .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-        .glassCard(cornerRadius: Self.cornerRadius)
-        .glassRimBevel(cornerRadius: Self.cornerRadius, outerWidth: 0.5, innerInset: 1.0)
-    }
-
-    /// Single-line muscle summary — abbreviated for compact rows.
-    /// Two muscles get joined with "+"; three or more collapse to
-    /// "Full body" so the row stays clean.
     private var muscleSummary: String {
         switch muscleTags.count {
         case 0: return "Workout"
@@ -648,6 +374,8 @@ private struct CompactSessionRow: View {
         default: return "Full body"
         }
     }
+
+    private var displayMinutes: Int { Int(session.duration / 60) }
 
     private var dateLine: String {
         let date = session.completedAt ?? session.startedAt

@@ -26,7 +26,9 @@ struct CarvedVolumeText: View {
     var size: CGFloat = 36
     var isPR: Bool = false
 
-    private static let prGold = Color(red: 1.0, green: 0.78, blue: 0.30)
+    /// PR underline uses the one accent — completion/achievement is
+    /// the only thing allowed to wear colour.
+    private static let prGold = Tint.primary
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 3) {

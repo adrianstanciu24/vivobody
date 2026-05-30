@@ -2,52 +2,115 @@
 //  DesignSystem.swift
 //  vivobody
 //
-//  Centralised colour and radius tokens for the Liquid Glass design
-//  system. Every accent, surface tint, and corner radius routes
-//  through these enums so a future palette tweak is one-file wide.
+//  The visual constitution. Every colour, opacity tier, radius, and
+//  spacing step routes through these enums so the whole app obeys
+//  one set of rules — consistency is enforced by tokens, not by
+//  willpower screen-to-screen.
 //
-//  - `Tint.primary` is the warm orange/amber that drives navigation
-//    tint, primary CTAs, and the focus ambient glow on the active
-//    workout card.
-//  - `Tint.success` is reserved for moment-of-completion cues:
-//    SetCompleteButton, PR celebration, "exercise complete" flag.
-//  - `Tint.danger` is reserved for destructive affordances and
-//    delete confirmations.
+//  First-principles rules baked in here:
+//    1. ONE accent (Volt). It marks the single primary action, the
+//       live/in-progress state, and the moment of completion / PR.
+//       Everything else is grayscale. There is no second hue.
+//    2. Text is white at four opacity tiers (`Ink`) — hierarchy
+//       comes from luminance, not colour.
+//    3. ONE card fill, ONE hairline, ONE family of radii. Cards do
+//       not get reinvented per screen.
+//
+//  - `Tint.primary` (Volt) — primary CTA, nav tint, live indicator.
+//  - `Tint.success` — moment-of-completion cues. Deliberately the
+//    *same* hue as primary: completion is signalled by motion +
+//    haptic + fill-state, not by introducing a competing colour.
+//  - `Tint.danger` — destructive affordances only.
 //
 
 import SwiftUI
 
 enum Tint {
-    /// Vivid red-orange — borrowed from the original vivobody palette
-    /// (`#FF5500`). Saturated and unmistakable, reads as a bright
-    /// "live now" accent rather than a soft amber tint.
-    static let primary       = Color(.sRGB, red: 1.00, green: 0.333, blue: 0.00, opacity: 1.0)
-    static let primaryDim    = Color(.sRGB, red: 1.00, green: 0.333, blue: 0.00, opacity: 0.35)
-    /// Darker companion (`#CC4400`) — used when a deeper variant of
-    /// the primary works better (shadow halos, pressed states).
-    static let primaryShadow = Color(.sRGB, red: 0.80, green: 0.267, blue: 0.00, opacity: 1.0)
+    /// Volt — a refined electric lime (`#BEF24A`). The single accent.
+    /// On pure black it is the most legible high-energy colour that
+    /// isn't the orange/blue every other tracker uses; it reads as
+    /// "alive" and pairs cleanly with grayscale. Used sparingly so it
+    /// always means something.
+    static let primary       = Color(.sRGB, red: 0.745, green: 0.949, blue: 0.290, opacity: 1.0)
+    static let primaryDim    = Color(.sRGB, red: 0.745, green: 0.949, blue: 0.290, opacity: 0.35)
+    /// Deeper chartreuse companion — pressed states, shadow halos.
+    static let primaryShadow = Color(.sRGB, red: 0.50, green: 0.70, blue: 0.13, opacity: 1.0)
 
-    /// Apple system green (`#34C759`) — vivid, grounded, not minty.
-    static let success    = Color(.sRGB, red: 0.204, green: 0.780, blue: 0.349, opacity: 1.0)
-    static let successDim = Color(.sRGB, red: 0.204, green: 0.780, blue: 0.349, opacity: 0.35)
+    /// Completion / PR cue. Same hue as `primary` on purpose: one
+    /// accent, full stop. The *moment* (spring overshoot, haptic
+    /// crescendo, fill flooding in) is what reads as "done," not a
+    /// new colour.
+    static let success    = primary
+    static let successDim = primaryDim
 
+    // Two functional accents per the product principles: one for
+    // "in progress," one for "complete." They must never read alike
+    // at a 0.5-second glance, so they sit on opposite temperatures.
+
+    /// In-progress — the live/charged state: the active set, the
+    /// primary action you're about to take. This is Volt.
+    static let inProgress = primary
+
+    /// Complete — the earned "done" state: a finished set, a finished
+    /// exercise, a PR. A disciplined honey-gold, deliberately warm so
+    /// it never blends with the cool in-progress lime. Reserved for
+    /// the *moment* and *locus* of completion — never an ambient wash.
+    static let complete    = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 1.0)
+    static let completeDim = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 0.35)
+
+    /// Black sits on either accent for CTAs — maximum contrast.
+    static let onAccent   = Color.black
+
+    /// Destructive affordances only (delete, discard). The lone
+    /// permitted exception to the one-accent rule.
     static let danger     = Color(.sRGB, red: 0.96, green: 0.42, blue: 0.42, opacity: 1.0)
 }
 
+/// Text colour tiers. Hierarchy is luminance, never hue. Reach for
+/// these instead of scattering `.white.opacity(...)` literals so the
+/// steps stay identical everywhere.
+enum Ink {
+    /// Hero numerals, titles, the thing you read first.
+    static let primary    = Color.white
+    /// Body copy, secondary values.
+    static let secondary  = Color.white.opacity(0.70)
+    /// Labels, captions, supporting metadata.
+    static let tertiary   = Color.white.opacity(0.45)
+    /// Faintest — disabled, dividers-as-text, deep background detail.
+    static let quaternary = Color.white.opacity(0.30)
+}
+
 enum Radius {
-    static let card: CGFloat   = 24
-    static let chip: CGFloat   = 16
-    static let small: CGFloat  = 12
+    static let card: CGFloat   = 22
+    static let chip: CGFloat   = 14
+    static let small: CGFloat  = 10
     static let pill: CGFloat   = 999
+}
+
+/// 4-pt spacing scale. Section gaps, card padding, and row heights
+/// all snap to these so vertical rhythm is shared across screens.
+enum Space {
+    static let xs: CGFloat  = 4
+    static let sm: CGFloat  = 8
+    static let md: CGFloat  = 12
+    static let lg: CGFloat  = 16
+    static let xl: CGFloat  = 20
+    static let xxl: CGFloat = 24
+    /// Outer screen gutter — the left/right padding every tab uses.
+    static let gutter: CGFloat = 20
+    /// Gap between major sections on a screen.
+    static let section: CGFloat = 24
+    /// Minimum tappable row height (HIG-compliant, glanceable).
+    static let rowMin: CGFloat = 60
 }
 
 enum Surface {
     static let background = Color.black
-    static let cardTint   = Color.white.opacity(0.04)
+    static let cardTint   = Color.white.opacity(0.05)
     /// Brighter neutral fill for hero / primary stat cards — lets
     /// them read as "raised, important" through luminance rather
     /// than a colored tint wash (which skews muddy over black).
-    static let cardTintBright = Color.white.opacity(0.07)
+    static let cardTintBright = Color.white.opacity(0.08)
     static let edge       = Color.white.opacity(0.10)
     static let edgeBright = Color.white.opacity(0.22)
 }

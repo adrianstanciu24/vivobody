@@ -56,7 +56,7 @@ struct ActiveWorkoutScreen: View {
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Surface.background.ignoresSafeArea()
 
             pager
                 .safeAreaInset(edge: .top, spacing: 8) { topBar }
@@ -157,7 +157,7 @@ struct ActiveWorkoutScreen: View {
 
             Text("\(completedSetCount) / \(totalSetCount)")
                 .font(Typography.metricUnit)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.tertiary)
 
             // Trailing: X — cancel workout (with confirmation alert).
             // Logged sets are lost. To minimize, swipe the sheet
@@ -170,9 +170,9 @@ struct ActiveWorkoutScreen: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.white.opacity(0.65))
+                        .foregroundStyle(Ink.secondary)
                         .frame(width: 26, height: 26)
-                        .background(Circle().fill(Color.white.opacity(0.08)))
+                        .background(Circle().fill(Surface.cardTintBright))
                         // Visual chip stays compact; outer frame +
                         // contentShape expand the tap area to the
                         // 44pt HIG minimum.
@@ -194,7 +194,7 @@ struct ActiveWorkoutScreen: View {
         // glass." The fade-down overlay was darkening the top of
         // each card on top of that, producing a "bent" crescent.
         // Removed.
-        .background(Color.black)
+        .background(Surface.background)
     }
 
     private var pager: some View {

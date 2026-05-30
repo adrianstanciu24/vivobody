@@ -42,21 +42,27 @@ struct TodayScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
+            // Order is deliberate: the workout you can start is at the
+            // top, thumb-reachable, above the fold — "Today is the
+            // workout queued up, one tap from starting." The calendar
+            // and history are the journal underneath, reached by a
+            // scroll once you've decided.
+            VStack(alignment: .leading, spacing: Space.section) {
                 dateStrip
-                streakSection
                 startSection
                 if !templates.isEmpty {
                     templatesSection
                 }
+                SectionDivider()
+                streakSection
+                SectionDivider()
                 lastWorkoutSection
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 4)
-            .padding(.bottom, 16)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.xs)
+            .padding(.bottom, Space.lg)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
+        .screenBackground()
         .onAppear { Haptics.prepare() }
     }
 
@@ -67,64 +73,40 @@ struct TodayScreen: View {
     /// gives you the calendar context.
     private var dateStrip: some View {
         Text(Self.dayFormatter.string(from: Date()))
-            .sectionLabelStyle(0.50)
+            .sectionLabelStyle(0.45)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var streakSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .firstTextBaseline) {
-                streakHeading
-                Spacer()
-                if !workoutDates.isEmpty {
-                    Text("\(monthCount(in: Date())) this month")
-                        .sectionLabelStyle(0.45)
-                }
-            }
-
-            StreakCalendar(
-                workoutDates: workoutDates,
-                month: Date()
+        VStack(alignment: .leading, spacing: Space.lg) {
+            SectionHeader(
+                title: "Streak",
+                trailing: workoutDates.isEmpty ? nil : "\(monthCount(in: Date())) this month"
             )
-            .padding(.top, 4)
+            streakHeading
+            StreakCalendar(workoutDates: workoutDates, month: Date())
         }
-        .padding(20)
-        .glassCard()
     }
 
     private var streakHeading: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text("Streak")
-                .sectionLabelStyle(0.60)
-
-            Text("·")
-                .foregroundStyle(.white.opacity(0.30))
-
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(currentStreakDays)")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                Text(currentStreakDays == 1 ? "day" : "days")
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(.white.opacity(0.50))
-            }
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            Text("\(currentStreakDays)")
+                .font(.system(size: 36, weight: .bold, design: .monospaced))
+                .foregroundStyle(currentStreakDays > 0 ? Tint.inProgress : Ink.primary)
+                .monospacedDigit()
+            Text(currentStreakDays == 1 ? "day" : "days")
+                .font(Typography.metricUnit)
+                .foregroundStyle(Ink.tertiary)
         }
     }
 
     private var startSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(startSectionTitle)
-                .sectionLabelStyle(0.60)
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: startSectionTitle)
 
-            HStack(spacing: 14) {
-                Image(systemName: "dumbbell.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.50))
-                Text(planSummary)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.75))
-            }
+            Text(planSummary)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
 
             PrimaryActionButton(
                 title: startButtonTitle,
@@ -132,7 +114,7 @@ struct TodayScreen: View {
             ) {
                 appState.startTodaysWorkout(basedOn: completedSessions.first)
             }
-            .padding(.top, 4)
+            .padding(.top, Space.xs)
 
             // Secondary escape hatch — only shown when there's a
             // last session, since otherwise the primary already IS
@@ -143,11 +125,11 @@ struct TodayScreen: View {
                     appState.startTodaysWorkout(basedOn: nil)
                 } label: {
                     Text("Start a fresh workout instead")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.50))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
                         .underline()
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 6)
+                        .padding(.top, Space.xs)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -160,115 +142,96 @@ struct TodayScreen: View {
     /// button). Sorted most-recently-used first, with never-used
     /// templates trailing in their original Library order.
     private var templatesSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Templates")
-                .sectionLabelStyle(0.60)
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Templates")
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(sortedTemplates) { template in
-                        templateChip(template)
-                    }
+            VStack(spacing: 0) {
+                ForEach(Array(sortedTemplates.enumerated()), id: \.element.id) { index, template in
+                    if index > 0 { SectionDivider() }
+                    templateRow(template)
                 }
             }
         }
     }
 
-    private func templateChip(_ template: WorkoutTemplate) -> some View {
+    private func templateRow(_ template: WorkoutTemplate) -> some View {
         Button {
             Haptics.soft()
             appState.startWorkoutFromTemplate(template)
         } label: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(template.name)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-
-                Text("\(template.orderedExercises.count) ex · \(template.totalPlannedSets) sets")
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.50))
-
-                HStack(spacing: 4) {
-                    ForEach(template.muscleGroups.prefix(4), id: \.self) { group in
-                        Circle()
-                            .fill(group.accent)
-                            .frame(width: 6, height: 6)
-                    }
+            HStack(spacing: Space.md) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(template.name)
+                        .font(Typography.title)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
+                    Text(templateSubtitle(template))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                        .lineLimit(1)
                 }
+
+                Spacer(minLength: Space.sm)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Ink.quaternary)
             }
-            .padding(14)
-            .frame(width: 150, alignment: .leading)
-            .glassChip()
+            .frame(minHeight: Space.rowMin)
+            .padding(.vertical, Space.sm)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Start \(template.name)")
     }
 
+    private func templateSubtitle(_ template: WorkoutTemplate) -> String {
+        let count = template.orderedExercises.count
+        let base = "\(count) ex · \(template.totalPlannedSets) sets"
+        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
+        return groups.isEmpty ? base : "\(base) · \(groups)"
+    }
+
     private var lastWorkoutSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Last workout")
-                .sectionLabelStyle(0.60)
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Last workout")
 
             if let session = completedSessions.first {
                 lastWorkoutCard(for: session)
             } else {
                 Text("Nothing logged yet — your first session lands here.")
                     .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.tertiary)
             }
         }
     }
 
     private func lastWorkoutCard(for session: WorkoutSession) -> some View {
         let date = session.completedAt ?? session.startedAt
-        return VStack(alignment: .leading, spacing: 14) {
+        return VStack(alignment: .leading, spacing: Space.lg) {
             HStack {
                 Text(Self.relativeDayFormatter.string(from: date))
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
                 Spacer()
                 Text(Self.timeFormatter.string(from: date))
                     .font(Typography.metricUnit)
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.tertiary)
             }
 
-            HStack(spacing: 0) {
-                stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time")
-                statDivider
-                stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume")
-                statDivider
-                stat(value: "\(session.totalSets)", unit: nil, label: "Sets")
-            }
+            StatStrip(
+                stats: [
+                    Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
+                    Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
+                    Stat(value: "\(session.totalSets)", label: "Sets"),
+                ],
+                valueFont: Self.monoStatValue
+            )
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(20)
-        .glassCard()
     }
 
-    private func stat(value: String, unit: String?, label: String) -> some View {
-        VStack(spacing: 6) {
-            HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(value)
-                    .font(Typography.statValue)
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                if let unit {
-                    Text(unit)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
-                }
-            }
-            Text(label)
-                .sectionLabelStyle(0.50)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private var statDivider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.08))
-            .frame(width: 0.5, height: 36)
-    }
+    private static let monoStatValue = Font.system(size: 28, weight: .bold, design: .monospaced)
 
     // MARK: - Derived
 

@@ -51,13 +51,13 @@ struct TemplateDetailScreen: View {
                     statsCard
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 8, leading: 22, bottom: 4, trailing: 22))
+                        .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.xs, trailing: Space.gutter))
 
                     if !template.muscleGroups.isEmpty {
                         muscleGroupChips
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets(top: 4, leading: 22, bottom: 8, trailing: 22))
+                            .listRowInsets(EdgeInsets(top: Space.xs, leading: Space.gutter, bottom: Space.md, trailing: Space.gutter))
                     }
                 }
 
@@ -101,37 +101,32 @@ struct TemplateDetailScreen: View {
         }
     }
 
-    // MARK: - Stats card
+    // MARK: - Stats
 
     private var statsCard: some View {
-        HStack(spacing: 14) {
-            stat(value: "\(template.orderedExercises.count)", label: "Exercises")
-            statDivider
-            stat(value: "\(template.totalPlannedSets)", label: "Sets")
-            if !template.muscleGroups.isEmpty {
-                statDivider
-                stat(value: "\(template.muscleGroups.count)", label: "Groups")
-            }
-            Spacer(minLength: 0)
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: 18)
+        StatStrip(stats: statStats, valueFont: Self.monoStat)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var muscleGroupChips: some View {
-        HStack(spacing: 6) {
-            ForEach(template.muscleGroups, id: \.self) { group in
-                Text(group.displayName)
-                    .font(Typography.caption)
-                    .foregroundStyle(group.accent)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(
-                        Capsule().fill(group.accent.opacity(0.16))
-                    )
-            }
+    private var statStats: [Stat] {
+        var stats = [
+            Stat(value: "\(template.orderedExercises.count)", label: "Exercises"),
+            Stat(value: "\(template.totalPlannedSets)", label: "Sets"),
+        ]
+        if !template.muscleGroups.isEmpty {
+            stats.append(Stat(value: "\(template.muscleGroups.count)", label: "Groups"))
         }
+        return stats
+    }
+
+    private static let monoStat = Font.system(size: 24, weight: .bold, design: .monospaced)
+
+    private var muscleGroupChips: some View {
+        Text(template.muscleGroups.map(\.displayName).joined(separator: " · "))
+            .font(Typography.caption)
+            .foregroundStyle(Ink.tertiary)
+            .lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Exercise list
@@ -161,8 +156,8 @@ struct TemplateDetailScreen: View {
                         exerciseRow(exercise)
                     }
                     .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 22, bottom: 4, trailing: 22))
+                    .listRowSeparatorTint(Surface.edge)
+                    .listRowInsets(EdgeInsets(top: 0, leading: Space.gutter, bottom: 0, trailing: Space.gutter))
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             deleteExercise(exercise)
@@ -185,64 +180,46 @@ struct TemplateDetailScreen: View {
     }
 
     private var emptyExercisesPrompt: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Tint.primary.opacity(0.10))
-                    .frame(width: 96, height: 96)
-                Image(systemName: "plus.circle")
-                    .font(.system(size: 36, weight: .light))
-                    .foregroundStyle(Tint.primary.opacity(0.85))
-            }
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("No exercises yet")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.70))
-            Text("Tap + above to add one")
+                .sectionHeadingStyle()
+            Text("Tap + above to add one.")
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(Ink.tertiary)
         }
-        .padding(32)
-        .frame(maxWidth: .infinity)
-        .glassChip(cornerRadius: 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, Space.lg)
     }
 
     private func exerciseRow(_ exercise: TemplateExercise) -> some View {
-        HStack(spacing: 14) {
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(exercise.group.accent)
-                .frame(width: 4, height: 42)
-
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
+        HStack(spacing: Space.md) {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: Space.sm) {
                     Text(exercise.name)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(Typography.title)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
                     if exercise.hasPerSetData {
                         Text("Per set")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 2)
-                            .background(
-                                Capsule().fill(Tint.primary)
-                            )
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.inProgress)
                     }
                 }
                 Text(exerciseSummary(exercise))
                     .font(.system(size: 13, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.tertiary)
             }
 
-            Spacer()
+            Spacer(minLength: Space.sm)
 
             Text(exercise.group.displayName)
                 .font(Typography.caption)
-                .foregroundStyle(exercise.group.accent.opacity(0.85))
+                .foregroundStyle(Ink.tertiary)
         }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 16)
-        .frame(minHeight: 60)
-        .glassChip(cornerRadius: 14)
+        .frame(minHeight: Space.rowMin)
+        .padding(.vertical, Space.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
     }
 
     private func exerciseSummary(_ exercise: TemplateExercise) -> String {
@@ -260,30 +237,11 @@ struct TemplateDetailScreen: View {
         return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
     }
 
-    // MARK: - Stat helpers
-
-    private func stat(value: String, label: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(value)
-                .font(Typography.statValue)
-                .foregroundStyle(.white)
-                .monospacedDigit()
-            Text(label)
-                .sectionLabelStyle(0.55)
-        }
-    }
-
-    private var statDivider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.08))
-            .frame(width: 0.5, height: 32)
-    }
-
     // MARK: - Start bar
 
     private var startBar: some View {
         VStack(spacing: 0) {
-            Divider().background(Color.white.opacity(0.08))
+            Rectangle().fill(Surface.edge).frame(height: 1)
             PrimaryActionButton(
                 title: "Start Workout",
                 subtitle: nil

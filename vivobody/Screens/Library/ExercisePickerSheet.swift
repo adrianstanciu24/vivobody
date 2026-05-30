@@ -24,6 +24,13 @@ import SwiftData
 struct ExercisePickerSheet: View {
     let onPick: (ExerciseCatalogItem) -> Void
 
+    /// When true, tapping a row commits the pick immediately (lime
+    /// "+" affordance) and dismisses — used by the template builder,
+    /// where selection flows straight into the configure sheet. When
+    /// false (default), rows push to ExerciseDetailScreen and the
+    /// user commits from the detail CTA — the active-workout add path.
+    var picksOnTap: Bool = false
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
@@ -69,7 +76,7 @@ struct ExercisePickerSheet: View {
                 Color.black.ignoresSafeArea()
 
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 18) {
+                    LazyVStack(alignment: .leading, spacing: Space.section) {
                         equipmentFilterStrip
                         ForEach(filteredGroups, id: \.group) { section in
                             groupSection(group: section.group, items: section.items)
@@ -78,9 +85,9 @@ struct ExercisePickerSheet: View {
                             emptyState
                         }
                     }
-                    .padding(.horizontal, 22)
-                    .padding(.top, 12)
-                    .padding(.bottom, 24)
+                    .padding(.horizontal, Space.gutter)
+                    .padding(.top, Space.md)
+                    .padding(.bottom, Space.xxl)
                 }
             }
             .navigationTitle("Add Exercise")
@@ -185,8 +192,8 @@ struct ExercisePickerSheet: View {
             }
             // Counter the LazyVStack's padding so the chips align
             // with the screen edges, not the content insets.
-            .padding(.horizontal, -22)
-            .padding(.horizontal, 22)
+            .padding(.horizontal, -Space.gutter)
+            .padding(.horizontal, Space.gutter)
         }
     }
 
@@ -211,18 +218,19 @@ struct ExercisePickerSheet: View {
                 Text(label)
                     .font(.system(size: 13, weight: .semibold))
             }
-            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-            .padding(.horizontal, 14)
-            .frame(minHeight: 32)
-            .background(
-                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-            )
-            .overlay(
-                Capsule().stroke(
-                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                    lineWidth: 0.5
-                )
-            )
+            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+            .padding(.horizontal, Space.lg)
+            .frame(minHeight: 38)
+            .background {
+                if isSelected {
+                    Capsule().fill(Tint.inProgress)
+                }
+            }
+            .overlay {
+                if !isSelected {
+                    Capsule().stroke(Surface.edge, lineWidth: 1)
+                }
+            }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -231,63 +239,46 @@ struct ExercisePickerSheet: View {
     // MARK: - Sections / rows
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Circle().fill(group.accent).frame(width: 7, height: 7)
-                Text(group.displayName)
-                    .sectionLabelStyle(0.60)
-            }
-            VStack(spacing: 6) {
-                ForEach(items) { item in
+        VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(title: group.displayName)
+            VStack(spacing: 0) {
+                ForEach(Array(items.enumerated()), id: \.element.id) { idx, item in
+                    if idx > 0 { SectionDivider() }
                     pickerRow(item)
                 }
             }
         }
     }
 
+    @ViewBuilder
     private func pickerRow(_ item: ExerciseCatalogItem) -> some View {
         let last = lastInstanceLookup[item.name.lowercased()]
 
-        // Row taps navigate to detail instead of immediately picking;
-        // the user commits via the "Add to Workout" CTA on the detail
-        // screen. Long-press still surfaces Edit / Delete via the
-        // attached contextMenu — that gesture is unchanged.
-        return NavigationLink(value: item) {
-            HStack(spacing: 10) {
-                // Equipment glyph — small, dim, telegraphs the gear
-                // before the user reads the name. Helps scan a long
-                // back day for "any dumbbell rows in here?"
-                Image(systemName: item.equipment.symbol)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.45))
-                    .frame(width: 18)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(.white)
-                    // Subtitle line — equipment label and pattern
-                    // (or "Isolation") as a tiny disambiguator for
-                    // exercises with similar names ("Bench Press"
-                    // barbell vs. "Bench Press" dumbbell).
-                    Text(rowSubtitle(item))
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.50))
+        Group {
+            if picksOnTap {
+                // Direct-pick: tap commits and dismisses. The lime
+                // "+" glyph signals "adds straight to the template"
+                // rather than "drills into detail."
+                Button {
+                    Haptics.soft()
+                    onPick(item)
+                    dismiss()
+                } label: {
+                    rowBody(item: item, last: last, trailingSymbol: "plus")
                 }
-
-                Spacer(minLength: 8)
-
-                // Right side flips between "default" (never lifted)
-                // and "last" (have history). Last-side is the high-
-                // value variant — it answers "what should I aim to
-                // beat?" while the picker is still open.
-                rowRightSide(item: item, last: last)
+                .buttonStyle(.plain)
+            } else {
+                // Row taps navigate to detail instead of immediately
+                // picking; the user commits via the "Add to Workout"
+                // CTA on the detail screen.
+                NavigationLink(value: item) {
+                    rowBody(item: item, last: last, trailingSymbol: "chevron.right")
+                }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .glassChip(cornerRadius: 14)
         }
-        .buttonStyle(.plain)
+        // Long-press still surfaces Edit / Delete in both modes —
+        // that gesture is unchanged.
         .contextMenu {
             Button {
                 editorTarget = .edit(item)
@@ -303,6 +294,47 @@ struct ExercisePickerSheet: View {
         }
     }
 
+    private func rowBody(
+        item: ExerciseCatalogItem,
+        last: LastExerciseInstance?,
+        trailingSymbol: String
+    ) -> some View {
+        let isAdd = trailingSymbol == "plus"
+        return HStack(spacing: Space.md) {
+            Image(systemName: item.equipment.symbol)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(Ink.tertiary)
+                .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(item.name)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                Text(rowSubtitle(item))
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
+            }
+
+            Spacer(minLength: Space.sm)
+
+            // Right side flips between "default" (never lifted)
+            // and "last" (have history). Last-side is the high-
+            // value variant — it answers "what should I aim to
+            // beat?" while the picker is still open.
+            rowRightSide(item: item, last: last)
+
+            Image(systemName: trailingSymbol)
+                .font(.system(size: isAdd ? 16 : 12, weight: .semibold))
+                .foregroundStyle(isAdd ? Tint.inProgress : Ink.quaternary)
+        }
+        .frame(minHeight: Space.rowMin)
+        .padding(.vertical, Space.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+    }
+
     /// Right-side rendering of a picker row. Branches on whether
     /// we have a recent log of this exercise:
     ///   • No history → show the catalog's default (`135 lb · 8 reps`)
@@ -315,27 +347,18 @@ struct ExercisePickerSheet: View {
     private func rowRightSide(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
-                HStack(spacing: 4) {
-                    if last.isAllTimeBest {
-                        Text("PR")
-                            .font(.system(size: 10, weight: .bold, design: .monospaced))
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 1)
-                            .background(Capsule().fill(Tint.primary))
-                    }
-                    Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.85))
-                }
+                Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)")
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
+                    .monospacedDigit()
                 Text(RelativeDate.short(last.sessionDate))
                     .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(Ink.quaternary)
             }
         } else {
             Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
                 .font(Typography.caption)
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(Ink.tertiary)
         }
     }
 
@@ -356,29 +379,20 @@ struct ExercisePickerSheet: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 18) {
-            ZStack {
-                Circle()
-                    .fill(Tint.primary.opacity(0.10))
-                    .frame(width: 110, height: 110)
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 36, weight: .light))
-                    .foregroundStyle(Tint.primary.opacity(0.85))
-            }
+        VStack(spacing: Space.lg) {
             Text(emptyStateMessage)
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.tertiary)
                 .multilineTextAlignment(.center)
             Button {
                 editorTarget = .create
             } label: {
-                Label("Create custom exercise", systemImage: "plus.circle.fill")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.black)
-                    .padding(.horizontal, 18)
+                Text("Create custom exercise")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Tint.onAccent)
+                    .padding(.horizontal, 22)
                     .frame(minHeight: 44)
-                    .background(Capsule().fill(Tint.primary))
-                    .softElevation()
+                    .background(Capsule().fill(Tint.inProgress))
             }
             .buttonStyle(.plain)
         }

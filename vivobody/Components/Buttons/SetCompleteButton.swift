@@ -27,6 +27,13 @@ struct SetCompleteButton: View {
     let weight: Double
     let isComplete: Bool
     var intensity: SetIntensity = .standard
+    /// When set, the button renders this verb (e.g. "Complete set")
+    /// instead of repeating the reps × weight numbers. The numbers
+    /// already live large above the button in the instrument layout,
+    /// so echoing them here would be the duplication the redesign
+    /// deletes. Icons are reserved for navigation — the action is a
+    /// word.
+    var title: String? = nil
     let onToggle: () -> Void
 
     @State private var pressScale: CGFloat = 1
@@ -41,7 +48,11 @@ struct SetCompleteButton: View {
     /// could "rescue" a tap they didn't actually intend.
     @State private var dragCanceled: Bool = false
 
-    private let accent = Tint.success
+    /// The flood-fill colour the moment the set is completed.
+    private let accent = Tint.complete
+    /// The live, "you're about to do this" colour worn by the idle
+    /// button — rim, verb text, chevron.
+    private let liveAccent = Tint.inProgress
 
     var body: some View {
         ZStack {
@@ -72,7 +83,7 @@ struct SetCompleteButton: View {
     private var background: some View {
         let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
         return shape
-            .fill(isComplete ? accent.opacity(0.95) : Color.white.opacity(0.07))
+            .fill(isComplete ? accent.opacity(0.95) : liveAccent.opacity(0.10))
             // Top specular sheen — strongest on the idle state where
             // the surface needs the most cue that it's pressable glass.
             .overlay {
@@ -117,43 +128,57 @@ struct SetCompleteButton: View {
                         LinearGradient(
                             colors: isComplete
                                 ? [Color.white.opacity(0.55), Color.white.opacity(0.10)]
-                                : [Color.white.opacity(0.28), Color.white.opacity(0.05)],
+                                : [liveAccent.opacity(0.65), liveAccent.opacity(0.15)],
                             startPoint: .top,
                             endPoint: .bottom
                         ),
                         lineWidth: 0.9
                     )
             )
-            // Ambient bloom — green when complete (celebration glow),
-            // a faint white sheen otherwise so the puck still feels
-            // lifted off the card even in idle state.
+            // Completion glow only — gold flood when done. Idle stays
+            // a faint lift, no ambient bloom on the live state.
             .shadow(
-                color: isComplete ? accent.opacity(0.55) : Color.white.opacity(0.05),
-                radius: isComplete ? 26 : 10,
-                y: isComplete ? 10 : 4
+                color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.16),
+                radius: isComplete ? 24 : 10,
+                y: isComplete ? 9 : 4
             )
             .shadow(color: .black.opacity(0.50), radius: 6, y: 3)
             .animation(.spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 
     private var ripple: some View {
-        Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : accent)
+        Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : liveAccent)
             .allowsHitTesting(false)
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 
+    @ViewBuilder
     private var content: some View {
-        HStack(alignment: .center, spacing: 0) {
-            numberBlock(value: "\(reps)", unit: "reps")
-            multiplier
-            numberBlock(value: formattedWeight, unit: "lb")
-            Spacer(minLength: 8)
-            statusIndicator
+        if let title {
+            HStack(alignment: .center, spacing: 0) {
+                Text(title)
+                    .font(.system(size: 19, weight: .bold))
+                    .tracking(0.4)
+                    .foregroundStyle(isComplete ? Color.black : liveAccent)
+                Spacer(minLength: 8)
+                statusIndicator
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 18)
+            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
+        } else {
+            HStack(alignment: .center, spacing: 0) {
+                numberBlock(value: "\(reps)", unit: "reps")
+                multiplier
+                numberBlock(value: formattedWeight, unit: "lb")
+                Spacer(minLength: 8)
+                statusIndicator
+            }
+            .padding(.horizontal, 22)
+            .padding(.vertical, 18)
+            .foregroundStyle(isComplete ? Color.black : Color.white)
+            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         }
-        .padding(.horizontal, 22)
-        .padding(.vertical, 18)
-        .foregroundStyle(isComplete ? Color.black : Color.white)
-        .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
     }
 
     private func numberBlock(value: String, unit: String) -> some View {
@@ -179,7 +204,7 @@ struct SetCompleteButton: View {
     private var statusIndicator: some View {
         ZStack {
             Circle()
-                .fill(isComplete ? Color.black.opacity(0.12) : Color.white.opacity(0.06))
+                .fill(isComplete ? Color.black.opacity(0.12) : liveAccent.opacity(0.14))
                 .frame(width: 44, height: 44)
 
             if isComplete {
@@ -199,7 +224,7 @@ struct SetCompleteButton: View {
             } else {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(liveAccent)
                     .transition(.opacity.combined(with: .scale(scale: 0.6)))
             }
         }

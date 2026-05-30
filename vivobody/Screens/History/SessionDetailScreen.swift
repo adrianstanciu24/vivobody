@@ -2,35 +2,27 @@
 //  SessionDetailScreen.swift
 //  vivobody
 //
-//  The view a history row pushes into. Speaks the same Liquid Glass
-//  / journal vocabulary as the History list — restraint, monospaced
-//  caps for metadata, carved-glass numerals as the heroes, no orbs
-//  or celebration chrome. Reading a past workout shouldn't feel like
-//  reopening the active session; it should feel like flipping back
-//  to a journal entry.
+//  The view a history row pushes into — the permanent record of a
+//  past workout, built in the same instrument language as the live
+//  summary "receipt": full-bleed on black, no cards or carved glass,
+//  type and hairlines doing the work.
 //
 //  Layout, top to bottom:
 //
-//    • Hero card — date caps line + derived workout title (e.g.
-//      "Push day") + the session's total volume rendered as
-//      CarvedVolumeText at hero size. Muscle strip below as small
-//      monospaced labels with accent dashes. PR gold underline
-//      beneath the volume if any exercise in this session set an
-//      all-time top weight at the moment it was logged.
-//
-//    • Stat strip — four columns inside a quiet glass card:
-//      Duration / Sets / Reps / Top set. Same hairline divider
-//      treatment as WeeklyHeroCard.
-//
-//    • Exercise breakdown — one card per exercise. Header carries
-//      the muscle group dot + name and the per-exercise carved
-//      volume on the right. A hairline divider, then a set grid:
-//      `1   135 × 8` rows in tabular monospaced figures, with the
-//      top set rendered in success green and any incomplete sets
-//      dimmed. Per-exercise notes appended as a quiet caption.
-//
-//    • Notes block — if the session has workout-level notes, they
-//      surface in a glass chip at the bottom labelled "Notes".
+//    • Kicker — the date, then the derived workout title (e.g.
+//      "Full body") as the entry's identity.
+//    • The HERO — the session's total volume as a large monospaced
+//      numeral, rendered in the gold completion accent when any
+//      exercise set an all-time top weight at the moment it was
+//      logged (matching the gold numeral on the History row).
+//    • A card-free stat strip — Duration / Sets / Reps / Top set,
+//      hairline-divided.
+//    • Exercise breakdown — one hairline-divided block per exercise:
+//      group label + name + the per-exercise volume on the right,
+//      then a set grid of `1   135 × 8` rows in tabular monospace.
+//      The top set's numerals render gold; incomplete sets dim with
+//      a hollow status pip.
+//    • Notes — session-level notes surface as plain type at the end.
 //
 
 import SwiftUI
@@ -57,154 +49,90 @@ struct SessionDetailScreen: View {
     )
     private var allCompletedSessions: [WorkoutSession]
 
+    private static let volumeHero = Font.system(size: 72, weight: .bold, design: .monospaced)
+    private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                heroCard
-                statStrip
+            VStack(alignment: .leading, spacing: 0) {
+                kicker
+                heroVolume
+                    .padding(.top, Space.lg)
+                StatStrip(
+                    stats: [
+                        Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
+                        Stat(value: "\(session.totalSets)", label: "Sets"),
+                        Stat(value: "\(session.totalReps)", label: "Reps"),
+                        Stat(value: topSetValue, label: "Top set"),
+                    ],
+                    valueFont: Self.monoStat
+                )
+                .padding(.top, Space.xl)
+
+                SectionDivider()
+                    .padding(.top, Space.xl)
+
                 exercisesSection
+                    .padding(.top, Space.lg)
+
                 if !session.notes.isEmpty {
                     notesSection
+                        .padding(.top, Space.xl)
                 }
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.xxl)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
+        .screenBackground()
         .navigationTitle("Session")
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: - Hero
+    // MARK: - Kicker + hero
 
-    private var heroCard: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text(dateCapsLine)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.55))
-                .tracking(1.2)
-                .textCase(.uppercase)
-
+    private var kicker: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(dateLine)
+                .sectionLabelStyle(0.45)
             Text(workoutTitle)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(.white.opacity(0.95))
-                .lineLimit(2)
-
-            HStack(alignment: .lastTextBaseline) {
-                Spacer(minLength: 0)
-                CarvedVolumeText(
-                    value: WeightFormatter.volumeValue(session.totalVolume, unit: unit),
-                    unit: unit.symbol,
-                    size: 56,
-                    isPR: sessionHasPR
-                )
-            }
-            .padding(.top, 2)
-
-            if !muscleTags.isEmpty {
-                Divider().background(Color.white.opacity(0.06))
-                muscleStrip
-            }
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: 24)
-        .topSpecularSheen(cornerRadius: 24, intensity: 0.10, height: 0.40)
-        .glassRimBevel(cornerRadius: 24, outerWidth: 0.7, innerInset: 1.2)
-        .shadow(color: .black.opacity(0.40), radius: 14, y: 8)
-    }
-
-    private var muscleStrip: some View {
-        HStack(spacing: 14) {
-            ForEach(muscleTags, id: \.self) { group in
-                HStack(spacing: 6) {
-                    Rectangle()
-                        .fill(group.accent.opacity(0.85))
-                        .frame(width: 8, height: 2)
-                    Text(group.displayName.uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.70))
-                        .tracking(0.8)
-                }
-            }
-            Spacer(minLength: 0)
+                .font(Typography.title)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
     }
 
-    // MARK: - Stat strip
-
-    /// Four-column metric row inside a quiet glass card. Layout
-    /// borrows the WeeklyHeroCard's column + hairline divider
-    /// rhythm so the page reads as one continuous Liquid Glass
-    /// vocabulary rather than a new pattern per screen.
-    private var statStrip: some View {
-        HStack(spacing: 0) {
-            statCell(value: "\(durationMinutes)", unit: "min", label: "Duration")
-            statDivider
-            statCell(value: "\(session.totalSets)", unit: nil, label: "Sets")
-            statDivider
-            statCell(value: "\(session.totalReps)", unit: nil, label: "Reps")
-            statDivider
-            statCell(value: topSetValue.value, unit: topSetValue.unit, label: "Top set")
-        }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 6)
-        .frame(maxWidth: .infinity)
-        .glassCard(cornerRadius: 20)
-        .glassRimBevel(cornerRadius: 20, outerWidth: 0.5, innerInset: 1.0)
-    }
-
-    private func statCell(value: String, unit: String?, label: String) -> some View {
-        VStack(spacing: 6) {
-            HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(value)
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+    private var heroVolume: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
+                    .font(Self.volumeHero)
+                    .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
-                    .minimumScaleFactor(0.55)
-                if let unit {
-                    Text(unit)
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
-                }
+                    .minimumScaleFactor(0.5)
+                Text(unit.symbol)
+                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(Ink.tertiary)
             }
-            Text(label.uppercased())
-                .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.50))
-                .tracking(0.9)
-                .lineLimit(1)
+            Text(sessionHasPR ? "Volume · personal record" : "Volume")
+                .font(Typography.sectionLabel)
+                .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
-        .frame(maxWidth: .infinity)
-    }
-
-    private var statDivider: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.08))
-            .frame(width: 0.5, height: 30)
     }
 
     // MARK: - Exercises
 
     private var exercisesSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Exercises".uppercased())
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.55))
-                    .tracking(0.6)
-                Spacer()
-                Text(exercisesSubtitle)
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.35))
-            }
-            .padding(.horizontal, 4)
+        VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
 
-            VStack(spacing: 12) {
-                ForEach(session.orderedExercises) { exercise in
-                    ExerciseDetailCard(
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
+                    if idx > 0 { SectionDivider() }
+                    ExerciseDetailRow(
                         exercise: exercise,
                         unit: unit,
                         isPR: prExerciseIDs.contains(exercise.id)
@@ -222,20 +150,15 @@ struct SessionDetailScreen: View {
     // MARK: - Notes
 
     private var notesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Notes".uppercased())
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.55))
-                .tracking(0.6)
-                .padding(.horizontal, 4)
-
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Notes")
+                .font(Typography.sectionLabel)
+                .foregroundStyle(Ink.tertiary)
             Text(session.notes)
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.85))
+                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(16)
-                .glassChip(cornerRadius: 16)
         }
     }
 
@@ -244,8 +167,7 @@ struct SessionDetailScreen: View {
     private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
 
     /// Same derivation HistoryScreen uses for its row title — keeps
-    /// the journal's voice consistent between the list and the
-    /// detail.
+    /// the voice consistent between the list and the detail.
     private var workoutTitle: String {
         switch muscleTags.count {
         case 0: return "Workout"
@@ -255,9 +177,9 @@ struct SessionDetailScreen: View {
         }
     }
 
-    private var dateCapsLine: String {
+    private var dateLine: String {
         let date = session.completedAt ?? session.startedAt
-        return SessionDetailFormatters.dateCaps.string(from: date)
+        return SessionDetailFormatters.date.string(from: date)
     }
 
     private var durationMinutes: Int {
@@ -265,9 +187,8 @@ struct SessionDetailScreen: View {
     }
 
     /// Heaviest weight × reps logged across the entire session,
-    /// rendered as "135×8" with the user's unit. Falls back to "—"
-    /// when no sets are completed.
-    private var topSetValue: (value: String, unit: String?) {
+    /// rendered as "135×8". Falls back to "—" when no sets completed.
+    private var topSetValue: String {
         let heaviest = session.exercises
             .flatMap(\.sets)
             .filter(\.isCompleted)
@@ -276,9 +197,9 @@ struct SessionDetailScreen: View {
                 return a.weight < b.weight
             })
 
-        guard let set = heaviest else { return ("—", nil) }
+        guard let set = heaviest else { return "—" }
         let weight = WeightFormatter.string(set.weight, unit: unit, includeUnit: false)
-        return ("\(weight)×\(set.reps)", unit.symbol)
+        return "\(weight)×\(set.reps)"
     }
 
     /// Walks all completed sessions in chronological order up to and
@@ -314,20 +235,17 @@ struct SessionDetailScreen: View {
     private var sessionHasPR: Bool { !prExerciseIDs.isEmpty }
 }
 
-// MARK: - Per-exercise card
+// MARK: - Per-exercise row
 
-private struct ExerciseDetailCard: View {
+private struct ExerciseDetailRow: View {
     let exercise: Exercise
     let unit: WeightUnit
     let isPR: Bool
 
-    private static let cornerRadius: CGFloat = 18
-
     private var orderedSets: [WorkoutSet] { exercise.orderedSets }
 
-    /// Heaviest completed set in this exercise, used to single out
-    /// the row as the top set with success-green numerals. Tiebreak
-    /// on reps so 135×10 beats 135×8.
+    /// Heaviest completed set in this exercise, singled out with the
+    /// gold completion accent. Tiebreak on reps so 135×10 beats 135×8.
     private var topSet: WorkoutSet? {
         exercise.sets
             .filter(\.isCompleted)
@@ -344,63 +262,52 @@ private struct ExerciseDetailCard: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: Space.md) {
             header
-
-            Divider().background(Color.white.opacity(0.06))
-
             setsGrid
-
             if !exercise.notes.isEmpty {
                 exerciseNotes
             }
         }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 16)
+        .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: Self.cornerRadius)
-        .glassRimBevel(cornerRadius: Self.cornerRadius, outerWidth: 0.5, innerInset: 1.0)
     }
 
     private var header: some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(exercise.group.accent)
-                        .frame(width: 6, height: 6)
-                    Text(exercise.group.displayName.uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(exercise.group.accent.opacity(0.95))
-                        .tracking(0.9)
-                }
+        HStack(alignment: .center, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(exercise.group.displayName)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
                 Text(exercise.name)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.95))
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
                     .lineLimit(2)
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: Space.sm)
 
             if exerciseVolume > 0 {
-                CarvedVolumeText(
-                    value: WeightFormatter.volumeValue(exerciseVolume, unit: unit),
-                    unit: unit.symbol,
-                    size: 22,
-                    isPR: isPR
-                )
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
+                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                        .monospacedDigit()
+                    Text(unit.symbol)
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(Ink.quaternary)
+                }
             }
         }
     }
 
     /// Sets table. Each row is a thin 3-column line: index, weight,
-    /// reps. The top set's numerals render in `Tint.success` —
-    /// typographic accent, no badge. Incomplete sets dim to ~30%
-    /// opacity, with a hollow status pip in place of the filled
-    /// dot so the difference between "lifted" and "planned but
-    /// skipped" stays visible at a glance.
+    /// reps. The top set's numerals render in the gold completion
+    /// accent — typographic, no badge. Incomplete sets dim, with a
+    /// hollow status pip in place of the filled dot so "lifted" vs
+    /// "planned but skipped" stays legible.
     private var setsGrid: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: Space.sm) {
             ForEach(Array(orderedSets.enumerated()), id: \.element.id) { idx, set in
                 setRow(index: idx + 1, set: set)
             }
@@ -409,20 +316,15 @@ private struct ExerciseDetailCard: View {
 
     private func setRow(index: Int, set: WorkoutSet) -> some View {
         let isTopSet = set === topSet
-        let textColor: Color = {
-            if isTopSet { return Tint.success }
-            return .white.opacity(set.isCompleted ? 0.85 : 0.30)
-        }()
-        let unitColor: Color = .white.opacity(set.isCompleted ? 0.45 : 0.20)
+        let textColor: Color = isTopSet ? Tint.complete : (set.isCompleted ? Ink.primary : Ink.quaternary)
 
         return HStack(spacing: 0) {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 statusPip(isCompleted: set.isCompleted, isTopSet: isTopSet)
                 Text("\(index)")
                     .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(set.isCompleted ? 0.45 : 0.25))
-                    .tracking(0.4)
-                    .frame(width: 14, alignment: .leading)
+                    .foregroundStyle(set.isCompleted ? Ink.tertiary : Ink.quaternary)
+                    .frame(width: 16, alignment: .leading)
             }
 
             Spacer(minLength: 12)
@@ -434,12 +336,12 @@ private struct ExerciseDetailCard: View {
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(unitColor)
+                    .foregroundStyle(Ink.quaternary)
             }
 
             Text("×")
                 .font(.system(size: 13, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(set.isCompleted ? 0.25 : 0.15))
+                .foregroundStyle(Ink.quaternary)
                 .padding(.horizontal, 10)
 
             Text("\(set.reps)")
@@ -455,39 +357,29 @@ private struct ExerciseDetailCard: View {
     private func statusPip(isCompleted: Bool, isTopSet: Bool) -> some View {
         ZStack {
             Circle()
-                .fill(isCompleted ? Tint.success.opacity(isTopSet ? 1.0 : 0.85) : Color.clear)
+                .fill(isCompleted ? Tint.complete.opacity(isTopSet ? 1.0 : 0.85) : Color.clear)
                 .frame(width: 8, height: 8)
             Circle()
-                .stroke(
-                    isCompleted ? Color.clear : Color.white.opacity(0.18),
-                    lineWidth: 1
-                )
+                .strokeBorder(isCompleted ? Color.clear : Ink.quaternary, lineWidth: 1.5)
                 .frame(width: 8, height: 8)
         }
     }
 
     private var exerciseNotes: some View {
-        HStack(alignment: .top, spacing: 6) {
-            Image(systemName: "text.alignleft")
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.40))
-                .padding(.top, 3)
-            Text(exercise.notes)
-                .font(Typography.caption)
-                .foregroundStyle(.white.opacity(0.70))
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(.top, 2)
+        Text(exercise.notes)
+            .font(Typography.caption)
+            .foregroundStyle(Ink.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 // MARK: - Formatters
 
 private enum SessionDetailFormatters {
-    static let dateCaps: DateFormatter = {
+    static let date: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "EEE · MMM d · h:mm a"
+        f.dateFormat = "EEEE  ·  MMM d  ·  h:mm a"
         return f
     }()
 }

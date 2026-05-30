@@ -51,6 +51,6 @@ struct RestTimerOverlay: View {
         guard let nextIndex = session.activeSetIndex(for: exercise) else {
             return "Exercise complete"
         }
-        return "Set \(nextIndex + 1) of \(exercise.plannedSets) · \(exercise.name)"
+        return "Set \(nextIndex + 1) of \(exercise.orderedSets.count) · \(exercise.name)"
     }
 }

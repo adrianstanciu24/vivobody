@@ -22,14 +22,15 @@
 //  segment is active: templates match by name; exercises match by
 //  name or alias.
 //
-//  The Exercises segment shares the History list's journal
-//  vocabulary: monospaced caps group headers with a "12 EXERCISES
-//  · 5 TRACKED" right-aligned subtitle; and a two-tier row split
-//  keyed on recency. Anything lifted in the last 14 days gets the
-//  rich glass-card treatment with `CarvedVolumeText` on the right
-//  (weight×reps, gold underline if all-time best). Everything else
-//  collapses to a tighter chip — smaller carved digits if there's
-//  older history, a quiet catalog default if there isn't.
+//  Both segments speak the same instrument language as the rest of
+//  the app: no cards or carved glass — full-width hairline rows on
+//  black, monospaced numerals, two accents (lime for the live
+//  selection, gold for an all-time best). The segmented control is a
+//  pair of words with a sliding lime underline; the Exercises catalog
+//  groups by muscle under sentence-case headers ("12 exercises · 5
+//  tracked") and splits rows by recency — anything lifted in the last
+//  14 days reads prominent with a larger weight×reps numeral, the
+//  rest tighter. An all-time best renders its numeral in gold.
 //
 
 import SwiftUI
@@ -43,13 +44,11 @@ struct LibraryScreen: View {
     @State private var segment: LibrarySegment = .templates
     @State private var searchText: String = ""
 
-    /// Programmatic push target. Set when the user taps the new-
-    /// template "+" — we insert an empty `WorkoutTemplate` and let
-    /// the navigation stack push straight into its detail screen,
-    /// the same surface tapping a row would land on. Rename happens
-    /// in-place via the title binding; backing out without making
-    /// any edits triggers auto-cleanup so we don't leave stub rows.
-    @State private var pendingNewTemplate: WorkoutTemplate? = nil
+    /// Template builder sheet target. `.new` for the "+" toolbar /
+    /// empty-state CTA; `.edit(template)` when a row is tapped. The
+    /// builder owns a value-type draft and only writes through to
+    /// SwiftData on Save, so there are no stub rows to clean up.
+    @State private var templateEditorTarget: TemplateEditorTarget? = nil
 
     /// Custom-exercise editor sheet target. `.create` for the "+"
     /// toolbar on the Exercises segment; `.edit(item)` for context
@@ -57,48 +56,39 @@ struct LibraryScreen: View {
     @State private var customExerciseTarget: CatalogEditorTarget? = nil
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
+        VStack(spacing: 0) {
+            segmentPicker
 
-            VStack(spacing: 0) {
-                segmentPicker
-
-                // Two distinct content views — each owns its own
-                // SwiftData query + filter state so neither one
-                // does extra work when the other segment is active.
-                switch segment {
-                case .templates:
-                    LibraryTemplatesContent(
-                        appState: appState,
-                        searchText: searchText,
-                        onRequestNew: createAndOpenTemplate
-                    )
-                case .exercises:
-                    LibraryExercisesContent(
-                        searchText: searchText,
-                        customExerciseTarget: $customExerciseTarget
-                    )
-                }
+            // Two distinct content views — each owns its own
+            // SwiftData query + filter state so neither one
+            // does extra work when the other segment is active.
+            switch segment {
+            case .templates:
+                LibraryTemplatesContent(
+                    appState: appState,
+                    searchText: searchText,
+                    templateEditorTarget: $templateEditorTarget
+                )
+            case .exercises:
+                LibraryExercisesContent(
+                    searchText: searchText,
+                    customExerciseTarget: $customExerciseTarget
+                )
             }
         }
+        .screenBackground()
         .searchable(
             text: $searchText,
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: searchPrompt
         )
         .toolbar { toolbar }
-        // System-native flow, Notes-style: tap "+" → land directly
-        // in the new template's detail screen with the title in
-        // rename mode. Wired through the parent NavigationStack via
-        // a bound item; SwiftUI nils the binding when the user pops
-        // back, which `onChange` catches to clean up untouched stubs.
-        .navigationDestination(item: $pendingNewTemplate) { template in
-            TemplateDetailScreen(template: template, appState: appState)
-        }
-        .onChange(of: pendingNewTemplate) { oldValue, newValue in
-            if let abandoned = oldValue, newValue == nil {
-                cleanupIfUntouched(abandoned)
-            }
+        // Create + edit both run through the same modal builder: a
+        // name field, a configured-exercise list, and an "Add
+        // exercise" flow that picks from the catalog then drops into
+        // a configure sheet. Nothing persists until Save.
+        .sheet(item: $templateEditorTarget) { target in
+            TemplateEditorScreen(target: target)
         }
         .sheet(item: $customExerciseTarget) { target in
             CustomExerciseEditorSheet(target: target)
@@ -107,19 +97,15 @@ struct LibraryScreen: View {
 
     // MARK: - Segment picker
 
-    /// Custom Liquid Glass segmented picker. Replaces the stock
-    /// `.segmented` Picker style — which renders as a flat UIKit
-    /// pill that doesn't speak the rest of the app's carved-glass
-    /// vocabulary — with a capsule that uses `.glassEffect()`,
-    /// a rim stroke, and a brighter glass pill that slides between
-    /// segments via `matchedGeometryEffect`. Same material language
-    /// as the equipment chip strip directly below it.
+    /// The instrument segmented control: two words, the active one in
+    /// full white with a sliding lime underline, the other dimmed. No
+    /// pill, no glass — type carries the state.
     private var segmentPicker: some View {
-        GlassSegmentedPicker(selection: $segment)
+        SegmentedControl(selection: $segment)
             .accessibilityLabel("Library segment")
-            .padding(.horizontal, 22)
-            .padding(.top, 10)
-            .padding(.bottom, 14)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.lg)
     }
 
     // MARK: - Toolbar
@@ -138,7 +124,10 @@ struct LibraryScreen: View {
     private func handlePlus() {
         switch segment {
         case .templates:
-            createAndOpenTemplate()
+            let descriptor = FetchDescriptor<WorkoutTemplate>()
+            let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+            templateEditorTarget = .new(sortOrder: count)
+            Haptics.soft()
         case .exercises:
             customExerciseTarget = .create
         }
@@ -163,35 +152,6 @@ struct LibraryScreen: View {
         }
     }
 
-    // MARK: - Mutations
-
-    /// Insert a blank "New Template" and push into its detail screen
-    /// in one step — mirrors Notes' "New Note" behavior. The detail
-    /// screen surfaces the system rename UI via
-    /// `.navigationTitle($template.name)`, so the user can edit the
-    /// title and add exercises without a second hop.
-    private func createAndOpenTemplate() {
-        let descriptor = FetchDescriptor<WorkoutTemplate>()
-        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-
-        let template = WorkoutTemplate(sortOrder: count)
-        modelContext.insert(template)
-        try? modelContext.save()
-        Haptics.soft()
-
-        pendingNewTemplate = template
-    }
-
-    /// If the user pops back from the new-template detail without
-    /// renaming or adding anything, treat it as a cancel and delete
-    /// the stub so the list doesn't accumulate empty rows.
-    private func cleanupIfUntouched(_ template: WorkoutTemplate) {
-        guard template.modelContext != nil else { return }
-        guard template.name == "New Template",
-              template.exercises.isEmpty else { return }
-        modelContext.delete(template)
-        try? modelContext.save()
-    }
 }
 
 // MARK: - Segment enum
@@ -208,45 +168,23 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
     }
 }
 
-// MARK: - Glass segmented picker
+// MARK: - Segmented control
 
-/// Two-segment glass capsule. Outer shell is a `.glassEffect()`
-/// pill with the project's standard rim stroke. The selection
-/// indicator is a second, brighter glass pill that sits inside —
-/// it animates between segments via `matchedGeometryEffect`, so
-/// switching from Templates → Exercises feels like the highlight
-/// glides through liquid rather than swapping in place. Selection
-/// fires a `Haptics.selection()` tick to match the equipment
-/// chip strip below.
-private struct GlassSegmentedPicker: View {
+/// Two words with a sliding lime underline. The active segment is
+/// full white, the other dimmed; the underline animates between them
+/// via `matchedGeometryEffect`, and selection fires the same
+/// `Haptics.selection()` tick as the equipment chips below. No glass,
+/// no pill — the state is read entirely from type and the accent line.
+private struct SegmentedControl: View {
     @Binding var selection: LibrarySegment
-    @Namespace private var indicatorNamespace
+    @Namespace private var underline
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: Space.xl) {
             ForEach(LibrarySegment.allCases) { segment in
                 segmentButton(segment)
             }
-        }
-        .padding(4)
-        .background {
-            Capsule().fill(Surface.cardTint)
-        }
-        .glassEffect(.regular, in: Capsule())
-        .overlay {
-            Capsule()
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            Surface.edgeBright,
-                            Surface.edge.opacity(0.6),
-                            Surface.edge.opacity(0.2)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 0.5
-                )
+            Spacer(minLength: 0)
         }
     }
 
@@ -259,48 +197,21 @@ private struct GlassSegmentedPicker: View {
             }
             Haptics.selection()
         } label: {
-            ZStack {
-                if isSelected {
-                    Capsule()
-                        .fill(Color.white.opacity(0.10))
-                        .overlay {
-                            Capsule()
-                                .stroke(
-                                    LinearGradient(
-                                        colors: [
-                                            Color.white.opacity(0.32),
-                                            Color.white.opacity(0.10)
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    ),
-                                    lineWidth: 0.6
-                                )
-                        }
-                        .overlay {
-                            Capsule()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [
-                                            Color.white.opacity(0.10),
-                                            Color.clear
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .allowsHitTesting(false)
-                        }
-                        .matchedGeometryEffect(id: "selectionPill", in: indicatorNamespace)
-                        .shadow(color: .black.opacity(0.25), radius: 6, y: 2)
-                }
+            VStack(spacing: Space.sm) {
                 Text(segment.label)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(isSelected ? Color.white.opacity(0.95) : Color.white.opacity(0.55))
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(isSelected ? Ink.primary : Ink.tertiary)
+                ZStack {
+                    Capsule().fill(Color.clear).frame(height: 2)
+                    if isSelected {
+                        Capsule()
+                            .fill(Tint.inProgress)
+                            .frame(height: 2)
+                            .matchedGeometryEffect(id: "underline", in: underline)
+                    }
+                }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 38)
-            .contentShape(Capsule())
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -310,13 +221,15 @@ private struct GlassSegmentedPicker: View {
 
 // MARK: - Templates content
 
-/// Templates segment — list of saved workout plans. Swipe-left to
-/// delete, tap to enter detail. Empty state offers an inline create
-/// button. Inherits search text from the parent and filters by name.
+/// Templates segment — list of saved workout plans. Tap a row to
+/// edit it in the modal builder; swipe-right (or long-press) to
+/// start a workout from it; swipe-left to delete. Empty state offers
+/// an inline create button. Inherits search text from the parent and
+/// filters by name.
 private struct LibraryTemplatesContent: View {
     @Bindable var appState: AppState
     let searchText: String
-    let onRequestNew: () -> Void
+    @Binding var templateEditorTarget: TemplateEditorTarget?
 
     @Environment(\.modelContext) private var modelContext
 
@@ -360,17 +273,23 @@ private struct LibraryTemplatesContent: View {
     private var list: some View {
         List {
             ForEach(filtered) { template in
-                NavigationLink {
-                    TemplateDetailScreen(
-                        template: template,
-                        appState: appState
-                    )
+                Button {
+                    templateEditorTarget = .edit(template)
                 } label: {
                     TemplateCard(template: template)
                 }
+                .buttonStyle(.plain)
                 .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 8, leading: 22, bottom: 8, trailing: 22))
+                .listRowSeparatorTint(Surface.edge)
+                .listRowInsets(EdgeInsets(top: 0, leading: Space.gutter, bottom: 0, trailing: Space.gutter))
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button {
+                        startWorkout(from: template)
+                    } label: {
+                        Label("Start", systemImage: "play.fill")
+                    }
+                    .tint(Tint.inProgress)
+                }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
                         deletingTemplate = template
@@ -379,6 +298,16 @@ private struct LibraryTemplatesContent: View {
                     }
                 }
                 .contextMenu {
+                    Button {
+                        startWorkout(from: template)
+                    } label: {
+                        Label("Start workout", systemImage: "play.fill")
+                    }
+                    Button {
+                        templateEditorTarget = .edit(template)
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
                     Button(role: .destructive) {
                         deletingTemplate = template
                     } label: {
@@ -393,87 +322,61 @@ private struct LibraryTemplatesContent: View {
 
     // MARK: - Empty states
 
-    /// Empty state. Instead of a decorative orb, the hero is a
-    /// dashed-rim "ghost" of a real template card — the exact shape
-    /// the user is about to create (name + meta line + two muscle
-    /// chips), rendered as dim placeholder bars in the same glass
-    /// material as a populated card. It previews the result and
-    /// keeps the orange CTA as the single accent anchor below.
+    /// Type-forward empty state — a quiet heading, one line of
+    /// guidance, and the single lime action. No ghost, no card.
     private var emptyState: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: Space.xl) {
             Spacer()
 
-            templateGhost
-                .frame(maxWidth: 300)
-
-            VStack(spacing: 8) {
+            VStack(spacing: Space.sm) {
                 Text("No templates yet")
                     .sectionHeadingStyle()
 
                 Text("Build a reusable workout — pick exercises, set target reps and weight. Start any time from here.")
                     .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.tertiary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 280)
             }
 
-            Button(action: onRequestNew) {
+            Button {
+                templateEditorTarget = .new(sortOrder: templates.count)
+                Haptics.soft()
+            } label: {
                 Text("Create Template")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Tint.onAccent)
                     .frame(maxWidth: 220)
-                    .padding(.vertical, 13)
+                    .padding(.vertical, 14)
                     .background(
-                        Capsule().fill(Tint.primary)
+                        Capsule().fill(Tint.inProgress)
                     )
-                    .softElevation()
             }
             .buttonStyle(.plain)
-            .padding(.top, 6)
+            .padding(.top, Space.xs)
 
             Spacer()
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 22)
-    }
-
-    /// Dashed-glass phantom matching `TemplateCard`'s layout:
-    /// a title bar + "last used" stub, an "N exercises · N sets"
-    /// line, and two muscle-group chip placeholders.
-    private var templateGhost: some View {
-        GhostCard(cornerRadius: 18) {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .firstTextBaseline) {
-                    GhostBar(width: 122, height: 18, cornerRadius: 6, opacity: 0.18)
-                    Spacer()
-                    GhostBar(width: 44, height: 10, opacity: 0.10)
-                }
-                GhostBar(width: 168, height: 12, opacity: 0.11)
-                HStack(spacing: 6) {
-                    GhostBar(width: 64, height: 24, cornerRadius: 12, opacity: 0.10)
-                    GhostBar(width: 52, height: 24, cornerRadius: 12, opacity: 0.10)
-                }
-                .padding(.top, 4)
-            }
-        }
+        .padding(.horizontal, Space.gutter)
     }
 
     private var noMatchesState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Space.md) {
             Spacer()
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 30, weight: .light))
-                .foregroundStyle(.white.opacity(0.35))
+                .foregroundStyle(Ink.tertiary)
             Text("No templates match \"\(searchText)\".")
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.tertiary)
                 .multilineTextAlignment(.center)
             Spacer()
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 22)
+        .padding(.horizontal, Space.gutter)
     }
 
     // MARK: - Plumbing
@@ -494,6 +397,14 @@ private struct LibraryTemplatesContent: View {
         try? modelContext.save()
         Haptics.soft()
         deletingTemplate = nil
+    }
+
+    /// Start a workout from a template without leaving Library — the
+    /// same entry point Today exposes. AppState swaps in the active
+    /// session; the app shell surfaces the live workout.
+    private func startWorkout(from template: WorkoutTemplate) {
+        Haptics.soft()
+        appState.startWorkoutFromTemplate(template)
     }
 }
 
@@ -597,7 +508,7 @@ private struct LibraryExercisesContent: View {
                         }
                     }
                 }
-                .padding(.horizontal, 22)
+                .padding(.horizontal, Space.gutter)
             }
             .padding(.bottom, 14)
         }
@@ -617,21 +528,18 @@ private struct LibraryExercisesContent: View {
                 Text(label)
                     .font(.system(size: 14, weight: .semibold))
             }
-            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-            .padding(.horizontal, 16)
-            .frame(minHeight: 40)
+            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+            .padding(.horizontal, Space.lg)
+            .frame(minHeight: 38)
             .background {
                 if isSelected {
-                    Capsule().fill(Tint.primary)
-                } else {
-                    Capsule().fill(Color.white.opacity(0.06))
+                    Capsule().fill(Tint.inProgress)
                 }
             }
             .overlay {
-                Capsule().stroke(
-                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.12),
-                    lineWidth: 0.5
-                )
+                if !isSelected {
+                    Capsule().stroke(Surface.edge, lineWidth: 1)
+                }
             }
         }
         .buttonStyle(.plain)
@@ -642,13 +550,13 @@ private struct LibraryExercisesContent: View {
 
     private var exerciseList: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 24) {
+            LazyVStack(alignment: .leading, spacing: Space.section) {
                 ForEach(filteredGroups, id: \.group) { section in
                     groupSection(group: section.group, items: section.items)
                 }
             }
-            .padding(.horizontal, 22)
-            .padding(.bottom, 28)
+            .padding(.horizontal, Space.gutter)
+            .padding(.bottom, Space.xxl + Space.xs)
         }
     }
 
@@ -657,51 +565,31 @@ private struct LibraryExercisesContent: View {
             if lastInstanceLookup[item.name.lowercased()] != nil { acc += 1 }
         }
 
-        return VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(group: group, total: items.count, tracked: trackedCount)
-            VStack(spacing: 12) {
-                ForEach(items) { item in
+        return VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(
+                title: group.displayName,
+                trailing: sectionSubtitle(total: items.count, tracked: trackedCount)
+            )
+            VStack(spacing: 0) {
+                ForEach(Array(items.enumerated()), id: \.element.id) { idx, item in
+                    if idx > 0 { SectionDivider() }
                     row(item)
                 }
             }
         }
     }
 
-    /// Journal-style group header — accent dash + monospaced caps
-    /// muscle name on the left, "12 EXERCISES · 5 TRACKED" subtitle
-    /// on the right. Mirrors the History list's date-group header
-    /// rhythm so the two surfaces share one vocabulary.
-    private func sectionHeader(group: MuscleGroup, total: Int, tracked: Int) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            HStack(spacing: 8) {
-                Rectangle()
-                    .fill(group.accent.opacity(0.85))
-                    .frame(width: 10, height: 2)
-                Text(group.displayName.uppercased())
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.80))
-                    .tracking(0.8)
-            }
-            Spacer()
-            Text(sectionSubtitle(total: total, tracked: tracked))
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.40))
-                .tracking(0.6)
-        }
-        .padding(.horizontal, 4)
-    }
-
     private func sectionSubtitle(total: Int, tracked: Int) -> String {
-        let exercises = total == 1 ? "1 EXERCISE" : "\(total) EXERCISES"
+        let exercises = total == 1 ? "1 exercise" : "\(total) exercises"
         guard tracked > 0 else { return exercises }
-        return "\(exercises) · \(tracked) TRACKED"
+        return "\(exercises) · \(tracked) tracked"
     }
 
     /// Row classifier: an exercise lifted within the last 14 days
-    /// gets the rich journal-card treatment; everything else falls
-    /// back to a compact chip. Mirrors the History list's
-    /// rich-today / compact-earlier split, just keyed on the
-    /// exercise's last-performed date instead of the session date.
+    /// reads prominent (brighter name, larger weight×reps numeral);
+    /// everything else stays tighter. Mirrors the History list's
+    /// elevated-recent / quiet-older split, keyed on the exercise's
+    /// last-performed date.
     private func row(_ item: ExerciseCatalogItem) -> some View {
         let last = lastInstanceLookup[item.name.lowercased()]
         let isRecent: Bool = {
@@ -714,12 +602,8 @@ private struct LibraryExercisesContent: View {
             return days <= 14
         }()
 
-        return Group {
-            if let last, isRecent {
-                richRow(item: item, last: last)
-            } else {
-                compactRow(item: item, last: last)
-            }
+        return rowLink(item: item) {
+            exerciseRow(item: item, last: last, prominent: last != nil && isRecent)
         }
     }
 
@@ -751,122 +635,79 @@ private struct LibraryExercisesContent: View {
         }
     }
 
-    // MARK: Rich row (recent lifts)
+    // MARK: Exercise row
 
-    /// Carved-glass journal card for exercises lifted in the last
-    /// two weeks. Name + caps meta line on the left; the last
-    /// session's heaviest set rendered as `CarvedVolumeText` on the
-    /// right with a gold underline if the weight ties or beats the
-    /// all-time best. A small relative-date caption sits below the
-    /// carved digits so the row keeps the "when" anchored without
-    /// a second number competing for attention.
-    private func richRow(item: ExerciseCatalogItem, last: LastExerciseInstance) -> some View {
-        let cornerRadius: CGFloat = 18
-        return rowLink(item: item) {
-            HStack(alignment: .center, spacing: 14) {
-                Image(systemName: item.equipment.symbol)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.55))
-                    .frame(width: 24)
+    /// One catalog row — full-width, card-free, divided from its
+    /// neighbours by a hairline. Equipment icon + name + sentence-case
+    /// meta on the left; on the right either the last session's
+    /// heaviest set as a monospaced `weight×reps` numeral (gold when
+    /// it's an all-time best) over a relative date, or — when the
+    /// exercise has never been logged — the quiet catalog default.
+    /// `prominent` (lifted within 14 days) brightens the name and
+    /// enlarges the numeral.
+    private func exerciseRow(
+        item: ExerciseCatalogItem,
+        last: LastExerciseInstance?,
+        prominent: Bool
+    ) -> some View {
+        HStack(alignment: .center, spacing: Space.md) {
+            Image(systemName: item.equipment.symbol)
+                .font(.system(size: prominent ? 15 : 14, weight: .semibold))
+                .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
+                .frame(width: 24)
 
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(item.name)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.95))
-                        .lineLimit(1)
-                    Text(metaCapsLine(item).uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.55))
-                        .tracking(0.9)
-                        .lineLimit(1)
-                }
-
-                Spacer(minLength: 8)
-
-                VStack(alignment: .trailing, spacing: 3) {
-                    CarvedVolumeText(
-                        value: "\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)",
-                        unit: "",
-                        size: 22,
-                        isPR: last.isAllTimeBest
-                    )
-                    Text(RelativeDate.short(last.sessionDate))
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
-                        .tracking(0.5)
-                }
+            VStack(alignment: .leading, spacing: 3) {
+                Text(item.name)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
+                    .lineLimit(1)
+                Text(metaLine(item))
+                    .font(Typography.caption)
+                    .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
+                    .lineLimit(1)
             }
-            .padding(.vertical, 14)
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-            .glassCard(cornerRadius: cornerRadius)
-            .topSpecularSheen(cornerRadius: cornerRadius, intensity: 0.08, height: 0.40)
-            .glassRimBevel(cornerRadius: cornerRadius, outerWidth: 0.5, innerInset: 1.0)
+
+            Spacer(minLength: Space.sm)
+
+            rowTrailing(item: item, last: last, prominent: prominent)
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Ink.quaternary)
+        }
+        .frame(minHeight: prominent ? 64 : Space.rowMin, alignment: .leading)
+        .padding(.vertical, Space.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private func rowTrailing(
+        item: ExerciseCatalogItem,
+        last: LastExerciseInstance?,
+        prominent: Bool
+    ) -> some View {
+        if let last {
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)")
+                    .font(.system(size: prominent ? 20 : 16, weight: .bold, design: .monospaced))
+                    .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
+                    .monospacedDigit()
+                Text(RelativeDate.short(last.sessionDate))
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+            }
+        } else {
+            Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
         }
     }
 
-    // MARK: Compact row (older history or untracked)
-
-    /// Tighter chip for exercises with stale history (>14 days) or
-    /// none at all. Same equipment icon + name + caps meta line on
-    /// the left. The right side carries either a smaller carved
-    /// weight×reps + relative date (older history) or a quiet dim
-    /// default (untracked) so the row tier stays legible without
-    /// pretending freshness it doesn't have.
-    private func compactRow(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
-        let cornerRadius: CGFloat = 14
-        return rowLink(item: item) {
-            HStack(alignment: .center, spacing: 14) {
-                Image(systemName: item.equipment.symbol)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.45))
-                    .frame(width: 22)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.90))
-                        .lineLimit(1)
-                    Text(metaCapsLine(item).uppercased())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.45))
-                        .tracking(0.8)
-                        .lineLimit(1)
-                }
-
-                Spacer(minLength: 8)
-
-                if let last {
-                    VStack(alignment: .trailing, spacing: 2) {
-                        CarvedVolumeText(
-                            value: "\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)",
-                            unit: "",
-                            size: 16,
-                            isPR: last.isAllTimeBest
-                        )
-                        Text(RelativeDate.short(last.sessionDate))
-                            .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                            .foregroundStyle(.white.opacity(0.35))
-                            .tracking(0.5)
-                    }
-                } else {
-                    Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
-                        .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.42))
-                }
-            }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
-            .glassChip(cornerRadius: cornerRadius)
-            .glassRimBevel(cornerRadius: cornerRadius, outerWidth: 0.5, innerInset: 1.0)
-        }
-    }
-
-    /// Monospaced-caps meta line shared by both row tiers — same
-    /// vocabulary as History's muscle strip: "BARBELL · PUSH" or
-    /// "DUMBBELL · ISOLATION".
-    private func metaCapsLine(_ item: ExerciseCatalogItem) -> String {
+    /// Sentence-case meta line shared by both row tiers — same
+    /// vocabulary as History's muscle strip: "Barbell · Push" or
+    /// "Dumbbell · Isolation".
+    private func metaLine(_ item: ExerciseCatalogItem) -> String {
         var parts: [String] = [item.equipment.displayName]
         if item.mechanic == .compound, let pattern = item.pattern {
             parts.append(pattern.displayName)
@@ -879,31 +720,28 @@ private struct LibraryExercisesContent: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 18) {
+        VStack(spacing: Space.lg) {
             Spacer()
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 30, weight: .light))
-                .foregroundStyle(.white.opacity(0.35))
             Text(emptyMessage)
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.tertiary)
                 .multilineTextAlignment(.center)
             Button {
                 customExerciseTarget = .create
             } label: {
-                Label("Create custom exercise", systemImage: "plus.circle.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 18)
+                Text("Create custom exercise")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Tint.onAccent)
+                    .padding(.horizontal, 22)
                     .frame(minHeight: 44)
-                    .glassPill(tint: Tint.primary)
+                    .background(Capsule().fill(Tint.inProgress))
             }
             .buttonStyle(.plain)
             Spacer()
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 22)
+        .padding(.horizontal, Space.gutter)
     }
 
     private var emptyMessage: String {
@@ -926,51 +764,47 @@ private struct LibraryExercisesContent: View {
     }
 }
 
-// MARK: - Template card
+// MARK: - Template row
 
-/// Reusable card for a row in the Templates list. Same visual as
-/// before — extracted here so the file's two content views stay
-/// purely about layout + state.
+/// A saved plan as a full-width hairline row — no card. Name and a
+/// sentence-case meta line on the left ("4 ex · 16 sets · Chest ·
+/// Back"); the relative last-used date and a faint chevron on the
+/// right. The List that hosts it draws the separators.
 private struct TemplateCard: View {
     let template: WorkoutTemplate
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .firstTextBaseline) {
+        HStack(spacing: Space.md) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(template.name)
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.white)
-                Spacer()
-                if let used = template.lastUsedAt {
-                    Text(Self.relative.localizedString(for: used, relativeTo: Date()))
-                        .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.50))
-                }
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                Text(subtitle)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
             }
 
-            Text("\(template.orderedExercises.count) exercises · \(template.totalPlannedSets) sets")
-                .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.60))
+            Spacer(minLength: Space.sm)
 
-            if !template.muscleGroups.isEmpty {
-                HStack(spacing: 6) {
-                    ForEach(template.muscleGroups, id: \.self) { group in
-                        Text(group.displayName)
-                            .font(Typography.caption)
-                            .foregroundStyle(group.accent)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .background(
-                                Capsule().fill(group.accent.opacity(0.16))
-                            )
-                    }
-                }
-                .padding(.top, 4)
+            if let used = template.lastUsedAt {
+                Text(Self.relative.localizedString(for: used, relativeTo: Date()))
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
             }
         }
-        .padding(20)
+        .frame(minHeight: Space.rowMin)
+        .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard(cornerRadius: 18)
+        .contentShape(Rectangle())
+    }
+
+    private var subtitle: String {
+        let count = template.orderedExercises.count
+        let base = "\(count) ex · \(template.totalPlannedSets) sets"
+        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
+        return groups.isEmpty ? base : "\(base) · \(groups)"
     }
 
     private static let relative: RelativeDateTimeFormatter = {

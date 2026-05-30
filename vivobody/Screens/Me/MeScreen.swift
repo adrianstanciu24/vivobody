@@ -3,9 +3,9 @@
 //  vivobody
 //
 //  Personal tab. Two stacked surfaces:
-//    • YOUR JOURNEY — lifetime totals across all archived sessions
+//    • Your journey — lifetime totals across all archived sessions
 //      (workouts logged, sets completed, total volume).
-//    • PREFERENCES — defaultable rest seconds, haptics on/off.
+//    • Preferences — defaultable rest seconds, haptics on/off.
 //
 //  Settings persist via @AppStorage (UserDefaults). The Haptics
 //  engine reads its enabled flag directly from UserDefaults on every
@@ -68,38 +68,48 @@ struct MeScreen: View {
     /// value is a single tap with no keyboard or sheet round-trip.
     private let restOptions: [Int] = [30, 60, 90, 120, 180]
 
-    /// Recognizable "complete" green used elsewhere in the app
-    /// (summary card accent, complete-state set rows). Re-used here
-    /// for the Haptics toggle so its ON state has clear contrast
-    /// against the white thumb rather than reading as a blank pill.
-    private let toggleOnGreen = Color(.sRGB, red: 0.36, green: 0.92, blue: 0.62, opacity: 1.0)
-
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
+            VStack(alignment: .leading, spacing: 0) {
                 statsSection
                 if weeklyComparison.hasAnyActivity {
+                    groupSeparator
                     weeklySection
                 }
+                groupSeparator
                 bodyWeightSection
                 if !progressEntries.isEmpty {
+                    groupSeparator
                     progressSection
                 }
+                groupSeparator
                 preferencesSection
                 footer
+                    .padding(.top, Space.xxl)
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 4)
-            .padding(.bottom, 24)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.xxl)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
+        .screenBackground()
         .navigationDestination(for: ExerciseProgress.self) { entry in
             ExerciseProgressDetail(progress: entry)
         }
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
+    }
+
+    // MARK: - Group separator
+
+    /// Full-width hairline between two major groups, carrying generous
+    /// air on both sides so each group reads as its own instrument —
+    /// the same device SessionDetail uses between its hero and the
+    /// exercise breakdown. This is what gives the screen its rhythm;
+    /// the flat 24pt gap alone read as crowded.
+    private var groupSeparator: some View {
+        SectionDivider()
+            .padding(.vertical, Space.xl)
     }
 
     // MARK: - Body weight
@@ -111,16 +121,11 @@ struct MeScreen: View {
     /// the detail screen where the same Log sheet is one tap away.
     @ViewBuilder
     private var bodyWeightSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("Body weight")
-                    .sectionLabelStyle(0.60)
-                Spacer()
-                if !bodyWeightEntries.isEmpty {
-                    Text("Tap for detail")
-                        .sectionLabelStyle(0.40)
-                }
-            }
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(
+                title: "Body weight",
+                trailing: bodyWeightEntries.isEmpty ? nil : "Tap for detail"
+            )
 
             if bodyWeightEntries.isEmpty {
                 bodyWeightEmptyCard
@@ -135,42 +140,25 @@ struct MeScreen: View {
         }
     }
 
-    /// Empty body-weight state: a dashed-glass phantom of the
-    /// populated card (latest weight + sparkline) previews the
-    /// result, with the explanatory line and Log Weight CTA below.
+    /// Type-forward empty body-weight state: one explanatory line and
+    /// a single flat lime action — no ghost preview, no card.
     private var bodyWeightEmptyCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            GhostCard {
-                HStack(alignment: .center, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        GhostBar(width: 88, height: 28, cornerRadius: 8, opacity: 0.18)
-                        GhostBar(width: 120, height: 10, opacity: 0.10)
-                    }
-                    Spacer(minLength: 12)
-                    GhostBar(width: 96, height: 34, cornerRadius: 8, opacity: 0.06)
-                }
-            }
-
+        VStack(alignment: .leading, spacing: Space.md) {
             Text("Track your body weight to see how it trends alongside your training.")
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.60))
+                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             Button {
                 Haptics.soft()
                 logTarget = .create
             } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 14, weight: .semibold))
-                    Text("Log Weight")
-                        .font(.system(size: 14, weight: .semibold))
-                }
-                .foregroundStyle(.black)
-                .padding(.horizontal, 18)
-                .frame(minHeight: 44)
-                .background(Capsule().fill(Tint.primary))
-                .softElevation()
+                Text("Log weight")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Tint.onAccent)
+                    .padding(.horizontal, 22)
+                    .frame(minHeight: 44)
+                    .background(Capsule().fill(Tint.inProgress))
             }
             .buttonStyle(.plain)
         }
@@ -183,55 +171,55 @@ struct MeScreen: View {
         let latest = bodyWeightEntries.latest
         let delta = bodyWeightEntries.latestDelta
 
-        return HStack(alignment: .center, spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
+        return HStack(alignment: .center, spacing: Space.lg) {
+            VStack(alignment: .leading, spacing: Space.xs) {
                 HStack(alignment: .lastTextBaseline, spacing: 5) {
                     Text(latest.map {
                         WeightFormatter.string($0.weight, unit: weightUnit, fractionDigits: 1, includeUnit: false)
                     } ?? "—")
-                        .font(Typography.statValue)
-                        .foregroundStyle(.white)
+                        .font(Self.monoStat)
+                        .foregroundStyle(Ink.primary)
                         .monospacedDigit()
                     Text(weightUnit.symbol)
                         .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
+                        .foregroundStyle(Ink.tertiary)
                 }
                 if let delta {
                     bodyWeightDeltaLabel(delta: delta)
                 } else if let latest {
                     Text("First entry · \(Self.shortDayFormatter.string(from: latest.date))")
                         .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.50))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: Space.sm)
 
             if sparkValues.count >= 2 {
-                MiniChart(values: sparkValues, lineColor: Tint.primary, fillColor: Tint.primary)
+                MiniChart(values: sparkValues, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
                     .frame(width: 96, height: 36)
             }
 
             Image(systemName: "chevron.right")
                 .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.30))
+                .foregroundStyle(Ink.quaternary)
         }
-        .padding(20)
+        .frame(minHeight: Space.rowMin)
+        .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassCard()
         .contentShape(Rectangle())
     }
 
     private func bodyWeightDeltaLabel(delta: Double) -> some View {
         let isUp = delta > 0
         let deltaText = WeightFormatter.deltaString(delta, unit: weightUnit, fractionDigits: 1)
-        return HStack(spacing: 4) {
+        return HStack(spacing: Space.xs) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
                 .font(.system(size: 10, weight: .bold))
             Text("\(deltaText) since last entry")
                 .font(Typography.caption)
         }
-        .foregroundStyle(.white.opacity(0.60))
+        .foregroundStyle(Ink.secondary)
     }
 
     private static let shortDayFormatter: DateFormatter = {
@@ -251,14 +239,13 @@ struct MeScreen: View {
 
     private var weeklySection: some View {
         let comp = weeklyComparison
-        return VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("This week")
-                    .sectionLabelStyle(0.60)
-                Spacer()
-                Text("vs last week")
-                    .sectionLabelStyle(0.40)
-            }
+        // The comparison framing ("vs last week" + the ↗/↘ deltas)
+        // only means something once there's a prior week to measure
+        // against. Until then we show this week's numbers plainly —
+        // no header promise we can't keep, no repeated "First week".
+        let hasPriorWeek = comp.lastWeek.workouts > 0
+        return VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "This week", trailing: hasPriorWeek ? "vs last week" : nil)
 
             HStack(spacing: 0) {
                 weeklyStat(
@@ -284,16 +271,14 @@ struct MeScreen: View {
                     isVolume: true
                 )
             }
-            .padding(.vertical, 8)
+            .padding(.vertical, Space.sm)
         }
-        .padding(20)
-        .glassCard()
     }
 
-    /// One weekly stat column — current value (large), small delta
-    /// chip below. `previous == 0` is treated specially: there's
-    /// nothing to compare to, so we render a neutral "first week"
-    /// indicator instead of a misleading +∞ chip.
+    /// One weekly stat column — current value (large) with a small
+    /// delta chip below. `previous == 0` means there's no prior week
+    /// to compare to, so the chip is omitted entirely and the value
+    /// stands alone rather than showing a misleading +∞.
     private func weeklyStat(
         value: String,
         valueUnit: String? = nil,
@@ -302,23 +287,23 @@ struct MeScreen: View {
         label: String,
         isVolume: Bool = false
     ) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: Space.sm) {
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(value)
-                    .font(Typography.statValue)
-                    .foregroundStyle(.white)
+                    .font(Self.monoStat)
+                    .foregroundStyle(Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 if let valueUnit {
                     Text(valueUnit)
                         .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
             weeklyDeltaIndicator(delta: delta, isVolume: isVolume, previousIsZero: previousIsZero(previous))
             Text(label)
-                .sectionLabelStyle(0.50)
+                .sectionLabelStyle(0.45)
         }
         .frame(maxWidth: .infinity)
     }
@@ -333,16 +318,14 @@ struct MeScreen: View {
         return false
     }
 
-    /// The little ↑+12 / ↓−3 / — chip under each weekly stat. Green
+    /// The little ↑+12 / ↓−3 / — chip under each weekly stat. Lime
     /// for up, red for down, dimmed white for flat. When the prior
-    /// week had nothing logged we drop the arrow entirely and show
-    /// "FIRST WEEK" instead of a misleading delta.
+    /// week had nothing logged there's nothing to compare to, so we
+    /// render no chip at all — the bare value stands on its own.
     private func weeklyDeltaIndicator(delta: Double, isVolume: Bool, previousIsZero: Bool) -> some View {
         Group {
             if previousIsZero {
-                Text("First week")
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.40))
+                EmptyView()
             } else if delta == 0 {
                 HStack(spacing: 3) {
                     Image(systemName: "minus")
@@ -350,10 +333,10 @@ struct MeScreen: View {
                     Text("no change")
                         .font(Typography.caption)
                 }
-                .foregroundStyle(.white.opacity(0.50))
+                .foregroundStyle(Ink.tertiary)
             } else {
                 let isUp = delta > 0
-                let color: Color = isUp ? Tint.success : Tint.danger
+                let color: Color = isUp ? Tint.inProgress : Tint.danger
                 let label: String = isVolume
                     ? WeightFormatter.deltaString(delta, unit: weightUnit)
                     : "\(isUp ? "+" : "")\(Int(delta))"
@@ -370,7 +353,7 @@ struct MeScreen: View {
 
     private var weeklyDivider: some View {
         Rectangle()
-            .fill(Color.white.opacity(0.08))
+            .fill(Surface.edge)
             .frame(width: 0.5, height: 56)
     }
 
@@ -385,31 +368,18 @@ struct MeScreen: View {
     }
 
     private var progressSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("Progress")
-                    .sectionLabelStyle(0.60)
-                Spacer()
-                Text("Tap for detail")
-                    .sectionLabelStyle(0.40)
-            }
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Progress", trailing: "Tap for detail")
 
             VStack(spacing: 0) {
                 ForEach(Array(progressEntries.enumerated()), id: \.element.id) { idx, entry in
+                    if idx > 0 { SectionDivider() }
                     NavigationLink(value: entry) {
                         progressRow(entry)
                     }
                     .buttonStyle(.plain)
-
-                    if idx < progressEntries.count - 1 {
-                        Rectangle()
-                            .fill(Color.white.opacity(0.06))
-                            .frame(height: 0.5)
-                            .padding(.horizontal, 16)
-                    }
                 }
             }
-            .glassCard()
         }
     }
 
@@ -420,44 +390,44 @@ struct MeScreen: View {
                 .filter { $0.element.isWeightPR }
                 .map(\.offset)
         )
-        return HStack(spacing: 14) {
-            VStack(alignment: .leading, spacing: 4) {
+        return HStack(spacing: Space.md) {
+            VStack(alignment: .leading, spacing: Space.xs) {
                 Text(entry.name)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
                     .lineLimit(1)
                 Text(entry.group.displayName)
                     .font(Typography.caption)
-                    .foregroundStyle(entry.group.accent)
+                    .foregroundStyle(Ink.tertiary)
             }
             .frame(minWidth: 90, alignment: .leading)
 
-            MiniChart(values: weights, prIndices: prSet, lineColor: Tint.primary, fillColor: Tint.primary)
+            MiniChart(values: weights, prIndices: prSet, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
                 .frame(width: 80, height: 32)
 
-            Spacer(minLength: 4)
+            Spacer(minLength: Space.xs)
 
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(alignment: .trailing, spacing: Space.xs) {
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
                     Text(WeightFormatter.string(entry.bestWeight, unit: weightUnit, includeUnit: false))
-                        .font(.system(size: 17, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(.system(size: 17, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Ink.primary)
                         .monospacedDigit()
                     Text(weightUnit.symbol)
                         .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
+                        .foregroundStyle(Ink.tertiary)
                 }
                 if let delta = entry.weightDelta {
                     trendIndicator(delta: delta)
                 } else {
                     Text("—")
                         .font(Typography.caption)
-                        .foregroundStyle(.white.opacity(0.40))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .padding(.vertical, Space.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
     }
 
@@ -465,8 +435,8 @@ struct MeScreen: View {
         let isUp = delta > 0
         let isFlat = delta == 0
         let color: Color = isFlat
-            ? .white.opacity(0.45)
-            : (isUp ? Tint.success : Tint.danger)
+            ? Ink.tertiary
+            : (isUp ? Tint.inProgress : Tint.danger)
         let symbol: String = isFlat ? "minus" : (isUp ? "arrow.up.right" : "arrow.down.right")
         let valueText: String = isFlat
             ? "no change"
@@ -482,154 +452,62 @@ struct MeScreen: View {
 
     // MARK: - Stats
 
+    private static let volumeHero = Font.system(size: 52, weight: .bold, design: .monospaced)
+    private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
+
+    /// Lifetime totals as an instrument: total volume as a large
+    /// monospaced hero, with workouts / sets / reps on a hairline
+    /// stat strip beneath. No tiles, no glass — the numbers carry it.
     private var statsSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("Your journey")
-                    .sectionLabelStyle(0.60)
-                Spacer()
-                if !completedSessions.isEmpty {
-                    Text("Last 12 weeks")
-                        .sectionLabelStyle(0.40)
-                }
-            }
+        VStack(alignment: .leading, spacing: Space.lg) {
+            SectionHeader(
+                title: "Your journey",
+                trailing: completedSessions.isEmpty ? nil : "All time"
+            )
 
             if completedSessions.isEmpty {
-                emptyJourneyTile
+                emptyJourney
             } else {
-                journeyTiles
-            }
-        }
-    }
-
-    /// Three glass tiles, each with a hero number + sparkline. Trend
-    /// arrow uses the most-recent-4-weeks average vs the prior 8-week
-    /// average so a single quiet week doesn't read as a downturn.
-    private var journeyTiles: some View {
-        let series = completedSessions.weeklySeries()
-        let workoutsSeries = series.map { Double($0.workouts) }
-        let setsSeries = series.map { Double($0.sets) }
-        let volumeSeries = series.map(\.volume)
-
-        return HStack(spacing: 10) {
-            journeyTile(
-                value: "\(totalWorkouts)",
-                unit: nil,
-                label: "Workouts",
-                series: workoutsSeries
-            )
-            journeyTile(
-                value: "\(totalSets)",
-                unit: nil,
-                label: "Sets",
-                series: setsSeries
-            )
-            journeyTile(
-                value: volumeLabel,
-                unit: weightUnit.symbol,
-                label: "Volume",
-                series: volumeSeries
-            )
-        }
-    }
-
-    private func journeyTile(
-        value: String,
-        unit: String?,
-        label: String,
-        series: [Double]
-    ) -> some View {
-        let trendingUp = isTrendingUp(series)
-        return VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(value)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
-                if let unit {
-                    Text(unit)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
+                VStack(alignment: .leading, spacing: Space.xl) {
+                    MetricView(
+                        label: "Total volume",
+                        value: volumeLabel,
+                        unit: weightUnit.symbol,
+                        valueFont: Self.volumeHero
+                    )
+                    StatStrip(
+                        stats: [
+                            Stat(value: "\(totalWorkouts)", label: "Workouts"),
+                            Stat(value: "\(totalSets)", label: "Sets"),
+                            Stat(value: "\(totalReps)", label: "Reps"),
+                        ],
+                        valueFont: Self.monoStat
+                    )
                 }
             }
-
-            if series.count >= 2 && series.contains(where: { $0 > 0 }) {
-                MiniChart(
-                    values: series,
-                    lineColor: trendingUp ? Tint.primary : .white,
-                    fillColor: trendingUp ? Tint.primary : .white
-                )
-                .frame(height: 26)
-            } else {
-                Rectangle()
-                    .fill(Color.white.opacity(0.05))
-                    .frame(height: 26)
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
-            }
-
-            Text(label)
-                .sectionLabelStyle(0.55)
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassChip(cornerRadius: 18, bright: true)
-    }
-
-    /// Compares the trailing 4-week average vs the prior 8-week
-    /// average — gives the "trending up" tint enough inertia to
-    /// ignore a single quiet week.
-    private func isTrendingUp(_ series: [Double]) -> Bool {
-        guard series.count >= 6 else { return false }
-        let recent = series.suffix(4)
-        let earlier = series.dropLast(4)
-        let recentAvg = recent.reduce(0, +) / Double(recent.count)
-        let earlierAvg = earlier.isEmpty
-            ? 0
-            : earlier.reduce(0, +) / Double(earlier.count)
-        return recentAvg > earlierAvg
-    }
-
-    /// Empty journey: three dashed-glass phantoms of the real
-    /// `journeyTile`s (hero number + sparkline + label) above the
-    /// prompt, previewing what populated stats will look like.
-    private var emptyJourneyTile: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 10) {
-                journeyGhostTile
-                journeyGhostTile
-                journeyGhostTile
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Log your first workout")
-                    .sectionHeadingStyle()
-                Text("Your stats and trends land here.")
-                    .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.55))
-            }
         }
     }
 
-    private var journeyGhostTile: some View {
-        GhostCard(cornerRadius: 18, padding: 14) {
-            VStack(alignment: .leading, spacing: 10) {
-                GhostBar(width: 40, height: 22, cornerRadius: 6, opacity: 0.18)
-                GhostBar(height: 26, cornerRadius: 6, opacity: 0.06)
-                GhostBar(width: 46, height: 9, cornerRadius: 4, opacity: 0.11)
-            }
+    /// Type-forward empty journey — a quiet heading and one line, no
+    /// ghost tiles.
+    private var emptyJourney: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text("Log your first workout")
+                .sectionHeadingStyle()
+            Text("Your lifetime volume, workouts, and sets will land here.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
     // MARK: - Preferences
 
     private var preferencesSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Preferences")
-                .sectionLabelStyle(0.60)
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Preferences")
 
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: Space.lg + 2) {
                 weightUnitRow
                 rowDivider
                 restRow
@@ -638,8 +516,6 @@ struct MeScreen: View {
                 rowDivider
                 resetCatalogRow
             }
-            .padding(20)
-            .glassCard()
         }
         .alert(
             "Reset Exercise Catalog?",
@@ -665,18 +541,18 @@ struct MeScreen: View {
             isConfirmingCatalogReset = true
         } label: {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: Space.xs) {
                     Text("Reset Exercise Catalog")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
                     Text("Restore the original 90 exercises")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
                 }
                 Spacer()
                 Image(systemName: "arrow.counterclockwise")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.tertiary)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
@@ -687,23 +563,23 @@ struct MeScreen: View {
     }
 
     private var weightUnitRow: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: Space.md) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: Space.xs) {
                     Text("Weight Unit")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
                     Text("Displayed across the app — storage stays canonical")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
                 }
                 Spacer()
                 Text(weightUnit.symbol)
                     .font(.system(size: 15, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Ink.primary)
             }
 
-            HStack(spacing: 8) {
+            HStack(spacing: Space.sm) {
                 ForEach(WeightUnit.allCases) { unit in
                     weightUnitChip(unit)
                 }
@@ -724,24 +600,20 @@ struct MeScreen: View {
                     .font(.system(size: 10, weight: .medium))
                     .opacity(0.75)
             }
-            .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
+            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .frame(maxWidth: .infinity, minHeight: 52)
             .background {
                 if isSelected {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Tint.primary)
-                } else {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color.white.opacity(0.06))
+                        .fill(Tint.inProgress)
                 }
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(
-                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                        lineWidth: 0.5
-                    )
-            )
+            .overlay {
+                if !isSelected {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(Surface.edge, lineWidth: 1)
+                }
+            }
         }
         .buttonStyle(.plain)
         .accessibilityLabel(unit.displayName)
@@ -749,24 +621,24 @@ struct MeScreen: View {
     }
 
     private var restRow: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: Space.md) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: Space.xs) {
                     Text("Default Rest")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
                     Text("Between sets — used by the rest timer")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.45))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
                 }
                 Spacer()
                 Text("\(defaultRestSeconds)s")
                     .font(.system(size: 15, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Ink.primary)
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack(spacing: Space.sm) {
                     ForEach(restOptions, id: \.self) { seconds in
                         restChip(seconds: seconds)
                     }
@@ -783,25 +655,19 @@ struct MeScreen: View {
         } label: {
             Text("\(seconds)s")
                 .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minWidth: 56, minHeight: 44)
-                .padding(.horizontal, 14)
+                .padding(.horizontal, Space.md + 2)
                 .background {
                     if isSelected {
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(Tint.primary)
-                    } else {
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(Color.white.opacity(0.06))
+                        Capsule().fill(Tint.inProgress)
                     }
                 }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(
-                            isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                            lineWidth: 0.5
-                        )
-                )
+                .overlay {
+                    if !isSelected {
+                        Capsule().stroke(Surface.edge, lineWidth: 1)
+                    }
+                }
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(seconds) second rest")
@@ -810,13 +676,13 @@ struct MeScreen: View {
 
     private var hapticsRow: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Space.xs) {
                 Text("Haptics")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
                 Text("Taps and patterns throughout the app")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
             }
             Spacer()
             Toggle("", isOn: Binding(
@@ -833,13 +699,13 @@ struct MeScreen: View {
                 }
             ))
             .labelsHidden()
-            .tint(Tint.success)
+            .tint(Tint.inProgress)
         }
     }
 
     private var rowDivider: some View {
         Rectangle()
-            .fill(Color.white.opacity(0.07))
+            .fill(Surface.edge)
             .frame(height: 0.5)
     }
 
@@ -848,11 +714,11 @@ struct MeScreen: View {
     private var footer: some View {
         VStack(spacing: 6) {
             Text("vivobody")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.35))
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 8)
+        .padding(.top, Space.sm)
     }
 
     // MARK: - Derived
@@ -861,6 +727,10 @@ struct MeScreen: View {
 
     private var totalSets: Int {
         completedSessions.reduce(0) { $0 + $1.totalSets }
+    }
+
+    private var totalReps: Int {
+        completedSessions.reduce(0) { $0 + $1.totalReps }
     }
 
     private var totalVolume: Double {

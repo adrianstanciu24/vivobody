@@ -48,23 +48,23 @@ struct SetSummaryRow: View {
                     Text(WeightFormatter.string(weight, unit: unit, includeUnit: false))
                         .monospacedDigit()
                     Text(unit.symbol)
-                        .foregroundStyle(.white.opacity(isCompleted ? 0.45 : 0.30))
+                        .foregroundStyle(isCompleted ? Ink.tertiary : Ink.quaternary)
                     Text("·")
-                        .foregroundStyle(.white.opacity(isCompleted ? 0.30 : 0.20))
+                        .foregroundStyle(Ink.quaternary)
                         .padding(.horizontal, 2)
                     Text("\(reps)")
                         .monospacedDigit()
                     Text("reps")
-                        .foregroundStyle(.white.opacity(isCompleted ? 0.45 : 0.30))
+                        .foregroundStyle(isCompleted ? Ink.tertiary : Ink.quaternary)
                 }
                 .font(.system(size: 14, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(isCompleted ? 0.80 : 0.45))
+                .foregroundStyle(isCompleted ? Ink.secondary : Ink.tertiary)
             }
 
             Spacer()
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, Space.md + 2)
+        .padding(.vertical, Space.sm + 2)
         .background(rowBackground)
         .onAppear {
             guard isActive else { return }
@@ -120,11 +120,11 @@ struct SetSummaryRow: View {
                 if isCompleted {
                     Image(systemName: "checkmark")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Tint.onAccent)
                 } else {
                     Text("\(index)")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
         }

@@ -38,6 +38,11 @@ struct CustomExerciseEditorSheet: View {
 
     @FocusState private var nameFieldFocused: Bool
 
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
     init(target: CatalogEditorTarget) {
         self.target = target
         switch target {
@@ -59,26 +64,24 @@ struct CustomExerciseEditorSheet: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.black.ignoresSafeArea()
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 22) {
-                        nameField
-                        muscleGroupField
-                        equipmentField
-                        mechanicField
-                        if draft.mechanic == .compound {
-                            patternField
-                        }
-                        aliasesField
-                        defaultsRow
+            ScrollView {
+                VStack(alignment: .leading, spacing: Space.section) {
+                    nameField
+                    muscleGroupField
+                    equipmentField
+                    mechanicField
+                    if draft.mechanic == .compound {
+                        patternField
                     }
-                    .padding(.horizontal, 22)
-                    .padding(.top, 12)
-                    .padding(.bottom, 24)
+                    aliasesField
+                    defaultsRow
                 }
+                .padding(.horizontal, Space.gutter)
+                .padding(.top, Space.md)
+                .padding(.bottom, Space.xxl)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .screenBackground()
             .navigationTitle(isEditMode ? "Edit Exercise" : "New Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -105,197 +108,141 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Fields
 
     private var nameField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("Name")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(0.55)
 
             TextField("", text: $draft.name, prompt: Text("e.g. Bulgarian Split Squat")
-                .foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Ink.quaternary))
+                .font(Typography.title)
+                .foregroundStyle(Ink.primary)
                 .focused($nameFieldFocused)
                 .submitLabel(.done)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 14)
-                .glassChip(cornerRadius: 14)
+                .padding(.vertical, Space.sm)
+
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 1)
         }
     }
 
     private var muscleGroupField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("Muscle group")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(0.55)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack(spacing: Space.sm) {
                     ForEach(MuscleGroup.allCases, id: \.self) { g in
-                        muscleChip(g)
+                        chip(label: g.displayName, isSelected: draft.group == g) {
+                            Haptics.selection()
+                            draft.group = g
+                        }
                     }
                 }
             }
         }
-    }
-
-    private func muscleChip(_ g: MuscleGroup) -> some View {
-        let isSelected = draft.group == g
-        return Button {
-            Haptics.selection()
-            draft.group = g
-        } label: {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(g.accent)
-                    .frame(width: 7, height: 7)
-                Text(g.displayName)
-                    .font(.system(size: 14, weight: .semibold))
-            }
-            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-            .padding(.horizontal, 14)
-            .frame(minHeight: 44)
-            .background(
-                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-            )
-            .overlay(
-                Capsule().stroke(
-                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                    lineWidth: 0.5
-                )
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     // MARK: - Equipment
 
     private var equipmentField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("Equipment")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(0.55)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack(spacing: Space.sm) {
                     ForEach(Equipment.allCases, id: \.self) { e in
-                        equipmentChip(e)
+                        chip(label: e.displayName, symbol: e.symbol, isSelected: draft.equipment == e) {
+                            Haptics.selection()
+                            draft.equipment = e
+                        }
                     }
                 }
             }
         }
-    }
-
-    private func equipmentChip(_ e: Equipment) -> some View {
-        let isSelected = draft.equipment == e
-        return Button {
-            Haptics.selection()
-            draft.equipment = e
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: e.symbol)
-                    .font(.system(size: 12, weight: .semibold))
-                Text(e.displayName)
-                    .font(.system(size: 14, weight: .semibold))
-            }
-            .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-            .padding(.horizontal, 14)
-            .frame(minHeight: 44)
-            .background(
-                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-            )
-            .overlay(
-                Capsule().stroke(
-                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                    lineWidth: 0.5
-                )
-            )
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     // MARK: - Mechanic
 
     private var mechanicField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("Mechanic")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(0.55)
 
-            HStack(spacing: 8) {
+            HStack(spacing: Space.sm) {
                 ForEach(Mechanic.allCases, id: \.self) { m in
-                    mechanicChip(m)
-                }
-            }
-        }
-    }
-
-    private func mechanicChip(_ m: Mechanic) -> some View {
-        let isSelected = draft.mechanic == m
-        return Button {
-            Haptics.selection()
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                draft.mechanic = m
-                if m == .isolation {
-                    draft.pattern = nil
-                }
-            }
-        } label: {
-            Text(m.displayName)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 44)
-                .background(
-                    Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-                )
-                .overlay(
-                    Capsule().stroke(
-                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                        lineWidth: 0.5
-                    )
-                )
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    // MARK: - Pattern (compound only)
-
-    private var patternField: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Movement pattern")
-                .sectionLabelStyle(0.60)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    patternChip(nil)
-                    ForEach(MovementPattern.allCases, id: \.self) { p in
-                        patternChip(p)
+                    chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
+                        Haptics.selection()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            draft.mechanic = m
+                            if m == .isolation {
+                                draft.pattern = nil
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    private func patternChip(_ p: MovementPattern?) -> some View {
-        let isSelected = draft.pattern == p
-        let label = p?.displayName ?? "None"
-        return Button {
-            Haptics.selection()
-            draft.pattern = p
-        } label: {
-            Text(label)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.85))
-                .padding(.horizontal, 14)
-                .frame(minHeight: 44)
-                .background(
-                    Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-                )
-                .overlay(
-                    Capsule().stroke(
-                        isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                        lineWidth: 0.5
-                    )
-                )
+    // MARK: - Pattern (compound only)
+
+    private var patternField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Movement pattern")
+                .sectionLabelStyle(0.55)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Space.sm) {
+                    chip(label: "None", isSelected: draft.pattern == nil) {
+                        Haptics.selection()
+                        draft.pattern = nil
+                    }
+                    ForEach(MovementPattern.allCases, id: \.self) { p in
+                        chip(label: p.displayName, isSelected: draft.pattern == p) {
+                            Haptics.selection()
+                            draft.pattern = p
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Chip
+
+    /// The one selectable chip used across every field: lime fill +
+    /// black text when chosen, a hairline outline when not — the
+    /// exact pair used by the picker and catalog equipment strips.
+    /// No muscle-color dots, no glass: one accent, one hairline.
+    private func chip(
+        label: String,
+        symbol: String? = nil,
+        isSelected: Bool,
+        fullWidth: Bool = false,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 6) {
+                if let symbol {
+                    Image(systemName: symbol)
+                        .font(.system(size: 12, weight: .semibold))
+                }
+                Text(label)
+                    .font(.system(size: 14, weight: .semibold))
+            }
+            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .padding(.horizontal, fullWidth ? Space.md : Space.lg)
+            .frame(minHeight: 44)
+            .background {
+                if isSelected { Capsule().fill(Tint.inProgress) }
+            }
+            .overlay {
+                if !isSelected { Capsule().stroke(Surface.edge, lineWidth: 1) }
+            }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -304,55 +251,93 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Aliases
 
     private var aliasesField: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline) {
                 Text("Aliases")
-                    .sectionLabelStyle(0.60)
+                    .sectionLabelStyle(0.55)
                 Spacer()
                 Text("comma-separated")
                     .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.40))
+                    .foregroundStyle(Ink.quaternary)
             }
 
             TextField("", text: $draft.aliasesInput, prompt: Text("e.g. BP, Flat Bench")
-                .foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 16))
-                .foregroundStyle(.white)
+                .foregroundStyle(Ink.quaternary))
+                .font(Typography.body)
+                .foregroundStyle(Ink.primary)
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.words)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 14)
-                .glassChip(cornerRadius: 14)
+                .padding(.vertical, Space.sm)
+
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 1)
         }
     }
 
     private var defaultsRow: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(0.55)
 
-            HStack(spacing: 12) {
-                WeightScrubber(
-                    canonicalWeight: $draft.defaultWeight,
-                    purpose: .strength,
-                    label: "Weight",
-                    valueFontSize: 28,
-                    verticalPadding: 12
-                )
-                NumberScrubber(
-                    value: Binding(
-                        get: { Double(draft.defaultReps) },
-                        set: { draft.defaultReps = max(1, Int($0)) }
-                    ),
-                    range: 1...100,
-                    step: 1,
-                    unit: "reps",
-                    label: "Reps",
-                    valueFontSize: 28,
-                    verticalPadding: 12
-                )
+            HStack(alignment: .top, spacing: Space.xxl) {
+                valueColumn(label: "Weight") {
+                    BareScrubber(
+                        value: defaultWeightBinding,
+                        range: unit.strengthRange,
+                        step: unit.strengthStep,
+                        pointsPerStep: 8,
+                        fontSize: 40,
+                        unit: unit.symbol,
+                        unitFontSize: 13,
+                        numberColor: Ink.primary,
+                        unitColor: Ink.tertiary
+                    )
+                }
+                valueColumn(label: "Reps") {
+                    BareScrubber(
+                        value: defaultRepsBinding,
+                        range: 1...100,
+                        step: 1,
+                        pointsPerStep: 16,
+                        fontSize: 40,
+                        numberColor: Ink.primary
+                    )
+                }
+                Spacer(minLength: 0)
             }
         }
+    }
+
+    /// A small sentence-case label above a bare scrubbing numeral —
+    /// the same composition the template editor uses, so the two
+    /// editors read identically.
+    private func valueColumn<S: View>(
+        label: String,
+        @ViewBuilder scrubber: () -> S
+    ) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(label)
+                .sectionLabelStyle(0.45)
+            scrubber()
+        }
+    }
+
+    // MARK: - Default bindings
+
+    /// Scrubbed in display units; stored canonical (lb) on the draft.
+    private var defaultWeightBinding: Binding<Double> {
+        Binding(
+            get: { WeightFormatter.toDisplay(draft.defaultWeight, unit: unit) },
+            set: { draft.defaultWeight = WeightFormatter.toCanonical($0, unit: unit) }
+        )
+    }
+
+    private var defaultRepsBinding: Binding<Double> {
+        Binding(
+            get: { Double(draft.defaultReps) },
+            set: { draft.defaultReps = max(1, Int($0)) }
+        )
     }
 
     // MARK: - Save
