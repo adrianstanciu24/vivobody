@@ -56,22 +56,26 @@ struct LibraryScreen: View {
     @State private var customExerciseTarget: CatalogEditorTarget? = nil
 
     var body: some View {
-        VStack(spacing: 0) {
-            segmentPicker
-
-            // Two distinct content views — each owns its own
-            // SwiftData query + filter state so neither one
-            // does extra work when the other segment is active.
+        // Each content view owns its own SwiftData query + filter
+        // state and hosts the segmented control as the FIRST element
+        // inside its own scroll view. That keeps the scroll view the
+        // direct content under the navigation bar, so the large
+        // "Library" title collapses correctly on scroll and the
+        // segment scrolls away with the content instead of staying
+        // pinned and colliding with the title.
+        Group {
             switch segment {
             case .templates:
                 LibraryTemplatesContent(
                     appState: appState,
                     searchText: searchText,
+                    segment: $segment,
                     templateEditorTarget: $templateEditorTarget
                 )
             case .exercises:
                 LibraryExercisesContent(
                     searchText: searchText,
+                    segment: $segment,
                     customExerciseTarget: $customExerciseTarget
                 )
             }
@@ -93,19 +97,6 @@ struct LibraryScreen: View {
         .sheet(item: $customExerciseTarget) { target in
             CustomExerciseEditorSheet(target: target)
         }
-    }
-
-    // MARK: - Segment picker
-
-    /// The instrument segmented control: two words, the active one in
-    /// full white with a sliding lime underline, the other dimmed. No
-    /// pill, no glass — type carries the state.
-    private var segmentPicker: some View {
-        SegmentedControl(selection: $segment)
-            .accessibilityLabel("Library segment")
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, Space.sm)
-            .padding(.bottom, Space.lg)
     }
 
     // MARK: - Toolbar
@@ -219,6 +210,24 @@ private struct SegmentedControl: View {
     }
 }
 
+// MARK: - Segment bar
+
+/// The segmented control wrapped with the screen's standard header
+/// padding. Hosted as the first element inside each segment's scroll
+/// view so it scrolls away with the content (and lets the large
+/// navigation title collapse normally) rather than staying pinned.
+private struct LibrarySegmentBar: View {
+    @Binding var selection: LibrarySegment
+
+    var body: some View {
+        SegmentedControl(selection: $selection)
+            .accessibilityLabel("Library segment")
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.lg)
+    }
+}
+
 // MARK: - Templates content
 
 /// Templates segment — list of saved workout plans. Tap a row to
@@ -229,6 +238,7 @@ private struct SegmentedControl: View {
 private struct LibraryTemplatesContent: View {
     @Bindable var appState: AppState
     let searchText: String
+    @Binding var segment: LibrarySegment
     @Binding var templateEditorTarget: TemplateEditorTarget?
 
     @Environment(\.modelContext) private var modelContext
@@ -247,9 +257,15 @@ private struct LibraryTemplatesContent: View {
     var body: some View {
         Group {
             if templates.isEmpty {
-                emptyState
+                VStack(spacing: 0) {
+                    LibrarySegmentBar(selection: $segment)
+                    emptyState
+                }
             } else if filtered.isEmpty {
-                noMatchesState
+                VStack(spacing: 0) {
+                    LibrarySegmentBar(selection: $segment)
+                    noMatchesState
+                }
             } else {
                 list
             }
@@ -272,6 +288,14 @@ private struct LibraryTemplatesContent: View {
 
     private var list: some View {
         List {
+            // First scrolling row — the segment moves up with the
+            // content on scroll, so the large title collapses cleanly.
+            SegmentedControl(selection: $segment)
+                .accessibilityLabel("Library segment")
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.lg, trailing: Space.gutter))
+
             ForEach(filtered) { template in
                 Button {
                     templateEditorTarget = .edit(template)
@@ -417,6 +441,7 @@ private struct LibraryTemplatesContent: View {
 /// continuous.
 private struct LibraryExercisesContent: View {
     let searchText: String
+    @Binding var segment: LibrarySegment
     @Binding var customExerciseTarget: CatalogEditorTarget?
 
     @Environment(\.modelContext) private var modelContext
@@ -443,11 +468,13 @@ private struct LibraryExercisesContent: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            equipmentFilterStrip
-
+        Group {
             if filteredGroups.isEmpty {
-                emptyState
+                VStack(spacing: 0) {
+                    LibrarySegmentBar(selection: $segment)
+                    equipmentFilterStrip
+                    emptyState
+                }
             } else {
                 exerciseList
             }
@@ -550,13 +577,20 @@ private struct LibraryExercisesContent: View {
 
     private var exerciseList: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: Space.section) {
-                ForEach(filteredGroups, id: \.group) { section in
-                    groupSection(group: section.group, items: section.items)
+            VStack(alignment: .leading, spacing: 0) {
+                // Header scrolls with the catalog so the large title
+                // collapses cleanly instead of fighting a pinned bar.
+                LibrarySegmentBar(selection: $segment)
+                equipmentFilterStrip
+
+                LazyVStack(alignment: .leading, spacing: Space.section) {
+                    ForEach(filteredGroups, id: \.group) { section in
+                        groupSection(group: section.group, items: section.items)
+                    }
                 }
+                .padding(.horizontal, Space.gutter)
+                .padding(.bottom, Space.xxl + Space.xs)
             }
-            .padding(.horizontal, Space.gutter)
-            .padding(.bottom, Space.xxl + Space.xs)
         }
     }
 
