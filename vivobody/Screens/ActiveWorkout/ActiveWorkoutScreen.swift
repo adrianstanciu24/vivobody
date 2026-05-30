@@ -58,9 +58,14 @@ struct ActiveWorkoutScreen: View {
         ZStack {
             Surface.background.ignoresSafeArea()
 
-            pager
-                .safeAreaInset(edge: .top, spacing: 8) { topBar }
-                .safeAreaInset(edge: .bottom, spacing: 10) { bottomBar }
+            if isEmpty {
+                emptyState
+                    .safeAreaInset(edge: .top, spacing: 8) { topBar }
+            } else {
+                pager
+                    .safeAreaInset(edge: .top, spacing: 8) { topBar }
+                    .safeAreaInset(edge: .bottom, spacing: 10) { bottomBar }
+            }
 
             if session.isResting {
                 RestTimerOverlay(session: session)
@@ -117,16 +122,30 @@ struct ActiveWorkoutScreen: View {
     /// it — the user just tapped Add from the Summary, so we keep
     /// them on the Summary; the new card is one swipe-left away.
     private func appendExercise(from item: ExerciseCatalogItem) {
+        let wasEmpty = session.orderedExercises.isEmpty
+        // Summary lives at index `count` (pages = count + 1); being
+        // there means the add came from the Summary card.
+        let fromSummary = session.activeExerciseIndex >= session.orderedExercises.count
+
         let newExercise = Exercise(
             from: item,
             sortOrder: session.exercises.count
         )
         session.exercises.append(newExercise)
-        // Appending an exercise shifts the Summary card one slot to
-        // the right. Without this re-anchor, the user would silently
-        // end up on the new exercise card instead of staying on
-        // Summary where they started.
-        session.activeExerciseIndex = session.orderedExercises.count
+
+        if wasEmpty {
+            // First exercise on a blank workout — drop the user
+            // straight onto its card so they can start logging.
+            session.activeExerciseIndex = 0
+        } else if fromSummary {
+            // Appending shifts the Summary card one slot right.
+            // Re-anchor so the user stays on Summary rather than
+            // silently landing on the new exercise.
+            session.activeExerciseIndex = session.orderedExercises.count
+        }
+        // Otherwise the add came from the top-bar chip mid-exercise:
+        // leave the pager where it is — earlier indices are
+        // unaffected by an append.
         Haptics.soft()
     }
 
@@ -155,32 +174,23 @@ struct ActiveWorkoutScreen: View {
 
             Spacer()
 
-            Text("\(completedSetCount) / \(totalSetCount)")
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.tertiary)
+            // The set tally + mid-workout add are meaningless while
+            // the workout is still empty — the empty state owns the
+            // single "Add exercise" action there.
+            if !isEmpty {
+                Text("\(completedSetCount) / \(totalSetCount)")
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+
+                addButton
+            }
 
             // Trailing: X — cancel workout (with confirmation alert).
             // Logged sets are lost. To minimize, swipe the sheet
             // down. To finish & archive, swipe to the Summary card
             // and tap Done.
             if onDiscard != nil {
-                Button {
-                    Haptics.soft()
-                    showDiscardConfirm = true
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(Ink.secondary)
-                        .frame(width: 26, height: 26)
-                        .background(Circle().fill(Surface.cardTintBright))
-                        // Visual chip stays compact; outer frame +
-                        // contentShape expand the tap area to the
-                        // 44pt HIG minimum.
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Cancel workout")
+                discardButton
             }
         }
         .padding(.horizontal, 20)
@@ -195,6 +205,113 @@ struct ActiveWorkoutScreen: View {
         // each card on top of that, producing a "bent" crescent.
         // Removed.
         .background(Surface.background)
+    }
+
+    /// Compact chip — plus on a tinted circle, matching the discard
+    /// X. Lets the user add an exercise without swiping all the way
+    /// to the Summary card. Neutral (not lime) so it doesn't compete
+    /// with the per-set in-progress accent on the cards below.
+    private var addButton: some View {
+        Button {
+            Haptics.soft()
+            showAddExercisePicker = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(Ink.secondary)
+                .frame(width: 26, height: 26)
+                .background(Circle().fill(Surface.cardTintBright))
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Add an exercise")
+    }
+
+    private var discardButton: some View {
+        Button {
+            Haptics.soft()
+            showDiscardConfirm = true
+        } label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(Ink.secondary)
+                .frame(width: 26, height: 26)
+                .background(Circle().fill(Surface.cardTintBright))
+                // Visual chip stays compact; outer frame +
+                // contentShape expand the tap area to the 44pt HIG
+                // minimum.
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Cancel workout")
+    }
+
+    // MARK: - Empty state
+
+    /// Shown when the session has no exercises yet (a fresh, blank
+    /// start). The instrument's calm canvas: a type-forward prompt
+    /// and one prominent lime action. Tapping Add opens the same
+    /// picker used mid-workout; the first pick lands the user on its
+    /// card (see `appendExercise`).
+    private var emptyState: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Spacer(minLength: Space.xl)
+
+            Text("New workout")
+                .font(Typography.sectionLabel)
+                .foregroundStyle(Ink.tertiary)
+
+            Text("Empty canvas")
+                .font(.system(size: 30, weight: .bold))
+                .foregroundStyle(Ink.primary)
+                .padding(.top, Space.sm)
+
+            Text("Add your first exercise to start logging sets.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .padding(.top, Space.sm)
+
+            Spacer(minLength: Space.xl)
+
+            addFirstExerciseButton
+                .padding(.bottom, Space.lg)
+        }
+        .padding(.horizontal, Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+    }
+
+    /// The single biggest target on the empty screen — a full-width
+    /// lime verb button, the same shape language as the cards' set
+    /// buttons. Lime because adding the first exercise IS the live,
+    /// in-progress action here.
+    private var addFirstExerciseButton: some View {
+        Button {
+            Haptics.soft()
+            showAddExercisePicker = true
+        } label: {
+            HStack(alignment: .center, spacing: 0) {
+                Text("Add exercise")
+                    .font(.system(size: 19, weight: .bold))
+                    .tracking(0.4)
+                    .foregroundStyle(Color.black)
+                Spacer(minLength: 8)
+                Image(systemName: "plus")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(Color.black)
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 18)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .fill(Tint.inProgress)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Add an exercise")
     }
 
     private var pager: some View {
@@ -229,6 +346,7 @@ struct ActiveWorkoutScreen: View {
 
     // MARK: - Derived
 
+    private var isEmpty: Bool { session.orderedExercises.isEmpty }
     private var completedSetCount: Int { session.totalSets }
     private var totalSetCount: Int     { session.totalPlannedSets }
 }

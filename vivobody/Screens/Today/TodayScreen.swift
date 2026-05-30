@@ -247,7 +247,8 @@ struct TodayScreen: View {
     /// Whether the user has any prior session to base today's
     /// workout on. When true, the start section presents itself as
     /// "Repeat Last Workout" using the most recent session's
-    /// structure; when false, it falls back to the seeded sample plan.
+    /// structure; when false, the primary action starts a blank
+    /// workout the user fills in as they go.
     private var hasLastSession: Bool { completedSessions.first != nil }
 
     /// Templates ordered for the chip strip: most-recently-used
@@ -267,16 +268,17 @@ struct TodayScreen: View {
 
     /// The exercises that will populate the about-to-start session.
     /// Mirrors `appState.startTodaysWorkout(basedOn:)`'s logic so the
-    /// plan summary on screen matches what the start button will do.
+    /// plan summary on screen matches what the start button will do:
+    /// the last session's structure, or nothing (a blank start).
     private var planSourceExercises: [Exercise] {
-        if let last = completedSessions.first, !last.orderedExercises.isEmpty {
-            return last.orderedExercises
-        }
-        return appState.todaysPlan
+        completedSessions.first?.orderedExercises ?? []
     }
 
     private var planSummary: String {
         let exercises = planSourceExercises
+        guard !exercises.isEmpty else {
+            return "A blank canvas — add exercises as you go."
+        }
         let groups = Set(exercises.map(\.group))
         let groupNames = groups.map(\.displayName).joined(separator: " · ")
         return "\(exercises.count) exercises  ·  \(groupNames)"

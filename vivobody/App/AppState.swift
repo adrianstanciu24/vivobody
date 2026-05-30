@@ -55,12 +55,6 @@ final class AppState {
     /// OR minimized; only `dismissActiveWorkout` ends the session.
     var isWorkoutExpanded: Bool = false
 
-    /// The user's plan for today. Fresh @Model instances each access
-    /// via `Exercise.samplePlan()`; eventually driven by a programs/
-    /// library tab. Stored on AppState so the Today screen can show
-    /// a preview without spinning up a real session.
-    var todaysPlan: [Exercise] = Exercise.samplePlan()
-
     /// Lazily-assigned reference to the SwiftData write context.
     /// AppRoot wires this on first appear; mutations to history go
     /// through here. Held as a weak-ish opt-in so previews that don't
@@ -71,22 +65,22 @@ final class AppState {
 
     /// Start a workout. Optionally provide a `template` session to
     /// repeat its structure (typically the most recent archived
-    /// session). When `template` is nil — first launch, or user
-    /// explicitly chose "start fresh" — we fall back to the static
-    /// `Exercise.samplePlan()`. Either way, every set begins fresh:
+    /// session). When `template` is nil — first launch, or the user
+    /// explicitly chose "start fresh" — the workout begins as a blank
+    /// canvas and the user builds it from the active screen's empty
+    /// state. Either way, every repeated set begins fresh:
     /// `Exercise.freshCopy(of:)` clears completion state.
     func startTodaysWorkout(basedOn template: WorkoutSession? = nil) {
         let plan: [Exercise]
         if let template, !template.orderedExercises.isEmpty {
             plan = template.orderedExercises.map(Exercise.freshCopy(of:))
         } else {
-            // Fresh plan instances every start — the previous
-            // `todaysPlan` array may have been touched (or held by
-            // a stale session).
-            plan = Exercise.samplePlan()
+            // Nothing to repeat — start empty. The user adds
+            // exercises from the active workout's empty state.
+            plan = []
         }
         activeSession = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
-        isWorkoutExpanded = true   // first set is the moment of intent
+        isWorkoutExpanded = true   // the first action is the moment of intent
     }
 
     /// Start a workout from a saved template. Each TemplateExercise
