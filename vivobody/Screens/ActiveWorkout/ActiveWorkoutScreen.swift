@@ -118,9 +118,7 @@ struct ActiveWorkoutScreen: View {
 
     /// Append a fresh Exercise from the catalog to the active
     /// session. The new exercise lands at the end (just before the
-    /// Summary card). We deliberately do NOT advance the pager to
-    /// it — the user just tapped Add from the Summary, so we keep
-    /// them on the Summary; the new card is one swipe-left away.
+    /// Summary card).
     private func appendExercise(from item: ExerciseCatalogItem) {
         let wasEmpty = session.orderedExercises.isEmpty
         // Summary lives at index `count` (pages = count + 1); being
@@ -133,15 +131,12 @@ struct ActiveWorkoutScreen: View {
         )
         session.exercises.append(newExercise)
 
-        if wasEmpty {
-            // First exercise on a blank workout — drop the user
-            // straight onto its card so they can start logging.
-            session.activeExerciseIndex = 0
-        } else if fromSummary {
-            // Appending shifts the Summary card one slot right.
-            // Re-anchor so the user stays on Summary rather than
-            // silently landing on the new exercise.
-            session.activeExerciseIndex = session.orderedExercises.count
+        if wasEmpty || fromSummary {
+            // Adding from the empty state or the Summary card: jump
+            // straight to the freshly added exercise (now the last
+            // card) so the user can start logging it without swiping
+            // back.
+            session.activeExerciseIndex = session.orderedExercises.count - 1
         }
         // Otherwise the add came from the top-bar chip mid-exercise:
         // leave the pager where it is — earlier indices are
