@@ -63,24 +63,12 @@ struct PrimaryActionButton: View {
                 }
             }
             .padding(.horizontal, 22)
-            .padding(.vertical, 22)
+            .padding(.vertical, 20)
             .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .fill(accent)
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.05)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.8
-                    )
-            )
-            .softElevation()
         }
         .buttonStyle(.plain)
         .scaleEffect(pressScale)

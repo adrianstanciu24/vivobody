@@ -48,7 +48,6 @@ struct TodayScreen: View {
             // and history are the journal underneath, reached by a
             // scroll once you've decided.
             VStack(alignment: .leading, spacing: Space.section) {
-                dateStrip
                 startSection
                 if !templates.isEmpty {
                     templatesSection
@@ -67,15 +66,6 @@ struct TodayScreen: View {
     }
 
     // MARK: - Sections
-
-    /// Small monospaced date caption that sits just below the system
-    /// large title. The title says where you are ("Today"); this strip
-    /// gives you the calendar context.
-    private var dateStrip: some View {
-        Text(Self.dayFormatter.string(from: Date()))
-            .sectionLabelStyle(0.45)
-            .frame(maxWidth: .infinity, alignment: .leading)
-    }
 
     private var streakSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
@@ -108,33 +98,52 @@ struct TodayScreen: View {
                 .font(Typography.body)
                 .foregroundStyle(Ink.secondary)
 
-            PrimaryActionButton(
-                title: startButtonTitle,
-                subtitle: nil
-            ) {
-                appState.startTodaysWorkout(basedOn: completedSessions.first)
+            VStack(spacing: Space.sm) {
+                PrimaryActionButton(
+                    title: startButtonTitle,
+                    subtitle: nil
+                ) {
+                    appState.startTodaysWorkout(basedOn: completedSessions.first)
+                }
+
+                // Secondary, but a real button — not a buried link.
+                // Only shown when there's a last session to repeat;
+                // otherwise the primary already IS "start fresh."
+                if hasLastSession {
+                    freshButton
+                }
             }
             .padding(.top, Space.xs)
-
-            // Secondary escape hatch — only shown when there's a
-            // last session, since otherwise the primary already IS
-            // "Start Workout" from the sample plan. Kept visually
-            // quiet so it doesn't compete with the primary CTA.
-            if hasLastSession {
-                Button {
-                    appState.startTodaysWorkout(basedOn: nil)
-                } label: {
-                    Text("Start a fresh workout instead")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                        .underline()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, Space.xs)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-            }
         }
+    }
+
+    /// Outlined sibling to the primary CTA. Hairline on black, white
+    /// label, a "plus" to read as "a clean, empty start." Clearly
+    /// secondary to the filled lime button above it, but unmissable.
+    private var freshButton: some View {
+        Button {
+            appState.startTodaysWorkout(basedOn: nil)
+        } label: {
+            HStack(spacing: Space.sm) {
+                Text("Start Fresh")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Ink.primary)
+                Spacer()
+                Image(systemName: "plus")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Ink.tertiary)
+            }
+            .padding(.horizontal, 22)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 56)
+            .overlay(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(Surface.edge, lineWidth: 1)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Start a fresh workout")
     }
 
     /// Horizontal chip strip of saved templates. Tap a chip → start
@@ -274,7 +283,9 @@ struct TodayScreen: View {
     }
 
     private var startSectionTitle: String {
-        hasLastSession ? "Repeat last workout" : "Today's workout"
+        // Avoid echoing the button label ("Repeat Last Workout")
+        // verbatim in the section header.
+        hasLastSession ? "Last time" : "Today's workout"
     }
 
     private var startButtonTitle: String {
@@ -321,12 +332,6 @@ struct TodayScreen: View {
     }
 
     // MARK: - Formatters
-
-    private static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE  ·  MMM d"
-        return f
-    }()
 
     private static let relativeDayFormatter: DateFormatter = {
         let f = DateFormatter()
