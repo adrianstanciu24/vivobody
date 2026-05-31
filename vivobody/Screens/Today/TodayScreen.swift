@@ -48,6 +48,16 @@ struct TodayScreen: View {
     /// title animation so it holds a constant size.
     @State private var heroHeight: CGFloat = 0
 
+    /// Whether the start-workout sheet is presented (raised by the
+    /// pinned "+ Start" pill).
+    @State private var showStartSheet = false
+
+    /// The start action chosen in the sheet, deferred until the sheet
+    /// fully dismisses. Running it in the sheet's onDismiss avoids
+    /// presenting the focused ActiveWorkoutScreen over a still-
+    /// dismissing sheet.
+    @State private var pendingStart: (() -> Void)?
+
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
@@ -58,18 +68,15 @@ struct TodayScreen: View {
                 // scroll once you've decided.
                 VStack(alignment: .leading, spacing: Space.section) {
                     bodyModelHero(height: heroHeight > 0 ? heroHeight : proxy.size.height)
-                    startSection
-                    if !templates.isEmpty {
-                        templatesSection
-                    }
-                    SectionDivider()
                     streakSection
                     SectionDivider()
                     lastWorkoutSection
                 }
                 .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.xs)
-                .padding(.bottom, Space.lg)
+                // Clear the floating "+" FAB (56pt) so the last
+                // section can always scroll above it.
+                .padding(.bottom, 72)
             }
             .scrollIndicators(.hidden)
             .screenBackground()
@@ -79,11 +86,28 @@ struct TodayScreen: View {
                 // (which grows the viewport and would otherwise re-scale
                 // the model). Reading the tracked view's own geometry —
                 // not a captured outer proxy — is what makes SwiftUI
-                // actually deliver these updates.
+                // actually deliver these updates. Measured BEFORE the
+                // bottom inset below so the floating "+" never steals
+                // height from the hero (which shrank the figure).
                 if heroHeight == 0, newHeight > 0 { heroHeight = newHeight }
+            }
+            // Floating "+" FAB. An overlay rather than a safeAreaInset
+            // so it doesn't reserve scroll height (which would shrink
+            // the model); offset up past the tab bar's safe area.
+            .overlay(alignment: .bottomLeading) {
+                startButton
+                    .padding(.leading, Space.gutter)
+                    .padding(.bottom, Space.lg)
             }
         }
         .onAppear { Haptics.prepare() }
+        .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
+            StartWorkoutSheet(
+                lastSession: completedSessions.first,
+                templates: sortedTemplates,
+                onSelect: queueStart
+            )
+        }
     }
 
     // MARK: - Sections
@@ -123,115 +147,47 @@ struct TodayScreen: View {
         }
     }
 
-    private var startSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: startSectionTitle)
-
-            Text(planSummary)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-
-            VStack(spacing: Space.sm) {
-                PrimaryActionButton(
-                    title: startButtonTitle,
-                    subtitle: nil
-                ) {
-                    appState.startTodaysWorkout(basedOn: completedSessions.first)
-                }
-
-                // Secondary, but a real button — not a buried link.
-                // Only shown when there's a last session to repeat;
-                // otherwise the primary already IS "start fresh."
-                if hasLastSession {
-                    freshButton
-                }
-            }
-            .padding(.top, Space.xs)
-        }
-    }
-
-    /// Outlined sibling to the primary CTA. Hairline on black, white
-    /// label, a "plus" to read as "a clean, empty start." Clearly
-    /// secondary to the filled lime button above it, but unmissable.
-    private var freshButton: some View {
-        Button {
-            appState.startTodaysWorkout(basedOn: nil)
-        } label: {
-            HStack(spacing: Space.sm) {
-                Text("Start Fresh")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Ink.primary)
-                Spacer()
-                Image(systemName: "plus")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .padding(.horizontal, 22)
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: 56)
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Surface.edge, lineWidth: 1)
-            )
-            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Start a fresh workout")
-    }
-
-    /// Horizontal chip strip of saved templates. Tap a chip → start
-    /// that template directly (same path as Library detail's Start
-    /// button). Sorted most-recently-used first, with never-used
-    /// templates trailing in their original Library order.
-    private var templatesSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Templates")
-
-            VStack(spacing: 0) {
-                ForEach(Array(sortedTemplates.enumerated()), id: \.element.id) { index, template in
-                    if index > 0 { SectionDivider() }
-                    templateRow(template)
-                }
-            }
-        }
-    }
-
-    private func templateRow(_ template: WorkoutTemplate) -> some View {
+    /// Floating lime "+" FAB — the single entry point to starting a
+    /// workout. Bottom-left so the 3D model owns the whole hero;
+    /// tapping it raises the StartWorkoutSheet (Repeat / Fresh /
+    /// templates). Shaped as a capsule (echoing the selected tab
+    /// pill) with a top specular sheen + soft elevation so it reads
+    /// as a raised piece of material rather than a flat disc.
+    private var startButton: some View {
         Button {
             Haptics.soft()
-            appState.startWorkoutFromTemplate(template)
+            showStartSheet = true
         } label: {
-            HStack(spacing: Space.md) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(template.name)
-                        .font(Typography.title)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                    Text(templateSubtitle(template))
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                        .lineLimit(1)
+            plusGlyph
+                .frame(width: 78, height: 52)
+                .background(Capsule(style: .continuous).fill(Tint.primary))
+                .overlay {
+                    Capsule(style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.5), .white.opacity(0.08)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 0.75
+                        )
                 }
-
-                Spacer(minLength: Space.sm)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Ink.quaternary)
-            }
-            .frame(minHeight: Space.rowMin)
-            .padding(.vertical, Space.sm)
-            .contentShape(Rectangle())
+                .topSpecularSheen(cornerRadius: 26, intensity: 0.22, height: 0.55)
+                .softElevation(radius: 16, y: 8, opacity: 0.45)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Start \(template.name)")
+        .accessibilityLabel("Start a workout")
     }
 
-    private func templateSubtitle(_ template: WorkoutTemplate) -> String {
-        let count = template.orderedExercises.count
-        let base = "\(count) ex · \(template.totalPlannedSets) sets"
-        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
-        return groups.isEmpty ? base : "\(base) · \(groups)"
+    /// A "+" built from two rounded bars rather than the SF Symbol —
+    /// thinner strokes with fully rounded caps read crisper and more
+    /// modern than the heavy system glyph.
+    private var plusGlyph: some View {
+        ZStack {
+            Capsule().frame(width: 20, height: 4)
+            Capsule().frame(width: 4, height: 20)
+        }
+        .foregroundStyle(Tint.onAccent)
     }
 
     private var lastWorkoutSection: some View {
@@ -275,16 +231,33 @@ struct TodayScreen: View {
 
     private static let monoStatValue = Font.system(size: 28, weight: .bold, design: .monospaced)
 
+    // MARK: - Start intent
+
+    /// Record the chosen start path and let the sheet dismiss. The
+    /// work runs in `runPendingStart` once the sheet is gone, so the
+    /// focused ActiveWorkoutScreen never presents over a dismissing
+    /// sheet.
+    private func queueStart(_ intent: StartIntent) {
+        switch intent {
+        case .repeatLast:
+            let last = completedSessions.first
+            pendingStart = { appState.startTodaysWorkout(basedOn: last) }
+        case .fresh:
+            pendingStart = { appState.startTodaysWorkout(basedOn: nil) }
+        case .template(let template):
+            pendingStart = { appState.startWorkoutFromTemplate(template) }
+        }
+    }
+
+    private func runPendingStart() {
+        let action = pendingStart
+        pendingStart = nil
+        action?()
+    }
+
     // MARK: - Derived
 
-    /// Whether the user has any prior session to base today's
-    /// workout on. When true, the start section presents itself as
-    /// "Repeat Last Workout" using the most recent session's
-    /// structure; when false, the primary action starts a blank
-    /// workout the user fills in as they go.
-    private var hasLastSession: Bool { completedSessions.first != nil }
-
-    /// Templates ordered for the chip strip: most-recently-used
+    /// Templates ordered for the start sheet: most-recently-used
     /// first, then never-used templates in their Library sortOrder.
     /// A `@Query` predicate-based sort can't express this hybrid
     /// (lastUsedAt is optional), so it's resolved client-side.
@@ -297,34 +270,6 @@ struct TodayScreen: View {
             case (.none, .none):     return lhs.sortOrder < rhs.sortOrder
             }
         }
-    }
-
-    /// The exercises that will populate the about-to-start session.
-    /// Mirrors `appState.startTodaysWorkout(basedOn:)`'s logic so the
-    /// plan summary on screen matches what the start button will do:
-    /// the last session's structure, or nothing (a blank start).
-    private var planSourceExercises: [Exercise] {
-        completedSessions.first?.orderedExercises ?? []
-    }
-
-    private var planSummary: String {
-        let exercises = planSourceExercises
-        guard !exercises.isEmpty else {
-            return "A blank canvas — add exercises as you go."
-        }
-        let groups = Set(exercises.map(\.group))
-        let groupNames = groups.map(\.displayName).joined(separator: " · ")
-        return "\(exercises.count) exercises  ·  \(groupNames)"
-    }
-
-    private var startSectionTitle: String {
-        // Avoid echoing the button label ("Repeat Last Workout")
-        // verbatim in the section header.
-        hasLastSession ? "Last time" : "Today's workout"
-    }
-
-    private var startButtonTitle: String {
-        hasLastSession ? "Repeat Last Workout" : "Start Workout"
     }
 
     /// Calendar days on which the user has at least one archived
