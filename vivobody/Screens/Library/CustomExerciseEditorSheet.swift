@@ -73,7 +73,10 @@ struct CustomExerciseEditorSheet: View {
                     if draft.mechanic == .compound {
                         patternField
                     }
+                    planeField
+                    lateralityField
                     aliasesField
+                    trackingModeField
                     defaultsRow
                 }
                 .padding(.horizontal, Space.gutter)
@@ -211,6 +214,42 @@ struct CustomExerciseEditorSheet: View {
         }
     }
 
+    // MARK: - Plane (every exercise)
+
+    private var planeField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Plane of movement")
+                .sectionLabelStyle(0.55)
+
+            HStack(spacing: Space.sm) {
+                ForEach(MovementPlane.allCases, id: \.self) { p in
+                    chip(label: p.displayName, isSelected: draft.plane == p, fullWidth: true) {
+                        Haptics.selection()
+                        draft.plane = p
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Laterality (every exercise)
+
+    private var lateralityField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Sides")
+                .sectionLabelStyle(0.55)
+
+            HStack(spacing: Space.sm) {
+                ForEach(Laterality.allCases, id: \.self) { l in
+                    chip(label: l.displayName, isSelected: draft.laterality == l, fullWidth: true) {
+                        Haptics.selection()
+                        draft.laterality = l
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: - Chip
 
     /// The one selectable chip used across every field: lime fill +
@@ -275,34 +314,86 @@ struct CustomExerciseEditorSheet: View {
         }
     }
 
+    // MARK: - Measure (reps vs. time)
+
+    /// Chooses how the exercise is logged. Time turns the defaults
+    /// row into a Hold + Load pair (vs. Weight + Reps), and is what
+    /// makes a plank / dead hang / loaded carry track as a held
+    /// interval instead of a rep count.
+    private var trackingModeField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Measure")
+                .sectionLabelStyle(0.55)
+
+            HStack(spacing: Space.sm) {
+                ForEach(TrackingMode.allCases, id: \.self) { m in
+                    chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
+                        Haptics.selection()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            draft.trackingMode = m
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
                 .sectionLabelStyle(0.55)
 
             HStack(alignment: .top, spacing: Space.xxl) {
-                valueColumn(label: "Weight") {
-                    BareScrubber(
-                        value: defaultWeightBinding,
-                        range: unit.strengthRange,
-                        step: unit.strengthStep,
-                        pointsPerStep: 8,
-                        fontSize: 40,
-                        unit: unit.symbol,
-                        unitFontSize: 13,
-                        numberColor: Ink.primary,
-                        unitColor: Ink.tertiary
-                    )
-                }
-                valueColumn(label: "Reps") {
-                    BareScrubber(
-                        value: defaultRepsBinding,
-                        range: 1...100,
-                        step: 1,
-                        pointsPerStep: 16,
-                        fontSize: 40,
-                        numberColor: Ink.primary
-                    )
+                switch draft.trackingMode {
+                case .reps:
+                    valueColumn(label: "Weight") {
+                        BareScrubber(
+                            value: defaultWeightBinding,
+                            range: unit.strengthRange,
+                            step: unit.strengthStep,
+                            pointsPerStep: 8,
+                            fontSize: 40,
+                            unit: unit.symbol,
+                            unitFontSize: 13,
+                            numberColor: Ink.primary,
+                            unitColor: Ink.tertiary
+                        )
+                    }
+                    valueColumn(label: "Reps") {
+                        BareScrubber(
+                            value: defaultRepsBinding,
+                            range: 1...100,
+                            step: 1,
+                            pointsPerStep: 16,
+                            fontSize: 40,
+                            numberColor: Ink.primary
+                        )
+                    }
+                case .duration:
+                    valueColumn(label: "Hold") {
+                        BareScrubber(
+                            value: defaultDurationBinding,
+                            range: DurationFormatter.scrubRange,
+                            step: DurationFormatter.scrubStep,
+                            pointsPerStep: 10,
+                            fontSize: 40,
+                            numberColor: Ink.primary,
+                            formatter: { DurationFormatter.string($0) }
+                        )
+                    }
+                    valueColumn(label: "Load") {
+                        BareScrubber(
+                            value: defaultWeightBinding,
+                            range: unit.strengthRange,
+                            step: unit.strengthStep,
+                            pointsPerStep: 8,
+                            fontSize: 40,
+                            unit: unit.symbol,
+                            unitFontSize: 13,
+                            numberColor: Ink.primary,
+                            unitColor: Ink.tertiary
+                        )
+                    }
                 }
                 Spacer(minLength: 0)
             }
@@ -340,6 +431,13 @@ struct CustomExerciseEditorSheet: View {
         )
     }
 
+    private var defaultDurationBinding: Binding<Double> {
+        Binding(
+            get: { draft.defaultDuration },
+            set: { draft.defaultDuration = $0 }
+        )
+    }
+
     // MARK: - Save
 
     private func save() {
@@ -355,9 +453,13 @@ struct CustomExerciseEditorSheet: View {
                 group: draft.group,
                 defaultWeight: draft.defaultWeight,
                 defaultReps: draft.defaultReps,
+                trackingMode: draft.trackingMode,
+                defaultDuration: draft.defaultDuration,
                 equipment: draft.equipment,
                 mechanic: draft.mechanic,
                 pattern: draft.mechanic == .compound ? draft.pattern : nil,
+                plane: draft.plane,
+                laterality: draft.laterality,
                 aliases: parsedAliases,
                 isUserCreated: true
             )
@@ -368,12 +470,16 @@ struct CustomExerciseEditorSheet: View {
             item.group = draft.group
             item.defaultWeight = draft.defaultWeight
             item.defaultReps = draft.defaultReps
+            item.trackingMode = draft.trackingMode
+            item.defaultDuration = draft.defaultDuration
             item.equipment = draft.equipment
             // Setting mechanic to isolation auto-clears pattern via
             // the model's didSet hook, so we don't need to clear it
             // here explicitly. Order matters: mechanic first.
             item.mechanic = draft.mechanic
             item.pattern = draft.mechanic == .compound ? draft.pattern : nil
+            item.plane = draft.plane
+            item.laterality = draft.laterality
             item.aliases = parsedAliases
         }
 
@@ -395,9 +501,13 @@ struct CatalogDraft {
     var group: MuscleGroup
     var defaultWeight: Double
     var defaultReps: Int
+    var trackingMode: TrackingMode
+    var defaultDuration: TimeInterval
     var equipment: Equipment
     var mechanic: Mechanic
     var pattern: MovementPattern?
+    var plane: MovementPlane
+    var laterality: Laterality
 
     /// Raw editor input for aliases — comma-separated free text.
     /// Parsed into `[String]` on save via `parsedAliases`. Keeping
@@ -410,9 +520,13 @@ struct CatalogDraft {
         group: .chest,
         defaultWeight: 0,
         defaultReps: 8,
+        trackingMode: .reps,
+        defaultDuration: 45,
         equipment: .barbell,
         mechanic: .compound,
         pattern: nil,
+        plane: .sagittal,
+        laterality: .bilateral,
         aliasesInput: ""
     )
 
@@ -421,18 +535,26 @@ struct CatalogDraft {
         group: MuscleGroup,
         defaultWeight: Double,
         defaultReps: Int,
+        trackingMode: TrackingMode,
+        defaultDuration: TimeInterval,
         equipment: Equipment,
         mechanic: Mechanic,
         pattern: MovementPattern?,
+        plane: MovementPlane,
+        laterality: Laterality,
         aliasesInput: String
     ) {
         self.name = name
         self.group = group
         self.defaultWeight = defaultWeight
         self.defaultReps = defaultReps
+        self.trackingMode = trackingMode
+        self.defaultDuration = defaultDuration
         self.equipment = equipment
         self.mechanic = mechanic
         self.pattern = pattern
+        self.plane = plane
+        self.laterality = laterality
         self.aliasesInput = aliasesInput
     }
 
@@ -441,9 +563,13 @@ struct CatalogDraft {
         self.group = item.group
         self.defaultWeight = item.defaultWeight
         self.defaultReps = item.defaultReps
+        self.trackingMode = item.trackingMode
+        self.defaultDuration = item.defaultDuration > 0 ? item.defaultDuration : 45
         self.equipment = item.equipment
         self.mechanic = item.mechanic
         self.pattern = item.pattern
+        self.plane = item.plane
+        self.laterality = item.laterality
         // Rebuild the comma-separated string so the editor's text
         // field reflects the stored list. Two-space readability for
         // long lists, but the parser tolerates either.

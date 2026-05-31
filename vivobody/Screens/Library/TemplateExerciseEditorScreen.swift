@@ -49,20 +49,35 @@ struct TemplateExerciseEditorScreen: View {
 
                 SectionDivider()
 
-                valueRow(label: "Reps") {
-                    BareScrubber(
-                        value: repsBinding,
-                        range: 1...50,
-                        step: 1,
-                        pointsPerStep: 16,
-                        fontSize: 64,
-                        numberColor: Ink.primary
-                    )
+                switch exercise.trackingMode {
+                case .reps:
+                    valueRow(label: "Reps") {
+                        BareScrubber(
+                            value: repsBinding,
+                            range: 1...50,
+                            step: 1,
+                            pointsPerStep: 16,
+                            fontSize: 64,
+                            numberColor: Ink.primary
+                        )
+                    }
+                case .duration:
+                    valueRow(label: "Hold") {
+                        BareScrubber(
+                            value: durationBinding,
+                            range: DurationFormatter.scrubRange,
+                            step: DurationFormatter.scrubStep,
+                            pointsPerStep: 10,
+                            fontSize: 64,
+                            numberColor: Ink.primary,
+                            formatter: { DurationFormatter.string($0) }
+                        )
+                    }
                 }
 
                 SectionDivider()
 
-                valueRow(label: "Weight") {
+                valueRow(label: exercise.trackingMode == .duration ? "Added load" : "Weight") {
                     BareScrubber(
                         value: weightDisplayBinding,
                         range: unit.strengthRange,
@@ -95,6 +110,7 @@ struct TemplateExerciseEditorScreen: View {
         .onChange(of: exercise.plannedSets) { _, _ in save() }
         .onChange(of: exercise.plannedReps) { _, _ in save() }
         .onChange(of: exercise.plannedWeight) { _, _ in save() }
+        .onChange(of: exercise.plannedDuration) { _, _ in save() }
     }
 
     // MARK: - Header
@@ -164,6 +180,13 @@ struct TemplateExerciseEditorScreen: View {
         Binding(
             get: { Double(exercise.plannedReps) },
             set: { exercise.plannedReps = Int($0) }
+        )
+    }
+
+    private var durationBinding: Binding<Double> {
+        Binding(
+            get: { exercise.plannedDuration },
+            set: { exercise.plannedDuration = $0 }
         )
     }
 

@@ -164,7 +164,14 @@ struct WorkoutSummaryCard: View {
         let setsPart = session.totalPlannedSets != session.totalSets
             ? "\(session.totalSets) of \(session.totalPlannedSets) sets"
             : "\(session.totalSets) sets"
-        return "\(mins) min   ·   \(setsPart)   ·   \(session.totalReps) reps"
+        var parts = ["\(mins) min", setsPart]
+        if session.totalReps > 0 {
+            parts.append("\(session.totalReps) reps")
+        }
+        if session.totalHoldTime > 0 {
+            parts.append("\(DurationFormatter.compact(session.totalHoldTime)) held")
+        }
+        return parts.joined(separator: "   ·   ")
     }
 
     // MARK: - Exercise list
@@ -184,7 +191,7 @@ struct WorkoutSummaryCard: View {
 
     private func exerciseRow(for exercise: Exercise) -> some View {
         let exerciseSets = exercise.orderedSets
-        let top = session.topSet(for: exercise)
+        let topLabel = session.topSetLabel(for: exercise, unit: unit)
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: Space.md) {
@@ -201,8 +208,8 @@ struct WorkoutSummaryCard: View {
 
                 Spacer(minLength: Space.sm)
 
-                if let top {
-                    Text("\(WeightFormatter.string(top.weight, unit: unit, includeUnit: false)) × \(top.reps)")
+                if let topLabel {
+                    Text(topLabel)
                         .font(.system(size: 13, weight: .semibold, design: .monospaced))
                         .foregroundStyle(Ink.secondary)
                 } else {

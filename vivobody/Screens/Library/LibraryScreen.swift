@@ -726,7 +726,7 @@ private struct LibraryExercisesContent: View {
     ) -> some View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
-                Text("\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false))×\(last.topReps)")
+                Text(last.metricLabel(unit: unit))
                     .font(.system(size: prominent ? 20 : 16, weight: .bold, design: .monospaced))
                     .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
                     .monospacedDigit()
@@ -735,9 +735,23 @@ private struct LibraryExercisesContent: View {
                     .foregroundStyle(Ink.quaternary)
             }
         } else {
-            Text("\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps")
+            Text(catalogDefaultLabel(item))
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
+        }
+    }
+
+    /// Mode-aware right-side default for an exercise with no history —
+    /// "135 lb · 8 reps" for strength, "0:45 hold" for a timed hold.
+    private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
+        switch item.trackingMode {
+        case .reps:
+            return "\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps"
+        case .duration:
+            let base = "\(DurationFormatter.string(item.defaultDuration)) hold"
+            return item.defaultWeight > 0
+                ? "\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(base)"
+                : base
         }
     }
 

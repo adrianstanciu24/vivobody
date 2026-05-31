@@ -102,6 +102,16 @@ final class TemplateExercise: Identifiable {
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
 
+    /// How this exercise is measured — reps or a timed hold. Stored
+    /// as a raw value; defaulted so existing templates read as reps
+    /// with no migration. Copied to the spawned Exercise at start.
+    var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Planned hold length (seconds) for `.duration` exercises.
+    /// Mirrors `plannedReps` for the timed case. Additive defaulted
+    /// field — no migration.
+    var plannedDuration: TimeInterval = 0
+
     /// Stable position within the parent template.
     var sortOrder: Int = 0
 
@@ -121,6 +131,12 @@ final class TemplateExercise: Identifiable {
     var group: MuscleGroup {
         get { MuscleGroup(rawValue: muscleGroupRaw) ?? .chest }
         set { muscleGroupRaw = newValue.rawValue }
+    }
+
+    /// Computed accessor for the tracking-mode enum.
+    var trackingMode: TrackingMode {
+        get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
+        set { trackingModeRaw = newValue.rawValue }
     }
 
     /// Sets in their stable order. Use everywhere the UI enumerates
@@ -146,6 +162,8 @@ final class TemplateExercise: Identifiable {
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double,
+        trackingMode: TrackingMode = .reps,
+        plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
@@ -154,6 +172,8 @@ final class TemplateExercise: Identifiable {
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
+        self.trackingModeRaw = trackingMode.rawValue
+        self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
     }
 }
@@ -169,6 +189,10 @@ final class TemplateSet: Identifiable {
     var weight: Double = 0
     var reps: Int = 0
 
+    /// Planned hold length (seconds) for a set on a `.duration`
+    /// exercise. Zero for the reps case. Additive defaulted field.
+    var duration: TimeInterval = 0
+
     /// Stable position within the parent exercise's `sets`.
     var sortOrder: Int = 0
 
@@ -180,11 +204,13 @@ final class TemplateSet: Identifiable {
         id: UUID = UUID(),
         weight: Double,
         reps: Int,
+        duration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.weight = weight
         self.reps = reps
+        self.duration = duration
         self.sortOrder = sortOrder
     }
 }
@@ -215,6 +241,8 @@ extension Exercise {
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
                 plannedWeight: orderedSets.first?.weight ?? templateExercise.plannedWeight,
+                trackingMode: templateExercise.trackingMode,
+                plannedDuration: orderedSets.first?.duration ?? templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
             for (i, templateSet) in orderedSets.enumerated() {
@@ -222,6 +250,7 @@ extension Exercise {
                     WorkoutSet(
                         weight: templateSet.weight,
                         reps: templateSet.reps,
+                        duration: templateSet.duration,
                         sortOrder: i
                     )
                 )
@@ -233,6 +262,8 @@ extension Exercise {
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                trackingMode: templateExercise.trackingMode,
+                plannedDuration: templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
         }
@@ -249,6 +280,8 @@ extension Exercise {
             plannedSets: 3,
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeight,
+            trackingMode: item.trackingMode,
+            plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
         )
     }

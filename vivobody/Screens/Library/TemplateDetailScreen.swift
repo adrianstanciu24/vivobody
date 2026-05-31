@@ -223,18 +223,36 @@ struct TemplateDetailScreen: View {
     }
 
     private func exerciseSummary(_ exercise: TemplateExercise) -> String {
-        if exercise.hasPerSetData {
-            let sets = exercise.orderedSets
-            let weights = sets.map(\.weight)
-            guard let lo = weights.min(), let hi = weights.max() else { return "" }
-            if lo == hi, let first = sets.first {
-                return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+        switch exercise.trackingMode {
+        case .reps:
+            if exercise.hasPerSetData {
+                let sets = exercise.orderedSets
+                let weights = sets.map(\.weight)
+                guard let lo = weights.min(), let hi = weights.max() else { return "" }
+                if lo == hi, let first = sets.first {
+                    return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+                }
+                let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
+                let hiStr = WeightFormatter.string(hi, unit: unit)
+                return "\(sets.count) sets · \(loStr)–\(hiStr)"
             }
-            let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
-            let hiStr = WeightFormatter.string(hi, unit: unit)
-            return "\(sets.count) sets · \(loStr)–\(hiStr)"
+            return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+
+        case .duration:
+            if exercise.hasPerSetData {
+                let sets = exercise.orderedSets
+                let durations = sets.map(\.duration)
+                guard let lo = durations.min(), let hi = durations.max() else { return "" }
+                if lo == hi {
+                    return "\(sets.count) × \(DurationFormatter.string(lo)) hold"
+                }
+                return "\(sets.count) sets · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+            }
+            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) hold"
+            return exercise.plannedWeight > 0
+                ? "\(base) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+                : base
         }
-        return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
     }
 
     // MARK: - Start bar
@@ -269,6 +287,8 @@ struct TemplateDetailScreen: View {
             plannedSets: 3,
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeight,
+            trackingMode: item.trackingMode,
+            plannedDuration: item.defaultDuration,
             sortOrder: template.exercises.count
         )
         template.exercises.append(new)

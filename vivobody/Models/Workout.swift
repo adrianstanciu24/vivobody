@@ -41,6 +41,26 @@ enum MuscleGroup: String, Hashable, CaseIterable {
     var accent: Color { Color.white.opacity(0.40) }
 }
 
+// MARK: - Tracking mode
+
+/// How an exercise's sets are measured. Most lifts are `reps`
+/// (weight × reps); isometric / timed work (plank, dead hang,
+/// timed carries) is `duration` — a held interval in seconds, with
+/// weight still optional (weighted plank, loaded carry). Stored as
+/// a raw value on the catalog item, the template exercise, and the
+/// session exercise so the enum can evolve without migrations.
+enum TrackingMode: String, Hashable, CaseIterable {
+    case reps
+    case duration
+
+    var displayName: String {
+        switch self {
+        case .reps:     return "Reps"
+        case .duration: return "Time"
+        }
+    }
+}
+
 // MARK: - Exercise
 
 /// One exercise within a session. Holds its plan parameters AND the
@@ -55,6 +75,16 @@ final class Exercise: Identifiable {
     var plannedSets: Int = 3
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
+
+    /// How this exercise is measured — reps or a timed hold. Stored
+    /// as a raw value; defaulted so existing data reads as reps with
+    /// no migration. Copied from the catalog/template at pick-time.
+    var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Planned hold length (seconds) for `.duration` exercises.
+    /// Mirrors `plannedReps` for the timed case; ignored when the
+    /// mode is `.reps`. Additive defaulted field — no migration.
+    var plannedDuration: TimeInterval = 0
 
     /// Stable position within the parent session. Used to render
     /// exercises in the order the user planned them; SwiftData
@@ -84,6 +114,12 @@ final class Exercise: Identifiable {
         set { muscleGroupRaw = newValue.rawValue }
     }
 
+    /// Computed accessor for the tracking-mode enum.
+    var trackingMode: TrackingMode {
+        get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
+        set { trackingModeRaw = newValue.rawValue }
+    }
+
     /// Sets returned in their stable order. Used everywhere the UI
     /// needs to enumerate set rows.
     var orderedSets: [WorkoutSet] {
@@ -97,6 +133,8 @@ final class Exercise: Identifiable {
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double,
+        trackingMode: TrackingMode = .reps,
+        plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
@@ -105,15 +143,18 @@ final class Exercise: Identifiable {
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
+        self.trackingModeRaw = trackingMode.rawValue
+        self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
 
         // Pre-populate the planned sets. They start uncompleted at
-        // the plan's weight/reps and get updated in-place as the user
-        // adjusts the scrubbers and taps complete.
+        // the plan's weight/reps/duration and get updated in-place as
+        // the user adjusts the scrubbers and taps complete.
         for i in 0..<plannedSets {
             let set = WorkoutSet(
                 weight: plannedWeight,
                 reps: plannedReps,
+                duration: plannedDuration,
                 sortOrder: i
             )
             self.sets.append(set)
@@ -129,6 +170,13 @@ final class WorkoutSet: Identifiable {
     var id: UUID = UUID()
     var weight: Double = 0
     var reps: Int = 0
+
+    /// Held interval (seconds) for sets on a `.duration` exercise.
+    /// Zero for the reps case. Additive defaulted field — no
+    /// migration; the owning exercise's `trackingMode` decides which
+    /// of `reps` / `duration` is the source of truth for this set.
+    var duration: TimeInterval = 0
+
     var isCompleted: Bool = false
 
     /// Stable position within the parent exercise.
@@ -142,14 +190,47 @@ final class WorkoutSet: Identifiable {
         id: UUID = UUID(),
         weight: Double,
         reps: Int,
+        duration: TimeInterval = 0,
         isCompleted: Bool = false,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.weight = weight
         self.reps = reps
+        self.duration = duration
         self.isCompleted = isCompleted
         self.sortOrder = sortOrder
+    }
+}
+
+// MARK: - Set display
+
+extension Exercise {
+    /// Compact, mode-aware label for one set's logged/planned metric,
+    /// with the weight value carried in the user's unit (no unit
+    /// suffix — callers append it where they want it):
+    ///   • reps     → "135 × 8"
+    ///   • duration → "0:45", or "25 × 0:45" when the hold is loaded.
+    /// The single source of truth for how a set reads across the
+    /// summary, history, picker, and detail surfaces.
+    func setLabel(_ set: WorkoutSet, unit: WeightUnit) -> String {
+        switch trackingMode {
+        case .reps:
+            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) × \(set.reps)"
+        case .duration:
+            let time = DurationFormatter.string(set.duration)
+            guard set.weight > 0 else { return time }
+            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) × \(time)"
+        }
+    }
+}
+
+extension WorkoutSession {
+    /// Display label for an exercise's representative top set,
+    /// mode-aware. Nil when nothing's been completed yet.
+    func topSetLabel(for exercise: Exercise, unit: WeightUnit) -> String? {
+        guard let top = topSet(for: exercise) else { return nil }
+        return exercise.setLabel(top, unit: unit)
     }
 }
 
@@ -180,6 +261,8 @@ extension Exercise {
             plannedSets: 0,
             plannedReps: firstSet?.reps ?? source.plannedReps,
             plannedWeight: firstSet?.weight ?? source.plannedWeight,
+            trackingMode: source.trackingMode,
+            plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder
         )
         for (i, sourceSet) in sourceSets.enumerated() {
@@ -187,6 +270,7 @@ extension Exercise {
                 WorkoutSet(
                     weight: sourceSet.weight,
                     reps: sourceSet.reps,
+                    duration: sourceSet.duration,
                     isCompleted: false,
                     sortOrder: i
                 )

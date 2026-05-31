@@ -248,44 +248,96 @@ struct ActiveExerciseCard: View {
     @ViewBuilder
     private var heroBlock: some View {
         if session.activeSet(for: exercise) != nil {
-            VStack(alignment: .leading, spacing: Space.sm) {
-                BareScrubber(
-                    value: weightDisplayBinding,
-                    range: unit.strengthRange,
-                    step: unit.strengthStep,
-                    pointsPerStep: 8,
-                    fontSize: 104,
-                    unit: unit.symbol,
-                    unitFontSize: 18,
-                    numberColor: Ink.primary,
-                    unitColor: Ink.tertiary
-                )
-
-                HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                    Text("×")
-                        .font(.system(size: 30, weight: .regular, design: .monospaced))
-                        .foregroundStyle(Ink.quaternary)
-                    BareScrubber(
-                        value: repsBinding,
-                        range: 1...30,
-                        step: 1,
-                        pointsPerStep: 16,
-                        fontSize: 46,
-                        unit: "reps",
-                        unitFontSize: 14,
-                        numberColor: Ink.secondary,
-                        unitColor: Ink.tertiary
-                    )
-                }
+            switch exercise.trackingMode {
+            case .reps:     repsHero
+            case .duration: durationHero
             }
         } else {
             completedHero
         }
     }
 
+    /// Weight × reps instrument — the default lift.
+    private var repsHero: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            BareScrubber(
+                value: weightDisplayBinding,
+                range: unit.strengthRange,
+                step: unit.strengthStep,
+                pointsPerStep: 8,
+                fontSize: 104,
+                unit: unit.symbol,
+                unitFontSize: 18,
+                numberColor: Ink.primary,
+                unitColor: Ink.tertiary
+            )
+
+            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                Text("×")
+                    .font(.system(size: 30, weight: .regular, design: .monospaced))
+                    .foregroundStyle(Ink.quaternary)
+                BareScrubber(
+                    value: repsBinding,
+                    range: 1...30,
+                    step: 1,
+                    pointsPerStep: 16,
+                    fontSize: 46,
+                    unit: "reps",
+                    unitFontSize: 14,
+                    numberColor: Ink.secondary,
+                    unitColor: Ink.tertiary
+                )
+            }
+        }
+    }
+
+    /// Timed-hold instrument — the big number is the target duration
+    /// (mm:ss); the optional load below handles weighted holds and
+    /// loaded carries. Left at 0 the load simply reads as bodyweight.
+    private var durationHero: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            BareScrubber(
+                value: durationBinding,
+                range: DurationFormatter.scrubRange,
+                step: DurationFormatter.scrubStep,
+                pointsPerStep: 10,
+                fontSize: 104,
+                numberColor: Ink.primary,
+                formatter: { DurationFormatter.string($0) }
+            )
+
+            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                Text("+")
+                    .font(.system(size: 30, weight: .regular, design: .monospaced))
+                    .foregroundStyle(Ink.quaternary)
+                BareScrubber(
+                    value: weightDisplayBinding,
+                    range: unit.strengthRange,
+                    step: unit.strengthStep,
+                    pointsPerStep: 8,
+                    fontSize: 46,
+                    unit: unit.symbol,
+                    unitFontSize: 14,
+                    numberColor: Ink.secondary,
+                    unitColor: Ink.tertiary
+                )
+            }
+        }
+    }
+
     /// Exercise finished — show the top set, locked in gold, static.
+    @ViewBuilder
     private var completedHero: some View {
         let top = sets.last(where: { $0.isCompleted }) ?? sets.last
+        switch exercise.trackingMode {
+        case .reps:
+            completedRepsHero(top)
+        case .duration:
+            completedDurationHero(top)
+        }
+    }
+
+    private func completedRepsHero(_ top: WorkoutSet?) -> some View {
         let weightText = top.map { WeightFormatter.string($0.weight, unit: unit, includeUnit: false) } ?? "—"
         let repsText = top.map { "\($0.reps)" } ?? "—"
         return VStack(alignment: .leading, spacing: Space.sm) {
@@ -313,12 +365,37 @@ struct ActiveExerciseCard: View {
         }
     }
 
+    private func completedDurationHero(_ top: WorkoutSet?) -> some View {
+        let timeText = top.map { DurationFormatter.string($0.duration) } ?? "—"
+        let loaded = (top?.weight ?? 0) > 0
+        return VStack(alignment: .leading, spacing: Space.sm) {
+            Text(timeText)
+                .font(.system(size: 104, weight: .bold, design: .monospaced))
+                .foregroundStyle(Tint.complete)
+                .monospacedDigit()
+            if loaded, let top {
+                HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                    Text("+")
+                        .font(.system(size: 30, weight: .regular, design: .monospaced))
+                        .foregroundStyle(Ink.quaternary)
+                    Text(WeightFormatter.string(top.weight, unit: unit, includeUnit: false))
+                        .font(.system(size: 46, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Tint.complete.opacity(0.85))
+                        .monospacedDigit()
+                    Text(unit.symbol)
+                        .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(Ink.tertiary)
+                }
+            }
+        }
+    }
+
     // MARK: - Last set + action
 
     @ViewBuilder
     private var lastSetCaption: some View {
         if activeIndex != nil, let last = sets.last(where: { $0.isCompleted }) {
-            Text("Last  \(WeightFormatter.string(last.weight, unit: unit, includeUnit: false)) × \(last.reps)")
+            Text("Last  \(exercise.setLabel(last, unit: unit))")
                 .font(.system(size: 13, weight: .medium, design: .monospaced))
                 .foregroundStyle(Ink.tertiary)
                 .padding(.bottom, Space.sm)
@@ -341,12 +418,16 @@ struct ActiveExerciseCard: View {
     private var actionArea: some View {
         if let active = session.activeSet(for: exercise) {
             let isLastSet = activeIndex == sets.count - 1
+            let isHold = exercise.trackingMode == .duration
             SetCompleteButton(
                 reps: active.reps,
                 weight: active.weight,
                 isComplete: pendingCompletionSetID == active.id,
                 intensity: isLastSet ? .peak : .standard,
-                title: isLastSet ? "Finish exercise" : "Complete set",
+                title: completeTitle(isLastSet: isLastSet, isHold: isHold),
+                accessibilityLabelOverride: isHold
+                    ? "Hold \(DurationFormatter.string(active.duration))"
+                    : nil,
                 onToggle: { handleSetToggle(active) }
             )
         } else {
@@ -381,6 +462,7 @@ struct ActiveExerciseCard: View {
         let newSet = WorkoutSet(
             weight: seed?.weight ?? exercise.plannedWeight,
             reps: seed?.reps ?? exercise.plannedReps,
+            duration: seed?.duration ?? exercise.plannedDuration,
             sortOrder: exercise.sets.count
         )
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
@@ -465,6 +547,30 @@ struct ActiveExerciseCard: View {
         )
     }
 
+    private var displayedDuration: TimeInterval {
+        session.activeSet(for: exercise)?.duration ?? exercise.plannedDuration
+    }
+
+    /// Hold length scrubbed in seconds (Double for BareScrubber),
+    /// written back to the active set as a TimeInterval.
+    private var durationBinding: Binding<Double> {
+        Binding(
+            get: { displayedDuration },
+            set: { new in
+                session.updateActiveDuration(for: exercise, duration: new)
+            }
+        )
+    }
+
+    /// Verb for the complete button — mode + position aware. Timed
+    /// holds finish as "Finish hold"; reps finish as "Finish exercise."
+    private func completeTitle(isLastSet: Bool, isHold: Bool) -> String {
+        if isLastSet {
+            return isHold ? "Finish hold" : "Finish exercise"
+        }
+        return isHold ? "Complete hold" : "Complete set"
+    }
+
     // MARK: - Completion pipeline
 
     /// Run the PR-detect + auto-advance pipeline. Holds the visual
@@ -473,7 +579,9 @@ struct ActiveExerciseCard: View {
     private func handleSetToggle(_ set: WorkoutSet) {
         let weight = set.weight
         let reps = set.reps
+        let duration = set.duration
         let exerciseName = exercise.name
+        let mode = exercise.trackingMode
 
         pendingCompletionSetID = set.id
 
@@ -482,8 +590,10 @@ struct ActiveExerciseCard: View {
 
             let prKind = detectPersonalRecord(
                 exerciseName: exerciseName,
+                mode: mode,
                 weight: weight,
-                reps: reps
+                reps: reps,
+                duration: duration
             )
 
             withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
@@ -492,7 +602,14 @@ struct ActiveExerciseCard: View {
             pendingCompletionSetID = nil
 
             if let prKind {
-                session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
+                switch prKind {
+                case .weight, .volume:
+                    session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
+                    session.pendingPRUnit = unit.symbol
+                case .duration:
+                    session.pendingPRValue = DurationFormatter.string(duration)
+                    session.pendingPRUnit = nil
+                }
                 session.pendingPRDetail = detailLine(
                     exerciseName: exerciseName,
                     reps: reps,
@@ -533,15 +650,20 @@ struct ActiveExerciseCard: View {
     private enum PRKind {
         case weight
         case volume
+        case duration
     }
 
-    /// Returns the *kind* of PR a `(weight, reps)` set sets, or nil
-    /// if it doesn't beat the user's previous best on this exercise
-    /// on either axis. Weight PR takes priority when both fire.
+    /// Returns the *kind* of PR a completed set sets, or nil if it
+    /// doesn't beat the user's previous best on this exercise. For
+    /// `.reps` exercises the axes are weight (priority) then volume;
+    /// for `.duration` exercises it's the longest hold. Compares
+    /// against archived + in-session prior sets.
     private func detectPersonalRecord(
         exerciseName: String,
+        mode: TrackingMode,
         weight: Double,
-        reps: Int
+        reps: Int,
+        duration: TimeInterval
     ) -> PRKind? {
         let descriptor = FetchDescriptor<Exercise>(
             predicate: #Predicate { $0.name == exerciseName }
@@ -555,17 +677,26 @@ struct ActiveExerciseCard: View {
 
         let allPriorSets = archivedPriorSets + inSessionPriorSets
 
-        guard !allPriorSets.isEmpty else { return nil }
-
-        let maxWeight = allPriorSets.map(\.weight).max() ?? 0
-        let maxVolume = allPriorSets
-            .map { $0.weight * Double($0.reps) }
-            .max() ?? 0
-        let candidateVolume = weight * Double(reps)
-
-        if weight > maxWeight { return .weight }
-        if candidateVolume > maxVolume { return .volume }
-        return nil
+        switch mode {
+        case .reps:
+            guard !allPriorSets.isEmpty else { return nil }
+            let maxWeight = allPriorSets.map(\.weight).max() ?? 0
+            let maxVolume = allPriorSets
+                .map { $0.weight * Double($0.reps) }
+                .max() ?? 0
+            let candidateVolume = weight * Double(reps)
+            if weight > maxWeight { return .weight }
+            if candidateVolume > maxVolume { return .volume }
+            return nil
+        case .duration:
+            // Only compare against prior *timed* holds, so a newly
+            // tracked hold doesn't "beat" legacy zero-duration
+            // records and fire a hollow PR.
+            let priorHolds = allPriorSets.map(\.duration).filter { $0 > 0 }
+            guard let maxDuration = priorHolds.max() else { return nil }
+            if duration > maxDuration { return .duration }
+            return nil
+        }
     }
 
     private func detailLine(
@@ -578,6 +709,8 @@ struct ActiveExerciseCard: View {
             return "\(exerciseName) · New max"
         case .volume:
             return "\(exerciseName) · \(reps) reps"
+        case .duration:
+            return "\(exerciseName) · Longest hold"
         }
     }
 }

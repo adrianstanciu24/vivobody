@@ -16,6 +16,10 @@ struct EditSetSheet: View {
     @Bindable var set: WorkoutSet
     @Environment(\.dismiss) private var dismiss
 
+    /// The set's tracking mode comes from its owning exercise —
+    /// decides whether we edit reps or a held interval.
+    private var mode: TrackingMode { self.set.exercise?.trackingMode ?? .reps }
+
     /// NumberScrubber operates on Double; reps live as Int in the
     /// model. Round on every set so the model stays integer-clean.
     private var repsBinding: Binding<Double> {
@@ -32,28 +36,59 @@ struct EditSetSheet: View {
         )
     }
 
+    private var durationBinding: Binding<Double> {
+        Binding(
+            get: { set.duration },
+            set: { set.duration = $0 }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 14) {
-                WeightScrubber(
-                    canonicalWeight: weightBinding,
-                    purpose: .strength,
-                    label: "weight",
-                    pointsPerStep: 8,
-                    valueFontSize: 40,
-                    verticalPadding: 14
-                )
+                switch mode {
+                case .reps:
+                    WeightScrubber(
+                        canonicalWeight: weightBinding,
+                        purpose: .strength,
+                        label: "weight",
+                        pointsPerStep: 8,
+                        valueFontSize: 40,
+                        verticalPadding: 14
+                    )
 
-                NumberScrubber(
-                    value: repsBinding,
-                    range: 1...30,
-                    step: 1,
-                    pointsPerStep: 16,
-                    unit: "reps",
-                    label: "reps",
-                    valueFontSize: 32,
-                    verticalPadding: 12
-                )
+                    NumberScrubber(
+                        value: repsBinding,
+                        range: 1...30,
+                        step: 1,
+                        pointsPerStep: 16,
+                        unit: "reps",
+                        label: "reps",
+                        valueFontSize: 32,
+                        verticalPadding: 12
+                    )
+
+                case .duration:
+                    NumberScrubber(
+                        value: durationBinding,
+                        range: DurationFormatter.scrubRange,
+                        step: DurationFormatter.scrubStep,
+                        pointsPerStep: 10,
+                        label: "hold",
+                        valueFontSize: 40,
+                        verticalPadding: 14,
+                        formatter: { DurationFormatter.string($0) }
+                    )
+
+                    WeightScrubber(
+                        canonicalWeight: weightBinding,
+                        purpose: .strength,
+                        label: "added load",
+                        pointsPerStep: 8,
+                        valueFontSize: 32,
+                        verticalPadding: 12
+                    )
+                }
 
                 Spacer(minLength: 0)
             }

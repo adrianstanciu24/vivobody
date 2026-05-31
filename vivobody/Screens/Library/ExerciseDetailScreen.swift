@@ -189,14 +189,20 @@ struct ExerciseDetailScreen: View {
     }
 
     /// Sentence-case classification line: equipment · pattern (when
-    /// compound) · mechanic. Replaces the old chip strip with plain
-    /// type, same vocabulary as the catalog row meta.
+    /// compound) · mechanic · plane · unilateral (only when it is —
+    /// bilateral is the unremarkable default, so we omit it). Replaces
+    /// the old chip strip with plain type, same vocabulary as the
+    /// catalog row meta.
     private var metaLine: String {
         var parts = [item.equipment.displayName]
         if item.mechanic == .compound, let pattern = item.pattern {
             parts.append(pattern.displayName)
         }
         parts.append(item.mechanic.displayName)
+        parts.append(item.plane.displayName)
+        if item.laterality == .unilateral {
+            parts.append(item.laterality.displayName)
+        }
         return parts.joined(separator: " · ")
     }
 
@@ -431,7 +437,7 @@ struct ExerciseDetailScreen: View {
             }
             .frame(width: 90, alignment: .leading)
 
-            Text("\(WeightFormatter.string(row.topWeight, unit: unit)) × \(row.topReps)")
+            Text(recentMetricLabel(row))
                 .font(.system(size: 14, weight: .semibold, design: .monospaced))
                 .foregroundStyle(row.isPR ? Tint.complete : Ink.primary)
                 .monospacedDigit()
@@ -462,11 +468,22 @@ struct ExerciseDetailScreen: View {
                 .sectionLabelStyle(0.60)
 
             HStack(spacing: Space.lg) {
-                defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight, unit: unit))
-                Rectangle()
-                    .fill(Surface.edge)
-                    .frame(width: 0.5, height: 32)
-                defaultStat(label: "Reps", value: "\(item.defaultReps)")
+                switch item.trackingMode {
+                case .reps:
+                    defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight, unit: unit))
+                    Rectangle()
+                        .fill(Surface.edge)
+                        .frame(width: 0.5, height: 32)
+                    defaultStat(label: "Reps", value: "\(item.defaultReps)")
+                case .duration:
+                    defaultStat(label: "Hold", value: DurationFormatter.string(item.defaultDuration))
+                    if item.defaultWeight > 0 {
+                        Rectangle()
+                            .fill(Surface.edge)
+                            .frame(width: 0.5, height: 32)
+                        defaultStat(label: "Load", value: WeightFormatter.string(item.defaultWeight, unit: unit))
+                    }
+                }
                 Spacer()
                 Text("Used when first picked")
                     .font(Typography.caption)
@@ -529,8 +546,23 @@ struct ExerciseDetailScreen: View {
         let date: Date
         let topWeight: Double
         let topReps: Int
+        let topDuration: TimeInterval
         let setCount: Int
         let isPR: Bool
+    }
+
+    /// Mode-aware top-set label for a recent row — "145 lb × 8" for
+    /// strength, "0:45" (or "25 lb × 0:45" when loaded) for a hold.
+    private func recentMetricLabel(_ row: RecentSessionRow) -> String {
+        switch item.trackingMode {
+        case .reps:
+            return "\(WeightFormatter.string(row.topWeight, unit: unit)) × \(row.topReps)"
+        case .duration:
+            let time = DurationFormatter.string(row.topDuration)
+            return row.topWeight > 0
+                ? "\(WeightFormatter.string(row.topWeight, unit: unit)) × \(time)"
+                : time
+        }
     }
 
     /// Lowercased name lookup key matching the convention used in
@@ -572,13 +604,16 @@ struct ExerciseDetailScreen: View {
     private var recentRows: [RecentSessionRow] {
         // Walk archive newest-first (already sorted that way via
         // the @Query order: .reverse), pick up to 5 sessions that
-        // include this exercise.
-        let allTimeBest = completedSessions
+        // include this exercise. The "best" axis is mode-aware:
+        // heaviest weight for reps, longest hold for duration.
+        let isDuration = item.trackingMode == .duration
+        let completedSets = completedSessions
             .flatMap(\.orderedExercises)
             .filter { $0.name.lowercased() == nameKey }
             .flatMap { $0.sets.filter(\.isCompleted) }
-            .map(\.weight)
-            .max() ?? 0
+        let allTimeBest = isDuration
+            ? (completedSets.map(\.duration).max() ?? 0)
+            : (completedSets.map(\.weight).max() ?? 0)
 
         var rows: [RecentSessionRow] = []
         for session in completedSessions {
@@ -588,18 +623,22 @@ struct ExerciseDetailScreen: View {
             let completed = exercise.sets.filter(\.isCompleted)
             guard !completed.isEmpty else { continue }
 
-            let top = completed.max { a, b in
-                if a.weight == b.weight { return a.reps < b.reps }
-                return a.weight < b.weight
-            }!
+            let top = isDuration
+                ? completed.max { a, b in a.duration < b.duration }!
+                : completed.max { a, b in
+                    if a.weight == b.weight { return a.reps < b.reps }
+                    return a.weight < b.weight
+                }!
             let date = session.completedAt ?? session.startedAt
+            let metric = isDuration ? top.duration : top.weight
 
             rows.append(RecentSessionRow(
                 date: date,
                 topWeight: top.weight,
                 topReps: top.reps,
+                topDuration: top.duration,
                 setCount: completed.count,
-                isPR: top.weight >= allTimeBest
+                isPR: metric >= allTimeBest && metric > 0
             ))
 
             if rows.count >= 5 { break }
@@ -610,9 +649,10 @@ struct ExerciseDetailScreen: View {
     // MARK: - Display strings (stats row)
 
     /// "145 × 8" (in user's unit) when there's history; "—" otherwise.
+    /// Mode-aware via `LastExerciseInstance.metricLabel`.
     private var lastValueString: String {
         guard let last = lastInstance else { return "—" }
-        return "\(WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)) × \(last.topReps)"
+        return last.metricLabel(unit: unit)
     }
 
     private var lastDetailString: String? {
@@ -621,26 +661,35 @@ struct ExerciseDetailScreen: View {
     }
 
     private var bestValueString: String {
+        let isDuration = item.trackingMode == .duration
         guard let prog = progress else {
             // Progress requires >=2 sessions. If we have 1, surface
             // that single top set as the "best" so the column isn't
             // empty when the user is just getting started.
             if let last = lastInstance {
-                return WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)
+                return isDuration
+                    ? DurationFormatter.string(last.topDuration)
+                    : WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)
             }
             return "—"
         }
-        return WeightFormatter.string(prog.bestWeight, unit: unit, includeUnit: false)
+        return isDuration
+            ? DurationFormatter.string(prog.bestDuration)
+            : WeightFormatter.string(prog.bestWeight, unit: unit, includeUnit: false)
     }
 
     private var bestDetailString: String? {
+        let isDuration = item.trackingMode == .duration
         guard let prog = progress else {
             // For a one-session user the "best" IS today's session.
             guard let last = lastInstance else { return nil }
             return RelativeDate.short(last.sessionDate)
         }
-        // Find when the all-time best was achieved.
-        if let bestPoint = prog.points.first(where: { $0.topWeight == prog.bestWeight }) {
+        // Find when the all-time best was achieved (on the active axis).
+        let bestPoint = isDuration
+            ? prog.points.first(where: { $0.topDuration == prog.bestDuration })
+            : prog.points.first(where: { $0.topWeight == prog.bestWeight })
+        if let bestPoint {
             return RelativeDate.short(bestPoint.date)
         }
         return nil
@@ -666,10 +715,13 @@ struct ExerciseDetailScreen: View {
         return prog.points.filter { $0.date >= cutoff }
     }
 
-    /// Convert canonical-lb top weight to the display unit for the
-    /// chart's y-axis. Same pattern used in ExerciseProgressDetail.
+    /// The y-value for a chart point. Duration exercises plot the
+    /// hold length in seconds; strength exercises plot top weight
+    /// converted to the user's display unit.
     private func chartValue(for point: ExerciseProgressPoint) -> Double {
-        WeightFormatter.toDisplay(point.topWeight, unit: unit)
+        item.trackingMode == .duration
+            ? point.topDuration
+            : WeightFormatter.toDisplay(point.topWeight, unit: unit)
     }
 
     // MARK: - Mutations

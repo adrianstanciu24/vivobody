@@ -4,7 +4,7 @@ iOS workout tracker built from scratch in SwiftUI + SwiftData. Dark-themed,
 gesture-first, all data on-device. Single developer (astanciu), iterative work.
 
 ## Stack
-- **iOS 26.4** (Xcode 17, Swift 6) — uses iOS-26 idioms (`@Bindable`, `.toolbar`, `.searchable`, `RenameButton`, `tabBarMinimizeBehavior`)
+- **iOS 26.5** (Xcode 17, Swift 6) — uses iOS-26 idioms (`@Bindable`, `.toolbar`, `.searchable`, `RenameButton`, `tabBarMinimizeBehavior`)
 - **SwiftUI** for all UI; **SwiftData** (`@Model`, `@Query`) for persistence; **Charts** for progress graphs
 - No third-party libraries. Native everything.
 

@@ -99,18 +99,29 @@ struct ExerciseProgressDetail: View {
                 .foregroundStyle(progress.group.accent)
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
-                Text(WeightFormatter.string(progress.bestWeight, unit: unit, includeUnit: false))
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                Text(unit.symbol)
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(.white.opacity(0.55))
+                if isDuration {
+                    Text(DurationFormatter.string(progress.bestDuration))
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                } else {
+                    Text(WeightFormatter.string(progress.bestWeight, unit: unit, includeUnit: false))
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                    Text(unit.symbol)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(.white.opacity(0.55))
+                }
 
                 Spacer()
 
-                if let delta = progress.weightDelta, delta != 0 {
-                    deltaChip(delta: delta)
+                if isDuration {
+                    if let delta = progress.durationDelta, delta != 0 {
+                        deltaChip(isUp: delta > 0, valueText: DurationFormatter.deltaString(delta))
+                    }
+                } else if let delta = progress.weightDelta, delta != 0 {
+                    deltaChip(isUp: delta > 0, valueText: WeightFormatter.deltaString(delta, unit: unit))
                 }
             }
 
@@ -120,13 +131,12 @@ struct ExerciseProgressDetail: View {
         }
     }
 
-    private func deltaChip(delta: Double) -> some View {
-        let isUp = delta > 0
+    private func deltaChip(isUp: Bool, valueText: String) -> some View {
         let chipColor: Color = isUp ? Tint.success : Tint.danger
         return HStack(spacing: 4) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
                 .font(.system(size: 11, weight: .bold))
-            Text(WeightFormatter.deltaString(delta, unit: unit))
+            Text(valueText)
                 .font(.system(size: 12, weight: .semibold, design: .monospaced))
         }
         .foregroundStyle(chipColor)
@@ -139,10 +149,16 @@ struct ExerciseProgressDetail: View {
 
     // MARK: - Metric strip
 
+    /// Hidden for `.duration` exercises — the weight-centric metrics
+    /// (top weight / volume / e1RM) don't apply to timed holds, which
+    /// chart a single axis: hold length.
+    @ViewBuilder
     private var metricStrip: some View {
-        HStack(spacing: 8) {
-            ForEach(Metric.allCases) { m in
-                metricChip(m)
+        if !isDuration {
+            HStack(spacing: 8) {
+                ForEach(Metric.allCases) { m in
+                    metricChip(m)
+                }
             }
         }
     }
@@ -279,7 +295,7 @@ struct ExerciseProgressDetail: View {
                             .foregroundStyle(.white.opacity(0.60))
                             .frame(width: 90, alignment: .leading)
 
-                        Text("\(WeightFormatter.string(point.topWeight, unit: unit)) × \(point.topReps)")
+                        Text(recentLabel(point))
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(.white)
 
@@ -310,15 +326,32 @@ struct ExerciseProgressDetail: View {
 
     // MARK: - Derived
 
+    private var isDuration: Bool { progress.trackingMode == .duration }
+
     private var visiblePoints: [ExerciseProgressPoint] {
         guard let cutoff = range.cutoff else { return progress.points }
         return progress.points.filter { $0.date >= cutoff }
     }
 
+    /// Mode-aware recent-table label: "145 lb × 8" for strength,
+    /// "0:45" (or "25 lb × 0:45" when loaded) for a hold.
+    private func recentLabel(_ point: ExerciseProgressPoint) -> String {
+        if isDuration {
+            let time = DurationFormatter.string(point.topDuration)
+            return point.topWeight > 0
+                ? "\(WeightFormatter.string(point.topWeight, unit: unit)) × \(time)"
+                : time
+        }
+        return "\(WeightFormatter.string(point.topWeight, unit: unit)) × \(point.topReps)"
+    }
+
     /// Chart y-values are returned in the user's display unit so the
     /// auto-computed y-axis labels read naturally ("60", "70", "80"
-    /// kg) instead of canonical lb numbers wearing a kg suffix.
+    /// kg) instead of canonical lb numbers wearing a kg suffix. For
+    /// `.duration` exercises the axis is hold length in seconds and
+    /// no unit conversion applies.
     private func value(for point: ExerciseProgressPoint) -> Double {
+        if isDuration { return point.topDuration }
         let canonical: Double
         switch metric {
         case .topWeight: canonical = point.topWeight

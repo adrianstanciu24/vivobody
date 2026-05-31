@@ -88,7 +88,7 @@ struct ActiveWorkoutScreen: View {
                 isPresented: prPresentationBinding,
                 title: "Personal record",
                 value: session.pendingPRValue ?? "",
-                unit: unit.symbol,
+                unit: session.pendingPRUnit,
                 detail: session.pendingPRDetail
             )
             .zIndex(20)
@@ -189,6 +189,7 @@ struct ActiveWorkoutScreen: View {
                 if !newValue {
                     session.pendingPRValue = nil
                     session.pendingPRDetail = nil
+                    session.pendingPRUnit = nil
                 }
             }
         )

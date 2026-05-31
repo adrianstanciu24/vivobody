@@ -34,6 +34,10 @@ struct SetCompleteButton: View {
     /// deletes. Icons are reserved for navigation — the action is a
     /// word.
     var title: String? = nil
+    /// Overrides the spoken VoiceOver label. Used for timed holds,
+    /// where "8 reps at 0 pounds" would be meaningless — the card
+    /// passes "Hold 0:45" instead.
+    var accessibilityLabelOverride: String? = nil
     let onToggle: () -> Void
 
     @State private var pressScale: CGFloat = 1
@@ -72,7 +76,7 @@ struct SetCompleteButton: View {
         )
         .gesture(tapGesture)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(reps) reps at \(Int(weight)) pounds")
+        .accessibilityLabel(accessibilityLabelOverride ?? "\(reps) reps at \(Int(weight)) pounds")
         .accessibilityValue(isComplete ? "completed" : "not completed")
         .accessibilityAddTraits(.isButton)
         .accessibilityHint(isComplete ? "Double tap to undo." : "Double tap to complete the set.")

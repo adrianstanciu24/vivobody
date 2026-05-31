@@ -242,23 +242,39 @@ private struct ExerciseDetailRow: View {
     let unit: WeightUnit
     let isPR: Bool
 
+    private var mode: TrackingMode { exercise.trackingMode }
+
     private var orderedSets: [WorkoutSet] { exercise.orderedSets }
 
-    /// Heaviest completed set in this exercise, singled out with the
-    /// gold completion accent. Tiebreak on reps so 135×10 beats 135×8.
+    /// The exercise's standout completed set, singled out with the
+    /// gold completion accent. Mode-aware: heaviest lift for reps
+    /// (tiebreak on reps so 135×10 beats 135×8), longest hold for
+    /// duration.
     private var topSet: WorkoutSet? {
-        exercise.sets
-            .filter(\.isCompleted)
-            .max(by: { (a, b) in
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch mode {
+        case .reps:
+            return completed.max { a, b in
                 if a.weight == b.weight { return a.reps < b.reps }
                 return a.weight < b.weight
-            })
+            }
+        case .duration:
+            return completed.max { a, b in a.duration < b.duration }
+        }
     }
 
     private var exerciseVolume: Double {
         exercise.sets
             .filter(\.isCompleted)
             .reduce(0) { $0 + $1.weight * Double($1.reps) }
+    }
+
+    /// Total time held across completed sets — the `.duration`
+    /// counterpart to `exerciseVolume`, shown in the row header.
+    private var totalHold: TimeInterval {
+        exercise.sets
+            .filter(\.isCompleted)
+            .reduce(0) { $0 + $1.duration }
     }
 
     var body: some View {
@@ -287,15 +303,30 @@ private struct ExerciseDetailRow: View {
 
             Spacer(minLength: Space.sm)
 
-            if exerciseVolume > 0 {
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
-                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
-                        .monospacedDigit()
-                    Text(unit.symbol)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundStyle(Ink.quaternary)
+            switch mode {
+            case .reps:
+                if exerciseVolume > 0 {
+                    HStack(alignment: .lastTextBaseline, spacing: 3) {
+                        Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                            .monospacedDigit()
+                        Text(unit.symbol)
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .foregroundStyle(Ink.quaternary)
+                    }
+                }
+            case .duration:
+                if totalHold > 0 {
+                    HStack(alignment: .lastTextBaseline, spacing: 3) {
+                        Text(DurationFormatter.compact(totalHold))
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                            .monospacedDigit()
+                        Text("hold")
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .foregroundStyle(Ink.quaternary)
+                    }
                 }
             }
         }
@@ -329,6 +360,19 @@ private struct ExerciseDetailRow: View {
 
             Spacer(minLength: 12)
 
+            setValue(set: set, textColor: textColor)
+        }
+        .padding(.vertical, 4)
+        .frame(maxWidth: .infinity)
+    }
+
+    /// The trailing metric cluster of a set row. Reps render as
+    /// "135 lb × 8"; holds render as "0:45" — prefixed with the
+    /// load ("25 lb · 0:45") only when the hold was weighted.
+    @ViewBuilder
+    private func setValue(set: WorkoutSet, textColor: Color) -> some View {
+        switch mode {
+        case .reps:
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
                     .font(.system(size: 15, weight: .semibold, design: .monospaced))
@@ -349,9 +393,30 @@ private struct ExerciseDetailRow: View {
                 .foregroundStyle(textColor)
                 .monospacedDigit()
                 .frame(width: 28, alignment: .trailing)
+
+        case .duration:
+            if set.weight > 0 {
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
+                        .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(textColor)
+                        .monospacedDigit()
+                    Text(unit.symbol)
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(Ink.quaternary)
+                }
+                Text("·")
+                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                    .foregroundStyle(Ink.quaternary)
+                    .padding(.horizontal, 10)
+            }
+
+            Text(DurationFormatter.string(set.duration))
+                .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                .foregroundStyle(textColor)
+                .monospacedDigit()
+                .frame(minWidth: 48, alignment: .trailing)
         }
-        .padding(.vertical, 4)
-        .frame(maxWidth: .infinity)
     }
 
     private func statusPip(isCompleted: Bool, isTopSet: Bool) -> some View {

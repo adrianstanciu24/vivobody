@@ -74,6 +74,12 @@ final class WorkoutSession: Identifiable {
     /// when a PR is detected; cleared together on dismiss.
     var pendingPRDetail: String? = nil
 
+    /// Unit suffix for the celebration hero — the weight symbol
+    /// ("lb"/"kg") for strength PRs, nil for timed-hold PRs (whose
+    /// value is already a self-describing "m:ss"). Additive defaulted
+    /// field. Set together with `pendingPRValue`.
+    var pendingPRUnit: String? = nil
+
     init(
         id: UUID = UUID(),
         exercises: [Exercise] = [],
@@ -146,6 +152,14 @@ final class WorkoutSession: Identifiable {
         ordered[index].reps = reps
     }
 
+    /// Set the active (timed) set's hold length. Counterpart to
+    /// `updateActiveReps` for `.duration` exercises.
+    func updateActiveDuration(for exercise: Exercise, duration: TimeInterval) {
+        let ordered = exercise.orderedSets
+        guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return }
+        ordered[index].duration = duration
+    }
+
     func skipRest() {
         isResting = false
         restStartedAt = nil
@@ -173,17 +187,39 @@ final class WorkoutSession: Identifiable {
         exercises.flatMap(\.sets)
     }
 
-    /// Sum of `weight × reps` across all completed sets.
+    /// Sum of `weight × reps` across all completed sets of `.reps`
+    /// exercises. Timed (`.duration`) holds carry no weight×reps
+    /// volume — their effort is tracked as `totalHoldTime` instead —
+    /// so they're excluded here to keep the headline metric honest.
     var totalVolume: Double {
-        allSets
-            .filter(\.isCompleted)
-            .reduce(0) { $0 + $1.weight * Double($1.reps) }
+        exercises.reduce(0) { acc, ex in
+            guard ex.trackingMode == .reps else { return acc }
+            return acc + ex.sets
+                .filter(\.isCompleted)
+                .reduce(0) { $0 + $1.weight * Double($1.reps) }
+        }
     }
 
     var totalReps: Int {
-        allSets
-            .filter(\.isCompleted)
-            .reduce(0) { $0 + $1.reps }
+        exercises.reduce(0) { acc, ex in
+            guard ex.trackingMode == .reps else { return acc }
+            return acc + ex.sets
+                .filter(\.isCompleted)
+                .reduce(0) { $0 + $1.reps }
+        }
+    }
+
+    /// Total time held across completed sets of every `.duration`
+    /// exercise — the timed counterpart to `totalVolume`. Surfaced
+    /// alongside volume on the summary only when any holds were
+    /// logged, so reps-only sessions read exactly as before.
+    var totalHoldTime: TimeInterval {
+        exercises.reduce(0) { acc, ex in
+            guard ex.trackingMode == .duration else { return acc }
+            return acc + ex.sets
+                .filter(\.isCompleted)
+                .reduce(0) { $0 + $1.duration }
+        }
     }
 
     var totalSets: Int {
@@ -194,16 +230,25 @@ final class WorkoutSession: Identifiable {
         allSets.count
     }
 
-    /// Returns the heaviest completed set in an exercise (by weight,
-    /// with reps used as the tiebreaker). Used by the summary card to
-    /// show a single representative "top set" per exercise.
+    /// Returns the single representative "top set" for an exercise.
+    /// For `.reps` exercises that's the heaviest completed set (reps
+    /// as tiebreaker); for `.duration` exercises it's the longest
+    /// completed hold (weight as tiebreaker). Used by the summary
+    /// card and history detail.
     func topSet(for exercise: Exercise) -> WorkoutSet? {
-        exercise.sets
-            .filter(\.isCompleted)
-            .max(by: { (a, b) in
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch exercise.trackingMode {
+        case .reps:
+            return completed.max(by: { (a, b) in
                 if a.weight == b.weight { return a.reps < b.reps }
                 return a.weight < b.weight
             })
+        case .duration:
+            return completed.max(by: { (a, b) in
+                if a.duration == b.duration { return a.weight < b.weight }
+                return a.duration < b.duration
+            })
+        }
     }
 
     /// Live wall-clock duration. When the workout is still in

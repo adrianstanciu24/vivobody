@@ -109,6 +109,62 @@ enum MovementPattern: String, Hashable, CaseIterable {
     }
 }
 
+// MARK: - Movement plane
+
+/// The anatomical plane the lift's working limbs primarily travel
+/// through. Unlike `MovementPattern` (push/pull only) this applies to
+/// every exercise, so it's non-optional and defaults to `.sagittal` —
+/// where the overwhelming majority of barbell work lives. Drives a
+/// future "plane coverage" stat so the user can see whether they ever
+/// load the frontal/transverse planes or live entirely in the
+/// sagittal one.
+///
+/// Classification heuristic (kept deliberately simple so tagging is
+/// unambiguous and the coverage metric stays honest):
+///   • transverse — rotation or a pure horizontal arm ad/abduction:
+///     twists, Pallof, flys, pec deck, rear-delt fly, face pull.
+///   • frontal    — lateral travel / ab-adduction in the coronal
+///     plane: lateral raise, hip ab/adduction, side plank, upright row.
+///   • sagittal   — everything else (forward/back, up/down): all
+///     squats, hinges, presses, rows, vertical pulls, curls,
+///     extensions, planks, carries.
+/// Multi-joint presses stay sagittal even though the shoulder
+/// horizontally adducts — the press pattern dominates; a pure fly,
+/// whose only action is that adduction, is transverse.
+enum MovementPlane: String, Hashable, CaseIterable {
+    case sagittal
+    case frontal
+    case transverse
+
+    var displayName: String {
+        switch self {
+        case .sagittal:   return "Sagittal"
+        case .frontal:    return "Frontal"
+        case .transverse: return "Transverse"
+        }
+    }
+}
+
+// MARK: - Laterality
+
+/// Whether the lift loads both sides together or one side at a time.
+/// Non-optional with a `.bilateral` default — most barbell/machine
+/// work is bilateral. Unilateral lifts (split squat, single-arm row,
+/// lunges) are logged/loaded per side, so this is the hook a future
+/// per-side logging or left/right balance feature reads. Bounded,
+/// trivially taggable on seeds and user-created entries alike.
+enum Laterality: String, Hashable, CaseIterable {
+    case bilateral
+    case unilateral
+
+    var displayName: String {
+        switch self {
+        case .bilateral:  return "Bilateral"
+        case .unilateral: return "Unilateral"
+        }
+    }
+}
+
 /// One entry in the picker. Carries a sensible default starting
 /// weight so the user doesn't always have to scrub from zero; the
 /// weight can still be adjusted per-template afterward.
@@ -119,6 +175,16 @@ final class ExerciseCatalogItem: Identifiable {
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var defaultWeight: Double = 0
     var defaultReps: Int = 8
+
+    /// How this exercise is measured — reps or a timed hold. Stored
+    /// as a raw value; defaulted so existing catalogs read as reps
+    /// with no migration. Copied to templates / sessions at pick-time.
+    var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Default hold length (seconds) for `.duration` exercises —
+    /// the timed counterpart to `defaultReps`. Ignored when the mode
+    /// is `.reps`. Additive defaulted field — no migration.
+    var defaultDuration: TimeInterval = 0
 
     /// Primary equipment used. Defaults to barbell on a new entry
     /// (matches the most common case for a serious lifter) but can
@@ -136,6 +202,18 @@ final class ExerciseCatalogItem: Identifiable {
     /// the store — the editor just hides the pattern selector when
     /// mechanic is isolation.
     var patternRaw: String? = nil
+
+    /// Anatomical plane the lift primarily trains. Non-optional with a
+    /// `.sagittal` default — every exercise lives in some plane and
+    /// most live here. Stored as raw value so `MovementPlane` can
+    /// evolve without breaking the schema. Additive defaulted field,
+    /// so no migration for existing catalogs.
+    var planeRaw: String = MovementPlane.sagittal.rawValue
+
+    /// Bilateral (both sides at once) vs. unilateral (one side at a
+    /// time). Non-optional with a `.bilateral` default. Additive
+    /// defaulted field, so no migration for existing catalogs.
+    var lateralityRaw: String = Laterality.bilateral.rawValue
 
     /// Alternate names / abbreviations the user might type to find
     /// this exercise. e.g. "BP", "Flat Bench" → Bench Press. Searched
@@ -167,6 +245,12 @@ final class ExerciseCatalogItem: Identifiable {
         set { muscleGroupRaw = newValue.rawValue }
     }
 
+    /// Computed accessor for the tracking-mode enum.
+    var trackingMode: TrackingMode {
+        get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
+        set { trackingModeRaw = newValue.rawValue }
+    }
+
     var equipment: Equipment {
         get { Equipment(rawValue: equipmentRaw) ?? .barbell }
         set { equipmentRaw = newValue.rawValue }
@@ -191,15 +275,29 @@ final class ExerciseCatalogItem: Identifiable {
         set { patternRaw = newValue?.rawValue }
     }
 
+    var plane: MovementPlane {
+        get { MovementPlane(rawValue: planeRaw) ?? .sagittal }
+        set { planeRaw = newValue.rawValue }
+    }
+
+    var laterality: Laterality {
+        get { Laterality(rawValue: lateralityRaw) ?? .bilateral }
+        set { lateralityRaw = newValue.rawValue }
+    }
+
     init(
         id: UUID = UUID(),
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
         defaultReps: Int = 8,
+        trackingMode: TrackingMode = .reps,
+        defaultDuration: TimeInterval = 0,
         equipment: Equipment = .barbell,
         mechanic: Mechanic = .compound,
         pattern: MovementPattern? = nil,
+        plane: MovementPlane = .sagittal,
+        laterality: Laterality = .bilateral,
         aliases: [String] = [],
         notes: String = "",
         isUserCreated: Bool = false,
@@ -210,9 +308,13 @@ final class ExerciseCatalogItem: Identifiable {
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
         self.defaultReps = defaultReps
+        self.trackingModeRaw = trackingMode.rawValue
+        self.defaultDuration = defaultDuration
         self.equipmentRaw = equipment.rawValue
         self.mechanicRaw = mechanic.rawValue
         self.patternRaw = (mechanic == .isolation) ? nil : pattern?.rawValue
+        self.planeRaw = plane.rawValue
+        self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
         self.notes = notes
         self.isUserCreated = isUserCreated
@@ -236,6 +338,10 @@ extension ExerciseCatalogItem {
         let mechanic: Mechanic
         let pattern: MovementPattern?
         let aliases: [String]
+        let plane: MovementPlane
+        let laterality: Laterality
+        let trackingMode: TrackingMode
+        let duration: TimeInterval
 
         init(
             _ name: String,
@@ -245,7 +351,11 @@ extension ExerciseCatalogItem {
             _ equipment: Equipment,
             _ mechanic: Mechanic = .compound,
             _ pattern: MovementPattern? = nil,
-            _ aliases: [String] = []
+            _ aliases: [String] = [],
+            _ plane: MovementPlane = .sagittal,
+            _ laterality: Laterality = .bilateral,
+            trackingMode: TrackingMode = .reps,
+            duration: TimeInterval = 0
         ) {
             self.name = name
             self.group = group
@@ -255,6 +365,29 @@ extension ExerciseCatalogItem {
             self.mechanic = mechanic
             self.pattern = pattern
             self.aliases = aliases
+            self.plane = plane
+            self.laterality = laterality
+            self.trackingMode = trackingMode
+            self.duration = duration
+        }
+
+        /// Convenience for a bodyweight isometric hold — timed,
+        /// core-pattern, zero load by default. Keeps the timed seed
+        /// rows readable next to the reps-based ones.
+        static func hold(
+            _ name: String,
+            _ group: MuscleGroup,
+            seconds: TimeInterval,
+            _ equipment: Equipment = .bodyweight,
+            _ pattern: MovementPattern? = .core,
+            _ aliases: [String] = [],
+            _ plane: MovementPlane = .sagittal,
+            _ laterality: Laterality = .bilateral
+        ) -> Seed {
+            Seed(
+                name, group, 0, 1, equipment, .isolation, pattern, aliases,
+                plane, laterality, trackingMode: .duration, duration: seconds
+            )
         }
     }
 
@@ -278,9 +411,9 @@ extension ExerciseCatalogItem {
         .init("Paused Bench Press",         .chest, 115, 5, .barbell,    .compound,   .push,  ["Pause Bench"]),
         .init("Dumbbell Bench Press",       .chest,  50, 8, .dumbbell,   .compound,   .push,  ["DB Bench", "DB Press"]),
         .init("Incline Dumbbell Press",     .chest,  40, 8, .dumbbell,   .compound,   .push,  ["Incline DB Press"]),
-        .init("Dumbbell Fly",               .chest,  25, 12, .dumbbell,  .isolation,  nil,    ["DB Fly", "Pec Fly"]),
-        .init("Cable Fly",                  .chest,  30, 12, .cable,     .isolation,  nil,    ["Cable Crossover"]),
-        .init("Pec Deck",                   .chest,  60, 12, .machine,   .isolation,  nil,    ["Machine Fly"]),
+        .init("Dumbbell Fly",               .chest,  25, 12, .dumbbell,  .isolation,  nil,    ["DB Fly", "Pec Fly"], .transverse),
+        .init("Cable Fly",                  .chest,  30, 12, .cable,     .isolation,  nil,    ["Cable Crossover"], .transverse),
+        .init("Pec Deck",                   .chest,  60, 12, .machine,   .isolation,  nil,    ["Machine Fly"], .transverse),
         .init("Push-Up",                    .chest,   0, 15, .bodyweight,.compound,   .push,  ["Pushup"]),
         .init("Dip",                        .chest,   0, 8, .bodyweight, .compound,   .push,  ["Chest Dip", "Tricep Dip"]),
 
@@ -301,9 +434,10 @@ extension ExerciseCatalogItem {
         .init("Lat Pulldown",               .back, 100, 10, .cable,      .compound,   .pull,  ["Pulldown"]),
         .init("Wide-Grip Lat Pulldown",     .back, 100, 10, .cable,      .compound,   .pull,  []),
         .init("Seated Cable Row",           .back, 100, 10, .cable,      .compound,   .pull,  ["Cable Row"]),
-        .init("Single-Arm Dumbbell Row",    .back,  60, 10, .dumbbell,   .compound,   .pull,  ["DB Row", "One-Arm Row"]),
+        .init("Single-Arm Dumbbell Row",    .back,  60, 10, .dumbbell,   .compound,   .pull,  ["DB Row", "One-Arm Row"], .sagittal, .unilateral),
         .init("Straight-Arm Pulldown",      .back,  40, 12, .cable,      .isolation,  nil,    []),
         .init("Shrug",                      .back, 135, 10, .barbell,    .isolation,  nil,    ["Barbell Shrug"]),
+        .hold("Dead Hang",                  .back, seconds: 30, .bodyweight, .pull, ["Bar Hang"]),
 
         // MARK: Shoulders
         .init("Overhead Press",             .shoulders,  95, 8, .barbell,   .compound, .push, ["OHP", "Standing Press", "Strict Press"]),
@@ -312,12 +446,12 @@ extension ExerciseCatalogItem {
         .init("Dumbbell Shoulder Press",    .shoulders,  30, 8, .dumbbell,  .compound, .push, ["DB Shoulder Press", "DB OHP"]),
         .init("Arnold Press",               .shoulders,  25, 10, .dumbbell, .compound, .push, []),
         .init("Landmine Press",             .shoulders,  45, 10, .barbell,  .compound, .push, []),
-        .init("Lateral Raise",              .shoulders,  15, 12, .dumbbell, .isolation, nil, ["Side Raise"]),
-        .init("Cable Lateral Raise",        .shoulders,  10, 15, .cable,    .isolation, nil, []),
+        .init("Lateral Raise",              .shoulders,  15, 12, .dumbbell, .isolation, nil, ["Side Raise"], .frontal),
+        .init("Cable Lateral Raise",        .shoulders,  10, 15, .cable,    .isolation, nil, [], .frontal),
         .init("Front Raise",                .shoulders,  15, 12, .dumbbell, .isolation, nil, []),
-        .init("Rear Delt Fly",              .shoulders,  15, 15, .dumbbell, .isolation, nil, ["Reverse Fly"]),
-        .init("Face Pull",                  .shoulders,  40, 15, .cable,    .isolation, nil, []),
-        .init("Upright Row",                .shoulders,  65, 10, .barbell,  .compound, .pull, []),
+        .init("Rear Delt Fly",              .shoulders,  15, 15, .dumbbell, .isolation, nil, ["Reverse Fly"], .transverse),
+        .init("Face Pull",                  .shoulders,  40, 15, .cable,    .isolation, nil, [], .transverse),
+        .init("Upright Row",                .shoulders,  65, 10, .barbell,  .compound, .pull, [], .frontal),
 
         // MARK: Legs
         .init("Back Squat",                 .legs, 185, 8, .barbell,     .compound,   .squat, ["Squat", "High-Bar Squat", "Low-Bar Squat"]),
@@ -325,10 +459,10 @@ extension ExerciseCatalogItem {
         .init("Pause Squat",                .legs, 135, 5, .barbell,     .compound,   .squat, []),
         .init("Box Squat",                  .legs, 155, 5, .barbell,     .compound,   .squat, []),
         .init("Goblet Squat",               .legs,  50, 10, .dumbbell,   .compound,   .squat, []),
-        .init("Bulgarian Split Squat",      .legs,  35, 10, .dumbbell,   .compound,   .lunge, ["BSS", "Split Squat"]),
-        .init("Walking Lunge",              .legs,  30, 12, .dumbbell,   .compound,   .lunge, ["Lunge"]),
-        .init("Reverse Lunge",              .legs,  30, 10, .dumbbell,   .compound,   .lunge, []),
-        .init("Step-Up",                    .legs,  25, 10, .dumbbell,   .compound,   .lunge, []),
+        .init("Bulgarian Split Squat",      .legs,  35, 10, .dumbbell,   .compound,   .lunge, ["BSS", "Split Squat"], .sagittal, .unilateral),
+        .init("Walking Lunge",              .legs,  30, 12, .dumbbell,   .compound,   .lunge, ["Lunge"], .sagittal, .unilateral),
+        .init("Reverse Lunge",              .legs,  30, 10, .dumbbell,   .compound,   .lunge, [], .sagittal, .unilateral),
+        .init("Step-Up",                    .legs,  25, 10, .dumbbell,   .compound,   .lunge, [], .sagittal, .unilateral),
         .init("Leg Press",                  .legs, 270, 10, .machine,    .compound,   .squat, []),
         .init("Hack Squat",                 .legs, 180, 10, .machine,    .compound,   .squat, []),
         .init("Romanian Deadlift",          .legs, 155, 8, .barbell,     .compound,   .hinge, ["RDL"]),
@@ -340,8 +474,9 @@ extension ExerciseCatalogItem {
         .init("Leg Extension",              .legs,  80, 12, .machine,    .isolation,  nil,    ["Quad Extension"]),
         .init("Standing Calf Raise",        .legs, 135, 12, .machine,    .isolation,  nil,    ["Calf Raise"]),
         .init("Seated Calf Raise",          .legs,  90, 15, .machine,    .isolation,  nil,    []),
-        .init("Hip Adduction",               .legs,  80, 15, .machine,    .isolation,  nil,    []),
-        .init("Hip Abduction",              .legs,  80, 15, .machine,    .isolation,  nil,    []),
+        .hold("Wall Sit",                   .legs, seconds: 45, .bodyweight, .squat, []),
+        .init("Hip Adduction",               .legs,  80, 15, .machine,    .isolation,  nil,    [], .frontal),
+        .init("Hip Abduction",              .legs,  80, 15, .machine,    .isolation,  nil,    [], .frontal),
 
         // MARK: Arms
         .init("Barbell Curl",               .arms,  65, 10, .barbell,    .isolation,  nil,    ["BB Curl", "Bicep Curl"]),
@@ -351,7 +486,7 @@ extension ExerciseCatalogItem {
         .init("Incline Dumbbell Curl",      .arms,  20, 10, .dumbbell,   .isolation,  nil,    []),
         .init("Preacher Curl",              .arms,  40, 10, .barbell,    .isolation,  nil,    []),
         .init("Cable Curl",                 .arms,  40, 12, .cable,      .isolation,  nil,    []),
-        .init("Concentration Curl",         .arms,  20, 12, .dumbbell,   .isolation,  nil,    []),
+        .init("Concentration Curl",         .arms,  20, 12, .dumbbell,   .isolation,  nil,    [], .sagittal, .unilateral),
         .init("Tricep Pushdown",            .arms,  50, 12, .cable,      .isolation,  nil,    ["Pushdown"]),
         .init("Rope Pushdown",              .arms,  40, 12, .cable,      .isolation,  nil,    []),
         .init("Skullcrusher",               .arms,  60, 10, .barbell,    .isolation,  nil,    ["Lying Tricep Extension"]),
@@ -362,17 +497,19 @@ extension ExerciseCatalogItem {
         .init("Reverse Wrist Curl",         .arms,  15, 15, .barbell,    .isolation,  nil,    []),
 
         // MARK: Core
-        .init("Plank",                      .core,   0, 60, .bodyweight, .isolation,  .core,  []),
-        .init("Side Plank",                 .core,   0, 45, .bodyweight, .isolation,  .core,  []),
+        .hold("Plank",                      .core, seconds: 60),
+        .hold("Side Plank",                 .core, seconds: 45, .bodyweight, .core, [], .frontal, .unilateral),
+        .hold("Hollow Hold",                .core, seconds: 30, .bodyweight, .core, ["Hollow Body Hold"]),
+        .hold("L-Sit",                      .core, seconds: 20, .bodyweight, .core, []),
         .init("Hanging Leg Raise",          .core,   0, 12, .bodyweight, .isolation,  .core,  ["Leg Raise"]),
         .init("Hanging Knee Raise",         .core,   0, 15, .bodyweight, .isolation,  .core,  ["Knee Raise"]),
         .init("Cable Crunch",               .core,  50, 15, .cable,      .isolation,  .core,  []),
         .init("Ab Wheel Rollout",           .core,   0, 10, .other,      .isolation,  .core,  ["Ab Roller"]),
-        .init("Russian Twist",              .core,  20, 20, .dumbbell,   .isolation,  .core,  []),
-        .init("Pallof Press",               .core,  20, 12, .cable,      .isolation,  .core,  []),
+        .init("Russian Twist",              .core,  20, 20, .dumbbell,   .isolation,  .core,  [], .transverse),
+        .init("Pallof Press",               .core,  20, 12, .cable,      .isolation,  .core,  [], .transverse),
         .init("Dead Bug",                   .core,   0, 12, .bodyweight, .isolation,  .core,  []),
         .init("Bird Dog",                   .core,   0, 12, .bodyweight, .isolation,  .core,  []),
-        .init("Farmer's Carry",             .core,  70, 1, .dumbbell,    .compound,   .carry, ["Farmer Walk", "Suitcase Carry"]),
+        .init("Farmer's Carry",             .core,  70,  1, .dumbbell,   .compound,   .carry, ["Farmer Walk", "Suitcase Carry"], .sagittal, .bilateral, trackingMode: .duration, duration: 30),
     ]
 
     /// Insert the starter catalog when the store is empty. Idempotent
@@ -395,9 +532,13 @@ extension ExerciseCatalogItem {
                 group: seed.group,
                 defaultWeight: seed.weight,
                 defaultReps: seed.reps,
+                trackingMode: seed.trackingMode,
+                defaultDuration: seed.duration,
                 equipment: seed.equipment,
                 mechanic: seed.mechanic,
                 pattern: seed.pattern,
+                plane: seed.plane,
+                laterality: seed.laterality,
                 aliases: seed.aliases,
                 isUserCreated: false,
                 createdAt: base.addingTimeInterval(Double(i) * 0.001)

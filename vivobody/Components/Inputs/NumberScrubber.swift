@@ -30,6 +30,10 @@ struct NumberScrubber: View {
     /// Vertical padding inside the rounded card. Trim alongside
     /// `valueFontSize` for compact embeddings.
     var verticalPadding: CGFloat = 28
+    /// Optional custom value formatter (e.g. mm:ss for timed holds).
+    /// When provided, takes precedence over the integer/decimal
+    /// default. Mirrors BareScrubber's `formatter`.
+    var formatter: ((Double) -> String)? = nil
 
     @State private var dragStartValue: Double = 0
     @State private var rubberOffset: CGFloat = 0
@@ -52,7 +56,8 @@ struct NumberScrubber: View {
                     value: value,
                     font: .system(size: valueFontSize, weight: .bold, design: .rounded),
                     color: .white,
-                    fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1
+                    fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
+                    formatter: formatter
                 )
 
                 if !unit.isEmpty {
@@ -196,6 +201,7 @@ struct NumberScrubber: View {
     }
 
     private var formattedValue: String {
+        if let formatter { return formatter(value) }
         let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
         return isIntegerStep ? "\(Int(value))" : String(format: "%.1f", value)
     }

@@ -49,9 +49,12 @@ struct ConfigureExerciseSheet: View {
     @State private var reps: Int
     /// Canonical lb — scrubbed in display units, stored as lb.
     @State private var weight: Double
+    /// Hold length (seconds) — used only in `.duration` mode.
+    @State private var duration: Double
 
     private let name: String
     private let group: MuscleGroup
+    private let mode: TrackingMode
     private let isEditing: Bool
     private let draftID: UUID
 
@@ -62,17 +65,21 @@ struct ConfigureExerciseSheet: View {
         case .adding(let item):
             name = item.name
             group = item.group
+            mode = item.trackingMode
             _sets = State(initialValue: 3)
             _reps = State(initialValue: item.defaultReps)
             _weight = State(initialValue: item.defaultWeight)
+            _duration = State(initialValue: item.defaultDuration > 0 ? item.defaultDuration : 45)
             isEditing = false
             draftID = UUID()
         case .editing(let draft):
             name = draft.name
             group = draft.group
+            mode = draft.trackingMode
             _sets = State(initialValue: draft.plannedSets)
             _reps = State(initialValue: draft.plannedReps)
             _weight = State(initialValue: draft.plannedWeight)
+            _duration = State(initialValue: draft.plannedDuration > 0 ? draft.plannedDuration : 45)
             isEditing = true
             draftID = draft.id
         }
@@ -97,20 +104,35 @@ struct ConfigureExerciseSheet: View {
 
                     SectionDivider()
 
-                    valueRow(label: "Target reps") {
-                        BareScrubber(
-                            value: repsBinding,
-                            range: 1...50,
-                            step: 1,
-                            pointsPerStep: 16,
-                            fontSize: 56,
-                            numberColor: Ink.primary
-                        )
+                    switch mode {
+                    case .reps:
+                        valueRow(label: "Target reps") {
+                            BareScrubber(
+                                value: repsBinding,
+                                range: 1...50,
+                                step: 1,
+                                pointsPerStep: 16,
+                                fontSize: 56,
+                                numberColor: Ink.primary
+                            )
+                        }
+                    case .duration:
+                        valueRow(label: "Hold") {
+                            BareScrubber(
+                                value: durationBinding,
+                                range: DurationFormatter.scrubRange,
+                                step: DurationFormatter.scrubStep,
+                                pointsPerStep: 10,
+                                fontSize: 56,
+                                numberColor: Ink.primary,
+                                formatter: { DurationFormatter.string($0) }
+                            )
+                        }
                     }
 
                     SectionDivider()
 
-                    valueRow(label: "Weight") {
+                    valueRow(label: mode == .duration ? "Added load" : "Weight") {
                         BareScrubber(
                             value: weightDisplayBinding,
                             range: unit.strengthRange,
@@ -197,7 +219,13 @@ struct ConfigureExerciseSheet: View {
     }
 
     private var previewLine: String {
-        "\(sets) × \(reps) @ \(WeightFormatter.string(weight, unit: unit))"
+        switch mode {
+        case .reps:
+            return "\(sets) × \(reps) @ \(WeightFormatter.string(weight, unit: unit))"
+        case .duration:
+            let base = "\(sets) × \(DurationFormatter.string(duration)) hold"
+            return weight > 0 ? "\(base) @ \(WeightFormatter.string(weight, unit: unit))" : base
+        }
     }
 
     // MARK: - Bindings
@@ -213,6 +241,13 @@ struct ConfigureExerciseSheet: View {
         Binding(
             get: { Double(reps) },
             set: { reps = Int($0) }
+        )
+    }
+
+    private var durationBinding: Binding<Double> {
+        Binding(
+            get: { duration },
+            set: { duration = $0 }
         )
     }
 
@@ -233,6 +268,8 @@ struct ConfigureExerciseSheet: View {
             plannedSets: sets,
             plannedReps: reps,
             plannedWeight: weight,
+            trackingMode: mode,
+            plannedDuration: duration,
             isPerSet: false,
             sets: []
         )

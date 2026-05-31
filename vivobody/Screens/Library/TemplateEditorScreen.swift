@@ -308,12 +308,16 @@ struct TemplateEditorScreen: View {
             let fallbackWeight = ed.isPerSet ? (ed.sets.first?.weight ?? ed.plannedWeight) : ed.plannedWeight
             let fallbackCount  = ed.isPerSet ? max(1, ed.sets.count) : ed.plannedSets
 
+            let fallbackDuration = ed.isPerSet ? (ed.sets.first?.duration ?? ed.plannedDuration) : ed.plannedDuration
+
             let ex = TemplateExercise(
                 name: ed.name,
                 group: ed.group,
                 plannedSets: fallbackCount,
                 plannedReps: fallbackReps,
                 plannedWeight: fallbackWeight,
+                trackingMode: ed.trackingMode,
+                plannedDuration: fallbackDuration,
                 sortOrder: i
             )
             template.exercises.append(ex)
@@ -324,6 +328,7 @@ struct TemplateEditorScreen: View {
                         TemplateSet(
                             weight: setDraft.weight,
                             reps: setDraft.reps,
+                            duration: setDraft.duration,
                             sortOrder: j
                         )
                     )

@@ -384,7 +384,8 @@ struct MeScreen: View {
     }
 
     private func progressRow(_ entry: ExerciseProgress) -> some View {
-        let weights = entry.points.map(\.topWeight)
+        let isDuration = entry.trackingMode == .duration
+        let chartValues = isDuration ? entry.points.map(\.topDuration) : entry.points.map(\.topWeight)
         let prSet: Set<Int> = Set(
             entry.points.enumerated()
                 .filter { $0.element.isWeightPR }
@@ -402,23 +403,39 @@ struct MeScreen: View {
             }
             .frame(minWidth: 90, alignment: .leading)
 
-            MiniChart(values: weights, prIndices: prSet, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
+            MiniChart(values: chartValues, prIndices: prSet, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
                 .frame(width: 80, height: 32)
 
             Spacer(minLength: Space.xs)
 
             VStack(alignment: .trailing, spacing: Space.xs) {
-                HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text(WeightFormatter.string(entry.bestWeight, unit: weightUnit, includeUnit: false))
+                if isDuration {
+                    Text(DurationFormatter.string(entry.bestDuration))
                         .font(.system(size: 17, weight: .bold, design: .monospaced))
                         .foregroundStyle(Ink.primary)
                         .monospacedDigit()
-                    Text(weightUnit.symbol)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
+                } else {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(WeightFormatter.string(entry.bestWeight, unit: weightUnit, includeUnit: false))
+                            .font(.system(size: 17, weight: .bold, design: .monospaced))
+                            .foregroundStyle(Ink.primary)
+                            .monospacedDigit()
+                        Text(weightUnit.symbol)
+                            .font(Typography.metricUnit)
+                            .foregroundStyle(Ink.tertiary)
+                    }
                 }
-                if let delta = entry.weightDelta {
-                    trendIndicator(delta: delta)
+
+                if isDuration {
+                    if let delta = entry.durationDelta {
+                        trendChip(delta: delta, valueText: delta == 0 ? "no change" : DurationFormatter.deltaString(delta))
+                    } else {
+                        Text("—")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                } else if let delta = entry.weightDelta {
+                    trendChip(delta: delta, valueText: delta == 0 ? "no change" : WeightFormatter.deltaString(delta, unit: weightUnit))
                 } else {
                     Text("—")
                         .font(Typography.caption)
@@ -431,16 +448,16 @@ struct MeScreen: View {
         .contentShape(Rectangle())
     }
 
-    private func trendIndicator(delta: Double) -> some View {
+    /// Trend pill shared by weight and duration progress rows — the
+    /// arrow + color come from the delta's sign; the text is
+    /// pre-formatted by the caller (weight delta or mm:ss delta).
+    private func trendChip(delta: Double, valueText: String) -> some View {
         let isUp = delta > 0
         let isFlat = delta == 0
         let color: Color = isFlat
             ? Ink.tertiary
             : (isUp ? Tint.inProgress : Tint.danger)
         let symbol: String = isFlat ? "minus" : (isUp ? "arrow.up.right" : "arrow.down.right")
-        let valueText: String = isFlat
-            ? "no change"
-            : WeightFormatter.deltaString(delta, unit: weightUnit)
         return HStack(spacing: 3) {
             Image(systemName: symbol)
                 .font(.system(size: 10, weight: .bold))
