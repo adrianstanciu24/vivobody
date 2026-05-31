@@ -40,32 +40,65 @@ struct TodayScreen: View {
     /// doesn't matter beyond identity.
     @Query private var templates: [WorkoutTemplate]
 
+    /// Frozen on first layout and never updated afterwards. The
+    /// scroll container's height shrinks as the large navigation
+    /// title collapses on scroll; binding the SCNView's height to
+    /// that live value made the model visibly re-scale ("zoom") mid-
+    /// scroll. Capturing the height once decouples the model from the
+    /// title animation so it holds a constant size.
+    @State private var heroHeight: CGFloat = 0
+
     var body: some View {
-        ScrollView {
-            // Order is deliberate: the workout you can start is at the
-            // top, thumb-reachable, above the fold — "Today is the
-            // workout queued up, one tap from starting." The calendar
-            // and history are the journal underneath, reached by a
-            // scroll once you've decided.
-            VStack(alignment: .leading, spacing: Space.section) {
-                startSection
-                if !templates.isEmpty {
-                    templatesSection
+        GeometryReader { proxy in
+            ScrollView {
+                // Order is deliberate: the workout you can start is at the
+                // top, thumb-reachable, above the fold — "Today is the
+                // workout queued up, one tap from starting." The calendar
+                // and history are the journal underneath, reached by a
+                // scroll once you've decided.
+                VStack(alignment: .leading, spacing: Space.section) {
+                    bodyModelHero(height: heroHeight > 0 ? heroHeight : proxy.size.height)
+                    startSection
+                    if !templates.isEmpty {
+                        templatesSection
+                    }
+                    SectionDivider()
+                    streakSection
+                    SectionDivider()
+                    lastWorkoutSection
                 }
-                SectionDivider()
-                streakSection
-                SectionDivider()
-                lastWorkoutSection
+                .padding(.horizontal, Space.gutter)
+                .padding(.top, Space.xs)
+                .padding(.bottom, Space.lg)
             }
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, Space.xs)
-            .padding(.bottom, Space.lg)
+            .scrollIndicators(.hidden)
+            .screenBackground()
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
+                // Freeze the first valid viewport height; ignore every
+                // change that follows as the tab bar minimizes on scroll
+                // (which grows the viewport and would otherwise re-scale
+                // the model). Reading the tracked view's own geometry —
+                // not a captured outer proxy — is what makes SwiftUI
+                // actually deliver these updates.
+                if heroHeight == 0, newHeight > 0 { heroHeight = newHeight }
+            }
         }
-        .screenBackground()
         .onAppear { Haptics.prepare() }
     }
 
     // MARK: - Sections
+
+    /// Anatomical body model, full-screen and edge-to-edge atop the
+    /// screen. Drag horizontally to rotate; vertical drags fall
+    /// through to the scroll. Purely decorative for now — the Start
+    /// CTA sits below it, one short scroll away.
+    private func bodyModelHero(height: CGFloat) -> some View {
+        RotatableBodyModel(renderHeight: height)
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .padding(.horizontal, -Space.gutter)
+            .accessibilityHidden(true)
+    }
 
     private var streakSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
