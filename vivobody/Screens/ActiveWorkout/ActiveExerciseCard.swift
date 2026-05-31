@@ -507,7 +507,16 @@ struct ActiveExerciseCard: View {
                 let nextIdx = currentIdx + 1
                 let cardCount = exercises.count + 1
                 if nextIdx < cardCount {
-                    try? await Task.sleep(for: .milliseconds(300))
+                    // The earned pause: when this set finishes the
+                    // whole workout, sit on the final number in
+                    // silence before the summary arrives. A fired PR
+                    // is its own ceremony and takes the moment instead
+                    // — fall back to the normal short hop so the
+                    // summary is ready behind the celebration the user
+                    // dismisses.
+                    let endsWorkout = session.isAllComplete && prKind == nil
+                    let hold: Duration = endsWorkout ? .milliseconds(2000) : .milliseconds(300)
+                    try? await Task.sleep(for: hold)
                     withAnimation(.spring(response: 0.55, dampingFraction: 0.85)) {
                         session.activeExerciseIndex = nextIdx
                     }
