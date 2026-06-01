@@ -11,7 +11,9 @@
 //  Formula
 //  -------
 //    load(set)    = loggedWeight + bodyweightFraction · bodyweight
-//    effort(set)  = load · reps              (reps mode)
+//    rir(set)     = 1.00 → 0.70 as reps-in-reserve climbs 0 → 5
+//                   (gentle: modulates tonnage, never dominates it)
+//    effort(set)  = load · reps · rir        (reps mode)
 //                 = load · duration / 30s    (timed-hold mode)
 //    score(m)     = recency-decayed Σ of effort · role.weight over
 //                   every completed set involving m (primary 1.0,
@@ -22,7 +24,10 @@
 //  Scoring is by tonnage (load × reps), so heavier work counts more —
 //  10×100 kg outweighs 10×1 kg. Unloaded movements still register via
 //  their `ExerciseLoad` bodyweight fraction (a push-up ≈ 0.64 × body
-//  weight) so they're never zeroed out.
+//  weight) so they're never zeroed out. Each rep-mode set's effort is
+//  then nudged by proximity to failure (reps-in-reserve): a set taken
+//  to failure outweighs an easy one of equal tonnage, but only gently
+//  — load stays the dominant signal. Timed holds ignore RIR.
 //
 //  Normalisation — two half-lives
 //  ------------------------------
@@ -58,6 +63,13 @@ enum MuscleHeatmap {
     /// One timed-hold second is worth this fraction of a rep when
     /// scoring effort, so a 60s plank ≈ 2 rep-equivalents.
     private static let secondsPerRepEquivalent = 30.0
+
+    /// How much each step of reps-in-reserve discounts a set's
+    /// effort. A gentle 0.06/step ramp from 1.0 (trained to failure)
+    /// to 0.70 (5 in reserve), so proximity-to-failure MODULATES
+    /// tonnage rather than dominating it — a heavy low-rep set still
+    /// outscores a light easy one.
+    private static let effortPerReserveStep = 0.06
 
     /// Days for a muscle's recent-work score to halve. Recent work
     /// dominates; neglected muscles fade smoothly rather than off a
@@ -168,9 +180,22 @@ enum MuscleHeatmap {
 
         switch exercise.trackingMode {
         case .reps:
-            return completed.reduce(0) { $0 + ($1.weight + bodyweightLoad) * Double($1.reps) }
+            return completed.reduce(0) {
+                $0 + ($1.weight + bodyweightLoad) * Double($1.reps) * effortFactor(repsInReserve: $1.repsInReserve)
+            }
         case .duration:
             return completed.reduce(0) { $0 + ($1.weight + bodyweightLoad) * ($1.duration / secondsPerRepEquivalent) }
         }
+    }
+
+    /// Effort multiplier from a set's reps-in-reserve. Sets pushed
+    /// closer to failure are more stimulative, so they count for more.
+    /// Reps-mode only — timed holds leave RIR at its default and never
+    /// call this. Because the map normalises against the busiest
+    /// muscle, a uniform RIR (e.g. every set at the default 2) cancels
+    /// out; only DIFFERENCES in proximity-to-failure move the colours.
+    private static func effortFactor(repsInReserve rir: Int) -> Double {
+        let clamped = Double(min(max(rir, 0), 5))
+        return 1.0 - effortPerReserveStep * clamped
     }
 }

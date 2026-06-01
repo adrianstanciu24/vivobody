@@ -166,6 +166,63 @@ struct MuscleHeatmapTests {
         #expect(intensities[.pectorals] == nil)
     }
 
+    // MARK: - Reps-in-reserve weighting
+
+    /// A set taken to failure (RIR 0) is more stimulative than one of
+    /// equal tonnage left well short (RIR 5). Both lifts are primaries
+    /// of their own muscle and log identical load×reps, so the only
+    /// thing separating them is proximity to failure — the failure
+    /// lift becomes the busiest muscle (full) and the reserved one
+    /// grades below it.
+    @Test func setsCloserToFailureScoreHigher() {
+        let now = Date()
+        let toFailure = completed(name: "Bench Press", group: .chest, sets: 1, reps: 10, weight: 100, rir: 0)
+        let reserved  = completed(name: "Barbell Curl", group: .arms, sets: 1, reps: 10, weight: 100, rir: 5)
+        let intensities = MuscleHeatmap.intensities(from: [WorkoutSession(exercises: [toFailure, reserved], startedAt: now)], now: now)
+
+        #expect(intensities[.pectorals] == 1.0)
+        #expect((intensities[.biceps] ?? 0) < (intensities[.pectorals] ?? 0))
+        // biceps effort = 0.70 of chest's (RIR 5 vs 0), then gamma 0.6.
+        #expect(abs((intensities[.biceps] ?? 0) - pow(0.70, 0.6)) < 0.0001)
+    }
+
+    /// RIR only modulates the map when sets DIFFER: scaling every set
+    /// by the same reps-in-reserve cancels in normalisation, so the
+    /// relative colours are untouched whether all sets are RIR 0 or 5.
+    @Test func uniformReserveDoesNotChangeRelativeMap() {
+        let now = Date()
+        func map(rir: Int) -> [Muscle: Double] {
+            let bench = completed(name: "Bench Press", group: .chest, sets: 1, reps: 10, weight: 200, rir: rir)
+            let curl  = completed(name: "Barbell Curl", group: .arms, sets: 1, reps: 10, weight: 50, rir: rir)
+            return MuscleHeatmap.intensities(from: [WorkoutSession(exercises: [bench, curl], startedAt: now)], now: now)
+        }
+        let low = map(rir: 0)
+        let high = map(rir: 5)
+        #expect(abs((low[.pectorals] ?? 0) - (high[.pectorals] ?? 0)) < 0.0001)
+        #expect(abs((low[.biceps] ?? 0) - (high[.biceps] ?? 0)) < 0.0001)
+    }
+
+    /// Timed holds ignore RIR: a plank logged at RIR 0 scores exactly
+    /// like the same plank at RIR 5 (the default is meaningless for
+    /// duration work), so its colour is unaffected.
+    @Test func reserveIgnoredForTimedHolds() {
+        let now = Date()
+        func absIntensity(plankRIR rir: Int) -> Double {
+            let bench = completed(name: "Bench Press", group: .chest, sets: 1, reps: 10, weight: 200)
+            let plank = Exercise(
+                name: "Plank", group: .core,
+                plannedSets: 1, plannedReps: 0, plannedWeight: 0,
+                trackingMode: .duration, plannedDuration: 60
+            )
+            plank.sets.forEach { $0.isCompleted = true; $0.repsInReserve = rir }
+            return MuscleHeatmap.intensities(from: [WorkoutSession(exercises: [bench, plank], startedAt: now)], now: now)[.abs] ?? 0
+        }
+        let toFailure = absIntensity(plankRIR: 0)
+        let reserved  = absIntensity(plankRIR: 5)
+        #expect(toFailure > 0)
+        #expect(abs(toFailure - reserved) < 0.0001)
+    }
+
     // MARK: - Time decay
 
     /// Recent work outweighs equal-but-stale work: identical curl and
@@ -235,9 +292,9 @@ struct MuscleHeatmapTests {
 
     // MARK: - Helpers
 
-    private func completed(name: String, group: MuscleGroup, sets: Int, reps: Int, weight: Double = 100) -> Exercise {
+    private func completed(name: String, group: MuscleGroup, sets: Int, reps: Int, weight: Double = 100, rir: Int = 2) -> Exercise {
         let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: reps, plannedWeight: weight)
-        ex.sets.forEach { $0.isCompleted = true }
+        ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = rir }
         return ex
     }
 }
