@@ -55,6 +55,11 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// underlying view — both let the figure "zoom" mid-scroll.
     var renderHeight: CGFloat
 
+    /// Per-muscle training intensity in `0...1`, keyed by BodyModel
+    /// mesh node name (see `MuscleHeatmap`). Drives the untrained →
+    /// Volt colour ramp. Empty renders every muscle untrained.
+    var activations: [String: CGFloat] = [:]
+
     func makeUIView(context: Context) -> UIView {
         let container = UIView()
         container.backgroundColor = .clear
@@ -65,7 +70,8 @@ struct RotatableBodyModel: UIViewRepresentable {
         scnView.allowsCameraControl = false
         scnView.antialiasingMode = .multisampling4X
         scnView.autoenablesDefaultLighting = false
-        scnView.scene = BodyModelScene.make()
+        scnView.scene = BodyModelScene.make(activations: activations)
+        context.coordinator.appliedActivations = activations
         scnView.pointOfView = scnView.scene?.rootNode.childNodes.first { $0.camera != nil }
         scnView.translatesAutoresizingMaskIntoConstraints = false
         scnView.tag = Self.viewTag
@@ -91,6 +97,15 @@ struct RotatableBodyModel: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {
         context.coordinator.heightConstraint?.constant = renderHeight
+
+        // Re-tint in place when the heatmap changes (e.g. a workout
+        // was just archived) rather than rebuilding the heavy scene.
+        if context.coordinator.appliedActivations != activations,
+           let scnView = uiView.viewWithTag(Self.viewTag) as? SCNView,
+           let scene = scnView.scene {
+            BodyModelScene.applyActivations(activations, to: scene)
+            context.coordinator.appliedActivations = activations
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -99,6 +114,7 @@ struct RotatableBodyModel: UIViewRepresentable {
 
     final class Coordinator: NSObject {
         var heightConstraint: NSLayoutConstraint?
+        var appliedActivations: [String: CGFloat] = [:]
         private var lastX: CGFloat = 0
 
         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {

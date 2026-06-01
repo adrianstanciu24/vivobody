@@ -14,8 +14,8 @@
 //    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
 //      "this is a deliberate action" feedback).
 //    • Tactile press scale (1.0 → 0.97 → 1.0).
-//    • Default accent is the universal completion green so the button
-//      reads as "the thing you want to do right now."
+//    • Default accent is the app's electric-orange primary so the
+//      button reads as "the thing you want to do right now."
 //
 
 import SwiftUI

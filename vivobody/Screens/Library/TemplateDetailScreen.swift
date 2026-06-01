@@ -281,16 +281,7 @@ struct TemplateDetailScreen: View {
     /// Add a TemplateExercise from a catalog pick. Uniform mode with
     /// catalog defaults; the new row appears at the end of the list.
     private func appendExercise(from item: ExerciseCatalogItem) {
-        let new = TemplateExercise(
-            name: item.name,
-            group: item.group,
-            plannedSets: 3,
-            plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeight,
-            trackingMode: item.trackingMode,
-            plannedDuration: item.defaultDuration,
-            sortOrder: template.exercises.count
-        )
+        let new = TemplateExercise(from: item, sortOrder: template.exercises.count)
         template.exercises.append(new)
         try? modelContext.save()
         Haptics.soft()

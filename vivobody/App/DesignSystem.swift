@@ -8,15 +8,15 @@
 //  willpower screen-to-screen.
 //
 //  First-principles rules baked in here:
-//    1. ONE accent (Volt). It marks the single primary action, the
-//       live/in-progress state, and the moment of completion / PR.
-//       Everything else is grayscale. There is no second hue.
+//    1. ONE accent (electric orange). It marks the single primary
+//       action, the live/in-progress state, and the moment of
+//       completion / PR. Everything else is grayscale. No second hue.
 //    2. Text is white at four opacity tiers (`Ink`) — hierarchy
 //       comes from luminance, not colour.
 //    3. ONE card fill, ONE hairline, ONE family of radii. Cards do
 //       not get reinvented per screen.
 //
-//  - `Tint.primary` (Volt) — primary CTA, nav tint, live indicator.
+//  - `Tint.primary` (electric orange) — primary CTA, nav tint, live indicator.
 //  - `Tint.success` — moment-of-completion cues. Deliberately the
 //    *same* hue as primary: completion is signalled by motion +
 //    haptic + fill-state, not by introducing a competing colour.
@@ -26,15 +26,13 @@
 import SwiftUI
 
 enum Tint {
-    /// Volt — a refined electric lime (`#BEF24A`). The single accent.
-    /// On pure black it is the most legible high-energy colour that
-    /// isn't the orange/blue every other tracker uses; it reads as
-    /// "alive" and pairs cleanly with grayscale. Used sparingly so it
-    /// always means something.
-    static let primary       = Color(.sRGB, red: 0.745, green: 0.949, blue: 0.290, opacity: 1.0)
-    static let primaryDim    = Color(.sRGB, red: 0.745, green: 0.949, blue: 0.290, opacity: 0.35)
-    /// Deeper chartreuse companion — pressed states, shadow halos.
-    static let primaryShadow = Color(.sRGB, red: 0.50, green: 0.70, blue: 0.13, opacity: 1.0)
+    /// Electric orange (`#FF7300`). The single accent. On pure black
+    /// it reads as molten / high-energy and pairs cleanly with
+    /// grayscale. Used sparingly so it always means something.
+    static let primary       = Color(.sRGB, red: 1.0, green: 0.45, blue: 0.0, opacity: 1.0)
+    static let primaryDim    = Color(.sRGB, red: 1.0, green: 0.45, blue: 0.0, opacity: 0.35)
+    /// Deeper amber companion — pressed states, shadow halos.
+    static let primaryShadow = Color(.sRGB, red: 0.72, green: 0.30, blue: 0.0, opacity: 1.0)
 
     /// Completion / PR cue. Same hue as `primary` on purpose: one
     /// accent, full stop. The *moment* (spring overshoot, haptic
@@ -48,13 +46,13 @@ enum Tint {
     // at a 0.5-second glance, so they sit on opposite temperatures.
 
     /// In-progress — the live/charged state: the active set, the
-    /// primary action you're about to take. This is Volt.
+    /// primary action you're about to take. This is electric orange.
     static let inProgress = primary
 
     /// Complete — the earned "done" state: a finished set, a finished
-    /// exercise, a PR. A disciplined honey-gold, deliberately warm so
-    /// it never blends with the cool in-progress lime. Reserved for
-    /// the *moment* and *locus* of completion — never an ambient wash.
+    /// exercise, a PR. A disciplined honey-gold, kept distinct from
+    /// the in-progress orange. Reserved for the *moment* and *locus*
+    /// of completion — never an ambient wash.
     static let complete    = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 1.0)
     static let completeDim = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 0.35)
 

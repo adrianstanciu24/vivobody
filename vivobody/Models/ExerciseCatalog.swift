@@ -186,6 +186,15 @@ final class ExerciseCatalogItem: Identifiable {
     /// is `.reps`. Additive defaulted field — no migration.
     var defaultDuration: TimeInterval = 0
 
+    /// Muscles this lift works, as `Muscle` raw values — primary
+    /// (prime movers) and secondary (assistors). Seeded on first
+    /// launch from `Muscle.involvement(forExerciseNamed:)` and copied
+    /// onto templates / sessions at pick-time, so the all-time muscle
+    /// heatmap can colour the 3D model. Additive defaulted fields —
+    /// no migration; an empty array resolves by name at read time.
+    var primaryMusclesRaw: [String] = []
+    var secondaryMusclesRaw: [String] = []
+
     /// Primary equipment used. Defaults to barbell on a new entry
     /// (matches the most common case for a serious lifter) but can
     /// be edited per-exercise. Stored as raw value so the Equipment
@@ -285,6 +294,19 @@ final class ExerciseCatalogItem: Identifiable {
         set { lateralityRaw = newValue.rawValue }
     }
 
+    /// Muscles worked, resolved from the persisted raw values when
+    /// present and otherwise from the by-name default map — so a
+    /// custom entry that reuses a known lift name still maps without
+    /// the user tagging muscles by hand.
+    var muscleInvolvement: Muscle.Involvement {
+        let primary = primaryMusclesRaw.compactMap(Muscle.init(rawValue:))
+        let secondary = secondaryMusclesRaw.compactMap(Muscle.init(rawValue:))
+        if primary.isEmpty && secondary.isEmpty {
+            return Muscle.involvement(forExerciseNamed: name)
+        }
+        return Muscle.Involvement(primary: primary, secondary: secondary)
+    }
+
     init(
         id: UUID = UUID(),
         name: String,
@@ -298,6 +320,8 @@ final class ExerciseCatalogItem: Identifiable {
         pattern: MovementPattern? = nil,
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
+        primaryMuscles: [Muscle] = [],
+        secondaryMuscles: [Muscle] = [],
         aliases: [String] = [],
         notes: String = "",
         isUserCreated: Bool = false,
@@ -310,6 +334,8 @@ final class ExerciseCatalogItem: Identifiable {
         self.defaultReps = defaultReps
         self.trackingModeRaw = trackingMode.rawValue
         self.defaultDuration = defaultDuration
+        self.primaryMusclesRaw = primaryMuscles.map(\.rawValue)
+        self.secondaryMusclesRaw = secondaryMuscles.map(\.rawValue)
         self.equipmentRaw = equipment.rawValue
         self.mechanicRaw = mechanic.rawValue
         self.patternRaw = (mechanic == .isolation) ? nil : pattern?.rawValue
@@ -527,6 +553,7 @@ extension ExerciseCatalogItem {
         // ordering.
         let base = Date()
         for (i, seed) in seedItems.enumerated() {
+            let muscles = Muscle.involvement(forExerciseNamed: seed.name)
             let item = ExerciseCatalogItem(
                 name: seed.name,
                 group: seed.group,
@@ -539,6 +566,8 @@ extension ExerciseCatalogItem {
                 pattern: seed.pattern,
                 plane: seed.plane,
                 laterality: seed.laterality,
+                primaryMuscles: muscles.primary,
+                secondaryMuscles: muscles.secondary,
                 aliases: seed.aliases,
                 isUserCreated: false,
                 createdAt: base.addingTimeInterval(Double(i) * 0.001)

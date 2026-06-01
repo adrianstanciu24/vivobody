@@ -112,6 +112,12 @@ final class TemplateExercise: Identifiable {
     /// field — no migration.
     var plannedDuration: TimeInterval = 0
 
+    /// Muscles worked, as `Muscle` raw values — set from the catalog
+    /// when the exercise is added to the template and copied onward to
+    /// the spawned session `Exercise`. Additive defaulted fields.
+    var primaryMusclesRaw: [String] = []
+    var secondaryMusclesRaw: [String] = []
+
     /// Stable position within the parent template.
     var sortOrder: Int = 0
 
@@ -164,6 +170,8 @@ final class TemplateExercise: Identifiable {
         plannedWeight: Double,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
+        primaryMuscles: [Muscle] = [],
+        secondaryMuscles: [Muscle] = [],
         sortOrder: Int = 0
     ) {
         self.id = id
@@ -174,7 +182,27 @@ final class TemplateExercise: Identifiable {
         self.plannedWeight = plannedWeight
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
+        self.primaryMusclesRaw = primaryMuscles.map(\.rawValue)
+        self.secondaryMusclesRaw = secondaryMuscles.map(\.rawValue)
         self.sortOrder = sortOrder
+    }
+
+    /// Build a template exercise from a catalog pick, carrying its
+    /// muscle map across. Centralises the catalog → template copy so
+    /// every "add exercise to template" call site stays in sync.
+    convenience init(from item: ExerciseCatalogItem, sortOrder: Int) {
+        self.init(
+            name: item.name,
+            group: item.group,
+            plannedSets: 3,
+            plannedReps: item.defaultReps,
+            plannedWeight: item.defaultWeight,
+            trackingMode: item.trackingMode,
+            plannedDuration: item.defaultDuration,
+            sortOrder: sortOrder
+        )
+        self.primaryMusclesRaw = item.primaryMusclesRaw
+        self.secondaryMusclesRaw = item.secondaryMusclesRaw
     }
 }
 
@@ -245,6 +273,8 @@ extension Exercise {
                 plannedDuration: orderedSets.first?.duration ?? templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
+            self.primaryMusclesRaw = templateExercise.primaryMusclesRaw
+            self.secondaryMusclesRaw = templateExercise.secondaryMusclesRaw
             for (i, templateSet) in orderedSets.enumerated() {
                 self.sets.append(
                     WorkoutSet(
@@ -266,6 +296,8 @@ extension Exercise {
                 plannedDuration: templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
+            self.primaryMusclesRaw = templateExercise.primaryMusclesRaw
+            self.secondaryMusclesRaw = templateExercise.secondaryMusclesRaw
         }
     }
 
@@ -284,5 +316,7 @@ extension Exercise {
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
         )
+        self.primaryMusclesRaw = item.primaryMusclesRaw
+        self.secondaryMusclesRaw = item.secondaryMusclesRaw
     }
 }

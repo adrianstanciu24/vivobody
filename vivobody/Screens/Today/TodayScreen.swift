@@ -40,6 +40,10 @@ struct TodayScreen: View {
     /// doesn't matter beyond identity.
     @Query private var templates: [WorkoutTemplate]
 
+    /// Body-weight log — the latest entry sets the load for unloaded
+    /// movements in the muscle heatmap (push-ups, pull-ups, planks).
+    @Query private var bodyWeights: [BodyWeightEntry]
+
     /// Frozen on first layout and never updated afterwards. The
     /// scroll container's height shrinks as the large navigation
     /// title collapses on scroll; binding the SCNView's height to
@@ -117,7 +121,13 @@ struct TodayScreen: View {
     /// through to the scroll. Purely decorative for now — the Start
     /// CTA sits below it, one short scroll away.
     private func bodyModelHero(height: CGFloat) -> some View {
-        RotatableBodyModel(renderHeight: height)
+        RotatableBodyModel(
+            renderHeight: height,
+            activations: MuscleHeatmap.nodeIntensities(
+                from: completedSessions,
+                bodyweight: bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
+            )
+        )
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .padding(.horizontal, -Space.gutter)

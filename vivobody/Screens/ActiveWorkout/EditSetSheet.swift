@@ -68,6 +68,8 @@ struct EditSetSheet: View {
                         verticalPadding: 12
                     )
 
+                    RIRSelector(value: $set.repsInReserve)
+
                 case .duration:
                     NumberScrubber(
                         value: durationBinding,

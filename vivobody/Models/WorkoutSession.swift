@@ -160,6 +160,15 @@ final class WorkoutSession: Identifiable {
         ordered[index].duration = duration
     }
 
+    /// Set the active set's reps-in-reserve (0…5) — how hard the set
+    /// was pushed. Companion to `updateActiveReps`; meaningful only
+    /// for `.reps` exercises.
+    func updateActiveRIR(for exercise: Exercise, rir: Int) {
+        let ordered = exercise.orderedSets
+        guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return }
+        ordered[index].repsInReserve = rir
+    }
+
     func skipRest() {
         isResting = false
         restStartedAt = nil

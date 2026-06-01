@@ -10,10 +10,12 @@
 //  keep in code rather than bake into the file: a camera, a 3-light
 //  rig, and per-part PBR materials.
 //
-//  Materials are intentionally data-agnostic for now (every muscle
-//  renders at the same base tier). The muscle-name sets and tiered
-//  material ramp below are the seam for a future pass that colours
-//  muscles by how much they've been trained.
+//  Muscles are coloured by training: each mesh is tinted along a
+//  ramp from a dark untrained base to Volt (the app's single accent),
+//  driven by an `activations` map keyed by node name (see
+//  `MuscleHeatmap`). The skeleton and connective tissue keep their
+//  fixed anatomical tones; an empty activations map renders every
+//  muscle at the untrained base.
 //
 
 import SceneKit
@@ -21,18 +23,29 @@ import UIKit
 
 enum BodyModelScene {
     /// Loads the baked geometry, applies materials, and adds the
-    /// camera + lights. Returns nil only if the bundled archive is
-    /// missing (a build-packaging error, not a runtime condition).
-    static func make() -> SCNScene? {
+    /// camera + lights. `activations` maps a mesh's node name to its
+    /// training intensity in `0...1`; absent nodes render untrained.
+    /// Returns nil only if the bundled archive is missing (a build-
+    /// packaging error, not a runtime condition).
+    static func make(activations: [String: CGFloat] = [:]) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
               let scene = try? SCNScene(url: url) else { return nil }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
-            applyMaterials(pivot: pivot)
+            applyMaterials(pivot: pivot, activations: activations)
         }
         configureCamera(scene: scene)
         configureLighting(scene: scene)
         return scene
+    }
+
+    /// Re-tint an already-built scene's muscles for new training data,
+    /// without reloading the 26 MB archive. Used by the SwiftUI
+    /// wrapper when the all-time heatmap changes (e.g. a workout was
+    /// just archived).
+    static func applyActivations(_ activations: [String: CGFloat], to scene: SCNScene) {
+        guard let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) else { return }
+        applyMaterials(pivot: pivot, activations: activations)
     }
 
     // MARK: - Camera
@@ -87,53 +100,70 @@ enum BodyModelScene {
         return mat
     }
 
-    /// 5-step activation ramp (untrained → high). Unused tiers are
-    /// kept so a later data-driven pass can index into them directly.
-    private static let tierMaterials: [SCNMaterial] = [
-        makeTierMaterial(red: 0.30, green: 0.18, blue: 0.12, rough: 0.70),
-        makeTierMaterial(red: 0.50, green: 0.22, blue: 0.08, rough: 0.65),
-        makeTierMaterial(red: 0.70, green: 0.26, blue: 0.04, rough: 0.58),
-        makeTierMaterial(red: 0.85, green: 0.30, blue: 0.02, rough: 0.52),
-        makeTierMaterial(red: 1.00, green: 0.33, blue: 0.00, rough: 0.45)
-    ]
+    /// Endpoints of the muscle ramp. Untrained muscles sit at a dark,
+    /// desaturated base so trained ones read as glowing; the hot end
+    /// is electric orange — the app's single accent (`Tint.primary`,
+    /// RGB 1.0 / 0.45 / 0.0).
+    private static let untrainedColor = (r: 0.26, g: 0.245, b: 0.275)
+    private static let accentColor    = (r: 1.0, g: 0.45, b: 0.0)
+
+    /// Four discrete training tiers — untrained → light → solid →
+    /// hard. The eye can't resolve a fine gradient across separate
+    /// muscles on a figure this size; four clear steps read as
+    /// categories you can actually compare at a glance. Each tier is
+    /// the untrained→accent ramp sampled at a fixed point, with a
+    /// touch more gloss as it climbs.
+    private static let tierMaterials: [SCNMaterial] = {
+        let fractions: [CGFloat] = [0.0, 0.5, 0.78, 1.0]
+        return fractions.map { f in
+            func lerp(_ a: Double, _ b: Double) -> CGFloat { CGFloat(a + (b - a) * Double(f)) }
+            return makeTierMaterial(
+                red: lerp(untrainedColor.r, accentColor.r),
+                green: lerp(untrainedColor.g, accentColor.g),
+                blue: lerp(untrainedColor.b, accentColor.b),
+                rough: 0.70 - 0.25 * f
+            )
+        }
+    }()
+
+    /// Maps a `0...1` intensity to one of the four tiers. No logged
+    /// work stays at the untrained base; any training lifts a muscle
+    /// to at least "light", then bands evenly into "solid" and "hard".
+    private static func muscleMaterial(intensity: CGFloat) -> SCNMaterial {
+        let t = max(0, min(1, intensity))
+        let tier: Int
+        switch t {
+        case ...0:          tier = 0   // untrained
+        case ..<(1.0/3.0):  tier = 1   // light
+        case ..<(2.0/3.0):  tier = 2   // solid
+        default:            tier = 3   // hard
+        }
+        return tierMaterials[tier]
+    }
 
     private static let tissueMaterial = makeTierMaterial(red: 0.70, green: 0.70, blue: 0.70, rough: 0.6)
     private static let boneMaterial = makeTierMaterial(red: 0.85, green: 0.82, blue: 0.75, rough: 0.8)
-    private static let muscleBaseMaterial = tierMaterials[0]
 
     private static let connectiveTissue: Set<String> = [
         "Iliotibial_Tract_L", "Iliotibial_Tract_R"
     ]
 
-    /// Facial / display-only muscles that have no training meaning;
-    /// rendered at the brightest tier so the head reads as detailed.
-    private static let displayOnlyMuscles: Set<String> = {
-        let bases = [
-            "Frontalis", "Temporalis", "Masseter", "Buccinator", "Procerus", "Orbicularis_Oculi",
-            "Nasalis", "Zygomaticus_Major", "Zygomaticus_Minor", "Levator_Labii_Superioris",
-            "Levator_Labii_Superioris_Alaeque_Nasi", "Levator_Anguli_Oris", "Depressor_Anguli_Oris",
-            "Depressor_Labii_Inferioris", "Depressor_Supercilii", "Corrugator_Supercilii",
-            "Mentalis", "Risorius", "Auricularis_Anterior", "Auricularis_Posterior",
-            "Auricularis_Superior", "Auricular_Cartilage", "Lower_Lateral_Cartilage",
-            "Upper_Lateral_Cartilage", "Occipitalis", "Eye"
-        ]
-        return Set(bases.flatMap { ["\($0)_L", "\($0)_R"] } + ["Epicranial_Aponeurosis", "Orbicularis_Oris", "Lips"])
-    }()
-
-    private static func applyMaterials(pivot: SCNNode) {
+    private static func applyMaterials(pivot: SCNNode, activations: [String: CGFloat]) {
         for child in pivot.childNodes {
             guard let name = child.name else { continue }
             child.opacity = 1
-            setMaterial(materialFor(name: name), on: child)
+            setMaterial(materialFor(name: name, activations: activations), on: child)
         }
     }
 
-    private static func materialFor(name: String) -> SCNMaterial {
+    private static func materialFor(name: String, activations: [String: CGFloat]) -> SCNMaterial {
         if name == "Skeleton" { return boneMaterial }
         if connectiveTissue.contains(name) { return tissueMaterial }
-        // displayOnlyMuscles (face/ears) render at the base tier too,
-        // for a uniform "plain" body until coloring is data-driven.
-        return muscleBaseMaterial
+        // Every muscle — including untrained ones and the display-only
+        // face/hand meshes that no exercise targets (intensity 0) —
+        // rides the same ramp, so the body reads uniformly until
+        // training data lights specific muscles up.
+        return muscleMaterial(intensity: activations[name] ?? 0)
     }
 
     private static func setMaterial(_ mat: SCNMaterial, on node: SCNNode) {

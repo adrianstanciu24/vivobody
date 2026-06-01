@@ -86,6 +86,15 @@ final class Exercise: Identifiable {
     /// mode is `.reps`. Additive defaulted field — no migration.
     var plannedDuration: TimeInterval = 0
 
+    /// Muscles this exercise works, as `Muscle` raw values. Primary
+    /// = prime movers, secondary = assistors. Copied from the catalog
+    /// at pick-time so the data travels into the logged session that
+    /// the all-time muscle heatmap aggregates over. Additive defaulted
+    /// fields — no migration; empty arrays fall back to a name lookup
+    /// via `muscleInvolvement`.
+    var primaryMusclesRaw: [String] = []
+    var secondaryMusclesRaw: [String] = []
+
     /// Stable position within the parent session. Used to render
     /// exercises in the order the user planned them; SwiftData
     /// relationships don't guarantee array order on their own.
@@ -120,6 +129,20 @@ final class Exercise: Identifiable {
         set { trackingModeRaw = newValue.rawValue }
     }
 
+    /// Muscles worked, resolved from the persisted raw values when
+    /// present and otherwise back-filled from the by-name default map.
+    /// The fallback keeps legacy logs and custom entries (that reuse a
+    /// known name) lit on the heatmap even though their stored arrays
+    /// are empty.
+    var muscleInvolvement: Muscle.Involvement {
+        let primary = primaryMusclesRaw.compactMap(Muscle.init(rawValue:))
+        let secondary = secondaryMusclesRaw.compactMap(Muscle.init(rawValue:))
+        if primary.isEmpty && secondary.isEmpty {
+            return Muscle.involvement(forExerciseNamed: name)
+        }
+        return Muscle.Involvement(primary: primary, secondary: secondary)
+    }
+
     /// Sets returned in their stable order. Used everywhere the UI
     /// needs to enumerate set rows.
     var orderedSets: [WorkoutSet] {
@@ -135,6 +158,8 @@ final class Exercise: Identifiable {
         plannedWeight: Double,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
+        primaryMuscles: [Muscle] = [],
+        secondaryMuscles: [Muscle] = [],
         sortOrder: Int = 0
     ) {
         self.id = id
@@ -145,6 +170,8 @@ final class Exercise: Identifiable {
         self.plannedWeight = plannedWeight
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
+        self.primaryMusclesRaw = primaryMuscles.map(\.rawValue)
+        self.secondaryMusclesRaw = secondaryMuscles.map(\.rawValue)
         self.sortOrder = sortOrder
 
         // Pre-populate the planned sets. They start uncompleted at
@@ -179,6 +206,16 @@ final class WorkoutSet: Identifiable {
 
     var isCompleted: Bool = false
 
+    /// Reps in reserve — how many more reps the lifter felt they had
+    /// left at the end of this set. The session-logged read on how
+    /// hard the set was pushed: 0 = trained to failure, 5 = many left
+    /// in the tank. Clamped to a 0…5 scale (the usable RIR range;
+    /// beyond that the self-estimate is noise). Defaults to 2, the
+    /// standard hypertrophy target. Additive defaulted field — no
+    /// migration. Only meaningful for `.reps` exercises; left at the
+    /// default and ignored for timed holds.
+    var repsInReserve: Int = 2
+
     /// Stable position within the parent exercise.
     var sortOrder: Int = 0
 
@@ -192,6 +229,7 @@ final class WorkoutSet: Identifiable {
         reps: Int,
         duration: TimeInterval = 0,
         isCompleted: Bool = false,
+        repsInReserve: Int = 2,
         sortOrder: Int = 0
     ) {
         self.id = id
@@ -199,6 +237,7 @@ final class WorkoutSet: Identifiable {
         self.reps = reps
         self.duration = duration
         self.isCompleted = isCompleted
+        self.repsInReserve = repsInReserve
         self.sortOrder = sortOrder
     }
 }
@@ -265,6 +304,8 @@ extension Exercise {
             plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder
         )
+        copy.primaryMusclesRaw = source.primaryMusclesRaw
+        copy.secondaryMusclesRaw = source.secondaryMusclesRaw
         for (i, sourceSet) in sourceSets.enumerated() {
             copy.sets.append(
                 WorkoutSet(

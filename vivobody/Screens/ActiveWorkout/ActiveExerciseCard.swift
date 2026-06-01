@@ -76,6 +76,7 @@ struct ActiveExerciseCard: View {
 
             Spacer(minLength: Space.xl)
 
+            rirControl
             lastSetCaption
             actionArea
                 .padding(.top, Space.md)
@@ -390,12 +391,38 @@ struct ActiveExerciseCard: View {
         }
     }
 
+    // MARK: - RIR
+
+    /// Reps-in-reserve pill for the active set — reps mode only.
+    /// Timed holds have no "reps left," so it's omitted there.
+    @ViewBuilder
+    private var rirControl: some View {
+        if session.activeSet(for: exercise) != nil, exercise.trackingMode == .reps {
+            RIRSelector(value: rirBinding)
+                .padding(.bottom, Space.md)
+        }
+    }
+
+    private var rirBinding: Binding<Int> {
+        Binding(
+            get: { session.activeSet(for: exercise)?.repsInReserve ?? 2 },
+            set: { session.updateActiveRIR(for: exercise, rir: $0) }
+        )
+    }
+
+    /// Echoes the previously-logged set's RIR in the "Last …" caption.
+    /// Reps mode only — timed holds carry no reps-in-reserve.
+    private func lastSetRIRSuffix(_ set: WorkoutSet) -> String {
+        guard exercise.trackingMode == .reps else { return "" }
+        return "  ·  \(RIRSelector.displayLabel(set.repsInReserve)) RIR"
+    }
+
     // MARK: - Last set + action
 
     @ViewBuilder
     private var lastSetCaption: some View {
         if activeIndex != nil, let last = sets.last(where: { $0.isCompleted }) {
-            Text("Last  \(exercise.setLabel(last, unit: unit))")
+            Text("Last  \(exercise.setLabel(last, unit: unit))\(lastSetRIRSuffix(last))")
                 .font(.system(size: 13, weight: .medium, design: .monospaced))
                 .foregroundStyle(Ink.tertiary)
                 .padding(.bottom, Space.sm)
