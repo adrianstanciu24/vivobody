@@ -123,7 +123,7 @@ struct TodayScreen: View {
     private func bodyModelHero(height: CGFloat) -> some View {
         RotatableBodyModel(
             renderHeight: height,
-            activations: MuscleHeatmap.nodeIntensities(
+            channels: MuscleDevelopment.nodeChannels(
                 from: completedSessions,
                 bodyweight: bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
             )

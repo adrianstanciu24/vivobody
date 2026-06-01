@@ -10,12 +10,13 @@
 //  keep in code rather than bake into the file: a camera, a 3-light
 //  rig, and per-part PBR materials.
 //
-//  Muscles are coloured by training: each mesh is tinted along a
-//  ramp from a dark untrained base to Volt (the app's single accent),
-//  driven by an `activations` map keyed by node name (see
-//  `MuscleHeatmap`). The skeleton and connective tissue keep their
-//  fixed anatomical tones; an empty activations map renders every
-//  muscle at the untrained base.
+//  Muscles are coloured by training via a 2-channel + bloom encoding
+//  (see `MuscleColor`): development sets lightness, growth momentum
+//  sets saturation, and acute fatigue adds a transient emissive glow.
+//  The input is a `channels` map keyed by node name (see
+//  `MuscleDevelopment`). The skeleton and connective tissue keep their
+//  fixed anatomical tones; an empty channels map renders every muscle
+//  at the untrained base.
 //
 
 import SceneKit
@@ -23,16 +24,16 @@ import UIKit
 
 enum BodyModelScene {
     /// Loads the baked geometry, applies materials, and adds the
-    /// camera + lights. `activations` maps a mesh's node name to its
-    /// training intensity in `0...1`; absent nodes render untrained.
-    /// Returns nil only if the bundled archive is missing (a build-
-    /// packaging error, not a runtime condition).
-    static func make(activations: [String: CGFloat] = [:]) -> SCNScene? {
+    /// camera + lights. `channels` maps a mesh's node name to its
+    /// development / momentum / fatigue triple; absent nodes render
+    /// untrained. Returns nil only if the bundled archive is missing
+    /// (a build-packaging error, not a runtime condition).
+    static func make(channels: [String: MuscleDevelopment.Channels] = [:]) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
               let scene = try? SCNScene(url: url) else { return nil }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
-            applyMaterials(pivot: pivot, activations: activations)
+            applyMaterials(pivot: pivot, channels: channels)
         }
         configureCamera(scene: scene)
         configureLighting(scene: scene)
@@ -41,11 +42,11 @@ enum BodyModelScene {
 
     /// Re-tint an already-built scene's muscles for new training data,
     /// without reloading the 26 MB archive. Used by the SwiftUI
-    /// wrapper when the all-time heatmap changes (e.g. a workout was
+    /// wrapper when the development map changes (e.g. a workout was
     /// just archived).
-    static func applyActivations(_ activations: [String: CGFloat], to scene: SCNScene) {
+    static func applyChannels(_ channels: [String: MuscleDevelopment.Channels], to scene: SCNScene) {
         guard let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) else { return }
-        applyMaterials(pivot: pivot, activations: activations)
+        applyMaterials(pivot: pivot, channels: channels)
     }
 
     // MARK: - Camera
@@ -100,45 +101,33 @@ enum BodyModelScene {
         return mat
     }
 
-    /// Endpoints of the muscle ramp. Untrained muscles sit at a dark,
-    /// desaturated base so trained ones read as glowing; the hot end
-    /// is electric orange — the app's single accent (`Tint.primary`,
-    /// RGB 1.0 / 0.45 / 0.0).
-    private static let untrainedColor = (r: 0.26, g: 0.245, b: 0.275)
-    private static let accentColor    = (r: 1.0, g: 0.45, b: 0.0)
+    /// Peak emission applied at full fatigue. Kept modest so the
+    /// "just trained" bloom reads as a warm glow, not a light bulb.
+    private static let maxEmission: CGFloat = 0.55
 
-    /// Four discrete training tiers — untrained → light → solid →
-    /// hard. The eye can't resolve a fine gradient across separate
-    /// muscles on a figure this size; four clear steps read as
-    /// categories you can actually compare at a glance. Each tier is
-    /// the untrained→accent ramp sampled at a fixed point, with a
-    /// touch more gloss as it climbs.
-    private static let tierMaterials: [SCNMaterial] = {
-        let fractions: [CGFloat] = [0.0, 0.5, 0.78, 1.0]
-        return fractions.map { f in
-            func lerp(_ a: Double, _ b: Double) -> CGFloat { CGFloat(a + (b - a) * Double(f)) }
-            return makeTierMaterial(
-                red: lerp(untrainedColor.r, accentColor.r),
-                green: lerp(untrainedColor.g, accentColor.g),
-                blue: lerp(untrainedColor.b, accentColor.b),
-                rough: 0.70 - 0.25 * f
-            )
-        }
-    }()
+    /// Channels for a muscle that has never been trained — the dark,
+    /// desaturated base every untargeted mesh renders at.
+    private static let untrainedChannels = MuscleDevelopment.Channels(
+        adaptation: 0, momentum: 0, fatigue: 0
+    )
 
-    /// Maps a `0...1` intensity to one of the four tiers. No logged
-    /// work stays at the untrained base; any training lifts a muscle
-    /// to at least "light", then bands evenly into "solid" and "hard".
-    private static func muscleMaterial(intensity: CGFloat) -> SCNMaterial {
-        let t = max(0, min(1, intensity))
-        let tier: Int
-        switch t {
-        case ...0:          tier = 0   // untrained
-        case ..<(1.0/3.0):  tier = 1   // light
-        case ..<(2.0/3.0):  tier = 2   // solid
-        default:            tier = 3   // hard
-        }
-        return tierMaterials[tier]
+    /// Builds a muscle's material from its channels via the perceptual
+    /// `MuscleColor` map: development → lightness, momentum → chroma,
+    /// fatigue → an emissive bloom. Developed muscle reads a touch
+    /// glossier. A fresh material per mesh (≈240) is cheap to rebuild
+    /// on each re-tint.
+    private static func muscleMaterial(for channels: MuscleDevelopment.Channels) -> SCNMaterial {
+        let c = MuscleColor.rgb(for: channels)
+        let color = UIColor(red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue), alpha: 1)
+
+        let mat = SCNMaterial()
+        mat.diffuse.contents = color
+        mat.emission.contents = color
+        mat.emission.intensity = CGFloat(c.emissive) * maxEmission
+        mat.roughness.contents = 0.70 - 0.25 * CGFloat(max(0, min(1, channels.adaptation)))
+        mat.metalness.contents = 0.12
+        mat.lightingModel = .physicallyBased
+        return mat
     }
 
     private static let tissueMaterial = makeTierMaterial(red: 0.70, green: 0.70, blue: 0.70, rough: 0.6)
@@ -148,22 +137,22 @@ enum BodyModelScene {
         "Iliotibial_Tract_L", "Iliotibial_Tract_R"
     ]
 
-    private static func applyMaterials(pivot: SCNNode, activations: [String: CGFloat]) {
+    private static func applyMaterials(pivot: SCNNode, channels: [String: MuscleDevelopment.Channels]) {
         for child in pivot.childNodes {
             guard let name = child.name else { continue }
             child.opacity = 1
-            setMaterial(materialFor(name: name, activations: activations), on: child)
+            setMaterial(materialFor(name: name, channels: channels), on: child)
         }
     }
 
-    private static func materialFor(name: String, activations: [String: CGFloat]) -> SCNMaterial {
+    private static func materialFor(name: String, channels: [String: MuscleDevelopment.Channels]) -> SCNMaterial {
         if name == "Skeleton" { return boneMaterial }
         if connectiveTissue.contains(name) { return tissueMaterial }
         // Every muscle — including untrained ones and the display-only
-        // face/hand meshes that no exercise targets (intensity 0) —
-        // rides the same ramp, so the body reads uniformly until
-        // training data lights specific muscles up.
-        return muscleMaterial(intensity: activations[name] ?? 0)
+        // face/hand meshes that no exercise targets — rides the same
+        // map, so the body reads uniformly until training data lights
+        // specific muscles up.
+        return muscleMaterial(for: channels[name] ?? untrainedChannels)
     }
 
     private static func setMaterial(_ mat: SCNMaterial, on node: SCNNode) {

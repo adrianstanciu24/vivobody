@@ -10,14 +10,13 @@
 //  regions — and three things built on top of it:
 //
 //    1. `Muscle.nodeNames` — which model meshes each region paints.
-//    2. `MuscleRole` — primary vs. secondary involvement, with the
-//       weight each contributes to the activation score.
-//    3. `Muscle.involvement(forExerciseNamed:)` — the default
-//       per-exercise muscle map for the seeded catalog. Used to seed
-//       the persisted `primaryMuscles` / `secondaryMuscles` fields on
-//       catalog items and, as a fallback, to resolve muscles for any
-//       exercise whose persisted fields are empty (legacy logs,
-//       custom entries that reuse a known name).
+//    2. `Muscle.Involvement` — graded per-muscle contribution for an
+//       exercise: an ordered list of (muscle, weight) pairs, where
+//       weight ∈ 0...1 is the fraction of effort each muscle receives.
+//    3. `Muscle.involvement(forExerciseNamed:)` — the curated, graded
+//       per-exercise muscle map for the seeded catalog. The single
+//       source of truth that every `muscleInvolvement` resolver reads
+//       from, keyed purely by exercise name.
 //
 //  The model node names are exact strings baked into BodyModel.scn,
 //  including its spelling quirks (`Adductor_Mangus`, `Biceps_femoris`).
@@ -25,23 +24,6 @@
 //
 
 import Foundation
-
-// MARK: - Muscle role
-
-/// How hard a muscle works in a given exercise. The weight is the
-/// multiplier applied to a set's effort when accumulating the
-/// all-time activation score (see `MuscleHeatmap`).
-enum MuscleRole {
-    case primary
-    case secondary
-
-    var weight: Double {
-        switch self {
-        case .primary:   return 1.0
-        case .secondary: return 0.5
-        }
-    }
-}
 
 // MARK: - Muscle
 
@@ -182,19 +164,48 @@ enum Muscle: String, Hashable, CaseIterable {
 // MARK: - Default exercise → muscle map
 
 extension Muscle {
-    /// Primary + secondary muscles for one exercise.
+    /// Per-muscle contribution for one exercise: an ordered list of
+    /// (muscle, weight) pairs, where weight ∈ 0...1 is the fraction of
+    /// the exercise's effort credited to that muscle. Prime movers sit
+    /// at/above `primeThreshold`; lighter synergists grade down. The
+    /// `primary`/`secondary` accessors project this back onto the old
+    /// two-tier view for callers that still want it.
     struct Involvement {
-        let primary: [Muscle]
-        let secondary: [Muscle]
+        /// Standard contribution levels used to author the catalog.
+        static let prime = 1.0   // the target muscle
+        static let major = 0.7   // heavily-loaded synergist
+        static let minor = 0.4   // clear assistor
+        static let trace = 0.2   // light stabiliser
+        /// At/above this a contribution reads as a prime mover.
+        static let primeThreshold = 0.85
 
-        static let empty = Involvement(primary: [], secondary: [])
+        let contributions: [(muscle: Muscle, weight: Double)]
+
+        static let empty = Involvement(contributions: [])
+
+        init(contributions: [(muscle: Muscle, weight: Double)]) {
+            self.contributions = contributions
+        }
+
+        /// Effort multiplier per muscle, deduplicated by max.
+        var weights: [Muscle: Double] {
+            Dictionary(contributions.map { ($0.muscle, $0.weight) }, uniquingKeysWith: max)
+        }
+        /// Prime movers (weight ≥ `primeThreshold`), in author order.
+        var primary: [Muscle] {
+            contributions.filter { $0.weight >= Self.primeThreshold }.map(\.muscle)
+        }
+        /// Everything below prime but still involved.
+        var secondary: [Muscle] {
+            contributions.filter { $0.weight > 0 && $0.weight < Self.primeThreshold }.map(\.muscle)
+        }
+        var isEmpty: Bool { contributions.isEmpty }
     }
 
-    /// Default muscle involvement for an exercise, resolved by name
-    /// (case-insensitive). Covers every entry in the seeded catalog;
-    /// returns `.empty` for unknown names. The single source of truth
-    /// used both to seed persisted fields and to back-fill any
-    /// exercise whose fields are empty.
+    /// Graded muscle involvement for an exercise, resolved by name
+    /// (case-insensitive). Covers every entry in the seeded catalog
+    /// and returns `.empty` for unknown names. The single source of
+    /// truth every `muscleInvolvement` resolver reads from.
     static func involvement(forExerciseNamed name: String) -> Involvement {
         let key = name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         return defaultMap[key] ?? .empty
@@ -203,117 +214,131 @@ extension Muscle {
     /// Keyed by lowercased exercise name. Mirrors the seed catalog in
     /// `ExerciseCatalogItem.seedItems`.
     private static let defaultMap: [String: Involvement] = {
-        func inv(_ p: [Muscle], _ s: [Muscle] = []) -> Involvement {
-            Involvement(primary: p, secondary: s)
+        // Graded contribution: prime movers at full weight, then
+        // `major` / `minor` / `trace` synergists stepping down. The
+        // weight is the fraction of an exercise's effort each muscle
+        // receives (see `MuscleDevelopment.sessionStimulus`).
+        func inv(
+            _ prime: [Muscle],
+            major: [Muscle] = [],
+            minor: [Muscle] = [],
+            trace: [Muscle] = []
+        ) -> Involvement {
+            Involvement(contributions:
+                prime.map { ($0, Involvement.prime) } +
+                major.map { ($0, Involvement.major) } +
+                minor.map { ($0, Involvement.minor) } +
+                trace.map { ($0, Involvement.trace) }
+            )
         }
         let pairs: [(String, Involvement)] = [
             // MARK: Chest
-            ("Bench Press",               inv([.pectorals], [.triceps, .deltoids])),
-            ("Incline Bench Press",       inv([.pectorals], [.deltoids, .triceps])),
-            ("Decline Bench Press",       inv([.pectorals], [.triceps])),
-            ("Close-Grip Bench Press",    inv([.triceps, .pectorals], [.deltoids])),
-            ("Paused Bench Press",        inv([.pectorals], [.triceps, .deltoids])),
-            ("Dumbbell Bench Press",      inv([.pectorals], [.triceps, .deltoids])),
-            ("Incline Dumbbell Press",    inv([.pectorals], [.deltoids, .triceps])),
-            ("Dumbbell Fly",              inv([.pectorals])),
-            ("Cable Fly",                 inv([.pectorals])),
+            ("Bench Press",               inv([.pectorals], major: [.triceps], minor: [.deltoids])),
+            ("Incline Bench Press",       inv([.pectorals], major: [.deltoids], minor: [.triceps])),
+            ("Decline Bench Press",       inv([.pectorals], major: [.triceps])),
+            ("Close-Grip Bench Press",    inv([.triceps, .pectorals], minor: [.deltoids])),
+            ("Paused Bench Press",        inv([.pectorals], major: [.triceps], minor: [.deltoids])),
+            ("Dumbbell Bench Press",      inv([.pectorals], major: [.triceps], minor: [.deltoids])),
+            ("Incline Dumbbell Press",    inv([.pectorals], major: [.deltoids], minor: [.triceps])),
+            ("Dumbbell Fly",              inv([.pectorals], trace: [.deltoids])),
+            ("Cable Fly",                 inv([.pectorals], trace: [.deltoids])),
             ("Pec Deck",                  inv([.pectorals])),
-            ("Push-Up",                   inv([.pectorals], [.triceps, .deltoids, .abs])),
-            ("Dip",                       inv([.pectorals, .triceps], [.deltoids])),
+            ("Push-Up",                   inv([.pectorals], major: [.triceps], minor: [.deltoids], trace: [.abs])),
+            ("Dip",                       inv([.pectorals, .triceps], minor: [.deltoids])),
 
             // MARK: Back
-            ("Deadlift",                  inv([.glutes, .hamstrings, .lowerBack], [.traps, .lats, .quads, .forearms])),
-            ("Sumo Deadlift",             inv([.glutes, .adductors, .quads], [.hamstrings, .lowerBack, .traps])),
-            ("Trap Bar Deadlift",         inv([.quads, .glutes, .hamstrings], [.traps, .lowerBack, .forearms])),
-            ("Block Pull",                inv([.glutes, .hamstrings, .lowerBack], [.traps, .lats, .forearms])),
-            ("Rack Pull",                 inv([.traps, .lowerBack, .glutes], [.lats, .forearms, .hamstrings])),
-            ("Barbell Row",               inv([.lats, .rhomboids], [.traps, .teres, .biceps, .lowerBack])),
-            ("Pendlay Row",               inv([.lats, .rhomboids], [.traps, .teres, .biceps])),
-            ("T-Bar Row",                 inv([.lats, .rhomboids], [.traps, .biceps, .teres])),
-            ("Chest-Supported Row",       inv([.lats, .rhomboids], [.traps, .teres, .biceps])),
-            ("Pull-Up",                   inv([.lats], [.biceps, .teres, .rhomboids, .forearms])),
-            ("Chin-Up",                   inv([.lats, .biceps], [.teres, .rhomboids, .forearms])),
-            ("Neutral-Grip Pull-Up",      inv([.lats], [.biceps, .teres, .forearms])),
-            ("Weighted Pull-Up",          inv([.lats], [.biceps, .teres, .rhomboids, .forearms])),
-            ("Lat Pulldown",              inv([.lats], [.biceps, .teres, .rhomboids])),
-            ("Wide-Grip Lat Pulldown",    inv([.lats], [.teres, .biceps, .rhomboids])),
-            ("Seated Cable Row",          inv([.lats, .rhomboids], [.traps, .biceps, .teres])),
-            ("Single-Arm Dumbbell Row",   inv([.lats, .rhomboids], [.traps, .biceps, .teres])),
-            ("Straight-Arm Pulldown",     inv([.lats], [.teres])),
-            ("Shrug",                     inv([.traps], [.forearms])),
-            ("Dead Hang",                 inv([.forearms], [.lats, .traps])),
+            ("Deadlift",                  inv([.glutes, .hamstrings, .lowerBack], major: [.traps, .forearms], minor: [.lats, .quads])),
+            ("Sumo Deadlift",             inv([.glutes, .adductors, .quads], major: [.lowerBack], minor: [.hamstrings, .traps])),
+            ("Trap Bar Deadlift",         inv([.quads, .glutes, .hamstrings], major: [.traps, .forearms], minor: [.lowerBack])),
+            ("Block Pull",                inv([.glutes, .hamstrings, .lowerBack], major: [.traps, .forearms], minor: [.lats])),
+            ("Rack Pull",                 inv([.traps, .lowerBack, .glutes], major: [.forearms], minor: [.lats, .hamstrings])),
+            ("Barbell Row",               inv([.lats, .rhomboids], major: [.traps, .biceps], minor: [.teres, .lowerBack])),
+            ("Pendlay Row",               inv([.lats, .rhomboids], major: [.traps, .biceps], minor: [.teres])),
+            ("T-Bar Row",                 inv([.lats, .rhomboids], major: [.biceps], minor: [.traps, .teres])),
+            ("Chest-Supported Row",       inv([.lats, .rhomboids], major: [.biceps], minor: [.traps, .teres])),
+            ("Pull-Up",                   inv([.lats], major: [.biceps], minor: [.teres, .rhomboids, .forearms])),
+            ("Chin-Up",                   inv([.lats, .biceps], minor: [.teres, .rhomboids, .forearms])),
+            ("Neutral-Grip Pull-Up",      inv([.lats], major: [.biceps], minor: [.teres, .forearms])),
+            ("Weighted Pull-Up",          inv([.lats], major: [.biceps], minor: [.teres, .rhomboids, .forearms])),
+            ("Lat Pulldown",              inv([.lats], major: [.biceps], minor: [.teres, .rhomboids])),
+            ("Wide-Grip Lat Pulldown",    inv([.lats], minor: [.teres, .biceps, .rhomboids])),
+            ("Seated Cable Row",          inv([.lats, .rhomboids], major: [.biceps], minor: [.traps, .teres])),
+            ("Single-Arm Dumbbell Row",   inv([.lats, .rhomboids], major: [.biceps], minor: [.traps, .teres])),
+            ("Straight-Arm Pulldown",     inv([.lats], minor: [.teres])),
+            ("Shrug",                     inv([.traps], minor: [.forearms])),
+            ("Dead Hang",                 inv([.forearms], minor: [.lats, .traps])),
 
             // MARK: Shoulders
-            ("Overhead Press",            inv([.deltoids], [.triceps, .traps])),
-            ("Seated Barbell Press",      inv([.deltoids], [.triceps, .traps])),
-            ("Push Press",                inv([.deltoids], [.triceps, .traps, .quads])),
-            ("Dumbbell Shoulder Press",   inv([.deltoids], [.triceps, .traps])),
-            ("Arnold Press",              inv([.deltoids], [.triceps, .traps])),
-            ("Landmine Press",            inv([.deltoids], [.triceps, .pectorals])),
+            ("Overhead Press",            inv([.deltoids], major: [.triceps], minor: [.traps])),
+            ("Seated Barbell Press",      inv([.deltoids], major: [.triceps], minor: [.traps])),
+            ("Push Press",                inv([.deltoids], major: [.triceps], minor: [.traps, .quads])),
+            ("Dumbbell Shoulder Press",   inv([.deltoids], major: [.triceps], minor: [.traps])),
+            ("Arnold Press",              inv([.deltoids], major: [.triceps], minor: [.traps])),
+            ("Landmine Press",            inv([.deltoids], major: [.triceps], minor: [.pectorals])),
             ("Lateral Raise",             inv([.deltoids])),
             ("Cable Lateral Raise",       inv([.deltoids])),
             ("Front Raise",               inv([.deltoids])),
-            ("Rear Delt Fly",             inv([.deltoids], [.rhomboids, .teres])),
-            ("Face Pull",                 inv([.deltoids], [.rhomboids, .traps, .teres])),
-            ("Upright Row",               inv([.deltoids, .traps], [.biceps])),
+            ("Rear Delt Fly",             inv([.deltoids], minor: [.rhomboids, .teres])),
+            ("Face Pull",                 inv([.deltoids], major: [.rhomboids], minor: [.traps, .teres])),
+            ("Upright Row",               inv([.deltoids, .traps], minor: [.biceps])),
 
             // MARK: Legs
-            ("Back Squat",                inv([.quads, .glutes], [.hamstrings, .lowerBack, .adductors])),
-            ("Front Squat",               inv([.quads], [.glutes, .lowerBack, .abs])),
-            ("Pause Squat",               inv([.quads, .glutes], [.hamstrings, .lowerBack])),
-            ("Box Squat",                 inv([.glutes, .quads], [.hamstrings, .lowerBack])),
-            ("Goblet Squat",              inv([.quads], [.glutes, .adductors])),
-            ("Bulgarian Split Squat",     inv([.quads, .glutes], [.hamstrings, .adductors])),
-            ("Walking Lunge",             inv([.quads, .glutes], [.hamstrings, .adductors])),
-            ("Reverse Lunge",             inv([.glutes, .quads], [.hamstrings])),
-            ("Step-Up",                   inv([.quads, .glutes], [.hamstrings])),
-            ("Leg Press",                 inv([.quads, .glutes], [.hamstrings, .adductors])),
-            ("Hack Squat",                inv([.quads], [.glutes])),
-            ("Romanian Deadlift",         inv([.hamstrings, .glutes], [.lowerBack])),
-            ("Stiff-Leg Deadlift",        inv([.hamstrings, .glutes], [.lowerBack])),
-            ("Good Morning",              inv([.hamstrings, .lowerBack], [.glutes])),
-            ("Hip Thrust",                inv([.glutes], [.hamstrings])),
-            ("Glute Bridge",              inv([.glutes], [.hamstrings])),
+            ("Back Squat",                inv([.quads, .glutes], major: [.hamstrings], minor: [.lowerBack, .adductors])),
+            ("Front Squat",               inv([.quads], major: [.glutes], minor: [.lowerBack, .abs])),
+            ("Pause Squat",               inv([.quads, .glutes], major: [.hamstrings], minor: [.lowerBack])),
+            ("Box Squat",                 inv([.glutes, .quads], major: [.hamstrings], minor: [.lowerBack])),
+            ("Goblet Squat",              inv([.quads], major: [.glutes], minor: [.adductors])),
+            ("Bulgarian Split Squat",     inv([.quads, .glutes], major: [.hamstrings], minor: [.adductors])),
+            ("Walking Lunge",             inv([.quads, .glutes], major: [.hamstrings], minor: [.adductors])),
+            ("Reverse Lunge",             inv([.glutes, .quads], minor: [.hamstrings])),
+            ("Step-Up",                   inv([.quads, .glutes], minor: [.hamstrings])),
+            ("Leg Press",                 inv([.quads, .glutes], major: [.hamstrings], minor: [.adductors])),
+            ("Hack Squat",                inv([.quads], minor: [.glutes])),
+            ("Romanian Deadlift",         inv([.hamstrings, .glutes], major: [.lowerBack])),
+            ("Stiff-Leg Deadlift",        inv([.hamstrings, .glutes], major: [.lowerBack])),
+            ("Good Morning",              inv([.hamstrings, .lowerBack], major: [.glutes])),
+            ("Hip Thrust",                inv([.glutes], major: [.hamstrings])),
+            ("Glute Bridge",              inv([.glutes], minor: [.hamstrings])),
             ("Leg Curl",                  inv([.hamstrings])),
             ("Leg Extension",             inv([.quads])),
             ("Standing Calf Raise",       inv([.calves])),
             ("Seated Calf Raise",         inv([.calves])),
-            ("Wall Sit",                  inv([.quads], [.glutes])),
+            ("Wall Sit",                  inv([.quads], minor: [.glutes])),
             ("Hip Adduction",             inv([.adductors])),
             ("Hip Abduction",             inv([.glutes])),
 
             // MARK: Arms
-            ("Barbell Curl",              inv([.biceps], [.forearms])),
-            ("EZ-Bar Curl",               inv([.biceps], [.forearms])),
-            ("Dumbbell Curl",             inv([.biceps], [.forearms])),
+            ("Barbell Curl",              inv([.biceps], minor: [.forearms])),
+            ("EZ-Bar Curl",               inv([.biceps], minor: [.forearms])),
+            ("Dumbbell Curl",             inv([.biceps], minor: [.forearms])),
             ("Hammer Curl",               inv([.forearms, .biceps])),
-            ("Incline Dumbbell Curl",     inv([.biceps], [.forearms])),
-            ("Preacher Curl",             inv([.biceps], [.forearms])),
-            ("Cable Curl",                inv([.biceps], [.forearms])),
+            ("Incline Dumbbell Curl",     inv([.biceps], minor: [.forearms])),
+            ("Preacher Curl",             inv([.biceps], minor: [.forearms])),
+            ("Cable Curl",                inv([.biceps], minor: [.forearms])),
             ("Concentration Curl",        inv([.biceps])),
             ("Tricep Pushdown",           inv([.triceps])),
             ("Rope Pushdown",             inv([.triceps])),
             ("Skullcrusher",              inv([.triceps])),
             ("Overhead Tricep Extension", inv([.triceps])),
             ("Dumbbell Tricep Kickback",  inv([.triceps])),
-            ("Close-Grip Push-Up",        inv([.triceps, .pectorals], [.deltoids])),
+            ("Close-Grip Push-Up",        inv([.triceps, .pectorals], minor: [.deltoids])),
             ("Wrist Curl",                inv([.forearms])),
             ("Reverse Wrist Curl",        inv([.forearms])),
 
             // MARK: Core
-            ("Plank",                     inv([.abs], [.obliques, .lowerBack])),
-            ("Side Plank",                inv([.obliques], [.abs])),
-            ("Hollow Hold",               inv([.abs], [.hipFlexors])),
-            ("L-Sit",                     inv([.abs], [.hipFlexors, .triceps])),
-            ("Hanging Leg Raise",         inv([.abs], [.hipFlexors, .obliques])),
-            ("Hanging Knee Raise",        inv([.abs], [.hipFlexors])),
-            ("Cable Crunch",              inv([.abs], [.obliques])),
-            ("Ab Wheel Rollout",          inv([.abs], [.lowerBack, .lats])),
-            ("Russian Twist",             inv([.obliques], [.abs])),
-            ("Pallof Press",              inv([.obliques], [.abs])),
-            ("Dead Bug",                  inv([.abs], [.hipFlexors])),
-            ("Bird Dog",                  inv([.lowerBack, .glutes], [.abs])),
-            ("Farmer's Carry",            inv([.traps, .forearms], [.abs, .obliques, .quads])),
+            ("Plank",                     inv([.abs], major: [.obliques], minor: [.lowerBack])),
+            ("Side Plank",                inv([.obliques], major: [.abs])),
+            ("Hollow Hold",               inv([.abs], minor: [.hipFlexors])),
+            ("L-Sit",                     inv([.abs], minor: [.hipFlexors, .triceps])),
+            ("Hanging Leg Raise",         inv([.abs], major: [.hipFlexors], minor: [.obliques])),
+            ("Hanging Knee Raise",        inv([.abs], major: [.hipFlexors])),
+            ("Cable Crunch",              inv([.abs], minor: [.obliques])),
+            ("Ab Wheel Rollout",          inv([.abs], minor: [.lowerBack, .lats])),
+            ("Russian Twist",             inv([.obliques], major: [.abs])),
+            ("Pallof Press",              inv([.obliques], minor: [.abs])),
+            ("Dead Bug",                  inv([.abs], minor: [.hipFlexors])),
+            ("Bird Dog",                  inv([.lowerBack, .glutes], minor: [.abs])),
+            ("Farmer's Carry",            inv([.traps, .forearms], minor: [.abs, .obliques, .quads])),
         ]
         return Dictionary(uniqueKeysWithValues: pairs.map { ($0.0.lowercased(), $0.1) })
     }()
