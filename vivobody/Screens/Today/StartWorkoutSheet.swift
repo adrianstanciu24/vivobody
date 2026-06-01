@@ -8,11 +8,14 @@
 //
 //  Lists every start path in priority order:
 //    1. Repeat last workout — the most common case, so it's the
-//       prominent lime CTA at the top (only when there's a session to
-//       repeat).
-//    2. Start fresh — a blank canvas.
-//    3. Templates — one row per saved template, most-recently-used
-//       first (the caller pre-sorts).
+//       prominent orange CTA at the top (only when there's a session
+//       to repeat).
+//    2. Start from — Start fresh and every saved template share one
+//       outlined-tile shell so the start paths read as a single
+//       family of buttons rather than buttons-then-a-nav-list. When
+//       there's no session to repeat, Start fresh promotes itself to
+//       the prominent orange CTA so the sheet always has one anchor.
+//       Templates are most-recently-used first (the caller pre-sorts).
 //
 //  The sheet never starts the workout directly: it reports the chosen
 //  intent to the caller and dismisses itself. TodayScreen runs the
@@ -53,13 +56,10 @@ struct StartWorkoutSheet: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: Space.section) {
-                        if let lastSession {
-                            repeatSection(lastSession)
+                        if lastSession != nil {
+                            repeatSection
                         }
-                        freshSection
-                        if !templates.isEmpty {
-                            templatesSection
-                        }
+                        startFromSection
                     }
                     .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.md)
@@ -81,53 +81,90 @@ struct StartWorkoutSheet: View {
 
     // MARK: - Sections
 
-    private func repeatSection(_ session: WorkoutSession) -> some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Last time")
-
-            Text(planSummary(for: session))
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-
-            PrimaryActionButton(title: "Repeat Last Workout") {
-                select(.repeatLast)
-            }
+    /// The single prominent action: repeat the most recent workout.
+    /// No "last time" header or plan summary — the CTA carries the
+    /// meaning on its own.
+    private var repeatSection: some View {
+        PrimaryActionButton(title: "Repeat Last Workout") {
+            select(.repeatLast)
         }
     }
 
-    /// Outlined sibling to the Repeat CTA — a clean, empty start. When
-    /// there's no last session this is the only filled option, so it
-    /// promotes itself to a primary lime button instead.
-    private var freshSection: some View {
+    /// Every other way to start, as one family of tiles. Start Fresh
+    /// leads; the saved templates follow. When there's no session to
+    /// repeat, Start Fresh promotes itself to the prominent orange CTA
+    /// so the sheet always has exactly one anchor.
+    private var startFromSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: lastSession == nil ? "Today's workout" : "Or start from")
+            SectionHeader(title: lastSession == nil ? "Start from" : "Or start from")
 
-            if lastSession == nil {
-                PrimaryActionButton(title: "Start Workout", icon: "plus") {
-                    select(.fresh)
+            VStack(spacing: Space.md) {
+                if lastSession == nil {
+                    PrimaryActionButton(title: "Start Fresh", icon: "plus") {
+                        select(.fresh)
+                    }
+                } else {
+                    startTile(
+                        title: "Start Fresh",
+                        icon: "plus",
+                        accessibility: "Start a fresh workout"
+                    ) {
+                        select(.fresh)
+                    }
                 }
-            } else {
-                freshButton
+
+                ForEach(templates, id: \.id) { template in
+                    startTile(
+                        title: template.name,
+                        subtitle: templateSubtitle(template),
+                        icon: "arrow.right",
+                        accessibility: "Start \(template.name)"
+                    ) {
+                        select(.template(template))
+                    }
+                }
             }
         }
     }
 
-    private var freshButton: some View {
+    /// The shared outlined-tile shell for Start Fresh and every
+    /// template. Tapping a tile starts that workout immediately, so
+    /// the trailing glyph is an action affordance (plus / arrow),
+    /// never a navigation chevron.
+    private func startTile(
+        title: String,
+        subtitle: String? = nil,
+        icon: String,
+        accessibility: String,
+        action: @escaping () -> Void
+    ) -> some View {
         Button {
-            select(.fresh)
+            Haptics.soft()
+            action()
         } label: {
-            HStack(spacing: Space.sm) {
-                Text("Start Fresh")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Ink.primary)
-                Spacer()
-                Image(systemName: "plus")
-                    .font(.system(size: 16, weight: .semibold))
+            HStack(spacing: Space.md) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
+                    if let subtitle {
+                        Text(subtitle)
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                            .lineLimit(1)
+                    }
+                }
+
+                Spacer(minLength: Space.sm)
+
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Ink.tertiary)
             }
             .padding(.horizontal, 22)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 56)
+            .frame(minHeight: 64)
             .overlay(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(Surface.edge, lineWidth: 1)
@@ -135,51 +172,7 @@ struct StartWorkoutSheet: View {
             .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Start a fresh workout")
-    }
-
-    private var templatesSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Templates")
-
-            VStack(spacing: 0) {
-                ForEach(Array(templates.enumerated()), id: \.element.id) { index, template in
-                    if index > 0 { SectionDivider() }
-                    templateRow(template)
-                }
-            }
-        }
-    }
-
-    private func templateRow(_ template: WorkoutTemplate) -> some View {
-        Button {
-            Haptics.soft()
-            select(.template(template))
-        } label: {
-            HStack(spacing: Space.md) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(template.name)
-                        .font(Typography.title)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                    Text(templateSubtitle(template))
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                        .lineLimit(1)
-                }
-
-                Spacer(minLength: Space.sm)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Ink.quaternary)
-            }
-            .frame(minHeight: Space.rowMin)
-            .padding(.vertical, Space.sm)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Start \(template.name)")
+        .accessibilityLabel(accessibility)
     }
 
     // MARK: - Helpers
@@ -191,20 +184,33 @@ struct StartWorkoutSheet: View {
         dismiss()
     }
 
-    private func planSummary(for session: WorkoutSession) -> String {
-        let exercises = session.orderedExercises
-        guard !exercises.isEmpty else {
-            return "A blank canvas — add exercises as you go."
-        }
-        let groups = Set(exercises.map(\.group))
-        let groupNames = groups.map(\.displayName).joined(separator: " · ")
-        return "\(exercises.count) exercises  ·  \(groupNames)"
-    }
-
     private func templateSubtitle(_ template: WorkoutTemplate) -> String {
         let count = template.orderedExercises.count
         let base = "\(count) ex · \(template.totalPlannedSets) sets"
         let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
         return groups.isEmpty ? base : "\(base) · \(groups)"
     }
+}
+
+private func sampleTemplates() -> [WorkoutTemplate] {
+    let three = WorkoutTemplate(name: "Test 3", exercises: [
+        TemplateExercise(name: "Bench Press", group: .chest, plannedWeight: 135, sortOrder: 0),
+        TemplateExercise(name: "Barbell Row", group: .back, plannedWeight: 95, sortOrder: 1),
+        TemplateExercise(name: "Overhead Press", group: .shoulders, plannedWeight: 65, sortOrder: 2),
+    ])
+    let two = WorkoutTemplate(name: "Test", exercises: [
+        TemplateExercise(name: "Incline Press", group: .chest, plannedWeight: 95, sortOrder: 0),
+        TemplateExercise(name: "Lat Pulldown", group: .back, plannedWeight: 110, sortOrder: 1),
+    ])
+    return [three, two]
+}
+
+#Preview("Repeat + templates") {
+    StartWorkoutSheet(lastSession: WorkoutSession(), templates: sampleTemplates()) { _ in }
+        .preferredColorScheme(.dark)
+}
+
+#Preview("No last session") {
+    StartWorkoutSheet(lastSession: nil, templates: sampleTemplates()) { _ in }
+        .preferredColorScheme(.dark)
 }
