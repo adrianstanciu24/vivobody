@@ -221,7 +221,8 @@ struct TodayScreen: View {
                 Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
                 Stat(value: "\(session.totalSets)", label: "Sets"),
             ],
-            valueFont: Self.monoStatValue
+            valueFont: Self.monoStatValue,
+            edgeAligned: true
         )
         .frame(maxWidth: .infinity, alignment: .leading)
     }

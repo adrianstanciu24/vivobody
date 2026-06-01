@@ -78,11 +78,17 @@ struct Stat: Identifiable {
 struct StatStrip: View {
     let stats: [Stat]
     var valueFont: Font = Typography.statValue
+    /// When true the outer cells hug the strip's edges (first leading,
+    /// last trailing) while the middle stays centred. Lets the strip
+    /// line up under a gutter-to-gutter section header — the title
+    /// sits over the first value, the trailing note over the last.
+    /// Default stays fully centred so existing strips are unchanged.
+    var edgeAligned: Bool = false
 
     var body: some View {
         HStack(spacing: 0) {
             ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
-                cell(stat)
+                cell(stat, alignment: alignment(for: index))
                 if index < stats.count - 1 {
                     Rectangle()
                         .fill(Surface.edge)
@@ -92,8 +98,15 @@ struct StatStrip: View {
         }
     }
 
-    private func cell(_ stat: Stat) -> some View {
-        VStack(spacing: Space.xs + 2) {
+    private func alignment(for index: Int) -> HorizontalAlignment {
+        guard edgeAligned else { return .center }
+        if index == 0 { return .leading }
+        if index == stats.count - 1 { return .trailing }
+        return .center
+    }
+
+    private func cell(_ stat: Stat, alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: Space.xs + 2) {
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(stat.value)
                     .font(valueFont)
@@ -108,7 +121,7 @@ struct StatStrip: View {
             Text(stat.label)
                 .sectionLabelStyle(0.45)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
     }
 }
 
