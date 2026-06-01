@@ -202,11 +202,11 @@ struct TodayScreen: View {
 
     private var lastWorkoutSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Last workout")
-
             if let session = completedSessions.first {
+                SectionHeader(title: "Last workout", trailing: lastWorkoutMeta(for: session))
                 lastWorkoutCard(for: session)
             } else {
+                SectionHeader(title: "Last workout")
                 Text("Nothing logged yet — your first session lands here.")
                     .font(Typography.body)
                     .foregroundStyle(Ink.tertiary)
@@ -215,28 +215,34 @@ struct TodayScreen: View {
     }
 
     private func lastWorkoutCard(for session: WorkoutSession) -> some View {
-        let date = session.completedAt ?? session.startedAt
-        return VStack(alignment: .leading, spacing: Space.lg) {
-            HStack {
-                Text(Self.relativeDayFormatter.string(from: date))
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Spacer()
-                Text(Self.timeFormatter.string(from: date))
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
-            }
+        StatStrip(
+            stats: [
+                Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
+                Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
+                Stat(value: "\(session.totalSets)", label: "Sets"),
+            ],
+            valueFont: Self.monoStatValue
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 
-            StatStrip(
-                stats: [
-                    Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
-                    Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
-                    Stat(value: "\(session.totalSets)", label: "Sets"),
-                ],
-                valueFont: Self.monoStatValue
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
+    /// Relative day + time of the last session, surfaced as the dim
+    /// trailing note on the section header (mirroring the streak
+    /// header's "N this month"). Keeping the date on the title's
+    /// baseline removes the separate header row that floated out of
+    /// line with the centred stat columns below.
+    private func lastWorkoutMeta(for session: WorkoutSession) -> String {
+        let date = session.completedAt ?? session.startedAt
+        let calendar = Calendar.current
+        let day: String
+        if calendar.isDateInToday(date) {
+            day = "Today"
+        } else if calendar.isDateInYesterday(date) {
+            day = "Yesterday"
+        } else {
+            day = Self.dayFormatter.string(from: date)
         }
+        return day + "  ·  " + Self.timeFormatter.string(from: date)
     }
 
     private static let monoStatValue = Font.system(size: 28, weight: .bold, design: .monospaced)
@@ -323,10 +329,14 @@ struct TodayScreen: View {
 
     // MARK: - Formatters
 
-    private static let relativeDayFormatter: DateFormatter = {
+    /// Weekday + month/day for sessions older than yesterday. Today
+    /// and yesterday are resolved by hand in `lastWorkoutMeta` —
+    /// `doesRelativeDateFormatting` silently yields an empty string
+    /// when paired with a custom `dateFormat`, which is why the date
+    /// used to render blank.
+    private static let dayFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "EEEE  ·  MMM d"
-        f.doesRelativeDateFormatting = true
+        f.dateFormat = "EEE  ·  MMM d"
         return f
     }()
 
