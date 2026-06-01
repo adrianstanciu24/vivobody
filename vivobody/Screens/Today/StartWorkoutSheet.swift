@@ -118,7 +118,8 @@ struct StartWorkoutSheet: View {
                         title: template.name,
                         subtitle: templateSubtitle(template),
                         icon: "arrow.right",
-                        accessibility: "Start \(template.name)"
+                        accessibility: "Start \(template.name)",
+                        filled: true
                     ) {
                         select(.template(template))
                     }
@@ -127,15 +128,22 @@ struct StartWorkoutSheet: View {
         }
     }
 
-    /// The shared outlined-tile shell for Start Fresh and every
-    /// template. Tapping a tile starts that workout immediately, so
-    /// the trailing glyph is an action affordance (plus / arrow),
-    /// never a navigation chevron.
+    /// The shared tile shell for Start Fresh and every template.
+    /// Tapping a tile starts that workout immediately, so the trailing
+    /// glyph is an action affordance (plus / arrow), never a navigation
+    /// chevron.
+    ///
+    /// Two surfaces, so the tiers read apart at a glance: Start Fresh
+    /// is a hollow outline (it *looks* empty — fitting a blank canvas),
+    /// while saved templates sit on a filled glass card (a solid piece
+    /// of material — they already hold a plan). No second colour; the
+    /// distinction is fill vs. outline.
     private func startTile(
         title: String,
         subtitle: String? = nil,
         icon: String,
         accessibility: String,
+        filled: Bool = false,
         action: @escaping () -> Void
     ) -> some View {
         Button {
@@ -165,10 +173,7 @@ struct StartWorkoutSheet: View {
             .padding(.horizontal, 22)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 64)
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(Surface.edge, lineWidth: 1)
-            )
+            .modifier(StartTileSurface(filled: filled))
             .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(.plain)
@@ -189,6 +194,24 @@ struct StartWorkoutSheet: View {
         let base = "\(count) ex · \(template.totalPlannedSets) sets"
         let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
         return groups.isEmpty ? base : "\(base) · \(groups)"
+    }
+}
+
+/// The two start-tile surfaces. `filled` templates ride the standard
+/// glass card; the hollow Start Fresh gets a stroke-only outline so
+/// the empty start and the saved plans never blur together.
+private struct StartTileSurface: ViewModifier {
+    let filled: Bool
+
+    func body(content: Content) -> some View {
+        if filled {
+            content.glassCard(cornerRadius: 18)
+        } else {
+            content.overlay(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(Surface.edge, lineWidth: 1)
+            )
+        }
     }
 }
 
