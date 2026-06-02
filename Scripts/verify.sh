@@ -5,7 +5,7 @@
 #
 # Usage:
 #   Scripts/verify.sh                # default: iPhone 17 Pro, iOS 26.4, launch state
-#   TAB=library Scripts/verify.sh    # tap a tab first (today | history | library | me)
+#   TAB=library Scripts/verify.sh    # tap a tab first (today | history | library | insights | me)
 #   SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
 #   SIMULATOR_OS=26.2 Scripts/verify.sh
 #
@@ -79,11 +79,12 @@ sleep 3
 # Adjust if you switch device sizes.
 if [[ -n "$TAB" ]]; then
   case "$TAB" in
-    today)   X=80  ;;
-    history) X=160 ;;
-    library) X=242 ;;
-    me)      X=322 ;;
-    *) echo "error: unknown TAB '$TAB' (today | history | library | me)" >&2; exit 1 ;;
+    today)    X=53  ;;
+    history)  X=128 ;;
+    library)  X=202 ;;
+    insights) X=276 ;;
+    me)       X=350 ;;
+    *) echo "error: unknown TAB '$TAB' (today | history | library | insights | me)" >&2; exit 1 ;;
   esac
   Y=825
   echo "▸ Tapping $TAB tab at ($X, $Y)..."

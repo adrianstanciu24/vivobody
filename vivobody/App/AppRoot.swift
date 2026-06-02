@@ -95,6 +95,15 @@ struct AppRoot: View {
                 }
             }
 
+            Tab(AppTab.insights.label,
+                systemImage: AppTab.insights.icon,
+                value: AppTab.insights) {
+                NavigationStack {
+                    InsightsScreen(appState: appState)
+                        .navigationTitle("Insights")
+                }
+            }
+
             Tab(AppTab.me.label,
                 systemImage: AppTab.me.icon,
                 value: AppTab.me) {

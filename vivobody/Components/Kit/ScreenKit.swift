@@ -96,6 +96,7 @@ struct StatStrip: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
     }
 
     private func alignment(for index: Int) -> HorizontalAlignment {

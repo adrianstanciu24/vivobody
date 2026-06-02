@@ -19,23 +19,25 @@ import SwiftData
 import Observation
 
 enum AppTab: String, CaseIterable, Hashable {
-    case today, history, library, me
+    case today, history, library, insights, me
 
     var label: String {
         switch self {
-        case .today:   return "Today"
-        case .history: return "History"
-        case .library: return "Library"
-        case .me:      return "Me"
+        case .today:    return "Today"
+        case .history:  return "History"
+        case .library:  return "Library"
+        case .insights: return "Insights"
+        case .me:       return "Me"
         }
     }
 
     var icon: String {
         switch self {
-        case .today:   return "calendar"
-        case .history: return "clock.arrow.circlepath"
-        case .library: return "books.vertical.fill"
-        case .me:      return "person.fill"
+        case .today:    return "calendar"
+        case .history:  return "clock.arrow.circlepath"
+        case .library:  return "books.vertical.fill"
+        case .insights: return "chart.bar.fill"
+        case .me:       return "person.fill"
         }
     }
 }

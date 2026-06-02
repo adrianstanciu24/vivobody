@@ -86,8 +86,9 @@ enum Muscle: String, Hashable, CaseIterable {
 
     /// The coarse group this region rolls up into. Lets a future
     /// surface (e.g. group-level coverage) bridge back to the
-    /// existing `MuscleGroup` vocabulary.
-    var group: MuscleGroup {
+    /// existing `MuscleGroup` vocabulary. `nonisolated` so the pure
+    /// value-type stat models can roll muscles up off the main actor.
+    nonisolated var group: MuscleGroup {
         switch self {
         case .pectorals, .serratus:                       return .chest
         case .lats, .traps, .rhomboids, .teres, .lowerBack: return .back
