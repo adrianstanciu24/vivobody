@@ -25,8 +25,10 @@ import SwiftUI
 
 // MARK: - Section header
 
-/// The label that sits above a section. Sentence case, tertiary ink,
-/// optional dim trailing note ("3 sessions", "vs last week").
+/// The label that sits above a section. A bold sentence-case heading
+/// that reads as a clear "new chapter" cue as you scroll, paired with
+/// an optional dim trailing note ("3 sessions", "vs last week"). The
+/// size contrast between the two is what announces the transition.
 struct SectionHeader: View {
     let title: String
     var trailing: String? = nil
@@ -34,13 +36,18 @@ struct SectionHeader: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(title)
-                .sectionLabelStyle(0.55)
+                .font(Typography.title)
+                .foregroundStyle(.white.opacity(0.92))
+                .textCase(nil)
+                .tracking(0)
+                .accessibilityAddTraits(.isHeader)
             if let trailing {
                 Spacer(minLength: Space.sm)
                 Text(trailing)
                     .sectionLabelStyle(0.40)
             }
         }
+        .padding(.top, Space.sm)
     }
 }
 

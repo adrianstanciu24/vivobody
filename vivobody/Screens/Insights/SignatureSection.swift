@@ -1,23 +1,33 @@
 //
-//  TrainingDNASection.swift
+//  SignatureSection.swift
 //  vivobody
 //
-//  The Insights capstone — a single generative emblem that fuses the
-//  whole picture: volume mix sets each petal's width, development its
-//  reach, effort the bloom's brightness, and cadence a ring of beads.
-//  One plain-language line reads the signature's focus, trajectory,
-//  effort, and cadence; the bloom itself is drawn in a single Canvas
-//  that fills the container width.
+//  The Insights hero — the screen opens on a portrait, not a table.
+//  A single generative emblem fuses the whole picture into a mark
+//  you'd recognise as *yours*: six petals (one per muscle group)
+//  whose reach is how developed the region is and whose width is how
+//  much of your volume it carries, burning brighter the harder you
+//  train, ringed by beads that count your weekly cadence.
+//
+//  It deliberately carries the group-balance read the old tab spread
+//  across a separate roster — so this one mark answers "what's the
+//  shape of my training?" — anchored by three plain numbers (cadence,
+//  streak, balance) and one sentence so the art always has a legend.
+//
+//  No anatomical body here on purpose: the rotatable 3D figure is
+//  Today's hero. Insights is the analytical counterpart, and the
+//  emblem is its signature.
 //
 
 import SwiftUI
 
-struct TrainingDNASection: View {
+struct SignatureSection: View {
     let signature: TrainingSignature
+    let report: ConsistencyReport
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Training DNA", trailing: "your signature")
+            SectionHeader(title: "Your signature", trailing: "the shape of your training")
 
             if !signature.hasSignature {
                 Text("Your signature takes shape once you've logged some training — a living portrait of how you train, all of it in one mark.")
@@ -25,13 +35,24 @@ struct TrainingDNASection: View {
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                insight
-
                 TrainingSignatureView(signature: signature)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Space.sm)
 
-                Text("Each petal is a region — its reach is how developed it is, its width how much of your volume it takes. The brighter the bloom, the harder the training; the beads count your sessions a week.")
+                StatStrip(
+                    stats: [
+                        Stat(value: InsightsFormat.perWeekLabel(signature.cadence), label: "Per week", accent: signature.cadence >= 2),
+                        Stat(value: "\(report.weekStreak)", label: "Week streak"),
+                        Stat(value: "\(Int((signature.balance * 100).rounded()))", unit: "%", label: "Balance"),
+                    ],
+                    valueFont: InsightsFormat.monoStat,
+                    edgeAligned: true
+                )
+                .padding(.vertical, Space.xs)
+
+                verdict
+
+                Text("Each petal is a muscle group — its reach is how developed it is, its width how much of your volume it takes. The brighter the bloom, the harder the training; the beads count your sessions a week.")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -42,14 +63,13 @@ struct TrainingDNASection: View {
 
     /// One read of the whole signature: its focus and trajectory, then
     /// the effort and cadence it was built at.
-    private var insight: some View {
+    private var verdict: some View {
         Text(line(signature))
             .font(Typography.body)
             .fixedSize(horizontal: false, vertical: true)
     }
 
     private func line(_ signature: TrainingSignature) -> AttributedString {
-        // Focus + trajectory.
         var focus: AttributedString
         if let group = signature.dominantGroup {
             focus = AttributedString("\(group.displayName)-led")
@@ -61,7 +81,6 @@ struct TrainingDNASection: View {
         var trend = AttributedString(" \(trendPhrase(signature.trend)). ")
         trend.foregroundColor = Ink.secondary
 
-        // Effort + cadence.
         var effort = AttributedString(effortPhrase(signature.intensity) + ", ")
         effort.foregroundColor = Ink.secondary
         var cadence = AttributedString(InsightsFormat.perWeekLabel(signature.cadence) + "×")
@@ -89,7 +108,7 @@ struct TrainingDNASection: View {
 
 // MARK: - Training signature emblem
 
-/// The Training DNA bloom. Six petals radiate from a core — one per
+/// The signature bloom. Six petals radiate from a core — one per
 /// muscle group, fixed at the wheel position its order assigns — each
 /// reaching out by how developed the region is and fattened by how
 /// much of your volume it carries. A faint ring frames it, beads
@@ -110,11 +129,9 @@ private struct TrainingSignatureView: View {
             drawLabels(in: &context, center: center, radius: radius)
             drawCore(in: &context, center: center, radius: radius)
         }
-        .frame(height: 248)
+        .frame(height: 272)
         .accessibilityLabel(Text(accessibilityText))
     }
-
-    // MARK: Layers
 
     private func drawRing(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
         let r = radius * 0.78

@@ -72,6 +72,7 @@ struct TodayScreen: View {
                 // scroll once you've decided.
                 VStack(alignment: .leading, spacing: Space.section) {
                     bodyModelHero(height: heroHeight > 0 ? heroHeight : proxy.size.height)
+                    muscleBalanceReadout
                     streakSection
                     SectionDivider()
                     lastWorkoutSection
@@ -132,6 +133,104 @@ struct TodayScreen: View {
             .frame(height: height)
             .padding(.horizontal, -Space.gutter)
             .accessibilityHidden(true)
+    }
+
+    /// The "right now" companion to the 3D figure: a quiet, glanceable
+    /// readout of how this week's effective sets spread across the
+    /// muscles, and the one most worth training next. Type-forward and
+    /// non-interactive — the deeper analysis lives on the Insights tab.
+    @ViewBuilder
+    private var muscleBalanceReadout: some View {
+        if !completedSessions.isEmpty {
+            let stats = completedSessions.muscleVolume()
+            let summary = stats.summary
+            VStack(alignment: .leading, spacing: Space.lg) {
+                SectionHeader(title: "Muscle balance", trailing: "last 7 days")
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    Text(balanceSummaryAttributed(summary))
+                        .font(Typography.body)
+                        .fixedSize(horizontal: false, vertical: true)
+                    trainNextLine(summary)
+                }
+                allMusclesLink(stats: stats)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    /// The native drill-down — pushes the full per-muscle breakdown
+    /// (the same reference screen the Insights "Show all muscles" link
+    /// opens) onto Today's own navigation stack. Momentum and forecast
+    /// are derived inside the destination closure so the detraining
+    /// simulation runs only when the detail is actually opened, not on
+    /// every Today render.
+    private func allMusclesLink(stats: [MuscleVolumeStat]) -> some View {
+        NavigationLink {
+            let bodyweight = bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
+            MuscleDetailScreen(
+                stats: stats,
+                momentum: completedSessions.muscleMomentum(bodyweight: bodyweight),
+                forecast: completedSessions.muscleForecast(bodyweight: bodyweight)
+            )
+        } label: {
+            HStack(spacing: Space.xs) {
+                Text("Show all muscles")
+                    .font(Typography.sectionLabel)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .semibold))
+            }
+            .foregroundStyle(Ink.secondary)
+        }
+        .buttonStyle(.plain)
+        .padding(.top, Space.xs)
+    }
+
+    /// The zone split as one type-forward line: each count brightened
+    /// against dim words, the in-range tally in the accent so the
+    /// healthy number is the one that catches the eye.
+    private func balanceSummaryAttributed(_ summary: MuscleVolumeSummary) -> AttributedString {
+        func count(_ n: Int, _ color: Color) -> AttributedString {
+            var s = AttributedString("\(n)")
+            s.foregroundColor = color
+            s.font = .system(size: 16, weight: .semibold)
+            return s
+        }
+        func word(_ text: String) -> AttributedString {
+            var s = AttributedString(text)
+            s.foregroundColor = Ink.tertiary
+            return s
+        }
+        let separator = word("   ·   ")
+        return count(summary.optimalCount, Tint.primary) + word(" in range")
+            + separator + count(summary.underCount, Ink.primary) + word(" to build")
+            + separator + count(summary.restingCount, Ink.primary) + word(" resting")
+    }
+
+    /// One line naming the muscle most worth the next session, or an
+    /// affirmation when everything trained is in range.
+    @ViewBuilder
+    private func trainNextLine(_ summary: MuscleVolumeSummary) -> some View {
+        if let next = summary.neglected.first {
+            Text(trainNextAttributed(next.muscle.displayName))
+                .font(Typography.body)
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            Text("Every muscle you've trained is in its productive range.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    /// Two-tone "Train next: <muscle>" — the muscle name brightened
+    /// against the dimmer lead (AttributedString; `Text` `+` is
+    /// deprecated).
+    private func trainNextAttributed(_ name: String) -> AttributedString {
+        var lead = AttributedString("Train next: ")
+        lead.foregroundColor = Ink.secondary
+        var muscle = AttributedString(name)
+        muscle.foregroundColor = Ink.primary
+        return lead + muscle
     }
 
     private var streakSection: some View {

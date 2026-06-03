@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct ConsistencySection: View {
     let report: ConsistencyReport
@@ -37,6 +38,8 @@ struct ConsistencySection: View {
                 .padding(.vertical, Space.xs)
 
                 insight
+
+                weeklyVolumeSpark
 
                 ConsistencyHeatmap(weeks: report.weeks, daysTrained: report.daysTrainedInWindow)
 
@@ -101,6 +104,49 @@ struct ConsistencySection: View {
         return String(format: "%.1f", value)
     }
 
+    // MARK: - Weekly volume sparkline
+
+    /// Set volume per week across the same six-month window as the
+    /// heatmap, drawn as a calm area so the heatmap's "did I show up?"
+    /// gains a second axis: "how much did I do?" — the swells and dips
+    /// of training output at a glance.
+    private var weeklyVolumeSpark: some View {
+        let weekly = report.weeks.enumerated().map { index, column in
+            WeeklyVolumePoint(
+                week: index,
+                sets: column.filter(\.isInRange).reduce(0) { $0 + $1.sets }
+            )
+        }
+        return VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Weekly volume")
+                .sectionLabelStyle(0.55)
+            Chart(weekly) { point in
+                AreaMark(
+                    x: .value("Week", point.week),
+                    y: .value("Sets", point.sets)
+                )
+                .interpolationMethod(.monotone)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Tint.primary.opacity(0.28), Tint.primary.opacity(0)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                LineMark(
+                    x: .value("Week", point.week),
+                    y: .value("Sets", point.sets)
+                )
+                .interpolationMethod(.monotone)
+                .foregroundStyle(Tint.primary.opacity(0.85))
+            }
+            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
+            .frame(height: 48)
+            .accessibilityLabel(Text("Weekly training volume over the last six months"))
+        }
+    }
+
     // MARK: - Heatmap legend
 
     private var heatmapLegend: some View {
@@ -118,6 +164,14 @@ struct ConsistencySection: View {
                 .foregroundStyle(Ink.tertiary)
         }
     }
+}
+
+/// One bar of the weekly-volume sparkline: total completed sets in a
+/// given week of the heatmap window.
+private struct WeeklyVolumePoint: Identifiable {
+    var id: Int { week }
+    let week: Int
+    let sets: Int
 }
 
 /// Shade for a heatmap level — a faint card tint at rest ramping

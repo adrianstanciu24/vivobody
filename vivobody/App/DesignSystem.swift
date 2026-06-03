@@ -96,8 +96,10 @@ enum Space {
     static let xxl: CGFloat = 24
     /// Outer screen gutter — the left/right padding every tab uses.
     static let gutter: CGFloat = 20
-    /// Gap between major sections on a screen.
-    static let section: CGFloat = 24
+    /// Gap between major sections on a screen. Generous so a new
+    /// section reads as a distinct block, not a continuation of the
+    /// one above it.
+    static let section: CGFloat = 32
     /// Minimum tappable row height (HIG-compliant, glanceable).
     static let rowMin: CGFloat = 60
 }
