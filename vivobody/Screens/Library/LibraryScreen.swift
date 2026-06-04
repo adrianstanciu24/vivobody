@@ -41,6 +41,13 @@ struct LibraryScreen: View {
 
     @Environment(\.modelContext) private var modelContext
 
+    /// Count-only mirror of the templates store, used solely to decide
+    /// whether the toolbar "+" is redundant. On the empty Templates
+    /// screen the centered "Create Template" CTA is the single create
+    /// path, so the toolbar "+" is suppressed — two create buttons for
+    /// one action read as clutter.
+    @Query private var allTemplates: [WorkoutTemplate]
+
     @State private var segment: LibrarySegment = .templates
     @State private var searchText: String = ""
 
@@ -103,13 +110,21 @@ struct LibraryScreen: View {
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button(action: handlePlus) {
-                Image(systemName: "plus")
-                    .fontWeight(.semibold)
+        if !suppressesPlus {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: handlePlus) {
+                    Image(systemName: "plus")
+                        .fontWeight(.semibold)
+                }
+                .accessibilityLabel(plusAccessibilityLabel)
             }
-            .accessibilityLabel(plusAccessibilityLabel)
         }
+    }
+
+    /// Hide the toolbar "+" only on the empty Templates screen, where
+    /// the centered CTA already owns the create action.
+    private var suppressesPlus: Bool {
+        segment == .templates && allTemplates.isEmpty
     }
 
     private func handlePlus() {
@@ -382,7 +397,6 @@ private struct LibraryTemplatesContent: View {
             .buttonStyle(.plain)
             .padding(.top, Space.xs)
 
-            Spacer()
             Spacer()
         }
         .frame(maxWidth: .infinity)

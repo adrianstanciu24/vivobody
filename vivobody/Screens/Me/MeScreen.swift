@@ -90,7 +90,9 @@ struct MeScreen: View {
             }
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
-            .padding(.bottom, Space.xxl)
+            // Extra tail so the last Progress row clears the floating
+            // tab bar at rest instead of peeking out from under it.
+            .padding(.bottom, Space.section + Space.md)
         }
         .forgeBackground()
         .navigationDestination(for: ExerciseProgress.self) { entry in
@@ -263,7 +265,7 @@ struct MeScreen: View {
                 .filter { $0.element.isWeightPR }
                 .map(\.offset)
         )
-        return HStack(spacing: Space.md) {
+        return HStack(spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {
                 Text(entry.name)
                     .font(Typography.sectionHeading)
@@ -273,12 +275,12 @@ struct MeScreen: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
             }
-            .frame(minWidth: 90, alignment: .leading)
+            .frame(minWidth: 88, alignment: .leading)
 
             MiniChart(values: chartValues, prIndices: prSet, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
-                .frame(width: 80, height: 32)
+                .frame(width: 112, height: 44)
 
-            Spacer(minLength: Space.xs)
+            Spacer(minLength: Space.md)
 
             VStack(alignment: .trailing, spacing: Space.xs) {
                 if isDuration {

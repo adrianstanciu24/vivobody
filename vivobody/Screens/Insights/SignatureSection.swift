@@ -124,6 +124,7 @@ private struct TrainingSignatureView: View {
             let radius = Swift.min(size.width, size.height) / 2
 
             drawRing(in: &context, center: center, radius: radius)
+            drawSpokes(in: &context, center: center, radius: radius)
             drawCadenceBeads(in: &context, center: center, radius: radius)
             drawPetals(in: &context, center: center, radius: radius)
             drawLabels(in: &context, center: center, radius: radius)
@@ -137,6 +138,32 @@ private struct TrainingSignatureView: View {
         let r = radius * 0.78
         let rect = CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)
         context.stroke(Path(ellipseIn: rect), with: .color(Surface.cardTint), lineWidth: 1)
+    }
+
+    /// A faint guide line from the core out to each axis label. This
+    /// is the legibility fix: petals are short when a region is
+    /// underdeveloped, so without a spoke the eye can't tell which
+    /// label a stubby petal belongs to. The spoke anchors every petal
+    /// to its named axis, and the dominant region's spoke is lit so
+    /// "back-led" reads straight off the emblem, not just the caption.
+    private func drawSpokes(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+        let petals = signature.petals
+        let count = petals.count
+        guard count > 0 else { return }
+        let inner = radius * 0.09
+        let outer = radius * 0.84
+        for (i, petal) in petals.enumerated() {
+            let angle = (Double(i) / Double(count)) * 2 * .pi - .pi / 2
+            let isDominant = petal.group == signature.dominantGroup
+            var path = Path()
+            path.move(to: CGPoint(x: center.x + cos(angle) * inner, y: center.y + sin(angle) * inner))
+            path.addLine(to: CGPoint(x: center.x + cos(angle) * outer, y: center.y + sin(angle) * outer))
+            context.stroke(
+                path,
+                with: .color(isDominant ? Tint.primary.opacity(0.45) : .white.opacity(0.05)),
+                lineWidth: 1
+            )
+        }
     }
 
     private func drawCadenceBeads(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
@@ -158,10 +185,16 @@ private struct TrainingSignatureView: View {
 
         for (i, petal) in petals.enumerated() {
             let angle = (Double(i) / Double(count)) * 2 * .pi - .pi / 2
-            let length = radius * (0.20 + 0.56 * petal.development)
+            // Reach to near the label ring at full development so a
+            // strong region visibly touches its axis.
+            let length = radius * (0.22 + 0.62 * petal.development)
             let shareNorm = maxShare > 0 ? petal.volumeShare / maxShare : 0
             let halfWidth = radius * (0.05 + 0.30 * shareNorm)
-            let opacity = (0.28 + 0.55 * petal.development) * (0.55 + 0.45 * signature.intensity)
+            let isDominant = petal.group == signature.dominantGroup
+            let base = (0.28 + 0.55 * petal.development) * (0.55 + 0.45 * signature.intensity)
+            // The lead region burns a touch brighter so the bloom
+            // itself communicates the focus the caption spells out.
+            let opacity = isDominant ? Swift.min(1, base + 0.22) : base
 
             var leaf = Path()
             let tip = CGPoint(x: length, y: 0)
@@ -172,6 +205,14 @@ private struct TrainingSignatureView: View {
             var transform = CGAffineTransform(translationX: center.x, y: center.y)
             transform = transform.rotated(by: angle)
             context.fill(leaf.applying(transform), with: .color(Tint.primary.opacity(Swift.min(1, opacity))))
+
+            // A bright bead at the dominant petal's tip pins the eye to
+            // the leading region.
+            if isDominant {
+                let tipPoint = CGPoint(x: center.x + cos(angle) * length, y: center.y + sin(angle) * length)
+                let dot = CGRect(x: tipPoint.x - 3, y: tipPoint.y - 3, width: 6, height: 6)
+                context.fill(Path(ellipseIn: dot), with: .color(Tint.primary))
+            }
         }
     }
 
@@ -182,9 +223,10 @@ private struct TrainingSignatureView: View {
         for (i, petal) in petals.enumerated() {
             let angle = (Double(i) / Double(count)) * 2 * .pi - .pi / 2
             let p = CGPoint(x: center.x + cos(angle) * r, y: center.y + sin(angle) * r)
+            let isDominant = petal.group == signature.dominantGroup
             let text = Text(petal.group.displayName.uppercased())
-                .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(Ink.tertiary)
+                .font(.system(size: 9, weight: isDominant ? .bold : .semibold))
+                .foregroundStyle(isDominant ? Ink.primary : Ink.tertiary)
             context.draw(text, at: p, anchor: .center)
         }
     }

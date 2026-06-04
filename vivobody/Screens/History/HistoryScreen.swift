@@ -391,10 +391,13 @@ private struct SessionRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {
-                Text(titleLine)
-                    .font(prominent ? Typography.title : Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(1)
+                HStack(spacing: Space.sm) {
+                    Text(titleLine)
+                        .font(prominent ? Typography.title : Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
+                    if hasPR { prBadge }
+                }
                 Text(metaLine)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
@@ -403,10 +406,14 @@ private struct SessionRow: View {
 
             Spacer(minLength: Space.sm)
 
+            // Volume is the row's metric, not its headline — kept a calm
+            // grayscale numeral so the workout's identity (name + muscle
+            // fingerprint) leads. The accent lives only in the rare PR
+            // badge, never on every line.
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
-                    .font(.system(size: prominent ? 30 : 22, weight: .bold, design: .monospaced))
-                    .foregroundStyle(hasPR ? Tint.complete : Ink.primary)
+                    .font(.system(size: prominent ? 24 : 19, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(Typography.metricUnit)
@@ -422,24 +429,33 @@ private struct SessionRow: View {
         .contentShape(Rectangle())
     }
 
+    /// The lone accent in the list: a small outlined "PR" tag next to
+    /// a session that set a new top weight. Replaces the old practice
+    /// of flooding the whole volume numeral orange, which made every
+    /// row shout.
+    private var prBadge: some View {
+        Text("PR")
+            .font(.system(size: 10, weight: .heavy, design: .rounded))
+            .foregroundStyle(Tint.primary)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 1)
+            .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
+            .accessibilityLabel("Personal record")
+    }
+
     /// Today's rows lead with the workout's muscle identity; earlier
     /// rows lead with their date.
     private var titleLine: String {
         prominent ? workoutTitle : dateLine
     }
 
-    /// Secondary line: today shows sets · minutes · time; earlier
-    /// shows the muscle summary · time. Either way the numeral on the
-    /// right stays the anchor.
+    /// Secondary line: the session's muscle fingerprint followed by
+    /// the time it was logged. The fingerprint is what stops a column
+    /// of "Full body" rows from reading as identical — you can see at
+    /// a glance which regions each session actually hit — while the
+    /// time distinguishes multiple sessions on the same day.
     private var metaLine: String {
-        if prominent {
-            var parts = ["\(session.totalSets) \(session.totalSets == 1 ? "set" : "sets")"]
-            if displayMinutes >= 1 { parts.append("\(displayMinutes) min") }
-            parts.append(timeString)
-            return parts.joined(separator: "  ·  ")
-        } else {
-            return "\(muscleSummary)  ·  \(timeString)"
-        }
+        "\(muscleFingerprint)  ·  \(timeString)"
     }
 
     private var workoutTitle: String {
@@ -451,16 +467,17 @@ private struct SessionRow: View {
         }
     }
 
-    private var muscleSummary: String {
-        switch muscleTags.count {
+    /// Up to three muscle groups, in worked order, with a "+N" tail
+    /// when the session spans more. Gives even a generic "Full body"
+    /// row a legible signature of what was actually trained.
+    private var muscleFingerprint: String {
+        let names = muscleTags.map(\.displayName)
+        switch names.count {
         case 0: return "Workout"
-        case 1: return muscleTags[0].displayName
-        case 2: return "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
-        default: return "Full body"
+        case 1, 2, 3: return names.joined(separator: " · ")
+        default: return names.prefix(3).joined(separator: " · ") + " +\(names.count - 3)"
         }
     }
-
-    private var displayMinutes: Int { Int(session.duration / 60) }
 
     private var dateLine: String {
         let date = session.completedAt ?? session.startedAt
