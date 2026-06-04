@@ -154,9 +154,40 @@ struct TodayScreen: View {
         )
             .frame(maxWidth: .infinity)
             .frame(height: height)
+            .overlay(alignment: .bottom) { developmentLegend }
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
-            .accessibilityLabel("Your body, lit by the muscles you've trained")
+            .accessibilityLabel("Your body, lit by how developed each muscle is — brighter where you've trained hard, fading where you've eased off")
+    }
+
+    /// The figure's placard. The body's dominant colour is the
+    /// development channel of `MuscleDevelopment` — how built each
+    /// muscle is over months, not a one-session pump — so at rest the
+    /// hero needs one line naming exactly that, or the glow reads as
+    /// decoration. Anchored to the bottom of the figure (its narrowest
+    /// point) over a short fade-to-black scrim so it reads as a caption
+    /// on the portrait, not a floating label. The acute "what to train
+    /// next" voice is a separate section (`readinessReadout`) you
+    /// scroll to; this only decodes the colours you're looking at.
+    private var developmentLegend: some View {
+        Text("Lit by how developed each muscle is — brighter where you've trained hard, fading where you've eased off.")
+            .font(Typography.caption)
+            .foregroundStyle(Ink.secondary)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Space.xl)
+            .padding(.top, Space.section)
+            .padding(.bottom, Space.sm)
+            .background(
+                LinearGradient(
+                    colors: [Color.clear, Surface.background.opacity(0.78)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     /// The figure is the hero, so it takes nearly the whole first
