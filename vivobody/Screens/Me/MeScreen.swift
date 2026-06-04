@@ -345,8 +345,11 @@ struct MeScreen: View {
     private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
 
     /// Lifetime totals as an instrument: total volume as a large
-    /// monospaced hero, with workouts / sets / reps on a hairline
-    /// stat strip beneath. No tiles, no glass — the numbers carry it.
+    /// monospaced hero, with workouts / sets / PRs on a hairline
+    /// stat strip beneath. This is the all-time *odometer* — the
+    /// counterpart to History's this-week *log*. The accented PR
+    /// count gives Me an achievement identity History doesn't carry.
+    /// No tiles, no glass — the numbers carry it.
     private var statsSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
@@ -368,7 +371,11 @@ struct MeScreen: View {
                         stats: [
                             Stat(value: "\(totalWorkouts)", label: "Workouts"),
                             Stat(value: "\(totalSets)", label: "Sets"),
-                            Stat(value: "\(totalReps)", label: "Reps"),
+                            Stat(
+                                value: "\(personalRecords)",
+                                label: personalRecords == 1 ? "PR" : "PRs",
+                                accent: personalRecords > 0
+                            ),
                         ],
                         valueFont: Self.monoStat
                     )
@@ -618,9 +625,11 @@ struct MeScreen: View {
         completedSessions.reduce(0) { $0 + $1.totalSets }
     }
 
-    private var totalReps: Int {
-        completedSessions.reduce(0) { $0 + $1.totalReps }
-    }
+    /// Count of personal records the user currently holds — one per
+    /// tracked lift in the Progress list (each exercise's all-time
+    /// best is, by definition, a PR you hold). Aligned with the
+    /// Progress section right below so the number and the list agree.
+    private var personalRecords: Int { progressEntries.count }
 
     private var totalVolume: Double {
         completedSessions.reduce(0) { $0 + $1.totalVolume }

@@ -4,11 +4,14 @@
 //
 //  Live list of every archived workout, rendered as an instrument:
 //  no cards, no carved glass — structure comes from type, whitespace,
-//  and hairlines on black. The screen opens with the week's defining
-//  numeral (Total volume) as a large monospaced hero, a colored
-//  trend delta, and a card-free stat strip. Below it, sessions are
-//  grouped by date bucket (Today / Yesterday / This Week / Last
-//  Week / month) and laid out as full-width hairline-separated rows:
+//  and hairlines on black. The screen opens as a *training-week log*:
+//  a seven-dot cadence strip (one dot per day, filled when you
+//  trained, ringed on today), a colored trend delta, and a card-free
+//  stat strip led by the streak. This is deliberately about *time*,
+//  not tonnage — Me is the all-time volume odometer; History is the
+//  rhythm. Below it, sessions are grouped by date bucket (Today /
+//  Yesterday / This Week / Last Week / month) and laid out as
+//  full-width hairline-separated rows:
 //
 //    • Today — elevated rows: workout title + meta on the left, a
 //      larger volume numeral on the right.
@@ -81,6 +84,7 @@ struct HistoryScreen: View {
                     WeeklyHero(
                         comparison: sessions.weeklyComparison(),
                         currentStreakDays: currentStreakDays,
+                        workoutDays: workoutDays,
                         unit: unit
                     )
                     .settleIn(0)
@@ -147,6 +151,14 @@ struct HistoryScreen: View {
         return prIDs
     }
 
+    /// Every calendar day (start-of-day) on which at least one
+    /// session was logged. Drives both the streak math and the
+    /// week-cadence strip in the hero.
+    private var workoutDays: Set<Date> {
+        let calendar = Calendar.current
+        return Set(sessions.map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
+    }
+
     /// Length of the current consecutive-workout-day streak ending
     /// today or yesterday. "Today" is forgiving: if the user hasn't
     /// trained today yet, the streak continues counting from
@@ -154,9 +166,7 @@ struct HistoryScreen: View {
     /// when there's no streak (no workout today or yesterday).
     private var currentStreakDays: Int {
         let calendar = Calendar.current
-        let workoutDays: Set<Date> = Set(
-            sessions.map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) }
-        )
+        let workoutDays = self.workoutDays
         guard !workoutDays.isEmpty else { return 0 }
 
         let today = calendar.startOfDay(for: Date())
@@ -186,50 +196,37 @@ struct HistoryScreen: View {
 
 // MARK: - Weekly hero
 
-/// The week as an instrument: a "This week" kicker, the Total volume
-/// numeral as the dominant monospaced hero, a colored trend delta
-/// against last week, and a card-free stat strip (workouts / sets /
-/// streak). No surface, no sparkline — type and a single hairline
-/// carry it.
+/// The week as a *log*, not a ledger: a "This week" kicker with a
+/// colored trend delta, then the seven-dot cadence strip as the
+/// dominant element (which days you showed up), then a card-free
+/// stat strip led by the streak. Volume lives here too, but demoted
+/// to a single cell — the hero is time, not tonnage. That's what
+/// keeps History from reading as a recolored copy of Me's all-time
+/// volume odometer.
 private struct WeeklyHero: View {
     let comparison: WeeklyComparison
     let currentStreakDays: Int
+    let workoutDays: Set<Date>
     let unit: WeightUnit
 
-    private static let volumeHero = Font.system(size: 60, weight: .bold, design: .monospaced)
     private static let monoStat = Font.system(size: 28, weight: .bold, design: .monospaced)
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(
-                title: "This week",
-                trailing: comparison.lastWeek.workouts > 0 ? "vs last week" : nil
-            )
+            header
 
-            HStack(alignment: .lastTextBaseline, spacing: Space.md) {
-                HStack(alignment: .lastTextBaseline, spacing: 6) {
-                    Text(WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit))
-                        .font(Self.volumeHero)
-                        .foregroundStyle(Ink.primary)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
-                    Text(unit.symbol)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer(minLength: Space.sm)
-                trendDelta
-            }
-
-            Text("Total volume")
-                .sectionLabelStyle(0.45)
+            WeekCadenceStrip(workoutDays: workoutDays)
+                .padding(.top, Space.xs)
 
             StatStrip(
                 stats: [
-                    Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
-                    Stat(value: "\(comparison.thisWeek.sets)", label: "Sets"),
                     Stat(value: streakLabel, label: "Streak", accent: currentStreakDays >= 2),
+                    Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
+                    Stat(
+                        value: WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit),
+                        unit: unit.symbol,
+                        label: "Volume"
+                    ),
                 ],
                 valueFont: Self.monoStat
             )
@@ -237,18 +234,33 @@ private struct WeeklyHero: View {
         }
     }
 
+    /// "This week" with the volume trend pinned to the right — the
+    /// week's one editorial signal, kept as a colored numeral rather
+    /// than a chart.
+    private var header: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("This week")
+                .font(Typography.title)
+                .foregroundStyle(.white.opacity(0.92))
+                .accessibilityAddTraits(.isHeader)
+            Spacer(minLength: Space.sm)
+            trendDelta
+        }
+        .padding(.top, Space.sm)
+    }
+
     /// Direction-of-change against last week, as a colored numeral
-    /// rather than a chart: lime when up, dim when flat/down. Hidden
-    /// when there's no prior week to compare against.
+    /// rather than a chart: orange when up, dim when flat/down.
+    /// Hidden when there's no prior week to compare against.
     @ViewBuilder
     private var trendDelta: some View {
         if comparison.lastWeek.volume > 0 {
             let pct = Int((comparison.volumeDelta / comparison.lastWeek.volume * 100).rounded())
-            HStack(spacing: 2) {
+            HStack(spacing: 3) {
                 Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
-                Text("\(abs(pct))%")
+                Text("\(abs(pct))% vs last week")
             }
-            .font(.system(size: 14, weight: .semibold, design: .monospaced))
+            .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(pct >= 0 ? Tint.inProgress : Ink.tertiary)
         }
     }
@@ -256,6 +268,77 @@ private struct WeeklyHero: View {
     private var streakLabel: String {
         currentStreakDays <= 0 ? "—" : "\(currentStreakDays)d"
     }
+}
+
+// MARK: - Week cadence strip
+
+/// Seven dots — the current locale week, Sunday-to-Saturday or
+/// Monday-to-Sunday per the user's calendar. A filled orange dot is
+/// a day you trained; a faint ring is a rest day; today wears a
+/// brighter ring so "where am I in the week" reads at a glance.
+/// Future days in the week are dimmed. This is the streak's calendar
+/// DNA compressed to a single, glanceable row — History's signature.
+private struct WeekCadenceStrip: View {
+    let workoutDays: Set<Date>
+
+    private var calendar: Calendar { .current }
+
+    private var weekDays: [Date] {
+        guard let interval = calendar.dateInterval(of: .weekOfYear, for: Date()) else { return [] }
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: interval.start) }
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(weekDays, id: \.self) { day in
+                cell(for: day)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+    }
+
+    private func cell(for day: Date) -> some View {
+        let start = calendar.startOfDay(for: day)
+        let today = calendar.startOfDay(for: Date())
+        let isWorkout = workoutDays.contains(start)
+        let isToday = calendar.isDateInToday(day)
+        let isFuture = start > today
+
+        return VStack(spacing: Space.sm) {
+            Text(Self.weekdayLetter.string(from: day))
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.40))
+            ZStack {
+                Circle()
+                    .fill(isWorkout ? Tint.primary : Color.clear)
+                Circle()
+                    .stroke(ringColor(isWorkout: isWorkout, isToday: isToday), lineWidth: isToday ? 1.5 : 1)
+            }
+            .frame(width: 30, height: 30)
+            .opacity(isFuture ? 0.30 : 1.0)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Self.accessibilityDay.string(from: day))
+        .accessibilityValue(isWorkout ? "Trained" : "Rest")
+    }
+
+    private func ringColor(isWorkout: Bool, isToday: Bool) -> Color {
+        if isToday { return .white.opacity(0.55) }
+        if isWorkout { return .clear }
+        return .white.opacity(0.10)
+    }
+
+    private static let weekdayLetter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEEEE"
+        return f
+    }()
+
+    private static let accessibilityDay: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEEE"
+        return f
+    }()
 }
 
 // MARK: - Date group section
