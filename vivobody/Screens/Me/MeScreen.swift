@@ -346,12 +346,15 @@ struct MeScreen: View {
     private static let volumeHero = Font.system(size: 52, weight: .bold, design: .monospaced)
     private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
 
-    /// Lifetime totals as an instrument: total volume as a large
-    /// monospaced hero, with workouts / sets / PRs on a hairline
-    /// stat strip beneath. This is the all-time *odometer* — the
-    /// counterpart to History's this-week *log*. The accented PR
-    /// count gives Me an achievement identity History doesn't carry.
-    /// No tiles, no glass — the numbers carry it.
+    /// Lifetime totals as an *odometer*: one giant volume numeral is
+    /// the whole story, with workouts / sets / PRs trailing as a quiet
+    /// single-line spec beneath it — not a second hairline stat strip.
+    /// That's deliberate: History and Insights both carry a 3-up strip
+    /// (a centered weekly scoreboard, an edge-aligned verdict legend),
+    /// so repeating it here made Me read as their wallpaper. Demoting
+    /// it to an inline footnote lets the odometer be Me's singular
+    /// number, the counterpart to History's this-week *log*. The
+    /// accented PR count keeps the achievement identity History lacks.
     private var statsSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
@@ -362,28 +365,55 @@ struct MeScreen: View {
             if completedSessions.isEmpty {
                 emptyJourney
             } else {
-                VStack(alignment: .leading, spacing: Space.xl) {
+                VStack(alignment: .leading, spacing: Space.md) {
                     MetricView(
                         label: "Total volume",
                         value: volumeLabel,
                         unit: weightUnit.symbol,
                         valueFont: Self.volumeHero
                     )
-                    StatStrip(
-                        stats: [
-                            Stat(value: "\(totalWorkouts)", label: "Workouts"),
-                            Stat(value: "\(totalSets)", label: "Sets"),
-                            Stat(
-                                value: "\(personalRecords)",
-                                label: personalRecords == 1 ? "PR" : "PRs",
-                                accent: personalRecords > 0
-                            ),
-                        ],
-                        valueFont: Self.monoStat
-                    )
+                    lifetimeLine
                 }
             }
         }
+    }
+
+    /// The odometer's spec line: lifetime workouts · sets · PRs on one
+    /// quiet row. Values lead in white, labels trail dim, separators
+    /// recede — structurally distinct from the boxed 3-up strips on
+    /// History and Insights, so the giant volume numeral keeps the
+    /// spotlight. The PR count alone wears the accent.
+    private var lifetimeLine: some View {
+        Text(lifetimeSummary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .accessibilityLabel("\(totalWorkouts) workouts, \(totalSets) sets, \(personalRecords) personal records all time")
+    }
+
+    private var lifetimeSummary: AttributedString {
+        let parts: [(value: String, label: String, accent: Bool)] = [
+            ("\(totalWorkouts)", totalWorkouts == 1 ? "workout" : "workouts", false),
+            ("\(totalSets)", totalSets == 1 ? "set" : "sets", false),
+            ("\(personalRecords)", personalRecords == 1 ? "PR" : "PRs", personalRecords > 0),
+        ]
+        var result = AttributedString()
+        for (index, part) in parts.enumerated() {
+            if index > 0 {
+                var separator = AttributedString("   ·   ")
+                separator.foregroundColor = Ink.quaternary
+                result += separator
+            }
+            var value = AttributedString(part.value)
+            value.font = .system(size: 15, weight: .semibold)
+            value.foregroundColor = part.accent ? Tint.primary : Ink.primary
+            result += value
+
+            var label = AttributedString(" " + part.label)
+            label.font = .system(size: 15, weight: .regular)
+            label.foregroundColor = Ink.tertiary
+            result += label
+        }
+        return result
     }
 
     /// Type-forward empty journey — a quiet heading and one line, no
