@@ -41,22 +41,24 @@ enum Tint {
     static let success    = primary
     static let successDim = primaryDim
 
-    // Two functional accents per the product principles: one for
-    // "in progress," one for "complete." They must never read alike
-    // at a 0.5-second glance, so they sit on opposite temperatures.
+    // ONE accent, full stop. Both "in progress" and "complete" are
+    // the same electric orange — the difference between them is read
+    // through motion (spring overshoot), haptics (crescendo), and
+    // fill-state (faint rim → solid flood), never a competing hue.
+    // A second warm accent sitting ~30° away only muddied lists where
+    // the two appeared side by side.
 
     /// In-progress — the live/charged state: the active set, the
-    /// primary action you're about to take. This is electric orange.
+    /// primary action you're about to take.
     static let inProgress = primary
 
     /// Complete — the earned "done" state: a finished set, a finished
-    /// exercise, a PR. A disciplined honey-gold, kept distinct from
-    /// the in-progress orange. Reserved for the *moment* and *locus*
-    /// of completion — never an ambient wash.
-    static let complete    = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 1.0)
-    static let completeDim = Color(.sRGB, red: 0.97, green: 0.74, blue: 0.27, opacity: 0.35)
+    /// exercise, a PR. Same orange as `inProgress`; the *moment*
+    /// (overshoot + haptic + fill flooding in) is what reads as done.
+    static let complete    = primary
+    static let completeDim = primaryDim
 
-    /// Black sits on either accent for CTAs — maximum contrast.
+    /// Black sits on the accent for CTAs — maximum contrast.
     static let onAccent   = Color.black
 
     /// Destructive affordances only (delete, discard). The lone

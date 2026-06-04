@@ -80,7 +80,7 @@ enum BodyModelScene {
         camera.zNear = 0.01
         camera.zFar = 100
         cameraNode.camera = camera
-        cameraNode.position = SCNVector3(0, 0.9, 3.35)
+        cameraNode.position = SCNVector3(0, 0.9, 3.05)
         cameraNode.look(at: SCNVector3(0, 0.9, 0))
         scene.rootNode.addChildNode(cameraNode)
     }
@@ -88,19 +88,25 @@ enum BodyModelScene {
     // MARK: - Lighting
 
     private static func configureLighting(scene: SCNScene) {
+        // The rig is deliberately warm. A neutral white key over the
+        // gray base meshes read clinical — an anatomy plate, not a
+        // living body. A warm key + warm ambient pulls the whole
+        // figure toward the app's molten/forge temperature so it feels
+        // lit from the same fire as the screen behind it; a faintly
+        // cool fill is kept only to preserve cross-form modelling.
         let keyLight = SCNNode()
         keyLight.light = SCNLight()
         keyLight.light?.type = .directional
         keyLight.light?.intensity = 1000
-        keyLight.light?.color = UIColor.white
+        keyLight.light?.color = UIColor(red: 1.0, green: 0.96, blue: 0.90, alpha: 1)
         keyLight.eulerAngles = SCNVector3(-0.5, 0.5, 0)
         scene.rootNode.addChildNode(keyLight)
 
         let fillLight = SCNNode()
         fillLight.light = SCNLight()
         fillLight.light?.type = .directional
-        fillLight.light?.intensity = 500
-        fillLight.light?.color = UIColor(white: 0.9, alpha: 1)
+        fillLight.light?.intensity = 460
+        fillLight.light?.color = UIColor(red: 0.86, green: 0.89, blue: 0.96, alpha: 1)
         fillLight.eulerAngles = SCNVector3(-0.2, -0.8, 0)
         scene.rootNode.addChildNode(fillLight)
 
@@ -108,7 +114,7 @@ enum BodyModelScene {
         ambient.light = SCNLight()
         ambient.light?.type = .ambient
         ambient.light?.intensity = 300
-        ambient.light?.color = UIColor(white: 0.6, alpha: 1)
+        ambient.light?.color = UIColor(red: 0.62, green: 0.56, blue: 0.48, alpha: 1)
         scene.rootNode.addChildNode(ambient)
     }
 

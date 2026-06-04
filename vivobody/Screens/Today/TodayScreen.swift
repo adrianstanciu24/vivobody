@@ -96,27 +96,31 @@ struct TodayScreen: View {
                             }
                             .settleIn(0)
                         readinessReadout.settleIn(1)
-                        startCTA.settleIn(2)
-                        streakSection.settleIn(3)
-                        SectionDivider().settleIn(4)
-                        lastWorkoutSection.settleIn(5)
+                        streakSection.settleIn(2)
+                        SectionDivider().settleIn(3)
+                        lastWorkoutSection.settleIn(4)
                     }
                     .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.xs)
                     .padding(.bottom, Space.xxl)
                 }
                 .scrollIndicators(.hidden)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
-                    // Freeze the first valid viewport height; ignore every
-                    // change that follows as the tab bar minimizes on scroll
-                    // (which grows the viewport and would otherwise re-scale
-                    // the model). Reading the tracked view's own geometry —
-                    // not a captured outer proxy — is what makes SwiftUI
-                    // actually deliver these updates.
-                    if heroHeight == 0, newHeight > 0 { heroHeight = newHeight }
-                }
+                // START is pinned, never part of the scroll, so the body
+                // hero is free to dominate the first screen while the
+                // primary action stays reachable at all times.
+                .safeAreaInset(edge: .bottom, spacing: 0) { pinnedStartBar }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
+                // Latch onto the LARGEST viewport height ever seen, not
+                // the first. The pinned-START `safeAreaInset` makes the
+                // container report a transient, collapsed height during
+                // launch layout; freezing that first value shrank the
+                // hero to a thumbnail. Tracking the max ignores the
+                // transient (and the on-scroll tab-bar minimize never
+                // shrinks the figure, since the value only grows).
+                if newHeight > heroHeight { heroHeight = newHeight }
+            }
         }
         .onAppear {
             Haptics.prepare()
@@ -155,17 +159,22 @@ struct TodayScreen: View {
             .accessibilityLabel("Your body, lit by the muscles you've trained")
     }
 
-    /// The figure takes a little over half of the first viewport so
-    /// the readiness line and the START target clear the fold beneath
-    /// it. `heroHeight` is frozen on first layout (see `body`), so the
-    /// model holds a constant size as the large title collapses on
-    /// scroll rather than rescaling mid-gesture.
+    /// The figure is the hero, so it takes nearly the whole first
+    /// viewport — its rendered scale is proportional to this height
+    /// (the SCNView's field of view binds to the taller axis), which
+    /// is why an earlier half-height value made the model read small.
+    /// START is pinned separately (`safeAreaInset`), so the hero no
+    /// longer has to leave scroll room for it; the readiness line just
+    /// peeks beneath the figure and scrolls up from there. `heroHeight`
+    /// is frozen on first layout (see `body`), so the model holds a
+    /// constant size as the large title collapses on scroll rather
+    /// than rescaling mid-gesture.
     private func bodyHeroHeight(viewport: CGFloat) -> CGFloat {
         let base = heroHeight > 0 ? heroHeight : viewport
         return base * Self.heroFraction
     }
 
-    private static let heroFraction: CGFloat = 0.52
+    private static let heroFraction: CGFloat = 0.88
 
     /// The body's voice: one glanceable line naming what you worked
     /// recently (still glowing on the figure) and what's recovered and
@@ -230,18 +239,23 @@ struct TodayScreen: View {
 
         switch (fresh.isEmpty, ready.isEmpty) {
         case (false, false):
-            return names(fresh, color: Tint.primary)
-                + run(" worked recently. ", color: Ink.secondary)
-                + names(ready, color: Ink.primary)
-                + run(" — recovered and ready.", color: Ink.secondary)
+            // Lead with the opportunity — what's recovered and ready
+            // to load — then name what's still lit from recent work
+            // (orange, matching the muscles glowing on the figure).
+            return names(ready, color: Ink.primary)
+                + run(" — recovered and ready to train. ", color: Ink.secondary)
+                + names(fresh, color: Tint.primary)
+                + run(" still lit from recent work.", color: Ink.secondary)
         case (false, true):
+            // Nothing's fully recovered yet — frame it as work banked,
+            // not a limitation. These are the muscles glowing now.
             return names(fresh, color: Tint.primary)
-                + run(" worked recently — still recovering.", color: Ink.secondary)
+                + run(" — freshly worked, ready again soon.", color: Ink.secondary)
         case (true, false):
             return names(ready, color: Ink.primary)
                 + run(" — recovered and ready to train.", color: Ink.secondary)
         case (true, true):
-            return run("Recovered and ready for the next session.", color: Ink.secondary)
+            return run("Fully recovered — ready for your next session.", color: Ink.secondary)
         }
     }
 
@@ -317,6 +331,31 @@ struct TodayScreen: View {
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)
         .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
+    }
+
+    /// START, pinned to the bottom via `safeAreaInset`. A short scrim
+    /// rises behind it so the scrolling journal dissolves into the bar
+    /// rather than colliding with a hard edge; the gradient runs to
+    /// the screen bottom so the button reads as floating on the forge,
+    /// not sitting in a black tray.
+    private var pinnedStartBar: some View {
+        startCTA
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.lg)
+            .padding(.bottom, Space.sm)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Surface.background.opacity(0),
+                        Surface.background.opacity(0.55),
+                        Surface.background.opacity(0.85),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea(edges: .bottom)
+                .allowsHitTesting(false)
+            )
     }
 
     private var lastWorkoutSection: some View {

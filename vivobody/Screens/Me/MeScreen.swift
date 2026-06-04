@@ -73,25 +73,20 @@ struct MeScreen: View {
             VStack(alignment: .leading, spacing: 0) {
                 statsSection
                     .settleIn(0)
-                if weeklyComparison.hasAnyActivity {
-                    groupSeparator
-                    weeklySection
-                        .settleIn(1)
-                }
                 groupSeparator
                 bodyWeightSection
-                    .settleIn(2)
+                    .settleIn(1)
                 if !progressEntries.isEmpty {
                     groupSeparator
                     progressSection
-                        .settleIn(3)
+                        .settleIn(2)
                 }
                 groupSeparator
                 preferencesSection
-                    .settleIn(4)
+                    .settleIn(3)
                 footer
                     .padding(.top, Space.xxl)
-                    .settleIn(5)
+                    .settleIn(4)
             }
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
@@ -233,135 +228,6 @@ struct MeScreen: View {
         f.dateFormat = "MMM d"
         return f
     }()
-
-    // MARK: - Weekly comparison
-
-    /// Aggregated current vs prior week. Recomputed each render —
-    /// dataset is tiny (weeks are bounded) and memoizing would risk
-    /// staleness after history edits.
-    private var weeklyComparison: WeeklyComparison {
-        completedSessions.weeklyComparison()
-    }
-
-    private var weeklySection: some View {
-        let comp = weeklyComparison
-        // The comparison framing ("vs last week" + the ↗/↘ deltas)
-        // only means something once there's a prior week to measure
-        // against. Until then we show this week's numbers plainly —
-        // no header promise we can't keep, no repeated "First week".
-        let hasPriorWeek = comp.lastWeek.workouts > 0
-        return VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "This week", trailing: hasPriorWeek ? "vs last week" : nil)
-
-            HStack(spacing: 0) {
-                weeklyStat(
-                    value: "\(comp.thisWeek.workouts)",
-                    previous: comp.lastWeek.workouts,
-                    delta: Double(comp.workoutsDelta),
-                    label: "Workouts"
-                )
-                weeklyDivider
-                weeklyStat(
-                    value: "\(comp.thisWeek.sets)",
-                    previous: comp.lastWeek.sets,
-                    delta: Double(comp.setsDelta),
-                    label: "Sets"
-                )
-                weeklyDivider
-                weeklyStat(
-                    value: WeightFormatter.volumeValue(comp.thisWeek.volume, unit: weightUnit),
-                    valueUnit: weightUnit.symbol,
-                    previous: comp.lastWeek.volume,
-                    delta: comp.volumeDelta,
-                    label: "Volume",
-                    isVolume: true
-                )
-            }
-            .padding(.vertical, Space.sm)
-        }
-    }
-
-    /// One weekly stat column — current value (large) with a small
-    /// delta chip below. `previous == 0` means there's no prior week
-    /// to compare to, so the chip is omitted entirely and the value
-    /// stands alone rather than showing a misleading +∞.
-    private func weeklyStat(
-        value: String,
-        valueUnit: String? = nil,
-        previous: some Numeric,
-        delta: Double,
-        label: String,
-        isVolume: Bool = false
-    ) -> some View {
-        VStack(spacing: Space.sm) {
-            HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(value)
-                    .font(Self.monoStat)
-                    .foregroundStyle(Ink.primary)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                if let valueUnit {
-                    Text(valueUnit)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
-                }
-            }
-            weeklyDeltaIndicator(delta: delta, isVolume: isVolume, previousIsZero: previousIsZero(previous))
-            Text(label)
-                .sectionLabelStyle(0.45)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    /// Generic helper for "is this Numeric value zero?" — avoids
-    /// a duplicate Int/Double overload for the call sites above.
-    private func previousIsZero(_ value: some Numeric) -> Bool {
-        // Numeric doesn't conform to Equatable by itself, so route
-        // through the AdditiveArithmetic conformance.
-        if let int = value as? Int { return int == 0 }
-        if let dbl = value as? Double { return dbl == 0 }
-        return false
-    }
-
-    /// The little ↑+12 / ↓−3 / — chip under each weekly stat. Lime
-    /// for up, red for down, dimmed white for flat. When the prior
-    /// week had nothing logged there's nothing to compare to, so we
-    /// render no chip at all — the bare value stands on its own.
-    private func weeklyDeltaIndicator(delta: Double, isVolume: Bool, previousIsZero: Bool) -> some View {
-        Group {
-            if previousIsZero {
-                EmptyView()
-            } else if delta == 0 {
-                HStack(spacing: 3) {
-                    Image(systemName: "minus")
-                        .font(.system(size: 9, weight: .bold))
-                    Text("no change")
-                        .font(Typography.caption)
-                }
-                .foregroundStyle(Ink.tertiary)
-            } else {
-                let isUp = delta > 0
-                let color: Color = isUp ? Tint.inProgress : Tint.danger
-                let label: String = isVolume
-                    ? WeightFormatter.deltaString(delta, unit: weightUnit)
-                    : "\(isUp ? "+" : "")\(Int(delta))"
-                HStack(spacing: 3) {
-                    Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
-                        .font(.system(size: 9, weight: .bold))
-                    Text(label)
-                        .font(Typography.caption)
-                }
-                .foregroundStyle(color)
-            }
-        }
-    }
-
-    private var weeklyDivider: some View {
-        Rectangle()
-            .fill(Surface.edge)
-            .frame(width: 0.5, height: 56)
-    }
 
     // MARK: - Progress
 

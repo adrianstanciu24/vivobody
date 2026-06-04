@@ -52,7 +52,9 @@ struct SetCompleteButton: View {
     /// could "rescue" a tap they didn't actually intend.
     @State private var dragCanceled: Bool = false
 
-    /// The flood-fill colour the moment the set is completed.
+    /// The flood-fill colour the moment the set is completed. Same
+    /// accent as the live state — completion reads through the solid
+    /// fill, the checkmark draw-on, and the haptic, not a new hue.
     private let accent = Tint.complete
     /// The live, "you're about to do this" colour worn by the idle
     /// button — rim, verb text, chevron.
@@ -139,7 +141,7 @@ struct SetCompleteButton: View {
                         lineWidth: 0.9
                     )
             )
-            // Completion glow only — gold flood when done. Idle stays
+            // Completion glow only — accent flood when done. Idle stays
             // a faint lift, no ambient bloom on the live state.
             .shadow(
                 color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.16),
