@@ -64,48 +64,66 @@ struct TodayScreen: View {
 
     var body: some View {
         GeometryReader { proxy in
-            ScrollView {
-                // Order is deliberate: the workout you can start is at the
-                // top, thumb-reachable, above the fold — "Today is the
-                // workout queued up, one tap from starting." The calendar
-                // and history are the journal underneath, reached by a
-                // scroll once you've decided.
-                VStack(alignment: .leading, spacing: Space.section) {
-                    bodyModelHero(height: heroHeight > 0 ? heroHeight : proxy.size.height)
-                    muscleBalanceReadout
-                    streakSection
-                    SectionDivider()
-                    lastWorkoutSection
+            ZStack {
+                Surface.background.ignoresSafeArea()
+
+                // The living atmosphere: an ember field that burns at a
+                // temperature set by the streak + recency, so the home
+                // screen reads as a powered-on instrument rather than a
+                // flat black report. Sits behind the transparent 3D
+                // figure, so the glow breathes through and around it.
+                AmbientForge(warmth: forgeWarmth)
+                    .ignoresSafeArea()
+
+                ScrollView {
+                    // The body leads — your trained figure is the hero
+                    // and the readout's subject. The readiness line gives
+                    // it a voice; then START is the biggest, first-thing-
+                    // you-reach target. The calendar and last workout are
+                    // the journal you scroll down to once you've decided.
+                    VStack(alignment: .leading, spacing: Space.section) {
+                        bodyModelHero(height: bodyHeroHeight(viewport: proxy.size.height))
+                            // Depth: the figure settles back into the forge as
+                            // you scroll past it. Driven by .scrollTransition
+                            // (render-thread) rather than a scroll-offset
+                            // @State, so it never re-runs the body model's
+                            // channel computation per frame — that was what
+                            // made scrolling feel like slow motion.
+                            .scrollTransition(.interactive, axis: .vertical) { content, phase in
+                                content
+                                    .scaleEffect(1 - abs(phase.value) * 0.07, anchor: .top)
+                                    .opacity(1 - abs(phase.value) * 0.30)
+                            }
+                            .settleIn(0)
+                        readinessReadout.settleIn(1)
+                        startCTA.settleIn(2)
+                        streakSection.settleIn(3)
+                        SectionDivider().settleIn(4)
+                        lastWorkoutSection.settleIn(5)
+                    }
+                    .padding(.horizontal, Space.gutter)
+                    .padding(.top, Space.xs)
+                    .padding(.bottom, Space.xxl)
                 }
-                .padding(.horizontal, Space.gutter)
-                .padding(.top, Space.xs)
-                // Clear the floating "+" FAB (56pt) so the last
-                // section can always scroll above it.
-                .padding(.bottom, 72)
+                .scrollIndicators(.hidden)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
+                    // Freeze the first valid viewport height; ignore every
+                    // change that follows as the tab bar minimizes on scroll
+                    // (which grows the viewport and would otherwise re-scale
+                    // the model). Reading the tracked view's own geometry —
+                    // not a captured outer proxy — is what makes SwiftUI
+                    // actually deliver these updates.
+                    if heroHeight == 0, newHeight > 0 { heroHeight = newHeight }
+                }
             }
-            .scrollIndicators(.hidden)
-            .screenBackground()
-            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
-                // Freeze the first valid viewport height; ignore every
-                // change that follows as the tab bar minimizes on scroll
-                // (which grows the viewport and would otherwise re-scale
-                // the model). Reading the tracked view's own geometry —
-                // not a captured outer proxy — is what makes SwiftUI
-                // actually deliver these updates. Measured BEFORE the
-                // bottom inset below so the floating "+" never steals
-                // height from the hero (which shrank the figure).
-                if heroHeight == 0, newHeight > 0 { heroHeight = newHeight }
-            }
-            // Floating "+" FAB. An overlay rather than a safeAreaInset
-            // so it doesn't reserve scroll height (which would shrink
-            // the model); offset up past the tab bar's safe area.
-            .overlay(alignment: .bottomLeading) {
-                startButton
-                    .padding(.leading, Space.gutter)
-                    .padding(.bottom, Space.lg)
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .onAppear { Haptics.prepare() }
+        .onAppear {
+            Haptics.prepare()
+            // A soft "powered-on" tick as the screen settles in — the
+            // ambient-confirmation cousin of the workout's haptics.
+            Haptics.soft()
+        }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
                 lastSession: completedSessions.first,
@@ -117,10 +135,11 @@ struct TodayScreen: View {
 
     // MARK: - Sections
 
-    /// Anatomical body model, full-screen and edge-to-edge atop the
-    /// screen. Drag horizontally to rotate; vertical drags fall
-    /// through to the scroll. Purely decorative for now — the Start
-    /// CTA sits below it, one short scroll away.
+    /// Anatomical body model — the screen's hero and the subject of
+    /// the readiness line beneath it. Edge-to-edge; drag horizontally
+    /// to rotate, vertical drags fall through to the scroll. Lit by
+    /// the muscles you've trained (development + acute fatigue), so it
+    /// reads as your body, not a mannequin.
     private func bodyModelHero(height: CGFloat) -> some View {
         RotatableBodyModel(
             renderHeight: height,
@@ -132,30 +151,42 @@ struct TodayScreen: View {
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .padding(.horizontal, -Space.gutter)
-            .accessibilityHidden(true)
+            .accessibilityElement()
+            .accessibilityLabel("Your body, lit by the muscles you've trained")
     }
 
-    /// The "right now" companion to the 3D figure: a quiet, glanceable
-    /// readout of how this week's effective sets spread across the
-    /// muscles, and the one most worth training next. Type-forward and
-    /// non-interactive — the deeper analysis lives on the Insights tab.
+    /// The figure takes a little over half of the first viewport so
+    /// the readiness line and the START target clear the fold beneath
+    /// it. `heroHeight` is frozen on first layout (see `body`), so the
+    /// model holds a constant size as the large title collapses on
+    /// scroll rather than rescaling mid-gesture.
+    private func bodyHeroHeight(viewport: CGFloat) -> CGFloat {
+        let base = heroHeight > 0 ? heroHeight : viewport
+        return base * Self.heroFraction
+    }
+
+    private static let heroFraction: CGFloat = 0.52
+
+    /// The body's voice: one glanceable line naming what you worked
+    /// recently (still glowing on the figure) and what's recovered and
+    /// ready to load again — read from the same development model that
+    /// colours the figure, so the words and the body always agree. The
+    /// per-muscle drill-down stays one tap away.
     @ViewBuilder
-    private var muscleBalanceReadout: some View {
-        if !completedSessions.isEmpty {
-            let stats = completedSessions.muscleVolume()
-            let summary = stats.summary
-            VStack(alignment: .leading, spacing: Space.lg) {
-                SectionHeader(title: "Muscle balance", trailing: "last 7 days")
-                VStack(alignment: .leading, spacing: Space.sm) {
-                    Text(balanceSummaryAttributed(summary))
-                        .font(Typography.body)
-                        .fixedSize(horizontal: false, vertical: true)
-                    trainNextLine(summary)
-                }
-                allMusclesLink(stats: stats)
+    private var readinessReadout: some View {
+        let readiness = completedSessions.bodyReadiness(
+            bodyweight: bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
+        )
+        VStack(alignment: .leading, spacing: Space.sm) {
+            SectionHeader(title: "Your body", trailing: "right now")
+            Text(readinessSentence(readiness))
+                .font(Typography.body)
+                .fixedSize(horizontal: false, vertical: true)
+            if !completedSessions.isEmpty {
+                allMusclesLink(stats: completedSessions.muscleVolume())
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// The native drill-down — pushes the full per-muscle breakdown
@@ -185,52 +216,67 @@ struct TodayScreen: View {
         .padding(.top, Space.xs)
     }
 
-    /// The zone split as one type-forward line: each count brightened
-    /// against dim words, the in-range tally in the accent so the
-    /// healthy number is the one that catches the eye.
-    private func balanceSummaryAttributed(_ summary: MuscleVolumeSummary) -> AttributedString {
-        func count(_ n: Int, _ color: Color) -> AttributedString {
-            var s = AttributedString("\(n)")
-            s.foregroundColor = color
-            s.font = .system(size: 16, weight: .semibold)
-            return s
+    /// Two-tone body-state line. Freshly-worked groups take the ember
+    /// accent — they're the ones glowing on the figure — recovered-
+    /// and-ready groups read in bright ink, and the connective words
+    /// stay dim, so the eye lands on the muscle names.
+    private func readinessSentence(_ r: BodyReadiness) -> AttributedString {
+        guard r.hasTrained else {
+            return run("Nothing trained yet — your first workout lights up the body.",
+                       color: Ink.secondary)
         }
-        func word(_ text: String) -> AttributedString {
-            var s = AttributedString(text)
-            s.foregroundColor = Ink.tertiary
-            return s
-        }
-        let separator = word("   ·   ")
-        return count(summary.optimalCount, Tint.primary) + word(" in range")
-            + separator + count(summary.underCount, Ink.primary) + word(" to build")
-            + separator + count(summary.restingCount, Ink.primary) + word(" resting")
-    }
+        let fresh = r.fresh.map { $0.group.displayName }
+        let ready = r.ready.map { $0.group.displayName }
 
-    /// One line naming the muscle most worth the next session, or an
-    /// affirmation when everything trained is in range.
-    @ViewBuilder
-    private func trainNextLine(_ summary: MuscleVolumeSummary) -> some View {
-        if let next = summary.neglected.first {
-            Text(trainNextAttributed(next.muscle.displayName))
-                .font(Typography.body)
-                .fixedSize(horizontal: false, vertical: true)
-        } else {
-            Text("Every muscle you've trained is in its productive range.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+        switch (fresh.isEmpty, ready.isEmpty) {
+        case (false, false):
+            return names(fresh, color: Tint.primary)
+                + run(" worked recently. ", color: Ink.secondary)
+                + names(ready, color: Ink.primary)
+                + run(" — recovered and ready.", color: Ink.secondary)
+        case (false, true):
+            return names(fresh, color: Tint.primary)
+                + run(" worked recently — still recovering.", color: Ink.secondary)
+        case (true, false):
+            return names(ready, color: Ink.primary)
+                + run(" — recovered and ready to train.", color: Ink.secondary)
+        case (true, true):
+            return run("Recovered and ready for the next session.", color: Ink.secondary)
         }
     }
 
-    /// Two-tone "Train next: <muscle>" — the muscle name brightened
-    /// against the dimmer lead (AttributedString; `Text` `+` is
-    /// deprecated).
-    private func trainNextAttributed(_ name: String) -> AttributedString {
-        var lead = AttributedString("Train next: ")
-        lead.foregroundColor = Ink.secondary
-        var muscle = AttributedString(name)
-        muscle.foregroundColor = Ink.primary
-        return lead + muscle
+    /// A coloured, semibold run of naturally-joined group names.
+    private func names(_ groupNames: [String], color: Color) -> AttributedString {
+        var a = AttributedString(joinedGroupNames(groupNames))
+        a.foregroundColor = color
+        a.font = .system(size: 16, weight: .semibold)
+        return a
+    }
+
+    /// A dim connective run at body size.
+    private func run(_ text: String, color: Color) -> AttributedString {
+        var a = AttributedString(text)
+        a.foregroundColor = color
+        a.font = Typography.body
+        return a
+    }
+
+    /// Join group names into a clause-leading phrase — lower-cased
+    /// "a, b and c", first letter capitalised, capped so the line
+    /// never wraps past two rows.
+    private func joinedGroupNames(_ names: [String], limit: Int = 4) -> String {
+        let lowered = names.map { $0.lowercased() }
+        let shown = Array(lowered.prefix(limit))
+        let extra = lowered.count - shown.count
+        var phrase: String
+        switch shown.count {
+        case 0:  phrase = ""
+        case 1:  phrase = shown[0]
+        case 2:  phrase = "\(shown[0]) and \(shown[1])"
+        default: phrase = shown.dropLast().joined(separator: ", ") + " and " + shown.last!
+        }
+        if extra > 0 { phrase = shown.joined(separator: ", ") + " and \(extra) more" }
+        return phrase.prefix(1).uppercased() + phrase.dropFirst()
     }
 
     private var streakSection: some View {
@@ -246,57 +292,31 @@ struct TodayScreen: View {
 
     private var streakHeading: some View {
         HStack(alignment: .firstTextBaseline, spacing: 4) {
-            Text("\(currentStreakDays)")
-                .font(.system(size: 36, weight: .bold, design: .monospaced))
-                .foregroundStyle(currentStreakDays > 0 ? Tint.inProgress : Ink.primary)
-                .monospacedDigit()
+            // Rolls into place like the workout's odometer instead of
+            // blinking in — the streak feels counted, not printed.
+            DigitTicker(
+                value: Double(currentStreakDays),
+                font: .system(size: 36, weight: .bold, design: .monospaced),
+                color: currentStreakDays > 0 ? Tint.inProgress : Ink.primary
+            )
             Text(currentStreakDays == 1 ? "day" : "days")
                 .font(Typography.metricUnit)
                 .foregroundStyle(Ink.tertiary)
         }
     }
 
-    /// Floating lime "+" FAB — the single entry point to starting a
-    /// workout. Bottom-left so the 3D model owns the whole hero;
-    /// tapping it raises the StartWorkoutSheet (Repeat / Fresh /
-    /// templates). Shaped as a capsule (echoing the selected tab
-    /// pill) with a top specular sheen + soft elevation so it reads
-    /// as a raised piece of material rather than a flat disc.
-    private var startButton: some View {
-        Button {
-            Haptics.soft()
+    /// The primary target: a full-width START, the biggest and first-
+    /// thing-you-reach control on the screen (first principles — the
+    /// most likely next action is always the largest target). Tapping
+    /// raises the StartWorkoutSheet, so this one button covers every
+    /// way to begin: Repeat / Fresh / a saved template. A neutral soft
+    /// elevation lifts it off the black as the screen's clear anchor.
+    private var startCTA: some View {
+        PrimaryActionButton(title: "Start Workout") {
             showStartSheet = true
-        } label: {
-            plusGlyph
-                .frame(width: 78, height: 52)
-                .background(Capsule(style: .continuous).fill(Tint.primary))
-                .overlay {
-                    Capsule(style: .continuous)
-                        .stroke(
-                            LinearGradient(
-                                colors: [.white.opacity(0.5), .white.opacity(0.08)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ),
-                            lineWidth: 0.75
-                        )
-                }
-                .topSpecularSheen(cornerRadius: 26, intensity: 0.22, height: 0.55)
-                .softElevation(radius: 16, y: 8, opacity: 0.45)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Start a workout")
-    }
-
-    /// A "+" built from two rounded bars rather than the SF Symbol —
-    /// thinner strokes with fully rounded caps read crisper and more
-    /// modern than the heavy system glyph.
-    private var plusGlyph: some View {
-        ZStack {
-            Capsule().frame(width: 20, height: 4)
-            Capsule().frame(width: 4, height: 20)
-        }
-        .foregroundStyle(Tint.onAccent)
+        .softElevation(radius: 18, y: 10, opacity: 0.45)
+        .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
     }
 
     private var lastWorkoutSection: some View {
@@ -415,6 +435,12 @@ struct TodayScreen: View {
             cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
         }
         return count
+    }
+
+    /// Forge temperature, from the shared training-warmth signal so
+    /// Today burns at the same scale as every other tab.
+    private var forgeWarmth: Double {
+        completedSessions.forgeWarmth
     }
 
     private func monthCount(in date: Date) -> Int {

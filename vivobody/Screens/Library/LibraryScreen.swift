@@ -80,7 +80,7 @@ struct LibraryScreen: View {
                 )
             }
         }
-        .screenBackground()
+        .forgeBackground()
         .searchable(
             text: $searchText,
             placement: .navigationBarDrawer(displayMode: .always),
@@ -587,8 +587,9 @@ private struct LibraryExercisesContent: View {
                 equipmentFilterStrip
 
                 LazyVStack(alignment: .leading, spacing: Space.section) {
-                    ForEach(filteredGroups, id: \.group) { section in
+                    ForEach(Array(filteredGroups.enumerated()), id: \.element.group) { index, section in
                         groupSection(group: section.group, items: section.items)
+                            .settleIn(index)
                     }
                 }
                 .padding(.horizontal, Space.gutter)

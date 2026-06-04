@@ -72,26 +72,32 @@ struct MeScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 statsSection
+                    .settleIn(0)
                 if weeklyComparison.hasAnyActivity {
                     groupSeparator
                     weeklySection
+                        .settleIn(1)
                 }
                 groupSeparator
                 bodyWeightSection
+                    .settleIn(2)
                 if !progressEntries.isEmpty {
                     groupSeparator
                     progressSection
+                        .settleIn(3)
                 }
                 groupSeparator
                 preferencesSection
+                    .settleIn(4)
                 footer
                     .padding(.top, Space.xxl)
+                    .settleIn(5)
             }
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
             .padding(.bottom, Space.xxl)
         }
-        .screenBackground()
+        .forgeBackground()
         .navigationDestination(for: ExerciseProgress.self) { entry in
             ExerciseProgressDetail(progress: entry)
         }

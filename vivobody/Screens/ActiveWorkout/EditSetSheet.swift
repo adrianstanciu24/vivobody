@@ -43,6 +43,15 @@ struct EditSetSheet: View {
         )
     }
 
+    /// Writing RIR here marks it explicitly logged, so effort stats
+    /// can tell a real reading apart from the default-2 placeholder.
+    private var rirBinding: Binding<Int> {
+        Binding(
+            get: { set.repsInReserve },
+            set: { set.repsInReserve = $0; set.rirLogged = true }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 14) {
@@ -68,7 +77,7 @@ struct EditSetSheet: View {
                         verticalPadding: 12
                     )
 
-                    RIRSelector(value: $set.repsInReserve)
+                    RIRSelector(value: rirBinding)
 
                 case .duration:
                     NumberScrubber(

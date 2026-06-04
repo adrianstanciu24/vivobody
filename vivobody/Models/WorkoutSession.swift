@@ -167,6 +167,7 @@ final class WorkoutSession: Identifiable {
         let ordered = exercise.orderedSets
         guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return }
         ordered[index].repsInReserve = rir
+        ordered[index].rirLogged = true
     }
 
     func skipRest() {

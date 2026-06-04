@@ -52,7 +52,7 @@ struct HistoryScreen: View {
                 content
             }
         }
-        .screenBackground()
+        .forgeBackground()
     }
 
     // MARK: - Empty state
@@ -83,15 +83,17 @@ struct HistoryScreen: View {
                         currentStreakDays: currentStreakDays,
                         unit: unit
                     )
+                    .settleIn(0)
                     SectionDivider()
                 }
 
-                ForEach(Array(groups.enumerated()), id: \.element.id) { _, group in
+                ForEach(Array(groups.enumerated()), id: \.element.id) { index, group in
                     DateGroupSection(
                         group: group,
                         unit: unit,
                         prSessions: prSet
                     )
+                    .settleIn(index + 1)
                 }
             }
             .padding(.horizontal, Space.gutter)

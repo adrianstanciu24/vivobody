@@ -59,14 +59,19 @@ struct InsightsScreen: View {
                     let plan = TrainNextPlan(volume: stats, momentum: momentum, forecast: forecast)
 
                     SignatureSection(signature: signature, report: consistency)
+                        .settleIn(0)
                     groupSeparator
                     TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast)
+                        .settleIn(1)
                     groupSeparator
                     StrengthTrajectorySection(board: strength, progress: progress)
+                        .settleIn(2)
                     groupSeparator
                     ConsistencySection(report: consistency)
+                        .settleIn(3)
                     groupSeparator
                     SymmetrySection(board: symmetry)
+                        .settleIn(4)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,7 +80,7 @@ struct InsightsScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .screenBackground()
+        .forgeBackground()
     }
 
     // MARK: - Group separator

@@ -266,7 +266,10 @@ extension Exercise {
                         weight: templateSet.weight,
                         reps: templateSet.reps,
                         duration: templateSet.duration,
-                        sortOrder: i
+                        sortOrder: i,
+                        plannedWeight: templateSet.weight,
+                        plannedReps: templateSet.reps,
+                        plannedDuration: templateSet.duration
                     )
                 )
             }

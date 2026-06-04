@@ -163,7 +163,10 @@ final class Exercise: Identifiable {
                 weight: plannedWeight,
                 reps: plannedReps,
                 duration: plannedDuration,
-                sortOrder: i
+                sortOrder: i,
+                plannedWeight: plannedWeight,
+                plannedReps: plannedReps,
+                plannedDuration: plannedDuration
             )
             self.sets.append(set)
         }
@@ -197,8 +200,33 @@ final class WorkoutSet: Identifiable {
     /// default and ignored for timed holds.
     var repsInReserve: Int = 2
 
+    /// Whether the lifter explicitly set `repsInReserve` for this set.
+    /// `repsInReserve` defaults to 2 and has no "unset" value of its
+    /// own, so a freshly-spawned set is indistinguishable from one the
+    /// user deliberately rated as RIR 2. This flag — flipped true only
+    /// when the RIR control is actually touched — lets effort stats
+    /// (sets-to-failure, intensity trends, RIR consistency, etc.)
+    /// count only real readings and report honest coverage. Stays
+    /// false for `.duration` holds, which carry no RIR. Additive
+    /// defaulted field — no migration.
+    var rirLogged: Bool = false
+
     /// Stable position within the parent exercise.
     var sortOrder: Int = 0
+
+    /// The planned target this set was spawned from — the template's
+    /// per-set prescription, or the previous session's logged value
+    /// for a fresh copy — captured at spawn time so it survives the
+    /// in-place edits that overwrite `weight`/`reps`/`duration` as the
+    /// user logs the actual set. Zero means "no plan was recorded":
+    /// pre-snapshot data, or an ad-hoc set added mid-workout. Enables
+    /// exact planned-vs-actual adherence even for pyramid / per-set
+    /// programming, where the owning Exercise's uniform `planned*`
+    /// fields only reflect the first set. Additive defaulted fields —
+    /// no migration.
+    var plannedWeight: Double = 0
+    var plannedReps: Int = 0
+    var plannedDuration: TimeInterval = 0
 
     /// Back-pointer to the owning exercise. Auto-managed by the
     /// inverse relationship on `Exercise.sets`.
@@ -211,7 +239,11 @@ final class WorkoutSet: Identifiable {
         duration: TimeInterval = 0,
         isCompleted: Bool = false,
         repsInReserve: Int = 2,
-        sortOrder: Int = 0
+        rirLogged: Bool = false,
+        sortOrder: Int = 0,
+        plannedWeight: Double = 0,
+        plannedReps: Int = 0,
+        plannedDuration: TimeInterval = 0
     ) {
         self.id = id
         self.weight = weight
@@ -219,7 +251,11 @@ final class WorkoutSet: Identifiable {
         self.duration = duration
         self.isCompleted = isCompleted
         self.repsInReserve = repsInReserve
+        self.rirLogged = rirLogged
         self.sortOrder = sortOrder
+        self.plannedWeight = plannedWeight
+        self.plannedReps = plannedReps
+        self.plannedDuration = plannedDuration
     }
 }
 
@@ -292,7 +328,10 @@ extension Exercise {
                     reps: sourceSet.reps,
                     duration: sourceSet.duration,
                     isCompleted: false,
-                    sortOrder: i
+                    sortOrder: i,
+                    plannedWeight: sourceSet.weight,
+                    plannedReps: sourceSet.reps,
+                    plannedDuration: sourceSet.duration
                 )
             )
         }

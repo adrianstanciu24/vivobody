@@ -28,12 +28,16 @@ enum BodyModelScene {
     /// development / momentum / fatigue triple; absent nodes render
     /// untrained. Returns nil only if the bundled archive is missing
     /// (a build-packaging error, not a runtime condition).
-    static func make(channels: [String: MuscleDevelopment.Channels] = [:]) -> SCNScene? {
+    static func make(
+        channels: [String: MuscleDevelopment.Channels] = [:],
+        breathing: Bool = true
+    ) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
               let scene = try? SCNScene(url: url) else { return nil }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
             applyMaterials(pivot: pivot, channels: channels)
+            if breathing { addBreathing(to: pivot) }
         }
         configureCamera(scene: scene)
         configureLighting(scene: scene)
@@ -47,6 +51,24 @@ enum BodyModelScene {
     static func applyChannels(_ channels: [String: MuscleDevelopment.Channels], to scene: SCNScene) {
         guard let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) else { return }
         applyMaterials(pivot: pivot, channels: channels)
+    }
+
+    // MARK: - Idle breathing
+
+    /// A slow, shallow scale pulse on the whole figure so it reads as
+    /// alive at rest rather than a frozen mannequin. Uses `scale(by:)`
+    /// (multiplicative) so it respects whatever scale the baked archive
+    /// already applies to the pivot, and the inhale/exhale are exact
+    /// inverses so it never drifts. Independent of the pan gesture,
+    /// which only touches the pivot's Y rotation.
+    private static func addBreathing(to node: SCNNode) {
+        let amount: CGFloat = 1.014
+        let inhale = SCNAction.scale(by: amount, duration: 2.0)
+        inhale.timingMode = .easeInEaseOut
+        let exhale = SCNAction.scale(by: 1.0 / amount, duration: 2.7)
+        exhale.timingMode = .easeInEaseOut
+        let cycle = SCNAction.sequence([inhale, exhale])
+        node.runAction(.repeatForever(cycle), forKey: "breathing")
     }
 
     // MARK: - Camera
