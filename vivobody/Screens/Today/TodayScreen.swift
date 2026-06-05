@@ -82,7 +82,15 @@ struct TodayScreen: View {
                     // you-reach target. The calendar and last workout are
                     // the journal you scroll down to once you've decided.
                     VStack(alignment: .leading, spacing: Space.section) {
-                        bodyModelHero(height: bodyHeroHeight(viewport: proxy.size.height))
+                        // The figure and its caption read as one unit: the
+                        // portrait, then the line decoding its colours sitting
+                        // just beneath the feet (over the plain background, not
+                        // over the model — the muscle detail made an overlaid
+                        // caption unreadable).
+                        VStack(spacing: Space.sm) {
+                            bodyModelHero(height: bodyHeroHeight(viewport: proxy.size.height))
+                            developmentLegend
+                        }
                             // Depth: the figure settles back into the forge as
                             // you scroll past it. Driven by .scrollTransition
                             // (render-thread) rather than a scroll-offset
@@ -154,7 +162,6 @@ struct TodayScreen: View {
         )
             .frame(maxWidth: .infinity)
             .frame(height: height)
-            .overlay(alignment: .bottom) { developmentLegend }
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
             .accessibilityLabel("Your body, lit by how developed each muscle is — brighter where you've trained hard, fading where you've eased off")
@@ -164,11 +171,12 @@ struct TodayScreen: View {
     /// development channel of `MuscleDevelopment` — how built each
     /// muscle is over months, not a one-session pump — so at rest the
     /// hero needs one line naming exactly that, or the glow reads as
-    /// decoration. Anchored to the bottom of the figure (its narrowest
-    /// point) over a short fade-to-black scrim so it reads as a caption
-    /// on the portrait, not a floating label. The acute "what to train
-    /// next" voice is a separate section (`readinessReadout`) you
-    /// scroll to; this only decodes the colours you're looking at.
+    /// decoration. Placed directly beneath the figure (over the plain
+    /// background, not overlaid on the model — the muscle/skeleton
+    /// detail made an overlaid caption unreadable) so it reads as a
+    /// caption under the portrait. The acute "what to train next" voice
+    /// is a separate section (`readinessReadout`) you scroll to; this
+    /// only decodes the colours you're looking at.
     private var developmentLegend: some View {
         Text("Lit by how developed each muscle is — brighter where you've trained hard, fading where you've eased off.")
             .font(Typography.caption)
@@ -177,16 +185,6 @@ struct TodayScreen: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Space.xl)
-            .padding(.top, Space.section)
-            .padding(.bottom, Space.sm)
-            .background(
-                LinearGradient(
-                    colors: [Color.clear, Surface.background.opacity(0.78)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .allowsHitTesting(false)
             .accessibilityHidden(true)
     }
 
@@ -205,7 +203,7 @@ struct TodayScreen: View {
         return base * Self.heroFraction
     }
 
-    private static let heroFraction: CGFloat = 0.88
+    private static let heroFraction: CGFloat = 0.80
 
     /// The body's voice: one glanceable line naming what you worked
     /// recently (still glowing on the figure) and what's recovered and
@@ -357,7 +355,7 @@ struct TodayScreen: View {
     /// way to begin: Repeat / Fresh / a saved template. A neutral soft
     /// elevation lifts it off the black as the screen's clear anchor.
     private var startCTA: some View {
-        PrimaryActionButton(title: "Start Workout") {
+        PrimaryActionButton(title: "Start Workout", icon: "chevron.up") {
             showStartSheet = true
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)

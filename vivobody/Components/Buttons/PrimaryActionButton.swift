@@ -27,19 +27,9 @@ struct PrimaryActionButton: View {
     var accent: Color = Tint.primary
     let action: () -> Void
 
-    @State private var pressScale: CGFloat = 1.0
-
     var body: some View {
         Button {
             Haptics.crescendo()
-            withAnimation(.spring(response: 0.22, dampingFraction: 0.6)) {
-                pressScale = 0.97
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
-                withAnimation(.spring(response: 0.30, dampingFraction: 0.6)) {
-                    pressScale = 1.0
-                }
-            }
             action()
         } label: {
             HStack(spacing: 12) {
@@ -70,12 +60,23 @@ struct PrimaryActionButton: View {
                     .fill(accent)
             )
         }
-        .buttonStyle(.plain)
-        .scaleEffect(pressScale)
+        .buttonStyle(PressScaleButtonStyle())
         .accessibilityElement()
         .accessibilityLabel(title)
         .accessibilityHint(subtitle ?? "Activates primary action")
         .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// A physical "push" press: the button scales down while held and
+/// springs back on release. Deliberately scale-only — the system
+/// `.plain` style fades label opacity on press, which made the solid
+/// accent fill go translucent and reveal whatever sat behind it.
+private struct PressScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.spring(response: 0.28, dampingFraction: 0.62), value: configuration.isPressed)
     }
 }
 
