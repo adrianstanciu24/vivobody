@@ -83,6 +83,11 @@ struct WorkoutSummaryCard: View {
                     supportLine
                         .padding(.top, Space.sm)
 
+                    if SessionIntensityLine.hasContent(session) {
+                        SessionIntensityLine(session: session, unit: unit)
+                            .padding(.top, Space.xs)
+                    }
+
                     exerciseList
                         .padding(.top, Space.xl + Space.sm)
 
@@ -177,21 +182,23 @@ struct WorkoutSummaryCard: View {
     // MARK: - Exercise list
 
     private var exerciseList: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        let breakdown = session.contributions()
+        return VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
                 if idx > 0 {
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(height: 1)
                 }
-                exerciseRow(for: exercise)
+                exerciseRow(for: exercise, contribution: breakdown[exercise.id])
             }
         }
     }
 
-    private func exerciseRow(for exercise: Exercise) -> some View {
+    private func exerciseRow(for exercise: Exercise, contribution: SessionContribution?) -> some View {
         let exerciseSets = exercise.orderedSets
         let topLabel = session.topSetLabel(for: exercise, unit: unit)
+        let adherence = session.adherence(for: exercise)
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: Space.md) {
@@ -208,17 +215,26 @@ struct WorkoutSummaryCard: View {
 
                 Spacer(minLength: Space.sm)
 
-                if let topLabel {
-                    Text(topLabel)
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(Ink.secondary)
-                } else {
-                    Text("—")
-                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(Ink.quaternary)
+                VStack(alignment: .trailing, spacing: 3) {
+                    if let topLabel {
+                        Text(topLabel)
+                            .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(Ink.secondary)
+                    } else {
+                        Text("—")
+                            .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(Ink.quaternary)
+                    }
+                    if let adherence, !adherence.isOnPlan {
+                        AdherenceBadge(adherence: adherence, unit: unit)
+                    }
                 }
 
                 summaryPips(for: exerciseSets)
+            }
+
+            if let contribution, contribution.metric > 0 {
+                WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
             }
 
             if !exercise.notes.isEmpty {

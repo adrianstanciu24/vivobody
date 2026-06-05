@@ -133,6 +133,89 @@ struct StatStrip: View {
     }
 }
 
+// MARK: - Share bar
+
+/// A thin horizontal proportion bar — a fraction of a hairline track
+/// filled. Used for the session "waterfall": each exercise's share of
+/// the workout's volume (or hold-time). Deliberately minimal so a
+/// column of them reads as a glanceable distribution, not a chart.
+struct ShareBar: View {
+    /// 0…1 portion of the track to fill.
+    let fraction: Double
+    var tint: Color = Ink.secondary
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Surface.edge)
+                Capsule()
+                    .fill(tint)
+                    .frame(width: max(2, geo.size.width * min(1, max(0, fraction))))
+            }
+        }
+        .frame(height: 3)
+        .accessibilityHidden(true)
+    }
+}
+
+/// One row of the session "waterfall": a proportion bar plus a
+/// trailing percentage. `isDuration` dims the bar to mark hold-time,
+/// which is normalised against the session's holds rather than its
+/// weight-volume (a separate pool).
+struct WaterfallRow: View {
+    let share: Double
+    var isDuration: Bool = false
+
+    var body: some View {
+        HStack(spacing: Space.sm) {
+            ShareBar(fraction: share, tint: isDuration ? Ink.tertiary : Ink.secondary)
+            Text("\(Int((share * 100).rounded()))%")
+                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .foregroundStyle(Ink.quaternary)
+                .monospacedDigit()
+                .frame(width: 38, alignment: .trailing)
+        }
+    }
+}
+
+// MARK: - Adherence badge
+
+/// The planned-vs-actual delta chip for an exercise row — "+5 lb",
+/// "-1 rep", "+0:05". A set that beat the plan wears the completion
+/// accent; a shortfall stays dim. Renders nothing when the achieved
+/// top set matched the plan (so on-plan rows stay uncluttered) or
+/// when there's no plan to compare against.
+struct AdherenceBadge: View {
+    let adherence: ExerciseAdherence
+    let unit: WeightUnit
+
+    var body: some View {
+        if let text = label {
+            Text(text)
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .foregroundStyle(adherence.beatPlan ? Tint.complete : Ink.tertiary)
+                .monospacedDigit()
+        }
+    }
+
+    private var label: String? {
+        if adherence.isDuration {
+            guard adherence.durationDelta != 0 else { return nil }
+            return DurationFormatter.deltaString(adherence.durationDelta)
+        }
+        if adherence.weightDelta != 0 {
+            return WeightFormatter.deltaString(adherence.weightDelta, unit: unit)
+        }
+        if adherence.repsDelta != 0 {
+            let n = abs(adherence.repsDelta)
+            let sign = adherence.repsDelta > 0 ? "+" : "-"
+            return "\(sign)\(n) \(n == 1 ? "rep" : "reps")"
+        }
+        return nil
+    }
+}
+
 // MARK: - Metric block
 
 /// A single left-aligned metric: small label, big number, unit. Used

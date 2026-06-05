@@ -95,6 +95,57 @@ struct ExerciseProgress: Identifiable, Hashable {
         guard points.count >= 2 else { return nil }
         return points[points.count - 1].topDuration - points[points.count - 2].topDuration
     }
+
+    /// All-time best estimated 1-rep max across the series. The
+    /// headline strength number on the detail screen — smoother than
+    /// raw top weight because it folds reps into the estimate, so a
+    /// heavier-for-fewer set and a lighter-for-more set compare on one
+    /// axis.
+    var bestE1RM: Double {
+        points.map(\.estimated1RM).max() ?? 0
+    }
+
+    /// The point that achieved `bestE1RM` — used to date the PR.
+    var bestE1RMPoint: ExerciseProgressPoint? {
+        points.max(by: { $0.estimated1RM < $1.estimated1RM })
+    }
+
+    /// Plateau check on the mode's primary metric (top weight for
+    /// `.reps`, longest hold for `.duration`): counts how many of the
+    /// most recent sessions have failed to set a new all-time high,
+    /// and reports a stall when that run reaches `threshold`. Points
+    /// are chronological ascending, so the run is measured from the
+    /// last PR to the latest session. Nil when there isn't a long
+    /// enough stale streak (including brand-new exercises).
+    func plateauStatus(threshold: Int) -> PlateauStatus? {
+        guard points.count > threshold else { return nil }
+        let isDuration = trackingMode == .duration
+        func metric(_ p: ExerciseProgressPoint) -> Double {
+            isDuration ? p.topDuration : p.topWeight
+        }
+
+        var runningMax = -Double.infinity
+        var lastPRIndex = -1
+        for (i, p) in points.enumerated() where metric(p) > runningMax {
+            runningMax = metric(p)
+            lastPRIndex = i
+        }
+
+        let stale = (points.count - 1) - lastPRIndex
+        guard stale >= threshold else { return nil }
+        return PlateauStatus(sessions: stale, metric: runningMax, isDuration: isDuration)
+    }
+}
+
+/// A detected progression stall on an exercise's primary metric.
+nonisolated struct PlateauStatus: Hashable {
+    /// Consecutive sessions since the last all-time high.
+    let sessions: Int
+    /// The stuck value — canonical lb for `.reps`, seconds for
+    /// `.duration`.
+    let metric: Double
+    /// Which axis the stall is on, so callers format `metric` right.
+    let isDuration: Bool
 }
 
 // MARK: - Last instance lookup

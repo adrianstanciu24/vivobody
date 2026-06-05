@@ -69,6 +69,11 @@ struct SessionDetailScreen: View {
                 )
                 .padding(.top, Space.xl)
 
+                if SessionIntensityLine.hasContent(session) {
+                    SessionIntensityLine(session: session, unit: unit)
+                        .padding(.top, Space.md)
+                }
+
                 SectionDivider()
                     .padding(.top, Space.xl)
 
@@ -126,7 +131,8 @@ struct SessionDetailScreen: View {
     // MARK: - Exercises
 
     private var exercisesSection: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
+        let breakdown = session.contributions()
+        return VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
 
             VStack(alignment: .leading, spacing: 0) {
@@ -135,7 +141,9 @@ struct SessionDetailScreen: View {
                     ExerciseDetailRow(
                         exercise: exercise,
                         unit: unit,
-                        isPR: prExerciseIDs.contains(exercise.id)
+                        isPR: prExerciseIDs.contains(exercise.id),
+                        contribution: breakdown[exercise.id],
+                        adherence: session.adherence(for: exercise)
                     )
                 }
             }
@@ -241,6 +249,8 @@ private struct ExerciseDetailRow: View {
     let exercise: Exercise
     let unit: WeightUnit
     let isPR: Bool
+    var contribution: SessionContribution? = nil
+    var adherence: ExerciseAdherence? = nil
 
     private var mode: TrackingMode { exercise.trackingMode }
 
@@ -280,6 +290,9 @@ private struct ExerciseDetailRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             header
+            if let contribution, contribution.metric > 0 {
+                WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
+            }
             setsGrid
             if !exercise.notes.isEmpty {
                 exerciseNotes
@@ -303,30 +316,40 @@ private struct ExerciseDetailRow: View {
 
             Spacer(minLength: Space.sm)
 
-            switch mode {
-            case .reps:
-                if exerciseVolume > 0 {
-                    HStack(alignment: .lastTextBaseline, spacing: 3) {
-                        Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
-                            .font(.system(size: 18, weight: .bold, design: .monospaced))
-                            .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
-                            .monospacedDigit()
-                        Text(unit.symbol)
-                            .font(.system(size: 11, weight: .medium, design: .monospaced))
-                            .foregroundStyle(Ink.quaternary)
-                    }
+            VStack(alignment: .trailing, spacing: 4) {
+                volumeCluster
+                if let adherence, !adherence.isOnPlan {
+                    AdherenceBadge(adherence: adherence, unit: unit)
                 }
-            case .duration:
-                if totalHold > 0 {
-                    HStack(alignment: .lastTextBaseline, spacing: 3) {
-                        Text(DurationFormatter.compact(totalHold))
-                            .font(.system(size: 18, weight: .bold, design: .monospaced))
-                            .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
-                            .monospacedDigit()
-                        Text("hold")
-                            .font(.system(size: 11, weight: .medium, design: .monospaced))
-                            .foregroundStyle(Ink.quaternary)
-                    }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var volumeCluster: some View {
+        switch mode {
+        case .reps:
+            if exerciseVolume > 0 {
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
+                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                        .monospacedDigit()
+                    Text(unit.symbol)
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(Ink.quaternary)
+                }
+            }
+        case .duration:
+            if totalHold > 0 {
+                HStack(alignment: .lastTextBaseline, spacing: 3) {
+                    Text(DurationFormatter.compact(totalHold))
+                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                        .monospacedDigit()
+                    Text("hold")
+                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .foregroundStyle(Ink.quaternary)
                 }
             }
         }

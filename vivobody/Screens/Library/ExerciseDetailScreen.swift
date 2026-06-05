@@ -9,11 +9,16 @@
 //  quick Edit / Delete context menu.
 //
 //  Surfaces (when data exists):
-//    • Hero    — muscle group accent + exercise name + metadata
-//                chips (equipment / pattern / mechanic)
+//    • Hero    — muscle group accent + exercise name + metadata line,
+//                plus a plateau / "ready to add load" status pill
 //    • Stats   — Last (top set + relative date), Best (all-time top
-//                weight), Count (sessions that included this lift)
-//    • Chart   — SwiftUI Charts line with PR dots + time-range chips
+//                weight), e1RM (best estimated 1RM — reps only),
+//                Times (sessions that included this lift)
+//    • Chart   — SwiftUI Charts line with PR dots + a Weight | e1RM |
+//                Volume metric toggle (reps only) + time-range chips
+//    • Effort  — average RIR + progression verdict (reps only, gated
+//                on having ≥3 logged RIR readings)
+//    • Muscles — primary / secondary involvement from the catalog map
 //    • Cues    — Catalog-level form notes (persistent across all
 //                sessions), tap to edit via NotesEditorSheet
 //    • Recents — Last 5 sessions, top set + date + PR flag
@@ -64,6 +69,27 @@ struct ExerciseDetailScreen: View {
     @State private var isConfirmingDelete: Bool = false
     @State private var isEditingNotes: Bool = false
     @State private var range: TimeRange = .all
+    @State private var chartMetric: ChartMetric = .e1rm
+
+    /// Number of consecutive stale sessions before the hero flags a
+    /// plateau. Five matches the "a working block didn't move the
+    /// needle" intuition — short enough to be actionable, long enough
+    /// to ignore normal week-to-week noise.
+    private static let plateauThreshold = 5
+
+    /// Which series the progress chart plots. Only offered for
+    /// `.reps` exercises — timed holds always plot duration.
+    enum ChartMetric: String, CaseIterable, Identifiable {
+        case weight, e1rm, volume
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .weight: return "Weight"
+            case .e1rm:   return "e1RM"
+            case .volume: return "Volume"
+            }
+        }
+    }
 
     /// Chart time-range chips. Same enum-shape as
     /// ExerciseProgressDetail.TimeRange — kept private to this screen
@@ -102,6 +128,8 @@ struct ExerciseDetailScreen: View {
                 if hasHistory {
                     chartSection
                 }
+                effortSection
+                muscleBreakdownSection
                 formCuesSection
                 if hasHistory {
                     recentSessionsSection
@@ -185,7 +213,39 @@ struct ExerciseDetailScreen: View {
             Text(metaLine)
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
+
+            if hasStatusPill {
+                statusPill
+            }
         }
+    }
+
+    /// True when the hero has a plateau or readiness pill to show —
+    /// gates the conditional include so the VStack spacing doesn't
+    /// leave a gap when neither fires.
+    private var hasStatusPill: Bool {
+        plateauStatus != nil || effortSummary?.verdict == .ready
+    }
+
+    /// Plateau wins over readiness when both could fire — a stall is
+    /// the more urgent signal. Renders nothing when neither applies.
+    @ViewBuilder
+    private var statusPill: some View {
+        if let plateau = plateauStatus {
+            pill(text: "Stalled · \(plateau.sessions) sessions", accent: false)
+        } else if effortSummary?.verdict == .ready {
+            pill(text: "Ready to add load", accent: true)
+        }
+    }
+
+    private func pill(text: String, accent: Bool) -> some View {
+        Text(text)
+            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+            .foregroundStyle(accent ? Tint.complete : Ink.tertiary)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(Surface.cardTint))
+            .overlay(Capsule().stroke(accent ? Tint.primaryDim : Surface.edge, lineWidth: 1))
     }
 
     /// Sentence-case classification line: equipment · pattern (when
@@ -221,6 +281,16 @@ struct ExerciseDetailScreen: View {
                 value: bestValueString,
                 detail: bestDetailString
             )
+            // e1RM only makes sense for weight × reps work — timed
+            // holds keep the original three-column layout.
+            if item.trackingMode == .reps {
+                statDivider
+                statCard(
+                    label: "e1RM",
+                    value: bestE1RMValueString,
+                    detail: bestE1RMDetailString
+                )
+            }
             statDivider
             statCard(
                 label: "Times",
@@ -237,7 +307,7 @@ struct ExerciseDetailScreen: View {
                 .foregroundStyle(Ink.primary)
                 .monospacedDigit()
                 .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .minimumScaleFactor(0.5)
             Text(label)
                 .sectionLabelStyle(0.45)
             if let detail {
@@ -266,6 +336,14 @@ struct ExerciseDetailScreen: View {
             Text("Progress")
                 .sectionLabelStyle(0.60)
 
+            if item.trackingMode == .reps {
+                HStack(spacing: 8) {
+                    ForEach(ChartMetric.allCases) { m in
+                        metricChip(m)
+                    }
+                }
+            }
+
             chart
 
             HStack(spacing: 8) {
@@ -276,20 +354,52 @@ struct ExerciseDetailScreen: View {
         }
     }
 
+    private func metricChip(_ m: ChartMetric) -> some View {
+        let isSelected = m == chartMetric
+        return Button {
+            Haptics.selection()
+            chartMetric = m
+        } label: {
+            Text(m.label)
+                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(minHeight: 38)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 12)
+                .background {
+                    if isSelected {
+                        Capsule().fill(Tint.inProgress)
+                    }
+                }
+                .overlay {
+                    if !isSelected {
+                        Capsule().stroke(Surface.edge, lineWidth: 1)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
     private var chart: some View {
-        let visible = visiblePoints
+        // Resolve the series ONCE: `progress` rebuilds its points
+        // (and their UUIDs) on every access, so the visible slice and
+        // the PR-id set must derive from the same instance to line up.
+        let prog = progress
+        let visible = visiblePoints(from: prog)
+        let prIDs = prPointIDs(from: prog)
         return Chart {
             ForEach(visible) { point in
                 LineMark(
                     x: .value("Date", point.date),
-                    y: .value("Weight", chartValue(for: point))
+                    y: .value("Metric", chartValue(for: point))
                 )
                 .interpolationMethod(.monotone)
                 .foregroundStyle(.white.opacity(0.85))
 
                 AreaMark(
                     x: .value("Date", point.date),
-                    y: .value("Weight", chartValue(for: point))
+                    y: .value("Metric", chartValue(for: point))
                 )
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
@@ -300,10 +410,10 @@ struct ExerciseDetailScreen: View {
                     )
                 )
 
-                if point.isWeightPR {
+                if prIDs.contains(point.id) {
                     PointMark(
                         x: .value("Date", point.date),
-                        y: .value("Weight", chartValue(for: point))
+                        y: .value("Metric", chartValue(for: point))
                     )
                     .symbol(.circle)
                     .symbolSize(60)
@@ -354,6 +464,98 @@ struct ExerciseDetailScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    // MARK: - Effort
+
+    /// Average RIR + a one-line "what to do next" verdict. Self-gates
+    /// to nothing for timed holds and for lifts without enough logged
+    /// RIR readings (see `effortSummary`).
+    @ViewBuilder
+    private var effortSection: some View {
+        if let effort = effortSummary {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Effort")
+                    .sectionLabelStyle(0.60)
+
+                HStack(alignment: .center, spacing: Space.lg) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(String(format: "RIR %.1f", effort.avgRIR))
+                            .font(.system(size: 22, weight: .bold, design: .monospaced))
+                            .foregroundStyle(Ink.primary)
+                            .monospacedDigit()
+                        Text("Last · \(effort.lastSessionSetCount) \(effort.lastSessionSetCount == 1 ? "set" : "sets")")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.quaternary)
+                    }
+
+                    Spacer(minLength: 8)
+
+                    if let headline = effort.verdict.headline {
+                        Text(headline)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(verdictColor(effort.verdict))
+                            .multilineTextAlignment(.trailing)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(Space.lg)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                        .fill(Surface.cardTint)
+                )
+            }
+        }
+    }
+
+    private func verdictColor(_ verdict: ProgressionVerdict) -> Color {
+        switch verdict {
+        case .ready: return Tint.complete
+        case .grind: return Tint.danger
+        case .push:  return Ink.tertiary
+        case .none:  return Ink.tertiary
+        }
+    }
+
+    // MARK: - Muscles
+
+    /// Primary / secondary muscle involvement for the lift, resolved
+    /// from the curated catalog map. Rendered as middot-joined text
+    /// lines (matching the hero meta line) rather than chips, in step
+    /// with the app's move away from chip strips. Hidden entirely for
+    /// custom exercises the map doesn't know (`.empty`).
+    @ViewBuilder
+    private var muscleBreakdownSection: some View {
+        let involvement = item.muscleInvolvement
+        if !involvement.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Muscles")
+                    .sectionLabelStyle(0.60)
+
+                let primary = involvement.primary
+                let secondary = involvement.secondary
+                if !primary.isEmpty {
+                    muscleRow(label: "Primary", muscles: primary, prominent: true)
+                }
+                if !secondary.isEmpty {
+                    muscleRow(label: "Secondary", muscles: secondary, prominent: false)
+                }
+            }
+        }
+    }
+
+    private func muscleRow(label: String, muscles: [Muscle], prominent: Bool) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+            Text(label)
+                .sectionLabelStyle(0.45)
+                .frame(width: 76, alignment: .leading)
+            Text(muscles.map(\.displayName).joined(separator: " · "))
+                .font(Typography.body)
+                .foregroundStyle(prominent ? Ink.secondary : Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     // MARK: - Form cues
@@ -577,6 +779,20 @@ struct ExerciseDetailScreen: View {
         completedSessions.progressByExercise.first { $0.name.lowercased() == nameKey }
     }
 
+    /// Recent RIR read + progression verdict. Nil for timed holds and
+    /// for lifts with fewer than three logged RIR readings — the card
+    /// hides entirely in those cases.
+    private var effortSummary: ExerciseEffortSummary? {
+        guard item.trackingMode == .reps else { return nil }
+        return completedSessions.effortSummary(forExerciseNamed: item.name)
+    }
+
+    /// Stall on the primary metric over the last N sessions, or nil
+    /// when the lift is still progressing / lacks enough history.
+    private var plateauStatus: PlateauStatus? {
+        progress?.plateauStatus(threshold: Self.plateauThreshold)
+    }
+
     /// Most-recent top set + relative date + PR flag. Nil when the
     /// user has never logged this exercise.
     private var lastInstance: LastExerciseInstance? {
@@ -695,6 +911,34 @@ struct ExerciseDetailScreen: View {
         return nil
     }
 
+    /// All-time best estimated 1RM, in the user's unit (no suffix —
+    /// the stat card layout omits units). Falls back to a single
+    /// session's estimate before a trend exists, and "—" with no
+    /// reps to estimate from. Only ever shown for `.reps` exercises.
+    private var bestE1RMValueString: String {
+        if let prog = progress {
+            let best = prog.bestE1RM
+            return best > 0
+                ? WeightFormatter.string(best, unit: unit, includeUnit: false)
+                : "—"
+        }
+        if let last = lastInstance, last.topReps > 0 {
+            let estimate = last.topWeight * (1.0 + Double(last.topReps) / 30.0)
+            return WeightFormatter.string(estimate, unit: unit, includeUnit: false)
+        }
+        return "—"
+    }
+
+    private var bestE1RMDetailString: String? {
+        if let prog = progress, let point = prog.bestE1RMPoint {
+            return RelativeDate.short(point.date)
+        }
+        if let last = lastInstance, last.topReps > 0 {
+            return RelativeDate.short(last.sessionDate)
+        }
+        return nil
+    }
+
     private var countString: String {
         sessionCount > 0 ? "\(sessionCount)" : "—"
     }
@@ -706,22 +950,56 @@ struct ExerciseDetailScreen: View {
 
     // MARK: - Chart helpers
 
-    /// Filter progress points by the selected time range. Empty array
-    /// when the user has no progress (chart section is hidden in
-    /// that case via `hasHistory`).
-    private var visiblePoints: [ExerciseProgressPoint] {
-        guard let prog = progress else { return [] }
+    /// Filter a resolved series by the selected time range. Takes the
+    /// series as a parameter (rather than reading `progress` again) so
+    /// the chart's visible slice and PR-id set share one instance —
+    /// `progress` mints fresh point UUIDs on every access.
+    private func visiblePoints(from prog: ExerciseProgress?) -> [ExerciseProgressPoint] {
+        guard let prog else { return [] }
         guard let cutoff = range.cutoff else { return prog.points }
         return prog.points.filter { $0.date >= cutoff }
     }
 
-    /// The y-value for a chart point. Duration exercises plot the
-    /// hold length in seconds; strength exercises plot top weight
-    /// converted to the user's display unit.
+    /// IDs of the points that set a new high on the *currently
+    /// selected* metric, computed with a running max over the full
+    /// chronological series (not just the visible window) so a PR dot
+    /// only appears where the value beat everything before it.
+    private func prPointIDs(from prog: ExerciseProgress?) -> Set<UUID> {
+        guard let prog else { return [] }
+        var ids = Set<UUID>()
+        var runningMax = -Double.infinity
+        for point in prog.points {
+            let value = metricValue(for: point)
+            if value > runningMax {
+                runningMax = value
+                ids.insert(point.id)
+            }
+        }
+        return ids
+    }
+
+    /// The y-value for a chart point in the user's display unit.
+    /// Duration exercises always plot hold length; strength exercises
+    /// follow the selected `chartMetric`.
     private func chartValue(for point: ExerciseProgressPoint) -> Double {
-        item.trackingMode == .duration
-            ? point.topDuration
-            : WeightFormatter.toDisplay(point.topWeight, unit: unit)
+        guard item.trackingMode == .reps else { return point.topDuration }
+        switch chartMetric {
+        case .weight: return WeightFormatter.toDisplay(point.topWeight, unit: unit)
+        case .e1rm:   return WeightFormatter.toDisplay(point.estimated1RM, unit: unit)
+        case .volume: return WeightFormatter.toDisplay(point.totalVolume, unit: unit)
+        }
+    }
+
+    /// Raw (canonical) metric for PR detection — same axis selection
+    /// as `chartValue` but without unit conversion, which is
+    /// monotonic and so doesn't affect the running-max comparison.
+    private func metricValue(for point: ExerciseProgressPoint) -> Double {
+        guard item.trackingMode == .reps else { return point.topDuration }
+        switch chartMetric {
+        case .weight: return point.topWeight
+        case .e1rm:   return point.estimated1RM
+        case .volume: return point.totalVolume
+        }
     }
 
     // MARK: - Mutations
