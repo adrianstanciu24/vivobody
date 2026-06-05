@@ -2,8 +2,7 @@
 //  BodyWeightDetail.swift
 //  vivobody
 //
-//  Full drill-down on body-weight progress. Architecture parallels
-//  ExerciseProgressDetail:
+//  Full drill-down on body-weight progress:
 //    • Hero header — current weight + delta chip + meta line
 //    • Prominent Log button — same sheet used from the Me-tab card
 //    • SwiftUI Charts line chart — area-filled, monotone curves

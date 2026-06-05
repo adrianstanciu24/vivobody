@@ -76,17 +76,12 @@ struct MeScreen: View {
                 groupSeparator
                 bodyWeightSection
                     .settleIn(1)
-                if !progressEntries.isEmpty {
-                    groupSeparator
-                    progressSection
-                        .settleIn(2)
-                }
                 groupSeparator
                 preferencesSection
-                    .settleIn(3)
+                    .settleIn(2)
                 footer
                     .padding(.top, Space.xxl)
-                    .settleIn(4)
+                    .settleIn(3)
             }
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
@@ -95,9 +90,6 @@ struct MeScreen: View {
             .padding(.bottom, Space.section + Space.md)
         }
         .forgeBackground()
-        .navigationDestination(for: ExerciseProgress.self) { entry in
-            ExerciseProgressDetail(progress: entry)
-        }
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
@@ -230,116 +222,6 @@ struct MeScreen: View {
         f.dateFormat = "MMM d"
         return f
     }()
-
-    // MARK: - Progress
-
-    /// Per-exercise progress series across the archive. Recomputed
-    /// on each render — with realistic archive sizes (hundreds of
-    /// sessions × handful of exercises) this is well under a frame.
-    /// Memoization would just risk staleness after edit/delete.
-    private var progressEntries: [ExerciseProgress] {
-        completedSessions.progressByExercise
-    }
-
-    private var progressSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Progress", trailing: "Tap for detail")
-
-            VStack(spacing: 0) {
-                ForEach(Array(progressEntries.enumerated()), id: \.element.id) { idx, entry in
-                    if idx > 0 { SectionDivider() }
-                    NavigationLink(value: entry) {
-                        progressRow(entry)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-
-    private func progressRow(_ entry: ExerciseProgress) -> some View {
-        let isDuration = entry.trackingMode == .duration
-        let chartValues = isDuration ? entry.points.map(\.topDuration) : entry.points.map(\.topWeight)
-        let prSet: Set<Int> = Set(
-            entry.points.enumerated()
-                .filter { $0.element.isWeightPR }
-                .map(\.offset)
-        )
-        return HStack(spacing: Space.lg) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text(entry.name)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(1)
-                Text(entry.group.displayName)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(minWidth: 88, alignment: .leading)
-
-            MiniChart(values: chartValues, prIndices: prSet, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
-                .frame(width: 112, height: 44)
-
-            Spacer(minLength: Space.md)
-
-            VStack(alignment: .trailing, spacing: Space.xs) {
-                if isDuration {
-                    Text(DurationFormatter.string(entry.bestDuration))
-                        .font(.system(size: 17, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Ink.primary)
-                        .monospacedDigit()
-                } else {
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(WeightFormatter.string(entry.bestWeight, unit: weightUnit, includeUnit: false))
-                            .font(.system(size: 17, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Ink.primary)
-                            .monospacedDigit()
-                        Text(weightUnit.symbol)
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                }
-
-                if isDuration {
-                    if let delta = entry.durationDelta {
-                        trendChip(delta: delta, valueText: delta == 0 ? "no change" : DurationFormatter.deltaString(delta))
-                    } else {
-                        Text("—")
-                            .font(Typography.caption)
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                } else if let delta = entry.weightDelta {
-                    trendChip(delta: delta, valueText: delta == 0 ? "no change" : WeightFormatter.deltaString(delta, unit: weightUnit))
-                } else {
-                    Text("—")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-            }
-        }
-        .padding(.vertical, Space.md)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
-    }
-
-    /// Trend pill shared by weight and duration progress rows — the
-    /// arrow + color come from the delta's sign; the text is
-    /// pre-formatted by the caller (weight delta or mm:ss delta).
-    private func trendChip(delta: Double, valueText: String) -> some View {
-        let isUp = delta > 0
-        let isFlat = delta == 0
-        let color: Color = isFlat
-            ? Ink.tertiary
-            : (isUp ? Tint.inProgress : Tint.danger)
-        let symbol: String = isFlat ? "minus" : (isUp ? "arrow.up.right" : "arrow.down.right")
-        return HStack(spacing: 3) {
-            Image(systemName: symbol)
-                .font(.system(size: 10, weight: .bold))
-            Text(valueText)
-                .font(Typography.caption)
-        }
-        .foregroundStyle(color)
-    }
 
     // MARK: - Stats
 
@@ -658,10 +540,12 @@ struct MeScreen: View {
     }
 
     /// Count of personal records the user currently holds — one per
-    /// tracked lift in the Progress list (each exercise's all-time
-    /// best is, by definition, a PR you hold). Aligned with the
-    /// Progress section right below so the number and the list agree.
-    private var personalRecords: Int { progressEntries.count }
+    /// tracked lift across the archive (each exercise's all-time best
+    /// is, by definition, a PR you hold). Drives the accented PR
+    /// numeral in the lifetime odometer.
+    private var personalRecords: Int {
+        completedSessions.progressByExercise.count
+    }
 
     private var totalVolume: Double {
         completedSessions.reduce(0) { $0 + $1.totalVolume }
