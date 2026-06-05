@@ -55,6 +55,8 @@ struct InsightsScreen: View {
                     let progress = completedSessions.progressByExercise
                     let symmetry = completedSessions.antagonistBalance()
                     let consistency = completedSessions.consistency()
+                    let intensity = completedSessions.intensityMix()
+                    let load = completedSessions.trainingLoad()
                     let signature = TrainingSignature(volume: stats, momentum: momentum, consistency: consistency)
                     let plan = TrainNextPlan(volume: stats, momentum: momentum, forecast: forecast)
 
@@ -67,11 +69,17 @@ struct InsightsScreen: View {
                     StrengthTrajectorySection(board: strength, progress: progress)
                         .settleIn(2)
                     groupSeparator
-                    ConsistencySection(report: consistency)
+                    IntensityMixSection(mix: intensity)
                         .settleIn(3)
                     groupSeparator
-                    SymmetrySection(board: symmetry)
+                    ConsistencySection(report: consistency)
                         .settleIn(4)
+                    groupSeparator
+                    TrainingLoadSection(report: load)
+                        .settleIn(5)
+                    groupSeparator
+                    SymmetrySection(board: symmetry)
+                        .settleIn(6)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
