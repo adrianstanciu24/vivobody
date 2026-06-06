@@ -116,6 +116,24 @@ enum BodyModelScene {
         ambient.light?.intensity = 300
         ambient.light?.color = UIColor(red: 0.62, green: 0.56, blue: 0.48, alpha: 1)
         scene.rootNode.addChildNode(ambient)
+
+        // Strong, grazing rim lights placed behind the figure to carve its 
+        // silhouette out of the dark background. One cool, one warm for depth.
+        let leftRim = SCNNode()
+        leftRim.light = SCNLight()
+        leftRim.light?.type = .directional
+        leftRim.light?.intensity = 1800
+        leftRim.light?.color = UIColor(red: 0.85, green: 0.92, blue: 1.0, alpha: 1)
+        leftRim.eulerAngles = SCNVector3(-0.2, -2.6, 0)
+        scene.rootNode.addChildNode(leftRim)
+
+        let rightRim = SCNNode()
+        rightRim.light = SCNLight()
+        rightRim.light?.type = .directional
+        rightRim.light?.intensity = 1800
+        rightRim.light?.color = UIColor(red: 1.0, green: 0.92, blue: 0.85, alpha: 1)
+        rightRim.eulerAngles = SCNVector3(-0.2, 2.6, 0)
+        scene.rootNode.addChildNode(rightRim)
     }
 
     // MARK: - Materials

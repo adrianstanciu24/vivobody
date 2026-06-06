@@ -170,7 +170,9 @@ struct AmbientForge: View {
     /// comparatively dark so copy stays legible. Periods are desynced so
     /// the three never pulse in unison — the field reads as organic.
     private static let lobes: [Lobe] = [
-        Lobe(x: 0.50, y: 0.28, radius: 0.90, peak: 0.34,
+        // The hero halo: a dominant, focused glow directly behind the figure.
+        // Burns brighter and tighter to act as a studio backlight.
+        Lobe(x: 0.50, y: 0.28, radius: 0.75, peak: 0.75,
              driftX: 48, driftY: 40, driftSecondsX: 19, driftSecondsY: 26,
              breathSeconds: 4.6, flickerSeconds: 2.3, phase: 0.0),
         Lobe(x: 0.18, y: 0.84, radius: 0.58, peak: 0.25,

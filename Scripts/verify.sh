@@ -17,7 +17,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 17 Pro}"
-SIMULATOR_OS="${SIMULATOR_OS:-26.4}"
+SIMULATOR_OS="${SIMULATOR_OS:-26.5}"
 SCHEME="vivobody"
 BUNDLE_ID="astanciu.vivobody.app"
 DERIVED="$ROOT/build"
