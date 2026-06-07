@@ -12,15 +12,24 @@
 //  History / Library / Me). Matches Notes / Reminders / Music
 //  patterns where collections + items share one tab.
 //
-//  Toolbar "+" is contextual:
-//    • Templates segment → opens a name-prompt alert → creates a
+//  The create "+" is contextual and lives beside the search pill at
+//  the bottom (not the nav bar):
+//    • Templates segment → opens the template builder → creates a
 //      blank template; user enters its detail to add exercises.
 //    • Exercises segment → opens CustomExerciseEditorSheet in
 //      .create mode → adds a new entry to the catalog.
 //
-//  Search bar (always visible, nav-bar drawer) filters whichever
-//  segment is active: templates match by name; exercises match by
-//  name or alias.
+//  Search is a floating Liquid-Glass pill pinned just above the tab
+//  bar (the same safeAreaInset treatment Today gives its Start
+//  button) — always reachable, never a top drawer that collapses the
+//  large title. It filters whichever segment is active: templates
+//  match by name; exercises match by name or alias. The contextual
+//  "+" rides beside it as its own glass capsule (two separated
+//  capsules, echoing the iOS 26 Mail bottom bar). The pill also
+//  minimizes on scroll the same way the tab bar does — collapsing to
+//  a small left glass circle on scroll-down and snapping back to full
+//  width only once the scroll reaches the top, or on tap (which also
+//  focuses it).
 //
 //  Both segments speak the same instrument language as the rest of
 //  the app: no cards or carved glass — full-width hairline rows on
@@ -51,6 +60,16 @@ struct LibraryScreen: View {
     @State private var segment: LibrarySegment = .templates
     @State private var searchText: String = ""
 
+    /// Drives focus for the pinned search pill so submitting the
+    /// query (or tapping Clear) can dismiss the keyboard.
+    @FocusState private var searchFocused: Bool
+
+    /// When true the search pill collapses to a small left capsule —
+    /// the same minimize-on-scroll-down gesture the iOS 26 tab bar
+    /// uses. Driven by each segment's scroll position; reset to false
+    /// (full width) at the top, on tap, and on segment change.
+    @State private var searchMinimized: Bool = false
+
     /// Template builder sheet target. `.new` for the "+" toolbar /
     /// empty-state CTA; `.edit(template)` when a row is tapped. The
     /// builder owns a value-type draft and only writes through to
@@ -77,23 +96,35 @@ struct LibraryScreen: View {
                     appState: appState,
                     searchText: searchText,
                     segment: $segment,
-                    templateEditorTarget: $templateEditorTarget
+                    templateEditorTarget: $templateEditorTarget,
+                    searchMinimized: $searchMinimized,
+                    canMinimize: canMinimizeSearch
                 )
             case .exercises:
                 LibraryExercisesContent(
                     searchText: searchText,
                     segment: $segment,
-                    customExerciseTarget: $customExerciseTarget
+                    customExerciseTarget: $customExerciseTarget,
+                    searchMinimized: $searchMinimized,
+                    canMinimize: canMinimizeSearch
                 )
             }
         }
         .forgeBackground()
-        .searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: searchPrompt
-        )
-        .toolbar { toolbar }
+        // Switching segments swaps in a fresh scroll view at the top,
+        // so the pill should read as expanded again.
+        .onChange(of: segment) { _, _ in
+            guard searchMinimized else { return }
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                searchMinimized = false
+            }
+        }
+        // Search + create are pinned to the bottom as floating glass —
+        // always reachable, mirroring Today's pinned Start button —
+        // rather than a top nav-bar drawer that collapses the title.
+        // The "+" rides beside the pill instead of the nav bar so both
+        // primary affordances live in one thumb-reachable cluster.
+        .safeAreaInset(edge: .bottom, spacing: 0) { pinnedSearchBar }
         // Create + edit both run through the same modal builder: a
         // name field, a configured-exercise list, and an "Add
         // exercise" flow that picks from the catalog then drops into
@@ -106,22 +137,9 @@ struct LibraryScreen: View {
         }
     }
 
-    // MARK: - Toolbar
+    // MARK: - Create action
 
-    @ToolbarContentBuilder
-    private var toolbar: some ToolbarContent {
-        if !suppressesPlus {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: handlePlus) {
-                    Image(systemName: "plus")
-                        .fontWeight(.semibold)
-                }
-                .accessibilityLabel(plusAccessibilityLabel)
-            }
-        }
-    }
-
-    /// Hide the toolbar "+" only on the empty Templates screen, where
+    /// Hide the create "+" only on the empty Templates screen, where
     /// the centered CTA already owns the create action.
     private var suppressesPlus: Bool {
         segment == .templates && allTemplates.isEmpty
@@ -158,6 +176,126 @@ struct LibraryScreen: View {
         }
     }
 
+    /// Scroll only minimizes the pill when the user isn't actively
+    /// searching — keep it expanded (and the query visible) while the
+    /// field is focused or holds text.
+    private var canMinimizeSearch: Bool {
+        !searchFocused && searchText.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    /// Tapping the collapsed pill restores full width and drops the
+    /// keyboard in, so one tap goes straight to typing — matching the
+    /// tab bar's tap-to-expand feel.
+    private func expandSearch() {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+            searchMinimized = false
+        }
+        DispatchQueue.main.async { searchFocused = true }
+    }
+
+    // MARK: - Pinned search
+
+    /// The floating bottom cluster pinned just above the tab bar via
+    /// `safeAreaInset` — the same treatment Today gives its Start
+    /// button, so both search and create are always reachable without
+    /// a top drawer collapsing the large title. The search field
+    /// stretches to fill; the contextual "+" rides beside it as its
+    /// own glass capsule (two separated capsules, à la the iOS 26
+    /// Mail bottom bar) and hides on the empty Templates screen where
+    /// the centered CTA already owns creation.
+    private var pinnedSearchBar: some View {
+        HStack(spacing: Space.sm) {
+            searchField
+            // Collapsed, the field shrinks to a left circle; this
+            // spacer fills the gap so the "+" stays pinned right
+            // (expanded, the field already fills the width).
+            if searchMinimized {
+                Spacer(minLength: 0)
+            }
+            if !suppressesPlus {
+                createButton
+                    .transition(.scale.combined(with: .opacity))
+            }
+        }
+        .softElevation(radius: 16, y: 8, opacity: 0.4)
+        .padding(.horizontal, Space.gutter)
+        .padding(.top, Space.sm)
+        .padding(.bottom, Space.sm)
+        .animation(.easeInOut(duration: 0.15), value: searchText.isEmpty)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: suppressesPlus)
+    }
+
+    /// The search capsule. Expanded it stretches to fill — leading
+    /// glyph, the live-filtering field bound to `searchText`, and a
+    /// trailing clear button. Collapsed (minimize-on-scroll) it
+    /// shrinks to a 50pt glass circle showing just the glyph, with a
+    /// transparent overlay button that taps back to full width.
+    private var searchField: some View {
+        HStack(spacing: searchMinimized ? 0 : Space.sm) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: searchMinimized ? 18 : 16, weight: .semibold))
+                .foregroundStyle(searchMinimized ? Ink.secondary : Ink.tertiary)
+                .frame(maxWidth: searchMinimized ? .infinity : nil)
+
+            if !searchMinimized {
+                TextField(searchPrompt, text: $searchText)
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.primary)
+                    .tint(Tint.primary)
+                    .focused($searchFocused)
+                    .submitLabel(.search)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .onSubmit { searchFocused = false }
+
+                if !searchText.isEmpty {
+                    Button {
+                        searchText = ""
+                        Haptics.selection()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Clear search")
+                    .transition(.opacity)
+                }
+            }
+        }
+        .padding(.horizontal, searchMinimized ? 0 : Space.lg)
+        .frame(maxWidth: searchMinimized ? 50 : .infinity)
+        .frame(height: 50)
+        .glassPill()
+        .overlay {
+            // Only intercept taps when collapsed — expanded, the
+            // TextField itself owns the tap to focus.
+            if searchMinimized {
+                Button(action: expandSearch) {
+                    Color.clear.contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Expand search")
+            }
+        }
+    }
+
+    /// The contextual create button, relocated from the nav bar to
+    /// sit beside the search pill. A 50pt glass circle with the
+    /// electric-orange "+"; its action + label switch per segment.
+    private var createButton: some View {
+        Button(action: handlePlus) {
+            Image(systemName: "plus")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(Tint.primary)
+                .frame(width: 50, height: 50)
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .glassPill()
+        .accessibilityLabel(plusAccessibilityLabel)
+    }
+
 }
 
 // MARK: - Segment enum
@@ -176,48 +314,51 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
 
 // MARK: - Segmented control
 
-/// Two words with a sliding lime underline. The active segment is
-/// full white, the other dimmed; the underline animates between them
-/// via `matchedGeometryEffect`, and selection fires the same
-/// `Haptics.selection()` tick as the equipment chips below. No glass,
-/// no pill — the state is read entirely from type and the accent line.
+/// A full-width frosted-capsule segmented control. A subtle glass
+/// track holds both labels; the active segment rides a solid-orange
+/// pill that slides between them via `matchedGeometryEffect`. Selected
+/// text is black for maximum contrast on the accent, the inactive
+/// label stays dim white on the track, and selection fires the same
+/// `Haptics.selection()` tick as the equipment chips below — whose
+/// orange-fill / stroked-capsule language this control deliberately
+/// echoes so the screen reads as one system.
 private struct SegmentedControl: View {
     @Binding var selection: LibrarySegment
-    @Namespace private var underline
+    @Namespace private var thumb
 
     var body: some View {
-        HStack(spacing: Space.xl) {
+        HStack(spacing: 4) {
             ForEach(LibrarySegment.allCases) { segment in
                 segmentButton(segment)
             }
-            Spacer(minLength: 0)
         }
+        .padding(4)
+        .background(Capsule().fill(Surface.cardTint))
+        .overlay(Capsule().strokeBorder(Surface.edge, lineWidth: 0.5))
     }
 
     private func segmentButton(_ segment: LibrarySegment) -> some View {
         let isSelected = selection == segment
         return Button {
             guard selection != segment else { return }
-            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 selection = segment
             }
             Haptics.selection()
         } label: {
-            VStack(spacing: Space.sm) {
-                Text(segment.label)
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(isSelected ? Ink.primary : Ink.tertiary)
-                ZStack {
-                    Capsule().fill(Color.clear).frame(height: 2)
+            Text(segment.label)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background {
                     if isSelected {
                         Capsule()
                             .fill(Tint.inProgress)
-                            .frame(height: 2)
-                            .matchedGeometryEffect(id: "underline", in: underline)
+                            .matchedGeometryEffect(id: "thumb", in: thumb)
                     }
                 }
-            }
-            .contentShape(Rectangle())
+                .contentShape(Capsule())
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -255,6 +396,8 @@ private struct LibraryTemplatesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
     @Binding var templateEditorTarget: TemplateEditorTarget?
+    @Binding var searchMinimized: Bool
+    let canMinimize: Bool
 
     @Environment(\.modelContext) private var modelContext
 
@@ -360,6 +503,7 @@ private struct LibraryTemplatesContent: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .minimizesSearchOnScroll(isMinimized: $searchMinimized, enabled: canMinimize)
     }
 
     // MARK: - Empty states
@@ -460,6 +604,8 @@ private struct LibraryExercisesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
     @Binding var customExerciseTarget: CatalogEditorTarget?
+    @Binding var searchMinimized: Bool
+    let canMinimize: Bool
 
     @Environment(\.modelContext) private var modelContext
 
@@ -545,10 +691,10 @@ private struct LibraryExercisesContent: View {
         if availableEquipment.count > 1 {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    chip(nil, label: "All", symbol: nil)
+                    chip(nil, label: "All")
                     ForEach(Equipment.allCases, id: \.self) { e in
                         if availableEquipment.contains(e) {
-                            chip(e, label: e.displayName, symbol: e.symbol)
+                            chip(e, label: e.displayName)
                         }
                     }
                 }
@@ -558,33 +704,27 @@ private struct LibraryExercisesContent: View {
         }
     }
 
-    private func chip(_ value: Equipment?, label: String, symbol: String?) -> some View {
+    private func chip(_ value: Equipment?, label: String) -> some View {
         let isSelected = equipmentFilter == value
         return Button {
             Haptics.selection()
             equipmentFilter = value
         } label: {
-            HStack(spacing: 6) {
-                if let symbol {
-                    Image(systemName: symbol)
-                        .font(.system(size: 12, weight: .semibold))
+            Text(label)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .padding(.horizontal, Space.lg)
+                .frame(minHeight: 38)
+                .background {
+                    if isSelected {
+                        Capsule().fill(Tint.inProgress)
+                    }
                 }
-                Text(label)
-                    .font(.system(size: 14, weight: .semibold))
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .padding(.horizontal, Space.lg)
-            .frame(minHeight: 38)
-            .background {
-                if isSelected {
-                    Capsule().fill(Tint.inProgress)
+                .overlay {
+                    if !isSelected {
+                        Capsule().stroke(Surface.edge, lineWidth: 1)
+                    }
                 }
-            }
-            .overlay {
-                if !isSelected {
-                    Capsule().stroke(Surface.edge, lineWidth: 1)
-                }
-            }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -610,6 +750,7 @@ private struct LibraryExercisesContent: View {
                 .padding(.bottom, Space.xxl + Space.xs)
             }
         }
+        .minimizesSearchOnScroll(isMinimized: $searchMinimized, enabled: canMinimize)
     }
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
@@ -690,8 +831,8 @@ private struct LibraryExercisesContent: View {
     // MARK: Exercise row
 
     /// One catalog row — full-width, card-free, divided from its
-    /// neighbours by a hairline. Equipment icon + name + sentence-case
-    /// meta on the left; on the right either the last session's
+    /// neighbours by a hairline. Name + sentence-case meta (which
+    /// carries the equipment) on the left; on the right either the last session's
     /// heaviest set as a monospaced `weight×reps` numeral (gold when
     /// it's an all-time best) over a relative date, or — when the
     /// exercise has never been logged — the quiet catalog default.
@@ -703,11 +844,6 @@ private struct LibraryExercisesContent: View {
         prominent: Bool
     ) -> some View {
         HStack(alignment: .center, spacing: Space.md) {
-            Image(systemName: item.equipment.symbol)
-                .font(.system(size: prominent ? 15 : 14, weight: .semibold))
-                .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
-                .frame(width: 24)
-
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.name)
                     .font(Typography.sectionHeading)
@@ -878,6 +1014,39 @@ private struct TemplateCard: View {
         f.unitsStyle = .abbreviated
         return f
     }()
+}
+
+// MARK: - Minimize-on-scroll
+
+private extension View {
+    /// Drives the pinned search pill's minimize state from a scroll
+    /// view's position, mirroring the iOS 26 tab bar's
+    /// `.tabBarMinimizeBehavior(.onScrollDown)`: collapse on scroll
+    /// down and only snap back to full width once the scroll reaches
+    /// the top — scrolling up partway holds the collapsed state.
+    /// `distance` is measured from the resting top (offset + top
+    /// inset) so a collapsing large title doesn't skew the reading. A
+    /// small dead-band filters out bounce jitter. No-op while
+    /// `enabled` is false (active search).
+    func minimizesSearchOnScroll(isMinimized: Binding<Bool>, enabled: Bool) -> some View {
+        onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y + geo.contentInsets.top
+        } action: { oldDistance, newDistance in
+            guard enabled else { return }
+            let target: Bool
+            if newDistance <= 4 {
+                target = false
+            } else if newDistance > oldDistance + 2 {
+                target = true
+            } else {
+                return
+            }
+            guard target != isMinimized.wrappedValue else { return }
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                isMinimized.wrappedValue = target
+            }
+        }
+    }
 }
 
 #Preview("Templates") {

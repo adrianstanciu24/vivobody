@@ -22,9 +22,9 @@ import SwiftData
 // MARK: - Equipment
 
 /// Primary piece of gear the lift uses. Drives the equipment filter
-/// chip strip at the top of the picker and shows as a small badge on
-/// each row. Stored as the raw value on `ExerciseCatalogItem` so
-/// the enum can evolve without migrations.
+/// chip strip at the top of the picker / Library. Stored as the raw
+/// value on `ExerciseCatalogItem` so the enum can evolve without
+/// migrations.
 enum Equipment: String, Hashable, CaseIterable {
     case barbell
     case dumbbell
@@ -45,21 +45,6 @@ enum Equipment: String, Hashable, CaseIterable {
         case .kettlebell: return "Kettlebell"
         case .band:       return "Band"
         case .other:      return "Other"
-        }
-    }
-
-    /// SF Symbol used in the picker's equipment filter chips and in
-    /// the small badge on each row. Chosen for legibility at 11pt.
-    var symbol: String {
-        switch self {
-        case .barbell:    return "dumbbell.fill"
-        case .dumbbell:   return "dumbbell"
-        case .cable:      return "cable.connector"
-        case .machine:    return "gearshape.fill"
-        case .bodyweight: return "figure.strengthtraining.functional"
-        case .kettlebell: return "scalemass.fill"
-        case .band:       return "wave.3.right"
-        case .other:      return "questionmark.circle"
         }
     }
 }
@@ -185,6 +170,13 @@ final class ExerciseCatalogItem: Identifiable {
     /// the timed counterpart to `defaultReps`. Ignored when the mode
     /// is `.reps`. Additive defaulted field — no migration.
     var defaultDuration: TimeInterval = 0
+
+    /// User-measured true one-rep max, in canonical pounds. A tested
+    /// max is more accurate than the Epley estimate, so when this is
+    /// set it overrides the estimated e1RM on the detail screen. Nil
+    /// means "no measured max — fall back to the estimate from logged
+    /// sets." Additive defaulted field — no migration.
+    var oneRepMax: Double? = nil
 
     /// Primary equipment used. Defaults to barbell on a new entry
     /// (matches the most common case for a serious lifter) but can

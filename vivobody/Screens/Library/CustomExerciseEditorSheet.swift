@@ -157,7 +157,7 @@ struct CustomExerciseEditorSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
                     ForEach(Equipment.allCases, id: \.self) { e in
-                        chip(label: e.displayName, symbol: e.symbol, isSelected: draft.equipment == e) {
+                        chip(label: e.displayName, isSelected: draft.equipment == e) {
                             Haptics.selection()
                             draft.equipment = e
                         }
@@ -258,30 +258,23 @@ struct CustomExerciseEditorSheet: View {
     /// No muscle-color dots, no glass: one accent, one hairline.
     private func chip(
         label: String,
-        symbol: String? = nil,
         isSelected: Bool,
         fullWidth: Bool = false,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack(spacing: 6) {
-                if let symbol {
-                    Image(systemName: symbol)
-                        .font(.system(size: 12, weight: .semibold))
+            Text(label)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(maxWidth: fullWidth ? .infinity : nil)
+                .padding(.horizontal, fullWidth ? Space.md : Space.lg)
+                .frame(minHeight: 44)
+                .background {
+                    if isSelected { Capsule().fill(Tint.inProgress) }
                 }
-                Text(label)
-                    .font(.system(size: 14, weight: .semibold))
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .frame(maxWidth: fullWidth ? .infinity : nil)
-            .padding(.horizontal, fullWidth ? Space.md : Space.lg)
-            .frame(minHeight: 44)
-            .background {
-                if isSelected { Capsule().fill(Tint.inProgress) }
-            }
-            .overlay {
-                if !isSelected { Capsule().stroke(Surface.edge, lineWidth: 1) }
-            }
+                .overlay {
+                    if !isSelected { Capsule().stroke(Surface.edge, lineWidth: 1) }
+                }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

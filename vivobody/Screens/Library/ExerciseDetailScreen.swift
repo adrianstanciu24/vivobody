@@ -12,8 +12,10 @@
 //    • Hero    — muscle group accent + exercise name + metadata line,
 //                plus a plateau / "ready to add load" status pill
 //    • Stats   — Last (top set + relative date), Best (all-time top
-//                weight), e1RM (best estimated 1RM — reps only),
-//                Times (sessions that included this lift)
+//                weight), Times (sessions that included this lift)
+//    • 1RM     — Dedicated, tappable row (reps only): a user-measured
+//                max (precise) overrides the estimated e1RM; empty
+//                until there's data. Tap opens the scrubber editor.
 //    • Chart   — SwiftUI Charts line with PR dots + a Weight | e1RM |
 //                Volume metric toggle (reps only) + time-range chips
 //    • Effort  — average RIR + progression verdict (reps only, gated
@@ -68,6 +70,7 @@ struct ExerciseDetailScreen: View {
     @State private var editorTarget: CatalogEditorTarget?
     @State private var isConfirmingDelete: Bool = false
     @State private var isEditingNotes: Bool = false
+    @State private var isEditingOneRepMax: Bool = false
     @State private var range: TimeRange = .all
     @State private var chartMetric: ChartMetric = .e1rm
 
@@ -125,6 +128,9 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading, spacing: 26) {
                 hero
                 statsRow
+                if item.trackingMode == .reps {
+                    oneRepMaxRow
+                }
                 if hasHistory {
                     chartSection
                 }
@@ -180,6 +186,17 @@ struct ExerciseDetailScreen: View {
                 initialValue: item.notes,
                 onSave: { newNotes in
                     item.notes = newNotes
+                    try? modelContext.save()
+                }
+            )
+        }
+        .sheet(isPresented: $isEditingOneRepMax) {
+            OneRepMaxEditorSheet(
+                initialValue: oneRepMaxSeed,
+                hasMeasured: item.oneRepMax != nil,
+                hasEstimate: estimatedOneRepMax != nil,
+                onSave: { newValue in
+                    item.oneRepMax = newValue
                     try? modelContext.save()
                 }
             )
@@ -281,16 +298,6 @@ struct ExerciseDetailScreen: View {
                 value: bestValueString,
                 detail: bestDetailString
             )
-            // e1RM only makes sense for weight × reps work — timed
-            // holds keep the original three-column layout.
-            if item.trackingMode == .reps {
-                statDivider
-                statCard(
-                    label: "e1RM",
-                    value: bestE1RMValueString,
-                    detail: bestE1RMDetailString
-                )
-            }
             statDivider
             statCard(
                 label: "Times",
@@ -327,6 +334,73 @@ struct ExerciseDetailScreen: View {
         Rectangle()
             .fill(Surface.edge)
             .frame(width: 0.5, height: 54)
+    }
+
+    // MARK: - One-rep max
+
+    /// Dedicated, tappable 1RM row. Shows a user-measured max (the
+    /// precise, hand-entered value) when set; otherwise the estimated
+    /// e1RM from logged sets; otherwise an empty "tap to add" prompt
+    /// when there's nothing to show yet. Tapping opens the scrubber
+    /// editor. Reps-only — holds have no meaningful 1RM.
+    private var oneRepMaxRow: some View {
+        let measured = item.oneRepMax
+        let value = measured ?? estimatedOneRepMax
+        return Button {
+            Haptics.soft()
+            isEditingOneRepMax = true
+        } label: {
+            HStack(alignment: .center, spacing: Space.md) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("1RM")
+                        .sectionLabelStyle(0.45)
+                    Text(oneRepMaxSubLabel(measured: measured))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+
+                Spacer(minLength: Space.sm)
+
+                if let value {
+                    Text(WeightFormatter.string(value, unit: unit))
+                        .font(.system(size: 22, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Ink.primary)
+                        .monospacedDigit()
+                } else {
+                    Text("Add")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Tint.complete)
+                }
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Ink.quaternary)
+            }
+            .padding(Space.lg)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                    .fill(Surface.cardTint)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("One-rep max")
+    }
+
+    /// Sub-label under the "1RM" caption: distinguishes a precise
+    /// measured value from the estimate (with the date the estimate
+    /// peaked), or invites the user to add one.
+    private func oneRepMaxSubLabel(measured: Double?) -> String {
+        if measured != nil { return "Measured" }
+        guard estimatedOneRepMax != nil else {
+            return "Tap to enter your tested max"
+        }
+        if let date = estimatedOneRepMaxDate {
+            return "Estimated · \(RelativeDate.short(date))"
+        }
+        return "Estimated"
     }
 
     // MARK: - Chart section
@@ -911,32 +985,41 @@ struct ExerciseDetailScreen: View {
         return nil
     }
 
-    /// All-time best estimated 1RM, in the user's unit (no suffix —
-    /// the stat card layout omits units). Falls back to a single
-    /// session's estimate before a trend exists, and "—" with no
-    /// reps to estimate from. Only ever shown for `.reps` exercises.
-    private var bestE1RMValueString: String {
+    /// All-time best estimated 1RM (canonical lb), or nil when there
+    /// are no reps to estimate from. Falls back to a single session's
+    /// Epley estimate before a 2-session trend exists. Drives the
+    /// estimated fallback in the dedicated 1RM row.
+    private var estimatedOneRepMax: Double? {
         if let prog = progress {
-            let best = prog.bestE1RM
-            return best > 0
-                ? WeightFormatter.string(best, unit: unit, includeUnit: false)
-                : "—"
+            return prog.bestE1RM > 0 ? prog.bestE1RM : nil
         }
         if let last = lastInstance, last.topReps > 0 {
-            let estimate = last.topWeight * (1.0 + Double(last.topReps) / 30.0)
-            return WeightFormatter.string(estimate, unit: unit, includeUnit: false)
-        }
-        return "—"
-    }
-
-    private var bestE1RMDetailString: String? {
-        if let prog = progress, let point = prog.bestE1RMPoint {
-            return RelativeDate.short(point.date)
-        }
-        if let last = lastInstance, last.topReps > 0 {
-            return RelativeDate.short(last.sessionDate)
+            return last.topWeight * (1.0 + Double(last.topReps) / 30.0)
         }
         return nil
+    }
+
+    /// When the estimated 1RM peaked — surfaced as the row's "Estimated
+    /// · 7d ago" sub-label.
+    private var estimatedOneRepMaxDate: Date? {
+        if let prog = progress, let point = prog.bestE1RMPoint {
+            return point.date
+        }
+        if let last = lastInstance, last.topReps > 0 {
+            return last.sessionDate
+        }
+        return nil
+    }
+
+    /// Value the editor opens on: the measured max if set, else the
+    /// estimate, else the heaviest logged weight or the catalog
+    /// default — anything to avoid scrubbing up from zero.
+    private var oneRepMaxSeed: Double {
+        if let measured = item.oneRepMax { return measured }
+        if let estimate = estimatedOneRepMax { return estimate }
+        if let prog = progress, prog.bestWeight > 0 { return prog.bestWeight }
+        if item.defaultWeight > 0 { return item.defaultWeight }
+        return 135
     }
 
     private var countString: String {
@@ -1022,4 +1105,87 @@ struct ExerciseDetailScreen: View {
         f.dateFormat = "MMM d"
         return f
     }()
+}
+
+// MARK: - One-rep max editor
+
+/// Small sheet for entering a measured one-rep max. Opens seeded on
+/// the current value (measured / estimated / heaviest set), scrubs in
+/// the user's unit via `WeightScrubber`, and saves a canonical-lb
+/// value. The secondary action clears the measured max (passing nil)
+/// — it only appears when one is set, and reads "Use estimate
+/// instead" when there's an estimate to fall back to, otherwise
+/// "Remove measured max" (which returns the row to empty).
+private struct OneRepMaxEditorSheet: View {
+    let initialValue: Double
+    let hasMeasured: Bool
+    let hasEstimate: Bool
+    let onSave: (Double?) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var draft: Double
+
+    init(
+        initialValue: Double,
+        hasMeasured: Bool,
+        hasEstimate: Bool,
+        onSave: @escaping (Double?) -> Void
+    ) {
+        self.initialValue = initialValue
+        self.hasMeasured = hasMeasured
+        self.hasEstimate = hasEstimate
+        self.onSave = onSave
+        _draft = State(initialValue: initialValue)
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: Space.lg) {
+                Text("Enter your tested one-rep max. A measured max is more accurate than the estimate from your logged sets.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, Space.xl)
+                    .padding(.top, Space.lg)
+
+                WeightScrubber(canonicalWeight: $draft, purpose: .strength, label: nil)
+
+                if hasMeasured {
+                    Button {
+                        Haptics.soft()
+                        onSave(nil)
+                        dismiss()
+                    } label: {
+                        Text(hasEstimate ? "Use estimate instead" : "Remove measured max")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(Ink.secondary)
+                            .frame(minHeight: 44)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.black.ignoresSafeArea())
+            .navigationTitle("One-Rep Max")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Haptics.soft()
+                        onSave(draft)
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationBackground(.black)
+        }
+    }
 }

@@ -179,10 +179,10 @@ struct ExercisePickerSheet: View {
         if availableEquipment.count > 1 {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    equipmentFilterChip(nil, label: "All", symbol: nil)
+                    equipmentFilterChip(nil, label: "All")
                     ForEach(Equipment.allCases, id: \.self) { e in
                         if availableEquipment.contains(e) {
-                            equipmentFilterChip(e, label: e.displayName, symbol: e.symbol)
+                            equipmentFilterChip(e, label: e.displayName)
                         }
                     }
                 }
@@ -204,33 +204,27 @@ struct ExercisePickerSheet: View {
         Set(items.map(\.equipment))
     }
 
-    private func equipmentFilterChip(_ value: Equipment?, label: String, symbol: String?) -> some View {
+    private func equipmentFilterChip(_ value: Equipment?, label: String) -> some View {
         let isSelected = equipmentFilter == value
         return Button {
             Haptics.selection()
             equipmentFilter = value
         } label: {
-            HStack(spacing: 5) {
-                if let symbol {
-                    Image(systemName: symbol)
-                        .font(.system(size: 11, weight: .semibold))
+            Text(label)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .padding(.horizontal, Space.lg)
+                .frame(minHeight: 38)
+                .background {
+                    if isSelected {
+                        Capsule().fill(Tint.inProgress)
+                    }
                 }
-                Text(label)
-                    .font(.system(size: 13, weight: .semibold))
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .padding(.horizontal, Space.lg)
-            .frame(minHeight: 38)
-            .background {
-                if isSelected {
-                    Capsule().fill(Tint.inProgress)
+                .overlay {
+                    if !isSelected {
+                        Capsule().stroke(Surface.edge, lineWidth: 1)
+                    }
                 }
-            }
-            .overlay {
-                if !isSelected {
-                    Capsule().stroke(Surface.edge, lineWidth: 1)
-                }
-            }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -301,11 +295,6 @@ struct ExercisePickerSheet: View {
     ) -> some View {
         let isAdd = trailingSymbol == "plus"
         return HStack(spacing: Space.md) {
-            Image(systemName: item.equipment.symbol)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Ink.tertiary)
-                .frame(width: 24)
-
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.name)
                     .font(Typography.sectionHeading)
