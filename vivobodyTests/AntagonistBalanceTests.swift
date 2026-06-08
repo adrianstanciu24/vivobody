@@ -83,7 +83,7 @@ struct AntagonistBalanceTests {
             session(at: day(Double(i) * 5), [lift("Bench Press", .chest)])
         }
         let mixed = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Barbell Row", .back)])
+            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Bent Over Rowing", .back)])
         }
 
         let skewPress = pressOnly.antagonistBalance(now: day(20)).pair("push-pull")!.skew
@@ -95,7 +95,7 @@ struct AntagonistBalanceTests {
 
     @Test func squatsSkewQuadDominant() {
         let s = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Back Squat", .legs)])
+            session(at: day(Double(i) * 5), [lift("Squats", .legs)])
         }
         let board = s.antagonistBalance(now: day(20))
 

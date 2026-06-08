@@ -67,7 +67,7 @@ struct TrainingSignatureTests {
 
     @Test func dominantRegionSurfaces() {
         let sessions = (0..<3).map { i in
-            session(at: day(100 - Double(i) * 2), [lift("Back Squat", .legs)])
+            session(at: day(100 - Double(i) * 2), [lift("Squats", .legs)])
         }
         let sig = sessions.trainingSignature(now: day(100))
 

@@ -18,13 +18,12 @@
 //  retroactively across all history for any seeded lift — even if the
 //  catalog item was later edited, renamed, or deleted.
 //
-//  The map is derived directly from `ExerciseCatalogItem.seedItems`,
-//  the single source of truth for the starter catalog, so there is
-//  nothing to keep in sync by hand: new seed rows are classified
-//  automatically. Names absent from the seed list (user-created
-//  custom exercises) resolve to `nil`; callers that want the user's
-//  own tagging for those should fall back to a live catalog lookup by
-//  name before defaulting.
+//  Resolution reads the bundled catalog (`CatalogData`), the single
+//  source of truth for the starter catalog, so there is nothing to keep
+//  in sync by hand: every catalog record is classified automatically.
+//  Names absent from the catalog (user-created custom exercises) resolve
+//  to `nil`; callers that want the user's own tagging for those should
+//  fall back to a live catalog lookup by name before defaulting.
 //
 
 import Foundation
@@ -41,31 +40,10 @@ struct ExerciseClassification: Hashable {
 
 extension ExerciseClassification {
     /// Classification for a seeded exercise, resolved by name
-    /// (case-insensitive). `nil` for names absent from the starter
-    /// catalog — typically user-created custom exercises.
+    /// (case-insensitive) from the bundled catalog (`CatalogData`).
+    /// `nil` for names absent from the catalog — typically user-created
+    /// custom exercises.
     static func forExerciseNamed(_ name: String) -> ExerciseClassification? {
-        let key = name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        return seedIndex[key]
+        CatalogData.record(forExerciseNamed: name)?.classification
     }
-
-    /// Lowercased-name → classification, built once from the seed
-    /// catalog. Duplicate names (which the catalog shouldn't contain)
-    /// keep the first occurrence.
-    private static let seedIndex: [String: ExerciseClassification] = {
-        Dictionary(
-            ExerciseCatalogItem.seedItems.map { seed in
-                (
-                    seed.name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines),
-                    ExerciseClassification(
-                        equipment: seed.equipment,
-                        mechanic: seed.mechanic,
-                        pattern: seed.pattern,
-                        plane: seed.plane,
-                        laterality: seed.laterality
-                    )
-                )
-            },
-            uniquingKeysWith: { first, _ in first }
-        )
-    }()
 }

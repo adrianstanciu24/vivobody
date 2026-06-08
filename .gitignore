@@ -5,6 +5,13 @@ DerivedData/
 # Verification artifacts (Scripts/verify.sh output)
 .verify/
 
+# wger raw data snapshot (Scripts/fetch_wger.py output)
+.wger-data/
+
+# Python bytecode cache (Scripts/)
+__pycache__/
+*.pyc
+
 # Xcode user state
 xcuserdata/
 *.xcuserstate

@@ -3,9 +3,10 @@
 //  vivobodyTests
 //
 //  Guards the exercise → muscle taxonomy that both the body model and
-//  the development engine build on: every seeded exercise resolves to
-//  at least one muscle, the lookup is case-insensitive, unknown names
-//  fall back to empty, and every muscle expands to real `_L`/`_R`
+//  the development engine build on, now sourced from the bundled
+//  `catalog.json` (`CatalogData`): the catalog decodes, involvement
+//  weights are well-formed, the lookup is case-insensitive, unknown
+//  names fall back to empty, and every muscle expands to real `_L`/`_R`
 //  mesh nodes.
 //
 
@@ -15,12 +16,27 @@ import Testing
 
 struct MuscleMappingTests {
 
-    @Test func everySeededExerciseMapsToMuscles() {
-        for seed in ExerciseCatalogItem.seedItems {
-            let involvement = Muscle.involvement(forExerciseNamed: seed.name)
+    @Test func catalogDecodesFromBundle() {
+        #expect(CatalogData.records.count > 800)
+        #expect(CatalogData.record(forExerciseNamed: "Bench Press") != nil)
+    }
+
+    @Test func involvementWeightsAreWellFormed() {
+        for record in CatalogData.records {
+            for (_, weight) in record.muscleInvolvement.contributions {
+                #expect(
+                    weight > 0 && weight <= 1,
+                    "'\(record.name)' has out-of-range involvement weight \(weight)"
+                )
+            }
+        }
+    }
+
+    @Test func everyRecordGroupIsValid() {
+        for record in CatalogData.records {
             #expect(
-                !involvement.primary.isEmpty,
-                "Seed '\(seed.name)' has no primary muscle mapping"
+                MuscleGroup(rawValue: record.group) != nil,
+                "'\(record.name)' has unknown group '\(record.group)'"
             )
         }
     }
@@ -37,19 +53,24 @@ struct MuscleMappingTests {
         #expect(involvement.secondary.isEmpty)
     }
 
-    @Test func contributionsAreGraded() {
+    @Test func benchPressContributionsGradeFromPrime() {
         let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
         let w = bench.weights
-        // Target chest is the prime mover; triceps a heavier synergist
-        // than the assisting front delt — strictly stepping down.
+        // Authored grading: chest is the prime mover, triceps a heavier
+        // synergist than the assisting front delt — strictly stepping down.
         #expect(w[.pectorals] == Muscle.Involvement.prime)
         #expect(w[.triceps] == Muscle.Involvement.major)
         #expect(w[.deltoids] == Muscle.Involvement.minor)
         #expect(w[.pectorals]! > w[.triceps]!)
         #expect(w[.triceps]! > w[.deltoids]!)
-        // Two-tier projection still partitions on the prime threshold.
         #expect(bench.primary == [.pectorals])
         #expect(bench.secondary == [.triceps, .deltoids])
+    }
+
+    @Test func classificationResolvesForKnownLift() {
+        let classification = ExerciseClassification.forExerciseNamed("Bench Press")
+        #expect(classification?.equipment == .barbell)
+        #expect(classification?.mechanic == .compound)
     }
 
     @Test func everyMuscleExpandsToLeftRightNodes() {

@@ -129,7 +129,7 @@ struct MuscleDevelopmentTests {
                         [lift(name, .legs, sets: 3, reps: reps, weight: weight)])
             }
         }
-        let heavy = fixedQuads("Back Squat", reps: 5, weight: 315)
+        let heavy = fixedQuads("Squats", reps: 5, weight: 315)
         let light = fixedQuads("Leg Extension", reps: 15, weight: 30)
 
         let heavyQuads = adaptation(.quads, afterFirst: 18, of: heavy)
@@ -250,15 +250,19 @@ struct MuscleDevelopmentTests {
     }
 
     /// A muscle's session stimulus scales with its graded involvement
-    /// weight: from a bench press the triceps (major) and front delt
-    /// (minor) earn exact fractions of the chest's prime-mover credit.
+    /// weight: from a bench press the assisting triceps and front delt
+    /// earn exact fractions of the chest's prime-mover credit. Weights
+    /// come from the catalog so the test follows the shipped data.
     @Test func gradedInvolvementScalesSessionStimulus() {
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let stim = MuscleDevelopment.sessionStimulus(s, bodyweight: 155)
+        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
         let chest = stim[.pectorals] ?? 0
         #expect(chest > 0)
-        #expect(abs((stim[.triceps] ?? 0) - Muscle.Involvement.major * chest) < 1e-9)
-        #expect(abs((stim[.deltoids] ?? 0) - Muscle.Involvement.minor * chest) < 1e-9)
+        #expect(abs((stim[.triceps] ?? 0) - (w[.triceps]! / w[.pectorals]!) * chest) < 1e-9)
+        #expect(abs((stim[.deltoids] ?? 0) - (w[.deltoids]! / w[.pectorals]!) * chest) < 1e-9)
+        // The assistors receive strictly less stimulus than the prime mover.
+        #expect((stim[.triceps] ?? 0) < chest)
     }
 
     // MARK: - Colour mapping

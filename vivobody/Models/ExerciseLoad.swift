@@ -33,40 +33,9 @@ enum ExerciseLoad {
     static let defaultBodyweight: Double = 155
 
     /// The share of body weight an exercise carries, resolved by name
-    /// (case-insensitive). 0 for fully-loaded lifts (the default).
+    /// (case-insensitive) from the bundled catalog (`CatalogData`). 0
+    /// for fully-loaded lifts and any name the catalog never shipped.
     static func bodyweightFraction(forExerciseNamed name: String) -> Double {
-        let key = name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        return fractions[key] ?? 0
+        CatalogData.record(forExerciseNamed: name)?.bodyweightFractionValue ?? 0
     }
-
-    /// Keyed by lowercased exercise name. Only the bodyweight-based
-    /// seeds appear; everything else defaults to 0.
-    private static let fractions: [String: Double] = {
-        let pairs: [(String, Double)] = [
-            // Chest
-            ("Push-Up", 0.64),
-            ("Dip", 0.95),
-            // Back
-            ("Pull-Up", 1.0),
-            ("Chin-Up", 1.0),
-            ("Neutral-Grip Pull-Up", 1.0),
-            ("Weighted Pull-Up", 1.0),
-            ("Dead Hang", 1.0),
-            // Arms
-            ("Close-Grip Push-Up", 0.64),
-            // Legs
-            ("Wall Sit", 0.5),
-            // Core
-            ("Plank", 0.6),
-            ("Side Plank", 0.55),
-            ("Hollow Hold", 0.3),
-            ("L-Sit", 0.7),
-            ("Hanging Leg Raise", 0.5),
-            ("Hanging Knee Raise", 0.4),
-            ("Ab Wheel Rollout", 0.5),
-            ("Dead Bug", 0.15),
-            ("Bird Dog", 0.2),
-        ]
-        return Dictionary(uniqueKeysWithValues: pairs.map { ($0.0.lowercased(), $0.1) })
-    }()
 }

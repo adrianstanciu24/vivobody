@@ -55,7 +55,7 @@ struct MuscleForecastTests {
     @Test func recentlyTrainedKeepsLongerRunwayThanStale() {
         // Chest is trained right up to "now"; legs stopped 8 days ago.
         let chest = program("Bench Press", .chest, on: [0, 3, 6, 9, 12], startWeight: 135)
-        let legs = program("Back Squat", .legs, on: [0, 2, 4], startWeight: 185)
+        let legs = program("Squats", .legs, on: [0, 2, 4], startWeight: 185)
         let board = (chest + legs).muscleForecast(now: day(12))
 
         let pecs = board.stat(for: .pectorals)

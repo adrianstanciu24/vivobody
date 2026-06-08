@@ -54,12 +54,20 @@ struct MuscleVolumeTests {
     // MARK: - Graded credit
 
     @Test func benchSplitsSetsAcrossMusclesByWeight() {
+        // The engine credits each muscle `sets × involvementWeight`.
+        // Read the weights from the catalog so the test tracks the
+        // shipped data instead of hard-coding a grading that can shift
+        // when catalog.json is regenerated.
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3)])
         let stats = [s].muscleVolume(now: day(0))
+        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
 
-        #expect(abs(stat(.pectorals, in: stats).effectiveSets - 3.0) < 1e-9)
-        #expect(abs(stat(.triceps, in: stats).effectiveSets - 3.0 * 0.7) < 1e-9)
-        #expect(abs(stat(.deltoids, in: stats).effectiveSets - 3.0 * 0.4) < 1e-9)
+        #expect(abs(stat(.pectorals, in: stats).effectiveSets - 3.0 * (w[.pectorals] ?? 0)) < 1e-9)
+        #expect(abs(stat(.triceps, in: stats).effectiveSets - 3.0 * (w[.triceps] ?? 0)) < 1e-9)
+        #expect(abs(stat(.deltoids, in: stats).effectiveSets - 3.0 * (w[.deltoids] ?? 0)) < 1e-9)
+        // Chest is the prime mover; the assistors are graded lower.
+        #expect(w[.pectorals] == Muscle.Involvement.prime)
+        #expect((w[.triceps] ?? 0) < w[.pectorals]!)
     }
 
     @Test func everyMuscleIsRepresentedEvenWhenUntrained() {
