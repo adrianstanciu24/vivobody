@@ -43,8 +43,8 @@
 //  that ∫ sigmoid = softplus, which makes it exact and order-
 //  independent (advancing t₀→t₂ equals t₀→t₁→t₂).
 //
-//  Three channels come out, ready for a 2-channel + bloom colour map
-//  (see `MuscleColor`):
+//  Four channels come out, ready for the body-model colour + rim map
+//  (see `MuscleColor` / `BodyModelScene`):
 //    • adaptation ∈ [0,1] — development (drives lightness/brightness)
 //    • momentum   ∈ [−1,1] — growth trend = fast minus slow adaptation
 //                            (drives saturation: vivid while growing,
@@ -52,6 +52,14 @@
 //                            losing it). The fast-minus-slow trick
 //                            mirrors fitness-minus-fatigue / MACD.
 //    • fatigue    ∈ [0,1] — acute "just trained" glow, decays in days
+//    • tightness  ∈ [0,1] — functional shortness. Accrues from
+//                            contraction-biased loading (most on tonic
+//                            muscles), paid down by mobility / full-ROM
+//                            work, and only partly eased by rest (it
+//                            floors above zero until actively
+//                            stretched). Drives a cool strain rim.
+//                            Mobility exercises — long ignored — finally
+//                            act here: they relieve instead of grow.
 //
 //  The model is a PURE value type driven entirely by injected dates
 //  (`session.completedAt`/`startedAt` and `now`), so its time-based
@@ -139,6 +147,45 @@ enum MuscleDevelopment {
         /// glow saturates as 1 − e^(−stimulus/scale).
         var fatigueScale: Double = 3000.0
 
+        // — Tightness (functional shortness) —
+        /// Growth gain on tightening. Multiplies the per-muscle
+        /// log-loading × ROM-bias × susceptibility increment, so a
+        /// hard contraction-biased session on a tonic muscle adds a
+        /// noticeable-but-bounded amount of tightness.
+        var tightenGain: Double = 0.022
+        /// Relief gain on a lengthening (mobility / full-ROM) dose.
+        /// Tightness is paid down multiplicatively: T ← T·e^(−relief·dose),
+        /// so each ~30s stretch (dose ≈ 1) per involved muscle removes
+        /// a meaningful slice.
+        var mobilityRelief: Double = 0.55
+        /// Fraction of a full-ROM strength set's movement that also
+        /// counts as a (mild) lengthening dose — loaded stretching at
+        /// the bottom of a deep squat / RDL keeps the muscle supple.
+        var fullRomReliefFraction: Double = 0.12
+        /// Asymptotic passive-relief rate (per day) once past the
+        /// grace window — slow, so tightness lingers for weeks without
+        /// active mobility. ln(2)/30 ⇒ ~30-day half-life of the part
+        /// that rest can reach.
+        var tightnessDecayRate: Double = 0.693 / 30.0
+        /// Days of neglect before passive easing really starts.
+        var tightnessGraceDays: Double = 3.0
+        /// Width (days) of the passive-easing sigmoid.
+        var tightnessGraceWidth: Double = 3.0
+        /// Floor passive rest eases toward, as a fraction of the
+        /// tightness at the layoff's start: rest alone never fully
+        /// resolves adaptive shortening — only active lengthening does.
+        var tightnessRestFloor: Double = 0.45
+        /// Seconds of lengthening credited to one rep of a dynamic
+        /// mobility / full-ROM movement, so rep-counted and timed work
+        /// share the same dose unit (`secondsPerRepEquivalent` per
+        /// dose). ~3s ⇒ 10 reps ≈ one 30s hold.
+        var mobilityRepSeconds: Double = 3.0
+        /// How strongly an underdeveloped posture antagonist amplifies
+        /// a muscle's tightening (crossed-syndrome): tightening is
+        /// scaled by up to `1 + posturalCouplingGain` when the agonist
+        /// fully out-develops its opposite. 0 disables the coupling.
+        var posturalCouplingGain: Double = 0.6
+
         // — Effort —
         /// One timed-hold second is worth this fraction of a rep.
         var secondsPerRepEquivalent: Double = 30.0
@@ -163,6 +210,11 @@ enum MuscleDevelopment {
         var baseline: Double?
         /// Acute fatigue / pump, `0...1`. Fast-decaying.
         var fatigue: Double = 0
+        /// Functional tightness, `0...1`. Accrues from contraction-
+        /// biased loading, is paid down by mobility / full-ROM work,
+        /// and eases only partway with passive rest (it floors above
+        /// zero until actively stretched).
+        var tightness: Double = 0
         /// When this muscle last received stimulus. Anchors the
         /// grace-gated decay age.
         var lastStimulated: Date?
@@ -170,11 +222,19 @@ enum MuscleDevelopment {
 
     // MARK: - Output channels
 
-    /// The render-ready triple for one muscle.
+    /// The render-ready channels for one muscle.
     struct Channels: Equatable {
         var adaptation: Double   // 0...1  → lightness / development
         var momentum: Double     // -1...1 → saturation (growth trend)
-        var fatigue: Double      // 0...1  → transient bloom
+        var fatigue: Double      // 0...1  → transient warm bloom
+        var tightness: Double    // 0...1  → cool strain rim
+
+        init(adaptation: Double, momentum: Double, fatigue: Double, tightness: Double = 0) {
+            self.adaptation = adaptation
+            self.momentum = momentum
+            self.fatigue = fatigue
+            self.tightness = tightness
+        }
     }
 
     // MARK: - Full model state
@@ -204,16 +264,17 @@ enum MuscleDevelopment {
             return max(-1, min(1, raw / parameters.momentumReference))
         }
 
-        /// All three channels for one muscle (zeroed if untrained).
+        /// All channels for one muscle (zeroed if untrained).
         func channels(_ muscle: Muscle) -> Channels {
             guard let f = fibers[muscle] else {
-                return Channels(adaptation: 0, momentum: 0, fatigue: 0)
+                return Channels(adaptation: 0, momentum: 0, fatigue: 0, tightness: 0)
             }
             let raw = f.adaptation - f.adaptationSlow
             return Channels(
                 adaptation: min(1, max(0, f.adaptation)),
                 momentum: max(-1, min(1, raw / parameters.momentumReference)),
-                fatigue: min(1, max(0, f.fatigue))
+                fatigue: min(1, max(0, f.fatigue)),
+                tightness: min(1, max(0, f.tightness))
             )
         }
     }
@@ -240,7 +301,7 @@ enum MuscleDevelopment {
         for session in ordered {
             let date = session.completedAt ?? session.startedAt
             advance(&state, to: date)
-            applyStimulus(sessionStimulus(session, bodyweight: bw), at: date, to: &state)
+            applyImpulse(sessionImpulse(session, bodyweight: bw, parameters: parameters), at: date, to: &state)
         }
 
         // Fade from the last logged session up to the present moment.
@@ -310,6 +371,20 @@ enum MuscleDevelopment {
                     ageStart: ageStart, ageEnd: ageEnd,
                     rate: p.slowDecayRate, graceDays: p.slowGraceDays, width: p.slowGraceWidth
                 )
+
+                // Tightness eases only partway with passive rest: it
+                // relaxes toward a floor (a fraction of where the
+                // layoff started), never to zero — only active
+                // lengthening fully resolves it.
+                if fiber.tightness > 0 {
+                    let factor = decayFactor(
+                        ageStart: ageStart, ageEnd: ageEnd,
+                        rate: p.tightnessDecayRate,
+                        graceDays: p.tightnessGraceDays, width: p.tightnessGraceWidth
+                    )
+                    let floor = p.tightnessRestFloor * fiber.tightness
+                    fiber.tightness = floor + (fiber.tightness - floor) * factor
+                }
             }
             state.fibers[muscle] = fiber
         }
@@ -357,10 +432,69 @@ enum MuscleDevelopment {
         return t * t * (3 - 2 * t)
     }
 
-    // MARK: - Evolution: stimulus event (growth)
+    // MARK: - Evolution: stimulus event
 
-    /// Inject one session's per-muscle stimulus at `date`. Assumes the
-    /// state has already been advanced to `date`.
+    /// One session decomposed into the three impulses it delivers,
+    /// pre-credited per muscle. `loadStimulus` is the tonnage that
+    /// drives growth + fatigue (loading work only); `tightenLoad` is
+    /// the ROM-biased loading that tightens; `lengthenDose` is the
+    /// load-independent lengthening (mobility + a full-ROM credit)
+    /// that relieves tightness.
+    struct Impulse {
+        var loadStimulus: [Muscle: Double] = [:]
+        var tightenLoad: [Muscle: Double] = [:]
+        var lengthenDose: [Muscle: Double] = [:]
+    }
+
+    /// Apply one session's full impulse at `date`: growth + fatigue
+    /// from loading, then tightening, then lengthening relief — in
+    /// that order, so a full-ROM lift's own relief can offset the
+    /// tightness it just added. Assumes the state has been advanced to
+    /// `date`.
+    static func applyImpulse(_ impulse: Impulse, at date: Date, to state: inout State) {
+        applyStimulus(impulse.loadStimulus, at: date, to: &state)
+
+        let p = state.parameters
+
+        // Tightening: contraction-biased loading, in log units (so a
+        // huge session can't spike it), scaled by the muscle's
+        // postural susceptibility and amplified when its posture
+        // antagonist has been neglected.
+        for (muscle, load) in impulse.tightenLoad where load > 0 {
+            var fiber = state.fibers[muscle] ?? Fiber()
+            let posture = posturalAmplifier(for: muscle, in: state, p)
+            let increment = p.tightenGain * log1p(load) * muscle.tightnessSusceptibility * posture
+            fiber.tightness = min(1, fiber.tightness + increment)
+            if fiber.lastStimulated == nil { fiber.lastStimulated = date }
+            state.fibers[muscle] = fiber
+        }
+
+        // Relief: mobility / full-ROM lengthening pays the debt down
+        // multiplicatively. A muscle with no accrued tightness has
+        // nothing to relieve, so stretching an untrained muscle is a
+        // no-op (no fiber created).
+        for (muscle, dose) in impulse.lengthenDose where dose > 0 {
+            guard var fiber = state.fibers[muscle], fiber.tightness > 0 else { continue }
+            fiber.tightness *= exp(-p.mobilityRelief * dose)
+            state.fibers[muscle] = fiber
+        }
+    }
+
+    /// Crossed-syndrome amplifier for a muscle's tightening: `1` when
+    /// balanced (or there is no posture antagonist), rising to
+    /// `1 + posturalCouplingGain` as the agonist out-develops its
+    /// neglected opposite. Read after growth has been applied, so a
+    /// muscle's own development this session counts.
+    private static func posturalAmplifier(for muscle: Muscle, in state: State, _ p: Parameters) -> Double {
+        guard p.posturalCouplingGain > 0, let antagonist = muscle.tightnessAntagonist else { return 1 }
+        let agonist = state.fibers[muscle]?.adaptation ?? 0
+        let opposed = state.fibers[antagonist]?.adaptation ?? 0
+        let imbalance = max(0, min(1, agonist - opposed))
+        return 1 + p.posturalCouplingGain * imbalance
+    }
+
+    /// Inject one session's per-muscle growth stimulus at `date`.
+    /// Assumes the state has already been advanced to `date`.
     static func applyStimulus(
         _ stimulus: [Muscle: Double],
         at date: Date,
@@ -402,10 +536,11 @@ enum MuscleDevelopment {
 
     // MARK: - Stimulus from a session
 
-    /// Per-muscle effective stimulus for one session: each exercise's
-    /// completed effort credited to its muscles by their graded
-    /// involvement weight (`Muscle.Involvement.weights`). Effort is
-    /// scored by tonnage:
+    /// Per-muscle growth stimulus for one session: each LOADING
+    /// exercise's completed effort credited to its muscles by their
+    /// graded involvement weight (`Muscle.Involvement.weights`).
+    /// Mobility work is excluded — it lengthens rather than loads.
+    /// Effort is scored by tonnage:
     ///   reps     → Σ (load · reps · rirFactor)
     ///   duration → Σ (load · seconds / secondsPerRepEquivalent)
     /// where load = loggedWeight + bodyweightFraction · bodyweight.
@@ -415,7 +550,7 @@ enum MuscleDevelopment {
         parameters: Parameters = .default
     ) -> [Muscle: Double] {
         var stim: [Muscle: Double] = [:]
-        for exercise in session.exercises {
+        for exercise in session.exercises where exercise.movementType == .strength {
             let involvement = exercise.muscleInvolvement
             guard !involvement.isEmpty else { continue }
 
@@ -427,6 +562,91 @@ enum MuscleDevelopment {
             }
         }
         return stim
+    }
+
+    /// Decompose one session into its growth / tighten / lengthen
+    /// impulses (see `Impulse`). Loading exercises feed growth and a
+    /// ROM-biased tightening (plus a small full-ROM relief credit);
+    /// mobility exercises feed lengthening relief only.
+    static func sessionImpulse(
+        _ session: WorkoutSession,
+        bodyweight: Double,
+        parameters p: Parameters = .default
+    ) -> Impulse {
+        var impulse = Impulse()
+        for exercise in session.exercises {
+            let weights = exercise.muscleInvolvement.weights
+            guard !weights.isEmpty else { continue }
+
+            switch exercise.movementType {
+            case .strength:
+                let effort = completedEffort(for: exercise, bodyweight: bodyweight, parameters: p)
+                guard effort > 0 else { continue }
+                let rom = tighteningBias(for: exercise)
+                let lengthen = lengtheningCredit(for: exercise, parameters: p)
+                for (muscle, weight) in weights {
+                    impulse.loadStimulus[muscle, default: 0] += effort * weight
+                    if rom > 0 { impulse.tightenLoad[muscle, default: 0] += effort * weight * rom }
+                    if lengthen > 0 { impulse.lengthenDose[muscle, default: 0] += lengthen * weight }
+                }
+            case .mobility:
+                let dose = movementDose(for: exercise, parameters: p)
+                guard dose > 0 else { continue }
+                for (muscle, weight) in weights {
+                    impulse.lengthenDose[muscle, default: 0] += dose * weight
+                }
+            }
+        }
+        return impulse
+    }
+
+    /// How tightening one loading exercise is (`0...1`), the ROM bias
+    /// applied to its loading effort. Timed isometrics hold a muscle
+    /// under sustained contraction (worst); isolation / partial-ROM
+    /// work is high; full-ROM compounds (hinge / squat / lunge) load
+    /// through a long range and tighten least; other compounds sit in
+    /// between. Derived from existing classification — no per-exercise
+    /// authoring.
+    private static func tighteningBias(for exercise: Exercise) -> Double {
+        if exercise.trackingMode == .duration { return 1.0 }
+        let classification = ExerciseClassification.forExerciseNamed(exercise.name)
+        if let pattern = classification?.pattern, isLengthenedPattern(pattern) { return 0.3 }
+        if classification?.mechanic == .isolation { return 0.9 }
+        return 0.6
+    }
+
+    /// A full-ROM rep-counted strength lift also lengthens the muscle
+    /// a little (loaded stretching at the bottom of a deep squat /
+    /// RDL). Returns a (small) lengthening dose; zero for isometrics
+    /// and non-lengthened patterns.
+    private static func lengtheningCredit(for exercise: Exercise, parameters p: Parameters) -> Double {
+        guard exercise.trackingMode == .reps,
+              let pattern = ExerciseClassification.forExerciseNamed(exercise.name)?.pattern,
+              isLengthenedPattern(pattern)
+        else { return 0 }
+        return movementDose(for: exercise, parameters: p) * p.fullRomReliefFraction
+    }
+
+    private static func isLengthenedPattern(_ pattern: MovementPattern) -> Bool {
+        switch pattern {
+        case .hinge, .squat, .lunge: return true
+        default:                     return false
+        }
+    }
+
+    /// Load-independent movement dose in 30-second-equivalent units —
+    /// what relief scales with. A stretch's dose is how long it was
+    /// held, not how heavy it was, so reps and timed holds share one
+    /// unit via `mobilityRepSeconds`.
+    private static func movementDose(for exercise: Exercise, parameters p: Parameters) -> Double {
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch exercise.trackingMode {
+        case .reps:
+            let reps = completed.reduce(0.0) { $0 + Double($1.reps) }
+            return reps * p.mobilityRepSeconds / p.secondsPerRepEquivalent
+        case .duration:
+            return completed.reduce(0.0) { $0 + $1.duration } / p.secondsPerRepEquivalent
+        }
     }
 
     private static func completedEffort(

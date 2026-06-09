@@ -10,13 +10,16 @@
 //  keep in code rather than bake into the file: a camera, a 3-light
 //  rig, and per-part PBR materials.
 //
-//  Muscles are coloured by training via a 2-channel + bloom encoding
-//  (see `MuscleColor`): development sets lightness, growth momentum
-//  sets saturation, and acute fatigue adds a transient emissive glow.
-//  The input is a `channels` map keyed by node name (see
-//  `MuscleDevelopment`). The skeleton and connective tissue keep their
-//  fixed anatomical tones; an empty channels map renders every muscle
-//  at the untrained base.
+//  Muscles are coloured by training (see `MuscleColor`): development
+//  sets the diffuse — a tint ramp from pale orange to a vivid,
+//  saturated orange. Tightness is the one channel left out of the base
+//  colour: it drives a brighten-only throb (see `tightnessPulseModifier`)
+//  on the per-frame clock, so a stiff muscle pulses brighter in its
+//  own colour — pulsation is what marks tightness, without restaining
+//  how developed it looks. The input is a `channels` map keyed by node
+//  name (see `MuscleDevelopment`). The skeleton and connective tissue
+//  keep their fixed anatomical tones; an empty channels map renders
+//  every muscle at the untrained base.
 //
 
 import SceneKit
@@ -25,19 +28,17 @@ import UIKit
 enum BodyModelScene {
     /// Loads the baked geometry, applies materials, and adds the
     /// camera + lights. `channels` maps a mesh's node name to its
-    /// development / momentum / fatigue triple; absent nodes render
+    /// development / tightness channels; absent nodes render
     /// untrained. Returns nil only if the bundled archive is missing
     /// (a build-packaging error, not a runtime condition).
     static func make(
-        channels: [String: MuscleDevelopment.Channels] = [:],
-        breathing: Bool = true
+        channels: [String: MuscleDevelopment.Channels] = [:]
     ) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
               let scene = try? SCNScene(url: url) else { return nil }
 
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
             applyMaterials(pivot: pivot, channels: channels)
-            if breathing { addBreathing(to: pivot) }
         }
         configureCamera(scene: scene)
         configureLighting(scene: scene)
@@ -51,24 +52,6 @@ enum BodyModelScene {
     static func applyChannels(_ channels: [String: MuscleDevelopment.Channels], to scene: SCNScene) {
         guard let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) else { return }
         applyMaterials(pivot: pivot, channels: channels)
-    }
-
-    // MARK: - Idle breathing
-
-    /// A slow, shallow scale pulse on the whole figure so it reads as
-    /// alive at rest rather than a frozen mannequin. Uses `scale(by:)`
-    /// (multiplicative) so it respects whatever scale the baked archive
-    /// already applies to the pivot, and the inhale/exhale are exact
-    /// inverses so it never drifts. Independent of the pan gesture,
-    /// which only touches the pivot's Y rotation.
-    private static func addBreathing(to node: SCNNode) {
-        let amount: CGFloat = 1.014
-        let inhale = SCNAction.scale(by: amount, duration: 2.0)
-        inhale.timingMode = .easeInEaseOut
-        let exhale = SCNAction.scale(by: 1.0 / amount, duration: 2.7)
-        exhale.timingMode = .easeInEaseOut
-        let cycle = SCNAction.sequence([inhale, exhale])
-        node.runAction(.repeatForever(cycle), forKey: "breathing")
     }
 
     // MARK: - Camera
@@ -147,9 +130,23 @@ enum BodyModelScene {
         return mat
     }
 
-    /// Peak emission applied at full fatigue. Kept modest so the
-    /// "just trained" bloom reads as a warm glow, not a light bulb.
-    private static let maxEmission: CGFloat = 0.55
+    /// A brightness throb applied to a tight muscle's own diffuse,
+    /// oscillating on SceneKit's per-frame `scn_frame.time` clock.
+    /// Motion is what marks tightness: the muscle keeps its development
+    /// colour but pulses brighter at the same hue (the diffuse rgb is
+    /// scaled uniformly, so only luminance moves). The throb is
+    /// BRIGHTEN-ONLY — it floors at the muscle's true colour (×1.0) and
+    /// swings upward, never below — because scaling a saturated orange
+    /// *down* reads as muddy brown. Freezes to the true tone when the
+    /// render loop halts (Reduce Motion). `u_tightness` is set per
+    /// material via KVC and scales the throb depth.
+    private static let tightnessPulseModifier = """
+    #pragma arguments
+    float u_tightness;
+    #pragma body
+    float throb = 0.5 + 0.5 * sin(scn_frame.time * 2.6);
+    _surface.diffuse.rgb *= 1.0 + 0.30 * u_tightness * throb;
+    """
 
     /// Channels for a muscle that has never been trained — the dark,
     /// desaturated base every untargeted mesh renders at.
@@ -157,22 +154,28 @@ enum BodyModelScene {
         adaptation: 0, momentum: 0, fatigue: 0
     )
 
-    /// Builds a muscle's material from its channels via the perceptual
-    /// `MuscleColor` map: development → lightness, momentum → chroma,
-    /// fatigue → an emissive bloom. Developed muscle reads a touch
-    /// glossier. A fresh material per mesh (≈240) is cheap to rebuild
-    /// on each re-tint.
+    /// Builds a muscle's material from its channels via the
+    /// `MuscleColor` map: development sets the diffuse (pale→vivid
+    /// orange), while tightness rides a brighten-only throb on top.
+    /// Developed muscle reads a touch glossier. A fresh material per
+    /// mesh (≈240) is cheap to rebuild on each re-tint.
     private static func muscleMaterial(for channels: MuscleDevelopment.Channels) -> SCNMaterial {
         let c = MuscleColor.rgb(for: channels)
         let color = UIColor(red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue), alpha: 1)
 
         let mat = SCNMaterial()
         mat.diffuse.contents = color
-        mat.emission.contents = color
-        mat.emission.intensity = CGFloat(c.emissive) * maxEmission
         mat.roughness.contents = 0.70 - 0.25 * CGFloat(max(0, min(1, channels.adaptation)))
         mat.metalness.contents = 0.12
         mat.lightingModel = .physicallyBased
+
+        // Tightness rides a brightness throb on the muscle's own
+        // diffuse — motion marks a stiff muscle, without changing its
+        // development colour.
+        if c.tightness > 0 {
+            mat.shaderModifiers = [.surface: tightnessPulseModifier]
+            mat.setValue(NSNumber(value: Float(c.tightness)), forKey: "u_tightness")
+        }
         return mat
     }
 

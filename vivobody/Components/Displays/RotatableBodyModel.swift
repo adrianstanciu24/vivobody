@@ -71,10 +71,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         scnView.allowsCameraControl = false
         scnView.antialiasingMode = .multisampling4X
         scnView.autoenablesDefaultLighting = false
-        scnView.scene = BodyModelScene.make(
-            channels: channels,
-            breathing: !context.environment.accessibilityReduceMotion
-        )
+        scnView.scene = BodyModelScene.make(channels: channels)
         context.coordinator.appliedChannels = channels
         scnView.pointOfView = scnView.scene?.rootNode.childNodes.first { $0.camera != nil }
         scnView.translatesAutoresizingMaskIntoConstraints = false

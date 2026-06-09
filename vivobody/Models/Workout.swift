@@ -128,6 +128,13 @@ final class Exercise: Identifiable {
         Muscle.involvement(forExerciseNamed: name)
     }
 
+    /// Loading (strength) vs. lengthening (mobility) work, resolved by
+    /// name from the catalog. Strength work grows and can tighten the
+    /// worked muscles; mobility work relieves their tightness.
+    var movementType: MovementType {
+        MovementType.forExerciseNamed(name)
+    }
+
     /// Sets returned in their stable order. Used everywhere the UI
     /// needs to enumerate set rows.
     var orderedSets: [WorkoutSet] {

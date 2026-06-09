@@ -51,6 +51,7 @@ struct InsightsScreen: View {
                     let bodyweight = bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
                     let momentum = completedSessions.muscleMomentum(bodyweight: bodyweight)
                     let forecast = completedSessions.muscleForecast(bodyweight: bodyweight)
+                    let tightness = completedSessions.muscleTightness(bodyweight: bodyweight)
                     let strength = completedSessions.strengthOutlook()
                     let progress = completedSessions.progressByExercise
                     let symmetry = completedSessions.antagonistBalance()
@@ -63,7 +64,7 @@ struct InsightsScreen: View {
                     SignatureSection(signature: signature, report: consistency)
                         .settleIn(0)
                     groupSeparator
-                    TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast)
+                    TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast, tightness: tightness)
                         .settleIn(1)
                     groupSeparator
                     StrengthTrajectorySection(board: strength, progress: progress)

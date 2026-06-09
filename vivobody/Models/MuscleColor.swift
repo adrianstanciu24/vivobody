@@ -2,38 +2,30 @@
 //  MuscleColor.swift
 //  vivobody
 //
-//  The design-system layer that turns a muscle's three abstract
-//  channels (see `MuscleDevelopment.Channels`) into a colour the 3D
-//  body model can render. It is deliberately a PURE, perceptual
-//  mapping — no SceneKit, no UIKit — so it can be reasoned about and
-//  unit-tested in isolation.
+//  The design-system layer that turns a muscle's training channels
+//  (see `MuscleDevelopment.Channels`) into the colour the 3D body
+//  model renders. It is deliberately a PURE mapping — no SceneKit, no
+//  UIKit — so it can be reasoned about and unit-tested in isolation.
 //
-//  Why a 2-channel + bloom encoding
-//  --------------------------------
-//  A single brightness ramp can't tell "big but stagnant" apart from
-//  "actively growing" — yet that's exactly the nuance we want the body
-//  to convey. So colour carries three independent meanings:
+//  The encoding
+//  ------------
+//  Colour carries development only; tightness is passed through for
+//  the renderer to drive a brightness pulse on top.
 //
-//    • adaptation → LIGHTNESS. Dark/undeveloped → bright/developed.
-//    • momentum   → CHROMA (saturation). Vivid while a muscle is
-//                   growing, desaturated at a plateau, washed-out and
-//                   cooler when it's being lost. A developed-but-
-//                   stagnant muscle therefore reads bright-but-dull;
-//                   a growing one glows.
-//    • fatigue    → EMISSIVE BLOOM. A transient self-lit glow returned
-//                   separately so the renderer can add it as emission;
-//                   it fades over days without touching the base tone.
+//    • adaptation → a TINT RAMP of the app's accent orange. A fully
+//      developed muscle wears a vivid, saturated ORANGE (#FF7A1A); as
+//      development drops the orange pales toward a light, washed-out
+//      tint. So the more saturated the orange, the more built the
+//      muscle. The ramp deepens by draining green/blue (raising
+//      chroma), NOT by crushing the value — crushing value is what
+//      turns orange into muddy brown, so the red channel stays high.
+//    • tightness  → not in the diffuse at all; returned as a level the
+//      renderer turns into a brighten-only throb (base↔brighter, same
+//      hue), so a tight muscle pulses brighter in its own colour
+//      without restaining it. Pulsation IS the tightness signal.
 //
-//  Why OKLCH
-//  ---------
-//  We compose the colour in OKLCH — a perceptually-uniform space —
-//  rather than lerping RGB, so equal steps in adaptation look like
-//  equal steps to the eye, and changing saturation (chroma) doesn't
-//  drag the hue or apparent brightness around. The hue stays in the
-//  app's single warm accent family (orange), nudging slightly toward
-//  yellow while growing and toward red while detraining. The final
-//  step converts OKLCH → OKLab → linear sRGB → gamma sRGB with the
-//  standard Björn Ottosson matrices.
+//  Blends happen in linear-light sRGB (gamma-decoded endpoints, lerp,
+//  re-encode) so midtones don't go muddy and the ramp reads evenly.
 //
 
 import CoreGraphics
@@ -41,102 +33,64 @@ import Foundation
 
 enum MuscleColor {
 
-    // MARK: - Tunables
+    // MARK: - Tunables (gamma sRGB endpoints)
 
-    /// OKLab lightness endpoints for the adaptation ramp.
-    private static let lightnessUntrained = 0.32
-    private static let lightnessDeveloped = 0.80
-
-    /// Chroma (OKLCH) for a developed-but-steady muscle, and the
-    /// ceiling a fully-growing one reaches.
-    private static let chromaSteady = 0.055
-    private static let chromaMax = 0.16
-    /// How much positive momentum adds chroma; how much negative
-    /// momentum strips it back toward grey.
-    private static let chromaGrowthGain = 0.13
-    private static let chromaDetrainCut = 0.85
-
-    /// Accent hue (degrees) ≈ the app's electric orange, with a gentle
-    /// swing: warmer (toward yellow) while growing, cooler (toward
-    /// red) while losing it.
-    private static let accentHue = 52.0
-    private static let hueSwing = 16.0
+    /// Development ramp. `a = 1` is a vivid, saturated orange
+    /// (`#FF7A1A`); `a = 0` is a pale, light tint of that same orange.
+    /// The trick: a fully developed muscle must stay a high-VALUE,
+    /// high-chroma orange — crush the value (e.g. `#8C4000`, or even a
+    /// burnt `#E06605` once the renderer dims it) and orange collapses
+    /// into muddy brown. So we keep the red channel pinned high and
+    /// deepen the ramp purely by draining green + blue (raising chroma).
+    private static let developed   = (r: 1.00, g: 0.48, b: 0.10)
+    private static let undeveloped = (r: 1.00, g: 0.83, b: 0.69)
 
     // MARK: - Output
 
-    /// Linear-friendly sRGB components in `0...1` plus the emissive
-    /// bloom the renderer adds on top.
+    /// Render-ready gamma sRGB components in `0...1`, plus the tightness
+    /// level the renderer turns into a brightness pulse.
     struct RGB: Equatable {
         var red: Double
         var green: Double
         var blue: Double
-        /// Self-illumination strength `0...1` (acute fatigue glow).
-        var emissive: Double
-    }
-
-    /// OKLCH composition for one muscle, before conversion to sRGB.
-    /// Exposed so behaviour (lightness rises with development, chroma
-    /// rises with momentum) can be asserted directly.
-    struct OKLCH: Equatable {
-        var lightness: Double
-        var chroma: Double
-        var hue: Double       // degrees
-        var emissive: Double
+        /// Tightness level `0...1`, passed through for the renderer
+        /// (see `BodyModelScene`) — never baked into the base colour;
+        /// it only drives the throb that marks a stiff muscle.
+        var tightness: Double
     }
 
     // MARK: - Mapping
 
-    /// Compose the perceptual colour for a muscle's channels.
-    static func oklch(for channels: MuscleDevelopment.Channels) -> OKLCH {
-        let a = clamp01(channels.adaptation)
-        let m = max(-1, min(1, channels.momentum))
-        let posM = max(0, m)
-        let negM = max(0, -m)
-
-        let lightness = lightnessUntrained + (lightnessDeveloped - lightnessUntrained) * a
-
-        // Saturation reads against development (an untrained muscle
-        // stays grey no matter the trend), grows with positive
-        // momentum, and is stripped toward grey by negative momentum.
-        let trendChroma = chromaSteady
-            + chromaGrowthGain * posM
-            - chromaSteady * chromaDetrainCut * negM
-        let chroma = clamp(a * max(0, trendChroma), 0, chromaMax)
-
-        let hue = accentHue + hueSwing * (posM - negM)
-
-        return OKLCH(lightness: lightness, chroma: chroma, hue: hue, emissive: clamp01(channels.fatigue))
-    }
-
-    /// The render-ready sRGB colour (plus emissive) for a muscle.
+    /// The render-ready colour for a muscle's channels.
     static func rgb(for channels: MuscleDevelopment.Channels) -> RGB {
-        let c = oklch(for: channels)
-        let (r, g, b) = srgb(fromOKLCH: c.lightness, chroma: c.chroma, hueDegrees: c.hue)
-        return RGB(red: r, green: g, blue: b, emissive: c.emissive)
+        let a = clamp01(channels.adaptation)
+
+        let lo = linear(undeveloped)
+        let hi = linear(developed)
+
+        // Development → tint ramp (pale → vivid orange), in linear
+        // light. Tightness is left out of the colour entirely.
+        let rl = lerp(lo.0, hi.0, a)
+        let gl = lerp(lo.1, hi.1, a)
+        let bl = lerp(lo.2, hi.2, a)
+
+        return RGB(
+            red: gammaEncode(rl),
+            green: gammaEncode(gl),
+            blue: gammaEncode(bl),
+            tightness: clamp01(channels.tightness)
+        )
     }
 
-    // MARK: - OKLCH → sRGB
+    // MARK: - sRGB transfer
 
-    /// OKLCH → OKLab → linear sRGB → gamma sRGB (Ottosson). Returns
-    /// gamma-encoded sRGB components clamped to `0...1`.
-    static func srgb(fromOKLCH L: Double, chroma C: Double, hueDegrees: Double) -> (Double, Double, Double) {
-        let h = hueDegrees * .pi / 180
-        let a = C * cos(h)
-        let b = C * sin(h)
+    private static func linear(_ c: (r: Double, g: Double, b: Double)) -> (Double, Double, Double) {
+        (gammaDecode(c.r), gammaDecode(c.g), gammaDecode(c.b))
+    }
 
-        let l_ = L + 0.3963377774 * a + 0.2158037573 * b
-        let m_ = L - 0.1055613458 * a - 0.0638541728 * b
-        let s_ = L - 0.0894841775 * a - 1.2914855480 * b
-
-        let l = l_ * l_ * l_
-        let m = m_ * m_ * m_
-        let s = s_ * s_ * s_
-
-        let lr =  4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
-        let lg = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
-        let lb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
-
-        return (gammaEncode(lr), gammaEncode(lg), gammaEncode(lb))
+    private static func gammaDecode(_ c: Double) -> Double {
+        let x = clamp01(c)
+        return x <= 0.04045 ? x / 12.92 : pow((x + 0.055) / 1.055, 2.4)
     }
 
     private static func gammaEncode(_ c: Double) -> Double {
@@ -145,6 +99,6 @@ enum MuscleColor {
         return clamp01(encoded)
     }
 
-    private static func clamp01(_ x: Double) -> Double { clamp(x, 0, 1) }
-    private static func clamp(_ x: Double, _ lo: Double, _ hi: Double) -> Double { min(hi, max(lo, x)) }
+    private static func lerp(_ x: Double, _ y: Double, _ t: Double) -> Double { x + (y - x) * t }
+    private static func clamp01(_ x: Double) -> Double { min(1, max(0, x)) }
 }

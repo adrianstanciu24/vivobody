@@ -267,41 +267,45 @@ struct MuscleDevelopmentTests {
 
     // MARK: - Colour mapping
 
-    @Test func lightnessRisesWithDevelopment() {
-        let dim = MuscleColor.oklch(for: .init(adaptation: 0.2, momentum: 0, fatigue: 0))
-        let bright = MuscleColor.oklch(for: .init(adaptation: 0.85, momentum: 0, fatigue: 0))
-        #expect(bright.lightness > dim.lightness)
+    @Test func developmentDeepensTheOrange() {
+        // Less developed = a pale, light tint; more developed = a vivid,
+        // saturated orange. The ramp deepens by draining green + blue
+        // (raising chroma) while keeping the red channel pinned high —
+        // NOT by crushing value, which is what turns orange into brown.
+        // So the developed tone is more saturated and lower in total
+        // luminance, and stays clearly orange (red > green > blue).
+        let pale = MuscleColor.rgb(for: .init(adaptation: 0.1, momentum: 0, fatigue: 0))
+        let vivid = MuscleColor.rgb(for: .init(adaptation: 0.95, momentum: 0, fatigue: 0))
+        #expect(vivid.green < pale.green)
+        #expect(vivid.blue < pale.blue)
+        #expect(vivid.red >= pale.red)          // red stays high (no value crush)
+        #expect(vivid.red + vivid.green + vivid.blue < pale.red + pale.green + pale.blue)
+        #expect(vivid.red > vivid.green && vivid.green > vivid.blue)
+        // Saturation (chroma proxy) rises with development.
+        #expect((vivid.red - vivid.blue) > (pale.red - pale.blue))
     }
 
-    @Test func chromaRisesWithMomentum() {
-        let growing = MuscleColor.oklch(for: .init(adaptation: 0.6, momentum: 0.8, fatigue: 0))
-        let steady = MuscleColor.oklch(for: .init(adaptation: 0.6, momentum: 0, fatigue: 0))
-        let losing = MuscleColor.oklch(for: .init(adaptation: 0.6, momentum: -0.8, fatigue: 0))
-        #expect(growing.chroma > steady.chroma)
-        #expect(steady.chroma > losing.chroma)
-    }
-
-    @Test func untrainedMuscleIsNeutralGrey() {
-        let c = MuscleColor.rgb(for: .init(adaptation: 0, momentum: 0, fatigue: 0))
-        #expect(abs(c.red - c.green) < 1e-6)
-        #expect(abs(c.green - c.blue) < 1e-6)
-    }
-
-    @Test func fatigueDrivesEmissiveBloom() {
-        let c = MuscleColor.rgb(for: .init(adaptation: 0.6, momentum: 0.2, fatigue: 0.7))
-        #expect(abs(c.emissive - 0.7) < 1e-9)
+    @Test func tightnessIsPassedThroughForThePulse() {
+        // Tightness no longer touches the diffuse — it only rides
+        // through as the pulse level. Two muscles at the same
+        // development read identical colours regardless of tightness.
+        let loose = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0))
+        let stiff = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0.95))
+        #expect(stiff.red == loose.red)
+        #expect(stiff.green == loose.green)
+        #expect(stiff.blue == loose.blue)
+        #expect(abs(stiff.tightness - 0.95) < 1e-9)
+        #expect(loose.tightness == 0)
     }
 
     /// Every colour in a full channel sweep stays in gamut `0...1`.
     @Test func colourStaysInGamut() {
         for a in stride(from: 0.0, through: 1.0, by: 0.2) {
-            for m in stride(from: -1.0, through: 1.0, by: 0.5) {
-                for f in stride(from: 0.0, through: 1.0, by: 0.5) {
-                    let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: m, fatigue: f))
-                    #expect(c.red >= 0 && c.red <= 1)
-                    #expect(c.green >= 0 && c.green <= 1)
-                    #expect(c.blue >= 0 && c.blue <= 1)
-                }
+            for t in stride(from: 0.0, through: 1.0, by: 0.25) {
+                let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0, tightness: t))
+                #expect(c.red >= 0 && c.red <= 1)
+                #expect(c.green >= 0 && c.green <= 1)
+                #expect(c.blue >= 0 && c.blue <= 1)
             }
         }
     }

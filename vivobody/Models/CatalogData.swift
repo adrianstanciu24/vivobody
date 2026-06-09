@@ -52,6 +52,7 @@ struct CatalogRecord: Decodable, Sendable {
     let pattern: String?
     let plane: String?
     let laterality: String?
+    let movementType: String?
     let aliases: [String]?
     let bodyweightFraction: Double?
     let involvement: [MuscleWeight]?
@@ -68,6 +69,7 @@ struct CatalogRecord: Decodable, Sendable {
     var patternValue: MovementPattern? { pattern.flatMap(MovementPattern.init(rawValue:)) }
     var planeValue: MovementPlane { plane.flatMap(MovementPlane.init(rawValue:)) ?? .sagittal }
     var lateralityValue: Laterality { laterality.flatMap(Laterality.init(rawValue:)) ?? .bilateral }
+    var movementTypeValue: MovementType { movementType.flatMap(MovementType.init(rawValue:)) ?? .strength }
     var aliasesValue: [String] { aliases ?? [] }
     var bodyweightFractionValue: Double { bodyweightFraction ?? 0 }
 
