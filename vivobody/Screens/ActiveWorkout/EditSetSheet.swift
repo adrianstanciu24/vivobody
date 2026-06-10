@@ -121,7 +121,6 @@ struct EditSetSheet: View {
         }
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
-        .presentationBackground(.black)
         .preferredColorScheme(.dark)
     }
 }

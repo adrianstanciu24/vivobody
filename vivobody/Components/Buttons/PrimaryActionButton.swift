@@ -15,7 +15,9 @@
 //      "this is a deliberate action" feedback).
 //    • Tactile press scale (1.0 → 0.97 → 1.0).
 //    • Default accent is the app's electric-orange primary so the
-//      button reads as "the thing you want to do right now."
+//      button reads as "the thing you want to do right now." Liquid
+//      Glass adds the interactive surface response without changing
+//      that chosen color.
 //
 
 import SwiftUI
@@ -55,10 +57,7 @@ struct PrimaryActionButton: View {
             .padding(.horizontal, 22)
             .padding(.vertical, 20)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(accent)
-            )
+            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: 18))
         }
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityElement()
@@ -68,10 +67,60 @@ struct PrimaryActionButton: View {
     }
 }
 
+/// Prominent, full-width Liquid Glass surface for primary actions. The
+/// accent remains an opaque design-token fill; glass only adds the
+/// interactive optical response and rim detail on top.
+private struct PrimaryGlassSurface: ViewModifier {
+    let accent: Color
+    let cornerRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        return content
+            .background {
+                shape.fill(accent)
+            }
+            .glassEffect(.regular.interactive(), in: shape)
+            .overlay {
+                shape.stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.46),
+                            Color.black.opacity(0.12),
+                            Color.white.opacity(0.18)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.9
+                )
+            }
+            .overlay {
+                GeometryReader { geo in
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.20),
+                            Color.white.opacity(0.06),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: geo.size.height * 0.52)
+                    .frame(maxWidth: .infinity, alignment: .top)
+                }
+                .clipShape(shape)
+                .allowsHitTesting(false)
+            }
+            .shadow(color: accent.opacity(0.18), radius: 18, y: 8)
+            .shadow(color: .black.opacity(0.45), radius: 10, y: 5)
+            .contentShape(shape)
+    }
+}
+
 /// A physical "push" press: the button scales down while held and
-/// springs back on release. Deliberately scale-only — the system
-/// `.plain` style fades label opacity on press, which made the solid
-/// accent fill go translucent and reveal whatever sat behind it.
+/// springs back on release. Deliberately scale-only, leaving the glass
+/// material to handle its own interactive optical response.
 private struct PressScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

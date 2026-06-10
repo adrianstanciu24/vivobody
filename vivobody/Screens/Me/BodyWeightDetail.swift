@@ -79,8 +79,6 @@ struct BodyWeightDetail: View {
         .background(Color.black.ignoresSafeArea())
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.black, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
@@ -176,21 +174,7 @@ struct BodyWeightDetail: View {
             }
             .foregroundStyle(.black)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Tint.primary)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [Color.white.opacity(0.40), Color.white.opacity(0.05)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.8
-                    )
-            )
+            .coloredGlassControl(cornerRadius: 14, fill: Tint.primary)
             .softElevation()
         }
         .buttonStyle(.plain)
@@ -257,9 +241,11 @@ struct BodyWeightDetail: View {
     // MARK: - Range strip
 
     private var rangeStrip: some View {
-        HStack(spacing: 8) {
-            ForEach(TimeRange.allCases) { r in
-                rangeChip(r)
+        GlassEffectContainer(spacing: 8) {
+            HStack(spacing: 8) {
+                ForEach(TimeRange.allCases) { r in
+                    rangeChip(r)
+                }
             }
         }
     }
@@ -275,17 +261,7 @@ struct BodyWeightDetail: View {
                 .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(
-                            isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
-                            lineWidth: 0.5
-                        )
-                )
+                .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.primary : nil)
         }
         .buttonStyle(.plain)
     }
@@ -327,7 +303,7 @@ struct BodyWeightDetail: View {
                     }
                 }
             }
-            .glassCard(cornerRadius: 18)
+            .glassCard(cornerRadius: 18, interactive: true)
         }
     }
 

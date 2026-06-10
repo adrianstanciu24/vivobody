@@ -80,7 +80,7 @@ struct NumberScrubber: View {
                 isDragging: isDragging
             )
         }
-        .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil)
+        .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil, interactive: true)
         .topSpecularSheen(cornerRadius: 22, intensity: isDragging ? 0.18 : 0.12, height: 0.50)
         .overlay {
             // Bottom inner shadow — gives the chip a sense of

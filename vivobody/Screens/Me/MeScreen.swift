@@ -136,7 +136,7 @@ struct MeScreen: View {
     }
 
     /// Type-forward empty body-weight state: one explanatory line and
-    /// a single flat lime action — no ghost preview, no card.
+    /// a single color-preserving glass action — no ghost preview, no card.
     private var bodyWeightEmptyCard: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Track your body weight to see how it trends alongside your training.")
@@ -153,7 +153,7 @@ struct MeScreen: View {
                     .foregroundStyle(Tint.onAccent)
                     .padding(.horizontal, 22)
                     .frame(minHeight: 44)
-                    .background(Capsule().fill(Tint.inProgress))
+                    .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
             }
             .buttonStyle(.plain)
         }
@@ -366,7 +366,10 @@ struct MeScreen: View {
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
+            .padding(.horizontal, Space.md)
+            .padding(.vertical, Space.sm)
+            .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
+            .coloredGlassControl(cornerRadius: 16)
         }
         .buttonStyle(.plain)
         .accessibilityHint("Wipes and reseeds the exercise catalog")
@@ -389,9 +392,11 @@ struct MeScreen: View {
                     .foregroundStyle(Ink.primary)
             }
 
-            HStack(spacing: Space.sm) {
-                ForEach(WeightUnit.allCases) { unit in
-                    weightUnitChip(unit)
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(WeightUnit.allCases) { unit in
+                        weightUnitChip(unit)
+                    }
                 }
             }
         }
@@ -412,18 +417,7 @@ struct MeScreen: View {
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .background {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Tint.inProgress)
-                }
-            }
-            .overlay {
-                if !isSelected {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Surface.edge, lineWidth: 1)
-                }
-            }
+            .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(unit.displayName)
@@ -448,9 +442,11 @@ struct MeScreen: View {
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Space.sm) {
-                    ForEach(restOptions, id: \.self) { seconds in
-                        restChip(seconds: seconds)
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        ForEach(restOptions, id: \.self) { seconds in
+                            restChip(seconds: seconds)
+                        }
                     }
                 }
             }
@@ -468,16 +464,7 @@ struct MeScreen: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minWidth: 56, minHeight: 44)
                 .padding(.horizontal, Space.md + 2)
-                .background {
-                    if isSelected {
-                        Capsule().fill(Tint.inProgress)
-                    }
-                }
-                .overlay {
-                    if !isSelected {
-                        Capsule().stroke(Surface.edge, lineWidth: 1)
-                    }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(seconds) second rest")

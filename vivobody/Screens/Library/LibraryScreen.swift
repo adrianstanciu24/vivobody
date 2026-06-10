@@ -70,6 +70,11 @@ struct LibraryScreen: View {
     /// (full width) at the top, on tap, and on segment change.
     @State private var searchMinimized: Bool = false
 
+    /// Stable glass identity for the search pill so its expanded field
+    /// and collapsed glyph-only capsule morph as one Liquid Glass piece
+    /// during minimize/expand transitions.
+    @Namespace private var searchGlass
+
     /// Template builder sheet target. `.new` for the "+" toolbar /
     /// empty-state CTA; `.edit(template)` when a row is tapped. The
     /// builder owns a value-type draft and only writes through to
@@ -204,17 +209,19 @@ struct LibraryScreen: View {
     /// Mail bottom bar) and hides on the empty Templates screen where
     /// the centered CTA already owns creation.
     private var pinnedSearchBar: some View {
-        HStack(spacing: Space.sm) {
-            searchField
-            // Collapsed, the field shrinks to a left circle; this
-            // spacer fills the gap so the "+" stays pinned right
-            // (expanded, the field already fills the width).
-            if searchMinimized {
-                Spacer(minLength: 0)
-            }
-            if !suppressesPlus {
-                createButton
-                    .transition(.scale.combined(with: .opacity))
+        GlassEffectContainer(spacing: Space.sm) {
+            HStack(spacing: Space.sm) {
+                searchField
+                // Collapsed, the field shrinks to a left circle; this
+                // spacer fills the gap so the "+" stays pinned right
+                // (expanded, the field already fills the width).
+                if searchMinimized {
+                    Spacer(minLength: 0)
+                }
+                if !suppressesPlus {
+                    createButton
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
         }
         .softElevation(radius: 16, y: 8, opacity: 0.4)
@@ -225,59 +232,72 @@ struct LibraryScreen: View {
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: suppressesPlus)
     }
 
-    /// The search capsule. Expanded it stretches to fill — leading
-    /// glyph, the live-filtering field bound to `searchText`, and a
-    /// trailing clear button. Collapsed (minimize-on-scroll) it
-    /// shrinks to a 50pt glass circle showing just the glyph, with a
-    /// transparent overlay button that taps back to full width.
+    /// The search capsule switches between two concrete glass views:
+    /// a full text field and a compact glyph button. Both carry the
+    /// same glass identity so SwiftUI can morph the Liquid Glass
+    /// surface instead of only animating layout.
+    @ViewBuilder
     private var searchField: some View {
-        HStack(spacing: searchMinimized ? 0 : Space.sm) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: searchMinimized ? 18 : 16, weight: .semibold))
-                .foregroundStyle(searchMinimized ? Ink.secondary : Ink.tertiary)
-                .frame(maxWidth: searchMinimized ? .infinity : nil)
-
-            if !searchMinimized {
-                TextField(searchPrompt, text: $searchText)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.primary)
-                    .tint(Tint.primary)
-                    .focused($searchFocused)
-                    .submitLabel(.search)
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
-                    .onSubmit { searchFocused = false }
-
-                if !searchText.isEmpty {
-                    Button {
-                        searchText = ""
-                        Haptics.selection()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Clear search")
-                    .transition(.opacity)
-                }
-            }
+        if searchMinimized {
+            collapsedSearchButton
+        } else {
+            expandedSearchField
         }
-        .padding(.horizontal, searchMinimized ? 0 : Space.lg)
-        .frame(maxWidth: searchMinimized ? 50 : .infinity)
-        .frame(height: 50)
-        .glassPill()
-        .overlay {
-            // Only intercept taps when collapsed — expanded, the
-            // TextField itself owns the tap to focus.
-            if searchMinimized {
-                Button(action: expandSearch) {
-                    Color.clear.contentShape(Capsule())
+    }
+
+    /// Expanded search surface: leading glyph, live-filtering field,
+    /// and trailing clear button.
+    private var expandedSearchField: some View {
+        HStack(spacing: Space.sm) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Ink.tertiary)
+
+            TextField(searchPrompt, text: $searchText)
+                .font(Typography.body)
+                .foregroundStyle(Ink.primary)
+                .tint(Tint.primary)
+                .focused($searchFocused)
+                .submitLabel(.search)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .onSubmit { searchFocused = false }
+
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                    Haptics.selection()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Ink.tertiary)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Expand search")
+                .accessibilityLabel("Clear search")
+                .transition(.opacity)
             }
         }
+        .padding(.horizontal, Space.lg)
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .glassPill(interactive: true)
+        .glassEffectID("library-search", in: searchGlass)
+    }
+
+    /// Collapsed search surface: one tappable glass capsule that
+    /// morphs back into the expanded search field.
+    private var collapsedSearchButton: some View {
+        Button(action: expandSearch) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(Ink.secondary)
+                .frame(width: 50, height: 50)
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .glassPill(interactive: true)
+        .glassEffectID("library-search", in: searchGlass)
+        .accessibilityLabel("Expand search")
     }
 
     /// The contextual create button, relocated from the nav bar to
@@ -292,7 +312,7 @@ struct LibraryScreen: View {
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)
-        .glassPill()
+        .glassPill(interactive: true)
         .accessibilityLabel(plusAccessibilityLabel)
     }
 
@@ -314,27 +334,25 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
 
 // MARK: - Segmented control
 
-/// A full-width frosted-capsule segmented control. A subtle glass
-/// track holds both labels; the active segment rides a solid-orange
-/// pill that slides between them via `matchedGeometryEffect`. Selected
-/// text is black for maximum contrast on the accent, the inactive
-/// label stays dim white on the track, and selection fires the same
-/// `Haptics.selection()` tick as the equipment chips below — whose
-/// orange-fill / stroked-capsule language this control deliberately
-/// echoes so the screen reads as one system.
+/// A full-width Liquid Glass segmented bar. A shared neutral glass
+/// track holds both labels; the selected thumb preserves the solid
+/// electric-orange token while gaining the same interactive glass
+/// response as the rest of the controls.
 private struct SegmentedControl: View {
     @Binding var selection: LibrarySegment
     @Namespace private var thumb
 
     var body: some View {
-        HStack(spacing: 4) {
-            ForEach(LibrarySegment.allCases) { segment in
-                segmentButton(segment)
+        GlassEffectContainer(spacing: 4) {
+            HStack(spacing: 4) {
+                ForEach(LibrarySegment.allCases) { segment in
+                    segmentButton(segment)
+                }
             }
+            .padding(4)
+            .coloredGlassControl(cornerRadius: Radius.pill)
         }
-        .padding(4)
-        .background(Capsule().fill(Surface.cardTint))
-        .overlay(Capsule().strokeBorder(Surface.edge, lineWidth: 0.5))
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: selection)
     }
 
     private func segmentButton(_ segment: LibrarySegment) -> some View {
@@ -353,9 +371,9 @@ private struct SegmentedControl: View {
                 .padding(.vertical, 10)
                 .background {
                     if isSelected {
-                        Capsule()
-                            .fill(Tint.inProgress)
+                        Color.clear
                             .matchedGeometryEffect(id: "thumb", in: thumb)
+                            .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
                     }
                 }
                 .contentShape(Capsule())
@@ -534,9 +552,7 @@ private struct LibraryTemplatesContent: View {
                     .foregroundStyle(Tint.onAccent)
                     .frame(maxWidth: 220)
                     .padding(.vertical, 14)
-                    .background(
-                        Capsule().fill(Tint.inProgress)
-                    )
+                    .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
             }
             .buttonStyle(.plain)
             .padding(.top, Space.xs)

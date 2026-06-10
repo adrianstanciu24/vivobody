@@ -42,8 +42,6 @@ struct MuscleDetailScreen: View {
         .screenBackground()
         .navigationTitle("All muscles")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.black, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     private var groupSeparator: some View {

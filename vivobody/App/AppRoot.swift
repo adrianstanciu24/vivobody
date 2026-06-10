@@ -55,12 +55,11 @@ struct AppRoot: View {
                         onDiscard: { appState.discardActiveWorkout() }
                     )
                     // Music-style presentation: fills the screen, has
-                    // a grabber for swipe-down-to-minimize, opaque
-                    // black background so the tab content doesn't
-                    // bleed through during the focused mode.
+                    // a grabber for swipe-down-to-minimize, and leaves
+                    // the presentation chrome to iOS 26's native glass.
+                    // The workout screen still owns its dark canvas.
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
-                    .presentationBackground(.black)
                     .presentationCornerRadius(28)
                 }
             }

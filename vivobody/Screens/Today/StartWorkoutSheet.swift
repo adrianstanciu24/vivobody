@@ -70,13 +70,15 @@ struct StartWorkoutSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
+                    .tint(Tint.primary)
                 }
             }
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .presentationBackground(.black)
     }
 
     // MARK: - Sections
@@ -98,30 +100,32 @@ struct StartWorkoutSheet: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: lastSession == nil ? "Start from" : "Or start from")
 
-            VStack(spacing: Space.md) {
-                if lastSession == nil {
-                    PrimaryActionButton(title: "Start Fresh", icon: "plus") {
-                        select(.fresh)
+            GlassEffectContainer(spacing: Space.md) {
+                VStack(spacing: Space.md) {
+                    if lastSession == nil {
+                        PrimaryActionButton(title: "Start Fresh", icon: "plus") {
+                            select(.fresh)
+                        }
+                    } else {
+                        startTile(
+                            title: "Start Fresh",
+                            icon: "plus",
+                            accessibility: "Start a fresh workout"
+                        ) {
+                            select(.fresh)
+                        }
                     }
-                } else {
-                    startTile(
-                        title: "Start Fresh",
-                        icon: "plus",
-                        accessibility: "Start a fresh workout"
-                    ) {
-                        select(.fresh)
-                    }
-                }
 
-                ForEach(templates, id: \.id) { template in
-                    startTile(
-                        title: template.name,
-                        subtitle: templateSubtitle(template),
-                        icon: "arrow.right",
-                        accessibility: "Start \(template.name)",
-                        filled: true
-                    ) {
-                        select(.template(template))
+                    ForEach(templates, id: \.id) { template in
+                        startTile(
+                            title: template.name,
+                            subtitle: templateSubtitle(template),
+                            icon: "arrow.right",
+                            accessibility: "Start \(template.name)",
+                            filled: true
+                        ) {
+                            select(.template(template))
+                        }
                     }
                 }
             }
@@ -205,7 +209,7 @@ private struct StartTileSurface: ViewModifier {
 
     func body(content: Content) -> some View {
         if filled {
-            content.glassCard(cornerRadius: 18)
+            content.glassCard(cornerRadius: 18, interactive: true)
         } else {
             content.overlay(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)

@@ -25,24 +25,38 @@ extension View {
     func glassCard(
         cornerRadius: CGFloat = Radius.card,
         tint: Color? = nil,
-        bright: Bool = false
+        bright: Bool = false,
+        interactive: Bool = false
     ) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
+        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright, interactive: interactive))
     }
 
     /// Chip / small surface — same idea, tighter radius.
     func glassChip(
         cornerRadius: CGFloat = Radius.chip,
         tint: Color? = nil,
-        bright: Bool = false
+        bright: Bool = false,
+        interactive: Bool = false
     ) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
+        modifier(GlassCardModifier(cornerRadius: cornerRadius, tint: tint, bright: bright, interactive: interactive))
     }
 
     /// Pill / capsule glass — used for floating buttons and chips
     /// where the shape is fully rounded.
-    func glassPill(tint: Color? = nil, bright: Bool = false) -> some View {
-        modifier(GlassCardModifier(cornerRadius: Radius.pill, tint: tint, bright: bright))
+    func glassPill(tint: Color? = nil, bright: Bool = false, interactive: Bool = false) -> some View {
+        modifier(GlassCardModifier(cornerRadius: Radius.pill, tint: tint, bright: bright, interactive: interactive))
+    }
+
+    /// Button/control glass that preserves a caller-owned fill color.
+    /// Use this for selected chips and CTAs where the design token must
+    /// remain visually exact; Liquid Glass contributes the interactive
+    /// surface response, rim, and sheen instead of becoming the color.
+    func coloredGlassControl(
+        cornerRadius: CGFloat = Radius.chip,
+        fill: Color? = nil,
+        interactive: Bool = true
+    ) -> some View {
+        modifier(ColoredGlassControlModifier(cornerRadius: cornerRadius, fill: fill, interactive: interactive))
     }
 
     /// Neutral elevation. Lifts a CTA or card off the pure-black
@@ -161,6 +175,57 @@ private struct TopSpecularSheenModifier: ViewModifier {
     }
 }
 
+private struct ColoredGlassControlModifier: ViewModifier {
+    let cornerRadius: CGFloat
+    let fill: Color?
+    var interactive: Bool = true
+
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        return content
+            .background {
+                if let fill {
+                    shape.fill(fill)
+                } else {
+                    shape.fill(Surface.cardTint)
+                }
+            }
+            .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
+            .overlay {
+                shape.stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(fill == nil ? 0.24 : 0.46),
+                            Color.black.opacity(fill == nil ? 0.04 : 0.12),
+                            Color.white.opacity(fill == nil ? 0.10 : 0.18)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: fill == nil ? 0.6 : 0.9
+                )
+            }
+            .overlay {
+                GeometryReader { geo in
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(fill == nil ? 0.08 : 0.20),
+                            Color.white.opacity(fill == nil ? 0.03 : 0.06),
+                            Color.clear
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: geo.size.height * 0.52)
+                    .frame(maxWidth: .infinity, alignment: .top)
+                }
+                .clipShape(shape)
+                .allowsHitTesting(false)
+            }
+            .contentShape(shape)
+    }
+}
+
 /// A Fresnel-shaded translucent sphere — the same vocabulary used
 /// for the rest-timer orb, packaged for reuse anywhere a circular
 /// glass element should read as 3D rather than as a flat tinted
@@ -270,6 +335,7 @@ private struct GlassCardModifier: ViewModifier {
     let cornerRadius: CGFloat
     let tint: Color?
     var bright: Bool = false
+    var interactive: Bool = false
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -283,7 +349,7 @@ private struct GlassCardModifier: ViewModifier {
                     }
                 }
             }
-            .glassEffect(.regular, in: shape)
+            .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
             .overlay {
                 shape
                     .stroke(

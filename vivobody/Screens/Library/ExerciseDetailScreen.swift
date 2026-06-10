@@ -149,8 +149,6 @@ struct ExerciseDetailScreen: View {
         .background(Color.black.ignoresSafeArea())
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.black, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -1185,7 +1183,6 @@ private struct OneRepMaxEditorSheet: View {
                 }
             }
             .presentationDetents([.medium])
-            .presentationBackground(.black)
         }
     }
 }
