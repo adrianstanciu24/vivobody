@@ -160,7 +160,7 @@ private struct TrainingSignatureView: View {
             path.addLine(to: CGPoint(x: center.x + cos(angle) * outer, y: center.y + sin(angle) * outer))
             context.stroke(
                 path,
-                with: .color(isDominant ? Tint.primary.opacity(0.45) : .white.opacity(0.05)),
+                with: .color(isDominant ? Tint.primary.opacity(0.45) : Ink.primary.opacity(0.05)),
                 lineWidth: 1
             )
         }

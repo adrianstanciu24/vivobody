@@ -20,7 +20,7 @@ struct RestTimerOverlay: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.92).ignoresSafeArea()
+            Surface.background.opacity(0.92).ignoresSafeArea()
 
             BreathingTimer(
                 duration: max(1, session.restRemaining),

@@ -76,7 +76,7 @@ struct BodyWeightDetail: View {
             .padding(.horizontal, 22)
             .padding(.vertical, 16)
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(Surface.background.ignoresSafeArea())
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $logTarget) { target in
@@ -109,11 +109,11 @@ struct BodyWeightDetail: View {
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(currentWeightLabel)
                     .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Ink.primary)
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(Typography.metricUnit)
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.primary.opacity(0.55))
 
                 Spacer()
 
@@ -125,11 +125,11 @@ struct BodyWeightDetail: View {
             if let last = entries.latest {
                 Text("Last logged \(Self.dayFormatter.string(from: last.date))")
                     .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(Ink.primary.opacity(0.45))
             } else {
                 Text("No entries yet")
                     .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(Ink.primary.opacity(0.45))
             }
         }
     }
@@ -141,7 +141,7 @@ struct BodyWeightDetail: View {
         // imply a moral direction (unlike strength PRs, where up =
         // always good).
         let isUp = delta > 0
-        let chipColor = Color.white.opacity(0.85)
+        let chipColor = Ink.secondary
         return HStack(spacing: 4) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
                 .font(.system(size: 10, weight: .bold))
@@ -151,7 +151,7 @@ struct BodyWeightDetail: View {
         .foregroundStyle(chipColor)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
-        .background(Capsule().fill(Color.white.opacity(0.10)))
+        .background(Capsule().fill(Surface.cardTintBright))
     }
 
     private var currentWeightLabel: String {
@@ -172,7 +172,7 @@ struct BodyWeightDetail: View {
                 Text("Log weight")
                     .font(.system(size: 16, weight: .semibold))
             }
-            .foregroundStyle(.black)
+            .foregroundStyle(Tint.onAccent)
             .frame(maxWidth: .infinity, minHeight: 52)
             .coloredGlassControl(cornerRadius: 14, fill: Tint.primary)
             .softElevation()
@@ -191,7 +191,7 @@ struct BodyWeightDetail: View {
                     y: .value("Weight", displayWeight)
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(.white.opacity(0.85))
+                .foregroundStyle(Ink.primary.opacity(0.85))
 
                 AreaMark(
                     x: .value("Date", point.date),
@@ -200,7 +200,7 @@ struct BodyWeightDetail: View {
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [Color.white.opacity(0.18), Color.white.opacity(0)],
+                        colors: [Ink.primary.opacity(0.18), Ink.primary.opacity(0)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -209,18 +209,18 @@ struct BodyWeightDetail: View {
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
         .chartYAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
         .frame(height: 220)
@@ -231,7 +231,7 @@ struct BodyWeightDetail: View {
             Spacer()
             Text("Log another entry to see your trend")
                 .font(Typography.body)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.primary.opacity(0.55))
             Spacer()
         }
         .frame(height: 120)
@@ -258,7 +258,7 @@ struct BodyWeightDetail: View {
         } label: {
             Text(r.label)
                 .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? .black : .white.opacity(0.80))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
                 .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.primary : nil)
@@ -297,7 +297,7 @@ struct BodyWeightDetail: View {
 
                     if idx < reversedEntries.count - 1 {
                         Rectangle()
-                            .fill(Color.white.opacity(0.06))
+                            .fill(Surface.edge)
                             .frame(height: 0.5)
                             .padding(.horizontal, 16)
                     }
@@ -311,19 +311,19 @@ struct BodyWeightDetail: View {
         HStack(spacing: 12) {
             Text(Self.dayFormatter.string(from: entry.date))
                 .font(.system(size: 12, weight: .medium, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.primary.opacity(0.55))
                 .frame(width: 110, alignment: .leading)
 
             Text(WeightFormatter.string(entry.weight, unit: unit, fractionDigits: 1))
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Ink.primary)
                 .monospacedDigit()
 
             Spacer()
 
             Image(systemName: "chevron.right")
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.30))
+                .foregroundStyle(Ink.primary.opacity(0.30))
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

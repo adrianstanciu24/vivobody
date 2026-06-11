@@ -44,7 +44,7 @@ struct TemplateDetailScreen: View {
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Surface.background.ignoresSafeArea()
 
             List {
                 Section {
@@ -174,7 +174,7 @@ struct TemplateDetailScreen: View {
                     .padding(.bottom, 6)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .listRowInsets(EdgeInsets())
-                    .background(Color.black)
+                    .background(Surface.background)
             }
         }
     }
@@ -273,7 +273,7 @@ struct TemplateDetailScreen: View {
             .disabled(template.orderedExercises.isEmpty)
             .opacity(template.orderedExercises.isEmpty ? 0.4 : 1)
         }
-        .background(Color.black.opacity(0.85))
+        .background(Surface.background.opacity(0.85))
     }
 
     // MARK: - Mutations

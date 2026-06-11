@@ -57,7 +57,7 @@ extension View {
     func sectionLabelStyle(_ opacity: Double = 0.45) -> some View {
         self
             .font(Typography.sectionLabel)
-            .foregroundStyle(.white.opacity(opacity))
+            .foregroundStyle(Ink.primary.opacity(opacity))
             .textCase(nil)
             .tracking(0)
     }
@@ -67,7 +67,7 @@ extension View {
     func sectionHeadingStyle(_ opacity: Double = 0.85) -> some View {
         self
             .font(Typography.sectionHeading)
-            .foregroundStyle(.white.opacity(opacity))
+            .foregroundStyle(Ink.primary.opacity(opacity))
             .textCase(nil)
             .tracking(0)
     }

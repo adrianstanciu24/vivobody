@@ -55,7 +55,7 @@ struct NumberScrubber: View {
                 DigitTicker(
                     value: value,
                     font: .system(size: valueFontSize, weight: .bold, design: .rounded),
-                    color: .white,
+                    color: Ink.primary,
                     fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
                     formatter: formatter
                 )
@@ -63,7 +63,7 @@ struct NumberScrubber: View {
                 if !unit.isEmpty {
                     Text(unit)
                         .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
             .offset(y: rubberOffset)
@@ -219,7 +219,7 @@ struct NumberScrubber: View {
     }
 
     private var fluidTint: Color {
-        isEnabled ? Tint.primary : Color.white.opacity(0.6)
+        isEnabled ? Tint.primary : Ink.tertiary
     }
 }
 

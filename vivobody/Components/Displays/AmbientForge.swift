@@ -31,6 +31,7 @@ struct AmbientForge: View {
     var intensity: Double = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var fromWarmth: Double = 0
     @State private var toWarmth: Double = 0
@@ -94,7 +95,17 @@ struct AmbientForge: View {
         warmth w: Double,
         animated: Bool
     ) {
-        context.blendMode = .plusLighter
+        let light = colorScheme != .dark
+        // Additive ember glows on a black stage; on a light page that
+        // same add-blend clips to white, so light mode lays down a warm
+        // amber wash with normal blending instead.
+        context.blendMode = light ? .normal : .plusLighter
+        // Additive-on-black shows even a dim ember, but a normal-blend
+        // tint on a near-white page needs far more opacity to register,
+        // so scale the light wash up well past 1.0. The radial falloff
+        // keeps it a halo rather than a solid block even when the peak
+        // clamps near opaque at full heat.
+        let alphaScale = light ? 1.35 : 1.0
         let tau = 2 * Double.pi
         let maxDim = max(size.width, size.height)
 
@@ -119,12 +130,12 @@ struct AmbientForge: View {
             // Temperature scales brightness: dim & deep when cold, bright
             // & orange when hot.
             let temperature = 0.34 + 0.66 * w
-            let peak = lobe.peak * temperature * pulse * intensity
+            let peak = lobe.peak * temperature * pulse * intensity * alphaScale
 
             let gradient = Gradient(stops: [
-                .init(color: ember(w, peak), location: 0.0),
-                .init(color: ember(w, peak * 0.45), location: 0.4),
-                .init(color: ember(w, 0.0), location: 1.0),
+                .init(color: ember(w, peak, light: light), location: 0.0),
+                .init(color: ember(w, peak * 0.45, light: light), location: 0.4),
+                .init(color: ember(w, 0.0, light: light), location: 1.0),
             ])
             let rect = CGRect(
                 x: center.x - radius,
@@ -141,8 +152,16 @@ struct AmbientForge: View {
 
     /// Deep ember → hot orange interpolation. Both endpoints sit on the
     /// app's single orange accent family, so the forge never introduces a
-    /// competing hue.
-    private func ember(_ w: Double, _ opacity: Double) -> Color {
+    /// competing hue. Light mode swaps to a warm amber that deepens from
+    /// a pale peach (idle) toward a richer orange (hot) — more saturated
+    /// than the gray surface so a normal-blend wash reads as warmth
+    /// rather than glare.
+    private func ember(_ w: Double, _ opacity: Double, light: Bool) -> Color {
+        if light {
+            let g = 0.70 - 0.16 * w
+            let b = 0.46 - 0.24 * w
+            return Color(.sRGB, red: 1.0, green: g, blue: b, opacity: opacity)
+        }
         let r = 0.85 + 0.15 * w
         let g = 0.26 + 0.19 * w
         return Color(.sRGB, red: r, green: g, blue: 0.0, opacity: opacity)
@@ -260,6 +279,9 @@ private struct ForgeBackground: View {
     var body: some View {
         ZStack {
             Surface.background
+            // AmbientForge adapts its own compositing per appearance —
+            // an additive ember on the black stage, a soft warm amber
+            // wash on the light surface — so it renders in both.
             AmbientForge(warmth: sessions.forgeWarmth, intensity: intensity)
         }
     }

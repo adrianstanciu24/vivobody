@@ -79,7 +79,7 @@ struct StreakCalendar: View {
     private var header: some View {
         Text(monthLabel)
             .font(.system(size: 22, weight: .semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(Ink.primary)
             .contentTransition(.opacity)
     }
 
@@ -88,7 +88,7 @@ struct StreakCalendar: View {
             ForEach(Array(weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                 Text(symbol)
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.40))
+                    .foregroundStyle(Ink.tertiary)
                     .frame(width: cellWidth)
             }
         }
@@ -100,11 +100,11 @@ struct StreakCalendar: View {
             DigitTicker(
                 value: Double(monthSessionCount),
                 font: .system(size: 13, weight: .semibold),
-                color: .white.opacity(0.55)
+                color: Ink.secondary
             )
             Text(monthSessionCount == 1 ? "session" : "sessions")
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.secondary)
         }
     }
 
@@ -169,12 +169,12 @@ private struct DayDot: View {
 
     private var strokeColor: Color {
         if isToday {
-            return Color.white.opacity(0.55)
+            return Ink.secondary
         }
         if isWorkout {
             return Color.clear
         }
-        return Color.white.opacity(0.10)
+        return Surface.edge
     }
 
     private var strokeWidth: CGFloat {
@@ -183,8 +183,8 @@ private struct DayDot: View {
 
     private var numberColor: Color {
         if isWorkout {
-            return Color.black.opacity(0.85)
+            return Tint.onAccent.opacity(0.85)
         }
-        return Color.white.opacity(isInMonth ? 0.55 : 0.45)
+        return isInMonth ? Ink.secondary : Ink.tertiary
     }
 }

@@ -39,11 +39,11 @@ struct PrimaryActionButton: View {
                     if let subtitle {
                         Text(subtitle)
                             .font(Typography.caption)
-                            .foregroundStyle(.black.opacity(0.55))
+                            .foregroundStyle(Tint.onAccent.opacity(0.55))
                     }
                     Text(title)
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Tint.onAccent)
                 }
 
                 Spacer()
@@ -51,7 +51,7 @@ struct PrimaryActionButton: View {
                 if let icon {
                     Image(systemName: icon)
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(.black.opacity(0.85))
+                        .foregroundStyle(Tint.onAccent.opacity(0.85))
                 }
             }
             .padding(.horizontal, 22)

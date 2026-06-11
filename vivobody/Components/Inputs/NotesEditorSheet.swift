@@ -42,7 +42,7 @@ struct NotesEditorSheet: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .topLeading) {
-                Color.black.ignoresSafeArea()
+                Surface.background.ignoresSafeArea()
 
                 ScrollView {
                     ZStack(alignment: .topLeading) {
@@ -51,8 +51,8 @@ struct NotesEditorSheet: View {
                             .background(Color.clear)
                             .focused($isFocused)
                             .font(.system(size: 15))
-                            .foregroundStyle(.white)
-                            .tint(.white)
+                            .foregroundStyle(Ink.primary)
+                            .tint(Tint.primary)
                             .frame(minHeight: 240)
 
                         // Hand-rolled placeholder. TextEditor's
@@ -63,7 +63,7 @@ struct NotesEditorSheet: View {
                         if draft.isEmpty {
                             Text(placeholder)
                                 .font(.system(size: 15))
-                                .foregroundStyle(.white.opacity(0.30))
+                                .foregroundStyle(Ink.quaternary)
                                 .padding(.top, 8)
                                 .padding(.leading, 5)
                                 .allowsHitTesting(false)
@@ -97,7 +97,6 @@ struct NotesEditorSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .preferredColorScheme(.dark)
         .onAppear {
             draft = initialValue
             // Defer focus by one runloop so the sheet's transition

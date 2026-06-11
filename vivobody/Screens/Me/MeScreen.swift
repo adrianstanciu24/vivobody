@@ -54,6 +54,13 @@ struct MeScreen: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
 
+    @AppStorage(SettingsKey.appearance)
+    private var appearanceRaw: String = SettingsDefaults.appearance
+
+    private var appearance: AppAppearance {
+        AppAppearance(rawValue: appearanceRaw) ?? .system
+    }
+
     /// Drives the inline log sheet presented from the empty-state
     /// card. Populated state navigates to detail (which has its own
     /// log sheet) so the same affordance never collides.
@@ -318,6 +325,8 @@ struct MeScreen: View {
             SectionHeader(title: "Preferences")
 
             VStack(alignment: .leading, spacing: Space.lg + 2) {
+                appearanceRow
+                rowDivider
                 weightUnitRow
                 rowDivider
                 restRow
@@ -373,6 +382,50 @@ struct MeScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityHint("Wipes and reseeds the exercise catalog")
+    }
+
+    private var appearanceRow: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            HStack {
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text("Appearance")
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                    Text("Light, dark, or follow the system")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                }
+                Spacer()
+                Text(appearance.label)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Ink.primary)
+            }
+
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(AppAppearance.allCases) { option in
+                        appearanceChip(option)
+                    }
+                }
+            }
+        }
+    }
+
+    private func appearanceChip(_ option: AppAppearance) -> some View {
+        let isSelected = option == appearance
+        return Button {
+            Haptics.selection()
+            appearanceRaw = option.rawValue
+        } label: {
+            Text(option.label)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(option.label)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var weightUnitRow: some View {

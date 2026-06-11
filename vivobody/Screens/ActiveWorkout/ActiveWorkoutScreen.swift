@@ -325,11 +325,11 @@ struct ActiveWorkoutScreen: View {
                 Text("Add exercise")
                     .font(.system(size: 19, weight: .bold))
                     .tracking(0.4)
-                    .foregroundStyle(Color.black)
+                    .foregroundStyle(Tint.onAccent)
                 Spacer(minLength: 8)
                 Image(systemName: "plus")
                     .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(Color.black)
+                    .foregroundStyle(Tint.onAccent)
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 18)

@@ -235,7 +235,7 @@ private struct ConsistencyHeatmap: View {
             .overlay {
                 if day.isToday {
                     RoundedRectangle(cornerRadius: 2, style: .continuous)
-                        .stroke(Color.white.opacity(0.6), lineWidth: 1.5)
+                        .stroke(Ink.secondary, lineWidth: 1.5)
                 }
             }
     }

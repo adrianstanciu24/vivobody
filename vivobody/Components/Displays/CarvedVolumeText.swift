@@ -40,8 +40,8 @@ struct CarvedVolumeText: View {
                     .foregroundStyle(
                         LinearGradient(
                             stops: [
-                                .init(color: .white.opacity(0.58), location: 0.0),
-                                .init(color: .white.opacity(0.94), location: 1.0),
+                                .init(color: Ink.primary.opacity(0.58), location: 0.0),
+                                .init(color: Ink.primary.opacity(0.94), location: 1.0),
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -53,7 +53,7 @@ struct CarvedVolumeText: View {
                 if !unit.isEmpty {
                     Text(unit)
                         .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.40))
+                        .foregroundStyle(Ink.primary.opacity(0.40))
                         .padding(.bottom, 2)
                 }
             }

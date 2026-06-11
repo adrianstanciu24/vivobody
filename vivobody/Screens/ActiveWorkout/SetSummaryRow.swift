@@ -98,7 +98,7 @@ struct SetSummaryRow: View {
             }
         } else {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.white.opacity(isCompleted ? 0.05 : 0.025))
+                .fill(isCompleted ? Surface.cardTint : Surface.cardTint.opacity(0.5))
         }
     }
 
@@ -114,7 +114,7 @@ struct SetSummaryRow: View {
                     .opacity(pulse)
             } else {
                 Circle()
-                    .fill(isCompleted ? completedGreen : Color.white.opacity(0.06))
+                    .fill(isCompleted ? completedGreen : Surface.cardTintBright)
                     .frame(width: 24, height: 24)
 
                 if isCompleted {

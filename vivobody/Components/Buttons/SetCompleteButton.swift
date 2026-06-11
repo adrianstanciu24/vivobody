@@ -165,7 +165,7 @@ struct SetCompleteButton: View {
                 Text(title)
                     .font(.system(size: 19, weight: .bold))
                     .tracking(0.4)
-                    .foregroundStyle(isComplete ? Color.black : liveAccent)
+                    .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
                 Spacer(minLength: 8)
                 statusIndicator
             }
@@ -182,7 +182,7 @@ struct SetCompleteButton: View {
             }
             .padding(.horizontal, 22)
             .padding(.vertical, 18)
-            .foregroundStyle(isComplete ? Color.black : Color.white)
+            .foregroundStyle(isComplete ? Tint.onAccent : Ink.primary)
             .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         }
     }
@@ -217,7 +217,7 @@ struct SetCompleteButton: View {
                 Checkmark()
                     .trim(from: 0, to: 1)
                     .stroke(
-                        Color.black,
+                        Tint.onAccent,
                         style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
                     )
                     .frame(width: 18, height: 14)

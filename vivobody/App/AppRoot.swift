@@ -28,8 +28,20 @@ struct AppRoot: View {
     @State private var appState = AppState()
     @Environment(\.modelContext) private var modelContext
 
+    /// The user's light/dark/system choice. Drives the whole window's
+    /// color scheme (system resolving to nil so the OS decides).
+    /// Applied at the top of the view tree so the navigation bar's
+    /// large titles and the status bar recolor with it.
+    @AppStorage(SettingsKey.appearance)
+    private var appearanceRaw: String = SettingsDefaults.appearance
+
+    private var appearance: AppAppearance {
+        AppAppearance(rawValue: appearanceRaw) ?? .system
+    }
+
     var body: some View {
         tabView
+            .preferredColorScheme(appearance.colorScheme)
             .tint(Tint.primary)
             .miniBarAccessory(
                 session: appState.activeSession,
@@ -57,7 +69,6 @@ struct AppRoot: View {
                     // Music-style presentation: fills the screen, has
                     // a grabber for swipe-down-to-minimize, and leaves
                     // the presentation chrome to iOS 26's native glass.
-                    // The workout screen still owns its dark canvas.
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(28)

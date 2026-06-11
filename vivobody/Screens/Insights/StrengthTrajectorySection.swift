@@ -127,15 +127,15 @@ struct StrengthTrajectorySection: View {
                 Text(stat.exercise)
                     .font(.system(size: 13, weight: .semibold))
             }
-            .foregroundStyle(isSelected ? .black : Ink.secondary)
+            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .padding(.horizontal, 14)
             .frame(minHeight: 38)
             .background(
-                Capsule().fill(isSelected ? Tint.primary : Color.white.opacity(0.06))
+                Capsule().fill(isSelected ? Tint.primary : Surface.cardTint)
             )
             .overlay(
                 Capsule().stroke(
-                    isSelected ? Color.white.opacity(0.30) : Color.white.opacity(0.10),
+                    isSelected ? Surface.edgeBright : Surface.edge,
                     lineWidth: 0.5
                 )
             )
@@ -193,7 +193,7 @@ struct StrengthTrajectorySection: View {
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(Ink.tertiary)
@@ -201,7 +201,7 @@ struct StrengthTrajectorySection: View {
         }
         .chartYAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(Ink.tertiary)

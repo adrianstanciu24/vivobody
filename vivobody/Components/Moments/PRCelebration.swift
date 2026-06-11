@@ -50,7 +50,7 @@ struct PRCelebration: View {
     var body: some View {
         if isPresented {
             ZStack {
-                Color.black
+                Surface.background
                     .opacity(backdropVisible ? 0.96 : 0)
                     .ignoresSafeArea()
 

@@ -77,7 +77,7 @@ struct BreathingTimer: View {
             let progress = min(1, max(0, 1 - remainingExact / totalDuration))
 
             ZStack {
-                Color.black.ignoresSafeArea()
+                Surface.background.ignoresSafeArea()
 
                 VStack(alignment: .leading, spacing: 0) {
                     kicker
@@ -104,7 +104,7 @@ struct BreathingTimer: View {
             }
             .offset(y: dragOffset)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.ignoresSafeArea())
+            .background(Surface.background.ignoresSafeArea())
             .contentShape(Rectangle())
             .gesture(skipOrExtendGesture)
         }
@@ -158,7 +158,7 @@ struct BreathingTimer: View {
         GeometryReader { g in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.white.opacity(0.10))
+                    .fill(Surface.edge)
                     .frame(height: 3)
                 Capsule()
                     .fill(Tint.inProgress)
@@ -222,7 +222,7 @@ struct BreathingTimer: View {
                 .font(.system(size: 11, weight: .semibold, design: .monospaced))
                 .tracking(0.5)
         }
-        .foregroundStyle(committed ? Tint.inProgress : Color.white.opacity(opacity))
+        .foregroundStyle(committed ? Tint.inProgress : Ink.primary.opacity(opacity))
         .scaleEffect(0.96 + 0.06 * visibility)
     }
 

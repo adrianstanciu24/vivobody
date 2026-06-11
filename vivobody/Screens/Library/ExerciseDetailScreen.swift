@@ -146,7 +146,7 @@ struct ExerciseDetailScreen: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(Surface.background.ignoresSafeArea())
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -467,7 +467,7 @@ struct ExerciseDetailScreen: View {
                     y: .value("Metric", chartValue(for: point))
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(.white.opacity(0.85))
+                .foregroundStyle(Ink.primary.opacity(0.85))
 
                 AreaMark(
                     x: .value("Date", point.date),
@@ -476,7 +476,7 @@ struct ExerciseDetailScreen: View {
                 .interpolationMethod(.monotone)
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [Color.white.opacity(0.20), Color.white.opacity(0)],
+                        colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -495,18 +495,18 @@ struct ExerciseDetailScreen: View {
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
         .chartYAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Color.white.opacity(0.08))
+                AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
         .frame(height: 200)
@@ -725,7 +725,7 @@ struct ExerciseDetailScreen: View {
             if row.isPR {
                 Text("PR")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(Tint.onAccent)
                     .padding(.horizontal, 7)
                     .padding(.vertical, 2)
                     .background(Capsule().fill(prColor))
@@ -806,7 +806,7 @@ struct ExerciseDetailScreen: View {
         .padding(.top, 12)
         .background(
             LinearGradient(
-                colors: [Color.black.opacity(0), Color.black],
+                colors: [Surface.background.opacity(0), Surface.background],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -1166,7 +1166,7 @@ private struct OneRepMaxEditorSheet: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity)
-            .background(Color.black.ignoresSafeArea())
+            .background(Surface.background.ignoresSafeArea())
             .navigationTitle("One-Rep Max")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

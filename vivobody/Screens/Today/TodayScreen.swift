@@ -72,6 +72,8 @@ struct TodayScreen: View {
                 // screen reads as a powered-on instrument rather than a
                 // flat black report. Sits behind the transparent 3D
                 // figure, so the glow breathes through and around it.
+                // AmbientForge adapts its own compositing per appearance
+                // (additive ember on dark, warm amber wash on light).
                 AmbientForge(warmth: forgeWarmth)
                     .ignoresSafeArea()
 

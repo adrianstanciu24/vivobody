@@ -41,7 +41,7 @@ struct ActiveWorkoutMiniBar: View {
 
     private let completedGreen = Tint.success
     private let restTint       = Tint.primary
-    private let readyTint      = Color.white.opacity(0.55)
+    private let readyTint      = Ink.secondary
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
@@ -62,7 +62,7 @@ struct ActiveWorkoutMiniBar: View {
                 statusBadge(now: now)
                 Image(systemName: "chevron.up")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.tertiary)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 6)
@@ -86,12 +86,12 @@ struct ActiveWorkoutMiniBar: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(titleText)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Ink.primary)
                 .lineLimit(1)
 
             Text(subtitleText)
                 .font(Typography.caption)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(Ink.tertiary)
                 .lineLimit(1)
         }
     }
@@ -136,7 +136,7 @@ struct ActiveWorkoutMiniBar: View {
     /// muscle-group accent.
     private var dotColor: Color {
         if session.isAllComplete { return completedGreen }
-        return displayExercise?.group.accent ?? .white
+        return displayExercise?.group.accent ?? Ink.primary
     }
 
     /// Pulse while a workout is genuinely *in flight* (active session,
@@ -207,7 +207,7 @@ private struct PulseDot: View {
             .fill(color)
             .frame(width: 9, height: 9)
             .overlay(
-                Circle().stroke(Color.white.opacity(0.20), lineWidth: 0.5)
+                Circle().stroke(Ink.quaternary, lineWidth: 0.5)
             )
             .scaleEffect(phase ? 1.35 : 1.0)
             .opacity(phase ? 0.65 : 1.0)

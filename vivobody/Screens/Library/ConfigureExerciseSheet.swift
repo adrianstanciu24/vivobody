@@ -215,7 +215,7 @@ struct ConfigureExerciseSheet: View {
             .padding(.top, Space.md)
             .padding(.bottom, Space.sm)
         }
-        .background(Color.black.opacity(0.9))
+        .background(Surface.background.opacity(0.9))
     }
 
     private var previewLine: String {

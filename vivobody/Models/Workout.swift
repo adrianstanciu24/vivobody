@@ -38,7 +38,7 @@ enum MuscleGroup: String, Hashable, CaseIterable {
     /// label, not a rainbow of dots. Kept as a property so existing
     /// call sites (dots, chips, calendar) compile while the screens
     /// migrate to text-only group labels.
-    var accent: Color { Color.white.opacity(0.40) }
+    var accent: Color { Ink.tertiary }
 }
 
 // MARK: - Tracking mode

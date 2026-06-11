@@ -202,7 +202,7 @@ struct PageDots: View {
         HStack(spacing: 7) {
             ForEach(0..<count, id: \.self) { i in
                 Capsule()
-                    .fill(i == selection ? Color.white : Color.white.opacity(0.22))
+                    .fill(i == selection ? Ink.primary : Ink.quaternary)
                     .frame(width: i == selection ? 22 : 6, height: 6)
                     .animation(.spring(response: 0.35, dampingFraction: 0.78), value: selection)
             }

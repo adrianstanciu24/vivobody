@@ -228,7 +228,7 @@ private struct MuscleVolumeBar: View {
                     .fill(Surface.cardTint)
 
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
-                    .fill(Color.white.opacity(0.12))
+                    .fill(Surface.edgeBright)
                     .frame(width: bandWidth)
                     .offset(x: bandStart)
 

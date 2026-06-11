@@ -128,20 +128,20 @@ struct PlateVisualizer: View {
         HStack(spacing: 4) {
             if !exact {
                 Text("≈")
-                    .foregroundStyle(.white.opacity(0.55))
+                    .foregroundStyle(Ink.secondary)
             }
             DigitTicker(
                 value: actual,
                 font: .system(size: 13, weight: .semibold, design: .monospaced),
-                color: .white.opacity(0.75),
+                color: Ink.secondary,
                 fractionalDigits: actual.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1
             )
             Text(unit.rawValue)
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(Ink.tertiary)
                 .padding(.leading, 2)
         }
         .font(.system(size: 13, weight: .semibold, design: .monospaced))
-        .foregroundStyle(.white.opacity(0.75))
+        .foregroundStyle(Ink.secondary)
         .tracking(1.5)
     }
 

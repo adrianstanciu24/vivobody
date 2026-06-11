@@ -52,7 +52,7 @@ struct StartWorkoutSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.black.ignoresSafeArea()
+                Surface.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: Space.section) {

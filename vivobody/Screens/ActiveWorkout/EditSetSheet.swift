@@ -106,7 +106,7 @@ struct EditSetSheet: View {
             .padding(.horizontal, 20)
             .padding(.top, 18)
             .padding(.bottom, 20)
-            .background(Color.black.ignoresSafeArea())
+            .background(Surface.background.ignoresSafeArea())
             .navigationTitle("Edit Set")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -121,7 +121,6 @@ struct EditSetSheet: View {
         }
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
-        .preferredColorScheme(.dark)
     }
 }
 

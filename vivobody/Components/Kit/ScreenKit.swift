@@ -37,7 +37,7 @@ struct SectionHeader: View {
         HStack(alignment: .firstTextBaseline) {
             Text(title)
                 .font(Typography.title)
-                .foregroundStyle(.white.opacity(0.92))
+                .foregroundStyle(Ink.primary)
                 .textCase(nil)
                 .tracking(0)
                 .accessibilityAddTraits(.isHeader)

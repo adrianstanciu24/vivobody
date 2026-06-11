@@ -73,7 +73,7 @@ struct ExercisePickerSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.black.ignoresSafeArea()
+                Surface.background.ignoresSafeArea()
 
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: Space.section) {

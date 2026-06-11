@@ -35,7 +35,6 @@ struct vivobodyApp: App {
     var body: some Scene {
         WindowGroup {
             AppRoot()
-                .preferredColorScheme(.dark)
                 .warmUpKeyboardOnce()
                 .task {
                     if CommandLine.arguments.contains("--seed-history") {

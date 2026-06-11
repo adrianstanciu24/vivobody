@@ -23,7 +23,7 @@ import SwiftUI
 struct DigitTicker: View {
     let value: Double
     var font: Font = .system(size: 36, weight: .bold, design: .monospaced)
-    var color: Color = .white
+    var color: Color = Ink.primary
     var fractionalDigits: Int = 0
     var animation: Animation = .spring(response: 0.34, dampingFraction: 0.74)
     /// Optional custom formatter. When provided, takes precedence over

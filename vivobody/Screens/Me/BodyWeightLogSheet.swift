@@ -60,7 +60,7 @@ struct BodyWeightLogSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.black.ignoresSafeArea()
+                Surface.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
@@ -87,7 +87,6 @@ struct BodyWeightLogSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .preferredColorScheme(.dark)
         .onAppear(perform: hydrate)
     }
 

@@ -69,15 +69,20 @@ enum Tint {
 /// Text colour tiers. Hierarchy is luminance, never hue. Reach for
 /// these instead of scattering `.white.opacity(...)` literals so the
 /// steps stay identical everywhere.
+///
+/// Each tier is an Asset Catalog colour set with explicit Light/Dark
+/// appearances: the dark variant reproduces the original
+/// white-on-black ladder exactly, the light variant mirrors it as
+/// black-on-white so hierarchy survives the flip.
 enum Ink {
     /// Hero numerals, titles, the thing you read first.
-    static let primary    = Color.white
+    static let primary    = Color("InkPrimary")
     /// Body copy, secondary values.
-    static let secondary  = Color.white.opacity(0.70)
+    static let secondary  = Color("InkSecondary")
     /// Labels, captions, supporting metadata.
-    static let tertiary   = Color.white.opacity(0.45)
+    static let tertiary   = Color("InkTertiary")
     /// Faintest — disabled, dividers-as-text, deep background detail.
-    static let quaternary = Color.white.opacity(0.30)
+    static let quaternary = Color("InkQuaternary")
 }
 
 enum Radius {
@@ -106,13 +111,19 @@ enum Space {
     static let rowMin: CGFloat = 60
 }
 
+/// Neutral surfaces. Each is an Asset Catalog colour set with
+/// explicit Light/Dark appearances. Dark reproduces the original
+/// pure-black canvas + white-opacity fills exactly; light maps onto
+/// Apple's grouped-grays vocabulary (a soft systemGroupedBackground
+/// page with faint dark-opacity fills) so the same card recipe reads
+/// natively in both modes.
 enum Surface {
-    static let background = Color.black
-    static let cardTint   = Color.white.opacity(0.05)
+    static let background = Color("SurfaceBackground")
+    static let cardTint   = Color("SurfaceCardTint")
     /// Brighter neutral fill for hero / primary stat cards — lets
     /// them read as "raised, important" through luminance rather
     /// than a colored tint wash (which skews muddy over black).
-    static let cardTintBright = Color.white.opacity(0.08)
-    static let edge       = Color.white.opacity(0.10)
-    static let edgeBright = Color.white.opacity(0.22)
+    static let cardTintBright = Color("SurfaceCardTintBright")
+    static let edge       = Color("SurfaceEdge")
+    static let edgeBright = Color("SurfaceEdgeBright")
 }

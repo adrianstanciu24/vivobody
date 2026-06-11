@@ -241,7 +241,7 @@ private struct WeeklyHero: View {
         HStack(alignment: .firstTextBaseline) {
             Text("This week")
                 .font(Typography.title)
-                .foregroundStyle(.white.opacity(0.92))
+                .foregroundStyle(Ink.primary.opacity(0.92))
                 .accessibilityAddTraits(.isHeader)
             Spacer(minLength: Space.sm)
             trendDelta
@@ -307,7 +307,7 @@ private struct WeekCadenceStrip: View {
         return VStack(spacing: Space.sm) {
             Text(Self.weekdayLetter.string(from: day))
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.40))
+                .foregroundStyle(Ink.primary.opacity(0.40))
             ZStack {
                 Circle()
                     .fill(isWorkout ? Tint.primary : Color.clear)
@@ -323,9 +323,9 @@ private struct WeekCadenceStrip: View {
     }
 
     private func ringColor(isWorkout: Bool, isToday: Bool) -> Color {
-        if isToday { return .white.opacity(0.55) }
+        if isToday { return Ink.primary.opacity(0.55) }
         if isWorkout { return .clear }
-        return .white.opacity(0.10)
+        return Surface.edge
     }
 
     private static let weekdayLetter: DateFormatter = {

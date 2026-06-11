@@ -15,8 +15,8 @@ struct MiniChart: View {
     /// Indices in `values` to highlight as PRs. Rendered as small
     /// solid dots above the line. Out-of-bounds indices are ignored.
     var prIndices: Set<Int> = []
-    var lineColor: Color = .white
-    var fillColor: Color = .white
+    var lineColor: Color = Ink.primary
+    var fillColor: Color = Ink.primary
 
     var body: some View {
         GeometryReader { geo in

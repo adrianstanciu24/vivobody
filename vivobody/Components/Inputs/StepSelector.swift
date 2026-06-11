@@ -31,14 +31,14 @@ struct StepSelector<T: Hashable>: View {
                     Text(label(option))
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                         .monospacedDigit()
-                        .foregroundStyle(option == selection ? Color.black : Color.white.opacity(0.55))
+                        .foregroundStyle(option == selection ? Surface.background : Ink.secondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .contentShape(Capsule())
                         .background {
                             if option == selection {
                                 Capsule()
-                                    .fill(Color.white)
+                                    .fill(Ink.primary)
                                     .matchedGeometryEffect(id: "indicator", in: indicatorNS)
                             }
                         }
@@ -47,7 +47,7 @@ struct StepSelector<T: Hashable>: View {
             }
         }
         .padding(4)
-        .background(Capsule().fill(Color.white.opacity(0.06)))
+        .background(Capsule().fill(Surface.cardTint))
         .animation(.spring(response: 0.32, dampingFraction: 0.72), value: selection)
     }
 }
