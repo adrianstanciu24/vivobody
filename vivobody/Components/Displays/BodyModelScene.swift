@@ -11,47 +11,59 @@
 //  rig, and per-part PBR materials.
 //
 //  Muscles are coloured by training (see `MuscleColor`): development
-//  sets the diffuse — a tint ramp from pale orange to a vivid,
-//  saturated orange. Tightness is the one channel left out of the base
-//  colour: it drives a brighten-only throb (see `tightnessPulseModifier`)
-//  on the per-frame clock, so a stiff muscle pulses brighter in its
-//  own colour — pulsation is what marks tightness, without restaining
-//  how developed it looks. The input is a `channels` map keyed by node
+//  sets the diffuse — a tint ramp from the theme's untrained base to
+//  a vivid, saturated orange. Tightness is the one channel left out
+//  of the base colour: it drives a strain-tone throb (see
+//  `tightnessPulseModifier`) on the per-frame clock — the muscle
+//  breathes between its own development colour and a hot per-theme
+//  flush. Pulsation is what marks tightness; the resting tone still
+//  reads development. The input is a `channels` map keyed by node
 //  name (see `MuscleDevelopment`). The skeleton and connective tissue
-//  keep their fixed anatomical tones; an empty channels map renders
-//  every muscle at the untrained base.
+//  keep fixed anatomical tones per theme; an empty channels map
+//  renders every muscle at the untrained base.
+//
+//  Everything is themed (see `BodyModelTheme`): on the dark stage the
+//  figure separates by being LIGHTER than black — bright rim lights
+//  carving the silhouette, a flush that glows hotter. On the light
+//  page it separates by being DARKER than the page — deeper tones,
+//  rims dialled way down (bright edges would erase the silhouette
+//  into the page), and a flush that deepens to a burnt ember.
 //
 
 import SceneKit
 import UIKit
 
 enum BodyModelScene {
-    /// Loads the baked geometry, applies materials, and adds the
-    /// camera + lights. `channels` maps a mesh's node name to its
+    /// Loads the baked geometry, applies themed materials + lights,
+    /// and adds the camera. `channels` maps a mesh's node name to its
     /// development / tightness channels; absent nodes render
     /// untrained. Returns nil only if the bundled archive is missing
     /// (a build-packaging error, not a runtime condition).
     static func make(
-        channels: [String: MuscleDevelopment.Channels] = [:]
+        channels: [String: MuscleDevelopment.Channels] = [:],
+        theme: BodyModelTheme
     ) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
               let scene = try? SCNScene(url: url) else { return nil }
 
-        if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
-            applyMaterials(pivot: pivot, channels: channels)
-        }
+        apply(channels: channels, theme: theme, to: scene)
         configureCamera(scene: scene)
-        configureLighting(scene: scene)
         return scene
     }
 
-    /// Re-tint an already-built scene's muscles for new training data,
-    /// without reloading the 26 MB archive. Used by the SwiftUI
-    /// wrapper when the development map changes (e.g. a workout was
-    /// just archived).
-    static func applyChannels(_ channels: [String: MuscleDevelopment.Channels], to scene: SCNScene) {
-        guard let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) else { return }
-        applyMaterials(pivot: pivot, channels: channels)
+    /// Re-tint an already-built scene's muscles + light rig for new
+    /// training data or a colour-scheme flip, without reloading the
+    /// 26 MB archive. Used by the SwiftUI wrapper when the development
+    /// map or the resolved appearance changes.
+    static func apply(
+        channels: [String: MuscleDevelopment.Channels],
+        theme: BodyModelTheme,
+        to scene: SCNScene
+    ) {
+        if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
+            applyMaterials(pivot: pivot, channels: channels, theme: theme)
+        }
+        configureLighting(scene: scene, theme: theme)
     }
 
     // MARK: - Camera
@@ -70,53 +82,83 @@ enum BodyModelScene {
 
     // MARK: - Lighting
 
-    private static func configureLighting(scene: SCNScene) {
+    /// The whole rig lives under one named container so a theme flip
+    /// can swap it atomically.
+    private static let lightRigName = "lightRig"
+
+    private static func configureLighting(scene: SCNScene, theme: BodyModelTheme) {
+        scene.rootNode.childNode(withName: lightRigName, recursively: false)?
+            .removeFromParentNode()
+
+        let rig = SCNNode()
+        rig.name = lightRigName
+
         // The rig is deliberately warm. A neutral white key over the
         // gray base meshes read clinical — an anatomy plate, not a
         // living body. A warm key + warm ambient pulls the whole
         // figure toward the app's molten/forge temperature so it feels
         // lit from the same fire as the screen behind it; a faintly
         // cool fill is kept only to preserve cross-form modelling.
+        //
+        // Per theme: the dark stage runs the key warmer and the rims
+        // hot, carving the silhouette out of black. The light page
+        // cools the key a touch (the forge wash already heats the
+        // scene), neutralises the ambient so shadows read gray-warm
+        // rather than muddy, and drops the rims to a whisper — bright
+        // edges separate a figure from black but erase it into a
+        // near-white page; there, separation comes from the figure
+        // being darker than the page.
         let keyLight = SCNNode()
         keyLight.light = SCNLight()
         keyLight.light?.type = .directional
-        keyLight.light?.intensity = 1000
-        keyLight.light?.color = UIColor(red: 1.0, green: 0.96, blue: 0.90, alpha: 1)
+        keyLight.light?.intensity = theme == .dark ? 1000 : 900
+        keyLight.light?.color = theme == .dark
+            ? UIColor(red: 1.0, green: 0.96, blue: 0.90, alpha: 1)
+            : UIColor(red: 1.0, green: 0.97, blue: 0.94, alpha: 1)
         keyLight.eulerAngles = SCNVector3(-0.5, 0.5, 0)
-        scene.rootNode.addChildNode(keyLight)
+        rig.addChildNode(keyLight)
 
         let fillLight = SCNNode()
         fillLight.light = SCNLight()
         fillLight.light?.type = .directional
-        fillLight.light?.intensity = 460
-        fillLight.light?.color = UIColor(red: 0.86, green: 0.89, blue: 0.96, alpha: 1)
+        fillLight.light?.intensity = theme == .dark ? 460 : 420
+        fillLight.light?.color = theme == .dark
+            ? UIColor(red: 0.86, green: 0.89, blue: 0.96, alpha: 1)
+            : UIColor(red: 0.88, green: 0.90, blue: 0.95, alpha: 1)
         fillLight.eulerAngles = SCNVector3(-0.2, -0.8, 0)
-        scene.rootNode.addChildNode(fillLight)
+        rig.addChildNode(fillLight)
 
         let ambient = SCNNode()
         ambient.light = SCNLight()
         ambient.light?.type = .ambient
-        ambient.light?.intensity = 300
-        ambient.light?.color = UIColor(red: 0.62, green: 0.56, blue: 0.48, alpha: 1)
-        scene.rootNode.addChildNode(ambient)
+        ambient.light?.intensity = theme == .dark ? 300 : 340
+        ambient.light?.color = theme == .dark
+            ? UIColor(red: 0.62, green: 0.56, blue: 0.48, alpha: 1)
+            : UIColor(red: 0.62, green: 0.59, blue: 0.55, alpha: 1)
+        rig.addChildNode(ambient)
 
-        // Strong, grazing rim lights placed behind the figure to carve its 
-        // silhouette out of the dark background. One cool, one warm for depth.
+        // Grazing rim lights placed behind the figure. One cool, one
+        // warm for depth. Strong on the dark stage (they carve the
+        // silhouette); faint on the light page (they'd erase it).
+        let rimIntensity: CGFloat = theme == .dark ? 1800 : 650
+
         let leftRim = SCNNode()
         leftRim.light = SCNLight()
         leftRim.light?.type = .directional
-        leftRim.light?.intensity = 1800
+        leftRim.light?.intensity = rimIntensity
         leftRim.light?.color = UIColor(red: 0.85, green: 0.92, blue: 1.0, alpha: 1)
         leftRim.eulerAngles = SCNVector3(-0.2, -2.6, 0)
-        scene.rootNode.addChildNode(leftRim)
+        rig.addChildNode(leftRim)
 
         let rightRim = SCNNode()
         rightRim.light = SCNLight()
         rightRim.light?.type = .directional
-        rightRim.light?.intensity = 1800
+        rightRim.light?.intensity = rimIntensity
         rightRim.light?.color = UIColor(red: 1.0, green: 0.92, blue: 0.85, alpha: 1)
         rightRim.eulerAngles = SCNVector3(-0.2, 2.6, 0)
-        scene.rootNode.addChildNode(rightRim)
+        rig.addChildNode(rightRim)
+
+        scene.rootNode.addChildNode(rig)
     }
 
     // MARK: - Materials
@@ -130,23 +172,69 @@ enum BodyModelScene {
         return mat
     }
 
-    /// A brightness throb applied to a tight muscle's own diffuse,
-    /// oscillating on SceneKit's per-frame `scn_frame.time` clock.
-    /// Motion is what marks tightness: the muscle keeps its development
-    /// colour but pulses brighter at the same hue (the diffuse rgb is
-    /// scaled uniformly, so only luminance moves). The throb is
-    /// BRIGHTEN-ONLY — it floors at the muscle's true colour (×1.0) and
-    /// swings upward, never below — because scaling a saturated orange
-    /// *down* reads as muddy brown. Freezes to the true tone when the
-    /// render loop halts (Reduce Motion). `u_tightness` is set per
-    /// material via KVC and scales the throb depth.
+    /// The tightness throb, oscillating on SceneKit's per-frame
+    /// `scn_frame.time` clock: the muscle's diffuse sweeps from its
+    /// true development colour toward a per-theme STRAIN TONE and
+    /// back. An earlier same-hue luminance throb proved nearly
+    /// invisible — a smooth sine with no chroma change is exactly the
+    /// kind of motion the eye filters out — so the pulse now moves
+    /// colour AND luminance together: at rest the muscle wears its
+    /// own tone (the floor of the swing, so the development reading
+    /// survives), at peak it flushes hot/inflamed.
+    ///
+    /// The waveform is squared: it lingers near the base tone and
+    /// snaps through the flush, reading as a breath rather than an
+    /// ambient drift. Amplitude keeps a VISIBILITY FLOOR — any muscle
+    /// past the attach threshold sweeps at least ~half-way to the
+    /// strain tone at peak. Freezes to the true tone when the render
+    /// loop halts (Reduce Motion). Both uniforms are set per material
+    /// via KVC.
     private static let tightnessPulseModifier = """
     #pragma arguments
     float u_tightness;
+    float3 u_strainColor;
     #pragma body
-    float throb = 0.5 + 0.5 * sin(scn_frame.time * 2.6);
-    _surface.diffuse.rgb *= 1.0 + 0.30 * u_tightness * throb;
+    float wave = 0.5 + 0.5 * sin(scn_frame.time * 2.6);
+    float throb = wave * wave;
+    float amplitude = 0.45 + 0.55 * u_tightness;
+    _surface.diffuse.rgb = mix(_surface.diffuse.rgb, u_strainColor, amplitude * throb);
     """
+
+    /// The flush a tight muscle sweeps toward, always AWAY from the
+    /// stage and hotter than any development colour: a bright hot
+    /// orange on the dark stage (the muscle glows out of the figure),
+    /// a deep burnt ember on the light page (it darkens into focus).
+    /// Both stay in the app's single orange family.
+    private static func strainColor(for theme: BodyModelTheme) -> SCNVector3 {
+        theme == .dark
+            ? SCNVector3(1.00, 0.62, 0.30)
+            : SCNVector3(0.55, 0.17, 0.02)
+    }
+
+    /// Node names that carry the pulse. Only the TIGHTEST region
+    /// throbs — the figure singles out the one muscle most in need of
+    /// stretching, the way the single accent marks the single primary
+    /// action. Letting every flagged muscle pulse turned the whole
+    /// body into noise; the full roster still lives in the Mobility
+    /// list. Regions within a hair of the max (genuine ties, e.g. two
+    /// muscles both clamped at full tightness) pulse together, and
+    /// nothing pulses below the same threshold the readiness words
+    /// flag at — so the body never throbs where the text is silent.
+    static func pulsingNodes(in channels: [String: MuscleDevelopment.Channels]) -> Set<String> {
+        let maxTightness = channels.values.map(\.tightness).max() ?? 0
+        guard maxTightness >= MuscleTightnessBoard.threshold else { return [] }
+        let band = maxTightness * 0.98
+        return Set(channels.filter { $0.value.tightness >= band }.keys)
+    }
+
+    /// Whether anything in the map would carry the pulse shader.
+    /// The SwiftUI wrapper uses this to decide if the SCNView must
+    /// render continuously: the throb rides `scn_frame.time`, and a
+    /// shader modifier alone never schedules frames — a static scene
+    /// renders once and halts, freezing the pulse at its base tone.
+    static func hasActivePulse(in channels: [String: MuscleDevelopment.Channels]) -> Bool {
+        !pulsingNodes(in: channels).isEmpty
+    }
 
     /// Channels for a muscle that has never been trained — the dark,
     /// desaturated base every untargeted mesh renders at.
@@ -155,12 +243,17 @@ enum BodyModelScene {
     )
 
     /// Builds a muscle's material from its channels via the
-    /// `MuscleColor` map: development sets the diffuse (pale→vivid
-    /// orange), while tightness rides a brighten-only throb on top.
-    /// Developed muscle reads a touch glossier. A fresh material per
-    /// mesh (≈240) is cheap to rebuild on each re-tint.
-    private static func muscleMaterial(for channels: MuscleDevelopment.Channels) -> SCNMaterial {
-        let c = MuscleColor.rgb(for: channels)
+    /// `MuscleColor` map: development sets the diffuse (untrained
+    /// base → vivid orange on the theme's ramp), while tightness rides
+    /// a one-sided luminance throb on top. Developed muscle reads a
+    /// touch glossier. A fresh material per mesh (≈240) is cheap to
+    /// rebuild on each re-tint.
+    private static func muscleMaterial(
+        for channels: MuscleDevelopment.Channels,
+        theme: BodyModelTheme,
+        pulses: Bool
+    ) -> SCNMaterial {
+        let c = MuscleColor.rgb(for: channels, theme: theme)
         let color = UIColor(red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue), alpha: 1)
 
         let mat = SCNMaterial()
@@ -169,39 +262,76 @@ enum BodyModelScene {
         mat.metalness.contents = 0.12
         mat.lightingModel = .physicallyBased
 
-        // Tightness rides a brightness throb on the muscle's own
-        // diffuse — motion marks a stiff muscle, without changing its
-        // development colour.
-        if c.tightness > 0 {
+        // The tightest region rides the strain-tone throb on top —
+        // motion marks the muscle to stretch next, while the resting
+        // tone keeps its development colour.
+        if pulses {
             mat.shaderModifiers = [.surface: tightnessPulseModifier]
             mat.setValue(NSNumber(value: Float(c.tightness)), forKey: "u_tightness")
+            mat.setValue(NSValue(scnVector3: strainColor(for: theme)), forKey: "u_strainColor")
         }
         return mat
     }
 
-    private static let tissueMaterial = makeTierMaterial(red: 0.70, green: 0.70, blue: 0.70, rough: 0.6)
-    private static let boneMaterial = makeTierMaterial(red: 0.85, green: 0.82, blue: 0.75, rough: 0.8)
+    /// Fixed anatomical tones, one step darker on the light page so
+    /// bone and tendon stay below the page's luminance — at the dark
+    /// values' brightness they'd vanish into near-white.
+    private static func tissueMaterial(for theme: BodyModelTheme) -> SCNMaterial {
+        theme == .dark
+            ? makeTierMaterial(red: 0.70, green: 0.70, blue: 0.70, rough: 0.6)
+            : makeTierMaterial(red: 0.56, green: 0.56, blue: 0.56, rough: 0.6)
+    }
+
+    private static func boneMaterial(for theme: BodyModelTheme) -> SCNMaterial {
+        theme == .dark
+            ? makeTierMaterial(red: 0.85, green: 0.82, blue: 0.75, rough: 0.8)
+            : makeTierMaterial(red: 0.72, green: 0.68, blue: 0.61, rough: 0.8)
+    }
 
     private static let connectiveTissue: Set<String> = [
         "Iliotibial_Tract_L", "Iliotibial_Tract_R"
     ]
 
-    private static func applyMaterials(pivot: SCNNode, channels: [String: MuscleDevelopment.Channels]) {
+    private static func applyMaterials(
+        pivot: SCNNode,
+        channels: [String: MuscleDevelopment.Channels],
+        theme: BodyModelTheme
+    ) {
+        let bone = boneMaterial(for: theme)
+        let tissue = tissueMaterial(for: theme)
+        let pulsing = pulsingNodes(in: channels)
         for child in pivot.childNodes {
             guard let name = child.name else { continue }
             child.opacity = 1
-            setMaterial(materialFor(name: name, channels: channels), on: child)
+            setMaterial(
+                materialFor(
+                    name: name, channels: channels, theme: theme,
+                    bone: bone, tissue: tissue, pulsing: pulsing
+                ),
+                on: child
+            )
         }
     }
 
-    private static func materialFor(name: String, channels: [String: MuscleDevelopment.Channels]) -> SCNMaterial {
-        if name == "Skeleton" { return boneMaterial }
-        if connectiveTissue.contains(name) { return tissueMaterial }
+    private static func materialFor(
+        name: String,
+        channels: [String: MuscleDevelopment.Channels],
+        theme: BodyModelTheme,
+        bone: SCNMaterial,
+        tissue: SCNMaterial,
+        pulsing: Set<String>
+    ) -> SCNMaterial {
+        if name == "Skeleton" { return bone }
+        if connectiveTissue.contains(name) { return tissue }
         // Every muscle — including untrained ones and the display-only
         // face/hand meshes that no exercise targets — rides the same
         // map, so the body reads uniformly until training data lights
         // specific muscles up.
-        return muscleMaterial(for: channels[name] ?? untrainedChannels)
+        return muscleMaterial(
+            for: channels[name] ?? untrainedChannels,
+            theme: theme,
+            pulses: pulsing.contains(name)
+        )
     }
 
     private static func setMaterial(_ mat: SCNMaterial, on node: SCNNode) {

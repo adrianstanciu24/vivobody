@@ -33,11 +33,14 @@ struct BodyModelSceneTests {
         return found
     }
 
-    @Test func tightMuscleGetsPulseLooseDoesNot() throws {
+    @Test(arguments: [BodyModelTheme.dark, .light])
+    func tightMuscleGetsPulseLooseDoesNot(theme: BodyModelTheme) throws {
         let channels: [String: MuscleDevelopment.Channels] = [
-            "Pectoralis_Major_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.9)
+            "Pectoralis_Major_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.9),
+            "Gastrocnemius_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.5),
+            "Deltoid_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.05)
         ]
-        let scene = try #require(BodyModelScene.make(channels: channels))
+        let scene = try #require(BodyModelScene.make(channels: channels, theme: theme))
 
         // The tight muscle carries the surface pulse modifier and its
         // strength uniform.
@@ -45,10 +48,29 @@ struct BodyModelSceneTests {
         #expect(stiff.shaderModifiers?[.surface] != nil)
         #expect(stiff.value(forKey: "u_tightness") != nil)
 
+        // The strain tone swings away from the stage: a bright hot
+        // flush on the dark stage, a deep burnt ember on the light
+        // page.
+        let strain = try #require(stiff.value(forKey: "u_strainColor") as? NSValue).scnVector3Value
+        let luminance = strain.x + strain.y + strain.z
+        #expect(theme == .dark ? luminance > 1.5 : luminance < 1.0)
+
         // A loose muscle stays pulse-free — development lives in the
         // diffuse, not a shader.
         if let loose = material(named: "Vastus_Lateralis_L", in: scene) {
             #expect(loose.shaderModifiers?[.surface] == nil)
+        }
+
+        // Only the TIGHTEST region pulses: the calves are flagged-tight
+        // (0.5) but clearly below the chest's 0.9, so they hold still —
+        // the figure singles out the one muscle to stretch next.
+        if let runnerUp = material(named: "Gastrocnemius_L", in: scene) {
+            #expect(runnerUp.shaderModifiers?[.surface] == nil)
+        }
+
+        // Trace tightness never pulses either.
+        if let trace = material(named: "Deltoid_L", in: scene) {
+            #expect(trace.shaderModifiers?[.surface] == nil)
         }
 
         // The skeleton never gets the pulse — it's not muscle.

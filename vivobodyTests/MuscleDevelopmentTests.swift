@@ -267,30 +267,50 @@ struct MuscleDevelopmentTests {
 
     // MARK: - Colour mapping
 
-    @Test func developmentDeepensTheOrange() {
-        // Less developed = a pale, light tint; more developed = a vivid,
-        // saturated orange. The ramp deepens by draining green + blue
-        // (raising chroma) while keeping the red channel pinned high —
-        // NOT by crushing value, which is what turns orange into brown.
-        // So the developed tone is more saturated and lower in total
-        // luminance, and stays clearly orange (red > green > blue).
-        let pale = MuscleColor.rgb(for: .init(adaptation: 0.1, momentum: 0, fatigue: 0))
-        let vivid = MuscleColor.rgb(for: .init(adaptation: 0.95, momentum: 0, fatigue: 0))
+    @Test(arguments: [BodyModelTheme.dark, .light])
+    func developmentDeepensTheOrange(theme: BodyModelTheme) {
+        // Less developed = the theme's muted clay/stone base; more
+        // developed = a vivid, saturated orange. The ramp sweeps a
+        // wide arc — red rises while green + blue drain (chroma
+        // climbs) — so mid-range differences between muscles read,
+        // and the developed tone stays clearly orange (r > g > b),
+        // never crushed into brown.
+        let pale = MuscleColor.rgb(for: .init(adaptation: 0.1, momentum: 0, fatigue: 0), theme: theme)
+        let vivid = MuscleColor.rgb(for: .init(adaptation: 0.95, momentum: 0, fatigue: 0), theme: theme)
         #expect(vivid.green < pale.green)
         #expect(vivid.blue < pale.blue)
-        #expect(vivid.red >= pale.red)          // red stays high (no value crush)
-        #expect(vivid.red + vivid.green + vivid.blue < pale.red + pale.green + pale.blue)
+        #expect(vivid.red > pale.red)
         #expect(vivid.red > vivid.green && vivid.green > vivid.blue)
         // Saturation (chroma proxy) rises with development.
         #expect((vivid.red - vivid.blue) > (pale.red - pale.blue))
     }
 
-    @Test func tightnessIsPassedThroughForThePulse() {
+    @Test func rampsMoveAwayFromTheirOwnStage() {
+        // Each theme's ramp must gain contrast against its own stage
+        // as development climbs: on black the muscle LIGHTS UP (red
+        // channel surges toward the vivid accent); on the near-white
+        // page it DEEPENS (total luminance falls).
+        let pale = { (t: BodyModelTheme) in
+            MuscleColor.rgb(for: .init(adaptation: 0.05, momentum: 0, fatigue: 0), theme: t)
+        }
+        let vivid = { (t: BodyModelTheme) in
+            MuscleColor.rgb(for: .init(adaptation: 1.0, momentum: 0, fatigue: 0), theme: t)
+        }
+        #expect(vivid(.dark).red - pale(.dark).red > 0.2)
+        let lightPale = pale(.light), lightVivid = vivid(.light)
+        #expect(
+            lightVivid.red + lightVivid.green + lightVivid.blue
+                < lightPale.red + lightPale.green + lightPale.blue - 0.2
+        )
+    }
+
+    @Test(arguments: [BodyModelTheme.dark, .light])
+    func tightnessIsPassedThroughForThePulse(theme: BodyModelTheme) {
         // Tightness no longer touches the diffuse — it only rides
         // through as the pulse level. Two muscles at the same
         // development read identical colours regardless of tightness.
-        let loose = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0))
-        let stiff = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0.95))
+        let loose = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0), theme: theme)
+        let stiff = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0.95), theme: theme)
         #expect(stiff.red == loose.red)
         #expect(stiff.green == loose.green)
         #expect(stiff.blue == loose.blue)
@@ -299,10 +319,11 @@ struct MuscleDevelopmentTests {
     }
 
     /// Every colour in a full channel sweep stays in gamut `0...1`.
-    @Test func colourStaysInGamut() {
+    @Test(arguments: [BodyModelTheme.dark, .light])
+    func colourStaysInGamut(theme: BodyModelTheme) {
         for a in stride(from: 0.0, through: 1.0, by: 0.2) {
             for t in stride(from: 0.0, through: 1.0, by: 0.25) {
-                let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0, tightness: t))
+                let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0, tightness: t), theme: theme)
                 #expect(c.red >= 0 && c.red <= 1)
                 #expect(c.green >= 0 && c.green <= 1)
                 #expect(c.blue >= 0 && c.blue <= 1)

@@ -179,11 +179,13 @@ private enum HistorySeeder {
     ///     days ago ⇒ a deep, vivid orange (well developed), and
     ///     supple (a squat lengthens under load, so it relieves).
     ///   • Chest / front delts — a progressive press block with zero
-    ///     pulling and zero mobility ⇒ developed orange that slowly
-    ///     pulses (tight: contraction-biased loading, neglected
-    ///     rhomboids amplify it).
-    ///   • Calves — progressive raises, shins never trained ⇒ a second
-    ///     pulsing tight region low on the legs.
+    ///     pulling and zero mobility ⇒ developed orange, and the
+    ///     body's TIGHTEST region (contraction-biased loading,
+    ///     neglected rhomboids amplify it) — the one that pulses,
+    ///     since the figure only throbs its single tightest muscle.
+    ///   • Calves — a lighter raise block ⇒ moderately tight: flagged
+    ///     in the Mobility roster, but clearly below the chest, so it
+    ///     holds still.
     ///   • Biceps / triceps — the SAME load for fourteen sessions ⇒
     ///     solid mid-orange (developed, a long plateau).
     ///   • Lats / rhomboids / upper back — trained hard early, then
@@ -251,9 +253,11 @@ private enum HistorySeeder {
                ("Overhead Press", .shoulders, 75)],
               startDaysAgo: 56, endDaysAgo: 6, count: 11, overload: 55, sets: 4, reps: 8)
 
-        // Tight (lower body): progressive raises, shins never trained.
-        block([("Standing Calf Raises", .legs, 120)],
-              startDaysAgo: 40, endDaysAgo: 2, count: 8, overload: 40, sets: 4, reps: 12)
+        // Moderately tight (lower body): a light, brief raise block —
+        // enough to flag the calves in the Mobility roster, but well
+        // below the chest so the pulse stays uniquely on the chest.
+        block([("Standing Calf Raises", .legs, 70)],
+              startDaysAgo: 30, endDaysAgo: 9, count: 4, overload: 15, sets: 3, reps: 10)
 
         // Plateau: identical load for fourteen sessions ⇒ developed but
         // no longer climbing — a steady mid-orange.

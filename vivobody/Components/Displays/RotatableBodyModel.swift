@@ -61,18 +61,39 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// untrained.
     var channels: [String: MuscleDevelopment.Channels] = [:]
 
+    /// The resolved scheme the scene renders for — materials, light
+    /// rig, and pulse direction are all themed (see `BodyModelScene`).
+    private static func theme(for context: Context) -> BodyModelTheme {
+        context.environment.colorScheme == .dark ? .dark : .light
+    }
+
+    /// The tightness throb rides SceneKit's frame clock, but a shader
+    /// modifier never schedules frames by itself — a static scene
+    /// renders once and halts, freezing the pulse at its base tone.
+    /// So the view renders continuously exactly while something
+    /// pulses (and Reduce Motion is off; halting the loop is also
+    /// what honours it). 30 fps is plenty for a slow throb.
+    private func updatePulseClock(_ scnView: SCNView, context: Context) {
+        scnView.rendersContinuously = BodyModelScene.hasActivePulse(in: channels)
+            && !context.environment.accessibilityReduceMotion
+    }
+
     func makeUIView(context: Context) -> UIView {
         let container = UIView()
         container.backgroundColor = .clear
         container.clipsToBounds = false
 
+        let theme = Self.theme(for: context)
         let scnView = SCNView()
         scnView.backgroundColor = .clear
         scnView.allowsCameraControl = false
         scnView.antialiasingMode = .multisampling4X
         scnView.autoenablesDefaultLighting = false
-        scnView.scene = BodyModelScene.make(channels: channels)
+        scnView.scene = BodyModelScene.make(channels: channels, theme: theme)
+        scnView.preferredFramesPerSecond = 30
+        updatePulseClock(scnView, context: context)
         context.coordinator.appliedChannels = channels
+        context.coordinator.appliedTheme = theme
         scnView.pointOfView = scnView.scene?.rootNode.childNodes.first { $0.camera != nil }
         scnView.translatesAutoresizingMaskIntoConstraints = false
         scnView.tag = Self.viewTag
@@ -100,13 +121,18 @@ struct RotatableBodyModel: UIViewRepresentable {
         context.coordinator.heightConstraint?.constant = renderHeight
 
         // Re-tint in place when the development map changes (e.g. a
-        // workout was just archived) rather than rebuilding the heavy
-        // scene.
-        if context.coordinator.appliedChannels != channels,
-           let scnView = uiView.viewWithTag(Self.viewTag) as? SCNView,
-           let scene = scnView.scene {
-            BodyModelScene.applyChannels(channels, to: scene)
-            context.coordinator.appliedChannels = channels
+        // workout was just archived) or the resolved colour scheme
+        // flips, rather than rebuilding the heavy scene.
+        let theme = Self.theme(for: context)
+        if let scnView = uiView.viewWithTag(Self.viewTag) as? SCNView {
+            if context.coordinator.appliedChannels != channels
+                || context.coordinator.appliedTheme != theme,
+               let scene = scnView.scene {
+                BodyModelScene.apply(channels: channels, theme: theme, to: scene)
+                context.coordinator.appliedChannels = channels
+                context.coordinator.appliedTheme = theme
+            }
+            updatePulseClock(scnView, context: context)
         }
     }
 
@@ -117,6 +143,7 @@ struct RotatableBodyModel: UIViewRepresentable {
     final class Coordinator: NSObject {
         var heightConstraint: NSLayoutConstraint?
         var appliedChannels: [String: MuscleDevelopment.Channels] = [:]
+        var appliedTheme: BodyModelTheme = .dark
         private var lastX: CGFloat = 0
 
         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -143,10 +170,20 @@ struct RotatableBodyModel: UIViewRepresentable {
     }
 }
 
-#Preview {
+#Preview("Dark") {
     ZStack {
         Color.black.ignoresSafeArea()
         RotatableBodyModel(renderHeight: 420)
             .frame(height: 420)
     }
+    .preferredColorScheme(.dark)
+}
+
+#Preview("Light") {
+    ZStack {
+        Color(red: 0.95, green: 0.95, blue: 0.97).ignoresSafeArea()
+        RotatableBodyModel(renderHeight: 420)
+            .frame(height: 420)
+    }
+    .preferredColorScheme(.light)
 }

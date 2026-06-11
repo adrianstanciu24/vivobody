@@ -166,7 +166,7 @@ struct TodayScreen: View {
             .frame(height: height)
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
-            .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, paling to a light orange where you've eased off. A slow pulse marks muscles that have tightened and could use some mobility.")
+            .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off. A slow pulse marks your tightest muscle — the first one to stretch.")
     }
 
     /// The figure's placard. The body's dominant colour is the
@@ -180,7 +180,7 @@ struct TodayScreen: View {
     /// is a separate section (`readinessReadout`) you scroll to; this
     /// only decodes the colours you're looking at.
     private var developmentLegend: some View {
-        Text("Each muscle glows a more vivid orange the more developed it is, and pales toward a light orange as you ease off. A slow pulse marks muscles that have tightened up.")
+        Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off. A slow pulse marks your tightest muscle — the first one to stretch.")
             .font(Typography.caption)
             .foregroundStyle(Ink.secondary)
             .multilineTextAlignment(.center)
