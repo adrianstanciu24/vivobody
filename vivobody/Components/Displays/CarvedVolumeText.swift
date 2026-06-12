@@ -26,6 +26,8 @@ struct CarvedVolumeText: View {
     var size: CGFloat = 36
     var isPR: Bool = false
 
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
     /// PR underline uses the one accent — completion/achievement is
     /// the only thing allowed to wear colour.
     private static let prGold = Tint.primary
@@ -38,17 +40,21 @@ struct CarvedVolumeText: View {
                     .monospacedDigit()
                     .kerning(-0.6)
                     .foregroundStyle(
-                        LinearGradient(
-                            stops: [
-                                .init(color: Ink.primary.opacity(0.58), location: 0.0),
-                                .init(color: Ink.primary.opacity(0.94), location: 1.0),
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
+                        reduceTransparency
+                            ? AnyShapeStyle(Ink.primary)
+                            : AnyShapeStyle(
+                                LinearGradient(
+                                    stops: [
+                                        .init(color: Ink.primary.opacity(0.58), location: 0.0),
+                                        .init(color: Ink.primary.opacity(0.94), location: 1.0),
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
                     )
-                    .shadow(color: .black.opacity(0.55), radius: 0.6, x: 0, y: -0.5)
-                    .shadow(color: .white.opacity(0.10), radius: 0.4, x: 0, y: 0.8)
+                    .shadow(color: .black.opacity(reduceTransparency ? 0 : 0.55), radius: 0.6, x: 0, y: -0.5)
+                    .shadow(color: .white.opacity(reduceTransparency ? 0 : 0.10), radius: 0.4, x: 0, y: 0.8)
 
                 if !unit.isEmpty {
                     Text(unit)

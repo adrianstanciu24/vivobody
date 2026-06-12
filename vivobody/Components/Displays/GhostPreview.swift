@@ -32,7 +32,7 @@ struct GhostBar: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .fill(Color.white.opacity(opacity))
+            .fill(Ink.quaternary.opacity(opacity / 0.12))
         Group {
             if let width {
                 shape.frame(width: width, height: height)

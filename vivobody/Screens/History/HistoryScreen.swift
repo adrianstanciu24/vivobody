@@ -61,15 +61,11 @@ struct HistoryScreen: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: Space.sm) {
-            Text("No workouts yet")
-                .sectionHeadingStyle()
-            Text("Finish your first session and it lands here.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.tertiary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-        }
+        ContentUnavailableView(
+            "No workouts yet",
+            systemImage: "figure.strengthtraining.traditional",
+            description: Text("Finish your first session and it lands here.")
+        )
     }
 
     // MARK: - Content

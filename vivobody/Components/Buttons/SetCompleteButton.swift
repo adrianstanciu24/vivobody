@@ -7,12 +7,18 @@
 //
 //  Composition of effects on idle → complete:
 //    1. Haptics.crescendo()
-//    2. Card background fills with accent.
+//    2. Glass surface tints from live accent to completion accent.
 //    3. Numbers spring-overshoot (1.0 → 1.06 → 1.0).
 //    4. Chevron morphs into a checkmark (stroke draw-on).
 //    5. A single radial ring expands from the tap point and fades.
 //
 //  Complete → idle (undo): Haptics.soft() and the same path in reverse.
+//
+//  The surface is Liquid Glass (.glassEffect) with the accent as its
+//  tint — not an opaque fill. The system material owns the specular
+//  highlights, rim lighting, and accessibility fallbacks (Reduce
+//  Transparency / Increase Contrast), so no hand-drawn sheens,
+//  darkening overlays, or stroke gradients are needed.
 //
 
 import SwiftUI
@@ -40,6 +46,7 @@ struct SetCompleteButton: View {
     var accessibilityLabelOverride: String? = nil
     let onToggle: () -> Void
 
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @State private var pressScale: CGFloat = 1
     @State private var numberScale: CGFloat = 1
     @State private var rippleId: Int = 0
@@ -88,61 +95,18 @@ struct SetCompleteButton: View {
 
     private var background: some View {
         let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        let glassTint = isComplete ? accent : liveAccent
+        // Completion floods the surface; idle stays a faint lift so the
+        // accent verb and chevron read against the glass instead of
+        // drowning in a same-hue orange wash.
+        let surfaceTint = isComplete ? accent : liveAccent.opacity(0.16)
         return shape
-            .fill(isComplete ? accent.opacity(0.95) : liveAccent.opacity(0.10))
-            // Top specular sheen — strongest on the idle state where
-            // the surface needs the most cue that it's pressable glass.
-            .overlay {
-                GeometryReader { geo in
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(isComplete ? 0.18 : 0.20),
-                            Color.white.opacity(0)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: geo.size.height * 0.55)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                }
-                .clipShape(shape)
-                .allowsHitTesting(false)
-            }
-            // Bottom inner darkening — the puck has a base lip the
-            // light doesn't reach, which is what makes the top read
-            // as raised.
-            .overlay {
-                GeometryReader { geo in
-                    LinearGradient(
-                        colors: [
-                            Color.clear,
-                            Color.black.opacity(isComplete ? 0.25 : 0.30)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: geo.size.height * 0.50)
-                    .frame(maxWidth: .infinity, alignment: .bottom)
-                }
-                .clipShape(shape)
-                .blendMode(.multiply)
-                .allowsHitTesting(false)
-            }
-            .overlay(
-                shape
-                    .stroke(
-                        LinearGradient(
-                            colors: isComplete
-                                ? [Color.white.opacity(0.55), Color.white.opacity(0.10)]
-                                : [liveAccent.opacity(0.65), liveAccent.opacity(0.15)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.9
-                    )
-            )
-            // Completion glow only — accent flood when done. Idle stays
-            // a faint lift, no ambient bloom on the live state.
+            .fill(reduceTransparency
+                    ? glassTint.opacity(isComplete ? 1.0 : 0.35)
+                    : glassTint.opacity(isComplete ? 0.85 : 0.10))
+            .glassEffect(.regular.tint(surfaceTint).interactive(), in: shape)
+            // Completion glow — accent bloom when done. Idle stays a
+            // faint lift, no ambient bloom on the live state.
             .shadow(
                 color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.16),
                 radius: isComplete ? 24 : 10,
@@ -210,7 +174,7 @@ struct SetCompleteButton: View {
     private var statusIndicator: some View {
         ZStack {
             Circle()
-                .fill(isComplete ? Color.black.opacity(0.12) : liveAccent.opacity(0.14))
+                .fill(isComplete ? Color.black.opacity(0.12) : Surface.cardTint)
                 .frame(width: 44, height: 44)
 
             if isComplete {

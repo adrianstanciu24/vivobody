@@ -145,24 +145,16 @@ struct MeScreen: View {
     /// Type-forward empty body-weight state: one explanatory line and
     /// a single color-preserving glass action — no ghost preview, no card.
     private var bodyWeightEmptyCard: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            Text("Track your body weight to see how it trends alongside your training.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
+        ContentUnavailableView {
+            Label("Track your body weight to see how it trends alongside your training.", systemImage: "scalemass")
+        } actions: {
             Button {
                 Haptics.soft()
                 logTarget = .create
             } label: {
                 Text("Log weight")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Tint.onAccent)
-                    .padding(.horizontal, 22)
-                    .frame(minHeight: 44)
-                    .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.glassProminent)
         }
     }
 
@@ -308,14 +300,12 @@ struct MeScreen: View {
     /// Type-forward empty journey — a quiet heading and one line, no
     /// ghost tiles.
     private var emptyJourney: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            Text("Log your first workout")
-                .sectionHeadingStyle()
-            Text("Your lifetime volume, workouts, and sets will land here.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        ContentUnavailableView(
+            "Log your first workout",
+            systemImage: "flame",
+            description: Text("Your lifetime volume, workouts, and sets will land here.")
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Preferences

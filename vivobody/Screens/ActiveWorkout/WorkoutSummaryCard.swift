@@ -357,10 +357,7 @@ struct WorkoutSummaryCard: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .fill(Tint.complete)
-            )
+            .coloredGlassControl(cornerRadius: 22, fill: Tint.complete, interactive: true)
             .shadow(color: Tint.complete.opacity(0.40), radius: 22, y: 9)
             .contentShape(Rectangle())
         }

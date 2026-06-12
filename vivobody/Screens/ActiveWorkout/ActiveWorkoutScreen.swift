@@ -286,64 +286,20 @@ struct ActiveWorkoutScreen: View {
     /// picker used mid-workout; the first pick lands the user on its
     /// card (see `appendExercise`).
     private var emptyState: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Spacer(minLength: Space.xl)
-
-            Text("New workout")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-
-            Text("Empty canvas")
-                .font(.system(size: 30, weight: .bold))
-                .foregroundStyle(Ink.primary)
-                .padding(.top, Space.sm)
-
+        ContentUnavailableView {
+            Label("Empty canvas", systemImage: "square.dashed")
+        } description: {
             Text("Add your first exercise to start logging sets.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .padding(.top, Space.sm)
-
-            Spacer(minLength: Space.xl)
-
-            addFirstExerciseButton
-                .padding(.bottom, Space.lg)
+        } actions: {
+            PrimaryActionButton(title: "Add exercise", icon: "plus") {
+                showAddExercisePicker = true
+            }
+            .padding(.horizontal, Space.gutter)
         }
-        .padding(.horizontal, Space.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 
     /// The single biggest target on the empty screen — a full-width
     /// lime verb button, the same shape language as the cards' set
-    /// buttons. Lime because adding the first exercise IS the live,
-    /// in-progress action here.
-    private var addFirstExerciseButton: some View {
-        Button {
-            Haptics.soft()
-            showAddExercisePicker = true
-        } label: {
-            HStack(alignment: .center, spacing: 0) {
-                Text("Add exercise")
-                    .font(.system(size: 19, weight: .bold))
-                    .tracking(0.4)
-                    .foregroundStyle(Tint.onAccent)
-                Spacer(minLength: 8)
-                Image(systemName: "plus")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(Tint.onAccent)
-            }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 18)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .fill(Tint.inProgress)
-            )
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Add an exercise")
-    }
-
     private var pager: some View {
         let exercises = session.orderedExercises
         return SwipePager(

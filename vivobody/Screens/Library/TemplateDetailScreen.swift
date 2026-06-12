@@ -180,15 +180,11 @@ struct TemplateDetailScreen: View {
     }
 
     private var emptyExercisesPrompt: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("No exercises yet")
-                .sectionHeadingStyle()
-            Text("Tap + above to add one.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.tertiary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, Space.lg)
+        ContentUnavailableView(
+            "No exercises yet",
+            systemImage: "list.bullet",
+            description: Text("Tap + above to add one.")
+        )
     }
 
     private func exerciseRow(_ exercise: TemplateExercise) -> some View {

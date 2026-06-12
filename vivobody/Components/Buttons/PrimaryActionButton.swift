@@ -13,11 +13,12 @@
 //  Behavior:
 //    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
 //      "this is a deliberate action" feedback).
-//    • Tactile press scale (1.0 → 0.97 → 1.0).
+//    • A tinted Liquid Glass surface (.glassEffect) provides the lensing
+//      and accent wash with a controlled 18pt corner and height — the
+//      .glassProminent button style is avoided because it doubles the
+//      padding and forces a full capsule.
 //    • Default accent is the app's electric-orange primary so the
-//      button reads as "the thing you want to do right now." Liquid
-//      Glass adds the interactive surface response without changing
-//      that chosen color.
+//      button reads as "the thing you want to do right now."
 //
 
 import SwiftUI
@@ -42,7 +43,8 @@ struct PrimaryActionButton: View {
                             .foregroundStyle(Tint.onAccent.opacity(0.55))
                     }
                     Text(title)
-                        .font(.system(size: 22, weight: .bold))
+                        .font(.system(size: 17, weight: .bold))
+                        .tracking(0.4)
                         .foregroundStyle(Tint.onAccent)
                 }
 
@@ -50,14 +52,14 @@ struct PrimaryActionButton: View {
 
                 if let icon {
                     Image(systemName: icon)
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(Tint.onAccent.opacity(0.85))
                 }
             }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 20)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: 18))
+            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: 22))
         }
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityElement()
@@ -67,10 +69,9 @@ struct PrimaryActionButton: View {
     }
 }
 
-/// Prominent, full-width Liquid Glass surface for primary actions. The
-/// accent rides as the glass material's tint — not as an opaque fill
-/// underneath, which would leave the lensing nothing to refract — so
-/// the CTA stays a live piece of glass that happens to be orange.
+/// Tinted Liquid Glass surface for the primary CTA. Keeps the corner
+/// radius and shadows under our control (the system .glassProminent
+/// style forces a capsule and adds its own padding).
 private struct PrimaryGlassSurface: ViewModifier {
     let accent: Color
     let cornerRadius: CGFloat
@@ -85,9 +86,7 @@ private struct PrimaryGlassSurface: ViewModifier {
     }
 }
 
-/// A physical "push" press: the button scales down while held and
-/// springs back on release. Deliberately scale-only, leaving the glass
-/// material to handle its own interactive optical response.
+/// Subtle press feedback — the glass dips slightly under the finger.
 private struct PressScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

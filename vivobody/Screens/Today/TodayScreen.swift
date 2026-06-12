@@ -70,8 +70,11 @@ struct TodayScreen: View {
                 // figure, so the glow breathes through and around it.
                 // AmbientForge adapts its own compositing per appearance
                 // (additive ember on dark, warm amber wash on light).
+                // backgroundExtensionEffect mirrors the forge into the
+                // safe-area insets so the glow bleeds under the nav bar.
                 AmbientForge(warmth: forgeWarmth)
                     .ignoresSafeArea()
+                    .backgroundExtensionEffect()
 
                 ScrollView {
                     // The body leads — your trained figure is the hero
@@ -119,6 +122,7 @@ struct TodayScreen: View {
                     .padding(.bottom, Space.xxl)
                 }
                 .scrollIndicators(.hidden)
+                .scrollEdgeEffectStyle(.soft, for: .bottom)
                 // START is pinned, never part of the scroll, so the body
                 // hero is free to dominate the first screen while the
                 // primary action stays reachable at all times.
@@ -380,29 +384,15 @@ struct TodayScreen: View {
         .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
     }
 
-    /// START, pinned to the bottom via `safeAreaInset`. A short scrim
-    /// rises behind it so the scrolling journal dissolves into the bar
-    /// rather than colliding with a hard edge; the gradient runs to
-    /// the screen bottom so the button reads as floating on the forge,
-    /// not sitting in a black tray.
+    /// START, pinned to the bottom via `safeAreaInset`. No background
+    /// of its own — the system's soft scroll edge effect handles the
+    /// content-to-bar fade, so the button floats directly on the forge
+    /// instead of sitting in a black tray.
     private var pinnedStartBar: some View {
         startCTA
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.lg)
             .padding(.bottom, Space.sm)
-            .background(
-                LinearGradient(
-                    colors: [
-                        Surface.background.opacity(0),
-                        Surface.background.opacity(0.55),
-                        Surface.background.opacity(0.85),
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea(edges: .bottom)
-                .allowsHitTesting(false)
-            )
     }
 
     private var lastWorkoutSection: some View {

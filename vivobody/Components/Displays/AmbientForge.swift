@@ -260,10 +260,19 @@ extension View {
     /// field behind the content. Mirrors `screenBackground()` but swaps
     /// the flat fill for the living forge, so Today's siblings share one
     /// atmosphere. Content renders untouched on top.
+    ///
+    /// `backgroundExtensionEffect()` mirrors the forge into the safe-
+    /// area insets (navigation bar, tab bar) so the ember glow bleeds
+    /// seamlessly under translucent chrome instead of terminating at a
+    /// hard edge.
     func forgeBackground(intensity: Double = 0.9) -> some View {
         self
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(ForgeBackground(intensity: intensity).ignoresSafeArea())
+            .background(
+                ForgeBackground(intensity: intensity)
+                    .ignoresSafeArea()
+                    .backgroundExtensionEffect()
+            )
     }
 }
 

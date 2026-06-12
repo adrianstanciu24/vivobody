@@ -147,6 +147,7 @@ struct ExerciseDetailScreen: View {
             .padding(.bottom, 24)
         }
         .background(Surface.background.ignoresSafeArea())
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -440,7 +441,7 @@ struct ExerciseDetailScreen: View {
                 .padding(.horizontal, 12)
                 .background {
                     if isSelected {
-                        Capsule().fill(Tint.inProgress)
+                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
                     }
                 }
                 .overlay {
@@ -525,7 +526,7 @@ struct ExerciseDetailScreen: View {
                 .padding(.horizontal, 12)
                 .background {
                     if isSelected {
-                        Capsule().fill(Tint.inProgress)
+                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
                     }
                 }
                 .overlay {
@@ -795,22 +796,13 @@ struct ExerciseDetailScreen: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .fill(Tint.inProgress)
-            )
+            .coloredGlassControl(cornerRadius: 22, fill: Tint.inProgress, interactive: true)
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 22)
         .padding(.bottom, 8)
         .padding(.top, 12)
-        .background(
-            LinearGradient(
-                colors: [Surface.background.opacity(0), Surface.background],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .background(Surface.background)
     }
 
     // MARK: - Derived

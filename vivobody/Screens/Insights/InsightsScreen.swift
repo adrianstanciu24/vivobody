@@ -37,11 +37,20 @@ struct InsightsScreen: View {
     private var completedSessions: [WorkoutSession]
 
     var body: some View {
+        Group {
+            if completedSessions.isEmpty {
+                emptyState
+            } else {
+                loadedContent
+            }
+        }
+        .forgeBackground()
+    }
+
+    private var loadedContent: some View {
         ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 0) {
-                if completedSessions.isEmpty {
-                    emptyState
-                } else {
+                Group {
                     let stats = completedSessions.muscleVolume()
                     // One development-model replay feeds every muscle
                     // instrument on the tab.
@@ -86,7 +95,6 @@ struct InsightsScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .forgeBackground()
     }
 
     // MARK: - Group separator
@@ -99,16 +107,11 @@ struct InsightsScreen: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            Text("No training logged yet")
-                .sectionHeadingStyle()
-            Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.top, Space.sm)
+        ContentUnavailableView(
+            "No training logged yet",
+            systemImage: "chart.xyaxis.line",
+            description: Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
+        )
     }
 }
 

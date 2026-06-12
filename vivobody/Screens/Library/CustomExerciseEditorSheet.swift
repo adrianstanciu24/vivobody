@@ -270,7 +270,7 @@ struct CustomExerciseEditorSheet: View {
                 .padding(.horizontal, fullWidth ? Space.md : Space.lg)
                 .frame(minHeight: 44)
                 .background {
-                    if isSelected { Capsule().fill(Tint.inProgress) }
+                    if isSelected { Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress) }
                 }
                 .overlay {
                     if !isSelected { Capsule().stroke(Surface.edge, lineWidth: 1) }

@@ -217,7 +217,7 @@ struct ExercisePickerSheet: View {
                 .frame(minHeight: 38)
                 .background {
                     if isSelected {
-                        Capsule().fill(Tint.inProgress)
+                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
                     }
                 }
                 .overlay {
@@ -383,25 +383,16 @@ struct ExercisePickerSheet: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: Space.lg) {
-            Text(emptyStateMessage)
-                .font(Typography.body)
-                .foregroundStyle(Ink.tertiary)
-                .multilineTextAlignment(.center)
+        ContentUnavailableView {
+            Label(emptyStateMessage, systemImage: "dumbbell")
+        } actions: {
             Button {
                 editorTarget = .create
             } label: {
                 Text("Create custom exercise")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Tint.onAccent)
-                    .padding(.horizontal, 22)
-                    .frame(minHeight: 44)
-                    .background(Capsule().fill(Tint.inProgress))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.glassProminent)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 60)
     }
 
     private var emptyStateMessage: String {

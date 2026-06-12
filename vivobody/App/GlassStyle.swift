@@ -115,6 +115,7 @@ private struct ColoredGlassControlModifier: ViewModifier {
                 }
             }
             .glassEffect(glass.tint(fill), in: shape)
+            .containerShape(shape)
             .contentShape(shape)
     }
 }
@@ -138,7 +139,22 @@ struct GlassSphere: View {
     var size: CGFloat = 132
     var tint: Color = Tint.primary
 
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
     var body: some View {
+        if reduceTransparency {
+            // When Reduce Transparency is active, render as a solid
+            // tinted disc — the Fresnel gradients and specular
+            // highlights rely on transparency and don't adapt.
+            Circle()
+                .fill(tint)
+                .frame(width: size, height: size)
+        } else {
+            fullSphere
+        }
+    }
+
+    private var fullSphere: some View {
         ZStack {
             Circle()
                 .fill(
@@ -202,14 +218,16 @@ struct GlassPedestal: View {
     var shadowOpacity: Double = 0.55
     var tint: Color = .black
 
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
     var body: some View {
         VStack(spacing: 0) {
             Ellipse()
                 .fill(
                     RadialGradient(
                         colors: [
-                            tint.opacity(shadowOpacity),
-                            tint.opacity(shadowOpacity * 0.4),
+                            tint.opacity(reduceTransparency ? min(shadowOpacity * 1.5, 1.0) : shadowOpacity),
+                            tint.opacity(reduceTransparency ? min(shadowOpacity * 0.8, 1.0) : shadowOpacity * 0.4),
                             Color.clear
                         ],
                         center: .center,
@@ -243,6 +261,7 @@ private struct GlassCardModifier: ViewModifier {
                 }
             }
             .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
+            .containerShape(shape)
     }
 }
 
@@ -254,12 +273,14 @@ private struct ContentSurfaceModifier: ViewModifier {
     let tint: Color?
     var bright: Bool = false
 
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         return content
             .background {
                 if let tint {
-                    shape.fill(tint.opacity(0.14))
+                    shape.fill(tint.opacity(reduceTransparency ? 0.40 : 0.14))
                 } else {
                     shape.fill(bright ? Surface.cardTintBright : Surface.cardTint)
                 }
