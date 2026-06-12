@@ -4,23 +4,26 @@
 //
 //  A TIME MACHINE for the muscle-development model. The model's whole
 //  point is behaviour over weeks and months (slow build, fade after a
-//  layoff, plateau without progression) — impossible to feel in a
-//  simulator. So instead we drive it with a virtual clock: every
+//  layoff, convergence at a sustained volume) — impossible to feel in
+//  a simulator. So instead we drive it with a virtual clock: every
 //  workout is stamped at a chosen day and the state is evaluated "as
 //  of" any later day. Fast-forwarding a quarter is a one-liner.
 //
 //  The suites:
-//    • Build      — colour accrues gradually, never maxes in one go.
+//    • Build      — colour accrues gradually, never maxes in one go,
+//                   and scales with set volume.
 //    • Detraining — holds through a ~1-week grace, then fades, deeper
 //                   the longer the layoff.
-//    • Plateau    — a fixed program tapers to a sub-max ceiling and
-//                   loses momentum; progressive overload keeps climbing.
-//    • Momentum   — growing > 0, plateau ≈ 0, detraining < 0.
-//    • Fatigue    — the acute glow blooms and fades within days.
+//    • Convergence— consistent training shows diminishing returns and
+//                   approaches full development at the landmark band.
+//    • Momentum   — building > 0, layoff < 0.
+//    • Fatigue    — the acute bump blooms and fades within days.
+//    • Currency   — effective sets match `MuscleVolume`'s crediting,
+//                   scaled by graded involvement.
 //    • Invariants — closed-form decay is order-independent (semigroup),
 //                   and the model is deterministic.
-//    • Colour     — the perceptual map behaves (lightness↑ with
-//                   development, chroma↑ with momentum, bloom = fatigue).
+//    • Colour     — the perceptual map behaves (the orange deepens
+//                   with development; tightness passes through).
 //
 
 import Foundation
@@ -42,15 +45,15 @@ struct MuscleDevelopmentTests {
     @Test func oneWorkoutDoesNotMaxAdaptation() {
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let state = MuscleDevelopment.simulate(from: [s], now: day(0))
-        let chest = state.fibers[.pectorals]?.adaptation ?? 0
-        #expect(chest > 0.05)        // it did register
-        #expect(chest < 0.45)        // but nowhere near full
+        let chest = state.adaptation(.pectorals)
+        #expect(chest > 0.03)        // it did register
+        #expect(chest < 0.3)         // but nowhere near full
     }
 
-    /// Under steady progressive overload, development rises at every
-    /// checkpoint — and is still below the ceiling early on.
-    @Test func progressiveOverloadBuildsMonotonically() {
-        let program = progressive(sessions: 14, startWeight: 135, step: 5, everyDays: 3.5)
+    /// Under a steady training cadence, development rises at every
+    /// checkpoint — and is still far from full early on.
+    @Test func consistentTrainingBuildsMonotonically() {
+        let program = benchProgram(sessions: 14, everyDays: 3.5)
         let a1 = adaptation(.pectorals, afterFirst: 1, of: program)
         let a4 = adaptation(.pectorals, afterFirst: 4, of: program)
         let a8 = adaptation(.pectorals, afterFirst: 8, of: program)
@@ -59,8 +62,21 @@ struct MuscleDevelopmentTests {
         #expect(a1 < a4)
         #expect(a4 < a8)
         #expect(a8 < a14)
-        #expect(a1 < 0.45)           // early on, far from full
-        #expect(a14 > a1 + 0.2)      // meaningful accrued growth
+        #expect(a1 < 0.3)            // early on, far from full
+        #expect(a14 > 2.5 * a1)      // meaningful accrued growth
+    }
+
+    /// Development scales with set volume: the same cadence at higher
+    /// per-session sets develops the muscle visibly further.
+    @Test func moreVolumeDevelopsMore() {
+        let low = benchProgram(sessions: 10, everyDays: 3.5, sets: 2)
+        let high = benchProgram(sessions: 10, everyDays: 3.5, sets: 5)
+
+        let lowChest = adaptation(.pectorals, afterFirst: 10, of: low)
+        let highChest = adaptation(.pectorals, afterFirst: 10, of: high)
+
+        #expect(highChest > lowChest + 0.05)
+        #expect(highChest <= 1.0)
     }
 
     // MARK: - Detraining: the ~1-week grace, then fade
@@ -68,12 +84,12 @@ struct MuscleDevelopmentTests {
     /// Trained hard, then neglected: colour barely moves inside the
     /// first week, then fades, and fades further the longer the layoff.
     @Test func detrainingHoldsThenFades() {
-        let program = progressive(sessions: 12, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 12, everyDays: 3.5)
         let last = program.last!.completedAt!
 
         func chest(daysAfterLast d: Double) -> Double {
             MuscleDevelopment.simulate(from: program, now: last.addingTimeInterval(d * 86_400))
-                .fibers[.pectorals]?.adaptation ?? 0
+                .adaptation(.pectorals)
         }
 
         let fresh = chest(daysAfterLast: 0)
@@ -85,89 +101,63 @@ struct MuscleDevelopmentTests {
         #expect(week > 0.95 * fresh)
         // Then a clear decline that deepens with time.
         #expect(threeWeeks < 0.92 * fresh)
-        #expect(twoMonths < 0.65 * fresh)
+        #expect(twoMonths < 0.70 * fresh)
         #expect(week > threeWeeks)
         #expect(threeWeeks > twoMonths)
     }
 
-    // MARK: - Plateau vs. progression
+    // MARK: - Convergence at sustained volume
 
-    /// Same workout forever tapers to a sub-maximal ceiling; pushing
-    /// the load keeps climbing past it. This is the "same reps → you
-    /// stop growing" signal.
-    @Test func fixedProgramPlateausBelowProgressiveOverload() {
-        let fixed = progressive(sessions: 16, startWeight: 135, step: 0, everyDays: 3.5)
-        let pushed = progressive(sessions: 16, startWeight: 135, step: 5, everyDays: 3.5)
-
-        let fixedChest = adaptation(.pectorals, afterFirst: 16, of: fixed)
-        let pushedChest = adaptation(.pectorals, afterFirst: 16, of: pushed)
-
-        #expect(pushedChest > fixedChest)
-        #expect(fixedChest < 0.85)               // a fixed load never tops out
-        #expect(fixedChest > 0.2)                // but it did develop something
-    }
-
-    /// Diminishing returns: on a fixed load, the growth between late
-    /// sessions is far smaller than between early ones.
-    @Test func fixedProgramShowsDiminishingReturns() {
-        let fixed = progressive(sessions: 16, startWeight: 135, step: 0, everyDays: 3.5)
-        let earlyDelta = adaptation(.pectorals, afterFirst: 4, of: fixed)
-            - adaptation(.pectorals, afterFirst: 2, of: fixed)
-        let lateDelta = adaptation(.pectorals, afterFirst: 16, of: fixed)
-            - adaptation(.pectorals, afterFirst: 14, of: fixed)
+    /// Diminishing returns: at a steady volume, the growth between
+    /// late sessions is far smaller than between early ones — the
+    /// accumulator approaches the level that volume sustains.
+    @Test func steadyVolumeShowsDiminishingReturns() {
+        let program = benchProgram(sessions: 16, everyDays: 3.5)
+        let earlyDelta = adaptation(.pectorals, afterFirst: 4, of: program)
+            - adaptation(.pectorals, afterFirst: 2, of: program)
+        let lateDelta = adaptation(.pectorals, afterFirst: 16, of: program)
+            - adaptation(.pectorals, afterFirst: 14, of: program)
         #expect(earlyDelta > lateDelta)
-        #expect(lateDelta < 0.02)                // essentially flat by the end
+        #expect(lateDelta < 0.02)
     }
 
-    /// Absolute-load ceiling: the same muscle trained heavy plateaus
-    /// markedly more developed than when trained with trivial loads,
-    /// even though both programs are fixed (non-progressing).
-    @Test func heavierTrainingReachesHigherCeiling() {
-        func fixedQuads(_ name: String, reps: Int, weight: Double) -> [WorkoutSession] {
-            (0..<18).map { i in
-                session(at: day(Double(i) * 3.5),
-                        [lift(name, .legs, sets: 3, reps: reps, weight: weight)])
-            }
+    /// The landmark normalisation: training a muscle at the TOP of its
+    /// productive weekly band, week in week out for a year, converges
+    /// toward full development — and never overshoots the clamp.
+    @Test func consistentOptimalVolumeConvergesTowardFull() {
+        let weeklySets = Int(VolumeLandmark.landmark(for: .pectorals).optimalHigh)
+        let program = (0..<52).map { i in
+            session(at: day(Double(i) * 7),
+                    [lift("Bench Press", .chest, sets: weeklySets, reps: 8, weight: 135)])
         }
-        let heavy = fixedQuads("Squats", reps: 5, weight: 315)
-        let light = fixedQuads("Leg Extension", reps: 15, weight: 30)
-
-        let heavyQuads = adaptation(.quads, afterFirst: 18, of: heavy)
-        let lightQuads = adaptation(.quads, afterFirst: 18, of: light)
-
-        #expect(heavyQuads > lightQuads + 0.1)
-        #expect(lightQuads > 0)               // light work still develops a little
-        #expect(lightQuads < 0.6)             // ...but is ceiling-capped low
+        let chest = adaptation(.pectorals, afterFirst: 52, of: program)
+        #expect(chest > 0.8)
+        #expect(chest <= 1.0)
     }
 
     // MARK: - Momentum channel
 
-    /// Growing muscles read vivid (momentum > 0), plateaued ones go
-    /// flat (≈ 0), detraining ones go cool (< 0).
-    @Test func momentumDistinguishesGrowthPlateauAndLoss() {
-        let pushed = progressive(sessions: 16, startWeight: 135, step: 5, everyDays: 3.5)
-        let fixed = progressive(sessions: 16, startWeight: 135, step: 0, everyDays: 3.5)
+    /// A building program reads positive momentum; a long layoff goes
+    /// negative (the fast accumulator drops beneath its slow tracker).
+    @Test func momentumDistinguishesGrowthAndLoss() {
+        let program = benchProgram(sessions: 12, everyDays: 3.5)
+        let last = program.last!.completedAt!
 
         let growing = MuscleDevelopment
-            .simulate(from: pushed, now: pushed.last!.completedAt!)
-            .momentum(.pectorals)
-        let plateau = MuscleDevelopment
-            .simulate(from: fixed, now: fixed.last!.completedAt!)
+            .simulate(from: program, now: last)
             .momentum(.pectorals)
         let losing = MuscleDevelopment
-            .simulate(from: pushed, now: pushed.last!.completedAt!.addingTimeInterval(60 * 86_400))
+            .simulate(from: program, now: last.addingTimeInterval(60 * 86_400))
             .momentum(.pectorals)
 
-        #expect(growing > 0.1)
-        #expect(abs(plateau) < growing)
-        #expect(plateau < 0.2)
-        #expect(losing < 0)
+        #expect(growing > 0.15)
+        #expect(losing < -0.15)
         #expect(growing > losing)
     }
 
-    // MARK: - Fatigue (acute glow)
+    // MARK: - Fatigue (acute bump)
 
-    /// The bloom is bright right after training and almost gone a week
+    /// The bump is high right after training and almost gone a week
     /// later — and it fades far faster than the underlying development.
     @Test func fatigueBloomsThenFadesFasterThanAdaptation() {
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
@@ -177,12 +167,45 @@ struct MuscleDevelopmentTests {
 
         let freshFatigue = fresh.fibers[.pectorals]?.fatigue ?? 0
         let weekFatigue = week.fibers[.pectorals]?.fatigue ?? 0
-        let freshAdapt = fresh.fibers[.pectorals]?.adaptation ?? 0
-        let weekAdapt = week.fibers[.pectorals]?.adaptation ?? 0
+        let freshAdapt = fresh.adaptation(.pectorals)
+        let weekAdapt = week.adaptation(.pectorals)
 
         #expect(freshFatigue > 0.4)
-        #expect(weekFatigue < 0.2 * freshFatigue)     // glow nearly gone
+        #expect(weekFatigue < 0.2 * freshFatigue)     // bump nearly gone
         #expect(weekAdapt > 0.95 * freshAdapt)         // development held
+    }
+
+    // MARK: - Currency
+
+    /// A muscle's session stimulus scales with its graded involvement
+    /// weight: from a bench press the assisting triceps and front delt
+    /// earn exact fractions of the chest's prime-mover credit. Weights
+    /// come from the catalog so the test follows the shipped data.
+    @Test func gradedInvolvementScalesSessionStimulus() {
+        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
+        let stim = MuscleDevelopment.sessionStimulus(s)
+        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
+        let chest = stim[.pectorals] ?? 0
+        #expect(chest > 0)
+        #expect(abs((stim[.triceps] ?? 0) - (w[.triceps]! / w[.pectorals]!) * chest) < 1e-9)
+        #expect(abs((stim[.deltoids] ?? 0) - (w[.deltoids]! / w[.pectorals]!) * chest) < 1e-9)
+        // The assistors receive strictly less stimulus than the prime mover.
+        #expect((stim[.triceps] ?? 0) < chest)
+    }
+
+    /// The development model and the volume bars share ONE work
+    /// currency: a strength session's stimulus equals `muscleVolume`'s
+    /// effective sets for the same window, muscle for muscle.
+    @Test func stimulusMatchesMuscleVolumeCurrency() {
+        let s = session(at: day(0), [
+            lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135),
+            lift("Back Squat", .legs, sets: 4, reps: 5, weight: 225),
+        ])
+        let stim = MuscleDevelopment.sessionStimulus(s)
+        let stats = [s].muscleVolume(now: day(0))
+        for stat in stats {
+            #expect(abs(stat.effectiveSets - (stim[stat.muscle] ?? 0)) < 1e-9)
+        }
     }
 
     // MARK: - Invariants
@@ -202,18 +225,18 @@ struct MuscleDevelopmentTests {
             MuscleDevelopment.advance(&manySteps, to: day(d))
         }
 
-        let a = oneStep.fibers[.pectorals]!.adaptation
-        let b = manySteps.fibers[.pectorals]!.adaptation
+        let a = oneStep.fibers[.pectorals]!.volume
+        let b = manySteps.fibers[.pectorals]!.volume
         #expect(abs(a - b) < 1e-9)
 
-        let sa = oneStep.fibers[.pectorals]!.adaptationSlow
-        let sb = manySteps.fibers[.pectorals]!.adaptationSlow
+        let sa = oneStep.fibers[.pectorals]!.volumeSlow
+        let sb = manySteps.fibers[.pectorals]!.volumeSlow
         #expect(abs(sa - sb) < 1e-9)
     }
 
     /// Same history in, same channels out.
     @Test func simulationIsDeterministic() {
-        let program = progressive(sessions: 10, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 10, everyDays: 3.5)
         let now = program.last!.completedAt!.addingTimeInterval(10 * 86_400)
         let a = MuscleDevelopment.simulate(from: program, now: now)
         let b = MuscleDevelopment.simulate(from: program, now: now)
@@ -225,7 +248,7 @@ struct MuscleDevelopmentTests {
     /// Session order in the input array doesn't matter — they're
     /// sorted by completion time.
     @Test func sessionOrderDoesNotMatter() {
-        let program = progressive(sessions: 8, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 8, everyDays: 3.5)
         let now = program.last!.completedAt!
         let forward = MuscleDevelopment.simulate(from: program, now: now).momentum(.pectorals)
         let shuffled = MuscleDevelopment.simulate(from: program.reversed(), now: now).momentum(.pectorals)
@@ -247,22 +270,6 @@ struct MuscleDevelopmentTests {
         #expect((nodes["Pectoralis_Major_L"] ?? 0) > 0)
         #expect((nodes["Pectoralis_Major_R"] ?? 0) > 0)
         #expect(nodes["Vastus_Lateralis_L"] == nil)
-    }
-
-    /// A muscle's session stimulus scales with its graded involvement
-    /// weight: from a bench press the assisting triceps and front delt
-    /// earn exact fractions of the chest's prime-mover credit. Weights
-    /// come from the catalog so the test follows the shipped data.
-    @Test func gradedInvolvementScalesSessionStimulus() {
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
-        let stim = MuscleDevelopment.sessionStimulus(s, bodyweight: 155)
-        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
-        let chest = stim[.pectorals] ?? 0
-        #expect(chest > 0)
-        #expect(abs((stim[.triceps] ?? 0) - (w[.triceps]! / w[.pectorals]!) * chest) < 1e-9)
-        #expect(abs((stim[.deltoids] ?? 0) - (w[.deltoids]! / w[.pectorals]!) * chest) < 1e-9)
-        // The assistors receive strictly less stimulus than the prime mover.
-        #expect((stim[.triceps] ?? 0) < chest)
     }
 
     // MARK: - Colour mapping
@@ -306,9 +313,9 @@ struct MuscleDevelopmentTests {
 
     @Test(arguments: [BodyModelTheme.dark, .light])
     func tightnessIsPassedThroughForThePulse(theme: BodyModelTheme) {
-        // Tightness no longer touches the diffuse — it only rides
-        // through as the pulse level. Two muscles at the same
-        // development read identical colours regardless of tightness.
+        // Tightness never touches the diffuse — it only rides through
+        // as the pulse level. Two muscles at the same development read
+        // identical colours regardless of tightness.
         let loose = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0), theme: theme)
         let stiff = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0.95), theme: theme)
         #expect(stiff.red == loose.red)
@@ -340,21 +347,20 @@ struct MuscleDevelopmentTests {
         return s
     }
 
-    /// A completed lift: every planned set marked done at the given RIR.
-    private func lift(_ name: String, _ group: MuscleGroup, sets: Int, reps: Int, weight: Double, rir: Int = 2) -> Exercise {
+    /// A completed lift: every planned set marked done.
+    private func lift(_ name: String, _ group: MuscleGroup, sets: Int, reps: Int, weight: Double) -> Exercise {
         let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: reps, plannedWeight: weight)
-        ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = rir }
+        ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = 2 }
         return ex
     }
 
     /// A bench-press program: `sessions` workouts spaced `everyDays`
-    /// apart, the load climbing by `step` lb each time (step 0 = a
-    /// fixed, non-progressing program).
-    private func progressive(sessions n: Int, startWeight: Double, step: Double, everyDays: Double) -> [WorkoutSession] {
+    /// apart at a steady per-session set count.
+    private func benchProgram(sessions n: Int, everyDays: Double, sets: Int = 3) -> [WorkoutSession] {
         (0..<n).map { i in
             session(
                 at: day(Double(i) * everyDays),
-                [lift("Bench Press", .chest, sets: 3, reps: 8, weight: startWeight + Double(i) * step)]
+                [lift("Bench Press", .chest, sets: sets, reps: 8, weight: 135)]
             )
         }
     }
@@ -364,6 +370,6 @@ struct MuscleDevelopmentTests {
     private func adaptation(_ muscle: Muscle, afterFirst k: Int, of program: [WorkoutSession]) -> Double {
         let subset = Array(program.prefix(k))
         guard let last = subset.last?.completedAt else { return 0 }
-        return MuscleDevelopment.simulate(from: subset, now: last).fibers[muscle]?.adaptation ?? 0
+        return MuscleDevelopment.simulate(from: subset, now: last).adaptation(muscle)
     }
 }

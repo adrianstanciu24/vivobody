@@ -2,20 +2,19 @@
 //  MuscleTightnessTests.swift
 //  vivobodyTests
 //
-//  Exercises the tightness channel of `MuscleDevelopment` — the fourth
-//  muscle state that contraction-biased loading accrues, mobility /
-//  full-ROM work pays down, and rest only partly eases. Like its
+//  Exercises the tightness channel of `MuscleDevelopment` — the
+//  muscle state that contraction-biased set volume accrues, mobility /
+//  full-ROM work pays down, and rest only slowly eases. Like its
 //  sibling `MuscleDevelopmentTests`, it drives the model with a virtual
-//  clock so weeks-long behaviour (a layoff flooring above zero) is a
-//  one-liner.
+//  clock so weeks-long behaviour is a one-liner.
 //
 //  The suites:
 //    • Accrual    — loading tightens susceptible muscles; full-ROM
 //                   compounds tighten less than isolation work.
 //    • Relief     — mobility work loosens; an untrained muscle has
 //                   nothing to relieve.
-//    • Rest       — passive easing drops tightness but floors above
-//                   zero (only active lengthening fully resolves it).
+//    • Rest       — passive easing relaxes tightness slowly toward
+//                   zero (active lengthening clears it far faster).
 //    • Mobility    — stretching feeds relief, not growth.
 //    • Catalog    — movement type resolves by name.
 //
@@ -58,28 +57,6 @@ struct MuscleTightnessTests {
         #expect(squat > 0)
         #expect(extension_ > 0)
         #expect(squat < extension_)
-    }
-
-    /// Crossed-syndrome coupling: pressing without ever training the
-    /// antagonist (rows) tightens the chest MORE than the same pressing
-    /// balanced by back work, because the neglected rhomboids let the
-    /// pecs shorten into rounded shoulders.
-    @Test func neglectedAntagonistAmplifiesTightness() {
-        func pecTightness(withRows: Bool) -> Double {
-            let program = (0..<6).map { i -> WorkoutSession in
-                var exercises = [lift("Bench Press", .chest, sets: 3, reps: 8, weight: 135)]
-                if withRows {
-                    exercises.append(lift("Bent Over Rowing", .back, sets: 3, reps: 8, weight: 115))
-                }
-                return session(at: day(Double(i) * 3), exercises)
-            }
-            return MuscleDevelopment.simulate(from: program, now: program.last!.completedAt!)
-                .fibers[.pectorals]?.tightness ?? 0
-        }
-        let neglected = pecTightness(withRows: false)
-        let balanced = pecTightness(withRows: true)
-        #expect(neglected > 0)
-        #expect(balanced < neglected)
     }
 
     /// A phasic muscle (rhomboids) barely tightens compared with a
@@ -126,10 +103,10 @@ struct MuscleTightnessTests {
 
     // MARK: - Rest
 
-    /// Passive rest eases tightness but never fully clears it — a long
-    /// layoff lands below the fresh value yet still strictly above
-    /// zero, the signal that mobility is still owed.
-    @Test func restEasesButFloorsAboveZero() {
+    /// Passive rest eases tightness slowly: it lingers for weeks
+    /// (short layoffs keep most of it), while a months-long layoff
+    /// finally relaxes it toward zero.
+    @Test func restEasesSlowlyTowardZero() {
         let program = (0..<6).map { i in
             session(at: day(Double(i) * 3), [lift("Bench Press", .chest, sets: 3, reps: 8, weight: 135)])
         }
@@ -141,10 +118,11 @@ struct MuscleTightnessTests {
         }
 
         let fresh = chestTightness(daysAfter: 0)
+        let week = chestTightness(daysAfter: 7)
         let later = chestTightness(daysAfter: 180)
         #expect(fresh > 0)
-        #expect(later < fresh)
-        #expect(later > 0)
+        #expect(week > 0.7 * fresh)      // lingers without mobility
+        #expect(later < 0.1 * fresh)     // a long layoff finally clears
     }
 
     // MARK: - Mobility feeds relief, not growth
@@ -154,7 +132,7 @@ struct MuscleTightnessTests {
     @Test func mobilityDoesNotGrowMuscle() {
         let s = session(at: day(0), [stretch("Doorway Pectoral Stretch", .chest, sets: 3, seconds: 30)])
         let state = MuscleDevelopment.simulate(from: [s], now: day(0))
-        #expect((state.fibers[.pectorals]?.adaptation ?? 0) == 0)
+        #expect(state.adaptation(.pectorals) == 0)
         #expect(state.intensities.isEmpty)
     }
 

@@ -145,15 +145,11 @@ nonisolated struct TrainingSignature {
 
 extension Array where Element == WorkoutSession {
     /// Build the training signature as of `now`, fusing the balance,
-    /// momentum, and consistency models. `bodyweight` (lb) scales
-    /// unloaded movements through the same path the 3D body uses.
-    func trainingSignature(
-        bodyweight: Double = ExerciseLoad.defaultBodyweight,
-        now: Date = Date()
-    ) -> TrainingSignature {
+    /// momentum, and consistency models.
+    func trainingSignature(now: Date = Date()) -> TrainingSignature {
         TrainingSignature(
             volume: muscleVolume(now: now),
-            momentum: muscleMomentum(bodyweight: bodyweight, now: now),
+            momentum: muscleMomentum(now: now),
             consistency: consistency(now: now)
         )
     }

@@ -36,11 +36,6 @@ struct InsightsScreen: View {
     )
     private var completedSessions: [WorkoutSession]
 
-    /// Body-weight log — the latest entry sets the load for unloaded
-    /// movements when the development model scores momentum (push-ups,
-    /// pull-ups, planks), matching the 3D body on Today.
-    @Query private var bodyWeights: [BodyWeightEntry]
-
     var body: some View {
         ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 0) {
@@ -48,10 +43,12 @@ struct InsightsScreen: View {
                     emptyState
                 } else {
                     let stats = completedSessions.muscleVolume()
-                    let bodyweight = bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
-                    let momentum = completedSessions.muscleMomentum(bodyweight: bodyweight)
-                    let forecast = completedSessions.muscleForecast(bodyweight: bodyweight)
-                    let tightness = completedSessions.muscleTightness(bodyweight: bodyweight)
+                    // One development-model replay feeds every muscle
+                    // instrument on the tab.
+                    let modelState = MuscleDevelopment.simulate(from: completedSessions)
+                    let momentum = modelState.muscleMomentum()
+                    let forecast = modelState.muscleForecast()
+                    let tightness = modelState.muscleTightness()
                     let strength = completedSessions.strengthOutlook()
                     let progress = completedSessions.progressByExercise
                     let symmetry = completedSessions.antagonistBalance()

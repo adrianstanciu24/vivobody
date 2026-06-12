@@ -91,28 +91,23 @@ nonisolated struct MuscleMomentumBoard {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
-    /// Replay the archive through the development model as of `now`
-    /// and bucket every meaningfully-developed muscle by its growth
-    /// trend. `bodyweight` (lb) scales unloaded movements via the
-    /// same path the 3D body uses.
-    func muscleMomentum(
-        bodyweight: Double = ExerciseLoad.defaultBodyweight,
-        now: Date = Date()
-    ) -> MuscleMomentumBoard {
-        let state = MuscleDevelopment.simulate(from: self, bodyweight: bodyweight, now: now)
+extension MuscleDevelopment.State {
+    /// Bucket every meaningfully-developed muscle in this state by
+    /// its growth trend. Screens compute one `State` per data change
+    /// and derive every board from it.
+    func muscleMomentum(now: Date = Date()) -> MuscleMomentumBoard {
         let calendar = Calendar.current
 
         var stats: [MuscleMomentumStat] = []
-        for (muscle, fiber) in state.fibers {
-            let adaptation = Swift.min(1, Swift.max(0, fiber.adaptation))
-            guard adaptation >= MuscleMomentumBoard.developmentFloor else { continue }
+        for (muscle, fiber) in fibers {
+            let development = adaptation(muscle)
+            guard development >= MuscleMomentumBoard.developmentFloor else { continue }
 
-            let momentum = state.momentum(muscle)
+            let trendValue = momentum(muscle)
             let trend: MomentumTrend
-            if momentum > MuscleMomentumBoard.growingThreshold {
+            if trendValue > MuscleMomentumBoard.growingThreshold {
                 trend = .growing
-            } else if momentum < MuscleMomentumBoard.fadingThreshold {
+            } else if trendValue < MuscleMomentumBoard.fadingThreshold {
                 trend = .fading
             } else {
                 trend = .holding
@@ -133,13 +128,23 @@ extension Array where Element == WorkoutSession {
                 MuscleMomentumStat(
                     muscle: muscle,
                     trend: trend,
-                    momentum: momentum,
-                    adaptation: adaptation,
+                    momentum: trendValue,
+                    adaptation: development,
                     daysSinceLastTrained: days
                 )
             )
         }
 
         return MuscleMomentumBoard(stats: stats)
+    }
+}
+
+extension Array where Element == WorkoutSession {
+    /// Replay the archive through the development model as of `now`
+    /// and bucket every meaningfully-developed muscle by its growth
+    /// trend. Convenience for one-shot callers and tests; screens
+    /// that already hold a `State` should derive from it directly.
+    func muscleMomentum(now: Date = Date()) -> MuscleMomentumBoard {
+        MuscleDevelopment.simulate(from: self, now: now).muscleMomentum(now: now)
     }
 }

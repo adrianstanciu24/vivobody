@@ -40,10 +40,6 @@ struct TodayScreen: View {
     /// doesn't matter beyond identity.
     @Query private var templates: [WorkoutTemplate]
 
-    /// Body-weight log — the latest entry sets the load for unloaded
-    /// movements in the muscle heatmap (push-ups, pull-ups, planks).
-    @Query private var bodyWeights: [BodyWeightEntry]
-
     /// Frozen on first layout and never updated afterwards. The
     /// scroll container's height shrinks as the large navigation
     /// title collapses on scroll; binding the SCNView's height to
@@ -83,6 +79,11 @@ struct TodayScreen: View {
                     // it a voice; then START is the biggest, first-thing-
                     // you-reach target. The calendar and last workout are
                     // the journal you scroll down to once you've decided.
+                    //
+                    // The development model is replayed ONCE per render
+                    // and every consumer (figure, readiness words, the
+                    // drill-down boards) derives from this single state.
+                    let modelState = MuscleDevelopment.simulate(from: completedSessions)
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -90,7 +91,10 @@ struct TodayScreen: View {
                         // over the model — the muscle detail made an overlaid
                         // caption unreadable).
                         VStack(spacing: Space.sm) {
-                            bodyModelHero(height: bodyHeroHeight(viewport: proxy.size.height))
+                            bodyModelHero(
+                                height: bodyHeroHeight(viewport: proxy.size.height),
+                                state: modelState
+                            )
                             developmentLegend
                         }
                             // Depth: the figure settles back into the forge as
@@ -105,7 +109,7 @@ struct TodayScreen: View {
                                     .opacity(1 - abs(phase.value) * 0.30)
                             }
                             .settleIn(0)
-                        readinessReadout.settleIn(1)
+                        readinessReadout(state: modelState).settleIn(1)
                         streakSection.settleIn(2)
                         SectionDivider().settleIn(3)
                         lastWorkoutSection.settleIn(4)
@@ -154,13 +158,10 @@ struct TodayScreen: View {
     /// to rotate, vertical drags fall through to the scroll. Lit by
     /// the muscles you've trained (development, with a pulse where
     /// you've tightened up), so it reads as your body, not a mannequin.
-    private func bodyModelHero(height: CGFloat) -> some View {
+    private func bodyModelHero(height: CGFloat, state: MuscleDevelopment.State) -> some View {
         RotatableBodyModel(
             renderHeight: height,
-            channels: MuscleDevelopment.nodeChannels(
-                from: completedSessions,
-                bodyweight: bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
-            )
+            channels: state.nodeChannels
         )
             .frame(maxWidth: .infinity)
             .frame(height: height)
@@ -213,10 +214,8 @@ struct TodayScreen: View {
     /// colours the figure, so the words and the body always agree. The
     /// per-muscle drill-down stays one tap away.
     @ViewBuilder
-    private var readinessReadout: some View {
-        let readiness = completedSessions.bodyReadiness(
-            bodyweight: bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
-        )
+    private func readinessReadout(state: MuscleDevelopment.State) -> some View {
+        let readiness = state.bodyReadiness()
         VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Your body", trailing: "right now")
             Text(readinessSentence(readiness))
@@ -228,7 +227,7 @@ struct TodayScreen: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             if !completedSessions.isEmpty {
-                allMusclesLink(stats: completedSessions.muscleVolume())
+                allMusclesLink(stats: completedSessions.muscleVolume(), state: state)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -248,18 +247,17 @@ struct TodayScreen: View {
 
     /// The native drill-down — pushes the full per-muscle breakdown
     /// (the same reference screen the Insights "Show all muscles" link
-    /// opens) onto Today's own navigation stack. Momentum and forecast
-    /// are derived inside the destination closure so the detraining
-    /// simulation runs only when the detail is actually opened, not on
-    /// every Today render.
-    private func allMusclesLink(stats: [MuscleVolumeStat]) -> some View {
+    /// opens) onto Today's own navigation stack. The boards are
+    /// derived inside the destination closure — from the same state
+    /// the figure renders — so the detraining march runs only when
+    /// the detail is actually opened, not on every Today render.
+    private func allMusclesLink(stats: [MuscleVolumeStat], state: MuscleDevelopment.State) -> some View {
         NavigationLink {
-            let bodyweight = bodyWeights.latest?.weight ?? ExerciseLoad.defaultBodyweight
             MuscleDetailScreen(
                 stats: stats,
-                momentum: completedSessions.muscleMomentum(bodyweight: bodyweight),
-                forecast: completedSessions.muscleForecast(bodyweight: bodyweight),
-                tightness: completedSessions.muscleTightness(bodyweight: bodyweight)
+                momentum: state.muscleMomentum(),
+                forecast: state.muscleForecast(),
+                tightness: state.muscleTightness()
             )
         } label: {
             HStack(spacing: Space.xs) {

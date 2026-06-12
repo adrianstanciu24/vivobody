@@ -40,21 +40,26 @@ nonisolated struct MuscleTightnessBoard {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
-    /// Per-muscle tightness as of `now`, keeping only muscles tight
-    /// enough to flag. `bodyweight` (lb) scales unloaded movements via
-    /// the same path the 3D body uses, so the roster matches the rim.
-    func muscleTightness(
-        bodyweight: Double = ExerciseLoad.defaultBodyweight,
-        now: Date = Date()
-    ) -> MuscleTightnessBoard {
-        let state = MuscleDevelopment.simulate(from: self, bodyweight: bodyweight, now: now)
-        let readings = state.fibers.compactMap { muscle, fiber -> MuscleTightnessReading? in
+extension MuscleDevelopment.State {
+    /// Per-muscle tightness from this state, keeping only muscles
+    /// tight enough to flag. Reads the same channel that drives the
+    /// figure's pulse, so the roster matches the body.
+    func muscleTightness() -> MuscleTightnessBoard {
+        let readings = fibers.compactMap { muscle, fiber -> MuscleTightnessReading? in
             let t = Swift.min(1, Swift.max(0, fiber.tightness))
             guard t >= MuscleTightnessBoard.threshold else { return nil }
             return MuscleTightnessReading(muscle: muscle, tightness: t)
         }
         .sorted { $0.tightness > $1.tightness }
         return MuscleTightnessBoard(readings: readings)
+    }
+}
+
+extension Array where Element == WorkoutSession {
+    /// Per-muscle tightness as of `now`. Convenience for one-shot
+    /// callers and tests; screens that already hold a `State` should
+    /// derive from it directly.
+    func muscleTightness(now: Date = Date()) -> MuscleTightnessBoard {
+        MuscleDevelopment.simulate(from: self, now: now).muscleTightness()
     }
 }

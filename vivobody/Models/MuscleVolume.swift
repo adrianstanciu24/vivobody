@@ -100,6 +100,23 @@ nonisolated struct MuscleVolumeStat: Identifiable, Hashable {
     }
 }
 
+// MARK: - Effective-set crediting
+
+extension Exercise {
+    /// Effective-set credit per involved muscle for this exercise's
+    /// completed sets: completed count × graded involvement weight.
+    /// The single work currency `muscleVolume` and `MuscleDevelopment`
+    /// share — extracted so the volume bars and the 3D body can never
+    /// drift onto different definitions of "a set of work."
+    var effectiveSetsByMuscle: [Muscle: Double] {
+        let completed = sets.filter(\.isCompleted).count
+        guard completed > 0 else { return [:] }
+        let weights = muscleInvolvement.weights
+        guard !weights.isEmpty else { return [:] }
+        return weights.mapValues { Double(completed) * $0 }
+    }
+}
+
 // MARK: - Aggregation
 
 extension Array where Element == WorkoutSession {
@@ -121,14 +138,11 @@ extension Array where Element == WorkoutSession {
         for session in self {
             let date = session.completedAt ?? session.startedAt
             for exercise in session.exercises {
-                let completedCount = exercise.sets.filter(\.isCompleted).count
-                guard completedCount > 0 else { continue }
-
-                let weights = exercise.muscleInvolvement.weights
-                guard !weights.isEmpty else { continue }
+                let credit = exercise.effectiveSetsByMuscle
+                guard !credit.isEmpty else { continue }
 
                 let inWindow = date >= cutoff
-                for (muscle, weight) in weights {
+                for (muscle, sets) in credit {
                     // Recency tracks the whole archive.
                     if let existing = lastTrained[muscle] {
                         if date > existing { lastTrained[muscle] = date }
@@ -137,7 +151,7 @@ extension Array where Element == WorkoutSession {
                     }
                     // Effective sets only accrue inside the window.
                     if inWindow {
-                        effective[muscle, default: 0] += Double(completedCount) * weight
+                        effective[muscle, default: 0] += sets
                     }
                 }
             }

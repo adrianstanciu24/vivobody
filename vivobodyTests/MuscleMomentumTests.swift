@@ -4,10 +4,10 @@
 //
 //  Guards the trend-bucketing behind the Insights "Momentum" board.
 //  Like the development model it projects, the behaviour is time-
-//  driven, so it's tested on a virtual clock: progressive overload
-//  reads as growing, a long fixed program settles into holding, a
-//  layoff slides into fading, and undeveloped muscles stay off the
-//  board entirely.
+//  driven, so it's tested on a virtual clock: a building program
+//  reads as growing, a program matured to the level its volume
+//  sustains settles into holding, a layoff slides into fading, and
+//  undeveloped muscles stay off the board entirely.
 //
 
 import Foundation
@@ -35,19 +35,19 @@ struct MuscleMomentumTests {
         return ex
     }
 
-    /// A bench program: `n` sessions `everyDays` apart, load climbing
-    /// by `step` lb each time (step 0 = a fixed, non-progressing program).
-    private func benchProgram(sessions n: Int, startWeight: Double, step: Double, everyDays: Double) -> [WorkoutSession] {
+    /// A bench program: `n` sessions `everyDays` apart at a steady
+    /// per-session set count.
+    private func benchProgram(sessions n: Int, everyDays: Double) -> [WorkoutSession] {
         (0..<n).map { i in
             session(at: day(Double(i) * everyDays),
-                    [lift("Bench Press", .chest, weight: startWeight + Double(i) * step)])
+                    [lift("Bench Press", .chest, weight: 135)])
         }
     }
 
     // MARK: - Growing
 
-    @Test func progressiveOverloadReadsGrowing() {
-        let program = benchProgram(sessions: 12, startWeight: 135, step: 5, everyDays: 3.5)
+    @Test func buildingProgramReadsGrowing() {
+        let program = benchProgram(sessions: 12, everyDays: 3.5)
         let now = program.last!.completedAt!
         let board = program.muscleMomentum(now: now)
 
@@ -59,15 +59,20 @@ struct MuscleMomentumTests {
 
     // MARK: - Holding
 
-    @Test func longFixedProgramReadsHolding() {
-        // A flat program runs out of "surprise": prediction error
-        // decays toward zero, the slow tracker catches the fast one,
-        // and momentum settles inside the holding band.
-        let program = benchProgram(sessions: 20, startWeight: 135, step: 0, everyDays: 3.5)
-        let now = program.last!.completedAt!
-        let board = program.muscleMomentum(now: now)
+    @Test func maturedProgramReadsHolding() {
+        // A steady cadence eventually carries the accumulator to the
+        // level that volume sustains: the slow tracker catches the
+        // fast one and momentum settles inside the holding band.
+        // Growth also visibly cools on the way there.
+        let early = benchProgram(sessions: 12, everyDays: 3.5)
+        let matured = benchProgram(sessions: 156, everyDays: 3.5)
 
+        let earlyMomentum = early.muscleMomentum(now: early.last!.completedAt!)
+            .stat(for: .pectorals)?.momentum ?? 0
+        let board = matured.muscleMomentum(now: matured.last!.completedAt!)
         let chest = board.stat(for: .pectorals)
+
+        #expect((chest?.momentum ?? 1) < earlyMomentum)
         #expect(chest?.trend == .holding)
         #expect(abs(chest?.momentum ?? 1) <= MuscleMomentumBoard.growingThreshold)
     }
@@ -75,7 +80,7 @@ struct MuscleMomentumTests {
     // MARK: - Fading
 
     @Test func layoffReadsFading() {
-        let program = benchProgram(sessions: 12, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 12, everyDays: 3.5)
         let last = program.last!.completedAt!
         // Well past the ~1-week grace: the fast channel has dropped
         // below the slow tracker, so momentum is clearly negative.
@@ -91,7 +96,7 @@ struct MuscleMomentumTests {
     // MARK: - Exclusion
 
     @Test func untrainedMuscleIsAbsentFromBoard() {
-        let program = benchProgram(sessions: 8, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 8, everyDays: 3.5)
         let now = program.last!.completedAt!
         let board = program.muscleMomentum(now: now)
 
@@ -116,7 +121,7 @@ struct MuscleMomentumTests {
     // MARK: - Partition integrity
 
     @Test func bucketsPartitionByTrend() {
-        let program = benchProgram(sessions: 12, startWeight: 135, step: 5, everyDays: 3.5)
+        let program = benchProgram(sessions: 12, everyDays: 3.5)
         let board = program.muscleMomentum(now: program.last!.completedAt!)
         #expect(board.growing.allSatisfy { $0.trend == .growing })
         #expect(board.holding.allSatisfy { $0.trend == .holding })

@@ -128,24 +128,6 @@ enum Muscle: String, Hashable, CaseIterable {
         }
     }
 
-    /// The opposing muscle whose neglect lets this one shorten into a
-    /// postural fault — the classic crossed-syndrome pairs. When the
-    /// agonist far out-develops this antagonist, tightening is
-    /// amplified (see `MuscleDevelopment`): the only-bench lifter's
-    /// chest tightens into rounded shoulders, the sitter's hip flexors
-    /// into an anterior pelvic tilt. `nil` for muscles with no clear
-    /// posture-driving opposite. `nonisolated` so the pure value-type
-    /// model can read it off the main actor.
-    nonisolated var tightnessAntagonist: Muscle? {
-        switch self {
-        case .pectorals:  return .rhomboids   // rounded shoulders
-        case .hipFlexors: return .glutes      // anterior pelvic tilt
-        case .lowerBack:  return .abs          // lumbar over-extension
-        case .calves:     return .shins        // stiff, plantar-locked ankle
-        default:          return nil
-        }
-    }
-
     /// Mesh base-names (without the `_L`/`_R` suffix) this region
     /// covers in BodyModel.scn. Exact archive spelling — see file
     /// header.

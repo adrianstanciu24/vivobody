@@ -54,7 +54,10 @@ nonisolated struct MuscleForecastBoard {
     static let maxHorizonDays = 60
     /// Development dropping to this fraction of today's marks the start
     /// of a noticeable fade — the moment `daysUntilFade` records.
-    static let fadeThreshold = 0.92
+    /// Calibrated to the development curve's γ-softened decay: a
+    /// muscle well past its grace window crosses this within about a
+    /// week (urgent), a freshly trained one in about two.
+    static let fadeThreshold = 0.95
     /// At or below this many days to fade reads as urgent ("train soon").
     static let urgentDays = 7
     /// Muscles below this development have nothing meaningful to lose.
@@ -82,24 +85,22 @@ nonisolated struct MuscleForecastBoard {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
-    /// Project the development model forward from `now` with no
-    /// further training and report which muscles fade within
-    /// `horizonDays`. `bodyweight` (lb) scales unloaded movements via
-    /// the same path the 3D body and momentum board use.
+extension MuscleDevelopment.State {
+    /// Project this state forward from `now` with no further training
+    /// and report which muscles fade within `horizonDays`. The state
+    /// is copied before marching, so the caller's value is untouched.
     func muscleForecast(
-        bodyweight: Double = ExerciseLoad.defaultBodyweight,
         now: Date = Date(),
         horizonDays: Int = MuscleForecastBoard.horizonDays
     ) -> MuscleForecastBoard {
-        var state = MuscleDevelopment.simulate(from: self, bodyweight: bodyweight, now: now)
+        var state = self
         let calendar = Calendar.current
 
         // Snapshot today's development for every muscle worth tracking.
         var current: [Muscle: Double] = [:]
         var lastStim: [Muscle: Date] = [:]
-        for (muscle, fiber) in state.fibers {
-            let a = Swift.min(1, Swift.max(0, fiber.adaptation))
+        for (muscle, fiber) in fibers {
+            let a = adaptation(muscle)
             guard a >= MuscleForecastBoard.developmentFloor else { continue }
             current[muscle] = a
             if let ts = fiber.lastStimulated { lastStim[muscle] = ts }
@@ -116,7 +117,7 @@ extension Array where Element == WorkoutSession {
             guard let future = calendar.date(byAdding: .day, value: d, to: now) else { break }
             MuscleDevelopment.advance(&state, to: future)
             for (muscle, a0) in current {
-                let a = Swift.min(1, Swift.max(0, state.fibers[muscle]?.adaptation ?? 0))
+                let a = state.adaptation(muscle)
                 if d == horizonDays { projected[muscle] = a }
                 if daysUntilFade[muscle] == nil, a <= MuscleForecastBoard.fadeThreshold * a0 {
                     daysUntilFade[muscle] = d
@@ -157,5 +158,19 @@ extension Array where Element == WorkoutSession {
         }
 
         return MuscleForecastBoard(ranked: ranked, horizonDays: horizonDays)
+    }
+}
+
+extension Array where Element == WorkoutSession {
+    /// Replay the archive through the development model and project
+    /// its decay forward from `now`. Convenience for one-shot callers
+    /// and tests; screens that already hold a `State` should derive
+    /// from it directly.
+    func muscleForecast(
+        now: Date = Date(),
+        horizonDays: Int = MuscleForecastBoard.horizonDays
+    ) -> MuscleForecastBoard {
+        MuscleDevelopment.simulate(from: self, now: now)
+            .muscleForecast(now: now, horizonDays: horizonDays)
     }
 }

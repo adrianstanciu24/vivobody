@@ -91,31 +91,25 @@ nonisolated struct BodyReadiness {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
-    /// Replay the archive through the development model as of `now`
-    /// and roll every muscle up into its coarse group, classifying
-    /// each group as fresh / ready / resting. `bodyweight` (lb)
-    /// scales unloaded movements via the same path the 3D body uses,
-    /// so the readout and the figure are computed from one source.
-    func bodyReadiness(
-        bodyweight: Double = ExerciseLoad.defaultBodyweight,
-        now: Date = Date()
-    ) -> BodyReadiness {
-        let state = MuscleDevelopment.simulate(from: self, bodyweight: bodyweight, now: now)
+extension MuscleDevelopment.State {
+    /// Roll this development state up into its coarse groups,
+    /// classifying each as fresh / ready / resting. Screens compute
+    /// one `State` per data change and derive every board from it.
+    func bodyReadiness(now: Date = Date()) -> BodyReadiness {
         let calendar = Calendar.current
 
         // Roll the per-muscle fibers up to groups: a group is as fresh
         // and as developed as its brightest / most-developed member,
         // and was "last trained" whenever its most-recent member was.
         var fatigue: [MuscleGroup: Double] = [:]
-        var adaptation: [MuscleGroup: Double] = [:]
+        var development: [MuscleGroup: Double] = [:]
         var tightness: [MuscleGroup: Double] = [:]
         var lastTrained: [MuscleGroup: Date] = [:]
 
-        for (muscle, fiber) in state.fibers {
+        for (muscle, fiber) in fibers {
             let group = muscle.group
             fatigue[group] = Swift.max(fatigue[group] ?? 0, clamp(fiber.fatigue))
-            adaptation[group] = Swift.max(adaptation[group] ?? 0, clamp(fiber.adaptation))
+            development[group] = Swift.max(development[group] ?? 0, adaptation(muscle))
             tightness[group] = Swift.max(tightness[group] ?? 0, clamp(fiber.tightness))
             if let stamp = fiber.lastStimulated {
                 if let prev = lastTrained[group] {
@@ -128,7 +122,7 @@ extension Array where Element == WorkoutSession {
 
         let groups = MuscleGroup.allCases.map { group -> GroupReadiness in
             let f = fatigue[group] ?? 0
-            let a = adaptation[group] ?? 0
+            let a = development[group] ?? 0
             let days: Int? = lastTrained[group].map {
                 calendar.dateComponents(
                     [.day],
@@ -157,6 +151,16 @@ extension Array where Element == WorkoutSession {
         }
 
         return BodyReadiness(groups: groups)
+    }
+}
+
+extension Array where Element == WorkoutSession {
+    /// Replay the archive through the development model as of `now`
+    /// and roll every muscle up into its coarse group. Convenience for
+    /// one-shot callers and tests; screens that already hold a `State`
+    /// should derive from it directly.
+    func bodyReadiness(now: Date = Date()) -> BodyReadiness {
+        MuscleDevelopment.simulate(from: self, now: now).bodyReadiness(now: now)
     }
 }
 
