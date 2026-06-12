@@ -386,20 +386,18 @@ struct MeScreen: View {
 
     private var appearanceRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Appearance")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Light, dark, or follow the system")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer()
-                Text(appearance.label)
-                    .font(.system(size: 15, weight: .semibold))
+            // No trailing value label: the highlighted chip below is
+            // the single source of selection state (all options are
+            // always visible, so a separate readout would only echo it).
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Appearance")
+                    .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.primary)
+                Text("Light, dark, or follow the system")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             GlassEffectContainer(spacing: Space.sm) {
                 HStack(spacing: Space.sm) {
@@ -430,20 +428,17 @@ struct MeScreen: View {
 
     private var weightUnitRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Weight Unit")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Displayed across the app — storage stays canonical")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer()
-                Text(weightUnit.symbol)
-                    .font(.system(size: 15, weight: .semibold, design: .monospaced))
+            // No trailing value label: the highlighted chip below
+            // already carries the selection (both options visible).
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Weight Unit")
+                    .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.primary)
+                Text("Displayed across the app — storage stays canonical")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             GlassEffectContainer(spacing: Space.sm) {
                 HStack(spacing: Space.sm) {

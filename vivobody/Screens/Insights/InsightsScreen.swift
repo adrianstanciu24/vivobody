@@ -99,16 +99,13 @@ struct InsightsScreen: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Insights")
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("No training logged yet")
-                    .sectionHeadingStyle()
-                Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text("No training logged yet")
+                .sectionHeadingStyle()
+            Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, Space.sm)

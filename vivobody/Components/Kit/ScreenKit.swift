@@ -287,7 +287,7 @@ struct KitRow<Trailing: View>: View {
         .padding(.horizontal, Space.lg)
         .frame(minHeight: Space.rowMin)
         .padding(.vertical, Space.md)
-        .glassCard()
+        .contentCard()
     }
 }
 
@@ -319,7 +319,7 @@ extension View {
                     Stat(value: "12", label: "Sets"),
                 ])
                 .padding(Space.xl)
-                .glassCard()
+                .contentCard()
             }
 
             VStack(alignment: .leading, spacing: Space.md) {
@@ -327,7 +327,7 @@ extension View {
                 MetricView(label: "Total volume", value: "51.5k", unit: "lb")
                     .padding(Space.xl)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .glassCard()
+                    .contentCard()
             }
 
             VStack(alignment: .leading, spacing: Space.md) {

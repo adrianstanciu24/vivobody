@@ -235,7 +235,7 @@ struct BodyWeightDetail: View {
             Spacer()
         }
         .frame(height: 120)
-        .glassChip(cornerRadius: 16)
+        .contentChip(cornerRadius: 16)
     }
 
     // MARK: - Range strip
@@ -303,7 +303,7 @@ struct BodyWeightDetail: View {
                     }
                 }
             }
-            .glassCard(cornerRadius: 18, interactive: true)
+            .contentCard(cornerRadius: 18)
         }
     }
 

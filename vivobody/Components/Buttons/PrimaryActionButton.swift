@@ -68,8 +68,9 @@ struct PrimaryActionButton: View {
 }
 
 /// Prominent, full-width Liquid Glass surface for primary actions. The
-/// accent remains an opaque design-token fill; glass only adds the
-/// interactive optical response and rim detail on top.
+/// accent rides as the glass material's tint — not as an opaque fill
+/// underneath, which would leave the lensing nothing to refract — so
+/// the CTA stays a live piece of glass that happens to be orange.
 private struct PrimaryGlassSurface: ViewModifier {
     let accent: Color
     let cornerRadius: CGFloat
@@ -77,41 +78,7 @@ private struct PrimaryGlassSurface: ViewModifier {
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         return content
-            .background {
-                shape.fill(accent)
-            }
-            .glassEffect(.regular.interactive(), in: shape)
-            .overlay {
-                shape.stroke(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.46),
-                            Color.black.opacity(0.12),
-                            Color.white.opacity(0.18)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 0.9
-                )
-            }
-            .overlay {
-                GeometryReader { geo in
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.20),
-                            Color.white.opacity(0.06),
-                            Color.clear
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: geo.size.height * 0.52)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                }
-                .clipShape(shape)
-                .allowsHitTesting(false)
-            }
+            .glassEffect(.regular.tint(accent).interactive(), in: shape)
             .shadow(color: accent.opacity(0.18), radius: 18, y: 8)
             .shadow(color: .black.opacity(0.45), radius: 10, y: 5)
             .contentShape(shape)

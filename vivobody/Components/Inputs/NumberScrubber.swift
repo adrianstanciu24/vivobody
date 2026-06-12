@@ -81,7 +81,6 @@ struct NumberScrubber: View {
             )
         }
         .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil, interactive: true)
-        .topSpecularSheen(cornerRadius: 22, intensity: isDragging ? 0.18 : 0.12, height: 0.50)
         .overlay {
             // Bottom inner shadow — gives the chip a sense of
             // containment, like the liquid is sitting in a real

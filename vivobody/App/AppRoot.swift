@@ -68,10 +68,12 @@ struct AppRoot: View {
                     )
                     // Music-style presentation: fills the screen, has
                     // a grabber for swipe-down-to-minimize, and leaves
-                    // the presentation chrome to iOS 26's native glass.
+                    // the presentation chrome to iOS 26's native glass —
+                    // including the system's concentric sheet corner
+                    // radius, so it stays in lockstep with the device's
+                    // own curvature instead of a hardcoded value.
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(28)
                 }
             }
     }

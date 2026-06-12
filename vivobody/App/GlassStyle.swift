@@ -3,13 +3,15 @@
 //  vivobody
 //
 //  iOS 26 Liquid Glass surface vocabulary. Wraps `.glassEffect()`
-//  with project-specific shapes, tints, and the specular top edge
-//  that gives every glass surface a hint of light.
+//  with project-specific shapes and tints, and nothing else — the
+//  system material owns the rim lighting, specular highlights, and
+//  accessibility fallbacks (Reduce Transparency / Increase Contrast).
+//  No hand-drawn strokes or sheens are layered on top: they double
+//  the system's own highlights and don't adapt when the material
+//  changes appearance.
 //
 //  Why a centralised modifier rather than per-site glass calls:
 //    • One file to tweak when iOS reshapes the `.glassEffect` API.
-//    • Guarantees the specular highlight rim is the same on every
-//      card, so the depth language is consistent.
 //    • Lets the rest of the codebase stop reasoning about materials
 //      and just say `.glassCard()` / `.glassChip()`.
 //
@@ -17,11 +19,36 @@
 import SwiftUI
 
 extension View {
-    /// Standard card-shaped Liquid Glass surface. Drop-in replacement
-    /// for the legacy `RoundedRectangle(cornerRadius: 22).fill(.white.opacity(0.04))`
-    /// pattern. Includes a top-edge specular highlight and a faint
-    /// outer stroke so the card reads as a luminous piece of material
-    /// against the pure-black backdrop.
+    /// Plain content surface — the translucent neutral fill of a card
+    /// or row with NO `.glassEffect`. Liquid Glass belongs to the
+    /// floating controls/navigation layer; the scrolling content
+    /// beneath it (stat cards, list rows, tables) is a resting
+    /// surface, so the glass that genuinely floats (search pill, CTA,
+    /// MiniBar, chips) keeps its meaning and lists stay cheap to
+    /// render. Same shape/tint vocabulary as `glassCard`, so swapping
+    /// one for the other is a drop-in.
+    func contentCard(
+        cornerRadius: CGFloat = Radius.card,
+        tint: Color? = nil,
+        bright: Bool = false
+    ) -> some View {
+        modifier(ContentSurfaceModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
+    }
+
+    /// Chip-radius content surface — see `contentCard`.
+    func contentChip(
+        cornerRadius: CGFloat = Radius.chip,
+        tint: Color? = nil,
+        bright: Bool = false
+    ) -> some View {
+        modifier(ContentSurfaceModifier(cornerRadius: cornerRadius, tint: tint, bright: bright))
+    }
+
+    /// Standard card-shaped Liquid Glass surface. Reserve for the
+    /// controls/navigation layer that floats above content; resting
+    /// content cards and rows should use `contentCard` instead. The
+    /// system material supplies the edge lighting and specular
+    /// response; only the translucent fill tint is ours.
     func glassCard(
         cornerRadius: CGFloat = Radius.card,
         tint: Color? = nil,
@@ -47,10 +74,10 @@ extension View {
         modifier(GlassCardModifier(cornerRadius: Radius.pill, tint: tint, bright: bright, interactive: interactive))
     }
 
-    /// Button/control glass that preserves a caller-owned fill color.
-    /// Use this for selected chips and CTAs where the design token must
-    /// remain visually exact; Liquid Glass contributes the interactive
-    /// surface response, rim, and sheen instead of becoming the color.
+    /// Button/control glass carrying a caller-owned accent. The color
+    /// rides as the glass material's own tint — never as an opaque
+    /// fill underneath, which would leave the lensing nothing to
+    /// refract and flatten the control into a painted slab.
     func coloredGlassControl(
         cornerRadius: CGFloat = Radius.chip,
         fill: Color? = nil,
@@ -68,111 +95,6 @@ extension View {
     func softElevation(radius: CGFloat = 12, y: CGFloat = 6, opacity: Double = 0.35) -> some View {
         self.shadow(color: .black.opacity(opacity), radius: radius, y: y)
     }
-
-    /// Carved-glass rim: a bright outer stroke plus a darker inner
-    /// stroke offset one point inwards. Together they read as a
-    /// bevel — light catches the top outer edge while the inner lip
-    /// drops into shadow, the same way real polished glass looks
-    /// against a dark backdrop.
-    func glassRimBevel(
-        cornerRadius: CGFloat,
-        outerWidth: CGFloat = 0.6,
-        innerInset: CGFloat = 1.2
-    ) -> some View {
-        modifier(GlassRimBevelModifier(
-            cornerRadius: cornerRadius,
-            outerWidth: outerWidth,
-            innerInset: innerInset
-        ))
-    }
-
-    /// Top-edge specular sheen — a vertical gradient overlay clipped
-    /// to the shape, fading from a soft white at the top into
-    /// transparency over the upper third. Sells "wet glass" on any
-    /// surface without changing its fill.
-    func topSpecularSheen(
-        cornerRadius: CGFloat,
-        intensity: Double = 0.10,
-        height: Double = 0.38
-    ) -> some View {
-        modifier(TopSpecularSheenModifier(
-            cornerRadius: cornerRadius,
-            intensity: intensity,
-            height: height
-        ))
-    }
-}
-
-private struct GlassRimBevelModifier: ViewModifier {
-    let cornerRadius: CGFloat
-    let outerWidth: CGFloat
-    let innerInset: CGFloat
-
-    func body(content: Content) -> some View {
-        let outer = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        let inner = RoundedRectangle(cornerRadius: max(0, cornerRadius - innerInset), style: .continuous)
-        return content
-            .overlay {
-                outer.stroke(
-                    LinearGradient(
-                        colors: [
-                            Surface.edgeBright,
-                            Surface.edge.opacity(0.55),
-                            Surface.edge.opacity(0.15)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: outerWidth
-                )
-            }
-            .overlay {
-                inner
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Color.black.opacity(0.45),
-                                Color.black.opacity(0.10),
-                                Color.white.opacity(0.06)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.5
-                    )
-                    .padding(innerInset)
-                    .blendMode(.plusDarker)
-                    .opacity(0.6)
-            }
-    }
-}
-
-private struct TopSpecularSheenModifier: ViewModifier {
-    let cornerRadius: CGFloat
-    let intensity: Double
-    let height: Double
-
-    func body(content: Content) -> some View {
-        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        return content
-            .overlay {
-                GeometryReader { geo in
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(intensity),
-                            Color.white.opacity(intensity * 0.35),
-                            Color.clear
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: geo.size.height * CGFloat(height))
-                    .frame(maxWidth: .infinity, alignment: .top)
-                }
-                .clipShape(shape)
-                .allowsHitTesting(false)
-            }
-    }
 }
 
 private struct ColoredGlassControlModifier: ViewModifier {
@@ -182,46 +104,17 @@ private struct ColoredGlassControlModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        let glass: Glass = interactive ? .regular.interactive() : .regular
         return content
             .background {
-                if let fill {
-                    shape.fill(fill)
-                } else {
+                // Neutral (untinted) controls keep the faint surface
+                // wash so tracks and idle chips read as a resting
+                // surface; translucent, so the lensing stays live.
+                if fill == nil {
                     shape.fill(Surface.cardTint)
                 }
             }
-            .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
-            .overlay {
-                shape.stroke(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(fill == nil ? 0.24 : 0.46),
-                            Color.black.opacity(fill == nil ? 0.04 : 0.12),
-                            Color.white.opacity(fill == nil ? 0.10 : 0.18)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: fill == nil ? 0.6 : 0.9
-                )
-            }
-            .overlay {
-                GeometryReader { geo in
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(fill == nil ? 0.08 : 0.20),
-                            Color.white.opacity(fill == nil ? 0.03 : 0.06),
-                            Color.clear
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: geo.size.height * 0.52)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                }
-                .clipShape(shape)
-                .allowsHitTesting(false)
-            }
+            .glassEffect(glass.tint(fill), in: shape)
             .contentShape(shape)
     }
 }
@@ -350,20 +243,26 @@ private struct GlassCardModifier: ViewModifier {
                 }
             }
             .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
-            .overlay {
-                shape
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Surface.edgeBright,
-                                Surface.edge.opacity(0.6),
-                                Surface.edge.opacity(0.2)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: bright ? 0.75 : 0.5
-                    )
+    }
+}
+
+/// Resting content surface: the same translucent fill as
+/// `GlassCardModifier` but without `.glassEffect`, so content cards
+/// and rows don't compete with the floating glass controls above them.
+private struct ContentSurfaceModifier: ViewModifier {
+    let cornerRadius: CGFloat
+    let tint: Color?
+    var bright: Bool = false
+
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        return content
+            .background {
+                if let tint {
+                    shape.fill(tint.opacity(0.14))
+                } else {
+                    shape.fill(bright ? Surface.cardTintBright : Surface.cardTint)
+                }
             }
     }
 }
