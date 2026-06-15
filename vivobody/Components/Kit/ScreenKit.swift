@@ -120,6 +120,8 @@ struct StatStrip: View {
                     .font(valueFont)
                     .foregroundStyle(stat.accent ? Tint.primary : Ink.primary)
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                 if let unit = stat.unit {
                     Text(unit)
                         .font(Typography.metricUnit)

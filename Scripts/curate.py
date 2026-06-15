@@ -13,9 +13,13 @@
 #      python3 Scripts/transform_wger.py   # roster (names + group)
 #      python3 Scripts/curate.py           # our data on top
 #
-#  Records not listed here stay as { name, group } and fall back to the
-#  app's neutral defaults until curated. Everything is validated against
-#  the app enums, so a typo'd muscle/equipment/etc. fails loudly.
+#  Only exercises listed here SHIP. Roster names with no authored data
+#  (the weird wger long tail — cardio, foreign-language dupes, typos,
+#  per-side splits, foam-rolling) are dropped from catalog.json instead
+#  of riding along as neutral-default placeholders, so they never reach
+#  the app even after a future wger regen. To add an exercise, curate it.
+#  Everything is validated against the app enums, so a typo'd
+#  muscle/equipment/etc. fails loudly.
 #
 
 import json
@@ -1285,19 +1289,26 @@ def main():
         for n in missing:
             print(f"  - {n}", file=sys.stderr)
 
-    applied = 0
+    # Build each shipped record fresh from its authored body so no stale
+    # keys survive across runs. Only curated names that exist in the
+    # roster ship; everything else is dropped.
+    curated = []
     for name, body in CURATION.items():
         validate(name, body)
-        rec = by_name.get(name)
-        if rec is None:
+        if name not in by_name:
             continue
-        rec.update(body)
-        applied += 1
+        record = {"name": name}
+        record.update(body)
+        curated.append(record)
+
+    curated.sort(key=lambda r: (r["group"], r["name"].lower()))
 
     with open(CATALOG, "w", encoding="utf-8") as f:
-        json.dump(roster, f, ensure_ascii=False, indent=2)
+        json.dump(curated, f, ensure_ascii=False, indent=2)
 
-    print(f"Curated {applied}/{len(CURATION)} records into {CATALOG}")
+    dropped = len(roster) - len(curated)
+    print(f"Shipped {len(curated)}/{len(CURATION)} curated records into {CATALOG}")
+    print(f"Dropped {dropped} uncurated roster entries (not shipped)")
     if missing:
         print(f"({len(missing)} curated names had no roster match — see warnings)")
 

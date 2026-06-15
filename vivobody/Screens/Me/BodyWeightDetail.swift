@@ -64,10 +64,10 @@ struct BodyWeightDetail: View {
                     chart
                     rangeStrip
                 } else if !entries.isEmpty {
-                    // Single-entry case — show a placeholder rather
-                    // than an empty Charts frame, which otherwise
-                    // renders an awkward blank rectangle.
-                    singleEntryPlaceholder
+                    // Single-entry case — a quiet caption instead of
+                    // an empty Charts frame (which renders a blank
+                    // rectangle) or a boxy placeholder card.
+                    singleEntryHint
                 }
                 if !entries.isEmpty {
                     recentTable
@@ -226,16 +226,11 @@ struct BodyWeightDetail: View {
         .frame(height: 220)
     }
 
-    private var singleEntryPlaceholder: some View {
-        HStack {
-            Spacer()
-            Text("Log another entry to see your trend")
-                .font(Typography.body)
-                .foregroundStyle(Ink.primary.opacity(0.55))
-            Spacer()
-        }
-        .frame(height: 120)
-        .contentChip(cornerRadius: 16)
+    private var singleEntryHint: some View {
+        Text("Log another entry to see your trend")
+            .font(Typography.caption)
+            .foregroundStyle(Ink.primary.opacity(0.45))
+            .frame(maxWidth: .infinity)
     }
 
     // MARK: - Range strip

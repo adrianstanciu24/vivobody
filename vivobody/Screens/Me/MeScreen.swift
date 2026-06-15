@@ -2,18 +2,20 @@
 //  MeScreen.swift
 //  vivobody
 //
-//  Personal tab. Two stacked surfaces:
-//    • Your journey — lifetime totals across all archived sessions
-//      (workouts logged, sets completed, total volume).
-//    • Preferences — defaultable rest seconds, haptics on/off.
+//  Personal tab — a personal dashboard. Stacked surfaces:
+//    • Your journey — lifetime totals + training age.
+//    • Milestones — threshold badges across the lifetime totals.
+//    • Personal records — top standing records, full wall on tap.
+//    • Consistency — current-month calendar + week streak, full
+//      month-paging view on tap.
+//    • Body weight — latest entry + sparkline, linking to detail.
+//    • This month — the current calendar month's recap.
 //
-//  Settings persist via @AppStorage (UserDefaults). The Haptics
-//  engine reads its enabled flag directly from UserDefaults on every
-//  emission, so toggling here takes effect immediately throughout
-//  the app with no extra wiring. The weight unit follows the same
-//  pattern — every display site and every weight scrubber reads
-//  the unit at render time, so flipping the toggle propagates
-//  instantly across the app.
+//  Everything past the journey is gated on having completed history,
+//  so a brand-new user sees only the journey + body-weight prompts.
+//
+//  App configuration lives on SettingsScreen, pushed from the gear
+//  button in the trailing toolbar slot.
 //
 
 import SwiftUI
@@ -21,12 +23,6 @@ import SwiftData
 
 struct MeScreen: View {
     @Bindable var appState: AppState
-
-    /// SwiftData context — needed for the Reset Catalog action,
-    /// which wipes and re-seeds the ExerciseCatalogItem store.
-    /// Pulled from the environment lazily so MeScreen continues
-    /// to render via @Bindable without any constructor changes.
-    @Environment(\.modelContext) private var modelContext
 
     /// All archived sessions. Drives the stats header — we sum
     /// across the full set rather than relying on cached counters,
@@ -41,12 +37,6 @@ struct MeScreen: View {
     @Query(sort: \BodyWeightEntry.date, order: .reverse)
     private var bodyWeightEntries: [BodyWeightEntry]
 
-    @AppStorage(SettingsKey.hapticsEnabled)
-    private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
-
-    @AppStorage(SettingsKey.defaultRestSeconds)
-    private var defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
-
     @AppStorage(SettingsKey.weightUnit)
     private var weightUnitRaw: String = SettingsDefaults.weightUnit
 
@@ -54,49 +44,50 @@ struct MeScreen: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
 
-    @AppStorage(SettingsKey.appearance)
-    private var appearanceRaw: String = SettingsDefaults.appearance
-
-    private var appearance: AppAppearance {
-        AppAppearance(rawValue: appearanceRaw) ?? .system
-    }
-
     /// Drives the inline log sheet presented from the empty-state
     /// card. Populated state navigates to detail (which has its own
     /// log sheet) so the same affordance never collides.
     @State private var logTarget: BodyWeightLogTarget? = nil
-
-    /// Controls the destructive-confirmation alert for "Reset
-    /// Exercise Catalog." Bound to the alert's `isPresented`.
-    @State private var isConfirmingCatalogReset: Bool = false
-
-    /// Common rest values that cover the bulk of strength-training
-    /// programs. Surfaced as a horizontal chip selector — picking a
-    /// value is a single tap with no keyboard or sheet round-trip.
-    private let restOptions: [Int] = [30, 60, 90, 120, 180]
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 statsSection
                     .settleIn(0)
+
                 groupSeparator
-                bodyWeightSection
+                milestonesSection
                     .settleIn(1)
                 groupSeparator
-                preferencesSection
+                personalRecordsSection
                     .settleIn(2)
-                footer
-                    .padding(.top, Space.xxl)
+                groupSeparator
+                consistencySection
                     .settleIn(3)
+                groupSeparator
+                bodyWeightSection
+                    .settleIn(4)
+                groupSeparator
+                monthlyRecapSection
+                    .settleIn(5)
             }
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
-            // Extra tail so the last Progress row clears the floating
-            // tab bar at rest instead of peeking out from under it.
+            // Extra tail so the last row clears the floating tab bar
+            // at rest instead of peeking out from under it.
             .padding(.bottom, Space.section + Space.md)
         }
         .forgeBackground()
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    SettingsScreen()
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Settings")
+            }
+        }
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
@@ -254,9 +245,127 @@ struct MeScreen: View {
                         valueFont: Self.volumeHero
                     )
                     lifetimeLine
+                    if let ageText = completedSessions.trainingAgeText {
+                        Text(ageText)
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                    }
                 }
             }
         }
+    }
+
+    // MARK: - Milestones
+
+    /// Lifetime-progress badges in a horizontal rail. Each tile is a
+    /// goal you're climbing toward (or a cleared category wearing the
+    /// accent) — the achievement layer the odometer only counts.
+    private var milestonesSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Milestones")
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Space.sm) {
+                    ForEach(completedSessions.milestones(unit: weightUnit, prCount: personalRecords)) { milestone in
+                        MilestoneBadge(milestone: milestone)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Personal records
+
+    /// Top standing records as a preview; the full wall is one tap
+    /// away via the header. Renders a quiet prompt when the user has
+    /// history but no exercise tracked across two sessions yet.
+    @ViewBuilder
+    private var personalRecordsSection: some View {
+        let records = completedSessions.personalRecords
+        VStack(alignment: .leading, spacing: Space.md) {
+            if records.isEmpty {
+                SectionHeader(title: "Personal records")
+                Text("Log a lift across two or more sessions to set your first record.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            } else {
+                NavigationLink {
+                    PersonalRecordsScreen()
+                } label: {
+                    SectionHeader(
+                        title: "Personal records",
+                        trailing: records.count > 3 ? "See all" : nil
+                    )
+                }
+                .buttonStyle(.plain)
+
+                VStack(spacing: Space.sm) {
+                    ForEach(Array(records.prefix(3))) { record in
+                        PRRow(record: record, unit: weightUnit)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Consistency
+
+    /// Current-month calendar + week-streak note, tapping through to
+    /// the full month-paging Consistency screen.
+    private var consistencySection: some View {
+        let streak = completedSessions.workoutStreak
+        return VStack(alignment: .leading, spacing: Space.md) {
+            NavigationLink {
+                ConsistencyScreen()
+            } label: {
+                SectionHeader(title: "Consistency", trailing: streakText(streak))
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                ConsistencyScreen()
+            } label: {
+                StreakCalendar(workoutDates: workoutDates, month: Date())
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, Space.sm)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if workoutDates.isEmpty {
+                Text("Your training days light up here as you log workouts.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            }
+        }
+    }
+
+    private func streakText(_ streak: WorkoutStreak) -> String? {
+        guard streak.current > 0 else { return nil }
+        return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
+    }
+
+    // MARK: - This month
+
+    private var monthlyRecapSection: some View {
+        let recap = completedSessions.monthlyRecap
+        return VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "This month", trailing: recap.monthLabel)
+            StatStrip(stats: [
+                Stat(value: "\(recap.workouts)", label: recap.workouts == 1 ? "workout" : "workouts"),
+                Stat(value: WeightFormatter.volumeValue(recap.volume, unit: weightUnit), unit: weightUnit.symbol, label: "volume"),
+                Stat(value: "\(recap.prs)", label: recap.prs == 1 ? "PR" : "PRs", accent: recap.prs > 0),
+            ])
+            .padding(Space.xl)
+            .contentCard()
+        }
+    }
+
+    /// Workout days as start-of-day instants for the calendar.
+    private var workoutDates: Set<Date> {
+        let cal = Calendar.current
+        return Set(completedSessions.compactMap { session in
+            session.completedAt.map { cal.startOfDay(for: $0) }
+        })
     }
 
     /// The odometer's spec line: lifetime workouts · sets · PRs on one
@@ -306,254 +415,6 @@ struct MeScreen: View {
             description: Text("Your lifetime volume, workouts, and sets will land here.")
         )
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    // MARK: - Preferences
-
-    private var preferencesSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Preferences")
-
-            VStack(alignment: .leading, spacing: Space.lg + 2) {
-                appearanceRow
-                rowDivider
-                weightUnitRow
-                rowDivider
-                restRow
-                rowDivider
-                hapticsRow
-                rowDivider
-                resetCatalogRow
-            }
-        }
-        .alert(
-            "Reset Exercise Catalog?",
-            isPresented: $isConfirmingCatalogReset
-        ) {
-            Button("Reset", role: .destructive) {
-                ExerciseCatalogItem.resetToDefaults(in: modelContext)
-                Haptics.thunk()
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Restores the original 90 exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
-        }
-    }
-
-    /// Destructive-action row inside Preferences. Tapping the whole
-    /// row opens a confirmation alert — never single-tap destructive,
-    /// per the rest of the app's pattern (delete set, cancel
-    /// workout, etc.).
-    private var resetCatalogRow: some View {
-        Button {
-            Haptics.soft()
-            isConfirmingCatalogReset = true
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Reset Exercise Catalog")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Restore the original 90 exercises")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer()
-                Image(systemName: "arrow.counterclockwise")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Ink.tertiary)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .padding(.horizontal, Space.md)
-            .padding(.vertical, Space.sm)
-            .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-            .coloredGlassControl(cornerRadius: 16)
-        }
-        .buttonStyle(.plain)
-        .accessibilityHint("Wipes and reseeds the exercise catalog")
-    }
-
-    private var appearanceRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            // No trailing value label: the highlighted chip below is
-            // the single source of selection state (all options are
-            // always visible, so a separate readout would only echo it).
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Appearance")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Light, dark, or follow the system")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(AppAppearance.allCases) { option in
-                        appearanceChip(option)
-                    }
-                }
-            }
-        }
-    }
-
-    private func appearanceChip(_ option: AppAppearance) -> some View {
-        let isSelected = option == appearance
-        return Button {
-            Haptics.selection()
-            appearanceRaw = option.rawValue
-        } label: {
-            Text(option.label)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(option.label)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private var weightUnitRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            // No trailing value label: the highlighted chip below
-            // already carries the selection (both options visible).
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Weight Unit")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Displayed across the app — storage stays canonical")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(WeightUnit.allCases) { unit in
-                        weightUnitChip(unit)
-                    }
-                }
-            }
-        }
-    }
-
-    private func weightUnitChip(_ unit: WeightUnit) -> some View {
-        let isSelected = unit == weightUnit
-        return Button {
-            Haptics.selection()
-            weightUnitRaw = unit.rawValue
-        } label: {
-            VStack(spacing: 2) {
-                Text(unit.symbol)
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
-                Text(unit.displayName)
-                    .font(.system(size: 10, weight: .medium))
-                    .opacity(0.75)
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .frame(maxWidth: .infinity, minHeight: 52)
-            .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(unit.displayName)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private var restRow: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            HStack {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Default Rest")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                    Text("Between sets — used by the rest timer")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                Spacer()
-                Text("\(defaultRestSeconds)s")
-                    .font(.system(size: 15, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(Ink.primary)
-            }
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(restOptions, id: \.self) { seconds in
-                            restChip(seconds: seconds)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private func restChip(seconds: Int) -> some View {
-        let isSelected = defaultRestSeconds == seconds
-        return Button {
-            Haptics.selection()
-            defaultRestSeconds = seconds
-        } label: {
-            Text("\(seconds)s")
-                .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(minWidth: 56, minHeight: 44)
-                .padding(.horizontal, Space.md + 2)
-                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("\(seconds) second rest")
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private var hapticsRow: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Haptics")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Taps and patterns throughout the app")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            Spacer()
-            Toggle("", isOn: Binding(
-                get: { hapticsEnabled },
-                set: { newValue in
-                    hapticsEnabled = newValue
-                    if newValue {
-                        // The @AppStorage write propagates synchronously
-                        // to UserDefaults, so the next Haptics emission
-                        // reads `true` — this soft tap plays as a
-                        // confirmation that haptics just came back on.
-                        Haptics.soft()
-                    }
-                }
-            ))
-            .labelsHidden()
-            .tint(Tint.inProgress)
-        }
-    }
-
-    private var rowDivider: some View {
-        Rectangle()
-            .fill(Surface.edge)
-            .frame(height: 0.5)
-    }
-
-    // MARK: - Footer
-
-    private var footer: some View {
-        VStack(spacing: 6) {
-            Text("vivobody")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, Space.sm)
     }
 
     // MARK: - Derived
