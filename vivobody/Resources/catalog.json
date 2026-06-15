@@ -1849,7 +1849,6 @@
       }
     ],
     "aliases": [
-      "Dumbbell Curl",
       "DB Curl"
     ]
   },
@@ -1963,7 +1962,6 @@
       }
     ],
     "aliases": [
-      "Dumbbell Shrug",
       "DB Shrug"
     ]
   },
@@ -3263,44 +3261,6 @@
     ]
   },
   {
-    "name": "Chin Up",
-    "group": "back",
-    "defaultWeight": 0,
-    "defaultReps": 8,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 1.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "weight": 1.0
-      },
-      {
-        "muscle": "biceps",
-        "weight": 0.7
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.4
-      },
-      {
-        "muscle": "teres",
-        "weight": 0.4
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.2
-      },
-      {
-        "muscle": "forearms",
-        "weight": 0.2
-      }
-    ],
-    "pattern": "pull"
-  },
-  {
     "name": "Chin-ups",
     "group": "back",
     "defaultWeight": 0,
@@ -3335,7 +3295,8 @@
     "pattern": "pull",
     "aliases": [
       "Chin-up",
-      "Chinup"
+      "Chinup",
+      "Chin Up"
     ]
   },
   {
@@ -4105,7 +4066,8 @@
     ],
     "pattern": "pull",
     "aliases": [
-      "Chest-Supported Incline DB Row"
+      "Chest-Supported Incline DB Row",
+      "Dumbbell Prone Row"
     ]
   },
   {
@@ -4237,6 +4199,53 @@
     ]
   },
   {
+    "name": "KB/DB Drags",
+    "group": "back",
+    "defaultWeight": 35,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "lats",
+        "weight": 1.0
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "biceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "teres",
+        "weight": 0.2
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "pull",
+    "aliases": [
+      "Drag Row",
+      "Kettlebell Drag",
+      "Dumbbell Drag"
+    ]
+  },
+  {
     "name": "Kettlebell deadlifts",
     "group": "back",
     "defaultWeight": 53,
@@ -4280,6 +4289,52 @@
     "aliases": [
       "Kettlebell Deadlift",
       "KB Deadlift"
+    ]
+  },
+  {
+    "name": "Kettlebell Row and Rotate",
+    "group": "back",
+    "defaultWeight": 35,
+    "defaultReps": 10,
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "lats",
+        "weight": 1.0
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "biceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "teres",
+        "weight": 0.2
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "pull",
+    "aliases": [
+      "KB Row and Rotate",
+      "Row to Rotation"
     ]
   },
   {
@@ -4954,7 +5009,8 @@
     "aliases": [
       "Single-Arm Dumbbell Row",
       "One-Arm Row",
-      "DB Row"
+      "DB Row",
+      "Single Arm Bent Over Row"
     ]
   },
   {
@@ -5257,7 +5313,10 @@
     "pattern": "pull",
     "aliases": [
       "Pull-up",
-      "Pullup"
+      "Pullup",
+      "Pull Ups",
+      "Speed Pull Ups",
+      "Weighted Pull Ups"
     ]
   },
   {
@@ -5332,8 +5391,7 @@
     ],
     "pattern": "pull",
     "aliases": [
-      "Wide-Grip Pull-up",
-      "Wide Pull Up"
+      "Wide-Grip Pull-up"
     ]
   },
   {
@@ -5472,7 +5530,6 @@
       }
     ],
     "aliases": [
-      "Bird Dog",
       "Quadruped Arm and Leg Raise"
     ]
   },
@@ -5813,10 +5870,7 @@
         "weight": 0.2
       }
     ],
-    "pattern": "pull",
-    "aliases": [
-      "T-Bar Row"
-    ]
+    "pattern": "pull"
   },
   {
     "name": "Scapula Pulls",
@@ -5880,48 +5934,6 @@
     ]
   },
   {
-    "name": "Seated Cable Row",
-    "group": "back",
-    "defaultWeight": 100,
-    "defaultReps": 10,
-    "equipment": "cable",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "weight": 1.0
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.7
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.7
-      },
-      {
-        "muscle": "biceps",
-        "weight": 0.4
-      },
-      {
-        "muscle": "teres",
-        "weight": 0.4
-      },
-      {
-        "muscle": "forearms",
-        "weight": 0.2
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.2
-      }
-    ],
-    "pattern": "pull"
-  },
-  {
     "name": "Seated Cable Rows",
     "group": "back",
     "defaultWeight": 100,
@@ -5956,7 +5968,8 @@
     "pattern": "pull",
     "aliases": [
       "Seated Row",
-      "Cable Row"
+      "Cable Row",
+      "Seated Cable Row"
     ]
   },
   {
@@ -6408,6 +6421,32 @@
     ]
   },
   {
+    "name": "Supine Thoracic Extensions",
+    "group": "back",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "lowerBack",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
     "name": "T-Bar row",
     "group": "back",
     "defaultWeight": 90,
@@ -6443,6 +6482,28 @@
     "aliases": [
       "T-Bar Row"
     ]
+  },
+  {
+    "name": "Thoracic Extensions",
+    "group": "back",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "lowerBack",
+        "weight": 1.0
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
   },
   {
     "name": "Towel Superman",
@@ -6842,7 +6903,9 @@
     ],
     "aliases": [
       "YWT Raise",
-      "YTW"
+      "YTW",
+      "Prone TYW's",
+      "TYWs"
     ]
   },
   {
@@ -6942,7 +7005,8 @@
     "aliases": [
       "Dumbbell Bench Press",
       "DB Bench",
-      "DB Press"
+      "DB Press",
+      "Dumbbell Chest Press"
     ]
   },
   {
@@ -7021,7 +7085,6 @@
       }
     ],
     "aliases": [
-      "Pec Deck",
       "Chest Fly Machine"
     ]
   },
@@ -7125,8 +7188,7 @@
       }
     ],
     "aliases": [
-      "Cable Crossover",
-      "Cable Fly"
+      "Cable Crossover"
     ]
   },
   {
@@ -7400,7 +7462,6 @@
       }
     ],
     "aliases": [
-      "Dumbbell Pullover",
       "Cross-Bench Pullover"
     ]
   },
@@ -8192,6 +8253,45 @@
     "defaultDuration": 30
   },
   {
+    "name": "Isometric 3-Sec Wall Holds",
+    "group": "chest",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "aliases": [
+      "Isometric Wall Press"
+    ]
+  },
+  {
     "name": "Isometric Wipers",
     "group": "chest",
     "defaultWeight": 0,
@@ -8220,6 +8320,44 @@
       }
     ],
     "pattern": "push"
+  },
+  {
+    "name": "KB Press-Ups with Bands",
+    "group": "chest",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.64,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.2
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Banded Push-Up",
+      "Band-Resisted Push-Up"
+    ]
   },
   {
     "name": "Larsen Press",
@@ -8450,6 +8588,48 @@
       }
     ],
     "pattern": "push"
+  },
+  {
+    "name": "Medicine Ball Punch Throw",
+    "group": "chest",
+    "defaultWeight": 8,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Med Ball Punch",
+      "Med Ball Press Throw"
+    ]
   },
   {
     "name": "No Leg Drive Dumbbell Chest Press",
@@ -8902,6 +9082,81 @@
     "pattern": "push"
   },
   {
+    "name": "Strict Press-Ups",
+    "group": "chest",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.64,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.2
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Strict Push-Up",
+      "Strict Push-Ups"
+    ]
+  },
+  {
+    "name": "Supine Med Ball Chest Pass",
+    "group": "chest",
+    "defaultWeight": 8,
+    "defaultReps": 12,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Lying Med Ball Chest Pass"
+    ]
+  },
+  {
     "name": "Suspended crossess",
     "group": "chest",
     "defaultWeight": 0,
@@ -8997,7 +9252,6 @@
     ],
     "pattern": "push",
     "aliases": [
-      "Push-up",
       "Push Up",
       "Pushup"
     ]
@@ -9199,6 +9453,86 @@
         "muscle": "glutes",
         "weight": 0.4
       }
+    ],
+    "aliases": [
+      "Medicine Ball Slams",
+      "Kneeling Med Ball Slams"
+    ]
+  },
+  {
+    "name": "Banded Pallof Split Jerks",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Pallof Split Jerk",
+      "Banded Pallof Jerk"
+    ]
+  },
+  {
+    "name": "Banded Rotations",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Banded Trunk Rotation",
+      "Band Woodchop"
     ]
   },
   {
@@ -9993,10 +10327,7 @@
       }
     ],
     "trackingMode": "duration",
-    "defaultDuration": 60,
-    "aliases": [
-      "Plank"
-    ]
+    "defaultDuration": 60
   },
   {
     "name": "Front Wood Chop",
@@ -10238,7 +10569,10 @@
       }
     ],
     "trackingMode": "duration",
-    "defaultDuration": 30
+    "defaultDuration": 30,
+    "aliases": [
+      "Supine Core Holds"
+    ]
   },
   {
     "name": "Incline Crunches",
@@ -10378,6 +10712,112 @@
     ]
   },
   {
+    "name": "Kneeling Pallof Iso Holds",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "aliases": [
+      "Kneeling Pallof Hold"
+    ]
+  },
+  {
+    "name": "Kneeling Rotational Throws",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Kneeling Rotational Med Ball Throw"
+    ]
+  },
+  {
+    "name": "Kneeling Rotations",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
     "name": "L-sit",
     "group": "core",
     "defaultWeight": 0,
@@ -10462,6 +10902,130 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
+    ],
+    "aliases": [
+      "Landmine Rotations"
+    ]
+  },
+  {
+    "name": "Lateral Plank Walk",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.7
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Lateral Plank Walkout",
+      "Plank Walk",
+      "Lateral Plank Walks"
+    ]
+  },
+  {
+    "name": "Lateral Shuffle to MB Throw",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Shuffle to Med Ball Throw"
+    ]
+  },
+  {
+    "name": "Leg Lowers with 2-Sec Pause",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Tempo Leg Lowers",
+      "Paused Leg Lowers"
     ]
   },
   {
@@ -10553,9 +11117,6 @@
         "muscle": "quads",
         "weight": 0.2
       }
-    ],
-    "aliases": [
-      "Lying Leg Raise"
     ]
   },
   {
@@ -10633,8 +11194,38 @@
       }
     ],
     "aliases": [
-      "Leg Raise",
       "Lying Leg Raises"
+    ]
+  },
+  {
+    "name": "Manual Iso Holds",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 20,
+    "aliases": [
+      "Manual Resistance Iso Hold",
+      "Partner Iso Hold"
     ]
   },
   {
@@ -10805,6 +11396,45 @@
     ]
   },
   {
+    "name": "Pallof Wall Iso Holds",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "aliases": [
+      "Pallof Iso Hold",
+      "Wall Pallof Hold",
+      "Pallof Max Effort Iso Holds",
+      "Pallof Max Effort Iso Holds (3-Secs)",
+      "Palloff Iso Holds (20s E.S.)"
+    ]
+  },
+  {
     "name": "Plank",
     "group": "core",
     "defaultWeight": 0,
@@ -10830,6 +11460,79 @@
     ],
     "trackingMode": "duration",
     "defaultDuration": 60
+  },
+  {
+    "name": "Plank Clockface with Bands (warm-up)",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core"
+  },
+  {
+    "name": "Plank Holds with Elevated Hands",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 45,
+    "aliases": [
+      "Incline Plank Hold",
+      "Hands-Elevated Plank"
+    ]
   },
   {
     "name": "Plank Jacks",
@@ -10879,6 +11582,59 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
+    ],
+    "aliases": [
+      "Plank with Arm Reach"
+    ]
+  },
+  {
+    "name": "Plank Row with Toe Touch (warm-up)",
+    "group": "core",
+    "defaultWeight": 15,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lats",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "biceps",
+        "weight": 0.2
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Plank Row with Toe Touch (core)",
+      "Plank Row with Toe Touch"
     ]
   },
   {
@@ -10972,6 +11728,32 @@
         "weight": 0.4
       }
     ]
+  },
+  {
+    "name": "Quadruped Rotations",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
   },
   {
     "name": "Reverse crunch",
@@ -11102,6 +11884,87 @@
     ]
   },
   {
+    "name": "Rotational Med Ball Slams (warm-up)",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultReps": 12,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "lats",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Rotational Slam",
+      "Side Med Ball Slam",
+      "Rotational Slams"
+    ]
+  },
+  {
+    "name": "Rotational Plank",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Plank Rotation",
+      "Thread the Needle Plank"
+    ]
+  },
+  {
     "name": "Russian Twist",
     "group": "core",
     "defaultWeight": 0,
@@ -11122,7 +11985,8 @@
       }
     ],
     "aliases": [
-      "Russian Twists"
+      "Russian Twists",
+      "Russian Twists with Med Ball"
     ]
   },
   {
@@ -11201,6 +12065,28 @@
     ]
   },
   {
+    "name": "Seated Rotations",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
     "name": "Side Bends on Machine",
     "group": "core",
     "defaultWeight": 70,
@@ -11269,9 +12155,6 @@
         "muscle": "forearms",
         "weight": 0.2
       }
-    ],
-    "aliases": [
-      "Dumbbell Side Bend"
     ]
   },
   {
@@ -11297,7 +12180,9 @@
     "trackingMode": "duration",
     "defaultDuration": 45,
     "aliases": [
-      "Side Plank Hold"
+      "Side Plank Hold",
+      "Lateral Isometric Hold",
+      "Lateral Isometric Holds"
     ]
   },
   {
@@ -11323,6 +12208,41 @@
     "trackingMode": "duration",
     "defaultDuration": 30,
     "movementType": "mobility"
+  },
+  {
+    "name": "Single Arm MB Holds",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 1,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "aliases": [
+      "Single Arm Med Ball Hold",
+      "Offset Med Ball Hold"
+    ]
   },
   {
     "name": "Sit Up Elbow Thrust",
@@ -11435,6 +12355,82 @@
     ]
   },
   {
+    "name": "Split Stance Rotational Throws",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Split Stance Med Ball Throw",
+      "Rotational Med Ball Throw"
+    ]
+  },
+  {
+    "name": "Standing Plate Rotations",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultReps": 15,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core"
+  },
+  {
     "name": "Standing Side Crunches",
     "group": "core",
     "defaultWeight": 0,
@@ -11526,6 +12522,71 @@
     "defaultDuration": 20
   },
   {
+    "name": "Straight Arm Straight Leg Sit Ups",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Long-Arm Sit-Up",
+      "Straight-Leg Sit-Up"
+    ]
+  },
+  {
+    "name": "Straight Leg Sit Ups with Med Ball",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 12,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Med Ball Straight-Leg Sit-Up"
+    ]
+  },
+  {
     "name": "Suitcase Carry",
     "group": "core",
     "defaultWeight": 50,
@@ -11559,7 +12620,83 @@
     ],
     "pattern": "carry",
     "trackingMode": "duration",
-    "defaultDuration": 40
+    "defaultDuration": 40,
+    "aliases": [
+      "Uni-Lateral Farmer Walks",
+      "Unilateral Farmer Walk"
+    ]
+  },
+  {
+    "name": "Supine Core Holds with Weight",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultReps": 1,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "aliases": [
+      "Weighted Hollow Hold",
+      "Weighted Supine Core Hold"
+    ]
+  },
+  {
+    "name": "Swiss Ball Plank Circles",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Stability Ball Plank Circles",
+      "Swiss Ball Stir-the-Pot"
+    ]
   },
   {
     "name": "Toe Taps",
@@ -11744,6 +12881,47 @@
     ]
   },
   {
+    "name": "TRX Rollouts",
+    "group": "core",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.7
+      },
+      {
+        "muscle": "lats",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Suspension Rollout",
+      "TRX Ab Rollout"
+    ]
+  },
+  {
     "name": "Tuck L-sit",
     "group": "core",
     "defaultWeight": 0,
@@ -11834,6 +13012,72 @@
     ]
   },
   {
+    "name": "Weighted Leg Lowers",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultReps": 12,
+    "equipment": "dumbbell",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.2
+      }
+    ],
+    "aliases": [
+      "Weighted Lying Leg Lowers"
+    ]
+  },
+  {
+    "name": "Weighted ½ Deadbugs (warm-up)",
+    "group": "core",
+    "defaultWeight": 10,
+    "defaultReps": 12,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "abs",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.2
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core"
+  },
+  {
     "name": "Windshield Wipers",
     "group": "core",
     "defaultWeight": 0,
@@ -11856,6 +13100,47 @@
         "muscle": "hipFlexors",
         "weight": 0.4
       }
+    ]
+  },
+  {
+    "name": "½ Kneeling Rotational Med Ball Throws",
+    "group": "core",
+    "defaultWeight": 8,
+    "defaultReps": 10,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "weight": 1.0
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "core",
+    "aliases": [
+      "Half-Kneeling Rotational Med Ball Throw"
     ]
   },
   {
@@ -11951,6 +13236,41 @@
     ]
   },
   {
+    "name": "Ali Shuffle",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "calves",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30
+  },
+  {
     "name": "Alternate back lunges",
     "group": "legs",
     "defaultWeight": 0,
@@ -11979,6 +13299,128 @@
       },
       {
         "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Altitude Landings",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Drop Landing",
+      "Depth Drop"
+    ]
+  },
+  {
+    "name": "Altitude Landings to Jump",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Depth Jump",
+      "Drop Jump"
+    ]
+  },
+  {
+    "name": "Altitude Landings to Lateral Shuffle",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
         "weight": 0.4
       },
       {
@@ -12025,6 +13467,89 @@
     "defaultDuration": 30
   },
   {
+    "name": "Banded 1.5 Squats",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat"
+  },
+  {
+    "name": "Banded Accentuated CMJ",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 8,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Banded Countermovement Jump"
+    ]
+  },
+  {
     "name": "Banded Ankle Mobility",
     "group": "legs",
     "defaultWeight": 0,
@@ -12047,7 +13572,57 @@
     "movementType": "mobility"
   },
   {
-    "name": "Banded Clamshell",
+    "name": "Banded Glute Stretch",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "band",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.4
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30,
+    "movementType": "mobility"
+  },
+  {
+    "name": "Banded Hip Floss",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "band",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "hipFlexors",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
+    "name": "Banded Side Clams",
     "group": "legs",
     "defaultWeight": 0,
     "defaultReps": 15,
@@ -12060,8 +13635,75 @@
       {
         "muscle": "glutes",
         "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
       }
+    ],
+    "aliases": [
+      "Banded Clamshell"
     ]
+  },
+  {
+    "name": "Banded Side Walks",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "band",
+    "mechanic": "isolation",
+    "plane": "frontal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.4
+      }
+    ],
+    "aliases": [
+      "Lateral Walk",
+      "Banded Lateral Walk",
+      "Monster Walk"
+    ]
+  },
+  {
+    "name": "Banded Single Leg Hip Thrusts",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge"
   },
   {
     "name": "Barbell Full Squat",
@@ -12623,6 +14265,48 @@
     "pattern": "hinge"
   },
   {
+    "name": "CMJ with Hands on Hips",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 8,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Countermovement Jump",
+      "Vertical Jump"
+    ]
+  },
+  {
     "name": "Copenhagen Adduction Exercise",
     "group": "legs",
     "defaultWeight": 0,
@@ -12676,6 +14360,48 @@
       }
     ],
     "pattern": "squat"
+  },
+  {
+    "name": "Criss Cross Jump",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 20,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "calves",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Crossover Jacks",
+      "Cross Jacks"
+    ]
   },
   {
     "name": "Crossbody Hamstring Stretch",
@@ -12749,6 +14475,40 @@
     ]
   },
   {
+    "name": "Downward Dog with Toe Touch",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 8,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "hamstrings",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lats",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.2
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
     "name": "Dragon squat",
     "group": "legs",
     "defaultWeight": 0,
@@ -12785,6 +14545,49 @@
       }
     ],
     "pattern": "squat"
+  },
+  {
+    "name": "Dumbbell CMJ (2 kg each hand)",
+    "group": "legs",
+    "defaultWeight": 5,
+    "defaultReps": 8,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Dumbbell Countermovement Jump",
+      "Loaded CMJ",
+      "Dumbbell CMJ"
+    ]
   },
   {
     "name": "Dumbbell Deadlift",
@@ -13126,32 +14929,6 @@
     "pattern": "lunge"
   },
   {
-    "name": "Dumbbell Single-leg Hip Thrust",
-    "group": "legs",
-    "defaultWeight": 40,
-    "defaultReps": 12,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hamstrings",
-        "weight": 0.7
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      }
-    ],
-    "pattern": "hinge"
-  },
-  {
     "name": "dumbbell snatch",
     "group": "legs",
     "defaultWeight": 40,
@@ -13326,6 +15103,105 @@
     ]
   },
   {
+    "name": "Falling CMJ",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 8,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Falling Countermovement Jump"
+    ]
+  },
+  {
+    "name": "Fast Pogos",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 25,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "calves",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "shins",
+        "weight": 0.2
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Fast Ankle Hops"
+    ]
+  },
+  {
+    "name": "Fire Hydrants",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.2,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      }
+    ]
+  },
+  {
     "name": "Frog Stretch",
     "group": "legs",
     "defaultWeight": 0,
@@ -13452,26 +15328,26 @@
     ]
   },
   {
-    "name": "Good Morning",
+    "name": "Goblet Reverse Lunge",
     "group": "legs",
-    "defaultWeight": 95,
-    "defaultReps": 8,
-    "equipment": "barbell",
+    "defaultWeight": 35,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
     "mechanic": "compound",
     "plane": "sagittal",
-    "laterality": "bilateral",
+    "laterality": "unilateral",
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "hamstrings",
+        "muscle": "quads",
         "weight": 1.0
       },
       {
         "muscle": "glutes",
-        "weight": 0.7
+        "weight": 1.0
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "hamstrings",
         "weight": 0.7
       },
       {
@@ -13479,11 +15355,144 @@
         "weight": 0.4
       },
       {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
         "muscle": "abs",
         "weight": 0.2
       }
     ],
-    "pattern": "hinge"
+    "pattern": "lunge"
+  },
+  {
+    "name": "Goblet Reverse Lunge with Knee Raise",
+    "group": "legs",
+    "defaultWeight": 30,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Goblet Split Squat",
+    "group": "legs",
+    "defaultWeight": 35,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Goblet Squat to Press",
+    "group": "legs",
+    "defaultWeight": 40,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.2
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Goblet Thruster"
+    ]
   },
   {
     "name": "Good Mornings",
@@ -13637,6 +15646,36 @@
     "pattern": "squat"
   },
   {
+    "name": "Hinge with Broomstick",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "hamstrings",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge"
+  },
+  {
     "name": "Hip Bridge",
     "group": "legs",
     "defaultWeight": 0,
@@ -13732,9 +15771,48 @@
         "weight": 0.7
       }
     ],
-    "pattern": "hinge",
+    "pattern": "hinge"
+  },
+  {
+    "name": "Hop + Hold",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
     "aliases": [
-      "Barbell Hip Thrust"
+      "Stick the Landing",
+      "Jump and Stick"
     ]
   },
   {
@@ -13772,6 +15850,128 @@
     "pattern": "squat",
     "trackingMode": "duration",
     "defaultDuration": 30
+  },
+  {
+    "name": "Ice Skaters",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 20,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge",
+    "aliases": [
+      "Skater Hops",
+      "Speed Skaters"
+    ]
+  },
+  {
+    "name": "Ice Skaters to Vertical Hop",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 16,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Ice Skaters with Medicine Ball",
+    "group": "legs",
+    "defaultWeight": 10,
+    "defaultReps": 16,
+    "equipment": "other",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
   },
   {
     "name": "Isometric Squat to Failure",
@@ -13867,6 +16067,44 @@
     "pattern": "hinge"
   },
   {
+    "name": "Kettlebell RDL (warm-up)",
+    "group": "legs",
+    "defaultWeight": 35,
+    "defaultReps": 12,
+    "equipment": "kettlebell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "hamstrings",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.7
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge"
+  },
+  {
     "name": "kettlebell sumo deadlift",
     "group": "legs",
     "defaultWeight": 53,
@@ -13896,48 +16134,6 @@
       {
         "muscle": "lowerBack",
         "weight": 0.4
-      }
-    ],
-    "pattern": "hinge"
-  },
-  {
-    "name": "Kettlebell Swing",
-    "group": "legs",
-    "defaultWeight": 35,
-    "defaultReps": 15,
-    "equipment": "kettlebell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.7
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      },
-      {
-        "muscle": "abs",
-        "weight": 0.4
-      },
-      {
-        "muscle": "forearms",
-        "weight": 0.2
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.2
       }
     ],
     "pattern": "hinge"
@@ -13974,7 +16170,10 @@
         "weight": 0.4
       }
     ],
-    "pattern": "hinge"
+    "pattern": "hinge",
+    "aliases": [
+      "Kettlebell Swing"
+    ]
   },
   {
     "name": "Kickstand RDL",
@@ -14028,6 +16227,128 @@
     ]
   },
   {
+    "name": "Landmine Reverse Lunge with Knee Raise",
+    "group": "legs",
+    "defaultWeight": 50,
+    "defaultReps": 10,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Landmine Single Leg RDL",
+    "group": "legs",
+    "defaultWeight": 50,
+    "defaultReps": 10,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "hamstrings",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge"
+  },
+  {
+    "name": "Landmine Squat",
+    "group": "legs",
+    "defaultWeight": 70,
+    "defaultReps": 10,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat"
+  },
+  {
     "name": "Landmine Squat to Press",
     "group": "legs",
     "defaultWeight": 65,
@@ -14060,6 +16381,41 @@
       }
     ],
     "pattern": "squat"
+  },
+  {
+    "name": "Lateral Lunge Swings",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "frontal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "adductors",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.7
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge",
+    "movementType": "mobility"
   },
   {
     "name": "Lateral Push Off",
@@ -14098,39 +16454,6 @@
       }
     ],
     "pattern": "lunge"
-  },
-  {
-    "name": "Lateral Walk",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 20,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "frontal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      },
-      {
-        "muscle": "adductors",
-        "weight": 0.2
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.2
-      }
-    ],
-    "aliases": [
-      "Banded Lateral Walk",
-      "Monster Walk"
-    ]
   },
   {
     "name": "Leg Curl",
@@ -14196,7 +16519,6 @@
     ],
     "aliases": [
       "Lying Leg Curl",
-      "Leg Curl",
       "Hamstring Curl"
     ]
   },
@@ -14431,6 +16753,90 @@
       }
     ],
     "pattern": "squat"
+  },
+  {
+    "name": "Lunge + Overhead Press (warm-up)",
+    "group": "legs",
+    "defaultWeight": 20,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.2
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
+  },
+  {
+    "name": "Lunge Matrix",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "lunge"
   },
   {
     "name": "Lunges",
@@ -14810,6 +17216,48 @@
     "pattern": "squat"
   },
   {
+    "name": "Pogos",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 20,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "calves",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "shins",
+        "weight": 0.2
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "squat",
+    "aliases": [
+      "Pogo Hops",
+      "Ankle Hops"
+    ]
+  },
+  {
     "name": "Prisoner Squat",
     "group": "legs",
     "defaultWeight": 0,
@@ -14835,6 +17283,48 @@
       {
         "muscle": "adductors",
         "weight": 0.4
+      }
+    ],
+    "pattern": "squat"
+  },
+  {
+    "name": "Prisoner Squats with Overhead Reach",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.2
       }
     ],
     "pattern": "squat"
@@ -14877,6 +17367,31 @@
       {
         "muscle": "glutes",
         "weight": 1.0
+      }
+    ]
+  },
+  {
+    "name": "Quadruped Hip Extensions",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.4
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.4
       }
     ]
   },
@@ -15195,6 +17710,43 @@
     "pattern": "squat"
   },
   {
+    "name": "Single Leg Clockface",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 8,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.5,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "adductors",
+        "weight": 0.4
+      },
+      {
+        "muscle": "calves",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ]
+  },
+  {
     "name": "Single Leg Extension",
     "group": "legs",
     "defaultWeight": 50,
@@ -15256,6 +17808,40 @@
     "trackingMode": "duration",
     "defaultDuration": 30,
     "movementType": "mobility"
+  },
+  {
+    "name": "Single Leg Hip Thrusts (warm-up)",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.4,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge",
+    "aliases": [
+      "Dumbbell Single-leg Hip Thrust",
+      "Single-leg Hip Thrust"
+    ]
   },
   {
     "name": "Single Leg RDL",
@@ -15430,6 +18016,45 @@
       }
     ],
     "pattern": "lunge"
+  },
+  {
+    "name": "Slow Hands, Fast Feet",
+    "group": "legs",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.3,
+    "involvement": [
+      {
+        "muscle": "calves",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "hipFlexors",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30
   },
   {
     "name": "Slow Squat",
@@ -15746,10 +18371,7 @@
         "weight": 0.2
       }
     ],
-    "pattern": "squat",
-    "aliases": [
-      "Smith Machine Squat"
-    ]
+    "pattern": "squat"
   },
   {
     "name": "Standing Adduction (Cable)",
@@ -16030,6 +18652,51 @@
         "muscle": "shins",
         "weight": 1.0
       }
+    ]
+  },
+  {
+    "name": "Trap Bar Deadlift",
+    "group": "legs",
+    "defaultWeight": 225,
+    "defaultReps": 6,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "glutes",
+        "weight": 1.0
+      },
+      {
+        "muscle": "quads",
+        "weight": 1.0
+      },
+      {
+        "muscle": "hamstrings",
+        "weight": 0.7
+      },
+      {
+        "muscle": "lowerBack",
+        "weight": 0.7
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "hinge",
+    "aliases": [
+      "Hex Bar Deadlift"
     ]
   },
   {
@@ -16404,6 +19071,71 @@
         "weight": 0.4
       }
     ]
+  },
+  {
+    "name": "Banded External Rotations",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "band",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "teres",
+        "weight": 1.0
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.2
+      }
+    ]
+  },
+  {
+    "name": "Banded Shadow Box",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "band",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "forearms",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "trackingMode": "duration",
+    "defaultDuration": 30
   },
   {
     "name": "Barbell Clean and press",
@@ -17085,6 +19817,36 @@
     ]
   },
   {
+    "name": "Floor Slides",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "defaultReps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.2
+      }
+    ],
+    "movementType": "mobility"
+  },
+  {
     "name": "Front neck stretch",
     "group": "shoulders",
     "defaultWeight": 0,
@@ -17229,8 +19991,7 @@
     ],
     "pattern": "push",
     "aliases": [
-      "HSPU",
-      "Handstand Pushup"
+      "HSPU"
     ]
   },
   {
@@ -17506,6 +20267,47 @@
     "aliases": [
       "Landmine Press",
       "Landmine Shoulder Press"
+    ]
+  },
+  {
+    "name": "Landmine Punch",
+    "group": "shoulders",
+    "defaultWeight": 45,
+    "defaultReps": 10,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "transverse",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.7
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Landmine Press-Out"
     ]
   },
   {
@@ -17794,6 +20596,35 @@
     "pattern": "push"
   },
   {
+    "name": "Prone Banded Press",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "defaultReps": 15,
+    "equipment": "band",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "rhomboids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "teres",
+        "weight": 0.4
+      }
+    ]
+  },
+  {
     "name": "Pseudo Planche Push-up",
     "group": "shoulders",
     "defaultWeight": 0,
@@ -17829,6 +20660,37 @@
     "aliases": [
       "Pseudo Planche Pushup"
     ]
+  },
+  {
+    "name": "Punch Iso Holds",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "defaultReps": 1,
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "plane": "transverse",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.4
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.2
+      }
+    ],
+    "trackingMode": "duration",
+    "defaultDuration": 30
   },
   {
     "name": "Push OHP",
@@ -17925,32 +20787,8 @@
     "aliases": [
       "Rear Delt Fly",
       "Reverse Fly",
-      "Bent-Over Lateral Raise"
-    ]
-  },
-  {
-    "name": "Rear Delt Raises",
-    "group": "shoulders",
-    "defaultWeight": 15,
-    "defaultReps": 15,
-    "equipment": "dumbbell",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "weight": 1.0
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.4
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.4
-      }
+      "Bent-Over Lateral Raise",
+      "Rear Delt Raises"
     ]
   },
   {
@@ -18686,6 +21524,85 @@
     "aliases": [
       "EZ-Bar Upright Row",
       "Upright Row"
+    ]
+  },
+  {
+    "name": "½ Kneeling Dumbbell Press",
+    "group": "shoulders",
+    "defaultWeight": 25,
+    "defaultReps": 10,
+    "equipment": "dumbbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "traps",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Half-Kneeling Dumbbell Press",
+      "Half Kneeling DB Press"
+    ]
+  },
+  {
+    "name": "½ Kneeling Landmine Press",
+    "group": "shoulders",
+    "defaultWeight": 45,
+    "defaultReps": 10,
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "unilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "deltoids",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "pectorals",
+        "weight": 0.7
+      },
+      {
+        "muscle": "serratus",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      },
+      {
+        "muscle": "obliques",
+        "weight": 0.2
+      }
+    ],
+    "pattern": "push",
+    "aliases": [
+      "Half-Kneeling Landmine Press"
     ]
   }
 ]

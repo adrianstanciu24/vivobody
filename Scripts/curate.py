@@ -89,7 +89,7 @@ CURATION = {
                       aliases=["BP", "Flat Bench", "Barbell Bench"]),
     "Benchpress Dumbbells": ex("chest", "dumbbell", "compound", "push", weight=50, reps=8,
                                prime=["pectorals"], major=["triceps"], minor=["deltoids"],
-                               aliases=["Dumbbell Bench Press", "DB Bench", "DB Press"]),
+                               aliases=["Dumbbell Bench Press", "DB Bench", "DB Press", "Dumbbell Chest Press"]),
     "Incline Dumbbell Press": ex("chest", "dumbbell", "compound", "push", weight=40, reps=8,
                                  prime=["pectorals"], major=["deltoids"], minor=["triceps"],
                                  aliases=["Incline DB Press"]),
@@ -111,23 +111,23 @@ CURATION = {
                            aliases=["Barbell Row", "Bent-Over Row", "BB Row"]),
     "Pull-ups": ex("back", "bodyweight", "compound", "pull", weight=0, reps=8, bw=1.0,
                    prime=["lats"], major=["biceps"], minor=["teres", "rhomboids", "forearms"],
-                   aliases=["Pull-up", "Pullup"]),
+                   aliases=["Pull-up", "Pullup", "Pull Ups", "Speed Pull Ups", "Weighted Pull Ups"]),
     "Chin-ups": ex("back", "bodyweight", "compound", "pull", weight=0, reps=8, bw=1.0,
                    prime=["lats", "biceps"], minor=["teres", "rhomboids", "forearms"],
-                   aliases=["Chin-up", "Chinup"]),
+                   aliases=["Chin-up", "Chinup", "Chin Up"]),
     "Lat Pull Down": ex("back", "cable", "compound", "pull", weight=100, reps=10,
                         prime=["lats"], major=["biceps"], minor=["teres", "rhomboids"],
                         aliases=["Lat Pulldown", "Pulldown"]),
     "Seated Cable Rows": ex("back", "cable", "compound", "pull", weight=100, reps=10,
                             prime=["lats", "rhomboids"], major=["biceps"],
-                            minor=["traps", "teres"], aliases=["Seated Row", "Cable Row"]),
+                            minor=["traps", "teres"], aliases=["Seated Row", "Cable Row", "Seated Cable Row"]),
     "T-Bar row": ex("back", "machine", "compound", "pull", weight=90, reps=8,
                     prime=["lats", "rhomboids"], major=["biceps"], minor=["traps", "teres"],
                     aliases=["T-Bar Row"]),
     "One Arm Bent Row": ex("back", "dumbbell", "compound", "pull", weight=60, reps=10,
                            lat="unilateral", prime=["lats", "rhomboids"], major=["biceps"],
                            minor=["traps", "teres"],
-                           aliases=["Single-Arm Dumbbell Row", "One-Arm Row", "DB Row"]),
+                           aliases=["Single-Arm Dumbbell Row", "One-Arm Row", "DB Row", "Single Arm Bent Over Row"]),
 
     # ---- Shoulders ----
     "Overhead Press": ex("shoulders", "barbell", "compound", "push", weight=95, reps=8,
@@ -215,7 +215,7 @@ CURATION = {
                             aliases=["Front Raise", "Plate Front Raise"]),
     "Rear Delt Raise": ex("shoulders", "dumbbell", "isolation", None, weight=15, reps=15,
                           prime=["deltoids"], minor=["traps", "rhomboids"],
-                          aliases=["Rear Delt Fly", "Reverse Fly", "Bent-Over Lateral Raise"]),
+                          aliases=["Rear Delt Fly", "Reverse Fly", "Bent-Over Lateral Raise", "Rear Delt Raises"]),
     "Upright Row w/ Dumbbells": ex("shoulders", "dumbbell", "compound", "pull", weight=25, reps=12,
                                    prime=["deltoids", "traps"], minor=["biceps"],
                                    aliases=["Upright Row", "Dumbbell Upright Row"]),
@@ -297,13 +297,13 @@ CURATION = {
                           prime=["abs"], major=["hipFlexors"], minor=["obliques"],
                           aliases=["Leg Raise", "Lying Leg Raises"]),
     "Russian Twist": ex("core", "bodyweight", "isolation", None, weight=0, reps=20,
-                        prime=["obliques"], major=["abs"], aliases=["Russian Twists"]),
+                        prime=["obliques"], major=["abs"], aliases=["Russian Twists", "Russian Twists with Med Ball"]),
     "Ab wheel": ex("core", "bodyweight", "isolation", None, weight=0, reps=12, bw=0.4,
                    prime=["abs"], minor=["obliques", "lowerBack"],
                    aliases=["Ab Wheel Rollout", "Ab Roller"]),
     "Side Plank": ex("core", "bodyweight", "isolation", None, weight=0, reps=1,
                      tracking="duration", duration=45, bw=0.5,
-                     prime=["obliques"], minor=["abs"], aliases=["Side Plank Hold"]),
+                     prime=["obliques"], minor=["abs"], aliases=["Side Plank Hold", "Lateral Isometric Hold", "Lateral Isometric Holds"]),
     "Mountain climbers": ex("core", "bodyweight", "isolation", None, weight=0, reps=20,
                             prime=["abs"], minor=["obliques", "hipFlexors"],
                             aliases=["Mountain Climber"]),
@@ -706,7 +706,8 @@ CURATION = {
                                    prime=["glutes", "adductors"], major=["quads", "hamstrings"],
                                    minor=["lowerBack"]),
     "Kettlebell Swings": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=15,
-                            prime=["glutes", "hamstrings"], major=["lowerBack"], minor=["quads", "deltoids"]),
+                            prime=["glutes", "hamstrings"], major=["lowerBack"], minor=["quads", "deltoids"],
+                            aliases=["Kettlebell Swing"]),
     "Single Leg RDL": ex("legs", "bodyweight", "compound", "hinge", weight=0, reps=10,
                          lat="unilateral", bw=0.5, prime=["hamstrings", "glutes"], minor=["lowerBack"]),
     "Single-Leg Deadlift with Dumbbell": ex("legs", "dumbbell", "compound", "hinge", weight=35, reps=10,
@@ -773,7 +774,8 @@ CURATION = {
                   prime=["abs"], minor=["hipFlexors", "obliques"]),
     "Hollow Hold": ex("core", "bodyweight", "isolation", None, weight=0, reps=1,
                       tracking="duration", duration=30, bw=0.55,
-                      prime=["abs"], minor=["obliques", "hipFlexors"]),
+                      prime=["abs"], minor=["obliques", "hipFlexors"],
+                      aliases=["Supine Core Holds"]),
     "Flutter Kicks": ex("core", "bodyweight", "isolation", None, weight=0, reps=20,
                         prime=["abs"], major=["hipFlexors"], minor=["obliques"]),
     "Scissors": ex("core", "bodyweight", "isolation", None, weight=0, reps=20,
@@ -835,7 +837,8 @@ CURATION = {
                               plane="transverse", prime=["obliques"], major=["abs"]),
     "Suitcase Carry": ex("core", "dumbbell", "compound", "carry", weight=50, reps=1,
                          plane="frontal", lat="unilateral", tracking="duration", duration=40,
-                         prime=["obliques"], major=["abs"], minor=["traps", "forearms", "glutes"]),
+                         prime=["obliques"], major=["abs"], minor=["traps", "forearms", "glutes"],
+                         aliases=["Uni-Lateral Farmer Walks", "Unilateral Farmer Walk"]),
     "Butterfly Sit Up": ex("core", "bodyweight", "isolation", None, weight=0, reps=15,
                            prime=["abs"], minor=["obliques", "hipFlexors"]),
     "Crunches With Legs Up": ex("core", "bodyweight", "isolation", None, weight=0, reps=20,
@@ -851,7 +854,8 @@ CURATION = {
     "TRX roll out": ex("core", "other", "isolation", None, weight=0, reps=12,
                        prime=["abs"], minor=["obliques", "lowerBack", "serratus"]),
     "Ball Slams": ex("core", "other", "isolation", None, weight=20, reps=15,
-                     prime=["abs"], major=["obliques", "lats"], minor=["deltoids", "glutes"]),
+                     prime=["abs"], major=["obliques", "lats"], minor=["deltoids", "glutes"],
+                     aliases=["Medicine Ball Slams", "Kneeling Med Ball Slams"]),
 
     # ===================== Batch 4: deep long-tail pass (parallel droids, round 2) =====================
 
@@ -913,7 +917,7 @@ CURATION = {
     "High Row": ex("back", "machine", "compound", "pull", weight=110, reps=10, prime=["lats", "rhomboids"], major=["biceps", "traps"], minor=["teres"], aliases=["Machine High Row"]),
     "Hip Raise, Lying": ex("back", "bodyweight", "compound", "hinge", weight=0, reps=15, bw=0.5, prime=["glutes"], major=["hamstrings"], minor=["lowerBack"], aliases=["Lying Hip Raise"]),
     "Hyper Y W Combo": ex("back", "bodyweight", "isolation", None, weight=0, reps=12, bw=0.4, prime=["lowerBack"], major=["glutes", "traps"], minor=["rhomboids", "deltoids", "hamstrings"], aliases=["Hyperextension Y-W Combo"]),
-    "Incline Chest-Supported Dumbbell Row": ex("back", "dumbbell", "compound", "pull", weight=45, reps=10, prime=["lats", "rhomboids"], major=["biceps"], minor=["traps", "teres"], aliases=["Chest-Supported Incline DB Row"]),
+    "Incline Chest-Supported Dumbbell Row": ex("back", "dumbbell", "compound", "pull", weight=45, reps=10, prime=["lats", "rhomboids"], major=["biceps"], minor=["traps", "teres"], aliases=["Chest-Supported Incline DB Row", "Dumbbell Prone Row"]),
     "Kneeling Superman": ex("back", "bodyweight", "isolation", None, weight=0, reps=12, lat="unilateral", prime=["lowerBack"], major=["glutes"], minor=["traps", "deltoids", "abs"], aliases=["Quadruped Superman"]),
     "Lat Pull Down (Leaning Back)": ex("back", "cable", "compound", "pull", weight=110, reps=10, prime=["lats"], major=["biceps"], minor=["teres", "rhomboids", "traps"], aliases=["Leaning-Back Lat Pulldown"]),
     "Lat Pull Down (Straight Back)": ex("back", "cable", "compound", "pull", weight=100, reps=10, prime=["lats"], major=["biceps"], minor=["teres", "rhomboids"], aliases=["Straight-Back Lat Pulldown"]),
@@ -941,7 +945,7 @@ CURATION = {
     "Towel Superman": ex("back", "bodyweight", "isolation", None, weight=0, reps=15, bw=0.4, prime=["lowerBack"], major=["glutes", "traps"], minor=["rhomboids", "hamstrings"], aliases=["Superman with Towel"]),
     "Trap-3 Raise": ex("back", "dumbbell", "isolation", None, weight=10, reps=15, plane="frontal", lat="unilateral", prime=["traps"], minor=["deltoids", "rhomboids"], aliases=["Lower Trap Raise", "Trap 3 Raise"]),
     "Typewriter Pull-ups": ex("back", "bodyweight", "compound", "pull", weight=0, reps=6, bw=1.0, prime=["lats"], major=["biceps"], minor=["teres", "rhomboids", "forearms"], aliases=["Typewriter Pull-up"]),
-    "YWTs": ex("back", "bodyweight", "isolation", None, weight=0, reps=12, bw=0.3, prime=["traps", "rhomboids"], major=["deltoids"], minor=["lowerBack"], aliases=["YWT Raise", "YTW"]),
+    "YWTs": ex("back", "bodyweight", "isolation", None, weight=0, reps=12, bw=0.3, prime=["traps", "rhomboids"], major=["deltoids"], minor=["lowerBack"], aliases=["YWT Raise", "YTW", "Prone TYW's", "TYWs"]),
 
     # ---- Shoulders ----
     "BUS DRIVERS": ex("shoulders", "other", "isolation", None, weight=25, reps=15, plane="frontal", prime=["deltoids"], minor=["serratus", "traps"]),
@@ -967,7 +971,6 @@ CURATION = {
     "Perpendicular Unilateral Landmine Row": ex("shoulders", "barbell", "compound", "pull", weight=60, reps=10, lat="unilateral", prime=["deltoids"], major=["traps"], minor=["rhomboids", "biceps"]),
     "Pin OHP": ex("shoulders", "barbell", "compound", "push", weight=95, reps=5, prime=["deltoids"], major=["triceps"], minor=["traps"]),
     "Push OHP": ex("shoulders", "barbell", "compound", "push", weight=115, reps=5, prime=["deltoids"], major=["triceps", "quads", "glutes"], minor=["traps"]),
-    "Rear Delt Raises": ex("shoulders", "dumbbell", "isolation", None, weight=15, reps=15, plane="transverse", prime=["deltoids"], minor=["traps", "rhomboids"]),
     "Schoulder Raise (Dumbbell)": ex("shoulders", "dumbbell", "isolation", None, weight=15, reps=15, plane="frontal", prime=["deltoids"], minor=["traps"]),
     "Seated Dumbbell Side Lateral": ex("shoulders", "dumbbell", "isolation", None, weight=15, reps=15, plane="frontal", prime=["deltoids"], minor=["traps"]),
     "Shoulder External Rotation (Cable)": ex("shoulders", "cable", "isolation", None, weight=15, reps=15, plane="transverse", lat="unilateral", prime=["deltoids"], minor=["teres"]),
@@ -1076,7 +1079,6 @@ CURATION = {
     "Wall balls": ex("legs", "other", "compound", "squat", weight=20, reps=15, prime=["quads", "glutes"], major=["deltoids"], minor=["triceps", "abs"]),
     "Dumbbell Deadlift": ex("legs", "dumbbell", "compound", "hinge", weight=70, reps=10, prime=["hamstrings", "glutes"], major=["lowerBack"], minor=["quads", "forearms"]),
     "Dumbbell Frog Press": ex("legs", "dumbbell", "compound", "hinge", weight=45, reps=15, prime=["glutes"], major=["hamstrings"], minor=["adductors"]),
-    "Dumbbell Single-leg Hip Thrust": ex("legs", "dumbbell", "compound", "hinge", weight=40, reps=12, lat="unilateral", prime=["glutes"], major=["hamstrings"], minor=["quads"]),
     "Glute Drive": ex("legs", "machine", "compound", "hinge", weight=180, reps=12, prime=["glutes"], major=["hamstrings"], minor=["quads"]),
     "Hip Bridge": ex("legs", "bodyweight", "compound", "hinge", weight=0, reps=20, bw=0.4, prime=["glutes"], minor=["hamstrings"]),
     "Kettlebell One Legged Deadlift": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=10, lat="unilateral", prime=["hamstrings", "glutes"], major=["lowerBack"], minor=["forearms"]),
@@ -1098,7 +1100,6 @@ CURATION = {
     "Exercise Band Dorsiflexion": ex("legs", "band", "isolation", None, weight=0, reps=20, prime=["shins"]),
     "Tibialis raises": ex("legs", "bodyweight", "isolation", None, weight=0, reps=20, prime=["shins"]),
     "Abduction while standing": ex("legs", "cable", "isolation", None, weight=30, reps=15, plane="frontal", lat="unilateral", prime=["glutes"]),
-    "Banded Clamshell": ex("legs", "band", "isolation", None, weight=0, reps=15, plane="frontal", lat="unilateral", prime=["glutes"]),
     "Quadruped Hip Abduction": ex("legs", "bodyweight", "isolation", None, weight=0, reps=20, plane="frontal", lat="unilateral", bw=0.15, prime=["glutes"]),
     "Supine Hip Abduction": ex("legs", "bodyweight", "isolation", None, weight=0, reps=20, plane="frontal", bw=0.15, prime=["glutes"]),
     "Single-leg side glute press": ex("legs", "machine", "isolation", None, weight=50, reps=15, lat="unilateral", prime=["glutes"], minor=["adductors"]),
@@ -1126,9 +1127,9 @@ CURATION = {
     "Jump rope: basic jumps": ex("core", "other", "isolation", None, weight=0, reps=1, tracking="duration", duration=60, prime=["calves"], minor=["quads", "abs", "forearms"]),
     "Jumping Jack HD": ex("core", "bodyweight", "isolation", None, weight=0, reps=1, tracking="duration", duration=30, plane="frontal", prime=["quads"], major=["glutes", "calves"], minor=["abs", "deltoids"]),
     "L-Sit (Foot Supported)": ex("core", "bodyweight", "isolation", None, weight=0, reps=1, tracking="duration", duration=20, bw=0.5, prime=["abs"], major=["hipFlexors"], minor=["quads", "triceps"]),
-    "Landmine Rotation": ex("core", "barbell", "isolation", None, weight=25, reps=12, plane="transverse", prime=["obliques"], major=["abs"], minor=["deltoids"]),
+    "Landmine Rotation": ex("core", "barbell", "isolation", None, weight=25, reps=12, plane="transverse", prime=["obliques"], major=["abs"], minor=["deltoids"], aliases=["Landmine Rotations"]),
     "One armed push-ups": ex("core", "bodyweight", "compound", "push", weight=0, reps=6, bw=0.7, lat="unilateral", prime=["pectorals", "triceps"], major=["abs", "obliques"], minor=["deltoids"]),
-    "Plank Reach": ex("core", "bodyweight", "isolation", None, weight=0, reps=16, plane="transverse", prime=["abs"], major=["obliques"], minor=["deltoids"]),
+    "Plank Reach": ex("core", "bodyweight", "isolation", None, weight=0, reps=16, plane="transverse", prime=["abs"], major=["obliques"], minor=["deltoids"], aliases=["Plank with Arm Reach"]),
     "Plank-to-Elbow Extension": ex("core", "bodyweight", "isolation", None, weight=0, reps=16, prime=["abs"], major=["obliques"], minor=["deltoids", "triceps"]),
     "Seated Corkscrew": ex("core", "bodyweight", "isolation", None, weight=0, reps=15, plane="transverse", prime=["obliques"], major=["abs"], minor=["hipFlexors"]),
     "Side Bends on Machine": ex("core", "machine", "isolation", None, weight=70, reps=15, plane="frontal", prime=["obliques"], minor=["abs"]),
@@ -1149,15 +1150,12 @@ CURATION = {
     "Inverted Rows": ex("back", "bodyweight", "compound", "pull", reps=10, bw=0.6, aliases=["Bodyweight Row", "Australian Pullup", "Supine Row"], prime=("lats",), major=("rhomboids", "traps", "biceps"), minor=("deltoids", "forearms"), trace=("abs",)),
 
     "Back bridge": ex("legs", "bodyweight", "compound", "hinge", reps=1, bw=0.5, tracking="duration", duration=30, prime=("glutes",), major=("lowerBack", "hamstrings"), minor=("quads",), trace=("deltoids",)),
-    "Chin Up": ex("back", "bodyweight", "compound", "pull", reps=8, bw=1.0, prime=("lats",), major=("biceps",), minor=("rhomboids", "teres"), trace=("traps", "forearms")),
     "Front Wood Chop": ex("core", "cable", "compound", "core", weight=30, reps=14, plane="transverse", lat="unilateral", prime=("obliques",), major=("abs",), minor=("deltoids", "lats"), trace=("serratus",)),
     "Lat Pull DB": ex("back", "dumbbell", "compound", "pull", weight=45, reps=12, prime=("lats",), major=("teres",), minor=("pectorals", "triceps"), trace=("serratus",), aliases=["Dumbbell Lat Pullover"]),
-    "Lateral Walk": ex("legs", "band", "isolation", None, reps=20, plane="frontal", prime=("glutes",), minor=("quads",), trace=("adductors", "calves"), aliases=["Banded Lateral Walk", "Monster Walk"]),
     "LYING DUMBBELL ROW SS SEATED SHRUG": ex("back", "dumbbell", "compound", "pull", weight=40, reps=10, prime=("lats", "traps"), major=("rhomboids",), minor=("biceps", "teres"), trace=("forearms", "deltoids")),
     "PULL OVER POLEA ALTA": ex("back", "cable", "isolation", None, weight=50, reps=14, prime=("lats",), major=("teres",), minor=("triceps", "pectorals"), trace=("rhomboids",), aliases=["High Cable Rope Pullover", "Straight-Arm Pulldown"]),
     "Reverse Wood Chops": ex("core", "cable", "compound", "core", weight=30, reps=14, plane="transverse", lat="unilateral", prime=("obliques",), major=("abs",), minor=("deltoids", "glutes"), trace=("lats",)),
     "Rowing, T-bar": ex("back", "barbell", "compound", "pull", weight=90, reps=8, prime=("lats",), major=("rhomboids", "traps"), minor=("biceps", "teres"), trace=("lowerBack", "forearms"), aliases=["T-Bar Row"]),
-    "Seated Cable Row": ex("back", "cable", "compound", "pull", weight=100, reps=10, prime=("lats",), major=("rhomboids", "traps"), minor=("biceps", "teres"), trace=("forearms", "lowerBack")),
     "Side Lateral Raise (Cable)": ex("shoulders", "cable", "isolation", None, weight=15, reps=15, plane="frontal", lat="unilateral", prime=("deltoids",), trace=("traps", "serratus")),
     "Upper Back": ex("back", "machine", "compound", "pull", weight=70, reps=12, plane="transverse", prime=("rhomboids",), major=("traps", "teres"), minor=("deltoids", "lats"), trace=("biceps",)),
     "Wide Pull Up": ex("back", "bodyweight", "compound", "pull", reps=8, bw=1.0, prime=("lats",), major=("teres",), minor=("rhomboids", "biceps"), trace=("traps", "forearms")),
@@ -1174,7 +1172,6 @@ CURATION = {
     "Alternate back lunges": ex("legs", "bodyweight", "compound", "lunge", reps=12, lat="unilateral", bw=0.5, prime=("quads", "glutes"), major=("hamstrings",), minor=("adductors", "calves"), trace=("abs",)),
     "Calf Raises on Hackenschmitt Machine": ex("legs", "machine", "isolation", None, weight=150, reps=15, prime=("calves",)),
     "Dragon squat": ex("legs", "bodyweight", "compound", "squat", reps=8, lat="unilateral", bw=0.6, prime=("quads", "glutes"), major=("hamstrings", "adductors"), minor=("calves",), trace=("abs",)),
-    "Good Morning": ex("legs", "barbell", "compound", "hinge", weight=95, reps=8, prime=("hamstrings",), major=("glutes", "lowerBack"), minor=("adductors",), trace=("abs",)),
     "Hamstring Kicks": ex("legs", "bodyweight", "isolation", None, reps=15, lat="unilateral", prime=("hamstrings",), minor=("glutes", "calves")),
     "Hip hinge": ex("legs", "bodyweight", "compound", "hinge", reps=15, bw=0.5, prime=("hamstrings", "glutes"), major=("lowerBack",), trace=("abs",)),
     "Horse Stance (Side Splits)": ex("legs", "bodyweight", "compound", "squat", reps=1, tracking="duration", duration=30, bw=0.6, prime=("quads", "adductors"), major=("glutes",), minor=("calves",), trace=("abs",)),
@@ -1195,7 +1192,6 @@ CURATION = {
     "Weighted Step-ups": ex("legs", "dumbbell", "compound", "lunge", weight=30, reps=12, lat="unilateral", prime=("quads", "glutes"), major=("hamstrings",), minor=("calves", "adductors"), trace=("abs",)),
 
     "2 Handed Kettlebell Swing": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=15, prime=("glutes", "hamstrings"), major=("lowerBack",), minor=("quads", "abs"), trace=("forearms", "traps"), aliases=["Two-Handed Kettlebell Swing"]),
-    "Kettlebell Swing": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=15, prime=("glutes", "hamstrings"), major=("lowerBack",), minor=("quads", "abs"), trace=("forearms", "traps")),
     "Box squat": ex("legs", "barbell", "compound", "squat", weight=135, reps=6, prime=("quads", "glutes"), major=("hamstrings",), minor=("adductors", "lowerBack"), trace=("abs", "calves"), aliases=["Box Squat"]),
     "High Knee Skips HD": ex("legs", "bodyweight", "compound", None, reps=1, tracking="duration", duration=30, prime=("hipFlexors", "calves"), major=("quads",), minor=("glutes", "hamstrings"), trace=("abs",), aliases=["High Knee Skips"]),
     "commando pull-ups": ex("back", "bodyweight", "compound", "pull", reps=8, bw=1.0, prime=("lats",), major=("biceps", "rhomboids"), minor=("traps", "teres", "forearms"), trace=("abs",), aliases=["Commando Pull-Up", "Alternating Grip Pull-Up"]),
@@ -1258,6 +1254,123 @@ CURATION = {
     "Back neck stretch": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["traps"]),
     "Front neck stretch": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["traps"]),
     "Banded Ankle Mobility": ex("legs", "band", "isolation", None, reps=10, movement="mobility", prime=["calves"], minor=["shins"]),
+
+    # ===================== Batch 8: warm-up / activation / mobility additions =====================
+    # Native (non-wger) warm-up drills. Activation work is tagged
+    # strength (it loads and primes the muscle); stretch / dynamic-range
+    # work is tagged mobility (it relieves tightness). Iso holds use
+    # duration tracking. No "warm-up" muscle group exists, so each drill
+    # is filed under the muscle group it primarily trains.
+    "Banded Hip Floss": ex("legs", "band", "isolation", None, reps=10, movement="mobility", prime=["hipFlexors"], minor=["glutes", "adductors"]),
+    "Floor Slides": ex("shoulders", "bodyweight", "isolation", None, reps=12, movement="mobility", prime=["deltoids"], minor=["traps", "rhomboids"], trace=["serratus"]),
+    "Banded Side Clams": ex("legs", "band", "isolation", None, reps=15, plane="frontal", lat="unilateral", prime=["glutes"], minor=["adductors"], aliases=["Banded Clamshell"]),
+    "Thoracic Extensions": ex("back", "bodyweight", "isolation", None, reps=10, movement="mobility", prime=["lowerBack"], minor=["traps"]),
+    "Hinge with Broomstick": ex("legs", "bodyweight", "compound", "hinge", reps=10, bw=0.3, prime=["hamstrings", "glutes"], minor=["lowerBack"], trace=["abs"]),
+    "Quadruped Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, lat="unilateral", movement="mobility", prime=["obliques"], minor=["lowerBack", "rhomboids"]),
+    "Single Leg Clockface": ex("legs", "bodyweight", "compound", None, reps=8, lat="unilateral", bw=0.5, prime=["glutes", "quads"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs"]),
+    "Banded 1.5 Squats": ex("legs", "band", "compound", "squat", reps=10, bw=0.5, prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs", "lowerBack"]),
+    "Prone Banded Press": ex("shoulders", "band", "isolation", None, reps=15, prime=["deltoids"], minor=["rhomboids", "traps", "teres"]),
+    "Quadruped Hip Extensions": ex("legs", "bodyweight", "isolation", None, reps=15, lat="unilateral", bw=0.3, prime=["glutes"], minor=["hamstrings", "lowerBack"]),
+    "Fire Hydrants": ex("legs", "bodyweight", "isolation", None, plane="frontal", reps=15, lat="unilateral", bw=0.2, prime=["glutes"], minor=["adductors"]),
+    "Kettlebell RDL (warm-up)": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=12, prime=["hamstrings", "glutes"], major=["lowerBack"], minor=["forearms"], trace=["abs", "traps"]),
+    "Prisoner Squats with Overhead Reach": ex("legs", "bodyweight", "compound", "squat", reps=12, bw=0.5, prime=["quads", "glutes"], major=["hamstrings"], minor=["deltoids", "adductors"], trace=["abs", "calves"]),
+    "Lunge Matrix": ex("legs", "bodyweight", "compound", "lunge", reps=12, lat="unilateral", bw=0.5, prime=["quads", "glutes"], major=["hamstrings", "adductors"], minor=["calves"], trace=["abs"]),
+    "Banded Side Walks": ex("legs", "band", "isolation", None, plane="frontal", reps=15, prime=["glutes"], minor=["adductors", "quads"], aliases=["Lateral Walk", "Banded Lateral Walk", "Monster Walk"]),
+    "Banded External Rotations": ex("shoulders", "band", "isolation", None, plane="transverse", reps=15, prime=["teres"], minor=["deltoids"], trace=["rhomboids"]),
+    "Banded Shadow Box": ex("shoulders", "band", "compound", "push", reps=1, tracking="duration", duration=30, plane="transverse", prime=["deltoids"], major=["pectorals", "triceps"], minor=["serratus", "obliques"], trace=["forearms"]),
+    "Plank Row with Toe Touch (warm-up)": ex("core", "dumbbell", "compound", "core", weight=15, reps=10, lat="unilateral", prime=["abs"], major=["lats", "deltoids"], minor=["obliques", "glutes", "hamstrings"], trace=["biceps", "rhomboids"], aliases=["Plank Row with Toe Touch (core)", "Plank Row with Toe Touch"]),
+    "Single Leg Hip Thrusts (warm-up)": ex("legs", "bodyweight", "compound", "hinge", reps=12, lat="unilateral", bw=0.4, prime=["glutes"], major=["hamstrings"], minor=["abs"], trace=["quads"], aliases=["Dumbbell Single-leg Hip Thrust", "Single-leg Hip Thrust"]),
+    "Lunge + Overhead Press (warm-up)": ex("legs", "dumbbell", "compound", "lunge", weight=20, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["deltoids", "hamstrings"], minor=["triceps", "abs"], trace=["calves", "adductors"]),
+    "Weighted ½ Deadbugs (warm-up)": ex("core", "dumbbell", "compound", "core", weight=10, reps=12, lat="unilateral", prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["deltoids", "quads"]),
+    "Downward Dog with Toe Touch": ex("legs", "bodyweight", "isolation", None, reps=8, movement="mobility", prime=["hamstrings"], major=["calves"], minor=["deltoids", "lats"], trace=["lowerBack"]),
+    "Kneeling Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, lat="unilateral", movement="mobility", prime=["obliques"], minor=["lowerBack", "rhomboids"]),
+    "Seated Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, movement="mobility", prime=["obliques"], minor=["lowerBack"]),
+    "Lateral Lunge Swings": ex("legs", "bodyweight", "compound", "lunge", plane="frontal", reps=12, lat="unilateral", bw=0.4, movement="mobility", prime=["adductors"], major=["glutes", "quads"], minor=["hamstrings"], trace=["calves"]),
+    "Standing Plate Rotations": ex("core", "other", "compound", "core", weight=10, reps=15, plane="transverse", prime=["obliques"], major=["abs"], minor=["lowerBack"], trace=["deltoids"]),
+    "Supine Thoracic Extensions": ex("back", "bodyweight", "isolation", None, reps=10, movement="mobility", prime=["lowerBack"], minor=["abs", "traps"]),
+    "Banded Glute Stretch": ex("legs", "band", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["glutes"], minor=["hipFlexors"]),
+    "Punch Iso Holds": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, plane="transverse", prime=["deltoids"], minor=["pectorals", "triceps"], trace=["serratus"]),
+    "Plank Clockface with Bands (warm-up)": ex("core", "band", "compound", "core", reps=10, lat="unilateral", bw=0.6, prime=["abs"], major=["deltoids", "obliques"], minor=["serratus", "glutes"], trace=["rhomboids"]),
+
+    # ===================== Batch 9: plyometrics / fight circuit =====================
+    # Explosive jump / bound / footwork work. The muscle model is load-
+    # and velocity-agnostic, so these credit their muscles by set count
+    # exactly like any bodyweight strength move (movement stays the
+    # default "strength"). Footwork drills with no countable rep are
+    # logged as timed holds. CMJ = counter-movement jump.
+    "Ice Skaters": ex("legs", "bodyweight", "compound", "lunge", reps=20, plane="frontal", lat="unilateral", bw=0.5, prime=["glutes", "quads"], major=["adductors", "calves"], minor=["hamstrings"], trace=["abs"], aliases=["Skater Hops", "Speed Skaters"]),
+    "Altitude Landings": ex("legs", "bodyweight", "compound", "squat", reps=10, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Drop Landing", "Depth Drop"]),
+    "Altitude Landings to Jump": ex("legs", "bodyweight", "compound", "squat", reps=10, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Depth Jump", "Drop Jump"]),
+    "Altitude Landings to Lateral Shuffle": ex("legs", "bodyweight", "compound", "lunge", reps=10, plane="frontal", lat="unilateral", bw=0.6, prime=["quads", "glutes"], major=["adductors", "calves"], minor=["hamstrings"], trace=["abs"]),
+    "Hop + Hold": ex("legs", "bodyweight", "compound", "squat", reps=10, lat="unilateral", bw=0.5, prime=["quads", "glutes"], major=["calves"], minor=["hamstrings", "adductors"], trace=["abs"], aliases=["Stick the Landing", "Jump and Stick"]),
+    "Pogos": ex("legs", "bodyweight", "compound", "squat", reps=20, bw=0.4, prime=["calves"], major=["quads"], minor=["glutes", "hamstrings"], trace=["shins", "abs"], aliases=["Pogo Hops", "Ankle Hops"]),
+    "Fast Pogos": ex("legs", "bodyweight", "compound", "squat", reps=25, bw=0.4, prime=["calves"], major=["quads"], minor=["glutes"], trace=["shins", "abs"], aliases=["Fast Ankle Hops"]),
+    "Dumbbell CMJ (2 kg each hand)": ex("legs", "dumbbell", "compound", "squat", weight=5, reps=8, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["deltoids"], trace=["abs"], aliases=["Dumbbell Countermovement Jump", "Loaded CMJ", "Dumbbell CMJ"]),
+    "Falling CMJ": ex("legs", "bodyweight", "compound", "squat", reps=8, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Falling Countermovement Jump"]),
+    "Banded Accentuated CMJ": ex("legs", "band", "compound", "squat", reps=8, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Banded Countermovement Jump"]),
+    "CMJ with Hands on Hips": ex("legs", "bodyweight", "compound", "squat", reps=8, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Countermovement Jump", "Vertical Jump"]),
+    "Ice Skaters to Vertical Hop": ex("legs", "bodyweight", "compound", "lunge", reps=16, plane="frontal", lat="unilateral", bw=0.5, prime=["glutes", "quads"], major=["adductors", "calves"], minor=["hamstrings"], trace=["abs"]),
+    "Ice Skaters with Medicine Ball": ex("legs", "other", "compound", "lunge", weight=10, reps=16, plane="frontal", lat="unilateral", prime=["glutes", "quads"], major=["adductors", "calves"], minor=["deltoids", "hamstrings"], trace=["abs"]),
+    "Criss Cross Jump": ex("legs", "bodyweight", "compound", "squat", reps=20, plane="frontal", bw=0.4, prime=["calves", "quads"], major=["adductors", "glutes"], minor=["hamstrings"], trace=["abs"], aliases=["Crossover Jacks", "Cross Jacks"]),
+    "Ali Shuffle": ex("legs", "bodyweight", "compound", None, reps=1, tracking="duration", duration=30, bw=0.3, prime=["calves"], major=["quads", "hipFlexors"], minor=["glutes"], trace=["abs"]),
+    "Slow Hands, Fast Feet": ex("legs", "bodyweight", "compound", None, reps=1, tracking="duration", duration=30, bw=0.3, prime=["calves"], major=["quads", "hipFlexors"], minor=["deltoids", "glutes"], trace=["abs"]),
+    "Rotational Med Ball Slams (warm-up)": ex("core", "other", "compound", "core", weight=10, reps=12, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "lats"], minor=["deltoids", "glutes"], trace=["triceps", "lowerBack"], aliases=["Rotational Slam", "Side Med Ball Slam", "Rotational Slams"]),
+
+    # ===================== Batch 10: key strength exercises =====================
+    # Loaded primary lifts and their implement / stance variants
+    # (goblet, landmine, half-kneeling, banded). Landmine work uses the
+    # barbell equipment (the bar in a pivot), matching the existing
+    # landmine entries. Throws / punches and iso wall holds are explosive
+    # or isometric loading work, so they stay the default "strength".
+    # — Lower body —
+    "Goblet Squat to Press": ex("legs", "dumbbell", "compound", "squat", weight=40, reps=10, prime=["quads", "glutes"], major=["deltoids", "hamstrings"], minor=["triceps", "abs"], trace=["calves", "adductors"], aliases=["Goblet Thruster"]),
+    "Goblet Split Squat": ex("legs", "dumbbell", "compound", "lunge", weight=35, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs"]),
+    "Goblet Reverse Lunge": ex("legs", "dumbbell", "compound", "lunge", weight=35, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs"]),
+    "Goblet Reverse Lunge with Knee Raise": ex("legs", "dumbbell", "compound", "lunge", weight=30, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["hamstrings", "hipFlexors"], minor=["adductors", "calves"], trace=["abs"]),
+    "Landmine Squat": ex("legs", "barbell", "compound", "squat", weight=70, reps=10, prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "lowerBack"], trace=["abs", "calves"]),
+    "Landmine Reverse Lunge with Knee Raise": ex("legs", "barbell", "compound", "lunge", weight=50, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["hamstrings", "hipFlexors"], minor=["adductors"], trace=["abs", "deltoids"]),
+    "Landmine Single Leg RDL": ex("legs", "barbell", "compound", "hinge", weight=50, reps=10, lat="unilateral", prime=["hamstrings", "glutes"], major=["lowerBack"], minor=["adductors", "forearms"], trace=["abs"]),
+    "Trap Bar Deadlift": ex("legs", "barbell", "compound", "hinge", weight=225, reps=6, prime=["glutes", "quads"], major=["hamstrings", "lowerBack"], minor=["traps", "forearms"], trace=["abs"], aliases=["Hex Bar Deadlift"]),
+    "Banded Single Leg Hip Thrusts": ex("legs", "band", "compound", "hinge", reps=12, lat="unilateral", bw=0.4, prime=["glutes"], major=["hamstrings"], minor=["abs"], trace=["quads"]),
+    # — Upper body push —
+    "½ Kneeling Dumbbell Press": ex("shoulders", "dumbbell", "compound", "push", weight=25, reps=10, lat="unilateral", prime=["deltoids"], major=["triceps"], minor=["traps", "abs"], trace=["obliques"], aliases=["Half-Kneeling Dumbbell Press", "Half Kneeling DB Press"]),
+    "½ Kneeling Landmine Press": ex("shoulders", "barbell", "compound", "push", weight=45, reps=10, lat="unilateral", prime=["deltoids"], major=["triceps", "pectorals"], minor=["serratus", "abs"], trace=["obliques"], aliases=["Half-Kneeling Landmine Press"]),
+    "Strict Press-Ups": ex("chest", "bodyweight", "compound", "push", reps=12, bw=0.64, prime=["pectorals"], major=["triceps"], minor=["deltoids"], trace=["serratus", "abs"], aliases=["Strict Push-Up", "Strict Push-Ups"]),
+    "KB Press-Ups with Bands": ex("chest", "band", "compound", "push", reps=10, bw=0.64, prime=["pectorals"], major=["triceps"], minor=["deltoids"], trace=["serratus", "abs"], aliases=["Banded Push-Up", "Band-Resisted Push-Up"]),
+    "Landmine Punch": ex("shoulders", "barbell", "compound", "push", weight=45, reps=10, lat="unilateral", plane="transverse", prime=["deltoids"], major=["pectorals", "serratus"], minor=["triceps", "obliques"], trace=["abs"], aliases=["Landmine Press-Out"]),
+    "Medicine Ball Punch Throw": ex("chest", "other", "compound", "push", weight=8, reps=10, lat="unilateral", prime=["pectorals"], major=["deltoids", "triceps"], minor=["serratus", "obliques"], trace=["abs"], aliases=["Med Ball Punch", "Med Ball Press Throw"]),
+    "Isometric 3-Sec Wall Holds": ex("chest", "bodyweight", "compound", "push", reps=1, tracking="duration", duration=30, prime=["pectorals"], major=["deltoids", "triceps"], minor=["serratus"], trace=["abs"], aliases=["Isometric Wall Press"]),
+    # — Upper body pull —
+    "Kettlebell Row and Rotate": ex("back", "kettlebell", "compound", "pull", weight=35, reps=10, lat="unilateral", plane="transverse", prime=["lats"], major=["rhomboids", "biceps"], minor=["obliques", "traps"], trace=["teres", "forearms"], aliases=["KB Row and Rotate", "Row to Rotation"]),
+    "KB/DB Drags": ex("back", "dumbbell", "compound", "pull", weight=35, reps=10, lat="unilateral", prime=["lats"], major=["rhomboids", "biceps"], minor=["abs", "traps"], trace=["teres", "forearms"], aliases=["Drag Row", "Kettlebell Drag", "Dumbbell Drag"]),
+    "Lateral Plank Walk": ex("core", "bodyweight", "compound", "core", reps=12, bw=0.6, prime=["abs"], major=["deltoids", "obliques"], minor=["pectorals", "serratus"], trace=["triceps"], aliases=["Lateral Plank Walkout", "Plank Walk", "Lateral Plank Walks"]),
+    # — Rotational / anti-rotation —
+    "Pallof Wall Iso Holds": ex("core", "band", "compound", "core", reps=1, tracking="duration", duration=30, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], trace=["glutes"], aliases=["Pallof Iso Hold", "Wall Pallof Hold", "Pallof Max Effort Iso Holds", "Pallof Max Effort Iso Holds (3-Secs)", "Palloff Iso Holds (20s E.S.)"]),
+    "Kneeling Pallof Iso Holds": ex("core", "band", "compound", "core", reps=1, tracking="duration", duration=30, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], trace=["glutes", "hipFlexors"], aliases=["Kneeling Pallof Hold"]),
+    "Banded Rotations": ex("core", "band", "compound", "core", reps=15, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], trace=["lowerBack"], aliases=["Banded Trunk Rotation", "Band Woodchop"]),
+    "Supine Med Ball Chest Pass": ex("chest", "other", "compound", "push", weight=8, reps=12, prime=["pectorals"], major=["triceps", "deltoids"], minor=["serratus"], trace=["abs"], aliases=["Lying Med Ball Chest Pass"]),
+    "Split Stance Rotational Throws": ex("core", "other", "compound", "core", weight=8, reps=10, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "deltoids"], minor=["glutes", "pectorals"], trace=["triceps", "quads"], aliases=["Split Stance Med Ball Throw", "Rotational Med Ball Throw"]),
+    "Lateral Shuffle to MB Throw": ex("core", "other", "compound", "core", weight=8, reps=10, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "deltoids"], minor=["glutes", "quads", "calves"], trace=["pectorals"], aliases=["Shuffle to Med Ball Throw"]),
+    "Manual Iso Holds": ex("core", "other", "isolation", None, reps=1, tracking="duration", duration=20, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], aliases=["Manual Resistance Iso Hold", "Partner Iso Hold"]),
+
+    # ===================== Batch 11: core exercises =====================
+    # Anti-extension / anti-rotation trunk work and loaded core variants.
+    # Weighted, tempo, and position variants are kept as their own entries
+    # (per program design); throws/holds are explosive or isometric
+    # loading, so they stay the default "strength".
+    "Weighted Leg Lowers": ex("core", "dumbbell", "isolation", None, weight=10, reps=12, prime=["abs"], major=["hipFlexors"], minor=["quads"], trace=["obliques"], aliases=["Weighted Lying Leg Lowers"]),
+    "Leg Lowers with 2-Sec Pause": ex("core", "bodyweight", "isolation", None, reps=10, bw=0.3, prime=["abs"], major=["hipFlexors"], minor=["quads"], trace=["obliques"], aliases=["Tempo Leg Lowers", "Paused Leg Lowers"]),
+    "Plank Holds with Elevated Hands": ex("core", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=45, bw=0.5, prime=["abs"], major=["obliques"], minor=["deltoids"], trace=["glutes"], aliases=["Incline Plank Hold", "Hands-Elevated Plank"]),
+    "Supine Core Holds with Weight": ex("core", "other", "isolation", None, weight=10, reps=1, tracking="duration", duration=30, prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["quads"], aliases=["Weighted Hollow Hold", "Weighted Supine Core Hold"]),
+    "Swiss Ball Plank Circles": ex("core", "other", "isolation", None, reps=10, bw=0.5, plane="transverse", prime=["abs"], major=["obliques", "deltoids"], minor=["serratus"], trace=["glutes"], aliases=["Stability Ball Plank Circles", "Swiss Ball Stir-the-Pot"]),
+    "Rotational Plank": ex("core", "bodyweight", "compound", "core", reps=12, bw=0.5, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], trace=["glutes"], aliases=["Plank Rotation", "Thread the Needle Plank"]),
+    "Straight Arm Straight Leg Sit Ups": ex("core", "bodyweight", "isolation", None, reps=12, bw=0.3, prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["quads"], aliases=["Long-Arm Sit-Up", "Straight-Leg Sit-Up"]),
+    "Straight Leg Sit Ups with Med Ball": ex("core", "other", "isolation", None, weight=8, reps=12, prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["deltoids"], aliases=["Med Ball Straight-Leg Sit-Up"]),
+    "TRX Rollouts": ex("core", "other", "isolation", None, reps=10, bw=0.5, prime=["abs"], major=["obliques", "lats"], minor=["deltoids", "serratus"], trace=["lowerBack"], aliases=["Suspension Rollout", "TRX Ab Rollout"]),
+    "Banded Pallof Split Jerks": ex("core", "band", "compound", "core", reps=10, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "deltoids"], minor=["glutes", "quads"], trace=["triceps"], aliases=["Pallof Split Jerk", "Banded Pallof Jerk"]),
+    "½ Kneeling Rotational Med Ball Throws": ex("core", "other", "compound", "core", weight=8, reps=10, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "deltoids"], minor=["glutes", "pectorals"], trace=["triceps"], aliases=["Half-Kneeling Rotational Med Ball Throw"]),
+    "Kneeling Rotational Throws": ex("core", "other", "compound", "core", weight=8, reps=10, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "deltoids"], minor=["pectorals"], trace=["triceps", "glutes"], aliases=["Kneeling Rotational Med Ball Throw"]),
+    "Single Arm MB Holds": ex("core", "other", "isolation", None, weight=8, reps=1, tracking="duration", duration=30, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs"], minor=["deltoids"], trace=["forearms"], aliases=["Single Arm Med Ball Hold", "Offset Med Ball Hold"]),
 }
 
 
@@ -1283,34 +1396,54 @@ def main():
         roster = json.load(f)
     by_name = {r["name"]: r for r in roster}
 
-    missing = [n for n in CURATION if n not in by_name]
-    if missing:
-        print("WARNING: curated names not found in roster:", file=sys.stderr)
-        for n in missing:
+    # Curated names with no roster match are native (non-wger) entries —
+    # fully authored here, so they ship as their own records. We report
+    # them for visibility but no longer drop them.
+    native = [n for n in CURATION if n not in by_name]
+    if native:
+        print("Native curated entries (no wger roster match, shipped):", file=sys.stderr)
+        for n in native:
             print(f"  - {n}", file=sys.stderr)
 
     # Build each shipped record fresh from its authored body so no stale
-    # keys survive across runs. Only curated names that exist in the
-    # roster ship; everything else is dropped.
+    # keys survive across runs. Every curated entry ships: roster matches
+    # are enriched in place and native entries are added on top.
     curated = []
     for name, body in CURATION.items():
         validate(name, body)
-        if name not in by_name:
-            continue
         record = {"name": name}
         record.update(body)
         curated.append(record)
+
+    # Drop any alias that collides with another exercise's canonical name
+    # (case-insensitive). Such aliases make search ambiguous — the term is
+    # already a real exercise — so the shipped catalog keeps every alias
+    # pointing to exactly one entry. Self-guarding for future curation.
+    canonical = {r["name"].strip().lower() for r in curated}
+    stripped = 0
+    for r in curated:
+        if not r.get("aliases"):
+            continue
+        kept = [a for a in r["aliases"]
+                if a.strip().lower() not in canonical
+                or a.strip().lower() == r["name"].strip().lower()]
+        stripped += len(r["aliases"]) - len(kept)
+        if kept:
+            r["aliases"] = kept
+        else:
+            del r["aliases"]
 
     curated.sort(key=lambda r: (r["group"], r["name"].lower()))
 
     with open(CATALOG, "w", encoding="utf-8") as f:
         json.dump(curated, f, ensure_ascii=False, indent=2)
 
-    dropped = len(roster) - len(curated)
+    dropped = len(roster) - len([n for n in CURATION if n in by_name])
     print(f"Shipped {len(curated)}/{len(CURATION)} curated records into {CATALOG}")
     print(f"Dropped {dropped} uncurated roster entries (not shipped)")
-    if missing:
-        print(f"({len(missing)} curated names had no roster match — see warnings)")
+    print(f"Stripped {stripped} alias(es) that collided with a canonical name")
+    if native:
+        print(f"({len(native)} native curated entries had no roster match — shipped anyway)")
 
 
 if __name__ == "__main__":
