@@ -122,3 +122,17 @@ extension WeightUnit {
     static let lbPerKg: Double = 1.0 / 0.45359237   // ≈ 2.20462262
     static let kgPerLb: Double = 0.45359237
 }
+
+// MARK: - Current preference
+
+extension WeightUnit {
+    /// The user's selected unit, read straight from UserDefaults.
+    /// For non-view code (value-copying model inits that seed a
+    /// catalog default) that can't reach @AppStorage. View code
+    /// should keep using @AppStorage so it re-renders on change.
+    static var current: WeightUnit {
+        let raw = UserDefaults.standard.string(forKey: SettingsKey.weightUnit)
+            ?? SettingsDefaults.weightUnit
+        return WeightUnit(rawValue: raw) ?? .lb
+    }
+}

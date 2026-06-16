@@ -725,13 +725,14 @@ private struct LibraryExercisesContent: View {
     /// Mode-aware right-side default for an exercise with no history —
     /// "135 lb · 8 reps" for strength, "0:45 hold" for a timed hold.
     private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
+        let seed = item.defaultWeight(forUnit: unit)
         switch item.trackingMode {
         case .reps:
-            return "\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(item.defaultReps) reps"
+            return "\(WeightFormatter.string(seed, unit: unit)) · \(item.defaultReps) reps"
         case .duration:
             let base = "\(DurationFormatter.string(item.defaultDuration)) hold"
-            return item.defaultWeight > 0
-                ? "\(WeightFormatter.string(item.defaultWeight, unit: unit)) · \(base)"
+            return seed > 0
+                ? "\(WeightFormatter.string(seed, unit: unit)) · \(base)"
                 : base
         }
     }

@@ -185,7 +185,7 @@ final class TemplateExercise: Identifiable {
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeight,
+            plannedWeight: item.defaultWeightSeed,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
@@ -297,7 +297,7 @@ extension Exercise {
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeight,
+            plannedWeight: item.defaultWeightSeed,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder

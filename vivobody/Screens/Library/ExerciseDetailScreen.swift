@@ -745,7 +745,7 @@ struct ExerciseDetailScreen: View {
             HStack(spacing: Space.lg) {
                 switch item.trackingMode {
                 case .reps:
-                    defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight, unit: unit))
+                    defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight(forUnit: unit), unit: unit))
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(width: 0.5, height: 32)
@@ -756,7 +756,7 @@ struct ExerciseDetailScreen: View {
                         Rectangle()
                             .fill(Surface.edge)
                             .frame(width: 0.5, height: 32)
-                        defaultStat(label: "Load", value: WeightFormatter.string(item.defaultWeight, unit: unit))
+                        defaultStat(label: "Load", value: WeightFormatter.string(item.defaultWeight(forUnit: unit), unit: unit))
                     }
                 }
                 Spacer()
@@ -1008,7 +1008,8 @@ struct ExerciseDetailScreen: View {
         if let measured = item.oneRepMax { return measured }
         if let estimate = estimatedOneRepMax { return estimate }
         if let prog = progress, prog.bestWeight > 0 { return prog.bestWeight }
-        if item.defaultWeight > 0 { return item.defaultWeight }
+        let seed = item.defaultWeight(forUnit: unit)
+        if seed > 0 { return seed }
         return 135
     }
 

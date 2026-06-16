@@ -104,7 +104,7 @@ extension ExerciseDraft {
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
-            plannedWeight: item.defaultWeight,
+            plannedWeight: item.defaultWeightSeed,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             isPerSet: false,

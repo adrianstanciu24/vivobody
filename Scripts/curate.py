@@ -47,11 +47,33 @@ MUSCLES = {
 # Graded involvement tiers (match Muscle.Involvement in the app).
 PRIME, MAJOR, MINOR, TRACE = 1.0, 0.7, 0.4, 0.2
 
+# kg seed defaults. The app stores weight canonically in lb, but a kg
+# user's scrubber steps by 2.5 kg, so an lb default converted straight
+# to kg (135 lb -> 61.2 kg) lands off-grid and reads unnaturally. We
+# ship a native kg default per loaded lift, snapped to the 2.5 kg
+# detent, so a kg user starts on a clean, plate-achievable number.
+KG_PER_LB = 0.45359237
+KG_STEP = 2.5
+
+
+def kg_seed(weight_lb):
+    """Gym-natural kg default for an lb weight, snapped to the kg
+    scrubber's 2.5 kg step. Never drops a loaded lift below one step."""
+    if weight_lb <= 0:
+        return 0.0
+    snapped = round(weight_lb * KG_PER_LB / KG_STEP) * KG_STEP
+    return max(KG_STEP, snapped)
+
 
 def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
-       plane="sagittal", lat="bilateral", bw=0.0, tracking="reps", duration=0,
+       weight_kg=None, plane="sagittal", lat="bilateral", bw=0.0,
+       tracking="reps", duration=0,
        movement="strength", aliases=None, prime=(), major=(), minor=(), trace=()):
-    """Build one curated record body (everything except the name)."""
+    """Build one curated record body (everything except the name).
+
+    `weight_kg` overrides the auto-snapped kg default for lifts whose
+    natural kg number differs from the rounded conversion (e.g. a
+    100 kg deadlift rather than 102.5)."""
     inv = ([{"muscle": m, "weight": PRIME} for m in prime]
            + [{"muscle": m, "weight": MAJOR} for m in major]
            + [{"muscle": m, "weight": MINOR} for m in minor]
@@ -67,6 +89,8 @@ def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
         "bodyweightFraction": bw,
         "involvement": inv,
     }
+    if weight > 0:
+        rec["defaultWeightKg"] = weight_kg if weight_kg is not None else kg_seed(weight)
     if mechanic == "compound" and pattern:
         rec["pattern"] = pattern
     if tracking != "reps":
@@ -101,11 +125,11 @@ CURATION = {
                aliases=["Dip", "Chest Dip"]),
 
     # ---- Back ----
-    "Deadlifts": ex("back", "barbell", "compound", "hinge", weight=225, reps=5,
+    "Deadlifts": ex("back", "barbell", "compound", "hinge", weight=225, reps=5, weight_kg=100,
                     prime=["glutes", "hamstrings", "lowerBack"],
                     major=["traps", "forearms"], minor=["lats", "quads"],
                     aliases=["Deadlift", "Conventional Deadlift", "DL"]),
-    "Bent Over Rowing": ex("back", "barbell", "compound", "pull", weight=115, reps=8,
+    "Bent Over Rowing": ex("back", "barbell", "compound", "pull", weight=115, reps=8, weight_kg=50,
                            prime=["lats", "rhomboids"], major=["traps", "biceps"],
                            minor=["teres", "lowerBack"],
                            aliases=["Barbell Row", "Bent-Over Row", "BB Row"]),
@@ -1323,7 +1347,7 @@ CURATION = {
     "Landmine Squat": ex("legs", "barbell", "compound", "squat", weight=70, reps=10, prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "lowerBack"], trace=["abs", "calves"]),
     "Landmine Reverse Lunge with Knee Raise": ex("legs", "barbell", "compound", "lunge", weight=50, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["hamstrings", "hipFlexors"], minor=["adductors"], trace=["abs", "deltoids"]),
     "Landmine Single Leg RDL": ex("legs", "barbell", "compound", "hinge", weight=50, reps=10, lat="unilateral", prime=["hamstrings", "glutes"], major=["lowerBack"], minor=["adductors", "forearms"], trace=["abs"]),
-    "Trap Bar Deadlift": ex("legs", "barbell", "compound", "hinge", weight=225, reps=6, prime=["glutes", "quads"], major=["hamstrings", "lowerBack"], minor=["traps", "forearms"], trace=["abs"], aliases=["Hex Bar Deadlift"]),
+    "Trap Bar Deadlift": ex("legs", "barbell", "compound", "hinge", weight=225, reps=6, weight_kg=100, prime=["glutes", "quads"], major=["hamstrings", "lowerBack"], minor=["traps", "forearms"], trace=["abs"], aliases=["Hex Bar Deadlift"]),
     "Banded Single Leg Hip Thrusts": ex("legs", "band", "compound", "hinge", reps=12, lat="unilateral", bw=0.4, prime=["glutes"], major=["hamstrings"], minor=["abs"], trace=["quads"]),
     # — Upper body push —
     "½ Kneeling Dumbbell Press": ex("shoulders", "dumbbell", "compound", "push", weight=25, reps=10, lat="unilateral", prime=["deltoids"], major=["triceps"], minor=["traps", "abs"], trace=["obliques"], aliases=["Half-Kneeling Dumbbell Press", "Half Kneeling DB Press"]),

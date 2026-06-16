@@ -192,6 +192,16 @@ final class ExerciseCatalogItem: Identifiable {
     var name: String = ""
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var defaultWeight: Double = 0
+
+    /// Native kg starting weight (a multiple of 2.5 kg) for kg users,
+    /// so a kg scrubber seeds on a clean detent instead of an off-grid
+    /// conversion of the lb default (135 lb → 61.2 kg). Nil for
+    /// bodyweight / duration lifts and user-created customs, which
+    /// fall back to the single lb default. Resolved to canonical lb at
+    /// the seed/display boundary; additive defaulted field, so no
+    /// migration for existing catalogs.
+    var defaultWeightKg: Double? = nil
+
     var defaultReps: Int = 8
 
     /// How this exercise is measured — reps or a timed hold. Stored
@@ -276,6 +286,23 @@ final class ExerciseCatalogItem: Identifiable {
         set { muscleGroupRaw = newValue.rawValue }
     }
 
+    /// Canonical-lb default to seed or display for `unit`. kg users get
+    /// the native kg default (converted to canonical lb) when one
+    /// shipped; everyone else gets the single lb default. Keeps stored
+    /// weight canonical while letting each unit start on a clean,
+    /// gym-natural number.
+    func defaultWeight(forUnit unit: WeightUnit) -> Double {
+        guard unit == .kg, let kg = defaultWeightKg else { return defaultWeight }
+        return WeightFormatter.toCanonical(kg, unit: .kg)
+    }
+
+    /// The seed default resolved against the user's current unit
+    /// preference. For value-copying inits (template / workout / draft)
+    /// that have no view context to read @AppStorage.
+    var defaultWeightSeed: Double {
+        defaultWeight(forUnit: .current)
+    }
+
     /// Computed accessor for the tracking-mode enum.
     var trackingMode: TrackingMode {
         get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
@@ -334,6 +361,7 @@ final class ExerciseCatalogItem: Identifiable {
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
+        defaultWeightKg: Double? = nil,
         defaultReps: Int = 8,
         trackingMode: TrackingMode = .reps,
         defaultDuration: TimeInterval = 0,
@@ -352,6 +380,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.name = name
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
+        self.defaultWeightKg = defaultWeightKg
         self.defaultReps = defaultReps
         self.trackingModeRaw = trackingMode.rawValue
         self.defaultDuration = defaultDuration
@@ -379,6 +408,7 @@ extension ExerciseCatalogItem {
             name: record.name,
             group: record.muscleGroup,
             defaultWeight: record.defaultWeightValue,
+            defaultWeightKg: record.defaultWeightKgValue,
             defaultReps: record.defaultRepsValue,
             trackingMode: record.trackingModeValue,
             defaultDuration: record.defaultDurationValue,

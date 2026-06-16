@@ -18,7 +18,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Alternating Biceps Curls With Dumbbell",
@@ -39,7 +40,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Alternating dumbbell hammer curl",
@@ -60,7 +62,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Australian pull-ups",
@@ -115,7 +118,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Barbell Triceps Extension",
@@ -132,7 +136,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "Barbell Wrist Curl",
@@ -149,7 +154,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 30.0
   },
   {
     "name": "Bayesian Curl",
@@ -170,7 +176,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Bench Dips On Floor HD",
@@ -221,6 +228,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push"
   },
   {
@@ -251,6 +259,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "pattern": "pull"
   },
   {
@@ -268,7 +277,8 @@
         "muscle": "biceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Biceps Curl With Cable",
@@ -289,7 +299,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Biceps Curls With Barbell",
@@ -311,6 +322,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 30.0,
     "aliases": [
       "Barbell Curl",
       "BB Curl"
@@ -335,7 +347,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Biceps Curls With SZ-bar",
@@ -356,7 +369,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "Biceps with TRX",
@@ -406,6 +420,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Biceps Curl Trifecta",
       "Triple Biceps Curl",
@@ -448,7 +463,8 @@
         "muscle": "biceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Cable Curls",
@@ -470,6 +486,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "Cable Curl"
     ]
@@ -489,7 +506,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Cable Tricep Kickback",
@@ -506,7 +524,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Cable Triceps Press",
@@ -523,7 +542,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Curl  - With Shoulder Elevated",
@@ -545,6 +565,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Shoulder-Elevated Curl",
       "Shoulder Flexed Curl"
@@ -569,7 +590,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "DB Cross Body Hammer Curls",
@@ -590,7 +612,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "DB Wrist Extension",
@@ -607,7 +630,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Deadhang",
@@ -705,6 +729,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "push"
   },
   {
@@ -722,7 +747,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Dumbbell bicep curl to press",
@@ -752,6 +778,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push"
   },
   {
@@ -773,7 +800,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Dumbbell close grip bench press",
@@ -799,6 +827,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push"
   },
   {
@@ -817,6 +846,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Concentration Curl"
     ]
@@ -840,7 +870,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbbell drag curls",
@@ -861,7 +892,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbbell Incline Curl",
@@ -882,7 +914,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbbell Triceps Extension",
@@ -899,7 +932,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Dumbbell Underhand Dead Row",
@@ -933,6 +967,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull"
   },
   {
@@ -954,7 +989,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbbells on Scott Machine",
@@ -975,7 +1011,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbell Tate Press",
@@ -992,7 +1029,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Elbows Tucked DB Bench Press",
@@ -1018,6 +1056,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push"
   },
   {
@@ -1125,7 +1164,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "Forearm Curls (underhand grip)",
@@ -1142,7 +1182,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Hammer Curls",
@@ -1164,6 +1205,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Hammer Curl",
       "DB Hammer Curl"
@@ -1188,7 +1230,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Hand Grip",
@@ -1227,7 +1270,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Incline Close Grip Barbell Bench Press",
@@ -1253,6 +1297,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -1270,7 +1315,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "JM Press",
@@ -1291,7 +1337,8 @@
         "muscle": "pectorals",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 42.5
   },
   {
     "name": "knee push-ups",
@@ -1376,7 +1423,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Lying Triceps Extensions",
@@ -1393,7 +1441,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "Lying Triceps Kickback",
@@ -1410,7 +1459,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "One Arm Overhead Cable Tricep Extension",
@@ -1427,7 +1477,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "One Arm Triceps Extensions on Cable",
@@ -1444,7 +1495,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "one-handed kettlebell curls",
@@ -1465,7 +1517,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Overhand Cable Curl",
@@ -1491,6 +1544,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "Cable Reverse Curl"
     ]
@@ -1510,7 +1564,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Overhead Triceps Extension",
@@ -1528,6 +1583,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 17.5,
     "aliases": [
       "Overhead Tricep Extension"
     ]
@@ -1574,6 +1630,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 12.5,
     "trackingMode": "duration",
     "defaultDuration": 30,
     "aliases": [
@@ -1600,7 +1657,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Preacher Curl - Internally Rotated",
@@ -1621,7 +1679,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Preacher Curls",
@@ -1643,6 +1702,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 25.0,
     "aliases": [
       "Preacher Curl"
     ]
@@ -1700,7 +1760,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 20.0
   },
   {
     "name": "Reverse Curl",
@@ -1721,7 +1782,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 20.0
   },
   {
     "name": "Reverse EZ Bar Cable Curls",
@@ -1742,7 +1804,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Reverse Grip Barbell Curls",
@@ -1763,7 +1826,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 20.0
   },
   {
     "name": "Reverse Preacher Curl (Close Grip)",
@@ -1784,7 +1848,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 20.0
   },
   {
     "name": "Ring Dips",
@@ -1826,7 +1891,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Seated Dumbbell Curls",
@@ -1848,6 +1914,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "DB Curl"
     ]
@@ -1867,7 +1934,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Seated W Curl",
@@ -1888,7 +1956,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Shoulder width three-point push-up",
@@ -1936,6 +2005,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "aliases": [
       "Barbell Shrug",
       "Shrugs"
@@ -1961,6 +2031,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "aliases": [
       "DB Shrug"
     ]
@@ -1980,7 +2051,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Single-arm Preacher Curl",
@@ -2001,7 +2073,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Skullcrusher Dumbbells",
@@ -2018,7 +2091,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Skullcrusher SZ-bar",
@@ -2036,6 +2110,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 25.0,
     "aliases": [
       "Skull Crusher",
       "Lying Triceps Extension",
@@ -2097,6 +2172,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push"
   },
   {
@@ -2118,7 +2194,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Standing Bicep Curl",
@@ -2139,7 +2216,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Standing biceps stretch left",
@@ -2204,7 +2282,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Straight Bar Cable Curls",
@@ -2225,7 +2304,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Tricep Dumbbell Kickback",
@@ -2242,7 +2322,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Tricep Pushdown on Cable",
@@ -2259,7 +2340,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Tricep Rope Pushdowns",
@@ -2276,7 +2358,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Triceps Dips (Assisted)",
@@ -2318,7 +2401,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Triceps Extensions on Cable With Bar",
@@ -2335,7 +2419,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 25.0
   },
   {
     "name": "Triceps on Machine",
@@ -2352,7 +2437,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 37.5
   },
   {
     "name": "Triceps Overhead (Dumbbell)",
@@ -2369,7 +2455,8 @@
         "muscle": "triceps",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Triceps Pushdown",
@@ -2387,6 +2474,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 27.5,
     "aliases": [
       "Tricep Pushdown",
       "Pushdown",
@@ -2579,7 +2667,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Wrist curl, dumbbells",
@@ -2596,7 +2685,8 @@
         "muscle": "forearms",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Zottman curl",
@@ -2617,7 +2707,8 @@
         "muscle": "forearms",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "1-Arm Half-Kneeling Lat Pulldown",
@@ -2647,6 +2738,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull",
     "aliases": [
       "Half-Kneeling Single-Arm Pulldown"
@@ -2684,6 +2776,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "pattern": "pull",
     "aliases": [
       "Alternating Cable High Row"
@@ -2725,6 +2818,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "pull",
     "aliases": [
       "Gorilla Row",
@@ -2800,6 +2894,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull",
     "aliases": [
       "Assisted Chin-up",
@@ -2834,6 +2929,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull",
     "aliases": [
       "Assisted Pull-up Machine",
@@ -2970,6 +3066,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 70.0,
     "pattern": "hinge",
     "aliases": [
       "Barbell RDL"
@@ -3011,6 +3108,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "pull",
     "aliases": [
       "Pronated Barbell Row",
@@ -3053,6 +3151,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "pull",
     "aliases": [
       "Supinated Barbell Row",
@@ -3095,6 +3194,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull",
     "aliases": [
       "Bent-Over Dumbbell Row",
@@ -3133,6 +3233,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "pattern": "pull",
     "aliases": [
       "Row to External Rotation"
@@ -3174,6 +3275,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50,
     "pattern": "pull",
     "aliases": [
       "Barbell Row",
@@ -3217,6 +3319,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "pull",
     "aliases": [
       "Underhand Barbell Row",
@@ -3327,6 +3430,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Close-Grip Pulldown"
@@ -3402,6 +3506,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Cross-Body Y Raise"
     ]
@@ -3446,6 +3551,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 100,
     "pattern": "hinge",
     "aliases": [
       "Deadlift",
@@ -3493,6 +3599,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 92.5,
     "pattern": "hinge",
     "aliases": [
       "Deficit Pull"
@@ -3526,6 +3633,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "pattern": "pull",
     "aliases": [
       "Bent-Over Face Pull",
@@ -3572,6 +3680,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "hinge",
     "aliases": [
       "DB Hang Power Clean",
@@ -3606,6 +3715,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "DB Pullover",
       "Lat Pullover",
@@ -3735,6 +3845,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Narrow-Grip Front Pulldown"
@@ -3772,6 +3883,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Wide-Grip Front Pulldown"
@@ -3809,6 +3921,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "pull",
     "aliases": [
       "Chest-Supported Helms Row"
@@ -3846,6 +3959,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Machine High Row"
@@ -4028,6 +4142,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Incline Reverse Fly",
       "Prone Rear Delt Fly"
@@ -4065,6 +4180,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "pull",
     "aliases": [
       "Chest-Supported Incline DB Row",
@@ -4103,6 +4219,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "pull",
     "aliases": [
       "Incline Chest-Supported Row",
@@ -4239,6 +4356,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "pull",
     "aliases": [
       "Drag Row",
@@ -4286,6 +4404,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 25.0,
     "pattern": "hinge",
     "aliases": [
       "Kettlebell Deadlift",
@@ -4332,6 +4451,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "pull",
     "aliases": [
       "KB Row and Rotate",
@@ -4378,6 +4498,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 25.0,
     "pattern": "pull",
     "aliases": [
       "KB Sumo High Pull"
@@ -4455,6 +4576,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "pattern": "pull",
     "aliases": [
       "Heavy Dumbbell Row"
@@ -4492,6 +4614,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "pull",
     "aliases": [
       "Dumbbell Lat Pullover"
@@ -4525,6 +4648,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Lat Pulldown",
@@ -4563,6 +4687,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Leaning-Back Lat Pulldown"
@@ -4596,6 +4721,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Straight-Back Lat Pulldown"
@@ -4629,6 +4755,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull",
     "aliases": [
       "Single-Arm Lat Pulldown",
@@ -4667,6 +4794,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "pull",
     "aliases": [
       "Iso-Lateral Row",
@@ -4705,6 +4833,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Low Cable Row",
@@ -4743,6 +4872,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Narrow-Grip Cable Row"
@@ -4816,6 +4946,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "pull"
   },
   {
@@ -4854,6 +4985,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "pull",
     "aliases": [
       "Landmine Meadows Row"
@@ -4929,6 +5061,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 47.5,
     "pattern": "pull",
     "aliases": [
       "Neutral-Grip Pulldown",
@@ -5006,6 +5139,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull",
     "aliases": [
       "Single-Arm Dumbbell Row",
@@ -5050,6 +5184,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "pattern": "pull",
     "aliases": [
       "Heavy One-Arm Dumbbell Row"
@@ -5091,6 +5226,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "pull",
     "aliases": [
       "Pendlay Row"
@@ -5136,6 +5272,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "hinge"
   },
   {
@@ -5202,6 +5339,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "High Cable Rope Pullover",
       "Straight-Arm Pulldown"
@@ -5235,6 +5373,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull",
     "aliases": [
       "Machine Assisted Pull-up"
@@ -5419,6 +5558,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "aliases": [
       "Machine Pullover",
       "Nautilus Pullover"
@@ -5538,6 +5678,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 125.0,
     "pattern": "hinge",
     "aliases": [
       "Rack Pull",
@@ -5580,6 +5721,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "pull",
     "aliases": [
       "Plank Row"
@@ -5613,6 +5755,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "aliases": [
       "Reverse Cable Fly"
     ]
@@ -5677,6 +5820,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "pull",
     "aliases": [
       "Rope Cable Pullover Row"
@@ -5714,6 +5858,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Close-Grip Seated Cable Row",
@@ -5794,6 +5939,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "pull",
     "aliases": [
       "Chest-Supported Barbell Row"
@@ -5856,6 +6002,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "aliases": [
       "Seated Cable Mid-Trap Shrug"
     ]
@@ -5892,6 +6039,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Seated Row",
@@ -5923,6 +6071,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Seated Rear Delt Raise"
     ]
@@ -5959,6 +6108,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 55.0,
     "pattern": "pull",
     "aliases": [
       "Machine Row",
@@ -5997,6 +6147,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "V-Bar Seated Row"
@@ -6034,6 +6185,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull",
     "aliases": [
       "Single-Arm Shotgun Row"
@@ -6063,6 +6215,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Single-Arm Straight-Arm Pulldown"
     ]
@@ -6103,6 +6256,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "pull",
     "aliases": [
       "Plank to Row"
@@ -6140,6 +6294,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull"
   },
   {
@@ -6223,6 +6378,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "hinge",
     "aliases": [
       "Snatch",
@@ -6253,6 +6409,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "Straight-Arm Pulldown (Bar)"
     ]
@@ -6281,6 +6438,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "aliases": [
       "Straight-Arm Pulldown (Rope)"
     ]
@@ -6309,6 +6467,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "Straight-Arm Pushdown",
       "Lat Pushdown"
@@ -6405,6 +6564,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "pull",
     "aliases": [
       "T-Bar Row",
@@ -6493,6 +6653,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 5.0,
     "aliases": [
       "Lower Trap Raise",
       "Trap 3 Raise"
@@ -6612,6 +6773,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
     "aliases": [
       "Reverse-Grip Pulldown",
@@ -6650,6 +6812,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull",
     "aliases": [
       "Single-Arm Cable Row"
@@ -6691,6 +6854,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "pull"
   },
   {
@@ -6721,6 +6885,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Close Neutral-Grip Pulldown"
@@ -6796,6 +6961,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "pull",
     "aliases": [
       "Wide-Grip Lat Pulldown"
@@ -6837,6 +7003,44 @@
     ]
   },
   {
+    "name": "4-count burpees",
+    "group": "chest",
+    "defaultWeight": 0,
+    "defaultReps": 10,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.6,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "weight": 1.0
+      },
+      {
+        "muscle": "triceps",
+        "weight": 0.7
+      },
+      {
+        "muscle": "quads",
+        "weight": 0.7
+      },
+      {
+        "muscle": "glutes",
+        "weight": 0.7
+      },
+      {
+        "muscle": "deltoids",
+        "weight": 0.4
+      },
+      {
+        "muscle": "abs",
+        "weight": 0.4
+      }
+    ],
+    "pattern": "push"
+  },
+  {
     "name": "Bench Press",
     "group": "chest",
     "defaultWeight": 135,
@@ -6860,6 +7064,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push",
     "aliases": [
       "BP",
@@ -6891,6 +7096,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "push",
     "aliases": [
       "Dumbbell Bench Press",
@@ -6918,7 +7124,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Burpees",
@@ -6974,6 +7181,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 37.5,
     "aliases": [
       "Chest Fly Machine"
     ]
@@ -6997,7 +7205,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 32.5
   },
   {
     "name": "Cable Chest Press - Decline",
@@ -7023,6 +7232,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "push",
     "aliases": [
       "Decline Cable Press"
@@ -7052,6 +7262,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "push",
     "aliases": [
       "Incline Cable Press"
@@ -7077,6 +7288,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Cable Crossover"
     ]
@@ -7101,6 +7313,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Standing Cable Fly"
     ]
@@ -7125,6 +7338,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "High-to-Low Cable Fly",
       "High Cable Fly"
@@ -7149,7 +7363,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Cable Fly Upper Chest",
@@ -7170,7 +7385,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Cable Press Around",
@@ -7200,6 +7416,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push"
   },
   {
@@ -7226,6 +7443,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "push",
     "aliases": [
       "Machine Press",
@@ -7287,6 +7505,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push",
     "aliases": [
       "CGBP",
@@ -7351,6 +7570,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "aliases": [
       "Cross-Bench Pullover"
     ]
@@ -7379,6 +7599,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "push"
   },
   {
@@ -7405,6 +7626,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push",
     "aliases": [
       "Decline Bench Press"
@@ -7434,6 +7656,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "Decline Dumbbell Press"
@@ -7603,6 +7826,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "DB Floor Press"
@@ -7632,6 +7856,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "Hex Press",
@@ -7713,6 +7938,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "push"
   },
   {
@@ -7734,7 +7960,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Fly With Dumbbells",
@@ -7756,6 +7983,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Dumbbell Fly",
       "Chest Fly",
@@ -7782,6 +8010,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Decline Dumbbell Fly",
       "Decline DB Fly"
@@ -7811,6 +8040,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 50.0,
     "pattern": "push",
     "aliases": [
       "Decline Machine Press",
@@ -7872,6 +8102,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "pattern": "push"
   },
   {
@@ -7898,6 +8129,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push",
     "aliases": [
       "Incline Bench Press",
@@ -7928,6 +8160,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "push"
   },
   {
@@ -7954,6 +8187,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "push"
   },
   {
@@ -7980,6 +8214,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "push"
   },
   {
@@ -8002,6 +8237,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "aliases": [
       "Incline DB Fly"
     ]
@@ -8030,6 +8266,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "push",
     "aliases": [
       "Incline DB Press"
@@ -8114,6 +8351,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push",
     "aliases": [
       "Incline Smith Machine Press"
@@ -8139,6 +8377,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "trackingMode": "duration",
     "defaultDuration": 30
   },
@@ -8273,6 +8512,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push"
   },
   {
@@ -8299,6 +8539,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "push"
   },
   {
@@ -8325,6 +8566,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "push"
   },
   {
@@ -8351,6 +8593,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "push"
   },
   {
@@ -8373,6 +8616,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "aliases": [
       "Low Cable Fly",
       "Low-to-High Cable Fly"
@@ -8397,7 +8641,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Machine chest fly",
@@ -8419,6 +8664,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "aliases": [
       "Pec Deck Fly",
       "Machine Fly"
@@ -8448,6 +8694,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "push",
     "aliases": [
       "Seated Machine Press"
@@ -8477,6 +8724,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "push"
   },
   {
@@ -8515,6 +8763,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "push",
     "aliases": [
       "Med Ball Punch",
@@ -8545,6 +8794,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push"
   },
   {
@@ -8604,7 +8854,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Pause Bench",
@@ -8630,6 +8881,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push",
     "aliases": [
       "Paused Bench Press"
@@ -8654,7 +8906,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 37.5
   },
   {
     "name": "Pin Bench Press BB",
@@ -8680,6 +8933,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push",
     "aliases": [
       "Pin Press",
@@ -8827,6 +9081,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push",
     "aliases": [
       "Underhand Bench Press",
@@ -8892,6 +9147,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "push"
   },
   {
@@ -8913,7 +9169,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Side to Side Push Ups",
@@ -8969,6 +9226,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -9041,6 +9299,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "push",
     "aliases": [
       "Lying Med Ball Chest Pass"
@@ -9107,6 +9366,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push",
     "aliases": [
       "Weighted Push-Up"
@@ -9192,11 +9452,11 @@
       },
       {
         "muscle": "obliques",
-        "weight": 0.4
+        "weight": 0.7
       },
       {
         "muscle": "hipFlexors",
-        "weight": 0.2
+        "weight": 0.4
       }
     ],
     "aliases": [
@@ -9325,6 +9585,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "aliases": [
       "Medicine Ball Slams",
       "Kneeling Med Ball Slams"
@@ -9505,7 +9766,8 @@
         "muscle": "quads",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "bicycle crunches",
@@ -9664,7 +9926,8 @@
         "muscle": "lats",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Clamshell",
@@ -9775,7 +10038,8 @@
         "muscle": "obliques",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 37.5
   },
   {
     "name": "Crunches With Cable",
@@ -9796,7 +10060,8 @@
         "muscle": "obliques",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 37.5
   },
   {
     "name": "Crunches With Legs Up",
@@ -9942,7 +10207,8 @@
         "muscle": "obliques",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Dumbbell Side Bend",
@@ -9963,7 +10229,8 @@
         "muscle": "abs",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Dynamic Planche",
@@ -10013,7 +10280,8 @@
         "muscle": "abs",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Flutter Kicks",
@@ -10171,6 +10439,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "core"
   },
   {
@@ -10234,6 +10503,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "push",
     "aliases": [
       "Glute Bridge Floor Press",
@@ -10596,6 +10866,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "core",
     "aliases": [
       "Kneeling Rotational Med Ball Throw"
@@ -10713,6 +10984,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Landmine Rotations"
     ]
@@ -10800,6 +11072,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "core",
     "aliases": [
       "Shuffle to Med Ball Throw"
@@ -11013,6 +11286,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "pattern": "core",
     "aliases": [
       "Weighted V-Up",
@@ -11038,7 +11312,8 @@
         "muscle": "abs",
         "weight": 0.7
       }
-    ]
+    ],
+    "defaultWeightKg": 5.0
   },
   {
     "name": "Mountain climbers",
@@ -11125,7 +11400,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Pallof Wall Iso Holds",
@@ -11366,6 +11642,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 7.5,
     "pattern": "core",
     "aliases": [
       "Plank Row with Toe Touch (core)",
@@ -11574,6 +11851,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "core"
   },
   {
@@ -11616,7 +11894,8 @@
         "muscle": "abs",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 32.5
   },
   {
     "name": "Rotational Med Ball Slams (warm-up)",
@@ -11658,6 +11937,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "pattern": "core",
     "aliases": [
       "Rotational Slam",
@@ -11815,7 +12095,8 @@
         "muscle": "abs",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 32.5
   },
   {
     "name": "Side Crunch",
@@ -11865,7 +12146,8 @@
         "muscle": "forearms",
         "weight": 0.2
       }
-    ]
+    ],
+    "defaultWeightKg": 15.0
   },
   {
     "name": "Side Plank",
@@ -11947,6 +12229,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "trackingMode": "duration",
     "defaultDuration": 30,
     "aliases": [
@@ -12035,6 +12318,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "squat",
     "trackingMode": "duration",
     "defaultDuration": 30
@@ -12104,6 +12388,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "core",
     "aliases": [
       "Split Stance Med Ball Throw",
@@ -12138,6 +12423,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "pattern": "core"
   },
   {
@@ -12292,6 +12578,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "aliases": [
       "Med Ball Straight-Leg Sit-Up"
     ]
@@ -12328,6 +12615,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "carry",
     "trackingMode": "duration",
     "defaultDuration": 40,
@@ -12364,6 +12652,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "trackingMode": "duration",
     "defaultDuration": 30,
     "aliases": [
@@ -12530,7 +12819,8 @@
         "muscle": "lats",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "TRX Obliques",
@@ -12694,6 +12984,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "core"
   },
   {
@@ -12719,7 +13010,8 @@
         "muscle": "hipFlexors",
         "weight": 0.2
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Weighted Leg Lowers",
@@ -12749,12 +13041,13 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "aliases": [
       "Weighted Lying Leg Lowers"
     ]
   },
   {
-    "name": "Weighted \u00bd Deadbugs (warm-up)",
+    "name": "Weighted ½ Deadbugs (warm-up)",
     "group": "core",
     "defaultWeight": 10,
     "defaultReps": 12,
@@ -12785,6 +13078,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "pattern": "core"
   },
   {
@@ -12813,7 +13107,7 @@
     ]
   },
   {
-    "name": "\u00bd Kneeling Rotational Med Ball Throws",
+    "name": "½ Kneeling Rotational Med Ball Throws",
     "group": "core",
     "defaultWeight": 8,
     "defaultReps": 10,
@@ -12848,6 +13142,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "core",
     "aliases": [
       "Half-Kneeling Rotational Med Ball Throw"
@@ -12923,6 +13218,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "hinge",
     "aliases": [
       "Two-Handed Kettlebell Swing"
@@ -12943,7 +13239,8 @@
         "muscle": "glutes",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Ali Shuffle",
@@ -13447,6 +13744,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "squat"
   },
   {
@@ -13477,6 +13775,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "squat"
   },
   {
@@ -13503,6 +13802,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "hinge"
   },
   {
@@ -13533,6 +13833,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "lunge"
   },
   {
@@ -13563,6 +13864,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "lunge"
   },
   {
@@ -13593,6 +13895,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "lunge"
   },
   {
@@ -13623,6 +13926,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 82.5,
     "pattern": "squat"
   },
   {
@@ -13745,6 +14049,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "squat",
     "aliases": [
       "Box Squat"
@@ -13808,6 +14113,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "lunge",
     "aliases": [
       "Bulgarian Split Squat",
@@ -13862,6 +14168,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "hinge"
   },
   {
@@ -13879,7 +14186,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 90.0
   },
   {
     "name": "Calf Raise using Hack Squat Machine",
@@ -13896,7 +14204,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 67.5
   },
   {
     "name": "Calf Raises on Hackenschmitt Machine",
@@ -13913,7 +14222,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 67.5
   },
   {
     "name": "Calf raises, one legged",
@@ -13972,6 +14282,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "hinge"
   },
   {
@@ -14161,6 +14472,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "squat"
   },
   {
@@ -14292,6 +14604,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "pattern": "squat",
     "aliases": [
       "Dumbbell Countermovement Jump",
@@ -14331,6 +14644,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "hinge"
   },
   {
@@ -14369,6 +14683,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "carry",
     "trackingMode": "duration",
     "defaultDuration": 40
@@ -14397,6 +14712,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "hinge"
   },
   {
@@ -14427,6 +14743,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "squat"
   },
   {
@@ -14457,6 +14774,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "squat",
     "aliases": [
       "Goblet Squat"
@@ -14486,6 +14804,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "hinge"
   },
   {
@@ -14516,6 +14835,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -14546,6 +14866,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -14576,6 +14897,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -14606,6 +14928,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "hinge"
   },
   {
@@ -14636,6 +14959,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "lunge"
   },
   {
@@ -14678,6 +15002,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "hinge"
   },
   {
@@ -14708,6 +15033,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "lunge"
   },
   {
@@ -14742,6 +15068,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "hinge"
   },
   {
@@ -14776,6 +15103,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "squat"
   },
   {
@@ -14963,6 +15291,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "squat",
     "aliases": [
       "Front Squat"
@@ -14988,6 +15317,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "hinge"
   },
   {
@@ -15014,6 +15344,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 82.5,
     "pattern": "hinge"
   },
   {
@@ -15035,7 +15366,8 @@
         "muscle": "hamstrings",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Goblet Reverse Lunge",
@@ -15073,6 +15405,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -15115,6 +15448,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "lunge"
   },
   {
@@ -15153,6 +15487,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -15199,6 +15534,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 17.5,
     "pattern": "squat",
     "aliases": [
       "Goblet Thruster"
@@ -15228,6 +15564,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "hinge",
     "aliases": [
       "Good Morning"
@@ -15253,6 +15590,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 82.5,
     "pattern": "squat",
     "aliases": [
       "Hack Squat"
@@ -15481,6 +15819,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "hinge"
   },
   {
@@ -15681,6 +16020,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 5.0,
     "pattern": "lunge"
   },
   {
@@ -15774,6 +16114,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "hinge"
   },
   {
@@ -15812,6 +16153,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "hinge"
   },
   {
@@ -15846,6 +16188,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 25.0,
     "pattern": "hinge"
   },
   {
@@ -15880,6 +16223,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "hinge",
     "aliases": [
       "Kettlebell Swing"
@@ -15913,6 +16257,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "hinge"
   },
   {
@@ -15976,6 +16321,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "lunge"
   },
   {
@@ -16014,6 +16360,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "hinge"
   },
   {
@@ -16056,6 +16403,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "squat"
   },
   {
@@ -16090,6 +16438,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 30.0,
     "pattern": "squat"
   },
   {
@@ -16184,7 +16533,8 @@
         "muscle": "calves",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 32.5
   },
   {
     "name": "Leg curl with elastic",
@@ -16227,6 +16577,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "aliases": [
       "Lying Leg Curl",
       "Hamstring Curl"
@@ -16252,6 +16603,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 37.5,
     "aliases": [
       "Seated Leg Curl"
     ]
@@ -16275,7 +16627,8 @@
         "muscle": "calves",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Leg Extension",
@@ -16293,6 +16646,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 37.5,
     "aliases": [
       "Quad Extension"
     ]
@@ -16325,6 +16679,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 122.5,
     "pattern": "squat"
   },
   {
@@ -16355,6 +16710,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 122.5,
     "pattern": "squat"
   },
   {
@@ -16372,7 +16728,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 90.0
   },
   {
     "name": "Leg Presses (narrow)",
@@ -16398,6 +16755,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 122.5,
     "pattern": "squat"
   },
   {
@@ -16428,6 +16786,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 122.5,
     "pattern": "squat"
   },
   {
@@ -16462,6 +16821,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "squat"
   },
   {
@@ -16508,6 +16868,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 10.0,
     "pattern": "lunge"
   },
   {
@@ -16641,6 +17002,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 40.0,
     "aliases": [
       "Hip Abduction",
       "Abductor Machine"
@@ -16742,6 +17104,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "squat"
   },
   {
@@ -16768,6 +17131,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 72.5,
     "pattern": "squat"
   },
   {
@@ -16802,6 +17166,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 82.5,
     "pattern": "squat",
     "aliases": [
       "Pendulum Hack Squat"
@@ -16835,6 +17200,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 82.5,
     "pattern": "squat"
   },
   {
@@ -16889,6 +17255,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 70.0,
     "pattern": "squat"
   },
   {
@@ -17153,6 +17520,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 40.0,
     "pattern": "hinge"
   },
   {
@@ -17230,6 +17598,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 70.0,
     "pattern": "hinge",
     "aliases": [
       "RDL"
@@ -17272,6 +17641,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 20.0,
     "aliases": [
       "Seated Calf Raise"
     ]
@@ -17291,7 +17661,8 @@
         "muscle": "glutes",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 40.0
   },
   {
     "name": "Seated Hip Adduction",
@@ -17309,6 +17680,7 @@
         "weight": 1.0
       }
     ],
+    "defaultWeightKg": 40.0,
     "aliases": [
       "Hip Adduction",
       "Adductor Machine"
@@ -17471,7 +17843,8 @@
         "muscle": "quads",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Single Leg Glute Bridge",
@@ -17607,6 +17980,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "hinge"
   },
   {
@@ -17637,6 +18011,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "lunge"
   },
   {
@@ -17658,7 +18033,8 @@
         "muscle": "adductors",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 22.5
   },
   {
     "name": "Sitting Calf Raises",
@@ -17675,7 +18051,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 40.0
   },
   {
     "name": "Sitting Calf Stretch (Dorsiflexion)",
@@ -17832,6 +18209,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "lunge"
   },
   {
@@ -17862,6 +18240,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "squat"
   },
   {
@@ -17928,6 +18307,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "hinge"
   },
   {
@@ -18034,6 +18414,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 85.0,
     "pattern": "squat",
     "aliases": [
       "Back Squat",
@@ -18081,6 +18462,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "squat"
   },
   {
@@ -18098,7 +18480,8 @@
         "muscle": "adductors",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 17.5
   },
   {
     "name": "Standing Calf Raises",
@@ -18115,7 +18498,8 @@
         "muscle": "calves",
         "weight": 1.0
       }
-    ]
+    ],
+    "defaultWeightKg": 67.5
   },
   {
     "name": "Standing Calf Stretch",
@@ -18185,6 +18569,7 @@
         "weight": 0.7
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "lunge",
     "aliases": [
       "Step-up",
@@ -18219,6 +18604,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "hinge"
   },
   {
@@ -18257,6 +18643,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 102.5,
     "pattern": "hinge",
     "aliases": [
       "Sumo DL"
@@ -18345,6 +18732,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "squat"
   },
   {
@@ -18404,6 +18792,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 100,
     "pattern": "hinge",
     "aliases": [
       "Hex Bar Deadlift"
@@ -18441,6 +18830,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 102.5,
     "pattern": "squat"
   },
   {
@@ -18535,6 +18925,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "lunge",
     "aliases": [
       "Walking Lunge"
@@ -18572,6 +18963,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "pattern": "squat"
   },
   {
@@ -18641,10 +19033,11 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "lunge"
   },
   {
-    "name": "45\u00b0 lateral raises",
+    "name": "45° lateral raises",
     "group": "shoulders",
     "defaultWeight": 15,
     "defaultReps": 15,
@@ -18663,6 +19056,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "45 Degree Lateral Raise",
       "Incline Lateral Raise"
@@ -18692,6 +19086,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push",
     "aliases": [
       "Arnold Press"
@@ -18843,6 +19238,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -18868,7 +19264,8 @@
         "muscle": "deltoids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 60.0
   },
   {
     "name": "Behind the Back Cable Lateral Raise",
@@ -18889,7 +19286,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Bent High Pulls",
@@ -18919,6 +19317,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "pull"
   },
   {
@@ -18945,6 +19344,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Bent-Over Lateral Raise",
       "Rear Delt Fly"
@@ -18973,7 +19373,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Butterfly Reverse",
@@ -18999,6 +19400,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "aliases": [
       "Reverse Pec Deck",
       "Rear Delt Machine"
@@ -19023,7 +19425,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Cable Front Raise with a small bar",
@@ -19044,7 +19447,8 @@
         "muscle": "serratus",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Cable Lateral Raises (Single Arm)",
@@ -19066,6 +19470,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Single-Arm Cable Lateral Raise"
     ]
@@ -19094,6 +19499,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 10.0,
     "aliases": [
       "Cable Reverse Fly"
     ]
@@ -19121,7 +19527,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Cable Shrug-In",
@@ -19142,7 +19549,8 @@
         "muscle": "rhomboids",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 37.5
   },
   {
     "name": "Chair dips",
@@ -19194,6 +19602,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Chest-Supported Reverse Fly"
     ]
@@ -19234,6 +19643,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push"
   },
   {
@@ -19268,10 +19678,11 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
-    "name": "Devil\u2019s Press",
+    "name": "Devil’s Press",
     "group": "shoulders",
     "defaultWeight": 35,
     "defaultReps": 8,
@@ -19310,6 +19721,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "push",
     "aliases": [
       "Devils Press",
@@ -19344,6 +19756,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push"
   },
   {
@@ -19370,6 +19783,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push",
     "aliases": [
       "Bradford Press"
@@ -19403,6 +19817,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "pull",
     "aliases": [
       "Rear Delt Row"
@@ -19432,6 +19847,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Scaption Raise"
     ]
@@ -19455,7 +19871,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Facepull",
@@ -19485,6 +19902,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "pattern": "pull",
     "aliases": [
       "Face Pull"
@@ -19560,6 +19978,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Front Raise",
       "Plate Front Raise"
@@ -19585,6 +20004,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "aliases": [
       "Cable Front Raise"
     ]
@@ -19609,6 +20029,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Front Raise",
       "Dumbbell Front Raise"
@@ -19633,7 +20054,8 @@
         "muscle": "serratus",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Handstand Push Up",
@@ -19697,6 +20119,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "pull",
     "aliases": [
       "Barbell High Pull"
@@ -19721,7 +20144,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Hindu Pushups",
@@ -19781,6 +20205,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 5.0,
     "aliases": [
       "Y-Raise",
       "Incline Y Raise"
@@ -19810,6 +20235,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push"
   },
   {
@@ -19844,6 +20270,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 60.0,
     "pattern": "push"
   },
   {
@@ -19874,6 +20301,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "push",
     "aliases": [
       "Arnold Press",
@@ -19908,6 +20336,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "Landmine Press",
@@ -19950,6 +20379,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "Landmine Press-Out"
@@ -19975,6 +20405,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Lateral Raise",
       "Side Raise",
@@ -20000,7 +20431,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Lateral-to-Front Raises",
@@ -20026,6 +20458,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 5.0,
     "aliases": [
       "L-Raise",
       "Lateral to Front Raise"
@@ -20050,7 +20483,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 2.5
   },
   {
     "name": "Machine Side Lateral Raises",
@@ -20072,6 +20506,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 22.5,
     "aliases": [
       "Machine Lateral Raise"
     ]
@@ -20100,6 +20535,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 35.0,
     "pattern": "push"
   },
   {
@@ -20126,6 +20562,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -20152,6 +20589,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push",
     "aliases": [
       "OHP",
@@ -20182,7 +20620,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 32.5
   },
   {
     "name": "Perpendicular Unilateral Landmine Row",
@@ -20212,6 +20651,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 27.5,
     "pattern": "pull"
   },
   {
@@ -20238,6 +20678,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -20369,6 +20810,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push"
   },
   {
@@ -20403,6 +20845,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 52.5,
     "pattern": "push"
   },
   {
@@ -20429,6 +20872,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 7.5,
     "aliases": [
       "Rear Delt Fly",
       "Reverse Fly",
@@ -20480,7 +20924,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Seated Dumbbell Side Lateral",
@@ -20501,7 +20946,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Shoulder Dumbbell Pendular Exercise",
@@ -20527,6 +20973,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 2.5,
     "aliases": [
       "Pendulum Shoulder Drill",
       "Rotator Cuff Pendulum"
@@ -20551,7 +20998,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Shoulder External Rotation with Dumbbell",
@@ -20572,7 +21020,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 5.0
   },
   {
     "name": "Shoulder Internal Rotation (Cable)",
@@ -20593,7 +21042,8 @@
         "muscle": "pectorals",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Shoulder Press, Barbell",
@@ -20619,6 +21069,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 42.5,
     "pattern": "push"
   },
   {
@@ -20645,6 +21096,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push",
     "aliases": [
       "Dumbbell Shoulder Press",
@@ -20676,6 +21128,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "push",
     "aliases": [
       "Machine Shoulder Press"
@@ -20705,6 +21158,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 32.5,
     "pattern": "push"
   },
   {
@@ -20730,7 +21184,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 5.0
   },
   {
     "name": "Shoulder Shrug",
@@ -20751,7 +21206,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 27.5
   },
   {
     "name": "Shoulder Y-pull cable",
@@ -20777,6 +21233,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "pull"
   },
   {
@@ -20798,7 +21255,8 @@
         "muscle": "forearms",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 85.0
   },
   {
     "name": "Side Lateral Raise (Cable)",
@@ -20823,7 +21281,8 @@
         "muscle": "serratus",
         "weight": 0.2
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Side lateral raise - Back (Cable)",
@@ -20844,7 +21303,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Side lateral raise - Front (Cable)",
@@ -20865,7 +21325,8 @@
         "muscle": "traps",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Side-laying interior rotation",
@@ -20886,7 +21347,8 @@
         "muscle": "pectorals",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 2.5
   },
   {
     "name": "Side-lying External Rotation",
@@ -20907,7 +21369,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 5.0
   },
   {
     "name": "Single-arm dumbbell shoulder press",
@@ -20937,6 +21400,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 15.0,
     "pattern": "push",
     "aliases": [
       "Single-Arm DB Shoulder Press"
@@ -20966,6 +21430,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 30.0,
     "pattern": "push",
     "aliases": [
       "Smith Machine Shoulder Press"
@@ -20990,7 +21455,8 @@
         "muscle": "serratus",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 12.5
   },
   {
     "name": "Trap press",
@@ -21011,7 +21477,8 @@
         "muscle": "serratus",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 7.5
   },
   {
     "name": "Tuck planche",
@@ -21083,7 +21550,8 @@
         "muscle": "teres",
         "weight": 0.4
       }
-    ]
+    ],
+    "defaultWeightKg": 10.0
   },
   {
     "name": "Upright Row w/ Dumbbells",
@@ -21109,6 +21577,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "pull",
     "aliases": [
       "Upright Row",
@@ -21139,6 +21608,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 30.0,
     "pattern": "pull"
   },
   {
@@ -21165,6 +21635,7 @@
         "weight": 0.4
       }
     ],
+    "defaultWeightKg": 30.0,
     "pattern": "pull",
     "aliases": [
       "EZ-Bar Upright Row",
@@ -21172,7 +21643,7 @@
     ]
   },
   {
-    "name": "\u00bd Kneeling Dumbbell Press",
+    "name": "½ Kneeling Dumbbell Press",
     "group": "shoulders",
     "defaultWeight": 25,
     "defaultReps": 10,
@@ -21203,6 +21674,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 12.5,
     "pattern": "push",
     "aliases": [
       "Half-Kneeling Dumbbell Press",
@@ -21210,7 +21682,7 @@
     ]
   },
   {
-    "name": "\u00bd Kneeling Landmine Press",
+    "name": "½ Kneeling Landmine Press",
     "group": "shoulders",
     "defaultWeight": 45,
     "defaultReps": 10,
@@ -21245,6 +21717,7 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 20.0,
     "pattern": "push",
     "aliases": [
       "Half-Kneeling Landmine Press"

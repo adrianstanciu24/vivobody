@@ -68,7 +68,7 @@ struct ConfigureExerciseSheet: View {
             mode = item.trackingMode
             _sets = State(initialValue: 3)
             _reps = State(initialValue: item.defaultReps)
-            _weight = State(initialValue: item.defaultWeight)
+            _weight = State(initialValue: item.defaultWeightSeed)
             _duration = State(initialValue: item.defaultDuration > 0 ? item.defaultDuration : 45)
             isEditing = false
             draftID = UUID()
