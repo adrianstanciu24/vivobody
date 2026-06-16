@@ -3608,7 +3608,8 @@
     ],
     "aliases": [
       "DB Pullover",
-      "Lat Pullover"
+      "Lat Pullover",
+      "Pullover"
     ]
   },
   {
@@ -5395,38 +5396,6 @@
     ]
   },
   {
-    "name": "Pullover",
-    "group": "back",
-    "defaultWeight": 50,
-    "defaultReps": 12,
-    "equipment": "dumbbell",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "weight": 1.0
-      },
-      {
-        "muscle": "pectorals",
-        "weight": 0.4
-      },
-      {
-        "muscle": "teres",
-        "weight": 0.4
-      },
-      {
-        "muscle": "triceps",
-        "weight": 0.4
-      }
-    ],
-    "aliases": [
-      "Bent-Arm Pullover"
-    ]
-  },
-  {
     "name": "Pullover Machine",
     "group": "back",
     "defaultWeight": 90,
@@ -5829,48 +5798,6 @@
     "aliases": [
       "Chest-Supported Barbell Row"
     ]
-  },
-  {
-    "name": "Rowing, T-bar",
-    "group": "back",
-    "defaultWeight": 90,
-    "defaultReps": 8,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "weight": 1.0
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.7
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.7
-      },
-      {
-        "muscle": "biceps",
-        "weight": 0.4
-      },
-      {
-        "muscle": "teres",
-        "weight": 0.4
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.2
-      },
-      {
-        "muscle": "forearms",
-        "weight": 0.2
-      }
-    ],
-    "pattern": "pull"
   },
   {
     "name": "Scapula Pulls",
@@ -6480,7 +6407,8 @@
     ],
     "pattern": "pull",
     "aliases": [
-      "T-Bar Row"
+      "T-Bar Row",
+      "Rowing, T-bar"
     ]
   },
   {
@@ -6907,44 +6835,6 @@
       "Prone TYW's",
       "TYWs"
     ]
-  },
-  {
-    "name": "4-count burpees",
-    "group": "chest",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "weight": 1.0
-      },
-      {
-        "muscle": "triceps",
-        "weight": 0.7
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.7
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.7
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.4
-      },
-      {
-        "muscle": "abs",
-        "weight": 0.4
-      }
-    ],
-    "pattern": "push"
   },
   {
     "name": "Bench Press",
@@ -9257,31 +9147,6 @@
     ]
   },
   {
-    "name": "3008 Abdominal Crunch",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.2
-      }
-    ]
-  },
-  {
     "name": "Ab wheel",
     "group": "core",
     "defaultWeight": 0,
@@ -9333,6 +9198,12 @@
         "muscle": "hipFlexors",
         "weight": 0.2
       }
+    ],
+    "aliases": [
+      "3008 Abdominal Crunch",
+      "Crunches HD",
+      "Levitation Crunch",
+      "Negative Crunches"
     ]
   },
   {
@@ -9886,31 +9757,6 @@
     ]
   },
   {
-    "name": "Crunches HD",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.2
-      }
-    ]
-  },
-  {
     "name": "Crunches on Machine",
     "group": "core",
     "defaultWeight": 80,
@@ -10192,6 +10038,9 @@
         "muscle": "obliques",
         "weight": 0.4
       }
+    ],
+    "aliases": [
+      "Scissors"
     ]
   },
   {
@@ -10289,45 +10138,6 @@
       }
     ],
     "pattern": "pull"
-  },
-  {
-    "name": "Front Plank",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.7
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.4
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.2
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.2
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 60
   },
   {
     "name": "Front Wood Chop",
@@ -11091,35 +10901,6 @@
     ]
   },
   {
-    "name": "Leg Raises, Lying",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.4,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.2
-      }
-    ]
-  },
-  {
     "name": "Leg Raises, Standing",
     "group": "core",
     "defaultWeight": 0,
@@ -11141,31 +10922,6 @@
       {
         "muscle": "obliques",
         "weight": 0.4
-      }
-    ]
-  },
-  {
-    "name": "Levitation Crunch",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.2
       }
     ]
   },
@@ -11194,7 +10950,8 @@
       }
     ],
     "aliases": [
-      "Lying Leg Raises"
+      "Lying Leg Raises",
+      "Leg Raises, Lying"
     ]
   },
   {
@@ -11309,31 +11066,6 @@
     ],
     "aliases": [
       "Mountain Climber"
-    ]
-  },
-  {
-    "name": "Negative Crunches",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.2
-      }
     ]
   },
   {
@@ -11459,7 +11191,10 @@
       }
     ],
     "trackingMode": "duration",
-    "defaultDuration": 60
+    "defaultDuration": 60,
+    "aliases": [
+      "Front Plank"
+    ]
   },
   {
     "name": "Plank Clockface with Bands (warm-up)",
@@ -11987,31 +11722,6 @@
     "aliases": [
       "Russian Twists",
       "Russian Twists with Med Ball"
-    ]
-  },
-  {
-    "name": "Scissors",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 20,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.7
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.4
-      }
     ]
   },
   {
@@ -13044,7 +12754,7 @@
     ]
   },
   {
-    "name": "Weighted ½ Deadbugs (warm-up)",
+    "name": "Weighted \u00bd Deadbugs (warm-up)",
     "group": "core",
     "defaultWeight": 10,
     "defaultReps": 12,
@@ -13103,7 +12813,7 @@
     ]
   },
   {
-    "name": "½ Kneeling Rotational Med Ball Throws",
+    "name": "\u00bd Kneeling Rotational Med Ball Throws",
     "group": "core",
     "defaultWeight": 8,
     "defaultReps": 10,
@@ -18865,45 +18575,6 @@
     "pattern": "squat"
   },
   {
-    "name": "Wall Squat",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "weight": 1.0
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.7
-      },
-      {
-        "muscle": "hamstrings",
-        "weight": 0.4
-      },
-      {
-        "muscle": "adductors",
-        "weight": 0.4
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.4
-      }
-    ],
-    "pattern": "squat",
-    "trackingMode": "duration",
-    "defaultDuration": 45,
-    "aliases": [
-      "Wall Sit"
-    ]
-  },
-  {
     "name": "Wall-sit",
     "group": "legs",
     "defaultWeight": 0,
@@ -18929,7 +18600,10 @@
     ],
     "pattern": "squat",
     "trackingMode": "duration",
-    "defaultDuration": 60
+    "defaultDuration": 60,
+    "aliases": [
+      "Wall Squat"
+    ]
   },
   {
     "name": "Weighted Step-ups",
@@ -18970,7 +18644,7 @@
     "pattern": "lunge"
   },
   {
-    "name": "45° lateral raises",
+    "name": "45\u00b0 lateral raises",
     "group": "shoulders",
     "defaultWeight": 15,
     "defaultReps": 15,
@@ -19597,7 +19271,7 @@
     "pattern": "push"
   },
   {
-    "name": "Devil’s Press",
+    "name": "Devil\u2019s Press",
     "group": "shoulders",
     "defaultWeight": 35,
     "defaultReps": 8,
@@ -19991,38 +19665,9 @@
     ],
     "pattern": "push",
     "aliases": [
-      "HSPU"
+      "HSPU",
+      "Handstand Pushup"
     ]
-  },
-  {
-    "name": "Handstand Pushup",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "defaultReps": 6,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.9,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "weight": 1.0
-      },
-      {
-        "muscle": "triceps",
-        "weight": 1.0
-      },
-      {
-        "muscle": "pectorals",
-        "weight": 0.4
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.4
-      }
-    ],
-    "pattern": "push"
   },
   {
     "name": "High Pull",
@@ -21527,7 +21172,7 @@
     ]
   },
   {
-    "name": "½ Kneeling Dumbbell Press",
+    "name": "\u00bd Kneeling Dumbbell Press",
     "group": "shoulders",
     "defaultWeight": 25,
     "defaultReps": 10,
@@ -21565,7 +21210,7 @@
     ]
   },
   {
-    "name": "½ Kneeling Landmine Press",
+    "name": "\u00bd Kneeling Landmine Press",
     "group": "shoulders",
     "defaultWeight": 45,
     "defaultReps": 10,
