@@ -55,10 +55,9 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// underlying view — both let the figure "zoom" mid-scroll.
     var renderHeight: CGFloat
 
-    /// Per-muscle development / momentum / fatigue channels, keyed by
-    /// BodyModel mesh node name (see `MuscleDevelopment`). Drives the
-    /// 2-channel + bloom colour map. Empty renders every muscle
-    /// untrained.
+    /// Per-muscle development channels, keyed by BodyModel mesh node
+    /// name (see `MuscleDevelopment`). Drives the development tint
+    /// ramp. Empty renders every muscle untrained.
     var channels: [String: MuscleDevelopment.Channels] = [:]
 
     /// The resolved scheme the scene renders for — materials and light

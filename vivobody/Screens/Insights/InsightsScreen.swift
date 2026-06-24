@@ -52,40 +52,33 @@ struct InsightsScreen: View {
             LazyVStack(alignment: .leading, spacing: 0) {
                 Group {
                     let stats = completedSessions.muscleVolume()
-                    // One development-model replay feeds every muscle
-                    // instrument on the tab.
+                    // One development-model replay feeds the signature.
                     let modelState = MuscleDevelopment.simulate(from: completedSessions)
-                    let momentum = modelState.muscleMomentum()
-                    let forecast = modelState.muscleForecast()
                     let strength = completedSessions.strengthOutlook()
                     let progress = completedSessions.progressByExercise
                     let symmetry = completedSessions.antagonistBalance()
                     let consistency = completedSessions.consistency()
                     let intensity = completedSessions.intensityMix()
                     let load = completedSessions.trainingLoad()
-                    let signature = TrainingSignature(volume: stats, momentum: momentum, consistency: consistency)
-                    let plan = TrainNextPlan(volume: stats, momentum: momentum, forecast: forecast)
+                    let signature = TrainingSignature(volume: stats, development: modelState.intensities, consistency: consistency)
 
                     SignatureSection(signature: signature, report: consistency)
                         .settleIn(0)
                     groupSeparator
-                    TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast)
+                    StrengthTrajectorySection(board: strength, progress: progress)
                         .settleIn(1)
                     groupSeparator
-                    StrengthTrajectorySection(board: strength, progress: progress)
+                    IntensityMixSection(mix: intensity)
                         .settleIn(2)
                     groupSeparator
-                    IntensityMixSection(mix: intensity)
+                    ConsistencySection(report: consistency)
                         .settleIn(3)
                     groupSeparator
-                    ConsistencySection(report: consistency)
+                    TrainingLoadSection(report: load)
                         .settleIn(4)
                     groupSeparator
-                    TrainingLoadSection(report: load)
-                        .settleIn(5)
-                    groupSeparator
                     SymmetrySection(board: symmetry)
-                        .settleIn(6)
+                        .settleIn(5)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

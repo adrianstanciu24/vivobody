@@ -112,10 +112,9 @@ struct TodayScreen: View {
                                     .opacity(1 - abs(phase.value) * 0.30)
                             }
                             .settleIn(0)
-                        readinessReadout(state: modelState).settleIn(1)
-                        streakSection.settleIn(2)
-                        SectionDivider().settleIn(3)
-                        lastWorkoutSection.settleIn(4)
+                        streakSection.settleIn(1)
+                        SectionDivider().settleIn(2)
+                        lastWorkoutSection.settleIn(3)
                     }
                     .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.xs)
@@ -181,9 +180,8 @@ struct TodayScreen: View {
     /// decoration. Placed directly beneath the figure (over the plain
     /// background, not overlaid on the model — the muscle/skeleton
     /// detail made an overlaid caption unreadable) so it reads as a
-    /// caption under the portrait. The acute "what to train next" voice
-    /// is a separate section (`readinessReadout`) you scroll to; this
-    /// only decodes the colours you're looking at.
+    /// caption under the portrait — it only decodes the colours you're
+    /// looking at.
     private var developmentLegend: some View {
         Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off.")
             .font(Typography.caption)
@@ -211,120 +209,6 @@ struct TodayScreen: View {
     }
 
     private static let heroFraction: CGFloat = 0.80
-
-    /// The body's voice: one glanceable line naming what you worked
-    /// recently (still glowing on the figure) and what's recovered and
-    /// ready to load again — read from the same development model that
-    /// colours the figure, so the words and the body always agree. The
-    /// per-muscle drill-down stays one tap away.
-    @ViewBuilder
-    private func readinessReadout(state: MuscleDevelopment.State) -> some View {
-        let readiness = state.bodyReadiness()
-        VStack(alignment: .leading, spacing: Space.sm) {
-            SectionHeader(title: "Your body", trailing: "right now")
-            Text(readinessSentence(readiness))
-                .font(Typography.body)
-                .fixedSize(horizontal: false, vertical: true)
-            if !completedSessions.isEmpty {
-                allMusclesLink(stats: completedSessions.muscleVolume(), state: state)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// The native drill-down — pushes the full per-muscle breakdown
-    /// (the same reference screen the Insights "Show all muscles" link
-    /// opens) onto Today's own navigation stack. The boards are
-    /// derived inside the destination closure — from the same state
-    /// the figure renders — so the detraining march runs only when
-    /// the detail is actually opened, not on every Today render.
-    private func allMusclesLink(stats: [MuscleVolumeStat], state: MuscleDevelopment.State) -> some View {
-        NavigationLink {
-            MuscleDetailScreen(
-                stats: stats,
-                momentum: state.muscleMomentum(),
-                forecast: state.muscleForecast()
-            )
-        } label: {
-            HStack(spacing: Space.xs) {
-                Text("Show all muscles")
-                    .font(Typography.sectionLabel)
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .semibold))
-            }
-            .foregroundStyle(Ink.secondary)
-        }
-        .buttonStyle(.plain)
-        .padding(.top, Space.xs)
-    }
-
-    /// Two-tone body-state line. Freshly-worked groups take the ember
-    /// accent — they're the ones glowing on the figure — recovered-
-    /// and-ready groups read in bright ink, and the connective words
-    /// stay dim, so the eye lands on the muscle names.
-    private func readinessSentence(_ r: BodyReadiness) -> AttributedString {
-        guard r.hasTrained else {
-            return run("Nothing trained yet — your first workout lights up the body.",
-                       color: Ink.secondary)
-        }
-        let fresh = r.fresh.map { $0.group.displayName }
-        let ready = r.ready.map { $0.group.displayName }
-
-        switch (fresh.isEmpty, ready.isEmpty) {
-        case (false, false):
-            // Lead with the opportunity — what's recovered and ready
-            // to load — then name what's still lit from recent work
-            // (orange, matching the muscles glowing on the figure).
-            return names(ready, color: Ink.primary)
-                + run(" — recovered and ready to train. ", color: Ink.secondary)
-                + names(fresh, color: Tint.primary)
-                + run(" still lit from recent work.", color: Ink.secondary)
-        case (false, true):
-            // Nothing's fully recovered yet — frame it as work banked,
-            // not a limitation. These are the muscles glowing now.
-            return names(fresh, color: Tint.primary)
-                + run(" — freshly worked, ready again soon.", color: Ink.secondary)
-        case (true, false):
-            return names(ready, color: Ink.primary)
-                + run(" — recovered and ready to train.", color: Ink.secondary)
-        case (true, true):
-            return run("Fully recovered — ready for your next session.", color: Ink.secondary)
-        }
-    }
-
-    /// A coloured, semibold run of naturally-joined group names.
-    private func names(_ groupNames: [String], color: Color) -> AttributedString {
-        var a = AttributedString(joinedGroupNames(groupNames))
-        a.foregroundColor = color
-        a.font = .system(size: 16, weight: .semibold)
-        return a
-    }
-
-    /// A dim connective run at body size.
-    private func run(_ text: String, color: Color) -> AttributedString {
-        var a = AttributedString(text)
-        a.foregroundColor = color
-        a.font = Typography.body
-        return a
-    }
-
-    /// Join group names into a clause-leading phrase — lower-cased
-    /// "a, b and c", first letter capitalised, capped so the line
-    /// never wraps past two rows.
-    private func joinedGroupNames(_ names: [String], limit: Int = 4) -> String {
-        let lowered = names.map { $0.lowercased() }
-        let shown = Array(lowered.prefix(limit))
-        let extra = lowered.count - shown.count
-        var phrase: String
-        switch shown.count {
-        case 0:  phrase = ""
-        case 1:  phrase = shown[0]
-        case 2:  phrase = "\(shown[0]) and \(shown[1])"
-        default: phrase = shown.dropLast().joined(separator: ", ") + " and " + shown.last!
-        }
-        if extra > 0 { phrase = shown.joined(separator: ", ") + " and \(extra) more" }
-        return phrase.prefix(1).uppercased() + phrase.dropFirst()
-    }
 
     private var streakSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {

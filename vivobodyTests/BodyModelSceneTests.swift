@@ -33,8 +33,8 @@ struct BodyModelSceneTests {
     @Test(arguments: [BodyModelTheme.dark, .light])
     func developmentLivesInTheDiffuseNotAShader(theme: BodyModelTheme) throws {
         let channels: [String: MuscleDevelopment.Channels] = [
-            "Pectoralis_Major_L": .init(adaptation: 0.9, momentum: 0, fatigue: 0),
-            "Gastrocnemius_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0)
+            "Pectoralis_Major_L": .init(adaptation: 0.9),
+            "Gastrocnemius_L": .init(adaptation: 0.5)
         ]
         let scene = try #require(BodyModelScene.make(channels: channels, theme: theme))
 

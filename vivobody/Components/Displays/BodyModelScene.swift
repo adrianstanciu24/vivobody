@@ -169,9 +169,7 @@ enum BodyModelScene {
 
     /// Channels for a muscle that has never been trained — the dark,
     /// desaturated base every untargeted mesh renders at.
-    private static let untrainedChannels = MuscleDevelopment.Channels(
-        adaptation: 0, momentum: 0, fatigue: 0
-    )
+    private static let untrainedChannels = MuscleDevelopment.Channels(adaptation: 0)
 
     /// Builds a muscle's material from its channels via the
     /// `MuscleColor` map: development sets the diffuse (untrained

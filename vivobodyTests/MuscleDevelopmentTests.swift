@@ -16,8 +16,6 @@
 //                   the longer the layoff.
 //    • Convergence— consistent training shows diminishing returns and
 //                   approaches full development at the landmark band.
-//    • Momentum   — building > 0, layoff < 0.
-//    • Fatigue    — the acute bump blooms and fades within days.
 //    • Currency   — effective sets match `MuscleVolume`'s crediting,
 //                   scaled by graded involvement.
 //    • Invariants — closed-form decay is order-independent (semigroup),
@@ -135,46 +133,6 @@ struct MuscleDevelopmentTests {
         #expect(chest <= 1.0)
     }
 
-    // MARK: - Momentum channel
-
-    /// A building program reads positive momentum; a long layoff goes
-    /// negative (the fast accumulator drops beneath its slow tracker).
-    @Test func momentumDistinguishesGrowthAndLoss() {
-        let program = benchProgram(sessions: 12, everyDays: 3.5)
-        let last = program.last!.completedAt!
-
-        let growing = MuscleDevelopment
-            .simulate(from: program, now: last)
-            .momentum(.pectorals)
-        let losing = MuscleDevelopment
-            .simulate(from: program, now: last.addingTimeInterval(60 * 86_400))
-            .momentum(.pectorals)
-
-        #expect(growing > 0.15)
-        #expect(losing < -0.15)
-        #expect(growing > losing)
-    }
-
-    // MARK: - Fatigue (acute bump)
-
-    /// The bump is high right after training and almost gone a week
-    /// later — and it fades far faster than the underlying development.
-    @Test func fatigueBloomsThenFadesFasterThanAdaptation() {
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
-
-        let fresh = MuscleDevelopment.simulate(from: [s], now: day(0))
-        let week = MuscleDevelopment.simulate(from: [s], now: day(7))
-
-        let freshFatigue = fresh.fibers[.pectorals]?.fatigue ?? 0
-        let weekFatigue = week.fibers[.pectorals]?.fatigue ?? 0
-        let freshAdapt = fresh.adaptation(.pectorals)
-        let weekAdapt = week.adaptation(.pectorals)
-
-        #expect(freshFatigue > 0.4)
-        #expect(weekFatigue < 0.2 * freshFatigue)     // bump nearly gone
-        #expect(weekAdapt > 0.95 * freshAdapt)         // development held
-    }
-
     // MARK: - Currency
 
     /// A muscle's session stimulus scales with its graded involvement
@@ -228,10 +186,6 @@ struct MuscleDevelopmentTests {
         let a = oneStep.fibers[.pectorals]!.volume
         let b = manySteps.fibers[.pectorals]!.volume
         #expect(abs(a - b) < 1e-9)
-
-        let sa = oneStep.fibers[.pectorals]!.volumeSlow
-        let sb = manySteps.fibers[.pectorals]!.volumeSlow
-        #expect(abs(sa - sb) < 1e-9)
     }
 
     /// Same history in, same channels out.
@@ -250,8 +204,8 @@ struct MuscleDevelopmentTests {
     @Test func sessionOrderDoesNotMatter() {
         let program = benchProgram(sessions: 8, everyDays: 3.5)
         let now = program.last!.completedAt!
-        let forward = MuscleDevelopment.simulate(from: program, now: now).momentum(.pectorals)
-        let shuffled = MuscleDevelopment.simulate(from: program.reversed(), now: now).momentum(.pectorals)
+        let forward = MuscleDevelopment.simulate(from: program, now: now).adaptation(.pectorals)
+        let shuffled = MuscleDevelopment.simulate(from: program.reversed(), now: now).adaptation(.pectorals)
         #expect(abs(forward - shuffled) < 1e-9)
     }
 
@@ -282,8 +236,8 @@ struct MuscleDevelopmentTests {
         // climbs) — so mid-range differences between muscles read,
         // and the developed tone stays clearly orange (r > g > b),
         // never crushed into brown.
-        let pale = MuscleColor.rgb(for: .init(adaptation: 0.1, momentum: 0, fatigue: 0), theme: theme)
-        let vivid = MuscleColor.rgb(for: .init(adaptation: 0.95, momentum: 0, fatigue: 0), theme: theme)
+        let pale = MuscleColor.rgb(for: .init(adaptation: 0.1), theme: theme)
+        let vivid = MuscleColor.rgb(for: .init(adaptation: 0.95), theme: theme)
         #expect(vivid.green < pale.green)
         #expect(vivid.blue < pale.blue)
         #expect(vivid.red > pale.red)
@@ -298,10 +252,10 @@ struct MuscleDevelopmentTests {
         // channel surges toward the vivid accent); on the near-white
         // page it DEEPENS (total luminance falls).
         let pale = { (t: BodyModelTheme) in
-            MuscleColor.rgb(for: .init(adaptation: 0.05, momentum: 0, fatigue: 0), theme: t)
+            MuscleColor.rgb(for: .init(adaptation: 0.05), theme: t)
         }
         let vivid = { (t: BodyModelTheme) in
-            MuscleColor.rgb(for: .init(adaptation: 1.0, momentum: 0, fatigue: 0), theme: t)
+            MuscleColor.rgb(for: .init(adaptation: 1.0), theme: t)
         }
         #expect(vivid(.dark).red - pale(.dark).red > 0.2)
         let lightPale = pale(.light), lightVivid = vivid(.light)
@@ -315,7 +269,7 @@ struct MuscleDevelopmentTests {
     @Test(arguments: [BodyModelTheme.dark, .light])
     func colourStaysInGamut(theme: BodyModelTheme) {
         for a in stride(from: 0.0, through: 1.0, by: 0.2) {
-            let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0), theme: theme)
+            let c = MuscleColor.rgb(for: .init(adaptation: a), theme: theme)
             #expect(c.red >= 0 && c.red <= 1)
             #expect(c.green >= 0 && c.green <= 1)
             #expect(c.blue >= 0 && c.blue <= 1)

@@ -13,7 +13,7 @@
 //    • Volume mix (the balance view) → the angular WIDTH of each of
 //      six petals, one per muscle group: where your effective sets
 //      actually go.
-//    • Development (the momentum model) → the REACH of each petal:
+//    • Development (the development model) → the REACH of each petal:
 //      how far that region has come.
 //    • Effort (consistency / reps-in-reserve) → the emblem's
 //      INTENSITY: training near failure burns vivid, easy work
@@ -62,14 +62,15 @@ nonisolated struct TrainingSignature {
     let balance: Double
     /// The region carrying clearly the most volume, when one leads.
     let dominantGroup: MuscleGroup?
-    /// Net development trajectory across all trained groups.
-    let trend: MomentumTrend
     /// Whether there's any training to draw at all.
     let hasSignature: Bool
 
+    /// - Parameter development: per-muscle development (adaptation,
+    ///   `0…1`) from `MuscleDevelopment` — only meaningfully-developed
+    ///   muscles need appear; missing muscles read as zero.
     init(
         volume: [MuscleVolumeStat],
-        momentum: MuscleMomentumBoard,
+        development: [Muscle: Double],
         consistency: ConsistencyReport
     ) {
         // Volume share per group (effective sets over the balance window).
@@ -80,13 +81,12 @@ nonisolated struct TrainingSignature {
         let totalVolume = groupVolume.values.reduce(0, +)
 
         // Development per group — mean adaptation across the group's
-        // muscles that carry a momentum reading.
-        let allMomentum = momentum.growing + momentum.holding + momentum.fading
+        // developed muscles.
         var devSum: [MuscleGroup: Double] = [:]
         var devCount: [MuscleGroup: Int] = [:]
-        for stat in allMomentum {
-            devSum[stat.muscle.group, default: 0] += stat.adaptation
-            devCount[stat.muscle.group, default: 0] += 1
+        for (muscle, adaptation) in development {
+            devSum[muscle.group, default: 0] += adaptation
+            devCount[muscle.group, default: 0] += 1
         }
 
         petals = MuscleGroup.allCases.map { group in
@@ -129,15 +129,6 @@ nonisolated struct TrainingSignature {
         } else {
             dominantGroup = nil
         }
-
-        // Net trajectory from the momentum tallies.
-        if momentum.growingCount > momentum.fadingCount {
-            trend = .growing
-        } else if momentum.fadingCount > momentum.growingCount {
-            trend = .fading
-        } else {
-            trend = .holding
-        }
     }
 }
 
@@ -145,11 +136,11 @@ nonisolated struct TrainingSignature {
 
 extension Array where Element == WorkoutSession {
     /// Build the training signature as of `now`, fusing the balance,
-    /// momentum, and consistency models.
+    /// development, and consistency models.
     func trainingSignature(now: Date = Date()) -> TrainingSignature {
         TrainingSignature(
             volume: muscleVolume(now: now),
-            momentum: muscleMomentum(now: now),
+            development: MuscleDevelopment.simulate(from: self, now: now).intensities,
             consistency: consistency(now: now)
         )
     }

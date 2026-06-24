@@ -78,8 +78,8 @@ struct SignatureSection: View {
         }
         focus.foregroundColor = Ink.primary
 
-        var trend = AttributedString(" \(trendPhrase(signature.trend)). ")
-        trend.foregroundColor = Ink.secondary
+        var separator = AttributedString(". ")
+        separator.foregroundColor = Ink.secondary
 
         var effort = AttributedString(effortPhrase(signature.intensity) + ", ")
         effort.foregroundColor = Ink.secondary
@@ -88,15 +88,7 @@ struct SignatureSection: View {
         var rest = AttributedString(" a week.")
         rest.foregroundColor = Ink.secondary
 
-        return focus + trend + effort + cadence + rest
-    }
-
-    private func trendPhrase(_ trend: MomentumTrend) -> String {
-        switch trend {
-        case .growing: return "and climbing"
-        case .holding: return "and holding steady"
-        case .fading:  return "and easing off"
-        }
+        return focus + separator + effort + cadence + rest
     }
 
     private func effortPhrase(_ intensity: Double) -> String {
@@ -239,13 +231,7 @@ private struct TrainingSignatureView: View {
 
     private var accessibilityText: String {
         let focus = signature.dominantGroup.map { "\($0.displayName)-led" } ?? "balanced"
-        let trend: String
-        switch signature.trend {
-        case .growing: trend = "climbing"
-        case .holding: trend = "holding"
-        case .fading:  trend = "easing off"
-        }
         let cadence = String(format: "%.1f", signature.cadence)
-        return "Training signature: \(focus), \(trend), \(cadence) sessions per week"
+        return "Training signature: \(focus), \(cadence) sessions per week"
     }
 }

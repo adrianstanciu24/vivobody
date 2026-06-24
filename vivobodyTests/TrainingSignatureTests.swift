@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the Insights "Training DNA" emblem. The signature is a pure
-//  fusion of the balance, momentum, and consistency models, so the
+//  fusion of the balance, development, and consistency models, so the
 //  mapping is checked on a virtual clock: six petals always, shares
 //  that sum to one, a lopsided block surfacing its lead region, a
 //  fuller spread reading more balanced, effort tracking reps-in-

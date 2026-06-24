@@ -3,9 +3,8 @@
 //  vivobody
 //
 //  The per-muscle development model that colours the 3D body. It
-//  answers "how DEVELOPED is each muscle, and is it still growing?" —
-//  the thing a real body shows over months, not the pump from one
-//  session.
+//  answers "how DEVELOPED is each muscle?" — the thing a real body
+//  shows over months, not the pump from one session.
 //
 //  The model is one well-understood primitive: a LEAKY INTEGRATOR of
 //  effective sets, normalised against the muscle's weekly volume
@@ -33,16 +32,9 @@
 //  The one-sentence read: colour = how consistently you've kept this
 //  muscle near its productive weekly set range.
 //
-//  Three channels come out, ready for the body-model colour map (see
+//  One channel comes out, ready for the body-model colour map (see
 //  `MuscleColor` / `BodyModelScene`):
 //    • adaptation ∈ [0,1] — development (drives the tint ramp)
-//    • momentum   ∈ [−1,1] — growth trend, read as the gap between
-//                            the fast accumulator and a slow tracker
-//                            of it (the fitness-minus-fatigue / MACD
-//                            trick): positive while building,
-//                            negative during a layoff.
-//    • fatigue    ∈ [0,1] — acute "just trained", a saturating bump
-//                            in session sets that halves every ~2 days
 //
 //  Deliberately NOT modelled (see specs/simplify-muscle-model.md):
 //  load progression. A 5 lb set counts like a 50 lb set — the body
@@ -84,27 +76,6 @@ enum MuscleDevelopment {
         /// Width (days) of the sigmoid transition into decay.
         var graceWidth: Double = 3.0
 
-        // — Slow tracker (momentum) —
-        /// The slow accumulator decays gentler than the fast one, so
-        /// during a layoff V drops beneath V_slow and momentum goes
-        /// negative.
-        var slowDecayRate: Double = 0.693 / 120.0
-        var slowGraceDays: Double = 14.0
-        var slowGraceWidth: Double = 5.0
-        /// Per-session pull of V_slow toward V. Smaller ⇒ V_slow lags
-        /// further behind during growth ⇒ stronger positive momentum.
-        var slowFollowRate: Double = 0.25
-        /// Development-gap that maps to full-scale momentum (±1).
-        var momentumReference: Double = 0.05
-
-        // — Fatigue (acute "just trained") —
-        /// Half-life (days) of the post-session bump. ~2 days ⇒ gone
-        /// within a week.
-        var fatigueHalfLifeDays: Double = 2.0
-        /// Session effective-sets that yield a near-full fatigue bump.
-        /// The bump saturates as 1 − e^(−sets/scale).
-        var fatigueSetScale: Double = 4.0
-
         static let `default` = Parameters()
     }
 
@@ -113,14 +84,9 @@ enum MuscleDevelopment {
     /// The hidden state evolved per muscle. Not colour — colour is
     /// derived from this (see `State.channels`).
     struct Fiber {
-        /// Decayed accumulator of effective sets. The main colour
-        /// driver, read through the landmark-normalised map.
+        /// Decayed accumulator of effective sets. The colour driver,
+        /// read through the landmark-normalised map.
         var volume: Double = 0
-        /// Slow tracker of `volume`; its lag behind `volume` is the
-        /// growth momentum.
-        var volumeSlow: Double = 0
-        /// Acute fatigue / pump, `0...1`. Fast-decaying.
-        var fatigue: Double = 0
         /// When this muscle last received stimulus. Anchors the
         /// grace-gated decay age.
         var lastStimulated: Date?
@@ -131,13 +97,9 @@ enum MuscleDevelopment {
     /// The render-ready channels for one muscle.
     struct Channels: Equatable {
         var adaptation: Double   // 0...1  → development tint ramp
-        var momentum: Double     // -1...1 → growth trend
-        var fatigue: Double      // 0...1  → acute "just trained"
 
-        init(adaptation: Double, momentum: Double, fatigue: Double) {
+        init(adaptation: Double) {
             self.adaptation = adaptation
-            self.momentum = momentum
-            self.fatigue = fatigue
         }
     }
 
@@ -146,8 +108,7 @@ enum MuscleDevelopment {
     /// The evolving state of every trained muscle plus the clock of
     /// the last advance. Replaying a history produces one of these;
     /// screens compute it ONCE per data change and every consumer
-    /// (body model, readiness, momentum, forecast) derives
-    /// from the same value.
+    /// derives from the same value.
     struct State {
         var fibers: [Muscle: Fiber] = [:]
         /// Wall-clock time the state was last advanced to.
@@ -197,26 +158,12 @@ enum MuscleDevelopment {
             return result
         }
 
-        /// Growth momentum per muscle, normalised to `-1...1`: the
-        /// development gap between the fast accumulator and its slow
-        /// tracker.
-        func momentum(_ muscle: Muscle) -> Double {
-            guard let f = fibers[muscle] else { return 0 }
-            let raw = development(volume: f.volume, for: muscle)
-                - development(volume: f.volumeSlow, for: muscle)
-            return Swift.max(-1, Swift.min(1, raw / parameters.momentumReference))
-        }
-
         /// All channels for one muscle (zeroed if untrained).
         func channels(_ muscle: Muscle) -> Channels {
             guard let f = fibers[muscle] else {
-                return Channels(adaptation: 0, momentum: 0, fatigue: 0)
+                return Channels(adaptation: 0)
             }
-            return Channels(
-                adaptation: development(volume: f.volume, for: muscle),
-                momentum: momentum(muscle),
-                fatigue: Swift.min(1, Swift.max(0, f.fatigue))
-            )
+            return Channels(adaptation: development(volume: f.volume, for: muscle))
         }
 
         /// All channels keyed by `BodyModel.scn` node name — the input
@@ -288,8 +235,7 @@ enum MuscleDevelopment {
     // MARK: - Evolution: time advance (pure decay)
 
     /// Advance every fiber forward to `date`, applying grace-gated
-    /// decay to the volume accumulator and its slow tracker, plus
-    /// exponential decay to fatigue. No-op before the first event.
+    /// decay to the volume accumulator. No-op before the first event.
     static func advance(_ state: inout State, to date: Date) {
         defer { state.lastUpdate = date }
         guard let last = state.lastUpdate else { return }
@@ -297,21 +243,14 @@ enum MuscleDevelopment {
         guard dtDays > 0 else { return }
 
         let p = state.parameters
-        let fatigueFactor = pow(0.5, dtDays / p.fatigueHalfLifeDays)
 
         for (muscle, var fiber) in state.fibers {
-            fiber.fatigue *= fatigueFactor
-
             if let ts = fiber.lastStimulated {
                 let ageStart = max(0, last.timeIntervalSince(ts)) / 86_400
                 let ageEnd = max(0, date.timeIntervalSince(ts)) / 86_400
                 fiber.volume *= decayFactor(
                     ageStart: ageStart, ageEnd: ageEnd,
                     rate: p.decayRate, graceDays: p.graceDays, width: p.graceWidth
-                )
-                fiber.volumeSlow *= decayFactor(
-                    ageStart: ageStart, ageEnd: ageEnd,
-                    rate: p.slowDecayRate, graceDays: p.slowGraceDays, width: p.slowGraceWidth
                 )
             }
             state.fibers[muscle] = fiber
@@ -353,20 +292,9 @@ enum MuscleDevelopment {
         at date: Date,
         to state: inout State
     ) {
-        let p = state.parameters
         for (muscle, sets) in stimulus where sets > 0 {
             var fiber = state.fibers[muscle] ?? Fiber()
-
             fiber.volume += sets
-
-            // Slow tracker lags the accumulator ⇒ positive momentum
-            // while building; during layoffs it decays slower ⇒
-            // negative.
-            fiber.volumeSlow += p.slowFollowRate * (fiber.volume - fiber.volumeSlow)
-
-            // Acute bump, saturating in session sets.
-            fiber.fatigue = min(1, fiber.fatigue + (1 - exp(-sets / p.fatigueSetScale)))
-
             fiber.lastStimulated = date
             state.fibers[muscle] = fiber
         }
