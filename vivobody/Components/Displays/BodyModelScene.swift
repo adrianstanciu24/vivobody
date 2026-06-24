@@ -217,16 +217,19 @@ enum BodyModelScene {
     ) {
         let bone = boneMaterial(for: theme)
         let tissue = tissueMaterial(for: theme)
-        for child in pivot.childNodes {
-            guard let name = child.name else { continue }
-            child.opacity = 1
-            setMaterial(
+        // Tint per mesh, keyed off each mesh's own name, so the figure
+        // colours correctly no matter how the archive nests its nodes.
+        // Group nodes (no geometry) are skipped, so a grouping node can
+        // never propagate its material over the muscles beneath it.
+        pivot.enumerateChildNodes { node, _ in
+            guard node.geometry != nil, let name = node.name else { return }
+            node.opacity = 1
+            node.geometry?.materials = [
                 materialFor(
                     name: name, channels: channels, theme: theme,
                     bone: bone, tissue: tissue
-                ),
-                on: child
-            )
+                )
+            ]
         }
     }
 
@@ -247,13 +250,5 @@ enum BodyModelScene {
             for: channels[name] ?? untrainedChannels,
             theme: theme
         )
-    }
-
-    private static func setMaterial(_ mat: SCNMaterial, on node: SCNNode) {
-        if node.geometry != nil { node.geometry?.materials = [mat] }
-        node.enumerateChildNodes { child, _ in
-            guard child.geometry != nil else { return }
-            child.geometry?.materials = [mat]
-        }
     }
 }

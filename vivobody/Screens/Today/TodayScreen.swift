@@ -159,8 +159,9 @@ struct TodayScreen: View {
     /// Anatomical body model — the screen's hero and the subject of
     /// the readiness line beneath it. Edge-to-edge; drag horizontally
     /// to rotate, vertical drags fall through to the scroll. Lit by
-    /// the muscles you've trained (development, with a pulse where
-    /// you've tightened up), so it reads as your body, not a mannequin.
+    /// how developed each muscle is (vivid orange where you've trained
+    /// hard, fading toward a muted tone where you've eased off), so it
+    /// reads as your body, not a mannequin.
     private func bodyModelHero(height: CGFloat, state: MuscleDevelopment.State) -> some View {
         RotatableBodyModel(
             renderHeight: height,
