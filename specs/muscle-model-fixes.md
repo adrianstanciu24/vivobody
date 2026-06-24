@@ -1,6 +1,6 @@
 # Spec: Fix the muscle-development model issues
 
-Status: proposed
+Status: implemented (Tier 0 `c8eb164`, Tier 1 `970bfa6`, Tier 2 `64cfa08`, Tier 3 — this update)
 Date: 2026-06-24
 Scope: `MuscleDevelopment`, `BodyModelScene`, `RotatableBodyModel`/`TodayScreen`,
 `MuscleColor` (read-only), tests (`MuscleDevelopmentTests`, `BodyModelSceneTests`,
@@ -306,12 +306,36 @@ header and reference it here:
 
 ## Rollout order
 
-1. Tier 0: stale comment (#4), harden `applyMaterials` (#7), add archive node
-   test (#5), strengthen render colour test (#6). Independent, low-risk.
-2. Tier 1: memoise the replay (#8).
-3. Tier 2: rework `MuscleDevelopment` to the weekly-volume estimator behind the
-   unchanged `Channels`/`State` API (#1); rewrite model tests + calibration
-   sweep and recalibrate `tau`/`gamma` (#3).
-4. Tier 3: header "Known limitations" note (#2, #9, #10).
-5. Build, test, `Scripts/verify.sh`, screenshot review.
+1. [done — `c8eb164`] Tier 0: stale comment (#4), harden `applyMaterials` (#7),
+   add archive node test (#5), strengthen render colour test (#6).
+2. [done — `970bfa6`] Tier 1: memoise the replay (#8).
+3. [done — `64cfa08`] Tier 2: rework `MuscleDevelopment` to the weekly-volume
+   estimator behind the unchanged `Channels`/`State` API (#1); recalibrate
+   `tau`/`gamma`, add the frequency-invariance + convergence tests, recalibrate
+   the calibration bands (#3).
+4. [done] Tier 3: header "Known limitations" note (#2, #9, #10).
+5. [done] Build (zero warnings), full suite (113 tests green), `Scripts/verify.sh`
+   (Today body renders development colours).
+
+## Implementation notes (as-built deviations from the plan)
+
+- **`Fiber.lastStimulated` was dropped, not kept.** With constant-rate decay the
+  elapsed interval is the state-level `lastUpdate` (same for every fiber), so the
+  per-fiber timestamp the grace gate needed is gone. `Fiber` now holds only
+  `weeklyVolume`. `MuscleVolume` computes its own `daysSinceLastTrained`
+  independently, so nothing else depended on it.
+- **`Channels` is marked `nonisolated`** to keep the pure value-type model (and
+  its `Equatable` conformance) usable off the main actor, matching the
+  `nonisolated struct VolumeLandmark` convention in `MuscleVolume.swift`.
+- **Calibration sweep kept its existing bench-cadence programs** (dedicated vs
+  casual, prime-vs-assistor, neglect schedule) rather than introducing four new
+  synthetic programs; the bands were recalibrated to the new curve (dedicated
+  2×6/12wk ≈ 0.67, casual 1×3/12wk ≈ 0.34, one-week-off ≈ 0.95 of fresh).
+- **Existing `MuscleDevelopmentTests` mostly survived unchanged** — the new model
+  reproduces build/diminishing-returns/detraining/convergence behaviour — so the
+  edits were a `.volume`→`.weeklyVolume` rename plus two added tests
+  (frequency invariance, convergence bands) rather than a full rewrite.
+- **Measured results:** frequency spread for identical weekly volume split
+  1×/2×/3× = 0.013 (was ~67% bias, #1); convergence ≈ 0.71 @ 6 wk, 0.89 @ 3 mo,
+  0.995 @ 6 mo (#3).
 ```
