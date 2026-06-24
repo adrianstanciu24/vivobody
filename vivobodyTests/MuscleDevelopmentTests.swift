@@ -15,10 +15,12 @@
 //    • Detraining — holds through a ~1-week grace, then fades, deeper
 //                   the longer the layoff.
 //    • Convergence— consistent training shows diminishing returns and
-//                   approaches full development at the landmark band.
+//                   fills in over months at the landmark band.
+//    • Frequency  — the same weekly volume develops the same, however
+//                   it is split across sessions.
 //    • Currency   — effective sets match `MuscleVolume`'s crediting,
 //                   scaled by graded involvement.
-//    • Invariants — closed-form decay is order-independent (semigroup),
+//    • Invariants — constant-rate decay is order-independent (semigroup),
 //                   and the model is deterministic.
 //    • Colour     — the perceptual map behaves (the orange deepens
 //                   with development).
@@ -133,6 +135,54 @@ struct MuscleDevelopmentTests {
         #expect(chest <= 1.0)
     }
 
+    /// Recalibrated convergence (#3): training at the top of the
+    /// productive band fills in over MONTHS, not years — clearly
+    /// developed by ~3 months, near-full by ~6.
+    @Test func optimalTrainingDevelopsWithinMonths() {
+        let weekly = Int(VolumeLandmark.landmark(for: .pectorals).optimalHigh)
+        func chest(afterWeeks weeks: Int) -> Double {
+            let program = (0..<weeks).map { i in
+                session(at: day(Double(i) * 7),
+                        [lift("Bench Press", .chest, sets: weekly, reps: 8, weight: 135)])
+            }
+            return MuscleDevelopment.simulate(from: program, now: program.last!.completedAt!)
+                .adaptation(.pectorals)
+        }
+        #expect(chest(afterWeeks: 6) > 0.6)    // ~0.71
+        #expect(chest(afterWeeks: 13) > 0.8)   // ~0.89 by 3 months
+        #expect(chest(afterWeeks: 26) > 0.95)  // ~0.99 by 6 months
+    }
+
+    // MARK: - Frequency invariance
+
+    /// The headline property of the weekly-volume model: the SAME
+    /// weekly volume, delivered 1×/2×/3× per week, converges to nearly
+    /// the same development. Colour reads weekly volume, not how it is
+    /// chunked into sessions (the old grace-gated model rewarded
+    /// frequency by ~67% for identical weekly volume).
+    @Test func sameWeeklyVolumeIsFrequencyInvariant() {
+        func program(timesPerWeek: Double, setsPerSession: Int) -> [WorkoutSession] {
+            let gap = 7.0 / timesPerWeek
+            let count = Int(16 * timesPerWeek)
+            return (0..<count).map { i in
+                session(at: day(Double(i) * gap),
+                        [lift("Bench Press", .chest, sets: setsPerSession, reps: 8, weight: 135)])
+            }
+        }
+        // 12 effective chest sets per week, three ways.
+        let once = program(timesPerWeek: 1, setsPerSession: 12)
+        let twice = program(timesPerWeek: 2, setsPerSession: 6)
+        let thrice = program(timesPerWeek: 3, setsPerSession: 4)
+
+        func chest(_ p: [WorkoutSession]) -> Double {
+            MuscleDevelopment.simulate(from: p, now: p.last!.completedAt!).adaptation(.pectorals)
+        }
+        let a1 = chest(once), a2 = chest(twice), a3 = chest(thrice)
+
+        #expect(max(a1, a2, a3) - min(a1, a2, a3) < 0.04)
+        #expect(a1 > 0.3)   // a real mid-ramp value, not a degenerate match at 0
+    }
+
     // MARK: - Currency
 
     /// A muscle's session stimulus scales with its graded involvement
@@ -183,8 +233,8 @@ struct MuscleDevelopmentTests {
             MuscleDevelopment.advance(&manySteps, to: day(d))
         }
 
-        let a = oneStep.fibers[.pectorals]!.volume
-        let b = manySteps.fibers[.pectorals]!.volume
+        let a = oneStep.fibers[.pectorals]!.weeklyVolume
+        let b = manySteps.fibers[.pectorals]!.weeklyVolume
         #expect(abs(a - b) < 1e-9)
     }
 

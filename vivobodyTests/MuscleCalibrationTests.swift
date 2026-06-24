@@ -68,9 +68,9 @@ struct MuscleCalibrationTests {
         let strong = chest(dedicated, at: dedicated.last!.completedAt!)
         let light = chest(casual, at: casual.last!.completedAt!)
 
-        #expect(strong > light + 0.15)       // clearly distinguishable
-        #expect(strong > 0.3 && strong < 0.6) // months in, far from maxed
-        #expect(light > 0.1 && light < 0.4)   // visible, but clearly behind
+        #expect(strong > light + 0.15)        // clearly distinguishable
+        #expect(strong > 0.55 && strong < 0.8) // well-developed, still climbing
+        #expect(light > 0.2 && light < 0.5)    // visible, but clearly behind
     }
 
     /// Prime movers must separate from their assistors: a bench-only
@@ -101,7 +101,7 @@ struct MuscleCalibrationTests {
         let oneWeekOff = chest(program, at: last.addingTimeInterval(7 * 86_400))
         let twelveWeeksOff = chest(program, at: last.addingTimeInterval(84 * 86_400))
 
-        #expect(oneWeekOff > 0.95 * fresh)        // the grace window
+        #expect(oneWeekOff > 0.93 * fresh)        // the grace window (~95% kept)
         #expect(twelveWeeksOff < 0.65 * fresh)    // visibly faded
         #expect(twelveWeeksOff > 0.2 * fresh)     // but not erased
     }

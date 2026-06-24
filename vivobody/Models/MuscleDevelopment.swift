@@ -6,40 +6,56 @@
 //  answers "how DEVELOPED is each muscle?" — the thing a real body
 //  shows over months, not the pump from one session.
 //
-//  The model is one well-understood primitive: a LEAKY INTEGRATOR of
-//  effective sets, normalised against the muscle's weekly volume
-//  landmark. It shares its work currency with `MuscleVolume` (one
-//  completed set credits each involved muscle by its graded
-//  involvement weight — see `Exercise.effectiveSetsByMuscle`), so the
-//  body, the volume bars, and the neglect list agree by construction.
+//  The model is one well-understood primitive: a FREQUENCY-INVARIANT
+//  estimate of recent weekly training volume, normalised against the
+//  muscle's productive weekly set range. It shares its work currency
+//  with `MuscleVolume` (one completed set credits each involved muscle
+//  by its graded involvement weight — see
+//  `Exercise.effectiveSetsByMuscle`), so the body, the volume bars,
+//  and the neglect list agree by construction.
 //
-//    • Each session adds its effective sets to a per-muscle
-//      accumulator `V`.
-//    • `V` decays with the GRACE-GATED exponential the model has
-//      always used: the instantaneous rate β(age) ramps from ~0 up to
-//      β₀ via a sigmoid centred at `graceDays` (≈ 7), so a muscle
-//      holds its colour for about a week of neglect, then fades. The
-//      decay over an interval is integrated in CLOSED FORM
-//      (∫ sigmoid = softplus), making it exact and order-independent.
-//    • Development = (V / V_ref)^γ, clamped to 1, where `V_ref` is
-//      the steady state `V` reaches under weekly training at the TOP
-//      of the muscle's productive band (`VolumeLandmark.optimalHigh`).
-//      Train at the top of the band consistently and the muscle
-//      converges to full vivid orange; train at half the band and it
-//      plateaus at √½ of the way there. γ < 1 keeps early sessions
-//      visibly rewarded while vivid still takes months.
+//    • Each muscle carries `weeklyVolume` W — a smoothed estimate of
+//      its effective sets per 7 days, kept as a constant-rate leaky
+//      integrator:
+//          on a session of s effective sets:  W += s · (7 / τ)
+//          over an interval of Δt days:        W *= exp(−Δt / τ)
+//      Under any training cadence the steady state depends only on the
+//      AVERAGE weekly rate, not on how the volume is chunked into
+//      sessions: 20 sets once a week and 10 sets twice a week converge
+//      to (essentially) the same W. The residual spread across
+//      frequencies is ~3%, versus the ~67% of the old grace-gated
+//      accumulator that rewarded frequency for its own sake.
+//    • Decay is a plain exponential with time-constant τ (≈ 65 d, a
+//      ~45-day half-life). It is exact and order-independent — the
+//      semigroup exp(−(a+b)/τ) = exp(−a/τ)·exp(−b/τ) — so the model is
+//      independent of how finely time is sliced, and it holds most of
+//      a muscle's colour through a week of neglect, then fades.
+//    • Development = min(1, (W / V_opt)^γ), where `V_opt` is the
+//      muscle's `VolumeLandmark.optimalHigh` (the top of its
+//      productive weekly band). Train at the top of the band and the
+//      muscle converges to full vivid orange in months; train at half
+//      the band and it plateaus around √½ of the way there. γ < 1
+//      keeps early sessions visibly rewarded while vivid still takes
+//      months.
 //
-//  The one-sentence read: colour = how consistently you've kept this
-//  muscle near its productive weekly set range.
+//  The one-sentence read: colour = your estimated recent weekly
+//  effective sets, versus your productive target.
 //
 //  One channel comes out, ready for the body-model colour map (see
 //  `MuscleColor` / `BodyModelScene`):
 //    • adaptation ∈ [0,1] — development (drives the tint ramp)
 //
-//  Deliberately NOT modelled (see specs/simplify-muscle-model.md):
-//  load progression. A 5 lb set counts like a 50 lb set — the body
-//  reads training consistency and balance; per-lift load progression
-//  has its own surfaces (`ExerciseProgress`, strength trajectory).
+//  Known limitations (accepted — see specs/muscle-model-fixes.md):
+//    • Load/progression blindness. A 5 lb set counts like a 50 lb set
+//      (reps and RIR likewise); the body reads training consistency
+//      and balance, while per-lift load progression has its own
+//      surfaces (`ExerciseProgress`, strength trajectory).
+//    • No left/right asymmetry. Development is per bilateral `Muscle`;
+//      both `_L`/`_R` meshes share a value and the log can't record
+//      side.
+//    • Saturation. `adaptation` clamps at 1.0, so the colour can't
+//      depict over-target volume; the weekly volume bars' `.high`
+//      zone is the surface for excess.
 //
 //  The model is a PURE value type driven entirely by injected dates
 //  (`session.completedAt`/`startedAt` and `now`), so its time-based
@@ -58,23 +74,16 @@ enum MuscleDevelopment {
     /// calibrated (and swept in tests) without touching the math.
     /// Days are the time unit throughout; work is in effective sets.
     struct Parameters {
-        // — Development —
-        /// Concavity of the volume → development map. < 1 rewards
-        /// early sessions visibly (newbie gains) while keeping full
-        /// vivid orange a months-long arc.
+        /// Concavity of the weekly-volume → development map. < 1
+        /// rewards early sessions visibly (newbie gains) while keeping
+        /// full vivid orange a months-long arc.
         var developmentGamma: Double = 0.5
 
-        // — Volume decay (detraining) —
-        /// Asymptotic decay rate (per day) of the accumulator once
-        /// well past the grace window. ln(2)/45 ⇒ ~45-day half-life
-        /// of the underlying volume (the visible colour fades gentler
-        /// still, since γ square-roots the surviving fraction).
-        var decayRate: Double = 0.693 / 45.0
-        /// Centre of the decay ramp: days of neglect before fade
-        /// really starts. This is the "holds for about a week" knob.
-        var graceDays: Double = 7.0
-        /// Width (days) of the sigmoid transition into decay.
-        var graceWidth: Double = 3.0
+        /// Relaxation time-constant (days) of the weekly-volume
+        /// estimate. Governs how fast development tracks a change in
+        /// training volume and how gently it fades on a layoff.
+        /// ≈ 65 d is a ~45-day half-life (τ = halfLife / ln 2).
+        var tau: Double = 65.0
 
         static let `default` = Parameters()
     }
@@ -84,18 +93,19 @@ enum MuscleDevelopment {
     /// The hidden state evolved per muscle. Not colour — colour is
     /// derived from this (see `State.channels`).
     struct Fiber {
-        /// Decayed accumulator of effective sets. The colour driver,
-        /// read through the landmark-normalised map.
-        var volume: Double = 0
-        /// When this muscle last received stimulus. Anchors the
-        /// grace-gated decay age.
-        var lastStimulated: Date?
+        /// Frequency-invariant estimate of recent effective sets per
+        /// week. The colour driver, read through the landmark-
+        /// normalised map.
+        var weeklyVolume: Double = 0
     }
 
     // MARK: - Output channels
 
-    /// The render-ready channels for one muscle.
-    struct Channels: Equatable {
+    /// The render-ready channels for one muscle. `nonisolated` so the
+    /// pure value-type model (and its `Equatable` conformance) is
+    /// usable off the main actor — replayed in tests and by
+    /// `TrainingSignature` outside any isolation domain.
+    nonisolated struct Channels: Equatable {
         var adaptation: Double   // 0...1  → development tint ramp
 
         init(adaptation: Double) {
@@ -119,32 +129,20 @@ enum MuscleDevelopment {
             self.parameters = parameters
         }
 
-        /// The steady state `volume` reaches under weekly training at
-        /// the top of the muscle's productive band — the denominator
-        /// that makes "consistently optimal" read as fully developed.
-        /// Derived from the decay knobs and the landmark table; no
-        /// constant of its own.
-        func referenceVolume(for muscle: Muscle) -> Double {
-            let weeklySurvival = MuscleDevelopment.decayFactor(
-                ageStart: 0, ageEnd: 7,
-                rate: parameters.decayRate,
-                graceDays: parameters.graceDays, width: parameters.graceWidth
-            )
-            return VolumeLandmark.landmark(for: muscle).optimalHigh
-                / Swift.max(1e-9, 1 - weeklySurvival)
-        }
-
-        /// Development for an accumulator value, `0...1`.
-        private func development(volume: Double, for muscle: Muscle) -> Double {
-            guard volume > 0 else { return 0 }
-            let ratio = volume / referenceVolume(for: muscle)
+        /// Development for a weekly-volume estimate, `0...1`. The
+        /// estimate is normalised against the top of the muscle's
+        /// productive weekly band, so "consistently optimal" reads as
+        /// fully developed.
+        private func development(weeklyVolume: Double, for muscle: Muscle) -> Double {
+            guard weeklyVolume > 0 else { return 0 }
+            let ratio = weeklyVolume / VolumeLandmark.landmark(for: muscle).optimalHigh
             return Swift.min(1, pow(ratio, parameters.developmentGamma))
         }
 
         /// Development (adaptation) per muscle, `0...1`.
         func adaptation(_ muscle: Muscle) -> Double {
             guard let f = fibers[muscle] else { return 0 }
-            return development(volume: f.volume, for: muscle)
+            return development(weeklyVolume: f.weeklyVolume, for: muscle)
         }
 
         /// Development per muscle, `0...1`. Omits never-trained (and
@@ -152,7 +150,7 @@ enum MuscleDevelopment {
         var intensities: [Muscle: Double] {
             var result: [Muscle: Double] = [:]
             for (muscle, fiber) in fibers {
-                let a = development(volume: fiber.volume, for: muscle)
+                let a = development(weeklyVolume: fiber.weeklyVolume, for: muscle)
                 if a > 0 { result[muscle] = a }
             }
             return result
@@ -163,7 +161,7 @@ enum MuscleDevelopment {
             guard let f = fibers[muscle] else {
                 return Channels(adaptation: 0)
             }
-            return Channels(adaptation: development(volume: f.volume, for: muscle))
+            return Channels(adaptation: development(weeklyVolume: f.weeklyVolume, for: muscle))
         }
 
         /// All channels keyed by `BodyModel.scn` node name — the input
@@ -234,68 +232,41 @@ enum MuscleDevelopment {
 
     // MARK: - Evolution: time advance (pure decay)
 
-    /// Advance every fiber forward to `date`, applying grace-gated
-    /// decay to the volume accumulator. No-op before the first event.
+    /// Advance every fiber forward to `date`, relaxing the weekly-
+    /// volume estimate toward zero at the constant rate `1/τ`. No-op
+    /// before the first event. Exact and order-independent: the
+    /// surviving fraction over `[last, date]` is `exp(−Δt/τ)`, and
+    /// `exp(−(a+b)/τ) = exp(−a/τ)·exp(−b/τ)`, so advancing in one step
+    /// equals advancing through any intermediate stops.
     static func advance(_ state: inout State, to date: Date) {
         defer { state.lastUpdate = date }
         guard let last = state.lastUpdate else { return }
         let dtDays = max(0, date.timeIntervalSince(last)) / 86_400
         guard dtDays > 0 else { return }
 
-        let p = state.parameters
-
+        let factor = exp(-dtDays / state.parameters.tau)
         for (muscle, var fiber) in state.fibers {
-            if let ts = fiber.lastStimulated {
-                let ageStart = max(0, last.timeIntervalSince(ts)) / 86_400
-                let ageEnd = max(0, date.timeIntervalSince(ts)) / 86_400
-                fiber.volume *= decayFactor(
-                    ageStart: ageStart, ageEnd: ageEnd,
-                    rate: p.decayRate, graceDays: p.graceDays, width: p.graceWidth
-                )
-            }
+            fiber.weeklyVolume *= factor
             state.fibers[muscle] = fiber
         }
     }
 
-    /// Multiplicative decay over `[ageStart, ageEnd]` days of neglect,
-    /// with rate β(age) = rate · sigmoid((age − graceDays)/width).
-    ///
-    /// Closed form: ∫ sigmoid((a−g)/w) da = w · softplus((a−g)/w), so
-    /// the integrated decay exponent is
-    ///     rate · w · [softplus((ageEnd−g)/w) − softplus((ageStart−g)/w)]
-    /// and the surviving fraction is e^(−exponent). Exact and additive
-    /// across sub-intervals (the decay semigroup property), which is
-    /// what makes the model independent of how finely time is sliced.
-    static func decayFactor(
-        ageStart: Double, ageEnd: Double,
-        rate: Double, graceDays: Double, width: Double
-    ) -> Double {
-        guard ageEnd > ageStart else { return 1 }
-        let s0 = softplus((ageStart - graceDays) / width)
-        let s1 = softplus((ageEnd - graceDays) / width)
-        let exponent = rate * width * (s1 - s0)
-        return exp(-exponent)
-    }
-
-    /// Numerically-stable softplus, ln(1 + e^z). The antiderivative of
-    /// the logistic sigmoid.
-    private static func softplus(_ z: Double) -> Double {
-        z > 30 ? z : (z < -30 ? 0 : log1p(exp(z)))
-    }
-
     // MARK: - Evolution: stimulus event
 
-    /// Inject one session's per-muscle effective sets at `date`.
-    /// Assumes the state has already been advanced to `date`.
+    /// Inject one session's per-muscle effective sets at `date` as a
+    /// weekly-rate increment (`s · 7/τ`), the form that makes the
+    /// steady state depend on the average weekly rate rather than the
+    /// session cadence. Assumes the state has already been advanced to
+    /// `date`.
     static func applyStimulus(
         _ stimulus: [Muscle: Double],
         at date: Date,
         to state: inout State
     ) {
+        let scale = 7.0 / state.parameters.tau
         for (muscle, sets) in stimulus where sets > 0 {
             var fiber = state.fibers[muscle] ?? Fiber()
-            fiber.volume += sets
-            fiber.lastStimulated = date
+            fiber.weeklyVolume += sets * scale
             state.fibers[muscle] = fiber
         }
     }
@@ -304,7 +275,10 @@ enum MuscleDevelopment {
 
     /// Per-muscle growth stimulus (effective sets) for one session:
     /// each exercise's completed sets credited to its muscles by their
-    /// graded involvement weight.
+    /// graded involvement weight. This is the raw effective-set count
+    /// `MuscleVolume` also uses — the weekly-rate scaling happens in
+    /// `applyStimulus`, so the two surfaces share one definition of
+    /// "a set of work."
     static func sessionStimulus(
         _ session: WorkoutSession,
         parameters: Parameters = .default
