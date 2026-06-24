@@ -58,6 +58,12 @@ struct TodayScreen: View {
     /// dismissing sheet.
     @State private var pendingStart: (() -> Void)?
 
+    /// Memoises the development-model replay so the full-history
+    /// `simulate` runs only when the archived-session set changes, not
+    /// on every body evaluation (height latching, the start sheet, a
+    /// unit-preference flip all re-run the body otherwise).
+    @State private var modelStateCache = BodyModelStateCache()
+
     var body: some View {
         GeometryReader { proxy in
             ZStack {
@@ -83,10 +89,11 @@ struct TodayScreen: View {
                     // you-reach target. The calendar and last workout are
                     // the journal you scroll down to once you've decided.
                     //
-                    // The development model is replayed ONCE per render
-                    // and every consumer (figure, readiness words, the
-                    // drill-down boards) derives from this single state.
-                    let modelState = MuscleDevelopment.simulate(from: completedSessions)
+                    // The development model is replayed once per data
+                    // change (memoised in BodyModelStateCache) and every
+                    // consumer (figure, readiness words, the drill-down
+                    // boards) derives from this single state.
+                    let modelState = modelStateCache.state(for: completedSessions)
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -414,6 +421,34 @@ struct TodayScreen: View {
         f.dateFormat = "h:mm a"
         return f
     }()
+}
+
+/// Memoises `MuscleDevelopment.simulate` for `TodayScreen`. The screen
+/// body is re-evaluated for many reasons unrelated to training data, so
+/// replaying the full O(sessions × muscles) history each time is
+/// wasteful. This holds the last result keyed on a cheap signature
+/// (session count + latest completion) and replays only when that
+/// signature changes. Deliberately NOT `@Observable`: it is a passive
+/// cache read during `body`, and the `@Query` feeding it already
+/// invalidates the body when the archived-session set changes. Archived
+/// sessions are immutable history, so count + latest completion fully
+/// identify the input.
+private final class BodyModelStateCache {
+    private var signature: String?
+    private var cached = MuscleDevelopment.State()
+
+    func state(for sessions: [WorkoutSession]) -> MuscleDevelopment.State {
+        let signature = Self.signature(for: sessions)
+        if signature != self.signature {
+            self.signature = signature
+            cached = MuscleDevelopment.simulate(from: sessions)
+        }
+        return cached
+    }
+
+    private static func signature(for sessions: [WorkoutSession]) -> String {
+        "\(sessions.count)-\(sessions.first?.completedAt?.timeIntervalSince1970 ?? 0)"
+    }
 }
 
 #Preview("Today") {
