@@ -20,7 +20,6 @@ struct MuscleDetailScreen: View {
     let stats: [MuscleVolumeStat]
     let momentum: MuscleMomentumBoard
     let forecast: MuscleForecastBoard
-    let tightness: MuscleTightnessBoard
 
     var body: some View {
         ScrollView(.vertical) {
@@ -30,8 +29,6 @@ struct MuscleDetailScreen: View {
                 MomentumSection(board: momentum)
                 groupSeparator
                 ForecastSection(board: forecast)
-                groupSeparator
-                MobilitySection(board: tightness)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, Space.sm)

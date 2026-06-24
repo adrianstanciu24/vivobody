@@ -2220,54 +2220,6 @@
     "defaultWeightKg": 12.5
   },
   {
-    "name": "Standing biceps stretch left",
-    "group": "arms",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "weight": 1.0
-      },
-      {
-        "muscle": "pectorals",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
-    "name": "Standing biceps stretch right",
-    "group": "arms",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "weight": 1.0
-      },
-      {
-        "muscle": "pectorals",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Standing Rope Forearm",
     "group": "arms",
     "defaultWeight": 40,
@@ -2480,46 +2432,6 @@
       "Pushdown",
       "Cable Pushdown"
     ]
-  },
-  {
-    "name": "Triceps stretch left",
-    "group": "arms",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
-    "name": "Triceps stretch right",
-    "group": "arms",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "TRX dips",
@@ -3721,30 +3633,6 @@
       "Lat Pullover",
       "Pullover"
     ]
-  },
-  {
-    "name": "Extreme Lat Stretch",
-    "group": "back",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "weight": 1.0
-      },
-      {
-        "muscle": "teres",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Face pulls with yellow/green band",
@@ -6507,32 +6395,6 @@
     ]
   },
   {
-    "name": "Supine Thoracic Extensions",
-    "group": "back",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lowerBack",
-        "weight": 1.0
-      },
-      {
-        "muscle": "abs",
-        "weight": 0.4
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
     "name": "T-Bar row",
     "group": "back",
     "defaultWeight": 90,
@@ -6570,28 +6432,6 @@
       "T-Bar Row",
       "Rowing, T-bar"
     ]
-  },
-  {
-    "name": "Thoracic Extensions",
-    "group": "back",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lowerBack",
-        "weight": 1.0
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
   },
   {
     "name": "Towel Superman",
@@ -7001,44 +6841,6 @@
       "Prone TYW's",
       "TYWs"
     ]
-  },
-  {
-    "name": "4-count burpees",
-    "group": "chest",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "weight": 1.0
-      },
-      {
-        "muscle": "triceps",
-        "weight": 0.7
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.7
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.7
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.4
-      },
-      {
-        "muscle": "abs",
-        "weight": 0.4
-      }
-    ],
-    "pattern": "push"
   },
   {
     "name": "Bench Press",
@@ -7779,30 +7581,6 @@
     ]
   },
   {
-    "name": "Doorway Pectoral Stretch",
-    "group": "chest",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "weight": 1.0
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Dumbbell Floor Press",
     "group": "chest",
     "defaultWeight": 45,
@@ -7889,30 +7667,6 @@
       }
     ],
     "pattern": "push"
-  },
-  {
-    "name": "Extreme Pec Stretch",
-    "group": "chest",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "weight": 1.0
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Flat Machine Press",
@@ -9951,30 +9705,6 @@
     ]
   },
   {
-    "name": "Cobra Stretch",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Core Rotation",
     "group": "core",
     "defaultWeight": 0,
@@ -10873,32 +10603,6 @@
     ]
   },
   {
-    "name": "Kneeling Rotations",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.4
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
     "name": "L-sit",
     "group": "core",
     "defaultWeight": 0,
@@ -11742,32 +11446,6 @@
     ]
   },
   {
-    "name": "Quadruped Rotations",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.4
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
     "name": "Reverse crunch",
     "group": "core",
     "defaultWeight": 0,
@@ -12055,28 +11733,6 @@
     ]
   },
   {
-    "name": "Seated Rotations",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
     "name": "Side Bends on Machine",
     "group": "core",
     "defaultWeight": 70,
@@ -12176,30 +11832,6 @@
       "Lateral Isometric Hold",
       "Lateral Isometric Holds"
     ]
-  },
-  {
-    "name": "Side stretch",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lats",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Single Arm MB Holds",
@@ -12750,30 +12382,6 @@
         "weight": 0.4
       }
     ]
-  },
-  {
-    "name": "Torso rotation stretch",
-    "group": "core",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "weight": 1.0
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "TORSO TWIST",
@@ -13557,78 +13165,6 @@
     ]
   },
   {
-    "name": "Banded Ankle Mobility",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "calves",
-        "weight": 1.0
-      },
-      {
-        "muscle": "shins",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
-    "name": "Banded Glute Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
-    "name": "Banded Hip Floss",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 10,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.4
-      },
-      {
-        "muscle": "adductors",
-        "weight": 0.4
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
     "name": "Banded Side Clams",
     "group": "legs",
     "defaultWeight": 0,
@@ -13930,26 +13466,6 @@
     "pattern": "squat"
   },
   {
-    "name": "Bent-Leg Hamstring Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Bodyweight lunge HD",
     "group": "legs",
     "defaultWeight": 0,
@@ -14119,30 +13635,6 @@
       "Bulgarian Split Squat",
       "Rear-Foot Elevated Split Squat"
     ]
-  },
-  {
-    "name": "Butterfly Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "adductors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Cable pull through",
@@ -14425,26 +13917,6 @@
     ]
   },
   {
-    "name": "Crossbody Hamstring Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Double Kettlebell Front Squat",
     "group": "legs",
     "defaultWeight": 70,
@@ -14495,40 +13967,6 @@
       "Calf Raise",
       "Standing Calf Raise"
     ]
-  },
-  {
-    "name": "Downward Dog with Toe Touch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 8,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.7
-      },
-      {
-        "muscle": "deltoids",
-        "weight": 0.4
-      },
-      {
-        "muscle": "lats",
-        "weight": 0.4
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.2
-      }
-    ],
-    "movementType": "mobility"
   },
   {
     "name": "Dragon squat",
@@ -15240,30 +14678,6 @@
     ]
   },
   {
-    "name": "Frog Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "adductors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Front Squats",
     "group": "legs",
     "defaultWeight": 135,
@@ -15744,30 +15158,6 @@
       }
     ],
     "pattern": "hinge"
-  },
-  {
-    "name": "Hip Flexor Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Hip hinge",
@@ -16442,41 +15832,6 @@
     "pattern": "squat"
   },
   {
-    "name": "Lateral Lunge Swings",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "frontal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.4,
-    "involvement": [
-      {
-        "muscle": "adductors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.7
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.7
-      },
-      {
-        "muscle": "hamstrings",
-        "weight": 0.4
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.2
-      }
-    ],
-    "pattern": "lunge",
-    "movementType": "mobility"
-  },
-  {
     "name": "Lateral Push Off",
     "group": "legs",
     "defaultWeight": 0,
@@ -16943,50 +16298,6 @@
     ]
   },
   {
-    "name": "Lying Figure Four Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
-    "name": "Lying Hamstring Stretch with Band",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.2
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Machine Hip Abduction",
     "group": "legs",
     "defaultWeight": 90,
@@ -17204,30 +16515,6 @@
     "pattern": "squat"
   },
   {
-    "name": "Pigeon Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Pin Squat",
     "group": "legs",
     "defaultWeight": 155,
@@ -17407,30 +16694,6 @@
     "pattern": "squat"
   },
   {
-    "name": "Quad Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "weight": 1.0
-      },
-      {
-        "muscle": "hipFlexors",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Quadruped Hip Abduction",
     "group": "legs",
     "defaultWeight": 0,
@@ -17471,30 +16734,6 @@
         "weight": 0.4
       }
     ]
-  },
-  {
-    "name": "Rear-foot-elevated Hip Flexor Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Reverse Hyperextension",
@@ -17687,26 +16926,6 @@
     ]
   },
   {
-    "name": "Seated Piriformis Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "glutes",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Shrimp Squad",
     "group": "legs",
     "defaultWeight": 0,
@@ -17869,30 +17088,6 @@
     "pattern": "hinge"
   },
   {
-    "name": "Single Leg Hamstring Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "weight": 1.0
-      },
-      {
-        "muscle": "calves",
-        "weight": 0.2
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
     "name": "Single Leg Hip Thrusts (warm-up)",
     "group": "legs",
     "defaultWeight": 0,
@@ -18053,26 +17248,6 @@
       }
     ],
     "defaultWeightKg": 40.0
-  },
-  {
-    "name": "Sitting Calf Stretch (Dorsiflexion)",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "calves",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Sliding Lateral Lunge",
@@ -18242,30 +17417,6 @@
     ],
     "defaultWeightKg": 85.0,
     "pattern": "squat"
-  },
-  {
-    "name": "Solo Hip Flexor Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "quads",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Speed Deadlift",
@@ -18500,50 +17651,6 @@
       }
     ],
     "defaultWeightKg": 67.5
-  },
-  {
-    "name": "Standing Calf Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "calves",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
-  },
-  {
-    "name": "Standing IT Band Stretch",
-    "group": "legs",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "weight": 1.0
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.4
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Step-ups",
@@ -19091,26 +18198,6 @@
     "aliases": [
       "Arnold Press"
     ]
-  },
-  {
-    "name": "Back neck stretch",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "traps",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Band pull-apart with external rotation",
@@ -19907,56 +18994,6 @@
     "aliases": [
       "Face Pull"
     ]
-  },
-  {
-    "name": "Floor Slides",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "defaultReps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "weight": 1.0
-      },
-      {
-        "muscle": "traps",
-        "weight": 0.4
-      },
-      {
-        "muscle": "rhomboids",
-        "weight": 0.4
-      },
-      {
-        "muscle": "serratus",
-        "weight": 0.2
-      }
-    ],
-    "movementType": "mobility"
-  },
-  {
-    "name": "Front neck stretch",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "defaultReps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "traps",
-        "weight": 1.0
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "movementType": "mobility"
   },
   {
     "name": "Front Plate Raise",

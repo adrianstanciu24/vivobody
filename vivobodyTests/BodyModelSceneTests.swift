@@ -2,13 +2,10 @@
 //  BodyModelSceneTests.swift
 //  vivobodyTests
 //
-//  Verifies the tightness → pulse wiring at the render boundary that
-//  the pure-model tests can't reach: that `BodyModelScene` builds the
-//  brightness-throb shader modifier onto a tight muscle's material
-//  (and sets its `u_tightness` uniform), while leaving loose muscles,
-//  the skeleton, and connective tissue pulse-free. It loads the real
-//  bundled archive, so it also guards against the archive going
-//  missing from the app bundle.
+//  Guards the render boundary the pure-model tests can't reach: that
+//  `BodyModelScene` loads the real bundled archive and tints muscles
+//  through the diffuse alone (no shader modifiers), so the archive
+//  going missing from the app bundle is caught here.
 //
 
 import Foundation
@@ -34,46 +31,20 @@ struct BodyModelSceneTests {
     }
 
     @Test(arguments: [BodyModelTheme.dark, .light])
-    func tightMuscleGetsPulseLooseDoesNot(theme: BodyModelTheme) throws {
+    func developmentLivesInTheDiffuseNotAShader(theme: BodyModelTheme) throws {
         let channels: [String: MuscleDevelopment.Channels] = [
-            "Pectoralis_Major_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.9),
-            "Gastrocnemius_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.5),
-            "Deltoid_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0, tightness: 0.05)
+            "Pectoralis_Major_L": .init(adaptation: 0.9, momentum: 0, fatigue: 0),
+            "Gastrocnemius_L": .init(adaptation: 0.5, momentum: 0, fatigue: 0)
         ]
         let scene = try #require(BodyModelScene.make(channels: channels, theme: theme))
 
-        // The tight muscle carries the surface pulse modifier and its
-        // strength uniform.
-        let stiff = try #require(material(named: "Pectoralis_Major_L", in: scene))
-        #expect(stiff.shaderModifiers?[.surface] != nil)
-        #expect(stiff.value(forKey: "u_tightness") != nil)
+        // A developed muscle is tinted through its diffuse, with no
+        // shader modifier layered on top.
+        let developed = try #require(material(named: "Pectoralis_Major_L", in: scene))
+        #expect(developed.shaderModifiers?[.surface] == nil)
+        #expect(developed.diffuse.contents != nil)
 
-        // The strain tone swings away from the stage: a bright hot
-        // flush on the dark stage, a deep burnt ember on the light
-        // page.
-        let strain = try #require(stiff.value(forKey: "u_strainColor") as? NSValue).scnVector3Value
-        let luminance = strain.x + strain.y + strain.z
-        #expect(theme == .dark ? luminance > 1.5 : luminance < 1.0)
-
-        // A loose muscle stays pulse-free — development lives in the
-        // diffuse, not a shader.
-        if let loose = material(named: "Vastus_Lateralis_L", in: scene) {
-            #expect(loose.shaderModifiers?[.surface] == nil)
-        }
-
-        // Only the TIGHTEST region pulses: the calves are flagged-tight
-        // (0.5) but clearly below the chest's 0.9, so they hold still —
-        // the figure singles out the one muscle to stretch next.
-        if let runnerUp = material(named: "Gastrocnemius_L", in: scene) {
-            #expect(runnerUp.shaderModifiers?[.surface] == nil)
-        }
-
-        // Trace tightness never pulses either.
-        if let trace = material(named: "Deltoid_L", in: scene) {
-            #expect(trace.shaderModifiers?[.surface] == nil)
-        }
-
-        // The skeleton never gets the pulse — it's not muscle.
+        // The skeleton renders its fixed anatomical tone, no shader.
         if let bone = material(named: "Skeleton", in: scene) {
             #expect(bone.shaderModifiers?[.surface] == nil)
         }

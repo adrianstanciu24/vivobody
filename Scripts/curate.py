@@ -37,7 +37,6 @@ PATTERNS = {"push", "pull", "squat", "hinge", "lunge", "carry", "core"}
 PLANES = {"sagittal", "frontal", "transverse"}
 LATERALITIES = {"bilateral", "unilateral"}
 TRACKING = {"reps", "duration"}
-MOVEMENT_TYPES = {"strength", "mobility"}
 MUSCLES = {
     "pectorals", "serratus", "lats", "traps", "rhomboids", "teres", "lowerBack",
     "deltoids", "biceps", "triceps", "forearms", "abs", "obliques", "quads",
@@ -68,7 +67,7 @@ def kg_seed(weight_lb):
 def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
        weight_kg=None, plane="sagittal", lat="bilateral", bw=0.0,
        tracking="reps", duration=0,
-       movement="strength", aliases=None, prime=(), major=(), minor=(), trace=()):
+       aliases=None, prime=(), major=(), minor=(), trace=()):
     """Build one curated record body (everything except the name).
 
     `weight_kg` overrides the auto-snapped kg default for lifts whose
@@ -96,10 +95,6 @@ def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
     if tracking != "reps":
         rec["trackingMode"] = tracking
         rec["defaultDuration"] = duration
-    # Strength is the default in the app; only emit the field for
-    # mobility work, keeping the catalog.json diff small.
-    if movement != "strength":
-        rec["movementType"] = movement
     if aliases:
         rec["aliases"] = aliases
     return rec
@@ -888,7 +883,6 @@ CURATION = {
     # ===================== Batch 4: deep long-tail pass (parallel droids, round 2) =====================
 
     # ---- Chest ----
-    "4-count burpees": ex("chest", "bodyweight", "compound", "push", weight=0, reps=10, bw=0.6, prime=["pectorals"], major=["triceps", "quads", "glutes"], minor=["deltoids", "abs"]),
     "Bent over Cable Flye": ex("chest", "cable", "isolation", None, weight=20, reps=12, prime=["pectorals"], minor=["deltoids"]),
     "Burpees": ex("chest", "bodyweight", "compound", "push", weight=0, reps=12, bw=0.6, prime=["pectorals"], major=["triceps", "quads", "glutes"], minor=["deltoids", "abs"]),
     "Butterfly Narrow Grip": ex("chest", "machine", "isolation", None, weight=70, reps=12, prime=["pectorals"], minor=["deltoids"]),
@@ -1237,53 +1231,14 @@ CURATION = {
     "Sloper hanging": ex("arms", "bodyweight", "isolation", None, reps=1, bw=1.0, tracking="duration", duration=15, prime=("forearms",), minor=("lats", "biceps"), aliases=["Sloper Hang", "Hangboard Sloper"]),
     "Pullup on fingerboard": ex("back", "bodyweight", "compound", "pull", reps=5, bw=1.0, prime=("lats",), major=("biceps", "forearms"), minor=("teres", "rhomboids"), trace=("traps",), aliases=["Hangboard Pull-up", "Fingerboard Pull-up"]),
 
-    # ===================== Batch 7: mobility / stretching =====================
-    # Lengthening work: it relieves tightness in the muscles it stretches
-    # rather than growing them (movement="mobility"). Timed holds, so the
-    # "dose" is time under stretch, not load. Involvement names the muscle
-    # being lengthened.
-    "Hip Flexor Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hipFlexors"], minor=["quads"]),
-    "Solo Hip Flexor Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hipFlexors"], minor=["quads"]),
-    "Rear-foot-elevated Hip Flexor Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hipFlexors"], minor=["quads"]),
-    "Quad Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["quads"], minor=["hipFlexors"]),
-    "Standing Calf Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["calves"]),
-    "Sitting Calf Stretch (Dorsiflexion)": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["calves"]),
-    "Bent-Leg Hamstring Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hamstrings"]),
-    "Single Leg Hamstring Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["hamstrings"], trace=["calves"]),
-    "Crossbody Hamstring Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hamstrings"]),
-    "Lying Hamstring Stretch with Band": ex("legs", "band", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hamstrings"], trace=["calves"]),
-    "Butterfly Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["adductors"], minor=["hipFlexors"]),
-    "Frog Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["adductors"], minor=["glutes"]),
-    "Pigeon Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["glutes"], minor=["hipFlexors"]),
-    "Seated Piriformis Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["glutes"]),
-    "Lying Figure Four Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["glutes"]),
-    "Standing IT Band Stretch": ex("legs", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["hipFlexors"], minor=["glutes"]),
-    "Doorway Pectoral Stretch": ex("chest", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["pectorals"], minor=["deltoids"]),
-    "Extreme Pec Stretch": ex("chest", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["pectorals"], minor=["deltoids"]),
-    "Extreme Lat Stretch": ex("back", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["lats"], minor=["teres"]),
-    "Side stretch": ex("core", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["obliques"], minor=["lats"]),
-    "Torso rotation stretch": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=1, tracking="duration", duration=30, movement="mobility", prime=["obliques"], minor=["lowerBack"]),
-    "Cobra Stretch": ex("core", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["abs"], minor=["hipFlexors"]),
-    "Triceps stretch left": ex("arms", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["triceps"]),
-    "Triceps stretch right": ex("arms", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["triceps"]),
-    "Standing biceps stretch left": ex("arms", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["biceps"], minor=["pectorals"]),
-    "Standing biceps stretch right": ex("arms", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["biceps"], minor=["pectorals"]),
-    "Back neck stretch": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["traps"]),
-    "Front neck stretch": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", prime=["traps"]),
-    "Banded Ankle Mobility": ex("legs", "band", "isolation", None, reps=10, movement="mobility", prime=["calves"], minor=["shins"]),
-
-    # ===================== Batch 8: warm-up / activation / mobility additions =====================
-    # Native (non-wger) warm-up drills. Activation work is tagged
-    # strength (it loads and primes the muscle); stretch / dynamic-range
-    # work is tagged mobility (it relieves tightness). Iso holds use
-    # duration tracking. No "warm-up" muscle group exists, so each drill
-    # is filed under the muscle group it primarily trains.
-    "Banded Hip Floss": ex("legs", "band", "isolation", None, reps=10, movement="mobility", prime=["hipFlexors"], minor=["glutes", "adductors"]),
-    "Floor Slides": ex("shoulders", "bodyweight", "isolation", None, reps=12, movement="mobility", prime=["deltoids"], minor=["traps", "rhomboids"], trace=["serratus"]),
+    # ===================== Batch 8: warm-up / activation =====================
+    # Native (non-wger) warm-up drills. Activation work loads and primes
+    # the muscle, so it credits its muscles by set count like any other
+    # strength move. Iso holds use duration tracking. No "warm-up" muscle
+    # group exists, so each drill is filed under the muscle group it
+    # primarily trains.
     "Banded Side Clams": ex("legs", "band", "isolation", None, reps=15, plane="frontal", lat="unilateral", prime=["glutes"], minor=["adductors"], aliases=["Banded Clamshell"]),
-    "Thoracic Extensions": ex("back", "bodyweight", "isolation", None, reps=10, movement="mobility", prime=["lowerBack"], minor=["traps"]),
     "Hinge with Broomstick": ex("legs", "bodyweight", "compound", "hinge", reps=10, bw=0.3, prime=["hamstrings", "glutes"], minor=["lowerBack"], trace=["abs"]),
-    "Quadruped Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, lat="unilateral", movement="mobility", prime=["obliques"], minor=["lowerBack", "rhomboids"]),
     "Single Leg Clockface": ex("legs", "bodyweight", "compound", None, reps=8, lat="unilateral", bw=0.5, prime=["glutes", "quads"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs"]),
     "Banded 1.5 Squats": ex("legs", "band", "compound", "squat", reps=10, bw=0.5, prime=["quads", "glutes"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs", "lowerBack"]),
     "Prone Banded Press": ex("shoulders", "band", "isolation", None, reps=15, prime=["deltoids"], minor=["rhomboids", "traps", "teres"]),
@@ -1299,22 +1254,15 @@ CURATION = {
     "Single Leg Hip Thrusts (warm-up)": ex("legs", "bodyweight", "compound", "hinge", reps=12, lat="unilateral", bw=0.4, prime=["glutes"], major=["hamstrings"], minor=["abs"], trace=["quads"], aliases=["Dumbbell Single-leg Hip Thrust", "Single-leg Hip Thrust"]),
     "Lunge + Overhead Press (warm-up)": ex("legs", "dumbbell", "compound", "lunge", weight=20, reps=10, lat="unilateral", prime=["quads", "glutes"], major=["deltoids", "hamstrings"], minor=["triceps", "abs"], trace=["calves", "adductors"]),
     "Weighted ½ Deadbugs (warm-up)": ex("core", "dumbbell", "compound", "core", weight=10, reps=12, lat="unilateral", prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["deltoids", "quads"]),
-    "Downward Dog with Toe Touch": ex("legs", "bodyweight", "isolation", None, reps=8, movement="mobility", prime=["hamstrings"], major=["calves"], minor=["deltoids", "lats"], trace=["lowerBack"]),
-    "Kneeling Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, lat="unilateral", movement="mobility", prime=["obliques"], minor=["lowerBack", "rhomboids"]),
-    "Seated Rotations": ex("core", "bodyweight", "isolation", None, plane="transverse", reps=10, movement="mobility", prime=["obliques"], minor=["lowerBack"]),
-    "Lateral Lunge Swings": ex("legs", "bodyweight", "compound", "lunge", plane="frontal", reps=12, lat="unilateral", bw=0.4, movement="mobility", prime=["adductors"], major=["glutes", "quads"], minor=["hamstrings"], trace=["calves"]),
     "Standing Plate Rotations": ex("core", "other", "compound", "core", weight=10, reps=15, plane="transverse", prime=["obliques"], major=["abs"], minor=["lowerBack"], trace=["deltoids"]),
-    "Supine Thoracic Extensions": ex("back", "bodyweight", "isolation", None, reps=10, movement="mobility", prime=["lowerBack"], minor=["abs", "traps"]),
-    "Banded Glute Stretch": ex("legs", "band", "isolation", None, reps=1, tracking="duration", duration=30, movement="mobility", lat="unilateral", prime=["glutes"], minor=["hipFlexors"]),
     "Punch Iso Holds": ex("shoulders", "bodyweight", "isolation", None, reps=1, tracking="duration", duration=30, plane="transverse", prime=["deltoids"], minor=["pectorals", "triceps"], trace=["serratus"]),
     "Plank Clockface with Bands (warm-up)": ex("core", "band", "compound", "core", reps=10, lat="unilateral", bw=0.6, prime=["abs"], major=["deltoids", "obliques"], minor=["serratus", "glutes"], trace=["rhomboids"]),
 
     # ===================== Batch 9: plyometrics / fight circuit =====================
     # Explosive jump / bound / footwork work. The muscle model is load-
     # and velocity-agnostic, so these credit their muscles by set count
-    # exactly like any bodyweight strength move (movement stays the
-    # default "strength"). Footwork drills with no countable rep are
-    # logged as timed holds. CMJ = counter-movement jump.
+    # exactly like any bodyweight strength move. Footwork drills with no
+    # countable rep are logged as timed holds. CMJ = counter-movement jump.
     "Ice Skaters": ex("legs", "bodyweight", "compound", "lunge", reps=20, plane="frontal", lat="unilateral", bw=0.5, prime=["glutes", "quads"], major=["adductors", "calves"], minor=["hamstrings"], trace=["abs"], aliases=["Skater Hops", "Speed Skaters"]),
     "Altitude Landings": ex("legs", "bodyweight", "compound", "squat", reps=10, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Drop Landing", "Depth Drop"]),
     "Altitude Landings to Jump": ex("legs", "bodyweight", "compound", "squat", reps=10, bw=0.6, prime=["quads", "glutes"], major=["calves", "hamstrings"], minor=["adductors"], trace=["abs"], aliases=["Depth Jump", "Drop Jump"]),
@@ -1400,7 +1348,6 @@ def validate(name, body):
     if body["plane"] not in PLANES: errs.append(f"plane '{body['plane']}'")
     if body["laterality"] not in LATERALITIES: errs.append(f"laterality '{body['laterality']}'")
     if "trackingMode" in body and body["trackingMode"] not in TRACKING: errs.append("trackingMode")
-    if "movementType" in body and body["movementType"] not in MOVEMENT_TYPES: errs.append("movementType")
     for c in body["involvement"]:
         if c["muscle"] not in MUSCLES: errs.append(f"muscle '{c['muscle']}'")
         if not (0 < c["weight"] <= 1): errs.append(f"weight {c['weight']}")

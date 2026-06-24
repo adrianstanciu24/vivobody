@@ -9,8 +9,7 @@
 //
 //  The encoding
 //  ------------
-//  Colour carries development only; tightness is passed through for
-//  the renderer to drive a brightness pulse on top.
+//  Colour carries development only.
 //
 //    • adaptation → a TINT RAMP of the app's accent orange. A fully
 //      developed muscle wears a vivid, saturated ORANGE; as
@@ -19,10 +18,6 @@
 //      muscle. The ramp deepens by draining green/blue (raising
 //      chroma), NOT by crushing the value — crushing value is what
 //      turns orange into muddy brown, so the red channel stays high.
-//    • tightness  → not in the diffuse at all; returned as a level the
-//      renderer turns into a luminance throb (away from the stage,
-//      same hue), so a tight muscle pulses in its own colour without
-//      restaining it. Pulsation IS the tightness signal.
 //
 //  The endpoints are themed: the untrained base is always a muted,
 //  desaturated clay/stone (dim against black, warm stone against the
@@ -90,16 +85,11 @@ enum MuscleColor {
 
     // MARK: - Output
 
-    /// Render-ready gamma sRGB components in `0...1`, plus the tightness
-    /// level the renderer turns into a brightness pulse.
+    /// Render-ready gamma sRGB components in `0...1`.
     struct RGB: Equatable {
         var red: Double
         var green: Double
         var blue: Double
-        /// Tightness level `0...1`, passed through for the renderer
-        /// (see `BodyModelScene`) — never baked into the base colour;
-        /// it only drives the throb that marks a stiff muscle.
-        var tightness: Double
     }
 
     // MARK: - Mapping
@@ -113,7 +103,7 @@ enum MuscleColor {
         let hi = linear(developed(for: theme))
 
         // Development → tint ramp (pale → vivid orange), in linear
-        // light. Tightness is left out of the colour entirely.
+        // light.
         let rl = lerp(lo.0, hi.0, a)
         let gl = lerp(lo.1, hi.1, a)
         let bl = lerp(lo.2, hi.2, a)
@@ -121,8 +111,7 @@ enum MuscleColor {
         return RGB(
             red: gammaEncode(rl),
             green: gammaEncode(gl),
-            blue: gammaEncode(bl),
-            tightness: clamp01(channels.tightness)
+            blue: gammaEncode(bl)
         )
     }
 

@@ -72,7 +72,7 @@ echo "▸ Reinstalling + launching $BUNDLE_ID..."
 xcrun simctl terminate "$UDID" "$BUNDLE_ID" 2>/dev/null || true
 xcrun simctl uninstall "$UDID" "$BUNDLE_ID" 2>/dev/null || true
 xcrun simctl install "$UDID" "$APP_PATH"
-# LAUNCH_ARGS lets a caller seed data, e.g. LAUNCH_ARGS='--seed-tightness'.
+# LAUNCH_ARGS lets a caller seed data, e.g. LAUNCH_ARGS='--seed-history'.
 xcrun simctl launch "$UDID" "$BUNDLE_ID" ${LAUNCH_ARGS:-} >/dev/null
 sleep 3
 

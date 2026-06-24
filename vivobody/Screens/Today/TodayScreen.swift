@@ -171,7 +171,7 @@ struct TodayScreen: View {
             .frame(height: height)
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
-            .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off. A slow pulse marks your tightest muscle — the first one to stretch.")
+            .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
     }
 
     /// The figure's placard. The body's dominant colour is the
@@ -185,7 +185,7 @@ struct TodayScreen: View {
     /// is a separate section (`readinessReadout`) you scroll to; this
     /// only decodes the colours you're looking at.
     private var developmentLegend: some View {
-        Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off. A slow pulse marks your tightest muscle — the first one to stretch.")
+        Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off.")
             .font(Typography.caption)
             .foregroundStyle(Ink.secondary)
             .multilineTextAlignment(.center)
@@ -225,28 +225,11 @@ struct TodayScreen: View {
             Text(readinessSentence(readiness))
                 .font(Typography.body)
                 .fixedSize(horizontal: false, vertical: true)
-            if let tightLine = tightnessSentence(readiness) {
-                Text(tightLine)
-                    .font(Typography.body)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
             if !completedSessions.isEmpty {
                 allMusclesLink(stats: completedSessions.muscleVolume(), state: state)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// A second body-state line, shown only when something has
-    /// tightened: names the tight groups (the cool-rimmed muscles on
-    /// the figure) and nudges toward mobility. `nil` when nothing is
-    /// tight, so the readout stays a single line on a loose body.
-    private func tightnessSentence(_ r: BodyReadiness) -> AttributedString? {
-        let tight = r.tight.map { $0.group.displayName }
-        guard !tight.isEmpty else { return nil }
-        return names(tight, color: Ink.primary)
-            + run(tight.count == 1 ? " has tightened up" : " have tightened up", color: Ink.secondary)
-            + run(" — some mobility would help.", color: Ink.secondary)
     }
 
     /// The native drill-down — pushes the full per-muscle breakdown
@@ -260,8 +243,7 @@ struct TodayScreen: View {
             MuscleDetailScreen(
                 stats: stats,
                 momentum: state.muscleMomentum(),
-                forecast: state.muscleForecast(),
-                tightness: state.muscleTightness()
+                forecast: state.muscleForecast()
             )
         } label: {
             HStack(spacing: Space.xs) {

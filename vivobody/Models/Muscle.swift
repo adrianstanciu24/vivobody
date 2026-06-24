@@ -100,34 +100,6 @@ enum Muscle: String, Hashable, CaseIterable {
         }
     }
 
-    /// How prone this region is to functional tightness (`0...1`),
-    /// driving how much contraction-biased loading tightens it (see
-    /// `MuscleDevelopment`). Postural / tonic muscles — hip flexors,
-    /// hamstrings, calves, pecs, upper traps, lats, lumbar erectors —
-    /// shorten readily under repeated loading and rate high. Phasic
-    /// muscles that tend toward inhibition rather than tightness —
-    /// glutes, abs, rhomboids — rate near zero. `nonisolated` so the
-    /// pure value-type model can read it off the main actor.
-    nonisolated var tightnessSusceptibility: Double {
-        switch self {
-        case .hipFlexors:            return 1.0
-        case .hamstrings:            return 0.9
-        case .calves:                return 0.9
-        case .pectorals:             return 0.85
-        case .lowerBack:             return 0.85
-        case .traps:                 return 0.8
-        case .lats:                  return 0.7
-        case .adductors:             return 0.7
-        case .quads:                 return 0.55
-        case .teres, .forearms:      return 0.5
-        case .biceps, .triceps,
-             .deltoids, .obliques:   return 0.4
-        case .serratus:              return 0.3
-        case .abs, .glutes, .shins:  return 0.2
-        case .rhomboids:             return 0.15
-        }
-    }
-
     /// Mesh base-names (without the `_L`/`_R` suffix) this region
     /// covers in BodyModel.scn. Exact archive spelling — see file
     /// header.

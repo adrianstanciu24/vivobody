@@ -12,14 +12,9 @@
 //
 //  Muscles are coloured by training (see `MuscleColor`): development
 //  sets the diffuse — a tint ramp from the theme's untrained base to
-//  a vivid, saturated orange. Tightness is the one channel left out
-//  of the base colour: it drives a strain-tone throb (see
-//  `tightnessPulseModifier`) on the per-frame clock — the muscle
-//  breathes between its own development colour and a hot per-theme
-//  flush. Pulsation is what marks tightness; the resting tone still
-//  reads development. The input is a `channels` map keyed by node
-//  name (see `MuscleDevelopment`). The skeleton and connective tissue
-//  keep fixed anatomical tones per theme; an empty channels map
+//  a vivid, saturated orange. The input is a `channels` map keyed by
+//  node name (see `MuscleDevelopment`). The skeleton and connective
+//  tissue keep fixed anatomical tones per theme; an empty channels map
 //  renders every muscle at the untrained base.
 //
 //  Everything is themed (see `BodyModelTheme`): on the dark stage the
@@ -36,8 +31,8 @@ import UIKit
 enum BodyModelScene {
     /// Loads the baked geometry, applies themed materials + lights,
     /// and adds the camera. `channels` maps a mesh's node name to its
-    /// development / tightness channels; absent nodes render
-    /// untrained. Returns nil only if the bundled archive is missing
+    /// development channels; absent nodes render untrained. Returns nil
+    /// only if the bundled archive is missing
     /// (a build-packaging error, not a runtime condition).
     static func make(
         channels: [String: MuscleDevelopment.Channels] = [:],
@@ -172,70 +167,6 @@ enum BodyModelScene {
         return mat
     }
 
-    /// The tightness throb, oscillating on SceneKit's per-frame
-    /// `scn_frame.time` clock: the muscle's diffuse sweeps from its
-    /// true development colour toward a per-theme STRAIN TONE and
-    /// back. An earlier same-hue luminance throb proved nearly
-    /// invisible — a smooth sine with no chroma change is exactly the
-    /// kind of motion the eye filters out — so the pulse now moves
-    /// colour AND luminance together: at rest the muscle wears its
-    /// own tone (the floor of the swing, so the development reading
-    /// survives), at peak it flushes hot/inflamed.
-    ///
-    /// The waveform is squared: it lingers near the base tone and
-    /// snaps through the flush, reading as a breath rather than an
-    /// ambient drift. Amplitude keeps a VISIBILITY FLOOR — any muscle
-    /// past the attach threshold sweeps at least ~half-way to the
-    /// strain tone at peak. Freezes to the true tone when the render
-    /// loop halts (Reduce Motion). Both uniforms are set per material
-    /// via KVC.
-    private static let tightnessPulseModifier = """
-    #pragma arguments
-    float u_tightness;
-    float3 u_strainColor;
-    #pragma body
-    float wave = 0.5 + 0.5 * sin(scn_frame.time * 2.6);
-    float throb = wave * wave;
-    float amplitude = 0.45 + 0.55 * u_tightness;
-    _surface.diffuse.rgb = mix(_surface.diffuse.rgb, u_strainColor, amplitude * throb);
-    """
-
-    /// The flush a tight muscle sweeps toward, always AWAY from the
-    /// stage and hotter than any development colour: a bright hot
-    /// orange on the dark stage (the muscle glows out of the figure),
-    /// a deep burnt ember on the light page (it darkens into focus).
-    /// Both stay in the app's single orange family.
-    private static func strainColor(for theme: BodyModelTheme) -> SCNVector3 {
-        theme == .dark
-            ? SCNVector3(1.00, 0.62, 0.30)
-            : SCNVector3(0.55, 0.17, 0.02)
-    }
-
-    /// Node names that carry the pulse. Only the TIGHTEST region
-    /// throbs — the figure singles out the one muscle most in need of
-    /// stretching, the way the single accent marks the single primary
-    /// action. Letting every flagged muscle pulse turned the whole
-    /// body into noise; the full roster still lives in the Mobility
-    /// list. Regions within a hair of the max (genuine ties, e.g. two
-    /// muscles both clamped at full tightness) pulse together, and
-    /// nothing pulses below the same threshold the readiness words
-    /// flag at — so the body never throbs where the text is silent.
-    static func pulsingNodes(in channels: [String: MuscleDevelopment.Channels]) -> Set<String> {
-        let maxTightness = channels.values.map(\.tightness).max() ?? 0
-        guard maxTightness >= MuscleTightnessBoard.threshold else { return [] }
-        let band = maxTightness * 0.98
-        return Set(channels.filter { $0.value.tightness >= band }.keys)
-    }
-
-    /// Whether anything in the map would carry the pulse shader.
-    /// The SwiftUI wrapper uses this to decide if the SCNView must
-    /// render continuously: the throb rides `scn_frame.time`, and a
-    /// shader modifier alone never schedules frames — a static scene
-    /// renders once and halts, freezing the pulse at its base tone.
-    static func hasActivePulse(in channels: [String: MuscleDevelopment.Channels]) -> Bool {
-        !pulsingNodes(in: channels).isEmpty
-    }
-
     /// Channels for a muscle that has never been trained — the dark,
     /// desaturated base every untargeted mesh renders at.
     private static let untrainedChannels = MuscleDevelopment.Channels(
@@ -244,14 +175,12 @@ enum BodyModelScene {
 
     /// Builds a muscle's material from its channels via the
     /// `MuscleColor` map: development sets the diffuse (untrained
-    /// base → vivid orange on the theme's ramp), while tightness rides
-    /// a one-sided luminance throb on top. Developed muscle reads a
-    /// touch glossier. A fresh material per mesh (≈240) is cheap to
+    /// base → vivid orange on the theme's ramp). Developed muscle reads
+    /// a touch glossier. A fresh material per mesh (≈240) is cheap to
     /// rebuild on each re-tint.
     private static func muscleMaterial(
         for channels: MuscleDevelopment.Channels,
-        theme: BodyModelTheme,
-        pulses: Bool
+        theme: BodyModelTheme
     ) -> SCNMaterial {
         let c = MuscleColor.rgb(for: channels, theme: theme)
         let color = UIColor(red: CGFloat(c.red), green: CGFloat(c.green), blue: CGFloat(c.blue), alpha: 1)
@@ -261,15 +190,6 @@ enum BodyModelScene {
         mat.roughness.contents = 0.70 - 0.25 * CGFloat(max(0, min(1, channels.adaptation)))
         mat.metalness.contents = 0.12
         mat.lightingModel = .physicallyBased
-
-        // The tightest region rides the strain-tone throb on top —
-        // motion marks the muscle to stretch next, while the resting
-        // tone keeps its development colour.
-        if pulses {
-            mat.shaderModifiers = [.surface: tightnessPulseModifier]
-            mat.setValue(NSNumber(value: Float(c.tightness)), forKey: "u_tightness")
-            mat.setValue(NSValue(scnVector3: strainColor(for: theme)), forKey: "u_strainColor")
-        }
         return mat
     }
 
@@ -299,14 +219,13 @@ enum BodyModelScene {
     ) {
         let bone = boneMaterial(for: theme)
         let tissue = tissueMaterial(for: theme)
-        let pulsing = pulsingNodes(in: channels)
         for child in pivot.childNodes {
             guard let name = child.name else { continue }
             child.opacity = 1
             setMaterial(
                 materialFor(
                     name: name, channels: channels, theme: theme,
-                    bone: bone, tissue: tissue, pulsing: pulsing
+                    bone: bone, tissue: tissue
                 ),
                 on: child
             )
@@ -318,8 +237,7 @@ enum BodyModelScene {
         channels: [String: MuscleDevelopment.Channels],
         theme: BodyModelTheme,
         bone: SCNMaterial,
-        tissue: SCNMaterial,
-        pulsing: Set<String>
+        tissue: SCNMaterial
     ) -> SCNMaterial {
         if name == "Skeleton" { return bone }
         if connectiveTissue.contains(name) { return tissue }
@@ -329,8 +247,7 @@ enum BodyModelScene {
         // specific muscles up.
         return muscleMaterial(
             for: channels[name] ?? untrainedChannels,
-            theme: theme,
-            pulses: pulsing.contains(name)
+            theme: theme
         )
     }
 

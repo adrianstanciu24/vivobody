@@ -24,7 +24,6 @@ struct TrainNextSection: View {
     let stats: [MuscleVolumeStat]
     let momentum: MuscleMomentumBoard
     let forecast: MuscleForecastBoard
-    let tightness: MuscleTightnessBoard
 
     var limit: Int = 3
 
@@ -143,7 +142,7 @@ struct TrainNextSection: View {
 
     private var showAllLink: some View {
         NavigationLink {
-            MuscleDetailScreen(stats: stats, momentum: momentum, forecast: forecast, tightness: tightness)
+            MuscleDetailScreen(stats: stats, momentum: momentum, forecast: forecast)
         } label: {
             HStack(spacing: Space.xs) {
                 Text("Show all muscles")

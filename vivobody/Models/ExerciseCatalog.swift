@@ -150,39 +150,6 @@ enum Laterality: String, Hashable, CaseIterable {
     }
 }
 
-// MARK: - Movement type
-
-/// Whether an exercise LOADS a muscle (strength work that grows it and
-/// can tighten it) or LENGTHENS it (mobility / stretching that pays
-/// down tightness). The discriminator that finally gives stretch and
-/// mobility work a role in the development model: a `.mobility` entry
-/// relieves the tightness channel for the muscles it stretches instead
-/// of feeding the growth path. Non-optional with a `.strength` default
-/// — the overwhelming majority of the catalog is loading work, and an
-/// untagged record reads as strength with no migration.
-enum MovementType: String, Hashable, CaseIterable {
-    case strength
-    case mobility
-
-    var displayName: String {
-        switch self {
-        case .strength: return "Strength"
-        case .mobility: return "Mobility"
-        }
-    }
-}
-
-extension MovementType {
-    /// Movement type for a seeded exercise, resolved by name
-    /// (case-insensitive) from the bundled catalog (`CatalogData`).
-    /// Defaults to `.strength` for names the catalog never shipped
-    /// (user-created custom exercises) — the safe assumption, since
-    /// only deliberately-tagged mobility work relieves tightness.
-    static func forExerciseNamed(_ name: String) -> MovementType {
-        CatalogData.record(forExerciseNamed: name)?.movementTypeValue ?? .strength
-    }
-}
-
 /// One entry in the picker. Carries a sensible default starting
 /// weight so the user doesn't always have to scrub from zero; the
 /// weight can still be adjusted per-template afterward.
@@ -249,12 +216,6 @@ final class ExerciseCatalogItem: Identifiable {
     /// time). Non-optional with a `.bilateral` default. Additive
     /// defaulted field, so no migration for existing catalogs.
     var lateralityRaw: String = Laterality.bilateral.rawValue
-
-    /// Loading (strength) vs. lengthening (mobility) work. Non-optional
-    /// with a `.strength` default. Drives whether logged effort grows
-    /// and tightens the worked muscles or relieves their tightness.
-    /// Additive defaulted field, so no migration for existing catalogs.
-    var movementTypeRaw: String = MovementType.strength.rawValue
 
     /// Alternate names / abbreviations the user might type to find
     /// this exercise. e.g. "BP", "Flat Bench" → Bench Press. Searched
@@ -343,11 +304,6 @@ final class ExerciseCatalogItem: Identifiable {
         set { lateralityRaw = newValue.rawValue }
     }
 
-    var movementType: MovementType {
-        get { MovementType(rawValue: movementTypeRaw) ?? .strength }
-        set { movementTypeRaw = newValue.rawValue }
-    }
-
     /// Muscles worked, with their graded contribution weights,
     /// resolved by name from the curated catalog map (the single
     /// source of truth). Custom names the map doesn't know resolve
@@ -370,7 +326,6 @@ final class ExerciseCatalogItem: Identifiable {
         pattern: MovementPattern? = nil,
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
-        movementType: MovementType = .strength,
         aliases: [String] = [],
         notes: String = "",
         isUserCreated: Bool = false,
@@ -389,7 +344,6 @@ final class ExerciseCatalogItem: Identifiable {
         self.patternRaw = (mechanic == .isolation) ? nil : pattern?.rawValue
         self.planeRaw = plane.rawValue
         self.lateralityRaw = laterality.rawValue
-        self.movementTypeRaw = movementType.rawValue
         self.aliases = aliases
         self.notes = notes
         self.isUserCreated = isUserCreated
@@ -417,7 +371,6 @@ extension ExerciseCatalogItem {
             pattern: record.patternValue,
             plane: record.planeValue,
             laterality: record.lateralityValue,
-            movementType: record.movementTypeValue,
             aliases: record.aliasesValue,
             isUserCreated: false,
             createdAt: createdAt

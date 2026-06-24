@@ -57,7 +57,6 @@ struct InsightsScreen: View {
                     let modelState = MuscleDevelopment.simulate(from: completedSessions)
                     let momentum = modelState.muscleMomentum()
                     let forecast = modelState.muscleForecast()
-                    let tightness = modelState.muscleTightness()
                     let strength = completedSessions.strengthOutlook()
                     let progress = completedSessions.progressByExercise
                     let symmetry = completedSessions.antagonistBalance()
@@ -70,7 +69,7 @@ struct InsightsScreen: View {
                     SignatureSection(signature: signature, report: consistency)
                         .settleIn(0)
                     groupSeparator
-                    TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast, tightness: tightness)
+                    TrainNextSection(plan: plan, stats: stats, momentum: momentum, forecast: forecast)
                         .settleIn(1)
                     groupSeparator
                     StrengthTrajectorySection(board: strength, progress: progress)

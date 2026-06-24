@@ -17,7 +17,7 @@ import Testing
 struct MuscleMappingTests {
 
     @Test func catalogDecodesFromBundle() {
-        #expect(CatalogData.records.count > 700)
+        #expect(CatalogData.records.count > 650)
         #expect(CatalogData.record(forExerciseNamed: "Bench Press") != nil)
     }
 

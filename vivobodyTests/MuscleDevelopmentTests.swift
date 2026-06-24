@@ -23,7 +23,7 @@
 //    • Invariants — closed-form decay is order-independent (semigroup),
 //                   and the model is deterministic.
 //    • Colour     — the perceptual map behaves (the orange deepens
-//                   with development; tightness passes through).
+//                   with development).
 //
 
 import Foundation
@@ -311,30 +311,14 @@ struct MuscleDevelopmentTests {
         )
     }
 
-    @Test(arguments: [BodyModelTheme.dark, .light])
-    func tightnessIsPassedThroughForThePulse(theme: BodyModelTheme) {
-        // Tightness never touches the diffuse — it only rides through
-        // as the pulse level. Two muscles at the same development read
-        // identical colours regardless of tightness.
-        let loose = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0), theme: theme)
-        let stiff = MuscleColor.rgb(for: .init(adaptation: 0.8, momentum: 0, fatigue: 0, tightness: 0.95), theme: theme)
-        #expect(stiff.red == loose.red)
-        #expect(stiff.green == loose.green)
-        #expect(stiff.blue == loose.blue)
-        #expect(abs(stiff.tightness - 0.95) < 1e-9)
-        #expect(loose.tightness == 0)
-    }
-
-    /// Every colour in a full channel sweep stays in gamut `0...1`.
+    /// Every colour in a full development sweep stays in gamut `0...1`.
     @Test(arguments: [BodyModelTheme.dark, .light])
     func colourStaysInGamut(theme: BodyModelTheme) {
         for a in stride(from: 0.0, through: 1.0, by: 0.2) {
-            for t in stride(from: 0.0, through: 1.0, by: 0.25) {
-                let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0, tightness: t), theme: theme)
-                #expect(c.red >= 0 && c.red <= 1)
-                #expect(c.green >= 0 && c.green <= 1)
-                #expect(c.blue >= 0 && c.blue <= 1)
-            }
+            let c = MuscleColor.rgb(for: .init(adaptation: a, momentum: 0, fatigue: 0), theme: theme)
+            #expect(c.red >= 0 && c.red <= 1)
+            #expect(c.green >= 0 && c.green <= 1)
+            #expect(c.blue >= 0 && c.blue <= 1)
         }
     }
 

@@ -61,21 +61,10 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// untrained.
     var channels: [String: MuscleDevelopment.Channels] = [:]
 
-    /// The resolved scheme the scene renders for — materials, light
-    /// rig, and pulse direction are all themed (see `BodyModelScene`).
+    /// The resolved scheme the scene renders for — materials and light
+    /// rig are all themed (see `BodyModelScene`).
     private static func theme(for context: Context) -> BodyModelTheme {
         context.environment.colorScheme == .dark ? .dark : .light
-    }
-
-    /// The tightness throb rides SceneKit's frame clock, but a shader
-    /// modifier never schedules frames by itself — a static scene
-    /// renders once and halts, freezing the pulse at its base tone.
-    /// So the view renders continuously exactly while something
-    /// pulses (and Reduce Motion is off; halting the loop is also
-    /// what honours it). 30 fps is plenty for a slow throb.
-    private func updatePulseClock(_ scnView: SCNView, context: Context) {
-        scnView.rendersContinuously = BodyModelScene.hasActivePulse(in: channels)
-            && !context.environment.accessibilityReduceMotion
     }
 
     func makeUIView(context: Context) -> UIView {
@@ -91,7 +80,6 @@ struct RotatableBodyModel: UIViewRepresentable {
         scnView.autoenablesDefaultLighting = false
         scnView.scene = BodyModelScene.make(channels: channels, theme: theme)
         scnView.preferredFramesPerSecond = 30
-        updatePulseClock(scnView, context: context)
         context.coordinator.appliedChannels = channels
         context.coordinator.appliedTheme = theme
         scnView.pointOfView = scnView.scene?.rootNode.childNodes.first { $0.camera != nil }
@@ -132,7 +120,6 @@ struct RotatableBodyModel: UIViewRepresentable {
                 context.coordinator.appliedChannels = channels
                 context.coordinator.appliedTheme = theme
             }
-            updatePulseClock(scnView, context: context)
         }
     }
 

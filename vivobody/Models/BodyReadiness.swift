@@ -13,8 +13,8 @@
 //  coarse `MuscleGroup`s the user thinks in:
 //
 //    • fatigue (acute, ~2-day half-life) → still FRESH from training.
-//      The figure no longer visualises acute fatigue (it pulses for
-//      tightness instead), so this drives the readout words only.
+//      The figure no longer visualises acute fatigue, so this drives
+//      the readout words only.
 //    • adaptation (development) with the fatigue faded → recovered and
 //      READY: built up, but rested enough to load again.
 //    • little/no development → RESTING: nothing meaningful trained yet.
@@ -48,9 +48,6 @@ nonisolated struct GroupReadiness: Identifiable, Hashable {
     let fatigue: Double
     /// Development (0…1) — the group's most-developed member.
     let adaptation: Double
-    /// Functional tightness (0…1) — the group's tightest member. The
-    /// cool strain rim on the figure; flags that mobility is owed.
-    let tightness: Double
     /// Whole days since any muscle in the group was last worked.
     /// `nil` only when the group has never been trained.
     let daysSinceLastTrained: Int?
@@ -68,9 +65,6 @@ nonisolated struct BodyReadiness {
     /// Development below this is treated as untrained — no recovery to
     /// speak of, so the group reads RESTING rather than READY.
     static let developmentFloor = 0.05
-    /// Tightness at/above which a group reads as TIGHT — worth a note
-    /// that some mobility would help.
-    static let tightThreshold = 0.25
 
     /// One entry per `MuscleGroup`, in `MuscleGroup.allCases` order.
     let groups: [GroupReadiness]
@@ -78,12 +72,6 @@ nonisolated struct BodyReadiness {
     var fresh: [GroupReadiness] { groups.filter { $0.state == .fresh } }
     var ready: [GroupReadiness] { groups.filter { $0.state == .ready } }
     var resting: [GroupReadiness] { groups.filter { $0.state == .resting } }
-
-    /// Groups carrying enough tightness to flag, tightest first.
-    var tight: [GroupReadiness] {
-        groups.filter { $0.tightness >= Self.tightThreshold }
-            .sorted { $0.tightness > $1.tightness }
-    }
 
     /// Has anything meaningful been trained at all?
     var hasTrained: Bool { groups.contains { $0.state != .resting } }
@@ -103,14 +91,12 @@ extension MuscleDevelopment.State {
         // and was "last trained" whenever its most-recent member was.
         var fatigue: [MuscleGroup: Double] = [:]
         var development: [MuscleGroup: Double] = [:]
-        var tightness: [MuscleGroup: Double] = [:]
         var lastTrained: [MuscleGroup: Date] = [:]
 
         for (muscle, fiber) in fibers {
             let group = muscle.group
             fatigue[group] = Swift.max(fatigue[group] ?? 0, clamp(fiber.fatigue))
             development[group] = Swift.max(development[group] ?? 0, adaptation(muscle))
-            tightness[group] = Swift.max(tightness[group] ?? 0, clamp(fiber.tightness))
             if let stamp = fiber.lastStimulated {
                 if let prev = lastTrained[group] {
                     lastTrained[group] = Swift.max(prev, stamp)
@@ -145,7 +131,6 @@ extension MuscleDevelopment.State {
                 state: state,
                 fatigue: f,
                 adaptation: a,
-                tightness: tightness[group] ?? 0,
                 daysSinceLastTrained: days
             )
         }

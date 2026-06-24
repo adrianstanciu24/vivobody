@@ -39,8 +39,6 @@ struct vivobodyApp: App {
                 .task {
                     if CommandLine.arguments.contains("--seed-history") {
                         HistorySeeder.seed(into: container.mainContext)
-                    } else if CommandLine.arguments.contains("--seed-tightness") {
-                        HistorySeeder.seedTightness(into: container.mainContext)
                     } else if CommandLine.arguments.contains("--seed-showcase") {
                         HistorySeeder.seedShowcase(into: container.mainContext)
                     }
@@ -111,81 +109,16 @@ private enum HistorySeeder {
         try? context.save()
     }
 
-    /// A five-week press-dominant block with zero pulling and zero
-    /// mobility — the textbook way to wind functional tightness into
-    /// the chest and front delts (neglected rhomboids → rounded
-    /// shoulders) and the quads. Exactly the state the cool strain rim
-    /// and the Today tightness line exist to surface. Drive it with
-    /// `--seed-tightness`.
-    static func seedTightness(into context: ModelContext) {
-        let descriptor = FetchDescriptor<WorkoutSession>(
-            predicate: #Predicate { $0.completedAt != nil }
-        )
-        let existing = (try? context.fetch(descriptor)) ?? []
-        guard existing.isEmpty else { return }
-
-        let now = Date()
-        let calendar = Calendar.current
-
-        // All contraction-biased, all confirmed in the catalog so the
-        // muscle map resolves. Nothing here lengthens a muscle under
-        // load and nothing pulls — so the chest tightens unopposed.
-        let lifts: [(name: String, group: MuscleGroup, weight: Double)] = [
-            ("Bench Press", .chest, 135),
-            ("Incline Bench Press - Barbell", .chest, 95),
-            ("Overhead Press", .shoulders, 85),
-            ("Triceps Pushdown", .arms, 60),
-            ("Leg Extension", .legs, 90),
-        ]
-
-        // 15 sessions, ~every 2.5 days, progressively heavier toward
-        // now (index 0 is the oldest, so the overload bonus grows with
-        // the index and reads as honest progression).
-        let count = 15
-        for i in 0..<count {
-            let daysAgo = Int(Double(count - 1 - i) * 2.5)
-            guard
-                let day = calendar.date(byAdding: .day, value: -daysAgo, to: now),
-                let started = calendar.date(byAdding: .hour, value: -1, to: day)
-            else { continue }
-
-            let overload = Double(i) * 2.5
-            let exercises: [Exercise] = lifts.enumerated().map { idx, lift in
-                let exercise = Exercise(
-                    name: lift.name,
-                    group: lift.group,
-                    plannedSets: 4,
-                    plannedReps: 8,
-                    plannedWeight: lift.weight + overload,
-                    sortOrder: idx
-                )
-                for set in exercise.sets { set.isCompleted = true }
-                return exercise
-            }
-
-            let session = WorkoutSession(exercises: exercises, restDuration: 90, startedAt: started)
-            session.completedAt = started.addingTimeInterval(40 * 60 + Double.random(in: 0...600))
-            context.insert(session)
-        }
-        try? context.save()
-    }
-
     /// A deliberately lopsided ~10-week training history engineered so
     /// every render channel lights up at once on a different body
     /// region — the fastest way to eyeball the full colour palette.
     /// Drive it with `--seed-showcase`.
     ///
     ///   • Quads / glutes — heavy, progressive squats right up to a few
-    ///     days ago ⇒ a deep, vivid orange (well developed), and
-    ///     supple (a squat lengthens under load, so it relieves).
-    ///   • Chest / front delts — a progressive press block with zero
-    ///     pulling and zero mobility ⇒ developed orange, and the
-    ///     body's TIGHTEST region (contraction-biased loading,
-    ///     neglected rhomboids amplify it) — the one that pulses,
-    ///     since the figure only throbs its single tightest muscle.
-    ///   • Calves — a lighter raise block ⇒ moderately tight: flagged
-    ///     in the Mobility roster, but clearly below the chest, so it
-    ///     holds still.
+    ///     days ago ⇒ a deep, vivid orange (well developed).
+    ///   • Chest / front delts — a progressive press block ⇒ developed
+    ///     orange.
+    ///   • Calves — a lighter raise block ⇒ a moderate orange.
     ///   • Biceps / triceps — the SAME load for fourteen sessions ⇒
     ///     solid mid-orange (developed, a long plateau).
     ///   • Lats / rhomboids / upper back — trained hard early, then
@@ -247,15 +180,13 @@ private enum HistorySeeder {
         block([("Barbell Full Squat", .legs, 185)],
               startDaysAgo: 120, endDaysAgo: 1, count: 55, overload: 555, sets: 6, reps: 6)
 
-        // Developed + tight: press-only, no pulling, no mobility.
+        // Developed: a progressive press block.
         block([("Bench Press", .chest, 135),
                ("Incline Bench Press - Barbell", .chest, 95),
                ("Overhead Press", .shoulders, 75)],
               startDaysAgo: 56, endDaysAgo: 6, count: 11, overload: 55, sets: 4, reps: 8)
 
-        // Moderately tight (lower body): a light, brief raise block —
-        // enough to flag the calves in the Mobility roster, but well
-        // below the chest so the pulse stays uniquely on the chest.
+        // Moderate development (lower body): a light, brief raise block.
         block([("Standing Calf Raises", .legs, 70)],
               startDaysAgo: 30, endDaysAgo: 9, count: 4, overload: 15, sets: 3, reps: 10)
 
