@@ -121,9 +121,9 @@ struct ExerciseCardPlaceholder: View {
         .padding(28)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
                 .stroke(Color.white.opacity(0.07), lineWidth: 0.5)
         )
         .shadow(color: .black.opacity(0.5), radius: 16, x: 0, y: 6)

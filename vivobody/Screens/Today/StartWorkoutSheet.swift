@@ -178,7 +178,7 @@ struct StartWorkoutSheet: View {
             .frame(maxWidth: .infinity)
             .frame(minHeight: 64)
             .modifier(StartTileSurface(filled: filled))
-            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibility)
@@ -209,10 +209,10 @@ private struct StartTileSurface: ViewModifier {
 
     func body(content: Content) -> some View {
         if filled {
-            content.glassCard(cornerRadius: 18, interactive: true)
+            content.glassCard(cornerRadius: Radius.card, interactive: true)
         } else {
             content.overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
                     .stroke(Surface.edge, lineWidth: 1)
             )
         }

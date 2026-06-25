@@ -119,7 +119,7 @@ struct DigitTickerGallery: View {
         }
         .padding(18)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                 .fill(Color.white.opacity(0.04))
         )
     }
@@ -178,11 +178,11 @@ struct DigitTickerGallery: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                     .fill(Color.white.opacity(0.08))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                     .stroke(Color.white.opacity(0.10), lineWidth: 0.5)
             )
         }

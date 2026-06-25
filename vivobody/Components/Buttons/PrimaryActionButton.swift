@@ -14,7 +14,7 @@
 //    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
 //      "this is a deliberate action" feedback).
 //    • A tinted Liquid Glass surface (.glassEffect) provides the lensing
-//      and accent wash with a controlled 18pt corner and height — the
+//      and accent wash with a controlled card-radius corner and height — the
 //      .glassProminent button style is avoided because it doubles the
 //      padding and forces a full capsule.
 //    • Default accent is the app's electric-orange primary so the
@@ -59,7 +59,7 @@ struct PrimaryActionButton: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: 22))
+            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: Radius.card))
         }
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityElement()

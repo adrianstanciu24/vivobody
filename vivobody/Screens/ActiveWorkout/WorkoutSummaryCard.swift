@@ -327,7 +327,7 @@ struct WorkoutSummaryCard: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
                         .stroke(Surface.edgeBright, lineWidth: 1)
                 )
                 .contentShape(Rectangle())
@@ -357,7 +357,7 @@ struct WorkoutSummaryCard: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .coloredGlassControl(cornerRadius: 22, fill: Tint.complete, interactive: true)
+            .coloredGlassControl(cornerRadius: Radius.card, fill: Tint.complete, interactive: true)
             .shadow(color: Tint.complete.opacity(0.40), radius: 22, y: 9)
             .contentShape(Rectangle())
         }

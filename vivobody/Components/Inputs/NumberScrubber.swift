@@ -75,17 +75,17 @@ struct NumberScrubber: View {
         .background {
             LiquidFill(
                 fraction: fillFraction,
-                cornerRadius: 22,
+                cornerRadius: Radius.card,
                 tint: fluidTint,
                 isDragging: isDragging
             )
         }
-        .glassChip(cornerRadius: 22, tint: isDragging ? Tint.primary : nil, interactive: true)
+        .glassChip(cornerRadius: Radius.card, tint: isDragging ? Tint.primary : nil, interactive: true)
         .overlay {
             // Bottom inner shadow — gives the chip a sense of
             // containment, like the liquid is sitting in a real
             // vessel with a darker base lip.
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
                 .stroke(
                     LinearGradient(
                         colors: [
@@ -108,7 +108,7 @@ struct NumberScrubber: View {
             y: isDragging ? 5 : 3
         )
         .shadow(color: .black.opacity(0.25), radius: 1, y: 1)
-        .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .gesture(scrubGesture)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)
         .accessibilityElement()

@@ -90,7 +90,7 @@ struct GhostCard<Content: View>: View {
     ZStack {
         Color.black.ignoresSafeArea()
         VStack(spacing: 20) {
-            GhostCard(cornerRadius: 18) {
+            GhostCard(cornerRadius: Radius.card) {
                 VStack(alignment: .leading, spacing: 14) {
                     HStack {
                         GhostBar(width: 120, height: 18, cornerRadius: 6, opacity: 0.16)
@@ -99,8 +99,8 @@ struct GhostCard<Content: View>: View {
                     }
                     GhostBar(width: 168, height: 12)
                     HStack(spacing: 6) {
-                        GhostBar(width: 62, height: 24, cornerRadius: 12)
-                        GhostBar(width: 52, height: 24, cornerRadius: 12)
+                        GhostBar(width: 62, height: 24, cornerRadius: Radius.chip)
+                        GhostBar(width: 52, height: 24, cornerRadius: Radius.chip)
                     }
                 }
             }

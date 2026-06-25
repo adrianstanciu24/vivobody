@@ -91,13 +91,13 @@ struct SetSummaryRow: View {
     private var rowBackground: some View {
         if isActive {
             ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                     .fill(Tint.primary.opacity(0.10))
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                     .stroke(Tint.primary.opacity(0.30), lineWidth: 0.8)
             }
         } else {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                 .fill(isCompleted ? Surface.cardTint : Surface.cardTint.opacity(0.5))
         }
     }

@@ -131,7 +131,7 @@ struct PRCelebrationGallery: View {
             .padding(.horizontal, 18)
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
-            .glassChip(cornerRadius: 16)
+            .glassChip(cornerRadius: Radius.chip)
         }
         .buttonStyle(.plain)
     }

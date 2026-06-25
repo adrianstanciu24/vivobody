@@ -114,7 +114,7 @@ private struct PressableCardStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                     .fill(Color.white.opacity(configuration.isPressed ? 0.12 : 0.06))
             }
             .scaleEffect(configuration.isPressed ? 0.985 : 1.0)

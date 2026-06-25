@@ -174,7 +174,7 @@ struct BodyWeightDetail: View {
             }
             .foregroundStyle(Tint.onAccent)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .coloredGlassControl(cornerRadius: 14, fill: Tint.primary)
+            .coloredGlassControl(cornerRadius: Radius.chip, fill: Tint.primary)
             .softElevation()
         }
         .buttonStyle(.plain)
@@ -256,7 +256,7 @@ struct BodyWeightDetail: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
-                .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.primary : nil)
+                .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.primary : nil)
         }
         .buttonStyle(.plain)
     }
@@ -298,7 +298,7 @@ struct BodyWeightDetail: View {
                     }
                 }
             }
-            .contentCard(cornerRadius: 18)
+            .contentCard(cornerRadius: Radius.card)
         }
     }
 

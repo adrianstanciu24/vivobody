@@ -796,7 +796,7 @@ struct ExerciseDetailScreen: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
-            .coloredGlassControl(cornerRadius: 22, fill: Tint.inProgress, interactive: true)
+            .coloredGlassControl(cornerRadius: Radius.card, fill: Tint.inProgress, interactive: true)
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 22)

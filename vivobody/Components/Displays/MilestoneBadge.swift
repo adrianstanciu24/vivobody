@@ -49,7 +49,7 @@ struct MilestoneBadge: View {
         .padding(Space.md)
         .frame(width: 150, alignment: .leading)
         .frame(maxHeight: .infinity, alignment: .top)
-        .contentChip(cornerRadius: 16, tint: milestone.achieved ? Tint.primary : nil)
+        .contentChip(cornerRadius: Radius.chip, tint: milestone.achieved ? Tint.primary : nil)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(milestone.title), \(milestone.achieved ? "reached" : milestone.valueText)")
     }

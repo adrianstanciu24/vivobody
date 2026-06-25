@@ -133,7 +133,7 @@ struct SettingsScreen: View {
             .padding(.horizontal, Space.md)
             .padding(.vertical, Space.sm)
             .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-            .coloredGlassControl(cornerRadius: 16)
+            .coloredGlassControl(cornerRadius: Radius.chip)
         }
         .buttonStyle(.plain)
         .accessibilityHint("Wipes and reseeds the exercise catalog")
@@ -174,7 +174,7 @@ struct SettingsScreen: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity, minHeight: 44)
-                .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
+                .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(option.label)
@@ -220,7 +220,7 @@ struct SettingsScreen: View {
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
+            .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(unit.displayName)

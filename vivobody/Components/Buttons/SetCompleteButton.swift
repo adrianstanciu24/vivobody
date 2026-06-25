@@ -75,7 +75,7 @@ struct SetCompleteButton: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 96)
-        .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .scaleEffect(pressScale)
         .background(
             GeometryReader { geo in
@@ -94,7 +94,7 @@ struct SetCompleteButton: View {
     // MARK: - Layers
 
     private var background: some View {
-        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
         let glassTint = isComplete ? accent : liveAccent
         // Completion floods the surface; idle stays a faint lift so the
         // accent verb and chevron read against the glass instead of
@@ -119,7 +119,7 @@ struct SetCompleteButton: View {
     private var ripple: some View {
         Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : liveAccent)
             .allowsHitTesting(false)
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
     }
 
     @ViewBuilder
