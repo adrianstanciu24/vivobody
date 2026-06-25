@@ -65,11 +65,11 @@ struct NotesEditorSheet: View {
                                 .font(Typography.body)
                                 .foregroundStyle(Ink.quaternary)
                                 .padding(.top, 8)
-                                .padding(.leading, 5)
+                                .padding(.leading, Space.xs)
                                 .allowsHitTesting(false)
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .padding(.horizontal, Space.xl)
                     .padding(.top, 12)
                 }
             }

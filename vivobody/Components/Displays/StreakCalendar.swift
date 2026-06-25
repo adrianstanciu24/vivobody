@@ -48,7 +48,7 @@ struct StreakCalendar: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: Space.xl) {
             header
 
             VStack(spacing: rowSpacing) {

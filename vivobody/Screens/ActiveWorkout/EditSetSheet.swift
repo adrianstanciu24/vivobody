@@ -54,7 +54,7 @@ struct EditSetSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 14) {
+            VStack(spacing: Space.lg) {
                 switch mode {
                 case .reps:
                     WeightScrubber(
@@ -104,7 +104,7 @@ struct EditSetSheet: View {
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 18)
+            .padding(.top, Space.xl)
             .padding(.bottom, 20)
             .background(Surface.background.ignoresSafeArea())
             .navigationTitle("Edit Set")

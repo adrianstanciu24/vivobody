@@ -158,7 +158,7 @@ struct MeScreen: View {
 
         return HStack(alignment: .center, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {
-                HStack(alignment: .lastTextBaseline, spacing: 5) {
+                HStack(alignment: .lastTextBaseline, spacing: Space.xs) {
                     Text(latest.map {
                         WeightFormatter.string($0.weight, unit: weightUnit, fractionDigits: 1, includeUnit: false)
                     } ?? "—")

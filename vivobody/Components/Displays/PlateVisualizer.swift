@@ -66,7 +66,7 @@ struct PlateVisualizer: View {
     var body: some View {
         let m = math
         let intrinsicWidth = intrinsicBarWidth(for: m.plates)
-        return VStack(spacing: 14) {
+        return VStack(spacing: Space.lg) {
             GeometryReader { geo in
                 let availableWidth = geo.size.width
                 let scale = intrinsicWidth > availableWidth && availableWidth > 0

@@ -220,7 +220,7 @@ private struct SegmentedControl: View {
                 .font(Typography.sectionHeading)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
+                .padding(.vertical, Space.md)
                 .background {
                     if isSelected {
                         Color.clear
@@ -521,7 +521,7 @@ private struct LibraryExercisesContent: View {
     private var equipmentFilterStrip: some View {
         if availableEquipment.count > 1 {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
+                HStack(spacing: Space.md) {
                     chip(nil, label: "All")
                     ForEach(Equipment.allCases, id: \.self) { e in
                         if availableEquipment.contains(e) {
@@ -531,7 +531,7 @@ private struct LibraryExercisesContent: View {
                 }
                 .padding(.horizontal, Space.gutter)
             }
-            .padding(.bottom, 14)
+            .padding(.bottom, Space.lg)
         }
     }
 

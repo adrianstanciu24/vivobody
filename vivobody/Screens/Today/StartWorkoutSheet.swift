@@ -174,7 +174,7 @@ struct StartWorkoutSheet: View {
                     .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.tertiary)
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 64)
             .modifier(StartTileSurface(filled: filled))

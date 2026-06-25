@@ -63,12 +63,12 @@ struct BodyWeightLogSheet: View {
                 Surface.background.ignoresSafeArea()
 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
+                    VStack(alignment: .leading, spacing: Space.xxl) {
                         dateField
                         weightScrubber
                         Spacer(minLength: 12)
                     }
-                    .padding(.horizontal, 22)
+                    .padding(.horizontal, Space.gutter)
                     .padding(.top, 8)
                 }
             }

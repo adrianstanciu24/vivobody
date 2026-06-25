@@ -199,7 +199,7 @@ struct PageDots: View {
     let selection: Int
 
     var body: some View {
-        HStack(spacing: 7) {
+        HStack(spacing: Space.sm) {
             ForEach(0..<count, id: \.self) { i in
                 Capsule()
                     .fill(i == selection ? Ink.primary : Ink.quaternary)

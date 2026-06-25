@@ -12,7 +12,7 @@ import SwiftUI
 struct HapticsGallery: View {
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
+            VStack(alignment: .leading, spacing: Space.section) {
                 header
 
                 section(title: "ATOMS") {
@@ -39,7 +39,7 @@ struct HapticsGallery: View {
                 Spacer(minLength: 40)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 24)
+            .padding(.top, Space.xxl)
         }
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -89,7 +89,7 @@ private struct HapticRow: View {
             action()
             pulseId &+= 1
         } label: {
-            HStack(spacing: 14) {
+            HStack(spacing: Space.lg) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(label)
                         .font(Typography.statValue)
@@ -101,7 +101,7 @@ private struct HapticRow: View {
                 Spacer()
                 PulseDot(triggerId: pulseId)
             }
-            .padding(.horizontal, 18)
+            .padding(.horizontal, Space.xl)
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())

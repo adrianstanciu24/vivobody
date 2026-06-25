@@ -105,7 +105,7 @@ struct MiniChart: View {
 }
 
 #Preview("MiniChart") {
-    VStack(alignment: .leading, spacing: 24) {
+    VStack(alignment: .leading, spacing: Space.xxl) {
         MiniChart(
             values: [100, 105, 110, 110, 115, 120, 125, 130],
             prIndices: [0, 1, 2, 4, 5, 6, 7]
@@ -118,6 +118,6 @@ struct MiniChart: View {
         MiniChart(values: [200, 195, 190, 195, 200, 205, 210], prIndices: [0, 5, 6])
             .frame(width: 120, height: 40)
     }
-    .padding(24)
+    .padding(Space.xxl)
     .background(Color.black)
 }

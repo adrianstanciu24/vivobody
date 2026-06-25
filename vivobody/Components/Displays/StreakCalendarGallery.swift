@@ -37,7 +37,7 @@ struct StreakCalendarGallery: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 26) {
+        VStack(alignment: .leading, spacing: Space.xxl) {
             header
             monthBar
 
@@ -52,9 +52,9 @@ struct StreakCalendarGallery: View {
 
             Spacer()
         }
-        .padding(.horizontal, 22)
-        .padding(.top, 28)
-        .padding(.bottom, 24)
+        .padding(.horizontal, Space.gutter)
+        .padding(.top, Space.section)
+        .padding(.bottom, Space.xxl)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -95,8 +95,8 @@ struct StreakCalendarGallery: View {
                     .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(monthOffset == 0 ? .white.opacity(0.35) : .white.opacity(0.75))
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 7)
+                    .padding(.horizontal, Space.lg)
+                    .padding(.vertical, Space.sm)
                     .background(
                         Capsule()
                             .fill(monthOffset == 0 ? Color.white.opacity(0.04) : Color.white.opacity(0.10))
@@ -140,7 +140,7 @@ struct StreakCalendarGallery: View {
     VStack {
         StreakCalendar(workoutDates: [], month: Date())
     }
-    .padding(28)
+    .padding(Space.section)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)
@@ -154,7 +154,7 @@ struct StreakCalendarGallery: View {
     return VStack {
         StreakCalendar(workoutDates: Set(dates), month: Date())
     }
-    .padding(28)
+    .padding(Space.section)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)

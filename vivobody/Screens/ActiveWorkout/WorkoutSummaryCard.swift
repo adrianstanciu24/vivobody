@@ -249,7 +249,7 @@ struct WorkoutSummaryCard: View {
     }
 
     private func summaryPips(for sets: [WorkoutSet]) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Space.sm) {
             ForEach(sets) { set in
                 if set.isCompleted {
                     Circle()
@@ -286,7 +286,7 @@ struct WorkoutSummaryCard: View {
                 Haptics.soft()
                 isEditingWorkoutNotes = true
             } label: {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: Space.sm) {
                     Text("Notes")
                         .font(Typography.sectionLabel)
                         .foregroundStyle(Ink.tertiary)
@@ -354,8 +354,8 @@ struct WorkoutSummaryCard: View {
                     .font(Typography.headline)
                     .foregroundStyle(Tint.onAccent)
             }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 18)
+            .padding(.horizontal, Space.xxl)
+            .padding(.vertical, Space.xl)
             .frame(maxWidth: .infinity)
             .coloredGlassControl(cornerRadius: Radius.card, fill: Tint.complete, interactive: true)
             .shadow(color: Tint.complete.opacity(0.40), radius: 22, y: 9)

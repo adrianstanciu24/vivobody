@@ -155,7 +155,7 @@ struct SessionDetailScreen: View {
     // MARK: - Notes
 
     private var notesSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             Text("Notes")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
@@ -370,7 +370,7 @@ private struct ExerciseDetailRow: View {
         let textColor: Color = isTopSet ? Tint.complete : (set.isCompleted ? Ink.primary : Ink.quaternary)
 
         return HStack(spacing: 0) {
-            HStack(spacing: 10) {
+            HStack(spacing: Space.md) {
                 statusPip(isCompleted: set.isCompleted, isTopSet: isTopSet)
                 Text("\(index)")
                     .font(Typography.metricUnit)
@@ -406,7 +406,7 @@ private struct ExerciseDetailRow: View {
             Text("×")
                 .font(Typography.metricUnit)
                 .foregroundStyle(Ink.quaternary)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, Space.md)
 
             Text("\(set.reps)")
                 .font(Typography.metricInline)
@@ -428,7 +428,7 @@ private struct ExerciseDetailRow: View {
                 Text("·")
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.quaternary)
-                    .padding(.horizontal, 10)
+                    .padding(.horizontal, Space.md)
             }
 
             Text(DurationFormatter.string(set.duration))

@@ -29,7 +29,7 @@ struct BreathingTimerGallery: View {
                 durationPicker
             }
             .padding(.top, 60)
-            .padding(.trailing, 18)
+            .padding(.trailing, Space.xl)
         }
         .background(Color.black.ignoresSafeArea())
         .preferredColorScheme(.dark)
@@ -43,7 +43,7 @@ struct BreathingTimerGallery: View {
             Text("Restart")
                 .font(Typography.metricUnit)
                 .foregroundStyle(.white.opacity(0.85))
-                .padding(.horizontal, 14)
+                .padding(.horizontal, Space.lg)
                 .padding(.vertical, 8)
                 .glassPill()
         }
@@ -63,8 +63,8 @@ struct BreathingTimerGallery: View {
                     Text("\(secs)s")
                         .font(Typography.metricMicro)
                         .foregroundStyle(duration == TimeInterval(secs) ? .black : .white.opacity(0.65))
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, Space.sm)
+                        .padding(.vertical, Space.sm)
                         .background {
                             if duration == TimeInterval(secs) {
                                 Capsule().fill(Tint.primary)

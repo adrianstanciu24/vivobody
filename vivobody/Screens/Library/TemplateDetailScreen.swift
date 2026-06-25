@@ -167,9 +167,9 @@ struct TemplateDetailScreen: View {
             } header: {
                 Text("Exercises")
                     .sectionLabelStyle(0.60)
-                    .padding(.leading, 22)
-                    .padding(.top, 6)
-                    .padding(.bottom, 6)
+                    .padding(.leading, Space.gutter)
+                    .padding(.top, Space.sm)
+                    .padding(.bottom, Space.sm)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .listRowInsets(EdgeInsets())
                     .background(Surface.background)
@@ -261,7 +261,7 @@ struct TemplateDetailScreen: View {
                 appState.startWorkoutFromTemplate(template)
                 dismiss()
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
             .padding(.top, 12)
             .padding(.bottom, 8)
             .disabled(template.orderedExercises.isEmpty)

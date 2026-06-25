@@ -18,7 +18,7 @@ struct DigitTickerGallery: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 30) {
+            VStack(alignment: .leading, spacing: Space.section) {
                 header
 
                 section(
@@ -62,9 +62,9 @@ struct DigitTickerGallery: View {
                 scrambleButton
                 Spacer().frame(height: 12)
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 28)
-            .padding(.bottom, 24)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.section)
+            .padding(.bottom, Space.xxl)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black.ignoresSafeArea())
@@ -96,7 +96,7 @@ struct DigitTickerGallery: View {
         fractionalDigits: Int = 0,
         font: Font
     ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: Space.lg) {
             Text(label.uppercased())
                 .font(Typography.metricMicro)
                 .tracking(2)
@@ -117,7 +117,7 @@ struct DigitTickerGallery: View {
                 stepper(value: value, step: step, range: range)
             }
         }
-        .padding(18)
+        .padding(Space.xl)
         .background(
             RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
                 .fill(Color.white.opacity(0.04))
@@ -125,7 +125,7 @@ struct DigitTickerGallery: View {
     }
 
     private func stepper(value: Binding<Double>, step: Double, range: ClosedRange<Double>) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Space.sm) {
             stepperButton(symbol: "minus") {
                 let new = max(range.lowerBound, value.wrappedValue - step)
                 if new != value.wrappedValue {
@@ -197,7 +197,7 @@ struct DigitTickerGallery: View {
 
 #Preview("Solo · big") {
     @Previewable @State var value: Double = 195
-    return VStack(spacing: 30) {
+    return VStack(spacing: Space.section) {
         DigitTicker(value: value, font: Typography.bigMetric)
         HStack(spacing: 12) {
             Button("−5") { value -= 5 }

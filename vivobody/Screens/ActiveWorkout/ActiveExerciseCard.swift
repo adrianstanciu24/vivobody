@@ -136,7 +136,7 @@ struct ActiveExerciseCard: View {
             Haptics.soft()
             isEditingNotes = true
         } label: {
-            HStack(spacing: 6) {
+            HStack(spacing: Space.sm) {
                 if !exercise.notes.isEmpty {
                     Circle()
                         .fill(Tint.inProgress)
@@ -467,7 +467,7 @@ struct ActiveExerciseCard: View {
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
             }
-            .padding(.vertical, 30)
+            .padding(.vertical, Space.section)
         }
     }
 

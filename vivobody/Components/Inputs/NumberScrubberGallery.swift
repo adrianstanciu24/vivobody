@@ -15,10 +15,10 @@ struct NumberScrubberGallery: View {
     @State private var weightStep: Double = 5
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: Space.xxl) {
             header
 
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: Space.md) {
                 Text("INCREMENT")
                     .font(Typography.metricMicro)
                     .tracking(2)
@@ -56,9 +56,9 @@ struct NumberScrubberGallery: View {
 
             readout
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 28)
-        .padding(.bottom, 24)
+        .padding(.horizontal, Space.xl)
+        .padding(.top, Space.section)
+        .padding(.bottom, Space.xxl)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -84,7 +84,7 @@ struct NumberScrubberGallery: View {
     }
 
     private var readout: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Space.sm) {
             DigitTicker(
                 value: weight,
                 font: Typography.metricInline,
@@ -106,8 +106,8 @@ struct NumberScrubberGallery: View {
         }
         .font(Typography.metricInline)
         .foregroundStyle(.white)
-        .padding(.vertical, 14)
-        .padding(.horizontal, 18)
+        .padding(.vertical, Space.lg)
+        .padding(.horizontal, Space.xl)
         .frame(maxWidth: .infinity)
         .background(Capsule().fill(Color.white.opacity(0.05)))
     }

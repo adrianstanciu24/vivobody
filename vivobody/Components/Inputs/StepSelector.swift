@@ -33,7 +33,7 @@ struct StepSelector<T: Hashable>: View {
                         .monospacedDigit()
                         .foregroundStyle(option == selection ? Surface.background : Ink.secondary)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, Space.md)
                         .contentShape(Capsule())
                         .background {
                             if option == selection {
@@ -54,7 +54,7 @@ struct StepSelector<T: Hashable>: View {
 
 #Preview("Step Selector") {
     @Previewable @State var step: Double = 5
-    return VStack(spacing: 24) {
+    return VStack(spacing: Space.xxl) {
         StepSelector(
             selection: $step,
             options: [1.0, 2.5, 5.0]
@@ -67,7 +67,7 @@ struct StepSelector<T: Hashable>: View {
             .font(.system(.body, design: .monospaced))
             .foregroundStyle(.white.opacity(0.6))
     }
-    .padding(24)
+    .padding(Space.xxl)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)

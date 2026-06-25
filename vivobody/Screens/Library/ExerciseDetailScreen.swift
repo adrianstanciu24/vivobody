@@ -125,7 +125,7 @@ struct ExerciseDetailScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 26) {
+            VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 statsRow
                 if item.trackingMode == .reps {
@@ -142,9 +142,9 @@ struct ExerciseDetailScreen: View {
                 }
                 defaultsSection
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
             .padding(.top, 8)
-            .padding(.bottom, 24)
+            .padding(.bottom, Space.xxl)
         }
         .background(Surface.background.ignoresSafeArea())
         .scrollEdgeEffectStyle(.soft, for: .bottom)
@@ -258,8 +258,8 @@ struct ExerciseDetailScreen: View {
         Text(text)
             .font(Typography.metricUnit)
             .foregroundStyle(accent ? Tint.complete : Ink.tertiary)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
+            .padding(.horizontal, Space.md)
+            .padding(.vertical, Space.xs)
             .background(Capsule().fill(Surface.cardTint))
             .overlay(Capsule().stroke(accent ? Tint.primaryDim : Surface.edge, lineWidth: 1))
     }
@@ -307,7 +307,7 @@ struct ExerciseDetailScreen: View {
     }
 
     private func statCard(label: String, value: String, detail: String?) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: Space.sm) {
             Text(value)
                 .font(Typography.statValue)
                 .foregroundStyle(Ink.primary)
@@ -405,7 +405,7 @@ struct ExerciseDetailScreen: View {
     // MARK: - Chart section
 
     private var chartSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: Space.lg) {
             Text("Progress")
                 .sectionLabelStyle(0.60)
 
@@ -547,7 +547,7 @@ struct ExerciseDetailScreen: View {
     @ViewBuilder
     private var effortSection: some View {
         if let effort = effortSummary {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: Space.md) {
                 Text("Effort")
                     .sectionLabelStyle(0.60)
 
@@ -634,7 +634,7 @@ struct ExerciseDetailScreen: View {
     // MARK: - Form cues
 
     private var formCuesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Space.md) {
             HStack {
                 Text("Form cues")
                     .sectionLabelStyle(0.60)
@@ -647,7 +647,7 @@ struct ExerciseDetailScreen: View {
                         Text("Edit")
                             .font(Typography.sectionLabel)
                             .foregroundStyle(Ink.secondary)
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, Space.md)
                             .frame(minHeight: 44)
                             .contentShape(Rectangle())
                     }
@@ -686,7 +686,7 @@ struct ExerciseDetailScreen: View {
     // MARK: - Recent sessions
 
     private var recentSessionsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent sessions")
                 .sectionLabelStyle(0.60)
 
@@ -727,7 +727,7 @@ struct ExerciseDetailScreen: View {
                 Text("PR")
                     .font(Typography.metricMicro)
                     .foregroundStyle(Tint.onAccent)
-                    .padding(.horizontal, 7)
+                    .padding(.horizontal, Space.sm)
                     .padding(.vertical, 2)
                     .background(Capsule().fill(prColor))
             }
@@ -738,7 +738,7 @@ struct ExerciseDetailScreen: View {
     // MARK: - Defaults
 
     private var defaultsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
                 .sectionLabelStyle(0.60)
 
@@ -793,13 +793,13 @@ struct ExerciseDetailScreen: View {
                     .font(Typography.sectionHeading)
             }
             .foregroundStyle(Tint.onAccent)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 18)
+            .padding(.horizontal, Space.xxl)
+            .padding(.vertical, Space.xl)
             .frame(maxWidth: .infinity)
             .coloredGlassControl(cornerRadius: Radius.card, fill: Tint.inProgress, interactive: true)
         }
         .buttonStyle(.plain)
-        .padding(.horizontal, 22)
+        .padding(.horizontal, Space.gutter)
         .padding(.bottom, 8)
         .padding(.top, 12)
         .background(Surface.background)

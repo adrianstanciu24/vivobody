@@ -64,8 +64,8 @@ struct ActiveWorkoutMiniBar: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 6)
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.sm)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

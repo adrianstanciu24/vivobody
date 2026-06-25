@@ -120,7 +120,7 @@ struct StrengthTrajectorySection: View {
             Haptics.selection()
             chosen = stat.exercise
         } label: {
-            HStack(spacing: 6) {
+            HStack(spacing: Space.sm) {
                 Circle()
                     .fill(prColor(stat.trend))
                     .frame(width: 6, height: 6)
@@ -128,7 +128,7 @@ struct StrengthTrajectorySection: View {
                     .font(Typography.sectionLabel)
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .padding(.horizontal, 14)
+            .padding(.horizontal, Space.lg)
             .frame(minHeight: 38)
             .background(
                 Capsule().fill(isSelected ? Tint.primary : Surface.cardTint)

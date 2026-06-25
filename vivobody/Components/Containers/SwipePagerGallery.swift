@@ -21,7 +21,7 @@ struct SwipePagerGallery: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: Space.xxl) {
             header
 
             SwipePager(selection: $index, count: exercises.count) { i in
@@ -34,9 +34,9 @@ struct SwipePagerGallery: View {
 
             Spacer()
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 28)
-        .padding(.bottom, 24)
+        .padding(.horizontal, Space.xl)
+        .padding(.top, Space.section)
+        .padding(.bottom, Space.xxl)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -92,7 +92,7 @@ struct ExerciseCardPlaceholder: View {
             Spacer()
 
             // Center: exercise name + accent line
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: Space.lg) {
                 Rectangle()
                     .fill(seed.accent)
                     .frame(width: 44, height: 2)
@@ -108,7 +108,7 @@ struct ExerciseCardPlaceholder: View {
             Spacer()
 
             // Bottom: scheme
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                 Text(seed.scheme)
                     .font(Typography.statValue)
                     .foregroundStyle(.white.opacity(0.88))
@@ -118,7 +118,7 @@ struct ExerciseCardPlaceholder: View {
                     .foregroundStyle(.white.opacity(0.35))
             }
         }
-        .padding(28)
+        .padding(Space.section)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))

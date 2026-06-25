@@ -24,7 +24,7 @@ struct SetCompleteButtonGallery: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: Space.xxl) {
                 header
 
                 VStack(spacing: 12) {
@@ -43,8 +43,8 @@ struct SetCompleteButtonGallery: View {
 
                 Spacer(minLength: 40)
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 24)
+            .padding(.horizontal, Space.xl)
+            .padding(.top, Space.xxl)
         }
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -97,7 +97,7 @@ struct SetCompleteButtonGallery: View {
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.5))
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
+                    .padding(.vertical, Space.md)
                     .background(
                         Capsule().fill(Color.white.opacity(0.06))
                     )

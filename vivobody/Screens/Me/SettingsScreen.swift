@@ -312,7 +312,7 @@ struct SettingsScreen: View {
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: Space.sm) {
             Text("vivobody")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)

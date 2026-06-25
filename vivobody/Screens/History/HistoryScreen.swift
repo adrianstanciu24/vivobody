@@ -431,7 +431,7 @@ private struct SessionRow: View {
         Text("PR")
             .font(Typography.micro)
             .foregroundStyle(Tint.primary)
-            .padding(.horizontal, 6)
+            .padding(.horizontal, Space.sm)
             .padding(.vertical, 1)
             .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
             .accessibilityLabel("Personal record")

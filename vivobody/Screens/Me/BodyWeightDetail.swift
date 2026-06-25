@@ -57,7 +57,7 @@ struct BodyWeightDetail: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: Space.xxl) {
                 header
                 logButton
                 if visiblePoints.count >= 2 {
@@ -73,7 +73,7 @@ struct BodyWeightDetail: View {
                     recentTable
                 }
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
             .padding(.vertical, 16)
         }
         .background(Surface.background.ignoresSafeArea())
@@ -149,8 +149,8 @@ struct BodyWeightDetail: View {
                 .font(Typography.metricMicro)
         }
         .foregroundStyle(chipColor)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
+        .padding(.horizontal, Space.md)
+        .padding(.vertical, Space.xs)
         .background(Capsule().fill(Surface.cardTintBright))
     }
 
@@ -255,7 +255,7 @@ struct BodyWeightDetail: View {
                 .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, Space.md)
                 .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.primary : nil)
         }
         .buttonStyle(.plain)
@@ -264,7 +264,7 @@ struct BodyWeightDetail: View {
     // MARK: - Recent table
 
     private var recentTable: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent")
                 .sectionLabelStyle(0.60)
 

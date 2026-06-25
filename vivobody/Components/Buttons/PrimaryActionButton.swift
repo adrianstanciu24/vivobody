@@ -56,8 +56,8 @@ struct PrimaryActionButton: View {
                         .foregroundStyle(Tint.onAccent.opacity(0.85))
                 }
             }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 18)
+            .padding(.horizontal, Space.xxl)
+            .padding(.vertical, Space.xl)
             .frame(maxWidth: .infinity)
             .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: Radius.card))
         }
@@ -113,7 +113,7 @@ private struct PressScaleButtonStyle: ButtonStyle {
             accent: Color(red: 0.46, green: 0.74, blue: 0.96)
         ) {}
     }
-    .padding(24)
+    .padding(Space.xxl)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black)
     .preferredColorScheme(.dark)

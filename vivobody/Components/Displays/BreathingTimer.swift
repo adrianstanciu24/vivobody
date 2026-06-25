@@ -123,7 +123,7 @@ struct BreathingTimer: View {
     // MARK: - Pieces
 
     private var kicker: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Space.sm) {
             Circle()
                 .fill(Tint.inProgress)
                 .frame(width: 7, height: 7)
@@ -171,7 +171,7 @@ struct BreathingTimer: View {
     @ViewBuilder
     private var nextLine: some View {
         if let nextSetLabel {
-            HStack(spacing: 10) {
+            HStack(spacing: Space.md) {
                 Text("Next")
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Tint.inProgress)

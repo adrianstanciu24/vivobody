@@ -70,7 +70,7 @@ struct ActiveWorkoutScreen: View {
             } else {
                 pager
                     .safeAreaInset(edge: .top, spacing: 8) { topBar }
-                    .safeAreaInset(edge: .bottom, spacing: 10) { bottomBar }
+                    .safeAreaInset(edge: .bottom, spacing: Space.md) { bottomBar }
             }
 
             if session.isResting {

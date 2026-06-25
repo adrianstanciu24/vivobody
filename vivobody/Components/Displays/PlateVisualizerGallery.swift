@@ -13,10 +13,10 @@ struct PlateVisualizerGallery: View {
     @State private var weightStep: Double = 5
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: Space.xxl) {
             header
 
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: Space.md) {
                 Text("INCREMENT")
                     .font(Typography.metricMicro)
                     .tracking(2)
@@ -48,9 +48,9 @@ struct PlateVisualizerGallery: View {
 
             Spacer()
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 28)
-        .padding(.bottom, 24)
+        .padding(.horizontal, Space.xl)
+        .padding(.top, Space.section)
+        .padding(.bottom, Space.xxl)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.black.ignoresSafeArea())
         .onAppear { Haptics.prepare() }
@@ -88,7 +88,7 @@ struct PlateVisualizerGallery: View {
 }
 
 #Preview("Plate Visualizer — kg") {
-    VStack(spacing: 40) {
+    VStack(spacing: Space.section) {
         PlateVisualizer(weight: 20, barWeight: 20, unit: .kg)
         PlateVisualizer(weight: 60, barWeight: 20, unit: .kg)
         PlateVisualizer(weight: 100, barWeight: 20, unit: .kg)

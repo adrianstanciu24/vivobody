@@ -21,7 +21,7 @@ struct PRCelebrationGallery: View {
             backdrop
 
             // Triggers
-            VStack(spacing: 14) {
+            VStack(spacing: Space.lg) {
                 Spacer()
                 triggerButton(label: "Weight PR · 225 lb") {
                     showWeightPR = true
@@ -34,7 +34,7 @@ struct PRCelebrationGallery: View {
                 }
                 Spacer().frame(height: 36)
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
 
             // The celebrations — three instances, only one fires at a time.
             PRCelebration(
@@ -66,7 +66,7 @@ struct PRCelebrationGallery: View {
     }
 
     private var backdrop: some View {
-        VStack(alignment: .leading, spacing: 26) {
+        VStack(alignment: .leading, spacing: Space.xxl) {
             // Header strip
             VStack(alignment: .leading, spacing: 8) {
                 Text("PR celebration")
@@ -79,21 +79,21 @@ struct PRCelebrationGallery: View {
                     .foregroundStyle(.white.opacity(0.55))
                     .padding(.top, 2)
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 28)
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.section)
 
             // Faux summary stats
-            VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: Space.lg) {
                 Text("Tuesday · 47 min · 8 sets")
                     .sectionLabelStyle(0.55)
 
-                HStack(spacing: 18) {
+                HStack(spacing: Space.xl) {
                     statBlock(value: "14,250", unit: "lb", label: "Volume")
                     statBlock(value: "47", unit: "min", label: "Duration")
                     statBlock(value: "3", unit: nil, label: "Exercises")
                 }
             }
-            .padding(.horizontal, 22)
+            .padding(.horizontal, Space.gutter)
 
             Spacer()
         }
@@ -101,7 +101,7 @@ struct PRCelebrationGallery: View {
     }
 
     private func statBlock(value: String, unit: String?, label: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
                     .font(Typography.statValue)
@@ -128,7 +128,7 @@ struct PRCelebrationGallery: View {
                     .font(Typography.caption)
                     .foregroundStyle(Tint.primary)
             }
-            .padding(.horizontal, 18)
+            .padding(.horizontal, Space.xl)
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
             .glassChip(cornerRadius: Radius.chip)

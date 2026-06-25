@@ -29,7 +29,7 @@ struct RIRSelector: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(spacing: 6) {
+            HStack(spacing: Space.sm) {
                 Text("RIR")
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
@@ -71,13 +71,13 @@ struct RIRSelector: View {
 
 #Preview("RIR Selector") {
     @Previewable @State var rir = 2
-    return VStack(spacing: 24) {
+    return VStack(spacing: Space.xxl) {
         RIRSelector(value: $rir)
         Text("Current: \(rir) RIR")
             .font(.system(.body, design: .monospaced))
             .foregroundStyle(.white.opacity(0.6))
     }
-    .padding(24)
+    .padding(Space.xxl)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)

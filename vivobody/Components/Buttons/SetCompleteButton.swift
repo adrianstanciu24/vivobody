@@ -133,8 +133,8 @@ struct SetCompleteButton: View {
                 Spacer(minLength: 8)
                 statusIndicator
             }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 18)
+            .padding(.horizontal, Space.xxl)
+            .padding(.vertical, Space.xl)
             .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         } else {
             HStack(alignment: .center, spacing: 0) {
@@ -144,8 +144,8 @@ struct SetCompleteButton: View {
                 Spacer(minLength: 8)
                 statusIndicator
             }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 18)
+            .padding(.horizontal, Space.xxl)
+            .padding(.vertical, Space.xl)
             .foregroundStyle(isComplete ? Tint.onAccent : Ink.primary)
             .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         }
@@ -167,7 +167,7 @@ struct SetCompleteButton: View {
         Text("×")
             .font(Typography.statValue)
             .opacity(0.35)
-            .padding(.horizontal, 14)
+            .padding(.horizontal, Space.lg)
             .offset(y: -8)
     }
 
