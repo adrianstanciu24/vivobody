@@ -91,7 +91,7 @@ extension View {
     /// Convenience for the "small dim sentence-case label" pattern
     /// that replaces all the tracked-uppercase labels. Sentence case,
     /// no tracking, tertiary ink by default.
-    func sectionLabelStyle(_ opacity: Double = 0.45) -> some View {
+    func sectionLabelStyle(_ opacity: Double = Opacity.soft) -> some View {
         self
             .font(Typography.sectionLabel)
             .foregroundStyle(Ink.primary.opacity(opacity))
@@ -101,7 +101,7 @@ extension View {
 
     /// Sentence-case heading style for empty states and card
     /// titles.
-    func sectionHeadingStyle(_ opacity: Double = 0.85) -> some View {
+    func sectionHeadingStyle(_ opacity: Double = Opacity.strong) -> some View {
         self
             .font(Typography.sectionHeading)
             .foregroundStyle(Ink.primary.opacity(opacity))

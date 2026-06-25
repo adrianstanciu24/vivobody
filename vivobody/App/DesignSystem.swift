@@ -85,6 +85,26 @@ enum Ink {
     static let quaternary = Color("InkQuaternary")
 }
 
+/// Emphasis tiers for the *extra* alpha layered on a base colour
+/// (`Ink.primary.opacity(...)`, `Tint.complete.opacity(...)`, section
+/// labels). Hierarchy is luminance, and these are the only steps it
+/// climbs — reach for a named tier instead of typing a fresh decimal
+/// so the ladder stays five rungs, not thirty. NOT for shadows, 3D
+/// shading, gradient end-stops, or plate-ID colours; those are
+/// bespoke and stay raw.
+enum Opacity {
+    /// Near-solid emphasis — primary value on a tinted/secondary base.
+    static let strong:   Double = 0.85
+    /// Confident secondary — sub-values, completed-state text.
+    static let emphasis: Double = 0.70
+    /// Section labels, supporting copy.
+    static let medium:   Double = 0.55
+    /// Quiet captions, faded metadata.
+    static let soft:     Double = 0.40
+    /// Barely-there — disabled, deep-background text.
+    static let faint:    Double = 0.22
+}
+
 enum Radius {
     static let card: CGFloat   = 22
     static let chip: CGFloat   = 14

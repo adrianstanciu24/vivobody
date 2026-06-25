@@ -119,7 +119,7 @@ struct ConsistencySection: View {
         }
         return VStack(alignment: .leading, spacing: Space.sm) {
             Text("Weekly volume")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
             Chart(weekly) { point in
                 AreaMark(
                     x: .value("Week", point.week),
@@ -138,7 +138,7 @@ struct ConsistencySection: View {
                     y: .value("Sets", point.sets)
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(Tint.primary.opacity(0.85))
+                .foregroundStyle(Tint.primary.opacity(Opacity.strong))
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)

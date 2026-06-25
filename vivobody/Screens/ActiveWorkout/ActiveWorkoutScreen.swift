@@ -200,7 +200,7 @@ struct ActiveWorkoutScreen: View {
     private var topBar: some View {
         HStack(spacing: 0) {
             Text("Active workout")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             Spacer()
 

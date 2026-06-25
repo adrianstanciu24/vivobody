@@ -153,11 +153,11 @@ struct StrengthTrajectorySection: View {
         return Chart {
             RuleMark(y: .value("Best", best))
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                .foregroundStyle(Tint.primary.opacity(0.5))
+                .foregroundStyle(Tint.primary.opacity(Opacity.medium))
                 .annotation(position: .top, alignment: .trailing) {
                     Text("best")
                         .font(Typography.metricMicro)
-                        .foregroundStyle(Tint.primary.opacity(0.8))
+                        .foregroundStyle(Tint.primary.opacity(Opacity.strong))
                 }
 
             ForEach(points) { p in

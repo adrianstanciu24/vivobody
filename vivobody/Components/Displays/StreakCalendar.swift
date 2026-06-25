@@ -183,7 +183,7 @@ private struct DayDot: View {
 
     private var numberColor: Color {
         if isWorkout {
-            return Tint.onAccent.opacity(0.85)
+            return Tint.onAccent.opacity(Opacity.strong)
         }
         return isInMonth ? Ink.secondary : Ink.tertiary
     }

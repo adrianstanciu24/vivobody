@@ -104,7 +104,7 @@ struct BodyWeightDetail: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Current")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(currentWeightLabel)
@@ -113,7 +113,7 @@ struct BodyWeightDetail: View {
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.primary.opacity(0.55))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
 
                 Spacer()
 
@@ -125,11 +125,11 @@ struct BodyWeightDetail: View {
             if let last = entries.latest {
                 Text("Last logged \(Self.dayFormatter.string(from: last.date))")
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.primary.opacity(0.45))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             } else {
                 Text("No entries yet")
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.primary.opacity(0.45))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             }
         }
     }
@@ -191,7 +191,7 @@ struct BodyWeightDetail: View {
                     y: .value("Weight", displayWeight)
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(Ink.primary.opacity(0.85))
+                .foregroundStyle(Ink.primary.opacity(Opacity.strong))
 
                 AreaMark(
                     x: .value("Date", point.date),
@@ -212,7 +212,7 @@ struct BodyWeightDetail: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
             }
         }
         .chartYAxis {
@@ -220,7 +220,7 @@ struct BodyWeightDetail: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
             }
         }
         .frame(height: 220)
@@ -229,7 +229,7 @@ struct BodyWeightDetail: View {
     private var singleEntryHint: some View {
         Text("Log another entry to see your trend")
             .font(Typography.caption)
-            .foregroundStyle(Ink.primary.opacity(0.45))
+            .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             .frame(maxWidth: .infinity)
     }
 
@@ -253,7 +253,7 @@ struct BodyWeightDetail: View {
         } label: {
             Text(r.label)
                 .font(Typography.metricUnit)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(0.80))
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(Opacity.strong))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, Space.md)
                 .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.primary : nil)
@@ -266,7 +266,7 @@ struct BodyWeightDetail: View {
     private var recentTable: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(Opacity.medium)
 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(reversedEntries.enumerated()), id: \.element.id) { idx, entry in
@@ -306,7 +306,7 @@ struct BodyWeightDetail: View {
         HStack(spacing: 12) {
             Text(Self.dayFormatter.string(from: entry.date))
                 .font(Typography.metricUnit)
-                .foregroundStyle(Ink.primary.opacity(0.55))
+                .foregroundStyle(Ink.primary.opacity(Opacity.medium))
                 .frame(width: 110, alignment: .leading)
 
             Text(WeightFormatter.string(entry.weight, unit: unit, fractionDigits: 1))
@@ -318,7 +318,7 @@ struct BodyWeightDetail: View {
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
-                .foregroundStyle(Ink.primary.opacity(0.30))
+                .foregroundStyle(Ink.primary.opacity(Opacity.faint))
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

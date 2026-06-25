@@ -216,7 +216,7 @@ struct SettingsScreen: View {
                     .font(Typography.metricUnit)
                 Text(unit.displayName)
                     .font(Typography.micro)
-                    .opacity(0.75)
+                    .opacity(Opacity.emphasis)
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .frame(maxWidth: .infinity, minHeight: 52)

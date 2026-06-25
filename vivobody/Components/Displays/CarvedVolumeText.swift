@@ -59,7 +59,7 @@ struct CarvedVolumeText: View {
                 if !unit.isEmpty {
                     Text(unit)
                         .font(.system(size: size * 0.32, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Ink.primary.opacity(0.40))
+                        .foregroundStyle(Ink.primary.opacity(Opacity.soft))
                         .padding(.bottom, 2)
                 }
             }

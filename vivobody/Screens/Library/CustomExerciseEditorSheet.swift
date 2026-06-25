@@ -113,7 +113,7 @@ struct CustomExerciseEditorSheet: View {
     private var nameField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Name")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             TextField("", text: $draft.name, prompt: Text("e.g. Bulgarian Split Squat")
                 .foregroundStyle(Ink.quaternary))
@@ -132,7 +132,7 @@ struct CustomExerciseEditorSheet: View {
     private var muscleGroupField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Muscle group")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
@@ -152,7 +152,7 @@ struct CustomExerciseEditorSheet: View {
     private var equipmentField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Equipment")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
@@ -172,7 +172,7 @@ struct CustomExerciseEditorSheet: View {
     private var mechanicField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Mechanic")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(spacing: Space.sm) {
                 ForEach(Mechanic.allCases, id: \.self) { m in
@@ -195,7 +195,7 @@ struct CustomExerciseEditorSheet: View {
     private var patternField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Movement pattern")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
@@ -219,7 +219,7 @@ struct CustomExerciseEditorSheet: View {
     private var planeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Plane of movement")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(spacing: Space.sm) {
                 ForEach(MovementPlane.allCases, id: \.self) { p in
@@ -237,7 +237,7 @@ struct CustomExerciseEditorSheet: View {
     private var lateralityField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Sides")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(spacing: Space.sm) {
                 ForEach(Laterality.allCases, id: \.self) { l in
@@ -286,7 +286,7 @@ struct CustomExerciseEditorSheet: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .firstTextBaseline) {
                 Text("Aliases")
-                    .sectionLabelStyle(0.55)
+                    .sectionLabelStyle(Opacity.medium)
                 Spacer()
                 Text("comma-separated")
                     .font(Typography.caption)
@@ -316,7 +316,7 @@ struct CustomExerciseEditorSheet: View {
     private var trackingModeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Measure")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(spacing: Space.sm) {
                 ForEach(TrackingMode.allCases, id: \.self) { m in
@@ -334,7 +334,7 @@ struct CustomExerciseEditorSheet: View {
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(alignment: .top, spacing: Space.xxl) {
                 switch draft.trackingMode {
@@ -402,7 +402,7 @@ struct CustomExerciseEditorSheet: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             scrubber()
         }
     }

@@ -166,7 +166,7 @@ struct TemplateDetailScreen: View {
                 }
             } header: {
                 Text("Exercises")
-                    .sectionLabelStyle(0.60)
+                    .sectionLabelStyle(Opacity.medium)
                     .padding(.leading, Space.gutter)
                     .padding(.top, Space.sm)
                     .padding(.bottom, Space.sm)

@@ -40,7 +40,7 @@ struct PrimaryActionButton: View {
                     if let subtitle {
                         Text(subtitle)
                             .font(Typography.caption)
-                            .foregroundStyle(Tint.onAccent.opacity(0.55))
+                            .foregroundStyle(Tint.onAccent.opacity(Opacity.medium))
                     }
                     Text(title)
                         .font(Typography.title)
@@ -53,7 +53,7 @@ struct PrimaryActionButton: View {
                 if let icon {
                     Image(systemName: icon)
                         .font(Typography.sectionHeading)
-                        .foregroundStyle(Tint.onAccent.opacity(0.85))
+                        .foregroundStyle(Tint.onAccent.opacity(Opacity.strong))
                 }
             }
             .padding(.horizontal, Space.xxl)

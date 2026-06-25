@@ -103,7 +103,7 @@ struct PRCelebration: View {
                 if let unit {
                     Text(unit)
                         .font(Typography.statValue)
-                        .foregroundStyle(Tint.complete.opacity(0.70))
+                        .foregroundStyle(Tint.complete.opacity(Opacity.emphasis))
                         .padding(.bottom, 12)
                 }
             }
@@ -240,7 +240,7 @@ struct PRCelebrationFrozen: View {
                     if let unit {
                         Text(unit)
                             .font(Typography.statValue)
-                            .foregroundStyle(Tint.complete.opacity(0.70))
+                            .foregroundStyle(Tint.complete.opacity(Opacity.emphasis))
                             .padding(.bottom, 12)
                     }
                 }

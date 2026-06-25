@@ -48,7 +48,7 @@ struct NumberScrubber: View {
         VStack(spacing: 4) {
             if let label {
                 Text(label)
-                    .sectionLabelStyle(0.50)
+                    .sectionLabelStyle(Opacity.medium)
             }
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {

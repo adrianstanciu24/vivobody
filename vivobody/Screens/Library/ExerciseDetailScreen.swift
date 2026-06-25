@@ -315,7 +315,7 @@ struct ExerciseDetailScreen: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Text(label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             if let detail {
                 Text(detail)
                     .font(Typography.caption)
@@ -352,7 +352,7 @@ struct ExerciseDetailScreen: View {
             HStack(alignment: .center, spacing: Space.md) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("1RM")
-                        .sectionLabelStyle(0.45)
+                        .sectionLabelStyle(Opacity.soft)
                     Text(oneRepMaxSubLabel(measured: measured))
                         .font(Typography.caption)
                         .foregroundStyle(Ink.quaternary)
@@ -407,7 +407,7 @@ struct ExerciseDetailScreen: View {
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             Text("Progress")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(Opacity.medium)
 
             if item.trackingMode == .reps {
                 HStack(spacing: 8) {
@@ -468,7 +468,7 @@ struct ExerciseDetailScreen: View {
                     y: .value("Metric", chartValue(for: point))
                 )
                 .interpolationMethod(.monotone)
-                .foregroundStyle(Ink.primary.opacity(0.85))
+                .foregroundStyle(Ink.primary.opacity(Opacity.strong))
 
                 AreaMark(
                     x: .value("Date", point.date),
@@ -499,7 +499,7 @@ struct ExerciseDetailScreen: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
             }
         }
         .chartYAxis {
@@ -507,7 +507,7 @@ struct ExerciseDetailScreen: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(0.50))
+                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
             }
         }
         .frame(height: 200)
@@ -549,7 +549,7 @@ struct ExerciseDetailScreen: View {
         if let effort = effortSummary {
             VStack(alignment: .leading, spacing: Space.md) {
                 Text("Effort")
-                    .sectionLabelStyle(0.60)
+                    .sectionLabelStyle(Opacity.medium)
 
                 HStack(alignment: .center, spacing: Space.lg) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -604,7 +604,7 @@ struct ExerciseDetailScreen: View {
         if !involvement.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Muscles")
-                    .sectionLabelStyle(0.60)
+                    .sectionLabelStyle(Opacity.medium)
 
                 let primary = involvement.primary
                 let secondary = involvement.secondary
@@ -621,7 +621,7 @@ struct ExerciseDetailScreen: View {
     private func muscleRow(label: String, muscles: [Muscle], prominent: Bool) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: Space.md) {
             Text(label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
                 .frame(width: 76, alignment: .leading)
             Text(muscles.map(\.displayName).joined(separator: " · "))
                 .font(Typography.body)
@@ -637,7 +637,7 @@ struct ExerciseDetailScreen: View {
         VStack(alignment: .leading, spacing: Space.md) {
             HStack {
                 Text("Form cues")
-                    .sectionLabelStyle(0.60)
+                    .sectionLabelStyle(Opacity.medium)
                 Spacer()
                 if !item.notes.isEmpty {
                     Button {
@@ -688,7 +688,7 @@ struct ExerciseDetailScreen: View {
     private var recentSessionsSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent sessions")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(Opacity.medium)
 
             let rows = recentRows
             VStack(alignment: .leading, spacing: 0) {
@@ -740,7 +740,7 @@ struct ExerciseDetailScreen: View {
     private var defaultsSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
-                .sectionLabelStyle(0.60)
+                .sectionLabelStyle(Opacity.medium)
 
             HStack(spacing: Space.lg) {
                 switch item.trackingMode {
@@ -770,7 +770,7 @@ struct ExerciseDetailScreen: View {
     private func defaultStat(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             Text(value)
                 .font(Typography.metricInline)
                 .foregroundStyle(Ink.primary)

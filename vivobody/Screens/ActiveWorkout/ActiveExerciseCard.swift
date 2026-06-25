@@ -349,7 +349,7 @@ struct ActiveExerciseCard: View {
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(Typography.metricInline)
-                    .foregroundStyle(Tint.complete.opacity(0.7))
+                    .foregroundStyle(Tint.complete.opacity(Opacity.emphasis))
             }
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("×")
@@ -357,7 +357,7 @@ struct ActiveExerciseCard: View {
                     .foregroundStyle(Ink.quaternary)
                 Text(repsText)
                     .font(Typography.metricLg)
-                    .foregroundStyle(Tint.complete.opacity(0.85))
+                    .foregroundStyle(Tint.complete.opacity(Opacity.strong))
                     .monospacedDigit()
                 Text("reps")
                     .font(Typography.metricUnit)
@@ -381,7 +381,7 @@ struct ActiveExerciseCard: View {
                         .foregroundStyle(Ink.quaternary)
                     Text(WeightFormatter.string(top.weight, unit: unit, includeUnit: false))
                         .font(Typography.metricLg)
-                        .foregroundStyle(Tint.complete.opacity(0.85))
+                        .foregroundStyle(Tint.complete.opacity(Opacity.strong))
                         .monospacedDigit()
                     Text(unit.symbol)
                         .font(Typography.metricUnit)

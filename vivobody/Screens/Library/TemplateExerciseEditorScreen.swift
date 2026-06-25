@@ -121,7 +121,7 @@ struct TemplateExerciseEditorScreen: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(exercise.group.displayName)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             Text(exercise.name)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
@@ -140,7 +140,7 @@ struct TemplateExerciseEditorScreen: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(label)
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
             scrubber()
         }
     }

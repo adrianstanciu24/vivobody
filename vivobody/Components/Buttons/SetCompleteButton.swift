@@ -174,7 +174,7 @@ struct SetCompleteButton: View {
     private var statusIndicator: some View {
         ZStack {
             Circle()
-                .fill(isComplete ? Color.black.opacity(0.12) : Surface.cardTint)
+                .fill(isComplete ? Tint.onAccent.opacity(0.12) : Surface.cardTint)
                 .frame(width: 44, height: 44)
 
             if isComplete {

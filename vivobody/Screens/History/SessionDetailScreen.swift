@@ -97,7 +97,7 @@ struct SessionDetailScreen: View {
     private var kicker: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(dateLine)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             Text(workoutTitle)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)

@@ -128,7 +128,7 @@ struct TemplateEditorScreen: View {
     private var nameField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Name")
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
 
             TextField("", text: $draft.name, prompt: Text("e.g. Push Day A")
                 .foregroundStyle(Ink.quaternary))

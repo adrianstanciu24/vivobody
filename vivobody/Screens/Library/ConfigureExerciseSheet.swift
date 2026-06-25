@@ -170,7 +170,7 @@ struct ConfigureExerciseSheet: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(group.displayName)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
             Text(name)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
@@ -187,7 +187,7 @@ struct ConfigureExerciseSheet: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(label)
-                .sectionLabelStyle(0.55)
+                .sectionLabelStyle(Opacity.medium)
             scrubber()
         }
     }

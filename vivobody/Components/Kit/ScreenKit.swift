@@ -44,7 +44,7 @@ struct SectionHeader: View {
             if let trailing {
                 Spacer(minLength: Space.sm)
                 Text(trailing)
-                    .sectionLabelStyle(0.40)
+                    .sectionLabelStyle(Opacity.soft)
             }
         }
         .padding(.top, Space.sm)
@@ -129,7 +129,7 @@ struct StatStrip: View {
                 }
             }
             Text(stat.label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
         }
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
     }
@@ -243,7 +243,7 @@ struct MetricView: View {
                 }
             }
             Text(label)
-                .sectionLabelStyle(0.45)
+                .sectionLabelStyle(Opacity.soft)
         }
     }
 }
