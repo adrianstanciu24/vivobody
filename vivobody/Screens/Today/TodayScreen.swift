@@ -66,22 +66,6 @@ struct TodayScreen: View {
 
     var body: some View {
         GeometryReader { proxy in
-            ZStack {
-                Surface.background.ignoresSafeArea()
-
-                // The living atmosphere: an ember field that burns at a
-                // temperature set by the streak + recency, so the home
-                // screen reads as a powered-on instrument rather than a
-                // flat black report. Sits behind the transparent 3D
-                // figure, so the glow breathes through and around it.
-                // AmbientForge adapts its own compositing per appearance
-                // (additive ember on dark, warm amber wash on light).
-                // backgroundExtensionEffect mirrors the forge into the
-                // safe-area insets so the glow bleeds under the nav bar.
-                AmbientForge(warmth: forgeWarmth)
-                    .ignoresSafeArea()
-                    .backgroundExtensionEffect()
-
                 ScrollView {
                     // The body leads — your trained figure is the hero
                     // and the readout's subject. The readiness line gives
@@ -133,18 +117,25 @@ struct TodayScreen: View {
                 // hero is free to dominate the first screen while the
                 // primary action stays reachable at all times.
                 .safeAreaInset(edge: .bottom, spacing: 0) { pinnedStartBar }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
-                // Latch onto the LARGEST viewport height ever seen, not
-                // the first. The pinned-START `safeAreaInset` makes the
-                // container report a transient, collapsed height during
-                // launch layout; freezing that first value shrank the
-                // hero to a thumbnail. Tracking the max ignores the
-                // transient (and the on-scroll tab-bar minimize never
-                // shrinks the figure, since the value only grows).
-                if newHeight > heroHeight { heroHeight = newHeight }
-            }
+                // The living atmosphere shared with every sibling tab: an
+                // ember field burning at a temperature set by streak +
+                // recency, so home reads as a powered-on instrument rather
+                // than a flat black report. Today burns at full intensity
+                // (vs the 0.9 the text-dense tabs default to) because the
+                // transparent 3D figure sits on top — the glow breathes
+                // through and around it. `forgeBackground` also mirrors the
+                // ember under the nav/tab bars so it never hard-edges.
+                .forgeBackground(intensity: 1.0)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
+                    // Latch onto the LARGEST viewport height ever seen, not
+                    // the first. The pinned-START `safeAreaInset` makes the
+                    // container report a transient, collapsed height during
+                    // launch layout; freezing that first value shrank the
+                    // hero to a thumbnail. Tracking the max ignores the
+                    // transient (and the on-scroll tab-bar minimize never
+                    // shrinks the figure, since the value only grows).
+                    if newHeight > heroHeight { heroHeight = newHeight }
+                }
         }
         .onAppear {
             Haptics.prepare()
@@ -383,12 +374,6 @@ struct TodayScreen: View {
             cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
         }
         return count
-    }
-
-    /// Forge temperature, from the shared training-warmth signal so
-    /// Today burns at the same scale as every other tab.
-    private var forgeWarmth: Double {
-        completedSessions.forgeWarmth
     }
 
     private func monthCount(in date: Date) -> Int {

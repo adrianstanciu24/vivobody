@@ -274,6 +274,17 @@ extension View {
                     .backgroundExtensionEffect()
             )
     }
+
+    /// The backdrop for a screen pushed off a forge-lit tab (session
+    /// detail, exercise detail, the Me sub-screens, Settings). It's the
+    /// same living forge, dialed well down so the ember warmth carries
+    /// through the push instead of dropping to flat black — the child
+    /// stays tethered to the tab it came from — while staying quiet
+    /// enough not to compete with dense detail copy. Modal sheets and
+    /// the focused workout deliberately keep the flat surface instead.
+    func detailForgeBackground() -> some View {
+        forgeBackground(intensity: 0.45)
+    }
 }
 
 /// Hosts the forge's data dependency so call sites stay a single

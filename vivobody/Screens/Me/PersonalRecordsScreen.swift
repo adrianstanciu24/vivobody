@@ -46,7 +46,7 @@ struct PersonalRecordsScreen: View {
                 .padding(.bottom, Space.section + Space.md)
             }
         }
-        .background(Surface.background.ignoresSafeArea())
+        .detailForgeBackground()
         .navigationTitle("Personal Records")
         .navigationBarTitleDisplayMode(.inline)
     }

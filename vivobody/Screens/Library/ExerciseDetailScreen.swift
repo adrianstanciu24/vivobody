@@ -146,7 +146,7 @@ struct ExerciseDetailScreen: View {
             .padding(.top, 8)
             .padding(.bottom, Space.xxl)
         }
-        .background(Surface.background.ignoresSafeArea())
+        .detailForgeBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)

@@ -87,7 +87,7 @@ struct SessionDetailScreen: View {
             .padding(.bottom, Space.xxl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .screenBackground()
+        .detailForgeBackground()
         .navigationTitle("Session")
         .navigationBarTitleDisplayMode(.inline)
     }

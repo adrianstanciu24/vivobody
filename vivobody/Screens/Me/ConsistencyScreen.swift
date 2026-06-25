@@ -48,7 +48,7 @@ struct ConsistencyScreen: View {
             .padding(.top, Space.lg)
             .padding(.bottom, Space.section + Space.md)
         }
-        .background(Surface.background.ignoresSafeArea())
+        .detailForgeBackground()
         .navigationTitle("Consistency")
         .navigationBarTitleDisplayMode(.inline)
     }

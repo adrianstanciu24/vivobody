@@ -76,7 +76,7 @@ struct BodyWeightDetail: View {
             .padding(.horizontal, Space.gutter)
             .padding(.vertical, 16)
         }
-        .background(Surface.background.ignoresSafeArea())
+        .detailForgeBackground()
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $logTarget) { target in

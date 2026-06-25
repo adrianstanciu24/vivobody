@@ -68,7 +68,7 @@ struct SettingsScreen: View {
             // at rest instead of peeking out from under it.
             .padding(.bottom, Space.section + Space.md)
         }
-        .background(Surface.background.ignoresSafeArea())
+        .detailForgeBackground()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
     }
