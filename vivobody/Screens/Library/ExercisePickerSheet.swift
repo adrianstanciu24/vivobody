@@ -211,7 +211,7 @@ struct ExercisePickerSheet: View {
             equipmentFilter = value
         } label: {
             Text(label)
-                .font(.system(size: 13, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
                 .frame(minHeight: 38)
@@ -315,7 +315,7 @@ struct ExercisePickerSheet: View {
             rowRightSide(item: item, last: last)
 
             Image(systemName: trailingSymbol)
-                .font(.system(size: isAdd ? 16 : 12, weight: .semibold))
+                .font(isAdd ? Typography.headline : Typography.caption)
                 .foregroundStyle(isAdd ? Tint.inProgress : Ink.quaternary)
         }
         .frame(minHeight: Space.rowMin)
@@ -337,7 +337,7 @@ struct ExercisePickerSheet: View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
-                    .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                 Text(RelativeDate.short(last.sessionDate))

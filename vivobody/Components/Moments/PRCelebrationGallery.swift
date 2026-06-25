@@ -72,7 +72,7 @@ struct PRCelebrationGallery: View {
                 Text("PR celebration")
                     .sectionLabelStyle(0.55)
                 Text("Earn it, then taste it.")
-                    .font(.system(size: 32, weight: .bold))
+                    .font(Typography.display)
                     .foregroundStyle(.white)
                 Text("Tap a button to fire the moment. Tap anywhere on the celebration to dismiss.")
                     .font(Typography.body)
@@ -104,7 +104,7 @@ struct PRCelebrationGallery: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
-                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .font(Typography.statValue)
                     .foregroundStyle(.white.opacity(0.92))
                 if let unit {
                     Text(unit)
@@ -121,11 +121,11 @@ struct PRCelebrationGallery: View {
         Button(action: action) {
             HStack {
                 Text(label)
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(Typography.sectionLabel)
                     .foregroundStyle(.white.opacity(0.90))
                 Spacer()
                 Image(systemName: "play.fill")
-                    .font(.system(size: 12, weight: .bold))
+                    .font(Typography.caption)
                     .foregroundStyle(Tint.primary)
             }
             .padding(.horizontal, 18)

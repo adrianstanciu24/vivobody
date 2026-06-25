@@ -205,8 +205,6 @@ private struct WeeklyHero: View {
     let workoutDays: Set<Date>
     let unit: WeightUnit
 
-    private static let monoStat = Font.system(size: 28, weight: .bold, design: .monospaced)
-
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             header
@@ -224,7 +222,7 @@ private struct WeeklyHero: View {
                         label: "Volume"
                     ),
                 ],
-                valueFont: Self.monoStat
+                valueFont: Typography.statValue
             )
             .padding(.top, Space.sm)
         }
@@ -256,7 +254,7 @@ private struct WeeklyHero: View {
                 Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
                 Text("\(abs(pct))% vs last week")
             }
-            .font(.system(size: 13, weight: .semibold))
+            .font(Typography.sectionLabel)
             .foregroundStyle(pct >= 0 ? Tint.inProgress : Ink.tertiary)
         }
     }
@@ -302,7 +300,7 @@ private struct WeekCadenceStrip: View {
 
         return VStack(spacing: Space.sm) {
             Text(Self.weekdayLetter.string(from: day))
-                .font(.system(size: 11, weight: .semibold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.primary.opacity(0.40))
             ZStack {
                 Circle()
@@ -408,7 +406,7 @@ private struct SessionRow: View {
             // badge, never on every line.
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
-                    .font(.system(size: prominent ? 24 : 19, weight: .semibold, design: .monospaced))
+                    .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
                 Text(unit.symbol)
@@ -417,7 +415,7 @@ private struct SessionRow: View {
             }
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
         }
         .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
@@ -431,7 +429,7 @@ private struct SessionRow: View {
     /// row shout.
     private var prBadge: some View {
         Text("PR")
-            .font(.system(size: 10, weight: .heavy, design: .rounded))
+            .font(Typography.micro)
             .foregroundStyle(Tint.primary)
             .padding(.horizontal, 6)
             .padding(.vertical, 1)

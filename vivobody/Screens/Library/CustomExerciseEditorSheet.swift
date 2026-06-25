@@ -264,7 +264,7 @@ struct CustomExerciseEditorSheet: View {
     ) -> some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 14, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: fullWidth ? .infinity : nil)
                 .padding(.horizontal, fullWidth ? Space.md : Space.lg)

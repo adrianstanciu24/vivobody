@@ -15,14 +15,14 @@
 //  Use:
 //      DigitTicker(value: 195)
 //      DigitTicker(value: 2.5, fractionalDigits: 1,
-//                  font: .system(size: 96, weight: .bold, design: .monospaced))
+//                  font: Typography.bigMetric)
 //
 
 import SwiftUI
 
 struct DigitTicker: View {
     let value: Double
-    var font: Font = .system(size: 36, weight: .bold, design: .monospaced)
+    var font: Font = Typography.metricLg
     var color: Color = Ink.primary
     var fractionalDigits: Int = 0
     var animation: Animation = .spring(response: 0.34, dampingFraction: 0.74)

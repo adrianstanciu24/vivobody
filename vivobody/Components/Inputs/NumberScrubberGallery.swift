@@ -20,7 +20,7 @@ struct NumberScrubberGallery: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("INCREMENT")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.45))
 
@@ -69,14 +69,14 @@ struct NumberScrubberGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("NUMBER SCRUBBER")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Drag to dial.")
-                .font(.system(size: 32, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Up to increase, down to decrease. Each step ticks. Pull past the limit to feel the wall.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }
@@ -87,7 +87,7 @@ struct NumberScrubberGallery: View {
         HStack(spacing: 6) {
             DigitTicker(
                 value: weight,
-                font: .system(size: 18, weight: .semibold, design: .rounded),
+                font: Typography.metricInline,
                 color: .white,
                 fractionalDigits: weightStep.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1
             )
@@ -98,13 +98,13 @@ struct NumberScrubberGallery: View {
                 .padding(.horizontal, 4)
             DigitTicker(
                 value: reps,
-                font: .system(size: 18, weight: .semibold, design: .rounded),
+                font: Typography.metricInline,
                 color: .white
             )
             Text("reps")
                 .foregroundStyle(.white.opacity(0.4))
         }
-        .font(.system(size: 18, weight: .semibold, design: .rounded))
+        .font(Typography.metricInline)
         .foregroundStyle(.white)
         .padding(.vertical, 14)
         .padding(.horizontal, 18)

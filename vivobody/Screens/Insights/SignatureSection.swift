@@ -45,7 +45,7 @@ struct SignatureSection: View {
                         Stat(value: "\(report.weekStreak)", label: "Week streak"),
                         Stat(value: "\(Int((signature.balance * 100).rounded()))", unit: "%", label: "Balance"),
                     ],
-                    valueFont: InsightsFormat.monoStat,
+                    valueFont: Typography.statValue,
                     edgeAligned: true
                 )
                 .padding(.vertical, Space.xs)
@@ -217,7 +217,8 @@ private struct TrainingSignatureView: View {
             let p = CGPoint(x: center.x + cos(angle) * r, y: center.y + sin(angle) * r)
             let isDominant = petal.group == signature.dominantGroup
             let text = Text(petal.group.displayName.uppercased())
-                .font(.system(size: 9, weight: isDominant ? .bold : .semibold))
+                .font(Typography.micro)
+                .fontWeight(isDominant ? .bold : .medium)
                 .foregroundStyle(isDominant ? Ink.primary : Ink.tertiary)
             context.draw(text, at: p, anchor: .center)
         }

@@ -29,7 +29,7 @@ struct StepSelector<T: Hashable>: View {
                     }
                 } label: {
                     Text(label(option))
-                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .font(Typography.metricUnit)
                         .monospacedDigit()
                         .foregroundStyle(option == selection ? Surface.background : Ink.secondary)
                         .frame(maxWidth: .infinity)

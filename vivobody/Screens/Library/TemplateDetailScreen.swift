@@ -104,7 +104,7 @@ struct TemplateDetailScreen: View {
     // MARK: - Stats
 
     private var statsCard: some View {
-        StatStrip(stats: statStats, valueFont: Self.monoStat)
+        StatStrip(stats: statStats, valueFont: Typography.statValue)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -118,8 +118,6 @@ struct TemplateDetailScreen: View {
         }
         return stats
     }
-
-    private static let monoStat = Font.system(size: 24, weight: .bold, design: .monospaced)
 
     private var muscleGroupChips: some View {
         Text(template.muscleGroups.map(\.displayName).joined(separator: " · "))
@@ -202,7 +200,7 @@ struct TemplateDetailScreen: View {
                     }
                 }
                 Text(exerciseSummary(exercise))
-                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.tertiary)
             }
 

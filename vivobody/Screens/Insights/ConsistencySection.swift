@@ -32,7 +32,7 @@ struct ConsistencySection: View {
                         Stat(value: "\(report.weekStreak)", label: "Week streak"),
                         Stat(value: rirLabel(report.averageRIR), label: "Avg RIR"),
                     ],
-                    valueFont: InsightsFormat.monoStat,
+                    valueFont: Typography.statValue,
                     edgeAligned: true
                 )
                 .padding(.vertical, Space.xs)

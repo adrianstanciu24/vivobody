@@ -157,7 +157,7 @@ struct StartWorkoutSheet: View {
             HStack(spacing: Space.md) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title)
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(Typography.title)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
                     if let subtitle {
@@ -171,7 +171,7 @@ struct StartWorkoutSheet: View {
                 Spacer(minLength: Space.sm)
 
                 Image(systemName: icon)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.tertiary)
             }
             .padding(.horizontal, 22)

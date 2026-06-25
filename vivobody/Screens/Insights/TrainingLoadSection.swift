@@ -35,7 +35,7 @@ struct TrainingLoadSection: View {
                         Stat(value: WeightFormatter.volumeValue(report.chronicWeekly, unit: unit), unit: unit.symbol, label: "4-wk avg"),
                         Stat(value: ratioLabel, label: "Load ratio", accent: report.verdict == .optimal),
                     ],
-                    valueFont: InsightsFormat.monoStat,
+                    valueFont: Typography.statValue,
                     edgeAligned: true
                 )
                 .padding(.vertical, Space.xs)

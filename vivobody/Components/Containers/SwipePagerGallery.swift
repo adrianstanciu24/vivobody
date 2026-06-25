@@ -45,14 +45,14 @@ struct SwipePagerGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("SWIPE PAGER")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Move between exercises.")
-                .font(.system(size: 32, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Drag horizontally. Flick for momentum. Neighbors peek so you always know what's next.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }
@@ -79,12 +79,12 @@ struct ExerciseCardPlaceholder: View {
             // Top row: index + group
             HStack {
                 Text(String(format: "%02d / %02d", index + 1, total))
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.5))
                 Spacer()
                 Text(seed.group.uppercased())
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(seed.accent)
             }
@@ -98,7 +98,7 @@ struct ExerciseCardPlaceholder: View {
                     .frame(width: 44, height: 2)
 
                 Text(seed.name)
-                    .font(.system(size: 36, weight: .bold))
+                    .font(Typography.display)
                     .foregroundStyle(.white)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
@@ -110,11 +110,11 @@ struct ExerciseCardPlaceholder: View {
             // Bottom: scheme
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(seed.scheme)
-                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                    .font(Typography.statValue)
                     .foregroundStyle(.white.opacity(0.88))
                 Spacer()
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(Typography.headline)
                     .foregroundStyle(.white.opacity(0.35))
             }
         }

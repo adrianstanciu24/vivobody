@@ -50,7 +50,7 @@ struct NotesEditorSheet: View {
                             .scrollContentBackground(.hidden)
                             .background(Color.clear)
                             .focused($isFocused)
-                            .font(.system(size: 15))
+                            .font(Typography.body)
                             .foregroundStyle(Ink.primary)
                             .tint(Tint.primary)
                             .frame(minHeight: 240)
@@ -62,7 +62,7 @@ struct NotesEditorSheet: View {
                         // the reliably-styled iOS pattern.
                         if draft.isEmpty {
                             Text(placeholder)
-                                .font(.system(size: 15))
+                                .font(Typography.body)
                                 .foregroundStyle(Ink.quaternary)
                                 .padding(.top, 8)
                                 .padding(.leading, 5)

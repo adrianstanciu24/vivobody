@@ -27,7 +27,7 @@ struct DigitTickerGallery: View {
                     value: $weight,
                     step: 5,
                     range: 0...995,
-                    font: .system(size: 56, weight: .bold, design: .monospaced)
+                    font: Typography.metricHero
                 )
 
                 section(
@@ -36,7 +36,7 @@ struct DigitTickerGallery: View {
                     value: $reps,
                     step: 1,
                     range: 1...30,
-                    font: .system(size: 28, weight: .semibold, design: .monospaced)
+                    font: Typography.statValue
                 )
 
                 section(
@@ -45,7 +45,7 @@ struct DigitTickerGallery: View {
                     value: $pr,
                     step: 5,
                     range: 100...995,
-                    font: .system(size: 92, weight: .bold, design: .monospaced)
+                    font: Typography.bigMetric
                 )
 
                 section(
@@ -55,7 +55,7 @@ struct DigitTickerGallery: View {
                     step: 1.25,
                     range: 0...50,
                     fractionalDigits: 2,
-                    font: .system(size: 36, weight: .bold, design: .monospaced)
+                    font: Typography.metricLg
                 )
 
                 Spacer().frame(height: 6)
@@ -74,14 +74,14 @@ struct DigitTickerGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("DIGIT TICKER")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Numbers roll, they don't fade.")
-                .font(.system(size: 32, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Each digit moves independently. Only the digits that change animate. Direction follows the value.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }
@@ -98,7 +98,7 @@ struct DigitTickerGallery: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(label.uppercased())
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.40))
 
@@ -110,7 +110,7 @@ struct DigitTickerGallery: View {
                 )
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                        .font(Typography.metricUnit)
                         .foregroundStyle(.white.opacity(0.4))
                 }
                 Spacer()
@@ -150,7 +150,7 @@ struct DigitTickerGallery: View {
     private func stepperButton(symbol: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: symbol)
-                .font(.system(size: 13, weight: .bold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.85))
                 .frame(width: 38, height: 38)
                 .background(Color.white.opacity(0.08))
@@ -169,9 +169,9 @@ struct DigitTickerGallery: View {
         } label: {
             HStack {
                 Image(systemName: "dice")
-                    .font(.system(size: 13, weight: .bold))
+                    .font(Typography.sectionLabel)
                 Text("SCRAMBLE")
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .tracking(2)
             }
             .foregroundStyle(.white.opacity(0.88))
@@ -198,7 +198,7 @@ struct DigitTickerGallery: View {
 #Preview("Solo · big") {
     @Previewable @State var value: Double = 195
     return VStack(spacing: 30) {
-        DigitTicker(value: value, font: .system(size: 120, weight: .bold, design: .monospaced))
+        DigitTicker(value: value, font: Typography.bigMetric)
         HStack(spacing: 12) {
             Button("−5") { value -= 5 }
             Button("+1") { value += 1 }

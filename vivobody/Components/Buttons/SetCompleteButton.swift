@@ -127,7 +127,7 @@ struct SetCompleteButton: View {
         if let title {
             HStack(alignment: .center, spacing: 0) {
                 Text(title)
-                    .font(.system(size: 19, weight: .bold))
+                    .font(Typography.title)
                     .tracking(0.4)
                     .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
                 Spacer(minLength: 8)
@@ -154,7 +154,7 @@ struct SetCompleteButton: View {
     private func numberBlock(value: String, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(value)
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(Typography.metricLg)
                 .monospacedDigit()
                 .scaleEffect(numberScale)
             Text(unit)
@@ -165,7 +165,7 @@ struct SetCompleteButton: View {
 
     private var multiplier: some View {
         Text("×")
-            .font(.system(size: 22, weight: .medium, design: .rounded))
+            .font(Typography.statValue)
             .opacity(0.35)
             .padding(.horizontal, 14)
             .offset(y: -8)
@@ -193,7 +193,7 @@ struct SetCompleteButton: View {
                     )
             } else {
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(Typography.headline)
                     .foregroundStyle(liveAccent)
                     .transition(.opacity.combined(with: .scale(scale: 0.6)))
             }

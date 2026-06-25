@@ -41,7 +41,7 @@ struct SetSummaryRow: View {
 
             if isActive {
                 Text("Lifting now")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Tint.primary)
             } else {
                 HStack(spacing: 4) {
@@ -57,7 +57,7 @@ struct SetSummaryRow: View {
                     Text("reps")
                         .foregroundStyle(isCompleted ? Ink.tertiary : Ink.quaternary)
                 }
-                .font(.system(size: 14, weight: .medium, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(isCompleted ? Ink.secondary : Ink.tertiary)
             }
 
@@ -119,11 +119,11 @@ struct SetSummaryRow: View {
 
                 if isCompleted {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 11, weight: .bold))
+                        .font(Typography.caption)
                         .foregroundStyle(Tint.onAccent)
                 } else {
                     Text("\(index)")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(Ink.tertiary)
                 }
             }

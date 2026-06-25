@@ -192,7 +192,7 @@ struct TemplateEditorScreen: View {
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
                     Text(exercise.summary(unit: unit))
-                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
                 }
 
@@ -223,7 +223,7 @@ struct TemplateEditorScreen: View {
         } label: {
             HStack(spacing: Space.sm) {
                 Image(systemName: "plus")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(Typography.sectionHeading)
                     .foregroundStyle(Tint.inProgress)
                 Text("Add exercise")
                     .font(Typography.sectionHeading)

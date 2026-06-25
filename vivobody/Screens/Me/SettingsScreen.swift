@@ -125,7 +125,7 @@ struct SettingsScreen: View {
                 }
                 Spacer()
                 Image(systemName: "arrow.counterclockwise")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
@@ -171,7 +171,7 @@ struct SettingsScreen: View {
             appearanceRaw = option.rawValue
         } label: {
             Text(option.label)
-                .font(.system(size: 14, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .coloredGlassControl(cornerRadius: 12, fill: isSelected ? Tint.inProgress : nil)
@@ -213,9 +213,9 @@ struct SettingsScreen: View {
         } label: {
             VStack(spacing: 2) {
                 Text(unit.symbol)
-                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .font(Typography.metricUnit)
                 Text(unit.displayName)
-                    .font(.system(size: 10, weight: .medium))
+                    .font(Typography.micro)
                     .opacity(0.75)
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
@@ -240,7 +240,7 @@ struct SettingsScreen: View {
                 }
                 Spacer()
                 Text("\(defaultRestSeconds)s")
-                    .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(Ink.primary)
             }
 
@@ -263,7 +263,7 @@ struct SettingsScreen: View {
             defaultRestSeconds = seconds
         } label: {
             Text("\(seconds)s")
-                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minWidth: 56, minHeight: 44)
                 .padding(.horizontal, Space.md + 2)

@@ -115,7 +115,7 @@ struct ConsistencyScreen: View {
             }
         } label: {
             Image(systemName: systemName)
-                .font(.system(size: 14, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())

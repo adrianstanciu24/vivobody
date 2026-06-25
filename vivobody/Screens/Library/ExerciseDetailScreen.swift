@@ -165,7 +165,7 @@ struct ExerciseDetailScreen: View {
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(Typography.headline)
                 }
                 .accessibilityLabel("More options")
             }
@@ -222,7 +222,7 @@ struct ExerciseDetailScreen: View {
                 .foregroundStyle(Ink.tertiary)
 
             Text(item.name)
-                .font(.system(size: 30, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(Ink.primary)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -256,7 +256,7 @@ struct ExerciseDetailScreen: View {
 
     private func pill(text: String, accent: Bool) -> some View {
         Text(text)
-            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+            .font(Typography.metricUnit)
             .foregroundStyle(accent ? Tint.complete : Ink.tertiary)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
@@ -309,7 +309,7 @@ struct ExerciseDetailScreen: View {
     private func statCard(label: String, value: String, detail: String?) -> some View {
         VStack(spacing: 6) {
             Text(value)
-                .font(.system(size: 22, weight: .bold, design: .monospaced))
+                .font(Typography.statValue)
                 .foregroundStyle(Ink.primary)
                 .monospacedDigit()
                 .lineLimit(1)
@@ -362,17 +362,17 @@ struct ExerciseDetailScreen: View {
 
                 if let value {
                     Text(WeightFormatter.string(value, unit: unit))
-                        .font(.system(size: 22, weight: .bold, design: .monospaced))
+                        .font(Typography.statValue)
                         .foregroundStyle(Ink.primary)
                         .monospacedDigit()
                 } else {
                     Text("Add")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(Typography.sectionHeading)
                         .foregroundStyle(Tint.complete)
                 }
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
             }
             .padding(Space.lg)
@@ -434,7 +434,7 @@ struct ExerciseDetailScreen: View {
             chartMetric = m
         } label: {
             Text(m.label)
-                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minHeight: 38)
                 .frame(maxWidth: .infinity)
@@ -498,7 +498,7 @@ struct ExerciseDetailScreen: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
@@ -506,7 +506,7 @@ struct ExerciseDetailScreen: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
@@ -520,7 +520,7 @@ struct ExerciseDetailScreen: View {
             range = r
         } label: {
             Text(r.label)
-                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minWidth: 44, minHeight: 38)
                 .padding(.horizontal, 12)
@@ -554,7 +554,7 @@ struct ExerciseDetailScreen: View {
                 HStack(alignment: .center, spacing: Space.lg) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(String(format: "RIR %.1f", effort.avgRIR))
-                            .font(.system(size: 22, weight: .bold, design: .monospaced))
+                            .font(Typography.statValue)
                             .foregroundStyle(Ink.primary)
                             .monospacedDigit()
                         Text("Last · \(effort.lastSessionSetCount) \(effort.lastSessionSetCount == 1 ? "set" : "sets")")
@@ -566,7 +566,7 @@ struct ExerciseDetailScreen: View {
 
                     if let headline = effort.verdict.headline {
                         Text(headline)
-                            .font(.system(size: 13, weight: .semibold))
+                            .font(Typography.sectionLabel)
                             .foregroundStyle(verdictColor(effort.verdict))
                             .multilineTextAlignment(.trailing)
                             .fixedSize(horizontal: false, vertical: true)
@@ -645,7 +645,7 @@ struct ExerciseDetailScreen: View {
                         isEditingNotes = true
                     } label: {
                         Text("Edit")
-                            .font(.system(size: 13, weight: .semibold))
+                            .font(Typography.sectionLabel)
                             .foregroundStyle(Ink.secondary)
                             .padding(.horizontal, 10)
                             .frame(minHeight: 44)
@@ -668,7 +668,7 @@ struct ExerciseDetailScreen: View {
                 isEditingNotes = true
             } label: {
                 Text("Add form cues")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.tertiary)
                     .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                     .contentShape(Rectangle())
@@ -704,7 +704,7 @@ struct ExerciseDetailScreen: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(Self.dayFormatter.string(from: row.date))
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
                 Text(RelativeDate.short(row.date))
                     .font(Typography.caption)
@@ -713,7 +713,7 @@ struct ExerciseDetailScreen: View {
             .frame(width: 90, alignment: .leading)
 
             Text(recentMetricLabel(row))
-                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(row.isPR ? Tint.complete : Ink.primary)
                 .monospacedDigit()
 
@@ -725,7 +725,7 @@ struct ExerciseDetailScreen: View {
 
             if row.isPR {
                 Text("PR")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Tint.onAccent)
                     .padding(.horizontal, 7)
                     .padding(.vertical, 2)
@@ -772,7 +772,7 @@ struct ExerciseDetailScreen: View {
             Text(label)
                 .sectionLabelStyle(0.45)
             Text(value)
-                .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                .font(Typography.metricInline)
                 .foregroundStyle(Ink.primary)
         }
     }
@@ -786,11 +786,11 @@ struct ExerciseDetailScreen: View {
         } label: {
             HStack(spacing: 0) {
                 Text("Add to Workout")
-                    .font(.system(size: 17, weight: .bold))
+                    .font(Typography.title)
                     .tracking(0.4)
                 Spacer(minLength: 8)
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(Typography.sectionHeading)
             }
             .foregroundStyle(Tint.onAccent)
             .padding(.horizontal, 24)
@@ -1149,7 +1149,7 @@ private struct OneRepMaxEditorSheet: View {
                         dismiss()
                     } label: {
                         Text(hasEstimate ? "Use estimate instead" : "Remove measured max")
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(Typography.sectionHeading)
                             .foregroundStyle(Ink.secondary)
                             .frame(minHeight: 44)
                     }

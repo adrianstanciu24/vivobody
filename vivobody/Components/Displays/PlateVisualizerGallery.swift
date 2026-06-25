@@ -18,7 +18,7 @@ struct PlateVisualizerGallery: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("INCREMENT")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.45))
 
@@ -59,14 +59,14 @@ struct PlateVisualizerGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("PLATE VISUALIZER")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Load the bar.")
-                .font(.system(size: 32, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Scrub the weight — plates slide on and off symmetrically. Real colors, real sizes, real plate math.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }

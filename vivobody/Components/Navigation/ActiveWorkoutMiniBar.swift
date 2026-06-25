@@ -61,7 +61,7 @@ struct ActiveWorkoutMiniBar: View {
                 Spacer(minLength: 8)
                 statusBadge(now: now)
                 Image(systemName: "chevron.up")
-                    .font(.system(size: 11, weight: .bold))
+                    .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
             }
             .padding(.horizontal, 14)
@@ -85,7 +85,7 @@ struct ActiveWorkoutMiniBar: View {
     private var labels: some View {
         VStack(alignment: .leading, spacing: 1) {
             Text(titleText)
-                .font(.system(size: 13, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.primary)
                 .lineLimit(1)
 
@@ -112,7 +112,7 @@ struct ActiveWorkoutMiniBar: View {
 
     private func badgeText(_ text: String, tint: Color) -> some View {
         Text(text)
-            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+            .font(Typography.metricUnit)
             .foregroundStyle(tint)
             .monospacedDigit()
     }

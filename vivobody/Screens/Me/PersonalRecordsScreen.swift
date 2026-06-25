@@ -72,7 +72,7 @@ struct PRRow: View {
             HStack(spacing: Space.xs) {
                 if isRecent {
                     Image(systemName: "sparkles")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(Typography.caption)
                         .foregroundStyle(Tint.primary)
                 }
                 Text(PRRow.recordValue(record, unit: unit))

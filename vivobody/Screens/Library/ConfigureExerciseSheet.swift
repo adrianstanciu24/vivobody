@@ -199,7 +199,7 @@ struct ConfigureExerciseSheet: View {
             Rectangle().fill(Surface.edge).frame(height: 1)
             VStack(spacing: Space.md) {
                 Text(previewLine)
-                    .font(.system(size: 15, weight: .medium, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(Ink.tertiary)
                     .frame(maxWidth: .infinity, alignment: .leading)
 

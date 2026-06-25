@@ -41,7 +41,7 @@ struct BreathingTimerGallery: View {
             resetCount &+= 1
         } label: {
             Text("Restart")
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .font(Typography.metricUnit)
                 .foregroundStyle(.white.opacity(0.85))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
@@ -61,7 +61,7 @@ struct BreathingTimerGallery: View {
                     }
                 } label: {
                     Text("\(secs)s")
-                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(duration == TimeInterval(secs) ? .black : .white.opacity(0.65))
                         .padding(.horizontal, 9)
                         .padding(.vertical, 6)

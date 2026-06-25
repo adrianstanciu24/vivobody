@@ -247,7 +247,7 @@ struct ActiveWorkoutScreen: View {
             showAddExercisePicker = true
         } label: {
             Image(systemName: "plus")
-                .font(.system(size: 13, weight: .bold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
                 .frame(width: 26, height: 26)
                 .background(Circle().fill(Surface.cardTintBright))
@@ -264,7 +264,7 @@ struct ActiveWorkoutScreen: View {
             showDiscardConfirm = true
         } label: {
             Image(systemName: "xmark")
-                .font(.system(size: 11, weight: .bold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.secondary)
                 .frame(width: 26, height: 26)
                 .background(Circle().fill(Surface.cardTintBright))

@@ -94,7 +94,7 @@ struct PRCelebration: View {
 
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(value)
-                    .font(.system(size: 104, weight: .bold, design: .monospaced))
+                    .font(Typography.bigMetric)
                     .foregroundStyle(Tint.complete)
                     .monospacedDigit()
                     .minimumScaleFactor(0.5)
@@ -102,7 +102,7 @@ struct PRCelebration: View {
                     .shadow(color: Tint.complete.opacity(0.35), radius: 18)
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 24, weight: .semibold, design: .monospaced))
+                        .font(Typography.statValue)
                         .foregroundStyle(Tint.complete.opacity(0.70))
                         .padding(.bottom, 12)
                 }
@@ -117,7 +117,7 @@ struct PRCelebration: View {
 
             if let detail {
                 Text(detail)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
                     .opacity(detailVisible ? 1 : 0)
                     .offset(y: detailVisible ? 0 : 6)
@@ -231,7 +231,7 @@ struct PRCelebrationFrozen: View {
 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(value)
-                        .font(.system(size: 104, weight: .bold, design: .monospaced))
+                        .font(Typography.bigMetric)
                         .foregroundStyle(Tint.complete)
                         .monospacedDigit()
                         .minimumScaleFactor(0.5)
@@ -239,7 +239,7 @@ struct PRCelebrationFrozen: View {
                         .shadow(color: Tint.complete.opacity(0.35), radius: 18)
                     if let unit {
                         Text(unit)
-                            .font(.system(size: 24, weight: .semibold, design: .monospaced))
+                            .font(Typography.statValue)
                             .foregroundStyle(Tint.complete.opacity(0.70))
                             .padding(.bottom, 12)
                     }
@@ -251,7 +251,7 @@ struct PRCelebrationFrozen: View {
 
                 if let detail {
                     Text(detail)
-                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                        .font(Typography.metricUnit)
                         .foregroundStyle(Ink.secondary)
                 }
             }

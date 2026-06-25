@@ -50,14 +50,14 @@ struct HapticsGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("HAPTICS")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Tap to feel.")
-                .font(.system(size: 34, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Haptics fire on a real device. Simulator and preview canvas show only the visual pulse.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }
@@ -67,7 +67,7 @@ struct HapticsGallery: View {
     private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             VStack(spacing: 8) { content() }
@@ -92,10 +92,10 @@ private struct HapticRow: View {
             HStack(spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(label)
-                        .font(.system(size: 22, weight: .semibold, design: .rounded))
+                        .font(Typography.statValue)
                         .foregroundStyle(.white)
                     Text(subtitle)
-                        .font(.system(size: 12, weight: .regular, design: .monospaced))
+                        .font(Typography.metricUnit)
                         .foregroundStyle(.white.opacity(0.4))
                 }
                 Spacer()

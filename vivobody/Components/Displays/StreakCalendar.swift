@@ -78,7 +78,7 @@ struct StreakCalendar: View {
 
     private var header: some View {
         Text(monthLabel)
-            .font(.system(size: 22, weight: .semibold))
+            .font(Typography.title)
             .foregroundStyle(Ink.primary)
             .contentTransition(.opacity)
     }
@@ -87,7 +87,7 @@ struct StreakCalendar: View {
         HStack(spacing: 0) {
             ForEach(Array(weekdaySymbols.enumerated()), id: \.offset) { _, symbol in
                 Text(symbol)
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .frame(width: cellWidth)
             }
@@ -99,11 +99,11 @@ struct StreakCalendar: View {
         HStack(spacing: 4) {
             DigitTicker(
                 value: Double(monthSessionCount),
-                font: .system(size: 13, weight: .semibold),
+                font: Typography.sectionLabel,
                 color: Ink.secondary
             )
             Text(monthSessionCount == 1 ? "session" : "sessions")
-                .font(.system(size: 13, weight: .medium))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
         }
     }
@@ -159,7 +159,7 @@ private struct DayDot: View {
                 .stroke(strokeColor, lineWidth: strokeWidth)
 
             Text("\(day)")
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .font(Typography.metricMicro)
                 .foregroundStyle(numberColor)
         }
         .frame(width: size, height: size)

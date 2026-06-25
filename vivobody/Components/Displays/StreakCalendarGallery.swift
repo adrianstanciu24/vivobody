@@ -63,14 +63,14 @@ struct StreakCalendarGallery: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("STREAK CALENDAR")
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
             Text("Show up, see it.")
-                .font(.system(size: 32, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
             Text("Filled dots are workout days. Today wears a ring. No flames, no shame — just record.")
-                .font(.system(size: 13))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.45))
                 .padding(.top, 2)
         }
@@ -92,7 +92,7 @@ struct StreakCalendarGallery: View {
                 monthOffset = 0
             } label: {
                 Text("TODAY")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(monthOffset == 0 ? .white.opacity(0.35) : .white.opacity(0.75))
                     .padding(.horizontal, 14)
@@ -121,7 +121,7 @@ struct StreakCalendarGallery: View {
             }
         } label: {
             Image(systemName: systemName)
-                .font(.system(size: 14, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(.white.opacity(0.7))
                 .frame(width: 44, height: 44)
                 .background(Color.white.opacity(0.04))

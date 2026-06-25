@@ -45,7 +45,7 @@ struct StrengthTrajectorySection: View {
                         Stat(value: "\(board.plateauedCount)", label: "Stalled"),
                         Stat(value: "\(board.slippingCount)", label: "Slipping"),
                     ],
-                    valueFont: InsightsFormat.monoStat,
+                    valueFont: Typography.statValue,
                     edgeAligned: true
                 )
                 .padding(.vertical, Space.xs)
@@ -125,7 +125,7 @@ struct StrengthTrajectorySection: View {
                     .fill(prColor(stat.trend))
                     .frame(width: 6, height: 6)
                 Text(stat.exercise)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(Typography.sectionLabel)
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .padding(.horizontal, 14)
@@ -156,7 +156,7 @@ struct StrengthTrajectorySection: View {
                 .foregroundStyle(Tint.primary.opacity(0.5))
                 .annotation(position: .top, alignment: .trailing) {
                     Text("best")
-                        .font(.system(size: 9, weight: .semibold, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(Tint.primary.opacity(0.8))
                 }
 
@@ -195,7 +195,7 @@ struct StrengthTrajectorySection: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.tertiary)
             }
         }
@@ -203,7 +203,7 @@ struct StrengthTrajectorySection: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.tertiary)
             }
         }
@@ -218,7 +218,7 @@ struct StrengthTrajectorySection: View {
                 Stat(value: WeightFormatter.string(stat.bestE1RM, unit: unit, includeUnit: false), unit: unit.symbol, label: "Best"),
                 Stat(value: prLabel(stat), label: "Trend"),
             ],
-            valueFont: InsightsFormat.monoStat,
+            valueFont: Typography.statValue,
             edgeAligned: true
         )
         .padding(.top, Space.xs)

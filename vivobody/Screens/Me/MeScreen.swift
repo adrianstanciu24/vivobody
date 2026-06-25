@@ -162,7 +162,7 @@ struct MeScreen: View {
                     Text(latest.map {
                         WeightFormatter.string($0.weight, unit: weightUnit, fractionDigits: 1, includeUnit: false)
                     } ?? "—")
-                        .font(Self.monoStat)
+                        .font(Typography.statValue)
                         .foregroundStyle(Ink.primary)
                         .monospacedDigit()
                     Text(weightUnit.symbol)
@@ -186,7 +186,7 @@ struct MeScreen: View {
             }
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
         }
         .frame(minHeight: Space.rowMin)
@@ -200,7 +200,7 @@ struct MeScreen: View {
         let deltaText = WeightFormatter.deltaString(delta, unit: weightUnit, fractionDigits: 1)
         return HStack(spacing: Space.xs) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
-                .font(.system(size: 10, weight: .bold))
+                .font(Typography.micro)
             Text("\(deltaText) since last entry")
                 .font(Typography.caption)
         }
@@ -214,9 +214,6 @@ struct MeScreen: View {
     }()
 
     // MARK: - Stats
-
-    private static let volumeHero = Font.system(size: 52, weight: .bold, design: .monospaced)
-    private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
 
     /// Lifetime totals as an *odometer*: one giant volume numeral is
     /// the whole story, with workouts / sets / PRs trailing as a quiet
@@ -242,7 +239,7 @@ struct MeScreen: View {
                         label: "Total volume",
                         value: volumeLabel,
                         unit: weightUnit.symbol,
-                        valueFont: Self.volumeHero
+                        valueFont: Typography.metricHero
                     )
                     lifetimeLine
                     if let ageText = completedSessions.trainingAgeText {
@@ -394,12 +391,12 @@ struct MeScreen: View {
                 result += separator
             }
             var value = AttributedString(part.value)
-            value.font = .system(size: 15, weight: .semibold)
+            value.font = Typography.sectionHeading
             value.foregroundColor = part.accent ? Tint.primary : Ink.primary
             result += value
 
             var label = AttributedString(" " + part.label)
-            label.font = .system(size: 15, weight: .regular)
+            label.font = Typography.body
             label.foregroundColor = Ink.tertiary
             result += label
         }

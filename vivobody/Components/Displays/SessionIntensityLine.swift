@@ -25,7 +25,7 @@ struct SessionIntensityLine: View {
     var body: some View {
         if let text = Self.text(for: session, unit: unit) {
             Text(text)
-                .font(.system(size: 14, weight: .medium, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(Ink.tertiary)
         }
     }

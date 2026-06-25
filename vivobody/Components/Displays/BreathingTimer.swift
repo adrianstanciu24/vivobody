@@ -136,7 +136,7 @@ struct BreathingTimer: View {
     private func timeHero(remaining: TimeInterval, breath: Double) -> some View {
         DigitTicker(
             value: remaining,
-            font: .system(size: 96, weight: .bold, design: .monospaced),
+            font: Typography.bigMetric,
             color: Ink.primary,
             formatter: { time in
                 let total = Int(time.rounded(.up))
@@ -149,7 +149,7 @@ struct BreathingTimer: View {
 
     private var ofTotalLine: some View {
         Text("of \(formatted(totalDuration))")
-            .font(.system(size: 14, weight: .medium, design: .monospaced))
+            .font(Typography.metricUnit)
             .foregroundStyle(Ink.tertiary)
             .opacity(hasFinished ? 0 : 1)
     }
@@ -179,7 +179,7 @@ struct BreathingTimer: View {
                     .fill(Surface.edge)
                     .frame(width: 1, height: 12)
                 Text(nextSetLabel)
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
@@ -217,9 +217,9 @@ struct BreathingTimer: View {
         let committed = visibility >= 1
         return VStack(spacing: 2) {
             Image(systemName: symbol)
-                .font(.system(size: 18, weight: .bold))
+                .font(Typography.title)
             Text(label)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .tracking(0.5)
         }
         .foregroundStyle(committed ? Tint.inProgress : Ink.primary.opacity(opacity))

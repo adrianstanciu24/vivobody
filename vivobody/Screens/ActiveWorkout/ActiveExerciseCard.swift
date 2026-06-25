@@ -157,7 +157,7 @@ struct ActiveExerciseCard: View {
 
     private var nameRow: some View {
         Text(exercise.name)
-            .font(.system(size: 30, weight: .bold))
+            .font(Typography.display)
             .foregroundStyle(Ink.primary)
             .lineLimit(1)
             .minimumScaleFactor(0.6)
@@ -216,7 +216,7 @@ struct ActiveExerciseCard: View {
             addSet()
         } label: {
             Image(systemName: "plus")
-                .font(.system(size: 13, weight: .bold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
                 .frame(width: 26, height: 26)
                 .overlay(Circle().strokeBorder(Ink.quaternary, lineWidth: 2))
@@ -275,7 +275,7 @@ struct ActiveExerciseCard: View {
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("×")
-                    .font(.system(size: 30, weight: .regular, design: .monospaced))
+                    .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
                 BareScrubber(
                     value: repsBinding,
@@ -309,7 +309,7 @@ struct ActiveExerciseCard: View {
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("+")
-                    .font(.system(size: 30, weight: .regular, design: .monospaced))
+                    .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
                 BareScrubber(
                     value: weightDisplayBinding,
@@ -344,23 +344,23 @@ struct ActiveExerciseCard: View {
         return VStack(alignment: .leading, spacing: Space.sm) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text(weightText)
-                    .font(.system(size: 104, weight: .bold, design: .monospaced))
+                    .font(Typography.bigMetric)
                     .foregroundStyle(Tint.complete)
                     .monospacedDigit()
                 Text(unit.symbol)
-                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(Tint.complete.opacity(0.7))
             }
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("×")
-                    .font(.system(size: 30, weight: .regular, design: .monospaced))
+                    .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
                 Text(repsText)
-                    .font(.system(size: 46, weight: .bold, design: .monospaced))
+                    .font(Typography.metricLg)
                     .foregroundStyle(Tint.complete.opacity(0.85))
                     .monospacedDigit()
                 Text("reps")
-                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.tertiary)
             }
         }
@@ -371,20 +371,20 @@ struct ActiveExerciseCard: View {
         let loaded = (top?.weight ?? 0) > 0
         return VStack(alignment: .leading, spacing: Space.sm) {
             Text(timeText)
-                .font(.system(size: 104, weight: .bold, design: .monospaced))
+                .font(Typography.bigMetric)
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
             if loaded, let top {
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text("+")
-                        .font(.system(size: 30, weight: .regular, design: .monospaced))
+                        .font(Typography.statValue)
                         .foregroundStyle(Ink.quaternary)
                     Text(WeightFormatter.string(top.weight, unit: unit, includeUnit: false))
-                        .font(.system(size: 46, weight: .bold, design: .monospaced))
+                        .font(Typography.metricLg)
                         .foregroundStyle(Tint.complete.opacity(0.85))
                         .monospacedDigit()
                     Text(unit.symbol)
-                        .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                        .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
                 }
             }
@@ -423,7 +423,7 @@ struct ActiveExerciseCard: View {
     private var lastSetCaption: some View {
         if activeIndex != nil, let last = sets.last(where: { $0.isCompleted }) {
             Text("Last  \(exercise.setLabel(last, unit: unit))\(lastSetRIRSuffix(last))")
-                .font(.system(size: 13, weight: .medium, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(Ink.tertiary)
                 .padding(.bottom, Space.sm)
                 .contextMenu {
@@ -460,7 +460,7 @@ struct ActiveExerciseCard: View {
         } else {
             HStack(alignment: .firstTextBaseline) {
                 Text("Exercise complete")
-                    .font(.system(size: 19, weight: .bold))
+                    .font(Typography.title)
                     .foregroundStyle(Tint.complete)
                 Spacer()
                 Text("Swipe for next  →")

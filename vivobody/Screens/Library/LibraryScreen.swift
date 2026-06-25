@@ -108,7 +108,7 @@ struct LibraryScreen: View {
                 if !suppressesPlus {
                     Button(action: handlePlus) {
                         Image(systemName: "plus")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(Typography.headline)
                             .foregroundStyle(Tint.primary)
                     }
                     .accessibilityLabel(plusAccessibilityLabel)
@@ -217,7 +217,7 @@ private struct SegmentedControl: View {
             Haptics.selection()
         } label: {
             Text(segment.label)
-                .font(.system(size: 15, weight: .semibold))
+                .font(Typography.sectionHeading)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
@@ -542,7 +542,7 @@ private struct LibraryExercisesContent: View {
             equipmentFilter = value
         } label: {
             Text(label)
-                .font(.system(size: 14, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
                 .frame(minHeight: 38)
@@ -690,7 +690,7 @@ private struct LibraryExercisesContent: View {
             rowTrailing(item: item, last: last, prominent: prominent)
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
         }
         .frame(minHeight: prominent ? 64 : Space.rowMin, alignment: .leading)
@@ -708,7 +708,7 @@ private struct LibraryExercisesContent: View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
-                    .font(.system(size: prominent ? 20 : 16, weight: .bold, design: .monospaced))
+                    .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                 Text(RelativeDate.short(last.sessionDate))

@@ -49,9 +49,6 @@ struct SessionDetailScreen: View {
     )
     private var allCompletedSessions: [WorkoutSession]
 
-    private static let volumeHero = Font.system(size: 72, weight: .bold, design: .monospaced)
-    private static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -65,7 +62,7 @@ struct SessionDetailScreen: View {
                         Stat(value: "\(session.totalReps)", label: "Reps"),
                         Stat(value: topSetValue, label: "Top set"),
                     ],
-                    valueFont: Self.monoStat
+                    valueFont: Typography.statValue
                 )
                 .padding(.top, Space.xl)
 
@@ -113,13 +110,13 @@ struct SessionDetailScreen: View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
-                    .font(Self.volumeHero)
+                    .font(Typography.metricHero)
                     .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 Text(unit.symbol)
-                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(Ink.tertiary)
             }
             Text(sessionHasPR ? "Volume · personal record" : "Volume")
@@ -332,11 +329,11 @@ private struct ExerciseDetailRow: View {
             if exerciseVolume > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .font(Typography.metricInline)
                         .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
                         .monospacedDigit()
                     Text(unit.symbol)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(Ink.quaternary)
                 }
             }
@@ -344,11 +341,11 @@ private struct ExerciseDetailRow: View {
             if totalHold > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(DurationFormatter.compact(totalHold))
-                        .font(.system(size: 18, weight: .bold, design: .monospaced))
+                        .font(Typography.metricInline)
                         .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
                         .monospacedDigit()
                     Text("hold")
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(Ink.quaternary)
                 }
             }
@@ -376,7 +373,7 @@ private struct ExerciseDetailRow: View {
             HStack(spacing: 10) {
                 statusPip(isCompleted: set.isCompleted, isTopSet: isTopSet)
                 Text("\(index)")
-                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(set.isCompleted ? Ink.tertiary : Ink.quaternary)
                     .frame(width: 16, alignment: .leading)
             }
@@ -398,21 +395,21 @@ private struct ExerciseDetailRow: View {
         case .reps:
             HStack(alignment: .lastTextBaseline, spacing: 3) {
                 Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
-                    .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(textColor)
                     .monospacedDigit()
                 Text(unit.symbol)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.quaternary)
             }
 
             Text("×")
-                .font(.system(size: 13, weight: .medium, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(Ink.quaternary)
                 .padding(.horizontal, 10)
 
             Text("\(set.reps)")
-                .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                .font(Typography.metricInline)
                 .foregroundStyle(textColor)
                 .monospacedDigit()
                 .frame(width: 28, alignment: .trailing)
@@ -421,21 +418,21 @@ private struct ExerciseDetailRow: View {
             if set.weight > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
-                        .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                        .font(Typography.metricInline)
                         .foregroundStyle(textColor)
                         .monospacedDigit()
                     Text(unit.symbol)
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                        .font(Typography.metricMicro)
                         .foregroundStyle(Ink.quaternary)
                 }
                 Text("·")
-                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                    .font(Typography.metricUnit)
                     .foregroundStyle(Ink.quaternary)
                     .padding(.horizontal, 10)
             }
 
             Text(DurationFormatter.string(set.duration))
-                .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                .font(Typography.metricInline)
                 .foregroundStyle(textColor)
                 .monospacedDigit()
                 .frame(minWidth: 48, alignment: .trailing)

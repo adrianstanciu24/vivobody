@@ -173,7 +173,7 @@ struct WaterfallRow: View {
         HStack(spacing: Space.sm) {
             ShareBar(fraction: share, tint: isDuration ? Ink.tertiary : Ink.secondary)
             Text("\(Int((share * 100).rounded()))%")
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .font(Typography.metricMicro)
                 .foregroundStyle(Ink.quaternary)
                 .monospacedDigit()
                 .frame(width: 38, alignment: .trailing)
@@ -195,7 +195,7 @@ struct AdherenceBadge: View {
     var body: some View {
         if let text = label {
             Text(text)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
                 .foregroundStyle(adherence.beatPlan ? Tint.complete : Ink.tertiary)
                 .monospacedDigit()
         }
@@ -264,7 +264,7 @@ struct KitRow<Trailing: View>: View {
         HStack(spacing: Space.md) {
             if let leading {
                 leading
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(Typography.headline)
                     .foregroundStyle(Ink.tertiary)
                     .frame(width: 22)
             }

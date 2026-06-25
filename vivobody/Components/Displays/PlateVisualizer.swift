@@ -132,7 +132,7 @@ struct PlateVisualizer: View {
             }
             DigitTicker(
                 value: actual,
-                font: .system(size: 13, weight: .semibold, design: .monospaced),
+                font: Typography.metricUnit,
                 color: Ink.secondary,
                 fractionalDigits: actual.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1
             )
@@ -140,7 +140,7 @@ struct PlateVisualizer: View {
                 .foregroundStyle(Ink.tertiary)
                 .padding(.leading, 2)
         }
-        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+        .font(Typography.metricUnit)
         .foregroundStyle(Ink.secondary)
         .tracking(1.5)
     }

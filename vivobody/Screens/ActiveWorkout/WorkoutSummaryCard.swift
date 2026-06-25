@@ -142,14 +142,14 @@ struct WorkoutSummaryCard: View {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 DigitTicker(
                     value: WeightFormatter.toDisplay(displayVolume, unit: unit),
-                    font: .system(size: 84, weight: .bold, design: .monospaced),
+                    font: Typography.metricHero,
                     color: Ink.primary,
                     formatter: { value in
                         Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
                     }
                 )
                 Text(unit.symbol)
-                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .font(Typography.metricInline)
                     .foregroundStyle(Ink.tertiary)
             }
             Text("Volume")
@@ -160,7 +160,7 @@ struct WorkoutSummaryCard: View {
 
     private var supportLine: some View {
         Text(supportText)
-            .font(.system(size: 14, weight: .medium, design: .monospaced))
+            .font(Typography.metricUnit)
             .foregroundStyle(Ink.tertiary)
     }
 
@@ -218,11 +218,11 @@ struct WorkoutSummaryCard: View {
                 VStack(alignment: .trailing, spacing: 3) {
                     if let topLabel {
                         Text(topLabel)
-                            .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                            .font(Typography.metricUnit)
                             .foregroundStyle(Ink.secondary)
                     } else {
                         Text("—")
-                            .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                            .font(Typography.metricUnit)
                             .foregroundStyle(Ink.quaternary)
                     }
                     if let adherence, !adherence.isOnPlan {
@@ -322,7 +322,7 @@ struct WorkoutSummaryCard: View {
             onAddExercise()
         } label: {
             Text("Add exercise")
-                .font(.system(size: 17, weight: .semibold))
+                .font(Typography.title)
                 .foregroundStyle(Ink.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
@@ -346,12 +346,12 @@ struct WorkoutSummaryCard: View {
         } label: {
             HStack(alignment: .center, spacing: 0) {
                 Text("Done")
-                    .font(.system(size: 19, weight: .bold))
+                    .font(Typography.title)
                     .tracking(0.4)
                     .foregroundStyle(Tint.onAccent)
                 Spacer(minLength: 8)
                 Image(systemName: "checkmark")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(Typography.headline)
                     .foregroundStyle(Tint.onAccent)
             }
             .padding(.horizontal, 24)

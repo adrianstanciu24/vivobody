@@ -302,7 +302,7 @@ private struct ForgeBackground: View {
         AmbientForge(warmth: 0.9)
         VStack {
             Text("Forge")
-                .font(.system(size: 48, weight: .bold))
+                .font(Typography.display)
                 .foregroundStyle(.white)
         }
     }

@@ -235,7 +235,7 @@ struct TodayScreen: View {
             // blinking in — the streak feels counted, not printed.
             DigitTicker(
                 value: Double(currentStreakDays),
-                font: .system(size: 36, weight: .bold, design: .monospaced),
+                font: Typography.metricLg,
                 color: currentStreakDays > 0 ? Tint.inProgress : Ink.primary
             )
             Text(currentStreakDays == 1 ? "day" : "days")
@@ -290,7 +290,7 @@ struct TodayScreen: View {
                 Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
                 Stat(value: "\(session.totalSets)", label: "Sets"),
             ],
-            valueFont: Self.monoStatValue,
+            valueFont: Typography.statValue,
             edgeAligned: true
         )
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -314,8 +314,6 @@ struct TodayScreen: View {
         }
         return day + "  ·  " + Self.timeFormatter.string(from: date)
     }
-
-    private static let monoStatValue = Font.system(size: 28, weight: .bold, design: .monospaced)
 
     // MARK: - Start intent
 

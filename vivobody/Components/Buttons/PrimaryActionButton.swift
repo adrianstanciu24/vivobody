@@ -43,7 +43,7 @@ struct PrimaryActionButton: View {
                             .foregroundStyle(Tint.onAccent.opacity(0.55))
                     }
                     Text(title)
-                        .font(.system(size: 17, weight: .bold))
+                        .font(Typography.title)
                         .tracking(0.4)
                         .foregroundStyle(Tint.onAccent)
                 }
@@ -52,7 +52,7 @@ struct PrimaryActionButton: View {
 
                 if let icon {
                     Image(systemName: icon)
-                        .font(.system(size: 15, weight: .bold))
+                        .font(Typography.sectionHeading)
                         .foregroundStyle(Tint.onAccent.opacity(0.85))
                 }
             }

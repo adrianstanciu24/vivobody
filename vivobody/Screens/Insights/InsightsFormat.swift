@@ -34,8 +34,4 @@ enum InsightsFormat {
     static func perWeekLabel(_ value: Double) -> String {
         String(format: "%.1f", value)
     }
-
-    /// The monospaced face every Insights `StatStrip` value uses, so
-    /// the big numbers never jitter and read as one family.
-    static let monoStat = Font.system(size: 22, weight: .bold, design: .monospaced)
 }

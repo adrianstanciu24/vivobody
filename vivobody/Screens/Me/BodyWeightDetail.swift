@@ -108,7 +108,7 @@ struct BodyWeightDetail: View {
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(currentWeightLabel)
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(Typography.metricHero)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
                 Text(unit.symbol)
@@ -144,9 +144,9 @@ struct BodyWeightDetail: View {
         let chipColor = Ink.secondary
         return HStack(spacing: 4) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
-                .font(.system(size: 10, weight: .bold))
+                .font(Typography.micro)
             Text(WeightFormatter.deltaString(delta, unit: unit, fractionDigits: 1))
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(Typography.metricMicro)
         }
         .foregroundStyle(chipColor)
         .padding(.horizontal, 10)
@@ -168,9 +168,9 @@ struct BodyWeightDetail: View {
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(Typography.headline)
                 Text("Log weight")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(Typography.headline)
             }
             .foregroundStyle(Tint.onAccent)
             .frame(maxWidth: .infinity, minHeight: 52)
@@ -211,7 +211,7 @@ struct BodyWeightDetail: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
@@ -219,7 +219,7 @@ struct BodyWeightDetail: View {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
-                    .font(.system(size: 10, design: .monospaced))
+                    .font(Typography.metricMicro)
                     .foregroundStyle(Ink.primary.opacity(0.50))
             }
         }
@@ -252,7 +252,7 @@ struct BodyWeightDetail: View {
             range = r
         } label: {
             Text(r.label)
-                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.primary.opacity(0.80))
                 .frame(minWidth: 44, minHeight: 44)
                 .padding(.horizontal, 10)
@@ -305,19 +305,19 @@ struct BodyWeightDetail: View {
     private func recentRow(_ entry: BodyWeightEntry) -> some View {
         HStack(spacing: 12) {
             Text(Self.dayFormatter.string(from: entry.date))
-                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                .font(Typography.metricUnit)
                 .foregroundStyle(Ink.primary.opacity(0.55))
                 .frame(width: 110, alignment: .leading)
 
             Text(WeightFormatter.string(entry.weight, unit: unit, fractionDigits: 1))
-                .font(.system(size: 13, weight: .semibold))
+                .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.primary)
                 .monospacedDigit()
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 11, weight: .semibold))
+                .font(Typography.caption)
                 .foregroundStyle(Ink.primary.opacity(0.30))
         }
         .padding(.horizontal, 16)

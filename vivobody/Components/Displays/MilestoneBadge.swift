@@ -18,12 +18,12 @@ struct MilestoneBadge: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack {
                 Image(systemName: milestone.icon)
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(Typography.sectionLabel)
                     .foregroundStyle(milestone.achieved ? Tint.primary : Ink.tertiary)
                 Spacer()
                 if milestone.achieved {
                     Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(Typography.caption)
                         .foregroundStyle(Tint.primary)
                 }
             }
