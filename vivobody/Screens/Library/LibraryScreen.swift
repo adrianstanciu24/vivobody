@@ -371,6 +371,7 @@ private struct LibraryTemplatesContent: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 
     // MARK: - Empty states
@@ -389,7 +390,7 @@ private struct LibraryTemplatesContent: View {
             } label: {
                 Text("Create Template")
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(PrimaryButtonStyle())
         }
     }
 
@@ -581,6 +582,7 @@ private struct LibraryExercisesContent: View {
                 .padding(.bottom, Space.xxl + Space.xs)
             }
         }
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
@@ -761,7 +763,7 @@ private struct LibraryExercisesContent: View {
             } label: {
                 Text("Create custom exercise")
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(PrimaryButtonStyle())
         }
     }
 

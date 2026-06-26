@@ -13,10 +13,9 @@
 //  Behavior:
 //    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
 //      "this is a deliberate action" feedback).
-//    • A tinted Liquid Glass surface (.glassEffect) provides the lensing
-//      and accent wash with a controlled card-radius corner and height — the
-//      .glassProminent button style is avoided because it doubles the
-//      padding and forces a full capsule.
+//    • The tinted Liquid Glass surface, padding, shadows, and press-scale
+//      feedback all come from `PrimaryButtonStyle` — this view just supplies
+//      the label content and the accent color.
 //    • Default accent is the app's electric-orange primary so the
 //      button reads as "the thing you want to do right now."
 //
@@ -56,42 +55,13 @@ struct PrimaryActionButton: View {
                         .foregroundStyle(Tint.onAccent.opacity(Opacity.strong))
                 }
             }
-            .padding(.horizontal, Space.xxl)
-            .padding(.vertical, Space.xl)
             .frame(maxWidth: .infinity)
-            .modifier(PrimaryGlassSurface(accent: accent, cornerRadius: Radius.card))
         }
-        .buttonStyle(PressScaleButtonStyle())
+        .buttonStyle(PrimaryButtonStyle(accent: accent))
         .accessibilityElement()
         .accessibilityLabel(title)
         .accessibilityHint(subtitle ?? "Activates primary action")
         .accessibilityAddTraits(.isButton)
-    }
-}
-
-/// Tinted Liquid Glass surface for the primary CTA. Keeps the corner
-/// radius and shadows under our control (the system .glassProminent
-/// style forces a capsule and adds its own padding).
-private struct PrimaryGlassSurface: ViewModifier {
-    let accent: Color
-    let cornerRadius: CGFloat
-
-    func body(content: Content) -> some View {
-        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        return content
-            .glassEffect(.regular.tint(accent).interactive(), in: shape)
-            .shadow(color: accent.opacity(0.18), radius: 18, y: 8)
-            .shadow(color: .black.opacity(0.45), radius: 10, y: 5)
-            .contentShape(shape)
-    }
-}
-
-/// Subtle press feedback — the glass dips slightly under the finger.
-private struct PressScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.62), value: configuration.isPressed)
     }
 }
 

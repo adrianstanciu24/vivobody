@@ -100,6 +100,7 @@ struct HistoryScreen: View {
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
         }
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 
     // MARK: - Derived

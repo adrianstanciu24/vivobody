@@ -95,6 +95,20 @@ extension View {
     func softElevation(radius: CGFloat = 12, y: CGFloat = 6, opacity: Double = 0.35) -> some View {
         self.shadow(color: .black.opacity(opacity), radius: radius, y: y)
     }
+
+    /// The single point through which `.glassEffect` reaches the
+    /// codebase. Every other modifier in this file (`glassCard`,
+    /// `glassChip`, `glassPill`, `coloredGlassControl`) and every
+    /// external caller routes here, so when iOS reshapes the
+    /// `.glassEffect` API there is exactly one site to update.
+    func glassTinted(
+        _ tint: Color? = nil,
+        interactive: Bool = false,
+        in shape: some Shape
+    ) -> some View {
+        let glass: Glass = interactive ? .regular.interactive() : .regular
+        return glassEffect(tint.map { glass.tint($0) } ?? glass, in: shape)
+    }
 }
 
 private struct ColoredGlassControlModifier: ViewModifier {
@@ -104,7 +118,6 @@ private struct ColoredGlassControlModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        let glass: Glass = interactive ? .regular.interactive() : .regular
         return content
             .background {
                 // Neutral (untinted) controls keep the faint surface
@@ -114,7 +127,7 @@ private struct ColoredGlassControlModifier: ViewModifier {
                     shape.fill(Surface.cardTint)
                 }
             }
-            .glassEffect(glass.tint(fill), in: shape)
+            .glassTinted(fill, interactive: interactive, in: shape)
             .containerShape(shape)
             .contentShape(shape)
     }
@@ -260,7 +273,7 @@ private struct GlassCardModifier: ViewModifier {
                     }
                 }
             }
-            .glassEffect(interactive ? .regular.interactive() : .regular, in: shape)
+            .glassTinted(interactive: interactive, in: shape)
             .containerShape(shape)
     }
 }

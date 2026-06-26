@@ -76,6 +76,7 @@ struct BodyWeightDetail: View {
             .padding(.horizontal, Space.gutter)
             .padding(.vertical, 16)
         }
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
         .detailForgeBackground()
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)

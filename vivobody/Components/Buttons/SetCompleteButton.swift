@@ -104,7 +104,7 @@ struct SetCompleteButton: View {
             .fill(reduceTransparency
                     ? glassTint.opacity(isComplete ? 1.0 : 0.35)
                     : glassTint.opacity(isComplete ? 0.85 : 0.10))
-            .glassEffect(.regular.tint(surfaceTint).interactive(), in: shape)
+            .glassTinted(surfaceTint, interactive: true, in: shape)
             // Completion glow — accent bloom when done. Idle stays a
             // faint lift, no ambient bloom on the live state.
             .shadow(

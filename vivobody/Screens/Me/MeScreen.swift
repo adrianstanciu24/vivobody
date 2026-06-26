@@ -77,6 +77,7 @@ struct MeScreen: View {
             // at rest instead of peeking out from under it.
             .padding(.bottom, Space.section + Space.md)
         }
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
         .forgeBackground()
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -145,7 +146,7 @@ struct MeScreen: View {
             } label: {
                 Text("Log weight")
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(PrimaryButtonStyle())
         }
     }
 

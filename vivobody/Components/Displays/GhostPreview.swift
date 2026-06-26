@@ -66,7 +66,7 @@ struct GhostCard<Content: View>: View {
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background { shape.fill(Surface.cardTint) }
-            .glassEffect(.regular, in: shape)
+            .glassTinted(in: shape)
             .overlay {
                 shape.stroke(
                     LinearGradient(

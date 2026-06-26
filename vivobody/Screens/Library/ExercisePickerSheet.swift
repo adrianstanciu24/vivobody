@@ -392,7 +392,7 @@ struct ExercisePickerSheet: View {
             } label: {
                 Text("Create custom exercise")
             }
-            .buttonStyle(.glassProminent)
+            .buttonStyle(PrimaryButtonStyle())
         }
     }
 

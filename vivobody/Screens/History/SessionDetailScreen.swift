@@ -87,6 +87,7 @@ struct SessionDetailScreen: View {
             .padding(.bottom, Space.xxl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
         .detailForgeBackground()
         .navigationTitle("Session")
         .navigationBarTitleDisplayMode(.inline)
