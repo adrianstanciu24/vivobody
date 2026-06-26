@@ -73,11 +73,12 @@ struct TemplateEditorScreen: View {
                     exercisesSection
                     addExerciseButton
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.md)
                 .padding(.bottom, Space.xxl)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
             .navigationTitle(isNewMode ? "New Template" : "Edit Template")
             .navigationBarTitleDisplayMode(.inline)
@@ -231,10 +232,7 @@ struct TemplateEditorScreen: View {
             }
             .frame(maxWidth: .infinity)
             .frame(minHeight: 52)
-            .overlay {
-                Capsule().stroke(Surface.edge, lineWidth: 1)
-            }
-            .contentShape(Capsule())
+            .coloredGlassControl(cornerRadius: Radius.pill, fill: nil)
         }
         .buttonStyle(.plain)
     }

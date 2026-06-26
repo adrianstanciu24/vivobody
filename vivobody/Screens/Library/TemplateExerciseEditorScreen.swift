@@ -96,11 +96,12 @@ struct TemplateExerciseEditorScreen: View {
                     perSetNotice
                 }
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, Space.lg)
             .padding(.bottom, Space.xxl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .screenBackground()
         .navigationTitle("Exercise")
         .navigationBarTitleDisplayMode(.inline)

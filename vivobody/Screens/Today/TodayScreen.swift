@@ -107,10 +107,11 @@ struct TodayScreen: View {
                         SectionDivider().settleIn(2)
                         lastWorkoutSection.settleIn(3)
                     }
-                    .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.xs)
                     .padding(.bottom, Space.xxl)
                 }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
                 .scrollIndicators(.hidden)
                 .scrollEdgeEffectStyle(.soft, for: .bottom)
                 // START is pinned, never part of the scroll, so the body

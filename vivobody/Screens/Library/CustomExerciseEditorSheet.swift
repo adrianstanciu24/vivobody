@@ -79,11 +79,12 @@ struct CustomExerciseEditorSheet: View {
                     trackingModeField
                     defaultsRow
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.md)
                 .padding(.bottom, Space.xxl)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
             .navigationTitle(isEditMode ? "Edit Exercise" : "New Exercise")
             .navigationBarTitleDisplayMode(.inline)
@@ -135,11 +136,13 @@ struct CustomExerciseEditorSheet: View {
                 .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Space.sm) {
-                    ForEach(MuscleGroup.allCases, id: \.self) { g in
-                        chip(label: g.displayName, isSelected: draft.group == g) {
-                            Haptics.selection()
-                            draft.group = g
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        ForEach(MuscleGroup.allCases, id: \.self) { g in
+                            chip(label: g.displayName, isSelected: draft.group == g) {
+                                Haptics.selection()
+                                draft.group = g
+                            }
                         }
                     }
                 }
@@ -155,11 +158,13 @@ struct CustomExerciseEditorSheet: View {
                 .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Space.sm) {
-                    ForEach(Equipment.allCases, id: \.self) { e in
-                        chip(label: e.displayName, isSelected: draft.equipment == e) {
-                            Haptics.selection()
-                            draft.equipment = e
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        ForEach(Equipment.allCases, id: \.self) { e in
+                            chip(label: e.displayName, isSelected: draft.equipment == e) {
+                                Haptics.selection()
+                                draft.equipment = e
+                            }
                         }
                     }
                 }
@@ -174,14 +179,16 @@ struct CustomExerciseEditorSheet: View {
             Text("Mechanic")
                 .sectionLabelStyle(Opacity.medium)
 
-            HStack(spacing: Space.sm) {
-                ForEach(Mechanic.allCases, id: \.self) { m in
-                    chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
-                        Haptics.selection()
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                            draft.mechanic = m
-                            if m == .isolation {
-                                draft.pattern = nil
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(Mechanic.allCases, id: \.self) { m in
+                        chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
+                            Haptics.selection()
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                draft.mechanic = m
+                                if m == .isolation {
+                                    draft.pattern = nil
+                                }
                             }
                         }
                     }
@@ -198,15 +205,17 @@ struct CustomExerciseEditorSheet: View {
                 .sectionLabelStyle(Opacity.medium)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Space.sm) {
-                    chip(label: "None", isSelected: draft.pattern == nil) {
-                        Haptics.selection()
-                        draft.pattern = nil
-                    }
-                    ForEach(MovementPattern.allCases, id: \.self) { p in
-                        chip(label: p.displayName, isSelected: draft.pattern == p) {
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        chip(label: "None", isSelected: draft.pattern == nil) {
                             Haptics.selection()
-                            draft.pattern = p
+                            draft.pattern = nil
+                        }
+                        ForEach(MovementPattern.allCases, id: \.self) { p in
+                            chip(label: p.displayName, isSelected: draft.pattern == p) {
+                                Haptics.selection()
+                                draft.pattern = p
+                            }
                         }
                     }
                 }
@@ -221,11 +230,13 @@ struct CustomExerciseEditorSheet: View {
             Text("Plane of movement")
                 .sectionLabelStyle(Opacity.medium)
 
-            HStack(spacing: Space.sm) {
-                ForEach(MovementPlane.allCases, id: \.self) { p in
-                    chip(label: p.displayName, isSelected: draft.plane == p, fullWidth: true) {
-                        Haptics.selection()
-                        draft.plane = p
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(MovementPlane.allCases, id: \.self) { p in
+                        chip(label: p.displayName, isSelected: draft.plane == p, fullWidth: true) {
+                            Haptics.selection()
+                            draft.plane = p
+                        }
                     }
                 }
             }
@@ -239,11 +250,13 @@ struct CustomExerciseEditorSheet: View {
             Text("Sides")
                 .sectionLabelStyle(Opacity.medium)
 
-            HStack(spacing: Space.sm) {
-                ForEach(Laterality.allCases, id: \.self) { l in
-                    chip(label: l.displayName, isSelected: draft.laterality == l, fullWidth: true) {
-                        Haptics.selection()
-                        draft.laterality = l
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(Laterality.allCases, id: \.self) { l in
+                        chip(label: l.displayName, isSelected: draft.laterality == l, fullWidth: true) {
+                            Haptics.selection()
+                            draft.laterality = l
+                        }
                     }
                 }
             }
@@ -252,10 +265,10 @@ struct CustomExerciseEditorSheet: View {
 
     // MARK: - Chip
 
-    /// The one selectable chip used across every field: lime fill +
-    /// black text when chosen, a hairline outline when not — the
-    /// exact pair used by the picker and catalog equipment strips.
-    /// No muscle-color dots, no glass: one accent, one hairline.
+    /// The one selectable chip used across every field: glass tinted
+    /// lime when chosen, neutral translucent glass when not — matching
+    /// the picker and catalog equipment strips, which share one
+    /// continuous glass region via GlassEffectContainer.
     private func chip(
         label: String,
         isSelected: Bool,
@@ -269,12 +282,7 @@ struct CustomExerciseEditorSheet: View {
                 .frame(maxWidth: fullWidth ? .infinity : nil)
                 .padding(.horizontal, fullWidth ? Space.md : Space.lg)
                 .frame(minHeight: 44)
-                .background {
-                    if isSelected { Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress) }
-                }
-                .overlay {
-                    if !isSelected { Capsule().stroke(Surface.edge, lineWidth: 1) }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -318,12 +326,14 @@ struct CustomExerciseEditorSheet: View {
             Text("Measure")
                 .sectionLabelStyle(Opacity.medium)
 
-            HStack(spacing: Space.sm) {
-                ForEach(TrackingMode.allCases, id: \.self) { m in
-                    chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
-                        Haptics.selection()
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                            draft.trackingMode = m
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(TrackingMode.allCases, id: \.self) { m in
+                        chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
+                            Haptics.selection()
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                draft.trackingMode = m
+                            }
                         }
                     }
                 }

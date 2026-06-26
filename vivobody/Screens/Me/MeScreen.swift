@@ -71,12 +71,13 @@ struct MeScreen: View {
                 monthlyRecapSection
                     .settleIn(5)
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
             // Extra tail so the last row clears the floating tab bar
             // at rest instead of peeking out from under it.
             .padding(.bottom, Space.section + Space.md)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .forgeBackground()
         .toolbar {

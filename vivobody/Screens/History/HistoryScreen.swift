@@ -96,10 +96,11 @@ struct HistoryScreen: View {
                     .settleIn(index + 1)
                 }
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 

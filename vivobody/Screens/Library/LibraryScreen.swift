@@ -522,11 +522,13 @@ private struct LibraryExercisesContent: View {
     private var equipmentFilterStrip: some View {
         if availableEquipment.count > 1 {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Space.md) {
-                    chip(nil, label: "All")
-                    ForEach(Equipment.allCases, id: \.self) { e in
-                        if availableEquipment.contains(e) {
-                            chip(e, label: e.displayName)
+                GlassEffectContainer(spacing: Space.md) {
+                    HStack(spacing: Space.md) {
+                        chip(nil, label: "All")
+                        ForEach(Equipment.allCases, id: \.self) { e in
+                            if availableEquipment.contains(e) {
+                                chip(e, label: e.displayName)
+                            }
                         }
                     }
                 }
@@ -547,16 +549,7 @@ private struct LibraryExercisesContent: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
                 .frame(minHeight: 38)
-                .background {
-                    if isSelected {
-                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
-                    }
-                }
-                .overlay {
-                    if !isSelected {
-                        Capsule().stroke(Surface.edge, lineWidth: 1)
-                    }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -570,7 +563,9 @@ private struct LibraryExercisesContent: View {
                 // Header scrolls with the catalog so the large title
                 // collapses cleanly instead of fighting a pinned bar.
                 LibrarySegmentBar(selection: $segment)
+                    .padding(.horizontal, -Space.gutter)
                 equipmentFilterStrip
+                    .padding(.horizontal, -Space.gutter)
 
                 LazyVStack(alignment: .leading, spacing: Space.section) {
                     ForEach(Array(filteredGroups.enumerated()), id: \.element.group) { index, section in
@@ -578,10 +573,11 @@ private struct LibraryExercisesContent: View {
                             .settleIn(index)
                     }
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.bottom, Space.xxl + Space.xs)
             }
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 

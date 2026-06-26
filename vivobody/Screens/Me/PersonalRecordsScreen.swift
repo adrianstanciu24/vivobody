@@ -41,11 +41,12 @@ struct PersonalRecordsScreen: View {
                         PRRow(record: record, unit: weightUnit)
                     }
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.sm)
                 .padding(.bottom, Space.section + Space.md)
             }
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .detailForgeBackground()
         .navigationTitle("Personal Records")
         .navigationBarTitleDisplayMode(.inline)

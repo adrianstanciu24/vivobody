@@ -82,11 +82,12 @@ struct SessionDetailScreen: View {
                         .padding(.top, Space.xl)
                 }
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
             .padding(.bottom, Space.xxl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .detailForgeBackground()
         .navigationTitle("Session")

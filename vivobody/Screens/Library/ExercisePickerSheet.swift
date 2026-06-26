@@ -85,10 +85,11 @@ struct ExercisePickerSheet: View {
                             emptyState
                         }
                     }
-                    .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.md)
                     .padding(.bottom, Space.xxl)
                 }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             }
             .navigationTitle("Add Exercise")
             .navigationBarTitleDisplayMode(.inline)
@@ -178,11 +179,13 @@ struct ExercisePickerSheet: View {
     private var equipmentFilterStrip: some View {
         if availableEquipment.count > 1 {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    equipmentFilterChip(nil, label: "All")
-                    ForEach(Equipment.allCases, id: \.self) { e in
-                        if availableEquipment.contains(e) {
-                            equipmentFilterChip(e, label: e.displayName)
+                GlassEffectContainer(spacing: 8) {
+                    HStack(spacing: 8) {
+                        equipmentFilterChip(nil, label: "All")
+                        ForEach(Equipment.allCases, id: \.self) { e in
+                            if availableEquipment.contains(e) {
+                                equipmentFilterChip(e, label: e.displayName)
+                            }
                         }
                     }
                 }
@@ -215,16 +218,7 @@ struct ExercisePickerSheet: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
                 .frame(minHeight: 38)
-                .background {
-                    if isSelected {
-                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
-                    }
-                }
-                .overlay {
-                    if !isSelected {
-                        Capsule().stroke(Surface.edge, lineWidth: 1)
-                    }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

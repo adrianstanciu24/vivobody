@@ -68,9 +68,10 @@ struct BodyWeightLogSheet: View {
                         weightScrubber
                         Spacer(minLength: 12)
                     }
-                    .padding(.horizontal, Space.gutter)
                     .padding(.top, 8)
                 }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             }
             .navigationTitle(isEditing ? "Edit Entry" : "Log Weight")
             .navigationBarTitleDisplayMode(.inline)

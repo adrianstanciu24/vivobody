@@ -142,10 +142,11 @@ struct ExerciseDetailScreen: View {
                 }
                 defaultsSection
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, 8)
             .padding(.bottom, Space.xxl)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .detailForgeBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .navigationTitle(item.name)
@@ -410,18 +411,22 @@ struct ExerciseDetailScreen: View {
                 .sectionLabelStyle(Opacity.medium)
 
             if item.trackingMode == .reps {
-                HStack(spacing: 8) {
-                    ForEach(ChartMetric.allCases) { m in
-                        metricChip(m)
+                GlassEffectContainer(spacing: 8) {
+                    HStack(spacing: 8) {
+                        ForEach(ChartMetric.allCases) { m in
+                            metricChip(m)
+                        }
                     }
                 }
             }
 
             chart
 
-            HStack(spacing: 8) {
-                ForEach(TimeRange.allCases) { r in
-                    rangeChip(r)
+            GlassEffectContainer(spacing: 8) {
+                HStack(spacing: 8) {
+                    ForEach(TimeRange.allCases) { r in
+                        rangeChip(r)
+                    }
                 }
             }
         }
@@ -439,16 +444,7 @@ struct ExerciseDetailScreen: View {
                 .frame(minHeight: 38)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 12)
-                .background {
-                    if isSelected {
-                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
-                    }
-                }
-                .overlay {
-                    if !isSelected {
-                        Capsule().stroke(Surface.edge, lineWidth: 1)
-                    }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -524,16 +520,7 @@ struct ExerciseDetailScreen: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(minWidth: 44, minHeight: 38)
                 .padding(.horizontal, 12)
-                .background {
-                    if isSelected {
-                        Color.clear.coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
-                    }
-                }
-                .overlay {
-                    if !isSelected {
-                        Capsule().stroke(Surface.edge, lineWidth: 1)
-                    }
-                }
+                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

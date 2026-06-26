@@ -61,10 +61,11 @@ struct StartWorkoutSheet: View {
                         }
                         startFromSection
                     }
-                    .padding(.horizontal, Space.gutter)
                     .padding(.top, Space.md)
                     .padding(.bottom, Space.xxl)
                 }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             }
             .navigationTitle("Start Workout")
             .navigationBarTitleDisplayMode(.inline)

@@ -99,12 +99,13 @@ struct WorkoutSummaryCard: View {
                     actionArea
                         .padding(.top, Space.xl)
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xl)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(minHeight: geo.size.height, alignment: .top)
             }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in

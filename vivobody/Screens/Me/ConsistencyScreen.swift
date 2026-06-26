@@ -44,10 +44,11 @@ struct ConsistencyScreen: View {
                     Spacer(minLength: 0)
                 }
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.top, Space.lg)
             .padding(.bottom, Space.section + Space.md)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .detailForgeBackground()
         .navigationTitle("Consistency")
         .navigationBarTitleDisplayMode(.inline)

@@ -73,9 +73,10 @@ struct BodyWeightDetail: View {
                     recentTable
                 }
             }
-            .padding(.horizontal, Space.gutter)
             .padding(.vertical, 16)
         }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .detailForgeBackground()
         .navigationTitle("Body Weight")

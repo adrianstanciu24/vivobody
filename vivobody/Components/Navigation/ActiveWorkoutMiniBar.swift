@@ -43,6 +43,8 @@ struct ActiveWorkoutMiniBar: View {
     private let restTint       = Tint.primary
     private let readyTint      = Ink.secondary
 
+    @Environment(\.tabViewBottomAccessoryPlacement) private var placement
+
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
             barContent(now: context.date)
@@ -55,18 +57,12 @@ struct ActiveWorkoutMiniBar: View {
             Haptics.soft()
             onExpand()
         }) {
-            HStack(spacing: 12) {
-                PulseDot(color: dotColor, isPulsing: shouldPulse)
-                labels
-                Spacer(minLength: 8)
-                statusBadge(now: now)
-                Image(systemName: "chevron.up")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+            switch placement {
+            case .expanded:
+                expandedLayout(now: now)
+            default:
+                compactLayout(now: now)
             }
-            .padding(.horizontal, Space.lg)
-            .padding(.vertical, Space.sm)
-            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
@@ -78,6 +74,41 @@ struct ActiveWorkoutMiniBar: View {
                 session.skipRest()
             }
         }
+    }
+
+    private func compactLayout(now: Date) -> some View {
+        HStack(spacing: 12) {
+            PulseDot(color: dotColor, isPulsing: shouldPulse)
+            labels
+            Spacer(minLength: 8)
+            statusBadge(now: now)
+            Image(systemName: "chevron.up")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.sm)
+        .contentShape(Rectangle())
+    }
+
+    private func expandedLayout(now: Date) -> some View {
+        VStack(spacing: Space.sm) {
+            HStack(spacing: 12) {
+                PulseDot(color: dotColor, isPulsing: shouldPulse)
+                labels
+                Spacer(minLength: 8)
+                Image(systemName: "chevron.up")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            }
+            HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                statusBadge(now: now)
+            }
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+        .contentShape(Rectangle())
     }
 
     // MARK: - Labels (always two lines for vertical rhythm)

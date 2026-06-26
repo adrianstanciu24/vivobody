@@ -146,11 +146,12 @@ struct ConfigureExerciseSheet: View {
                         )
                     }
                 }
-                .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xxl)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
             .safeAreaInset(edge: .bottom) { commitBar }
             .navigationTitle(isEditing ? "Edit Exercise" : "Configure")
