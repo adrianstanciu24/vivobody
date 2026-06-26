@@ -47,6 +47,9 @@ struct SetCompleteButton: View {
     let onToggle: () -> Void
 
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @AppStorage(SettingsKey.weightUnit)
+    private var unitRaw: String = SettingsDefaults.weightUnit
+    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
     @State private var pressScale: CGFloat = 1
     @State private var numberScale: CGFloat = 1
     @State private var rippleId: Int = 0
@@ -85,7 +88,7 @@ struct SetCompleteButton: View {
         )
         .gesture(tapGesture)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabelOverride ?? "\(reps) reps at \(Int(weight)) pounds")
+        .accessibilityLabel(accessibilityLabelOverride ?? "\(reps) reps at \(WeightFormatter.string(weight, unit: unit, fractionDigits: 0, includeUnit: false)) \(unit.displayName.lowercased())")
         .accessibilityValue(isComplete ? "completed" : "not completed")
         .accessibilityAddTraits(.isButton)
         .accessibilityHint(isComplete ? "Double tap to undo." : "Double tap to complete the set.")
@@ -140,7 +143,7 @@ struct SetCompleteButton: View {
             HStack(alignment: .center, spacing: 0) {
                 numberBlock(value: "\(reps)", unit: "reps")
                 multiplier
-                numberBlock(value: formattedWeight, unit: "lb")
+                numberBlock(value: formattedWeight, unit: unit.symbol)
                 Spacer(minLength: 8)
                 statusIndicator
             }
@@ -290,9 +293,7 @@ struct SetCompleteButton: View {
     }
 
     private var formattedWeight: String {
-        weight.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(weight))
-            : String(format: "%.1f", weight)
+        WeightFormatter.string(weight, unit: unit, includeUnit: false)
     }
 }
 
