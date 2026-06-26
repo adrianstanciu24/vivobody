@@ -127,6 +127,10 @@ enum Space {
     /// section reads as a distinct block, not a continuation of the
     /// one above it.
     static let section: CGFloat = 32
+    /// Minimum tappable size for compact controls (chips, segmented
+    /// buttons). HIG floor — never go below this for an interactive
+    /// target.
+    static let tapMin: CGFloat = 44
     /// Minimum tappable row height (HIG-compliant, glanceable).
     static let rowMin: CGFloat = 60
 }

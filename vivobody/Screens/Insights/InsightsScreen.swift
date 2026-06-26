@@ -64,19 +64,19 @@ struct InsightsScreen: View {
 
                     SignatureSection(signature: signature, report: consistency)
                         .settleIn(0)
-                    groupSeparator
+                    GroupSeparator()
                     StrengthTrajectorySection(board: strength, progress: progress)
                         .settleIn(1)
-                    groupSeparator
+                    GroupSeparator()
                     IntensityMixSection(mix: intensity)
                         .settleIn(2)
-                    groupSeparator
+                    GroupSeparator()
                     ConsistencySection(report: consistency)
                         .settleIn(3)
-                    groupSeparator
+                    GroupSeparator()
                     TrainingLoadSection(report: load)
                         .settleIn(4)
-                    groupSeparator
+                    GroupSeparator()
                     SymmetrySection(board: symmetry)
                         .settleIn(5)
                 }
@@ -88,13 +88,6 @@ struct InsightsScreen: View {
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-    }
-
-    // MARK: - Group separator
-
-    private var groupSeparator: some View {
-        SectionDivider()
-            .padding(.vertical, Space.xxl)
     }
 
     // MARK: - Empty state

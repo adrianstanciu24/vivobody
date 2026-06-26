@@ -11,8 +11,10 @@
 //       the tab bar whenever a workout is running. Tapping it expands
 //       the workout back to the full screen. Inspired by Music's
 //       MiniPlayer.
-//    3. .fullScreenCover(isPresented:) — the focused ActiveWorkoutScreen
-//       when the workout is expanded. Hides the tab bar.
+//    3. .sheet(isPresented:) — the focused ActiveWorkoutScreen
+//       when the workout is expanded. Presented as a .large sheet
+//       with a grabber so swipe-down minimizes it back to the MiniBar
+//       (Music-style). Hides the tab bar while expanded.
 //
 //  Session lifetime vs. presentation lifetime are intentionally
 //  decoupled here: `appState.activeSession != nil` controls whether the

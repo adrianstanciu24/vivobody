@@ -64,6 +64,17 @@ struct SectionDivider: View {
     }
 }
 
+/// Group separator between major sections on a long scroll screen:
+/// a full-width hairline with generous air on both sides so each
+/// group reads as its own block. Distinct from a bare `SectionDivider`
+/// used as an inline row separator (which carries no vertical padding).
+struct GroupSeparator: View {
+    var body: some View {
+        SectionDivider()
+            .padding(.vertical, Space.xxl)
+    }
+}
+
 // MARK: - Stat strip
 
 /// One cell within a `StatStrip`: a big number, an optional unit

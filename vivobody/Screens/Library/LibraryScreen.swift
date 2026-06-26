@@ -548,7 +548,7 @@ private struct LibraryExercisesContent: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
-                .frame(minHeight: 38)
+                .frame(minHeight: Space.tapMin)
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)

@@ -441,7 +441,7 @@ struct ExerciseDetailScreen: View {
             Text(m.label)
                 .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(minHeight: 38)
+                .frame(minHeight: Space.tapMin)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 12)
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
@@ -518,7 +518,7 @@ struct ExerciseDetailScreen: View {
             Text(r.label)
                 .font(Typography.metricUnit)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(minWidth: 44, minHeight: 38)
+                .frame(minWidth: Space.tapMin, minHeight: Space.tapMin)
                 .padding(.horizontal, 12)
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }

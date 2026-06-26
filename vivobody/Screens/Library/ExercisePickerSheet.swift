@@ -16,6 +16,10 @@
 //      Delete asks for confirmation, then removes the row.
 //
 //  Sectioned by muscle group, searchable across the full list.
+//  Search uses .searchable(placement: .toolbar) +
+//  .searchToolbarBehavior(.minimize) — the field lives in the
+//  bottom toolbar and collapses on scroll, matching Library's
+//  house style.
 //
 
 import SwiftUI
@@ -118,7 +122,8 @@ struct ExercisePickerSheet: View {
                     }
                 )
             }
-            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
+            .searchable(text: $query, placement: .toolbar, prompt: Text("Search exercises"))
+            .searchToolbarBehavior(.minimize)
             .sheet(item: $editorTarget) { target in
                 CustomExerciseEditorSheet(target: target)
             }
@@ -217,7 +222,7 @@ struct ExercisePickerSheet: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .padding(.horizontal, Space.lg)
-                .frame(minHeight: 38)
+                .frame(minHeight: Space.tapMin)
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)

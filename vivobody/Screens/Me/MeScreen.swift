@@ -55,19 +55,19 @@ struct MeScreen: View {
                 statsSection
                     .settleIn(0)
 
-                groupSeparator
+                GroupSeparator()
                 milestonesSection
                     .settleIn(1)
-                groupSeparator
+                GroupSeparator()
                 personalRecordsSection
                     .settleIn(2)
-                groupSeparator
+                GroupSeparator()
                 consistencySection
                     .settleIn(3)
-                groupSeparator
+                GroupSeparator()
                 bodyWeightSection
                     .settleIn(4)
-                groupSeparator
+                GroupSeparator()
                 monthlyRecapSection
                     .settleIn(5)
             }
@@ -93,18 +93,6 @@ struct MeScreen: View {
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
-    }
-
-    // MARK: - Group separator
-
-    /// Full-width hairline between two major groups, carrying generous
-    /// air on both sides so each group reads as its own instrument —
-    /// the same device SessionDetail uses between its hero and the
-    /// exercise breakdown. This is what gives the screen its rhythm;
-    /// the flat 24pt gap alone read as crowded.
-    private var groupSeparator: some View {
-        SectionDivider()
-            .padding(.vertical, Space.xl)
     }
 
     // MARK: - Body weight

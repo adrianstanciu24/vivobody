@@ -129,7 +129,7 @@ struct StrengthTrajectorySection: View {
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
             .padding(.horizontal, Space.lg)
-            .frame(minHeight: 38)
+            .frame(minHeight: Space.tapMin)
             .background(
                 Capsule().fill(isSelected ? Tint.primary : Surface.cardTint)
             )
