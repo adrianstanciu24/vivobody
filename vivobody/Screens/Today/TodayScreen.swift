@@ -134,12 +134,14 @@ struct TodayScreen: View {
                 // The living atmosphere shared with every sibling tab: an
                 // ember field burning at a temperature set by streak +
                 // recency, so home reads as a powered-on instrument rather
-                // than a flat black report. Today burns at full intensity
-                // (vs the 0.9 the text-dense tabs default to) because the
-                // transparent 3D figure sits on top — the glow breathes
-                // through and around it. `forgeBackground` also mirrors the
-                // ember under the nav/tab bars so it never hard-edges.
-                .forgeBackground(intensity: 1.0)
+                // than a flat black report. Dialed below the sibling tabs'
+                // 0.9 default because Today's transparent 3D figure leaves
+                // the hero halo unobstructed (siblings cover it with dark
+                // content), so a matching intensity reads far brighter
+                // here; this keeps the forge consistent across tabs.
+                // `forgeBackground` also mirrors the ember under the
+                // nav/tab bars so it never hard-edges.
+                .forgeBackground(intensity: 0.6)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
                     // Latch onto the LARGEST viewport height ever seen, not
                     // the first. Native bottom chrome can make the container
