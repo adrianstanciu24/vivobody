@@ -42,6 +42,7 @@ enum AppTab: String, CaseIterable, Hashable {
     }
 }
 
+@MainActor
 @Observable
 final class AppState {
     var selectedTab: AppTab = .today
@@ -62,6 +63,10 @@ final class AppState {
     /// through here. Held as a weak-ish opt-in so previews that don't
     /// supply a context still build and render.
     var modelContext: ModelContext?
+
+    /// Surfaces a save failure from `dismissActiveWorkout()` so AppRoot
+    /// can present the standard alert. Non-nil while an error is pending.
+    var lastSaveError: SaveErrorBox? = nil
 
     // MARK: - Workout lifecycle
 
@@ -102,7 +107,7 @@ final class AppState {
         activeSession = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
         isWorkoutExpanded = true
         template.lastUsedAt = Date()
-        try? modelContext?.save()
+        try? modelContext?.saveOrRollback()
     }
 
     /// The user's preferred default rest in seconds, as a TimeInterval.
@@ -141,13 +146,16 @@ final class AppState {
     /// Called when the user fully exits the workout — either via the
     /// close button (mid-workout) or the Done button (after the
     /// summary). Sessions with at least one logged set are archived
-    /// to SwiftData; empty quits are discarded.
+    /// to SwiftData; empty quits are discarded. On save failure the
+    /// session is kept alive and `lastSaveError` is set so AppRoot
+    /// can surface the standard alert — the user stays in the
+    /// workout and can retry, so no set is lost.
     func dismissActiveWorkout() {
-        defer {
+        guard let session = activeSession, session.totalSets > 0 else {
             activeSession = nil
             isWorkoutExpanded = false
+            return
         }
-        guard let session = activeSession, session.totalSets > 0 else { return }
 
         // Stamp completedAt if the user quit mid-workout without
         // finishing every set. The session's totals reflect what they
@@ -159,9 +167,19 @@ final class AppState {
         guard let context = modelContext else {
             // No context wired (e.g. preview). Silently drop the
             // archive instead of crashing.
+            activeSession = nil
+            isWorkoutExpanded = false
             return
         }
         context.insert(session)
-        try? context.save()
+        do {
+            try context.saveOrRollback()
+            activeSession = nil
+            isWorkoutExpanded = false
+        } catch {
+            lastSaveError = SaveErrorBox(error)
+            // Keep activeSession alive so the user stays in the workout
+            // and can retry. The MiniBar/sheet remain presented.
+        }
     }
 }

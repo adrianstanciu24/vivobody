@@ -49,6 +49,7 @@ struct AppRoot: View {
                 session: appState.activeSession,
                 onExpand: { appState.expandWorkout() }
             )
+            .saveErrorAlert($appState.lastSaveError)
             .onAppear {
                 // Hand the SwiftData write context to AppState on
                 // first appear. Subsequent appears are no-ops because

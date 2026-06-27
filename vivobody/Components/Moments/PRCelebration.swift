@@ -47,6 +47,12 @@ struct PRCelebration: View {
     @State private var breathing: CGFloat = 1.0
     @State private var isDismissing: Bool = false
 
+    /// Cancellable owners of the entrance choreography and the
+    /// dismiss fade so either can be aborted cleanly when the
+    /// view leaves the hierarchy or a new sequence starts.
+    @State private var sequenceTask: Task<Void, Never>? = nil
+    @State private var dismissTask: Task<Void, Never>? = nil
+
     var body: some View {
         if isPresented {
             ZStack {
@@ -77,6 +83,7 @@ struct PRCelebration: View {
                     }
             )
             .onAppear { startSequence() }
+            .onDisappear { sequenceTask?.cancel(); dismissTask?.cancel() }
             .transition(.opacity)
         }
     }
@@ -142,20 +149,24 @@ struct PRCelebration: View {
     // MARK: - Choreography
 
     private func startSequence() {
-        Task { @MainActor in
+        sequenceTask = Task { @MainActor in
             Haptics.swell()
 
             withAnimation(.easeOut(duration: 0.32)) {
                 backdropVisible = true
             }
 
-            try? await Task.sleep(for: .milliseconds(180))
+            do {
+                try await Task.sleep(for: .milliseconds(180))
+            } catch { return }
             withAnimation(.spring(response: 0.42, dampingFraction: 0.85)) {
                 titleVisible = true
             }
 
             // The number lands with weight.
-            try? await Task.sleep(for: .milliseconds(120))
+            do {
+                try await Task.sleep(for: .milliseconds(120))
+            } catch { return }
             Haptics.slam()
             withAnimation(.spring(response: 0.55, dampingFraction: 0.55)) {
                 valueScale = 1.0
@@ -163,17 +174,23 @@ struct PRCelebration: View {
             }
 
             // Gold hairline draws in under the number.
-            try? await Task.sleep(for: .milliseconds(60))
+            do {
+                try await Task.sleep(for: .milliseconds(60))
+            } catch { return }
             withAnimation(.easeOut(duration: 0.6)) {
                 underlineProgress = 1
             }
 
-            try? await Task.sleep(for: .milliseconds(220))
+            do {
+                try await Task.sleep(for: .milliseconds(220))
+            } catch { return }
             withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
                 detailVisible = true
             }
 
-            try? await Task.sleep(for: .milliseconds(780))
+            do {
+                try await Task.sleep(for: .milliseconds(780))
+            } catch { return }
             withAnimation(.easeOut(duration: 0.5)) {
                 promptVisible = true
             }
@@ -188,6 +205,8 @@ struct PRCelebration: View {
         isDismissing = true
         Haptics.soft()
 
+        sequenceTask?.cancel()
+
         withAnimation(.easeIn(duration: 0.28)) {
             backdropVisible = false
             titleVisible = false
@@ -196,8 +215,10 @@ struct PRCelebration: View {
             promptVisible = false
         }
 
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(300))
+        dismissTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+            } catch { return }
             isPresented = false
             // Reset for next presentation.
             valueScale = 0.55

@@ -69,6 +69,7 @@ enum TrackingMode: String, Hashable, CaseIterable {
 /// `exercise.session`, and vice versa.
 @Model
 final class Exercise: Identifiable {
+    #Index<Exercise>([\.name])
     var id: UUID = UUID()
     var name: String = ""
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue

@@ -36,6 +36,8 @@ struct CustomExerciseEditorSheet: View {
 
     @State private var draft: CatalogDraft
 
+    @State private var saveError: SaveErrorBox? = nil
+
     @FocusState private var nameFieldFocused: Bool
 
     @AppStorage(SettingsKey.weightUnit)
@@ -106,6 +108,7 @@ struct CustomExerciseEditorSheet: View {
                     nameFieldFocused = true
                 }
             }
+            .saveErrorAlert($saveError)
         }
     }
 
@@ -473,7 +476,12 @@ struct CustomExerciseEditorSheet: View {
             item.aliases = parsedAliases
         }
 
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.thunk()
         dismiss()
     }

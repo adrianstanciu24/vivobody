@@ -57,6 +57,12 @@ struct BodyWeightLogSheet: View {
     /// fast in practice; this is belt-and-suspenders.
     @State private var isSaving: Bool = false
 
+    /// Surfaces a save-failure alert and keeps the sheet open so the
+    /// user can retry. saveOrRollback has already reverted the
+    /// context, so a same-day overwrite that failed won't leave a
+    /// half-mutated row.
+    @State private var saveError: SaveErrorBox? = nil
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -89,6 +95,7 @@ struct BodyWeightLogSheet: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .onAppear(perform: hydrate)
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Hydration
@@ -181,8 +188,13 @@ struct BodyWeightLogSheet: View {
             entry.date = date
         }
 
-        try? context.save()
-        dismiss()
+        do {
+            try context.saveOrRollback()
+            dismiss()
+        } catch {
+            saveError = SaveErrorBox(error)
+            isSaving = false
+        }
     }
 }
 

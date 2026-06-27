@@ -41,6 +41,7 @@ struct TemplateDetailScreen: View {
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
     @State private var showPicker: Bool = false
+    @State private var saveError: SaveErrorBox? = nil
 
     var body: some View {
         ZStack {
@@ -81,7 +82,11 @@ struct TemplateDetailScreen: View {
             RenameButton()
         }
         .onChange(of: template.name) { _, _ in
-            try? modelContext.save()
+            do {
+                try modelContext.saveOrRollback()
+            } catch {
+                saveError = SaveErrorBox(error)
+            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -99,6 +104,7 @@ struct TemplateDetailScreen: View {
                 appendExercise(from: item)
             }
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Stats
@@ -277,7 +283,12 @@ struct TemplateDetailScreen: View {
     private func appendExercise(from item: ExerciseCatalogItem) {
         let new = TemplateExercise(from: item, sortOrder: template.exercises.count)
         template.exercises.append(new)
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.soft()
     }
 
@@ -289,7 +300,12 @@ struct TemplateDetailScreen: View {
             modelContext.delete(exercise)
         }
         repackSortOrder()
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.soft()
     }
 

@@ -14,6 +14,7 @@ import SwiftData
 
 @Model
 final class WorkoutSession: Identifiable {
+    #Index<WorkoutSession>([\.completedAt])
     /// Stable UUID for SwiftUI `.sheet(item:)` and for distinguishing
     /// sessions in history lists. @Model classes also carry an
     /// internal `persistentModelID`; we keep our own UUID so external

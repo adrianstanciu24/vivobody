@@ -59,6 +59,7 @@ struct ExercisePickerSheet: View {
     @State private var query: String = ""
     @State private var editorTarget: CatalogEditorTarget?
     @State private var pendingDeleteItem: ExerciseCatalogItem?
+    @State private var saveError: SaveErrorBox? = nil
 
     /// Optional equipment filter. Nil means "all equipment." Chip
     /// strip at the top of the picker toggles between this and the
@@ -110,18 +111,6 @@ struct ExercisePickerSheet: View {
                     .accessibilityLabel("Create custom exercise")
                 }
             }
-            .navigationDestination(for: ExerciseCatalogItem.self) { destination in
-                ExerciseDetailScreen(
-                    item: destination,
-                    // CTA on the detail picks the exercise and
-                    // dismisses the entire picker sheet — same
-                    // commit point the old tap-to-pick row had.
-                    onPickAndDismiss: { picked in
-                        onPick(picked)
-                        dismiss()
-                    }
-                )
-            }
             .searchable(text: $query, placement: .toolbar, prompt: Text("Search exercises"))
             .searchToolbarBehavior(.minimize)
             .sheet(item: $editorTarget) { target in
@@ -146,6 +135,7 @@ struct ExercisePickerSheet: View {
             } message: {
                 Text("This removes the exercise from the picker. Templates and history that already reference it stay intact.")
             }
+            .saveErrorAlert($saveError)
         }
     }
 
@@ -264,7 +254,15 @@ struct ExercisePickerSheet: View {
                 // Row taps navigate to detail instead of immediately
                 // picking; the user commits via the "Add to Workout"
                 // CTA on the detail screen.
-                NavigationLink(value: item) {
+                NavigationLink {
+                    ExerciseDetailScreen(
+                        item: item,
+                        onPickAndDismiss: { picked in
+                            onPick(picked)
+                            dismiss()
+                        }
+                    )
+                } label: {
                     rowBody(item: item, last: last, trailingSymbol: "chevron.right")
                 }
                 .buttonStyle(.plain)
@@ -407,7 +405,12 @@ struct ExercisePickerSheet: View {
 
     private func delete(_ item: ExerciseCatalogItem) {
         modelContext.delete(item)
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.soft()
     }
 }

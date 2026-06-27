@@ -32,6 +32,7 @@ struct BodyWeightDetail: View {
     @State private var range: TimeRange = .all
     @State private var logTarget: BodyWeightLogTarget? = nil
     @State private var pendingDelete: BodyWeightEntry? = nil
+    @State private var saveError: SaveErrorBox? = nil
 
     enum TimeRange: String, CaseIterable, Identifiable {
         case oneMonth, threeMonths, sixMonths, all
@@ -92,13 +93,19 @@ struct BodyWeightDetail: View {
             Button("Cancel", role: .cancel) { pendingDelete = nil }
             Button("Delete", role: .destructive) {
                 context.delete(entry)
-                try? context.save()
-                pendingDelete = nil
-                Haptics.rigid()
+                do {
+                    try context.saveOrRollback()
+                    pendingDelete = nil
+                    Haptics.rigid()
+                } catch {
+                    saveError = SaveErrorBox(error)
+                    pendingDelete = nil
+                }
             }
         } message: { _ in
             Text("This entry will be removed from your history.")
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Header

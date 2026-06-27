@@ -73,6 +73,7 @@ struct ExerciseDetailScreen: View {
     @State private var isEditingOneRepMax: Bool = false
     @State private var range: TimeRange = .all
     @State private var chartMetric: ChartMetric = .e1rm
+    @State private var saveError: SaveErrorBox? = nil
 
     /// Number of consecutive stale sessions before the hero flags a
     /// plateau. Five matches the "a working block didn't move the
@@ -186,7 +187,11 @@ struct ExerciseDetailScreen: View {
                 initialValue: item.notes,
                 onSave: { newNotes in
                     item.notes = newNotes
-                    try? modelContext.save()
+                    do {
+                        try modelContext.saveOrRollback()
+                    } catch {
+                        saveError = SaveErrorBox(error)
+                    }
                 }
             )
         }
@@ -197,7 +202,11 @@ struct ExerciseDetailScreen: View {
                 hasEstimate: estimatedOneRepMax != nil,
                 onSave: { newValue in
                     item.oneRepMax = newValue
-                    try? modelContext.save()
+                    do {
+                        try modelContext.saveOrRollback()
+                    } catch {
+                        saveError = SaveErrorBox(error)
+                    }
                 }
             )
         }
@@ -212,6 +221,7 @@ struct ExerciseDetailScreen: View {
         } message: {
             Text("Removes the exercise from your catalog. Templates and history that already reference it stay intact.")
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Hero
@@ -1071,7 +1081,12 @@ struct ExerciseDetailScreen: View {
     /// never reference catalog items directly).
     private func deleteAndDismiss() {
         modelContext.delete(item)
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.thunk()
         dismiss()
     }

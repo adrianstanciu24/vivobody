@@ -273,6 +273,7 @@ private struct LibraryTemplatesContent: View {
     private var templates: [WorkoutTemplate]
 
     @State private var deletingTemplate: WorkoutTemplate? = nil
+    @State private var saveError: SaveErrorBox? = nil
 
     private var filtered: [WorkoutTemplate] {
         let trimmed = searchText.trimmingCharacters(in: .whitespaces).lowercased()
@@ -308,6 +309,7 @@ private struct LibraryTemplatesContent: View {
         } message: { template in
             Text("\(template.name) · \(template.orderedExercises.count) exercises. This can't be undone.")
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - List
@@ -409,11 +411,16 @@ private struct LibraryTemplatesContent: View {
 
     private func deleteTemplate(_ template: WorkoutTemplate) {
         modelContext.delete(template)
-        try? modelContext.save()
-        for (i, t) in templates.enumerated() {
-            t.sortOrder = i
+        do {
+            try modelContext.saveOrRollback()
+            for (i, t) in templates.enumerated() {
+                t.sortOrder = i
+            }
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
         }
-        try? modelContext.save()
         Haptics.soft()
         deletingTemplate = nil
     }
@@ -457,6 +464,7 @@ private struct LibraryExercisesContent: View {
 
     @State private var equipmentFilter: Equipment? = nil
     @State private var pendingDeleteItem: ExerciseCatalogItem? = nil
+    @State private var saveError: SaveErrorBox? = nil
 
     private var lastInstanceLookup: [String: LastExerciseInstance] {
         completedSessions.lastInstanceByExercise()
@@ -493,6 +501,7 @@ private struct LibraryExercisesContent: View {
         } message: {
             Text("This removes the exercise from the catalog. Templates and history that already reference it stay intact.")
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Filter / group
@@ -778,7 +787,12 @@ private struct LibraryExercisesContent: View {
 
     private func delete(_ item: ExerciseCatalogItem) {
         modelContext.delete(item)
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.soft()
     }
 }

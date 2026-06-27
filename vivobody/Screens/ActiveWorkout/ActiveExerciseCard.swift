@@ -49,6 +49,10 @@ struct ActiveExerciseCard: View {
     /// even though the session hasn't advanced yet.
     @State private var pendingCompletionSetID: UUID? = nil
 
+    /// Cancellable owner of the PR-detect + auto-advance pipeline so
+    /// a re-toggle or card disappearance can abort an in-flight run.
+    @State private var completionTask: Task<Void, Never>? = nil
+
     /// When non-nil, presents the EditSetSheet for that completed
     /// set. Driven by the last-set caption's long-press menu.
     @State private var editingSet: WorkoutSet? = nil
@@ -107,6 +111,7 @@ struct ActiveExerciseCard: View {
                 onSave: { newNotes in exercise.notes = newNotes }
             )
         }
+        .onDisappear { completionTask?.cancel() }
     }
 
     // MARK: - Top meta
@@ -612,8 +617,11 @@ struct ActiveExerciseCard: View {
 
         pendingCompletionSetID = set.id
 
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(550))
+        completionTask?.cancel()
+        completionTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .milliseconds(550))
+            } catch { return }
 
             let prKind = detectPersonalRecord(
                 exerciseName: exerciseName,
@@ -660,7 +668,9 @@ struct ActiveExerciseCard: View {
                     // dismisses.
                     let endsWorkout = session.isAllComplete && prKind == nil
                     let hold: Duration = endsWorkout ? .milliseconds(2000) : .milliseconds(300)
-                    try? await Task.sleep(for: hold)
+                    do {
+                        try await Task.sleep(for: hold)
+                    } catch { return }
                     withAnimation(.spring(response: 0.55, dampingFraction: 0.85)) {
                         session.activeExerciseIndex = nextIdx
                     }

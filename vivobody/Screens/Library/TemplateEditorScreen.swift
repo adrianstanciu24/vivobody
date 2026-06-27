@@ -46,6 +46,7 @@ struct TemplateEditorScreen: View {
 
     @State private var showPicker: Bool = false
     @State private var configureTarget: ConfigureExerciseTarget? = nil
+    @State private var saveError: SaveErrorBox? = nil
 
     /// Auto-focus the name field on a new template — first action is
     /// always "name the thing." Skipped on edit so we don't shove the
@@ -111,6 +112,7 @@ struct TemplateEditorScreen: View {
             .onAppear {
                 if isNewMode { nameFieldFocused = true }
             }
+            .saveErrorAlert($saveError)
         }
     }
 
@@ -349,7 +351,12 @@ struct TemplateEditorScreen: View {
             attachExercises(to: existing)
         }
 
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
         Haptics.soft()
         dismiss()
     }

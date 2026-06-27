@@ -97,14 +97,14 @@ struct NotesEditorSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .onAppear {
+        .task {
             draft = initialValue
-            // Defer focus by one runloop so the sheet's transition
-            // finishes before the keyboard rises — otherwise iOS
-            // sometimes drops the focus during the animation.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                isFocused = true
-            }
+            // Defer focus briefly so the sheet's transition finishes
+            // before the keyboard rises — otherwise iOS sometimes
+            // drops the focus during the animation. .task auto-cancels
+            // the sleep if the view disappears within the window.
+            try? await Task.sleep(for: .milliseconds(150))
+            isFocused = true
         }
     }
 }

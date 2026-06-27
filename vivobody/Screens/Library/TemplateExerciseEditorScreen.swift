@@ -26,6 +26,8 @@ struct TemplateExerciseEditorScreen: View {
 
     @Environment(\.modelContext) private var modelContext
 
+    @State private var saveError: SaveErrorBox? = nil
+
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -112,6 +114,7 @@ struct TemplateExerciseEditorScreen: View {
         .onChange(of: exercise.plannedReps) { _, _ in save() }
         .onChange(of: exercise.plannedWeight) { _, _ in save() }
         .onChange(of: exercise.plannedDuration) { _, _ in save() }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Header
@@ -203,6 +206,10 @@ struct TemplateExerciseEditorScreen: View {
     // MARK: - Persistence
 
     private func save() {
-        try? modelContext.save()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+        }
     }
 }

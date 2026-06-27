@@ -19,6 +19,7 @@ import SwiftData
 
 @Model
 final class BodyWeightEntry: Identifiable {
+    #Index<BodyWeightEntry>([\.date])
     var id: UUID = UUID()
     var date: Date = Date()
     var weight: Double = 0

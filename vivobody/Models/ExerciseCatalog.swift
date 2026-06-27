@@ -401,7 +401,7 @@ extension ExerciseCatalogItem {
             )
             context.insert(item)
         }
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Wipe the entire catalog and re-seed from the bundled list.
@@ -419,7 +419,7 @@ extension ExerciseCatalogItem {
                 context.delete(item)
             }
         }
-        try? context.save()
+        try? context.saveOrRollback()
         seedIfEmpty(in: context)
     }
 }
