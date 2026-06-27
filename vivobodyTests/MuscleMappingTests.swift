@@ -92,14 +92,17 @@ struct MuscleMappingTests {
         let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
         let w = bench.weights
         // Authored grading: chest is the prime mover, triceps a heavier
-        // synergist than the assisting front delt — strictly stepping down.
+        // synergist than the assisting front delt, with biceps only as a
+        // trace dynamic stabilizer.
         #expect(w[.pectorals] == Muscle.Involvement.prime)
         #expect(w[.triceps] == Muscle.Involvement.major)
         #expect(w[.deltoids] == Muscle.Involvement.minor)
+        #expect(w[.biceps] == Muscle.Involvement.trace)
         #expect(w[.pectorals]! > w[.triceps]!)
         #expect(w[.triceps]! > w[.deltoids]!)
+        #expect(w[.deltoids]! > w[.biceps]!)
         #expect(bench.primary == [.pectorals])
-        #expect(bench.secondary == [.triceps, .deltoids])
+        #expect(bench.secondary == [.triceps, .deltoids, .biceps])
     }
 
     @Test @MainActor func classificationResolvesForKnownLift() {
