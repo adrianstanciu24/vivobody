@@ -2,18 +2,21 @@
 //  InsightsScreen.swift
 //  vivobody
 //
-//  The Insights tab, structured as four movements rather than a wall
-//  of lookalike bars:
+//  The Insights tab, structured as a sequence of movements rather
+//  than a wall of lookalike bars:
 //
 //    1. Signature — the generative hero: one mark for the whole shape
 //       of your training (no body here; the 3D figure is Today's).
-//    2. Train next — the verdict: a short, ranked list fusing volume,
-//       momentum, and forecast into "what should I train?", with the
-//       full per-muscle breakdown one tap away.
-//    3. Strength — an estimated-1RM line chart per lift, a record line
+//    2. Strength — an estimated-1RM line chart per lift, a record line
 //       to chase (Swift Charts, not bars).
-//    4. Rhythm — the consistency heatmap plus a weekly-volume curve,
-//       closed by the symmetry coda.
+//    3. Composition — which lifts carry your volume (exercise dominance).
+//    4. Intensity — rep-range distribution of working sets (snapshot).
+//    5. Rep trend — average reps/set drifting heavier or lighter over
+//       time (the temporal companion to the intensity snapshot).
+//    6. Movement — compound vs isolation split of working sets.
+//    7. Rhythm — the consistency heatmap plus a weekly-volume curve.
+//    8. Load — acute:chronic workload ratio (recovery debt).
+//    9. Symmetry — the antagonist-balance coda.
 //
 //  Each section owns its own copy and colours; this screen fetches the
 //  data, runs the value-type models, and lays the movements out
@@ -56,9 +59,12 @@ struct InsightsScreen: View {
                     let modelState = MuscleDevelopment.simulate(from: completedSessions)
                     let strength = completedSessions.strengthOutlook()
                     let progress = completedSessions.progressByExercise
+                    let dominance = completedSessions.exerciseDominance()
+                    let intensity = completedSessions.intensityMix()
+                    let migration = completedSessions.repRangeMigration()
+                    let composition = completedSessions.compoundIsolationSplit()
                     let symmetry = completedSessions.antagonistBalance()
                     let consistency = completedSessions.consistency()
-                    let intensity = completedSessions.intensityMix()
                     let load = completedSessions.trainingLoad()
                     let signature = TrainingSignature(volume: stats, development: modelState.intensities, consistency: consistency)
 
@@ -68,17 +74,26 @@ struct InsightsScreen: View {
                     StrengthTrajectorySection(board: strength, progress: progress)
                         .settleIn(1)
                     GroupSeparator()
-                    IntensityMixSection(mix: intensity)
+                    ExerciseDominanceSection(board: dominance)
                         .settleIn(2)
                     GroupSeparator()
-                    ConsistencySection(report: consistency)
+                    IntensityMixSection(mix: intensity)
                         .settleIn(3)
                     GroupSeparator()
-                    TrainingLoadSection(report: load)
+                    RepRangeMigrationSection(report: migration)
                         .settleIn(4)
                     GroupSeparator()
-                    SymmetrySection(board: symmetry)
+                    MovementCompositionSection(split: composition)
                         .settleIn(5)
+                    GroupSeparator()
+                    ConsistencySection(report: consistency)
+                        .settleIn(6)
+                    GroupSeparator()
+                    TrainingLoadSection(report: load)
+                        .settleIn(7)
+                    GroupSeparator()
+                    SymmetrySection(board: symmetry)
+                        .settleIn(8)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
