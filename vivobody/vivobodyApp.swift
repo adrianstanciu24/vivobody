@@ -51,6 +51,48 @@ struct vivobodyApp: App {
 }
 
 #if DEBUG
+enum UITestSupport {
+    static func resetIfRequested(in context: ModelContext) {
+        guard CommandLine.arguments.contains("--ui-test-reset") else { return }
+        deleteAll(WorkoutSession.self, in: context)
+        deleteAll(WorkoutTemplate.self, in: context)
+        deleteAll(ExerciseCatalogItem.self, in: context)
+        deleteAll(BodyWeightEntry.self, in: context)
+        try? context.save()
+    }
+
+    static func seedIfRequested(in context: ModelContext) {
+        guard CommandLine.arguments.contains("--ui-test-active-partial") else { return }
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 2,
+            plannedReps: 8,
+            plannedWeight: 135,
+            sortOrder: 0
+        )
+        if let first = exercise.orderedSets.first {
+            first.isCompleted = true
+        }
+        let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+        context.insert(session)
+        try? context.save()
+    }
+
+    private static func deleteAll<T: PersistentModel>(_ model: T.Type, in context: ModelContext) {
+        let descriptor = FetchDescriptor<T>()
+        let models = (try? context.fetch(descriptor)) ?? []
+        for model in models {
+            context.delete(model)
+        }
+    }
+}
+
 private enum HistorySeeder {
     static func seed(into context: ModelContext) {
         let descriptor = FetchDescriptor<WorkoutSession>(

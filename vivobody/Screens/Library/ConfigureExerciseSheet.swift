@@ -53,10 +53,13 @@ struct ConfigureExerciseSheet: View {
     @State private var duration: Double
 
     private let name: String
+    private let catalogItemID: UUID?
     private let group: MuscleGroup
+    private let muscleInvolvement: Muscle.Involvement
     private let mode: TrackingMode
     private let isEditing: Bool
     private let draftID: UUID
+    private let originalDraft: ExerciseDraft?
 
     init(target: ConfigureExerciseTarget, onCommit: @escaping (ExerciseDraft) -> Void) {
         self.target = target
@@ -64,7 +67,9 @@ struct ConfigureExerciseSheet: View {
         switch target {
         case .adding(let item):
             name = item.name
+            catalogItemID = item.id
             group = item.group
+            muscleInvolvement = item.muscleInvolvement
             mode = item.trackingMode
             _sets = State(initialValue: 3)
             _reps = State(initialValue: item.defaultReps)
@@ -72,9 +77,12 @@ struct ConfigureExerciseSheet: View {
             _duration = State(initialValue: item.defaultDuration > 0 ? item.defaultDuration : 45)
             isEditing = false
             draftID = UUID()
+            originalDraft = nil
         case .editing(let draft):
             name = draft.name
+            catalogItemID = draft.catalogItemID
             group = draft.group
+            muscleInvolvement = Muscle.Involvement(snapshot: draft.muscleInvolvementSnapshot)
             mode = draft.trackingMode
             _sets = State(initialValue: draft.plannedSets)
             _reps = State(initialValue: draft.plannedReps)
@@ -82,6 +90,7 @@ struct ConfigureExerciseSheet: View {
             _duration = State(initialValue: draft.plannedDuration > 0 ? draft.plannedDuration : 45)
             isEditing = true
             draftID = draft.id
+            originalDraft = draft
         }
     }
 
@@ -258,13 +267,32 @@ struct ConfigureExerciseSheet: View {
     // MARK: - Draft
 
     private func buildDraft() -> ExerciseDraft {
-        ExerciseDraft(
+        if let originalDraft, originalDraft.isPerSet {
+            return ExerciseDraft(
+                id: draftID,
+                name: name,
+                catalogItemID: originalDraft.catalogItemID,
+                group: group,
+                plannedSets: originalDraft.plannedSets,
+                plannedReps: originalDraft.plannedReps,
+                plannedWeight: originalDraft.plannedWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: originalDraft.muscleInvolvementSnapshot),
+                trackingMode: mode,
+                plannedDuration: originalDraft.plannedDuration,
+                isPerSet: true,
+                sets: originalDraft.sets
+            )
+        }
+
+        return ExerciseDraft(
             id: draftID,
             name: name,
+            catalogItemID: catalogItemID,
             group: group,
             plannedSets: sets,
             plannedReps: reps,
             plannedWeight: weight,
+            muscleInvolvement: muscleInvolvement,
             trackingMode: mode,
             plannedDuration: duration,
             isPerSet: false,

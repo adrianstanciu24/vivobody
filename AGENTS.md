@@ -80,7 +80,7 @@ vivobody/
 - **`EditButton()`** is the only way to reach drag-to-reorder in standard SwiftUI Lists — but if reorder isn't needed, swipe-to-delete via `.swipeActions` is sufficient and Edit can be omitted.
 - **`TemplateEditorScreen.swift` is orphaned** — currently unreachable from any UI surface. Library uses `TemplateDetailScreen` for both creation and editing. Safe to delete in a future cleanup pass.
 - **Always test scrubber-style components inside a `ScrollView`** — they use `DragGesture(minimumDistance: 0)` and can compete with scroll gestures if mis-nested.
-- **Bundle ID is `astanciu.vivobody`** — required for `xcrun simctl launch`. The output bundle filename `vivobody.app` is a different concept (the `.app` is the bundle extension, not part of the ID).
+- **Bundle ID is `astanciu.vivobody.app`** — required for `xcrun simctl launch`. The output bundle filename `vivobody.app` is a different concept (the `.app` is the bundle extension, not part of the ID).
 
 ## Key components reference
 

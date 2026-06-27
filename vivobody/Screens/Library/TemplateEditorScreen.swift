@@ -47,6 +47,7 @@ struct TemplateEditorScreen: View {
     @State private var showPicker: Bool = false
     @State private var configureTarget: ConfigureExerciseTarget? = nil
     @State private var saveError: SaveErrorBox? = nil
+    @State private var blockedPerSetExerciseName: String? = nil
 
     /// Auto-focus the name field on a new template — first action is
     /// always "name the thing." Skipped on edit so we don't shove the
@@ -113,6 +114,19 @@ struct TemplateEditorScreen: View {
                 if isNewMode { nameFieldFocused = true }
             }
             .saveErrorAlert($saveError)
+            .alert(
+                "Per-set programming",
+                isPresented: Binding(
+                    get: { blockedPerSetExerciseName != nil },
+                    set: { if !$0 { blockedPerSetExerciseName = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) {
+                    blockedPerSetExerciseName = nil
+                }
+            } message: {
+                Text("\(blockedPerSetExerciseName ?? "This exercise") uses explicit set-by-set programming. This quick editor only changes uniform exercises, so the per-set rows were left unchanged.")
+            }
         }
     }
 
@@ -241,7 +255,11 @@ struct TemplateEditorScreen: View {
 
     private func exerciseRow(_ exercise: ExerciseDraft) -> some View {
         Button {
-            configureTarget = .editing(exercise)
+            if exercise.isPerSet {
+                blockedPerSetExerciseName = exercise.name
+            } else {
+                configureTarget = .editing(exercise)
+            }
         } label: {
             HStack(spacing: Space.md) {
                 VStack(alignment: .leading, spacing: 3) {
@@ -374,10 +392,12 @@ struct TemplateEditorScreen: View {
 
             let ex = TemplateExercise(
                 name: ed.name,
+                catalogItemID: ed.catalogItemID,
                 group: ed.group,
                 plannedSets: fallbackCount,
                 plannedReps: fallbackReps,
                 plannedWeight: fallbackWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: ed.muscleInvolvementSnapshot),
                 trackingMode: ed.trackingMode,
                 plannedDuration: fallbackDuration,
                 sortOrder: i

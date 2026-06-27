@@ -67,7 +67,7 @@ struct ExercisePickerSheet: View {
     @State private var equipmentFilter: Equipment? = nil
 
     /// One-time-per-render lookup of "what did you last do for this
-    /// exercise?" keyed by lowercased name. Rebuilt whenever the
+    /// exercise?" keyed by stable copied identity. Rebuilt whenever the
     /// underlying completed sessions list changes — SwiftUI handles
     /// that via the @Query observation. Single O(N) sweep over
     /// history; picker rows do O(1) lookups.
@@ -235,7 +235,7 @@ struct ExercisePickerSheet: View {
 
     @ViewBuilder
     private func pickerRow(_ item: ExerciseCatalogItem) -> some View {
-        let last = lastInstanceLookup[item.name.lowercased()]
+        let last = lastInstance(for: item)
 
         Group {
             if picksOnTap {
@@ -319,6 +319,10 @@ struct ExercisePickerSheet: View {
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+    }
+
+    private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
+        lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
     }
 
     /// Right-side rendering of a picker row. Branches on whether

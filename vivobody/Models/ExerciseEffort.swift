@@ -53,18 +53,32 @@ nonisolated struct ExerciseEffortSummary: Hashable {
 }
 
 extension Array where Element == WorkoutSession {
-    /// Build an effort summary for one exercise (matched by name,
-    /// case-insensitive, `.reps` only). Nil when the lift carries
-    /// fewer than three logged RIR readings — below that the average
-    /// is too noisy to act on.
+    /// Build an effort summary for one catalog exercise. Stable ID
+    /// wins; name fallback only covers legacy history from before
+    /// copied exercises stored catalog IDs.
+    func effortSummary(for item: ExerciseCatalogItem) -> ExerciseEffortSummary? {
+        effortSummary { $0.matchesCatalogItem(item) }
+    }
+
+    /// Legacy convenience for tests or old call sites that only know a
+    /// display name.
     func effortSummary(forExerciseNamed name: String) -> ExerciseEffortSummary? {
-        let key = name.lowercased()
+        let key = name.exerciseIdentityName
+        return effortSummary { $0.name.exerciseIdentityName == key }
+    }
+
+    /// Build an effort summary for one exercise (`.reps` only). Nil
+    /// when the lift carries fewer than three logged RIR readings —
+    /// below that the average is too noisy to act on.
+    private func effortSummary(
+        matching matches: (Exercise) -> Bool
+    ) -> ExerciseEffortSummary? {
 
         // Newest-first list of this lift's appearances. Duration
         // exercises are excluded — they carry no RIR.
         let instances: [(date: Date, exercise: Exercise)] = self.compactMap { session in
             guard let ex = session.orderedExercises.first(where: {
-                $0.name.lowercased() == key && $0.trackingMode == .reps
+                matches($0) && $0.trackingMode == .reps
             }) else { return nil }
             return (session.completedAt ?? session.startedAt, ex)
         }

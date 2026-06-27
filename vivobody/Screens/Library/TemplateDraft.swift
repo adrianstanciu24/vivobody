@@ -31,6 +31,7 @@ struct TemplateDraft {
 struct ExerciseDraft: Identifiable, Hashable {
     let id: UUID
     var name: String
+    var catalogItemID: UUID?
     var group: MuscleGroup
 
     // Uniform fields — used when isPerSet == false. Always retained
@@ -39,6 +40,10 @@ struct ExerciseDraft: Identifiable, Hashable {
     var plannedSets: Int
     var plannedReps: Int
     var plannedWeight: Double
+
+    /// Pick-time muscle snapshot. Carried through the value draft so
+    /// editing a template does not strip analytics identity.
+    var muscleInvolvementSnapshot: [String: Double]
 
     /// How the exercise is measured — reps or a timed hold. Carried
     /// from the catalog pick so a plank / dead hang in a template
@@ -60,10 +65,12 @@ struct ExerciseDraft: Identifiable, Hashable {
     init(
         id: UUID = UUID(),
         name: String,
+        catalogItemID: UUID? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double = 0,
+        muscleInvolvement: Muscle.Involvement? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         isPerSet: Bool = false,
@@ -71,10 +78,12 @@ struct ExerciseDraft: Identifiable, Hashable {
     ) {
         self.id = id
         self.name = name
+        self.catalogItemID = catalogItemID
         self.group = group
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
         self.trackingMode = trackingMode
         self.plannedDuration = plannedDuration
         self.isPerSet = isPerSet
@@ -106,10 +115,12 @@ extension ExerciseDraft {
     init(from item: ExerciseCatalogItem) {
         self.init(
             name: item.name,
+            catalogItemID: item.id,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
+            muscleInvolvement: item.muscleInvolvement,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             isPerSet: false,
@@ -126,10 +137,12 @@ extension ExerciseDraft {
         if !orderedTemplateSets.isEmpty {
             self.init(
                 name: templateExercise.name,
+                catalogItemID: templateExercise.catalogItemID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: true,
@@ -140,10 +153,12 @@ extension ExerciseDraft {
         } else {
             self.init(
                 name: templateExercise.name,
+                catalogItemID: templateExercise.catalogItemID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: false,

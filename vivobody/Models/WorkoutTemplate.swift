@@ -112,10 +112,16 @@ final class WorkoutTemplate: Identifiable {
 final class TemplateExercise: Identifiable {
     var id: UUID = UUID()
     var name: String = ""
+    var catalogItemID: UUID? = nil
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
+
+    /// Pick-time muscle snapshot copied from the catalog item. Used
+    /// when spawning a WorkoutSession exercise so renamed custom
+    /// lifts keep contributing to muscle analytics.
+    var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// How this exercise is measured — reps or a timed hold. Stored
     /// as a raw value; defaulted so existing templates read as reps
@@ -173,20 +179,24 @@ final class TemplateExercise: Identifiable {
     init(
         id: UUID = UUID(),
         name: String,
+        catalogItemID: UUID? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double,
+        muscleInvolvement: Muscle.Involvement? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.name = name
+        self.catalogItemID = catalogItemID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
@@ -197,10 +207,12 @@ final class TemplateExercise: Identifiable {
     convenience init(from item: ExerciseCatalogItem, sortOrder: Int) {
         self.init(
             name: item.name,
+            catalogItemID: item.id,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
+            muscleInvolvement: item.muscleInvolvement,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
@@ -267,10 +279,12 @@ extension Exercise {
             // We then attach the explicit per-set rows below.
             self.init(
                 name: templateExercise.name,
+                catalogItemID: templateExercise.catalogItemID,
                 group: templateExercise.group,
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
                 plannedWeight: orderedSets.first?.weight ?? templateExercise.plannedWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: orderedSets.first?.duration ?? templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
@@ -291,10 +305,12 @@ extension Exercise {
         } else {
             self.init(
                 name: templateExercise.name,
+                catalogItemID: templateExercise.catalogItemID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
+                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
@@ -309,10 +325,12 @@ extension Exercise {
     convenience init(from item: ExerciseCatalogItem, sortOrder: Int) {
         self.init(
             name: item.name,
+            catalogItemID: item.id,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
+            muscleInvolvement: item.muscleInvolvement,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder

@@ -827,16 +827,23 @@ struct ExerciseDetailScreen: View {
         }
     }
 
-    /// Lowercased name lookup key matching the convention used in
-    /// `lastInstanceByExercise()` and `progressByExercise`.
-    private var nameKey: String { item.name.lowercased() }
+    /// Stable lookup keys matching `lastInstanceByExercise()` and
+    /// `progressByExercise()`. The name key is only a fallback for
+    /// legacy history written before copied catalog IDs existed.
+    private var historyKey: String { item.historyKey }
+    private var legacyHistoryKey: String { item.legacyHistoryKey }
 
     /// All progress points for this exercise across history. Nil
     /// when the user has fewer than 2 sessions (matches the
     /// >=2 filter inside `progressByExercise`). The chart needs
     /// at least 2 points to be more than a dot.
     private var progress: ExerciseProgress? {
-        completedSessions.progressByExercise.first { $0.name.lowercased() == nameKey }
+        completedSessions.progressByExercise.first { progress in
+            if let catalogItemID = progress.catalogItemID {
+                return catalogItemID == item.id
+            }
+            return progress.name.exerciseIdentityName == item.name.exerciseIdentityName
+        }
     }
 
     /// Recent RIR read + progression verdict. Nil for timed holds and
@@ -844,7 +851,7 @@ struct ExerciseDetailScreen: View {
     /// hides entirely in those cases.
     private var effortSummary: ExerciseEffortSummary? {
         guard item.trackingMode == .reps else { return nil }
-        return completedSessions.effortSummary(forExerciseNamed: item.name)
+        return completedSessions.effortSummary(for: item)
     }
 
     /// Stall on the primary metric over the last N sessions, or nil
@@ -856,14 +863,15 @@ struct ExerciseDetailScreen: View {
     /// Most-recent top set + relative date + PR flag. Nil when the
     /// user has never logged this exercise.
     private var lastInstance: LastExerciseInstance? {
-        completedSessions.lastInstanceByExercise()[nameKey]
+        let lookup = completedSessions.lastInstanceByExercise()
+        return lookup[historyKey] ?? lookup[legacyHistoryKey]
     }
 
     /// Number of archived sessions that include this exercise.
     private var sessionCount: Int {
         completedSessions.reduce(0) { acc, session in
             acc + (session.orderedExercises.contains(where: {
-                $0.name.lowercased() == nameKey
+                $0.matchesCatalogItem(item)
                 && $0.sets.contains(where: \.isCompleted)
             }) ? 1 : 0)
         }
@@ -885,7 +893,7 @@ struct ExerciseDetailScreen: View {
         let isDuration = item.trackingMode == .duration
         let completedSets = completedSessions
             .flatMap(\.orderedExercises)
-            .filter { $0.name.lowercased() == nameKey }
+            .filter { $0.matchesCatalogItem(item) }
             .flatMap { $0.sets.filter(\.isCompleted) }
         let allTimeBest = isDuration
             ? (completedSets.map(\.duration).max() ?? 0)
@@ -894,7 +902,7 @@ struct ExerciseDetailScreen: View {
         var rows: [RecentSessionRow] = []
         for session in completedSessions {
             guard let exercise = session.orderedExercises.first(where: {
-                $0.name.lowercased() == nameKey
+                $0.matchesCatalogItem(item)
             }) else { continue }
             let completed = exercise.sets.filter(\.isCompleted)
             guard !completed.isEmpty else { continue }

@@ -122,10 +122,10 @@ struct HistoryScreen: View {
     }
 
     /// IDs of sessions in which at least one exercise hit a new
-    /// all-time top-weight at the moment it was logged. Walks the
-    /// archive in chronological order, tracking the running max per
-    /// exercise name. Matches the PR-celebration semantics the user
-    /// already saw live.
+    /// all-time record at the moment it was logged. Reps exercises
+    /// track top weight; duration exercises track longest hold. Walks
+    /// the archive in chronological order, keyed by stable exercise
+    /// identity.
     private var sessionsWithPR: Set<UUID> {
         var bestByExercise: [String: Double] = [:]
         var prIDs: Set<UUID> = []
@@ -134,15 +134,12 @@ struct HistoryScreen: View {
         let chronological = sessions.reversed()
         for session in chronological {
             for exercise in session.orderedExercises {
-                let topWeight = exercise.sets
-                    .filter(\.isCompleted)
-                    .map(\.weight)
-                    .max() ?? 0
-                guard topWeight > 0 else { continue }
-                let key = exercise.name.lowercased()
+                let metric = prMetric(for: exercise)
+                guard metric > 0 else { continue }
+                let key = exercise.historyKey
                 let prev = bestByExercise[key, default: 0]
-                if topWeight > prev {
-                    bestByExercise[key] = topWeight
+                if metric > prev {
+                    bestByExercise[key] = metric
                     prIDs.insert(session.id)
                 }
             }
@@ -180,7 +177,7 @@ struct HistoryScreen: View {
             let date = session.completedAt ?? session.startedAt
             guard date >= weekRange.start && date < weekRange.end else { continue }
             for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted {
+                for set in exercise.sets where set.isCompleted && set.rirLogged {
                     rirSum += set.repsInReserve
                     rirCount += 1
                 }
@@ -188,6 +185,16 @@ struct HistoryScreen: View {
         }
         guard rirCount > 0 else { return nil }
         return Double(rirSum) / Double(rirCount)
+    }
+
+    private func prMetric(for exercise: Exercise) -> Double {
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch exercise.trackingMode {
+        case .reps:
+            return completed.map(\.weight).max() ?? 0
+        case .duration:
+            return completed.map(\.duration).max() ?? 0
+        }
     }
 
 }
@@ -479,6 +486,7 @@ private struct SessionRow: View {
         .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
         .padding(.vertical, Space.md)
         .contentShape(Rectangle())
+        .accessibilityIdentifier("historySessionRow")
     }
 
     /// The lone accent in the list: a small outlined "PR" tag next to

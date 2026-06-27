@@ -4,14 +4,15 @@
 //
 //  Top-level @Observable container for shell-only concerns:
 //    • which tab is selected
-//    • the currently-presented WorkoutSession (transient)
+//    • the currently-presented WorkoutSession (persisted draft)
 //    • whether the workout sheet is expanded vs. minimized
 //    • the planned workout for today
 //
 //  Persistent history is owned by SwiftData and queried directly by
 //  views (HistoryScreen, TodayScreen) via @Query — AppState no
-//  longer keeps a `completedSessions` array. On archive, the active
-//  session is inserted into the injected modelContext and saved.
+//  longer keeps a `completedSessions` array. Active sessions are
+//  inserted as drafts immediately and become history when completedAt
+//  is stamped on archive.
 //
 
 import SwiftUI
@@ -47,9 +48,11 @@ enum AppTab: String, CaseIterable, Hashable {
 final class AppState {
     var selectedTab: AppTab = .today
 
-    /// The currently-active workout session, if any. Lives transient
-    /// (not inserted in the modelContext) until archived. When non-nil
-    /// the MiniBar appears in the tab bar's bottom-accessory slot.
+    /// The currently-active workout session, if any. Stored as a
+    /// SwiftData draft (`completedAt == nil`) from the moment it starts
+    /// so progress can be restored after a crash, force quit, or OS
+    /// reclaim. When non-nil the MiniBar appears in the tab bar's
+    /// bottom-accessory slot.
     var activeSession: WorkoutSession?
 
     /// Whether the ActiveWorkoutScreen is presented as a sheet.
@@ -69,6 +72,22 @@ final class AppState {
     var lastSaveError: SaveErrorBox? = nil
 
     // MARK: - Workout lifecycle
+
+    /// Restore the newest unarchived workout draft from disk. Called
+    /// once AppRoot wires the model context. The sheet stays minimized
+    /// on restore so a relaunch lands calmly on Today with the MiniBar
+    /// ready to resume.
+    func restoreActiveWorkoutIfNeeded() {
+        guard activeSession == nil, let context = modelContext else { return }
+        var descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil },
+            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+        )
+        descriptor.fetchLimit = 1
+        guard let session = try? context.fetch(descriptor).first else { return }
+        activeSession = session
+        isWorkoutExpanded = false
+    }
 
     /// Start a workout. Optionally provide a `template` session to
     /// repeat its structure (typically the most recent archived
@@ -90,8 +109,7 @@ final class AppState {
             // exercises from the active workout's empty state.
             plan = []
         }
-        activeSession = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
-        isWorkoutExpanded = true   // the first action is the moment of intent
+        beginActiveWorkout(with: plan)
     }
 
     /// Start a workout from a saved template. Each TemplateExercise
@@ -104,10 +122,9 @@ final class AppState {
             return
         }
         let plan = template.orderedExercises.map(Exercise.init(from:))
-        activeSession = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
-        isWorkoutExpanded = true
-        template.lastUsedAt = Date()
-        try? modelContext?.saveOrRollback()
+        beginActiveWorkout(with: plan) {
+            template.lastUsedAt = Date()
+        }
     }
 
     /// The user's preferred default rest in seconds, as a TimeInterval.
@@ -121,6 +138,31 @@ final class AppState {
         return TimeInterval(seconds)
     }
 
+    /// Insert and save a new draft workout before showing it. Without
+    /// a model context (previews), falls back to an in-memory session.
+    private func beginActiveWorkout(
+        with plan: [Exercise],
+        beforeSave: (() -> Void)? = nil
+    ) {
+        let session = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
+        guard let context = modelContext else {
+            beforeSave?()
+            activeSession = session
+            isWorkoutExpanded = true
+            return
+        }
+
+        context.insert(session)
+        beforeSave?()
+        do {
+            try context.saveOrRollback()
+            activeSession = session
+            isWorkoutExpanded = true
+        } catch {
+            lastSaveError = SaveErrorBox(error)
+        }
+    }
+
     /// Collapse the active workout into the MiniBar. Session continues.
     func minimizeWorkout() {
         isWorkoutExpanded = false
@@ -132,13 +174,22 @@ final class AppState {
         isWorkoutExpanded = true
     }
 
-    /// Throw the active workout away without archiving. Used when
-    /// the user explicitly decided this session shouldn't be
-    /// recorded — started by mistake, switched programs mid-warmup,
-    /// etc. Any logged sets are lost. Distinct from
-    /// `dismissActiveWorkout()`, which auto-archives whenever sets
-    /// have been logged.
+    /// Throw the active workout away without archiving. Used when the
+    /// user explicitly decided this session shouldn't be recorded —
+    /// started by mistake, switched programs mid-warmup, etc. Any
+    /// logged sets are lost. Deletes the persisted draft as well as
+    /// clearing shell state.
     func discardActiveWorkout() {
+        guard let session = activeSession else { return }
+        if let context = modelContext {
+            context.delete(session)
+            do {
+                try context.saveOrRollback()
+            } catch {
+                lastSaveError = SaveErrorBox(error)
+                return
+            }
+        }
         activeSession = nil
         isWorkoutExpanded = false
     }
@@ -152,6 +203,15 @@ final class AppState {
     /// workout and can retry, so no set is lost.
     func dismissActiveWorkout() {
         guard let session = activeSession, session.totalSets > 0 else {
+            if let session = activeSession, let context = modelContext {
+                context.delete(session)
+                do {
+                    try context.saveOrRollback()
+                } catch {
+                    lastSaveError = SaveErrorBox(error)
+                    return
+                }
+            }
             activeSession = nil
             isWorkoutExpanded = false
             return
@@ -171,7 +231,6 @@ final class AppState {
             isWorkoutExpanded = false
             return
         }
-        context.insert(session)
         do {
             try context.saveOrRollback()
             activeSession = nil

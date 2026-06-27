@@ -33,14 +33,18 @@ struct ActiveWorkoutScreen: View {
     /// conflict.
     private let onDismiss: (() -> Void)?
 
-    /// Optional discard callback. When provided, the top-bar X
-    /// button appears. Tapping it shows a confirmation alert; on
-    /// confirm the session is thrown away — any logged sets are
-    /// lost. Distinct from `onDismiss`, which archives.
+    /// Optional discard callback. When provided, the top-bar X button
+    /// appears. Tapping it shows an end-workout alert; logged workouts
+    /// can be saved from there, while empty workouts only discard.
+    /// Distinct from `onDismiss`, which archives.
     private let onDiscard: (() -> Void)?
 
     /// Drives the discard confirmation alert.
     @State private var showDiscardConfirm: Bool = false
+
+    /// Surfaces failures from draft autosaves while the workout stays
+    /// open so the user can retry with their current in-memory state.
+    @State private var saveError: SaveErrorBox? = nil
 
     /// Drives the catalog picker for mid-workout exercise add.
     @State private var showAddExercisePicker: Bool = false
@@ -100,15 +104,26 @@ struct ActiveWorkoutScreen: View {
         // entire workout to the mini-bar mid-ceremony.
         .interactiveDismissDisabled(session.pendingPRValue != nil)
         .onAppear { Haptics.prepare() }
-        .alert("Discard this workout?", isPresented: $showDiscardConfirm) {
-            Button("Discard", role: .destructive) {
-                Haptics.soft()
-                onDiscard?()
+        .alert(endWorkoutAlertTitle, isPresented: $showDiscardConfirm) {
+            if session.totalSets > 0 {
+                Button("Save Workout") {
+                    Haptics.soft()
+                    onDismiss?()
+                }
+                Button("Discard", role: .destructive) {
+                    Haptics.soft()
+                    onDiscard?()
+                }
+            } else {
+                Button("Discard", role: .destructive) {
+                    Haptics.soft()
+                    onDiscard?()
+                }
             }
             Button("Cancel", role: .cancel) { }
         } message: {
             if session.totalSets > 0 {
-                Text("Your \(session.totalSets) logged set\(session.totalSets == 1 ? "" : "s") won't be saved.")
+                Text("Save \(session.totalSets) logged set\(session.totalSets == 1 ? "" : "s") to History, or discard this workout.")
             } else {
                 Text("This workout will be removed.")
             }
@@ -118,6 +133,7 @@ struct ActiveWorkoutScreen: View {
                 appendExercise(from: item)
             }
         }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Mid-workout add
@@ -147,6 +163,7 @@ struct ActiveWorkoutScreen: View {
         // Otherwise the add came from the top-bar chip mid-exercise:
         // leave the pager where it is — earlier indices are
         // unaffected by an append.
+        saveActiveSessionChanges()
         Haptics.soft()
     }
 
@@ -157,7 +174,7 @@ struct ActiveWorkoutScreen: View {
     /// catalog defaults (3 sets at the catalog reps × weight). Either
     /// way the count is then adjustable in the card (+ / − a set).
     private func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
-        if let last = mostRecentLoggedExercise(named: item.name) {
+        if let last = mostRecentLoggedExercise(matching: item) {
             let copy = Exercise.freshCopy(of: last)
             copy.sortOrder = sortOrder
             return copy
@@ -165,16 +182,15 @@ struct ActiveWorkoutScreen: View {
         return Exercise(from: item, sortOrder: sortOrder)
     }
 
-    /// The same-named exercise from the most recently completed
-    /// session, or nil if the user has never logged it. The current
-    /// in-flight session is un-inserted, so it never matches here.
-    private func mostRecentLoggedExercise(named name: String) -> Exercise? {
-        let descriptor = FetchDescriptor<Exercise>(
-            predicate: #Predicate { $0.name == name }
-        )
+    /// The same catalog exercise from the most recently completed
+    /// session, or nil if the user has never logged it. Stable catalog
+    /// ID wins; name fallback only covers legacy history from before
+    /// exercises stored that ID.
+    private func mostRecentLoggedExercise(matching item: ExerciseCatalogItem) -> Exercise? {
+        let descriptor = FetchDescriptor<Exercise>()
         let matches = (try? modelContext.fetch(descriptor)) ?? []
         return matches
-            .filter { $0.session?.completedAt != nil }
+            .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }
             .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
     }
 
@@ -265,7 +281,8 @@ struct ActiveWorkoutScreen: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Cancel workout")
+        .accessibilityLabel(session.totalSets > 0 ? "End workout" : "Cancel workout")
+        .accessibilityIdentifier("endWorkoutButton")
     }
 
     // MARK: - Empty state
@@ -325,6 +342,17 @@ struct ActiveWorkoutScreen: View {
     private var isEmpty: Bool { session.orderedExercises.isEmpty }
     private var completedSetCount: Int { session.totalSets }
     private var totalSetCount: Int     { session.totalPlannedSets }
+    private var endWorkoutAlertTitle: String {
+        session.totalSets > 0 ? "End this workout?" : "Discard this workout?"
+    }
+
+    private func saveActiveSessionChanges() {
+        do {
+            try modelContext.save()
+        } catch {
+            saveError = SaveErrorBox(error)
+        }
+    }
 }
 
 #Preview("Active Workout") {

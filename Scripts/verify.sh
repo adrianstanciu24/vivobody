@@ -20,9 +20,10 @@ SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 17 Pro}"
 SIMULATOR_OS="${SIMULATOR_OS:-26.5}"
 SCHEME="vivobody"
 BUNDLE_ID="astanciu.vivobody.app"
-DERIVED="$ROOT/build"
-APP_PATH="$DERIVED/Build/Products/Debug-iphonesimulator/${SCHEME}.app"
 OUT_DIR="$ROOT/.verify"
+DERIVED="$OUT_DIR/DerivedData"
+APP_PATH="$DERIVED/Build/Products/Debug-iphonesimulator/${SCHEME}.app"
+BUILD_LOG="$OUT_DIR/build.log"
 TAB="${TAB:-}"
 
 mkdir -p "$OUT_DIR"
@@ -33,14 +34,21 @@ if ! command -v baguette >/dev/null 2>&1; then
 fi
 
 echo "▸ Building $SCHEME (destination: $SIMULATOR_NAME, iOS $SIMULATOR_OS)..."
-xcodebuild \
+rm -rf "$DERIVED"
+if ! xcodebuild \
   -project vivobody.xcodeproj \
   -scheme "$SCHEME" \
   -configuration Debug \
   -destination "platform=iOS Simulator,name=${SIMULATOR_NAME},OS=${SIMULATOR_OS}" \
   -derivedDataPath "$DERIVED" \
-  build 2>&1 \
-  | grep -E "(warning:|error:|BUILD SUCCEEDED|BUILD FAILED)" \
+  build >"$BUILD_LOG" 2>&1; then
+  grep -E "(warning:|error:|BUILD SUCCEEDED|BUILD FAILED)" "$BUILD_LOG" \
+    | grep -v "AppIntents.framework dependency" || true
+  echo "error: xcodebuild failed; full log at $BUILD_LOG" >&2
+  exit 1
+fi
+
+grep -E "(warning:|error:|BUILD SUCCEEDED|BUILD FAILED)" "$BUILD_LOG" \
   | grep -v "AppIntents.framework dependency" || true
 
 if [[ ! -d "$APP_PATH" ]]; then
@@ -97,7 +105,7 @@ else
 fi
 
 echo "▸ Capturing screenshot + UI tree..."
-baguette screenshot --udid "$UDID" --output "${STEM}.jpg" >/dev/null 2>&1
+xcrun simctl io "$UDID" screenshot "${STEM}.jpg" >/dev/null
 baguette describe-ui --udid "$UDID" --output "${STEM}-ui.json" >/dev/null 2>&1
 
 echo ""

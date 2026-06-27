@@ -11,10 +11,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EditSetSheet: View {
     @Bindable var set: WorkoutSet
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @State private var saveError: SaveErrorBox? = nil
 
     /// The set's tracking mode comes from its owning exercise —
     /// decides whether we edit reps or a held interval.
@@ -113,6 +116,7 @@ struct EditSetSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         Haptics.soft()
+                        save()
                         dismiss()
                     }
                     .fontWeight(.semibold)
@@ -121,6 +125,19 @@ struct EditSetSheet: View {
         }
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
+        .onChange(of: set.weight) { _, _ in save() }
+        .onChange(of: set.reps) { _, _ in save() }
+        .onChange(of: set.duration) { _, _ in save() }
+        .onChange(of: set.repsInReserve) { _, _ in save() }
+        .saveErrorAlert($saveError)
+    }
+
+    private func save() {
+        do {
+            try modelContext.save()
+        } catch {
+            saveError = SaveErrorBox(error)
+        }
     }
 }
 

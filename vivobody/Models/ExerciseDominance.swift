@@ -13,9 +13,8 @@
 //  `.reps` set across the whole archive (no window — lifetime).
 //  Timed holds (`.duration` mode) carry no weight×reps and are
 //  excluded, same as `WorkoutSession.totalVolume`. Incomplete sets
-//  are excluded. Exercises are grouped by name (case-insensitive,
-//  first-seen original casing preserved for display), so "Bench
-//  Press" and "bench press" log as one lift.
+//  are excluded. Exercises are grouped by copied catalog identity,
+//  falling back to normalized name for legacy history.
 //
 //  Pure value-type computation on injected dates, so it's testable
 //  on a virtual clock (see `ExerciseDominanceTests`).
@@ -29,9 +28,9 @@ import Foundation
 /// accumulated volume (canonical lb), and share of the archive's
 /// total tonnage (`0…1`).
 nonisolated struct ExerciseDominanceStat: Identifiable, Hashable {
-    /// The exercise name (original casing from first sighting) —
-    /// also the SwiftUI identity.
-    var id: String { name }
+    var id: String { historyKey }
+    let historyKey: String
+    /// The exercise name (original casing from first sighting).
     let name: String
     let group: MuscleGroup
     let volume: Double      // lifetime tonnage, canonical lb
@@ -64,41 +63,42 @@ nonisolated struct ExerciseDominanceBoard {
 extension Array where Element == WorkoutSession {
     /// Lifetime tonnage share per exercise, ranked descending.
     /// Iterates every session, sums `weight × reps` over completed
-    /// `.reps` sets, groups by exercise name (case-insensitive),
+    /// `.reps` sets, groups by copied exercise identity,
     /// and converts each lift's volume into a share of the total.
     /// `now` is accepted for API symmetry with the other stat
     /// aggregators; dominance is a lifetime (unwindowed) read, so
     /// `now` is unused.
     func exerciseDominance(now: Date = Date()) -> ExerciseDominanceBoard {
-        // Bucket keyed by lowercased name; preserves the first-seen
-        // original-cased display name and the muscle group.
-        var byName: [String: (display: String, group: MuscleGroup, volume: Double)] = [:]
+        // Bucket keyed by stable identity; preserves the first-seen
+        // display name and the muscle group.
+        var byExercise: [String: (display: String, group: MuscleGroup, volume: Double)] = [:]
 
         for session in self {
             for exercise in session.orderedExercises where exercise.trackingMode == .reps {
-                let key = exercise.name.lowercased()
+                let key = exercise.historyKey
                 let volume = exercise.sets
                     .filter(\.isCompleted)
                     .reduce(0) { $0 + $1.weight * Double($1.reps) }
                 guard volume > 0 else { continue }
 
-                if var bucket = byName[key] {
+                if var bucket = byExercise[key] {
                     bucket.volume += volume
-                    byName[key] = bucket
+                    byExercise[key] = bucket
                 } else {
-                    byName[key] = (display: exercise.name, group: exercise.group, volume: volume)
+                    byExercise[key] = (display: exercise.name, group: exercise.group, volume: volume)
                 }
             }
         }
 
-        let totalVolume = byName.values.reduce(0) { $0 + $1.volume }
+        let totalVolume = byExercise.values.reduce(0) { $0 + $1.volume }
         guard totalVolume > 0 else {
             return ExerciseDominanceBoard(stats: [], totalVolume: 0)
         }
 
-        let stats = byName
-            .map { (_, bucket) -> ExerciseDominanceStat in
+        let stats = byExercise
+            .map { key, bucket -> ExerciseDominanceStat in
                 ExerciseDominanceStat(
+                    historyKey: key,
                     name: bucket.display,
                     group: bucket.group,
                     volume: bucket.volume,

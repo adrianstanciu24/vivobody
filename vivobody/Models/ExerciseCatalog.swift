@@ -11,9 +11,9 @@
 //  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
 //  to populate it from the bundled `catalog.json` (see `CatalogData`). After
 //  that, user adds/edits/deletes flow through SwiftData like any
-//  other model. Templates and sessions don't hold references — they
-//  copy `name`, `group`, `defaultWeight`, `defaultReps` at creation
-//  time — so deleting a catalog item never breaks existing history.
+//  other model. Templates and sessions copy stable catalog IDs plus
+//  display fields at creation time, so renaming a catalog item keeps
+//  history connected while deleting one never breaks old workouts.
 //
 
 import Foundation
@@ -159,6 +159,7 @@ final class ExerciseCatalogItem: Identifiable {
     var name: String = ""
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var defaultWeight: Double = 0
+    var defaultReps: Int = 8
 
     /// Native kg starting weight (a multiple of 2.5 kg) for kg users,
     /// so a kg scrubber seeds on a clean detent instead of an off-grid
@@ -262,14 +263,6 @@ final class ExerciseCatalogItem: Identifiable {
         defaultWeight(forUnit: .current)
     }
 
-    /// Default starting reps, derived from mechanic rather than stored
-    /// per-exercise: compound lifts seed lower (heavier work), isolation
-    /// higher. Used only to seed a freshly-picked template / workout
-    /// exercise; the user adjusts from there.
-    var defaultReps: Int {
-        mechanic == .compound ? 8 : 12
-    }
-
     /// Computed accessor for the tracking-mode enum.
     var trackingMode: TrackingMode {
         get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
@@ -310,12 +303,12 @@ final class ExerciseCatalogItem: Identifiable {
         set { lateralityRaw = newValue.rawValue }
     }
 
-    /// Muscles worked, with their graded contribution weights,
-    /// resolved by name from the curated catalog map (the single
-    /// source of truth). Custom names the map doesn't know resolve
-    /// to `.empty`.
+    /// Muscles worked, with their graded contribution weights. Seeded
+    /// items resolve from the curated catalog map; custom names fall
+    /// back to their coarse muscle group so analytics still count
+    /// user-created exercises.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.involvement(forExerciseNamed: name)
+        Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
     }
 
     init(
@@ -323,6 +316,7 @@ final class ExerciseCatalogItem: Identifiable {
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
+        defaultReps: Int? = nil,
         defaultWeightKg: Double? = nil,
         trackingMode: TrackingMode = .reps,
         defaultDuration: TimeInterval = 0,
@@ -340,6 +334,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.name = name
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
+        self.defaultReps = defaultReps ?? (mechanic == .compound ? 8 : 12)
         self.defaultWeightKg = defaultWeightKg
         self.trackingModeRaw = trackingMode.rawValue
         self.defaultDuration = defaultDuration
@@ -366,6 +361,7 @@ extension ExerciseCatalogItem {
             name: record.name,
             group: record.muscleGroup,
             defaultWeight: record.defaultWeightValue,
+            defaultReps: record.defaultRepsValue,
             defaultWeightKg: record.defaultWeightKgValue,
             trackingMode: record.trackingModeValue,
             defaultDuration: record.defaultDurationValue,
@@ -421,6 +417,110 @@ extension ExerciseCatalogItem {
         }
         try? context.saveOrRollback()
         seedIfEmpty(in: context)
+    }
+
+    /// Link legacy copied exercises/templates to catalog rows when the
+    /// current names still match, and snapshot muscle involvement so
+    /// custom/renamed exercises keep contributing to analytics. Safe
+    /// to run repeatedly; it only fills missing additive fields.
+    static func backfillCopiedExerciseIdentity(in context: ModelContext) {
+        let items = (try? context.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
+        guard !items.isEmpty else { return }
+
+        let itemsByName = Dictionary(
+            items.map { ($0.name.exerciseIdentityName, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+        let itemsByID = Dictionary(
+            items.map { ($0.id, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        var changed = false
+
+        let exercises = (try? context.fetch(FetchDescriptor<Exercise>())) ?? []
+        for exercise in exercises {
+            let item = exercise.catalogItemID.flatMap { itemsByID[$0] }
+                ?? itemsByName[exercise.name.exerciseIdentityName]
+            if exercise.catalogItemID == nil, let item {
+                exercise.catalogItemID = item.id
+                changed = true
+            }
+            if exercise.muscleInvolvementSnapshot.isEmpty {
+                let involvement = item?.muscleInvolvement
+                    ?? Muscle.involvement(forExerciseNamed: exercise.name, fallbackGroup: exercise.group)
+                exercise.muscleInvolvementSnapshot = involvement.snapshot
+                changed = true
+            }
+        }
+
+        let templateExercises = (try? context.fetch(FetchDescriptor<TemplateExercise>())) ?? []
+        for exercise in templateExercises {
+            let item = exercise.catalogItemID.flatMap { itemsByID[$0] }
+                ?? itemsByName[exercise.name.exerciseIdentityName]
+            if exercise.catalogItemID == nil, let item {
+                exercise.catalogItemID = item.id
+                changed = true
+            }
+            if exercise.muscleInvolvementSnapshot.isEmpty {
+                let involvement = item?.muscleInvolvement
+                    ?? Muscle.involvement(forExerciseNamed: exercise.name, fallbackGroup: exercise.group)
+                exercise.muscleInvolvementSnapshot = involvement.snapshot
+                changed = true
+            }
+        }
+
+        if changed {
+            try? context.saveOrRollback()
+        }
+    }
+}
+
+// MARK: - Exercise identity
+
+nonisolated enum ExerciseIdentity {
+    static func key(catalogItemID: UUID?, name: String) -> String {
+        if let catalogItemID {
+            return "catalog:\(catalogItemID.uuidString)"
+        }
+        return nameKey(name)
+    }
+
+    static func nameKey(_ name: String) -> String {
+        "name:\(name.exerciseIdentityName)"
+    }
+}
+
+extension String {
+    nonisolated var exerciseIdentityName: String {
+        lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+extension ExerciseCatalogItem {
+    var historyKey: String {
+        ExerciseIdentity.key(catalogItemID: id, name: name)
+    }
+
+    var legacyHistoryKey: String {
+        ExerciseIdentity.nameKey(name)
+    }
+}
+
+extension Exercise {
+    var historyKey: String {
+        ExerciseIdentity.key(catalogItemID: catalogItemID, name: name)
+    }
+
+    var legacyHistoryKey: String {
+        ExerciseIdentity.nameKey(name)
+    }
+
+    func matchesCatalogItem(_ item: ExerciseCatalogItem) -> Bool {
+        if let catalogItemID {
+            return catalogItemID == item.id
+        }
+        return name.exerciseIdentityName == item.name.exerciseIdentityName
     }
 }
 

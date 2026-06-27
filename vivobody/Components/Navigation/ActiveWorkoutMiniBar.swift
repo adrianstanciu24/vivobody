@@ -34,6 +34,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
@@ -44,6 +45,7 @@ struct ActiveWorkoutMiniBar: View {
     private let readyTint      = Ink.secondary
 
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
@@ -67,11 +69,13 @@ struct ActiveWorkoutMiniBar: View {
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
+        .accessibilityIdentifier("activeWorkoutMiniBar")
         .accessibilityHint("Tap to expand workout")
         .task(id: restJustExpired(now: now)) {
             if restJustExpired(now: now) {
                 Haptics.swell()
                 session.skipRest()
+                try? modelContext.save()
             }
         }
     }
@@ -211,6 +215,9 @@ struct ActiveWorkoutMiniBar: View {
     /// transition.
     private func restJustExpired(now: Date) -> Bool {
         guard session.isResting else { return false }
+        if let deadline = session.restEndsAt {
+            return now >= deadline
+        }
         guard let started = session.restStartedAt else { return false }
         return now.timeIntervalSince(started) >= session.restDuration
     }

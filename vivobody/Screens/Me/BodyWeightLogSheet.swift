@@ -13,7 +13,9 @@
 //    • New + date already has an entry → save UPDATES that entry
 //      (no duplicates per day in the default flow).
 //    • New + date has no entry → save inserts a fresh row.
-//    • Editing an existing entry → save mutates the original.
+//    • Editing an existing entry → save mutates the original, unless
+//      the new date already has another row; then it merges into that
+//      row and deletes the duplicate.
 //
 //  Sheet is reused from both the Me-tab card (empty state) and the
 //  BodyWeightDetail screen.
@@ -184,8 +186,14 @@ struct BodyWeightLogSheet: View {
                 context.insert(entry)
             }
         case .edit(let entry):
-            entry.weight = weight
-            entry.date = date
+            if let existing = entries.entry(on: date), existing.id != entry.id {
+                existing.weight = weight
+                existing.date = date
+                context.delete(entry)
+            } else {
+                entry.weight = weight
+                entry.date = date
+            }
         }
 
         do {

@@ -592,7 +592,7 @@ private struct LibraryExercisesContent: View {
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
         let trackedCount = items.reduce(into: 0) { acc, item in
-            if lastInstanceLookup[item.name.lowercased()] != nil { acc += 1 }
+            if lastInstance(for: item) != nil { acc += 1 }
         }
 
         return VStack(alignment: .leading, spacing: Space.sm) {
@@ -621,7 +621,7 @@ private struct LibraryExercisesContent: View {
     /// elevated-recent / quiet-older split, keyed on the exercise's
     /// last-performed date.
     private func row(_ item: ExerciseCatalogItem) -> some View {
-        let last = lastInstanceLookup[item.name.lowercased()]
+        let last = lastInstance(for: item)
         let isRecent: Bool = {
             guard let last else { return false }
             let days = Calendar.current.dateComponents(
@@ -727,6 +727,10 @@ private struct LibraryExercisesContent: View {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
         }
+    }
+
+    private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
+        lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
     }
 
     /// Mode-aware right-side default for an exercise with no history —

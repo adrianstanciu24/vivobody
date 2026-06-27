@@ -29,6 +29,7 @@ import SwiftData
 struct AppRoot: View {
     @State private var appState = AppState()
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
 
     /// The user's light/dark/system choice. Drives the whole window's
     /// color scheme (system resolving to nil so the OS decides).
@@ -57,10 +58,23 @@ struct AppRoot: View {
                 if appState.modelContext == nil {
                     appState.modelContext = modelContext
                 }
+#if DEBUG
+                UITestSupport.resetIfRequested(in: modelContext)
+#endif
                 // Seed the exercise catalog on a brand-new install.
                 // Idempotent — bails if anything's already there, so
                 // re-runs after migrations are cheap.
                 ExerciseCatalogItem.seedIfEmpty(in: modelContext)
+#if DEBUG
+                UITestSupport.seedIfRequested(in: modelContext)
+#endif
+                ExerciseCatalogItem.backfillCopiedExerciseIdentity(in: modelContext)
+                appState.restoreActiveWorkoutIfNeeded()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active, appState.activeSession != nil {
+                    try? modelContext.save()
+                }
             }
             .sheet(isPresented: $appState.isWorkoutExpanded) {
                 if let session = appState.activeSession {

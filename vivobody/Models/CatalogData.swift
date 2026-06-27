@@ -45,6 +45,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let group: String
     let defaultWeight: Double?
     let defaultWeightKg: Double?
+    let reps: Int?
     let trackingMode: String?
     let defaultDuration: TimeInterval?
     let equipment: String?
@@ -60,6 +61,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
 
     var muscleGroup: MuscleGroup { MuscleGroup(rawValue: group) ?? .chest }
     var defaultWeightValue: Double { defaultWeight ?? 0 }
+    var defaultRepsValue: Int { reps ?? (mechanicValue == .compound ? 8 : 12) }
     /// Native kg seed (multiple of 2.5 kg), or nil for unloaded /
     /// uncurated records — those fall back to the lb default.
     var defaultWeightKgValue: Double? { defaultWeightKg }

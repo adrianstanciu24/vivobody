@@ -188,6 +188,24 @@ nonisolated extension Muscle {
             self.contributions = contributions
         }
 
+        init(snapshot: [String: Double]) {
+            let weightsByMuscle = Dictionary(
+                snapshot.compactMap { raw, weight -> (Muscle, Double)? in
+                    guard let muscle = Muscle(rawValue: raw), weight > 0 else { return nil }
+                    return (muscle, weight)
+                },
+                uniquingKeysWith: max
+            )
+            self.contributions = Muscle.allCases.compactMap { muscle in
+                guard let weight = weightsByMuscle[muscle] else { return nil }
+                return (muscle: muscle, weight: weight)
+            }
+        }
+
+        var snapshot: [String: Double] {
+            Dictionary(contributions.map { ($0.muscle.rawValue, $0.weight) }, uniquingKeysWith: max)
+        }
+
         /// Effort multiplier per muscle, deduplicated by max.
         var weights: [Muscle: Double] {
             Dictionary(contributions.map { ($0.muscle, $0.weight) }, uniquingKeysWith: max)
@@ -203,12 +221,36 @@ nonisolated extension Muscle {
         var isEmpty: Bool { contributions.isEmpty }
     }
 
+    /// Coarse fallback for custom or renamed exercises that have no
+    /// curated catalog entry. This keeps user-created work visible in
+    /// muscle analytics instead of disappearing entirely.
+    static func defaultInvolvement(for group: MuscleGroup) -> Involvement {
+        switch group {
+        case .chest:
+            return Involvement(contributions: [(.pectorals, Involvement.prime)])
+        case .back:
+            return Involvement(contributions: [(.lats, Involvement.prime), (.traps, Involvement.major), (.rhomboids, Involvement.major)])
+        case .shoulders:
+            return Involvement(contributions: [(.deltoids, Involvement.prime)])
+        case .legs:
+            return Involvement(contributions: [(.quads, Involvement.prime), (.hamstrings, Involvement.major), (.glutes, Involvement.major)])
+        case .arms:
+            return Involvement(contributions: [(.biceps, Involvement.prime), (.triceps, Involvement.prime), (.forearms, Involvement.minor)])
+        case .core:
+            return Involvement(contributions: [(.abs, Involvement.prime), (.obliques, Involvement.major)])
+        }
+    }
+
     /// Graded muscle involvement for an exercise, resolved by name
     /// (case-insensitive) from the bundled catalog (`CatalogData`).
-    /// Returns `.empty` for unknown names (e.g. user-created lifts the
-    /// catalog never shipped). The single source of truth every
-    /// `muscleInvolvement` resolver reads from.
+    /// Unknown names fall back to a coarse group map when provided so
+    /// custom exercises still contribute to analytics.
     static func involvement(forExerciseNamed name: String) -> Involvement {
         CatalogData.record(forExerciseNamed: name)?.muscleInvolvement ?? .empty
+    }
+
+    static func involvement(forExerciseNamed name: String, fallbackGroup group: MuscleGroup) -> Involvement {
+        let curated = involvement(forExerciseNamed: name)
+        return curated.isEmpty ? defaultInvolvement(for: group) : curated
     }
 }

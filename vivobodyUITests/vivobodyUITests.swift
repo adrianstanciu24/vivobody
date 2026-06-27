@@ -2,7 +2,9 @@
 //  vivobodyUITests.swift
 //  vivobodyUITests
 //
-//  Created by Adrian Stanciu on 18.05.2026.
+//  UI workflow coverage for active-workout persistence and partial
+//  save behavior. Tests launch with debug-only seed arguments so each
+//  run starts from deterministic on-device SwiftData state.
 //
 
 import XCTest
@@ -10,34 +12,63 @@ import XCTest
 final class vivobodyUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
+    func testActiveWorkoutDraftRestoresAfterRelaunch() throws {
+        var app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
+        waitFor(app.buttons["activeWorkoutMiniBar"])
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // XCUIAutomation Documentation
-        // https://developer.apple.com/documentation/xcuiautomation
+        app.terminate()
+
+        app = launchApp(arguments: ["--ui-test-active-partial"])
+        waitFor(app.buttons["activeWorkoutMiniBar"])
+    }
+
+    @MainActor
+    func testPartialWorkoutCanBeSavedToHistory() throws {
+        let app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
+
+        waitFor(app.buttons["activeWorkoutMiniBar"]).tap()
+        waitFor(app.buttons["endWorkoutButton"]).tap()
+        waitFor(app.buttons["Save Workout"]).tap()
+
+        XCTAssertFalse(app.buttons["activeWorkoutMiniBar"].waitForExistence(timeout: 1))
+
+        tapTab("History", in: app)
+        waitFor(app.descendants(matching: .any)["historySessionRow"])
     }
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }
+    }
+
+    @MainActor
+    private func launchApp(arguments: [String] = []) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = arguments
+        app.launch()
+        return app
+    }
+
+    @MainActor
+    @discardableResult
+    private func waitFor(_ element: XCUIElement, timeout: TimeInterval = 5) -> XCUIElement {
+        XCTAssertTrue(element.waitForExistence(timeout: timeout), "Timed out waiting for \(element)")
+        return element
+    }
+
+    @MainActor
+    private func tapTab(_ name: String, in app: XCUIApplication) {
+        let tabButton = app.tabBars.buttons[name]
+        if tabButton.waitForExistence(timeout: 2) {
+            tabButton.tap()
+            return
+        }
+        waitFor(app.buttons[name]).tap()
     }
 }

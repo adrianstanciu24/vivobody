@@ -80,6 +80,7 @@ def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
     rec = {
         "group": group,
         "defaultWeight": weight,
+        "reps": reps,
         "equipment": equipment,
         "mechanic": mechanic,
         "plane": plane,
@@ -1346,6 +1347,8 @@ def validate(name, body):
     if "pattern" in body and body["pattern"] not in PATTERNS: errs.append(f"pattern '{body['pattern']}'")
     if body["plane"] not in PLANES: errs.append(f"plane '{body['plane']}'")
     if body["laterality"] not in LATERALITIES: errs.append(f"laterality '{body['laterality']}'")
+    if not isinstance(body["reps"], int) or body["reps"] < 1:
+        errs.append(f"reps '{body['reps']}'")
     if "trackingMode" in body and body["trackingMode"] not in TRACKING: errs.append("trackingMode")
     for c in body["involvement"]:
         if c["muscle"] not in MUSCLES: errs.append(f"muscle '{c['muscle']}'")

@@ -210,13 +210,12 @@ struct SessionDetailScreen: View {
     }
 
     /// Walks all completed sessions in chronological order up to and
-    /// including this one, tracking the running max weight per
-    /// exercise name. Any exercise in *this* session that crossed
-    /// its running max at the moment it was logged is flagged as a
-    /// PR. Same semantics as the PR detection on the History list,
-    /// scoped to one session.
+    /// including this one, tracking the running record per stable
+    /// exercise identity. Reps exercises track top weight; duration
+    /// exercises track longest hold. Same semantics as the PR
+    /// detection on the History list, scoped to one session.
     private var prExerciseIDs: Set<UUID> {
-        var bestByName: [String: Double] = [:]
+        var bestByExercise: [String: Double] = [:]
         var result: Set<UUID> = []
 
         let cutoff = session.completedAt ?? session.startedAt
@@ -224,12 +223,12 @@ struct SessionDetailScreen: View {
             let sTime = s.completedAt ?? s.startedAt
             if sTime > cutoff { break }
             for exercise in s.orderedExercises {
-                let topWeight = exercise.sets.filter(\.isCompleted).map(\.weight).max() ?? 0
-                guard topWeight > 0 else { continue }
-                let key = exercise.name.lowercased()
-                let prev = bestByName[key, default: 0]
-                if topWeight > prev {
-                    bestByName[key] = topWeight
+                let metric = prMetric(for: exercise)
+                guard metric > 0 else { continue }
+                let key = exercise.historyKey
+                let prev = bestByExercise[key, default: 0]
+                if metric > prev {
+                    bestByExercise[key] = metric
                     if s.id == session.id {
                         result.insert(exercise.id)
                     }
@@ -240,6 +239,16 @@ struct SessionDetailScreen: View {
     }
 
     private var sessionHasPR: Bool { !prExerciseIDs.isEmpty }
+
+    private func prMetric(for exercise: Exercise) -> Double {
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch exercise.trackingMode {
+        case .reps:
+            return completed.map(\.weight).max() ?? 0
+        case .duration:
+            return completed.map(\.duration).max() ?? 0
+        }
+    }
 }
 
 // MARK: - Per-exercise row

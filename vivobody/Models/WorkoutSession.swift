@@ -5,8 +5,9 @@
 //  Persistent @Model owner of one workout — in-flight or archived.
 //  Sets live on their exercise (`exercise.sets`); the session level
 //  rolls up aggregates and exposes the active-set mutations. The
-//  in-flight session lives un-inserted while the user is working;
-//  AppState calls modelContext.insert(session) on archive.
+//  in-flight sessions are inserted as drafts immediately while the
+//  user is working; AppState stamps completedAt when the user archives
+//  the workout so History queries can pick it up.
 //
 
 import SwiftUI
@@ -25,8 +26,9 @@ final class WorkoutSession: Identifiable {
     /// Wall-clock anchor for session duration. Captured at init.
     var startedAt: Date = Date()
 
-    /// Set the moment the final set of the final exercise is completed.
-    /// Stays nil while the workout is in progress.
+    /// Set when the user archives the workout. Stays nil for active
+    /// drafts, even after all planned sets are complete, so History
+    /// does not show a workout before the user taps Done / Save.
     var completedAt: Date?
 
     /// Duration (seconds) of each rest interval between sets. Stored
@@ -59,6 +61,7 @@ final class WorkoutSession: Identifiable {
     // WorkoutSummaryCard's `isHistorical: true` path.
     var isResting: Bool = false
     var restStartedAt: Date? = nil
+    var restEndsAt: Date? = nil
     var activeExerciseIndex: Int = 0
     var summaryAnimatedMinutes: Double = 0
     var summaryAnimatedVolume: Double = 0
@@ -129,16 +132,14 @@ final class WorkoutSession: Identifiable {
         // the next exercise's card is more disorienting than helpful.
         let exerciseNowDone = ordered.allSatisfy(\.isCompleted)
         if !exerciseNowDone {
+            let started = Date()
             isResting = true
-            restStartedAt = Date()
+            restStartedAt = started
+            restEndsAt = started.addingTimeInterval(restDuration)
         }
 
-        // Stamp completedAt the first time every set in every exercise
-        // is marked complete. Re-mutating a set after this point won't
-        // re-stamp the time.
-        if isAllComplete && completedAt == nil {
-            completedAt = Date()
-        }
+        // completedAt is stamped only on archive. Active drafts stay
+        // out of History until the user explicitly saves the workout.
     }
 
     func updateActiveWeight(for exercise: Exercise, weight: Double) {
@@ -174,20 +175,28 @@ final class WorkoutSession: Identifiable {
     func skipRest() {
         isResting = false
         restStartedAt = nil
+        restEndsAt = nil
     }
 
     /// Time left on the current rest interval, in seconds. Zero when
     /// not resting or when the deadline has passed. Both the rest
     /// overlay and the MiniBar derive their countdowns from this.
     var restRemaining: TimeInterval {
-        guard isResting, let start = restStartedAt else { return 0 }
+        guard isResting else { return 0 }
+        if let restEndsAt {
+            return max(0, restEndsAt.timeIntervalSinceNow)
+        }
+        guard let start = restStartedAt else { return 0 }
         return max(0, restDuration - Date().timeIntervalSince(start))
     }
 
-    /// BreathingTimer self-extends; this is just a notification hook
-    /// in case we want to log or animate something at the session level.
+    /// Extend the single session-level rest deadline. Both the full
+    /// overlay and MiniBar countdown read `restRemaining`, so they stay
+    /// in sync after an extension.
     func didExtendRest(by seconds: TimeInterval) {
-        // Intentionally empty for now.
+        guard isResting else { return }
+        let baseDeadline = restEndsAt ?? Date().addingTimeInterval(restRemaining)
+        restEndsAt = max(baseDeadline, Date()).addingTimeInterval(seconds)
     }
 
     // MARK: - Session-level stats

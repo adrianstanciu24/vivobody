@@ -738,7 +738,7 @@ struct TodayScreen: View {
         WeightFormatter.volumeValue(value, unit: unit)
     }
 
-    /// Whether the most recent session set a new all-time top weight
+    /// Whether the most recent session set a new all-time record
     /// on any exercise — the same semantics as History's PR badge and
     /// the live PR-celebration overlay. When true, the Volume stat on
     /// the Last workout strip wears the completion accent.
@@ -748,27 +748,35 @@ struct TodayScreen: View {
     }
 
     /// IDs of sessions in which at least one exercise hit a new
-    /// all-time top-weight at the moment it was logged. Walks the
-    /// archive oldest-first, tracking the running max per exercise
-    /// name. Matches `HistoryScreen.sessionsWithPR` exactly.
+    /// all-time record at the moment it was logged. Reps exercises
+    /// track top weight; duration exercises track longest hold. Walks
+    /// the archive oldest-first by stable exercise identity. Matches
+    /// `HistoryScreen.sessionsWithPR` exactly.
     private var prSessionIDs: Set<UUID> {
         var bestByExercise: [String: Double] = [:]
         var prIDs: Set<UUID> = []
         for session in completedSessions.reversed() {
             for exercise in session.orderedExercises {
-                let topWeight = exercise.sets
-                    .filter(\.isCompleted)
-                    .map(\.weight)
-                    .max() ?? 0
-                guard topWeight > 0 else { continue }
-                let key = exercise.name.lowercased()
-                if topWeight > bestByExercise[key, default: 0] {
-                    bestByExercise[key] = topWeight
+                let metric = prMetric(for: exercise)
+                guard metric > 0 else { continue }
+                let key = exercise.historyKey
+                if metric > bestByExercise[key, default: 0] {
+                    bestByExercise[key] = metric
                     prIDs.insert(session.id)
                 }
             }
         }
         return prIDs
+    }
+
+    private func prMetric(for exercise: Exercise) -> Double {
+        let completed = exercise.sets.filter(\.isCompleted)
+        switch exercise.trackingMode {
+        case .reps:
+            return completed.map(\.weight).max() ?? 0
+        case .duration:
+            return completed.map(\.duration).max() ?? 0
+        }
     }
 
     // MARK: - Formatters

@@ -5,9 +5,8 @@
 //  Persistent domain model. Three @Model classes wired up via
 //  @Relationship: WorkoutSession owns Exercises, each Exercise owns
 //  WorkoutSets. Cascade-delete propagates from session down. The
-//  in-flight session lives un-inserted (transient) while the user is
-//  working; only on archive does it get added to the context and
-//  saved to disk.
+//  in-flight session is saved as a SwiftData draft while the user is
+//  working; archive stamps completedAt so history queries can see it.
 //
 
 import SwiftUI
@@ -72,10 +71,18 @@ final class Exercise: Identifiable {
     #Index<Exercise>([\.name])
     var id: UUID = UUID()
     var name: String = ""
+    var catalogItemID: UUID? = nil
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
+
+    /// Snapshot of the catalog item's graded muscle involvement at
+    /// pick-time. This keeps custom/renamed/deleted catalog exercises
+    /// contributing to analytics even when their display name changes
+    /// later. Empty for legacy rows; computed access falls back to the
+    /// current catalog name, then to the coarse muscle group.
+    var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// How this exercise is measured — reps or a timed hold. Stored
     /// as a raw value; defaulted so existing data reads as reps with
@@ -121,12 +128,14 @@ final class Exercise: Identifiable {
         set { trackingModeRaw = newValue.rawValue }
     }
 
-    /// Muscles worked, with their graded contribution weights,
-    /// resolved by name from the curated catalog map (the single
-    /// source of truth). Custom names the map doesn't know resolve
-    /// to `.empty`.
+    /// Muscles worked, with their graded contribution weights. New
+    /// rows read their pick-time snapshot; legacy rows fall back to
+    /// the current catalog name, then to the coarse muscle group.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.involvement(forExerciseNamed: name)
+        if !muscleInvolvementSnapshot.isEmpty {
+            return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
+        }
+        return Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
     }
 
     /// Sets returned in their stable order. Used everywhere the UI
@@ -138,20 +147,24 @@ final class Exercise: Identifiable {
     init(
         id: UUID = UUID(),
         name: String,
+        catalogItemID: UUID? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
         plannedWeight: Double,
+        muscleInvolvement: Muscle.Involvement? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.name = name
+        self.catalogItemID = catalogItemID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
@@ -296,7 +309,7 @@ extension WorkoutSession {
 /// Templates for the seeded "Today's Plan". Returns fresh @Model
 /// instances each call — these are NOT inserted into any context;
 /// the caller is responsible for that (typically by attaching them
-/// to a WorkoutSession and inserting the session on archive).
+/// to a draft WorkoutSession inserted at workout start).
 extension Exercise {
     /// Build a fresh, ready-to-start exercise from a previously-logged
     /// one. Same name, group, sort-order, and a separate WorkoutSet
@@ -305,7 +318,7 @@ extension Exercise {
     /// `isCompleted` flags are reset so the new exercise reads as a
     /// clean plan. The returned instance is NOT inserted into any
     /// context — wire it into a WorkoutSession and let the session
-    /// archive flow handle persistence.
+    /// draft/archive flow handle persistence.
     static func freshCopy(of source: Exercise) -> Exercise {
         let sourceSets = source.orderedSets
         let firstSet = sourceSets.first
@@ -314,10 +327,12 @@ extension Exercise {
         // the source, including any variation across sets.
         let copy = Exercise(
             name: source.name,
+            catalogItemID: source.catalogItemID,
             group: source.group,
             plannedSets: 0,
             plannedReps: firstSet?.reps ?? source.plannedReps,
             plannedWeight: firstSet?.weight ?? source.plannedWeight,
+            muscleInvolvement: source.muscleInvolvement,
             trackingMode: source.trackingMode,
             plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder

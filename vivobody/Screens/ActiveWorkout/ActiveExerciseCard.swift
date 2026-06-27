@@ -64,6 +64,9 @@ struct ActiveExerciseCard: View {
     /// Drives the per-exercise notes editor sheet.
     @State private var isEditingNotes: Bool = false
 
+    /// Surfaces failures from saving the active workout draft.
+    @State private var saveError: SaveErrorBox? = nil
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             topMeta
@@ -108,10 +111,13 @@ struct ActiveExerciseCard: View {
                 title: "\(exercise.name) Notes",
                 placeholder: "Form cues, plate setup, how it felt…",
                 initialValue: exercise.notes,
-                onSave: { newNotes in exercise.notes = newNotes }
+                onSave: { newNotes in
+                    exercise.notes = newNotes
+                    saveActiveSessionChanges()
+                }
             )
         }
-        .onDisappear { completionTask?.cancel() }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Top meta
@@ -411,7 +417,10 @@ struct ActiveExerciseCard: View {
     private var rirBinding: Binding<Int> {
         Binding(
             get: { session.activeSet(for: exercise)?.repsInReserve ?? 2 },
-            set: { session.updateActiveRIR(for: exercise, rir: $0) }
+            set: {
+                session.updateActiveRIR(for: exercise, rir: $0)
+                saveActiveSessionChanges()
+            }
         )
     }
 
@@ -462,6 +471,7 @@ struct ActiveExerciseCard: View {
                     : nil,
                 onToggle: { handleSetToggle(active) }
             )
+            .accessibilityIdentifier("completeSetButton")
         } else {
             HStack(alignment: .firstTextBaseline) {
                 Text("Exercise complete")
@@ -501,6 +511,8 @@ struct ActiveExerciseCard: View {
             exercise.sets.append(newSet)
         }
         exercise.plannedSets = exercise.sets.count
+        session.completedAt = nil
+        saveActiveSessionChanges()
         Haptics.tick()
     }
 
@@ -517,6 +529,8 @@ struct ActiveExerciseCard: View {
             remaining.sortOrder = i
         }
         exercise.plannedSets = exercise.sets.count
+        session.completedAt = nil
+        saveActiveSessionChanges()
         Haptics.soft()
     }
 
@@ -529,6 +543,8 @@ struct ActiveExerciseCard: View {
             remaining.sortOrder = i
         }
         exercise.plannedSets = exercise.sets.count
+        session.completedAt = nil
+        saveActiveSessionChanges()
         Haptics.soft()
         deletingSet = nil
     }
@@ -565,6 +581,7 @@ struct ActiveExerciseCard: View {
                     for: exercise,
                     weight: WeightFormatter.toCanonical(newDisplay, unit: unit)
                 )
+                saveActiveSessionChanges()
             }
         )
     }
@@ -575,6 +592,7 @@ struct ActiveExerciseCard: View {
             get: { Double(displayedReps) },
             set: { new in
                 session.updateActiveReps(for: exercise, reps: Int(new.rounded()))
+                saveActiveSessionChanges()
             }
         )
     }
@@ -590,6 +608,7 @@ struct ActiveExerciseCard: View {
             get: { displayedDuration },
             set: { new in
                 session.updateActiveDuration(for: exercise, duration: new)
+                saveActiveSessionChanges()
             }
         )
     }
@@ -613,6 +632,7 @@ struct ActiveExerciseCard: View {
         let reps = set.reps
         let duration = set.duration
         let exerciseName = exercise.name
+        let catalogItemID = exercise.catalogItemID
         let mode = exercise.trackingMode
 
         pendingCompletionSetID = set.id
@@ -625,6 +645,7 @@ struct ActiveExerciseCard: View {
 
             let prKind = detectPersonalRecord(
                 exerciseName: exerciseName,
+                catalogItemID: catalogItemID,
                 mode: mode,
                 weight: weight,
                 reps: reps,
@@ -634,6 +655,7 @@ struct ActiveExerciseCard: View {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)
             }
+            saveActiveSessionChanges()
             pendingCompletionSetID = nil
 
             if let prKind {
@@ -650,6 +672,7 @@ struct ActiveExerciseCard: View {
                     reps: reps,
                     kind: prKind
                 )
+                saveActiveSessionChanges()
             }
 
             let exerciseNowDone = exercise.orderedSets.allSatisfy(\.isCompleted)
@@ -697,16 +720,24 @@ struct ActiveExerciseCard: View {
     /// against archived + in-session prior sets.
     private func detectPersonalRecord(
         exerciseName: String,
+        catalogItemID: UUID?,
         mode: TrackingMode,
         weight: Double,
         reps: Int,
         duration: TimeInterval
     ) -> PRKind? {
-        let descriptor = FetchDescriptor<Exercise>(
-            predicate: #Predicate { $0.name == exerciseName }
-        )
+        let legacyKey = exerciseName.exerciseIdentityName
+        let descriptor = FetchDescriptor<Exercise>()
         let archivedExercises = (try? modelContext.fetch(descriptor)) ?? []
         let archivedPriorSets = archivedExercises
+            .filter { archived in
+                guard archived.session?.completedAt != nil else { return false }
+                if let catalogItemID {
+                    return archived.catalogItemID == catalogItemID
+                        || (archived.catalogItemID == nil && archived.name.exerciseIdentityName == legacyKey)
+                }
+                return archived.name.exerciseIdentityName == legacyKey
+            }
             .flatMap(\.sets)
             .filter(\.isCompleted)
 
@@ -748,6 +779,14 @@ struct ActiveExerciseCard: View {
             return "\(exerciseName) · \(reps) reps"
         case .duration:
             return "\(exerciseName) · Longest hold"
+        }
+    }
+
+    private func saveActiveSessionChanges() {
+        do {
+            try modelContext.save()
+        } catch {
+            saveError = SaveErrorBox(error)
         }
     }
 }

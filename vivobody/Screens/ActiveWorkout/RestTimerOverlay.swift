@@ -9,9 +9,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession
+    @Environment(\.modelContext) private var modelContext
 
     /// Bumped each time a rest begins so the BreathingTimer inside is
     /// reconstructed with a fresh `duration` rather than reusing its
@@ -25,9 +27,18 @@ struct RestTimerOverlay: View {
             BreathingTimer(
                 duration: max(1, session.restRemaining),
                 nextSetLabel: nextSetLabel,
-                onComplete: { session.skipRest() },
-                onSkip:     { session.skipRest() },
-                onExtend:   { seconds in session.didExtendRest(by: seconds) }
+                onComplete: {
+                    session.skipRest()
+                    saveRestState()
+                },
+                onSkip: {
+                    session.skipRest()
+                    saveRestState()
+                },
+                onExtend: { seconds in
+                    session.didExtendRest(by: seconds)
+                    saveRestState()
+                }
             )
             .id(instanceID)
         }
@@ -52,5 +63,9 @@ struct RestTimerOverlay: View {
             return "Exercise complete"
         }
         return "Set \(nextIndex + 1) of \(exercise.orderedSets.count) · \(exercise.name)"
+    }
+
+    private func saveRestState() {
+        try? modelContext.save()
     }
 }

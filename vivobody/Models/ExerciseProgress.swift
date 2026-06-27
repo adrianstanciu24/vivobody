@@ -54,7 +54,8 @@ struct ExerciseProgressPoint: Identifiable, Hashable {
 /// Aggregated progress data for a single exercise across the user's
 /// entire archive.
 struct ExerciseProgress: Identifiable, Hashable {
-    var id: String { name }
+    var id: String { catalogItemID?.uuidString ?? name.exerciseIdentityName }
+    let catalogItemID: UUID?
     let name: String
     let group: MuscleGroup
     let points: [ExerciseProgressPoint]
@@ -196,28 +197,25 @@ struct LastExerciseInstance: Hashable {
 }
 
 extension Array where Element == WorkoutSession {
-    /// Build a name → LastExerciseInstance lookup in one pass over
+    /// Build a stable exercise-key → LastExerciseInstance lookup in one pass over
     /// the archive. Picker rows do O(1) lookups against this map
     /// instead of re-scanning history per row.
     ///
-    /// Match is by exercise name (case-insensitive). Templates and
-    /// active workouts already copy the name at pick-time, so equal
-    /// strings imply equal lifts — same convention as
-    /// `progressByExercise` above.
+    /// Match is by copied catalog ID when present, with legacy name
+    /// keys only for pre-identity history.
     func lastInstanceByExercise() -> [String: LastExerciseInstance] {
         // Step 1: gather every "top set per session per exercise"
         // tuple. The top set is mode-aware (heaviest for reps,
         // longest hold for duration) via `session.topSet(for:)`. The
         // arrays inside the dictionary are appended in archive order,
         // not by date — sorting comes next.
-        var rawByName: [String: [(date: Date, top: WorkoutSet, mode: TrackingMode)]] = [:]
+        var rawByKey: [String: [(date: Date, top: WorkoutSet, mode: TrackingMode)]] = [:]
 
         for session in self {
             let date = session.completedAt ?? session.startedAt
             for exercise in session.orderedExercises {
                 guard let top = session.topSet(for: exercise) else { continue }
-                let key = exercise.name.lowercased()
-                rawByName[key, default: []].append((date: date, top: top, mode: exercise.trackingMode))
+                rawByKey[exercise.historyKey, default: []].append((date: date, top: top, mode: exercise.trackingMode))
             }
         }
 
@@ -225,7 +223,7 @@ extension Array where Element == WorkoutSession {
         // top set AND the all-time best, compared on the mode's
         // primary metric. Two separate scans on a small list.
         var result: [String: LastExerciseInstance] = [:]
-        for (name, entries) in rawByName {
+        for (key, entries) in rawByKey {
             guard let mostRecent = entries.max(by: { $0.date < $1.date }) else { continue }
             let mode = mostRecent.mode
             let isBest: Bool
@@ -237,7 +235,7 @@ extension Array where Element == WorkoutSession {
                 let allTimeBest = entries.map(\.top.duration).max() ?? 0
                 isBest = mostRecent.top.duration >= allTimeBest
             }
-            result[name] = LastExerciseInstance(
+            result[key] = LastExerciseInstance(
                 topWeight: mostRecent.top.weight,
                 topReps: mostRecent.top.reps,
                 topDuration: mostRecent.top.duration,
@@ -295,7 +293,7 @@ extension Array where Element == WorkoutSession {
         // Tuple bucket (not a nested struct) — Swift doesn't allow
         // nested types in generic function bodies, and this lives
         // inside an extension on `Array where Element == ...`.
-        var byName: [String: (group: MuscleGroup, points: [ExerciseProgressPoint])] = [:]
+        var byKey: [String: (catalogItemID: UUID?, name: String, group: MuscleGroup, points: [ExerciseProgressPoint])] = [:]
 
         for session in self {
             let date = session.completedAt ?? session.startedAt
@@ -318,18 +316,24 @@ extension Array where Element == WorkoutSession {
                     totalVolume: totalVolume
                 )
 
-                if var bucket = byName[exercise.name] {
+                let key = exercise.historyKey
+                if var bucket = byKey[key] {
                     bucket.points.append(point)
-                    byName[exercise.name] = bucket
+                    byKey[key] = bucket
                 } else {
-                    byName[exercise.name] = (group: exercise.group, points: [point])
+                    byKey[key] = (
+                        catalogItemID: exercise.catalogItemID,
+                        name: exercise.name,
+                        group: exercise.group,
+                        points: [point]
+                    )
                 }
             }
         }
 
-        return byName
+        return byKey
             .filter { $0.value.points.count >= 2 }
-            .map { name, bucket in
+            .map { _, bucket in
                 // Sort by date ASC then walk to mark records at the
                 // moment they were achieved — on the mode's primary
                 // metric (top weight for reps, longest hold for time).
@@ -345,7 +349,12 @@ extension Array where Element == WorkoutSession {
                     }
                     flagged.append(p)
                 }
-                return ExerciseProgress(name: name, group: bucket.group, points: flagged)
+                return ExerciseProgress(
+                    catalogItemID: bucket.catalogItemID,
+                    name: bucket.name,
+                    group: bucket.group,
+                    points: flagged
+                )
             }
             .sorted { (lhs, rhs) in
                 let lDate = lhs.latest?.date ?? .distantPast
