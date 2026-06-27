@@ -80,6 +80,7 @@ struct TodayScreen: View {
                     let modelState = modelStateCache.state(for: completedSessions)
                     let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
                     let attention = attentionMuscles()
+                    let outlook = completedSessions.strengthOutlook()
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -110,7 +111,7 @@ struct TodayScreen: View {
                             SectionDivider().settleIn(2)
                         }
                         if upNext.isPresentable {
-                            upNextView(upNext).settleIn(3)
+                            upNextView(upNext, outlook: outlook).settleIn(3)
                             SectionDivider().settleIn(4)
                         }
                         consistencySection.settleIn(5)
@@ -242,13 +243,13 @@ struct TodayScreen: View {
     /// when no template is pinned to a weekday — the pinned START covers
     /// the unplanned case.
     @ViewBuilder
-    private func upNextView(_ upNext: UpNext) -> some View {
+    private func upNextView(_ upNext: UpNext, outlook: StrengthOutlookBoard) -> some View {
         switch upNext.kind {
         case let .scheduled(template, more, easeOff):
-            upNextSection(template: template, when: "Today", more: more, startable: true, easeOff: easeOff)
+            upNextSection(template: template, when: "Today", more: more, startable: true, easeOff: easeOff, outlook: outlook)
         case let .rest(_, next, daysUntil, more):
             if let next {
-                upNextSection(template: next, when: upNextWhen(daysUntil), more: more, startable: false, easeOff: false)
+                upNextSection(template: next, when: upNextWhen(daysUntil), more: more, startable: false, easeOff: false, outlook: outlook)
             }
         case .unscheduled:
             EmptyView()
@@ -266,7 +267,8 @@ struct TodayScreen: View {
         when: String,
         more: Int,
         startable: Bool,
-        easeOff: Bool
+        easeOff: Bool,
+        outlook: StrengthOutlookBoard
     ) -> some View {
         let exercises = template.orderedExercises
         let maxPreview = 5
@@ -306,6 +308,19 @@ struct TodayScreen: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, Space.sm)
                     }
+                }
+
+                if let prLine = prProximityLine(for: template, in: outlook) {
+                    HStack(spacing: Space.sm) {
+                        Image(systemName: "trophy.fill")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.primary)
+                        Text(prLine)
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.primary.opacity(0.9))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .accessibilityLabel(prLine)
                 }
 
                 if easeOff {
@@ -423,6 +438,34 @@ struct TodayScreen: View {
             ? "\(template.orderedExercises.count) ex · \(template.totalPlannedSets) sets"
             : groups
         return more > 0 ? "\(base)  ·  +\(more) more" : base
+    }
+
+    /// "4 lb from a Bench Press PR" — the weight-gap framing of the
+    /// nearest projected PR, surfaced on the Up Next card only when
+    /// that lift is actually in the queued workout (so the nudge is
+    /// contextual to what you're about to do, not a dashboard stat).
+    /// Returns nil when there's no climbing lift with a real gap, when
+    /// the headline lift is a fresh PR (no gap — celebrated elsewhere),
+    /// or when the near-PR lift isn't in this template.
+    private func prProximityLine(for template: WorkoutTemplate, in board: StrengthOutlookBoard) -> String? {
+        guard let pr = board.nearestPR else { return nil }
+        guard !pr.isFreshPR else { return nil }
+        let gapLb = pr.bestE1RM - pr.currentE1RM
+        guard gapLb >= 1 else { return nil }
+        let inTemplate = template.orderedExercises.contains {
+            $0.name.caseInsensitiveCompare(pr.exercise) == .orderedSame
+        }
+        guard inTemplate else { return nil }
+        let gap = WeightFormatter.string(gapLb, unit: unit, includeUnit: false)
+        return "\(gap) \(unit.symbol) from \(Self.article(for: pr.exercise)) \(pr.exercise) PR"
+    }
+
+    /// "a" or "an" for an exercise name, by its first letter. Good
+    /// enough for the gym vocabulary (Bench, Squat, Overhead Press,
+    /// Incline …); avoids a clashing article in the proximity line.
+    private static func article(for name: String) -> String {
+        guard let first = name.lowercased().first else { return "a" }
+        return "aeiou".contains(first) ? "an" : "a"
     }
 
     // MARK: - Needs attention

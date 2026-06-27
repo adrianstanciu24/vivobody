@@ -41,6 +41,8 @@ struct vivobodyApp: App {
                         HistorySeeder.seed(into: container.mainContext)
                     } else if CommandLine.arguments.contains("--seed-showcase") {
                         HistorySeeder.seedShowcase(into: container.mainContext)
+                    } else if CommandLine.arguments.contains("--seed-pr") {
+                        HistorySeeder.seedPRProximity(into: container.mainContext)
                     }
                 }
         }
@@ -199,6 +201,66 @@ private enum HistorySeeder {
         // Fading: trained hard early, abandoned four weeks ago.
         block([("Barbell Row (Overhand)", .back, 135)],
               startDaysAgo: 70, endDaysAgo: 28, count: 6, overload: 30, sets: 4, reps: 8)
+
+        try? context.save()
+    }
+
+    /// A focused seed for the Today "PR-proximity" line on the Up Next
+    /// card. Builds an old Bench Press record, then a climbing-back
+    /// block that hasn't caught up (a projected, non-fresh PR with a
+    /// real weight gap), plus a template pinned to today containing
+    /// that lift so the card surfaces "N lb from a Bench Press PR".
+    /// Drive it with `--seed-pr`.
+    static func seedPRProximity(into context: ModelContext) {
+        let sessionDescriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil }
+        )
+        let existingSessions = (try? context.fetch(sessionDescriptor)) ?? []
+        guard existingSessions.isEmpty else { return }
+
+        let now = Date()
+        let calendar = Calendar.current
+
+        // Old PR (185), a drop-off, then six sessions climbing back
+        // (155→180). The recent-window fit sees only the climbing
+        // tail, so the trend reads as climbing; the all-time best
+        // still stands, leaving a real gap to project.
+        let weights: [Double] = [185, 150, 155, 160, 165, 170, 175, 180]
+        let daysAgo: [Int]    = [50,  44,  38,  32,  26,  20,  14,  8 ]
+        for (w, d) in zip(weights, daysAgo) {
+            guard
+                let day = calendar.date(byAdding: .day, value: -d, to: now),
+                let started = calendar.date(byAdding: .hour, value: -1, to: day)
+            else { continue }
+            let exercise = Exercise(
+                name: "Bench Press",
+                group: .chest,
+                plannedSets: 1,
+                plannedReps: 5,
+                plannedWeight: w,
+                sortOrder: 0
+            )
+            for set in exercise.sets { set.isCompleted = true }
+            let session = WorkoutSession(exercises: [exercise], restDuration: 90, startedAt: started)
+            session.completedAt = started.addingTimeInterval(30 * 60)
+            context.insert(session)
+        }
+
+        // A template pinned to today containing the near-PR lift, so
+        // Up Next resolves to a startable workout with the lift in it.
+        let todayWeekday = calendar.component(.weekday, from: now)
+        let template = WorkoutTemplate(name: "Bench Day", sortOrder: 0)
+        template.scheduledWeekdays = [todayWeekday]
+        context.insert(template)
+        let templateExercise = TemplateExercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 5,
+            plannedReps: 5,
+            plannedWeight: 180,
+            sortOrder: 0
+        )
+        template.exercises.append(templateExercise)
 
         try? context.save()
     }
