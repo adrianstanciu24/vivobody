@@ -41,6 +41,41 @@ struct MuscleMappingTests {
         }
     }
 
+    @Test func everyMuscleIsTargetedByAtLeastOneCatalogExercise() {
+        let positiveInvolvement = CatalogData.records.flatMap { record in
+            (record.involvement ?? []).filter { $0.weight > 0 }
+        }
+        let targeted = Set(
+            positiveInvolvement.compactMap { involvement -> Muscle? in
+                Muscle(rawValue: involvement.muscle)
+            }
+        )
+        let expected = Set(Muscle.allCases)
+        let expectedRawValues = Set(Muscle.allCases.map(\.rawValue))
+        let missing = expected.subtracting(targeted)
+        let unexpectedRawValues = Set(positiveInvolvement.map(\.muscle)).subtracting(expectedRawValues)
+
+        #expect(
+            targeted == expected && unexpectedRawValues.isEmpty,
+            """
+            Catalog muscle coverage does not match Muscle.allCases.
+            Missing: \(Self.muscleList(missing))
+            Unexpected: \(Self.rawMuscleList(unexpectedRawValues))
+            """
+        )
+    }
+
+    @Test func everyCatalogMuscleStringIsValidMuscleRawValue() {
+        for record in CatalogData.records {
+            for involvement in record.involvement ?? [] {
+                #expect(
+                    Muscle(rawValue: involvement.muscle) != nil,
+                    "'\(record.name)' has invalid catalog muscle '\(involvement.muscle)'"
+                )
+            }
+        }
+    }
+
     @Test func mappingIsCaseInsensitive() {
         let lower = Muscle.involvement(forExerciseNamed: "bench press")
         #expect(lower.primary == [.pectorals])
@@ -79,5 +114,15 @@ struct MuscleMappingTests {
             #expect(!nodes.isEmpty, "\(muscle) maps to no mesh nodes")
             #expect(nodes.allSatisfy { $0.hasSuffix("_L") || $0.hasSuffix("_R") })
         }
+    }
+
+    private static func muscleList(_ muscles: Set<Muscle>) -> String {
+        let rawValues = muscles.map(\.rawValue).sorted()
+        return rawValues.isEmpty ? "none" : rawValues.joined(separator: ", ")
+    }
+
+    private static func rawMuscleList(_ rawValues: Set<String>) -> String {
+        let sorted = rawValues.sorted()
+        return sorted.isEmpty ? "none" : sorted.joined(separator: ", ")
     }
 }
