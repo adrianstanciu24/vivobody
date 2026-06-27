@@ -153,7 +153,7 @@ struct ConfigureExerciseSheet: View {
             .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
-            .safeAreaInset(edge: .bottom) { commitBar }
+            .safeAreaBar(edge: .bottom) { commitBar }
             .navigationTitle(isEditing ? "Edit Exercise" : "Configure")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -196,27 +196,23 @@ struct ConfigureExerciseSheet: View {
     // MARK: - Commit bar
 
     private var commitBar: some View {
-        VStack(spacing: 0) {
-            Rectangle().fill(Surface.edge).frame(height: 1)
-            VStack(spacing: Space.md) {
-                Text(previewLine)
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Ink.tertiary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(spacing: Space.md) {
+            Text(previewLine)
+                .font(Typography.metricInline)
+                .foregroundStyle(Ink.tertiary)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                PrimaryActionButton(
-                    title: isEditing ? "Save Changes" : "Add to Template",
-                    subtitle: nil
-                ) {
-                    onCommit(buildDraft())
-                    dismiss()
-                }
+            PrimaryActionButton(
+                title: isEditing ? "Save Changes" : "Add to Template",
+                subtitle: nil
+            ) {
+                onCommit(buildDraft())
+                dismiss()
             }
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, Space.md)
-            .padding(.bottom, Space.sm)
         }
-        .background(Surface.background.opacity(0.9))
+        .padding(.horizontal, Space.gutter)
+        .padding(.top, Space.md)
+        .padding(.bottom, Space.sm)
     }
 
     private var previewLine: String {

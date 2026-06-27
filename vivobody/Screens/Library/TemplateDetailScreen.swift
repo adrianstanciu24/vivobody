@@ -66,7 +66,7 @@ struct TemplateDetailScreen: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .safeAreaInset(edge: .bottom) {
+            .safeAreaBar(edge: .bottom) {
                 startBar
             }
         }
@@ -258,22 +258,18 @@ struct TemplateDetailScreen: View {
     // MARK: - Start bar
 
     private var startBar: some View {
-        VStack(spacing: 0) {
-            Rectangle().fill(Surface.edge).frame(height: 1)
-            PrimaryActionButton(
-                title: "Start Workout",
-                subtitle: nil
-            ) {
-                appState.startWorkoutFromTemplate(template)
-                dismiss()
-            }
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
-            .disabled(template.orderedExercises.isEmpty)
-            .opacity(template.orderedExercises.isEmpty ? 0.4 : 1)
+        PrimaryActionButton(
+            title: "Start Workout",
+            subtitle: nil
+        ) {
+            appState.startWorkoutFromTemplate(template)
+            dismiss()
         }
-        .background(Surface.background.opacity(0.85))
+        .padding(.horizontal, Space.gutter)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
+        .disabled(template.orderedExercises.isEmpty)
+        .opacity(template.orderedExercises.isEmpty ? 0.4 : 1)
     }
 
     // MARK: - Mutations

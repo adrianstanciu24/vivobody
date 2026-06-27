@@ -139,10 +139,10 @@ struct StartWorkoutSheet: View {
     /// chevron.
     ///
     /// Two surfaces, so the tiers read apart at a glance: Start Fresh
-    /// is a hollow outline (it *looks* empty — fitting a blank canvas),
-    /// while saved templates sit on a filled glass card (a solid piece
-    /// of material — they already hold a plan). No second colour; the
-    /// distinction is fill vs. outline.
+    /// is a neutral outlined glass control (it *looks* empty — fitting
+    /// a blank canvas), while saved templates sit on a filled glass
+    /// card (a solid piece of material — they already hold a plan). No
+    /// second colour; the distinction is fill vs. outline.
     private func startTile(
         title: String,
         subtitle: String? = nil,
@@ -203,19 +203,24 @@ struct StartWorkoutSheet: View {
 }
 
 /// The two start-tile surfaces. `filled` templates ride the standard
-/// glass card; the hollow Start Fresh gets a stroke-only outline so
-/// the empty start and the saved plans never blur together.
+/// glass card; the hollow Start Fresh uses neutral interactive glass
+/// with a fine outline so the empty start and the saved plans never
+/// blur together.
 private struct StartTileSurface: ViewModifier {
     let filled: Bool
 
     func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
         if filled {
             content.glassCard(cornerRadius: Radius.card, interactive: true)
         } else {
-            content.overlay(
-                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                    .stroke(Surface.edge, lineWidth: 1)
-            )
+            content
+                .glassTinted(interactive: true, in: shape)
+                .overlay {
+                    shape.stroke(Surface.edge, lineWidth: 1)
+                }
+                .containerShape(shape)
+                .contentShape(shape)
         }
     }
 }

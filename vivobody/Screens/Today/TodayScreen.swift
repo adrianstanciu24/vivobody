@@ -125,10 +125,12 @@ struct TodayScreen: View {
                 .scrollBounceBehavior(.basedOnSize, axes: .vertical)
                 .scrollIndicators(.hidden)
                 .scrollEdgeEffectStyle(.soft, for: .bottom)
-                // START is pinned, never part of the scroll, so the body
-                // hero is free to dominate the first screen while the
-                // primary action stays reachable at all times.
-                .safeAreaInset(edge: .bottom, spacing: 0) { pinnedStartBar }
+                .safeAreaPadding(.bottom, Self.pinnedStartBarClearance)
+                // START is pinned in the native iOS 26 safe-area bar,
+                // never part of the scroll. The matching safe-area
+                // padding above reserves its occupied height so body
+                // copy never sits underneath the CTA or tab chrome.
+                .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
                 // The living atmosphere shared with every sibling tab: an
                 // ember field burning at a temperature set by streak +
                 // recency, so home reads as a powered-on instrument rather
@@ -140,12 +142,12 @@ struct TodayScreen: View {
                 .forgeBackground(intensity: 1.0)
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
                     // Latch onto the LARGEST viewport height ever seen, not
-                    // the first. The pinned-START `safeAreaInset` makes the
-                    // container report a transient, collapsed height during
-                    // launch layout; freezing that first value shrank the
-                    // hero to a thumbnail. Tracking the max ignores the
-                    // transient (and the on-scroll tab-bar minimize never
-                    // shrinks the figure, since the value only grows).
+                    // the first. Native bottom chrome can make the container
+                    // report a transient, collapsed height during launch
+                    // layout; freezing that first value shrank the hero to a
+                    // thumbnail. Tracking the max ignores the transient (and
+                    // the on-scroll tab-bar minimize never shrinks the figure,
+                    // since the value only grows).
                     if newHeight > heroHeight { heroHeight = newHeight }
                 }
         }
@@ -545,18 +547,29 @@ struct TodayScreen: View {
     /// viewport — its rendered scale is proportional to this height
     /// (the SCNView's field of view binds to the taller axis), which
     /// is why an earlier half-height value made the model read small.
-    /// START is pinned separately (`safeAreaInset`), so the hero no
-    /// longer has to leave scroll room for it; the readiness line just
-    /// peeks beneath the figure and scrolls up from there. `heroHeight`
-    /// is frozen on first layout (see `body`), so the model holds a
-    /// constant size as the large title collapses on scroll rather
-    /// than rescaling mid-gesture.
+    /// START is pinned separately in a native safe-area bar. Because
+    /// `safeAreaBar` floats over the scroll view instead of reducing
+    /// the hero's initial layout height, the figure subtracts the CTA
+    /// clearance explicitly so the caption and next section do not sit
+    /// underneath the button. `heroHeight` is frozen on first layout
+    /// (see `body`), so the model holds a constant size as the large
+    /// title collapses on scroll rather than rescaling mid-gesture.
     private func bodyHeroHeight(viewport: CGFloat) -> CGFloat {
         let base = heroHeight > 0 ? heroHeight : viewport
-        return base * Self.heroFraction
+        return max(
+            base * Self.minimumHeroFraction,
+            base * Self.heroFraction - Self.pinnedStartBarClearance
+        )
     }
 
     private static let heroFraction: CGFloat = 0.80
+    private static let minimumHeroFraction: CGFloat = 0.64
+
+    /// Reserve the height occupied by the pinned primary CTA above the
+    /// floating tab bar. `safeAreaBar` provides native chrome placement;
+    /// this value keeps the hero and scroll content from being legible
+    /// underneath it.
+    private static let pinnedStartBarClearance: CGFloat = 104
 
     private var consistencySection: some View {
         let streak = completedSessions.workoutStreak
@@ -607,10 +620,9 @@ struct TodayScreen: View {
         .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
     }
 
-    /// START, pinned to the bottom via `safeAreaInset`. No background
-    /// of its own — the system's soft scroll edge effect handles the
-    /// content-to-bar fade, so the button floats directly on the forge
-    /// instead of sitting in a black tray.
+    /// START, pinned to the bottom via iOS 26's native safe-area bar.
+    /// No custom black tray — the system owns the bar chrome and the
+    /// button keeps the app's Liquid Glass CTA treatment.
     private var pinnedStartBar: some View {
         startCTA
             .padding(.horizontal, Space.gutter)

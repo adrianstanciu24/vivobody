@@ -327,6 +327,7 @@ struct WorkoutSummaryCard: View {
                 .foregroundStyle(Ink.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
+                .glassTinted(interactive: true, in: RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
                         .stroke(Surface.edgeBright, lineWidth: 1)

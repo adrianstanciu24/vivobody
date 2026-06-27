@@ -66,11 +66,11 @@ struct ActiveWorkoutScreen: View {
 
             if isEmpty {
                 emptyState
-                    .safeAreaInset(edge: .top, spacing: 8) { topBar }
+                    .safeAreaBar(edge: .top, spacing: 8) { topBar }
             } else {
                 pager
-                    .safeAreaInset(edge: .top, spacing: 8) { topBar }
-                    .safeAreaInset(edge: .bottom, spacing: Space.md) { bottomBar }
+                    .safeAreaBar(edge: .top, spacing: 8) { topBar }
+                    .safeAreaBar(edge: .bottom, spacing: Space.md) { bottomBar }
             }
 
             if session.isResting {
@@ -225,16 +225,6 @@ struct ActiveWorkoutScreen: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 8)
-        // Opaque backdrop keeps card content from bleeding through
-        // the bar. Previously this overlay also painted a soft
-        // black-to-clear gradient ~16pt below itself to suggest the
-        // bar floated above the cards — but the carved-glass card
-        // upgrade gave every card its own bright top sheen + bevel
-        // that already reads as "the bar's edge catches the card's
-        // glass." The fade-down overlay was darkening the top of
-        // each card on top of that, producing a "bent" crescent.
-        // Removed.
-        .background(Surface.background)
     }
 
     /// Compact chip — plus on a tinted circle, matching the discard
@@ -250,7 +240,7 @@ struct ActiveWorkoutScreen: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
                 .frame(width: 26, height: 26)
-                .background(Circle().fill(Surface.cardTintBright))
+                .coloredGlassControl(cornerRadius: Radius.pill)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
@@ -267,7 +257,7 @@ struct ActiveWorkoutScreen: View {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.secondary)
                 .frame(width: 26, height: 26)
-                .background(Circle().fill(Surface.cardTintBright))
+                .coloredGlassControl(cornerRadius: Radius.pill)
                 // Visual chip stays compact; outer frame +
                 // contentShape expand the tap area to the 44pt HIG
                 // minimum.

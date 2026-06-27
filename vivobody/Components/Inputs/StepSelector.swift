@@ -5,9 +5,10 @@
 //  Pill segmented control for choosing one value from a small fixed set.
 //  Used for: weight step (1 / 2.5 / 5), units (lb / kg), and similar.
 //
-//  A single capsule slides between options via matchedGeometryEffect —
-//  fade-swap looks software, sliding looks mechanical, which is honest:
-//  the user is choosing a position, not a category.
+//  The control is a compact Liquid Glass segmented bar: one neutral
+//  glass track, with the selected segment riding on the app's tinted
+//  glass thumb. This matches the Library segment control and keeps
+//  small option pickers in the same iOS 26 control vocabulary.
 //
 
 import SwiftUI
@@ -20,35 +21,42 @@ struct StepSelector<T: Hashable>: View {
     @Namespace private var indicatorNS
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(options, id: \.self) { option in
-                Button {
-                    if option != selection {
-                        Haptics.selection()
-                        selection = option
-                    }
-                } label: {
-                    Text(label(option))
-                        .font(Typography.metricUnit)
-                        .monospacedDigit()
-                        .foregroundStyle(option == selection ? Surface.background : Ink.secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, Space.md)
-                        .contentShape(Capsule())
-                        .background {
-                            if option == selection {
-                                Capsule()
-                                    .fill(Ink.primary)
-                                    .matchedGeometryEffect(id: "indicator", in: indicatorNS)
-                            }
-                        }
+        GlassEffectContainer(spacing: 4) {
+            HStack(spacing: 4) {
+                ForEach(options, id: \.self) { option in
+                    optionButton(option)
                 }
-                .buttonStyle(.plain)
             }
+            .padding(4)
+            .coloredGlassControl(cornerRadius: Radius.pill)
         }
-        .padding(4)
-        .background(Capsule().fill(Surface.cardTint))
         .animation(.spring(response: 0.32, dampingFraction: 0.72), value: selection)
+    }
+
+    private func optionButton(_ option: T) -> some View {
+        let isSelected = option == selection
+        return Button {
+            guard option != selection else { return }
+            Haptics.selection()
+            selection = option
+        } label: {
+            Text(label(option))
+                .font(Typography.metricUnit)
+                .monospacedDigit()
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Space.md)
+                .contentShape(Capsule())
+                .background {
+                    if isSelected {
+                        Color.clear
+                            .matchedGeometryEffect(id: "indicator", in: indicatorNS)
+                            .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

@@ -172,7 +172,7 @@ struct ExerciseDetailScreen: View {
                 .accessibilityLabel("More options")
             }
         }
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaBar(edge: .bottom) {
             if onPickAndDismiss != nil {
                 addToWorkoutCTA
             }
@@ -799,7 +799,6 @@ struct ExerciseDetailScreen: View {
         .padding(.horizontal, Space.gutter)
         .padding(.bottom, 8)
         .padding(.top, 12)
-        .background(Surface.background)
     }
 
     // MARK: - Derived

@@ -275,6 +275,7 @@ private struct GlassCardModifier: ViewModifier {
             }
             .glassTinted(interactive: interactive, in: shape)
             .containerShape(shape)
+            .contentShape(shape)
     }
 }
 
