@@ -21,6 +21,11 @@ import Foundation
 struct TemplateDraft {
     var name: String = ""
     var exercises: [ExerciseDraft] = []
+
+    /// Weekdays this template is pinned to (Calendar weekday numbers,
+    /// 1 = Sunday … 7 = Saturday). Surfaces it on Today's "Up next"
+    /// card. Empty = unscheduled.
+    var scheduledWeekdays: [Int] = []
 }
 
 struct ExerciseDraft: Identifiable, Hashable {

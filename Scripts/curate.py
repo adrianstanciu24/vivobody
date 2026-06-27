@@ -80,7 +80,6 @@ def ex(group, equipment, mechanic, pattern, *, weight=0, reps=8,
     rec = {
         "group": group,
         "defaultWeight": weight,
-        "defaultReps": reps,
         "equipment": equipment,
         "mechanic": mechanic,
         "plane": plane,

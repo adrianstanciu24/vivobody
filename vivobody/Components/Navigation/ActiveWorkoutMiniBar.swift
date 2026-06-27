@@ -77,6 +77,24 @@ struct ActiveWorkoutMiniBar: View {
     }
 
     private func compactLayout(now: Date) -> some View {
+        barRow(now: now)
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.sm)
+            .contentShape(Rectangle())
+    }
+
+    /// The accessory slot is a single-row height regardless of
+    /// placement — `.expanded` only grants more horizontal room, not
+    /// vertical. So both placements render one horizontal row;
+    /// stacking the badge on a second line overflows and clips it.
+    private func expandedLayout(now: Date) -> some View {
+        barRow(now: now)
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.sm)
+            .contentShape(Rectangle())
+    }
+
+    private func barRow(now: Date) -> some View {
         HStack(spacing: 12) {
             PulseDot(color: dotColor, isPulsing: shouldPulse)
             labels
@@ -86,33 +104,14 @@ struct ActiveWorkoutMiniBar: View {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
         }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.sm)
-        .contentShape(Rectangle())
     }
 
-    private func expandedLayout(now: Date) -> some View {
-        VStack(spacing: Space.sm) {
-            HStack(spacing: 12) {
-                PulseDot(color: dotColor, isPulsing: shouldPulse)
-                labels
-                Spacer(minLength: 8)
-                Image(systemName: "chevron.up")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            HStack(spacing: 0) {
-                Spacer(minLength: 0)
-                statusBadge(now: now)
-            }
-        }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
-        .contentShape(Rectangle())
-    }
+    // MARK: - Labels
 
-    // MARK: - Labels (always two lines for vertical rhythm)
-
+    /// Title plus an optional subtitle. The subtitle line is only
+    /// emitted when it has content — an empty second line would
+    /// reserve vertical space and push the title above the row's
+    /// centerline (the dot and badge stay centered).
     private var labels: some View {
         VStack(alignment: .leading, spacing: 1) {
             Text(titleText)
@@ -120,10 +119,12 @@ struct ActiveWorkoutMiniBar: View {
                 .foregroundStyle(Ink.primary)
                 .lineLimit(1)
 
-            Text(subtitleText)
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .lineLimit(1)
+            if !subtitleText.isEmpty {
+                Text(subtitleText)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
+            }
         }
     }
 

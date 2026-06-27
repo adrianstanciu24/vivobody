@@ -32,6 +32,12 @@ final class WorkoutTemplate: Identifiable {
     /// recently. Nil until the template's first use.
     var lastUsedAt: Date?
 
+    /// Weekdays this template is scheduled on, as `Calendar` weekday
+    /// numbers (1 = Sunday … 7 = Saturday). Empty means unscheduled.
+    /// Drives the Today "Up next" card. Additive defaulted field — no
+    /// migration.
+    var scheduledWeekdays: [Int] = []
+
     @Relationship(deleteRule: .cascade, inverse: \TemplateExercise.template)
     var exercises: [TemplateExercise] = []
 
@@ -73,6 +79,15 @@ final class WorkoutTemplate: Identifiable {
     /// present, falling back to the uniform `plannedSets`.
     var totalPlannedSets: Int {
         exercises.reduce(0) { $0 + $1.effectiveSetCount }
+    }
+
+    /// Whether the user has pinned this template to any weekday.
+    var isScheduled: Bool { !scheduledWeekdays.isEmpty }
+
+    /// Whether this template is scheduled on the given `Calendar`
+    /// weekday number (1 = Sunday … 7 = Saturday).
+    func isScheduled(on weekday: Int) -> Bool {
+        scheduledWeekdays.contains(weekday)
     }
 }
 

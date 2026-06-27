@@ -362,16 +362,6 @@ struct CustomExerciseEditorSheet: View {
                             unitColor: Ink.tertiary
                         )
                     }
-                    valueColumn(label: "Reps") {
-                        BareScrubber(
-                            value: defaultRepsBinding,
-                            range: 1...100,
-                            step: 1,
-                            pointsPerStep: 16,
-                            fontSize: 40,
-                            numberColor: Ink.primary
-                        )
-                    }
                 case .duration:
                     valueColumn(label: "Hold") {
                         BareScrubber(
@@ -427,13 +417,6 @@ struct CustomExerciseEditorSheet: View {
         )
     }
 
-    private var defaultRepsBinding: Binding<Double> {
-        Binding(
-            get: { Double(draft.defaultReps) },
-            set: { draft.defaultReps = max(1, Int($0)) }
-        )
-    }
-
     private var defaultDurationBinding: Binding<Double> {
         Binding(
             get: { draft.defaultDuration },
@@ -455,7 +438,6 @@ struct CustomExerciseEditorSheet: View {
                 name: trimmedName,
                 group: draft.group,
                 defaultWeight: draft.defaultWeight,
-                defaultReps: draft.defaultReps,
                 trackingMode: draft.trackingMode,
                 defaultDuration: draft.defaultDuration,
                 equipment: draft.equipment,
@@ -472,7 +454,6 @@ struct CustomExerciseEditorSheet: View {
             item.name = trimmedName
             item.group = draft.group
             item.defaultWeight = draft.defaultWeight
-            item.defaultReps = draft.defaultReps
             item.trackingMode = draft.trackingMode
             item.defaultDuration = draft.defaultDuration
             item.equipment = draft.equipment
@@ -503,7 +484,6 @@ struct CatalogDraft {
     var name: String
     var group: MuscleGroup
     var defaultWeight: Double
-    var defaultReps: Int
     var trackingMode: TrackingMode
     var defaultDuration: TimeInterval
     var equipment: Equipment
@@ -522,7 +502,6 @@ struct CatalogDraft {
         name: "",
         group: .chest,
         defaultWeight: 0,
-        defaultReps: 8,
         trackingMode: .reps,
         defaultDuration: 45,
         equipment: .barbell,
@@ -537,7 +516,6 @@ struct CatalogDraft {
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
-        defaultReps: Int,
         trackingMode: TrackingMode,
         defaultDuration: TimeInterval,
         equipment: Equipment,
@@ -550,7 +528,6 @@ struct CatalogDraft {
         self.name = name
         self.group = group
         self.defaultWeight = defaultWeight
-        self.defaultReps = defaultReps
         self.trackingMode = trackingMode
         self.defaultDuration = defaultDuration
         self.equipment = equipment
@@ -565,7 +542,6 @@ struct CatalogDraft {
         self.name = item.name
         self.group = item.group
         self.defaultWeight = item.defaultWeight
-        self.defaultReps = item.defaultReps
         self.trackingMode = item.trackingMode
         self.defaultDuration = item.defaultDuration > 0 ? item.defaultDuration : 45
         self.equipment = item.equipment

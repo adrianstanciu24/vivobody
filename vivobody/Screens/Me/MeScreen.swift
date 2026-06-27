@@ -136,6 +136,7 @@ struct MeScreen: View {
                 Text("Log weight")
             }
             .buttonStyle(PrimaryButtonStyle())
+            .padding(.top, Space.md)
         }
     }
 

@@ -61,6 +61,7 @@ struct TemplateEditorScreen: View {
             var d = TemplateDraft()
             d.name = existing.name
             d.exercises = existing.orderedExercises.map { ExerciseDraft(from: $0) }
+            d.scheduledWeekdays = existing.scheduledWeekdays
             _draft = State(wrappedValue: d)
         }
     }
@@ -70,6 +71,7 @@ struct TemplateEditorScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.section) {
                     nameField
+                    scheduleSection
                     exercisesSection
                     addExerciseButton
                 }
@@ -145,6 +147,59 @@ struct TemplateEditorScreen: View {
                 .fill(Surface.edge)
                 .frame(height: 1)
         }
+    }
+
+    // MARK: - Schedule
+
+    /// Weekday picker — pin the template to the days it should surface
+    /// on Today's "Up next" card. Optional; empty means unscheduled.
+    private var scheduleSection: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Schedule")
+                .sectionLabelStyle(Opacity.medium)
+
+            HStack(spacing: Space.sm) {
+                ForEach(WeekdayLabels.ordered(), id: \.self) { weekday in
+                    weekdayChip(weekday)
+                }
+            }
+
+            Text("Pin to weekdays to queue it on Today. Optional.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func weekdayChip(_ weekday: Int) -> some View {
+        let isOn = draft.scheduledWeekdays.contains(weekday)
+        return Button {
+            toggleScheduleDay(weekday)
+        } label: {
+            Text(WeekdayLabels.veryShort(weekday))
+                .font(Typography.sectionHeading)
+                .foregroundStyle(isOn ? Color.black : Ink.secondary)
+                .frame(maxWidth: .infinity)
+                .frame(height: Space.tapMin)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(isOn ? Tint.primary : Surface.cardTint)
+                )
+                .contentShape(Capsule(style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Calendar.current.weekdaySymbols[weekday - 1])
+        .accessibilityValue(isOn ? "Scheduled" : "Not scheduled")
+    }
+
+    private func toggleScheduleDay(_ weekday: Int) {
+        if let idx = draft.scheduledWeekdays.firstIndex(of: weekday) {
+            draft.scheduledWeekdays.remove(at: idx)
+        } else {
+            draft.scheduledWeekdays.append(weekday)
+            draft.scheduledWeekdays.sort()
+        }
+        Haptics.selection()
     }
 
     // MARK: - Exercises
@@ -277,11 +332,13 @@ struct TemplateEditorScreen: View {
         switch target {
         case .new(let sortOrder):
             let template = WorkoutTemplate(name: trimmedName, sortOrder: sortOrder)
+            template.scheduledWeekdays = draft.scheduledWeekdays
             modelContext.insert(template)
             attachExercises(to: template)
 
         case .edit(let existing):
             existing.name = trimmedName
+            existing.scheduledWeekdays = draft.scheduledWeekdays
             // Replace exercises wholesale. TemplateExercises hold only
             // plan data — no logged history — so nothing of value is
             // discarded.

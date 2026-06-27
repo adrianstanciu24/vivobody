@@ -803,6 +803,12 @@ private struct TemplateCard: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .lineLimit(1)
+                if template.isScheduled {
+                    Text(WeekdayLabels.summary(template.scheduledWeekdays))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+                        .lineLimit(1)
+                }
             }
 
             Spacer(minLength: Space.sm)

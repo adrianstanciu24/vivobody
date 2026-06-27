@@ -45,7 +45,6 @@ struct CatalogRecord: Decodable, Sendable {
     let group: String
     let defaultWeight: Double?
     let defaultWeightKg: Double?
-    let defaultReps: Int?
     let trackingMode: String?
     let defaultDuration: TimeInterval?
     let equipment: String?
@@ -64,7 +63,6 @@ struct CatalogRecord: Decodable, Sendable {
     /// Native kg seed (multiple of 2.5 kg), or nil for unloaded /
     /// uncurated records — those fall back to the lb default.
     var defaultWeightKgValue: Double? { defaultWeightKg }
-    var defaultRepsValue: Int { defaultReps ?? 8 }
     var defaultDurationValue: TimeInterval { defaultDuration ?? 0 }
     var trackingModeValue: TrackingMode { trackingMode.flatMap(TrackingMode.init(rawValue:)) ?? .reps }
     var equipmentValue: Equipment { equipment.flatMap(Equipment.init(rawValue:)) ?? .other }

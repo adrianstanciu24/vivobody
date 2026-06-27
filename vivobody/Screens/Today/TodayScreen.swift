@@ -78,6 +78,8 @@ struct TodayScreen: View {
                     // consumer (figure, readiness words, the drill-down
                     // boards) derives from this single state.
                     let modelState = modelStateCache.state(for: completedSessions)
+                    let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
+                    let attention = attentionMuscles()
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -89,7 +91,7 @@ struct TodayScreen: View {
                                 height: bodyHeroHeight(viewport: proxy.size.height),
                                 state: modelState
                             )
-                            developmentLegend
+                            figureCaption
                         }
                             // Depth: the figure settles back into the forge as
                             // you scroll past it. Driven by .scrollTransition
@@ -103,9 +105,17 @@ struct TodayScreen: View {
                                     .opacity(1 - abs(phase.value) * 0.30)
                             }
                             .settleIn(0)
-                        streakSection.settleIn(1)
-                        SectionDivider().settleIn(2)
-                        lastWorkoutSection.settleIn(3)
+                        if !attention.isEmpty {
+                            needsAttentionSection(attention).settleIn(1)
+                            SectionDivider().settleIn(2)
+                        }
+                        if upNext.isPresentable {
+                            upNextView(upNext).settleIn(3)
+                            SectionDivider().settleIn(4)
+                        }
+                        streakSection.settleIn(5)
+                        SectionDivider().settleIn(6)
+                        lastWorkoutSection.settleIn(7)
                     }
                     .padding(.top, Space.xs)
                     .padding(.bottom, Space.xxl)
@@ -173,15 +183,43 @@ struct TodayScreen: View {
             .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
     }
 
-    /// The figure's placard. The body's dominant colour is the
-    /// development channel of `MuscleDevelopment` — how built each
-    /// muscle is over months, not a one-session pump — so at rest the
-    /// hero needs one line naming exactly that, or the glow reads as
-    /// decoration. Placed directly beneath the figure (over the plain
-    /// background, not overlaid on the model — the muscle/skeleton
-    /// detail made an overlaid caption unreadable) so it reads as a
-    /// caption under the portrait — it only decodes the colours you're
-    /// looking at.
+    /// The figure's placard, placed directly beneath the portrait (over
+    /// the plain background, not overlaid — the muscle/skeleton detail
+    /// made an overlaid caption unreadable). Once anything is logged the
+    /// readiness line gives the body a voice ("Fresh and in the zone");
+    /// at cold start, when the untrained figure is uniform, the legend
+    /// decodes what the colours will mean instead.
+    @ViewBuilder
+    private var figureCaption: some View {
+        if let line = completedSessions.readiness() {
+            readinessLine(line)
+        } else {
+            developmentLegend
+        }
+    }
+
+    /// The body's voice: one short verdict on how ready you are to train
+    /// again, from freshness + the acute:chronic load trend. The lead
+    /// clause is brightened against the dimmer nudge; the colour stays
+    /// in the figure, so the words read calm and grayscale.
+    private func readinessLine(_ line: ReadinessLine) -> some View {
+        var lead = AttributedString(line.tail.isEmpty ? line.lead : line.lead + " ")
+        lead.foregroundColor = Ink.primary
+        var tail = AttributedString(line.tail)
+        tail.foregroundColor = Ink.secondary
+
+        return Text(lead + tail)
+            .font(Typography.body)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Space.xl)
+            .accessibilityElement()
+            .accessibilityLabel(line.phrase)
+    }
+
+    /// The cold-start placard: with no history the figure is uniform, so
+    /// this names what the colours will come to mean as you train.
     private var developmentLegend: some View {
         Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off.")
             .font(Typography.caption)
@@ -191,6 +229,148 @@ struct TodayScreen: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Space.xl)
             .accessibilityHidden(true)
+    }
+
+    // MARK: - Up next
+
+    /// The schedule-driven recommendation: what's queued for today (one
+    /// tap to start) or the next workout the week holds. Hidden entirely
+    /// when no template is pinned to a weekday — the pinned START covers
+    /// the unplanned case.
+    @ViewBuilder
+    private func upNextView(_ upNext: UpNext) -> some View {
+        switch upNext.kind {
+        case let .scheduled(template, more, easeOff):
+            upNextSection(template: template, when: "Today", more: more, startable: true, easeOff: easeOff)
+        case let .rest(_, next, daysUntil, more):
+            if let next {
+                upNextSection(template: next, when: upNextWhen(daysUntil), more: more, startable: false, easeOff: false)
+            }
+        case .unscheduled:
+            EmptyView()
+        }
+    }
+
+    /// Card-free instrument section, the same shape as Streak and Last
+    /// workout: a header whose dim trailing carries the "when", then the
+    /// template name as the weight-bearing line. When it's today the
+    /// name row is the tap target and wears the lone accent arrow;
+    /// future days read as a quiet preview.
+    private func upNextSection(
+        template: WorkoutTemplate,
+        when: String,
+        more: Int,
+        startable: Bool,
+        easeOff: Bool
+    ) -> some View {
+        let detail = VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: Space.sm) {
+                Text(template.name)
+                    .font(Typography.display)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if startable {
+                    Spacer(minLength: Space.sm)
+                    Image(systemName: "arrow.right")
+                        .font(Typography.title)
+                        .foregroundStyle(Tint.primary)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(upNextSubtitle(template, more: more))
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .lineLimit(1)
+
+            if easeOff {
+                Text("Running hot, ease off")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.primary.opacity(0.9))
+            }
+        }
+
+        return VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Up next", trailing: when)
+
+            if startable {
+                Button {
+                    Haptics.crescendo()
+                    appState.startWorkoutFromTemplate(template)
+                } label: { detail }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Start \(template.name)")
+                    .accessibilityHint("Scheduled for today")
+            } else {
+                detail.accessibilityElement(children: .combine)
+            }
+        }
+    }
+
+    private func upNextWhen(_ daysUntil: Int) -> String {
+        switch daysUntil {
+        case 0:  return "Today"
+        case 1:  return "Tomorrow"
+        default: return "in \(daysUntil) days"
+        }
+    }
+
+    private func upNextSubtitle(_ template: WorkoutTemplate, more: Int) -> String {
+        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
+        let base = groups.isEmpty
+            ? "\(template.orderedExercises.count) ex · \(template.totalPlannedSets) sets"
+            : groups
+        return more > 0 ? "\(base)  ·  +\(more) more" : base
+    }
+
+    // MARK: - Needs attention
+
+    /// The two or three muscles most worth training next: previously
+    /// trained but now stale lead, then never-trained, capped so the
+    /// row stays a glance rather than a guilt-list. Empty (and hidden)
+    /// until there's training to judge against.
+    private func attentionMuscles() -> [MuscleVolumeStat] {
+        let neglected = completedSessions.muscleVolume().summary.neglected
+        let rested = neglected.filter { $0.daysSinceLastTrained != nil }
+        let never = neglected.filter { $0.daysSinceLastTrained == nil }
+        return Array((rested + never).prefix(3))
+    }
+
+    private func needsAttentionSection(_ muscles: [MuscleVolumeStat]) -> some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Needs attention")
+            VStack(spacing: 0) {
+                ForEach(muscles) { attentionRow($0) }
+            }
+        }
+    }
+
+    /// One muscle on the neglect board: its name carries the weight on
+    /// the left, the recency/volume verdict sits dim and right-aligned,
+    /// rows parted by the same hairline the screen uses between sections.
+    private func attentionRow(_ stat: MuscleVolumeStat) -> some View {
+        HStack(spacing: Space.sm) {
+            Text(stat.muscle.displayName)
+                .font(Typography.headline)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(1)
+            Spacer(minLength: Space.sm)
+            Text(attentionQualifier(stat))
+                .sectionLabelStyle(Opacity.soft)
+                .monospacedDigit()
+        }
+        .frame(minHeight: Space.tapMin)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func attentionQualifier(_ stat: MuscleVolumeStat) -> String {
+        switch stat.zone {
+        case .untrained:
+            return stat.daysSinceLastTrained.map { "\($0)d" } ?? "new"
+        default:
+            return "low"
+        }
     }
 
     /// The figure is the hero, so it takes nearly the whole first

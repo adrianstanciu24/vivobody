@@ -169,8 +169,6 @@ final class ExerciseCatalogItem: Identifiable {
     /// migration for existing catalogs.
     var defaultWeightKg: Double? = nil
 
-    var defaultReps: Int = 8
-
     /// How this exercise is measured — reps or a timed hold. Stored
     /// as a raw value; defaulted so existing catalogs read as reps
     /// with no migration. Copied to templates / sessions at pick-time.
@@ -264,6 +262,14 @@ final class ExerciseCatalogItem: Identifiable {
         defaultWeight(forUnit: .current)
     }
 
+    /// Default starting reps, derived from mechanic rather than stored
+    /// per-exercise: compound lifts seed lower (heavier work), isolation
+    /// higher. Used only to seed a freshly-picked template / workout
+    /// exercise; the user adjusts from there.
+    var defaultReps: Int {
+        mechanic == .compound ? 8 : 12
+    }
+
     /// Computed accessor for the tracking-mode enum.
     var trackingMode: TrackingMode {
         get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
@@ -318,7 +324,6 @@ final class ExerciseCatalogItem: Identifiable {
         group: MuscleGroup,
         defaultWeight: Double,
         defaultWeightKg: Double? = nil,
-        defaultReps: Int = 8,
         trackingMode: TrackingMode = .reps,
         defaultDuration: TimeInterval = 0,
         equipment: Equipment = .barbell,
@@ -336,7 +341,6 @@ final class ExerciseCatalogItem: Identifiable {
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
         self.defaultWeightKg = defaultWeightKg
-        self.defaultReps = defaultReps
         self.trackingModeRaw = trackingMode.rawValue
         self.defaultDuration = defaultDuration
         self.equipmentRaw = equipment.rawValue
@@ -363,7 +367,6 @@ extension ExerciseCatalogItem {
             group: record.muscleGroup,
             defaultWeight: record.defaultWeightValue,
             defaultWeightKg: record.defaultWeightKgValue,
-            defaultReps: record.defaultRepsValue,
             trackingMode: record.trackingModeValue,
             defaultDuration: record.defaultDurationValue,
             equipment: record.equipmentValue,
