@@ -66,7 +66,7 @@
 import CoreGraphics
 import Foundation
 
-enum MuscleDevelopment {
+nonisolated enum MuscleDevelopment {
 
     // MARK: - Tunable parameters
 

@@ -23,7 +23,7 @@ enum WeightFormatter {
 
     /// Convert a canonical pounds value to a value in the user's
     /// preferred unit, suitable for showing in a scrubber or label.
-    static func toDisplay(_ lb: Double, unit: WeightUnit) -> Double {
+    nonisolated static func toDisplay(_ lb: Double, unit: WeightUnit) -> Double {
         switch unit {
         case .lb: return lb
         case .kg: return lb * WeightUnit.kgPerLb
@@ -32,7 +32,7 @@ enum WeightFormatter {
 
     /// Convert a display-unit value (the user typed / scrubbed it
     /// in their unit) back to canonical lb for storage.
-    static func toCanonical(_ display: Double, unit: WeightUnit) -> Double {
+    nonisolated static func toCanonical(_ display: Double, unit: WeightUnit) -> Double {
         switch unit {
         case .lb: return display
         case .kg: return display * WeightUnit.lbPerKg
@@ -54,7 +54,7 @@ enum WeightFormatter {
     /// "135 lb" or "61.2 kg". Pass `fractionDigits` to override
     /// the unit's default precision (e.g. body weight should always
     /// show 1 fraction digit regardless of unit).
-    static func string(
+    nonisolated static func string(
         _ lb: Double,
         unit: WeightUnit,
         fractionDigits: Int? = nil,
@@ -117,7 +117,7 @@ enum WeightFormatter {
 
     // MARK: - Internals
 
-    private static func formatValue(_ value: Double, digits: Int) -> String {
+    nonisolated private static func formatValue(_ value: Double, digits: Int) -> String {
         if digits == 0 {
             return "\(Int(value.rounded()))"
         }

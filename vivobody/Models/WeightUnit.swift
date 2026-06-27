@@ -22,7 +22,7 @@
 
 import Foundation
 
-enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
+nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     case lb, kg
 
     var id: String { rawValue }
@@ -118,14 +118,14 @@ enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
 
 /// Conversion uses the international avoirdupois pound: exactly
 /// 0.45359237 kg. Apple's HealthKit uses the same constant.
-extension WeightUnit {
+nonisolated extension WeightUnit {
     static let lbPerKg: Double = 1.0 / 0.45359237   // ≈ 2.20462262
     static let kgPerLb: Double = 0.45359237
 }
 
 // MARK: - Current preference
 
-extension WeightUnit {
+nonisolated extension WeightUnit {
     /// The user's selected unit, read straight from UserDefaults.
     /// For non-view code (value-copying model inits that seed a
     /// catalog default) that can't reach @AppStorage. View code

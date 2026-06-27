@@ -14,6 +14,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct ConsistencyReportTests {
 
     // MARK: - Virtual clock

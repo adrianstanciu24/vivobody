@@ -286,6 +286,7 @@ struct TemplateDetailScreen: View {
     private func deleteExercise(_ exercise: TemplateExercise) {
         if let idx = template.exercises.firstIndex(where: { $0.id == exercise.id }) {
             template.exercises.remove(at: idx)
+            modelContext.delete(exercise)
         }
         repackSortOrder()
         try? modelContext.save()

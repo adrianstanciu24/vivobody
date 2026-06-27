@@ -12,7 +12,7 @@
 
 import Foundation
 
-enum DurationFormatter {
+nonisolated enum DurationFormatter {
 
     // MARK: - String formatting
 

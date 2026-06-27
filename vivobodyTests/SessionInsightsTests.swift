@@ -12,6 +12,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct SessionInsightsTests {
 
     // MARK: - Builders

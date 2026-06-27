@@ -9,7 +9,7 @@
 
 import SwiftUI
 
-enum SettingsKey {
+nonisolated enum SettingsKey {
     static let hapticsEnabled = "settings.hapticsEnabled"
     static let defaultRestSeconds = "settings.defaultRestSeconds"
     /// Stores `WeightUnit.rawValue` ("lb" or "kg"). Read via
@@ -22,7 +22,7 @@ enum SettingsKey {
     static let appearance = "settings.appearance"
 }
 
-enum SettingsDefaults {
+nonisolated enum SettingsDefaults {
     static let hapticsEnabled = true
     static let defaultRestSeconds = 60
     static let weightUnit = WeightUnit.lb.rawValue
@@ -32,7 +32,7 @@ enum SettingsDefaults {
 /// The user's colour-scheme preference. `system` follows the OS;
 /// `light`/`dark` pin it. Maps to the optional `ColorScheme` SwiftUI
 /// expects at `.preferredColorScheme` (nil = follow system).
-enum AppAppearance: String, CaseIterable, Identifiable {
+nonisolated enum AppAppearance: String, CaseIterable, Identifiable {
     case system
     case light
     case dark

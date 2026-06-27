@@ -453,7 +453,13 @@ struct CustomExerciseEditorSheet: View {
         case .edit(let item):
             item.name = trimmedName
             item.group = draft.group
+            let weightChanged = draft.defaultWeight != item.defaultWeight
             item.defaultWeight = draft.defaultWeight
+            if weightChanged {
+                item.defaultWeightKg = unit == .kg
+                    ? WeightFormatter.toDisplay(draft.defaultWeight, unit: .kg)
+                    : nil
+            }
             item.trackingMode = draft.trackingMode
             item.defaultDuration = draft.defaultDuration
             item.equipment = draft.equipment

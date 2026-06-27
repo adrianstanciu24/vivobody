@@ -14,6 +14,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct AntagonistBalanceTests {
 
     // MARK: - Virtual clock

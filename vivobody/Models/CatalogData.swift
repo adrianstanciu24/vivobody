@@ -34,7 +34,7 @@ import Foundation
 /// stored as raw strings and projected to the app enums through computed
 /// accessors (with sensible defaults) so an uncurated record still
 /// decodes and a future catalog can add cases without a decode failure.
-struct CatalogRecord: Decodable, Sendable {
+nonisolated struct CatalogRecord: Decodable, Sendable {
     /// One graded muscle contribution (weight ∈ 0...1).
     struct MuscleWeight: Decodable, Sendable {
         let muscle: String
@@ -98,7 +98,7 @@ struct CatalogRecord: Decodable, Sendable {
 /// Loads and caches the bundled catalog once. `records` preserves file
 /// order (the transform sorts by group then name); `byName` is the
 /// lowercased-name index every resolver reads.
-enum CatalogData {
+nonisolated enum CatalogData {
     static let records: [CatalogRecord] = load()
 
     static let byName: [String: CatalogRecord] = Dictionary(

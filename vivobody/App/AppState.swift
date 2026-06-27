@@ -73,6 +73,10 @@ final class AppState {
     /// state. Either way, every repeated set begins fresh:
     /// `Exercise.freshCopy(of:)` clears completion state.
     func startTodaysWorkout(basedOn template: WorkoutSession? = nil) {
+        guard activeSession == nil else {
+            isWorkoutExpanded = true
+            return
+        }
         let plan: [Exercise]
         if let template, !template.orderedExercises.isEmpty {
             plan = template.orderedExercises.map(Exercise.freshCopy(of:))
@@ -90,6 +94,10 @@ final class AppState {
     /// × `plannedWeight`). The template's `lastUsedAt` is stamped and
     /// persisted so the Library list can highlight recent picks.
     func startWorkoutFromTemplate(_ template: WorkoutTemplate) {
+        guard activeSession == nil else {
+            isWorkoutExpanded = true
+            return
+        }
         let plan = template.orderedExercises.map(Exercise.init(from:))
         activeSession = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
         isWorkoutExpanded = true

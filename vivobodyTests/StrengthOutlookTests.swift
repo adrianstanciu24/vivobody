@@ -14,6 +14,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct StrengthOutlookTests {
 
     // MARK: - Virtual clock

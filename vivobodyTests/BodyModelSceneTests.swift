@@ -14,6 +14,7 @@ import UIKit
 import Testing
 @testable import vivobody
 
+@MainActor
 struct BodyModelSceneTests {
 
     /// First material found at or below a named node (one shared

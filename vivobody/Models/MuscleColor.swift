@@ -43,7 +43,7 @@ enum BodyModelTheme {
     case dark
 }
 
-enum MuscleColor {
+nonisolated enum MuscleColor {
 
     // MARK: - Tunables (gamma sRGB endpoints)
 

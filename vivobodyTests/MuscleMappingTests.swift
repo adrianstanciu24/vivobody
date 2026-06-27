@@ -67,7 +67,7 @@ struct MuscleMappingTests {
         #expect(bench.secondary == [.triceps, .deltoids])
     }
 
-    @Test func classificationResolvesForKnownLift() {
+    @Test @MainActor func classificationResolvesForKnownLift() {
         let classification = ExerciseClassification.forExerciseNamed("Bench Press")
         #expect(classification?.equipment == .barbell)
         #expect(classification?.mechanic == .compound)

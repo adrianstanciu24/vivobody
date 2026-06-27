@@ -11,6 +11,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct IntensityMixTests {
 
     private let now = Date(timeIntervalSince1970: 1_700_000_000)

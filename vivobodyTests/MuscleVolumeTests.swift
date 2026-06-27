@@ -22,6 +22,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct MuscleVolumeTests {
 
     // MARK: - Virtual clock

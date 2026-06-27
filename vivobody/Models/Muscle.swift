@@ -103,7 +103,7 @@ enum Muscle: String, Hashable, CaseIterable {
     /// Mesh base-names (without the `_L`/`_R` suffix) this region
     /// covers in BodyModel.scn. Exact archive spelling — see file
     /// header.
-    private var nodeBaseNames: [String] {
+    nonisolated private var nodeBaseNames: [String] {
         switch self {
         case .pectorals:
             return ["Pectoralis_Major", "Pectoralis_Minor"]
@@ -157,21 +157,21 @@ enum Muscle: String, Hashable, CaseIterable {
     /// Full mesh node names this region paints — every base name
     /// expanded to its `_L` and `_R` halves. These match
     /// `SCNNode.name` values in BodyModel.scn.
-    var nodeNames: [String] {
+    nonisolated var nodeNames: [String] {
         nodeBaseNames.flatMap { ["\($0)_L", "\($0)_R"] }
     }
 }
 
 // MARK: - Default exercise → muscle map
 
-extension Muscle {
+nonisolated extension Muscle {
     /// Per-muscle contribution for one exercise: an ordered list of
     /// (muscle, weight) pairs, where weight ∈ 0...1 is the fraction of
     /// the exercise's effort credited to that muscle. Prime movers sit
     /// at/above `primeThreshold`; lighter synergists grade down. The
     /// `primary`/`secondary` accessors project this back onto the old
     /// two-tier view for callers that still want it.
-    struct Involvement {
+    nonisolated struct Involvement {
         /// Standard contribution levels used to author the catalog.
         static let prime = 1.0   // the target muscle
         static let major = 0.7   // heavily-loaded synergist
