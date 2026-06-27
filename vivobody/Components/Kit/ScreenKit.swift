@@ -59,7 +59,19 @@ struct SectionHeader: View {
 struct SectionDivider: View {
     var body: some View {
         Rectangle()
-            .fill(Surface.edge)
+            .fill(
+                LinearGradient(
+                    stops: [
+                        .init(color: Color.clear, location: 0.0),
+                        .init(color: Surface.edge, location: 0.3),
+                        .init(color: Surface.edgeBright, location: 0.5),
+                        .init(color: Surface.edge, location: 0.7),
+                        .init(color: Color.clear, location: 1.0),
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
             .frame(height: 1)
     }
 }

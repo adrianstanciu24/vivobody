@@ -3,13 +3,13 @@
 //  vivobody
 //
 //  The app's home tab. Quiet, scannable, anchored by the big
-//  "Start Workout" call-to-action. Composes three previously-built
+//  "Start Workout" call-to-action. Composes previously-built
 //  atoms into their first real screen home:
-//    • StreakCalendar — the current month with workout dots
+//    • StreakCalendar — the current month with workout dots + PR pulse
 //    • PrimaryActionButton — the START WORKOUT call-to-action
 //    • DigitTicker — used inside the LastWorkout stats strip
 //
-//  The screen reads AppState directly (workout dates, streak count,
+//  The screen reads AppState directly (workout dates, PR dates,
 //  last completed session) and emits a single intent: start today's
 //  workout. The shell handles presentation.
 //
@@ -113,7 +113,7 @@ struct TodayScreen: View {
                             upNextView(upNext).settleIn(3)
                             SectionDivider().settleIn(4)
                         }
-                        streakSection.settleIn(5)
+                        consistencySection.settleIn(5)
                         SectionDivider().settleIn(6)
                         lastWorkoutSection.settleIn(7)
                     }
@@ -212,8 +212,10 @@ struct TodayScreen: View {
             .font(Typography.body)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity)
             .padding(.horizontal, Space.xl)
+            .padding(.vertical, Space.md)
+            .contentChip()
+            .frame(maxWidth: .infinity)
             .accessibilityElement()
             .accessibilityLabel(line.phrase)
     }
@@ -226,8 +228,10 @@ struct TodayScreen: View {
             .foregroundStyle(Ink.secondary)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity)
             .padding(.horizontal, Space.xl)
+            .padding(.vertical, Space.md)
+            .contentChip()
+            .frame(maxWidth: .infinity)
             .accessibilityHidden(true)
     }
 
@@ -251,11 +255,12 @@ struct TodayScreen: View {
         }
     }
 
-    /// Card-free instrument section, the same shape as Streak and Last
-    /// workout: a header whose dim trailing carries the "when", then the
-    /// template name as the weight-bearing line. When it's today the
-    /// name row is the tap target and wears the lone accent arrow;
-    /// future days read as a quiet preview.
+    /// Rich preview card for the next scheduled workout: template
+    /// name, muscle-group subtitle, a capped exercise list with
+    /// set/rep/load schemes, an optional ease-off warning, and a
+    /// start button at the bottom. When the workout is today the
+    /// card wears the accent tint and the button is live; future
+    /// days read as a neutral preview with a disabled button.
     private func upNextSection(
         template: WorkoutTemplate,
         when: String,
@@ -263,49 +268,145 @@ struct TodayScreen: View {
         startable: Bool,
         easeOff: Bool
     ) -> some View {
-        let detail = VStack(alignment: .leading, spacing: Space.xs) {
-            HStack(spacing: Space.sm) {
-                Text(template.name)
-                    .font(Typography.display)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                if startable {
-                    Spacer(minLength: Space.sm)
-                    Image(systemName: "arrow.right")
-                        .font(Typography.title)
-                        .foregroundStyle(Tint.primary)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(upNextSubtitle(template, more: more))
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .lineLimit(1)
-
-            if easeOff {
-                Text("Running hot, ease off")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.primary.opacity(0.9))
-            }
-        }
+        let exercises = template.orderedExercises
+        let maxPreview = 5
+        let preview = Array(exercises.prefix(maxPreview))
+        let remaining = exercises.count - maxPreview
 
         return VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Up next", trailing: when)
 
-            if startable {
-                Button {
-                    Haptics.crescendo()
-                    appState.startWorkoutFromTemplate(template)
-                } label: { detail }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Start \(template.name)")
-                    .accessibilityHint("Scheduled for today")
-            } else {
-                detail.accessibilityElement(children: .combine)
+            VStack(alignment: .leading, spacing: Space.md) {
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text(template.name)
+                        .font(Typography.display)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+
+                    Text(upNextSubtitle(template, more: more))
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                        .lineLimit(1)
+                }
+
+                VStack(spacing: 0) {
+                    ForEach(Array(preview.enumerated()), id: \.element.id) { index, exercise in
+                        upNextExerciseRow(exercise)
+                        if index < preview.count - 1 || remaining > 0 {
+                            Rectangle()
+                                .fill(Surface.edge)
+                                .frame(height: 0.5)
+                        }
+                    }
+                    if remaining > 0 {
+                        Text("+\(remaining) more")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, Space.sm)
+                    }
+                }
+
+                if easeOff {
+                    HStack(spacing: Space.sm) {
+                        Image(systemName: "flame")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.primary)
+                        Text("Running hot, ease off")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.primary.opacity(0.9))
+                    }
+                }
+
+                Rectangle()
+                    .fill(Surface.edge)
+                    .frame(height: 0.5)
+
+                upNextStartButton(template: template, startable: startable)
             }
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.lg)
+            .contentCard(tint: startable ? Tint.primary : nil)
         }
+    }
+
+    /// One exercise in the Up Next preview: name on the left,
+    /// set/rep/load scheme on the right. Compact, non-interactive.
+    private func upNextExerciseRow(_ exercise: TemplateExercise) -> some View {
+        HStack(spacing: Space.sm) {
+            Text(exercise.name)
+                .font(Typography.headline)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(1)
+            Spacer(minLength: Space.sm)
+            Text(exerciseScheme(exercise))
+                .font(Typography.metricUnit)
+                .foregroundStyle(Ink.tertiary)
+                .monospacedDigit()
+                .lineLimit(1)
+        }
+        .padding(.vertical, Space.sm)
+        .accessibilityElement(children: .combine)
+    }
+
+    /// Compact set/rep/load summary for one template exercise,
+    /// matching the format used on the Template Detail screen.
+    private func exerciseScheme(_ exercise: TemplateExercise) -> String {
+        switch exercise.trackingMode {
+        case .reps:
+            if exercise.hasPerSetData {
+                let sets = exercise.orderedSets
+                let weights = sets.map(\.weight)
+                guard let lo = weights.min(), let hi = weights.max() else { return "" }
+                if lo == hi, let first = sets.first {
+                    return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+                }
+                let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
+                let hiStr = WeightFormatter.string(hi, unit: unit)
+                return "\(sets.count) sets · \(loStr)–\(hiStr)"
+            }
+            return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+
+        case .duration:
+            if exercise.hasPerSetData {
+                let sets = exercise.orderedSets
+                let durations = sets.map(\.duration)
+                guard let lo = durations.min(), let hi = durations.max() else { return "" }
+                if lo == hi {
+                    return "\(sets.count) × \(DurationFormatter.string(lo)) hold"
+                }
+                return "\(sets.count) sets · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+            }
+            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) hold"
+            return exercise.plannedWeight > 0
+                ? "\(base) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+                : base
+        }
+    }
+
+    /// Start button at the bottom of the Up Next card. Solid accent
+    /// fill with black text when the workout is startable today; a
+    /// neutral surface with dimmed text when it's a future-day
+    /// preview.
+    private func upNextStartButton(template: WorkoutTemplate, startable: Bool) -> some View {
+        let shape = RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
+        return Button {
+            Haptics.crescendo()
+            appState.startWorkoutFromTemplate(template)
+        } label: {
+            Text("Start")
+                .font(Typography.headline)
+                .foregroundStyle(startable ? Tint.onAccent : Ink.tertiary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Space.md)
+                .background {
+                    shape.fill(startable ? Tint.primary : Surface.cardTintBright)
+                }
+        }
+        .disabled(!startable)
+        .accessibilityLabel("Start \(template.name)")
+        .accessibilityHint(startable ? "Scheduled for today" : "Not available yet")
     }
 
     private func upNextWhen(_ daysUntil: Int) -> String {
@@ -340,28 +441,52 @@ struct TodayScreen: View {
     private func needsAttentionSection(_ muscles: [MuscleVolumeStat]) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Needs attention")
-            VStack(spacing: 0) {
-                ForEach(muscles) { attentionRow($0) }
+            HStack(spacing: Space.sm) {
+                ForEach(muscles) { stat in
+                    attentionTile(stat)
+                }
             }
         }
     }
 
-    /// One muscle on the neglect board: its name carries the weight on
-    /// the left, the recency/volume verdict sits dim and right-aligned,
-    /// rows parted by the same hairline the screen uses between sections.
-    private func attentionRow(_ stat: MuscleVolumeStat) -> some View {
-        HStack(spacing: Space.sm) {
+    /// One neglected muscle as a vertical tile anchored by a recency
+    /// ring. The ring fills proportionally to how recently the muscle
+    /// was trained (or how close its volume is to the minimum
+    /// effective threshold), so an empty ring reads "zero work" at a
+    /// glance — no text parsing needed. The muscle name and a short
+    /// qualifier sit beneath the ring as detail.
+    private func attentionTile(_ stat: MuscleVolumeStat) -> some View {
+        VStack(spacing: Space.sm) {
+            AttentionRing(fraction: attentionRecencyFraction(stat))
             Text(stat.muscle.displayName)
                 .font(Typography.headline)
                 .foregroundStyle(Ink.primary)
                 .lineLimit(1)
-            Spacer(minLength: Space.sm)
+                .minimumScaleFactor(0.6)
             Text(attentionQualifier(stat))
-                .sectionLabelStyle(Opacity.soft)
+                .font(Typography.metricMicro)
+                .foregroundStyle(Ink.tertiary)
                 .monospacedDigit()
         }
-        .frame(minHeight: Space.tapMin)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Space.lg)
+        .contentChip()
         .accessibilityElement(children: .combine)
+    }
+
+    /// Recency ring fill fraction (0…1). For untrained muscles the
+    /// arc depletes over a 14-day reference — 0 days rest = full,
+    /// 14+ days = empty, never-trained = empty. For under-volume
+    /// muscles the arc represents how close the weekly effective-set
+    /// count is to the muscle's minimum effective volume.
+    private func attentionRecencyFraction(_ stat: MuscleVolumeStat) -> Double {
+        switch stat.zone {
+        case .untrained:
+            guard let days = stat.daysSinceLastTrained else { return 0 }
+            return max(0, 1 - Double(days) / 14)
+        default:
+            return min(1, stat.effectiveSets / stat.landmark.mev)
+        }
     }
 
     private func attentionQualifier(_ stat: MuscleVolumeStat) -> String {
@@ -390,30 +515,39 @@ struct TodayScreen: View {
 
     private static let heroFraction: CGFloat = 0.80
 
-    private var streakSection: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
+    private var consistencySection: some View {
+        let streak = completedSessions.workoutStreak
+        return VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
-                title: "Streak",
-                trailing: workoutDates.isEmpty ? nil : "\(monthCount(in: Date())) this month"
+                title: "Consistency",
+                trailing: streakText(streak)
             )
-            streakHeading
-            StreakCalendar(workoutDates: workoutDates, month: Date())
+            StreakCalendar(workoutDates: workoutDates, prDates: prDates, month: Date())
+                .padding(Space.xl)
+                .contentCard()
+            NavigationLink {
+                ConsistencyScreen()
+            } label: {
+                HStack {
+                    Text("View detail")
+                        .font(Typography.sectionLabel)
+                        .foregroundStyle(Ink.secondary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
+                .contentChip()
+            }
+            .buttonStyle(.plain)
         }
     }
 
-    private var streakHeading: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 4) {
-            // Rolls into place like the workout's odometer instead of
-            // blinking in — the streak feels counted, not printed.
-            DigitTicker(
-                value: Double(currentStreakDays),
-                font: Typography.metricLg,
-                color: currentStreakDays > 0 ? Tint.inProgress : Ink.primary
-            )
-            Text(currentStreakDays == 1 ? "day" : "days")
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.tertiary)
-        }
+    private func streakText(_ streak: WorkoutStreak) -> String? {
+        guard streak.current > 0 else { return nil }
+        return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
     }
 
     /// The primary target: a full-width START, the biggest and first-
@@ -459,13 +593,15 @@ struct TodayScreen: View {
         StatStrip(
             stats: [
                 Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
-                Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume"),
+                Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume", accent: lastWorkoutHasPR),
                 Stat(value: "\(session.totalSets)", label: "Sets"),
             ],
             valueFont: Typography.statValue,
             edgeAligned: true
         )
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Space.xl)
+        .contentCard()
     }
 
     /// Relative day + time of the last session, surfaced as the dim
@@ -536,35 +672,48 @@ struct TodayScreen: View {
         })
     }
 
-    /// Consecutive days back from today (or yesterday) with a
-    /// completed session. Today is allowed to be missing — the
-    /// streak then counts from yesterday so an unworked morning
-    /// doesn't visually reset the count.
-    private var currentStreakDays: Int {
-        let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
-        let dates = workoutDates
-
-        var cursor = today
-        if !dates.contains(cursor) {
-            cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
-        }
-        var count = 0
-        while dates.contains(cursor) {
-            count += 1
-            cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
-        }
-        return count
-    }
-
-    private func monthCount(in date: Date) -> Int {
-        let cal = Calendar.current
-        guard let interval = cal.dateInterval(of: .month, for: date) else { return 0 }
-        return workoutDates.filter { $0 >= interval.start && $0 < interval.end }.count
+    /// Calendar days on which a PR was set. Passed to StreakCalendar
+    /// so PR dots can pulsate.
+    private var prDates: Set<Date> {
+        Set(completedSessions.filter { prSessionIDs.contains($0.id) }
+            .map { Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
     private func volumeLabel(_ value: Double) -> String {
         WeightFormatter.volumeValue(value, unit: unit)
+    }
+
+    /// Whether the most recent session set a new all-time top weight
+    /// on any exercise — the same semantics as History's PR badge and
+    /// the live PR-celebration overlay. When true, the Volume stat on
+    /// the Last workout strip wears the completion accent.
+    private var lastWorkoutHasPR: Bool {
+        guard let lastID = completedSessions.first?.id else { return false }
+        return prSessionIDs.contains(lastID)
+    }
+
+    /// IDs of sessions in which at least one exercise hit a new
+    /// all-time top-weight at the moment it was logged. Walks the
+    /// archive oldest-first, tracking the running max per exercise
+    /// name. Matches `HistoryScreen.sessionsWithPR` exactly.
+    private var prSessionIDs: Set<UUID> {
+        var bestByExercise: [String: Double] = [:]
+        var prIDs: Set<UUID> = []
+        for session in completedSessions.reversed() {
+            for exercise in session.orderedExercises {
+                let topWeight = exercise.sets
+                    .filter(\.isCompleted)
+                    .map(\.weight)
+                    .max() ?? 0
+                guard topWeight > 0 else { continue }
+                let key = exercise.name.lowercased()
+                if topWeight > bestByExercise[key, default: 0] {
+                    bestByExercise[key] = topWeight
+                    prIDs.insert(session.id)
+                }
+            }
+        }
+        return prIDs
     }
 
     // MARK: - Formatters
@@ -612,6 +761,42 @@ private final class BodyModelStateCache {
 
     private static func signature(for sessions: [WorkoutSession]) -> String {
         "\(sessions.count)-\(sessions.first?.completedAt?.timeIntervalSince1970 ?? 0)"
+    }
+}
+
+/// Circular recency ring for one neglected-muscle tile. The arc
+/// animates from empty to its fill fraction on appear, so the ring
+/// "fills" as the section settles in. Honors Reduce Motion by
+/// showing the final value immediately.
+private struct AttentionRing: View {
+    let fraction: Double
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var shown = false
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Surface.edge, lineWidth: 3)
+            if fraction > 0 {
+                Circle()
+                    .trim(from: 0, to: shown ? fraction : 0)
+                    .stroke(
+                        Tint.primary,
+                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+            }
+        }
+        .frame(width: 40, height: 40)
+        .onAppear {
+            if reduceMotion {
+                shown = true
+            } else {
+                withAnimation(.spring(response: 0.7, dampingFraction: 0.8).delay(0.15)) {
+                    shown = true
+                }
+            }
+        }
     }
 }
 

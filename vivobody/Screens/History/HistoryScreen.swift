@@ -79,8 +79,9 @@ struct HistoryScreen: View {
                 if showsWeeklyHero {
                     WeeklyHero(
                         comparison: sessions.weeklyComparison(),
-                        currentStreakDays: currentStreakDays,
+                        averageRIR: thisWeekAverageRIR,
                         workoutDays: workoutDays,
+                        prDays: prDays,
                         unit: unit
                     )
                     .settleIn(0)
@@ -157,37 +158,36 @@ struct HistoryScreen: View {
         return Set(sessions.map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
-    /// Length of the current consecutive-workout-day streak ending
-    /// today or yesterday. "Today" is forgiving: if the user hasn't
-    /// trained today yet, the streak continues counting from
-    /// yesterday backward instead of resetting to zero. Returns 0
-    /// when there's no streak (no workout today or yesterday).
-    private var currentStreakDays: Int {
+    /// Days (start-of-day) on which a PR was set. Passed to the
+    /// cadence strip so PR dots can pulsate.
+    private var prDays: Set<Date> {
         let calendar = Calendar.current
-        let workoutDays = self.workoutDays
-        guard !workoutDays.isEmpty else { return 0 }
+        return Set(sessions.filter { sessionsWithPR.contains($0.id) }
+            .map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
+    }
 
-        let today = calendar.startOfDay(for: Date())
-        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else { return 0 }
+    /// Mean reps-in-reserve over this week's completed reps-mode
+    /// sets. Nil when no rated sets exist in the current calendar
+    /// week. Matches the ConsistencyReport computation but scoped to
+    /// the current week only.
+    private var thisWeekAverageRIR: Double? {
+        let cal = Calendar.current
+        guard let weekRange = cal.dateInterval(of: .weekOfYear, for: Date()) else { return nil }
 
-        // Anchor: today if trained today, else yesterday if trained
-        // yesterday, else no active streak.
-        var cursor: Date
-        if workoutDays.contains(today) {
-            cursor = today
-        } else if workoutDays.contains(yesterday) {
-            cursor = yesterday
-        } else {
-            return 0
+        var rirSum = 0
+        var rirCount = 0
+        for session in sessions {
+            let date = session.completedAt ?? session.startedAt
+            guard date >= weekRange.start && date < weekRange.end else { continue }
+            for exercise in session.exercises where exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isCompleted {
+                    rirSum += set.repsInReserve
+                    rirCount += 1
+                }
+            }
         }
-
-        var count = 0
-        while workoutDays.contains(cursor) {
-            count += 1
-            guard let prev = calendar.date(byAdding: .day, value: -1, to: cursor) else { break }
-            cursor = prev
-        }
-        return count
+        guard rirCount > 0 else { return nil }
+        return Double(rirSum) / Double(rirCount)
     }
 
 }
@@ -203,20 +203,21 @@ struct HistoryScreen: View {
 /// volume odometer.
 private struct WeeklyHero: View {
     let comparison: WeeklyComparison
-    let currentStreakDays: Int
+    let averageRIR: Double?
     let workoutDays: Set<Date>
+    let prDays: Set<Date>
     let unit: WeightUnit
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             header
 
-            WeekCadenceStrip(workoutDays: workoutDays)
+            WeekCadenceStrip(workoutDays: workoutDays, prDays: prDays)
                 .padding(.top, Space.xs)
 
             StatStrip(
                 stats: [
-                    Stat(value: streakLabel, label: "Streak", accent: currentStreakDays >= 2),
+                    Stat(value: rirLabel, label: "Avg RIR", accent: isRIROnTarget),
                     Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
                     Stat(
                         value: WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit),
@@ -261,8 +262,14 @@ private struct WeeklyHero: View {
         }
     }
 
-    private var streakLabel: String {
-        currentStreakDays <= 0 ? "—" : "\(currentStreakDays)d"
+    private var rirLabel: String {
+        guard let rir = averageRIR else { return "—" }
+        return String(format: "%.1f", rir)
+    }
+
+    private var isRIROnTarget: Bool {
+        guard let rir = averageRIR else { return false }
+        return rir >= 1.0 && rir <= 3.0
     }
 }
 
@@ -270,12 +277,15 @@ private struct WeeklyHero: View {
 
 /// Seven dots — the current locale week, Sunday-to-Saturday or
 /// Monday-to-Sunday per the user's calendar. A filled orange dot is
-/// a day you trained; a faint ring is a rest day; today wears a
-/// brighter ring so "where am I in the week" reads at a glance.
-/// Future days in the week are dimmed. This is the streak's calendar
-/// DNA compressed to a single, glanceable row — History's signature.
+/// a day you trained; a dim filled circle is a past rest day (the
+/// day is gone, you didn't train); a hollow ring is a future rest
+/// day (still ahead, nothing logged yet); today wears a brighter
+/// ring. Days with a PR gently pulsate — a soft ember breath that
+/// draws the eye to achievements. This is the streak's calendar DNA
+/// compressed to a single, glanceable row — History's signature.
 private struct WeekCadenceStrip: View {
     let workoutDays: Set<Date>
+    let prDays: Set<Date>
 
     private var calendar: Calendar { .current }
 
@@ -298,30 +308,23 @@ private struct WeekCadenceStrip: View {
         let today = calendar.startOfDay(for: Date())
         let isWorkout = workoutDays.contains(start)
         let isToday = calendar.isDateInToday(day)
-        let isFuture = start > today
+        let isPast = start < today
+        let isPR = prDays.contains(start)
 
         return VStack(spacing: Space.sm) {
             Text(Self.weekdayLetter.string(from: day))
                 .font(Typography.caption)
                 .foregroundStyle(Ink.primary.opacity(Opacity.soft))
-            ZStack {
-                Circle()
-                    .fill(isWorkout ? Tint.primary : Color.clear)
-                Circle()
-                    .stroke(ringColor(isWorkout: isWorkout, isToday: isToday), lineWidth: isToday ? 1.5 : 1)
-            }
-            .frame(width: 30, height: 30)
-            .opacity(isFuture ? 0.30 : 1.0)
+            CadenceDot(
+                isWorkout: isWorkout,
+                isToday: isToday,
+                isPast: isPast,
+                isPR: isPR
+            )
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Self.accessibilityDay.string(from: day))
-        .accessibilityValue(isWorkout ? "Trained" : "Rest")
-    }
-
-    private func ringColor(isWorkout: Bool, isToday: Bool) -> Color {
-        if isToday { return Ink.primary.opacity(Opacity.medium) }
-        if isWorkout { return .clear }
-        return Surface.edge
+        .accessibilityValue(isWorkout ? (isPR ? "Trained, personal record" : "Trained") : "Rest")
     }
 
     private static let weekdayLetter: DateFormatter = {
@@ -335,6 +338,59 @@ private struct WeekCadenceStrip: View {
         f.dateFormat = "EEEE"
         return f
     }()
+}
+
+/// A single cadence dot. PR days gently pulsate — a soft scale breath
+/// plus an ember-colored glow that appears and disappears, matching
+/// the forge's living-motion vocabulary. Non-PR days are static.
+/// Reduce Motion users see a static dot.
+private struct CadenceDot: View {
+    let isWorkout: Bool
+    let isToday: Bool
+    let isPast: Bool
+    let isPR: Bool
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulse = false
+
+    private var shouldPulse: Bool { isPR && !reduceMotion }
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(fillColor)
+            Circle()
+                .stroke(ringColor, lineWidth: isToday ? 1.5 : 1)
+        }
+        .frame(width: 30, height: 30)
+        .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
+        .shadow(
+            color: shouldPulse ? Tint.primary.opacity(pulse ? 0.35 : 0) : .clear,
+            radius: pulse ? 8 : 0
+        )
+        .onAppear {
+            guard shouldPulse else { return }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                pulse = true
+            }
+        }
+    }
+
+    /// Trained days fill bright orange; past rest days fill dim;
+    /// today and future rest days stay clear.
+    private var fillColor: Color {
+        if isWorkout { return Tint.primary }
+        if isPast { return Surface.edge }
+        return .clear
+    }
+
+    /// Today wears a brighter ring; future rest days keep the hairline
+    /// ring; trained and past rest days need no ring.
+    private var ringColor: Color {
+        if isToday { return Ink.primary.opacity(Opacity.medium) }
+        if isWorkout { return .clear }
+        return Surface.edge
+    }
 }
 
 // MARK: - Date group section

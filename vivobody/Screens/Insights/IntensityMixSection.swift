@@ -1,12 +1,13 @@
 //
 //  IntensityMixSection.swift
-//  vivobody
 //
 //  The rep-range distribution of your working sets over the last four
 //  weeks: how much sits in the heavy strength range (1–5), the
 //  growth/hypertrophy range (6–12), and the higher-rep endurance
-//  range (13+). A single segmented bar shows the split; a legend
-//  names the counts; one line reads the emphasis and nudges the gap.
+//  range (13+). A 100% stacked bar (Swift Charts) shows the split at
+//  a glance with inline percentage labels; a structured legend below
+//  carries the zone names, rep ranges, set counts, and percentages.
+//  One line reads the emphasis and nudges the gap.
 //
 //  Hypertrophy wears the accent as the productive default zone; the
 //  heavy and high-rep ends sit in grayscale luminance — one accent,
@@ -14,6 +15,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct IntensityMixSection: View {
     let mix: IntensityMix
@@ -29,19 +31,73 @@ struct IntensityMixSection: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 insight
-
-                SegmentBar(segments: segments)
-                    .padding(.top, Space.xs)
-
-                VStack(spacing: Space.md) {
-                    ForEach(IntensityZone.allCases, id: \.self) { zone in
-                        legendRow(zone)
-                    }
-                }
-                .padding(.top, Space.xs)
+                intensityChart
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: - Chart
+
+    private var intensityChart: some View {
+        VStack(spacing: Space.md) {
+            Chart(slices) { slice in
+                BarMark(
+                    x: .value("Percent", mix.share(slice.zone) * 100),
+                    y: .value("Category", "All")
+                )
+                .foregroundStyle(by: .value("Zone", slice.zone.label))
+                .annotation(position: .overlay) {
+                    if mix.share(slice.zone) > 0.08 {
+                        Text("\(Int((mix.share(slice.zone) * 100).rounded()))%")
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(labelColor(slice.zone))
+                            .monospacedDigit()
+                    }
+                }
+            }
+            .chartForegroundStyleScale(domain: IntensityZone.allCases.map(\.label), range: IntensityZone.allCases.map { color($0) })
+            .chartLegend(.hidden)
+            .chartXScale(domain: 0...100)
+            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
+            .frame(height: 52)
+            .clipShape(RoundedRectangle(cornerRadius: Radius.small, style: .continuous))
+
+            legend
+        }
+        .padding(Space.xl)
+        .contentCard()
+    }
+
+    // MARK: - Legend
+
+    private var legend: some View {
+        VStack(spacing: Space.sm) {
+            ForEach(slices) { slice in
+                HStack(spacing: Space.sm) {
+                    Circle()
+                        .fill(color(slice.zone))
+                        .frame(width: 10, height: 10)
+                    Text(slice.zone.label)
+                        .font(Typography.body)
+                        .foregroundStyle(Ink.primary)
+                    Text(slice.zone.repRange)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                    Spacer(minLength: Space.sm)
+                    Text("\(slice.count) \(slice.count == 1 ? "set" : "sets")")
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                    Text("\(Int((mix.share(slice.zone) * 100).rounded()))%")
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(slice.zone == mix.dominant ? Tint.primary : Ink.tertiary)
+                        .monospacedDigit()
+                        .frame(width: 44, alignment: .trailing)
+                }
+            }
+        }
     }
 
     // MARK: - Insight line
@@ -58,7 +114,6 @@ struct IntensityMixSection: View {
         }
         let pct = Int((mix.share(dominant) * 100).rounded())
 
-        // Balanced read when no single zone owns a clear majority.
         if mix.share(dominant) < 0.5 {
             var a = AttributedString("A balanced spread"); a.foregroundColor = Ink.primary
             var b = AttributedString(" across rep ranges — heavy, hypertrophy, and higher-rep work all represented.")
@@ -87,41 +142,13 @@ struct IntensityMixSection: View {
         }
     }
 
-    // MARK: - Legend
-
-    private func legendRow(_ zone: IntensityZone) -> some View {
-        let count = mix.count(zone)
-        let pct = Int((mix.share(zone) * 100).rounded())
-        return HStack(spacing: Space.sm) {
-            Circle()
-                .fill(color(zone))
-                .frame(width: 8, height: 8)
-            Text(zone.label)
-                .font(Typography.body)
-                .foregroundStyle(Ink.primary)
-            Text(zone.repRange)
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-            Spacer(minLength: Space.sm)
-            Text("\(count) \(count == 1 ? "set" : "sets")")
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.secondary)
-                .monospacedDigit()
-            Text("\(pct)%")
-                .font(Typography.metricUnit)
-                .foregroundStyle(zone == mix.dominant ? Tint.primary : Ink.tertiary)
-                .monospacedDigit()
-                .frame(width: 44, alignment: .trailing)
-        }
-    }
-
     // MARK: - Derived
 
-    private var segments: [SegmentBar.Segment] {
+    private var slices: [IntensitySlice] {
         IntensityZone.allCases.compactMap { zone in
-            let share = mix.share(zone)
-            guard share > 0 else { return nil }
-            return SegmentBar.Segment(share: share, color: color(zone))
+            let count = mix.count(zone)
+            guard count > 0 else { return nil }
+            return IntensitySlice(zone: zone, count: count)
         }
     }
 
@@ -132,35 +159,23 @@ struct IntensityMixSection: View {
         case .endurance:   return Ink.quaternary
         }
     }
+
+    /// Label color per zone for readability inside the bar — dark text
+    /// on the bright accent and light gray, light text on the dark
+    /// endurance segment.
+    private func labelColor(_ zone: IntensityZone) -> Color {
+        switch zone {
+        case .strength:    return .black.opacity(0.7)
+        case .hypertrophy: return Tint.onAccent.opacity(0.85)
+        case .endurance:   return .white.opacity(0.7)
+        }
+    }
 }
 
-// MARK: - Segmented bar
+// MARK: - Chart data
 
-/// A horizontal bar split into proportional segments with a hairline
-/// gap between each — the rep-range distribution at a glance.
-private struct SegmentBar: View {
-    struct Segment: Identifiable {
-        let id = UUID()
-        let share: Double
-        let color: Color
-    }
-
-    let segments: [Segment]
-
-    private let gap: CGFloat = 2
-
-    var body: some View {
-        GeometryReader { geo in
-            let avail = geo.size.width - gap * CGFloat(max(0, segments.count - 1))
-            HStack(spacing: gap) {
-                ForEach(segments) { segment in
-                    Capsule()
-                        .fill(segment.color)
-                        .frame(width: max(2, avail * segment.share))
-                }
-            }
-        }
-        .frame(height: 10)
-        .accessibilityHidden(true)
-    }
+private struct IntensitySlice: Identifiable {
+    let id = UUID()
+    let zone: IntensityZone
+    let count: Int
 }

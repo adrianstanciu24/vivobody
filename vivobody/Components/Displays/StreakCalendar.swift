@@ -16,6 +16,7 @@ import SwiftUI
 
 struct StreakCalendar: View {
     let workoutDates: Set<Date>
+    var prDates: Set<Date> = []
     var month: Date = Date()
     var fillColor: Color = Tint.primary
 
@@ -35,6 +36,10 @@ struct StreakCalendar: View {
 
     private var workoutDays: Set<Date> {
         Set(workoutDates.map { calendar.startOfDay(for: $0) })
+    }
+
+    private var prDays: Set<Date> {
+        Set(prDates.map { calendar.startOfDay(for: $0) })
     }
 
     private var monthSessionCount: Int {
@@ -57,11 +62,14 @@ struct StreakCalendar: View {
                     HStack(spacing: 0) {
                         ForEach(weeks[rowIndex].indices, id: \.self) { col in
                             let cell = weeks[rowIndex][col]
+                            let dayStart = calendar.startOfDay(for: cell.date)
                             DayDot(
                                 day: calendar.component(.day, from: cell.date),
-                                isWorkout: workoutDays.contains(calendar.startOfDay(for: cell.date)),
+                                isWorkout: workoutDays.contains(dayStart),
                                 isInMonth: cell.isInMonth,
                                 isToday: calendar.isDateInToday(cell.date),
+                                isPast: dayStart < calendar.startOfDay(for: Date()),
+                                isPR: prDays.contains(dayStart),
                                 fillColor: fillColor,
                                 size: dotSize
                             )
@@ -145,15 +153,35 @@ private struct DayDot: View {
     let isWorkout: Bool
     let isInMonth: Bool
     let isToday: Bool
+    let isPast: Bool
+    let isPR: Bool
     let fillColor: Color
     let size: CGFloat
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulse = false
+
+    private var shouldPulse: Bool { isPR && !reduceMotion }
+
     var body: some View {
         ZStack {
+            if isToday {
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [fillColor.opacity(0.22), Color.clear],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: size * 0.7
+                        )
+                    )
+                    .frame(width: size * 1.35, height: size * 1.35)
+            }
+
             Circle()
-                .fill(isWorkout ? fillColor : Color.clear)
-                .scaleEffect(isWorkout ? 1.0 : 0.6)
-                .opacity(isWorkout ? 1.0 : 0.0)
+                .fill(dotFillColor)
+                .scaleEffect(dotFillScale)
+                .opacity(dotFillOpacity)
 
             Circle()
                 .stroke(strokeColor, lineWidth: strokeWidth)
@@ -164,16 +192,44 @@ private struct DayDot: View {
         }
         .frame(width: size, height: size)
         .opacity(isInMonth ? 1.0 : 0.18)
+        .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
+        .shadow(
+            color: shouldPulse ? fillColor.opacity(pulse ? 0.35 : 0) : .clear,
+            radius: pulse ? 8 : 0
+        )
+        .onAppear {
+            guard shouldPulse else { return }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                pulse = true
+            }
+        }
         .animation(.spring(response: 0.45, dampingFraction: 0.75), value: isWorkout)
     }
 
+    /// Workout days fill bright orange; past rest days fill dim so
+    /// they read as "gone, missed"; today and future rest days stay
+    /// clear (the ring carries the shape).
+    private var dotFillColor: Color {
+        if isWorkout { return fillColor }
+        if isPast { return Surface.edge }
+        return .clear
+    }
+
+    private var dotFillScale: CGFloat {
+        isWorkout || isPast ? 1.0 : 0.6
+    }
+
+    private var dotFillOpacity: Double {
+        isWorkout || isPast ? 1.0 : 0.0
+    }
+
+    /// Today wears a brighter ring; future rest days keep the hairline
+    /// ring; trained and past rest days need no ring (the fill carries
+    /// the shape).
     private var strokeColor: Color {
-        if isToday {
-            return Ink.secondary
-        }
-        if isWorkout {
-            return Color.clear
-        }
+        if isToday { return Ink.secondary }
+        if isWorkout { return Color.clear }
+        if isPast { return Color.clear }
         return Surface.edge
     }
 

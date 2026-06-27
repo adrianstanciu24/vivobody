@@ -6,8 +6,6 @@
 //    • Your journey — lifetime totals + training age.
 //    • Milestones — threshold badges across the lifetime totals.
 //    • Personal records — top standing records, full wall on tap.
-//    • Consistency — current-month calendar + week streak, full
-//      month-paging view on tap.
 //    • Body weight — latest entry + sparkline, linking to detail.
 //    • This month — the current calendar month's recap.
 //
@@ -62,14 +60,11 @@ struct MeScreen: View {
                 personalRecordsSection
                     .settleIn(2)
                 GroupSeparator()
-                consistencySection
+                bodyWeightSection
                     .settleIn(3)
                 GroupSeparator()
-                bodyWeightSection
-                    .settleIn(4)
-                GroupSeparator()
                 monthlyRecapSection
-                    .settleIn(5)
+                    .settleIn(4)
             }
             .padding(.top, Space.sm)
             // Extra tail so the last row clears the floating tab bar
@@ -295,43 +290,6 @@ struct MeScreen: View {
         }
     }
 
-    // MARK: - Consistency
-
-    /// Current-month calendar + week-streak note, tapping through to
-    /// the full month-paging Consistency screen.
-    private var consistencySection: some View {
-        let streak = completedSessions.workoutStreak
-        return VStack(alignment: .leading, spacing: Space.md) {
-            NavigationLink {
-                ConsistencyScreen()
-            } label: {
-                SectionHeader(title: "Consistency", trailing: streakText(streak))
-            }
-            .buttonStyle(.plain)
-
-            NavigationLink {
-                ConsistencyScreen()
-            } label: {
-                StreakCalendar(workoutDates: workoutDates, month: Date())
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, Space.sm)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            if workoutDates.isEmpty {
-                Text("Your training days light up here as you log workouts.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            }
-        }
-    }
-
-    private func streakText(_ streak: WorkoutStreak) -> String? {
-        guard streak.current > 0 else { return nil }
-        return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
-    }
-
     // MARK: - This month
 
     private var monthlyRecapSection: some View {
@@ -346,14 +304,6 @@ struct MeScreen: View {
             .padding(Space.xl)
             .contentCard()
         }
-    }
-
-    /// Workout days as start-of-day instants for the calendar.
-    private var workoutDates: Set<Date> {
-        let cal = Calendar.current
-        return Set(completedSessions.compactMap { session in
-            session.completedAt.map { cal.startOfDay(for: $0) }
-        })
     }
 
     /// The odometer's spec line: lifetime workouts · sets · PRs on one
