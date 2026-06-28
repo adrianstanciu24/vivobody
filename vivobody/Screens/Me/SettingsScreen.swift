@@ -44,6 +44,9 @@ struct SettingsScreen: View {
         AppAppearance(rawValue: appearanceRaw) ?? .system
     }
 
+    @AppStorage(SettingsKey.healthKitEnabled)
+    private var healthKitEnabled: Bool = SettingsDefaults.healthKitEnabled
+
     /// Controls the destructive-confirmation alert for "Reset
     /// Exercise Catalog." Bound to the alert's `isPresented`.
     @State private var isConfirmingCatalogReset: Bool = false
@@ -89,6 +92,10 @@ struct SettingsScreen: View {
                 restRow
                 rowDivider
                 hapticsRow
+                if HealthKitWorkoutService.isAvailable {
+                    rowDivider
+                    healthKitRow
+                }
                 rowDivider
                 resetCatalogRow
             }
@@ -297,6 +304,41 @@ struct SettingsScreen: View {
                         // reads `true` — this soft tap plays as a
                         // confirmation that haptics just came back on.
                         Haptics.soft()
+                    }
+                }
+            ))
+            .labelsHidden()
+            .tint(Tint.inProgress)
+        }
+    }
+
+    /// Apple Health opt-in. Enabling requests write authorization;
+    /// the toggle settles to the real grant (reverts to off if the
+    /// user declines). Only shown when HealthKit exists on the device
+    /// — so it never appears in the Simulator.
+    private var healthKitRow: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Apple Health")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                Text("Save finished workouts to the Health app")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            }
+            Spacer()
+            Toggle("", isOn: Binding(
+                get: { healthKitEnabled },
+                set: { newValue in
+                    // Optimistically reflect the tap so the switch
+                    // doesn't snap back while the system sheet is up;
+                    // settle to the real grant when it returns.
+                    healthKitEnabled = newValue
+                    guard newValue else { return }
+                    Task {
+                        let granted = await HealthKitWorkoutService.requestAuthorization()
+                        healthKitEnabled = granted
+                        if granted { Haptics.soft() }
                     }
                 }
             ))

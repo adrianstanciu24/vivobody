@@ -241,6 +241,7 @@ final class AppState {
         do {
             try context.saveOrRollback()
             WorkoutLiveActivityController.end(for: session)
+            HealthKitWorkoutService.saveWorkout(for: session, in: context)
             activeSession = nil
             isWorkoutExpanded = false
             WidgetSnapshotWriter.writeAll(in: context)

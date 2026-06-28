@@ -84,6 +84,14 @@ final class WorkoutSession: Identifiable {
     /// field. Set together with `pendingPRValue`.
     var pendingPRUnit: String? = nil
 
+    /// UUID of the `HKWorkout` saved to HealthKit for this session,
+    /// if any. Stamped after a successful Tier A write so the save is
+    /// idempotent — a session that already carries a UUID is never
+    /// written to HealthKit again. Nil for sessions saved before the
+    /// integration, or when HealthKit sync is off / unauthorized.
+    /// Additive defaulted field — no migration.
+    var healthKitWorkoutUUID: UUID? = nil
+
     init(
         id: UUID = UUID(),
         exercises: [Exercise] = [],
