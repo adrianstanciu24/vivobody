@@ -1,0 +1,61 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.91650,0.46118,0.18262,1.00000",
+      "display-p3:0.91602,0.45435,0.18164,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "blur-material" : null,
+      "hidden" : false,
+      "layers" : [
+        {
+          "image-name" : "leaf.svg",
+          "name" : "leaf"
+        },
+        {
+          "blend-mode" : "normal",
+          "hidden" : false,
+          "image-name-specializations" : [
+            {
+              "value" : "forge_background 3.png"
+            },
+            {
+              "appearance" : "light",
+              "value" : "forge_background_light.png"
+            }
+          ],
+          "name" : "forge_background_light",
+          "opacity" : 1
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.6
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.2
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
