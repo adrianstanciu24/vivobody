@@ -371,6 +371,7 @@ struct TemplateEditorScreen: View {
 
         do {
             try modelContext.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
             return

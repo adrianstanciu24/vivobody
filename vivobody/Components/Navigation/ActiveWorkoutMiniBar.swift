@@ -76,6 +76,8 @@ struct ActiveWorkoutMiniBar: View {
                 Haptics.swell()
                 session.skipRest()
                 try? modelContext.save()
+                WorkoutLiveActivityController.update(for: session)
+                WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
             }
         }
     }

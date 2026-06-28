@@ -67,5 +67,7 @@ struct RestTimerOverlay: View {
 
     private func saveRestState() {
         try? modelContext.save()
+        WorkoutLiveActivityController.update(for: session)
+        WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
     }
 }

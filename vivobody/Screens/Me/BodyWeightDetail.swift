@@ -95,6 +95,7 @@ struct BodyWeightDetail: View {
                 context.delete(entry)
                 do {
                     try context.saveOrRollback()
+                    WidgetSnapshotWriter.writeAll(in: context)
                     pendingDelete = nil
                     Haptics.rigid()
                 } catch {

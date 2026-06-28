@@ -104,6 +104,9 @@ struct ActiveWorkoutScreen: View {
         // entire workout to the mini-bar mid-ceremony.
         .interactiveDismissDisabled(session.pendingPRValue != nil)
         .onAppear { Haptics.prepare() }
+        .onChange(of: session.activeExerciseIndex) { _, _ in
+            saveActiveSessionChanges()
+        }
         .alert(endWorkoutAlertTitle, isPresented: $showDiscardConfirm) {
             if session.totalSets > 0 {
                 Button("Save Workout") {
@@ -349,6 +352,8 @@ struct ActiveWorkoutScreen: View {
     private func saveActiveSessionChanges() {
         do {
             try modelContext.save()
+            WorkoutLiveActivityController.update(for: session)
+            WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
         }

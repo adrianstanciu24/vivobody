@@ -198,6 +198,7 @@ struct BodyWeightLogSheet: View {
 
         do {
             try context.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: context)
             dismiss()
         } catch {
             saveError = SaveErrorBox(error)

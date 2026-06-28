@@ -84,6 +84,7 @@ struct TemplateDetailScreen: View {
         .onChange(of: template.name) { _, _ in
             do {
                 try modelContext.saveOrRollback()
+                WidgetSnapshotWriter.writeAll(in: modelContext)
             } catch {
                 saveError = SaveErrorBox(error)
             }
@@ -281,6 +282,7 @@ struct TemplateDetailScreen: View {
         template.exercises.append(new)
         do {
             try modelContext.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
             return
@@ -298,6 +300,7 @@ struct TemplateDetailScreen: View {
         repackSortOrder()
         do {
             try modelContext.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
             return

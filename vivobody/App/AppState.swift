@@ -87,6 +87,7 @@ final class AppState {
         guard let session = try? context.fetch(descriptor).first else { return }
         activeSession = session
         isWorkoutExpanded = false
+        WidgetSnapshotWriter.writeActiveWorkout(in: context)
     }
 
     /// Start a workout. Optionally provide a `template` session to
@@ -158,6 +159,8 @@ final class AppState {
             try context.saveOrRollback()
             activeSession = session
             isWorkoutExpanded = true
+            WorkoutLiveActivityController.start(for: session)
+            WidgetSnapshotWriter.writeAll(in: context)
         } catch {
             lastSaveError = SaveErrorBox(error)
         }
@@ -185,6 +188,8 @@ final class AppState {
             context.delete(session)
             do {
                 try context.saveOrRollback()
+                WorkoutLiveActivityController.end(for: session)
+                WidgetSnapshotWriter.writeAll(in: context)
             } catch {
                 lastSaveError = SaveErrorBox(error)
                 return
@@ -207,6 +212,8 @@ final class AppState {
                 context.delete(session)
                 do {
                     try context.saveOrRollback()
+                    WorkoutLiveActivityController.end(for: session)
+                    WidgetSnapshotWriter.writeAll(in: context)
                 } catch {
                     lastSaveError = SaveErrorBox(error)
                     return
@@ -233,12 +240,39 @@ final class AppState {
         }
         do {
             try context.saveOrRollback()
+            WorkoutLiveActivityController.end(for: session)
             activeSession = nil
             isWorkoutExpanded = false
+            WidgetSnapshotWriter.writeAll(in: context)
         } catch {
             lastSaveError = SaveErrorBox(error)
             // Keep activeSession alive so the user stays in the workout
             // and can retry. The MiniBar/sheet remain presented.
+        }
+    }
+
+    // MARK: - Deep links
+
+    func handleDeepLink(_ url: URL) {
+        guard url.scheme == "vivobody" else { return }
+        let route = [url.host, url.path]
+            .compactMap { $0 }
+            .joined(separator: "")
+
+        switch route {
+        case "today", "":
+            selectedTab = .today
+        case "insights", "insights/", "insights/consistency":
+            selectedTab = .insights
+        case "workout":
+            if activeSession != nil {
+                selectedTab = .today
+                isWorkoutExpanded = true
+            } else {
+                selectedTab = .today
+            }
+        default:
+            selectedTab = .today
         }
     }
 }

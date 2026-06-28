@@ -70,12 +70,21 @@ struct AppRoot: View {
 #endif
                 ExerciseCatalogItem.backfillCopiedExerciseIdentity(in: modelContext)
                 appState.restoreActiveWorkoutIfNeeded()
+                consumeWidgetStartRequest()
+                consumeCompleteSetRequest()
+                WidgetSnapshotWriter.writeAll(in: modelContext)
             }
             .onChange(of: scenePhase) { _, phase in
-                if phase != .active, appState.activeSession != nil {
+                if phase == .active {
+                    consumeWidgetStartRequest()
+                    consumeCompleteSetRequest()
+                    WidgetSnapshotWriter.writeAll(in: modelContext)
+                } else if appState.activeSession != nil {
                     try? modelContext.save()
+                    WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
                 }
             }
+            .onOpenURL(perform: appState.handleDeepLink)
             .sheet(isPresented: $appState.isWorkoutExpanded) {
                 if let session = appState.activeSession {
                     ActiveWorkoutScreen(
@@ -143,6 +152,51 @@ struct AppRoot: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+    }
+
+    private func consumeWidgetStartRequest() {
+        guard
+            let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
+            defaults.object(forKey: WidgetShared.startWorkoutRequestKey) != nil,
+            appState.activeSession == nil
+        else { return }
+        defaults.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
+
+        let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
+        let sessions = (try? modelContext.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        ))) ?? []
+
+        switch UpNext.compute(templates: templates, sessions: sessions).kind {
+        case let .scheduled(template, _, _):
+            appState.startWorkoutFromTemplate(template)
+        default:
+            appState.startTodaysWorkout(basedOn: sessions.first)
+        }
+    }
+
+    private func consumeCompleteSetRequest() {
+        guard
+            let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
+            defaults.object(forKey: WidgetShared.completeSetRequestKey) != nil,
+            let session = appState.activeSession
+        else { return }
+        defaults.removeObject(forKey: WidgetShared.completeSetRequestKey)
+
+        let exercises = session.orderedExercises
+        guard exercises.indices.contains(session.activeExerciseIndex) else { return }
+        let exercise = exercises[session.activeExerciseIndex]
+        session.completeActiveSet(for: exercise)
+        do {
+            try modelContext.save()
+            WorkoutLiveActivityController.update(for: session)
+            WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+            appState.selectedTab = .today
+            appState.isWorkoutExpanded = true
+        } catch {
+            appState.lastSaveError = SaveErrorBox(error)
+        }
     }
 }
 
