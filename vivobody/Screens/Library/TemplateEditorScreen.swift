@@ -349,12 +349,15 @@ struct TemplateEditorScreen: View {
         let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedName.isEmpty, !draft.exercises.isEmpty else { return }
 
+        var savedTemplate: WorkoutTemplate?
+
         switch target {
         case .new(let sortOrder):
             let template = WorkoutTemplate(name: trimmedName, sortOrder: sortOrder)
             template.scheduledWeekdays = draft.scheduledWeekdays
             modelContext.insert(template)
             attachExercises(to: template)
+            savedTemplate = template
 
         case .edit(let existing):
             existing.name = trimmedName
@@ -367,11 +370,15 @@ struct TemplateEditorScreen: View {
             }
             existing.exercises.removeAll()
             attachExercises(to: existing)
+            savedTemplate = existing
         }
 
         do {
             try modelContext.saveOrRollback()
             WidgetSnapshotWriter.writeAll(in: modelContext)
+            if let template = savedTemplate {
+                SpotlightIndexer.index(template)
+            }
         } catch {
             saveError = SaveErrorBox(error)
             return

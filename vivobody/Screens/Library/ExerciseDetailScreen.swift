@@ -1087,9 +1087,11 @@ struct ExerciseDetailScreen: View {
     /// and history are unaffected (they copy values at pick-time and
     /// never reference catalog items directly).
     private func deleteAndDismiss() {
+        let id = item.id
         modelContext.delete(item)
         do {
             try modelContext.saveOrRollback()
+            SpotlightIndexer.removeExercise(id: id)
         } catch {
             saveError = SaveErrorBox(error)
             return

@@ -61,6 +61,14 @@ final class AppState {
     /// OR minimized; only `dismissActiveWorkout` ends the session.
     var isWorkoutExpanded: Bool = false
 
+    /// Catalog item surfaced by a Spotlight search-result tap,
+    /// presented as a detail sheet from the app shell. The Library
+    /// tab's NavigationStack has no programmatic push path, so a
+    /// deep-linked exercise detail is presented modally instead of
+    /// pushed. Nil when no Spotlight-driven detail is pending; the
+    /// sheet binding clears it on dismiss.
+    var pendingSpotlightExercise: ExerciseCatalogItem? = nil
+
     /// Lazily-assigned reference to the SwiftData write context.
     /// AppRoot wires this on first appear; mutations to history go
     /// through here. Held as a weak-ish opt-in so previews that don't
@@ -199,6 +207,15 @@ final class AppState {
     func expandWorkout() {
         guard activeSession != nil else { return }
         isWorkoutExpanded = true
+    }
+
+    /// Present a catalog item's detail as a modal sheet, driven by a
+    /// Spotlight search-result tap. Routed through AppState so the
+    /// shell owns presentation, independent of the Library tab's
+    /// lifecycle. The sheet binding clears `pendingSpotlightExercise`
+    /// on dismiss.
+    func presentSpotlightExercise(_ item: ExerciseCatalogItem) {
+        pendingSpotlightExercise = item
     }
 
     /// Throw the active workout away without archiving. Used when the

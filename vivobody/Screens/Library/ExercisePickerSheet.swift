@@ -408,9 +408,11 @@ struct ExercisePickerSheet: View {
     // MARK: - Mutations
 
     private func delete(_ item: ExerciseCatalogItem) {
+        let id = item.id
         modelContext.delete(item)
         do {
             try modelContext.saveOrRollback()
+            SpotlightIndexer.removeExercise(id: id)
         } catch {
             saveError = SaveErrorBox(error)
             return

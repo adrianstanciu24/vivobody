@@ -435,6 +435,8 @@ struct CustomExerciseEditorSheet: View {
 
         let parsedAliases = draft.parsedAliases
 
+        var savedItem: ExerciseCatalogItem?
+
         switch target {
         case .create:
             let item = ExerciseCatalogItem(
@@ -452,6 +454,7 @@ struct CustomExerciseEditorSheet: View {
                 isUserCreated: true
             )
             modelContext.insert(item)
+            savedItem = item
 
         case .edit(let item):
             item.name = trimmedName
@@ -474,10 +477,14 @@ struct CustomExerciseEditorSheet: View {
             item.plane = draft.plane
             item.laterality = draft.laterality
             item.aliases = parsedAliases
+            savedItem = item
         }
 
         do {
             try modelContext.saveOrRollback()
+            if let item = savedItem {
+                SpotlightIndexer.index(item)
+            }
         } catch {
             saveError = SaveErrorBox(error)
             return

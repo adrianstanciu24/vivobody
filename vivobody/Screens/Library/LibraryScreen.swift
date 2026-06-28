@@ -410,6 +410,7 @@ private struct LibraryTemplatesContent: View {
     }
 
     private func deleteTemplate(_ template: WorkoutTemplate) {
+        let id = template.id
         modelContext.delete(template)
         do {
             try modelContext.saveOrRollback()
@@ -417,6 +418,7 @@ private struct LibraryTemplatesContent: View {
                 t.sortOrder = i
             }
             try modelContext.saveOrRollback()
+            SpotlightIndexer.removeTemplate(id: id)
         } catch {
             saveError = SaveErrorBox(error)
             return
@@ -790,9 +792,11 @@ private struct LibraryExercisesContent: View {
     // MARK: - Mutations
 
     private func delete(_ item: ExerciseCatalogItem) {
+        let id = item.id
         modelContext.delete(item)
         do {
             try modelContext.saveOrRollback()
+            SpotlightIndexer.removeExercise(id: id)
         } catch {
             saveError = SaveErrorBox(error)
             return

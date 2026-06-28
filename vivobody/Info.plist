@@ -24,6 +24,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>astanciu.vivobody.app.continueWorkout</string>
+		<string>com.apple.corespotlightitem</string>
 	</array>
 </dict>
 </plist>

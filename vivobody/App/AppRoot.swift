@@ -26,6 +26,7 @@
 import SwiftUI
 import SwiftData
 import Intents
+import CoreSpotlight
 
 struct AppRoot: View {
     @State private var appState = AppState()
@@ -70,6 +71,15 @@ struct AppRoot: View {
                 UITestSupport.seedIfRequested(in: modelContext)
 #endif
                 ExerciseCatalogItem.backfillCopiedExerciseIdentity(in: modelContext)
+                // Mirror the SwiftData store into CoreSpotlight so the
+                // user's templates and catalog lifts appear in Spotlight
+                // search. Wipes both domains first to drop any stale
+                // entries, then re-indexes the current set. Off the main
+                // actor inside SpotlightIndexer, so this never blocks.
+                SpotlightIndexer.reindexAll(
+                    templates: (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? [],
+                    items: (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
+                )
                 appState.restoreActiveWorkoutIfNeeded()
                 consumeWidgetStartRequest()
                 consumeCompleteSetRequest()
@@ -113,6 +123,56 @@ struct AppRoot: View {
                 guard let id = ContinueWorkoutActivity.sessionID(from: activity) else { return }
                 appState.continueWorkout(with: id)
             }
+            .onContinueUserActivity(CSSearchableItemActionType) { activity in
+                // A Spotlight search-result tap. The uniqueIdentifier
+                // we indexed is "template:<uuid>" or "exercise:<uuid>";
+                // split it, fetch the @Model, and route. Template ->
+                // start its workout (one tap from Spotlight to lifting).
+                // Exercise -> present its detail as a modal sheet (the
+                // Library tab has no programmatic push path, so a deep-
+                // linked detail is modal). A stale identifier (item
+                // deleted since indexing) lands the user on Library.
+                guard let uniqueID = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String
+                else { return }
+                let parts = uniqueID.split(separator: ":", maxSplits: 1).map(String.init)
+                guard parts.count == 2, let uuid = UUID(uuidString: parts[1]) else { return }
+                // The continue handler can fire before onAppear wires
+                // AppState.modelContext; mirror that wiring so the
+                // appState methods that rely on it work on a cold
+                // Spotlight launch.
+                if appState.modelContext == nil {
+                    appState.modelContext = modelContext
+                }
+                switch parts[0] {
+                case "template":
+                    var descriptor = FetchDescriptor<WorkoutTemplate>(
+                        predicate: #Predicate { $0.id == uuid }
+                    )
+                    descriptor.fetchLimit = 1
+                    if let template = try? modelContext.fetch(descriptor).first {
+                        appState.startWorkoutFromTemplate(template)
+                        appState.selectedTab = .today
+                    } else {
+                        appState.selectedTab = .library
+                    }
+                case "exercise":
+                    var descriptor = FetchDescriptor<ExerciseCatalogItem>(
+                        predicate: #Predicate { $0.id == uuid }
+                    )
+                    descriptor.fetchLimit = 1
+                    if let item = try? modelContext.fetch(descriptor).first {
+                        // Minimize any active workout sheet first so
+                        // the two sheets are never presented at once.
+                        appState.isWorkoutExpanded = false
+                        appState.selectedTab = .library
+                        appState.presentSpotlightExercise(item)
+                    } else {
+                        appState.selectedTab = .library
+                    }
+                default:
+                    break
+                }
+            }
             .sheet(isPresented: $appState.isWorkoutExpanded) {
                 if let session = appState.activeSession {
                     ActiveWorkoutScreen(
@@ -129,6 +189,17 @@ struct AppRoot: View {
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
                 }
+            }
+            // Spotlight-driven exercise detail. Presented modally (not
+            // pushed) because the Library tab's NavigationStack has no
+            // programmatic push path. Wrapped in a NavigationStack so
+            // the detail's .navigationTitle / .toolbar render; swipe-
+            // down dismisses and clears pendingSpotlightExercise.
+            .sheet(item: $appState.pendingSpotlightExercise) { item in
+                NavigationStack {
+                    ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
+                }
+                .presentationDragIndicator(.visible)
             }
     }
 

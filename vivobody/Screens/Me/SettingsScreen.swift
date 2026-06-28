@@ -106,6 +106,10 @@ struct SettingsScreen: View {
         ) {
             Button("Reset", role: .destructive) {
                 ExerciseCatalogItem.resetToDefaults(in: modelContext)
+                SpotlightIndexer.reindexAll(
+                    templates: (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? [],
+                    items: (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
+                )
                 Haptics.thunk()
             }
             Button("Cancel", role: .cancel) { }
