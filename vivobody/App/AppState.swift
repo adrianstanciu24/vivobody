@@ -90,6 +90,30 @@ final class AppState {
         WidgetSnapshotWriter.writeActiveWorkout(in: context)
     }
 
+    /// Resume a specific workout session by UUID, as handed to us by
+    /// an NSUserActivity continue (Handoff banner, Siri Suggestion,
+    /// or system restore). Fetches the session from SwiftData, sets
+    /// it active, switches to Today, and expands the sheet. If the
+    /// session is missing or already archived, this is a no-op; the
+    /// system can hand us a stale activity long after the workout was
+    /// completed or discarded, and silently ignoring it is the
+    /// correct response. Returns whether a live session was found.
+    @discardableResult
+    func continueWorkout(with id: UUID) -> Bool {
+        guard let context = modelContext else { return false }
+        var descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.id == id && $0.completedAt == nil }
+        )
+        descriptor.fetchLimit = 1
+        guard let session = try? context.fetch(descriptor).first else {
+            return false
+        }
+        activeSession = session
+        selectedTab = .today
+        isWorkoutExpanded = true
+        return true
+    }
+
     /// Start a workout. Optionally provide a `template` session to
     /// repeat its structure (typically the most recent archived
     /// session). When `template` is nil — first launch, or the user

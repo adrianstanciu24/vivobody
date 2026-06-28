@@ -21,5 +21,9 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>astanciu.vivobody.app.continueWorkout</string>
+	</array>
 </dict>
 </plist>

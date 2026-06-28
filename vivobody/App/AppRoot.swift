@@ -25,6 +25,7 @@
 
 import SwiftUI
 import SwiftData
+import Intents
 
 struct AppRoot: View {
     @State private var appState = AppState()
@@ -85,6 +86,33 @@ struct AppRoot: View {
                 }
             }
             .onOpenURL(perform: appState.handleDeepLink)
+            // Publish a "continue workout" NSUserActivity while a
+            // session is live. isActive flips false when the workout
+            // ends (activeSession -> nil), at which point SwiftUI
+            // invalidates the activity automatically, so no manual
+            // cleanup is needed. The activity drives Handoff, system
+            // restore, and Siri Suggestions. Watch handoff is
+            // deferred to the watchOS track.
+            .userActivity(
+                ContinueWorkoutActivity.activityType,
+                isActive: appState.activeSession != nil
+            ) { activity in
+                guard let session = appState.activeSession else { return }
+                activity.title = ContinueWorkoutActivity.title(for: session)
+                activity.suggestedInvocationPhrase = "Continue my workout"
+                activity.isEligibleForHandoff = true
+                activity.isEligibleForSearch = false
+                activity.isEligibleForPrediction = true
+                activity.isEligibleForPublicIndexing = false
+                activity.requiredUserInfoKeys = Set([ContinueWorkoutActivity.sessionIDKey])
+                activity.userInfo = ContinueWorkoutActivity.userInfo(for: session)
+                activity.persistentIdentifier = session.id.uuidString
+                activity.targetContentIdentifier = session.id.uuidString
+            }
+            .onContinueUserActivity(ContinueWorkoutActivity.activityType) { activity in
+                guard let id = ContinueWorkoutActivity.sessionID(from: activity) else { return }
+                appState.continueWorkout(with: id)
+            }
             .sheet(isPresented: $appState.isWorkoutExpanded) {
                 if let session = appState.activeSession {
                     ActiveWorkoutScreen(
