@@ -22,6 +22,8 @@ nonisolated enum WidgetShared {
     static let weightUnitKey = "settings.weightUnit"
     static let startWorkoutRequestKey = "widgets.intent.startWorkoutRequestedAt"
     static let completeSetRequestKey = "widgets.intent.completeSetRequestedAt"
+    static let startTemplateWorkoutRequestKey = "widgets.intent.startTemplateId"
+    static let templatesSnapshotKey = "widgets.templates.snapshot"
 }
 
 struct UpNextSnapshot: Codable, Hashable {

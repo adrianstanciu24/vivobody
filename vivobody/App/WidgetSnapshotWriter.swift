@@ -25,6 +25,13 @@ enum WidgetSnapshotWriter {
         write(consistencySnapshot(sessions: completed), key: WidgetShared.consistencySnapshotKey)
         write(signatureSnapshot(sessions: completed), key: WidgetShared.signatureSnapshotKey)
         write(activeWorkoutSnapshot(session: active, unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
+        // Publish the template list (id + name) so the Siri App Intent
+        // entity query can enumerate templates from the system process
+        // without opening the app's SwiftData store.
+        write(
+            templates.map { TemplateEntitySnapshot(id: $0.id.uuidString, name: $0.name) },
+            key: WidgetShared.templatesSnapshotKey
+        )
 
         guard reload else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)

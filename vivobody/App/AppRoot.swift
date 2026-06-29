@@ -82,12 +82,14 @@ struct AppRoot: View {
                 )
                 appState.restoreActiveWorkoutIfNeeded()
                 consumeWidgetStartRequest()
+                consumeTemplateStartRequest()
                 consumeCompleteSetRequest()
                 WidgetSnapshotWriter.writeAll(in: modelContext)
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
                     consumeWidgetStartRequest()
+                    consumeTemplateStartRequest()
                     consumeCompleteSetRequest()
                     WidgetSnapshotWriter.writeAll(in: modelContext)
                 } else if appState.activeSession != nil {
@@ -273,6 +275,32 @@ struct AppRoot: View {
         default:
             appState.startTodaysWorkout(basedOn: sessions.first)
         }
+    }
+
+    /// Consume a Siri-shortcut / App Intent request to start a
+    /// specific template by UUID. The StartTemplateWorkoutIntent
+    /// (declared in AppShortcuts.swift) runs in the system process
+    /// and can't open the app's SwiftData store, so it records the
+    /// template id here; we fetch the @Model on launch and hand it to
+    /// AppState.startWorkoutFromTemplate. Mirrors
+    /// consumeWidgetStartRequest, but targeted at a specific template
+    /// instead of "today's scheduled" one. No-ops if a workout is
+    /// already active or the template no longer exists.
+    private func consumeTemplateStartRequest() {
+        guard
+            let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
+            let idString = defaults.string(forKey: WidgetShared.startTemplateWorkoutRequestKey),
+            let uuid = UUID(uuidString: idString),
+            appState.activeSession == nil
+        else { return }
+        defaults.removeObject(forKey: WidgetShared.startTemplateWorkoutRequestKey)
+
+        var descriptor = FetchDescriptor<WorkoutTemplate>(
+            predicate: #Predicate { $0.id == uuid }
+        )
+        descriptor.fetchLimit = 1
+        guard let template = try? modelContext.fetch(descriptor).first else { return }
+        appState.startWorkoutFromTemplate(template)
     }
 
     private func consumeCompleteSetRequest() {
