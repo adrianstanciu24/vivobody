@@ -15,6 +15,7 @@ nonisolated enum WidgetShared {
     static let consistencyKind = "vivobody.consistency"
     static let signatureKind = "vivobody.signature"
     static let activeWorkoutKind = "vivobody.activeWorkout"
+    static let startWorkoutControlKind = "vivobody.startWorkoutControl"
     static let upNextSnapshotKey = "widgets.upNext.snapshot"
     static let consistencySnapshotKey = "widgets.consistency.snapshot"
     static let signatureSnapshotKey = "widgets.signature.snapshot"

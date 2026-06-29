@@ -19,6 +19,7 @@ struct vivobodyWidgetsBundle: WidgetBundle {
         ConsistencyWidget()
         SignatureWidget()
         ActiveWorkoutLiveActivity()
+        StartWorkoutControl()
     }
 }
 
@@ -673,6 +674,27 @@ struct SignatureEmblem: View {
             return .white.opacity(isDominant ? 0.45 : 0.10)
         }
         return isDominant ? Tint.primary.opacity(0.45) : Ink.primary.opacity(0.05)
+    }
+}
+
+// MARK: - Start Workout Control (Action Button)
+
+/// A Control Center / Lock Screen / Action Button control that starts
+/// today's workout. Reuses the existing StartTodaysWorkoutIntent
+/// (shared WidgetIntents) which sets the App Group handoff flag and
+/// opens the app. On iPhone 16+ the user assigns this in
+/// Settings > Action Button > Control.
+struct StartWorkoutControl: ControlWidget {
+    static let kind = WidgetShared.startWorkoutControlKind
+
+    var body: some ControlWidgetConfiguration {
+        StaticControlConfiguration(kind: Self.kind) {
+            ControlWidgetButton(action: StartTodaysWorkoutIntent()) {
+                Label("Start Workout", systemImage: "figure.run")
+            }
+        }
+        .displayName("Start Workout")
+        .description("Start today's vivobody workout.")
     }
 }
 
