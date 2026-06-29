@@ -66,9 +66,7 @@ struct PrimaryActionButton: View {
         .accessibilityLabel(title)
         .accessibilityHint(subtitle ?? "Activates primary action")
         .accessibilityAddTraits(.isButton)
-        if let inputLabels {
-            accessibilityInputLabels(inputLabels.map { Text($0) })
-        }
+        .accessibilityInputLabels((inputLabels ?? [title]).map { Text($0) })
     }
 }
 
