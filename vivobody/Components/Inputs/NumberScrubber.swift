@@ -43,6 +43,19 @@ struct NumberScrubber: View {
     @State private var isDragging: Bool = false
 
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Value-settle spring. When Reduce Motion is on, skip the
+    /// decorative spring so the number snaps to its new value.
+    private var valueAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
+    }
+
+    /// Drag-state transition (scale, shadow, tint). When Reduce
+    /// Motion is on, snap between states instead of springing.
+    private var dragStateAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)
+    }
 
     var body: some View {
         VStack(spacing: 4) {
@@ -67,8 +80,8 @@ struct NumberScrubber: View {
                 }
             }
             .offset(y: rubberOffset)
-            .scaleEffect(isDragging ? 1.03 : 1.0)
-            .animation(.spring(response: 0.5, dampingFraction: 0.75), value: value)
+            .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.03 : 1.0))
+            .animation(valueAnimation, value: value)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, verticalPadding)
@@ -110,10 +123,11 @@ struct NumberScrubber: View {
         .shadow(color: .black.opacity(0.25), radius: 1, y: 1)
         .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .gesture(scrubGesture)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)
+        .animation(dragStateAnimation, value: isDragging)
         .accessibilityElement()
-        .accessibilityLabel(label ?? "Value")
-        .accessibilityValue("\(formattedValue) \(unit)")
+        .accessibilityLabel(label ?? "Adjustable value")
+        .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
+        .accessibilityHint("Swipe up or down to change")
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: stepValue(by: 1)
@@ -121,6 +135,8 @@ struct NumberScrubber: View {
             @unknown default: break
             }
         }
+        .focusable()
+        .accessibilityRespondsToUserInteraction(true)
     }
 
     // MARK: - Gesture
@@ -175,8 +191,12 @@ struct NumberScrubber: View {
             }
             .onEnded { _ in
                 isDragging = false
-                withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                if reduceMotion {
                     rubberOffset = 0
+                } else {
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                        rubberOffset = 0
+                    }
                 }
             }
     }
@@ -189,6 +209,7 @@ struct NumberScrubber: View {
     }
 
     private func stepValue(by direction: Int) {
+        guard isEnabled else { return }
         let next = value + Double(direction) * step
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {
@@ -237,6 +258,8 @@ private struct LiquidFill: View {
     let tint: Color
     let isDragging: Bool
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     /// Warm cream-white. Light reflecting off a tinted fluid is
     /// brighter and less saturated than the fluid's body colour,
     /// which is what stops the highlight reading as a UI rule.
@@ -281,8 +304,8 @@ private struct LiquidFill: View {
             .frame(width: geo.size.width, height: h, alignment: .bottom)
         }
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: fraction)
-        .animation(.easeInOut(duration: 0.18), value: isDragging)
+        .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.82), value: fraction)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: isDragging)
         .allowsHitTesting(false)
     }
 }

@@ -73,6 +73,7 @@ struct SectionDivider: View {
                 )
             )
             .frame(height: 1)
+            .accessibilityHidden(true)
     }
 }
 
@@ -155,6 +156,8 @@ struct StatStrip: View {
                 .sectionLabelStyle(Opacity.soft)
         }
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
     }
 }
 
@@ -201,6 +204,8 @@ struct WaterfallRow: View {
                 .monospacedDigit()
                 .frame(width: 38, alignment: .trailing)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(Int((share * 100).rounded())) percent of session volume")
     }
 }
 
@@ -268,6 +273,8 @@ struct MetricView: View {
             Text(label)
                 .sectionLabelStyle(Opacity.soft)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(value)\(unit.map { " \($0)" } ?? "") \(label)")
     }
 }
 
@@ -290,6 +297,7 @@ struct KitRow<Trailing: View>: View {
                     .font(Typography.headline)
                     .foregroundStyle(Ink.tertiary)
                     .frame(width: 22)
+                    .accessibilityHidden(true)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -313,6 +321,7 @@ struct KitRow<Trailing: View>: View {
         .frame(minHeight: Space.rowMin)
         .padding(.vertical, Space.md)
         .contentCard()
+        .accessibilityElement(children: .contain)
     }
 }
 

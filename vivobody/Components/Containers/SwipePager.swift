@@ -25,6 +25,8 @@ struct SwipePager<Content: View>: View {
     var peekWidth: CGFloat = 22
     var spacing: CGFloat = 12
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var dragOffset: CGFloat = 0
     @State private var lastCrossedIndex: Int = -1
     @State private var didEdgeHaptic: Bool = false
@@ -64,7 +66,7 @@ struct SwipePager<Content: View>: View {
                 ForEach(0..<count, id: \.self) { i in
                     content(i)
                         .frame(width: cardWidth, height: H)
-                        .scaleEffect(scale(for: i, virtual: virtual))
+                        .scaleEffect(reduceMotion ? 1.0 : scale(for: i, virtual: virtual))
                         .opacity(opacity(for: i, virtual: virtual))
                 }
             }
@@ -78,7 +80,18 @@ struct SwipePager<Content: View>: View {
             // gates the pager so it only acts on horizontally-
             // dominant drags — vertical scrubs pass through cleanly.
             .simultaneousGesture(dragGesture(stride: stride))
-            .animation(.spring(response: 0.45, dampingFraction: 0.82), value: selection)
+            .accessibilityAction(named: "Next exercise") {
+                guard selection < count - 1 else { return }
+                selection += 1
+                Haptics.soft()
+            }
+            .accessibilityAction(named: "Previous exercise") {
+                guard selection > 0 else { return }
+                selection -= 1
+                Haptics.soft()
+            }
+            .focusable()
+            .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.82), value: selection)
         }
     }
 
@@ -149,9 +162,14 @@ struct SwipePager<Content: View>: View {
                 let target = max(0, min(count - 1, Int(projected.rounded())))
 
                 let landed = target != selection
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.82)) {
+                if reduceMotion {
                     selection = target
                     dragOffset = 0
+                } else {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.82)) {
+                        selection = target
+                        dragOffset = 0
+                    }
                 }
                 if landed {
                     Haptics.soft()
@@ -198,14 +216,17 @@ struct PageDots: View {
     let count: Int
     let selection: Int
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         HStack(spacing: Space.sm) {
             ForEach(0..<count, id: \.self) { i in
                 Capsule()
                     .fill(i == selection ? Ink.primary : Ink.quaternary)
                     .frame(width: i == selection ? 22 : 6, height: 6)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.78), value: selection)
+                    .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.78), value: selection)
             }
         }
+        .accessibilityHidden(true)
     }
 }

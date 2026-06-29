@@ -209,6 +209,7 @@ struct UpNextWidgetView: View {
                 Circle()
                     .fill(Tint.primary)
                     .frame(width: 7, height: 7)
+                    .accessibilityHidden(true)
             }
             if snapshot.easeOff {
                 Text("Ease off")
@@ -251,6 +252,7 @@ struct UpNextWidgetView: View {
             Circle()
                 .fill(snapshot.kind == .scheduled ? Tint.primary : Ink.secondary)
                 .frame(width: 7, height: 7)
+                .accessibilityHidden(true)
             Text(circularText)
                 .font(.system(size: 16, weight: .bold, design: .monospaced))
                 .lineLimit(1)
@@ -398,6 +400,7 @@ struct ConsistencyWidgetView: View {
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
             ConsistencyHeatmapGrid(weeks: Array(snapshot.weeks.suffix(8)), cellSpacing: 3)
+                .accessibilityLabel("Training heatmap")
             Spacer(minLength: 0)
             statLine
         }
@@ -437,6 +440,16 @@ struct ConsistencyWidgetView: View {
                     .widgetAccentable()
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("This week: \(trainedDayCount) of \(totalDayCount) days trained")
+    }
+
+    private var trainedDayCount: Int {
+        (snapshot.weeks.last ?? []).filter { $0.level > 0 }.count
+    }
+
+    private var totalDayCount: Int {
+        (snapshot.weeks.last ?? []).count
     }
 
     private var statLine: some View {
@@ -663,6 +676,8 @@ struct SignatureEmblem: View {
             context.fill(Path(ellipseIn: core), with: .color(renderingMode == .vibrant ? .white : Tint.primary))
         }
         .widgetAccentable()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(snapshot.verdictLine.isEmpty ? "Training signature" : snapshot.verdictLine)
     }
 
     private func petalColor(opacity: Double) -> Color {

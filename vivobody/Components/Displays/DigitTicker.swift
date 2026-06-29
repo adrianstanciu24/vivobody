@@ -33,11 +33,17 @@ struct DigitTicker: View {
 
     @State private var previousValue: Double = .nan
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private var formattedString: String {
         formatter?(value) ?? String(format: "%.\(fractionalDigits)f", value)
     }
 
     private enum RollDirection { case up, down }
+
+    private var bodyAnimation: Animation {
+        reduceMotion ? .easeInOut(duration: 0.1) : animation
+    }
 
     var body: some View {
         let direction: RollDirection = (previousValue.isNaN || value >= previousValue) ? .up : .down
@@ -48,11 +54,13 @@ struct DigitTicker: View {
                 charSlot(char: chars[i], direction: direction)
             }
         }
-        .animation(animation, value: value)
+        .animation(bodyAnimation, value: value)
         .onAppear { previousValue = value }
         .onChange(of: value) { _, new in
             previousValue = new
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(formattedString)
     }
 
     @ViewBuilder
@@ -76,6 +84,7 @@ struct DigitTicker: View {
     }
 
     private func directedTransition(_ direction: RollDirection) -> AnyTransition {
+        if reduceMotion { return .opacity }
         switch direction {
         case .up:
             return .asymmetric(

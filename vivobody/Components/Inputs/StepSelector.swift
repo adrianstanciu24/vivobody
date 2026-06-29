@@ -20,6 +20,8 @@ struct StepSelector<T: Hashable>: View {
 
     @Namespace private var indicatorNS
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         GlassEffectContainer(spacing: 4) {
             HStack(spacing: 4) {
@@ -30,7 +32,7 @@ struct StepSelector<T: Hashable>: View {
             .padding(4)
             .coloredGlassControl(cornerRadius: Radius.pill)
         }
-        .animation(.spring(response: 0.32, dampingFraction: 0.72), value: selection)
+        .animation(reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.72), value: selection)
     }
 
     private func optionButton(_ option: T) -> some View {

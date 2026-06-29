@@ -157,6 +157,7 @@ struct WorkoutSummaryCard: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
         }
+        .accessibilityElement(children: .combine)
     }
 
     private var supportLine: some View {
@@ -190,6 +191,7 @@ struct WorkoutSummaryCard: View {
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(height: 1)
+                        .accessibilityHidden(true)
                 }
                 exerciseRow(for: exercise, contribution: breakdown[exercise.id])
             }
@@ -247,6 +249,7 @@ struct WorkoutSummaryCard: View {
             }
         }
         .padding(.vertical, Space.md)
+        .accessibilityElement(children: .combine)
     }
 
     private func summaryPips(for sets: [WorkoutSet]) -> some View {
@@ -263,6 +266,7 @@ struct WorkoutSummaryCard: View {
                 }
             }
         }
+        .accessibilityHidden(true)
     }
 
     // MARK: - Notes (word, not icon)

@@ -31,6 +31,7 @@ struct TemplateEditorScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -158,10 +159,12 @@ struct TemplateEditorScreen: View {
                 .submitLabel(.done)
                 .onSubmit { nameFieldFocused = false }
                 .padding(.vertical, Space.sm)
+                .accessibilityLabel("Name")
 
             Rectangle()
                 .fill(Surface.edge)
                 .frame(height: 1)
+                .accessibilityHidden(true)
         }
     }
 
@@ -200,12 +203,14 @@ struct TemplateEditorScreen: View {
                 .background(
                     Capsule(style: .continuous)
                         .fill(isOn ? Tint.primary : Surface.cardTint)
+                        .accessibilityHidden(true)
                 )
                 .contentShape(Capsule(style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Calendar.current.weekdaySymbols[weekday - 1])
         .accessibilityValue(isOn ? "Scheduled" : "Not scheduled")
+        .accessibilityHint("Toggles scheduling the template on this weekday")
     }
 
     private func toggleScheduleDay(_ weekday: Int) {
@@ -282,6 +287,7 @@ struct TemplateEditorScreen: View {
             .padding(.vertical, Space.sm)
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
+            .accessibilityElement(children: .combine)
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -337,8 +343,12 @@ struct TemplateEditorScreen: View {
     }
 
     private func remove(_ id: ExerciseDraft.ID) {
-        withAnimation(.easeInOut(duration: 0.18)) {
+        if reduceMotion {
             draft.exercises.removeAll { $0.id == id }
+        } else {
+            withAnimation(.easeInOut(duration: 0.18)) {
+                draft.exercises.removeAll { $0.id == id }
+            }
         }
         Haptics.soft()
     }

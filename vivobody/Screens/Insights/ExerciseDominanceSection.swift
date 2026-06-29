@@ -74,6 +74,7 @@ struct ExerciseDominanceSection: View {
             }
             ShareBar(fraction: row.share, tint: isTop ? Tint.primary : Ink.secondary)
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Insight line

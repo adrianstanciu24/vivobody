@@ -63,6 +63,7 @@ struct IntensityMixSection: View {
             .chartYAxis(.hidden)
             .frame(height: 52)
             .clipShape(RoundedRectangle(cornerRadius: Radius.small, style: .continuous))
+            .accessibilityLabel("Intensity mix distribution")
 
             legend
         }
@@ -79,6 +80,7 @@ struct IntensityMixSection: View {
                     Circle()
                         .fill(color(slice.zone))
                         .frame(width: 10, height: 10)
+                        .accessibilityHidden(true)
                     Text(slice.zone.label)
                         .font(Typography.body)
                         .foregroundStyle(Ink.primary)

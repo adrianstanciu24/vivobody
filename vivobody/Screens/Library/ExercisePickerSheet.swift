@@ -217,6 +217,7 @@ struct ExercisePickerSheet: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     // MARK: - Sections / rows
@@ -250,6 +251,7 @@ struct ExercisePickerSheet: View {
                     rowBody(item: item, last: last, trailingSymbol: "plus")
                 }
                 .buttonStyle(.plain)
+                .accessibilityHint("Adds this exercise to your template")
             } else {
                 // Row taps navigate to detail instead of immediately
                 // picking; the user commits via the "Add to Workout"
@@ -314,11 +316,13 @@ struct ExercisePickerSheet: View {
             Image(systemName: trailingSymbol)
                 .font(isAdd ? Typography.headline : Typography.caption)
                 .foregroundStyle(isAdd ? Tint.inProgress : Ink.quaternary)
+                .accessibilityHidden(true)
         }
         .frame(minHeight: Space.rowMin)
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
     private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {

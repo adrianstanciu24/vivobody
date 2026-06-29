@@ -107,7 +107,8 @@ struct ConfigureExerciseSheet: View {
                             step: 1,
                             pointsPerStep: 18,
                             fontSize: 56,
-                            numberColor: Ink.primary
+                            numberColor: Ink.primary,
+                            accessibilityLabel: "Sets"
                         )
                     }
 
@@ -122,7 +123,8 @@ struct ConfigureExerciseSheet: View {
                                 step: 1,
                                 pointsPerStep: 16,
                                 fontSize: 56,
-                                numberColor: Ink.primary
+                                numberColor: Ink.primary,
+                                accessibilityLabel: "Target reps"
                             )
                         }
                     case .duration:
@@ -134,7 +136,8 @@ struct ConfigureExerciseSheet: View {
                                 pointsPerStep: 10,
                                 fontSize: 56,
                                 numberColor: Ink.primary,
-                                formatter: { DurationFormatter.string($0) }
+                                formatter: { DurationFormatter.string($0) },
+                                accessibilityLabel: "Hold"
                             )
                         }
                     }
@@ -151,7 +154,8 @@ struct ConfigureExerciseSheet: View {
                             unit: unit.symbol,
                             unitFontSize: 16,
                             numberColor: Ink.primary,
-                            unitColor: Ink.tertiary
+                            unitColor: Ink.tertiary,
+                            accessibilityLabel: mode == .duration ? "Added load" : "Weight"
                         )
                     }
                 }
@@ -200,6 +204,7 @@ struct ConfigureExerciseSheet: View {
                 .sectionLabelStyle(Opacity.medium)
             scrubber()
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Commit bar
@@ -213,7 +218,10 @@ struct ConfigureExerciseSheet: View {
 
             PrimaryActionButton(
                 title: isEditing ? "Save Changes" : "Add to Template",
-                subtitle: nil
+                subtitle: nil,
+                inputLabels: isEditing
+                    ? ["Save Changes", "Save", "Done"]
+                    : ["Add to Template", "Add", "Save"]
             ) {
                 onCommit(buildDraft())
                 dismiss()

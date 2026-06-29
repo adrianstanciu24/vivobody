@@ -218,6 +218,7 @@ struct GlassSphere: View {
                 .blendMode(.plusLighter)
         }
         .frame(width: size, height: size)
+        .accessibilityHidden(true)
     }
 }
 
@@ -252,6 +253,7 @@ struct GlassPedestal: View {
                 .blur(radius: 6)
         }
         .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

@@ -139,5 +139,6 @@ struct RepRangeMigrationSection: View {
         .frame(height: 160)
         .padding(.top, Space.sm)
         .contentCard()
+        .accessibilityLabel("Average reps per set over 12 weeks")
     }
 }

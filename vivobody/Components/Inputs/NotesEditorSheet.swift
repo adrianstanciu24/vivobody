@@ -54,6 +54,7 @@ struct NotesEditorSheet: View {
                             .foregroundStyle(Ink.primary)
                             .tint(Tint.primary)
                             .frame(minHeight: 240)
+                            .accessibilityLabel(title)
 
                         // Hand-rolled placeholder. TextEditor's
                         // native one doesn't render on dark
@@ -67,6 +68,7 @@ struct NotesEditorSheet: View {
                                 .padding(.top, 8)
                                 .padding(.leading, Space.xs)
                                 .allowsHitTesting(false)
+                                .accessibilityHidden(true)
                         }
                     }
                     .padding(.horizontal, Space.xl)

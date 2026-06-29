@@ -37,6 +37,8 @@ struct PRCelebration: View {
     var unit: String? = nil
     var detail: String? = nil
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var backdropVisible: Bool = false
     @State private var titleVisible: Bool = false
     @State private var valueScale: CGFloat = 0.55
@@ -82,6 +84,9 @@ struct PRCelebration: View {
                         if drift < 10 { dismiss() }
                     }
             )
+            .accessibilityAction(named: "Continue") { dismiss() }
+            .accessibilityHint("Double tap to continue")
+            .focusable()
             .onAppear { startSequence() }
             .onDisappear { sequenceTask?.cancel(); dismissTask?.cancel() }
             .transition(.opacity)
@@ -114,13 +119,14 @@ struct PRCelebration: View {
                         .padding(.bottom, 12)
                 }
             }
-            .scaleEffect(valueScale)
+            .scaleEffect(reduceMotion ? 1.0 : valueScale)
             .opacity(valueVisible ? 1 : 0)
 
             Capsule()
                 .fill(Tint.complete)
                 .frame(width: 120 * underlineProgress, height: 3)
                 .opacity(valueVisible ? 1 : 0)
+                .accessibilityHidden(true)
 
             if let detail {
                 Text(detail)
@@ -131,6 +137,7 @@ struct PRCelebration: View {
             }
         }
         .padding(.horizontal, Space.gutter)
+        .accessibilityElement(children: .combine)
     }
 
     private var prompt: some View {
@@ -138,7 +145,8 @@ struct PRCelebration: View {
             Circle()
                 .fill(Tint.inProgress.opacity(0.85))
                 .frame(width: 5, height: 5)
-                .scaleEffect(breathing)
+                .scaleEffect(reduceMotion ? 1.0 : breathing)
+                .accessibilityHidden(true)
             Text("Tap to continue")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
@@ -152,15 +160,19 @@ struct PRCelebration: View {
         sequenceTask = Task { @MainActor in
             Haptics.swell()
 
-            withAnimation(.easeOut(duration: 0.32)) {
-                backdropVisible = true
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) { backdropVisible = true }
+            } else {
+                withAnimation(.easeOut(duration: 0.32)) { backdropVisible = true }
             }
 
             do {
                 try await Task.sleep(for: .milliseconds(180))
             } catch { return }
-            withAnimation(.spring(response: 0.42, dampingFraction: 0.85)) {
-                titleVisible = true
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) { titleVisible = true }
+            } else {
+                withAnimation(.spring(response: 0.42, dampingFraction: 0.85)) { titleVisible = true }
             }
 
             // The number lands with weight.
@@ -168,34 +180,49 @@ struct PRCelebration: View {
                 try await Task.sleep(for: .milliseconds(120))
             } catch { return }
             Haptics.slam()
-            withAnimation(.spring(response: 0.55, dampingFraction: 0.55)) {
-                valueScale = 1.0
-                valueVisible = true
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    valueScale = 1.0
+                    valueVisible = true
+                }
+            } else {
+                withAnimation(.spring(response: 0.55, dampingFraction: 0.55)) {
+                    valueScale = 1.0
+                    valueVisible = true
+                }
             }
 
             // Gold hairline draws in under the number.
             do {
                 try await Task.sleep(for: .milliseconds(60))
             } catch { return }
-            withAnimation(.easeOut(duration: 0.6)) {
-                underlineProgress = 1
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) { underlineProgress = 1 }
+            } else {
+                withAnimation(.easeOut(duration: 0.6)) { underlineProgress = 1 }
             }
 
             do {
                 try await Task.sleep(for: .milliseconds(220))
             } catch { return }
-            withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
-                detailVisible = true
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) { detailVisible = true }
+            } else {
+                withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) { detailVisible = true }
             }
 
             do {
                 try await Task.sleep(for: .milliseconds(780))
             } catch { return }
-            withAnimation(.easeOut(duration: 0.5)) {
-                promptVisible = true
+            if reduceMotion {
+                withAnimation(.easeInOut(duration: 0.15)) { promptVisible = true }
+            } else {
+                withAnimation(.easeOut(duration: 0.5)) { promptVisible = true }
             }
-            withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
-                breathing = 1.02
+            if !reduceMotion {
+                withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
+                    breathing = 1.02
+                }
             }
         }
     }
@@ -207,7 +234,7 @@ struct PRCelebration: View {
 
         sequenceTask?.cancel()
 
-        withAnimation(.easeIn(duration: 0.28)) {
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.1) : .easeIn(duration: 0.28)) {
             backdropVisible = false
             titleVisible = false
             valueVisible = false

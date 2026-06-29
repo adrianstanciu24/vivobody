@@ -40,6 +40,7 @@ struct GhostBar: View {
                 shape.frame(maxWidth: .infinity).frame(height: height)
             }
         }
+        .accessibilityHidden(true)
     }
 }
 
@@ -53,6 +54,7 @@ struct GhostCard<Content: View>: View {
     var padding: CGFloat = 20
     @ViewBuilder var content: () -> Content
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var breathing = false
 
     var body: some View {
@@ -60,7 +62,7 @@ struct GhostCard<Content: View>: View {
         content()
             .opacity(breathing ? 1.0 : 0.66)
             .animation(
-                .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
+                reduceMotion ? nil : .easeInOut(duration: 2.4).repeatForever(autoreverses: true),
                 value: breathing
             )
             .padding(padding)
@@ -82,6 +84,7 @@ struct GhostCard<Content: View>: View {
                 )
             }
             .allowsHitTesting(false)
+            .accessibilityHidden(true)
             .onAppear { breathing = true }
     }
 }

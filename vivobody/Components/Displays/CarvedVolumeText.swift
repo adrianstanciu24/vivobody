@@ -75,7 +75,9 @@ struct CarvedVolumeText: View {
                     )
                     .frame(height: 1)
                     .frame(maxWidth: size * 1.6)
+                    .accessibilityHidden(true)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }

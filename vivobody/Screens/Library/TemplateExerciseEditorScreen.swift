@@ -45,7 +45,8 @@ struct TemplateExerciseEditorScreen: View {
                         step: 1,
                         pointsPerStep: 18,
                         fontSize: 64,
-                        numberColor: Ink.primary
+                        numberColor: Ink.primary,
+                        accessibilityLabel: "Sets"
                     )
                 }
 
@@ -60,7 +61,8 @@ struct TemplateExerciseEditorScreen: View {
                             step: 1,
                             pointsPerStep: 16,
                             fontSize: 64,
-                            numberColor: Ink.primary
+                            numberColor: Ink.primary,
+                            accessibilityLabel: "Reps"
                         )
                     }
                 case .duration:
@@ -72,7 +74,8 @@ struct TemplateExerciseEditorScreen: View {
                             pointsPerStep: 10,
                             fontSize: 64,
                             numberColor: Ink.primary,
-                            formatter: { DurationFormatter.string($0) }
+                            formatter: { DurationFormatter.string($0) },
+                            accessibilityLabel: "Hold"
                         )
                     }
                 }
@@ -89,7 +92,8 @@ struct TemplateExerciseEditorScreen: View {
                         unit: unit.symbol,
                         unitFontSize: 16,
                         numberColor: Ink.primary,
-                        unitColor: Ink.tertiary
+                        unitColor: Ink.tertiary,
+                        accessibilityLabel: exercise.trackingMode == .duration ? "Added load" : "Weight"
                     )
                 }
 
@@ -132,6 +136,7 @@ struct TemplateExerciseEditorScreen: View {
                 .lineLimit(2)
                 .minimumScaleFactor(0.7)
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Value row
@@ -147,6 +152,7 @@ struct TemplateExerciseEditorScreen: View {
                 .sectionLabelStyle(Opacity.medium)
             scrubber()
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Per-set notice

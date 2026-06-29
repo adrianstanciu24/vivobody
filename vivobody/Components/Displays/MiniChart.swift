@@ -17,6 +17,9 @@ struct MiniChart: View {
     var prIndices: Set<Int> = []
     var lineColor: Color = Ink.primary
     var fillColor: Color = Ink.primary
+    /// VoiceOver description of the chart's data. Callers should
+    /// pass a concise summary (e.g. "Body weight trend, 178 to 185 lb").
+    var accessibilityLabel: String? = nil
 
     var body: some View {
         GeometryReader { geo in
@@ -71,6 +74,8 @@ struct MiniChart: View {
                 }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel ?? "Trend chart")
     }
 
     private var prColor: Color {

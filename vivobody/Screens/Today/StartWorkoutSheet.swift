@@ -88,9 +88,10 @@ struct StartWorkoutSheet: View {
     /// No "last time" header or plan summary — the CTA carries the
     /// meaning on its own.
     private var repeatSection: some View {
-        PrimaryActionButton(title: "Repeat Last Workout") {
+        PrimaryActionButton(title: "Repeat Last Workout", inputLabels: ["Repeat Last Workout", "Repeat", "Repeat Last"]) {
             select(.repeatLast)
         }
+        .accessibilityHint("Starts a workout matching your last session")
     }
 
     /// Every other way to start, as one family of tiles. Start Fresh
@@ -104,9 +105,10 @@ struct StartWorkoutSheet: View {
             GlassEffectContainer(spacing: Space.md) {
                 VStack(spacing: Space.md) {
                     if lastSession == nil {
-                        PrimaryActionButton(title: "Start Fresh", icon: "plus") {
+                        PrimaryActionButton(title: "Start Fresh", icon: "plus", inputLabels: ["Start Fresh", "Fresh", "New Workout"]) {
                             select(.fresh)
                         }
+                        .accessibilityHint("Starts a blank workout")
                     } else {
                         startTile(
                             title: "Start Fresh",
@@ -115,6 +117,8 @@ struct StartWorkoutSheet: View {
                         ) {
                             select(.fresh)
                         }
+                        .accessibilityHint("Starts a blank workout")
+                        .accessibilityInputLabels([Text("Start Fresh"), Text("Fresh"), Text("New Workout")])
                     }
 
                     ForEach(templates, id: \.id) { template in
@@ -127,6 +131,7 @@ struct StartWorkoutSheet: View {
                         ) {
                             select(.template(template))
                         }
+                        .accessibilityHint("Starts this workout now")
                     }
                 }
             }

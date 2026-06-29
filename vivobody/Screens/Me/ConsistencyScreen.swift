@@ -17,6 +17,8 @@ struct ConsistencyScreen: View {
     )
     private var completedSessions: [WorkoutSession]
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var monthOffset: Int = 0
 
     private var workoutDates: Set<Date> {
@@ -94,7 +96,7 @@ struct ConsistencyScreen: View {
                     )
             }
             .buttonStyle(.plain)
-            .animation(.easeOut(duration: 0.2), value: monthOffset)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: monthOffset)
             .disabled(monthOffset == 0)
 
             Spacer()
@@ -111,8 +113,12 @@ struct ConsistencyScreen: View {
 
     private func chevron(systemName: String, action: @escaping () -> Void) -> some View {
         Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
+            if reduceMotion {
                 action()
+            } else {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
+                    action()
+                }
             }
         } label: {
             Image(systemName: systemName)

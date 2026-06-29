@@ -181,8 +181,15 @@ struct ActiveExerciseCard: View {
                 // Skip the menu on a lone pending set — there'd be
                 // nothing to offer (can't remove the last set, nothing
                 // logged to edit).
-                if set.isCompleted || sets.count > 1 {
-                    pipView.contextMenu { pipMenu(for: set) }
+                if set.isCompleted {
+                    pipView
+                        .contextMenu { pipMenu(for: set) }
+                        .accessibilityAction(named: "Edit set") { editingSet = set }
+                        .accessibilityAction(named: "Delete set") { deletingSet = set }
+                } else if sets.count > 1 {
+                    pipView
+                        .contextMenu { pipMenu(for: set) }
+                        .accessibilityAction(named: "Remove set") { removeSet(set) }
                 } else {
                     pipView
                 }
@@ -236,6 +243,7 @@ struct ActiveExerciseCard: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Add a set")
+        .accessibilityInputLabels([Text("Add a set"), Text("Add Set"), Text("Add")])
     }
 
     @ViewBuilder
@@ -281,13 +289,15 @@ struct ActiveExerciseCard: View {
                 unit: unit.symbol,
                 unitFontSize: 18,
                 numberColor: Ink.primary,
-                unitColor: Ink.tertiary
+                unitColor: Ink.tertiary,
+                accessibilityLabel: "Weight"
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("×")
                     .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
                 BareScrubber(
                     value: repsBinding,
                     range: 1...30,
@@ -297,7 +307,8 @@ struct ActiveExerciseCard: View {
                     unit: "reps",
                     unitFontSize: 14,
                     numberColor: Ink.secondary,
-                    unitColor: Ink.tertiary
+                    unitColor: Ink.tertiary,
+                    accessibilityLabel: "Reps"
                 )
             }
         }
@@ -315,13 +326,15 @@ struct ActiveExerciseCard: View {
                 pointsPerStep: 10,
                 fontSize: 104,
                 numberColor: Ink.primary,
-                formatter: { DurationFormatter.string($0) }
+                formatter: { DurationFormatter.string($0) },
+                accessibilityLabel: "Hold duration"
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("+")
                     .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
                 BareScrubber(
                     value: weightDisplayBinding,
                     range: unit.strengthRange,
@@ -331,7 +344,8 @@ struct ActiveExerciseCard: View {
                     unit: unit.symbol,
                     unitFontSize: 14,
                     numberColor: Ink.secondary,
-                    unitColor: Ink.tertiary
+                    unitColor: Ink.tertiary,
+                    accessibilityLabel: "Weight"
                 )
             }
         }
@@ -366,6 +380,7 @@ struct ActiveExerciseCard: View {
                 Text("×")
                     .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
                 Text(repsText)
                     .font(Typography.metricLg)
                     .foregroundStyle(Tint.complete.opacity(Opacity.strong))
@@ -375,6 +390,7 @@ struct ActiveExerciseCard: View {
                     .foregroundStyle(Ink.tertiary)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 
     private func completedDurationHero(_ top: WorkoutSet?) -> some View {
@@ -390,6 +406,7 @@ struct ActiveExerciseCard: View {
                     Text("+")
                         .font(Typography.statValue)
                         .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
                     Text(WeightFormatter.string(top.weight, unit: unit, includeUnit: false))
                         .font(Typography.metricLg)
                         .foregroundStyle(Tint.complete.opacity(Opacity.strong))
@@ -400,6 +417,7 @@ struct ActiveExerciseCard: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - RIR
@@ -452,6 +470,8 @@ struct ActiveExerciseCard: View {
                         Label("Delete last set", systemImage: "trash")
                     }
                 }
+                .accessibilityAction(named: "Edit set") { editingSet = last }
+                .accessibilityAction(named: "Delete set") { deletingSet = last }
         }
     }
 

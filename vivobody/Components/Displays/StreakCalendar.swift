@@ -20,6 +20,8 @@ struct StreakCalendar: View {
     var month: Date = Date()
     var fillColor: Color = Tint.primary
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private let cellWidth: CGFloat = 48
     private let dotSize: CGFloat = 36
     private let rowSpacing: CGFloat = 6
@@ -63,17 +65,26 @@ struct StreakCalendar: View {
                         ForEach(weeks[rowIndex].indices, id: \.self) { col in
                             let cell = weeks[rowIndex][col]
                             let dayStart = calendar.startOfDay(for: cell.date)
+                            let isWorkoutDay = workoutDays.contains(dayStart)
+                            let isPRDay = prDays.contains(dayStart)
                             DayDot(
                                 day: calendar.component(.day, from: cell.date),
-                                isWorkout: workoutDays.contains(dayStart),
+                                isWorkout: isWorkoutDay,
                                 isInMonth: cell.isInMonth,
                                 isToday: calendar.isDateInToday(cell.date),
                                 isPast: dayStart < calendar.startOfDay(for: Date()),
-                                isPR: prDays.contains(dayStart),
+                                isPR: isPRDay,
                                 fillColor: fillColor,
                                 size: dotSize
                             )
                             .frame(width: cellWidth)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(dayAccessibilityLabel(
+                                date: cell.date,
+                                isWorkout: isWorkoutDay,
+                                isPR: isPRDay,
+                                isInMonth: cell.isInMonth
+                            ))
                         }
                     }
                 }
@@ -81,7 +92,7 @@ struct StreakCalendar: View {
 
             metadata
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.82), value: month)
+        .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.82), value: month)
     }
 
     private var header: some View {
@@ -101,6 +112,7 @@ struct StreakCalendar: View {
             }
         }
         .padding(.bottom, 2)
+        .accessibilityHidden(true)
     }
 
     private var metadata: some View {
@@ -117,6 +129,21 @@ struct StreakCalendar: View {
     }
 
     // MARK: - Grid math
+
+    /// VoiceOver label for a single calendar day: "[month] [day], [workout/rest], [PR if applicable]".
+    /// Out-of-month days are announced with just the date so they don't
+    /// clutter the calendar's actual month.
+    private func dayAccessibilityLabel(date: Date, isWorkout: Bool, isPR: Bool, isInMonth: Bool) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "MMMM d"
+        let datePart = f.string(from: date)
+        var parts = [datePart]
+        if isInMonth {
+            parts.append(isWorkout ? "workout" : "rest")
+            if isPR { parts.append("personal record") }
+        }
+        return parts.joined(separator: ", ")
+    }
 
     private struct DayCell {
         let date: Date
@@ -180,7 +207,7 @@ private struct DayDot: View {
 
             Circle()
                 .fill(dotFillColor)
-                .scaleEffect(dotFillScale)
+                .scaleEffect(reduceMotion ? 1.0 : dotFillScale)
                 .opacity(dotFillOpacity)
 
             Circle()
@@ -203,7 +230,7 @@ private struct DayDot: View {
                 pulse = true
             }
         }
-        .animation(.spring(response: 0.45, dampingFraction: 0.75), value: isWorkout)
+        .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.75), value: isWorkout)
     }
 
     /// Workout days fill bright orange; past rest days fill dim so

@@ -124,6 +124,7 @@ struct StrengthTrajectorySection: View {
                 Circle()
                     .fill(prColor(stat.trend))
                     .frame(width: 6, height: 6)
+                    .accessibilityHidden(true)
                 Text(stat.exercise)
                     .font(Typography.sectionLabel)
             }
@@ -209,6 +210,7 @@ struct StrengthTrajectorySection: View {
         }
         .frame(height: 200)
         .padding(.top, Space.sm)
+        .accessibilityLabel("\(stat.exercise) estimated one-rep max over time")
     }
 
     private func liftStats(_ stat: StrengthOutlookStat) -> some View {

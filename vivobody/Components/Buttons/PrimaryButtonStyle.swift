@@ -27,6 +27,26 @@ struct PrimaryButtonStyle: ButtonStyle {
     var cornerRadius: CGFloat = Radius.card
 
     func makeBody(configuration: Configuration) -> some View {
+        PrimaryButtonContent(
+            configuration: configuration,
+            accent: accent,
+            cornerRadius: cornerRadius
+        )
+    }
+}
+
+/// Renders the styled primary-CTA content. Split out from
+/// `PrimaryButtonStyle` so it can read `@Environment` values
+/// (notably `accessibilityReduceMotion`), which `ButtonStyle`
+/// itself cannot do.
+private struct PrimaryButtonContent: View {
+    let configuration: PrimaryButtonStyle.Configuration
+    let accent: Color
+    let cornerRadius: CGFloat
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         configuration.label
             .font(Typography.title)
@@ -39,6 +59,9 @@ struct PrimaryButtonStyle: ButtonStyle {
             .shadow(color: .black.opacity(0.45), radius: 10, y: 5)
             .contentShape(shape)
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.62), value: configuration.isPressed)
+            .animation(
+                reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.62),
+                value: configuration.isPressed
+            )
     }
 }

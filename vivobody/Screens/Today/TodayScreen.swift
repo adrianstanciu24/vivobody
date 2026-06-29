@@ -332,10 +332,12 @@ struct TodayScreen: View {
                         Image(systemName: "flame")
                             .font(Typography.caption)
                             .foregroundStyle(Tint.primary)
+                            .accessibilityHidden(true)
                         Text("Running hot, ease off")
                             .font(Typography.caption)
                             .foregroundStyle(Tint.primary.opacity(0.9))
                     }
+                    .accessibilityLabel("Running hot, ease off")
                 }
 
                 Rectangle()
@@ -594,12 +596,14 @@ struct TodayScreen: View {
                     Image(systemName: "chevron.right")
                         .font(Typography.caption)
                         .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, Space.lg)
                 .padding(.vertical, Space.md)
                 .contentChip()
             }
             .buttonStyle(.plain)
+            .accessibilityHint("Opens your consistency details")
         }
     }
 
@@ -615,7 +619,7 @@ struct TodayScreen: View {
     /// way to begin: Repeat / Fresh / a saved template. A neutral soft
     /// elevation lifts it off the black as the screen's clear anchor.
     private var startCTA: some View {
-        PrimaryActionButton(title: "Start Workout", icon: "chevron.up") {
+        PrimaryActionButton(title: "Start Workout", icon: "chevron.up", inputLabels: ["Start Workout", "Start", "Begin"]) {
             showStartSheet = true
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)

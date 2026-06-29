@@ -32,6 +32,8 @@ struct BreathingTimer: View {
     var onSkip: () -> Void = {}
     var onExtend: (TimeInterval) -> Void = { _ in }
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var endTime: Date
     @State private var startTime: Date
     @State private var totalDuration: TimeInterval
@@ -68,45 +70,22 @@ struct BreathingTimer: View {
     }
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
-            let now = context.date
-            let remainingExact = max(0, endTime.timeIntervalSince(now))
-            let elapsed = max(0, now.timeIntervalSince(startTime))
-            let accelerated = remainingExact > 0 && remainingExact <= 10
-            let breath = hasFinished ? 1.0 : breathScale(elapsed: elapsed, accelerated: accelerated)
-            let progress = min(1, max(0, 1 - remainingExact / totalDuration))
-
-            ZStack {
-                Surface.background.ignoresSafeArea()
-
-                VStack(alignment: .leading, spacing: 0) {
-                    kicker
-                        .padding(.top, Space.xs)
-
-                    Spacer()
-
-                    timeHero(remaining: remainingExact, breath: breath)
-                    ofTotalLine
-                        .padding(.top, Space.sm)
-                    progressBar(progress: progress)
-                        .padding(.top, Space.lg)
-
-                    Spacer()
-
-                    nextLine
+        Group {
+            if reduceMotion {
+                let remainingExact = max(0, endTime.timeIntervalSince(Date()))
+                let progress = min(1, max(0, 1 - remainingExact / totalDuration))
+                content(breath: 1.0, progress: progress, remaining: remainingExact)
+            } else {
+                TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
+                    let now = context.date
+                    let remainingExact = max(0, endTime.timeIntervalSince(now))
+                    let elapsed = max(0, now.timeIntervalSince(startTime))
+                    let accelerated = remainingExact > 0 && remainingExact <= 10
+                    let breath = hasFinished ? 1.0 : breathScale(elapsed: elapsed, accelerated: accelerated)
+                    let progress = min(1, max(0, 1 - remainingExact / totalDuration))
+                    content(breath: breath, progress: progress, remaining: remainingExact)
                 }
-                .padding(.horizontal, Space.gutter)
-                .padding(.top, Space.lg)
-                .padding(.bottom, Space.xl)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-
-                swipeAffordances
             }
-            .offset(y: dragOffset)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Surface.background.ignoresSafeArea())
-            .contentShape(Rectangle())
-            .gesture(skipOrExtendGesture)
         }
         .onAppear { Haptics.prepare() }
         .onChange(of: secondsRemaining) { _, new in handleSecondTick(new) }
@@ -120,6 +99,49 @@ struct BreathingTimer: View {
         }
     }
 
+    // MARK: - Content
+
+    private func content(breath: Double, progress: Double, remaining: TimeInterval) -> some View {
+        ZStack {
+            Surface.background.ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 0) {
+                kicker
+                    .padding(.top, Space.xs)
+
+                Spacer()
+
+                timeHero(remaining: remaining, breath: breath)
+                ofTotalLine
+                    .padding(.top, Space.sm)
+                progressBar(progress: progress)
+                    .padding(.top, Space.lg)
+
+                Spacer()
+
+                nextLine
+            }
+            .padding(.horizontal, Space.gutter)
+            .padding(.top, Space.lg)
+            .padding(.bottom, Space.xl)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
+            swipeAffordances
+        }
+        .offset(y: dragOffset)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Surface.background.ignoresSafeArea())
+        .contentShape(Rectangle())
+        .gesture(skipOrExtendGesture)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Rest timer")
+        .accessibilityValue("\(secondsRemaining) seconds remaining of \(formatted(totalDuration))")
+        .accessibilityAction(named: "Skip rest") { skipNow() }
+        .accessibilityAction(named: "Add 30 seconds") { extend(by: 30) }
+        .focusable()
+        .accessibilityRespondsToUserInteraction(true)
+    }
+
     // MARK: - Pieces
 
     private var kicker: some View {
@@ -127,6 +149,7 @@ struct BreathingTimer: View {
             Circle()
                 .fill(Tint.inProgress)
                 .frame(width: 7, height: 7)
+                .accessibilityHidden(true)
             Text(hasFinished ? "Go" : "Rest")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Tint.inProgress)
@@ -143,8 +166,8 @@ struct BreathingTimer: View {
                 return String(format: "%d:%02d", total / 60, total % 60)
             }
         )
-        .scaleEffect(breath, anchor: .leading)
-        .animation(.easeInOut(duration: 0.2), value: breath)
+        .scaleEffect(reduceMotion ? 1.0 : breath, anchor: .leading)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: breath)
     }
 
     private var ofTotalLine: some View {
@@ -160,9 +183,11 @@ struct BreathingTimer: View {
                 Capsule()
                     .fill(Surface.edge)
                     .frame(height: 3)
+                    .accessibilityHidden(true)
                 Capsule()
                     .fill(Tint.inProgress)
                     .frame(width: max(0, g.size.width * (1 - progress)), height: 3)
+                    .accessibilityHidden(true)
             }
         }
         .frame(height: 3)
@@ -178,6 +203,7 @@ struct BreathingTimer: View {
                 Rectangle()
                     .fill(Surface.edge)
                     .frame(width: 1, height: 12)
+                    .accessibilityHidden(true)
                 Text(nextSetLabel)
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
@@ -208,6 +234,7 @@ struct BreathingTimer: View {
             .padding(.bottom, 130)
         }
         .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 
     private func affordanceChip(symbol: String, label: String, visibility: Double) -> some View {
@@ -223,7 +250,7 @@ struct BreathingTimer: View {
                 .tracking(0.5)
         }
         .foregroundStyle(committed ? Tint.inProgress : Ink.primary.opacity(opacity))
-        .scaleEffect(0.96 + 0.06 * visibility)
+        .scaleEffect(reduceMotion ? 1.0 : 0.96 + 0.06 * visibility)
     }
 
     // MARK: - Gesture
@@ -256,8 +283,12 @@ struct BreathingTimer: View {
                     Haptics.tick()
                     extend(by: 30)
                 }
-                withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                if reduceMotion {
                     dragOffset = 0
+                } else {
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                        dragOffset = 0
+                    }
                 }
                 pastSkipThreshold = false
                 pastExtendThreshold = false

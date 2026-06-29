@@ -221,6 +221,7 @@ struct TemplateDetailScreen: View {
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
     private func exerciseSummary(_ exercise: TemplateExercise) -> String {
@@ -261,7 +262,8 @@ struct TemplateDetailScreen: View {
     private var startBar: some View {
         PrimaryActionButton(
             title: "Start Workout",
-            subtitle: nil
+            subtitle: nil,
+            inputLabels: ["Start Workout", "Start", "Begin"]
         ) {
             appState.startWorkoutFromTemplate(template)
             dismiss()
@@ -271,6 +273,7 @@ struct TemplateDetailScreen: View {
         .padding(.bottom, 8)
         .disabled(template.orderedExercises.isEmpty)
         .opacity(template.orderedExercises.isEmpty ? 0.4 : 1)
+        .accessibilityHint(template.orderedExercises.isEmpty ? "Add exercises first to start a workout" : "")
     }
 
     // MARK: - Mutations

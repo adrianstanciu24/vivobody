@@ -114,6 +114,7 @@ struct MeScreen: View {
                     bodyWeightPopulatedCard
                 }
                 .buttonStyle(.plain)
+                .accessibilityHint("Opens body weight details")
             }
         }
     }
@@ -167,18 +168,20 @@ struct MeScreen: View {
             Spacer(minLength: Space.sm)
 
             if sparkValues.count >= 2 {
-                MiniChart(values: sparkValues, lineColor: Tint.inProgress, fillColor: Tint.inProgress)
+                MiniChart(values: sparkValues, lineColor: Tint.inProgress, fillColor: Tint.inProgress, accessibilityLabel: "Body weight trend")
                     .frame(width: 96, height: 36)
             }
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
+                .accessibilityHidden(true)
         }
         .frame(minHeight: Space.rowMin)
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
     private func bodyWeightDeltaLabel(delta: Double) -> some View {
@@ -187,6 +190,7 @@ struct MeScreen: View {
         return HStack(spacing: Space.xs) {
             Image(systemName: isUp ? "arrow.up.right" : "arrow.down.right")
                 .font(Typography.micro)
+                .accessibilityHidden(true)
             Text("\(deltaText) since last entry")
                 .font(Typography.caption)
         }
@@ -280,6 +284,7 @@ struct MeScreen: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .accessibilityHint("Opens all personal records")
 
                 VStack(spacing: Space.sm) {
                     ForEach(Array(records.prefix(3))) { record in

@@ -142,6 +142,7 @@ struct SettingsScreen: View {
                     .foregroundStyle(Ink.tertiary)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
+                    .accessibilityHidden(true)
             }
             .padding(.horizontal, Space.md)
             .padding(.vertical, Space.sm)
@@ -313,6 +314,7 @@ struct SettingsScreen: View {
             ))
             .labelsHidden()
             .tint(Tint.inProgress)
+            .accessibilityLabel("Haptics")
         }
     }
 
@@ -348,6 +350,7 @@ struct SettingsScreen: View {
             ))
             .labelsHidden()
             .tint(Tint.inProgress)
+            .accessibilityLabel("Apple Health")
         }
     }
 
@@ -355,6 +358,7 @@ struct SettingsScreen: View {
         Rectangle()
             .fill(Surface.edge)
             .frame(height: 0.5)
+            .accessibilityHidden(true)
     }
 
     // MARK: - Footer

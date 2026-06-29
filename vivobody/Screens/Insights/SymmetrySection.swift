@@ -94,6 +94,7 @@ struct SymmetrySection: View {
                     .foregroundStyle(Ink.tertiary)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }
 

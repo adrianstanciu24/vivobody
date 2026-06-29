@@ -53,6 +53,8 @@ struct PlateVisualizer: View {
     var unit: WeightUnit = .lb
     var availablePlates: [Double]? = nil
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private var plates: [Double] { availablePlates ?? unit.standardPlates }
     private var perSide: Double { max(0, (weight - barWeight) / 2) }
 
@@ -77,7 +79,7 @@ struct PlateVisualizer: View {
                     BarSegment(width: Self.lipWidth, gradient: barGradient)
                     ForEach(m.plates.reversed()) { plate in
                         PlateView(plate: plate, unit: unit)
-                            .transition(.asymmetric(
+                            .transition(reduceMotion ? .opacity : .asymmetric(
                                 insertion: .move(edge: .leading).combined(with: .opacity),
                                 removal: .move(edge: .leading).combined(with: .opacity)
                             ))
@@ -87,7 +89,7 @@ struct PlateVisualizer: View {
                     BarCollarBump()
                     ForEach(m.plates) { plate in
                         PlateView(plate: plate, unit: unit)
-                            .transition(.asymmetric(
+                            .transition(reduceMotion ? .opacity : .asymmetric(
                                 insertion: .move(edge: .trailing).combined(with: .opacity),
                                 removal: .move(edge: .trailing).combined(with: .opacity)
                             ))
@@ -95,14 +97,16 @@ struct PlateVisualizer: View {
                     BarSegment(width: Self.lipWidth, gradient: barGradient)
                 }
                 .frame(height: 130)
-                .scaleEffect(scale, anchor: .center)
+                .scaleEffect(reduceMotion ? 1.0 : scale, anchor: .center)
                 .frame(width: availableWidth, height: 130, alignment: .center)
-                .animation(.spring(response: 0.42, dampingFraction: 0.72), value: m.plates)
+                .animation(reduceMotion ? nil : .spring(response: 0.42, dampingFraction: 0.72), value: m.plates)
             }
             .frame(height: 130)
 
             label(actual: actualTotal, exact: isExact)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Loaded barbell, \(formatted(actualTotal)) \(unit.rawValue)")
     }
 
     /// Analytical width of the loaded barbell at scale 1.0. Used to drive

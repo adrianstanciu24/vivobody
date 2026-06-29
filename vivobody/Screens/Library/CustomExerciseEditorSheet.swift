@@ -33,6 +33,7 @@ struct CustomExerciseEditorSheet: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var draft: CatalogDraft
 
@@ -126,10 +127,12 @@ struct CustomExerciseEditorSheet: View {
                 .focused($nameFieldFocused)
                 .submitLabel(.done)
                 .padding(.vertical, Space.sm)
+                .accessibilityLabel("Name")
 
             Rectangle()
                 .fill(Surface.edge)
                 .frame(height: 1)
+                .accessibilityHidden(true)
         }
     }
 
@@ -187,10 +190,17 @@ struct CustomExerciseEditorSheet: View {
                     ForEach(Mechanic.allCases, id: \.self) { m in
                         chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
                             Haptics.selection()
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            if reduceMotion {
                                 draft.mechanic = m
                                 if m == .isolation {
                                     draft.pattern = nil
+                                }
+                            } else {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                    draft.mechanic = m
+                                    if m == .isolation {
+                                        draft.pattern = nil
+                                    }
                                 }
                             }
                         }
@@ -289,6 +299,7 @@ struct CustomExerciseEditorSheet: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     // MARK: - Aliases
@@ -311,10 +322,12 @@ struct CustomExerciseEditorSheet: View {
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.words)
                 .padding(.vertical, Space.sm)
+                .accessibilityLabel("Aliases")
 
             Rectangle()
                 .fill(Surface.edge)
                 .frame(height: 1)
+                .accessibilityHidden(true)
         }
     }
 
@@ -334,8 +347,12 @@ struct CustomExerciseEditorSheet: View {
                     ForEach(TrackingMode.allCases, id: \.self) { m in
                         chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
                             Haptics.selection()
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            if reduceMotion {
                                 draft.trackingMode = m
+                            } else {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                    draft.trackingMode = m
+                                }
                             }
                         }
                     }
@@ -362,7 +379,8 @@ struct CustomExerciseEditorSheet: View {
                             unit: unit.symbol,
                             unitFontSize: 13,
                             numberColor: Ink.primary,
-                            unitColor: Ink.tertiary
+                            unitColor: Ink.tertiary,
+                            accessibilityLabel: "Weight"
                         )
                     }
                 case .duration:
@@ -374,7 +392,8 @@ struct CustomExerciseEditorSheet: View {
                             pointsPerStep: 10,
                             fontSize: 40,
                             numberColor: Ink.primary,
-                            formatter: { DurationFormatter.string($0) }
+                            formatter: { DurationFormatter.string($0) },
+                            accessibilityLabel: "Hold"
                         )
                     }
                     valueColumn(label: "Load") {
@@ -387,7 +406,8 @@ struct CustomExerciseEditorSheet: View {
                             unit: unit.symbol,
                             unitFontSize: 13,
                             numberColor: Ink.primary,
-                            unitColor: Ink.tertiary
+                            unitColor: Ink.tertiary,
+                            accessibilityLabel: "Load"
                         )
                     }
                 }

@@ -71,6 +71,7 @@ struct ActiveWorkoutMiniBar: View {
         .accessibilityLabel(accessibilityDescription)
         .accessibilityIdentifier("activeWorkoutMiniBar")
         .accessibilityHint("Tap to expand workout")
+        .accessibilityInputLabels([Text("Workout"), Text("Active workout"), Text("Resume")])
         .task(id: restJustExpired(now: now)) {
             if restJustExpired(now: now) {
                 Haptics.swell()

@@ -63,6 +63,7 @@ struct MovementCompositionSection: View {
             .chartYAxis(.hidden)
             .frame(height: 52)
             .clipShape(RoundedRectangle(cornerRadius: Radius.small, style: .continuous))
+            .accessibilityLabel("Movement composition distribution")
 
             legend
 
@@ -87,6 +88,7 @@ struct MovementCompositionSection: View {
                     Circle()
                         .fill(color(slice.mechanic))
                         .frame(width: 10, height: 10)
+                        .accessibilityHidden(true)
                     Text(slice.mechanic.displayName)
                         .font(Typography.body)
                         .foregroundStyle(Ink.primary)

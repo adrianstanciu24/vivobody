@@ -194,6 +194,8 @@ private struct SegmentedControl: View {
     @Binding var selection: LibrarySegment
     @Namespace private var thumb
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         GlassEffectContainer(spacing: 4) {
             HStack(spacing: 4) {
@@ -204,15 +206,19 @@ private struct SegmentedControl: View {
             .padding(4)
             .coloredGlassControl(cornerRadius: Radius.pill)
         }
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: selection)
+        .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.85), value: selection)
     }
 
     private func segmentButton(_ segment: LibrarySegment) -> some View {
         let isSelected = selection == segment
         return Button {
             guard selection != segment else { return }
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+            if reduceMotion {
                 selection = segment
+            } else {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    selection = segment
+                }
             }
             Haptics.selection()
         } label: {
@@ -233,6 +239,7 @@ private struct SegmentedControl: View {
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityLabel(segment.label)
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 }
 
@@ -564,6 +571,7 @@ private struct LibraryExercisesContent: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     // MARK: - Exercise list
@@ -701,11 +709,13 @@ private struct LibraryExercisesContent: View {
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
+                .accessibilityHidden(true)
         }
         .frame(minHeight: prominent ? 64 : Space.rowMin, alignment: .leading)
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
     @ViewBuilder
@@ -845,6 +855,7 @@ private struct TemplateCard: View {
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
     private var subtitle: String {

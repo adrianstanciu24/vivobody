@@ -33,8 +33,13 @@ struct BareScrubber: View {
     var numberColor: Color = Ink.primary
     var unitColor: Color = Ink.tertiary
     var formatter: ((Double) -> String)? = nil
+    /// VoiceOver label for the control. Callers should pass a
+    /// contextual noun ("Weight", "Reps", "Hold duration") so
+    /// VoiceOver announces what is being adjusted, not just the value.
+    var accessibilityLabel: String? = nil
 
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var dragStartValue: Double = 0
     @State private var rubberOffset: CGFloat = 0
@@ -42,6 +47,18 @@ struct BareScrubber: View {
     @State private var didHitMin: Bool = false
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
+
+    /// Value-settle spring. When Reduce Motion is on, skip the
+    /// decorative spring so the number snaps to its new value.
+    private var valueAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
+    }
+
+    /// Drag-state transition (scale). When Reduce Motion is on,
+    /// snap between states instead of springing.
+    private var dragStateAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7)
+    }
 
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -60,13 +77,15 @@ struct BareScrubber: View {
             }
         }
         .offset(y: rubberOffset)
-        .scaleEffect(isDragging ? 1.04 : 1.0)
-        .animation(.spring(response: 0.5, dampingFraction: 0.75), value: value)
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)
+        .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
+        .animation(valueAnimation, value: value)
+        .animation(dragStateAnimation, value: isDragging)
         .contentShape(Rectangle())
         .gesture(scrubGesture)
         .accessibilityElement()
-        .accessibilityValue("\(formattedValue) \(unit)")
+        .accessibilityLabel(accessibilityLabel ?? "")
+        .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
+        .accessibilityHint("Swipe up or down to change")
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: stepValue(by: 1)
@@ -74,6 +93,8 @@ struct BareScrubber: View {
             @unknown default: break
             }
         }
+        .focusable()
+        .accessibilityRespondsToUserInteraction(true)
     }
 
     // MARK: - Gesture
@@ -129,8 +150,12 @@ struct BareScrubber: View {
             }
             .onEnded { _ in
                 isDragging = false
-                withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                if reduceMotion {
                     rubberOffset = 0
+                } else {
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                        rubberOffset = 0
+                    }
                 }
             }
     }
@@ -143,6 +168,7 @@ struct BareScrubber: View {
     }
 
     private func stepValue(by direction: Int) {
+        guard isEnabled else { return }
         let next = value + Double(direction) * step
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {

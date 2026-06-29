@@ -22,6 +22,7 @@ struct ActiveWorkoutScreen: View {
     /// added exercise with the set count / reps / weight from the
     /// last time the user logged it (see `makeAddedExercise`).
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Optional archive callback. Wired to the Summary card's DONE
     /// button — that's the canonical "workout is over, save it"
@@ -97,7 +98,7 @@ struct ActiveWorkoutScreen: View {
             )
             .zIndex(20)
         }
-        .animation(.easeOut(duration: 0.18), value: session.isResting)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: session.isResting)
         // While a PR celebration is on screen, lock the sheet's
         // drag-to-dismiss. Otherwise an accidental downward swipe
         // (muscle memory from skipping the rest timer) collapses the
@@ -230,6 +231,7 @@ struct ActiveWorkoutScreen: View {
                 Text("\(completedSetCount) / \(totalSetCount)")
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.tertiary)
+                    .accessibilityLabel("\(completedSetCount) of \(totalSetCount) sets completed")
 
                 addButton
             }
@@ -285,6 +287,7 @@ struct ActiveWorkoutScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(session.totalSets > 0 ? "End workout" : "Cancel workout")
+        .accessibilityInputLabels([Text("End workout"), Text("End"), Text("Finish"), Text("Cancel workout"), Text("Cancel")])
         .accessibilityIdentifier("endWorkoutButton")
     }
 
@@ -301,7 +304,7 @@ struct ActiveWorkoutScreen: View {
         } description: {
             Text("Add your first exercise to start logging sets.")
         } actions: {
-            PrimaryActionButton(title: "Add exercise", icon: "plus") {
+            PrimaryActionButton(title: "Add exercise", icon: "plus", inputLabels: ["Add exercise", "Add", "Add Exercise"]) {
                 showAddExercisePicker = true
             }
             .padding(.horizontal, Space.gutter)
@@ -338,6 +341,7 @@ struct ActiveWorkoutScreen: View {
             selection: session.activeExerciseIndex
         )
         .padding(.bottom, 4)
+        .accessibilityHidden(true)
     }
 
     // MARK: - Derived

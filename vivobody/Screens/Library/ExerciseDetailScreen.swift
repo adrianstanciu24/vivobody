@@ -338,12 +338,14 @@ struct ExerciseDetailScreen: View {
             }
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
     }
 
     private var statDivider: some View {
         Rectangle()
             .fill(Surface.edge)
             .frame(width: 0.5, height: 54)
+            .accessibilityHidden(true)
     }
 
     // MARK: - One-rep max
@@ -458,6 +460,7 @@ struct ExerciseDetailScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     private var chart: some View {
@@ -517,6 +520,7 @@ struct ExerciseDetailScreen: View {
             }
         }
         .frame(height: 200)
+        .accessibilityLabel("Progress chart")
     }
 
     private func rangeChip(_ r: TimeRange) -> some View {
@@ -534,6 +538,7 @@ struct ExerciseDetailScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
     // MARK: - Effort
@@ -730,6 +735,7 @@ struct ExerciseDetailScreen: View {
             }
         }
         .padding(.vertical, 12)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Defaults
@@ -746,6 +752,7 @@ struct ExerciseDetailScreen: View {
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(width: 0.5, height: 32)
+                        .accessibilityHidden(true)
                     defaultStat(label: "Reps", value: "\(item.defaultReps)")
                 case .duration:
                     defaultStat(label: "Hold", value: DurationFormatter.string(item.defaultDuration))
@@ -753,6 +760,7 @@ struct ExerciseDetailScreen: View {
                         Rectangle()
                             .fill(Surface.edge)
                             .frame(width: 0.5, height: 32)
+                            .accessibilityHidden(true)
                         defaultStat(label: "Load", value: WeightFormatter.string(item.defaultWeight(forUnit: unit), unit: unit))
                     }
                 }
@@ -788,6 +796,7 @@ struct ExerciseDetailScreen: View {
                 Spacer(minLength: 8)
                 Image(systemName: "arrow.right")
                     .font(Typography.sectionHeading)
+                    .accessibilityHidden(true)
             }
             .foregroundStyle(Tint.onAccent)
             .padding(.horizontal, Space.xxl)
@@ -1151,7 +1160,7 @@ private struct OneRepMaxEditorSheet: View {
                     .padding(.horizontal, Space.xl)
                     .padding(.top, Space.lg)
 
-                WeightScrubber(canonicalWeight: $draft, purpose: .strength, label: nil)
+                WeightScrubber(canonicalWeight: $draft, purpose: .strength, label: "One-rep max")
 
                 if hasMeasured {
                     Button {

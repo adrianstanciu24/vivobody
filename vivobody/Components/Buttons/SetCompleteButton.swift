@@ -47,6 +47,7 @@ struct SetCompleteButton: View {
     let onToggle: () -> Void
 
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
@@ -91,7 +92,10 @@ struct SetCompleteButton: View {
         .accessibilityLabel(accessibilityLabelOverride ?? "\(reps) reps at \(WeightFormatter.string(weight, unit: unit, fractionDigits: 0, includeUnit: false)) \(unit.displayName.lowercased())")
         .accessibilityValue(isComplete ? "completed" : "not completed")
         .accessibilityAddTraits(.isButton)
+        .accessibilityInputLabels(inputLabelValues)
         .accessibilityHint(isComplete ? "Double tap to undo." : "Double tap to complete the set.")
+        .focusable()
+        .accessibilityRespondsToUserInteraction(true)
     }
 
     // MARK: - Layers
@@ -116,11 +120,11 @@ struct SetCompleteButton: View {
                 y: isComplete ? 9 : 4
             )
             .shadow(color: .black.opacity(0.50), radius: 6, y: 3)
-            .animation(.spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
+            .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 
     private var ripple: some View {
-        Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : liveAccent)
+        Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : liveAccent, reduceMotion: reduceMotion)
             .allowsHitTesting(false)
             .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
     }
@@ -138,7 +142,7 @@ struct SetCompleteButton: View {
             }
             .padding(.horizontal, Space.xxl)
             .padding(.vertical, Space.xl)
-            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
+            .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         } else {
             HStack(alignment: .center, spacing: 0) {
                 numberBlock(value: "\(reps)", unit: "reps")
@@ -150,7 +154,7 @@ struct SetCompleteButton: View {
             .padding(.horizontal, Space.xxl)
             .padding(.vertical, Space.xl)
             .foregroundStyle(isComplete ? Tint.onAccent : Ink.primary)
-            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
+            .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85), value: isComplete)
         }
     }
 
@@ -159,7 +163,7 @@ struct SetCompleteButton: View {
             Text(value)
                 .font(Typography.metricLg)
                 .monospacedDigit()
-                .scaleEffect(numberScale)
+                .scaleEffect(reduceMotion ? 1.0 : numberScale)
             Text(unit)
                 .font(Typography.metricUnit)
                 .opacity(isComplete ? 0.65 : 0.55)
@@ -189,19 +193,21 @@ struct SetCompleteButton: View {
                     )
                     .frame(width: 18, height: 14)
                     .transition(
-                        .asymmetric(
-                            insertion: .modifier(active: StrokeDrawIn(progress: 0), identity: StrokeDrawIn(progress: 1)),
-                            removal: .opacity.combined(with: .scale(scale: 0.6))
-                        )
+                        reduceMotion
+                            ? .opacity
+                            : .asymmetric(
+                                insertion: .modifier(active: StrokeDrawIn(progress: 0), identity: StrokeDrawIn(progress: 1)),
+                                removal: .opacity.combined(with: .scale(scale: 0.6))
+                            )
                     )
             } else {
                 Image(systemName: "chevron.right")
                     .font(Typography.headline)
                     .foregroundStyle(liveAccent)
-                    .transition(.opacity.combined(with: .scale(scale: 0.6)))
+                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.6)))
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.62), value: isComplete)
+        .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.62), value: isComplete)
     }
 
     // MARK: - Gesture
@@ -229,16 +235,24 @@ struct SetCompleteButton: View {
                 let inside = isInside(value.location)
                 let target: CGFloat = (inside && !dragCanceled) ? 0.975 : 1
                 if pressScale != target {
-                    withAnimation(.spring(response: 0.22, dampingFraction: 0.7)) {
+                    if reduceMotion {
                         pressScale = target
+                    } else {
+                        withAnimation(.spring(response: 0.22, dampingFraction: 0.7)) {
+                            pressScale = target
+                        }
                     }
                 }
                 if inside { ripplePoint = value.location }
             }
             .onEnded { value in
                 defer { dragCanceled = false }
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
+                if reduceMotion {
                     pressScale = 1
+                } else {
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.55)) {
+                        pressScale = 1
+                    }
                 }
                 // Fire only if (a) we haven't already decided this is
                 // a drag, (b) the release wasn't a fast flick, and
@@ -283,17 +297,36 @@ struct SetCompleteButton: View {
         ripplePoint = point
         rippleId &+= 1
 
-        withAnimation(.spring(response: 0.18, dampingFraction: 0.55)) {
-            numberScale = 1.06
-        }
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.6).delay(0.08)) {
+        if reduceMotion {
             numberScale = 1
+        } else {
+            withAnimation(.spring(response: 0.18, dampingFraction: 0.55)) {
+                numberScale = 1.06
+            }
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.6).delay(0.08)) {
+                numberScale = 1
+            }
         }
         onToggle()
     }
 
     private var formattedWeight: String {
         WeightFormatter.string(weight, unit: unit, includeUnit: false)
+    }
+
+    /// Voice Control synonyms derived from the button's current
+    /// title (or accessibility override). When a verb title is set
+    /// ("Complete set", "Finish exercise"), it leads so a user can
+    /// say "tap complete" or "tap finish." Generic synonyms ("Done",
+    /// "Complete", "Finish") follow so natural phrasing always works.
+    private var inputLabelValues: [Text] {
+        if let override = accessibilityLabelOverride {
+            return [Text(override), Text("Complete"), Text("Done"), Text("Finish")]
+        }
+        if let title {
+            return [Text(title), Text("Complete"), Text("Done"), Text("Finish")]
+        }
+        return [Text("Complete set"), Text("Complete"), Text("Done"), Text("Finish")]
     }
 }
 
@@ -303,6 +336,7 @@ private struct Ripple: View {
     let triggerId: Int
     let origin: CGPoint
     let color: Color
+    var reduceMotion: Bool = false
 
     @State private var scale: CGFloat = 0
     @State private var opacity: Double = 0
@@ -312,9 +346,12 @@ private struct Ripple: View {
             .stroke(color, lineWidth: 2)
             .frame(width: 60, height: 60)
             .position(origin == .zero ? CGPoint(x: 0, y: 0) : origin)
-            .scaleEffect(scale, anchor: .center)
+            .scaleEffect(reduceMotion ? 1.0 : scale, anchor: .center)
             .opacity(opacity)
             .onChange(of: triggerId) { _, _ in
+                if reduceMotion {
+                    return
+                }
                 scale = 0.2
                 opacity = 0.7
                 withAnimation(.easeOut(duration: 0.55)) {

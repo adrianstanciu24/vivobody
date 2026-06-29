@@ -30,9 +30,9 @@ struct WeightScrubber: View {
     /// converted to display-unit at use time.
     var canonicalRange: ClosedRange<Double>? = nil
 
-    /// Label shown above the value. Defaults to "WEIGHT" for
+    /// Label shown above the value. Defaults to "Weight" for
     /// strength scrubbers; pass nil to hide the label entirely.
-    var label: String? = "WEIGHT"
+    var label: String? = "Weight"
 
     /// Drag points required per step (smaller = faster scrubbing).
     /// Defaults to 12 to match the underlying NumberScrubber's

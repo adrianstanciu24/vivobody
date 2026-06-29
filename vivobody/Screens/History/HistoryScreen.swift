@@ -262,6 +262,7 @@ private struct WeeklyHero: View {
             let pct = Int((comparison.volumeDelta / comparison.lastWeek.volume * 100).rounded())
             HStack(spacing: 3) {
                 Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
+                    .accessibilityHidden(true)
                 Text("\(abs(pct))% vs last week")
             }
             .font(Typography.sectionLabel)
@@ -425,6 +426,7 @@ private struct DateGroupSection: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityHint("Opens workout details")
                 }
             }
         }
@@ -482,11 +484,13 @@ private struct SessionRow: View {
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
+                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
         .padding(.vertical, Space.md)
         .contentShape(Rectangle())
         .accessibilityIdentifier("historySessionRow")
+        .accessibilityElement(children: .combine)
     }
 
     /// The lone accent in the list: a small outlined "PR" tag next to

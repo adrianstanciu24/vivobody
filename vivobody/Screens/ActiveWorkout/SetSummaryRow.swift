@@ -25,6 +25,8 @@ struct SetSummaryRow: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
     /// Universal "set complete" green — not muscle-group specific
@@ -67,7 +69,7 @@ struct SetSummaryRow: View {
         .padding(.vertical, Space.sm + 2)
         .background(rowBackground)
         .onAppear {
-            guard isActive else { return }
+            guard isActive, !reduceMotion else { return }
             withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
                 pulse = 1.0
             }

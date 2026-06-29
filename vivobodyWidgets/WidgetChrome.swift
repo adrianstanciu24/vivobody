@@ -55,6 +55,8 @@ struct WidgetStatStrip: View {
                         .minimumScaleFactor(0.75)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
             }
         }
     }
@@ -109,6 +111,8 @@ struct WidgetExerciseRows: View {
                         .minimumScaleFactor(0.7)
                 }
                 .frame(minHeight: 28)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(exercise.name), \(exercise.setSpec)")
 
                 if index < min(exercises.count, limit) - 1 {
                     Rectangle()
@@ -142,6 +146,7 @@ struct ConsistencyHeatmapGrid: View {
             }
         }
         .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Training heatmap")
     }
 
     private func cell(_ day: ConsistencyDaySnapshot) -> some View {
@@ -208,6 +213,7 @@ struct WeeklyVolumeSparkline: View {
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .frame(height: 48)
+        .accessibilityLabel("Weekly volume trend")
     }
 }
 
@@ -230,11 +236,14 @@ struct HeatmapLegend: View {
                     .fill(fill(level))
                     .frame(width: 10, height: 10)
                     .widgetAccentable(level > 0)
+                    .accessibilityHidden(true)
             }
             Text("More")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Heatmap legend: less to more training")
     }
 
     private func fill(_ level: Int) -> Color {

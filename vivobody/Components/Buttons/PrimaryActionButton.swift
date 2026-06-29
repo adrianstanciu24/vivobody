@@ -27,6 +27,10 @@ struct PrimaryActionButton: View {
     var subtitle: String? = nil
     var icon: String? = "arrow.right"
     var accent: Color = Tint.primary
+    /// Voice Control synonyms — short, speakable labels ordered by
+    /// importance (first = primary). Lets a user say "Start" instead
+    /// of the full "Start Workout" to activate this button.
+    var inputLabels: [String]? = nil
     let action: () -> Void
 
     var body: some View {
@@ -62,6 +66,9 @@ struct PrimaryActionButton: View {
         .accessibilityLabel(title)
         .accessibilityHint(subtitle ?? "Activates primary action")
         .accessibilityAddTraits(.isButton)
+        if let inputLabels {
+            accessibilityInputLabels(inputLabels.map { Text($0) })
+        }
     }
 }
 
