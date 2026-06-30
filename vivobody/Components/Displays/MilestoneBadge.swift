@@ -47,7 +47,7 @@ struct MilestoneBadge: View {
                 .minimumScaleFactor(0.8)
         }
         .padding(Space.md)
-        .frame(width: 150, alignment: .leading)
+        .frame(minWidth: 150, alignment: .leading)
         .frame(maxHeight: .infinity, alignment: .top)
         .contentChip(cornerRadius: Radius.chip, tint: milestone.achieved ? Tint.primary : nil)
         .accessibilityElement(children: .ignore)

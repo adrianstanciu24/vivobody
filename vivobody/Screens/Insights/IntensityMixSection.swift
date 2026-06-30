@@ -96,6 +96,7 @@ struct IntensityMixSection: View {
                         .font(Typography.metricUnit)
                         .foregroundStyle(slice.zone == mix.dominant ? Tint.primary : Ink.tertiary)
                         .monospacedDigit()
+                        .minimumScaleFactor(0.6)
                         .frame(width: 44, alignment: .trailing)
                 }
             }

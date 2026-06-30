@@ -386,7 +386,8 @@ private struct ExerciseDetailRow: View {
                 Text("\(index)")
                     .font(Typography.metricUnit)
                     .foregroundStyle(set.isCompleted ? Ink.tertiary : Ink.quaternary)
-                    .frame(width: 16, alignment: .leading)
+                    .minimumScaleFactor(0.6)
+                    .frame(width: 24, alignment: .leading)
             }
 
             Spacer(minLength: 12)
@@ -423,7 +424,8 @@ private struct ExerciseDetailRow: View {
                 .font(Typography.metricInline)
                 .foregroundStyle(textColor)
                 .monospacedDigit()
-                .frame(width: 28, alignment: .trailing)
+                .minimumScaleFactor(0.6)
+                .frame(width: 40, alignment: .trailing)
 
         case .duration:
             if set.weight > 0 {

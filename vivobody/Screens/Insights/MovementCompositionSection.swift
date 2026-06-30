@@ -104,6 +104,7 @@ struct MovementCompositionSection: View {
                         .font(Typography.metricUnit)
                         .foregroundStyle(slice.mechanic == split.dominant ? Tint.primary : Ink.tertiary)
                         .monospacedDigit()
+                        .minimumScaleFactor(0.6)
                         .frame(width: 44, alignment: .trailing)
                 }
             }

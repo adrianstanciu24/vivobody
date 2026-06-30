@@ -457,12 +457,14 @@ private struct SessionRow: View {
                         .font(prominent ? Typography.title : Typography.sectionHeading)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     if hasPR { prBadge }
                 }
                 Text(metaLine)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
 
             Spacer(minLength: Space.sm)

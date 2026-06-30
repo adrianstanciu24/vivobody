@@ -199,7 +199,7 @@ struct TemplateEditorScreen: View {
                 .font(Typography.sectionHeading)
                 .foregroundStyle(isOn ? Color.black : Ink.secondary)
                 .frame(maxWidth: .infinity)
-                .frame(height: Space.tapMin)
+                .frame(minHeight: Space.tapMin)
                 .background(
                     Capsule(style: .continuous)
                         .fill(isOn ? Tint.primary : Surface.cardTint)
@@ -272,6 +272,7 @@ struct TemplateEditorScreen: View {
                         .font(Typography.title)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     Text(exercise.summary(unit: unit))
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)

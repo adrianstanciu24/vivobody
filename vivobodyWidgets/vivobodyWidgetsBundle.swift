@@ -98,6 +98,7 @@ struct UpNextWidgetView: View {
         }
         .widgetURL(URL(string: "vivobody://today"))
         .containerBackground(.black, for: .widget)
+        .dynamicTypeSize(.large)
     }
 
     private var system: some View {
@@ -359,6 +360,7 @@ struct ConsistencyWidgetView: View {
         }
         .widgetURL(URL(string: "vivobody://insights/consistency"))
         .containerBackground(.black, for: .widget)
+        .dynamicTypeSize(.large)
     }
 
     @ViewBuilder
@@ -514,6 +516,7 @@ struct SignatureWidgetView: View {
         }
         .widgetURL(URL(string: "vivobody://insights"))
         .containerBackground(.black, for: .widget)
+        .dynamicTypeSize(.large)
     }
 
     @ViewBuilder
@@ -853,5 +856,6 @@ struct ActiveWorkoutActivityView: View {
             }
         }
         .padding()
+        .dynamicTypeSize(.large)
     }
 }

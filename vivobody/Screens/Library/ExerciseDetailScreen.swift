@@ -332,6 +332,7 @@ struct ExerciseDetailScreen: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             } else {
                 Text(" ")
                     .font(Typography.caption)
@@ -624,7 +625,8 @@ struct ExerciseDetailScreen: View {
         HStack(alignment: .firstTextBaseline, spacing: Space.md) {
             Text(label)
                 .sectionLabelStyle(Opacity.soft)
-                .frame(width: 76, alignment: .leading)
+                .frame(width: 100, alignment: .leading)
+                .minimumScaleFactor(0.7)
             Text(muscles.map(\.displayName).joined(separator: " · "))
                 .font(Typography.body)
                 .foregroundStyle(prominent ? Ink.secondary : Ink.tertiary)
@@ -708,11 +710,13 @@ struct ExerciseDetailScreen: View {
                 Text(Self.dayFormatter.string(from: row.date))
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)
+                    .minimumScaleFactor(0.7)
                 Text(RelativeDate.short(row.date))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
+                    .minimumScaleFactor(0.7)
             }
-            .frame(width: 90, alignment: .leading)
+            .frame(width: 110, alignment: .leading)
 
             Text(recentMetricLabel(row))
                 .font(Typography.metricUnit)

@@ -294,6 +294,7 @@ struct TodayScreen: View {
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
 
                 VStack(spacing: 0) {
@@ -360,12 +361,14 @@ struct TodayScreen: View {
                 .font(Typography.headline)
                 .foregroundStyle(Ink.primary)
                 .lineLimit(1)
+                .minimumScaleFactor(0.7)
             Spacer(minLength: Space.sm)
             Text(exerciseScheme(exercise))
                 .font(Typography.metricUnit)
                 .foregroundStyle(Ink.tertiary)
                 .monospacedDigit()
                 .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
         .padding(.vertical, Space.sm)
         .accessibilityElement(children: .combine)

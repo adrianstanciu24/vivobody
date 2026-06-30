@@ -696,10 +696,12 @@ private struct LibraryExercisesContent: View {
                     .font(Typography.sectionHeading)
                     .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 Text(metaLine(item))
                     .font(Typography.caption)
                     .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
 
             Spacer(minLength: Space.sm)
@@ -831,15 +833,18 @@ private struct TemplateCard: View {
                     .font(Typography.title)
                     .foregroundStyle(Ink.primary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 Text(subtitle)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 if template.isScheduled {
                     Text(WeekdayLabels.summary(template.scheduledWeekdays))
                         .font(Typography.caption)
                         .foregroundStyle(Ink.secondary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
             }
 

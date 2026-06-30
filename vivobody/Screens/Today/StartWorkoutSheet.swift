@@ -166,11 +166,13 @@ struct StartWorkoutSheet: View {
                         .font(Typography.title)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                     if let subtitle {
                         Text(subtitle)
                             .font(Typography.caption)
                             .foregroundStyle(Ink.tertiary)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
                 }
 

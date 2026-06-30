@@ -123,7 +123,8 @@ struct StatStrip: View {
                 if index < stats.count - 1 {
                     Rectangle()
                         .fill(Surface.edge)
-                        .frame(width: 0.5, height: 34)
+                        .frame(width: 0.5)
+                        .frame(minHeight: 34)
                 }
             }
         }
@@ -202,6 +203,7 @@ struct WaterfallRow: View {
                 .font(Typography.metricMicro)
                 .foregroundStyle(Ink.quaternary)
                 .monospacedDigit()
+                .minimumScaleFactor(0.6)
                 .frame(width: 38, alignment: .trailing)
         }
         .accessibilityElement(children: .ignore)
@@ -305,11 +307,13 @@ struct KitRow<Trailing: View>: View {
                     .font(Typography.title)
                     .foregroundStyle(Ink.primary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 if let subtitle {
                     Text(subtitle)
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 }
             }
 

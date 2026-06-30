@@ -31,7 +31,7 @@ enum Ink {
     static let tertiary   = adaptiveColor(dark: .white.withAlphaComponent(0.44), light: .black.withAlphaComponent(0.42))
     static let quaternary = adaptiveColor(dark: .white.withAlphaComponent(0.22), light: .black.withAlphaComponent(0.22))
 
-    private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
+    nonisolated private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
         Color(UIColor { traits in
             traits.userInterfaceStyle == .dark ? dark : light
         })
@@ -73,7 +73,7 @@ enum Surface {
     static let edge = adaptiveColor(dark: .white.withAlphaComponent(0.10), light: .black.withAlphaComponent(0.10))
     static let edgeBright = adaptiveColor(dark: .white.withAlphaComponent(0.18), light: .black.withAlphaComponent(0.16))
 
-    private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
+    nonisolated private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
         Color(UIColor { traits in
             traits.userInterfaceStyle == .dark ? dark : light
         })
@@ -81,22 +81,29 @@ enum Surface {
 }
 
 enum Typography {
+    // Hero numerals — intentionally fixed. These are already very large
+    // display sizes (40-104 pt) that live inside gesture-first instrument
+    // layouts. Scaling them further risks breaking the deliberate spatial
+    // relationships. Apple allows capping very large display text.
     static let bigMetric = Font.system(size: 104, weight: .bold, design: .monospaced)
     static let metricHero = Font.system(size: 56, weight: .bold, design: .monospaced)
     static let metricLg = Font.system(size: 40, weight: .bold, design: .monospaced)
-    static let statValue = Font.system(size: 28, weight: .bold, design: .monospaced)
-    static let metricInline = Font.system(size: 16, weight: .semibold, design: .monospaced)
-    static let metricUnit = Font.system(size: 13, weight: .medium, design: .monospaced)
-    static let metricMicro = Font.system(size: 11, weight: .medium, design: .monospaced)
 
-    static let display = Font.system(size: 30, weight: .bold)
-    static let title = Font.system(size: 20, weight: .semibold)
-    static let headline = Font.system(size: 16, weight: .semibold)
-    static let body = Font.system(size: 16, weight: .regular)
-    static let sectionHeading = Font.system(size: 15, weight: .semibold)
-    static let sectionLabel = Font.system(size: 13, weight: .medium)
-    static let caption = Font.system(size: 12, weight: .medium)
-    static let micro = Font.system(size: 10, weight: .medium)
+    // Scalable numeric tokens — text-style-based so they react to Dynamic Type.
+    static let statValue = Font.system(.title, design: .monospaced, weight: .bold)
+    static let metricInline = Font.system(.callout, design: .monospaced, weight: .semibold)
+    static let metricUnit = Font.system(.footnote, design: .monospaced, weight: .medium)
+    static let metricMicro = Font.system(.caption2, design: .monospaced, weight: .medium)
+
+    // Scalable text tokens — text-style-based so they react to Dynamic Type.
+    static let display = Font.system(.largeTitle, weight: .bold)
+    static let title = Font.system(.title3, weight: .semibold)
+    static let headline = Font.system(.headline)
+    static let body = Font.system(.body)
+    static let sectionHeading = Font.system(.subheadline, weight: .semibold)
+    static let sectionLabel = Font.system(.footnote, weight: .medium)
+    static let caption = Font.system(.caption, weight: .medium)
+    static let micro = Font.system(.caption2, weight: .medium)
 }
 
 extension View {

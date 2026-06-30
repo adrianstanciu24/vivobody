@@ -136,6 +136,8 @@ struct SetCompleteButton: View {
                 Text(title)
                     .font(Typography.title)
                     .tracking(0.4)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
                 Spacer(minLength: 8)
                 statusIndicator
@@ -163,6 +165,8 @@ struct SetCompleteButton: View {
             Text(value)
                 .font(Typography.metricLg)
                 .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
                 .scaleEffect(reduceMotion ? 1.0 : numberScale)
             Text(unit)
                 .font(Typography.metricUnit)
