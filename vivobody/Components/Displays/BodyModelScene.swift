@@ -70,7 +70,7 @@ enum BodyModelScene {
         camera.zNear = 0.01
         camera.zFar = 100
         cameraNode.camera = camera
-        cameraNode.position = SCNVector3(0, 0.9, 3.05)
+        cameraNode.position = SCNVector3(0, 0.9, 3.0)
         cameraNode.look(at: SCNVector3(0, 0.9, 0))
         scene.rootNode.addChildNode(cameraNode)
     }

@@ -569,8 +569,8 @@ struct TodayScreen: View {
         )
     }
 
-    private static let heroFraction: CGFloat = 0.80
-    private static let minimumHeroFraction: CGFloat = 0.64
+    private static let heroFraction: CGFloat = 0.98
+    private static let minimumHeroFraction: CGFloat = 0.80
 
     /// Reserve the height occupied by the pinned primary CTA above the
     /// floating tab bar. `safeAreaBar` provides native chrome placement;
