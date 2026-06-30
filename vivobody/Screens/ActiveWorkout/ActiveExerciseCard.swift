@@ -290,7 +290,10 @@ struct ActiveExerciseCard: View {
                 unitFontSize: 18,
                 numberColor: Ink.primary,
                 unitColor: Ink.tertiary,
-                accessibilityLabel: "Weight"
+                accessibilityLabel: "Weight",
+                showsScrubHint: isActive,
+                performsScrubNudge: isActive,
+                fitsWidth: true
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -308,7 +311,8 @@ struct ActiveExerciseCard: View {
                     unitFontSize: 14,
                     numberColor: Ink.secondary,
                     unitColor: Ink.tertiary,
-                    accessibilityLabel: "Reps"
+                    accessibilityLabel: "Reps",
+                    showsScrubHint: isActive
                 )
             }
         }
@@ -327,7 +331,10 @@ struct ActiveExerciseCard: View {
                 fontSize: 104,
                 numberColor: Ink.primary,
                 formatter: { DurationFormatter.string($0) },
-                accessibilityLabel: "Hold duration"
+                accessibilityLabel: "Hold duration",
+                showsScrubHint: isActive,
+                performsScrubNudge: isActive,
+                fitsWidth: true
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -345,7 +352,8 @@ struct ActiveExerciseCard: View {
                     unitFontSize: 14,
                     numberColor: Ink.secondary,
                     unitColor: Ink.tertiary,
-                    accessibilityLabel: "Weight"
+                    accessibilityLabel: "Weight",
+                    showsScrubHint: isActive
                 )
             }
         }
@@ -372,6 +380,8 @@ struct ActiveExerciseCard: View {
                     .font(Typography.bigMetric)
                     .foregroundStyle(Tint.complete)
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 Text(unit.symbol)
                     .font(Typography.metricInline)
                     .foregroundStyle(Tint.complete.opacity(Opacity.emphasis))
@@ -401,6 +411,8 @@ struct ActiveExerciseCard: View {
                 .font(Typography.bigMetric)
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             if loaded, let top {
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text("+")
@@ -573,6 +585,14 @@ struct ActiveExerciseCard: View {
 
     private var exerciseIndex: Int {
         session.orderedExercises.firstIndex(where: { $0.id == exercise.id }) ?? 0
+    }
+
+    /// True when this card is the pager's current page. Gates the
+    /// first-use scrub hint so only the on-screen hero nudges and
+    /// wears chevrons — not the pre-mounted neighbor cards that the
+    /// SwipePager keeps in the hierarchy.
+    private var isActive: Bool {
+        exerciseIndex == session.activeExerciseIndex
     }
 
     private var sets: [WorkoutSet] {

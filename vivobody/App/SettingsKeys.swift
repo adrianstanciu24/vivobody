@@ -29,6 +29,13 @@ nonisolated enum SettingsKey {
     /// dismissed. Gates the one-time OnboardingScreen presented over
     /// AppRoot; flips true the moment the user taps Start.
     static let onboardingCompleted = "settings.onboardingCompleted"
+    /// Bool — whether the user has ever performed a real vertical
+    /// scrub on a number scrubber. Gates the in-context first-use
+    /// affordance (nudge animation + faint chevrons) so it appears
+    /// only until the user drags a number once, then never again.
+    /// Teaches the drag-to-adjust gesture without an onboarding
+    /// wizard, which the product principles cut outright.
+    static let hasScrubbedNumber = "settings.hasScrubbedNumber"
 }
 
 nonisolated enum SettingsDefaults {
@@ -38,6 +45,7 @@ nonisolated enum SettingsDefaults {
     static let appearance = AppAppearance.system.rawValue
     static let healthKitEnabled = false
     static let onboardingCompleted = false
+    static let hasScrubbedNumber = false
 }
 
 /// The user's colour-scheme preference. `system` follows the OS;
