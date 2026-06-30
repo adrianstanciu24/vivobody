@@ -17,14 +17,19 @@
 	<string>vivobody saves your finished workouts to the Health app so they appear in your workout history.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>astanciu.vivobody.app.continueWorkout</string>
 		<string>com.apple.corespotlightitem</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.health-and-fitness</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
 </dict>
 </plist>

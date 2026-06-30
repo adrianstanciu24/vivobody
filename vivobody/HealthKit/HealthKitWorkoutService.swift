@@ -40,6 +40,16 @@ enum HealthKitWorkoutService {
     /// Simulator and on hardware without a Health database.
     static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
+    /// Whether the system would actually present the authorization
+    /// prompt on the next request. HealthKit only shows the sheet
+    /// once; after that the status is determined and re-requesting
+    /// is a silent no-op. Used to gate a priming explainer before
+    /// the first prompt.
+    static var shouldPrime: Bool {
+        guard isAvailable else { return false }
+        return store.authorizationStatus(for: HKObjectType.workoutType()) == .notDetermined
+    }
+
     /// Whether the user opted in. Read straight from UserDefaults so
     /// non-view code can gate without @AppStorage (mirrors Haptics).
     private static var isEnabled: Bool {

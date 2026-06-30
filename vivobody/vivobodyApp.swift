@@ -28,6 +28,13 @@ struct vivobodyApp: App {
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
+            // A failed on-disk migration must not crash every launch.
+            // Fall back to an in-memory store so the app stays usable;
+            // the original store is left untouched on disk for recovery.
+            let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            if let memory = try? ModelContainer(for: schema, configurations: [fallback]) {
+                return memory
+            }
             fatalError("Failed to create ModelContainer: \(error)")
         }
     }()

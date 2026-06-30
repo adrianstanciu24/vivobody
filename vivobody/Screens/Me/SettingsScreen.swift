@@ -51,6 +51,10 @@ struct SettingsScreen: View {
     /// Exercise Catalog." Bound to the alert's `isPresented`.
     @State private var isConfirmingCatalogReset: Bool = false
 
+    /// Presents the Apple Health explainer before the first
+    /// authorization prompt. Driven by the HealthKit toggle.
+    @State private var showHealthKitPriming: Bool = false
+
     /// Common rest values that cover the bulk of strength-training
     /// programs. Surfaced as a horizontal chip selector — picking a
     /// value is a single tap with no keyboard or sheet round-trip.
@@ -115,6 +119,18 @@ struct SettingsScreen: View {
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("Restores the original 90 exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
+        }
+        .sheet(isPresented: $showHealthKitPriming) {
+            HealthKitPrimingSheet(
+                onContinue: {
+                    showHealthKitPriming = false
+                    Task { await requestHealthKitAuthorization() }
+                },
+                onNotNow: {
+                    healthKitEnabled = false
+                    showHealthKitPriming = false
+                }
+            )
         }
     }
 
@@ -341,10 +357,10 @@ struct SettingsScreen: View {
                     // settle to the real grant when it returns.
                     healthKitEnabled = newValue
                     guard newValue else { return }
-                    Task {
-                        let granted = await HealthKitWorkoutService.requestAuthorization()
-                        healthKitEnabled = granted
-                        if granted { Haptics.soft() }
+                    if HealthKitWorkoutService.shouldPrime {
+                        showHealthKitPriming = true
+                    } else {
+                        Task { await requestHealthKitAuthorization() }
                     }
                 }
             ))
@@ -352,6 +368,15 @@ struct SettingsScreen: View {
             .tint(Tint.inProgress)
             .accessibilityLabel("Apple Health")
         }
+    }
+
+    /// Runs the HealthKit write-authorization request and settles the
+    /// toggle to the real grant. Shared by the direct path (once the
+    /// prompt has already been shown) and the priming sheet's Continue.
+    private func requestHealthKitAuthorization() async {
+        let granted = await HealthKitWorkoutService.requestAuthorization()
+        healthKitEnabled = granted
+        if granted { Haptics.soft() }
     }
 
     private var rowDivider: some View {
