@@ -25,6 +25,10 @@ nonisolated enum SettingsKey {
     /// authorization when first enabled, and the archive path reads
     /// this flag before writing.
     static let healthKitEnabled = "settings.healthKitEnabled"
+    /// Bool — whether the first-launch welcome screen has been
+    /// dismissed. Gates the one-time OnboardingScreen presented over
+    /// AppRoot; flips true the moment the user taps Start.
+    static let onboardingCompleted = "settings.onboardingCompleted"
 }
 
 nonisolated enum SettingsDefaults {
@@ -33,6 +37,7 @@ nonisolated enum SettingsDefaults {
     static let weightUnit = WeightUnit.lb.rawValue
     static let appearance = AppAppearance.system.rawValue
     static let healthKitEnabled = false
+    static let onboardingCompleted = false
 }
 
 /// The user's colour-scheme preference. `system` follows the OS;

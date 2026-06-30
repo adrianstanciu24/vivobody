@@ -44,6 +44,19 @@ struct AppRoot: View {
         AppAppearance(rawValue: appearanceRaw) ?? .system
     }
 
+    /// First-launch gate. Once true the welcome screen never shows
+    /// again. The fullScreenCover binding is derived from its inverse
+    /// so tapping Start (which sets this true) dismisses the cover.
+    @AppStorage(SettingsKey.onboardingCompleted)
+    private var onboardingCompleted: Bool = SettingsDefaults.onboardingCompleted
+
+    private var showOnboarding: Binding<Bool> {
+        Binding(
+            get: { !onboardingCompleted },
+            set: { presented in onboardingCompleted = !presented }
+        )
+    }
+
     var body: some View {
         tabView
             .preferredColorScheme(appearance.colorScheme)
@@ -202,6 +215,12 @@ struct AppRoot: View {
                     ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
                 }
                 .presentationDragIndicator(.visible)
+            }
+            // First-launch welcome. Full-screen (no swipe-to-dismiss)
+            // so the only way out is tapping Start, which flips the
+            // onboarding flag and dismisses the cover.
+            .fullScreenCover(isPresented: showOnboarding) {
+                OnboardingScreen(onStart: { onboardingCompleted = true })
             }
     }
 
