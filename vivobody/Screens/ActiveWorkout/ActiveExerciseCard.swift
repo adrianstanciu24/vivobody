@@ -255,7 +255,8 @@ struct ActiveExerciseCard: View {
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
                 fitsWidth: true,
-                tickTone: .deep
+                tickTone: .deep,
+                hitSlop: 12
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -274,7 +275,8 @@ struct ActiveExerciseCard: View {
                     numberColor: Ink.secondary,
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Reps",
-                    showsScrubHint: isActive
+                    showsScrubHint: isActive,
+                    hitSlop: 18
                 )
             }
         }
@@ -296,7 +298,8 @@ struct ActiveExerciseCard: View {
                 accessibilityLabel: "Hold duration",
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
-                fitsWidth: true
+                fitsWidth: true,
+                hitSlop: 12
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -316,7 +319,8 @@ struct ActiveExerciseCard: View {
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Weight",
                     showsScrubHint: isActive,
-                    tickTone: .deep
+                    tickTone: .deep,
+                    hitSlop: 18
                 )
             }
         }

@@ -26,6 +26,13 @@ struct DigitTicker: View {
     var color: Color = Ink.primary
     var fractionalDigits: Int = 0
     var animation: Animation = .spring(response: 0.34, dampingFraction: 0.74)
+    /// When false, digits swap in place instantly instead of rolling.
+    /// Scrubbers pass `false` while a finger is down: at fast scrub
+    /// rates the restarted roll transitions pile into overlapping
+    /// ghost glyphs, and an in-place swap is what a mechanical
+    /// counter at speed looks like anyway. The roll returns for
+    /// single steps and settles the moment the drag ends.
+    var rolls: Bool = true
     /// Optional custom formatter. When provided, takes precedence over
     /// `fractionalDigits`. Non-digit characters in the result (`:`, `.`,
     /// `,`) stay still while digits around them roll independently.
@@ -84,6 +91,7 @@ struct DigitTicker: View {
     }
 
     private func directedTransition(_ direction: RollDirection) -> AnyTransition {
+        guard rolls else { return .identity }
         if reduceMotion { return .opacity }
         switch direction {
         case .up:

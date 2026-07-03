@@ -15,7 +15,8 @@
 //  Behaviour (identical to NumberScrubber, intentionally):
 //    • up = increase, down = decrease.
 //    • Haptics.tick() the frame the value snaps to a new step.
-//    • Haptics.rigid() once when hitting the min or max wall.
+//    • Haptics.rigid() once when hitting the min or max wall —
+//      raised in pitch at the max so top and bottom read differently.
 //    • Past the wall, the number rubber-bands with asymptotic decay.
 //    • Release springs the rubber-band back to zero.
 //
@@ -58,6 +59,12 @@ struct BareScrubber: View {
     /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
     /// weight sounds heavier than reps/sets/duration.
     var tickTone: Haptics.TickTone = .standard
+    /// Extra hit-test reach (points) beyond the glyphs on every side.
+    /// The hero numbers are huge but their touch frame hugs the ink —
+    /// a fast, sloppy grab often lands just above or beside the digits
+    /// and dies on dead card space. Slop keeps those grabs alive
+    /// without moving any pixels. Leave 0 on dense editor layouts.
+    var hitSlop: CGFloat = 0
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -73,6 +80,28 @@ struct BareScrubber: View {
     @State private var didHitMin: Bool = false
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
+
+    /// Axis ownership for the in-flight drag. The scrubber only acts
+    /// on vertically-dominant drags — the mirror of SwipePager's
+    /// horizontal claim — so a page swipe that begins on a hero
+    /// number and drifts a few points vertically no longer edits the
+    /// value as a side effect.
+    private enum AxisClaim { case undecided, vertical, horizontal }
+    @State private var axisClaim: AxisClaim = .undecided
+    /// Vertical translation already spent at the moment the claim
+    /// resolved. Subtracted from later events so the value starts
+    /// moving from the claim point, not the touch-down point — which
+    /// also gives every drag a small dead-band that keeps sloppy taps
+    /// from nudging the value by a step.
+    @State private var claimBaselineY: CGFloat = 0
+    /// True only while the system considers the drag alive. Resets
+    /// automatically on end AND on cancellation (sheet steal, incoming
+    /// call), which `onEnded` does not cover — used to sweep up stale
+    /// drag state so the next scrub never starts from a ghost anchor.
+    @GestureState private var gestureActive: Bool = false
+
+    /// Movement (points) needed before a drag claims an axis.
+    private static let axisClaimDistance: CGFloat = 8
 
     /// Nudge-bob offset for the first-use hint. Added to `rubberOffset`
     /// so the bob rides the same offset channel as the drag rubber-band
@@ -99,8 +128,12 @@ struct BareScrubber: View {
 
     /// Value-settle spring. When Reduce Motion is on, skip the
     /// decorative spring so the number snaps to its new value.
+    /// Suppressed entirely mid-drag: a live scrub must track the
+    /// finger 1:1 — the half-second spring made fast scrubs lag and
+    /// keep rolling after the finger stopped.
     private var valueAnimation: Animation? {
-        reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
+        guard !isDragging else { return nil }
+        return reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
     }
 
     /// Drag-state transition (scale). When Reduce Motion is on,
@@ -117,8 +150,17 @@ struct BareScrubber: View {
         .animation(dragStateAnimation, value: isDragging)
         .animation(.easeInOut(duration: 0.3), value: showsScrubHint)
         .animation(.easeInOut(duration: 0.4), value: hasScrubbed)
-        .contentShape(Rectangle())
+        .contentShape(Rectangle().inset(by: -hitSlop))
         .gesture(scrubGesture)
+        .onChange(of: gestureActive) { _, active in
+            // A cancelled drag never reaches onEnded; without this
+            // sweep the next touch would inherit a stale anchor and
+            // teleport the value.
+            if !active, isDragging || axisClaim != .undecided {
+                axisClaim = .undecided
+                if isDragging { finishDrag() }
+            }
+        }
         .onAppear { if showsScrubHint, performsScrubNudge { startNudge() } }
         .onChange(of: showsScrubHint) { _, active in
             if active {
@@ -158,6 +200,7 @@ struct BareScrubber: View {
                 font: .system(size: fontSize, weight: .bold, design: .monospaced),
                 color: numberColor,
                 fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
+                rolls: !isDragging,
                 formatter: formatter
             )
 
@@ -285,21 +328,47 @@ struct BareScrubber: View {
 
     private var scrubGesture: some Gesture {
         DragGesture(minimumDistance: 0)
+            .updating($gestureActive) { _, state, _ in state = true }
             .onChanged { drag in
                 guard isEnabled else { return }
-                if !isDragging {
-                    isDragging = true
+
+                switch axisClaim {
+                case .horizontal:
+                    // A page swipe (or any sideways drag) owns this
+                    // touch. Stay silent for its whole lifetime.
+                    return
+                case .undecided:
                     // Abort any in-flight first-use nudge so its bob
-                    // never competes with the user's real drag.
+                    // never competes with the user's touch.
                     nudgeTask?.cancel()
                     nudgeOffset = 0
+                    let tw = abs(drag.translation.width)
+                    let th = abs(drag.translation.height)
+                    guard max(tw, th) >= Self.axisClaimDistance else { return }
+                    guard th >= tw else {
+                        axisClaim = .horizontal
+                        return
+                    }
+                    axisClaim = .vertical
+                    // Anchor at the fixed claim distance, not at the
+                    // event that happened to cross it — a fast flick's
+                    // first decisive event can already be tens of
+                    // points in, and anchoring there would silently
+                    // swallow that travel. This keeps the dead-band
+                    // exactly `axisClaimDistance` at every speed.
+                    claimBaselineY = drag.translation.height >= 0
+                        ? Self.axisClaimDistance
+                        : -Self.axisClaimDistance
+                    isDragging = true
                     dragStartValue = value
                     lastStepReported = 0
                     didHitMin = false
                     didHitMax = false
+                case .vertical:
+                    break
                 }
 
-                let translationY = drag.translation.height
+                let translationY = drag.translation.height - claimBaselineY
                 let stepDelta = Int((-translationY / pointsPerStep).rounded())
                 let proposedValue = dragStartValue + Double(stepDelta) * step
                 let clamped = min(max(proposedValue, range.lowerBound), range.upperBound)
@@ -321,7 +390,7 @@ struct BareScrubber: View {
                 } else if proposedValue > range.upperBound {
                     rubberOffset = -rubberband(pointsOver)
                     if !didHitMax {
-                        Haptics.rigid()
+                        Haptics.rigid(pitch: Haptics.ceilingPitch)
                         didHitMax = true
                     }
                 } else {
@@ -340,21 +409,28 @@ struct BareScrubber: View {
                 }
             }
             .onEnded { _ in
-                isDragging = false
-                if reduceMotion {
-                    rubberOffset = 0
-                } else {
-                    withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
-                        rubberOffset = 0
-                    }
-                }
-                // The first scrub that actually moved the value
-                // retires the first-use affordance app-wide. Animate
-                // the flag so the chevrons fade, not snap, away.
-                if !hasScrubbed, value != dragStartValue {
-                    withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
-                }
+                let ownedDrag = axisClaim == .vertical
+                axisClaim = .undecided
+                guard ownedDrag else { return }
+                finishDrag()
             }
+    }
+
+    private func finishDrag() {
+        isDragging = false
+        if reduceMotion {
+            rubberOffset = 0
+        } else {
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                rubberOffset = 0
+            }
+        }
+        // The first scrub that actually moved the value
+        // retires the first-use affordance app-wide. Animate
+        // the flag so the chevrons fade, not snap, away.
+        if !hasScrubbed, value != dragStartValue {
+            withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
+        }
     }
 
     // MARK: - Helpers
@@ -378,7 +454,7 @@ struct BareScrubber: View {
                 withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
             }
         } else {
-            Haptics.rigid()
+            Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
         }
     }
 

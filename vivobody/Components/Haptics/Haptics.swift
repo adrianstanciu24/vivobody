@@ -138,9 +138,19 @@ enum Haptics {
         heavyImpact.prepare()
     }
 
+    /// Raised voice for the top-of-range wall. Scrubbers pass this
+    /// when the value slams into its MAXIMUM so "can't go higher"
+    /// reads differently from "can't go lower" (which keeps the
+    /// default 0) — same sound, two heights. One shared constant so
+    /// load, reps, and every other scrubber hit the same two notes.
+    static let ceilingPitch: Double = 0.5
+
     /// Rigid tap — hard edges (can't decrement below zero, end of list).
-    static func rigid() {
-        Sounds.play(.rigid)
+    /// `pitch` (-1…1, default 0) shifts the sound up or down; pass
+    /// `ceilingPitch` at a range's top wall. The haptic is
+    /// pitch-agnostic.
+    static func rigid(pitch: Double = 0) {
+        Sounds.play(.rigid, pitch: pitch)
         guard isEnabled else { return }
         rigidImpact.impactOccurred()
         rigidImpact.prepare()

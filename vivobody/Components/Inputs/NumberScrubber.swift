@@ -8,7 +8,8 @@
 //
 //  Behavior:
 //    • Haptics.tick() fires the exact frame the value snaps to a new step.
-//    • Haptics.rigid() fires once when the user hits the min or max wall.
+//    • Haptics.rigid() fires once when the user hits the min or max
+//      wall — raised in pitch at the max so the two walls read differently.
 //    • Past the wall, the visual rubber-bands with iOS-style asymptotic decay.
 //    • Release springs the rubber-band back to zero.
 //
@@ -45,13 +46,28 @@ struct NumberScrubber: View {
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
 
+    /// Axis ownership for the in-flight drag — see BareScrubber for
+    /// the rationale. Horizontal drags (page swipes, sheet gestures)
+    /// are yielded instead of scrubbing the value via their drift.
+    private enum AxisClaim { case undecided, vertical, horizontal }
+    @State private var axisClaim: AxisClaim = .undecided
+    @State private var claimBaselineY: CGFloat = 0
+    /// Resets on end AND cancellation — sweeps up stale drag state
+    /// when the system cancels the touch without calling onEnded.
+    @GestureState private var gestureActive: Bool = false
+
+    /// Movement (points) needed before a drag claims an axis.
+    private static let axisClaimDistance: CGFloat = 8
+
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Value-settle spring. When Reduce Motion is on, skip the
     /// decorative spring so the number snaps to its new value.
+    /// Suppressed mid-drag so a live scrub tracks the finger 1:1.
     private var valueAnimation: Animation? {
-        reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
+        guard !isDragging else { return nil }
+        return reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
     }
 
     /// Drag-state transition (scale, shadow, tint). When Reduce
@@ -73,6 +89,7 @@ struct NumberScrubber: View {
                     font: .system(size: valueFontSize, weight: .bold, design: .rounded),
                     color: Ink.primary,
                     fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
+                    rolls: !isDragging,
                     formatter: formatter
                 )
 
@@ -126,6 +143,12 @@ struct NumberScrubber: View {
         .shadow(color: .black.opacity(0.25), radius: 1, y: 1)
         .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .gesture(scrubGesture)
+        .onChange(of: gestureActive) { _, active in
+            if !active, isDragging || axisClaim != .undecided {
+                axisClaim = .undecided
+                if isDragging { finishDrag() }
+            }
+        }
         .animation(dragStateAnimation, value: isDragging)
         .accessibilityElement()
         .accessibilityLabel(label ?? "Adjustable value")
@@ -146,16 +169,38 @@ struct NumberScrubber: View {
 
     private var scrubGesture: some Gesture {
         DragGesture(minimumDistance: 0)
+            .updating($gestureActive) { _, state, _ in state = true }
             .onChanged { drag in
-                if !isDragging {
+                guard isEnabled else { return }
+
+                switch axisClaim {
+                case .horizontal:
+                    return
+                case .undecided:
+                    let tw = abs(drag.translation.width)
+                    let th = abs(drag.translation.height)
+                    guard max(tw, th) >= Self.axisClaimDistance else { return }
+                    guard th >= tw else {
+                        axisClaim = .horizontal
+                        return
+                    }
+                    axisClaim = .vertical
+                    // Anchor at the fixed claim distance so a fast
+                    // flick's pre-claim travel isn't swallowed — see
+                    // BareScrubber.
+                    claimBaselineY = drag.translation.height >= 0
+                        ? Self.axisClaimDistance
+                        : -Self.axisClaimDistance
                     isDragging = true
                     dragStartValue = value
                     lastStepReported = 0
                     didHitMin = false
                     didHitMax = false
+                case .vertical:
+                    break
                 }
 
-                let translationY = drag.translation.height
+                let translationY = drag.translation.height - claimBaselineY
                 let stepDelta = Int((-translationY / pointsPerStep).rounded())
                 let proposedValue = dragStartValue + Double(stepDelta) * step
                 let clamped = min(max(proposedValue, range.lowerBound), range.upperBound)
@@ -177,7 +222,7 @@ struct NumberScrubber: View {
                 } else if proposedValue > range.upperBound {
                     rubberOffset = -rubberband(pointsOver)
                     if !didHitMax {
-                        Haptics.rigid()
+                        Haptics.rigid(pitch: Haptics.ceilingPitch)
                         didHitMax = true
                     }
                 } else {
@@ -196,15 +241,22 @@ struct NumberScrubber: View {
                 }
             }
             .onEnded { _ in
-                isDragging = false
-                if reduceMotion {
-                    rubberOffset = 0
-                } else {
-                    withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
-                        rubberOffset = 0
-                    }
-                }
+                let ownedDrag = axisClaim == .vertical
+                axisClaim = .undecided
+                guard ownedDrag else { return }
+                finishDrag()
             }
+    }
+
+    private func finishDrag() {
+        isDragging = false
+        if reduceMotion {
+            rubberOffset = 0
+        } else {
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
+                rubberOffset = 0
+            }
+        }
     }
 
     // MARK: - Helpers
@@ -222,7 +274,7 @@ struct NumberScrubber: View {
             value = clamped
             Haptics.tick(pitch: Double(direction) * 0.15, tone: tickTone)
         } else {
-            Haptics.rigid()
+            Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
         }
     }
 
