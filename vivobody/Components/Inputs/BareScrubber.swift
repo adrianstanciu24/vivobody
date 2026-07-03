@@ -48,10 +48,11 @@ struct BareScrubber: View {
     /// for the single primary number per card so two scrubbbers never
     /// nudge at once.
     var performsScrubNudge: Bool = false
-    /// When true, the number + unit shrink to fit the available width
-    /// instead of clipping. Needed for the large hero numbers: a kg
-    /// weight renders with a decimal ("112.5") and at 104pt the row
-    /// can overrun the card and truncate the unit. Off elsewhere so
+    /// When true, the number + unit are uniformly scaled so the
+    /// widest value the range can produce fits the offered width.
+    /// Sizing against the worst case (not the live value) keeps the
+    /// scale constant for the whole scrub — the hero never resizes
+    /// when the digit count changes (99.5 → 100.0). Off elsewhere so
     /// intrinsic-width layouts (editors, galleries) are unaffected.
     var fitsWidth: Bool = false
     /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
@@ -83,11 +84,16 @@ struct BareScrubber: View {
     /// Cancellable owner of the nudge sequence so a drag can abort it.
     @State private var nudgeTask: Task<Void, Never>? = nil
 
-    /// Intrinsic width of the number + unit row, measured fixed-size so
-    /// it ignores the parent's proposal. Compared against
-    /// `availableWidth` to derive `fitScale`. Only used when
-    /// `fitsWidth` is true.
+    /// Intrinsic width of the number + unit row for the CURRENT value,
+    /// measured fixed-size so it ignores the parent's proposal. Used
+    /// only to reserve the row's scaled layout width; the scale itself
+    /// comes from `templateWidth`. Only used when `fitsWidth` is true.
     @State private var naturalWidth: CGFloat = 0
+    /// Intrinsic width of the hidden worst-case sizing row (the
+    /// range's upper bound, formatted). `fitScale` derives from this,
+    /// not from the live value, so the scale stays constant across
+    /// digit-count changes. Only used when `fitsWidth` is true.
+    @State private var templateWidth: CGFloat = 0
     /// Width the scrubber is actually offered by its container.
     @State private var availableWidth: CGFloat = 0
 
@@ -171,11 +177,30 @@ struct BareScrubber: View {
         }
     }
 
+    /// Invisible worst-case row: the range's upper bound rendered with
+    /// the same fonts and spacing as `numberUnitRow`. Its measured
+    /// width drives `fitScale`, so the scale is fixed for the whole
+    /// scrub regardless of the live value's digit count. A plain Text
+    /// matches DigitTicker's per-glyph width because the font is
+    /// monospaced.
+    private var sizingRow: some View {
+        HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+            Text(format(range.upperBound))
+                .font(.system(size: fontSize, weight: .bold, design: .monospaced))
+            if !unit.isEmpty {
+                Text(unit)
+                    .font(.system(size: unitFontSize, weight: .semibold, design: .monospaced))
+            }
+        }
+    }
+
     /// When `fitsWidth` is off, the number keeps its intrinsic width
-    /// (galleries, editors). When on, the number row is measured
-    /// fixed-size and uniformly scaled down so it — and its unit —
-    /// always fit the offered width, never clipping. `scaleEffect`
-    /// doesn't change layout, so measuring stays free of feedback.
+    /// (galleries, editors). When on, the row is uniformly scaled by
+    /// `fitScale` — derived from the hidden `sizingRow`, which lives
+    /// in an overlay so it can never influence layout — and its frame
+    /// is capped at the scaled width so the intrinsic 104pt row can
+    /// never stretch the parent card. `scaleEffect` doesn't change
+    /// layout, so measuring stays free of feedback.
     @ViewBuilder
     private var heroLayout: some View {
         if fitsWidth {
@@ -184,11 +209,17 @@ struct BareScrubber: View {
                     .fixedSize(horizontal: true, vertical: false)
                     .background(widthReader($naturalWidth))
                     .scaleEffect(fitScale, anchor: .leading)
-                    .frame(width: fitScale < 1 ? naturalWidth * fitScale : nil, alignment: .leading)
+                    .frame(width: naturalWidth > 0 ? naturalWidth * fitScale : nil, alignment: .leading)
                 hintChevrons
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(widthReader($availableWidth))
+            .overlay(alignment: .leading) {
+                sizingRow
+                    .fixedSize()
+                    .background(widthReader($templateWidth))
+                    .hidden()
+            }
         } else {
             HStack(alignment: .center, spacing: Space.sm) {
                 numberUnitRow
@@ -197,15 +228,16 @@ struct BareScrubber: View {
         }
     }
 
-    /// Uniform shrink factor (≤ 1) that fits the number row into the
-    /// offered width, reserving a little room for the chevrons while
-    /// the first-use hint is showing. 1 when it already fits.
+    /// Uniform shrink factor (≤ 1) that fits the worst-case number row
+    /// into the offered width, reserving a little room for the
+    /// chevrons while the first-use hint is showing. Constant during a
+    /// scrub because it depends on the range, not the live value.
     private var fitScale: CGFloat {
-        guard fitsWidth, naturalWidth > 0, availableWidth > 0 else { return 1 }
+        guard fitsWidth, templateWidth > 0, availableWidth > 0 else { return 1 }
         let reserve: CGFloat = (showsScrubHint && !hasScrubbed) ? (Space.sm + 16) : 0
         let target = max(1, availableWidth - reserve)
-        guard naturalWidth > target else { return 1 }
-        return target / naturalWidth
+        guard templateWidth > target else { return 1 }
+        return target / templateWidth
     }
 
     /// Writes a view's measured width into `binding`. Uses
@@ -350,10 +382,14 @@ struct BareScrubber: View {
         }
     }
 
-    private var formattedValue: String {
-        if let formatter { return formatter(value) }
+    private var formattedValue: String { format(value) }
+
+    /// Shared by the visible value and the worst-case sizing template
+    /// so both always render through the same formatting path.
+    private func format(_ v: Double) -> String {
+        if let formatter { return formatter(v) }
         let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
-        return isIntegerStep ? "\(Int(value))" : String(format: "%.1f", value)
+        return isIntegerStep ? "\(Int(v))" : String(format: "%.1f", v)
     }
 }
 
