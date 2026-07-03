@@ -380,7 +380,8 @@ struct CustomExerciseEditorSheet: View {
                             unitFontSize: 13,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: "Weight"
+                            accessibilityLabel: "Weight",
+                            tickTone: .deep
                         )
                     }
                 case .duration:
@@ -407,7 +408,8 @@ struct CustomExerciseEditorSheet: View {
                             unitFontSize: 13,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: "Load"
+                            accessibilityLabel: "Load",
+                            tickTone: .deep
                         )
                     }
                 }

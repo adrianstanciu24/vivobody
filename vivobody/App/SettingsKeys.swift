@@ -11,6 +11,11 @@ import SwiftUI
 
 nonisolated enum SettingsKey {
     static let hapticsEnabled = "settings.hapticsEnabled"
+    /// Bool — whether UI sounds accompany the haptic atoms/patterns.
+    /// Read fresh by Sounds on every emission, independent of the
+    /// haptics toggle. The .ambient audio session means the ring/
+    /// silent switch still mutes sounds even when this is on.
+    static let soundsEnabled = "settings.soundsEnabled"
     static let defaultRestSeconds = "settings.defaultRestSeconds"
     /// Stores `WeightUnit.rawValue` ("lb" or "kg"). Read via
     /// @AppStorage at every weight display + scrubber so flipping
@@ -40,6 +45,7 @@ nonisolated enum SettingsKey {
 
 nonisolated enum SettingsDefaults {
     static let hapticsEnabled = true
+    static let soundsEnabled = true
     static let defaultRestSeconds = 60
     static let weightUnit = WeightUnit.lb.rawValue
     static let appearance = AppAppearance.system.rawValue

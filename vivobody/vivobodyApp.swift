@@ -61,6 +61,11 @@ struct vivobodyApp: App {
 enum UITestSupport {
     static func resetIfRequested(in context: ModelContext) {
         guard CommandLine.arguments.contains("--ui-test-reset") else { return }
+        // UI tests must land on the tab shell, not the first-launch
+        // welcome cover. Without this, tests only pass when the base
+        // simulator happens to have completed onboarding — the cover
+        // sits over the MiniBar and swallows its taps.
+        UserDefaults.standard.set(true, forKey: SettingsKey.onboardingCompleted)
         deleteAll(WorkoutSession.self, in: context)
         deleteAll(WorkoutTemplate.self, in: context)
         deleteAll(ExerciseCatalogItem.self, in: context)

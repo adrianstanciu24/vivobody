@@ -93,7 +93,8 @@ struct TemplateExerciseEditorScreen: View {
                         unitFontSize: 16,
                         numberColor: Ink.primary,
                         unitColor: Ink.tertiary,
-                        accessibilityLabel: exercise.trackingMode == .duration ? "Added load" : "Weight"
+                        accessibilityLabel: exercise.trackingMode == .duration ? "Added load" : "Weight",
+                        tickTone: .deep
                     )
                 }
 

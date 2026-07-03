@@ -293,7 +293,8 @@ struct ActiveExerciseCard: View {
                 accessibilityLabel: "Weight",
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
-                fitsWidth: true
+                fitsWidth: true,
+                tickTone: .deep
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -353,7 +354,8 @@ struct ActiveExerciseCard: View {
                     numberColor: Ink.secondary,
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Weight",
-                    showsScrubHint: isActive
+                    showsScrubHint: isActive,
+                    tickTone: .deep
                 )
             }
         }

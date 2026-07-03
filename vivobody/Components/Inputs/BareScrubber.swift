@@ -54,6 +54,9 @@ struct BareScrubber: View {
     /// can overrun the card and truncate the unit. Off elsewhere so
     /// intrinsic-width layouts (editors, galleries) are unaffected.
     var fitsWidth: Bool = false
+    /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
+    /// weight sounds heavier than reps/sets/duration.
+    var tickTone: Haptics.TickTone = .standard
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -239,7 +242,7 @@ struct BareScrubber: View {
             withAnimation(.easeOut(duration: 0.28)) { nudgeOffset = -12 }
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled, !isDragging else { nudgeOffset = 0; return }
-            Haptics.tick()
+            Haptics.tick(tone: tickTone)
             try? await Task.sleep(for: .milliseconds(170))
             guard !Task.isCancelled, !isDragging else { nudgeOffset = 0; return }
             withAnimation(.easeInOut(duration: 0.34)) { nudgeOffset = 0 }
@@ -297,7 +300,10 @@ struct BareScrubber: View {
 
                 let actualStepDelta = Int(((clamped - dragStartValue) / step).rounded())
                 if actualStepDelta != lastStepReported {
-                    Haptics.tick()
+                    // Pitch tracks the drag: each step from the grab
+                    // point shifts the tick ~30 cents, so scrubbing up
+                    // literally sounds like the number going up.
+                    Haptics.tick(pitch: Double(actualStepDelta) / 20, tone: tickTone)
                     lastStepReported = actualStepDelta
                 }
             }
@@ -332,7 +338,7 @@ struct BareScrubber: View {
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {
             value = clamped
-            Haptics.tick()
+            Haptics.tick(pitch: Double(direction) * 0.15, tone: tickTone)
             // A VoiceOver adjustable action is also a "real scrub" —
             // retire the hint so it never nags an accessible user who
             // has already demonstrated the gesture.

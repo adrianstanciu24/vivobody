@@ -8,6 +8,10 @@
 //    • UIFeedbackGenerator — sub-frame latency atoms (tick, thunk, slam).
 //    • CHHapticEngine     — custom patterns (crescendo, breath, swell).
 //
+//  Every emission also fires its Sounds twin (see Sounds.swift). The
+//  sound call sits BEFORE the haptics-enabled guard so the two Me-tab
+//  toggles stay independent: sounds-only, haptics-only, both, neither.
+//
 
 import CoreHaptics
 import UIKit
@@ -55,6 +59,7 @@ enum Haptics {
         selectionGen.prepare()
         notification.prepare()
         startEngineIfNeeded()
+        Sounds.prepare()
     }
 
     private static func startEngineIfNeeded() {
@@ -93,15 +98,33 @@ enum Haptics {
 
     // MARK: - Atoms
 
+    /// Which voice a tick speaks in. `.standard` is the light
+    /// encoder blip (reps, sets, durations); `.deep` is an octave
+    /// lower with more body, reserved for load — a heavy thing
+    /// moving should sound like one. The haptic is identical.
+    enum TickTone {
+        case standard
+        case deep
+    }
+
     /// Light tick — scrubber increments, hover transitions.
-    static func tick() {
+    ///
+    /// `pitch` (-1…1, default 0) shifts the tick's sound up or down
+    /// about half an octave. Scrubbers pass their step delta so ticks
+    /// rise while the value climbs and fall while it drops, OP-1
+    /// encoder style. The haptic itself is pitch-agnostic.
+    static func tick(pitch: Double = 0, tone: TickTone = .standard) {
+        Sounds.play(tone == .deep ? .tickDeep : .tick, pitch: pitch)
         guard isEnabled else { return }
         lightImpact.impactOccurred(intensity: 0.6)
         lightImpact.prepare()
     }
 
     /// Medium thunk — the workhorse. Set complete, primary action.
-    static func thunk() {
+    /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
+    /// the haptic is pitch-agnostic.
+    static func thunk(pitch: Double = 0) {
+        Sounds.play(.thunk, pitch: pitch)
         guard isEnabled else { return }
         mediumImpact.impactOccurred()
         mediumImpact.prepare()
@@ -109,6 +132,7 @@ enum Haptics {
 
     /// Heavy slam — PRs, final set. Use sparingly so it stays meaningful.
     static func slam() {
+        Sounds.play(.slam)
         guard isEnabled else { return }
         heavyImpact.impactOccurred()
         heavyImpact.prepare()
@@ -116,6 +140,7 @@ enum Haptics {
 
     /// Rigid tap — hard edges (can't decrement below zero, end of list).
     static func rigid() {
+        Sounds.play(.rigid)
         guard isEnabled else { return }
         rigidImpact.impactOccurred()
         rigidImpact.prepare()
@@ -123,13 +148,17 @@ enum Haptics {
 
     /// Soft tap — subtle transitions, ambient confirmation.
     static func soft() {
+        Sounds.play(.soft)
         guard isEnabled else { return }
         softImpact.impactOccurred()
         softImpact.prepare()
     }
 
     /// Selection change — for pickers, segmented controls, wheel rolls.
-    static func selection() {
+    /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
+    /// the haptic is pitch-agnostic.
+    static func selection(pitch: Double = 0) {
+        Sounds.play(.selection, pitch: pitch)
         guard isEnabled else { return }
         selectionGen.selectionChanged()
         selectionGen.prepare()
@@ -138,18 +167,21 @@ enum Haptics {
     // MARK: - Notifications
 
     static func success() {
+        Sounds.play(.success)
         guard isEnabled else { return }
         notification.notificationOccurred(.success)
         notification.prepare()
     }
 
     static func warning() {
+        Sounds.play(.warning)
         guard isEnabled else { return }
         notification.notificationOccurred(.warning)
         notification.prepare()
     }
 
     static func failure() {
+        Sounds.play(.failure)
         guard isEnabled else { return }
         notification.notificationOccurred(.error)
         notification.prepare()
@@ -161,6 +193,7 @@ enum Haptics {
     /// Spacing ≥ ~90ms so each is perceived as its own event, not smeared into one.
     /// Sharpness rises alongside intensity, so each tap also feels firmer.
     static func crescendo() {
+        Sounds.play(.crescendo)
         guard isEnabled else { return }
         play(events: [
             transient(intensity: 0.40, sharpness: 0.35, at: 0.00),
@@ -171,6 +204,7 @@ enum Haptics {
 
     /// A gentle two-pulse — rest timer warning ("you're almost up").
     static func breath() {
+        Sounds.play(.breath)
         guard isEnabled else { return }
         play(events: [
             transient(intensity: 0.5, sharpness: 0.2, at: 0.00),
@@ -184,6 +218,7 @@ enum Haptics {
     /// `hapticIntensityControl` is a scalar multiplier on the event's
     /// base intensity, so the base must be > 0 for the curve to do anything.
     static func swell() {
+        Sounds.play(.swell)
         guard isEnabled else { return }
         let continuous = CHHapticEvent(
             eventType: .hapticContinuous,

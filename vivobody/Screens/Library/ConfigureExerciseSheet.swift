@@ -155,7 +155,8 @@ struct ConfigureExerciseSheet: View {
                             unitFontSize: 16,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: mode == .duration ? "Added load" : "Weight"
+                            accessibilityLabel: mode == .duration ? "Added load" : "Weight",
+                            tickTone: .deep
                         )
                     }
                 }

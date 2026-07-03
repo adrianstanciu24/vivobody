@@ -193,6 +193,10 @@ final class AppState {
             isWorkoutExpanded = true
             WorkoutLiveActivityController.start(for: session)
             WidgetSnapshotWriter.writeAll(in: context)
+            // First workout is the moment "tell me when rest is over"
+            // makes sense — ask for notification permission here, not
+            // at cold launch. No-op once answered.
+            RestNotificationController.requestAuthorizationIfNeeded()
         } catch {
             lastSaveError = SaveErrorBox(error)
         }

@@ -34,6 +34,9 @@ struct NumberScrubber: View {
     /// When provided, takes precedence over the integer/decimal
     /// default. Mirrors BareScrubber's `formatter`.
     var formatter: ((Double) -> String)? = nil
+    /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
+    /// weight sounds heavier than reps/sets/duration.
+    var tickTone: Haptics.TickTone = .standard
 
     @State private var dragStartValue: Double = 0
     @State private var rubberOffset: CGFloat = 0
@@ -185,7 +188,10 @@ struct NumberScrubber: View {
 
                 let actualStepDelta = Int(((clamped - dragStartValue) / step).rounded())
                 if actualStepDelta != lastStepReported {
-                    Haptics.tick()
+                    // Pitch tracks the drag: each step from the grab
+                    // point shifts the tick ~30 cents, so scrubbing up
+                    // literally sounds like the number going up.
+                    Haptics.tick(pitch: Double(actualStepDelta) / 20, tone: tickTone)
                     lastStepReported = actualStepDelta
                 }
             }
@@ -214,7 +220,7 @@ struct NumberScrubber: View {
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {
             value = clamped
-            Haptics.tick()
+            Haptics.tick(pitch: Double(direction) * 0.15, tone: tickTone)
         } else {
             Haptics.rigid()
         }

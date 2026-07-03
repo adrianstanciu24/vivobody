@@ -105,9 +105,17 @@ struct AppRoot: View {
                     consumeTemplateStartRequest()
                     consumeCompleteSetRequest()
                     WidgetSnapshotWriter.writeAll(in: modelContext)
+                    // Back in the foreground the BreathingTimer owns
+                    // the rest countdown again — the lock-screen chime
+                    // must not double-fire behind it.
+                    RestNotificationController.cancelPending()
                 } else if appState.activeSession != nil {
                     try? modelContext.save()
                     WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+                    // Leaving the foreground mid-rest: hand the "rest
+                    // over" moment to a local notification so a locked
+                    // phone still taps the user at zero.
+                    RestNotificationController.scheduleIfResting(for: appState.activeSession)
                 }
             }
             .onOpenURL(perform: appState.handleDeepLink)

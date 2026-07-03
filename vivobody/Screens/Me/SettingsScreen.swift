@@ -27,6 +27,9 @@ struct SettingsScreen: View {
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
 
+    @AppStorage(SettingsKey.soundsEnabled)
+    private var soundsEnabled: Bool = SettingsDefaults.soundsEnabled
+
     @AppStorage(SettingsKey.defaultRestSeconds)
     private var defaultRestSeconds: Int = SettingsDefaults.defaultRestSeconds
 
@@ -96,6 +99,8 @@ struct SettingsScreen: View {
                 restRow
                 rowDivider
                 hapticsRow
+                rowDivider
+                soundsRow
                 if HealthKitWorkoutService.isAvailable {
                     rowDivider
                     healthKitRow
@@ -331,6 +336,35 @@ struct SettingsScreen: View {
             .labelsHidden()
             .tint(Tint.inProgress)
             .accessibilityLabel("Haptics")
+        }
+    }
+
+    private var soundsRow: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Sounds")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                Text("Synth blips paired with the haptics")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            }
+            Spacer()
+            Toggle("", isOn: Binding(
+                get: { soundsEnabled },
+                set: { newValue in
+                    soundsEnabled = newValue
+                    if newValue {
+                        // Same trick as the haptics row: the write is
+                        // synchronous, so this blip plays as audible
+                        // confirmation that sounds just came back on.
+                        Sounds.play(.soft)
+                    }
+                }
+            ))
+            .labelsHidden()
+            .tint(Tint.inProgress)
+            .accessibilityLabel("Sounds")
         }
     }
 

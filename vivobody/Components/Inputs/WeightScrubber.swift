@@ -64,7 +64,8 @@ struct WeightScrubber: View {
             unit: unit.symbol,
             label: label,
             valueFontSize: valueFontSize,
-            verticalPadding: verticalPadding
+            verticalPadding: verticalPadding,
+            tickTone: .deep
         )
     }
 

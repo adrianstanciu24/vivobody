@@ -27,6 +27,19 @@ struct RIRSelector: View {
         value >= 5 ? "5+" : "\(value)"
     }
 
+    /// Feedback graded by the effort the number represents, not by
+    /// which direction the finger moved. 5+ (easy) is the standard
+    /// light selection blip; each step toward failure drops the tone,
+    /// and 0 — to failure — lands as a deep, heavy thud instead of a
+    /// blip. You hear how hard the set was.
+    private static func effortFeedback(for rir: Int) {
+        if rir == 0 {
+            Haptics.thunk(pitch: -0.5)
+        } else {
+            Haptics.selection(pitch: Double(rir - 5) / 5)
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(spacing: Space.sm) {
@@ -38,16 +51,26 @@ struct RIRSelector: View {
                     .foregroundStyle(Ink.quaternary)
             }
 
-            StepSelector(selection: $value, options: options) { Self.displayLabel($0) }
+            StepSelector(
+                selection: $value,
+                options: options,
+                label: { Self.displayLabel($0) },
+                feedback: { Self.effortFeedback(for: $0) }
+            )
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Reps in reserve")
         .accessibilityValue(accessibilityValue)
         .accessibilityAdjustableAction { direction in
+            let next: Int
             switch direction {
-            case .increment: value = min(5, value + 1)
-            case .decrement: value = max(0, value - 1)
-            @unknown default: break
+            case .increment: next = min(5, value + 1)
+            case .decrement: next = max(0, value - 1)
+            @unknown default: return
+            }
+            if next != value {
+                value = next
+                Self.effortFeedback(for: next)
             }
         }
     }
