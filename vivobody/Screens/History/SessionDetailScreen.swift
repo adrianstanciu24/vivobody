@@ -22,7 +22,6 @@
 //      then a set grid of `1   135 × 8` rows in tabular monospace.
 //      The top set's numerals render gold; incomplete sets dim with
 //      a hollow status pip.
-//    • Notes — session-level notes surface as plain type at the end.
 //
 
 import SwiftUI
@@ -76,11 +75,6 @@ struct SessionDetailScreen: View {
 
                 exercisesSection
                     .padding(.top, Space.lg)
-
-                if !session.notes.isEmpty {
-                    notesSection
-                        .padding(.top, Space.xl)
-                }
             }
             .padding(.top, Space.sm)
             .padding(.bottom, Space.xxl)
@@ -152,21 +146,6 @@ struct SessionDetailScreen: View {
     private var exercisesSubtitle: String {
         let n = session.orderedExercises.count
         return n == 1 ? "1 exercise" : "\(n) exercises"
-    }
-
-    // MARK: - Notes
-
-    private var notesSection: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Notes")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-            Text(session.notes)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
     }
 
     // MARK: - Derived
@@ -302,9 +281,6 @@ private struct ExerciseDetailRow: View {
                 WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
             }
             setsGrid
-            if !exercise.notes.isEmpty {
-                exerciseNotes
-            }
         }
         .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -461,14 +437,6 @@ private struct ExerciseDetailRow: View {
                 .strokeBorder(isCompleted ? Color.clear : Ink.quaternary, lineWidth: 1.5)
                 .frame(width: 8, height: 8)
         }
-    }
-
-    private var exerciseNotes: some View {
-        Text(exercise.notes)
-            .font(Typography.caption)
-            .foregroundStyle(Ink.secondary)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

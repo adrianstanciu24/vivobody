@@ -14,8 +14,8 @@
 //    • A small mono support line for the rest (duration, sets, reps).
 //    • The exercise list as type rows divided by hairlines, each with
 //      its top set and the same gold/dim set pips used on the pages.
-//    • Words for verbs: "Notes", "Add exercise", and a gold "Done"
-//      verb button (finishing the session is a completion).
+//    • Words for verbs: "Add exercise" and a gold "Done" verb
+//      button (finishing the session is a completion).
 //
 //  Two modes share the layout: in-progress (swiped here mid-workout)
 //  and complete (every set logged → Done appears, success haptic).
@@ -68,8 +68,6 @@ struct WorkoutSummaryCard: View {
 
     private var isComplete: Bool { session.isAllComplete }
 
-    @State private var isEditingWorkoutNotes: Bool = false
-
     var body: some View {
         GeometryReader { geo in
             ScrollView(showsIndicators: false) {
@@ -91,9 +89,6 @@ struct WorkoutSummaryCard: View {
                     exerciseList
                         .padding(.top, Space.xl + Space.sm)
 
-                    notesBlock
-                        .padding(.top, Space.lg)
-
                     Spacer(minLength: Space.xl)
 
                     actionArea
@@ -112,14 +107,6 @@ struct WorkoutSummaryCard: View {
             if !isHistorical && newIndex == session.orderedExercises.count {
                 playEntrance()
             }
-        }
-        .sheet(isPresented: $isEditingWorkoutNotes) {
-            NotesEditorSheet(
-                title: "Workout Notes",
-                placeholder: "How did today feel? Anything to remember next time?",
-                initialValue: session.notes,
-                onSave: { newNotes in session.notes = newNotes }
-            )
         }
     }
 
@@ -239,14 +226,6 @@ struct WorkoutSummaryCard: View {
             if let contribution, contribution.metric > 0 {
                 WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
             }
-
-            if !exercise.notes.isEmpty {
-                Text(exercise.notes)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
         }
         .padding(.vertical, Space.md)
         .accessibilityElement(children: .combine)
@@ -267,44 +246,6 @@ struct WorkoutSummaryCard: View {
             }
         }
         .accessibilityHidden(true)
-    }
-
-    // MARK: - Notes (word, not icon)
-
-    @ViewBuilder
-    private var notesBlock: some View {
-        if session.notes.isEmpty {
-            Button {
-                Haptics.soft()
-                isEditingWorkoutNotes = true
-            } label: {
-                Text("Notes")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
-                    .frame(minHeight: 44, alignment: .leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        } else {
-            Button {
-                Haptics.soft()
-                isEditingWorkoutNotes = true
-            } label: {
-                VStack(alignment: .leading, spacing: Space.sm) {
-                    Text("Notes")
-                        .font(Typography.sectionLabel)
-                        .foregroundStyle(Ink.tertiary)
-                    Text(session.notes)
-                        .font(Typography.body)
-                        .foregroundStyle(Ink.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        }
     }
 
     // MARK: - Actions

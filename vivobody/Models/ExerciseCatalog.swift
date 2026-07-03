@@ -221,13 +221,6 @@ final class ExerciseCatalogItem: Identifiable {
     /// alongside `name` in the picker. Empty by default.
     var aliases: [String] = []
 
-    /// Catalog-level form cues that follow the lift forever. Distinct
-    /// from `Exercise.notes` which are session-specific ("shoulder
-    /// twinge today"). Surface example: "Brace before unrack. Touch
-    /// chest. Drive through legs." Edited inline on the detail
-    /// screen. Empty by default.
-    var notes: String = ""
-
     /// Stamped at creation. Used as a sort tiebreaker after
     /// muscle-group and name, so two items with the same name (which
     /// shouldn't happen but isn't enforced) have a stable order.
@@ -326,7 +319,6 @@ final class ExerciseCatalogItem: Identifiable {
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
-        notes: String = "",
         isUserCreated: Bool = false,
         createdAt: Date = Date()
     ) {
@@ -344,7 +336,6 @@ final class ExerciseCatalogItem: Identifiable {
         self.planeRaw = plane.rawValue
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
-        self.notes = notes
         self.isUserCreated = isUserCreated
         self.createdAt = createdAt
     }

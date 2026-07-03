@@ -21,8 +21,6 @@
 //    • Effort  — average RIR + progression verdict (reps only, gated
 //                on having ≥3 logged RIR readings)
 //    • Muscles — primary / secondary involvement from the catalog map
-//    • Cues    — Catalog-level form notes (persistent across all
-//                sessions), tap to edit via NotesEditorSheet
 //    • Recents — Last 5 sessions, top set + date + PR flag
 //    • Defaults— The catalog item's starting weight × reps
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
@@ -30,7 +28,7 @@
 //  Empty-state behavior: when the user has never logged this
 //  exercise, the stats row shows em-dashes, the chart and recents
 //  sections are hidden, and the rest of the screen still functions
-//  (notes, defaults, CTA, edit/delete).
+//  (defaults, CTA, edit/delete).
 //
 
 import SwiftUI
@@ -69,7 +67,6 @@ struct ExerciseDetailScreen: View {
 
     @State private var editorTarget: CatalogEditorTarget?
     @State private var isConfirmingDelete: Bool = false
-    @State private var isEditingNotes: Bool = false
     @State private var isEditingOneRepMax: Bool = false
     @State private var range: TimeRange = .all
     @State private var chartMetric: ChartMetric = .e1rm
@@ -137,7 +134,6 @@ struct ExerciseDetailScreen: View {
                 }
                 effortSection
                 muscleBreakdownSection
-                formCuesSection
                 if hasHistory {
                     recentSessionsSection
                 }
@@ -179,21 +175,6 @@ struct ExerciseDetailScreen: View {
         }
         .sheet(item: $editorTarget) { target in
             CustomExerciseEditorSheet(target: target)
-        }
-        .sheet(isPresented: $isEditingNotes) {
-            NotesEditorSheet(
-                title: "\(item.name) Cues",
-                placeholder: "Form cues, plate setup, what to remember…",
-                initialValue: item.notes,
-                onSave: { newNotes in
-                    item.notes = newNotes
-                    do {
-                        try modelContext.saveOrRollback()
-                    } catch {
-                        saveError = SaveErrorBox(error)
-                    }
-                }
-            )
         }
         .sheet(isPresented: $isEditingOneRepMax) {
             OneRepMaxEditorSheet(
@@ -630,58 +611,6 @@ struct ExerciseDetailScreen: View {
             Text(muscles.map(\.displayName).joined(separator: " · "))
                 .font(Typography.body)
                 .foregroundStyle(prominent ? Ink.secondary : Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    // MARK: - Form cues
-
-    private var formCuesSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            HStack {
-                Text("Form cues")
-                    .sectionLabelStyle(Opacity.medium)
-                Spacer()
-                if !item.notes.isEmpty {
-                    Button {
-                        Haptics.soft()
-                        isEditingNotes = true
-                    } label: {
-                        Text("Edit")
-                            .font(Typography.sectionLabel)
-                            .foregroundStyle(Ink.secondary)
-                            .padding(.horizontal, Space.md)
-                            .frame(minHeight: 44)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Edit form cues")
-                }
-            }
-
-            cuesContent
-        }
-    }
-
-    @ViewBuilder
-    private var cuesContent: some View {
-        if item.notes.isEmpty {
-            Button {
-                Haptics.soft()
-                isEditingNotes = true
-            } label: {
-                Text("Add form cues")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.tertiary)
-                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        } else {
-            Text(item.notes)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

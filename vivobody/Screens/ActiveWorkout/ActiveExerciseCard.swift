@@ -7,7 +7,7 @@
 //  read from arm's length in half a second.
 //
 //  First-principles layout (top → bottom):
-//    • Set N of M + a Notes word (tiny — context, not chrome).
+//    • Set N of M (tiny — context, not chrome).
 //    • Exercise name (the page's identity).
 //    • Set pips — done / active / pending, glanceable at a flick.
 //    • The HERO: the working weight as a huge monospaced odometer
@@ -61,9 +61,6 @@ struct ActiveExerciseCard: View {
     /// that completed set.
     @State private var deletingSet: WorkoutSet? = nil
 
-    /// Drives the per-exercise notes editor sheet.
-    @State private var isEditingNotes: Bool = false
-
     /// Surfaces failures from saving the active workout draft.
     @State private var saveError: SaveErrorBox? = nil
 
@@ -106,17 +103,6 @@ struct ActiveExerciseCard: View {
         } message: { setToDelete in
             Text("\(WeightFormatter.string(setToDelete.weight, unit: unit)) · \(setToDelete.reps) reps. This can't be undone.")
         }
-        .sheet(isPresented: $isEditingNotes) {
-            NotesEditorSheet(
-                title: "\(exercise.name) Notes",
-                placeholder: "Form cues, plate setup, how it felt…",
-                initialValue: exercise.notes,
-                onSave: { newNotes in
-                    exercise.notes = newNotes
-                    saveActiveSessionChanges()
-                }
-            )
-        }
         .saveErrorAlert($saveError)
     }
 
@@ -128,7 +114,6 @@ struct ActiveExerciseCard: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
             Spacer()
-            notesButton
         }
         .padding(.top, Space.xs)
     }
@@ -138,30 +123,6 @@ struct ActiveExerciseCard: View {
             return "Set \(active + 1) of \(sets.count)"
         }
         return "All sets complete"
-    }
-
-    /// Secondary action as a word, not an icon (icons are for
-    /// navigation). A Volt dot signals notes already exist.
-    private var notesButton: some View {
-        Button {
-            Haptics.soft()
-            isEditingNotes = true
-        } label: {
-            HStack(spacing: Space.sm) {
-                if !exercise.notes.isEmpty {
-                    Circle()
-                        .fill(Tint.inProgress)
-                        .frame(width: 6, height: 6)
-                }
-                Text("Notes")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(exercise.notes.isEmpty ? Ink.tertiary : Ink.secondary)
-            }
-            .frame(minHeight: 44)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(exercise.notes.isEmpty ? "Add notes" : "Edit notes")
     }
 
     // MARK: - Name + pips
