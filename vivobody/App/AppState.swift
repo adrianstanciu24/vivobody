@@ -52,6 +52,11 @@ final class AppState {
     /// it on dismiss.
     var pendingSpotlightExercise: ExerciseCatalogItem? = nil
 
+    /// True when the on-disk SwiftData store couldn't be opened and
+    /// the app is running on an in-memory fallback. AppRoot shows a
+    /// warning banner so the user knows nothing is being saved.
+    var storageFallbackActive: Bool = false
+
     /// The workout session controller. Owns activeSession,
     /// isWorkoutExpanded, lastSaveError, and all lifecycle methods.
     let workout = WorkoutSessionController()

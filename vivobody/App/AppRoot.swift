@@ -74,7 +74,13 @@ struct AppRoot: View {
                 onExpand: { workout.expandWorkout() }
             )
             .saveErrorAlert($workout.lastSaveError)
+            .overlay(alignment: .top) {
+                if appState.storageFallbackActive {
+                    StorageFallbackBanner()
+                }
+            }
             .onAppear {
+                appState.storageFallbackActive = StorageHealth.didFallbackToInMemory
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }
@@ -251,6 +257,27 @@ private extension View {
         } else {
             self
         }
+    }
+}
+
+// MARK: - Storage fallback banner
+
+/// Shown when the on-disk store couldn't be opened and the app is
+/// running in-memory. The user needs to know nothing is being saved.
+private struct StorageFallbackBanner: View {
+    var body: some View {
+        HStack(spacing: Space.sm) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(Tint.danger)
+            Text("Your data couldn't be opened. Nothing is being saved.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.primary)
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.sm)
+        .frame(maxWidth: .infinity)
+        .background(Tint.danger.opacity(0.12))
+        .padding(.top, 4)
     }
 }
 
