@@ -2,19 +2,21 @@
 //  AmbientForge.swift
 //  vivobody
 //
-//  The living atmosphere behind a tab. The design system describes the
-//  accent as "molten / high-energy" — the forge makes that literal: a
-//  slow field of ember light that breathes behind the content and burns
-//  at a temperature set by your training. Train, and the forge runs hot
-//  and bright; let days pass, and it cools to a low idle glow — but it
-//  never goes out, because the instrument is always on.
+//  The living atmosphere behind a tab. The screen reads as the matte
+//  black faceplate of a powered-on instrument, and like real hardware
+//  the light never washes across the faceplate — it leaks at the seams.
+//  Heat rises from the electronics along the bottom edge as a low ember
+//  bleed with slow convection hot spots drifting through it, and a much
+//  fainter trace escapes at the top seam. The body of the screen stays
+//  pure black so content sits on darkness, always.
 //
 //  It is deliberately data-driven: `warmth` comes from streak + recency,
 //  so the glow always *means* something rather than being decorative
 //  wash — the same discipline the single accent follows everywhere else.
-//  Drawn in one Canvas of additive radial lobes for cost; the field
-//  parallaxes slightly slower than the content for depth, and honors
-//  Reduce Motion by holding still at the current temperature.
+//  Train, and the seam runs hotter and creeps further in; let days pass,
+//  and it cools to a thin idle line — but it never goes out. Drawn in
+//  one Canvas for cost, and honors Reduce Motion by holding still at
+//  the current temperature.
 //
 
 import SwiftUI
@@ -25,9 +27,9 @@ struct AmbientForge: View {
     /// changes (e.g. archiving a workout) glide rather than jump.
     var warmth: Double
 
-    /// Overall brightness multiplier. Today (figure hero) burns at the
-    /// full 1.0; the text-dense sibling tabs dial this down a touch so
-    /// the ember never competes with copy.
+    /// Overall brightness multiplier. Tabs run near 1.0; pushed detail
+    /// screens dial the seam down so it carries through without ever
+    /// competing with dense copy.
     var intensity: Double = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -101,40 +103,50 @@ struct AmbientForge: View {
         // amber wash with normal blending instead.
         context.blendMode = light ? .normal : .plusLighter
         // Additive-on-black shows even a dim ember, but a normal-blend
-        // tint on a near-white page needs far more opacity to register,
-        // so scale the light wash up well past 1.0. The radial falloff
-        // keeps it a halo rather than a solid block even when the peak
-        // clamps near opaque at full heat.
+        // tint on a near-white page needs far more opacity to register.
         let alphaScale = light ? 1.35 : 1.0
         let tau = 2 * Double.pi
-        let maxDim = max(size.width, size.height)
 
-        for lobe in Self.lobes {
-            // Slow organic wander + a faster shimmer on top, so the field
-            // reads as live convection rather than a static tint.
-            let driftX = animated ? CGFloat(sin(time * tau / lobe.driftSecondsX + lobe.phase)) * lobe.driftX : 0
-            let driftY = animated ? CGFloat(cos(time * tau / lobe.driftSecondsY + lobe.phase)) * lobe.driftY : 0
-            let breath = animated ? (sin(time * tau / lobe.breathSeconds + lobe.phase) + 1) / 2 : 0.5
-            let flicker = animated ? (sin(time * tau / lobe.flickerSeconds + lobe.phase * 2.3) + 1) / 2 : 0.5
+        // Dim and deep when cold, brighter when hot — but capped low.
+        // The seam is heat escaping a chassis, never a light show; the
+        // faceplate itself must stay dark at any temperature.
+        let temperature = 0.30 + 0.70 * w
 
+        // One slow breath shared by the whole seam plus a faint faster
+        // shimmer riding on top, so it reads as live convection.
+        let breath = animated ? (sin(time * tau / 6.2) + 1) / 2 : 0.5
+        let shimmer = animated ? (sin(time * tau / 2.7 + 1.3) + 1) / 2 : 0.5
+        let pulse = 0.80 + 0.16 * breath + 0.04 * shimmer
+
+        // Bottom seam: the dominant leak. Heat rises off the electronics
+        // under the tab bar; warmth sets how far it creeps up the plate.
+        // The floating tab chrome owns roughly the bottom 11% of the
+        // screen, so the creep starts past it — otherwise the whole seam
+        // hides behind glass and the temperature stops reading at all.
+        let bottomCreep = size.height * (0.14 + 0.13 * w)
+        let bottomPeak = (0.14 + 0.16 * w) * pulse * intensity * alphaScale
+        fillSeam(
+            &context,
+            rect: CGRect(x: 0, y: size.height - bottomCreep, width: size.width, height: bottomCreep),
+            from: CGPoint(x: size.width / 2, y: size.height),
+            to: CGPoint(x: size.width / 2, y: size.height - bottomCreep),
+            peak: bottomPeak, warmth: w, light: light
+        )
+
+        // Convection hot spots: small mounds of light drifting along the
+        // bottom seam. Centered below the edge so only their crowns show.
+        for spot in Self.spots {
+            let drift = animated ? CGFloat(sin(time * tau / spot.driftSeconds + spot.phase)) * spot.drift : 0
+            let sway = animated ? (sin(time * tau / spot.breathSeconds + spot.phase) + 1) / 2 : 0.5
+            let radius = size.width * spot.radius * (1 + 0.08 * CGFloat(sway))
             let center = CGPoint(
-                x: size.width * lobe.x + driftX,
-                y: size.height * lobe.y + driftY
+                x: size.width * spot.x + drift,
+                y: size.height + radius * 0.52
             )
-
-            // Visible breathing: ~26% brightness swing + a 10% size swell,
-            // with a small flicker riding on top so it never looks frozen.
-            let pulse = 0.66 + 0.26 * breath + 0.08 * flicker
-            let radius = maxDim * lobe.radius * (1 + 0.10 * CGFloat(breath) + 0.03 * CGFloat(flicker))
-
-            // Temperature scales brightness: dim & deep when cold, bright
-            // & orange when hot.
-            let temperature = 0.34 + 0.66 * w
-            let peak = lobe.peak * temperature * pulse * intensity * alphaScale
-
+            let peak = spot.peak * temperature * (0.72 + 0.28 * sway) * intensity * alphaScale
             let gradient = Gradient(stops: [
                 .init(color: ember(w, peak, light: light), location: 0.0),
-                .init(color: ember(w, peak * 0.45, light: light), location: 0.4),
+                .init(color: ember(w, peak * 0.4, light: light), location: 0.5),
                 .init(color: ember(w, 0.0, light: light), location: 1.0),
             ])
             let rect = CGRect(
@@ -148,6 +160,40 @@ struct AmbientForge: View {
                 with: .radialGradient(gradient, center: center, startRadius: 0, endRadius: radius)
             )
         }
+
+        // Top seam: a much fainter trace under the nav chrome, just
+        // enough to say the whole chassis is warm, not only the base.
+        let topCreep = size.height * (0.04 + 0.04 * w)
+        let topPeak = (0.05 + 0.06 * w) * pulse * intensity * alphaScale
+        fillSeam(
+            &context,
+            rect: CGRect(x: 0, y: 0, width: size.width, height: topCreep),
+            from: CGPoint(x: size.width / 2, y: 0),
+            to: CGPoint(x: size.width / 2, y: topCreep),
+            peak: topPeak, warmth: w, light: light
+        )
+    }
+
+    /// A linear ember bleed from a screen edge toward black — the light
+    /// escaping a chassis seam. Falls off fast so it stays a thin leak.
+    private func fillSeam(
+        _ context: inout GraphicsContext,
+        rect: CGRect,
+        from: CGPoint,
+        to: CGPoint,
+        peak: Double,
+        warmth w: Double,
+        light: Bool
+    ) {
+        let gradient = Gradient(stops: [
+            .init(color: ember(w, peak, light: light), location: 0.0),
+            .init(color: ember(w, peak * 0.42, light: light), location: 0.45),
+            .init(color: ember(w, 0.0, light: light), location: 1.0),
+        ])
+        context.fill(
+            Path(rect),
+            with: .linearGradient(gradient, startPoint: from, endPoint: to)
+        )
     }
 
     /// Deep ember → hot orange interpolation. Both endpoints sit on the
@@ -167,39 +213,28 @@ struct AmbientForge: View {
         return Color(.sRGB, red: r, green: g, blue: 0.0, opacity: opacity)
     }
 
-    // MARK: - Lobe layout
+    // MARK: - Seam layout
 
-    private struct Lobe {
-        var x: CGFloat              // 0..1 of width
-        var y: CGFloat              // 0..1 of height
-        var radius: CGFloat         // fraction of the max dimension
-        var peak: Double            // base opacity at full heat
-        var driftX: CGFloat
-        var driftY: CGFloat
-        var driftSecondsX: Double
-        var driftSecondsY: Double
-        var breathSeconds: Double   // slow swell period
-        var flickerSeconds: Double  // faster shimmer period
+    private struct SeamSpot {
+        var x: CGFloat            // 0..1 of width along the bottom seam
+        var radius: CGFloat       // fraction of the width
+        var peak: Double          // base opacity at full heat
+        var drift: CGFloat        // horizontal wander in points
+        var driftSeconds: Double
+        var breathSeconds: Double // slow swell period
         var phase: Double
     }
 
-    /// Three lobes: a dominant glow up in the hero zone (behind the
-    /// figure), a warm pool low-left under the start control, and a faint
-    /// mid-right counterlight. The text-heavy middle band is left
-    /// comparatively dark so copy stays legible. Periods are desynced so
-    /// the three never pulse in unison — the field reads as organic.
-    private static let lobes: [Lobe] = [
-        // The hero halo: a dominant, focused glow directly behind the figure.
-        // Burns brighter and tighter to act as a studio backlight.
-        Lobe(x: 0.50, y: 0.28, radius: 0.75, peak: 0.75,
-             driftX: 48, driftY: 40, driftSecondsX: 19, driftSecondsY: 26,
-             breathSeconds: 4.6, flickerSeconds: 2.3, phase: 0.0),
-        Lobe(x: 0.18, y: 0.84, radius: 0.58, peak: 0.25,
-             driftX: 40, driftY: 34, driftSecondsX: 23, driftSecondsY: 18,
-             breathSeconds: 5.4, flickerSeconds: 2.9, phase: 1.7),
-        Lobe(x: 0.84, y: 0.52, radius: 0.46, peak: 0.15,
-             driftX: 34, driftY: 46, driftSecondsX: 27, driftSecondsY: 21,
-             breathSeconds: 6.1, flickerSeconds: 3.4, phase: 3.1),
+    /// Three hot spots spread along the bottom seam, like uneven coals
+    /// behind a vent. Periods are desynced so they never pulse in unison
+    /// and the seam reads as organic convection rather than a strip light.
+    private static let spots: [SeamSpot] = [
+        SeamSpot(x: 0.22, radius: 0.42, peak: 0.26, drift: 46,
+                 driftSeconds: 21, breathSeconds: 5.1, phase: 0.0),
+        SeamSpot(x: 0.60, radius: 0.50, peak: 0.30, drift: 54,
+                 driftSeconds: 27, breathSeconds: 6.0, phase: 2.1),
+        SeamSpot(x: 0.88, radius: 0.36, peak: 0.20, drift: 40,
+                 driftSeconds: 18, breathSeconds: 4.4, phase: 3.9),
     ]
 }
 
@@ -256,22 +291,22 @@ extension Array where Element == WorkoutSession {
 // MARK: - Shared backdrop
 
 extension View {
-    /// The primary-tab backdrop: deep black with the data-driven ember
-    /// field behind the content. Mirrors `screenBackground()` but swaps
+    /// The primary-tab backdrop: deep black with the data-driven seam
+    /// glow behind the content. Mirrors `screenBackground()` but swaps
     /// the flat fill for the living forge, so Today's siblings share one
     /// atmosphere. Content renders untouched on top.
     ///
-    /// `backgroundExtensionEffect()` mirrors the forge into the safe-
-    /// area insets (navigation bar, tab bar) so the ember glow bleeds
-    /// seamlessly under translucent chrome instead of terminating at a
-    /// hard edge.
+    /// Plain `ignoresSafeArea()` (no `backgroundExtensionEffect()`):
+    /// the seam is anchored to the physical screen edges, so the canvas
+    /// must genuinely reach them. The extension effect clips its view to
+    /// the safe area and mirrors the edge into the insets, which would
+    /// replace the hot bottom seam with a blurred copy of the dim tail.
     func forgeBackground(intensity: Double = 0.9) -> some View {
         self
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 ForgeBackground(intensity: intensity)
                     .ignoresSafeArea()
-                    .backgroundExtensionEffect()
             )
     }
 

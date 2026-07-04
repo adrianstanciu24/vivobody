@@ -60,6 +60,13 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// ramp. Empty renders every muscle untrained.
     var channels: [String: MuscleDevelopment.Channels] = [:]
 
+    /// Reports the pivot's live Y rotation (radians) on every change —
+    /// drag and coast alike. The specimen stage's degree ticks ride
+    /// this so figure and turntable rotate as one piece. Called at
+    /// frame rate while the model is in motion; keep the observer
+    /// small.
+    var onRotation: ((Double) -> Void)? = nil
+
     /// The resolved scheme the scene renders for — materials and light
     /// rig are all themed (see `BodyModelScene`).
     private static func theme(for context: Context) -> BodyModelTheme {
@@ -100,12 +107,14 @@ struct RotatableBodyModel: UIViewRepresentable {
             action: #selector(Coordinator.handlePan(_:))
         )
         container.addGestureRecognizer(pan)
+        context.coordinator.onRotation = onRotation
 
         return container
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
         context.coordinator.heightConstraint?.constant = renderHeight
+        context.coordinator.onRotation = onRotation
 
         // Re-tint in place when the development map changes (e.g. a
         // workout was just archived) or the resolved colour scheme
@@ -126,11 +135,27 @@ struct RotatableBodyModel: UIViewRepresentable {
         Coordinator()
     }
 
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.stopCoast()
+    }
+
+    @MainActor
     final class Coordinator: NSObject {
         var heightConstraint: NSLayoutConstraint?
         var appliedChannels: [String: MuscleDevelopment.Channels] = [:]
         var appliedTheme: BodyModelTheme = .dark
+        var onRotation: ((Double) -> Void)?
         private var lastX: CGFloat = 0
+
+        // Flywheel coast: a released spin keeps turning and bleeds off
+        // exponentially, the same physics the scrubbers speak.
+        private var coastLink: CADisplayLink?
+        private var coastVelocity: Float = 0
+        private weak var coastPivot: SCNNode?
+
+        /// Which quarter turn the stage last sat in — a detent tick
+        /// fires on every crossing so rotation is felt, not just seen.
+        private var lastQuadrant: Int?
 
         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
             guard let container = gesture.view,
@@ -143,15 +168,66 @@ struct RotatableBodyModel: UIViewRepresentable {
 
             let translation = gesture.translation(in: container)
             switch gesture.state {
+            case .began:
+                stopCoast()
             case .changed:
                 let delta = Float(translation.x - lastX)
                 pivot.eulerAngles.y += delta * RotatableBodyModel.sensitivity
                 lastX = translation.x
-            case .ended, .cancelled, .failed:
+                report(pivot)
+            case .ended:
+                lastX = 0
+                beginCoast(
+                    pivot: pivot,
+                    velocity: Float(gesture.velocity(in: container).x) * RotatableBodyModel.sensitivity
+                )
+            case .cancelled, .failed:
                 lastX = 0
             default:
                 break
             }
+        }
+
+        // MARK: Coast
+
+        private func beginCoast(pivot: SCNNode, velocity: Float) {
+            guard !UIAccessibility.isReduceMotionEnabled,
+                  abs(velocity) > 0.35 else { return }
+            coastPivot = pivot
+            coastVelocity = min(max(velocity, -6), 6)
+            coastLink?.invalidate()
+            let link = CADisplayLink(target: self, selector: #selector(coastTick(_:)))
+            link.add(to: .main, forMode: .common)
+            coastLink = link
+        }
+
+        @objc private func coastTick(_ link: CADisplayLink) {
+            guard let pivot = coastPivot else {
+                stopCoast()
+                return
+            }
+            let dt = Float(link.targetTimestamp - link.timestamp)
+            pivot.eulerAngles.y += coastVelocity * dt
+            coastVelocity *= exp(-2.6 * dt)
+            report(pivot)
+            if abs(coastVelocity) < 0.12 { stopCoast() }
+        }
+
+        func stopCoast() {
+            coastLink?.invalidate()
+            coastLink = nil
+        }
+
+        // MARK: Reporting
+
+        private func report(_ pivot: SCNNode) {
+            let angle = Double(pivot.eulerAngles.y)
+            onRotation?(angle)
+            let quadrant = Int((angle / (.pi / 2)).rounded(.down))
+            if let last = lastQuadrant, quadrant != last {
+                Haptics.tick()
+            }
+            lastQuadrant = quadrant
         }
     }
 }

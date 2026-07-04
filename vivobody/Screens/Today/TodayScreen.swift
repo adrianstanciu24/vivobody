@@ -131,17 +131,15 @@ struct TodayScreen: View {
                 // padding above reserves its occupied height so body
                 // copy never sits underneath the CTA or tab chrome.
                 .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
-                // The living atmosphere shared with every sibling tab: an
-                // ember field burning at a temperature set by streak +
-                // recency, so home reads as a powered-on instrument rather
-                // than a flat black report. Dialed below the sibling tabs'
-                // 0.9 default because Today's transparent 3D figure leaves
-                // the hero halo unobstructed (siblings cover it with dark
-                // content), so a matching intensity reads far brighter
-                // here; this keeps the forge consistent across tabs.
-                // `forgeBackground` also mirrors the ember under the
-                // nav/tab bars so it never hard-edges.
-                .forgeBackground(intensity: 0.6)
+                // The living atmosphere shared with every sibling tab:
+                // heat leaking at the chassis seams at a temperature set
+                // by streak + recency, so home reads as a powered-on
+                // instrument rather than a flat black report. The seam
+                // hugs the screen edges, so the faceplate behind the
+                // figure and copy stays pure black. `forgeBackground`
+                // also mirrors the ember under the nav/tab bars so it
+                // never hard-edges.
+                .forgeBackground()
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
                     // Latch onto the LARGEST viewport height ever seen, not
                     // the first. Native bottom chrome can make the container
@@ -175,14 +173,16 @@ struct TodayScreen: View {
     /// to rotate, vertical drags fall through to the scroll. Lit by
     /// how developed each muscle is (vivid orange where you've trained
     /// hard, fading toward a muted tone where you've eased off), so it
-    /// reads as your body, not a mannequin.
+    /// reads as your body, not a mannequin. Mounted on the specimen
+    /// stage (turntable + faceplate graticule, see SpecimenStage) so
+    /// the figure stands inside the instrument instead of floating on
+    /// the void.
     private func bodyModelHero(height: CGFloat, state: MuscleDevelopment.State) -> some View {
-        RotatableBodyModel(
+        StagedBodyModel(
             renderHeight: height,
-            channels: state.nodeChannels
+            channels: state.nodeChannels,
+            warmth: completedSessions.forgeWarmth
         )
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
             .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
