@@ -179,6 +179,22 @@ final class WorkoutSession: Identifiable {
         restEndsAt = nil
     }
 
+    /// Clear in-flight UI state before archiving so stale rest timers,
+    /// PR celebration values, and summary animation flags don't
+    /// persist forever on the archived session. Called at archive
+    /// time in WorkoutSessionController.dismissActiveWorkout.
+    func resetTransientState() {
+        isResting = false
+        restStartedAt = nil
+        restEndsAt = nil
+        pendingPRValue = nil
+        pendingPRDetail = nil
+        pendingPRUnit = nil
+        summaryAnimatedMinutes = 0
+        summaryAnimatedVolume = 0
+        summaryDidCelebrate = false
+    }
+
     /// Time left on the current rest interval, in seconds. Zero when
     /// not resting or when the deadline has passed. Both the rest
     /// overlay and the MiniBar derive their countdowns from this.

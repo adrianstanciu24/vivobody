@@ -223,6 +223,7 @@ final class WorkoutSessionController {
         if session.completedAt == nil {
             session.completedAt = Date()
         }
+        session.resetTransientState()
 
         guard let context = modelContext else {
             activeSession = nil

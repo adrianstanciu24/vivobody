@@ -16,6 +16,8 @@ struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession
     @Environment(\.modelContext) private var modelContext
 
+    @State private var saveError: SaveErrorBox? = nil
+
     /// Bumped each time a rest begins so the BreathingTimer inside is
     /// reconstructed with a fresh `duration` rather than reusing its
     /// stored `@State` from a previous rest.
@@ -54,6 +56,7 @@ struct RestTimerOverlay: View {
                 instanceID += 1
             }
         }
+        .saveErrorAlert($saveError)
     }
 
     private var nextSetLabel: String? {
@@ -67,8 +70,11 @@ struct RestTimerOverlay: View {
     }
 
     private func saveRestState() {
-        try? modelContext.save()
-        WorkoutLiveActivityController.update(for: session)
-        WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+        do {
+            try modelContext.save()
+            SessionSideEffects.handle(.updated, session: session, in: modelContext)
+        } catch {
+            saveError = SaveErrorBox(error)
+        }
     }
 }

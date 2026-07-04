@@ -121,7 +121,12 @@ enum WeightFormatter {
         if digits == 0 {
             return "\(Int(value.rounded()))"
         }
-        return String(format: "%.\(digits)f", value)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = false
+        formatter.minimumFractionDigits = digits
+        formatter.maximumFractionDigits = digits
+        return formatter.string(from: NSNumber(value: value)) ?? String(format: "%.\(digits)f", value)
     }
 
     private static let volumeFormatter: NumberFormatter = {

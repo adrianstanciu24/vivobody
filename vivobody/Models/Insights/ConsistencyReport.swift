@@ -89,10 +89,10 @@ extension Array where Element == WorkoutSession {
             setsByDay[day, default: 0] += session.totalSets
         }
 
-        // Grid aligned so the rightmost column is the current week
-        // (weeks run Sunday → Saturday).
-        let weekdayIndex = calendar.component(.weekday, from: today) - 1
-        let currentWeekStart = calendar.date(byAdding: .day, value: -weekdayIndex, to: today) ?? today
+        // Grid aligned so the rightmost column is the current week.
+        // Uses the calendar's locale-aware week interval so
+        // Monday-first locales get correct column boundaries.
+        let currentWeekStart = calendar.dateInterval(of: .weekOfYear, for: today)?.start ?? today
         let gridStart = calendar.date(
             byAdding: .day,
             value: -7 * (ConsistencyReport.windowWeeks - 1),

@@ -48,6 +48,8 @@ struct ActiveWorkoutMiniBar: View {
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
     @Environment(\.modelContext) private var modelContext
 
+    @State private var saveError: SaveErrorBox? = nil
+
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
             barContent(now: context.date)
@@ -73,13 +75,17 @@ struct ActiveWorkoutMiniBar: View {
         .accessibilityIdentifier("activeWorkoutMiniBar")
         .accessibilityHint("Tap to expand workout")
         .accessibilityInputLabels([Text("Workout"), Text("Active workout"), Text("Resume")])
+        .saveErrorAlert($saveError)
         .task(id: restJustExpired(now: now)) {
             if restJustExpired(now: now) {
                 Haptics.swell()
                 session.skipRest()
-                try? modelContext.save()
-                WorkoutLiveActivityController.update(for: session)
-                WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+                do {
+                    try modelContext.save()
+                    SessionSideEffects.handle(.updated, session: session, in: modelContext)
+                } catch {
+                    saveError = SaveErrorBox(error)
+                }
             }
         }
     }

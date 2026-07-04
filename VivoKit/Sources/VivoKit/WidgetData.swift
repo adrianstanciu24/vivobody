@@ -334,8 +334,7 @@ public enum WidgetSampleData {
     private static func makeWeeks(active: Bool) -> [[ConsistencyDaySnapshot]] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        let weekdayIndex = calendar.component(.weekday, from: today) - 1
-        let currentWeekStart = calendar.date(byAdding: .day, value: -weekdayIndex, to: today) ?? today
+        let currentWeekStart = calendar.dateInterval(of: .weekOfYear, for: today)?.start ?? today
         let start = calendar.date(byAdding: .day, value: -7 * 25, to: currentWeekStart) ?? today
 
         return (0..<26).map { week in

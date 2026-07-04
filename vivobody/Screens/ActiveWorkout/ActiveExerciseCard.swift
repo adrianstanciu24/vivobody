@@ -357,8 +357,7 @@ struct ActiveExerciseCard: View {
     func saveActiveSessionChanges() {
         do {
             try modelContext.save()
-            WorkoutLiveActivityController.update(for: session)
-            WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+            SessionSideEffects.handle(.updated, session: session, in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
         }

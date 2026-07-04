@@ -66,6 +66,11 @@ struct BodyWeightLogSheet: View {
     /// half-mutated row.
     @State private var saveError: SaveErrorBox? = nil
 
+    /// When non-nil, a confirmation alert is showing because the user
+    /// is editing an entry to a date that already has another entry.
+    /// Holds the existing entry that would be overwritten.
+    @State private var pendingMergeTarget: BodyWeightEntry? = nil
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -99,6 +104,23 @@ struct BodyWeightLogSheet: View {
         .presentationDragIndicator(.visible)
         .onAppear(perform: hydrate)
         .saveErrorAlert($saveError)
+        .alert(
+            "Overwrite existing entry?",
+            isPresented: Binding(
+                get: { pendingMergeTarget != nil },
+                set: { if !$0 { pendingMergeTarget = nil } }
+            ),
+            presenting: pendingMergeTarget
+        ) { _ in
+            Button("Overwrite", role: .destructive) {
+                performMergeAndSave()
+            }
+            Button("Cancel", role: .cancel) {
+                pendingMergeTarget = nil
+            }
+        } message: { _ in
+            Text("An entry already exists on \(date.formatted(date: .abbreviated, time: .omitted)). Overwriting will replace its weight with the new value.")
+        }
     }
 
     // MARK: - Hydration
@@ -186,17 +208,38 @@ struct BodyWeightLogSheet: View {
                 let entry = BodyWeightEntry(date: date, weight: weight)
                 context.insert(entry)
             }
+            performSave()
+
         case .edit(let entry):
             if let existing = entries.entry(on: date), existing.id != entry.id {
-                existing.weight = weight
-                existing.date = date
-                context.delete(entry)
+                // Date collision with another entry — confirm before
+                // overwriting it and deleting the one being edited.
+                isSaving = false
+                pendingMergeTarget = existing
             } else {
                 entry.weight = weight
                 entry.date = date
+                performSave()
             }
         }
+    }
 
+    /// Complete the merge after the user confirms the collision alert:
+    /// overwrite the target entry's weight and delete the one being
+    /// edited.
+    private func performMergeAndSave() {
+        guard let existing = pendingMergeTarget,
+              case .edit(let entry) = target
+        else { return }
+        existing.weight = weight
+        existing.date = date
+        context.delete(entry)
+        pendingMergeTarget = nil
+        isSaving = true
+        performSave()
+    }
+
+    private func performSave() {
         do {
             try context.saveOrRollback()
             WidgetSnapshotWriter.writeAll(in: context)

@@ -27,7 +27,8 @@ struct MeScreen: View {
     /// across the full set rather than relying on cached counters,
     /// so the totals stay correct after any edit/delete in History.
     @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil }
+        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
+        sort: [SortDescriptor(\.completedAt, order: .reverse)]
     )
     private var completedSessions: [WorkoutSession]
 

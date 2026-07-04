@@ -107,7 +107,11 @@ struct AppRoot: View {
                     WidgetSnapshotWriter.writeAll(in: modelContext)
                     RestNotificationController.cancelPending()
                 } else if workout.activeSession != nil {
-                    try? modelContext.save()
+                    do {
+                        try modelContext.save()
+                    } catch {
+                        workout.lastSaveError = SaveErrorBox(error)
+                    }
                     WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
                     RestNotificationController.scheduleIfResting(for: workout.activeSession)
                 }
