@@ -119,7 +119,7 @@ struct ConsistencySection: View {
         }
         return VStack(alignment: .leading, spacing: Space.sm) {
             Text("Weekly volume")
-                .sectionLabelStyle(Opacity.medium)
+                .panelLegend()
             Chart(weekly) { point in
                 AreaMark(
                     x: .value("Week", point.week),

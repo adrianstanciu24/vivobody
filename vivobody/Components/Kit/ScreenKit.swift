@@ -44,7 +44,7 @@ struct SectionHeader: View {
             if let trailing {
                 Spacer(minLength: Space.sm)
                 Text(trailing)
-                    .sectionLabelStyle(Opacity.soft)
+                    .panelLegend()
             }
         }
         .padding(.top, Space.sm)
@@ -154,7 +154,7 @@ struct StatStrip: View {
                 }
             }
             Text(stat.label)
-                .sectionLabelStyle(Opacity.soft)
+                .panelLegend()
         }
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
         .accessibilityElement(children: .ignore)
@@ -264,7 +264,7 @@ struct MetricView: View {
                 }
             }
             Text(label)
-                .sectionLabelStyle(Opacity.soft)
+                .panelLegend()
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(value)\(unit.map { " \($0)" } ?? "") \(label)")

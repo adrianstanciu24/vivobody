@@ -128,7 +128,7 @@ struct ActiveWorkoutMiniBar: View {
 
             if !subtitleText.isEmpty {
                 Text(subtitleText)
-                    .font(Typography.caption)
+                    .panelLegendType()
                     .foregroundStyle(Ink.tertiary)
                     .lineLimit(1)
             }
@@ -151,7 +151,7 @@ struct ActiveWorkoutMiniBar: View {
 
     private func badgeText(_ text: String, tint: Color) -> some View {
         Text(text)
-            .font(Typography.metricUnit)
+            .panelLegendType()
             .foregroundStyle(tint)
             .monospacedDigit()
     }
@@ -234,10 +234,11 @@ struct ActiveWorkoutMiniBar: View {
 
 // MARK: - Pulse dot
 
-/// Self-contained pulsing circle. When `isPulsing` is true, scale and
-/// opacity ease back and forth forever; when false, settles smoothly
-/// to its resting shape. State lives inside so a parent can flip the
-/// flag without thinking about animation lifecycles.
+/// Self-contained indicator that breathes like an armed LED. When
+/// `isPulsing` is true, glow and brightness ease back and forth at
+/// standby rate; when false, settles to a steady dot. State lives
+/// inside so a parent can flip the flag without thinking about
+/// animation lifecycles.
 private struct PulseDot: View {
     let color: Color
     let isPulsing: Bool
@@ -251,8 +252,8 @@ private struct PulseDot: View {
             .overlay(
                 Circle().stroke(Ink.quaternary, lineWidth: 0.5)
             )
-            .scaleEffect(phase ? 1.35 : 1.0)
-            .opacity(phase ? 0.65 : 1.0)
+            .brightness(phase ? 0.18 : 0)
+            .shadow(color: color.opacity(phase ? 0.55 : 0.12), radius: phase ? 5 : 2)
             .animation(animation, value: phase)
             .onAppear { phase = isPulsing }
             .onChange(of: isPulsing) { _, newValue in
@@ -262,7 +263,7 @@ private struct PulseDot: View {
 
     private var animation: Animation {
         if isPulsing {
-            return .easeInOut(duration: 1.1).repeatForever(autoreverses: true)
+            return .easeInOut(duration: 1.4).repeatForever(autoreverses: true)
         } else {
             return .easeOut(duration: 0.3)
         }

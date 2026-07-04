@@ -94,6 +94,8 @@ struct ActiveExerciseCard: View {
         .padding(.horizontal, Space.gutter)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .opacity(session.isAllComplete ? 0.45 : 1.0)
+        .animation(.easeOut(duration: 0.6), value: session.isAllComplete)
         .sheet(item: $editingSet) { set in
             EditSetSheet(set: set)
         }

@@ -100,45 +100,40 @@ struct SymmetrySection: View {
 
 // MARK: - Diverging balance bar
 
-/// A tug-of-war between two opposing groups. The centre tick is a
-/// perfect 50/50 split; the thumb leans toward the heavier side and
-/// the fill spans the gap from centre. Orange when balanced, red when
-/// it's strayed past tolerance. Width comes from the container via
-/// `GeometryReader`.
+/// A tug-of-war between two opposing groups, as a segmented dial.
+/// The centre segment marks a perfect 50/50 split; segments light
+/// from the centre out to the current lean, with the far segment —
+/// the thumb — brightest. Accent when balanced, red past tolerance.
 private struct DivergingBar: View {
     let leftShare: Double
     let balanced: Bool
     let leftLabel: String
     let rightLabel: String
 
-    var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let center = w / 2
-            let thumb = w * CGFloat(1 - min(max(leftShare, 0), 1))
-            let lo = min(center, thumb)
-            let hi = max(center, thumb)
-            let color = balanced ? Tint.primary : Tint.danger
+    private let segments = 41
 
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.cardTint)
-                Capsule()
-                    .fill(color)
-                    .frame(width: hi - lo)
-                    .offset(x: lo)
-                Rectangle()
-                    .fill(Ink.tertiary)
-                    .frame(width: 1.5, height: 10)
-                    .offset(x: center - 0.75)
-                Circle()
-                    .fill(color)
-                    .frame(width: 10, height: 10)
-                    .offset(x: thumb - 5)
-            }
+    var body: some View {
+        let center = segments / 2
+        let thumb = thumbIndex
+        let lo = min(center, thumb)
+        let hi = max(center, thumb)
+        let color = balanced ? Tint.primary : Tint.danger
+
+        return SegmentGauge(segments: segments, height: 10) { index, _ in
+            if index == thumb { return color }
+            if index == center { return Ink.tertiary }
+            if index > lo && index < hi { return color.opacity(0.45) }
+            return Surface.edge
         }
-        .frame(height: 10)
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(accessibilityText))
+    }
+
+    /// The lit end of the fill. `leftShare` of 1.0 means fully left,
+    /// which sits at index 0 (the track runs left→right).
+    private var thumbIndex: Int {
+        let position = 1 - min(max(leftShare, 0), 1)
+        return min(segments - 1, Int(position * Double(segments)))
     }
 
     private var accessibilityText: String {

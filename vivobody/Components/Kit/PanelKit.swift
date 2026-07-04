@@ -162,6 +162,34 @@ struct SegmentLadder: View {
     }
 }
 
+// MARK: - Segment gauge
+
+/// A positional gauge built from discrete segments — the device
+/// counterpart to a continuous track with zones and a thumb (think
+/// FM tuner dial). The caller colors each segment from its fractional
+/// center position, so bands, markers, and the lit "needle" segment
+/// all come out of one closure and the gauge stays a single HStack.
+struct SegmentGauge: View {
+    var segments: Int = 40
+    var height: CGFloat = 10
+    var spacing: CGFloat = 2
+    /// Color for a segment, given its index and fractional center
+    /// position (0…1) along the track.
+    let color: (Int, Double) -> Color
+
+    var body: some View {
+        let count = max(1, segments)
+        HStack(spacing: spacing) {
+            ForEach(0..<count, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 1)
+                    .fill(color(index, (Double(index) + 0.5) / Double(count)))
+            }
+        }
+        .frame(height: height)
+        .accessibilityHidden(true)
+    }
+}
+
 // MARK: - Segment readout
 
 enum SegmentDisplay {

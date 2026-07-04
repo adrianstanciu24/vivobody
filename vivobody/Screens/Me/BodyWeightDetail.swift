@@ -114,7 +114,7 @@ struct BodyWeightDetail: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Current")
-                .sectionLabelStyle(Opacity.medium)
+                .panelLegend()
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(currentWeightLabel)
@@ -276,7 +276,7 @@ struct BodyWeightDetail: View {
     private var recentTable: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent")
-                .sectionLabelStyle(Opacity.medium)
+                .panelLegend()
 
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(reversedEntries.enumerated()), id: \.element.id) { idx, entry in

@@ -133,7 +133,7 @@ struct BodyWeightLogSheet: View {
     private var dateField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Date")
-                .sectionLabelStyle(Opacity.medium)
+                .panelLegend()
 
             DatePicker(
                 "Date",
@@ -150,7 +150,7 @@ struct BodyWeightLogSheet: View {
     private var weightScrubber: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Weight")
-                .sectionLabelStyle(Opacity.medium)
+                .panelLegend()
 
             WeightScrubber(
                 canonicalWeight: $weight,

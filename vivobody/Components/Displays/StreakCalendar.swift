@@ -187,6 +187,8 @@ private struct DayDot: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var pulse = false
+    @State private var overdrive = false
+    @State private var breathDim = false
 
     private var shouldPulse: Bool { isPR && !reduceMotion }
 
@@ -209,9 +211,12 @@ private struct DayDot: View {
                 .fill(dotFillColor)
                 .scaleEffect(reduceMotion ? 1.0 : dotFillScale)
                 .opacity(dotFillOpacity)
+                .brightness(overdrive ? 0.28 : 0)
+                .shadow(color: overdrive ? fillColor.opacity(0.6) : .clear, radius: overdrive ? 6 : 0)
 
             Circle()
                 .stroke(strokeColor, lineWidth: strokeWidth)
+                .opacity(isToday ? (breathDim ? 0.6 : 1.0) : 1.0)
 
             Text("\(day)")
                 .font(Typography.metricMicro)
@@ -225,12 +230,32 @@ private struct DayDot: View {
             radius: pulse ? 8 : 0
         )
         .onAppear {
+            if isWorkout && !reduceMotion { fireOverdrive() }
+            if isToday && !reduceMotion { startBreathing() }
             guard shouldPulse else { return }
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 pulse = true
             }
         }
+        .onChange(of: isWorkout) { _, lit in
+            if lit && !reduceMotion { fireOverdrive() }
+        }
         .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.75), value: isWorkout)
+    }
+
+    private func fireOverdrive() {
+        withAnimation(.easeOut(duration: 0.09)) { overdrive = true }
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(130))
+            withAnimation(.easeOut(duration: 0.7)) { overdrive = false }
+        }
+    }
+
+    private func startBreathing() {
+        breathDim = false
+        withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) {
+            breathDim = true
+        }
     }
 
     /// Workout days fill bright orange; past rest days fill dim so

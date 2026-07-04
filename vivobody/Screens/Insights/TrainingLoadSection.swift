@@ -119,44 +119,33 @@ struct TrainingLoadSection: View {
 
 // MARK: - Load gauge
 
-/// A single-axis gauge for the acute:chronic ratio. The track runs
-/// 0…2.0; the productive 0.8–1.3 band glows faint orange, the >1.5
-/// caution zone faint red, and a thumb marks the current ratio.
+/// A single-axis gauge for the acute:chronic ratio, built from
+/// discrete segments like a tuner dial. The track runs 0…2.0; the
+/// productive 0.8–1.3 band wears a dim accent, the >1.5 caution zone
+/// a dim red, and the segment at the current ratio is the one lit
+/// lamp on the dial — the needle.
 private struct LoadGauge: View {
     let ratio: Double
     let color: Color
 
     private let maxRatio: Double = 2.0
-
-    private func x(_ r: Double, width: CGFloat) -> CGFloat {
-        CGFloat(min(max(r, 0), maxRatio) / maxRatio) * width
-    }
+    private let segments = 40
 
     var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.cardTint)
-
-                Capsule()
-                    .fill(Tint.primary.opacity(0.22))
-                    .frame(width: max(0, x(1.3, width: w) - x(0.8, width: w)))
-                    .offset(x: x(0.8, width: w))
-
-                Capsule()
-                    .fill(Tint.danger.opacity(0.18))
-                    .frame(width: max(0, x(maxRatio, width: w) - x(1.5, width: w)))
-                    .offset(x: x(1.5, width: w))
-
-                Circle()
-                    .fill(color)
-                    .frame(width: 12, height: 12)
-                    .overlay(Circle().stroke(Surface.background, lineWidth: 2))
-                    .offset(x: x(ratio, width: w) - 6)
-            }
+        let needleIndex = needle
+        return SegmentGauge(segments: segments, height: 10) { index, position in
+            if index == needleIndex { return color }
+            let r = position * maxRatio
+            if r >= 0.8 && r <= 1.3 { return Tint.primary.opacity(0.22) }
+            if r >= 1.5 { return Tint.danger.opacity(0.18) }
+            return Surface.edge
         }
-        .frame(height: 12)
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Load ratio \(String(format: "%.2f", ratio)) out of a sweet spot of 0.8 to 1.3"))
+    }
+
+    private var needle: Int {
+        let clamped = min(max(ratio, 0), maxRatio)
+        return min(segments - 1, Int(clamped / maxRatio * Double(segments)))
     }
 }

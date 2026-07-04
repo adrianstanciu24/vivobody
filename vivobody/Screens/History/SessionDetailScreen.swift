@@ -93,7 +93,8 @@ struct SessionDetailScreen: View {
     private var kicker: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(dateLine)
-                .sectionLabelStyle(Opacity.soft)
+                .panelLegendType()
+                .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             Text(workoutTitle)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
@@ -116,7 +117,7 @@ struct SessionDetailScreen: View {
                     .foregroundStyle(Ink.tertiary)
             }
             Text(sessionHasPR ? "Volume · personal record" : "Volume")
-                .font(Typography.sectionLabel)
+                .panelLegendType()
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
         }
     }
