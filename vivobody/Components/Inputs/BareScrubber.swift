@@ -65,6 +65,12 @@ struct BareScrubber: View {
     /// and dies on dead card space. Slop keeps those grabs alive
     /// without moving any pixels. Leave 0 on dense editor layouts.
     var hitSlop: CGFloat = 0
+    /// When true, a graduation rail (tick marks sliding under a fixed
+    /// needle) fades in beside the number while a scrub is live — the
+    /// encoder's mechanism made visible, gone the moment you let go.
+    /// Reserve for the full-width hero scrubbers; dense editor rows
+    /// have no room for it.
+    var showsRail: Bool = false
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -80,6 +86,22 @@ struct BareScrubber: View {
     @State private var didHitMin: Bool = false
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
+
+    /// Flywheel coast. A released flick keeps the value rolling
+    /// through detents with decaying velocity — the number has mass.
+    /// True while the coast task is stepping; suppresses the settle
+    /// spring so each coast detent lands as a crisp mechanical click.
+    @State private var isCoasting: Bool = false
+    /// Cancellable owner of the coast run. A new touch anywhere on
+    /// the scrubber grabs the flywheel and stops it instantly.
+    @State private var coastTask: Task<Void, Never>? = nil
+
+    /// Wall flash — the visual twin of the rigid end-stop haptic.
+    /// One event, three senses: hitting a range wall flashes a thin
+    /// accent line on the wall's side of the number (top = max,
+    /// bottom = min) that decays like a struck lamp.
+    @State private var wallFlashEdge: Edge? = nil
+    @State private var wallFlashOpacity: Double = 0
 
     /// Axis ownership for the in-flight drag. The scrubber only acts
     /// on vertically-dominant drags — the mirror of SwipePager's
@@ -130,9 +152,10 @@ struct BareScrubber: View {
     /// decorative spring so the number snaps to its new value.
     /// Suppressed entirely mid-drag: a live scrub must track the
     /// finger 1:1 — the half-second spring made fast scrubs lag and
-    /// keep rolling after the finger stopped.
+    /// keep rolling after the finger stopped. Suppressed mid-coast
+    /// too: flywheel detents click, they don't smear.
     private var valueAnimation: Animation? {
-        guard !isDragging else { return nil }
+        guard !isDragging, !isCoasting else { return nil }
         return reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.75)
     }
 
@@ -144,6 +167,22 @@ struct BareScrubber: View {
 
     var body: some View {
         heroLayout
+        .overlay(alignment: .trailing) {
+            if showsRail {
+                GraduationRail(
+                    value: value,
+                    step: step,
+                    spacing: max(pointsPerStep, 7),
+                    visible: isDragging || isCoasting
+                )
+            }
+        }
+        .overlay(alignment: .top) {
+            if wallFlashEdge == .top { wallFlashLine }
+        }
+        .overlay(alignment: .bottom) {
+            if wallFlashEdge == .bottom { wallFlashLine }
+        }
         .offset(y: rubberOffset + nudgeOffset)
         .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
         .animation(valueAnimation, value: value)
@@ -172,7 +211,11 @@ struct BareScrubber: View {
                 nudgeOffset = 0
             }
         }
-        .onDisappear { nudgeTask?.cancel() }
+        .onDisappear {
+            nudgeTask?.cancel()
+            coastTask?.cancel()
+            isCoasting = false
+        }
         .accessibilityElement()
         .accessibilityLabel(accessibilityLabel ?? "")
         .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
@@ -200,7 +243,7 @@ struct BareScrubber: View {
                 font: .system(size: fontSize, weight: .bold, design: .monospaced),
                 color: numberColor,
                 fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
-                rolls: !isDragging,
+                rolls: !isDragging && !isCoasting,
                 formatter: formatter
             )
 
@@ -342,6 +385,10 @@ struct BareScrubber: View {
                     // never competes with the user's touch.
                     nudgeTask?.cancel()
                     nudgeOffset = 0
+                    // A touch grabs the flywheel: any in-flight coast
+                    // stops dead the instant a finger lands.
+                    coastTask?.cancel()
+                    isCoasting = false
                     let tw = abs(drag.translation.width)
                     let th = abs(drag.translation.height)
                     guard max(tw, th) >= Self.axisClaimDistance else { return }
@@ -385,12 +432,14 @@ struct BareScrubber: View {
                     rubberOffset = rubberband(pointsOver)
                     if !didHitMin {
                         Haptics.rigid()
+                        fireWallFlash(.bottom)
                         didHitMin = true
                     }
                 } else if proposedValue > range.upperBound {
                     rubberOffset = -rubberband(pointsOver)
                     if !didHitMax {
                         Haptics.rigid(pitch: Haptics.ceilingPitch)
+                        fireWallFlash(.top)
                         didHitMax = true
                     }
                 } else {
@@ -408,11 +457,13 @@ struct BareScrubber: View {
                     lastStepReported = actualStepDelta
                 }
             }
-            .onEnded { _ in
+            .onEnded { drag in
                 let ownedDrag = axisClaim == .vertical
                 axisClaim = .undecided
                 guard ownedDrag else { return }
+                let momentum = drag.predictedEndTranslation.height - drag.translation.height
                 finishDrag()
+                startCoast(momentumPoints: momentum)
             }
     }
 
@@ -431,6 +482,91 @@ struct BareScrubber: View {
         if !hasScrubbed, value != dragStartValue {
             withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
         }
+    }
+
+    // MARK: - Flywheel coast
+
+    /// A released flick keeps the value rolling. The drag's projected
+    /// momentum converts to a run of detents stepped through with
+    /// decaying velocity — each detent ticks (sound pitch still
+    /// tracking the climb), a wall stops the flywheel with the rigid
+    /// end-stop + flash + a rubber bump. Damped well below 1:1 so a
+    /// coast reads as "heavy wheel", not "runaway value". Skipped
+    /// under Reduce Motion: the value moving beyond the finger is
+    /// exactly the surprise that setting exists to prevent.
+    private func startCoast(momentumPoints: CGFloat) {
+        guard !reduceMotion, isEnabled else { return }
+        let projected = Int((-momentumPoints / pointsPerStep * 0.45).rounded())
+        guard abs(projected) >= 2 else { return }
+        let capped = max(-24, min(24, projected))
+        let direction: Double = capped > 0 ? 1 : -1
+        let total = abs(capped)
+        let anchor = dragStartValue
+        // Each detent takes a bit longer than the last; the ratio is
+        // sized so the final detent lands ~5× slower than the first.
+        let growth = pow(5.0, 1.0 / Double(max(total - 1, 1)))
+
+        coastTask?.cancel()
+        coastTask = Task { @MainActor in
+            isCoasting = true
+            defer { isCoasting = false }
+            var interval = 0.028
+            for _ in 0..<total {
+                try? await Task.sleep(for: .seconds(interval))
+                if Task.isCancelled { return }
+                let next = value + direction * step
+                let clamped = min(max(next, range.lowerBound), range.upperBound)
+                guard clamped != value else {
+                    Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
+                    fireWallFlash(direction > 0 ? .top : .bottom)
+                    bumpRubber(direction: direction)
+                    return
+                }
+                value = clamped
+                let totalDelta = (clamped - anchor) / step
+                Haptics.tick(pitch: totalDelta / 20, tone: tickTone)
+                interval *= growth
+            }
+        }
+    }
+
+    /// The flywheel slamming a wall mid-coast: a small offset bump on
+    /// the wall's side that springs back — the coast's version of the
+    /// live drag's rubber-band.
+    private func bumpRubber(direction: Double) {
+        withAnimation(.easeOut(duration: 0.08)) {
+            rubberOffset = direction > 0 ? -12 : 12
+        }
+        withAnimation(.spring(response: 0.42, dampingFraction: 0.62).delay(0.08)) {
+            rubberOffset = 0
+        }
+    }
+
+    // MARK: - Wall flash
+
+    /// Light the end-stop: instant on, lamp-decay off. Fired in the
+    /// same frame as the rigid haptic + sound so the wall is one
+    /// event across all three senses.
+    private func fireWallFlash(_ edge: Edge) {
+        guard !reduceMotion else { return }
+        var snap = Transaction()
+        snap.disablesAnimations = true
+        withTransaction(snap) {
+            wallFlashEdge = edge
+            wallFlashOpacity = 0.95
+        }
+        withAnimation(.easeOut(duration: 0.45)) {
+            wallFlashOpacity = 0
+        }
+    }
+
+    private var wallFlashLine: some View {
+        Capsule()
+            .fill(Tint.primary)
+            .frame(height: 2)
+            .opacity(wallFlashOpacity)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     // MARK: - Helpers
@@ -455,6 +591,7 @@ struct BareScrubber: View {
             }
         } else {
             Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
+            fireWallFlash(direction > 0 ? .top : .bottom)
         }
     }
 
@@ -466,6 +603,57 @@ struct BareScrubber: View {
         if let formatter { return formatter(v) }
         let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
         return isIntegerStep ? "\(Int(v))" : String(format: "%.1f", v)
+    }
+}
+
+/// The scrub mechanism made visible: a vertical strip of graduation
+/// marks that rides the value 1:1 past a fixed needle, one mark per
+/// detent, a taller mark every fifth. Fades in only while the scrub
+/// (or its coast) is live and evaporates on release — mechanism on
+/// demand, never chrome. Drawn with Canvas so the 60fps slide costs
+/// one layer, not a reflow.
+private struct GraduationRail: View {
+    let value: Double
+    let step: Double
+    let spacing: CGFloat
+    let visible: Bool
+
+    var body: some View {
+        Canvas { context, size in
+            let midY = size.height / 2
+            let stepsFromZero = value / max(step, .ulpOfOne)
+            let baseIndex = Int(stepsFromZero.rounded(.down))
+            let fraction = CGFloat(stepsFromZero - Double(baseIndex))
+            let reach = Int(midY / spacing) + 2
+
+            for offset in -reach...reach {
+                let index = baseIndex + offset
+                // Marks ride WITH the finger: value up → strip up, so
+                // higher detents start below the needle and get pulled
+                // up to it as the value climbs.
+                let y = midY + (CGFloat(offset) - fraction) * spacing
+                guard y >= 0, y <= size.height else { continue }
+                let isMajor = ((index % 5) + 5) % 5 == 0
+                let width: CGFloat = isMajor ? 14 : 8
+                let centerDistance = abs(y - midY) / max(midY, 1)
+                let edgeFade = pow(max(0, 1 - centerDistance), 1.5)
+                let base = isMajor ? 0.55 : 0.30
+                context.fill(
+                    Path(CGRect(x: size.width - width, y: y - 0.5, width: width, height: 1)),
+                    with: .color(Ink.primary.opacity(base * edgeFade))
+                )
+            }
+
+            context.fill(
+                Path(CGRect(x: size.width - 18, y: midY - 0.75, width: 18, height: 1.5)),
+                with: .color(Tint.primary.opacity(0.9))
+            )
+        }
+        .frame(width: 22)
+        .opacity(visible ? 1 : 0)
+        .animation(.easeOut(duration: 0.16), value: visible)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

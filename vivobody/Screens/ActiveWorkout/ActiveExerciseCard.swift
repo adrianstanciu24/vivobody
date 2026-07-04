@@ -67,23 +67,29 @@ struct ActiveExerciseCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             topMeta
+                .powerOn(0)
 
             Spacer(minLength: Space.lg)
 
             nameRow
+                .powerOn(1)
             setPips
                 .padding(.top, Space.md)
+                .powerOn(2)
 
             Spacer(minLength: Space.xl)
 
             heroBlock
+                .powerOn(3)
 
             Spacer(minLength: Space.xl)
 
             rirControl
+                .powerOn(4)
             lastSetCaption
             actionArea
                 .padding(.top, Space.md)
+                .powerOn(5)
         }
         .padding(.horizontal, Space.gutter)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -111,8 +117,7 @@ struct ActiveExerciseCard: View {
     private var topMeta: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(setCountLabel)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
+                .panelLegend()
             Spacer()
         }
         .padding(.top, Space.xs)
@@ -207,21 +212,12 @@ struct ActiveExerciseCard: View {
         .accessibilityInputLabels([Text("Add a set"), Text("Add Set"), Text("Add")])
     }
 
-    @ViewBuilder
+    /// Set pips as LED lamps: pending is unlit, the active set is
+    /// armed (standby breathe), a completed set is lit — completing
+    /// one overdrives the lamp past resting brightness before it
+    /// settles with an afterglow, in the same frame as the crescendo.
     private func pip(isCompleted: Bool, isActive: Bool) -> some View {
-        if isCompleted {
-            Circle()
-                .fill(Tint.complete)
-                .frame(width: 18, height: 18)
-        } else if isActive {
-            Circle()
-                .stroke(Tint.inProgress, lineWidth: 3)
-                .frame(width: 20, height: 20)
-        } else {
-            Circle()
-                .strokeBorder(Ink.quaternary, lineWidth: 2)
-                .frame(width: 16, height: 16)
-        }
+        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off))
     }
 
     // MARK: - Hero
@@ -256,7 +252,8 @@ struct ActiveExerciseCard: View {
                 performsScrubNudge: isActive,
                 fitsWidth: true,
                 tickTone: .deep,
-                hitSlop: 12
+                hitSlop: 12,
+                showsRail: true
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -299,7 +296,8 @@ struct ActiveExerciseCard: View {
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
                 fitsWidth: true,
-                hitSlop: 12
+                hitSlop: 12,
+                showsRail: true
             )
 
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -401,13 +399,19 @@ struct ActiveExerciseCard: View {
 
     // MARK: - RIR
 
-    /// Reps-in-reserve pill for the active set — reps mode only.
-    /// Timed holds have no "reps left," so it's omitted there.
+    /// Reps-in-reserve pill — reps mode only (timed holds have no
+    /// "reps left"). Panel discipline: when the exercise finishes the
+    /// control goes dark but HOLDS ITS PLACE, like a hardware control
+    /// whose lamp went out — the panel never reflows between states.
     @ViewBuilder
     private var rirControl: some View {
-        if session.activeSet(for: exercise) != nil, exercise.trackingMode == .reps {
+        if exercise.trackingMode == .reps {
+            let isLive = session.activeSet(for: exercise) != nil
             RIRSelector(value: rirBinding)
                 .padding(.bottom, Space.md)
+                .opacity(isLive ? 1 : 0)
+                .allowsHitTesting(isLive)
+                .accessibilityHidden(!isLive)
         }
     }
 
@@ -432,6 +436,15 @@ struct ActiveExerciseCard: View {
 
     @ViewBuilder
     private var lastSetCaption: some View {
+        if activeIndex != nil, sets.last(where: { $0.isCompleted }) == nil {
+            // No set logged yet: reserve the caption's line so the
+            // first completion lights the label without shoving the
+            // action button down — fixed panel, arriving light.
+            Text(" ")
+                .font(Typography.metricUnit)
+                .padding(.bottom, Space.sm)
+                .accessibilityHidden(true)
+        }
         if activeIndex != nil, let last = sets.last(where: { $0.isCompleted }) {
             Text("Last  \(exercise.setLabel(last, unit: unit))\(lastSetRIRSuffix(last))")
                 .font(Typography.metricUnit)
@@ -472,6 +485,9 @@ struct ActiveExerciseCard: View {
             )
             .accessibilityIdentifier("completeSetButton")
         } else {
+            // Panel discipline: the completion line occupies exactly
+            // the SetCompleteButton's 96pt slot, so finishing an
+            // exercise changes what's lit — never where things sit.
             HStack(alignment: .firstTextBaseline) {
                 Text("Exercise complete")
                     .font(Typography.title)
@@ -481,7 +497,7 @@ struct ActiveExerciseCard: View {
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
             }
-            .padding(.vertical, Space.section)
+            .frame(minHeight: 96)
         }
     }
 

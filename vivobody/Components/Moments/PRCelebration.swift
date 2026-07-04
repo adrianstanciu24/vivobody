@@ -98,20 +98,28 @@ struct PRCelebration: View {
     private var centerStack: some View {
         VStack(spacing: Space.md) {
             Text(title)
-                .font(Typography.sectionLabel)
-                .tracking(0.5)
+                .panelLegendType()
                 .foregroundStyle(Tint.complete)
                 .opacity(titleVisible ? 1 : 0)
                 .offset(y: titleVisible ? 0 : -6)
 
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(value)
-                    .font(Typography.bigMetric)
-                    .foregroundStyle(Tint.complete)
-                    .monospacedDigit()
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
-                    .shadow(color: Tint.complete.opacity(0.35), radius: 18)
+                ZStack(alignment: .leading) {
+                    Text(SegmentDisplay.ghost(for: value))
+                        .font(Typography.bigMetric)
+                        .foregroundStyle(Tint.complete.opacity(0.08))
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                        .accessibilityHidden(true)
+                    Text(value)
+                        .font(Typography.bigMetric)
+                        .foregroundStyle(Tint.complete)
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                        .shadow(color: Tint.complete.opacity(0.35), radius: 18)
+                }
                 if let unit {
                     Text(unit)
                         .font(Typography.statValue)
@@ -273,18 +281,25 @@ struct PRCelebrationFrozen: View {
 
             VStack(spacing: Space.md) {
                 Text(title)
-                    .font(Typography.sectionLabel)
-                    .tracking(0.5)
+                    .panelLegendType()
                     .foregroundStyle(Tint.complete)
 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(value)
-                        .font(Typography.bigMetric)
-                        .foregroundStyle(Tint.complete)
-                        .monospacedDigit()
-                        .minimumScaleFactor(0.5)
-                        .lineLimit(1)
-                        .shadow(color: Tint.complete.opacity(0.35), radius: 18)
+                    ZStack(alignment: .leading) {
+                        Text(SegmentDisplay.ghost(for: value))
+                            .font(Typography.bigMetric)
+                            .foregroundStyle(Tint.complete.opacity(0.08))
+                            .monospacedDigit()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                        Text(value)
+                            .font(Typography.bigMetric)
+                            .foregroundStyle(Tint.complete)
+                            .monospacedDigit()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                            .shadow(color: Tint.complete.opacity(0.35), radius: 18)
+                    }
                     if let unit {
                         Text(unit)
                             .font(Typography.statValue)

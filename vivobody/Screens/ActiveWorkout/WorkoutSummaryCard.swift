@@ -74,25 +74,31 @@ struct WorkoutSummaryCard: View {
                 VStack(alignment: .leading, spacing: 0) {
                     statusKicker
                         .padding(.top, Space.xs)
+                        .powerOn(0)
 
                     heroVolume
                         .padding(.top, Space.xl)
+                        .powerOn(1)
 
                     supportLine
                         .padding(.top, Space.sm)
+                        .powerOn(2)
 
                     if SessionIntensityLine.hasContent(session) {
                         SessionIntensityLine(session: session, unit: unit)
                             .padding(.top, Space.xs)
+                            .powerOn(2)
                     }
 
                     exerciseList
                         .padding(.top, Space.xl + Space.sm)
+                        .powerOn(3)
 
                     Spacer(minLength: Space.xl)
 
                     actionArea
                         .padding(.top, Space.xl)
+                        .powerOn(4)
                 }
                 .padding(.top, Space.lg)
                 .padding(.bottom, Space.xl)
@@ -115,7 +121,7 @@ struct WorkoutSummaryCard: View {
     private var statusKicker: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(isComplete ? "Complete" : "In progress")
-                .font(Typography.sectionLabel)
+                .panelLegendType()
                 .foregroundStyle(isComplete ? Tint.complete : Tint.inProgress)
             if isHistorical {
                 Text(dateString)
@@ -141,8 +147,7 @@ struct WorkoutSummaryCard: View {
                     .foregroundStyle(Ink.tertiary)
             }
             Text("Volume")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
+                .panelLegend()
         }
         .accessibilityElement(children: .combine)
     }

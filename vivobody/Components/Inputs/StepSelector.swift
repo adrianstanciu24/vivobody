@@ -27,6 +27,11 @@ struct StepSelector<T: Hashable>: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Light-snap: the instant a segment is picked its lamp overdrives
+    /// (brightness + a brief glow bloom) and decays to rest — the
+    /// selection is an LED snapping over, not a cross-fade.
+    @State private var snapPulse: Bool = false
+
     var body: some View {
         GlassEffectContainer(spacing: 4) {
             HStack(spacing: 4) {
@@ -38,6 +43,13 @@ struct StepSelector<T: Hashable>: View {
             .coloredGlassControl(cornerRadius: Radius.pill)
         }
         .animation(reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.72), value: selection)
+        .onChange(of: selection) { _, _ in
+            guard !reduceMotion else { return }
+            var snap = Transaction()
+            snap.disablesAnimations = true
+            withTransaction(snap) { snapPulse = true }
+            withAnimation(.easeOut(duration: 0.45).delay(0.05)) { snapPulse = false }
+        }
     }
 
     private func optionButton(_ option: T) -> some View {
@@ -63,6 +75,11 @@ struct StepSelector<T: Hashable>: View {
                         Color.clear
                             .matchedGeometryEffect(id: "indicator", in: indicatorNS)
                             .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
+                            .brightness(snapPulse ? 0.22 : 0)
+                            .shadow(
+                                color: Tint.inProgress.opacity(snapPulse ? 0.55 : 0),
+                                radius: 9
+                            )
                     }
                 }
         }

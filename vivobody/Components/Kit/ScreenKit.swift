@@ -164,27 +164,18 @@ struct StatStrip: View {
 
 // MARK: - Share bar
 
-/// A thin horizontal proportion bar — a fraction of a hairline track
-/// filled. Used for the session "waterfall": each exercise's share of
-/// the workout's volume (or hold-time). Deliberately minimal so a
-/// column of them reads as a glanceable distribution, not a chart.
+/// A thin horizontal proportion bar. Used for the session
+/// "waterfall": each exercise's share of the workout's volume (or
+/// hold-time). Renders as a discrete SegmentLadder — devices count
+/// in steps, so a column of these reads as a bank of gauges, and the
+/// discreteness matches the app's detent-based sound world.
 struct ShareBar: View {
     /// 0…1 portion of the track to fill.
     let fraction: Double
     var tint: Color = Ink.secondary
 
     var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.edge)
-                Capsule()
-                    .fill(tint)
-                    .frame(width: max(2, geo.size.width * min(1, max(0, fraction))))
-            }
-        }
-        .frame(height: 3)
-        .accessibilityHidden(true)
+        SegmentLadder(fraction: fraction, segments: 24, tint: tint)
     }
 }
 

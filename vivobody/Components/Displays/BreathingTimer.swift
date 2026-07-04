@@ -151,23 +151,39 @@ struct BreathingTimer: View {
                 .frame(width: 7, height: 7)
                 .accessibilityHidden(true)
             Text(hasFinished ? "Go" : "Rest")
-                .font(Typography.sectionLabel)
+                .panelLegendType()
                 .foregroundStyle(Tint.inProgress)
         }
     }
 
+    /// The hero readout, LCD-style: the live time rendered over its
+    /// own unlit ghost segments. In the final 10 seconds the digits
+    /// switch to Volt with a glow — the machine raising its voice —
+    /// without a single glyph moving (panel discipline).
     private func timeHero(remaining: TimeInterval, breath: Double) -> some View {
-        DigitTicker(
-            value: remaining,
-            font: Typography.bigMetric,
-            color: Ink.primary,
-            formatter: { time in
-                let total = Int(time.rounded(.up))
-                return String(format: "%d:%02d", total / 60, total % 60)
-            }
-        )
+        let urgent = !hasFinished && remaining > 0 && remaining <= 10
+        return ZStack(alignment: .leading) {
+            Text(SegmentDisplay.ghost(for: Self.timeString(remaining)))
+                .font(Typography.bigMetric)
+                .foregroundStyle(Ink.primary.opacity(0.06))
+                .monospacedDigit()
+                .accessibilityHidden(true)
+            DigitTicker(
+                value: remaining,
+                font: Typography.bigMetric,
+                color: urgent ? Tint.inProgress : Ink.primary,
+                formatter: { Self.timeString($0) }
+            )
+            .shadow(color: urgent ? Tint.inProgress.opacity(0.35) : .clear, radius: 14)
+        }
         .scaleEffect(reduceMotion ? 1.0 : breath, anchor: .leading)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: breath)
+        .animation(.easeInOut(duration: 0.3), value: urgent)
+    }
+
+    private static func timeString(_ time: TimeInterval) -> String {
+        let total = Int(time.rounded(.up))
+        return String(format: "%d:%02d", total / 60, total % 60)
     }
 
     private var ofTotalLine: some View {
@@ -177,20 +193,10 @@ struct BreathingTimer: View {
             .opacity(hasFinished ? 0 : 1)
     }
 
+    /// The rest gauge: a discrete segment ladder that depletes
+    /// click-by-click as the charge drains, not a smear.
     private func progressBar(progress: Double) -> some View {
-        GeometryReader { g in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.edge)
-                    .frame(height: 3)
-                    .accessibilityHidden(true)
-                Capsule()
-                    .fill(Tint.inProgress)
-                    .frame(width: max(0, g.size.width * (1 - progress)), height: 3)
-                    .accessibilityHidden(true)
-            }
-        }
-        .frame(height: 3)
+        SegmentLadder(fraction: 1 - progress, segments: 40, tint: Tint.inProgress)
     }
 
     @ViewBuilder
@@ -198,7 +204,7 @@ struct BreathingTimer: View {
         if let nextSetLabel {
             HStack(spacing: Space.md) {
                 Text("Next")
-                    .font(Typography.sectionLabel)
+                    .panelLegendType()
                     .foregroundStyle(Tint.inProgress)
                 Rectangle()
                     .fill(Surface.edge)

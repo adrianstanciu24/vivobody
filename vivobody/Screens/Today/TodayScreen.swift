@@ -637,6 +637,22 @@ struct TodayScreen: View {
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.lg)
             .padding(.bottom, Space.sm)
+            // Scrim: content scrolling beneath the pinned CTA fades
+            // into the background instead of reading at full strength
+            // through and around the button (section titles used to
+            // collide with the verb mid-scroll).
+            .background {
+                LinearGradient(
+                    colors: [
+                        Surface.background.opacity(0),
+                        Surface.background.opacity(0.9),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+            }
     }
 
     private var lastWorkoutSection: some View {

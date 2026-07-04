@@ -42,10 +42,9 @@ struct RIRSelector: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(spacing: Space.sm) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                 Text("RIR")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
+                    .panelLegend()
                 Text(caption)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)

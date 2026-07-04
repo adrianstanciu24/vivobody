@@ -20,6 +20,46 @@ extension View {
     func settleIn(_ order: Int) -> some View {
         modifier(SettleInModifier(order: order))
     }
+
+    /// Illumination-only entrance — the instrument's lamps warming on.
+    /// Unlike `settleIn` there is NO movement: each element lights in
+    /// place with a brief brightness overshoot that decays to rest,
+    /// so the panel's layout is fixed from the first frame (panel
+    /// discipline) and only its light arrives. Use on control surfaces
+    /// (the active-workout card, the summary) where position is part
+    /// of the instrument's contract.
+    func powerOn(_ order: Int) -> some View {
+        modifier(PowerOnModifier(order: order))
+    }
+}
+
+private struct PowerOnModifier: ViewModifier {
+    let order: Int
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var lit = false
+    @State private var flash = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(lit ? 1 : 0)
+            .brightness(flash ? 0.16 : 0)
+            .onAppear {
+                guard !lit else { return }
+                if reduceMotion {
+                    lit = true
+                    return
+                }
+                let delay = Double(order) * 0.07
+                withAnimation(.easeOut(duration: 0.16).delay(delay)) {
+                    lit = true
+                    flash = true
+                }
+                withAnimation(.easeOut(duration: 0.4).delay(delay + 0.16)) {
+                    flash = false
+                }
+            }
+    }
 }
 
 private struct SettleInModifier: ViewModifier {
