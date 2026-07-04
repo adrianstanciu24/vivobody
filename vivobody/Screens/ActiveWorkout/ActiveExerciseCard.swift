@@ -283,7 +283,23 @@ struct ActiveExerciseCard: View {
         duration: TimeInterval
     ) -> PRKind? {
         let legacyKey = exerciseName.exerciseIdentityName
-        let descriptor = FetchDescriptor<Exercise>()
+        let descriptor: FetchDescriptor<Exercise>
+        if let catalogItemID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && (
+                        $0.catalogItemID == catalogItemID
+                            || ($0.catalogItemID == nil && $0.name == exerciseName)
+                    )
+                }
+            )
+        } else {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.name == exerciseName
+                }
+            )
+        }
         let archivedExercises = (try? modelContext.fetch(descriptor)) ?? []
         let archivedPriorSets = archivedExercises
             .filter { archived in

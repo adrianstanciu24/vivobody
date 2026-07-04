@@ -15,7 +15,46 @@ import WidgetKit
 
 @MainActor
 enum WidgetSnapshotWriter {
+    /// Coalesces rapid successive `writeAll` calls (template edits,
+    /// body-weight saves, scene-phase changes) into a single deferred
+    /// update so the main thread isn't blocked synchronously on every
+    /// trigger. The 300 ms window is imperceptible to the user but
+    /// prevents stacking heavy fetches + analytics + 4 widget reloads.
+    private static var pendingWriteAllTask: Task<Void, Never>?
+
+    /// Same coalescing for `writeActiveWorkout`, which fires on every
+    /// set completion and rest-state change. Shorter window (200 ms)
+    /// since the active-workout snapshot is lighter and more
+    /// time-sensitive than the full analytics refresh.
+    private static var pendingWriteActiveTask: Task<Void, Never>?
+
     static func writeAll(in context: ModelContext, reload: Bool = true) {
+        pendingWriteAllTask?.cancel()
+        pendingWriteAllTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            writeAllNow(in: context, reload: reload)
+        }
+    }
+
+    static func writeActiveWorkout(in context: ModelContext, reload: Bool = true) {
+        pendingWriteActiveTask?.cancel()
+        pendingWriteActiveTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(200))
+            guard !Task.isCancelled else { return }
+            let unit = WeightUnit.current
+            mirrorPreferences(unit: unit)
+            write(activeWorkoutSnapshot(session: fetchActiveSession(in: context), unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
+            guard reload else { return }
+            WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
+        }
+    }
+
+    static func reloadUpNext() {
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
+    }
+
+    private static func writeAllNow(in context: ModelContext, reload: Bool) {
         let templates = fetchTemplates(in: context)
         let completed = fetchCompletedSessions(in: context)
         let active = fetchActiveSession(in: context)
@@ -39,18 +78,6 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.consistencyKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
-    }
-
-    static func writeActiveWorkout(in context: ModelContext, reload: Bool = true) {
-        let unit = WeightUnit.current
-        mirrorPreferences(unit: unit)
-        write(activeWorkoutSnapshot(session: fetchActiveSession(in: context), unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
-        guard reload else { return }
-        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
-    }
-
-    static func reloadUpNext() {
-        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
     }
 
     // MARK: - Fetching

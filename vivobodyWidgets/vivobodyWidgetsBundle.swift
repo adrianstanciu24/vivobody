@@ -38,20 +38,23 @@ struct SnapshotEntry<Snapshot>: TimelineEntry {
 
 struct SnapshotProvider<Snapshot: Codable>: TimelineProvider {
     let key: String
-    let fallback: Snapshot
+    /// Shown only in the widget gallery (placeholder context).
+    let galleryPlaceholder: Snapshot
+    /// Shown on the real timeline when no snapshot has been written yet.
+    let empty: Snapshot
     let refreshInterval: TimeInterval
 
     func placeholder(in context: Context) -> SnapshotEntry<Snapshot> {
-        SnapshotEntry(date: Date(), snapshot: fallback)
+        SnapshotEntry(date: Date(), snapshot: galleryPlaceholder)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SnapshotEntry<Snapshot>) -> Void) {
-        completion(SnapshotEntry(date: Date(), snapshot: readSnapshot() ?? fallback))
+        completion(SnapshotEntry(date: Date(), snapshot: readSnapshot() ?? empty))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SnapshotEntry<Snapshot>>) -> Void) {
         let now = Date()
-        let entry = SnapshotEntry(date: now, snapshot: readSnapshot() ?? fallback)
+        let entry = SnapshotEntry(date: now, snapshot: readSnapshot() ?? empty)
         let next = now.addingTimeInterval(refreshInterval)
         completion(Timeline(entries: [entry], policy: .after(next)))
     }

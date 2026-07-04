@@ -64,6 +64,7 @@ final class WorkoutSessionController {
         guard let session = try? context.fetch(descriptor).first else { return }
         activeSession = session
         isWorkoutExpanded = false
+        WorkoutLiveActivityController.start(for: session)
         WidgetSnapshotWriter.writeActiveWorkout(in: context)
     }
 

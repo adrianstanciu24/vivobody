@@ -17,7 +17,8 @@ struct UpNextWidget: Widget {
             kind: WidgetShared.upNextKind,
             provider: SnapshotProvider(
                 key: WidgetShared.upNextSnapshotKey,
-                fallback: UpNextSnapshot.placeholder,
+                galleryPlaceholder: UpNextSnapshot.placeholder,
+                empty: UpNextSnapshot.empty,
                 refreshInterval: 30 * 60
             )
         ) { entry in

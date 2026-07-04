@@ -192,7 +192,16 @@ struct ActiveWorkoutScreen: View {
     /// ID wins; name fallback only covers legacy history from before
     /// exercises stored that ID.
     private func mostRecentLoggedExercise(matching item: ExerciseCatalogItem) -> Exercise? {
-        let descriptor = FetchDescriptor<Exercise>()
+        let itemName = item.name
+        let itemID = item.id
+        let descriptor = FetchDescriptor<Exercise>(
+            predicate: #Predicate {
+                $0.session?.completedAt != nil && (
+                    $0.catalogItemID == itemID
+                        || ($0.catalogItemID == nil && $0.name == itemName)
+                )
+            }
+        )
         let matches = (try? modelContext.fetch(descriptor)) ?? []
         return matches
             .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }

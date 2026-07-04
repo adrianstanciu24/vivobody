@@ -16,7 +16,8 @@ struct SignatureWidget: Widget {
             kind: WidgetShared.signatureKind,
             provider: SnapshotProvider(
                 key: WidgetShared.signatureSnapshotKey,
-                fallback: SignatureSnapshot.placeholder,
+                galleryPlaceholder: SignatureSnapshot.placeholder,
+                empty: SignatureSnapshot.empty,
                 refreshInterval: 24 * 60 * 60
             )
         ) { entry in

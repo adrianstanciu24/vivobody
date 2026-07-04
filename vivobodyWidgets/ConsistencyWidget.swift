@@ -16,7 +16,8 @@ struct ConsistencyWidget: Widget {
             kind: WidgetShared.consistencyKind,
             provider: SnapshotProvider(
                 key: WidgetShared.consistencySnapshotKey,
-                fallback: ConsistencySnapshot.placeholder,
+                galleryPlaceholder: ConsistencySnapshot.placeholder,
+                empty: ConsistencySnapshot.empty,
                 refreshInterval: 24 * 60 * 60
             )
         ) { entry in
