@@ -7,6 +7,7 @@
 //  Same physical drag distance ≈ same weight change, regardless of step.
 //
 
+import VivoKit
 import SwiftUI
 
 struct NumberScrubberGallery: View {

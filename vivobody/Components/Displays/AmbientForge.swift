@@ -19,6 +19,7 @@
 //  the current temperature.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

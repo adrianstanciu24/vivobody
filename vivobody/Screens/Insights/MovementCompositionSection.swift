@@ -14,6 +14,7 @@
 //  brightness, like the rest of the app and the IntensityMix section.
 //
 
+import VivoKit
 import SwiftUI
 import Charts
 

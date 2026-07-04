@@ -16,6 +16,7 @@
 //  instantly across the app.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

@@ -24,6 +24,7 @@
 //  sheet-over-sheet presentation conflict.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

@@ -24,6 +24,7 @@
 //      a hollow status pip.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

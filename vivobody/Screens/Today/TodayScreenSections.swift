@@ -8,6 +8,7 @@
 //  sections.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

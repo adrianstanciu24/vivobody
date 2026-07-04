@@ -13,6 +13,7 @@
 //  in the user's display unit via `WeightFormatter`.
 //
 
+import VivoKit
 import SwiftUI
 
 struct ExerciseDominanceSection: View {

@@ -14,6 +14,7 @@
 //  workout. The shell handles presentation.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

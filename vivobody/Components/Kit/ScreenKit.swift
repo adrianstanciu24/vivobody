@@ -21,6 +21,7 @@
 //  all type from `Typography`. No literals.
 //
 
+import VivoKit
 import SwiftUI
 
 // MARK: - Section header

@@ -16,6 +16,7 @@
 //  decides when (and whether) to write it through to SwiftData.
 //
 
+import VivoKit
 import SwiftUI
 
 /// What the configure sheet is operating on. Driven as an

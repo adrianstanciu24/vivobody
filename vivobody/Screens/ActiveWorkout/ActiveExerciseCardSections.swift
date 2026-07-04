@@ -9,6 +9,7 @@
 //  the struct's stored state.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

@@ -25,6 +25,7 @@
 //  (swipe on its card), not here.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

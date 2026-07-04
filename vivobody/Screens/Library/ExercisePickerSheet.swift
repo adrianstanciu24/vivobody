@@ -22,6 +22,7 @@
 //  house style.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

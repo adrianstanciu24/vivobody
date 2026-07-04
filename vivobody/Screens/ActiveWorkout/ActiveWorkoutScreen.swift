@@ -12,6 +12,7 @@
 //  to the next exercise.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

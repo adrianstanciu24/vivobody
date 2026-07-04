@@ -7,6 +7,7 @@
 //  Haptics fire on device only.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SetCompleteButtonGallery: View {

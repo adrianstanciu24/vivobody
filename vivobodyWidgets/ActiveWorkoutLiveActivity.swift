@@ -7,6 +7,7 @@
 //  a rest-timer countdown when resting.
 //
 
+import VivoKit
 import ActivityKit
 import AppIntents
 import SwiftUI

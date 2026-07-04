@@ -15,6 +15,7 @@
 //      .frame(height: 420)
 //
 
+import VivoKit
 import SwiftUI
 
 struct SwipePager<Content: View>: View {

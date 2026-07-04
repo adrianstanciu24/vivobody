@@ -9,6 +9,7 @@
 //  working; archive stamps completedAt so history queries can see it.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

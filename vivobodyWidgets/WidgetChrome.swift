@@ -7,6 +7,7 @@
 //  the four widget surfaces visually aligned without importing app UI.
 //
 
+import VivoKit
 import Charts
 import SwiftUI
 import WidgetKit

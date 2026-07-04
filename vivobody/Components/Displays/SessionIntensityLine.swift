@@ -10,6 +10,7 @@
 //  surrounding spacing on `hasContent`.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SessionIntensityLine: View {

@@ -11,6 +11,7 @@
 //  "Remove measured max" (which returns the row to empty).
 //
 
+import VivoKit
 import SwiftUI
 
 struct OneRepMaxEditorSheet: View {

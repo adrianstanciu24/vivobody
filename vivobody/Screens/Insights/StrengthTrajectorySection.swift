@@ -15,6 +15,7 @@
 //  trend, PR projection, and ordering come from `strengthOutlook`.
 //
 
+import VivoKit
 import SwiftUI
 import Charts
 

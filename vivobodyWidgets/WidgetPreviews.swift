@@ -7,6 +7,7 @@
 //  make the high-value sizes quick to inspect during UI iteration.
 //
 
+import VivoKit
 import SwiftUI
 import WidgetKit
 

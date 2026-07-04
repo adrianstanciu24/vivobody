@@ -20,6 +20,7 @@
 //  width; empty-state CTAs pass a bare `Text` and auto-size.
 //
 
+import VivoKit
 import SwiftUI
 
 struct PrimaryButtonStyle: ButtonStyle {

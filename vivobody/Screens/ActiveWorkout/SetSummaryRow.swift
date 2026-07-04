@@ -13,6 +13,7 @@
 //    • pending     — hollow numbered chip + dim weight · reps plan.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SetSummaryRow: View {

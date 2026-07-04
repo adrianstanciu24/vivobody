@@ -7,6 +7,7 @@
 //  its own accent color so you can read the crossfade between neighbors.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SwipePagerGallery: View {

@@ -9,6 +9,7 @@
 //  Settings > Action Button > Control.
 //
 
+import VivoKit
 import AppIntents
 import SwiftUI
 import WidgetKit

@@ -12,6 +12,7 @@
 //      StreakCalendar(workoutDates: dates, month: date) // any month
 //
 
+import VivoKit
 import SwiftUI
 
 struct StreakCalendar: View {

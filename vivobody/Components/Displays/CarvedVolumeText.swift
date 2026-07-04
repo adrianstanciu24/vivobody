@@ -18,6 +18,7 @@
 //  glass type.
 //
 
+import VivoKit
 import SwiftUI
 
 struct CarvedVolumeText: View {

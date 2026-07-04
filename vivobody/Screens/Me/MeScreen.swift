@@ -16,6 +16,7 @@
 //  button in the trailing toolbar slot.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

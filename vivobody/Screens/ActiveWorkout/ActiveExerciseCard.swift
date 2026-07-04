@@ -27,6 +27,7 @@
 //  advance) is untouched; only the surface around it changed.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

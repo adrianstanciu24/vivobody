@@ -21,6 +21,7 @@
 //    • Release springs the rubber-band back to zero.
 //
 
+import VivoKit
 import SwiftUI
 
 struct BareScrubber: View {

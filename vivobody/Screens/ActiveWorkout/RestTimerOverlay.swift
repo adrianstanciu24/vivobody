@@ -8,6 +8,7 @@
 //  otherwise stick to a stale end time).
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

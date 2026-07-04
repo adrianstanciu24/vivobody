@@ -21,6 +21,7 @@
 //  BodyWeightDetail screen.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

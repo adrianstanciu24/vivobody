@@ -21,6 +21,7 @@
 //  effect by the time the app appears.
 //
 
+import VivoKit
 import SwiftUI
 
 struct OnboardingScreen: View {

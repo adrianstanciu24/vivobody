@@ -9,6 +9,7 @@
 //  which side to bring up.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SymmetrySection: View {

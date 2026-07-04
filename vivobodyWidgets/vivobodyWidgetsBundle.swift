@@ -12,6 +12,7 @@
 //  Shared view primitives are in WidgetChrome.swift.
 //
 
+import VivoKit
 import ActivityKit
 import AppIntents
 import SwiftUI

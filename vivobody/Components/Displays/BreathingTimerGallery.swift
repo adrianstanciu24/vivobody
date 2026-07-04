@@ -7,6 +7,7 @@
 //  Pull down to skip, pull up to add 30s, tap reset to start over.
 //
 
+import VivoKit
 import SwiftUI
 
 struct BreathingTimerGallery: View {

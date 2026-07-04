@@ -10,6 +10,7 @@
 //  device cleanly.
 //
 
+import VivoKit
 import SwiftUI
 import Charts
 

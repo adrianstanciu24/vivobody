@@ -7,6 +7,7 @@
 //  the visual pulse confirms the tap registered in the canvas.
 //
 
+import VivoKit
 import SwiftUI
 
 struct HapticsGallery: View {

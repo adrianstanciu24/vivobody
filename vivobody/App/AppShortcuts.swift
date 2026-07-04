@@ -30,6 +30,7 @@
 //  AppShortcutsProvider must be registered from the app target.
 //
 
+import VivoKit
 import AppIntents
 import Foundation
 

@@ -22,6 +22,7 @@
 //      machine-voice treatment for transient utterances.
 //
 
+import VivoKit
 import SwiftUI
 
 // MARK: - Silkscreen legend

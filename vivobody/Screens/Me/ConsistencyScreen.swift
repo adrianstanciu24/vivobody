@@ -8,6 +8,7 @@
 //  wears a ring. No flames, no shame, just the record.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

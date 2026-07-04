@@ -11,6 +11,7 @@
 //  plain language so the scale never needs explaining.
 //
 
+import VivoKit
 import SwiftUI
 
 struct RIRSelector: View {

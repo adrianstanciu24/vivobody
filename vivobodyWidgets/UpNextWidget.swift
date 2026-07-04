@@ -6,6 +6,7 @@
 //  next rest-day target across system and accessory families.
 //
 
+import VivoKit
 import AppIntents
 import SwiftUI
 import WidgetKit

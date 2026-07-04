@@ -23,6 +23,7 @@
 //      point fires Haptics.selection() so you feel it without looking.
 //
 
+import VivoKit
 import SwiftUI
 
 struct BreathingTimer: View {

@@ -8,6 +8,7 @@
 //  changes.
 //
 
+import VivoKit
 import Foundation
 import SwiftData
 import WidgetKit

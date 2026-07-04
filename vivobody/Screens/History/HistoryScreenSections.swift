@@ -8,6 +8,7 @@
 //  helpers and derived state live here.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

@@ -29,6 +29,7 @@
 //  single routing site.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 import Intents

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1B2C3D4E5F6A1B2C3D40004 /* VivoKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D4E5F6A1B2C3D40002 /* VivoKit */; };
+		A1B2C3D4E5F6A1B2C3D40005 /* VivoKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D4E5F6A1B2C3D40003 /* VivoKit */; };
 		C289A4AFB8854C44B600B66D /* vivobodyWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -81,11 +83,6 @@
 			path = vivobodyWidgets;
 			sourceTree = "<group>";
 		};
-		56C17370D8B54F84BD8FA25E /* vivobody/Shared */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = vivobody/Shared;
-			sourceTree = "<group>";
-		};
 		781FC1A42FBB8CC000EE0477 /* vivobody */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -111,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2C3D4E5F6A1B2C3D40004 /* VivoKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2C3D4E5F6A1B2C3D40005 /* VivoKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +142,6 @@
 			children = (
 				781FC1A42FBB8CC000EE0477 /* vivobody */,
 				33EBD939611D487DBC7134F4 /* vivobodyWidgets */,
-				56C17370D8B54F84BD8FA25E /* vivobody/Shared */,
 				781FC1B62FBB8CC200EE0477 /* vivobodyTests */,
 				781FC1C02FBB8CC200EE0477 /* vivobodyUITests */,
 				781FC1A32FBB8CC000EE0477 /* Products */,
@@ -183,6 +181,7 @@
 			);
 			name = vivobody;
 			packageProductDependencies = (
+				A1B2C3D4E5F6A1B2C3D40002 /* VivoKit */,
 			);
 			productName = vivobody;
 			productReference = 781FC1A22FBB8CC000EE0477 /* vivobody.app */;
@@ -248,10 +247,10 @@
 			);
 			fileSystemSynchronizedGroups = (
 				33EBD939611D487DBC7134F4 /* vivobodyWidgets */,
-				56C17370D8B54F84BD8FA25E /* vivobody/Shared */,
 			);
 			name = vivobodyWidgets;
 			packageProductDependencies = (
+				A1B2C3D4E5F6A1B2C3D40003 /* VivoKit */,
 			);
 			productName = vivobodyWidgets;
 			productReference = 67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */;
@@ -292,6 +291,9 @@
 			);
 			mainGroup = 781FC1992FBB8CC000EE0477;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 781FC1A32FBB8CC000EE0477 /* Products */;
 			projectDirPath = "";
@@ -776,6 +778,26 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VivoKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A1B2C3D4E5F6A1B2C3D40002 /* VivoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */;
+			productName = VivoKit;
+		};
+		A1B2C3D4E5F6A1B2C3D40003 /* VivoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */;
+			productName = VivoKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 781FC19A2FBB8CC000EE0477 /* Project object */;
 }

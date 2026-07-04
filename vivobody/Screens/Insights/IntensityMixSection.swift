@@ -14,6 +14,7 @@
 //  hierarchy by brightness, like the rest of the app.
 //
 
+import VivoKit
 import SwiftUI
 import Charts
 

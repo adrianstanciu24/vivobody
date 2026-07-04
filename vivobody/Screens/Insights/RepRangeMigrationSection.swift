@@ -16,6 +16,7 @@
 //  monotone interpolation, token-driven axes).
 //
 
+import VivoKit
 import SwiftUI
 import Charts
 

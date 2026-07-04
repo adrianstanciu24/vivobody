@@ -7,6 +7,7 @@
 //  focused on composition and state.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 import Charts

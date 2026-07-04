@@ -10,6 +10,7 @@
 //  or back off.
 //
 
+import VivoKit
 import SwiftUI
 
 struct TrainingLoadSection: View {

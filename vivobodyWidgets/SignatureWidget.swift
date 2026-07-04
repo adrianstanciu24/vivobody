@@ -6,6 +6,7 @@
 //  petal emblem across system and accessory families.
 //
 
+import VivoKit
 import SwiftUI
 import WidgetKit
 

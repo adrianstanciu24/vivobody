@@ -7,6 +7,7 @@
 //  months in either direction look "lived in."
 //
 
+import VivoKit
 import SwiftUI
 
 struct StreakCalendarGallery: View {

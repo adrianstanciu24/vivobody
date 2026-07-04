@@ -21,6 +21,7 @@
 //  darkening overlays, or stroke gradients are needed.
 //
 
+import VivoKit
 import SwiftUI
 
 enum SetIntensity {

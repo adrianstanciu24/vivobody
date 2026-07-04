@@ -19,6 +19,7 @@
 //      the dashed rim is the cue that this is empty, not loading.
 //
 
+import VivoKit
 import SwiftUI
 
 /// A single placeholder line. `width == nil` stretches to fill the

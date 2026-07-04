@@ -8,6 +8,7 @@
 //  big multi-digit cascades.
 //
 
+import VivoKit
 import SwiftUI
 
 struct DigitTickerGallery: View {

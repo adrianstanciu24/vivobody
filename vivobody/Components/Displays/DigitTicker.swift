@@ -18,6 +18,7 @@
 //                  font: Typography.bigMetric)
 //
 
+import VivoKit
 import SwiftUI
 
 struct DigitTicker: View {

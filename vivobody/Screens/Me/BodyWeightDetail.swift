@@ -14,6 +14,7 @@
 //  card stays in its empty state otherwise).
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 import Charts

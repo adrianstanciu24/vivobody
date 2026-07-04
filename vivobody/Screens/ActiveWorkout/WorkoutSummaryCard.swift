@@ -21,6 +21,7 @@
 //  and complete (every set logged → Done appears, success haptic).
 //
 
+import VivoKit
 import SwiftUI
 
 struct WorkoutSummaryCard: View {

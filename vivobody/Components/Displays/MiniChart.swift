@@ -8,6 +8,7 @@
 //  a soft gradient fill below it, and optional PR pips.
 //
 
+import VivoKit
 import SwiftUI
 
 struct MiniChart: View {

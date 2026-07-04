@@ -9,22 +9,22 @@
 
 import Foundation
 
-enum WidgetWeightUnit: String, Codable, Hashable {
+public enum WidgetWeightUnit: String, Codable, Hashable {
     case lb, kg
 
-    var symbol: String { rawValue }
-    var defaultFractionDigits: Int { self == .lb ? 0 : 1 }
+    public var symbol: String { rawValue }
+    public var defaultFractionDigits: Int { self == .lb ? 0 : 1 }
 }
 
-enum SharedWeightFormatter {
-    static func toDisplay(_ lb: Double, unit: WidgetWeightUnit) -> Double {
+public enum SharedWeightFormatter {
+    public static func toDisplay(_ lb: Double, unit: WidgetWeightUnit) -> Double {
         switch unit {
         case .lb: return lb
         case .kg: return lb * 0.45359237
         }
     }
 
-    static func string(
+    public static func string(
         _ lb: Double,
         unit: WidgetWeightUnit,
         fractionDigits: Int? = nil,

@@ -31,6 +31,7 @@
 //  (defaults, CTA, edit/delete).
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 import Charts

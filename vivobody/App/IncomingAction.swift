@@ -10,6 +10,7 @@
 //  case + one parser line.
 //
 
+import VivoKit
 import CoreSpotlight
 import Foundation
 

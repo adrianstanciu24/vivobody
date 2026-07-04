@@ -23,6 +23,7 @@
 //  cancelled sheet never pollutes the store.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

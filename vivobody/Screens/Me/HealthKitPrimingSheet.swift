@@ -12,6 +12,7 @@
 //  onContinue / onNotNow closures.
 //
 
+import VivoKit
 import SwiftUI
 
 struct HealthKitPrimingSheet: View {

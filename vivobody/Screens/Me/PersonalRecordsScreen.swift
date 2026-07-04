@@ -8,6 +8,7 @@
 //  Records set in the last 30 days wear the accent.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

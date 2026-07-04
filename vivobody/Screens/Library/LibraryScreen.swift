@@ -38,6 +38,7 @@
 //  rest tighter. An all-time best renders its numeral in gold.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

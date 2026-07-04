@@ -28,6 +28,7 @@
 //      }
 //
 
+import VivoKit
 import SwiftUI
 
 struct PRCelebration: View {

@@ -7,6 +7,7 @@
 //  while the app is foregrounded/alive.
 //
 
+import VivoKit
 import ActivityKit
 import Foundation
 

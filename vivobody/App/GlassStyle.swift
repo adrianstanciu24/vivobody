@@ -16,6 +16,7 @@
 //      and just say `.glassCard()` / `.glassChip()`.
 //
 
+import VivoKit
 import SwiftUI
 
 extension View {

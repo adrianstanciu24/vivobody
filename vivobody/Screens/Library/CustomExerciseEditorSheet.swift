@@ -13,6 +13,7 @@
 //  the catalog with half-typed entries.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

@@ -33,6 +33,7 @@
 //    AppState. The shell wires it.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

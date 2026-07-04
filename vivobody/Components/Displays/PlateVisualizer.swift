@@ -15,6 +15,7 @@
 //      PlateVisualizer(weight: 100, unit: .kg)
 //
 
+import VivoKit
 import SwiftUI
 
 // `WeightUnit` (lb / kg) lives in Models/WeightUnit.swift now so

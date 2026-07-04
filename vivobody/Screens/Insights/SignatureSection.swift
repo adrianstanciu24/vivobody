@@ -19,6 +19,7 @@
 //  emblem is its signature.
 //
 
+import VivoKit
 import SwiftUI
 
 struct SignatureSection: View {

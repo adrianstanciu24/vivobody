@@ -7,6 +7,7 @@
 //  trigger buttons cover the common PR shapes: weight, reps, volume.
 //
 
+import VivoKit
 import SwiftUI
 
 struct PRCelebrationGallery: View {

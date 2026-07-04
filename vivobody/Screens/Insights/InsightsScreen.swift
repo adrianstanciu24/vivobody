@@ -25,6 +25,7 @@
 //  accent for "on target," danger-red only where something's slipping.
 //
 
+import VivoKit
 import SwiftUI
 import SwiftData
 

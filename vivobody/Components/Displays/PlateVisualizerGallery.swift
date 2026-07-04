@@ -6,6 +6,7 @@
 //  This is the gallery composition that proves the components compose.
 //
 
+import VivoKit
 import SwiftUI
 
 struct PlateVisualizerGallery: View {

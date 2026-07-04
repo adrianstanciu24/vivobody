@@ -11,6 +11,7 @@
 //  small option pickers in the same iOS 26 control vocabulary.
 //
 
+import VivoKit
 import SwiftUI
 
 struct StepSelector<T: Hashable>: View {
