@@ -263,7 +263,7 @@ extension TodayScreen {
         let shape = RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
         return Button {
             Haptics.crescendo()
-            appState.startWorkoutFromTemplate(template)
+            appState.workout.startWorkoutFromTemplate(template)
         } label: {
             Text("Start")
                 .font(Typography.headline)

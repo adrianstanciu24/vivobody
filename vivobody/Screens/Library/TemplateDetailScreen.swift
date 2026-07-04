@@ -265,7 +265,7 @@ struct TemplateDetailScreen: View {
             subtitle: nil,
             inputLabels: ["Start Workout", "Start", "Begin"]
         ) {
-            appState.startWorkoutFromTemplate(template)
+            appState.workout.startWorkoutFromTemplate(template)
             dismiss()
         }
         .padding(.horizontal, Space.gutter)

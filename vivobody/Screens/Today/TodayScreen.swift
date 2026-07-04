@@ -176,11 +176,11 @@ struct TodayScreen: View {
         switch intent {
         case .repeatLast:
             let last = completedSessions.first
-            pendingStart = { appState.startTodaysWorkout(basedOn: last) }
+            pendingStart = { appState.workout.startTodaysWorkout(basedOn: last) }
         case .fresh:
-            pendingStart = { appState.startTodaysWorkout(basedOn: nil) }
+            pendingStart = { appState.workout.startTodaysWorkout(basedOn: nil) }
         case .template(let template):
-            pendingStart = { appState.startWorkoutFromTemplate(template) }
+            pendingStart = { appState.workout.startWorkoutFromTemplate(template) }
         }
     }
 

@@ -188,7 +188,7 @@ struct LibraryTemplatesContent: View {
     /// session; the app shell surfaces the live workout.
     private func startWorkout(from template: WorkoutTemplate) {
         Haptics.soft()
-        appState.startWorkoutFromTemplate(template)
+        appState.workout.startWorkoutFromTemplate(template)
     }
 }
 
