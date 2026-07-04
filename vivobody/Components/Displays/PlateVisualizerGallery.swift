@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  PlateVisualizerGallery.swift
 //  vivobody
@@ -101,3 +102,5 @@ struct PlateVisualizerGallery: View {
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)
 }
+
+#endif

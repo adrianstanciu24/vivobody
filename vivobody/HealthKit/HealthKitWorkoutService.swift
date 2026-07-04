@@ -78,6 +78,13 @@ enum HealthKitWorkoutService {
     /// Save one HKWorkout for a freshly archived session. No-ops
     /// unless every gate passes; never throws into the caller.
     /// Idempotent via `healthKitWorkoutUUID`.
+    ///
+    /// To prevent duplicate HKWorkouts, a sentinel UUID is persisted
+    /// to SwiftData BEFORE the async HealthKit write begins. If the
+    /// app is re-entered or relaunched before the HKWorkout finishes,
+    /// the sentinel blocks a second write. On success the sentinel is
+    /// replaced with the real HKWorkout UUID; on failure it is cleared
+    /// so a future retry can attempt the write again.
     static func saveWorkout(for session: WorkoutSession, in context: ModelContext) {
         guard isEnabled, isAvailable, canWrite,
               session.healthKitWorkoutUUID == nil,
@@ -89,8 +96,22 @@ enum HealthKitWorkoutService {
         let end = session.completedAt ?? Date()
         guard end > start else { return }
 
+        // Pre-assign a sentinel UUID and persist it so re-entry or
+        // relaunch can't create a duplicate HKWorkout.
+        session.healthKitWorkoutUUID = UUID()
+        do {
+            try context.save()
+        } catch {
+            session.healthKitWorkoutUUID = nil
+            return
+        }
+
         Task {
-            guard let workout = await build(start: start, end: end) else { return }
+            guard let workout = await build(start: start, end: end) else {
+                session.healthKitWorkoutUUID = nil
+                try? context.save()
+                return
+            }
             session.healthKitWorkoutUUID = workout.uuid
             try? context.save()
         }

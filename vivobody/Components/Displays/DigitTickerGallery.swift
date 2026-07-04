@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  DigitTickerGallery.swift
 //  vivobody
@@ -214,3 +215,5 @@ struct DigitTickerGallery: View {
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)
 }
+
+#endif

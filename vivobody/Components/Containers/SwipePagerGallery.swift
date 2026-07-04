@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  SwipePagerGallery.swift
 //  vivobody
@@ -146,3 +147,5 @@ struct ExerciseCardPlaceholder: View {
     SwipePagerGallery()
         .preferredColorScheme(.dark)
 }
+
+#endif

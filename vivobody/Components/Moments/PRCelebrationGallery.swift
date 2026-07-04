@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  PRCelebrationGallery.swift
 //  vivobody
@@ -170,3 +171,5 @@ struct PRCelebrationGallery: View {
     }
     .preferredColorScheme(.dark)
 }
+
+#endif

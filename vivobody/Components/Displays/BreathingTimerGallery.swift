@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  BreathingTimerGallery.swift
 //  vivobody
@@ -83,3 +84,5 @@ struct BreathingTimerGallery: View {
 #Preview("Breathing Timer") {
     BreathingTimerGallery()
 }
+
+#endif

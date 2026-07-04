@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  StreakCalendarGallery.swift
 //  vivobody
@@ -160,3 +161,5 @@ struct StreakCalendarGallery: View {
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)
 }
+
+#endif

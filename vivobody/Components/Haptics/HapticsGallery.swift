@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  HapticsGallery.swift
 //  vivobody
@@ -157,3 +158,5 @@ private struct PulseDot: View {
     HapticsGallery()
         .preferredColorScheme(.dark)
 }
+
+#endif

@@ -55,6 +55,7 @@
 		781FC1A22FBB8CC000EE0477 /* vivobody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vivobody.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		781FC1B32FBB8CC200EE0477 /* vivobodyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vivobodyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		781FC1BD2FBB8CC200EE0477 /* vivobodyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vivobodyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -140,6 +141,7 @@
 		781FC1992FBB8CC000EE0477 = {
 			isa = PBXGroup;
 			children = (
+				E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */,
 				781FC1A42FBB8CC000EE0477 /* vivobody */,
 				33EBD939611D487DBC7134F4 /* vivobodyWidgets */,
 				781FC1B62FBB8CC200EE0477 /* vivobodyTests */,
@@ -390,11 +392,11 @@
 /* Begin XCBuildConfiguration section */
 		2CBDF98EB27C43D7A1FA8047 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = vivobodyWidgets/vivobodyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -405,7 +407,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobody.app.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -425,12 +426,12 @@
 		};
 		781FC1C72FBB8CC200EE0477 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = logo;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = vivobody/vivobody.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -443,7 +444,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobody.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -462,12 +462,12 @@
 		};
 		781FC1C82FBB8CC200EE0477 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = logo;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = vivobody/vivobody.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -480,7 +480,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobody.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -620,13 +619,12 @@
 		};
 		781FC1CC2FBB8CC200EE0477 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -641,13 +639,12 @@
 		};
 		781FC1CD2FBB8CC200EE0477 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -662,11 +659,10 @@
 		};
 		781FC1CF2FBB8CC200EE0477 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -681,11 +677,10 @@
 		};
 		781FC1D02FBB8CC200EE0477 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobodyUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
@@ -700,11 +695,11 @@
 		};
 		DEB4D7ADE0F84D0AAD9CD942 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = vivobodyWidgets/vivobodyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -715,7 +710,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = astanciu.vivobody.app.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

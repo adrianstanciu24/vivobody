@@ -151,11 +151,21 @@ struct StreakCalendar: View {
         let isInMonth: Bool
     }
 
-    private var weekdaySymbols: [String] { ["S", "M", "T", "W", "T", "F", "S"] }
+    private var weekdaySymbols: [String] {
+        // Rotate veryShortWeekdaySymbols (Sunday-first) to start at
+        // the calendar's firstWeekday so Monday-first locales see
+        // M-T-W-T-F-S-S instead of S-M-T-W-T-F-S.
+        let symbols = calendar.veryShortWeekdaySymbols
+        let offset = calendar.firstWeekday - 1
+        return Array(symbols[offset...]) + Array(symbols[..<offset])
+    }
 
     private var weeks: [[DayCell]] {
-        // weekday: 1 = Sunday, 7 = Saturday (US convention).
-        let leadingPadding = calendar.component(.weekday, from: monthStart) - 1
+        // Align the grid to the calendar's firstWeekday so the
+        // leading padding matches the weekday header row.
+        let firstWeekday = calendar.firstWeekday
+        let weekday = calendar.component(.weekday, from: monthStart)
+        let leadingPadding = (weekday - firstWeekday + 7) % 7
         let daysInMonth = calendar.range(of: .day, in: .month, for: month)?.count ?? 30
         let totalCells = ((leadingPadding + daysInMonth + 6) / 7) * 7
 

@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  SetCompleteButtonGallery.swift
 //  vivobody
@@ -114,3 +115,5 @@ struct SetCompleteButtonGallery: View {
     SetCompleteButtonGallery()
         .preferredColorScheme(.dark)
 }
+
+#endif

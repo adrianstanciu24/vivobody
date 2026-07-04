@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  NumberScrubberGallery.swift
 //  vivobody
@@ -131,3 +132,5 @@ struct NumberScrubberGallery: View {
     NumberScrubberGallery()
         .preferredColorScheme(.dark)
 }
+
+#endif
