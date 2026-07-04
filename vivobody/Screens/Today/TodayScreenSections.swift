@@ -330,7 +330,7 @@ extension TodayScreen {
     /// row stays a glance rather than a guilt-list. Empty (and hidden)
     /// until there's training to judge against.
     func attentionMuscles() -> [MuscleVolumeStat] {
-        let neglected = completedSessions.muscleVolume().summary.neglected
+        let neglected = appState.analytics.volume.summary.neglected
         let rested = neglected.filter { $0.daysSinceLastTrained != nil }
         let never = neglected.filter { $0.daysSinceLastTrained == nil }
         return Array((rested + never).prefix(3))

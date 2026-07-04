@@ -187,12 +187,6 @@ struct TodayScreen: View {
 
 }
 
-/// Memoises `MuscleDevelopment.simulate` for `TodayScreen`. The screen
-/// body is re-evaluated for many reasons unrelated to training data, so
-/// replaying the full O(sessions × muscles) history each time is
-/// wasteful. This holds the last result keyed on a cheap signature
-/// (session count + latest completion) and replays only when that
-/// signature changes. Deliberately NOT `@Observable`: it is a passive
 /// Circular recency ring for one neglected-muscle tile. The arc
 /// animates from empty to its fill fraction on appear, so the ring
 /// "fills" as the section settles in. Honors Reduce Motion by
