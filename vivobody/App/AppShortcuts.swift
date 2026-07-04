@@ -84,7 +84,7 @@ struct WorkoutTemplateQuery: EnumerableEntityQuery, EntityStringQuery {
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
             let data = defaults.data(forKey: WidgetShared.templatesSnapshotKey)
         else { return [] }
-        return (try? JSONDecoder().decode([TemplateEntitySnapshot].self, from: data)) ?? []
+        return WidgetSnapshotCodec.decode([TemplateEntitySnapshot].self, from: data) ?? []
     }
 
     private func entity(for snapshot: TemplateEntitySnapshot) -> WorkoutTemplateEntity {

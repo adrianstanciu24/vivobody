@@ -264,14 +264,13 @@ enum WidgetSnapshotWriter {
 
     private static func setSpec(for set: WorkoutSet, exercise: Exercise?, unit: WeightUnit) -> String {
         guard let exercise else { return "" }
-        switch exercise.trackingMode {
-        case .reps:
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) x \(set.reps)"
-        case .duration:
-            let duration = DurationFormatter.compact(set.duration)
-            guard set.weight > 0 else { return duration }
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) x \(duration)"
-        }
+        return SetSpecFormatter.format(
+            weight: set.weight,
+            reps: set.reps,
+            duration: set.duration,
+            trackingMode: exercise.trackingMode,
+            unit: unit
+        )
     }
 
     private static func signatureVerdict(_ signature: TrainingSignature) -> String {
@@ -289,10 +288,10 @@ enum WidgetSnapshotWriter {
 
     // MARK: - Persistence
 
-    private static func write<T: Encodable>(_ snapshot: T, key: String) {
+    private static func write<T: Codable>(_ snapshot: T, key: String) {
         guard
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
-            let data = try? JSONEncoder().encode(snapshot)
+            let data = WidgetSnapshotCodec.encode(snapshot)
         else { return }
         defaults.set(data, forKey: key)
     }

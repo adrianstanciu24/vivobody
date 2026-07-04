@@ -64,6 +64,6 @@ struct SnapshotProvider<Snapshot: Codable>: TimelineProvider {
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
             let data = defaults.data(forKey: key)
         else { return nil }
-        return try? JSONDecoder().decode(Snapshot.self, from: data)
+        return WidgetSnapshotCodec.decode(Snapshot.self, from: data)
     }
 }

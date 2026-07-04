@@ -274,19 +274,18 @@ extension Exercise {
     /// Compact, mode-aware label for one set's logged/planned metric,
     /// with the weight value carried in the user's unit (no unit
     /// suffix — callers append it where they want it):
-    ///   • reps     → "135 × 8"
-    ///   • duration → "0:45", or "25 × 0:45" when the hold is loaded.
+    ///   • reps     → "135 x 8"
+    ///   • duration → "0:45", or "25 x 0:45" when the hold is loaded.
     /// The single source of truth for how a set reads across the
     /// summary, history, picker, and detail surfaces.
     func setLabel(_ set: WorkoutSet, unit: WeightUnit) -> String {
-        switch trackingMode {
-        case .reps:
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) × \(set.reps)"
-        case .duration:
-            let time = DurationFormatter.string(set.duration)
-            guard set.weight > 0 else { return time }
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) × \(time)"
-        }
+        SetSpecFormatter.format(
+            weight: set.weight,
+            reps: set.reps,
+            duration: set.duration,
+            trackingMode: trackingMode,
+            unit: unit
+        )
     }
 }
 

@@ -294,7 +294,7 @@
 			mainGroup = 781FC1992FBB8CC000EE0477;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */,
+				A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference "VivoKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 781FC1A32FBB8CC000EE0477 /* Products */;
@@ -778,7 +778,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */ = {
+		A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference "VivoKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VivoKit;
 		};
@@ -787,12 +787,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		A1B2C3D4E5F6A1B2C3D40002 /* VivoKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */;
+			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference "VivoKit" */;
 			productName = VivoKit;
 		};
 		A1B2C3D4E5F6A1B2C3D40003 /* VivoKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference */;
+			package = A1B2C3D4E5F6A1B2C3D40001 /* XCLocalSwiftPackageReference "VivoKit" */;
 			productName = VivoKit;
 		};
 /* End XCSwiftPackageProductDependency section */

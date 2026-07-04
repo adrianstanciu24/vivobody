@@ -17,7 +17,7 @@ struct vivobodyApp: App {
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
     private let container: ModelContainer? = {
-        let schema = Schema(SchemaV1.models, version: SchemaV1.versionIdentifier)
+        let schema = Schema(SchemaV2.models, version: SchemaV2.versionIdentifier)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
             return try ModelContainer(
@@ -29,7 +29,7 @@ struct vivobodyApp: App {
             // A failed on-disk migration must not crash every launch.
             // Fall back to an in-memory store so the app stays usable;
             // the original store is left untouched on disk for recovery.
-            StorageHealth.didFallbackToInMemory = true
+            StorageHealth.shared.didFallbackToInMemory = true
             let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
             if let memory = try? ModelContainer(for: schema, migrationPlan: VivobodyMigrationPlan.self, configurations: [fallback]) {
                 return memory

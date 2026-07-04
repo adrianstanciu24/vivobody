@@ -27,6 +27,51 @@ public nonisolated enum WidgetShared {
     public static let templatesSnapshotKey = "widgets.templates.snapshot"
 }
 
+// MARK: - Versioned envelope
+
+/// Wraps every widget snapshot written to the App Group so future
+/// shape changes can be detected at decode time instead of silently
+/// failing. The writer stamps `version` with the current schema
+/// version; the reader checks it before extracting `payload`. Old
+/// unversioned data (written before the envelope existed) is handled
+/// by `WidgetSnapshotCodec.decode` which falls back to a raw decode.
+public struct VersionedSnapshot<T: Codable>: Codable {
+    public var version: Int
+    public var payload: T
+
+    public init(version: Int, payload: T) {
+        self.version = version
+        self.payload = payload
+    }
+}
+
+/// Current snapshot schema version. Bump when any snapshot type's
+/// fields change so the reader can reject stale data instead of
+/// decoding garbage.
+public nonisolated enum WidgetSnapshotVersion {
+    public static let current = 1
+}
+
+/// Encode/decode helpers that wrap payloads in a `VersionedSnapshot`
+/// envelope. On decode, tries the versioned envelope first and falls
+/// back to a raw decode for backward compatibility with data written
+/// before versioning was introduced.
+public nonisolated enum WidgetSnapshotCodec {
+    public static func encode<T: Codable>(_ value: T) -> Data? {
+        let envelope = VersionedSnapshot(version: WidgetSnapshotVersion.current, payload: value)
+        return try? JSONEncoder().encode(envelope)
+    }
+
+    public static func decode<T: Codable>(_ type: T.Type, from data: Data) -> T? {
+        if let envelope = try? JSONDecoder().decode(VersionedSnapshot<T>.self, from: data) {
+            guard envelope.version == WidgetSnapshotVersion.current else { return nil }
+            return envelope.payload
+        }
+        // Fall back to unversioned data (pre-versioning writes).
+        return try? JSONDecoder().decode(T.self, from: data)
+    }
+}
+
 public struct UpNextSnapshot: Codable, Hashable, Sendable {
     public enum KindValue: String, Codable, Hashable, Sendable {
         case scheduled, rest, unscheduled

@@ -81,7 +81,7 @@ struct AppRoot: View {
                 }
             }
             .onAppear {
-                appState.storageFallbackActive = StorageHealth.didFallbackToInMemory
+                appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }

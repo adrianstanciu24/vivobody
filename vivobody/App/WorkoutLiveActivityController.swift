@@ -93,14 +93,12 @@ enum WorkoutLiveActivityController {
 
     private static func setSpec(for set: WorkoutSet, exercise: Exercise?) -> String {
         guard let exercise else { return "" }
-        let unit = WeightUnit.current
-        switch exercise.trackingMode {
-        case .reps:
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) x \(set.reps)"
-        case .duration:
-            let duration = DurationFormatter.compact(set.duration)
-            guard set.weight > 0 else { return duration }
-            return "\(WeightFormatter.string(set.weight, unit: unit, includeUnit: false)) x \(duration)"
-        }
+        return SetSpecFormatter.format(
+            weight: set.weight,
+            reps: set.reps,
+            duration: set.duration,
+            trackingMode: exercise.trackingMode,
+            unit: .current
+        )
     }
 }
