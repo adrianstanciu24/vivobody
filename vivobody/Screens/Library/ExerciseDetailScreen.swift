@@ -49,6 +49,7 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.sessionAnalytics) var sessionAnalytics
 
     /// All archived sessions — drives progress chart + last-used +
     /// total-count + recent table. Same filter as the picker; live
@@ -122,6 +123,7 @@ struct ExerciseDetailScreen: View {
     let prColor = Tint.complete
 
     var body: some View {
+        let _ = sessionAnalytics?.update(for: completedSessions)
         ScrollView {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero

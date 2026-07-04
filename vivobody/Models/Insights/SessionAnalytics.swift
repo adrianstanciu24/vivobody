@@ -15,6 +15,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @MainActor
 final class SessionAnalytics {
@@ -68,5 +69,20 @@ final class SessionAnalytics {
         symmetry = sessions.antagonistBalance()
         consistency = sessions.consistency()
         load = sessions.trainingLoad()
+    }
+}
+
+// MARK: - Environment injection
+
+/// Lets views without direct AppState access (e.g. ExerciseDetailScreen
+/// presented from a NavigationLink) share the cached analytics.
+private struct SessionAnalyticsKey: EnvironmentKey {
+    static let defaultValue: SessionAnalytics? = nil
+}
+
+extension EnvironmentValues {
+    var sessionAnalytics: SessionAnalytics? {
+        get { self[SessionAnalyticsKey.self] }
+        set { self[SessionAnalyticsKey.self] = newValue }
     }
 }

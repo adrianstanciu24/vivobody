@@ -168,6 +168,7 @@ struct AppRoot: View {
             .fullScreenCover(isPresented: showOnboarding) {
                 OnboardingScreen(onStart: { onboardingCompleted = true })
             }
+            .environment(\.sessionAnalytics, appState.analytics)
     }
 
     private var tabView: some View {

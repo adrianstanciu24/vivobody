@@ -587,7 +587,8 @@ extension ExerciseDetailScreen {
     /// >=2 filter inside `progressByExercise`). The chart needs
     /// at least 2 points to be more than a dot.
     var progress: ExerciseProgress? {
-        completedSessions.progressByExercise.first { progress in
+        let allProgress = sessionAnalytics?.progress ?? completedSessions.progressByExercise
+        return allProgress.first { progress in
             if let catalogItemID = progress.catalogItemID {
                 return catalogItemID == item.id
             }

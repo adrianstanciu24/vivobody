@@ -48,6 +48,7 @@ struct MeScreen: View {
     @State private var logTarget: BodyWeightLogTarget? = nil
 
     var body: some View {
+        let _ = appState.analytics.update(for: completedSessions)
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 statsSection
@@ -373,7 +374,7 @@ struct MeScreen: View {
     /// is, by definition, a PR you hold). Drives the accented PR
     /// numeral in the lifetime odometer.
     private var personalRecords: Int {
-        completedSessions.progressByExercise.count
+        appState.analytics.progress.count
     }
 
     private var totalVolume: Double {
