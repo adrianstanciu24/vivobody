@@ -77,6 +77,18 @@ enum SpotlightIndexer {
         }
     }
 
+    /// Version-throttled reindex: only runs the full delete + reindex
+    /// when the app's marketing version has changed since the last
+    /// pass. Prevents a wasteful wipe-and-rebuild on every launch.
+    static func reindexAllIfNeeded(templates: [WorkoutTemplate], items: [ExerciseCatalogItem]) {
+        let defaults = UserDefaults.standard
+        let lastVersion = defaults.string(forKey: SettingsKey.spotlightReindexedVersion)
+        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
+        guard lastVersion != currentVersion else { return }
+        reindexAll(templates: templates, items: items)
+        defaults.set(currentVersion, forKey: SettingsKey.spotlightReindexedVersion)
+    }
+
     // MARK: - Delete
 
     static func removeTemplate(id: UUID) {

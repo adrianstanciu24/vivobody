@@ -41,6 +41,15 @@ nonisolated enum SettingsKey {
     /// Teaches the drag-to-adjust gesture without an onboarding
     /// wizard, which the product principles cut outright.
     static let hasScrubbedNumber = "settings.hasScrubbedNumber"
+    /// Bool — whether the one-time legacy exercise identity backfill
+    /// has already run. Gates `backfillCopiedExerciseIdentityIfNeeded`
+    /// so it doesn't fetch every Exercise + TemplateExercise on every
+    /// launch after the first successful pass.
+    static let exerciseIdentityBackfilled = "settings.exerciseIdentityBackfilled"
+    /// String — the last `CFBundleShortVersionString` that triggered
+    /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
+    /// delete-all + reindex runs once per app version, not every launch.
+    static let spotlightReindexedVersion = "settings.spotlightReindexedVersion"
 }
 
 nonisolated enum SettingsDefaults {

@@ -81,6 +81,10 @@ struct AppRoot: View {
                 }
             }
             .onAppear {
+                // Critical path — must complete before first paint:
+                // wire the model context, seed the catalog if empty,
+                // restore any in-flight workout (MiniBar), and drain
+                // pending deep links.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
@@ -92,14 +96,19 @@ struct AppRoot: View {
 #if DEBUG
                 UITestSupport.seedIfRequested(in: modelContext)
 #endif
-                ExerciseCatalogItem.backfillCopiedExerciseIdentity(in: modelContext)
-                SpotlightIndexer.reindexAll(
-                    templates: (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? [],
-                    items: (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
-                )
                 workout.restoreActiveWorkoutIfNeeded()
                 consumeIncomingActions()
-                WidgetSnapshotWriter.writeAll(in: modelContext)
+
+                // Non-critical path — defer to a low-priority Task so
+                // SwiftUI's first render isn't blocked by legacy data
+                // fix-ups, Spotlight indexing, or widget snapshot writes.
+                Task(priority: .utility) { @MainActor in
+                    ExerciseCatalogItem.backfillCopiedExerciseIdentityIfNeeded(in: modelContext)
+                    let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
+                    let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
+                    SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)
+                    WidgetSnapshotWriter.writeAll(in: modelContext)
+                }
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {

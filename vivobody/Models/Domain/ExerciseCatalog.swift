@@ -465,6 +465,19 @@ extension ExerciseCatalogItem {
             try? context.saveOrRollback()
         }
     }
+
+    /// One-time wrapper around `backfillCopiedExerciseIdentity` that
+    /// skips the expensive all-Exercise + all-TemplateExercise fetch
+    /// after the first successful pass. New exercises created post-
+    /// backfill already carry `catalogItemID` and
+    /// `muscleInvolvementSnapshot` from their initializer, so the
+    /// legacy fix-up is never needed again.
+    static func backfillCopiedExerciseIdentityIfNeeded(in context: ModelContext) {
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: SettingsKey.exerciseIdentityBackfilled) else { return }
+        backfillCopiedExerciseIdentity(in: context)
+        defaults.set(true, forKey: SettingsKey.exerciseIdentityBackfilled)
+    }
 }
 
 // MARK: - Exercise identity
