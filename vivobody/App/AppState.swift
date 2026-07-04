@@ -61,6 +61,11 @@ final class AppState {
     /// isWorkoutExpanded, lastSaveError, and all lifecycle methods.
     let workout = WorkoutSessionController()
 
+    /// Shared analytics cache. Both TodayScreen and InsightsScreen
+    /// call update(for:) in their body; the fingerprint check skips
+    /// recomputation when the dataset hasn't changed.
+    let analytics = SessionAnalytics()
+
     init() {
         workout.appState = self
     }
