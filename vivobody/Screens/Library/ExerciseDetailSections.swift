@@ -313,6 +313,41 @@ extension ExerciseDetailScreen {
         .accessibilityLabel("Progress chart")
     }
 
+    /// Free-tier stand-in for `chartSection`: the user's real chart,
+    /// frozen behind a blur, with one quiet unlock row. Numeric stats
+    /// above and below stay free — only the trend visualisation is
+    /// part of Pro.
+    var lockedChartSection: some View {
+        ZStack {
+            chartSection
+                .blur(radius: 12)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+
+            VStack(spacing: Space.md) {
+                Text("Progress charts are part of Pro")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .multilineTextAlignment(.center)
+
+                Button {
+                    Haptics.soft()
+                    isPaywallPresented = true
+                } label: {
+                    Text("Unlock")
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Tint.onAccent)
+                        .padding(.horizontal, Space.xxl)
+                        .frame(minHeight: Space.tapMin)
+                        .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Unlock Vivobody Pro")
+            }
+            .padding(Space.xl)
+        }
+    }
+
     func rangeChip(_ r: TimeRange) -> some View {
         let isSelected = r == range
         return Button {

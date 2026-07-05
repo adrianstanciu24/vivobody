@@ -261,6 +261,59 @@ struct HeatmapLegend: View {
     }
 }
 
+/// Widget-side read of the Pro entitlement. The app mirrors the
+/// resolved flag into the App Group (ProStore + WidgetSnapshotWriter);
+/// widgets never import StoreKit.
+enum WidgetEntitlement {
+    static var isPro: Bool {
+        UserDefaults(suiteName: WidgetShared.appGroup)?
+            .bool(forKey: WidgetShared.proUnlockedKey) ?? false
+    }
+}
+
+/// Locked placeholder for Pro-gated widgets (Signature, Consistency).
+/// A quiet lock + one line; tapping deep-links to the paywall via
+/// the containing view's `widgetURL`.
+struct WidgetProLock: View {
+    let title: String
+
+    @Environment(\.widgetFamily) private var family
+
+    var body: some View {
+        VStack(spacing: Space.sm) {
+            Image(systemName: "lock.fill")
+                .font(.system(size: compact ? 15 : 22, weight: .medium))
+                .foregroundStyle(Ink.tertiary)
+                .accessibilityHidden(true)
+            if !compact {
+                Text(title)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .multilineTextAlignment(.center)
+            }
+            Text("Unlock in Vivobody")
+                .font(compact ? Typography.micro : Typography.caption)
+                .foregroundStyle(Ink.secondary)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(Space.sm)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title), part of Vivobody Pro. Unlock in the app.")
+    }
+
+    private var compact: Bool {
+        switch family {
+        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 extension Double {
     var widgetOneDecimal: String {
         String(format: "%.1f", self)

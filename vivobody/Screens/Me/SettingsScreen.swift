@@ -25,6 +25,13 @@ struct SettingsScreen: View {
     /// which wipes and re-seeds the ExerciseCatalogItem store.
     @Environment(\.modelContext) private var modelContext
 
+    /// Pro entitlement, injected by AppRoot. Optional so previews
+    /// still build — nil renders as unlocked. Drives the Vivobody
+    /// Pro row and the Apple Health gate.
+    @Environment(ProStore.self) private var pro: ProStore?
+
+    private var isPro: Bool { pro?.isUnlocked ?? true }
+
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
 
@@ -67,11 +74,14 @@ struct SettingsScreen: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                preferencesSection
+                proSection
                     .settleIn(0)
+                preferencesSection
+                    .padding(.top, Space.section)
+                    .settleIn(1)
                 footer
                     .padding(.top, Space.xxl)
-                    .settleIn(1)
+                    .settleIn(2)
             }
             .padding(.top, Space.sm)
             // Extra tail so the last row clears the floating tab bar
@@ -84,6 +94,68 @@ struct SettingsScreen: View {
         .detailForgeBackground()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - Vivobody Pro
+
+    /// The one quiet Pro surface in Settings. Free → a tappable row
+    /// that opens the paywall; owned → a static "Unlocked" row. No
+    /// banners, no countdowns, nothing anywhere else.
+    @ViewBuilder
+    private var proSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Vivobody Pro")
+
+            if isPro {
+                HStack {
+                    VStack(alignment: .leading, spacing: Space.xs) {
+                        Text("Vivobody Pro")
+                            .font(Typography.sectionHeading)
+                            .foregroundStyle(Ink.primary)
+                        Text("Unlocked — thank you")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                    Spacer()
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(Typography.headline)
+                        .foregroundStyle(Tint.primary)
+                        .accessibilityHidden(true)
+                }
+                .padding(.horizontal, Space.md)
+                .padding(.vertical, Space.sm)
+                .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
+                .coloredGlassControl(cornerRadius: Radius.chip, interactive: false)
+                .accessibilityElement(children: .combine)
+            } else {
+                Button {
+                    pro?.requestUnlock()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: Space.xs) {
+                            Text("Unlock Vivobody Pro")
+                                .font(Typography.sectionHeading)
+                                .foregroundStyle(Ink.primary)
+                            Text("Insights, progress charts, unlimited templates")
+                                .font(Typography.caption)
+                                .foregroundStyle(Ink.tertiary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(Typography.sectionLabel)
+                            .foregroundStyle(Ink.tertiary)
+                            .frame(width: 44, height: 44)
+                            .accessibilityHidden(true)
+                    }
+                    .padding(.horizontal, Space.md)
+                    .padding(.vertical, Space.sm)
+                    .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
+                    .coloredGlassControl(cornerRadius: Radius.chip)
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("Opens the Vivobody Pro purchase sheet")
+            }
+        }
     }
 
     // MARK: - Preferences
@@ -372,8 +444,42 @@ struct SettingsScreen: View {
     /// Apple Health opt-in. Enabling requests write authorization;
     /// the toggle settles to the real grant (reverts to off if the
     /// user declines). Only shown when HealthKit exists on the device
-    /// — so it never appears in the Simulator.
+    /// — so it never appears in the Simulator. Part of Pro: the free
+    /// tier shows a lock in place of the toggle, and tapping the row
+    /// opens the paywall.
+    @ViewBuilder
     private var healthKitRow: some View {
+        if isPro {
+            unlockedHealthKitRow
+        } else {
+            Button {
+                pro?.requestUnlock()
+            } label: {
+                HStack {
+                    VStack(alignment: .leading, spacing: Space.xs) {
+                        Text("Apple Health")
+                            .font(Typography.sectionHeading)
+                            .foregroundStyle(Ink.primary)
+                        Text("Save finished workouts to the Health app · Pro")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                    Spacer()
+                    Image(systemName: "lock.fill")
+                        .font(Typography.sectionLabel)
+                        .foregroundStyle(Ink.tertiary)
+                        .frame(width: 44, height: 44)
+                        .accessibilityHidden(true)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Apple Health, part of Vivobody Pro")
+            .accessibilityHint("Opens the Vivobody Pro purchase sheet")
+        }
+    }
+
+    private var unlockedHealthKitRow: some View {
         HStack {
             VStack(alignment: .leading, spacing: Space.xs) {
                 Text("Apple Health")

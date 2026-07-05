@@ -25,6 +25,12 @@ public nonisolated enum WidgetShared {
     public static let completeSetRequestKey = "widgets.intent.completeSetRequestedAt"
     public static let startTemplateWorkoutRequestKey = "widgets.intent.startTemplateId"
     public static let templatesSnapshotKey = "widgets.templates.snapshot"
+    /// Bool — whether the Pro lifetime unlock is owned. Written by the
+    /// app's ProStore on every entitlement change; read by the
+    /// Signature and Consistency widgets to decide between real
+    /// content and the locked placeholder. Widgets never touch
+    /// StoreKit themselves.
+    public static let proUnlockedKey = "settings.proUnlocked"
 }
 
 // MARK: - Versioned envelope

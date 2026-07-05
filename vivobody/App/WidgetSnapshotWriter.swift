@@ -297,7 +297,15 @@ enum WidgetSnapshotWriter {
     }
 
     private static func mirrorPreferences(unit: WeightUnit) {
-        UserDefaults(suiteName: WidgetShared.appGroup)?
-            .set(unit.rawValue, forKey: WidgetShared.weightUnitKey)
+        let defaults = UserDefaults(suiteName: WidgetShared.appGroup)
+        defaults?.set(unit.rawValue, forKey: WidgetShared.weightUnitKey)
+        // Keep the widget-side Pro flag in step with the app-side
+        // entitlement cache on every snapshot write. ProStore writes
+        // the same key on entitlement changes; this covers writes
+        // that happen before its async resolution lands.
+        defaults?.set(
+            UserDefaults.standard.bool(forKey: SettingsKey.proUnlockedCache),
+            forKey: WidgetShared.proUnlockedKey
+        )
     }
 }

@@ -143,6 +143,14 @@ struct LibraryScreen: View {
         case .templates:
             let descriptor = FetchDescriptor<WorkoutTemplate>()
             let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+            // The free tier includes ProGate.freeTemplateLimit
+            // templates; creating the next one presents the paywall
+            // instead of the editor. Existing templates always stay
+            // editable, startable, and deletable — only creation gates.
+            guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
+                appState.pro.requestUnlock()
+                return
+            }
             templateEditorTarget = .new(sortOrder: count)
             Haptics.soft()
         case .exercises:

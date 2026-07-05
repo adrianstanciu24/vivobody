@@ -50,6 +50,11 @@ nonisolated enum SettingsKey {
     /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
     /// delete-all + reindex runs once per app version, not every launch.
     static let spotlightReindexedVersion = "settings.spotlightReindexedVersion"
+    /// Bool — last known Pro entitlement, mirrored by ProStore so the
+    /// UI doesn't flash locked on a cold offline launch while StoreKit
+    /// resolves. A render hint only — `Transaction.currentEntitlements`
+    /// remains the source of truth and overwrites this on every launch.
+    static let proUnlockedCache = "settings.proUnlockedCache"
 }
 
 nonisolated enum SettingsDefaults {
@@ -61,6 +66,7 @@ nonisolated enum SettingsDefaults {
     static let healthKitEnabled = false
     static let onboardingCompleted = false
     static let hasScrubbedNumber = false
+    static let proUnlockedCache = false
 }
 
 /// The user's colour-scheme preference. `system` follows the OS;

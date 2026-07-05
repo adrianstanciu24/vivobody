@@ -1,0 +1,33 @@
+{
+  "identifier" : "8F3A1C0E-5D2B-4E7A-9C41-VIVOBODYPRO1",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "24.99",
+      "familyShareable" : false,
+      "internalID" : "6A0B2D4F-1E3C-4A5B-8D9E-VIVOBODYPRO2",
+      "localizations" : [
+        {
+          "description" : "Insights, progress charts, unlimited templates, widgets, Apple Health.",
+          "displayName" : "Vivobody Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "astanciu.vivobody.app.pro.lifetime",
+      "referenceName" : "Vivobody Pro Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

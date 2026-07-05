@@ -66,6 +66,12 @@ final class AppState {
     /// recomputation when the dataset hasn't changed.
     let analytics = SessionAnalytics()
 
+    /// The Pro entitlement store — the app's single StoreKit
+    /// boundary. Screens read `pro.status` to gate the depth layer
+    /// and call `pro.requestUnlock()` to present the shared paywall
+    /// sheet (bound in AppRoot).
+    let pro = ProStore()
+
     init() {
         workout.appState = self
     }

@@ -33,31 +33,39 @@ struct SignatureWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let snapshot: SignatureSnapshot
 
+    /// Pro-gated: the app mirrors the entitlement into the App Group;
+    /// free renders the locked placeholder deep-linking to the paywall.
+    private var isPro: Bool { WidgetEntitlement.isPro }
+
     var body: some View {
         Group {
-            switch family {
-            case .accessoryCircular:
-                SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                    .padding(4)
-            case .accessoryRectangular:
-                HStack(spacing: Space.sm) {
+            if !isPro {
+                WidgetProLock(title: "Your Signature")
+            } else {
+                switch family {
+                case .accessoryCircular:
                     SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                        .frame(width: 42, height: 42)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(snapshot.dominantGroup.map { "\($0)-led" } ?? "Balanced")
-                            .font(Typography.headline)
-                        Text(String(format: "%.1fx a week", snapshot.cadence))
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(Ink.secondary)
+                        .padding(4)
+                case .accessoryRectangular:
+                    HStack(spacing: Space.sm) {
+                        SignatureEmblem(snapshot: snapshot, showsLabels: false)
+                            .frame(width: 42, height: 42)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(snapshot.dominantGroup.map { "\($0)-led" } ?? "Balanced")
+                                .font(Typography.headline)
+                            Text(String(format: "%.1fx a week", snapshot.cadence))
+                                .font(Typography.metricUnit)
+                                .foregroundStyle(Ink.secondary)
+                        }
                     }
+                case .accessoryInline:
+                    Text(snapshot.verdictLine)
+                default:
+                    system
                 }
-            case .accessoryInline:
-                Text(snapshot.verdictLine)
-            default:
-                system
             }
         }
-        .widgetURL(URL(string: "vivobody://insights"))
+        .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
         .dynamicTypeSize(.large)
     }

@@ -66,6 +66,7 @@ struct AppRoot: View {
 
     var body: some View {
         @Bindable var workout = appState.workout
+        @Bindable var pro = appState.pro
 
         tabView
             .preferredColorScheme(appearance.colorScheme)
@@ -179,10 +180,14 @@ struct AppRoot: View {
                 }
                 .presentationDragIndicator(.visible)
             }
+            .sheet(isPresented: $pro.isPaywallPresented) {
+                PaywallSheet(pro: appState.pro)
+            }
             .fullScreenCover(isPresented: showOnboarding) {
                 OnboardingScreen(onStart: { onboardingCompleted = true })
             }
             .environment(\.sessionAnalytics, appState.analytics)
+            .environment(appState.pro)
     }
 
     private var tabView: some View {

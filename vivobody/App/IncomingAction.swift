@@ -29,6 +29,8 @@ enum IncomingAction: Equatable {
     case showExercise(UUID)
     /// Complete the active set on the current exercise (widget tap).
     case completeActiveSet
+    /// Present the Vivobody Pro paywall (locked-widget tap).
+    case showPaywall
 }
 
 // MARK: - Parsers
@@ -53,6 +55,8 @@ enum IncomingActionParser {
             return .openTab(.insights)
         case "workout":
             return .resumeWorkout
+        case "pro":
+            return .showPaywall
         default:
             return .openTab(.today)
         }

@@ -44,11 +44,77 @@ struct InsightsScreen: View {
         Group {
             if completedSessions.isEmpty {
                 emptyState
-            } else {
+            } else if appState.pro.isUnlocked {
                 loadedContent
+            } else {
+                lockedContent
             }
         }
         .forgeBackground()
+    }
+
+    // MARK: - Locked state (free tier)
+
+    /// The user's REAL insights, frozen behind frosted glass, with a
+    /// single quiet unlock card floated on top. Their own symmetry
+    /// chart is the pitch — not a feature list. Never shown before
+    /// the first workout (the empty state wins), and never as a
+    /// popup anywhere else in the app.
+    private var lockedContent: some View {
+        ZStack {
+            loadedContent
+                .blur(radius: 16)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+
+            Surface.background
+                .opacity(0.45)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+
+            unlockCard
+                .padding(.horizontal, Space.gutter)
+        }
+    }
+
+    private var unlockCard: some View {
+        VStack(spacing: Space.lg) {
+            Text("Vivobody Pro")
+                .font(Typography.title)
+                .foregroundStyle(Ink.primary)
+
+            Text("The full read on your training — signature, strength trajectory, symmetry, and where your lifts are heading. Built from the \(sessionCountLabel) you've already logged.")
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Button {
+                appState.pro.requestUnlock()
+            } label: {
+                Text(unlockButtonLabel)
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .accessibilityLabel("Unlock Vivobody Pro")
+
+            Text("One-time purchase. Logging stays free forever.")
+                .font(Typography.micro)
+                .foregroundStyle(Ink.quaternary)
+        }
+        .padding(Space.xxl)
+        .glassCard()
+    }
+
+    private var unlockButtonLabel: String {
+        if let price = appState.pro.displayPrice {
+            return "Unlock · \(price)"
+        }
+        return "Unlock"
+    }
+
+    private var sessionCountLabel: String {
+        let count = completedSessions.count
+        return count == 1 ? "workout" : "\(count) workouts"
     }
 
     private var loadedContent: some View {

@@ -329,6 +329,14 @@ final class WorkoutSessionController {
 
         case .completeActiveSet:
             completeActiveSet()
+
+        case .showPaywall:
+            // The paywall sheet is bound at AppRoot; anything already
+            // presented there (expanded workout, Spotlight detail)
+            // must come down first or the presentation is dropped.
+            isWorkoutExpanded = false
+            appState?.pendingSpotlightExercise = nil
+            appState?.pro.isPaywallPresented = true
         }
     }
 }

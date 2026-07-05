@@ -52,6 +52,11 @@ struct ExerciseDetailScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.sessionAnalytics) var sessionAnalytics
 
+    /// Pro entitlement, injected by AppRoot. Optional so previews
+    /// (which don't inject it) still build — nil renders unlocked.
+    /// Gates the progress chart; the numeric stats stay free.
+    @Environment(ProStore.self) var pro: ProStore?
+
     /// All archived sessions — drives progress chart + last-used +
     /// total-count + recent table. Same filter as the picker; live
     /// in-flight sessions never contribute.
@@ -69,6 +74,10 @@ struct ExerciseDetailScreen: View {
 
     @State private var editorTarget: CatalogEditorTarget?
     @State private var isConfirmingDelete: Bool = false
+    /// Local paywall presentation — this screen can live inside other
+    /// sheets (Spotlight detail, exercise picker), where the app-root
+    /// paywall sheet can't present on top.
+    @State var isPaywallPresented: Bool = false
     @State var isEditingOneRepMax: Bool = false
     @State var range: TimeRange = .all
     @State var chartMetric: ChartMetric = .e1rm
@@ -133,7 +142,11 @@ struct ExerciseDetailScreen: View {
                     oneRepMaxRow
                 }
                 if hasHistory {
-                    chartSection
+                    if pro?.isUnlocked ?? true {
+                        chartSection
+                    } else {
+                        lockedChartSection
+                    }
                 }
                 effortSection
                 muscleBreakdownSection
@@ -178,6 +191,11 @@ struct ExerciseDetailScreen: View {
         }
         .sheet(item: $editorTarget) { target in
             CustomExerciseEditorSheet(target: target)
+        }
+        .sheet(isPresented: $isPaywallPresented) {
+            if let pro {
+                PaywallSheet(pro: pro)
+            }
         }
         .sheet(isPresented: $isEditingOneRepMax) {
             OneRepMaxEditorSheet(

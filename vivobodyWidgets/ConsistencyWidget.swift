@@ -33,29 +33,37 @@ struct ConsistencyWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let snapshot: ConsistencySnapshot
 
+    /// Pro-gated: the app mirrors the entitlement into the App Group;
+    /// free renders the locked placeholder deep-linking to the paywall.
+    private var isPro: Bool { WidgetEntitlement.isPro }
+
     var body: some View {
         Group {
-            switch family {
-            case .accessoryCircular:
-                VStack(spacing: 0) {
-                    Text("\(snapshot.weekStreak)")
-                        .font(.system(size: 20, weight: .bold, design: .monospaced))
-                    Text("wks")
-                        .font(Typography.micro)
+            if !isPro {
+                WidgetProLock(title: "Consistency")
+            } else {
+                switch family {
+                case .accessoryCircular:
+                    VStack(spacing: 0) {
+                        Text("\(snapshot.weekStreak)")
+                            .font(.system(size: 20, weight: .bold, design: .monospaced))
+                        Text("wks")
+                            .font(Typography.micro)
+                    }
+                case .accessoryRectangular:
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("\(snapshot.weekStreak) weeks")
+                            .font(Typography.headline)
+                        cadenceRow
+                    }
+                case .accessoryInline:
+                    Text("\(snapshot.weekStreak) weeks in a row")
+                default:
+                    system
                 }
-            case .accessoryRectangular:
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("\(snapshot.weekStreak) weeks")
-                        .font(Typography.headline)
-                    cadenceRow
-                }
-            case .accessoryInline:
-                Text("\(snapshot.weekStreak) weeks in a row")
-            default:
-                system
             }
         }
-        .widgetURL(URL(string: "vivobody://insights/consistency"))
+        .widgetURL(URL(string: isPro ? "vivobody://insights/consistency" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
         .dynamicTypeSize(.large)
     }
