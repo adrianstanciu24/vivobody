@@ -325,9 +325,15 @@ struct ActiveWorkoutScreen: View {
     /// lime verb button, the same shape language as the cards' set
     private var pager: some View {
         let exercises = session.orderedExercises
+        // Slimmer side chrome than the pager's default: the workout
+        // card is an instrument read from arm's length, so the width
+        // goes to the numerals — a sliver of neighbor peek plus the
+        // page dots is enough "there's more" cue.
         return SwipePager(
             selection: $session.activeExerciseIndex,
-            count: exercises.count + 1
+            count: exercises.count + 1,
+            peekWidth: 10,
+            spacing: 8
         ) { i in
             if i < exercises.count {
                 ActiveExerciseCard(

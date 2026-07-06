@@ -146,7 +146,15 @@ struct BareScrubber: View {
     /// not from the live value, so the scale stays constant across
     /// digit-count changes. Only used when `fitsWidth` is true.
     @State private var templateWidth: CGFloat = 0
+    /// Height of the hidden worst-case sizing row — same fonts as the
+    /// live row, so it doubles as the hero's layout height while the
+    /// live row itself stays out of layout (see `heroLayout`).
+    @State private var templateHeight: CGFloat = 0
     /// Width the scrubber is actually offered by its container.
+    /// Measured from the proposal-sized clear base in `heroLayout`,
+    /// which the number row can never stretch — measuring the row's
+    /// own container instead would feed its overflow back into
+    /// `fitScale` and lock the whole card oversized.
     @State private var availableWidth: CGFloat = 0
 
     /// Value-settle spring. When Reduce Motion is on, skip the
@@ -282,31 +290,39 @@ struct BareScrubber: View {
     }
 
     /// When `fitsWidth` is off, the number keeps its intrinsic width
-    /// (galleries, editors). When on, the row is uniformly scaled by
-    /// `fitScale` — derived from the hidden `sizingRow`, which lives
-    /// in an overlay so it can never influence layout — and its frame
-    /// is capped at the scaled width so the intrinsic 104pt row can
-    /// never stretch the parent card. `scaleEffect` doesn't change
-    /// layout, so measuring stays free of feedback.
+    /// (galleries, editors). When on, the layout element is a clear
+    /// base that takes exactly the offered width and the sizing row's
+    /// height; the live number row renders in an OVERLAY on that
+    /// base. Overlays never negotiate layout, so the intrinsic 104pt
+    /// row can never stretch the parent card — a yet-unmeasured
+    /// worst-case value used to overflow the card, get its own
+    /// stretched width measured back as "available", and freeze the
+    /// whole card oversized until the digit count dropped.
+    /// `scaleEffect` doesn't change layout, so measuring stays free
+    /// of feedback.
     @ViewBuilder
     private var heroLayout: some View {
         if fitsWidth {
-            HStack(alignment: .center, spacing: Space.sm) {
-                numberUnitRow
-                    .fixedSize(horizontal: true, vertical: false)
-                    .background(widthReader($naturalWidth))
-                    .scaleEffect(fitScale, anchor: .leading)
-                    .frame(width: naturalWidth > 0 ? naturalWidth * fitScale : nil, alignment: .leading)
-                hintChevrons
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(widthReader($availableWidth))
-            .overlay(alignment: .leading) {
-                sizingRow
-                    .fixedSize()
-                    .background(widthReader($templateWidth))
-                    .hidden()
-            }
+            Color.clear
+                .frame(maxWidth: .infinity)
+                .frame(height: max(fontSize, templateHeight))
+                .background(widthReader($availableWidth))
+                .overlay(alignment: .leading) {
+                    HStack(alignment: .center, spacing: Space.sm) {
+                        numberUnitRow
+                            .fixedSize(horizontal: true, vertical: false)
+                            .background(widthReader($naturalWidth))
+                            .scaleEffect(fitScale, anchor: .leading)
+                            .frame(width: naturalWidth > 0 ? naturalWidth * fitScale : nil, alignment: .leading)
+                        hintChevrons
+                    }
+                }
+                .overlay(alignment: .leading) {
+                    sizingRow
+                        .fixedSize()
+                        .background(sizeReader($templateWidth, $templateHeight))
+                        .hidden()
+                }
         } else {
             HStack(alignment: .center, spacing: Space.sm) {
                 numberUnitRow
@@ -335,6 +351,21 @@ struct BareScrubber: View {
             Color.clear
                 .onAppear { binding.wrappedValue = proxy.size.width }
                 .onChange(of: proxy.size.width) { _, w in binding.wrappedValue = w }
+        }
+    }
+
+    /// Same as `widthReader`, but captures both dimensions.
+    private func sizeReader(_ width: Binding<CGFloat>, _ height: Binding<CGFloat>) -> some View {
+        GeometryReader { proxy in
+            Color.clear
+                .onAppear {
+                    width.wrappedValue = proxy.size.width
+                    height.wrappedValue = proxy.size.height
+                }
+                .onChange(of: proxy.size) { _, s in
+                    width.wrappedValue = s.width
+                    height.wrappedValue = s.height
+                }
         }
     }
 
@@ -657,6 +688,45 @@ private struct GraduationRail: View {
         .accessibilityHidden(true)
     }
 }
+
+#if DEBUG
+// Regression canary for the fitsWidth feedback loop: a 3-digit kg
+// value at hero size, first-rendered inside the pager's card width.
+// The number must scale down to the gutter width and the full-width
+// bar below must hug the red container — if either pokes past the
+// border, the availableWidth measurement is leaking again.
+#Preview("Fits width · worst case") {
+    struct Harness: View {
+        @State private var weight: Double = 192.5
+        var body: some View {
+            VStack(alignment: .leading, spacing: Space.lg) {
+                BareScrubber(
+                    value: $weight,
+                    range: 0...275,
+                    step: 2.5,
+                    pointsPerStep: 8,
+                    fontSize: 104,
+                    unit: "kg",
+                    unitFontSize: 18,
+                    accessibilityLabel: "Weight",
+                    fitsWidth: true
+                )
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.orange.opacity(0.35))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 60)
+            }
+            .padding(.horizontal, 20)
+            .frame(width: 334)
+            .border(Color.red.opacity(0.5))
+        }
+    }
+    return Harness()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+}
+#endif
 
 /// Animated up/down chevrons that bob in their respective directions
 /// to telegraph the vertical scrub gesture. A travelling highlight
