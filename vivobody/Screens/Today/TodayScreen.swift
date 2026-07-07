@@ -60,8 +60,7 @@ struct TodayScreen: View {
     @State private var pendingStart: (() -> Void)?
 
     var body: some View {
-        GeometryReader { proxy in
-                ScrollView {
+        ScrollView {
                     // The body leads — your trained figure is the hero
                     // and the readout's subject. The readiness line gives
                     // it a voice; then START is the biggest, first-thing-
@@ -85,7 +84,7 @@ struct TodayScreen: View {
                         // caption unreadable).
                         VStack(spacing: Space.sm) {
                             bodyModelHero(
-                                height: bodyHeroHeight(viewport: proxy.size.height),
+                                height: bodyHeroHeight(),
                                 state: modelState
                             )
                             figureCaption
@@ -102,6 +101,7 @@ struct TodayScreen: View {
                                     .opacity(1 - abs(phase.value) * 0.30)
                             }
                             .settleIn(0)
+
                         if !attention.isEmpty {
                             needsAttentionSection(attention).settleIn(1)
                             SectionDivider().settleIn(2)
@@ -146,7 +146,6 @@ struct TodayScreen: View {
                     // since the value only grows).
                     if newHeight > heroHeight { heroHeight = newHeight }
                 }
-        }
         .onAppear {
             Haptics.prepare()
             // A soft "powered-on" tick as the screen settles in — the

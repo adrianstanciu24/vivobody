@@ -408,8 +408,15 @@ extension TodayScreen {
     /// underneath the button. `heroHeight` is frozen on first layout
     /// (see `body`), so the model holds a constant size as the large
     /// title collapses on scroll rather than rescaling mid-gesture.
-    func bodyHeroHeight(viewport: CGFloat) -> CGFloat {
-        let base = heroHeight > 0 ? heroHeight : viewport
+    func bodyHeroHeight() -> CGFloat {
+        // `heroHeight` is latched from the scroll view's own geometry
+        // (see `onGeometryChange` in `body`). Until the first layout
+        // pass reports it the figure has no height and simply grows into
+        // place — masked by the section's fade-in — so we no longer need
+        // a `GeometryReader` wrapper (which was inflating the scroll
+        // content past the screen width and shifting every row right).
+        let base = heroHeight
+        guard base > 0 else { return 0 }
         return max(
             base * Self.minimumHeroFraction,
             base * Self.heroFraction - Self.pinnedStartBarClearance
