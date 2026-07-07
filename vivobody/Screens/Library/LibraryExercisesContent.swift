@@ -48,7 +48,9 @@ struct LibraryExercisesContent: View {
 
     var body: some View {
         Group {
-            if filteredGroups.isEmpty {
+            if isSearching {
+                searchList
+            } else if filteredGroups.isEmpty {
                 VStack(spacing: 0) {
                     LibrarySegmentBar(selection: $segment)
                     equipmentFilterStrip
@@ -82,12 +84,40 @@ struct LibraryExercisesContent: View {
 
     // MARK: - Filter / group
 
-    private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
-        let trimmed = searchText.trimmingCharacters(in: .whitespaces).lowercased()
+    /// True when the search field has real content — drives the
+    /// switch from grouped browse to a flat, relevance-ranked list.
+    private var isSearching: Bool {
+        !searchText.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    /// History keys for exercises the user has actually logged, used
+    /// as the tracked-boost set for `ExerciseSearch`.
+    private var trackedKeys: Set<String> {
+        Set(lastInstanceLookup.keys)
+    }
+
+    /// Catalog narrowed by the equipment chip only (no text filter).
+    /// Shared by the grouped browse path and the search-ranked path
+    /// so the equipment lens behaves identically in both modes.
+    private var scopedItems: [ExerciseCatalogItem] {
         var scope = items
         if let filter = equipmentFilter {
             scope = scope.filter { $0.equipment == filter }
         }
+        return scope
+    }
+
+    /// Flat, relevance-ranked results for the active query. Equipment
+    /// filter is applied first (via `scopedItems`), then `ExerciseSearch`
+    /// tiers and sorts so "pull" surfaces "Pull-ups" before "Lat Pull
+    /// Down" instead of respecting muscle-group enum order.
+    private var searchResults: [ExerciseCatalogItem] {
+        ExerciseSearch.rank(items: scopedItems, query: searchText, trackedKeys: trackedKeys)
+    }
+
+    private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
+        let trimmed = searchText.trimmingCharacters(in: .whitespaces).lowercased()
+        var scope = scopedItems
         if !trimmed.isEmpty {
             scope = scope.filter { item in
                 if item.name.lowercased().contains(trimmed) { return true }
@@ -160,6 +190,43 @@ struct LibraryExercisesContent: View {
                     }
                 }
                 .padding(.bottom, Space.xxl + Space.xs)
+            }
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+    }
+
+    // MARK: - Search list (flat, ranked)
+
+    /// While a search query is active, muscle-group sections are
+    /// dropped in favor of one flat, best-match-first list — the
+    /// grouped layout can only rank *within* a group, so it can never
+    /// put "Pull-ups" (back) above "Cable pull through" (legs) by
+    /// relevance. Rows reuse the same `row(_:)` renderer as the
+    /// grouped path so the prominent/recent decoration stays
+    /// consistent. Empty query keeps the grouped browse (`exerciseList`).
+    private var searchList: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                LibrarySegmentBar(selection: $segment)
+                    .padding(.horizontal, -Space.gutter)
+                equipmentFilterStrip
+                    .padding(.horizontal, -Space.gutter)
+
+                if searchResults.isEmpty {
+                    emptyState
+                        .padding(.top, Space.xxl)
+                } else {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(Array(searchResults.enumerated()), id: \.element.id) { idx, item in
+                            if idx > 0 { SectionDivider() }
+                            row(item)
+                                .settleIn(idx)
+                        }
+                    }
+                    .padding(.bottom, Space.xxl + Space.xs)
+                }
             }
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)

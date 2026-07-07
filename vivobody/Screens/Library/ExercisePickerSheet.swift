@@ -15,11 +15,13 @@
 //      Edit opens the same CustomExerciseEditorSheet in edit mode;
 //      Delete asks for confirmation, then removes the row.
 //
-//  Sectioned by muscle group, searchable across the full list.
-//  Search uses .searchable(placement: .toolbar) +
-//  .searchToolbarBehavior(.minimize) — the field lives in the
-//  bottom toolbar and collapses on scroll, matching Library's
-//  house style.
+//  Sectioned by muscle group for browsing; while a search query is
+//  active the sections collapse into a flat, relevance-ranked list
+//  (see ExerciseSearch) so "pull" surfaces "Pull-ups" first instead
+//  of respecting muscle-group enum order. Search uses
+//  .searchable(placement: .toolbar) + .searchToolbarBehavior(.minimize)
+//  — the field lives in the bottom toolbar and collapses on scroll,
+//  matching Library's house style.
 //
 
 import VivoKit
@@ -84,11 +86,15 @@ struct ExercisePickerSheet: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: Space.section) {
                         equipmentFilterStrip
-                        ForEach(filteredGroups, id: \.group) { section in
-                            groupSection(group: section.group, items: section.items)
-                        }
-                        if filteredGroups.isEmpty {
-                            emptyState
+                        if isSearching {
+                            searchResultsList
+                        } else {
+                            ForEach(filteredGroups, id: \.group) { section in
+                                groupSection(group: section.group, items: section.items)
+                            }
+                            if filteredGroups.isEmpty {
+                                emptyState
+                            }
                         }
                     }
                     .padding(.top, Space.md)
@@ -142,19 +148,46 @@ struct ExercisePickerSheet: View {
 
     // MARK: - Filtering / grouping
 
+    /// True when the search field has real content — switches the
+    /// picker from grouped browse to a flat, relevance-ranked list.
+    private var isSearching: Bool {
+        !query.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    /// History keys for exercises the user has logged — the
+    /// tracked-boost set for `ExerciseSearch`.
+    private var trackedKeys: Set<String> {
+        Set(lastInstanceLookup.keys)
+    }
+
+    /// Catalog narrowed by the equipment chip only (no text filter),
+    /// shared by the grouped and search paths.
+    private var scopedItems: [ExerciseCatalogItem] {
+        var scope = items
+        if let filter = equipmentFilter {
+            scope = scope.filter { $0.equipment == filter }
+        }
+        return scope
+    }
+
+    /// Flat, relevance-ranked results for the active query — same
+    /// ranker as the Library exercises tab so the two surfaces agree
+    /// on what "pull" should surface first.
+    private var searchResults: [ExerciseCatalogItem] {
+        ExerciseSearch.rank(items: scopedItems, query: query, trackedKeys: trackedKeys)
+    }
+
     private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
         let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
 
         // First narrow by equipment filter — the chip strip toggles
         // a global "show only this equipment" lens. Nil = all.
-        var scope = items
-        if let filter = equipmentFilter {
-            scope = scope.filter { $0.equipment == filter }
-        }
+        var scope = scopedItems
 
         // Then narrow by search query — matches against name OR any
         // alias. Aliases let "BP" find "Bench Press"; case-insensitive
-        // substring keeps the matching forgiving.
+        // substring keeps the matching forgiving. (Only reached when
+        // not searching, since the search path uses ExerciseSearch.)
         if !trimmed.isEmpty {
             scope = scope.filter { item in
                 if item.name.lowercased().contains(trimmed) { return true }
@@ -222,6 +255,28 @@ struct ExercisePickerSheet: View {
     }
 
     // MARK: - Sections / rows
+
+    // MARK: - Search results (flat, ranked)
+
+    /// While a query is active, drops the muscle-group sections for
+    /// one flat, best-match-first list — the grouped layout can only
+    /// rank within a group, so it can never put "Pull-ups" above
+    /// "Cable pull through" by relevance. Rows reuse `pickerRow` so
+    /// the pick-on-tap / navigate / context-menu behavior is
+    /// identical to the grouped path.
+    @ViewBuilder
+    private var searchResultsList: some View {
+        if searchResults.isEmpty {
+            emptyState
+        } else {
+            VStack(spacing: 0) {
+                ForEach(Array(searchResults.enumerated()), id: \.element.id) { idx, item in
+                    if idx > 0 { SectionDivider() }
+                    pickerRow(item)
+                }
+            }
+        }
+    }
 
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
