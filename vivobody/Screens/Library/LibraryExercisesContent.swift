@@ -329,8 +329,8 @@ struct LibraryExercisesContent: View {
                 Text(item.name)
                     .font(Typography.sectionHeading)
                     .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(metaLine(item))
                     .font(Typography.caption)
                     .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
@@ -361,15 +361,21 @@ struct LibraryExercisesContent: View {
         prominent: Bool
     ) -> some View {
         if let last {
+            // Keep the numeral on one line and let it hold its width:
+            // a long name should wrap to two lines rather than squeeze
+            // "180 × 10" into a wrapped, oversized stack over the date.
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
                     .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 Text(RelativeDate.short(last.sessionDate))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
             }
+            .layoutPriority(1)
         } else {
             Text(catalogDefaultLabel(item))
                 .font(Typography.caption)
