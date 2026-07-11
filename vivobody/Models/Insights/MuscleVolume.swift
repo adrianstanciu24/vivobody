@@ -2,27 +2,29 @@
 //  MuscleVolume.swift
 //  vivobody
 //
-//  Weekly "effective sets" per muscle — the evidence-based volume
+//  Weekly HARD-SET EQUIVALENTS per muscle — the evidence-based volume
 //  landmark serious lifters track by hand (≈ 10–20 hard sets per
 //  muscle per week). It answers the two questions the coarse
 //  chest/back/legs rollup can't: which muscles are getting enough
 //  work, and which are quietly being neglected.
 //
-//  The trick that makes this possible here is the GRADED involvement
-//  map (`Muscle.involvement`). A set isn't credited whole to one
+//  Two ideas make the count honest. First, the GRADED involvement
+//  map (`Muscle.involvement`): a set isn't credited whole to one
 //  bucket — it's split across every muscle it actually works, by that
 //  muscle's contribution weight. One Bench Press set therefore counts
 //  as 1.0 set for chest, 0.7 for triceps, and 0.4 for the front
-//  delts. Summed across a rolling week, those fractional credits give
-//  a far truer picture of balance than "you did 4 chest exercises."
+//  delts. Second, the shared `SetStimulus` currency: each completed
+//  set is priced as a hard-set equivalent — full credit for a real
+//  working set, demoted for warm-up loads, token weights, heavy
+//  singles, and sets stopped far from failure (RIR). A logged plank
+//  hold prices on its length the same way. `MuscleDevelopment` (the
+//  3D body) consumes the identical calculator, so the bars, the
+//  neglect list, and the body can never drift onto different
+//  definitions of "a set of work."
 //
-//  Only COMPLETED sets count, and both modes count the same: a logged
-//  plank hold is one set just like a logged bench set — volume
-//  landmarks are counted in sets, not reps or seconds.
-//
-//  Everything is a PURE value-type computation driven by injected
-//  dates, so it's fully testable without a simulator (see
-//  `MuscleVolumeTests`).
+//  Only COMPLETED sets count. Everything is a PURE value-type
+//  computation driven by injected dates, so it's fully testable
+//  without a simulator (see `MuscleVolumeTests`).
 //
 
 import Foundation
@@ -100,32 +102,17 @@ nonisolated struct MuscleVolumeStat: Identifiable, Hashable {
     }
 }
 
-// MARK: - Effective-set crediting
-
-extension Exercise {
-    /// Effective-set credit per involved muscle for this exercise's
-    /// completed sets: completed count × graded involvement weight.
-    /// The single work currency `muscleVolume` and `MuscleDevelopment`
-    /// share — extracted so the volume bars and the 3D body can never
-    /// drift onto different definitions of "a set of work."
-    var effectiveSetsByMuscle: [Muscle: Double] {
-        let completed = sets.filter(\.isCompleted).count
-        guard completed > 0 else { return [:] }
-        let weights = muscleInvolvement.weights
-        guard !weights.isEmpty else { return [:] }
-        return weights.mapValues { Double(completed) * $0 }
-    }
-}
-
 // MARK: - Aggregation
 
 extension Array where Element == WorkoutSession {
-    /// Effective sets per muscle over a rolling `window` ending at
-    /// `now` (default: the last 7 days). Every trainable muscle is
+    /// Hard-set equivalents per muscle over a rolling `window` ending
+    /// at `now` (default: the last 7 days). Every trainable muscle is
     /// returned — including ones with zero work, so neglect is
     /// visible rather than missing. Recency (`daysSinceLastTrained`)
     /// scans the full archive so a muscle untouched this week still
-    /// reports how long it's been.
+    /// reports how long it's been. The whole archive is replayed
+    /// chronologically (not just the window) so the `SetStimulus`
+    /// load references are causal.
     func muscleVolume(
         window: TimeInterval = 7 * 86_400,
         now: Date = Date()
@@ -134,11 +121,16 @@ extension Array where Element == WorkoutSession {
 
         var effective: [Muscle: Double] = [:]
         var lastTrained: [Muscle: Date] = [:]
+        var calculator = SetStimulus.Calculator()
 
-        for session in self {
+        let ordered = sorted {
+            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
+        }
+
+        for session in ordered {
             let date = session.completedAt ?? session.startedAt
-            for exercise in session.exercises {
-                let credit = exercise.effectiveSetsByMuscle
+            for exercise in session.orderedExercises {
+                let credit = calculator.credit(for: exercise, at: date)
                 guard !credit.isEmpty else { continue }
 
                 let inWindow = date >= cutoff

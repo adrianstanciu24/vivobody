@@ -9,15 +9,16 @@
 //  The model is one well-understood primitive: a FREQUENCY-INVARIANT
 //  estimate of recent weekly training volume, normalised against the
 //  muscle's productive weekly set range. It shares its work currency
-//  with `MuscleVolume` (one completed set credits each involved muscle
-//  by its graded involvement weight — see
-//  `Exercise.effectiveSetsByMuscle`), so the body, the volume bars,
-//  and the neglect list agree by construction.
+//  with `MuscleVolume` (each completed set is priced in HARD-SET
+//  EQUIVALENTS — load, reps, and RIR aware — then credited to each
+//  involved muscle by its graded involvement weight; see
+//  `SetStimulus`), so the body, the volume bars, and the neglect
+//  list agree by construction.
 //
 //    • Each muscle carries `weeklyVolume` W — a smoothed estimate of
-//      its effective sets per 7 days, kept as a constant-rate leaky
-//      integrator:
-//          on a session of s effective sets:  W += s · (7 / τ)
+//      its hard-set equivalents per 7 days, kept as a constant-rate
+//      leaky integrator:
+//          on a session of s hard-set equivalents:  W += s · (7 / τ)
 //          over an interval of Δt days:        W *= exp(−Δt / τ)
 //      Under any training cadence the steady state depends only on the
 //      AVERAGE weekly rate, not on how the volume is chunked into
@@ -39,17 +40,13 @@
 //      months.
 //
 //  The one-sentence read: colour = your estimated recent weekly
-//  effective sets, versus your productive target.
+//  hard sets, versus your productive target.
 //
 //  One channel comes out, ready for the body-model colour map (see
 //  `MuscleColor` / `BodyModelScene`):
 //    • adaptation ∈ [0,1] — development (drives the tint ramp)
 //
 //  Known limitations (accepted — see specs/muscle-model-fixes.md):
-//    • Load/progression blindness. A 5 lb set counts like a 50 lb set
-//      (reps and RIR likewise); the body reads training consistency
-//      and balance, while per-lift load progression has its own
-//      surfaces (`ExerciseProgress`, strength trajectory).
 //    • No left/right asymmetry. Development is per bilateral `Muscle`;
 //      both `_L`/`_R` meshes share a value and the log can't record
 //      side.
@@ -84,6 +81,10 @@ nonisolated enum MuscleDevelopment {
         /// training volume and how gently it fades on a layoff.
         /// ≈ 65 d is a ~45-day half-life (τ = halfLife / ln 2).
         var tau: Double = 65.0
+
+        /// Knobs of the per-set hard-set-equivalent pricing (RIR,
+        /// rep, and relative-load curves) — see `SetStimulus`.
+        var stimulus: SetStimulus.Parameters = .default
 
         static let `default` = Parameters()
     }
@@ -188,6 +189,7 @@ nonisolated enum MuscleDevelopment {
         parameters: Parameters = .default
     ) -> State {
         var state = State(parameters: parameters)
+        var calculator = SetStimulus.Calculator(parameters: parameters.stimulus)
 
         let ordered = sessions.sorted {
             ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
@@ -196,7 +198,7 @@ nonisolated enum MuscleDevelopment {
         for session in ordered {
             let date = session.completedAt ?? session.startedAt
             advance(&state, to: date)
-            applyStimulus(sessionStimulus(session, parameters: parameters), at: date, to: &state)
+            applyStimulus(sessionStimulus(session, at: date, calculator: &calculator), at: date, to: &state)
         }
 
         // Fade from the last logged session up to the present moment.
@@ -273,22 +275,37 @@ nonisolated enum MuscleDevelopment {
 
     // MARK: - Stimulus from a session
 
-    /// Per-muscle growth stimulus (effective sets) for one session:
-    /// each exercise's completed sets credited to its muscles by their
-    /// graded involvement weight. This is the raw effective-set count
-    /// `MuscleVolume` also uses — the weekly-rate scaling happens in
-    /// `applyStimulus`, so the two surfaces share one definition of
-    /// "a set of work."
+    /// Per-muscle growth stimulus (hard-set equivalents) for one
+    /// session, priced by the replay's `calculator` so the load
+    /// references stay causal across the history. This is the same
+    /// per-set credit `MuscleVolume` accrues — the weekly-rate scaling
+    /// happens in `applyStimulus`, so the two surfaces share one
+    /// definition of "a set of work."
     static func sessionStimulus(
         _ session: WorkoutSession,
-        parameters: Parameters = .default
+        at date: Date,
+        calculator: inout SetStimulus.Calculator
     ) -> [Muscle: Double] {
         var stimulus: [Muscle: Double] = [:]
-        for exercise in session.exercises {
-            for (muscle, sets) in exercise.effectiveSetsByMuscle {
+        for exercise in session.orderedExercises {
+            for (muscle, sets) in calculator.credit(for: exercise, at: date) {
                 stimulus[muscle, default: 0] += sets
             }
         }
         return stimulus
+    }
+
+    /// One-shot convenience for a standalone session, priced against
+    /// a fresh calculator (every lift reads as its first instance).
+    static func sessionStimulus(
+        _ session: WorkoutSession,
+        parameters: Parameters = .default
+    ) -> [Muscle: Double] {
+        var calculator = SetStimulus.Calculator(parameters: parameters.stimulus)
+        return sessionStimulus(
+            session,
+            at: session.completedAt ?? session.startedAt,
+            calculator: &calculator
+        )
     }
 }

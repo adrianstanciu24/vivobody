@@ -41,6 +41,36 @@ struct MuscleCalibrationTests {
         return ex
     }
 
+    /// One completed set for the hard-set honesty programs. A nil
+    /// `rir` means the set was never rated (`rirLogged` false).
+    private struct SetsSpec {
+        var weight: Double
+        var reps: Int
+        var rir: Int? = nil
+    }
+
+    /// A completed bench press with per-set control over weight,
+    /// reps, and rated RIR — the levers the hard-set currency reads.
+    private func bench(_ specs: [SetsSpec]) -> Exercise {
+        let ex = Exercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: specs.count,
+            plannedReps: specs.first?.reps ?? 8,
+            plannedWeight: specs.first?.weight ?? 0
+        )
+        for (spec, set) in zip(specs, ex.orderedSets) {
+            set.weight = spec.weight
+            set.reps = spec.reps
+            set.isCompleted = true
+            if let rir = spec.rir {
+                set.repsInReserve = rir
+                set.rirLogged = true
+            }
+        }
+        return ex
+    }
+
     /// A bench program at a chosen weekly frequency and per-session
     /// set count, running `weeks` weeks. The dose levers volume only —
     /// exactly what the model reads.
@@ -87,6 +117,74 @@ struct MuscleCalibrationTests {
         #expect(delts > 0)                    // assistor credit registers
         #expect(chest > delts + 0.1)          // ...but reads clearly dimmer
         #expect(state.adaptation(.quads) == 0) // untouched stays dark
+    }
+
+    // MARK: - Hard-set honesty (load / reps / RIR currency)
+
+    /// Same set count, different substance: 12 weeks of 3 working
+    /// sets + 3 warm-up ramps must land visibly below 12 weeks of 6
+    /// working sets. The raw-count currency read these as identical.
+    @Test func warmupPaddingReadsBelowWorkingVolume() {
+        func program(warmups: Bool) -> [WorkoutSession] {
+            (0..<24).map { i in
+                let working = SetsSpec(weight: 135, reps: 8)
+                let warmup = SetsSpec(weight: 55, reps: 8)
+                let plan = warmups
+                    ? [warmup, warmup, warmup, working, working, working]
+                    : [working, working, working, working, working, working]
+                return session(at: day(Double(i) * 3.5), [bench(plan)])
+            }
+        }
+        let padded = program(warmups: true)
+        let honest = program(warmups: false)
+
+        let a = chest(padded, at: padded.last!.completedAt!)
+        let b = chest(honest, at: honest.last!.completedAt!)
+
+        #expect(b > a + 0.05)   // visibly apart on the ramp
+        #expect(a > 0.4)        // the working half still reads as real training
+    }
+
+    /// Token weights against established strength: after four honest
+    /// weeks, dropping to ~10% of demonstrated e1RM must read clearly
+    /// below staying at working weight.
+    @Test func tokenWeightBlockReadsBelowWorkingWeight() {
+        func block(thenWeight: Double) -> [WorkoutSession] {
+            (0..<24).map { i in
+                let weight = i < 8 ? 135.0 : thenWeight
+                return session(at: day(Double(i) * 3.5), [bench(Array(
+                    repeating: SetsSpec(weight: weight, reps: 8), count: 6
+                ))])
+            }
+        }
+        let token = block(thenWeight: 15)
+        let working = block(thenWeight: 135)
+
+        let a = chest(token, at: token.last!.completedAt!)
+        let b = chest(working, at: working.last!.completedAt!)
+
+        #expect(b > a + 0.1)
+        #expect(a > 0.2)        // floored, faded — but not erased
+    }
+
+    /// Effort honesty: the same program logged at RIR 5 (nowhere near
+    /// failure) must read visibly below RIR 1.
+    @Test func farFromFailureReadsBelowHardTraining() {
+        func program(rir: Int) -> [WorkoutSession] {
+            (0..<24).map { i in
+                session(at: day(Double(i) * 3.5), [bench(Array(
+                    repeating: SetsSpec(weight: 135, reps: 8, rir: rir), count: 6
+                ))])
+            }
+        }
+        let lazy = program(rir: 5)
+        let hard = program(rir: 1)
+
+        let a = chest(lazy, at: lazy.last!.completedAt!)
+        let b = chest(hard, at: hard.last!.completedAt!)
+
+        #expect(b > a + 0.1)
+        #expect(a > 0.3)        // still real training, just dimmer
     }
 
     // MARK: - Fade schedule
