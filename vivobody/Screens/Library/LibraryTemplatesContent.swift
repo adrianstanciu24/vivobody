@@ -38,6 +38,16 @@ struct LibraryTemplatesContent: View {
         return templates.filter { $0.name.lowercased().contains(trimmed) }
     }
 
+    /// Display order: anything scheduled for today floats to the top
+    /// (the list's implicit "what's next" answer), the rest keep the
+    /// user's manual sortOrder. Both partitions are stable.
+    private var displayed: [WorkoutTemplate] {
+        let today = Calendar.current.component(.weekday, from: Date())
+        let base = filtered
+        return base.filter { $0.isScheduled(on: today) }
+            + base.filter { !$0.isScheduled(on: today) }
+    }
+
     var body: some View {
         Group {
             if templates.isEmpty {
@@ -81,7 +91,7 @@ struct LibraryTemplatesContent: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.lg, trailing: Space.gutter))
 
-            ForEach(filtered) { template in
+            ForEach(displayed) { template in
                 Button {
                     templateEditorTarget = .edit(template)
                 } label: {
@@ -195,44 +205,59 @@ struct LibraryTemplatesContent: View {
 
 // MARK: - Template row
 
-/// A saved plan as a full-width hairline row — no card. Name and a
-/// sentence-case meta line on the left ("4 ex · 16 sets · Chest ·
-/// Back"); the relative last-used date and a faint chevron on the
-/// right. The List that hosts it draws the separators.
+/// A saved plan as a full-width hairline row — no card. Two tiers,
+/// mirroring the Exercises segment: a template scheduled for today
+/// reads prominent (brighter name, larger numeral, taller row), the
+/// rest stay quiet. Left side: name, a sentence-case meta line
+/// ("4 exercises · Chest · Back"), and — when scheduled — a seven-
+/// letter weekday rail with the pinned days lit (today's in orange).
+/// Right side: the total planned-set count as a monospaced numeral,
+/// the row's instrument anchor. The List that hosts it draws the
+/// separators.
 struct TemplateCard: View {
     let template: WorkoutTemplate
 
+    private var isToday: Bool {
+        template.isScheduled(on: Calendar.current.component(.weekday, from: Date()))
+    }
+
     var body: some View {
-        HStack(spacing: Space.md) {
+        HStack(alignment: .center, spacing: Space.md) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(template.name)
                     .font(Typography.title)
-                    .foregroundStyle(Ink.primary)
+                    .foregroundStyle(isToday ? Ink.primary : Ink.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Text(subtitle)
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+                    .foregroundStyle(isToday ? Ink.tertiary : Ink.quaternary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 if template.isScheduled {
-                    Text(WeekdayLabels.summary(template.scheduledWeekdays))
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.secondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                    WeekdayRail(
+                        scheduled: Set(template.scheduledWeekdays),
+                        today: Calendar.current.component(.weekday, from: Date())
+                    )
+                    .padding(.top, 2)
                 }
             }
 
             Spacer(minLength: Space.sm)
 
-            if let used = template.lastUsedAt {
-                Text(Self.relative.localizedString(for: used, relativeTo: Date()))
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("\(template.totalPlannedSets)")
+                    .font(isToday ? Typography.statValue : Typography.metricInline)
+                    .foregroundStyle(Ink.primary)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                Text(template.totalPlannedSets == 1 ? "set" : "sets")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
             }
+            .layoutPriority(1)
         }
-        .frame(minHeight: Space.rowMin)
+        .frame(minHeight: isToday ? 72 : Space.rowMin)
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
@@ -241,14 +266,37 @@ struct TemplateCard: View {
 
     private var subtitle: String {
         let count = template.orderedExercises.count
-        let base = "\(count) ex · \(template.totalPlannedSets) sets"
+        let exercises = count == 1 ? "1 exercise" : "\(count) exercises"
         let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
-        return groups.isEmpty ? base : "\(base) · \(groups)"
+        return groups.isEmpty ? exercises : "\(exercises) · \(groups)"
+    }
+}
+
+// MARK: - Weekday rail
+
+/// Seven single-letter weekdays in the calendar's display order —
+/// the "quiet calendar" treatment of a template's schedule. Pinned
+/// days read in primary ink, today's pinned day in orange, the rest
+/// stay faint. Replaces the old "Wed · Fri · Sat" prose line.
+private struct WeekdayRail: View {
+    let scheduled: Set<Int>
+    let today: Int
+
+    var body: some View {
+        HStack(spacing: Space.xs) {
+            ForEach(WeekdayLabels.ordered(), id: \.self) { day in
+                Text(WeekdayLabels.veryShort(day))
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(color(for: day))
+                    .frame(minWidth: 13)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Scheduled \(WeekdayLabels.summary(Array(scheduled)))")
     }
 
-    private static let relative: RelativeDateTimeFormatter = {
-        let f = RelativeDateTimeFormatter()
-        f.unitsStyle = .abbreviated
-        return f
-    }()
+    private func color(for day: Int) -> Color {
+        guard scheduled.contains(day) else { return Ink.quaternary }
+        return day == today ? Tint.primary : Ink.primary
+    }
 }

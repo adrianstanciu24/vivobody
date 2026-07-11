@@ -71,17 +71,58 @@ struct PRRow: View {
             title: record.name,
             subtitle: subtitle
         ) {
-            HStack(spacing: Space.xs) {
+            // The weight is the record; the reps/hold only qualify it.
+            // Splitting the hierarchy (huge weight, small dim
+            // qualifier) keeps the trailing value on ONE line — the
+            // old single statValue string wrapped mid-value next to
+            // long exercise names, centering "× 12" under the weight.
+            HStack(alignment: .lastTextBaseline, spacing: Space.xs) {
                 if isRecent {
                     Image(systemName: "sparkles")
                         .font(Typography.caption)
                         .foregroundStyle(Tint.primary)
                 }
-                Text(PRRow.recordValue(record, unit: unit))
+                Text(headlineValue)
                     .font(Typography.statValue)
                     .foregroundStyle(isRecent ? Tint.primary : Ink.primary)
                     .monospacedDigit()
+                if let qualifier = qualifierValue {
+                    Text(qualifier)
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.tertiary)
+                        .monospacedDigit()
+                }
             }
+            .lineLimit(1)
+            .fixedSize()
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(PRRow.recordValue(record, unit: unit))
+        }
+    }
+
+    /// The big numeral: the record's weight, or the hold time when
+    /// the exercise is an unloaded timed hold.
+    private var headlineValue: String {
+        guard let point = record.recordPoint else { return "—" }
+        switch record.trackingMode {
+        case .reps:
+            return WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)
+        case .duration:
+            guard point.topWeight > 0 else { return DurationFormatter.string(point.topDuration) }
+            return WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)
+        }
+    }
+
+    /// The small dim qualifier ("× 12", "× 0:45"); nil when the
+    /// headline already says everything (bare hold, no record).
+    private var qualifierValue: String? {
+        guard let point = record.recordPoint else { return nil }
+        switch record.trackingMode {
+        case .reps:
+            return "× \(point.topReps)"
+        case .duration:
+            guard point.topWeight > 0 else { return nil }
+            return "× \(DurationFormatter.string(point.topDuration))"
         }
     }
 

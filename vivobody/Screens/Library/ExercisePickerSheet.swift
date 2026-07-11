@@ -40,6 +40,7 @@ struct ExercisePickerSheet: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     @Query private var items: [ExerciseCatalogItem]
 
@@ -69,16 +70,18 @@ struct ExercisePickerSheet: View {
     /// individual Equipment cases.
     @State private var equipmentFilter: Equipment? = nil
 
-    /// One-time-per-render lookup of "what did you last do for this
-    /// exercise?" keyed by stable copied identity. Rebuilt whenever the
-    /// underlying completed sessions list changes — SwiftUI handles
-    /// that via the @Query observation. Single O(N) sweep over
-    /// history; picker rows do O(1) lookups.
+    /// "What did you last do for this exercise?" keyed by stable
+    /// copied identity, served from the fingerprint-keyed
+    /// SessionAnalytics cache so the O(N) history sweep runs at most
+    /// once per data change; picker rows do O(1) lookups. The
+    /// recompute fallback only serves previews, which don't inject
+    /// the cache.
     private var lastInstanceLookup: [String: LastExerciseInstance] {
-        completedSessions.lastInstanceByExercise()
+        sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
     }
 
     var body: some View {
+        let _ = sessionAnalytics?.update(for: completedSessions)
         NavigationStack {
             ZStack {
                 Surface.background.ignoresSafeArea()

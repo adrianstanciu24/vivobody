@@ -32,6 +32,7 @@ final class SessionAnalytics {
     var symmetry: AntagonistBoard
     var consistency: ConsistencyReport
     var load: TrainingLoadReport
+    var lastInstances: [String: LastExerciseInstance]
 
     private var fingerprint: String = ""
 
@@ -48,6 +49,7 @@ final class SessionAnalytics {
         symmetry = empty.antagonistBalance()
         consistency = empty.consistency()
         load = empty.trainingLoad()
+        lastInstances = empty.lastInstanceByExercise()
     }
 
     /// Recompute all reports only when the dataset has actually
@@ -69,6 +71,7 @@ final class SessionAnalytics {
         symmetry = sessions.antagonistBalance()
         consistency = sessions.consistency()
         load = sessions.trainingLoad()
+        lastInstances = sessions.lastInstanceByExercise()
     }
 }
 

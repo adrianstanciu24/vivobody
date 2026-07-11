@@ -647,9 +647,11 @@ extension ExerciseDetailScreen {
     }
 
     /// Most-recent top set + relative date + PR flag. Nil when the
-    /// user has never logged this exercise.
+    /// user has never logged this exercise. Reads the cached lookup
+    /// (same pattern as `progress` above); the recompute fallback
+    /// only serves previews.
     var lastInstance: LastExerciseInstance? {
-        let lookup = completedSessions.lastInstanceByExercise()
+        let lookup = sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
         return lookup[historyKey] ?? lookup[legacyHistoryKey]
     }
 

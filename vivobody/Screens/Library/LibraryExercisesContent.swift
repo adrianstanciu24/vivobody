@@ -22,7 +22,12 @@ struct LibraryExercisesContent: View {
     @Binding var segment: LibrarySegment
     @Binding var customExerciseTarget: CatalogEditorTarget?
 
+    /// Owned by LibraryScreen so the selected chip survives segment
+    /// switches — this content view is recreated on every switch.
+    @Binding var equipmentFilter: Equipment?
+
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     @Query private var items: [ExerciseCatalogItem]
 
@@ -38,15 +43,20 @@ struct LibraryExercisesContent: View {
 
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
-    @State private var equipmentFilter: Equipment? = nil
     @State private var pendingDeleteItem: ExerciseCatalogItem? = nil
     @State private var saveError: SaveErrorBox? = nil
 
+    /// Last-instance decorations come from the fingerprint-keyed
+    /// SessionAnalytics cache, so the O(sessions) sweep runs at most
+    /// once per data change instead of once per row access. The
+    /// recompute fallback only serves previews, which don't inject
+    /// the cache.
     private var lastInstanceLookup: [String: LastExerciseInstance] {
-        completedSessions.lastInstanceByExercise()
+        sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
     }
 
     var body: some View {
+        let _ = sessionAnalytics?.update(for: completedSessions)
         Group {
             if isSearching {
                 searchList

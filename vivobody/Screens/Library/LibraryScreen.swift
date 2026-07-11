@@ -57,6 +57,12 @@ struct LibraryScreen: View {
     @State private var segment: LibrarySegment = .templates
     @State private var searchText: String = ""
 
+    /// Equipment chip selection for the Exercises segment. Lives here
+    /// (not in LibraryExercisesContent) because the segment switch
+    /// recreates the content views — hoisting it keeps the selected
+    /// chip stable across Templates ↔ Exercises round-trips.
+    @State private var equipmentFilter: Equipment? = nil
+
     /// Template builder sheet target. `.new` for the "+" toolbar /
     /// empty-state CTA; `.edit(template)` when a row is tapped. The
     /// builder owns a value-type draft and only writes through to
@@ -89,7 +95,8 @@ struct LibraryScreen: View {
                 LibraryExercisesContent(
                     searchText: searchText,
                     segment: $segment,
-                    customExerciseTarget: $customExerciseTarget
+                    customExerciseTarget: $customExerciseTarget,
+                    equipmentFilter: $equipmentFilter
                 )
             }
         }

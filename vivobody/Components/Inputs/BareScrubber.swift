@@ -88,10 +88,12 @@ struct BareScrubber: View {
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
 
-    /// Flywheel coast. A released flick keeps the value rolling
-    /// through detents with decaying velocity — the number has mass.
-    /// True while the coast task is stepping; suppresses the settle
-    /// spring so each coast detent lands as a crisp mechanical click.
+    /// Flywheel coast. A released flick (quick throw, finger down
+    /// only an instant — see `flickMaxDuration`) keeps the value
+    /// rolling through detents with decaying velocity — the number
+    /// has mass. True while the coast task is stepping; suppresses
+    /// the settle spring so each coast detent lands as a crisp
+    /// mechanical click.
     @State private var isCoasting: Bool = false
     /// Cancellable owner of the coast run. A new touch anywhere on
     /// the scrubber grabs the flywheel and stops it instantly.
@@ -125,6 +127,18 @@ struct BareScrubber: View {
 
     /// Movement (points) needed before a drag claims an axis.
     private static let axisClaimDistance: CGFloat = 8
+
+    /// Longest touch (claim → release) that still counts as a flick.
+    /// The flywheel coast is reserved for true flicks — a quick throw
+    /// where the finger is down only an instant. A targeted scrub
+    /// (drag to a value, release) keeps the finger down far longer,
+    /// and its residual release velocity must NOT roll the value past
+    /// where the user let go — that was exactly the bug: fast precise
+    /// scrubs kept drifting after lift-off.
+    private static let flickMaxDuration: TimeInterval = 0.3
+    /// When the current drag claimed the vertical axis. Compared to
+    /// the release timestamp to separate flicks from targeted scrubs.
+    @State private var dragClaimTime: Date = .distantPast
 
     /// Nudge-bob offset for the first-use hint. Added to `rubberOffset`
     /// so the bob rides the same offset channel as the drag rubber-band
@@ -438,6 +452,7 @@ struct BareScrubber: View {
                     claimBaselineY = drag.translation.height >= 0
                         ? Self.axisClaimDistance
                         : -Self.axisClaimDistance
+                    dragClaimTime = drag.time
                     isDragging = true
                     dragStartValue = value
                     lastStepReported = 0
@@ -494,8 +509,11 @@ struct BareScrubber: View {
                 axisClaim = .undecided
                 guard ownedDrag else { return }
                 let momentum = drag.predictedEndTranslation.height - drag.translation.height
+                let touchDuration = drag.time.timeIntervalSince(dragClaimTime)
                 finishDrag()
-                startCoast(momentumPoints: momentum)
+                if touchDuration <= Self.flickMaxDuration {
+                    startCoast(momentumPoints: momentum)
+                }
             }
     }
 
@@ -523,9 +541,12 @@ struct BareScrubber: View {
     /// decaying velocity — each detent ticks (sound pitch still
     /// tracking the climb), a wall stops the flywheel with the rigid
     /// end-stop + flash + a rubber bump. Damped well below 1:1 so a
-    /// coast reads as "heavy wheel", not "runaway value". Skipped
-    /// under Reduce Motion: the value moving beyond the finger is
-    /// exactly the surprise that setting exists to prevent.
+    /// coast reads as "heavy wheel", not "runaway value". Only true
+    /// flicks reach here (the caller gates on `flickMaxDuration`);
+    /// a targeted scrub always lands exactly where the finger let
+    /// go, however fast it was moving at release. Skipped under
+    /// Reduce Motion: the value moving beyond the finger is exactly
+    /// the surprise that setting exists to prevent.
     private func startCoast(momentumPoints: CGFloat) {
         guard !reduceMotion, isEnabled else { return }
         let projected = Int((-momentumPoints / pointsPerStep * 0.45).rounded())
