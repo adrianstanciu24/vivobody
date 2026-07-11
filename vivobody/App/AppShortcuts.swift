@@ -10,7 +10,8 @@
 //
 //  Two shortcuts are donated via VivoShortcutsProvider:
 //    1. Start Today's Workout  — reuses the existing
-//       StartTodaysWorkoutIntent (also used by the Up Next widget).
+//       StartTodaysWorkoutIntent (also used by the Control Center
+//       start-workout control).
 //    2. Start Workout from Template — the parameterized
 //       StartTemplateWorkoutIntent, resolved against the user's saved
 //       templates.

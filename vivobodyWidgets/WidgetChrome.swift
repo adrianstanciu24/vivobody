@@ -187,6 +187,7 @@ struct ConsistencyHeatmapGrid: View {
 
 struct WeeklyVolumeSparkline: View {
     let values: [Int]
+    var height: CGFloat = 48
 
     var body: some View {
         let points = values.enumerated().map { WeeklyVolumePoint(week: $0.offset, sets: $0.element) }
@@ -213,7 +214,7 @@ struct WeeklyVolumeSparkline: View {
         }
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
-        .frame(height: 48)
+        .frame(height: height)
         .accessibilityLabel("Weekly volume trend")
     }
 }

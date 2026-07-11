@@ -64,6 +64,7 @@ enum WidgetSnapshotWriter {
         write(upNextSnapshot(templates: templates, sessions: completed, unit: unit), key: WidgetShared.upNextSnapshotKey)
         write(consistencySnapshot(sessions: completed), key: WidgetShared.consistencySnapshotKey)
         write(signatureSnapshot(sessions: completed), key: WidgetShared.signatureSnapshotKey)
+        write(strengthSnapshot(sessions: completed), key: WidgetShared.strengthSnapshotKey)
         write(activeWorkoutSnapshot(session: active, unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
         // Publish the template list (id + name) so the Siri App Intent
         // entity query can enumerate templates from the system process
@@ -77,6 +78,7 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.consistencyKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
+        WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.strengthKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
     }
 
@@ -197,6 +199,52 @@ enum WidgetSnapshotWriter {
             verdictLine: signatureVerdict(signature),
             weekStreak: report.weekStreak
         )
+    }
+
+    private static func strengthSnapshot(sessions: [WorkoutSession]) -> StrengthSnapshot {
+        let board = sessions.strengthOutlook()
+        guard let lead = board.stats.first else { return .empty }
+
+        // Same running-max PR flagging the Insights strength chart
+        // uses, kept in canonical lb; the widget converts at display.
+        let series = sessions.progressByExercise
+            .first { $0.name.caseInsensitiveCompare(lead.exercise) == .orderedSame }
+        var runningMax = -Double.infinity
+        var points: [StrengthPointSnapshot] = []
+        for point in series?.points ?? [] where point.estimated1RM > 0 {
+            let isPR = point.estimated1RM > runningMax
+            if isPR { runningMax = point.estimated1RM }
+            points.append(StrengthPointSnapshot(date: point.date, e1RM: point.estimated1RM, isPR: isPR))
+        }
+
+        return StrengthSnapshot(
+            exercise: lead.exercise,
+            points: Array(points.suffix(StrengthSnapshot.maxPoints)),
+            currentE1RM: lead.currentE1RM,
+            bestE1RM: lead.bestE1RM,
+            trendLabel: strengthTrendLabel(lead),
+            climbingCount: board.climbingCount,
+            stalledCount: board.plateauedCount,
+            slippingCount: board.slippingCount,
+            hasData: !points.isEmpty
+        )
+    }
+
+    /// Mirrors the Insights strength section's trend chip wording.
+    private static func strengthTrendLabel(_ stat: StrengthOutlookStat) -> String {
+        switch stat.trend {
+        case .climbing:
+            if stat.isFreshPR { return "PR" }
+            if let days = stat.daysToPR {
+                return days <= 21 ? "~\(days)d" : "~\(Int((Double(days) / 7).rounded()))w"
+            }
+            return "up"
+        case .plateaued:
+            if let w = stat.weeksSinceBest, w > 0 { return "\(w)w flat" }
+            return "flat"
+        case .slipping:
+            return "down"
+        }
     }
 
     private static func activeWorkoutSnapshot(session: WorkoutSession?, unit: WeightUnit) -> ActiveWorkoutSnapshot {

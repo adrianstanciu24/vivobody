@@ -14,11 +14,13 @@ public nonisolated enum WidgetShared {
     public static let upNextKind = "vivobody.upNext"
     public static let consistencyKind = "vivobody.consistency"
     public static let signatureKind = "vivobody.signature"
+    public static let strengthKind = "vivobody.strength"
     public static let activeWorkoutKind = "vivobody.activeWorkout"
     public static let startWorkoutControlKind = "vivobody.startWorkoutControl"
     public static let upNextSnapshotKey = "widgets.upNext.snapshot"
     public static let consistencySnapshotKey = "widgets.consistency.snapshot"
     public static let signatureSnapshotKey = "widgets.signature.snapshot"
+    public static let strengthSnapshotKey = "widgets.strength.snapshot"
     public static let activeWorkoutSnapshotKey = "widgets.activeWorkout.snapshot"
     public static let weightUnitKey = "settings.weightUnit"
     public static let startWorkoutRequestKey = "widgets.intent.startWorkoutRequestedAt"
@@ -300,6 +302,88 @@ public struct SignaturePetalSnapshot: Codable, Hashable, Identifiable, Sendable 
     }
 }
 
+public struct StrengthSnapshot: Codable, Hashable, Sendable {
+    /// Keeps the App Group payload small; the chart only needs the
+    /// recent shape of the curve, not the full lift history.
+    public static let maxPoints = 40
+
+    /// The lead lift the board surfaces first (climbing lifts ahead
+    /// of stalls and slides).
+    public var exercise: String
+    /// e1RM samples in canonical lb; the widget converts at display.
+    public var points: [StrengthPointSnapshot]
+    public var currentE1RM: Double
+    public var bestE1RM: Double
+    /// Precomputed in the app ("PR", "~3w", "flat", "down", ...) so the
+    /// widget never re-derives trend logic.
+    public var trendLabel: String
+    public var climbingCount: Int
+    public var stalledCount: Int
+    public var slippingCount: Int
+    public var hasData: Bool
+
+    public init(
+        exercise: String,
+        points: [StrengthPointSnapshot],
+        currentE1RM: Double,
+        bestE1RM: Double,
+        trendLabel: String,
+        climbingCount: Int,
+        stalledCount: Int,
+        slippingCount: Int,
+        hasData: Bool
+    ) {
+        self.exercise = exercise
+        self.points = points
+        self.currentE1RM = currentE1RM
+        self.bestE1RM = bestE1RM
+        self.trendLabel = trendLabel
+        self.climbingCount = climbingCount
+        self.stalledCount = stalledCount
+        self.slippingCount = slippingCount
+        self.hasData = hasData
+    }
+
+    public static let placeholder = StrengthSnapshot(
+        exercise: "Bench Press",
+        points: WidgetSampleData.strengthPoints,
+        currentE1RM: 245,
+        bestE1RM: 245,
+        trendLabel: "PR",
+        climbingCount: 1,
+        stalledCount: 0,
+        slippingCount: 0,
+        hasData: true
+    )
+
+    public static let empty = StrengthSnapshot(
+        exercise: "",
+        points: [],
+        currentE1RM: 0,
+        bestE1RM: 0,
+        trendLabel: "-",
+        climbingCount: 0,
+        stalledCount: 0,
+        slippingCount: 0,
+        hasData: false
+    )
+}
+
+public struct StrengthPointSnapshot: Codable, Hashable, Identifiable, Sendable {
+    public var id: String { date.timeIntervalSinceReferenceDate.description }
+    public var date: Date
+    /// Estimated 1-rep max in canonical lb.
+    public var e1RM: Double
+    /// This sample set a new all-time best when it was logged.
+    public var isPR: Bool
+
+    public init(date: Date, e1RM: Double, isPR: Bool) {
+        self.date = date
+        self.e1RM = e1RM
+        self.isPR = isPR
+    }
+}
+
 public struct ActiveWorkoutSnapshot: Codable, Hashable, Sendable {
     public var isActive: Bool
     public var exerciseName: String?
@@ -376,6 +460,18 @@ public struct ActiveWorkoutSnapshot: Codable, Hashable, Sendable {
 public enum WidgetSampleData {
     public static var consistencyWeeks: [[ConsistencyDaySnapshot]] {
         makeWeeks(active: true)
+    }
+
+    public static var strengthPoints: [StrengthPointSnapshot] {
+        let values: [Double] = [185, 190, 190, 195, 200, 205, 205, 212, 218, 225, 232, 245]
+        let today = Calendar.current.startOfDay(for: Date())
+        var runningMax = -Double.infinity
+        return values.enumerated().map { index, value in
+            let isPR = value > runningMax
+            if isPR { runningMax = value }
+            let date = Calendar.current.date(byAdding: .day, value: -7 * (values.count - 1 - index), to: today) ?? today
+            return StrengthPointSnapshot(date: date, e1RM: value, isPR: isPR)
+        }
     }
 
     public static var emptyWeeks: [[ConsistencyDaySnapshot]] {

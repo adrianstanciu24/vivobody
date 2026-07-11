@@ -4,9 +4,10 @@
 //
 //  WidgetKit entry point for vivobody's glanceable surfaces. The
 //  individual widget implementations live in their own files:
-//    • UpNextWidget.swift
-//    • ConsistencyWidget.swift
-//    • SignatureWidget.swift
+//    • UpNextWidget.swift (small only)
+//    • SignatureWidget.swift (small only)
+//    • ConsistencyWidget.swift (medium only)
+//    • StrengthWidget.swift (large only)
 //    • StartWorkoutControl.swift
 //    • ActiveWorkoutLiveActivity.swift
 //  Shared view primitives are in WidgetChrome.swift.
@@ -22,8 +23,9 @@ import WidgetKit
 struct vivobodyWidgetsBundle: WidgetBundle {
     var body: some Widget {
         UpNextWidget()
-        ConsistencyWidget()
         SignatureWidget()
+        ConsistencyWidget()
+        StrengthWidget()
         ActiveWorkoutLiveActivity()
         StartWorkoutControl()
     }

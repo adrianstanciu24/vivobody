@@ -2,8 +2,8 @@
 //  SignatureWidget.swift
 //  vivobodyWidgets
 //
-//  The "Your Signature" widget. Renders the training-signal
-//  petal emblem across system and accessory families.
+//  The "Your Signature" widget — small family only. Renders the
+//  training-signal petal emblem with a one-line verdict.
 //
 
 import VivoKit
@@ -25,12 +25,11 @@ struct SignatureWidget: Widget {
         }
         .configurationDisplayName("Your Signature")
         .description("The shape of your training in one mark.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline])
+        .supportedFamilies([.systemSmall])
     }
 }
 
 struct SignatureWidgetView: View {
-    @Environment(\.widgetFamily) private var family
     let snapshot: SignatureSnapshot
 
     /// Pro-gated: the app mirrors the entitlement into the App Group;
@@ -42,27 +41,7 @@ struct SignatureWidgetView: View {
             if !isPro {
                 WidgetProLock(title: "Your Signature")
             } else {
-                switch family {
-                case .accessoryCircular:
-                    SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                        .padding(4)
-                case .accessoryRectangular:
-                    HStack(spacing: Space.sm) {
-                        SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                            .frame(width: 42, height: 42)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(snapshot.dominantGroup.map { "\($0)-led" } ?? "Balanced")
-                                .font(Typography.headline)
-                            Text(String(format: "%.1fx a week", snapshot.cadence))
-                                .font(Typography.metricUnit)
-                                .foregroundStyle(Ink.secondary)
-                        }
-                    }
-                case .accessoryInline:
-                    Text(snapshot.verdictLine)
-                default:
-                    system
-                }
+                small.padding()
             }
         }
         .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
@@ -70,21 +49,7 @@ struct SignatureWidgetView: View {
         .dynamicTypeSize(.large)
     }
 
-    @ViewBuilder
-    private var system: some View {
-        switch family {
-        case .systemSmall:
-            smallSystem.padding()
-        case .systemMedium:
-            mediumSystem.padding()
-        case .systemLarge:
-            largeSystem.padding()
-        default:
-            smallSystem.padding()
-        }
-    }
-
-    private var smallSystem: some View {
+    private var small: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Your signature")
                 .font(Typography.sectionLabel)
@@ -105,68 +70,6 @@ struct SignatureWidgetView: View {
                     .lineLimit(3)
             }
         }
-    }
-
-    private var mediumSystem: some View {
-        HStack(alignment: .center, spacing: Space.lg) {
-            SignatureEmblem(snapshot: snapshot, showsLabels: false)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            VStack(alignment: .leading, spacing: Space.sm) {
-                Text("Your signature")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
-                Text(snapshot.verdictLine)
-                    .font(Typography.body)
-                    .foregroundStyle(snapshot.hasSignature ? Ink.primary : Ink.secondary)
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.75)
-                WidgetStatStrip(stats: signatureStats, compact: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    private var largeSystem: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Your signature")
-                    .font(Typography.title)
-                    .foregroundStyle(Ink.primary)
-                Spacer()
-                Text("the shape of your training")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
-            }
-
-            if snapshot.hasSignature {
-                SignatureEmblem(snapshot: snapshot, showsLabels: true)
-                    .frame(maxWidth: .infinity, minHeight: 170, maxHeight: 190)
-                WidgetStatStrip(stats: signatureStats)
-                Text(snapshot.verdictLine)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .lineLimit(2)
-                Text("Each petal is a muscle group - its reach is how developed it is, its width how much of your volume it takes.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .lineLimit(3)
-            } else {
-                Spacer(minLength: 0)
-                Text(snapshot.verdictLine)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .lineLimit(3)
-                Spacer(minLength: 0)
-            }
-        }
-    }
-
-    private var signatureStats: [WidgetStat] {
-        [
-            WidgetStat(value: snapshot.cadence.widgetOneDecimal, label: "Per week", accent: snapshot.cadence >= 2),
-            WidgetStat(value: "\(snapshot.weekStreak)", label: "Streak"),
-            WidgetStat(value: "\(Int((snapshot.balance * 100).rounded()))", unit: "%", label: "Balance"),
-        ]
     }
 }
 

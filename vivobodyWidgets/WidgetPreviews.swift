@@ -17,70 +17,22 @@ import WidgetKit
     SnapshotEntry(date: .now, snapshot: UpNextSnapshot.placeholder)
 }
 
-#Preview("Up Next Medium", as: .systemMedium) {
-    UpNextWidget()
+#Preview("Signature Small", as: .systemSmall) {
+    SignatureWidget()
 } timeline: {
-    SnapshotEntry(date: .now, snapshot: UpNextSnapshot.placeholder)
+    SnapshotEntry(date: .now, snapshot: SignatureSnapshot.placeholder)
 }
 
-#Preview("Up Next Large", as: .systemLarge) {
-    UpNextWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: UpNextSnapshot.placeholder)
-}
-
-#Preview("Up Next Lock Rect", as: .accessoryRectangular) {
-    UpNextWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: UpNextSnapshot.placeholder)
-}
-
-#Preview("Up Next Lock Inline", as: .accessoryInline) {
-    UpNextWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: UpNextSnapshot.placeholder)
-}
-
-#Preview("Consistency Large", as: .systemLarge) {
+#Preview("Consistency Medium", as: .systemMedium) {
     ConsistencyWidget()
 } timeline: {
     SnapshotEntry(date: .now, snapshot: ConsistencySnapshot.placeholder)
 }
 
-#Preview("Consistency Lock Circular", as: .accessoryCircular) {
-    ConsistencyWidget()
+#Preview("Strength Large", as: .systemLarge) {
+    StrengthWidget()
 } timeline: {
-    SnapshotEntry(date: .now, snapshot: ConsistencySnapshot.placeholder)
-}
-
-#Preview("Consistency Lock Rect", as: .accessoryRectangular) {
-    ConsistencyWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: ConsistencySnapshot.placeholder)
-}
-
-#Preview("Signature Medium", as: .systemMedium) {
-    SignatureWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: SignatureSnapshot.placeholder)
-}
-
-#Preview("Signature Large", as: .systemLarge) {
-    SignatureWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: SignatureSnapshot.placeholder)
-}
-
-#Preview("Signature Lock Circular", as: .accessoryCircular) {
-    SignatureWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: SignatureSnapshot.placeholder)
-}
-
-#Preview("Signature Lock Inline", as: .accessoryInline) {
-    SignatureWidget()
-} timeline: {
-    SnapshotEntry(date: .now, snapshot: SignatureSnapshot.placeholder)
+    SnapshotEntry(date: .now, snapshot: StrengthSnapshot.placeholder)
 }
 
 #Preview("Live Activity Rest") {
