@@ -84,6 +84,29 @@ nonisolated struct IntensityMix: Hashable {
     }
 }
 
+// MARK: - Weekly breakdown
+
+/// One calendar week's zone counts — the bars of the Insights
+/// intensity chart. Weeks with no completed `.reps` sets are omitted
+/// by the aggregator, so a gap in training reads as a gap.
+nonisolated struct IntensityWeek: Identifiable, Hashable {
+    var id: Date { weekStart }
+    let weekStart: Date
+    let strengthSets: Int
+    let hypertrophySets: Int
+    let enduranceSets: Int
+
+    var total: Int { strengthSets + hypertrophySets + enduranceSets }
+
+    func count(_ zone: IntensityZone) -> Int {
+        switch zone {
+        case .strength:    return strengthSets
+        case .hypertrophy: return hypertrophySets
+        case .endurance:   return enduranceSets
+        }
+    }
+}
+
 // MARK: - Aggregation
 
 extension Array where Element == WorkoutSession {
@@ -115,5 +138,46 @@ extension Array where Element == WorkoutSession {
             hypertrophySets: hypertrophy,
             enduranceSets: endurance
         )
+    }
+
+    /// Zone counts per calendar week over the trailing `weeks`
+    /// (default 12) as of `now`, chronological ascending. Buckets by
+    /// the same locale-aware week start `repRangeMigration` uses so
+    /// the two reads always agree.
+    func weeklyIntensity(weeks: Int = 12, now: Date = Date()) -> [IntensityWeek] {
+        let calendar = Calendar.current
+        let cutoff = now.addingTimeInterval(-Double(weeks) * 7 * 86_400)
+
+        var byWeek: [Date: (strength: Int, hypertrophy: Int, endurance: Int)] = [:]
+
+        for session in self {
+            let date = session.completedAt ?? session.startedAt
+            guard date >= cutoff else { continue }
+            guard let weekStart = calendar.date(
+                from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+            ) else { continue }
+
+            for exercise in session.exercises where exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isCompleted && set.reps > 0 {
+                    var bucket = byWeek[weekStart] ?? (0, 0, 0)
+                    switch IntensityZone.zone(forReps: set.reps) {
+                    case .strength:    bucket.strength += 1
+                    case .hypertrophy: bucket.hypertrophy += 1
+                    case .endurance:   bucket.endurance += 1
+                    }
+                    byWeek[weekStart] = bucket
+                }
+            }
+        }
+
+        return byWeek.keys.sorted().map { weekStart in
+            let bucket = byWeek[weekStart] ?? (0, 0, 0)
+            return IntensityWeek(
+                weekStart: weekStart,
+                strengthSets: bucket.strength,
+                hypertrophySets: bucket.hypertrophy,
+                enduranceSets: bucket.endurance
+            )
+        }
     }
 }

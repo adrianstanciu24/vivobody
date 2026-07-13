@@ -7,7 +7,8 @@
 //  the bar going up? — and answers it the way a lifter actually wants
 //  to see: an estimated-1RM line over time, with the all-time best
 //  drawn as a record line to chase and each new PR marked on the
-//  curve. A lift selector swaps which exercise is in focus.
+//  curve. The lift name and axis units identify exactly what is being
+//  measured, while current, best, and all-history change sit below.
 //
 //  e1RM (Epley) is charted rather than raw top weight so a 5×5 and an
 //  8×3 sit on one comparable strength axis. Data comes from
@@ -27,12 +28,9 @@ struct StrengthTrajectorySection: View {
     private var unitRaw: String = SettingsDefaults.weightUnit
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
-    /// Nil falls back to the board's lead lift (climbing first).
-    @State private var chosen: String?
-
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Strength", trailing: "estimated 1RM")
+            SectionHeader(title: "Strength")
 
             if !board.hasAny {
                 Text("Strength trends appear once you've logged a weighted lift across a few sessions.")
@@ -40,22 +38,8 @@ struct StrengthTrajectorySection: View {
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                StatStrip(
-                    stats: [
-                        Stat(value: "\(board.climbingCount)", label: "Climbing", accent: board.climbingCount > 0),
-                        Stat(value: "\(board.plateauedCount)", label: "Stalled"),
-                        Stat(value: "\(board.slippingCount)", label: "Slipping"),
-                    ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
-                )
-                .padding(.vertical, Space.xs)
-
-                insight
-
-                selector
-
                 if let stat = currentStat {
+                    liftHeading(stat)
                     chart(for: stat)
                     liftStats(stat)
                 }
@@ -64,88 +48,32 @@ struct StrengthTrajectorySection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Insight
-
-    @ViewBuilder
-    private var insight: some View {
-        if let pr = board.nearestPR {
-            if pr.isFreshPR {
-                Text(line(name: pr.exercise, lead: "New PR on ", tail: " — ride the momentum."))
-                    .font(Typography.body)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else if let days = pr.daysToPR {
-                Text(line(name: pr.exercise, lead: "Closest PR: ", tail: " — about \(etaPhrase(days)) out at this rate."))
-                    .font(Typography.body)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else {
-                Text(line(name: pr.exercise, lead: "", tail: " is climbing back toward its best."))
-                    .font(Typography.body)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        } else if let stalled = board.stats.first(where: { $0.trend == .plateaued }) {
-            let tail = stalled.weeksSinceBest.map { " has stalled — \($0)w since its last PR. Time to change a variable." } ?? " has stalled. Time to change a variable."
-            Text(line(name: stalled.exercise, lead: "", tail: tail))
-                .font(Typography.body)
-                .fixedSize(horizontal: false, vertical: true)
-        } else if let slip = board.stats.first(where: { $0.trend == .slipping }) {
-            Text(line(name: slip.exercise, lead: "", tail: " is sliding — re-groove the movement before adding load."))
-                .font(Typography.body)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private func line(name: String, lead: String, tail: String) -> AttributedString {
-        var head = AttributedString(lead); head.foregroundColor = Ink.secondary
-        var lift = AttributedString(name); lift.foregroundColor = Ink.primary
-        var rest = AttributedString(tail); rest.foregroundColor = Ink.secondary
-        return head + lift + rest
-    }
-
-    // MARK: - Lift selector
-
-    private var selector: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Space.sm) {
-                ForEach(board.stats) { stat in
-                    chip(stat)
-                }
-            }
-            .padding(.vertical, 2)
-        }
-        .scrollClipDisabled()
-    }
-
-    private func chip(_ stat: StrengthOutlookStat) -> some View {
-        let isSelected = stat.exercise == currentName
-        return Button {
-            Haptics.selection()
-            chosen = stat.exercise
-        } label: {
-            HStack(spacing: Space.sm) {
-                Circle()
-                    .fill(prColor(stat.trend))
-                    .frame(width: 6, height: 6)
-                    .accessibilityHidden(true)
-                Text(stat.exercise)
-                    .font(Typography.sectionLabel)
-            }
-            .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .padding(.horizontal, Space.lg)
-            .frame(minHeight: Space.tapMin)
-            .background(
-                Capsule().fill(isSelected ? Tint.primary : Surface.cardTint)
-            )
-            .overlay(
-                Capsule().stroke(
-                    isSelected ? Surface.edgeBright : Surface.edge,
-                    lineWidth: 0.5
-                )
-            )
-        }
-        .buttonStyle(.plain)
-    }
-
     // MARK: - Chart
+
+    private func liftHeading(_ stat: StrengthOutlookStat) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text(stat.exercise)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("Estimated 1RM over time")
+                    .panelLegend()
+            }
+
+            Spacer(minLength: Space.sm)
+
+            if stat.isFreshPR {
+                Text("NEW PR")
+                    .font(Typography.micro)
+                    .foregroundStyle(Tint.primary)
+                    .padding(.horizontal, Space.sm)
+                    .padding(.vertical, 2)
+                    .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
+                    .accessibilityLabel("New personal record")
+            }
+        }
+    }
 
     private func chart(for stat: StrengthOutlookStat) -> some View {
         let points = e1rmSeries(for: stat.exercise)
@@ -157,7 +85,7 @@ struct StrengthTrajectorySection: View {
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
                 .foregroundStyle(Tint.primary.opacity(Opacity.medium))
                 .annotation(position: .top, alignment: .trailing) {
-                    Text("best")
+                    Text("All-time best · \(WeightFormatter.string(stat.bestE1RM, unit: unit))")
                         .font(Typography.metricMicro)
                         .foregroundStyle(Tint.primary.opacity(Opacity.strong))
                 }
@@ -192,21 +120,48 @@ struct StrengthTrajectorySection: View {
                     .foregroundStyle(Tint.primary)
                 }
             }
+
+            // The latest sample glows — a soft halo under a bright core
+            // — so "where you are now" pins the eye at the line's end.
+            if let last = points.last {
+                PointMark(
+                    x: .value("Date", last.date),
+                    y: .value("e1RM", last.value)
+                )
+                .symbolSize(260)
+                .foregroundStyle(color.opacity(0.22))
+                PointMark(
+                    x: .value("Date", last.date),
+                    y: .value("e1RM", last.value)
+                )
+                .symbolSize(70)
+                .foregroundStyle(color)
+            }
         }
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel()
+                AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .font(Typography.metricMicro)
                     .foregroundStyle(Ink.tertiary)
             }
         }
+        .chartXScale(
+            range: .plotDimension(
+                startPadding: Space.sm,
+                endPadding: Space.xl
+            )
+        )
         .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+            AxisMarks(values: .automatic(desiredCount: 4)) { value in
                 AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel()
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.tertiary)
+                AxisValueLabel {
+                    if let amount = value.as(Double.self) {
+                        Text("\(Int(amount.rounded())) \(unit.symbol)")
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                }
             }
         }
         .frame(height: 200)
@@ -215,11 +170,12 @@ struct StrengthTrajectorySection: View {
     }
 
     private func liftStats(_ stat: StrengthOutlookStat) -> some View {
-        StatStrip(
+        let change = changeSinceFirst(for: stat)
+        return StatStrip(
             stats: [
-                Stat(value: WeightFormatter.string(stat.currentE1RM, unit: unit, includeUnit: false), unit: unit.symbol, label: "Current e1RM"),
+                Stat(value: WeightFormatter.string(stat.currentE1RM, unit: unit, includeUnit: false), unit: unit.symbol, label: "Current"),
                 Stat(value: WeightFormatter.string(stat.bestE1RM, unit: unit, includeUnit: false), unit: unit.symbol, label: "Best"),
-                Stat(value: prLabel(stat), label: "Trend"),
+                Stat(value: change.value, unit: unit.symbol, label: change.label, accent: change.isPositive),
             ],
             valueFont: Typography.statValue,
             edgeAligned: true
@@ -229,8 +185,7 @@ struct StrengthTrajectorySection: View {
 
     // MARK: - Derived
 
-    private var currentName: String { chosen ?? board.stats.first?.exercise ?? "" }
-    private var currentStat: StrengthOutlookStat? { board.stat(for: currentName) ?? board.stats.first }
+    private var currentStat: StrengthOutlookStat? { board.stats.first }
 
     /// e1RM points (display units) for one lift, each flagged when it
     /// set a new estimated-1RM record at the moment it was logged.
@@ -262,26 +217,21 @@ struct StrengthTrajectorySection: View {
         }
     }
 
-    private func prLabel(_ stat: StrengthOutlookStat) -> String {
-        switch stat.trend {
-        case .climbing:
-            if stat.isFreshPR { return "PR" }
-            if let days = stat.daysToPR { return "~\(etaShort(days))" }
-            return "up"
-        case .plateaued:
-            if let w = stat.weeksSinceBest, w > 0 { return "\(w)w flat" }
-            return "flat"
-        case .slipping:
-            return "down"
+    private func changeSinceFirst(for stat: StrengthOutlookStat) -> (value: String, label: String, isPositive: Bool) {
+        guard
+            let series = progress.first(where: { $0.name.caseInsensitiveCompare(stat.exercise) == .orderedSame }),
+            let first = series.points.first,
+            first.estimated1RM > 0
+        else {
+            return ("—", "Change", false)
         }
-    }
 
-    private func etaShort(_ days: Int) -> String {
-        days <= 21 ? "\(days)d" : "\(Int((Double(days) / 7).rounded()))w"
-    }
-
-    private func etaPhrase(_ days: Int) -> String {
-        days <= 21 ? "\(days) days" : "\(Int((Double(days) / 7).rounded())) weeks"
+        let delta = stat.currentE1RM - first.estimated1RM
+        let percentage = delta / first.estimated1RM * 100
+        let sign = delta > 0 ? "+" : delta < 0 ? "−" : ""
+        let value = sign + WeightFormatter.string(abs(delta), unit: unit, includeUnit: false)
+        let percent = "\(sign)\(Int(abs(percentage).rounded()))%"
+        return (value, "Change (\(percent))", delta > 0)
     }
 }
 

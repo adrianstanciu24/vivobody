@@ -4,14 +4,16 @@
 //
 //  The recovery lens: this week's training load weighed against the
 //  last four weeks' habit (acute:chronic workload ratio, in tonnage).
-//  A glance gauge marks where the ratio sits relative to the
-//  productive 0.8–1.3 band and the 1.5 caution line, and one
-//  plain-language line turns the number into a verdict — build, hold,
-//  or back off.
+//  Twelve weeks of tonnage as bars — the current week lit in the
+//  verdict's colour — with the 4-week baseline drawn across them as a
+//  dashed rule, so "this week vs the habit" is literally visible.
+//  The stat strip carries the three numbers and one caption line
+//  turns the ratio into a verdict.
 //
 
 import VivoKit
 import SwiftUI
+import Charts
 
 struct TrainingLoadSection: View {
     let report: TrainingLoadReport
@@ -41,31 +43,89 @@ struct TrainingLoadSection: View {
                 )
                 .padding(.vertical, Space.xs)
 
-                insight
+                chart
 
-                LoadGauge(ratio: report.ratio, color: verdictColor)
-                    .padding(.top, Space.xs)
-
-                Text("Sweet spot 0.8–1.3   ·   caution above 1.5")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+                caption
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Insight line
+    // MARK: - Chart
 
-    private var insight: some View {
+    private var chart: some View {
+        let baseline = WeightFormatter.toDisplay(report.chronicWeekly, unit: unit)
+
+        return Chart {
+            ForEach(report.weeks) { week in
+                BarMark(
+                    x: .value("Week", week.weekStart, unit: .weekOfYear),
+                    y: .value("Load", WeightFormatter.toDisplay(week.load, unit: unit)),
+                    width: .ratio(0.65)
+                )
+                .foregroundStyle(barColor(for: week))
+                .cornerRadius(3)
+            }
+
+            RuleMark(y: .value("Baseline", baseline))
+                .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                .foregroundStyle(Tint.primary.opacity(Opacity.medium))
+                .annotation(position: .top, alignment: .leading) {
+                    Text("4-wk avg")
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Tint.primary.opacity(Opacity.strong))
+                }
+        }
+        .chartXAxis {
+            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                AxisGridLine().foregroundStyle(Surface.edge)
+                AxisValueLabel(format: .dateTime.month(.abbreviated))
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.tertiary)
+            }
+        }
+        .chartYAxis {
+            AxisMarks(values: .automatic(desiredCount: 3)) { value in
+                AxisGridLine().foregroundStyle(Surface.edge)
+                AxisValueLabel {
+                    if let amount = value.as(Double.self) {
+                        Text(compactLabel(amount))
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                }
+            }
+        }
+        .frame(height: 160)
+        .padding(.top, Space.md)
+        .accessibilityLabel("Weekly training load over 12 weeks against the 4-week baseline")
+    }
+
+    private func barColor(for week: LoadWeek) -> Color {
+        week.isCurrent ? verdictColor : Ink.primary.opacity(0.28)
+    }
+
+    /// Compact axis figure ("48k") in display units.
+    private func compactLabel(_ value: Double) -> String {
+        value >= 1000
+            ? String(format: "%.0fk", value / 1000)
+            : String(format: "%.0f", value)
+    }
+
+    // MARK: - Caption
+
+    private var caption: some View {
         Text(line)
-            .font(Typography.body)
+            .font(Typography.caption)
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// Verdict word brightened against the dimmer explanation.
+    /// Verdict word brightened against the dimmer clause.
     private var line: AttributedString {
-        var head = AttributedString(headline + " "); head.foregroundColor = Ink.primary
-        var tail = AttributedString(explanation); tail.foregroundColor = Ink.secondary
+        var head = AttributedString(headline + " ")
+        head.foregroundColor = report.verdict == .overreaching ? Tint.danger : Ink.secondary
+        var tail = AttributedString(explanation)
+        tail.foregroundColor = Ink.tertiary
         return head + tail
     }
 
@@ -81,16 +141,11 @@ struct TrainingLoadSection: View {
 
     private var explanation: String {
         switch report.verdict {
-        case .detraining:
-            return "This week sits below your 4-week baseline — fine for a deload, but stack a couple of full weeks to keep building."
-        case .optimal:
-            return "This week tracks your 4-week baseline closely. Keep stacking weeks like this and progress takes care of itself."
-        case .pushing:
-            return "This week runs well above your baseline. Strong push — guard sleep and joints before adding more."
-        case .overreaching:
-            return "This week is far above your 4-week baseline, where niggles and burnout creep in. Hold steady or back off for a week."
-        case .insufficient:
-            return ""
+        case .detraining:   return "Fine for a deload — stack full weeks to keep building."
+        case .optimal:      return "This week tracks your 4-week baseline. Sweet spot 0.8–1.3."
+        case .pushing:      return "Well above baseline — guard sleep and joints."
+        case .overreaching: return "Far above baseline — hold steady or back off a week."
+        case .insufficient: return ""
         }
     }
 
@@ -115,38 +170,5 @@ struct TrainingLoadSection: View {
         case .detraining:        return Ink.secondary
         case .insufficient:      return Ink.tertiary
         }
-    }
-}
-
-// MARK: - Load gauge
-
-/// A single-axis gauge for the acute:chronic ratio, built from
-/// discrete segments like a tuner dial. The track runs 0…2.0; the
-/// productive 0.8–1.3 band wears a dim accent, the >1.5 caution zone
-/// a dim red, and the segment at the current ratio is the one lit
-/// lamp on the dial — the needle.
-private struct LoadGauge: View {
-    let ratio: Double
-    let color: Color
-
-    private let maxRatio: Double = 2.0
-    private let segments = 40
-
-    var body: some View {
-        let needleIndex = needle
-        return SegmentGauge(segments: segments, height: 10) { index, position in
-            if index == needleIndex { return color }
-            let r = position * maxRatio
-            if r >= 0.8 && r <= 1.3 { return Tint.primary.opacity(0.22) }
-            if r >= 1.5 { return Tint.danger.opacity(0.18) }
-            return Surface.edge
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text("Load ratio \(String(format: "%.2f", ratio)) out of a sweet spot of 0.8 to 1.3"))
-    }
-
-    private var needle: Int {
-        let clamped = min(max(ratio, 0), maxRatio)
-        return min(segments - 1, Int(clamped / maxRatio * Double(segments)))
     }
 }

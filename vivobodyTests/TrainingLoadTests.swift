@@ -98,4 +98,45 @@ struct TrainingLoadTests {
         #expect(report.ratio > 1.3 && report.ratio < 1.5)
         #expect(report.verdict == .pushing)
     }
+
+    // MARK: - Weekly series
+
+    @Test func weeklySeriesIsChronologicalZeroFilledAndFlagsCurrent() {
+        // A session today and one 16 days back leave at least one
+        // empty week between them inside the clipped range, under
+        // both Sunday-first and Monday-first week conventions.
+        let sessions = [
+            session(daysAgo: 0, weight: 100, reps: 10, sets: 1),   // 1000, current week
+            session(daysAgo: 16, weight: 100, reps: 10, sets: 2),  // 2000
+        ]
+        let report = sessions.trainingLoad(now: now)
+        let weeks = report.weeks
+
+        #expect(!weeks.isEmpty)
+        #expect(weeks == weeks.sorted { $0.weekStart < $1.weekStart })
+        // Clipped to the first session's week — no leading empty tail.
+        #expect(weeks.count <= 4)
+        // Exactly the last column is the current week.
+        #expect(weeks.last?.isCurrent == true)
+        #expect(weeks.dropLast().allSatisfy { !$0.isCurrent })
+        // Tonnage lands in the right buckets and sums to the total.
+        #expect(abs(weeks.last!.load - 1000) < 0.001)
+        #expect(abs(weeks.reduce(0) { $0 + $1.load } - 3000) < 0.001)
+        // At least one zero-filled gap week exists between the two.
+        #expect(weeks.contains { $0.load == 0 })
+    }
+
+    @Test func weeklySeriesCapsAtTwelveWeeks() {
+        // Two years of weekly sessions — the series must clip to 12.
+        let sessions = stride(from: 0.0, through: 700, by: 7).map {
+            session(daysAgo: $0, weight: 100, reps: 10, sets: 1)
+        }
+        let report = sessions.trainingLoad(now: now)
+        #expect(report.weeks.count == 12)
+        #expect(report.weeks.allSatisfy { $0.load > 0 })
+    }
+
+    @Test func emptyHistoryHasNoWeeks() {
+        #expect([WorkoutSession]().trainingLoad(now: now).weeks.isEmpty)
+    }
 }

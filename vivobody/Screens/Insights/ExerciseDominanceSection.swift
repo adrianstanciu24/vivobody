@@ -3,14 +3,17 @@
 //
 //  The lifetime composition of your training: which lifts carry the
 //  tonnage. Ranks every exercise by its share of all-time volume
-//  (weight × reps) and shows the top ~6 as proportion bars, with the
-//  remainder collapsed into an "Other" row. One line reads the
-//  concentration — whether two lifts are doing half the work, one
-//  lift dominates outright, or volume is spread across the catalog.
+//  (weight × reps) and draws the top ~6 as full-weight proportion
+//  bars — the bar is the message, with the lift name riding above it
+//  and the share and tonnage trailing. The remainder collapses into
+//  an "Other" row.
 //
-//  The #1 lift wears the accent so the headline concentration reads
-//  instantly; the rest sit in grayscale luminance. Volume is shown
-//  in the user's display unit via `WeightFormatter`.
+//  The #1 lift wears the accent gradient so the headline
+//  concentration reads from three feet away; the rest fade down a
+//  luminance ramp by rank. A compound/isolation split rides at the
+//  card's foot as a compact two-segment bar — the "what kind of lifts
+//  are these?" companion to "which lifts?". One caption line below
+//  the card reads the concentration.
 //
 
 import VivoKit
@@ -18,6 +21,7 @@ import SwiftUI
 
 struct ExerciseDominanceSection: View {
     let board: ExerciseDominanceBoard
+    let split: CompositionSplit
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -34,8 +38,8 @@ struct ExerciseDominanceSection: View {
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                insight
                 ranking
+                caption
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,74 +48,119 @@ struct ExerciseDominanceSection: View {
     // MARK: - Ranking card
 
     private var ranking: some View {
-        VStack(spacing: Space.md) {
+        VStack(spacing: Space.lg) {
             ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
-                rowView(for: row, isTop: index == 0)
+                rowView(for: row, rank: index)
+            }
+
+            if split.hasData {
+                SectionDivider()
+                movementSplit
             }
         }
         .padding(Space.xl)
         .contentCard()
     }
 
-    private func rowView(for row: DominanceRow, isTop: Bool) -> some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(spacing: Space.sm) {
+    private func rowView(for row: DominanceRow, rank: Int) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs + 2) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                 Text(row.name)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.primary)
+                    .font(rank == 0 ? Typography.sectionHeading : Typography.caption)
+                    .foregroundStyle(rank == 0 ? Ink.primary : Ink.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: Space.sm)
                 Text("\(Int((row.share * 100).rounded()))%")
                     .font(Typography.metricUnit)
-                    .foregroundStyle(isTop ? Tint.primary : Ink.secondary)
+                    .foregroundStyle(rank == 0 ? Tint.primary : Ink.secondary)
                     .monospacedDigit()
-                    .minimumScaleFactor(0.6)
-                    .frame(width: 38, alignment: .trailing)
                 Text(WeightFormatter.volumeString(row.volume, unit: unit))
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.quaternary)
                     .monospacedDigit()
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
             }
-            ShareBar(fraction: row.share, tint: isTop ? Tint.primary : Ink.secondary)
+
+            DominanceBar(share: row.share, rank: rank)
         }
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: - Insight line
+    // MARK: - Movement split footer
 
-    private var insight: some View {
+    /// Compound vs isolation over the last 4 weeks, folded in as the
+    /// card's coda: one two-segment bar plus a single legend line.
+    private var movementSplit: some View {
+        let compound = split.share(.compound)
+        let isolation = split.share(.isolation)
+
+        return VStack(alignment: .leading, spacing: Space.sm) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Movement")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.secondary)
+                Spacer(minLength: Space.sm)
+                Text("last 4 weeks")
+                    .panelLegend()
+            }
+
+            GeometryReader { geo in
+                HStack(spacing: 2) {
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .fill(Tint.primary.opacity(0.85))
+                        .frame(width: max(4, geo.size.width * compound))
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .fill(Ink.quaternary)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .frame(height: 12)
+            .accessibilityHidden(true)
+
+            HStack(spacing: Space.xs) {
+                Text("Compound \(Int((compound * 100).rounded()))%")
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.secondary)
+                    .monospacedDigit()
+                Text("·")
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.quaternary)
+                Text("Isolation \(Int((isolation * 100).rounded()))%")
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.tertiary)
+                    .monospacedDigit()
+                Spacer(minLength: Space.sm)
+                Text("\(split.classifiedTotal) \(split.classifiedTotal == 1 ? "set" : "sets")")
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.quaternary)
+                    .monospacedDigit()
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Movement split: compound \(Int((compound * 100).rounded())) percent, isolation \(Int((isolation * 100).rounded())) percent")
+    }
+
+    // MARK: - Caption
+
+    private var caption: some View {
         Text(line)
-            .font(Typography.body)
+            .font(Typography.caption)
+            .foregroundStyle(Ink.tertiary)
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var line: AttributedString {
+    private var line: String {
         if board.topTwoShare > 0.5 {
             let pct = Int((board.topTwoShare * 100).rounded())
-            var lead = AttributedString("\(pct)% "); lead.foregroundColor = Ink.primary
-            var rest = AttributedString("of your volume rides on two lifts.")
-            rest.foregroundColor = Ink.secondary
-            return lead + rest
+            return "\(pct)% of your volume rides on two lifts."
         }
-
         if board.topShare > 0.4, let top = board.top {
             let pct = Int((top.share * 100).rounded())
-            var lead = AttributedString("\(top.name) "); lead.foregroundColor = Ink.primary
-            var mid = AttributedString("alone carries "); mid.foregroundColor = Ink.secondary
-            var pctStr = AttributedString("\(pct)%"); pctStr.foregroundColor = Ink.primary
-            var tail = AttributedString(" of your volume.")
-            tail.foregroundColor = Ink.secondary
-            return lead + mid + pctStr + tail
+            return "\(top.name) alone carries \(pct)% of your volume."
         }
-
         let count = board.stats.count
-        var lead = AttributedString("Volume spread "); lead.foregroundColor = Ink.primary
-        var rest = AttributedString("across \(count) \(count == 1 ? "lift" : "lifts").")
-        rest.foregroundColor = Ink.secondary
-        return lead + rest
+        return "Volume spread across \(count) \(count == 1 ? "lift" : "lifts")."
     }
 
     // MARK: - Derived rows
@@ -149,4 +198,52 @@ private struct DominanceRow: Identifiable, Hashable {
     let name: String
     let share: Double
     let volume: Double
+}
+
+// MARK: - Dominance bar
+
+/// A proportion bar with real mass: a full-width dim track, filled to
+/// the lift's share. The top rank burns in an accent gradient with a
+/// soft glow; lower ranks fade down a gray luminance ramp so the
+/// hierarchy reads from the bars alone.
+private struct DominanceBar: View {
+    let share: Double
+    let rank: Int
+
+    private var barHeight: CGFloat { rank == 0 ? 20 : 14 }
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .fill(Surface.cardTint)
+
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .fill(fill)
+                    .frame(width: max(5, geo.size.width * share))
+                    .shadow(
+                        color: rank == 0 ? Tint.primary.opacity(0.35) : .clear,
+                        radius: 6
+                    )
+            }
+        }
+        .frame(height: barHeight)
+        .accessibilityHidden(true)
+    }
+
+    private var fill: LinearGradient {
+        if rank == 0 {
+            return LinearGradient(
+                colors: [Tint.primaryShadow, Tint.primary],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        }
+        let ramp: Double = max(0.18, 0.55 - Double(rank) * 0.07)
+        return LinearGradient(
+            colors: [Ink.primary.opacity(ramp), Ink.primary.opacity(ramp)],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
 }

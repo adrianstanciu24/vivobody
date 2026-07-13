@@ -27,6 +27,7 @@ final class SessionAnalytics {
     var progress: [ExerciseProgress]
     var dominance: ExerciseDominanceBoard
     var intensity: IntensityMix
+    var intensityWeeks: [IntensityWeek]
     var migration: RepRangeMigrationReport
     var composition: CompositionSplit
     var symmetry: AntagonistBoard
@@ -44,6 +45,7 @@ final class SessionAnalytics {
         progress = empty.progressByExercise
         dominance = empty.exerciseDominance()
         intensity = empty.intensityMix()
+        intensityWeeks = empty.weeklyIntensity()
         migration = empty.repRangeMigration()
         composition = empty.compoundIsolationSplit()
         symmetry = empty.antagonistBalance()
@@ -66,6 +68,7 @@ final class SessionAnalytics {
         progress = sessions.progressByExercise
         dominance = sessions.exerciseDominance()
         intensity = sessions.intensityMix()
+        intensityWeeks = sessions.weeklyIntensity()
         migration = sessions.repRangeMigration()
         composition = sessions.compoundIsolationSplit()
         symmetry = sessions.antagonistBalance()

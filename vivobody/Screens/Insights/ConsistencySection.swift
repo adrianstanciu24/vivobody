@@ -3,11 +3,10 @@
 //  vivobody
 //
 //  Training rhythm over the last 6 months: a summary strip (sessions
-//  per week, week streak, average reps-in-reserve), a plain-language
-//  read of frequency and effort, and a GitHub-style contribution
-//  heatmap of every training day. The heatmap divides the available
-//  width across its weeks — no fixed cell sizes — so it fills any
-//  device cleanly.
+//  per week, week streak, average reps-in-reserve), weekly-volume
+//  graph, and a GitHub-style contribution heatmap of every training
+//  day. The heatmap divides the available width across its weeks — no
+//  fixed cell sizes — so it fills any device cleanly.
 //
 
 import VivoKit
@@ -38,8 +37,6 @@ struct ConsistencySection: View {
                 )
                 .padding(.vertical, Space.xs)
 
-                insight
-
                 weeklyVolumeSpark
 
                 ConsistencyHeatmap(weeks: report.weeks, daysTrained: report.daysTrainedInWindow)
@@ -48,56 +45,6 @@ struct ConsistencySection: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// Two clauses: the training rhythm (frequency, and the streak
-    /// when it's worth celebrating) and the effort read from RIR.
-    @ViewBuilder
-    private var insight: some View {
-        Text(line(report))
-            .font(Typography.body)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private func line(_ report: ConsistencyReport) -> AttributedString {
-        var freq = AttributedString(InsightsFormat.perWeekLabel(report.sessionsPerWeek) + "×")
-        freq.foregroundColor = Ink.primary
-        var perWeek = AttributedString(" per week")
-        perWeek.foregroundColor = Ink.secondary
-        var line = freq + perWeek
-
-        if report.weekStreak >= 2 {
-            var sep = AttributedString(", ")
-            sep.foregroundColor = Ink.secondary
-            var run = AttributedString("\(report.weekStreak) weeks")
-            run.foregroundColor = Ink.primary
-            var unbroken = AttributedString(" unbroken")
-            unbroken.foregroundColor = Ink.secondary
-            line += sep + run + unbroken
-        }
-
-        var stop = AttributedString(". ")
-        stop.foregroundColor = Ink.secondary
-        line += stop
-
-        if let rir = report.averageRIR {
-            var lead = AttributedString("Sets average ")
-            lead.foregroundColor = Ink.secondary
-            var value = AttributedString(rirLabel(rir) + " in reserve")
-            value.foregroundColor = Ink.primary
-            var verdict = AttributedString(" — " + effortVerdict(rir) + ".")
-            verdict.foregroundColor = Ink.secondary
-            line += lead + value + verdict
-        }
-
-        return line
-    }
-
-    /// How the average RIR reads as training intent.
-    private func effortVerdict(_ rir: Double) -> String {
-        if rir < ConsistencyReport.targetRIRLow { return "grinding near failure, so guard recovery" }
-        if rir <= ConsistencyReport.targetRIRHigh { return "right in the growth zone" }
-        return "leaving a lot in the tank"
     }
 
     private func rirLabel(_ value: Double?) -> String {

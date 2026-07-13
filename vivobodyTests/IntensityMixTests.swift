@@ -105,4 +105,41 @@ struct IntensityMixTests {
         #expect(mix.dominant == nil)
         #expect(mix.hasData == false)
     }
+
+    // MARK: - Weekly breakdown
+
+    @Test func weeklyBucketsSitInTheirOwnWeeks() {
+        let thisWeek = session(daysAgo: 0, [lift([(3, true), (8, true)])])
+        let lastWeek = session(daysAgo: 7, [lift([(15, true)])])
+        let weeks = [thisWeek, lastWeek].weeklyIntensity(now: now)
+
+        #expect(weeks.count == 2)
+        // Chronological ascending: older week first.
+        #expect(weeks[0].weekStart < weeks[1].weekStart)
+        #expect(weeks[0].enduranceSets == 1)
+        #expect(weeks[0].total == 1)
+        #expect(weeks[1].strengthSets == 1)
+        #expect(weeks[1].hypertrophySets == 1)
+        #expect(weeks[1].total == 2)
+    }
+
+    @Test func weeklyRespectsTheWindow() {
+        let recent = session(daysAgo: 3, [lift([(8, true)])])
+        let ancient = session(daysAgo: 100, [lift([(3, true)])])
+        let weeks = [recent, ancient].weeklyIntensity(weeks: 12, now: now)
+        #expect(weeks.count == 1)
+        #expect(weeks[0].hypertrophySets == 1)
+    }
+
+    @Test func weeklyOmitsEmptyWeeksAndHolds() {
+        let holdsOnly = session(daysAgo: 7, [hold(seconds: [60])])
+        let repsWeek = session(daysAgo: 0, [lift([(10, true)])])
+        let weeks = [holdsOnly, repsWeek].weeklyIntensity(now: now)
+        #expect(weeks.count == 1)
+        #expect(weeks[0].hypertrophySets == 1)
+    }
+
+    @Test func weeklyEmptyHistoryIsEmpty() {
+        #expect([WorkoutSession]().weeklyIntensity(now: now).isEmpty)
+    }
 }

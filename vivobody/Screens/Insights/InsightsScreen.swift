@@ -9,20 +9,22 @@
 //       of your training (no body here; the 3D figure is Today's).
 //    2. Strength — an estimated-1RM line chart per lift, a record line
 //       to chase (Swift Charts, not bars).
-//    3. Composition — which lifts carry your volume (exercise dominance).
-//    4. Intensity — rep-range distribution of working sets (snapshot).
-//    5. Rep trend — average reps/set drifting heavier or lighter over
-//       time (the temporal companion to the intensity snapshot).
-//    6. Movement — compound vs isolation split of working sets.
-//    7. Rhythm — the consistency heatmap plus a weekly-volume curve.
-//    8. Load — acute:chronic workload ratio (recovery debt).
-//    9. Symmetry — the antagonist-balance coda.
+//    3. Composition — which lifts carry your volume (exercise
+//       dominance), with the compound/isolation split as its coda.
+//    4. Intensity — 12 weeks of working sets stacked per week by
+//       rep-range zone: the mix and its drift in one chart.
+//    5. Rhythm — the consistency heatmap plus a weekly-volume curve.
+//    6. Load — weekly tonnage bars against the 4-week baseline
+//       (acute:chronic workload ratio — recovery debt).
+//    7. Symmetry — the antagonist butterfly bars as the coda.
 //
-//  Each section owns its own copy and colours; this screen fetches the
-//  data, runs the value-type models, and lays the movements out
-//  gutter-to-gutter with a hairline between each. Visual language
-//  follows the rest of the app: black, type-forward, the single orange
-//  accent for "on target," danger-red only where something's slipping.
+//  Every section is chart-first: the graphic leads at full size, one
+//  caption line reads it, and the numbers ride the chart instead of
+//  repeating it. This screen fetches the data, runs the value-type
+//  models, and lays the movements out gutter-to-gutter with a
+//  hairline between each. Visual language follows the rest of the
+//  app: black, type-forward, the single orange accent for "on
+//  target," danger-red only where something's slipping.
 //
 
 import VivoKit
@@ -131,26 +133,20 @@ struct InsightsScreen: View {
                     StrengthTrajectorySection(board: a.strength, progress: a.progress)
                         .settleIn(1)
                     GroupSeparator()
-                    ExerciseDominanceSection(board: a.dominance)
+                    ExerciseDominanceSection(board: a.dominance, split: a.composition)
                         .settleIn(2)
                     GroupSeparator()
-                    IntensityMixSection(mix: a.intensity)
+                    IntensityMixSection(mix: a.intensity, weeks: a.intensityWeeks, migration: a.migration)
                         .settleIn(3)
                     GroupSeparator()
-                    RepRangeMigrationSection(report: a.migration)
+                    ConsistencySection(report: a.consistency)
                         .settleIn(4)
                     GroupSeparator()
-                    MovementCompositionSection(split: a.composition)
+                    TrainingLoadSection(report: a.load)
                         .settleIn(5)
                     GroupSeparator()
-                    ConsistencySection(report: a.consistency)
-                        .settleIn(6)
-                    GroupSeparator()
-                    TrainingLoadSection(report: a.load)
-                        .settleIn(7)
-                    GroupSeparator()
                     SymmetrySection(board: a.symmetry)
-                        .settleIn(8)
+                        .settleIn(6)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

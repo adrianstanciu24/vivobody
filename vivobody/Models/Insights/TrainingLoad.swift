@@ -58,6 +58,20 @@ nonisolated enum LoadVerdict: Hashable {
     }
 }
 
+// MARK: - Weekly load
+
+/// One calendar week's total tonnage — the bars of the Insights
+/// training-load chart. Weeks without sessions carry zero so a
+/// skipped week reads as the gap it was.
+nonisolated struct LoadWeek: Identifiable, Hashable {
+    var id: Date { weekStart }
+    let weekStart: Date
+    /// Total tonnage (canonical lb) for the week.
+    let load: Double
+    /// `true` for the week containing `now` — still being written.
+    let isCurrent: Bool
+}
+
 // MARK: - Report
 
 nonisolated struct TrainingLoadReport: Hashable {
@@ -71,6 +85,9 @@ nonisolated struct TrainingLoadReport: Hashable {
     /// Whole days from the first logged session to `now` — drives the
     /// "keep logging" copy while the baseline is still forming.
     let daysLogged: Int
+    /// Weekly tonnage over the trailing 12 calendar weeks (oldest →
+    /// newest, zero-filled), clipped to weeks since the first session.
+    let weeks: [LoadWeek]
 
     /// Enough history (≥ 2 weeks) and a real baseline to judge.
     var hasEnoughHistory: Bool { verdict != .insufficient }
@@ -91,7 +108,7 @@ extension Array where Element == WorkoutSession {
         guard let first = dated.map(\.date).min() else {
             return TrainingLoadReport(
                 acuteLoad: 0, chronicWeekly: 0, ratio: 0,
-                verdict: .insufficient, daysLogged: 0
+                verdict: .insufficient, daysLogged: 0, weeks: []
             )
         }
 
@@ -116,7 +133,44 @@ extension Array where Element == WorkoutSession {
             chronicWeekly: chronicWeekly,
             ratio: ratio,
             verdict: verdict,
-            daysLogged: daysSinceFirst
+            daysLogged: daysSinceFirst,
+            weeks: Self.weeklyLoads(dated: dated, firstSession: first, now: now)
         )
+    }
+
+    /// Zero-filled weekly tonnage columns for the trailing 12 calendar
+    /// weeks, starting no earlier than the week of the first session.
+    private static func weeklyLoads(
+        dated: [(date: Date, load: Double)],
+        firstSession: Date,
+        now: Date
+    ) -> [LoadWeek] {
+        let calendar = Calendar.current
+        guard let currentWeekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+            return []
+        }
+
+        var loadByWeek: [Date: Double] = [:]
+        for entry in dated {
+            guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: entry.date)?.start else { continue }
+            loadByWeek[weekStart, default: 0] += entry.load
+        }
+
+        let firstWeekStart = calendar.dateInterval(of: .weekOfYear, for: firstSession)?.start ?? currentWeekStart
+
+        var weeks: [LoadWeek] = []
+        for offset in stride(from: -11, through: 0, by: 1) {
+            guard let weekStart = calendar.date(byAdding: .weekOfYear, value: offset, to: currentWeekStart),
+                  weekStart >= firstWeekStart
+            else { continue }
+            weeks.append(
+                LoadWeek(
+                    weekStart: weekStart,
+                    load: loadByWeek[weekStart] ?? 0,
+                    isCurrent: offset == 0
+                )
+            )
+        }
+        return weeks
     }
 }

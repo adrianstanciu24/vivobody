@@ -12,7 +12,7 @@
 //  It deliberately carries the group-balance read the old tab spread
 //  across a separate roster — so this one mark answers "what's the
 //  shape of my training?" — anchored by three plain numbers (cadence,
-//  streak, balance) and one sentence so the art always has a legend.
+//  streak, balance) and a concise visual legend.
 //
 //  No anatomical body here on purpose: the rotatable 3D figure is
 //  Today's hero. Insights is the analytical counterpart, and the
@@ -28,7 +28,11 @@ struct SignatureSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Your signature", trailing: "the shape of your training")
+            VStack(alignment: .leading, spacing: Space.xs) {
+                SectionHeader(title: "Your signature")
+                Text("the shape of your training")
+                    .panelLegend()
+            }
 
             if !signature.hasSignature {
                 Text("Your signature takes shape once you've logged some training — a living portrait of how you train, all of it in one mark.")
@@ -51,8 +55,6 @@ struct SignatureSection: View {
                 )
                 .padding(.vertical, Space.xs)
 
-                verdict
-
                 Text("Each petal is a muscle group — its reach is how developed it is, its width how much of your volume it takes. The brighter the bloom, the harder the training; the beads count your sessions a week.")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
@@ -62,41 +64,6 @@ struct SignatureSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// One read of the whole signature: its focus and trajectory, then
-    /// the effort and cadence it was built at.
-    private var verdict: some View {
-        Text(line(signature))
-            .font(Typography.body)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private func line(_ signature: TrainingSignature) -> AttributedString {
-        var focus: AttributedString
-        if let group = signature.dominantGroup {
-            focus = AttributedString("\(group.displayName)-led")
-        } else {
-            focus = AttributedString("Balanced across every region")
-        }
-        focus.foregroundColor = Ink.primary
-
-        var separator = AttributedString(". ")
-        separator.foregroundColor = Ink.secondary
-
-        var effort = AttributedString(effortPhrase(signature.intensity) + ", ")
-        effort.foregroundColor = Ink.secondary
-        var cadence = AttributedString(InsightsFormat.perWeekLabel(signature.cadence) + "×")
-        cadence.foregroundColor = Ink.primary
-        var rest = AttributedString(" a week.")
-        rest.foregroundColor = Ink.secondary
-
-        return focus + separator + effort + cadence + rest
-    }
-
-    private func effortPhrase(_ intensity: Double) -> String {
-        if intensity >= 0.6 { return "Trained close to failure" }
-        if intensity >= 0.4 { return "Pushed at a steady clip" }
-        return "Plenty left in the tank"
-    }
 }
 
 // MARK: - Training signature emblem
@@ -232,8 +199,7 @@ private struct TrainingSignatureView: View {
     }
 
     private var accessibilityText: String {
-        let focus = signature.dominantGroup.map { "\($0.displayName)-led" } ?? "balanced"
         let cadence = String(format: "%.1f", signature.cadence)
-        return "Training signature: \(focus), \(cadence) sessions per week"
+        return "Training signature showing muscle-group development, \(cadence) sessions per week"
     }
 }
