@@ -73,9 +73,9 @@ extension Array where Element == WorkoutSession {
 
         for session in self {
             let date = session.completedAt ?? session.startedAt
-            guard date > cutoff else { continue }
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                let completed = exercise.sets.filter(\.isCompleted).count
+            guard date > cutoff, date <= now else { continue }
+            for exercise in session.orderedExercises where exercise.trackingMode == .reps {
+                let completed = exercise.orderedSets.filter { $0.isCompleted && $0.reps > 0 }.count
                 guard completed > 0 else { continue }
                 guard let mechanic = ExerciseClassification.forExerciseNamed(exercise.name)?.mechanic else {
                     unclassified += completed

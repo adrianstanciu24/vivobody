@@ -88,13 +88,16 @@ nonisolated struct IntensityMix: Hashable {
 
 /// One calendar week's zone counts — the bars of the Insights
 /// intensity chart. Weeks with no completed `.reps` sets are omitted
-/// by the aggregator, so a gap in training reads as a gap.
+/// by the aggregator, so a gap in training reads as a gap. The current
+/// calendar week is marked so the chart can present it as incomplete
+/// rather than implying a finished-week drop.
 nonisolated struct IntensityWeek: Identifiable, Hashable {
     var id: Date { weekStart }
     let weekStart: Date
     let strengthSets: Int
     let hypertrophySets: Int
     let enduranceSets: Int
+    let isCurrentWeek: Bool
 
     var total: Int { strengthSets + hypertrophySets + enduranceSets }
 
@@ -147,6 +150,9 @@ extension Array where Element == WorkoutSession {
     func weeklyIntensity(weeks: Int = 12, now: Date = Date()) -> [IntensityWeek] {
         let calendar = Calendar.current
         let cutoff = now.addingTimeInterval(-Double(weeks) * 7 * 86_400)
+        let currentWeekStart = calendar.date(
+            from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
+        )
 
         var byWeek: [Date: (strength: Int, hypertrophy: Int, endurance: Int)] = [:]
 
@@ -176,7 +182,8 @@ extension Array where Element == WorkoutSession {
                 weekStart: weekStart,
                 strengthSets: bucket.strength,
                 hypertrophySets: bucket.hypertrophy,
-                enduranceSets: bucket.endurance
+                enduranceSets: bucket.endurance,
+                isCurrentWeek: weekStart == currentWeekStart
             )
         }
     }

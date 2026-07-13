@@ -11,8 +11,8 @@
 //  / in N days" label. Today is only offered as a startable workout
 //  when it's a scheduled day and nothing has been logged yet — any
 //  completed session today satisfies the day, so the card rolls on to
-//  the next one. When load is spiking the scheduled day still stands,
-//  just flagged to ease off.
+//  the next one. When recent load is high the scheduled day still
+//  stands, just flagged to keep the session lighter.
 //
 //  Pure value-type computation on injected dates (see `UpNextTests`).
 //  Holds live `WorkoutTemplate` references, so it's main-actor work
@@ -32,7 +32,7 @@ struct UpNext {
     enum Kind {
         /// Train today: a scheduled template with nothing logged yet.
         /// `more` counts other templates also pinned to today;
-        /// `easeOff` flags a spiking training load.
+        /// `easeOff` flags a high recent training load.
         case scheduled(template: WorkoutTemplate, more: Int, easeOff: Bool)
         /// Today is a rest day; the next scheduled template sits
         /// `daysUntil` days out (nil only if the schedule somehow
@@ -79,7 +79,7 @@ struct UpNext {
         // Train today — a scheduled day with nothing logged yet.
         let todays = pinned(at: 0)
         if !trainedToday, let pick = todays.first {
-            let easeOff = sessions.trainingLoad(now: now).verdict == .overreaching
+            let easeOff = sessions.trainingLoad(now: now, calendar: calendar).verdict == .high
             return UpNext(kind: .scheduled(template: pick, more: todays.count - 1, easeOff: easeOff))
         }
 

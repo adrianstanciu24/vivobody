@@ -2,9 +2,9 @@
 //  ExerciseDominanceTests.swift
 //  vivobodyTests
 //
-//  Guards the lifetime tonnage ranking: name grouping across
-//  sessions, descending order by volume, share arithmetic, exclusion
-//  of timed holds and incomplete sets, and the empty-archive edge.
+//  Guards recent working-set allocation: name grouping across
+//  sessions, set-count ordering, four-week windowing, share
+//  arithmetic, exclusions, and the empty-history edge.
 //
 
 import Foundation
@@ -27,9 +27,16 @@ struct ExerciseDominanceTests {
     private func lift(
         _ name: String = "Bench Press",
         group: MuscleGroup = .chest,
+        catalogItemID: UUID? = nil,
         _ sets: [(weight: Double, reps: Int, completed: Bool)]
     ) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: 0, plannedWeight: 0)
+        let ex = Exercise(
+            name: name,
+            catalogItemID: catalogItemID,
+            group: group,
+            plannedSets: 0,
+            plannedWeight: 0
+        )
         for (i, s) in sets.enumerated() {
             ex.sets.append(WorkoutSet(
                 weight: s.weight,
@@ -41,7 +48,7 @@ struct ExerciseDominanceTests {
         return ex
     }
 
-    /// Timed-hold exercise — carries duration, no weight×reps volume.
+    /// Timed-hold exercise, excluded from working-set allocation.
     private func hold(seconds: [TimeInterval]) -> Exercise {
         let ex = Exercise(
             name: "Plank",
@@ -65,8 +72,7 @@ struct ExerciseDominanceTests {
 
         #expect(board.stats.count == 1)
         #expect(board.top?.name == "Back Squat")
-        // 185*8 + 185*8 + 205*5 = 1480 + 1480 + 1025 = 3985
-        #expect(board.top?.volume ?? 0 == 3985)
+        #expect(board.top?.sets == 3)
     }
 
     // MARK: - Shares
@@ -78,19 +84,56 @@ struct ExerciseDominanceTests {
 
         let sum = board.stats.reduce(0.0) { $0 + $1.share }
         #expect(abs(sum - 1.0) < 0.0001)
-        #expect(board.totalVolume == 1500) // 1000 + 500
+        #expect(board.totalSets == 2)
+        #expect(board.stats.allSatisfy { abs($0.share - 0.5) < 0.0001 })
     }
 
     // MARK: - Ordering
 
-    @Test func sortsDescendingByVolume() {
-        let small = lift("Curl", group: .arms, [(50, 10, true)])      // 500
-        let big = lift("Deadlift", group: .back, [(200, 5, true)])    // 1000
-        let mid = lift("Row", group: .back, [(100, 8, true)])         // 800
+    @Test func sortsDescendingBySetCount() {
+        let small = lift("Curl", group: .arms, [(50, 10, true)])
+        let big = lift("Deadlift", group: .back, [(200, 5, true), (200, 5, true), (200, 5, true)])
+        let mid = lift("Row", group: .back, [(100, 8, true), (100, 8, true)])
         let board = [session(daysAgo: 1, [small, big, mid])].exerciseDominance(now: now)
 
         #expect(board.stats.map(\.name) == ["Deadlift", "Row", "Curl"])
         #expect(board.top?.name == "Deadlift")
+    }
+
+    @Test func lightExercisesAreNotPenalizedByWeight() {
+        let heavy = lift("Deadlift", group: .back, [(500, 3, true)])
+        let light = lift("Leg Curl", group: .legs, [
+            (40, 12, true),
+            (40, 12, true),
+            (40, 12, true),
+            (40, 12, true),
+        ])
+        let board = [session(daysAgo: 1, [heavy, light])].exerciseDominance(now: now)
+
+        #expect(board.top?.name == "Leg Curl")
+        #expect(board.top?.sets == 4)
+        #expect(abs(board.topShare - 0.8) < 0.0001)
+    }
+
+    @Test func equalCountsUseStableIdentityAfterName() {
+        let firstID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        let secondID = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+        let second = lift(
+            "Press",
+            catalogItemID: secondID,
+            [(100, 8, true)]
+        )
+        let first = lift(
+            "Press",
+            catalogItemID: firstID,
+            [(100, 8, true)]
+        )
+        let board = [session(daysAgo: 1, [second, first])].exerciseDominance(now: now)
+
+        #expect(board.stats.map(\.historyKey) == [
+            "catalog:\(firstID.uuidString)",
+            "catalog:\(secondID.uuidString)",
+        ])
     }
 
     // MARK: - Exclusions
@@ -102,7 +145,7 @@ struct ExerciseDominanceTests {
 
         #expect(board.stats.count == 1)
         #expect(board.top?.name == "Bench Press")
-        #expect(board.totalVolume == 800)
+        #expect(board.totalSets == 1)
     }
 
     @Test func excludesIncompleteSets() {
@@ -116,7 +159,35 @@ struct ExerciseDominanceTests {
         let board = [session(daysAgo: 1, [ex])].exerciseDominance(now: now)
 
         #expect(board.stats.count == 1)
-        #expect(board.totalVolume == 800) // only 100*8
+        #expect(board.totalSets == 1)
+    }
+
+    // MARK: - Window
+
+    @Test func respectsTheFourWeekWindow() {
+        let recent = session(daysAgo: 3, [lift("Bench Press", [(100, 8, true)])])
+        let old = session(daysAgo: 40, [lift("Back Squat", [(200, 5, true), (200, 5, true)])])
+        let board = [recent, old].exerciseDominance(now: now)
+
+        #expect(board.stats.map(\.name) == ["Bench Press"])
+        #expect(board.totalSets == 1)
+    }
+
+    @Test func excludesTheExactWindowBoundary() {
+        let inside = session(daysAgo: 27.999, [lift("Bench Press", [(100, 8, true)])])
+        let boundary = session(daysAgo: 28, [lift("Back Squat", [(200, 5, true)])])
+        let board = [inside, boundary].exerciseDominance(now: now)
+
+        #expect(board.stats.map(\.name) == ["Bench Press"])
+        #expect(board.totalSets == 1)
+    }
+
+    @Test func excludesFutureSessions() {
+        let recent = session(daysAgo: 1, [lift("Bench Press", [(100, 8, true)])])
+        let future = session(daysAgo: -1, [lift("Back Squat", [(200, 5, true)])])
+        let board = [recent, future].exerciseDominance(now: now)
+
+        #expect(board.stats.map(\.name) == ["Bench Press"])
     }
 
     // MARK: - Empty
@@ -127,20 +198,18 @@ struct ExerciseDominanceTests {
         #expect(board.top == nil)
         #expect(board.topShare == 0)
         #expect(board.topTwoShare == 0)
-        #expect(board.totalVolume == 0)
+        #expect(board.totalSets == 0)
     }
 
     // MARK: - topTwoShare
 
     @Test func topTwoShareSumsTopTwo() {
-        // Volumes: 1000, 500, 250 → total 1750.
-        // topTwoShare = (1000 + 500) / 1750
-        let big = lift("Squat", group: .legs, [(100, 10, true)])
-        let mid = lift("Bench", group: .chest, [(100, 5, true)])
+        let big = lift("Squat", group: .legs, [(100, 10, true), (100, 10, true), (100, 10, true)])
+        let mid = lift("Bench", group: .chest, [(100, 5, true), (100, 5, true)])
         let small = lift("Curl", group: .arms, [(50, 5, true)])
         let board = [session(daysAgo: 1, [big, mid, small])].exerciseDominance(now: now)
 
-        let expected = (1000.0 + 500.0) / 1750.0
+        let expected = 5.0 / 6.0
         #expect(abs(board.topTwoShare - expected) < 0.0001)
     }
 }

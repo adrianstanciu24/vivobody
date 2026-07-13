@@ -152,12 +152,25 @@ nonisolated enum SetStimulus {
             let weights = exercise.muscleInvolvement.weights
             guard !weights.isEmpty else { return [:] }
 
-            var total = 0.0
-            for set in exercise.orderedSets where set.isCompleted {
-                total += hardSetEquivalent(for: set, mode: exercise.trackingMode, key: exercise.historyKey, at: date)
-            }
+            let total = setEquivalentCredit(for: exercise, at: date)
             guard total > 0 else { return [:] }
             return weights.mapValues { total * $0 }
+        }
+
+        /// Whole-exercise hard-set equivalents before muscle
+        /// involvement is applied. Training load uses this systemic
+        /// total while muscle analytics use `credit(for:at:)`.
+        mutating func setEquivalentCredit(for exercise: Exercise, at date: Date) -> Double {
+            exercise.orderedSets
+                .filter(\.isCompleted)
+                .reduce(into: 0.0) { total, set in
+                    total += hardSetEquivalent(
+                        for: set,
+                        mode: exercise.trackingMode,
+                        key: exercise.historyKey,
+                        at: date
+                    )
+                }
         }
 
         // MARK: Per-set pricing

@@ -5,7 +5,7 @@
 //  Guards the schedule-driven "Up next" engine on a virtual clock:
 //  the unscheduled short-circuit, train-today, the rest-day rollover
 //  (off-day vs already-trained), week wrap-around, same-day rotation,
-//  and the overreaching ease-off flag.
+//  and the high-load lighter-session flag.
 //
 
 import Foundation
@@ -80,11 +80,11 @@ struct UpNextTests {
         #expect(more == 1)
     }
 
-    @Test func easeOffWhenOverreaching() {
+    @Test func easeOffWhenTrainingLoadIsHigh() {
         let t = template(name: "Push", days: [weekday(offset: 0)])
         var sessions = [9.0, 16, 23].map { session(daysAgo: $0, weight: 50, reps: 10, sets: 1) }
-        sessions.append(session(daysAgo: 2, weight: 100, reps: 10, sets: 2)) // acute spike
-        sessions.append(session(daysAgo: 30, weight: 500, reps: 1, sets: 1)) // opens history gate
+        sessions.append(session(daysAgo: 2, weight: 100, reps: 10, sets: 2))
+        sessions.append(session(daysAgo: 30, weight: 50, reps: 10, sets: 1))
         let upNext = UpNext.compute(templates: [t], sessions: sessions, now: now, calendar: cal)
         guard case let .scheduled(_, _, easeOff) = upNext.kind else { Issue.record("expected scheduled"); return }
         #expect(easeOff)

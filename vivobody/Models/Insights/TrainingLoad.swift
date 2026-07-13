@@ -2,175 +2,296 @@
 //  TrainingLoad.swift
 //  vivobody
 //
-//  The macro recovery lens for the Insights tab. Every other section
-//  reads DISTRIBUTION — which muscle, which lift, which rep range.
-//  This reads TREND: is total systemic load ramping faster than the
-//  body has adapted to?
+//  The personal workload lens for Insights. Load is expressed in
+//  estimated hard-set equivalents, the same currency used by muscle
+//  volume, so bodyweight work and timed holds count while warm-ups,
+//  easy sets, and heavy singles are weighted honestly.
 //
-//  It's the acute:chronic workload ratio (ACWR) coaches use to flag
-//  overreaching. Load is measured in tonnage (weight × reps), summed
-//  per session:
-//    • acute   = tonnage over the last 7 days.
-//    • chronic = average WEEKLY tonnage over the last 28 days.
-//    • ratio   = acute / chronic.
+//  The headline compares the rolling last seven calendar days with
+//  the median of the four non-overlapping weeks immediately before
+//  them. A personal productive range of 0.8...1.3 times that usual
+//  load gives the status context without presenting a clinical
+//  recovery or injury-risk claim.
 //
-//  A ratio near 1.0 means this week matches the month's habit; well
-//  above means you're ramping hard (recovery debt, niggle risk);
-//  well below means load is dropping (deload or detraining).
-//
-//  The chronic baseline is the 28-day tonnage total divided by the
-//  number of weeks of history actually on hand (rounded, capped at
-//  four) — so a three-week log isn't false-flagged as a spike because
-//  its sum got spread over a flat four. Under three weeks of history
-//  the ratio can't be trusted, so the verdict reads `.insufficient`
-//  and the UI counts down the days.
-//
-//  Pure value-type computation on injected dates (see
-//  `TrainingLoadTests`).
+//  The trend contains up to 84 daily points. Every point uses the
+//  trailing seven days and, where enough prior history exists, its
+//  own historical productive range. Pure value-type computation on
+//  injected dates and calendars (see `TrainingLoadTests`).
 //
 
 import Foundation
 
 // MARK: - Verdict
 
-/// Where the acute:chronic ratio lands. Bands follow the sports-
-/// science convention: 0.8–1.3 is the productive "sweet spot", above
-/// 1.5 is the elevated-risk zone.
 nonisolated enum LoadVerdict: Hashable {
-    /// Under two weeks of history — the ratio isn't meaningful yet.
     case insufficient
-    /// Ratio < 0.8 — load is dropping (deload or detraining).
-    case detraining
-    /// Ratio 0.8–1.3 — this week tracks the month's baseline.
-    case optimal
-    /// Ratio 1.3–1.5 — ramping hard but still inside reason.
-    case pushing
-    /// Ratio > 1.5 — load spiking past adaptation; back off.
-    case overreaching
+    case low
+    case productive
+    case high
 
     static func from(ratio: Double) -> LoadVerdict {
         switch ratio {
-        case ..<0.8:     return .detraining
-        case 0.8..<1.3:  return .optimal
-        case 1.3..<1.5:  return .pushing
-        default:         return .overreaching
+        case ..<0.8: return .low
+        case ...1.3: return .productive
+        default:     return .high
         }
     }
 }
 
-// MARK: - Weekly load
+// MARK: - Trend and drivers
 
-/// One calendar week's total tonnage — the bars of the Insights
-/// training-load chart. Weeks without sessions carry zero so a
-/// skipped week reads as the gap it was.
-nonisolated struct LoadWeek: Identifiable, Hashable {
-    var id: Date { weekStart }
-    let weekStart: Date
-    /// Total tonnage (canonical lb) for the week.
+/// One daily sample of the rolling seven-day load.
+nonisolated struct LoadPoint: Identifiable, Hashable {
+    var id: Date { date }
+    let date: Date
     let load: Double
-    /// `true` for the week containing `now` — still being written.
-    let isCurrent: Bool
+    let productiveLower: Double?
+    let productiveUpper: Double?
+}
+
+nonisolated struct LoadDriver: Hashable {
+    let current: Double
+    let usual: Double?
+}
+
+nonisolated struct TrainingLoadDrivers: Hashable {
+    let hardSets: LoadDriver
+    let sessions: LoadDriver
+    let heavySets: LoadDriver
+
+    static let empty = TrainingLoadDrivers(
+        hardSets: LoadDriver(current: 0, usual: nil),
+        sessions: LoadDriver(current: 0, usual: nil),
+        heavySets: LoadDriver(current: 0, usual: nil)
+    )
 }
 
 // MARK: - Report
 
 nonisolated struct TrainingLoadReport: Hashable {
-    /// Tonnage (canonical lb) over the last 7 days.
-    let acuteLoad: Double
-    /// Average weekly tonnage baseline over the last 28 days.
-    let chronicWeekly: Double
-    /// acute / chronicWeekly. Zero when there's no baseline.
+    /// Estimated hard-set equivalents in the rolling last seven days.
+    let currentLoad: Double
+    /// Median weekly load across the four preceding weeks.
+    let usualLoad: Double?
+    /// Current load divided by usual load. Zero while forming.
     let ratio: Double
     let verdict: LoadVerdict
-    /// Whole days from the first logged session to `now` — drives the
-    /// "keep logging" copy while the baseline is still forming.
+    /// Whole calendar days from first completed work to `now`.
     let daysLogged: Int
-    /// Weekly tonnage over the trailing 12 calendar weeks (oldest →
-    /// newest, zero-filled), clipped to weeks since the first session.
-    let weeks: [LoadWeek]
+    /// Rolling seven-day load over at most the trailing 12 weeks.
+    let points: [LoadPoint]
+    let drivers: TrainingLoadDrivers
 
-    /// Enough history (≥ 2 weeks) and a real baseline to judge.
     var hasEnoughHistory: Bool { verdict != .insufficient }
+
+    var productiveRange: ClosedRange<Double>? {
+        guard let usualLoad else { return nil }
+        return (usualLoad * 0.8)...(usualLoad * 1.3)
+    }
+
+    var changeFromUsual: Double? {
+        guard let usualLoad, usualLoad > 0 else { return nil }
+        return (currentLoad - usualLoad) / usualLoad
+    }
 }
 
 // MARK: - Aggregation
 
 extension Array where Element == WorkoutSession {
-    /// Acute:chronic workload report as of `now`, load measured in
-    /// tonnage. Only sessions with completed work contribute.
-    func trainingLoad(now: Date = Date()) -> TrainingLoadReport {
-        let dated: [(date: Date, load: Double)] = compactMap { session in
-            let load = session.totalVolume
-            guard load > 0 else { return nil }
-            return (session.completedAt ?? session.startedAt, load)
-        }
-
-        guard let first = dated.map(\.date).min() else {
+    /// Personal rolling workload report as of `now`.
+    func trainingLoad(
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> TrainingLoadReport {
+        let measurements = Self.measurements(from: self, through: now)
+        guard let first = measurements.first?.date else {
             return TrainingLoadReport(
-                acuteLoad: 0, chronicWeekly: 0, ratio: 0,
-                verdict: .insufficient, daysLogged: 0, weeks: []
+                currentLoad: 0,
+                usualLoad: nil,
+                ratio: 0,
+                verdict: .insufficient,
+                daysLogged: 0,
+                points: [],
+                drivers: .empty
             )
         }
 
-        let acuteCutoff = now.addingTimeInterval(-7 * 86_400)
-        let chronicCutoff = now.addingTimeInterval(-28 * 86_400)
-        let acute = dated.filter { $0.date > acuteCutoff }.reduce(0) { $0 + $1.load }
-        let chronicSum = dated.filter { $0.date > chronicCutoff }.reduce(0) { $0 + $1.load }
-
-        let daysSinceFirst = Swift.max(0, Int(now.timeIntervalSince(first) / 86_400))
-        // Spread the 28-day total over the weeks actually logged
-        // (rounded, 1…4) so a short history reports a fair weekly
-        // baseline instead of a deflated one that fakes a spike.
-        let weeksLogged = Swift.min(4.0, Swift.max(1.0, (Double(daysSinceFirst) / 7.0).rounded()))
-        let chronicWeekly = chronicSum / weeksLogged
-        let ratio = chronicWeekly > 0 ? acute / chronicWeekly : 0
-
-        let enough = daysSinceFirst >= 21 && chronicWeekly > 0
-        let verdict: LoadVerdict = enough ? LoadVerdict.from(ratio: ratio) : .insufficient
+        let today = calendar.startOfDay(for: now)
+        let firstDay = calendar.startOfDay(for: first)
+        let daysLogged = Swift.max(
+            0,
+            calendar.dateComponents([.day], from: firstDay, to: today).day ?? 0
+        )
+        let current = Self.window(
+            endingOn: today,
+            measurements: measurements,
+            calendar: calendar
+        )
+        let previous = Self.previousWindows(
+            before: today,
+            measurements: measurements,
+            calendar: calendar
+        )
+        let activeBaselineWeeks = previous.filter { $0.load > 0 }.count
+        let usual = daysLogged >= 28 && activeBaselineWeeks >= 3
+            ? Self.median(previous.map(\.load))
+            : nil
+        let ratio = usual.flatMap { $0 > 0 ? current.load / $0 : nil } ?? 0
+        let verdict = usual == nil ? LoadVerdict.insufficient : LoadVerdict.from(ratio: ratio)
 
         return TrainingLoadReport(
-            acuteLoad: acute,
-            chronicWeekly: chronicWeekly,
+            currentLoad: current.load,
+            usualLoad: usual,
             ratio: ratio,
             verdict: verdict,
-            daysLogged: daysSinceFirst,
-            weeks: Self.weeklyLoads(dated: dated, firstSession: first, now: now)
+            daysLogged: daysLogged,
+            points: Self.rollingPoints(
+                measurements: measurements,
+                firstDay: firstDay,
+                today: today,
+                calendar: calendar
+            ),
+            drivers: TrainingLoadDrivers(
+                hardSets: LoadDriver(current: current.load, usual: usual),
+                sessions: LoadDriver(
+                    current: Double(current.sessions),
+                    usual: usual == nil ? nil : Self.median(previous.map { Double($0.sessions) })
+                ),
+                heavySets: LoadDriver(
+                    current: current.heavySets,
+                    usual: usual == nil ? nil : Self.median(previous.map(\.heavySets))
+                )
+            )
         )
     }
 
-    /// Zero-filled weekly tonnage columns for the trailing 12 calendar
-    /// weeks, starting no earlier than the week of the first session.
-    private static func weeklyLoads(
-        dated: [(date: Date, load: Double)],
-        firstSession: Date,
-        now: Date
-    ) -> [LoadWeek] {
-        let calendar = Calendar.current
-        guard let currentWeekStart = calendar.dateInterval(of: .weekOfYear, for: now)?.start else {
+    private struct Measurement {
+        let date: Date
+        let load: Double
+        let heavySets: Double
+    }
+
+    private struct Window {
+        let load: Double
+        let sessions: Int
+        let heavySets: Double
+    }
+
+    /// Replay completed sessions chronologically so each set is
+    /// judged against only the exercise history that preceded it.
+    private static func measurements(
+        from sessions: [WorkoutSession],
+        through now: Date
+    ) -> [Measurement] {
+        let completed = sessions
+            .compactMap { session -> (WorkoutSession, Date)? in
+                guard let date = session.completedAt, date <= now else { return nil }
+                return (session, date)
+            }
+            .sorted { $0.1 < $1.1 }
+
+        var calculator = SetStimulus.Calculator()
+        return completed.compactMap { session, date in
+            var load = 0.0
+            var heavySets = 0.0
+            for exercise in session.orderedExercises {
+                load += calculator.setEquivalentCredit(for: exercise, at: date)
+                guard exercise.trackingMode == .reps else { continue }
+                heavySets += Double(
+                    exercise.orderedSets.filter {
+                        $0.isCompleted && (1...5).contains($0.reps)
+                    }.count
+                )
+            }
+            guard load > 0 else { return nil }
+            return Measurement(date: date, load: load, heavySets: heavySets)
+        }
+    }
+
+    private static func rollingPoints(
+        measurements: [Measurement],
+        firstDay: Date,
+        today: Date,
+        calendar: Calendar
+    ) -> [LoadPoint] {
+        guard let twelveWeeksAgo = calendar.date(byAdding: .day, value: -83, to: today) else {
             return []
         }
+        let start = Swift.max(firstDay, twelveWeeksAgo)
+        let days = Swift.max(0, calendar.dateComponents([.day], from: start, to: today).day ?? 0)
 
-        var loadByWeek: [Date: Double] = [:]
-        for entry in dated {
-            guard let weekStart = calendar.dateInterval(of: .weekOfYear, for: entry.date)?.start else { continue }
-            loadByWeek[weekStart, default: 0] += entry.load
-        }
-
-        let firstWeekStart = calendar.dateInterval(of: .weekOfYear, for: firstSession)?.start ?? currentWeekStart
-
-        var weeks: [LoadWeek] = []
-        for offset in stride(from: -11, through: 0, by: 1) {
-            guard let weekStart = calendar.date(byAdding: .weekOfYear, value: offset, to: currentWeekStart),
-                  weekStart >= firstWeekStart
-            else { continue }
-            weeks.append(
-                LoadWeek(
-                    weekStart: weekStart,
-                    load: loadByWeek[weekStart] ?? 0,
-                    isCurrent: offset == 0
-                )
+        return (0...days).compactMap { offset in
+            guard let day = calendar.date(byAdding: .day, value: offset, to: start) else {
+                return nil
+            }
+            let current = window(endingOn: day, measurements: measurements, calendar: calendar)
+            let previous = previousWindows(before: day, measurements: measurements, calendar: calendar)
+            let age = calendar.dateComponents([.day], from: firstDay, to: day).day ?? 0
+            let usual = age >= 28 && previous.filter({ $0.load > 0 }).count >= 3
+                ? median(previous.map(\.load))
+                : nil
+            return LoadPoint(
+                date: day,
+                load: current.load,
+                productiveLower: usual.map { $0 * 0.8 },
+                productiveUpper: usual.map { $0 * 1.3 }
             )
         }
-        return weeks
+    }
+
+    private static func window(
+        endingOn day: Date,
+        measurements: [Measurement],
+        calendar: Calendar
+    ) -> Window {
+        guard
+            let end = calendar.date(byAdding: .day, value: 1, to: day),
+            let start = calendar.date(byAdding: .day, value: -6, to: day)
+        else {
+            return Window(load: 0, sessions: 0, heavySets: 0)
+        }
+        return window(from: start, to: end, measurements: measurements)
+    }
+
+    private static func previousWindows(
+        before day: Date,
+        measurements: [Measurement],
+        calendar: Calendar
+    ) -> [Window] {
+        guard let currentStart = calendar.date(byAdding: .day, value: -6, to: day) else {
+            return []
+        }
+        return (1...4).compactMap { offset in
+            guard
+                let end = calendar.date(byAdding: .day, value: -7 * (offset - 1), to: currentStart),
+                let start = calendar.date(byAdding: .day, value: -7, to: end)
+            else {
+                return nil
+            }
+            return window(from: start, to: end, measurements: measurements)
+        }
+    }
+
+    private static func window(
+        from start: Date,
+        to end: Date,
+        measurements: [Measurement]
+    ) -> Window {
+        let included = measurements.filter { $0.date >= start && $0.date < end }
+        return Window(
+            load: included.reduce(0) { $0 + $1.load },
+            sessions: included.count,
+            heavySets: included.reduce(0) { $0 + $1.heavySets }
+        )
+    }
+
+    private static func median(_ values: [Double]) -> Double {
+        guard !values.isEmpty else { return 0 }
+        let sorted = values.sorted()
+        let middle = sorted.count / 2
+        if sorted.count.isMultiple(of: 2) {
+            return (sorted[middle - 1] + sorted[middle]) / 2
+        }
+        return sorted[middle]
     }
 }

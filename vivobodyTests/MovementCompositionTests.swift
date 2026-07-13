@@ -61,8 +61,8 @@ struct MovementCompositionTests {
 
     // MARK: - Exclusions
 
-    @Test func ignoresIncompleteSets() {
-        let ex = lift("Bench Press", .chest, [(8, true), (8, false), (8, true)])
+    @Test func ignoresIncompleteAndUnloggedSets() {
+        let ex = lift("Bench Press", .chest, [(8, true), (8, false), (0, true), (8, true)])
         let split = [session(daysAgo: 1, [ex])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 2)
         #expect(split.classifiedTotal == 2)
@@ -79,6 +79,15 @@ struct MovementCompositionTests {
         let recent = session(daysAgo: 3, [lift("Bench Press", .chest, [(8, true)])])
         let old = session(daysAgo: 40, [lift("Bench Press", .chest, [(8, true), (8, true)])])
         let split = [recent, old].compoundIsolationSplit(now: now) // default 28d window
+        #expect(split.compoundSets == 1)
+        #expect(split.isolationSets == 0)
+    }
+
+    @Test func ignoresFutureSessions() {
+        let recent = session(daysAgo: 1, [lift("Bench Press", .chest, [(8, true)])])
+        let future = session(daysAgo: -1, [lift("Leg Curl", .legs, [(12, true)])])
+        let split = [recent, future].compoundIsolationSplit(now: now)
+
         #expect(split.compoundSets == 1)
         #expect(split.isolationSets == 0)
     }

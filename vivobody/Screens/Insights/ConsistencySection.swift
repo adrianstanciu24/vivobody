@@ -2,11 +2,11 @@
 //  ConsistencySection.swift
 //  vivobody
 //
-//  Training rhythm over the last 6 months: a summary strip (sessions
-//  per week, week streak, average reps-in-reserve), weekly-volume
-//  graph, and a GitHub-style contribution heatmap of every training
-//  day. The heatmap divides the available width across its weeks — no
-//  fixed cell sizes — so it fills any device cleanly.
+//  Training rhythm over the last 6 months: a summary strip (workouts
+//  per week, week streak, days trained), completed weekly set-count
+//  graph, and a contribution heatmap of daily sets. The heatmap
+//  divides the available width across its weeks, so it fills any
+//  device cleanly.
 //
 
 import VivoKit
@@ -28,9 +28,9 @@ struct ConsistencySection: View {
             } else {
                 StatStrip(
                     stats: [
-                        Stat(value: InsightsFormat.perWeekLabel(report.sessionsPerWeek), label: "Per week", accent: report.sessionsPerWeek >= 2),
+                        Stat(value: InsightsFormat.perWeekLabel(report.sessionsPerWeek), label: "Workouts / wk", accent: report.sessionsPerWeek >= 2),
                         Stat(value: "\(report.weekStreak)", label: "Week streak"),
-                        Stat(value: rirLabel(report.averageRIR), label: "Avg RIR"),
+                        Stat(value: "\(report.daysTrainedInWindow)", label: "Days trained"),
                     ],
                     valueFont: Typography.statValue,
                     edgeAligned: true
@@ -47,27 +47,26 @@ struct ConsistencySection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func rirLabel(_ value: Double?) -> String {
-        guard let value else { return "—" }
-        return String(format: "%.1f", value)
-    }
+    // MARK: - Sets-per-week sparkline
 
-    // MARK: - Weekly volume sparkline
-
-    /// Set volume per week across the same six-month window as the
-    /// heatmap, drawn as a calm area so the heatmap's "did I show up?"
-    /// gains a second axis: "how much did I do?" — the swells and dips
-    /// of training output at a glance.
+    /// Completed set count per week across the same six-month window
+    /// as the heatmap. The current partial week is omitted so a week
+    /// in progress never looks like a sudden drop in training.
     private var weeklyVolumeSpark: some View {
-        let weekly = report.weeks.enumerated().map { index, column in
+        let weekly = report.weeks.dropLast().enumerated().map { index, column in
             WeeklyVolumePoint(
                 week: index,
                 sets: column.filter(\.isInRange).reduce(0) { $0 + $1.sets }
             )
         }
         return VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Weekly volume")
-                .panelLegend()
+            HStack {
+                Text("Sets per week")
+                    .panelLegend()
+                Spacer()
+                Text("\(weekly.last?.sets ?? 0) last week")
+                    .panelLegend()
+            }
             Chart(weekly) { point in
                 AreaMark(
                     x: .value("Week", point.week),
@@ -91,7 +90,7 @@ struct ConsistencySection: View {
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
             .frame(height: 48)
-            .accessibilityLabel(Text("Weekly training volume over the last six months"))
+            .accessibilityLabel(Text("Completed sets per week over the last six months"))
         }
     }
 
@@ -99,6 +98,9 @@ struct ConsistencySection: View {
 
     private var heatmapLegend: some View {
         HStack(spacing: Space.sm) {
+            Text("Daily sets")
+                .panelLegend()
+            Spacer()
             Text("Less")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)

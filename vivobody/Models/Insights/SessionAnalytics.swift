@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Shared cache for all session-derived analytics. Keyed by a
-//  dataset fingerprint (session count + newest completedAt) so
+//  dataset fingerprint (session count + newest completedAt + day) so
 //  every report computes at most once per data change, not once
 //  per render. Held on AppState so both TodayScreen and
 //  InsightsScreen share the same cache — switching tabs is free.
@@ -55,10 +55,12 @@ final class SessionAnalytics {
     }
 
     /// Recompute all reports only when the dataset has actually
-    /// changed. Archived sessions are immutable history, so count +
-    /// latest completion fully identify the input.
-    func update(for sessions: [WorkoutSession]) {
-        let sig = "\(sessions.count)-\(sessions.first?.completedAt?.timeIntervalSince1970 ?? 0)"
+    /// changed or the calendar day rolls over. Archived sessions are
+    /// immutable history, so count + latest completion identify the
+    /// input within a day.
+    func update(for sessions: [WorkoutSession], now: Date = Date()) {
+        let day = Calendar.current.startOfDay(for: now).timeIntervalSince1970
+        let sig = "\(sessions.count)-\(sessions.first?.completedAt?.timeIntervalSince1970 ?? 0)-\(day)"
         guard sig != fingerprint else { return }
         fingerprint = sig
 
@@ -66,14 +68,14 @@ final class SessionAnalytics {
         development = MuscleDevelopment.simulate(from: sessions)
         strength = sessions.strengthOutlook()
         progress = sessions.progressByExercise
-        dominance = sessions.exerciseDominance()
-        intensity = sessions.intensityMix()
-        intensityWeeks = sessions.weeklyIntensity()
-        migration = sessions.repRangeMigration()
-        composition = sessions.compoundIsolationSplit()
+        dominance = sessions.exerciseDominance(now: now)
+        intensity = sessions.intensityMix(now: now)
+        intensityWeeks = sessions.weeklyIntensity(now: now)
+        migration = sessions.repRangeMigration(now: now)
+        composition = sessions.compoundIsolationSplit(now: now)
         symmetry = sessions.antagonistBalance()
         consistency = sessions.consistency()
-        load = sessions.trainingLoad()
+        load = sessions.trainingLoad(now: now)
         lastInstances = sessions.lastInstanceByExercise()
     }
 }

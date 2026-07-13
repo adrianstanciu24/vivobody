@@ -51,7 +51,7 @@ extension TodayScreen {
     }
 
     /// The body's voice: one short verdict on how ready you are to train
-    /// again, from freshness + the acute:chronic load trend. The lead
+    /// again, from freshness + the personal workload trend. The lead
     /// clause is brightened against the dimmer nudge; the colour stays
     /// in the figure, so the words read calm and grayscale.
     func readinessLine(_ line: ReadinessLine) -> some View {
@@ -177,15 +177,15 @@ extension TodayScreen {
 
                 if easeOff {
                     HStack(spacing: Space.sm) {
-                        Image(systemName: "flame")
+                        Image(systemName: "gauge.with.dots.needle.67percent")
                             .font(Typography.caption)
                             .foregroundStyle(Tint.primary)
                             .accessibilityHidden(true)
-                        Text("Running hot, ease off")
+                        Text("High load, keep this session lighter")
                             .font(Typography.caption)
                             .foregroundStyle(Tint.primary.opacity(0.9))
                     }
-                    .accessibilityLabel("Running hot, ease off")
+                    .accessibilityLabel("High training load, keep this session lighter")
                 }
 
                 Rectangle()

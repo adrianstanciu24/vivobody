@@ -118,9 +118,11 @@ struct IntensityMixTests {
         #expect(weeks[0].weekStart < weeks[1].weekStart)
         #expect(weeks[0].enduranceSets == 1)
         #expect(weeks[0].total == 1)
+        #expect(!weeks[0].isCurrentWeek)
         #expect(weeks[1].strengthSets == 1)
         #expect(weeks[1].hypertrophySets == 1)
         #expect(weeks[1].total == 2)
+        #expect(weeks[1].isCurrentWeek)
     }
 
     @Test func weeklyRespectsTheWindow() {
@@ -141,5 +143,18 @@ struct IntensityMixTests {
 
     @Test func weeklyEmptyHistoryIsEmpty() {
         #expect([WorkoutSession]().weeklyIntensity(now: now).isEmpty)
+    }
+
+    @Test func weeklyMarksOnlyTheCurrentCalendarWeek() {
+        let sessions = [
+            session(daysAgo: 0, [lift([(8, true)])]),
+            session(daysAgo: 7, [lift([(8, true)])]),
+            session(daysAgo: 14, [lift([(8, true)])]),
+        ]
+        let weeks = sessions.weeklyIntensity(now: now)
+
+        #expect(weeks.count == 3)
+        #expect(weeks.filter(\.isCurrentWeek).count == 1)
+        #expect(weeks.last?.isCurrentWeek == true)
     }
 }

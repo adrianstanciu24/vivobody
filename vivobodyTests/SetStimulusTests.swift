@@ -83,6 +83,16 @@ struct SetStimulusTests {
         #expect(abs(total(&calc, ex, at: day(0)) - 3.0) < 1e-9)
     }
 
+    @Test func wholeExerciseCreditMatchesPreInvolvementTotal() {
+        let ex = lift("Bench Press", .chest, sets: [
+            SetSpec(weight: 135, reps: 8),
+            SetSpec(weight: 135, reps: 8),
+            SetSpec(weight: 135, reps: 8),
+        ])
+        var calculator = SetStimulus.Calculator()
+        #expect(abs(calculator.setEquivalentCredit(for: ex, at: day(0)) - 3.0) < 1e-9)
+    }
+
     /// RIR 0–2 all count as full hard sets — the landmark band.
     @Test func nearFailureRIRKeepsFullCredit() {
         for rir in 0...2 {

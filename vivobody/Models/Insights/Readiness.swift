@@ -8,13 +8,12 @@
 //
 //  It reads two cheap signals already on hand:
 //    • freshness — whole days since your last completed session.
-//    • trend     — the acute:chronic workload verdict (`TrainingLoad`),
-//                  once there's enough history for it to be trusted.
+//    • trend     — the rolling workload status (`TrainingLoad`), once
+//                  there's enough personal history for comparison.
 //
-//  The dominant signal wins so the line stays a few words: a load
-//  spike overrides freshness ("Running hot — back off"), otherwise a
-//  rested body leads ("Fresh and in the zone"). Before the load model
-//  has ~3 weeks of history it falls back to a pure recency voice.
+//  The dominant signal wins so the line stays a few words. High load
+//  prompts a lighter session, otherwise a rested body leads. Before
+//  the load model has four weeks of history it falls back to recency.
 //
 //  Pure value-type derivation on injected dates (see `ReadinessTests`).
 //  Returns nil only at cold start (no sessions), where the caller keeps
@@ -60,18 +59,16 @@ extension Array where Element == WorkoutSession {
         guard report.hasEnoughHistory else { return Self.formingLine(days: days) }
 
         // Enough history: the trend verdict dominates, with freshness
-        // colouring the "optimal" case.
+        // colouring the productive case.
         switch report.verdict {
-        case .overreaching:
-            return ReadinessLine(lead: "Running hot.", tail: "Back off today.")
-        case .pushing:
-            return ReadinessLine(lead: "Strong week.", tail: "Guard your recovery.")
-        case .optimal:
+        case .high:
+            return ReadinessLine(lead: "Training load is high.", tail: "Keep today lighter.")
+        case .productive:
             return days >= 2
-                ? ReadinessLine(lead: "Fresh and in the zone.", tail: "")
-                : ReadinessLine(lead: "Right in the build zone.", tail: "Keep stacking.")
-        case .detraining:
-            return ReadinessLine(lead: "Coasting lately.", tail: "Time to build.")
+                ? ReadinessLine(lead: "Fresh and on plan.", tail: "")
+                : ReadinessLine(lead: "Productive training load.", tail: "Keep the rhythm.")
+        case .low:
+            return ReadinessLine(lead: "Load is lighter lately.", tail: "Build when ready.")
         case .insufficient:
             return Self.formingLine(days: days)
         }

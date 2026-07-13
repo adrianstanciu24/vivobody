@@ -2,13 +2,10 @@
 //  TrainingLoadSection.swift
 //  vivobody
 //
-//  The recovery lens: this week's training load weighed against the
-//  last four weeks' habit (acute:chronic workload ratio, in tonnage).
-//  Twelve weeks of tonnage as bars — the current week lit in the
-//  verdict's colour — with the 4-week baseline drawn across them as a
-//  dashed rule, so "this week vs the habit" is literally visible.
-//  The stat strip carries the three numbers and one caption line
-//  turns the ratio into a verdict.
+//  The personal workload lens. A plain-language Low / Productive /
+//  High status leads, followed by the user's position against their
+//  own range, a Swift Charts rolling seven-day trend, the work that
+//  drove it, and one calm next action.
 //
 
 import VivoKit
@@ -18,157 +15,281 @@ import Charts
 struct TrainingLoadSection: View {
     let report: TrainingLoadReport
 
-    @AppStorage(SettingsKey.weightUnit)
-    private var unitRaw: String = SettingsDefaults.weightUnit
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
-
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Training load", trailing: "7d vs 28d")
+            SectionHeader(title: "Training load", trailing: "Rolling 7 days")
 
-            if !report.hasEnoughHistory {
-                Text(buildingCopy)
+            if report.points.isEmpty {
+                Text("Complete a workout to start reading your training load.")
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
             } else {
-                StatStrip(
-                    stats: [
-                        Stat(value: WeightFormatter.volumeValue(report.acuteLoad, unit: unit), unit: unit.symbol, label: "This week"),
-                        Stat(value: WeightFormatter.volumeValue(report.chronicWeekly, unit: unit), unit: unit.symbol, label: "4-wk avg"),
-                        Stat(value: ratioLabel, label: "Load ratio", accent: report.verdict == .optimal),
-                    ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
-                )
-                .padding(.vertical, Space.xs)
-
+                status
+                if report.hasEnoughHistory {
+                    rangeIndicator
+                }
                 chart
-
-                caption
+                drivers
+                guidance
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Chart
+    // MARK: - Status
+
+    private var status: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(statusTitle)
+                .font(Typography.display)
+                .foregroundStyle(statusColor)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+
+            Text(statusSummary)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var statusTitle: String {
+        switch report.verdict {
+        case .insufficient: return "Building your range"
+        case .low:          return "Low load"
+        case .productive:   return "Productive load"
+        case .high:         return "High load"
+        }
+    }
+
+    private var statusSummary: String {
+        guard let change = report.changeFromUsual else {
+            let remaining = max(1, 28 - report.daysLogged)
+            return "\(format(report.currentLoad)) estimated hard sets in the last 7 days. Keep logging for about \(remaining) more day\(remaining == 1 ? "" : "s") to form your personal range."
+        }
+
+        let percent = Int((abs(change) * 100).rounded())
+        if percent <= 1 {
+            return "Your last 7 days match your usual training."
+        }
+        let direction = change > 0 ? "above" : "below"
+        return "Your last 7 days are \(percent)% \(direction) your usual training."
+    }
+
+    // MARK: - Personal range
+
+    private var rangeIndicator: some View {
+        VStack(spacing: Space.sm) {
+            SegmentGauge(segments: 48, height: 12, spacing: 2) { _, position in
+                if abs(position - gaugePosition) < 0.025 {
+                    return statusColor
+                }
+                if productiveBand.contains(position) {
+                    return Tint.primary.opacity(0.28)
+                }
+                return Surface.edge
+            }
+
+            HStack {
+                Text("Low")
+                Spacer()
+                Text("Productive")
+                Spacer()
+                Text("High")
+            }
+            .panelLegend()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(statusTitle), positioned against your personal productive range")
+    }
+
+    private var gaugePosition: Double {
+        min(1, max(0, report.ratio / 2))
+    }
+
+    private var productiveBand: ClosedRange<Double> {
+        (0.8 / 2)...(1.3 / 2)
+    }
+
+    // MARK: - Trend
 
     private var chart: some View {
-        let baseline = WeightFormatter.toDisplay(report.chronicWeekly, unit: unit)
-
-        return Chart {
-            ForEach(report.weeks) { week in
-                BarMark(
-                    x: .value("Week", week.weekStart, unit: .weekOfYear),
-                    y: .value("Load", WeightFormatter.toDisplay(week.load, unit: unit)),
-                    width: .ratio(0.65)
-                )
-                .foregroundStyle(barColor(for: week))
-                .cornerRadius(3)
-            }
-
-            RuleMark(y: .value("Baseline", baseline))
-                .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                .foregroundStyle(Tint.primary.opacity(Opacity.medium))
-                .annotation(position: .top, alignment: .leading) {
-                    Text("4-wk avg")
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Tint.primary.opacity(Opacity.strong))
+        VStack(alignment: .leading, spacing: Space.sm) {
+            HStack(spacing: Space.lg) {
+                legend(color: Tint.primary, label: "7-day load")
+                if report.hasEnoughHistory {
+                    legend(color: Tint.primary.opacity(0.22), label: "Productive range")
                 }
-        }
-        .chartXAxis {
-            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel(format: .dateTime.month(.abbreviated))
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.tertiary)
             }
-        }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 3)) { value in
-                AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel {
-                    if let amount = value.as(Double.self) {
-                        Text(compactLabel(amount))
-                            .font(Typography.metricMicro)
-                            .foregroundStyle(Ink.tertiary)
+
+            Chart {
+                ForEach(report.points) { point in
+                    if let lower = point.productiveLower,
+                       let upper = point.productiveUpper {
+                        AreaMark(
+                            x: .value("Date", point.date),
+                            yStart: .value("Range lower", lower),
+                            yEnd: .value("Range upper", upper)
+                        )
+                        .foregroundStyle(Tint.primary.opacity(0.14))
+                    }
+
+                    LineMark(
+                        x: .value("Date", point.date),
+                        y: .value("Estimated hard sets", point.load)
+                    )
+                    .foregroundStyle(Tint.primary)
+                    .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+                }
+
+                if let latest = report.points.last {
+                    PointMark(
+                        x: .value("Latest date", latest.date),
+                        y: .value("Latest load", latest.load)
+                    )
+                    .foregroundStyle(statusColor)
+                    .symbolSize(46)
+                }
+            }
+            .chartXAxis {
+                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                    AxisGridLine().foregroundStyle(Surface.edge)
+                    AxisValueLabel(format: .dateTime.month(.abbreviated))
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Ink.tertiary)
+                }
+            }
+            .chartYAxis {
+                AxisMarks(values: .automatic(desiredCount: 3)) { value in
+                    AxisGridLine().foregroundStyle(Surface.edge)
+                    AxisValueLabel {
+                        if let amount = value.as(Double.self) {
+                            Text(format(amount))
+                                .font(Typography.metricMicro)
+                                .foregroundStyle(Ink.tertiary)
+                        }
                     }
                 }
             }
+            .frame(height: 180)
+            .accessibilityElement()
+            .accessibilityLabel("Rolling seven-day training load over \(report.points.count) days")
         }
-        .frame(height: 160)
-        .padding(.top, Space.md)
-        .accessibilityLabel("Weekly training load over 12 weeks against the 4-week baseline")
     }
 
-    private func barColor(for week: LoadWeek) -> Color {
-        week.isCurrent ? verdictColor : Ink.primary.opacity(0.28)
+    private func legend(color: Color, label: String) -> some View {
+        HStack(spacing: Space.xs) {
+            Capsule()
+                .fill(color)
+                .frame(width: 18, height: 4)
+            Text(label)
+                .font(Typography.metricMicro)
+                .foregroundStyle(Ink.tertiary)
+        }
     }
 
-    /// Compact axis figure ("48k") in display units.
-    private func compactLabel(_ value: Double) -> String {
-        value >= 1000
-            ? String(format: "%.0fk", value / 1000)
-            : String(format: "%.0f", value)
+    // MARK: - Drivers
+
+    private var drivers: some View {
+        VStack(spacing: 0) {
+            driverRow("Estimated hard sets", driver: report.drivers.hardSets)
+            divider
+            driverRow("Sessions", driver: report.drivers.sessions, wholeNumber: true)
+            divider
+            driverRow("1–5 rep sets", driver: report.drivers.heavySets, wholeNumber: true)
+        }
+        .padding(.horizontal, Space.lg)
+        .contentChip()
     }
 
-    // MARK: - Caption
-
-    private var caption: some View {
-        Text(line)
-            .font(Typography.caption)
-            .fixedSize(horizontal: false, vertical: true)
+    private func driverRow(
+        _ label: String,
+        driver: LoadDriver,
+        wholeNumber: Bool = false
+    ) -> some View {
+        HStack(spacing: Space.md) {
+            Text(label)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+            Spacer(minLength: Space.sm)
+            Text(wholeNumber ? "\(Int(driver.current.rounded()))" : format(driver.current))
+                .font(Typography.metricInline)
+                .foregroundStyle(Ink.primary)
+                .monospacedDigit()
+            if let usual = driver.usual {
+                Text(comparison(current: driver.current, usual: usual))
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.tertiary)
+                    .monospacedDigit()
+                    .frame(minWidth: 64, alignment: .trailing)
+            }
+        }
+        .frame(minHeight: 52)
+        .accessibilityElement(children: .combine)
     }
 
-    /// Verdict word brightened against the dimmer clause.
-    private var line: AttributedString {
-        var head = AttributedString(headline + " ")
-        head.foregroundColor = report.verdict == .overreaching ? Tint.danger : Ink.secondary
-        var tail = AttributedString(explanation)
-        tail.foregroundColor = Ink.tertiary
-        return head + tail
+    private var divider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
     }
 
-    private var headline: String {
+    private func comparison(current: Double, usual: Double) -> String {
+        let delta = current - usual
+        if abs(delta) < 0.05 {
+            return "usual"
+        }
+        let sign = delta > 0 ? "+" : "−"
+        return "\(sign)\(format(abs(delta))) vs usual"
+    }
+
+    // MARK: - Guidance
+
+    private var guidance: some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+            Circle()
+                .fill(statusColor)
+                .frame(width: 7, height: 7)
+            Text(guidanceText)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+        .contentChip()
+        .accessibilityElement(children: .combine)
+    }
+
+    private var guidanceText: String {
         switch report.verdict {
-        case .detraining:   return "Load is easing."
-        case .optimal:      return "Right in the build zone."
-        case .pushing:      return "Ramping hard."
-        case .overreaching: return "Load is spiking."
-        case .insufficient: return ""
+        case .insufficient:
+            return "Keep training normally while your personal range takes shape."
+        case .low:
+            return "If you feel ready, add a normal session."
+        case .productive:
+            return "Maintain your current training rhythm."
+        case .high:
+            return "Keep the next session lighter, or add a rest day."
         }
     }
 
-    private var explanation: String {
+    // MARK: - Formatting
+
+    private func format(_ value: Double) -> String {
+        if abs(value.rounded() - value) < 0.05 {
+            return String(format: "%.0f", value)
+        }
+        return String(format: "%.1f", value)
+    }
+
+    private var statusColor: Color {
         switch report.verdict {
-        case .detraining:   return "Fine for a deload — stack full weeks to keep building."
-        case .optimal:      return "This week tracks your 4-week baseline. Sweet spot 0.8–1.3."
-        case .pushing:      return "Well above baseline — guard sleep and joints."
-        case .overreaching: return "Far above baseline — hold steady or back off a week."
-        case .insufficient: return ""
-        }
-    }
-
-    private var buildingCopy: String {
-        if report.daysLogged <= 0 {
-            return "Once you've logged about three weeks, this reads your weekly load against your recent baseline to flag when you're ramping too fast."
-        }
-        let remaining = max(1, 21 - report.daysLogged)
-        return "Building your load baseline — about \(remaining) more day\(remaining == 1 ? "" : "s") of history and this reads whether you're ramping too fast or coasting."
-    }
-
-    // MARK: - Derived
-
-    private var ratioLabel: String {
-        String(format: "%.2f", report.ratio)
-    }
-
-    private var verdictColor: Color {
-        switch report.verdict {
-        case .optimal, .pushing: return Tint.primary
-        case .overreaching:      return Tint.danger
-        case .detraining:        return Ink.secondary
-        case .insufficient:      return Ink.tertiary
+        case .productive:   return Tint.primary
+        case .high:         return Tint.danger
+        case .low:          return Ink.secondary
+        case .insufficient: return Ink.primary
         }
     }
 }

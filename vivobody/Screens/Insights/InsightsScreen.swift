@@ -9,13 +9,13 @@
 //       of your training (no body here; the 3D figure is Today's).
 //    2. Strength — an estimated-1RM line chart per lift, a record line
 //       to chase (Swift Charts, not bars).
-//    3. Composition — which lifts carry your volume (exercise
-//       dominance), with the compound/isolation split as its coda.
+//    3. Composition — recent working-set allocation by exercise,
+//       paired with a compound/isolation exercise-type split.
 //    4. Intensity — 12 weeks of working sets stacked per week by
 //       rep-range zone: the mix and its drift in one chart.
 //    5. Rhythm — the consistency heatmap plus a weekly-volume curve.
-//    6. Load — weekly tonnage bars against the 4-week baseline
-//       (acute:chronic workload ratio — recovery debt).
+//    6. Load — rolling hard-set equivalents against the user's
+//       personal productive range, with the work that drove it.
 //    7. Symmetry — the antagonist butterfly bars as the coda.
 //
 //  Every section is chart-first: the graphic leads at full size, one
