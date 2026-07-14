@@ -53,6 +53,8 @@ struct vivobodyApp: App {
                             HistorySeeder.seedShowcase(into: container.mainContext)
                         } else if CommandLine.arguments.contains("--seed-pr") {
                             HistorySeeder.seedPRProximity(into: container.mainContext)
+                        } else if CommandLine.arguments.contains("--seed-templates") {
+                            HistorySeeder.seedTemplates(into: container.mainContext)
                         }
                     }
                     #endif

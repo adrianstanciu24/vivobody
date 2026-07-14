@@ -279,6 +279,46 @@ enum HistorySeeder {
         try? context.save()
     }
 
+    /// A small template library exercising every TemplateCard tier:
+    /// one plan pinned to today (card + Start), one pinned to other
+    /// weekdays (quiet row with schedule text), one unscheduled.
+    /// Drive it with `--seed-templates`.
+    static func seedTemplates(into context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
+        guard existing.isEmpty else { return }
+
+        let calendar = Calendar.current
+        let today = calendar.component(.weekday, from: Date())
+        let plusDays: (Int) -> Int = { ((today - 1 + $0) % 7) + 1 }
+
+        let lower = WorkoutTemplate(name: "Lower Day B", sortOrder: 0)
+        lower.scheduledWeekdays = [today, plusDays(3)].sorted()
+        lower.exercises = [
+            TemplateExercise(name: "Back Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
+            TemplateExercise(name: "Romanian Deadlift", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
+            TemplateExercise(name: "Leg Press", group: .legs, plannedSets: 3, plannedReps: 10, plannedWeight: 270, sortOrder: 2),
+        ]
+        context.insert(lower)
+
+        let upper = WorkoutTemplate(name: "Upper Day A", sortOrder: 1)
+        upper.scheduledWeekdays = [plusDays(2), plusDays(5)].sorted()
+        upper.exercises = [
+            TemplateExercise(name: "Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0),
+            TemplateExercise(name: "Barbell Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
+            TemplateExercise(name: "Overhead Press", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
+            TemplateExercise(name: "Barbell Curl", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
+        ]
+        context.insert(upper)
+
+        let core = WorkoutTemplate(name: "Core A", sortOrder: 2)
+        core.exercises = [
+            TemplateExercise(name: "Hanging Leg Raise", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
+        ]
+        context.insert(core)
+
+        try? context.save()
+    }
+
     private static func templateExercise(for group: MuscleGroup, variant: Int) -> (name: String, weight: Double) {
         switch group {
         case .chest:     return ("Bench Press", 135)

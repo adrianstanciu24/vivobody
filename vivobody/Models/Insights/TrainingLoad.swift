@@ -49,6 +49,16 @@ nonisolated struct LoadPoint: Identifiable, Hashable {
     let productiveUpper: Double?
 }
 
+/// Estimated hard-set equivalents completed on one calendar day —
+/// the per-day (not rolling) sample behind the Today readiness strip.
+nonisolated struct DayLoad: Identifiable, Hashable {
+    var id: Date { date }
+    let date: Date
+    let load: Double
+
+    var trained: Bool { load > 0 }
+}
+
 nonisolated struct LoadDriver: Hashable {
     let current: Double
     let usual: Double?
@@ -75,14 +85,27 @@ nonisolated struct TrainingLoadReport: Hashable {
     let usualLoad: Double?
     /// Current load divided by usual load. Zero while forming.
     let ratio: Double
+    /// Early comparison against the median active prior week. This
+    /// powers a provisional gauge marker before the four-week personal
+    /// baseline is stable; nil when no prior week exists or once the
+    /// stable ratio is available.
+    let provisionalRatio: Double?
     let verdict: LoadVerdict
     /// Whole calendar days from first completed work to `now`.
     let daysLogged: Int
     /// Rolling seven-day load over at most the trailing 12 weeks.
     let points: [LoadPoint]
+    /// Per-day loads for the trailing seven calendar days, oldest
+    /// first and ending today. Untrained days appear with zero load.
+    let recentDays: [DayLoad]
     let drivers: TrainingLoadDrivers
 
     var hasEnoughHistory: Bool { verdict != .insufficient }
+
+    /// The best available position for compact visual gauges.
+    var gaugeRatio: Double? {
+        hasEnoughHistory ? ratio : provisionalRatio
+    }
 
     var productiveRange: ClosedRange<Double>? {
         guard let usualLoad else { return nil }
@@ -109,9 +132,11 @@ extension Array where Element == WorkoutSession {
                 currentLoad: 0,
                 usualLoad: nil,
                 ratio: 0,
+                provisionalRatio: nil,
                 verdict: .insufficient,
                 daysLogged: 0,
                 points: [],
+                recentDays: [],
                 drivers: .empty
             )
         }
@@ -132,22 +157,32 @@ extension Array where Element == WorkoutSession {
             measurements: measurements,
             calendar: calendar
         )
-        let activeBaselineWeeks = previous.filter { $0.load > 0 }.count
-        let usual = daysLogged >= 28 && activeBaselineWeeks >= 3
+        let activeBaseline = previous.filter { $0.load > 0 }
+        let usual = daysLogged >= 28 && activeBaseline.count >= 3
             ? Self.median(previous.map(\.load))
             : nil
         let ratio = usual.flatMap { $0 > 0 ? current.load / $0 : nil } ?? 0
+        let provisionalUsual = Self.median(activeBaseline.map(\.load))
+        let provisionalRatio = usual == nil && provisionalUsual > 0
+            ? current.load / provisionalUsual
+            : nil
         let verdict = usual == nil ? LoadVerdict.insufficient : LoadVerdict.from(ratio: ratio)
 
         return TrainingLoadReport(
             currentLoad: current.load,
             usualLoad: usual,
             ratio: ratio,
+            provisionalRatio: provisionalRatio,
             verdict: verdict,
             daysLogged: daysLogged,
             points: Self.rollingPoints(
                 measurements: measurements,
                 firstDay: firstDay,
+                today: today,
+                calendar: calendar
+            ),
+            recentDays: Self.recentDailyLoads(
+                measurements: measurements,
                 today: today,
                 calendar: calendar
             ),
@@ -236,6 +271,22 @@ extension Array where Element == WorkoutSession {
                 productiveLower: usual.map { $0 * 0.8 },
                 productiveUpper: usual.map { $0 * 1.3 }
             )
+        }
+    }
+
+    private static func recentDailyLoads(
+        measurements: [Measurement],
+        today: Date,
+        calendar: Calendar
+    ) -> [DayLoad] {
+        (0..<7).reversed().compactMap { offset in
+            guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else {
+                return nil
+            }
+            let load = measurements
+                .filter { calendar.startOfDay(for: $0.date) == day }
+                .reduce(0) { $0 + $1.load }
+            return DayLoad(date: day, load: load)
         }
     }
 

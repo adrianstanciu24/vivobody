@@ -70,6 +70,8 @@ struct TrainingLoadTests {
         let report = sessions.trainingLoad(now: now, calendar: calendar)
         #expect(report.verdict == .insufficient)
         #expect(report.hasEnoughHistory == false)
+        #expect(abs((report.provisionalRatio ?? 0) - 1) < 0.001)
+        #expect(report.gaugeRatio == report.provisionalRatio)
     }
 
     @Test func sparseBaselineStaysInsufficient() {
@@ -89,6 +91,8 @@ struct TrainingLoadTests {
         #expect(report.verdict == .insufficient)
         #expect(report.currentLoad == 0)
         #expect(report.points.isEmpty)
+        #expect(report.provisionalRatio == nil)
+        #expect(report.gaugeRatio == nil)
     }
 
     // MARK: - Personal range
@@ -100,6 +104,8 @@ struct TrainingLoadTests {
         #expect(abs(report.currentLoad - 3) < 0.001)
         #expect(abs((report.usualLoad ?? 0) - 3) < 0.001)
         #expect(abs(report.ratio - 1.0) < 0.001)
+        #expect(report.provisionalRatio == nil)
+        #expect(report.gaugeRatio == report.ratio)
         #expect(report.verdict == .productive)
         #expect(abs((report.productiveRange?.lowerBound ?? 0) - 2.4) < 0.001)
         #expect(abs((report.productiveRange?.upperBound ?? 0) - 3.9) < 0.001)
@@ -187,6 +193,46 @@ struct TrainingLoadTests {
         #expect(report.drivers.sessions.usual == 1)
         #expect(report.drivers.heavySets.current == 6)
         #expect(report.drivers.heavySets.usual == 3)
+    }
+
+    // MARK: - Recent days
+
+    @Test func recentDaysSpanTrailingWeekEndingToday() {
+        let sessions = [
+            session(daysAgo: 0, sets: 3),
+            session(daysAgo: 2, sets: 2),
+            session(daysAgo: 7, sets: 5),
+        ]
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+        #expect(report.recentDays.count == 7)
+        #expect(report.recentDays == report.recentDays.sorted { $0.date < $1.date })
+        #expect(report.recentDays.last?.date == calendar.startOfDay(for: now))
+        #expect(report.recentDays.last?.load == 3)
+        #expect(report.recentDays[4].load == 2)
+        // Day 7 falls outside the trailing-week strip.
+        #expect(report.recentDays.map(\.load).reduce(0, +) == 5)
+    }
+
+    @Test func recentDaysZeroFillRestDays() {
+        let sessions = [session(daysAgo: 3, sets: 4)]
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+        #expect(report.recentDays.filter(\.trained).count == 1)
+        #expect(report.recentDays[3].load == 4)
+        #expect(report.recentDays.last?.trained == false)
+    }
+
+    @Test func recentDaysMergeSameDaySessions() {
+        let sessions = [
+            session(daysAgo: 1, sets: 2),
+            session(daysAgo: 1, sets: 3),
+        ]
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+        #expect(report.recentDays[5].load == 5)
+    }
+
+    @Test func recentDaysEmptyWithoutHistory() {
+        let report = [WorkoutSession]().trainingLoad(now: now, calendar: calendar)
+        #expect(report.recentDays.isEmpty)
     }
 
     // MARK: - Trend

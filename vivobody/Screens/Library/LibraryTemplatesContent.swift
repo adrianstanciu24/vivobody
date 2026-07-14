@@ -91,16 +91,26 @@ struct LibraryTemplatesContent: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: Space.sm, leading: Space.gutter, bottom: Space.lg, trailing: Space.gutter))
 
+            let today = Calendar.current.component(.weekday, from: Date())
             ForEach(displayed) { template in
-                Button {
-                    templateEditorTarget = .edit(template)
-                } label: {
-                    TemplateCard(template: template)
-                }
-                .buttonStyle(.plain)
+                let isToday = template.isScheduled(on: today)
+                TemplateCard(
+                    template: template,
+                    onOpen: { templateEditorTarget = .edit(template) },
+                    onStart: isToday ? { startWorkout(from: template) } : nil
+                )
                 .listRowBackground(Color.clear)
+                .listRowSeparator(isToday ? .hidden : .visible)
                 .listRowSeparatorTint(Surface.edge)
-                .listRowInsets(EdgeInsets(top: 0, leading: Space.gutter, bottom: 0, trailing: Space.gutter))
+                // The card tier pulls its background out toward the
+                // screen edge (inset + internal padding == gutter) so
+                // its text stays column-aligned with the quiet rows.
+                .listRowInsets(EdgeInsets(
+                    top: 0,
+                    leading: isToday ? Space.sm : Space.gutter,
+                    bottom: isToday ? Space.md : 0,
+                    trailing: isToday ? Space.sm : Space.gutter
+                ))
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
                     Button {
                         startWorkout(from: template)
@@ -205,101 +215,192 @@ struct LibraryTemplatesContent: View {
 
 // MARK: - Template row
 
-/// A saved plan as a full-width hairline row — no card. Two tiers,
-/// mirroring the Exercises segment: a template scheduled for today
-/// reads prominent (brighter name, taller row), the rest stay quiet.
-/// Three stacked lines: name (same size as an exercise row's name),
-/// a sentence-case meta line carrying exercise count, set count, and
-/// the muscles worked ("4 exercises · 12 sets · Chest, Back"), and —
-/// when scheduled — a seven-day rail of lettered circles with the
-/// pinned days filled (today's in orange). The List that hosts it
-/// draws the separators.
+/// A saved plan in the Library list. Two tiers with real hierarchy:
+/// a template scheduled for today lifts onto a card surface with a
+/// "TODAY" eyebrow and an inline Start action; the rest stay quiet
+/// full-width hairline rows (the List draws their separators). Every
+/// row shares one anatomy: name, an exercise-name preview line, a
+/// workload line (set pips grouped per exercise beside the set count
+/// as a tabular numeral), and — when pinned — the scheduled days as
+/// quiet text with today's day brightened.
 struct TemplateCard: View {
     let template: WorkoutTemplate
+    let onOpen: () -> Void
+    var onStart: (() -> Void)? = nil
+
+    private var today: Int {
+        Calendar.current.component(.weekday, from: Date())
+    }
 
     private var isToday: Bool {
-        template.isScheduled(on: Calendar.current.component(.weekday, from: Date()))
+        template.isScheduled(on: today)
     }
 
     var body: some View {
+        Group {
+            if isToday {
+                rowContent
+                    .padding(.horizontal, Space.md)
+                    .padding(.vertical, Space.lg)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentCard()
+            } else {
+                rowContent
+                    .padding(.vertical, Space.md)
+                    .frame(minHeight: Space.rowMin)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+
+    /// Open-editor and Start are SIBLING buttons, not nested — a
+    /// button inside another button's label gets flattened out of
+    /// the accessibility tree and loses its tap target. The open
+    /// button stretches to fill everything the Start pill doesn't.
+    private var rowContent: some View {
+        HStack(alignment: .center, spacing: Space.md) {
+            Button(action: onOpen) {
+                info
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            if isToday, onStart != nil {
+                startButton
+            }
+        }
+    }
+
+    private var info: some View {
         VStack(alignment: .leading, spacing: 3) {
+            if isToday {
+                Text("TODAY")
+                    .font(Typography.micro)
+                    .tracking(1.2)
+                    .foregroundStyle(Tint.primary)
+                    .padding(.bottom, 1)
+            }
             Text(template.name)
                 .font(Typography.sectionHeading)
                 .foregroundStyle(isToday ? Ink.primary : Ink.secondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
-            Text(subtitle)
-                .font(Typography.caption)
-                .foregroundStyle(isToday ? Ink.tertiary : Ink.quaternary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            if template.isScheduled {
-                WeekdayRail(
-                    scheduled: Set(template.scheduledWeekdays),
-                    today: Calendar.current.component(.weekday, from: Date())
-                )
+            if !exercisePreview.isEmpty {
+                Text(exercisePreview)
+                    .font(Typography.caption)
+                    .foregroundStyle(isToday ? Ink.tertiary : Ink.quaternary)
+                    .lineLimit(1)
+            }
+            workloadLine
                 .padding(.top, Space.sm)
+            if template.isScheduled {
+                scheduleText
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+                    .padding(.top, Space.xs)
             }
         }
-        .frame(minHeight: isToday ? 72 : Space.rowMin, alignment: .leading)
-        .padding(.vertical, Space.md)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
     }
 
-    private var subtitle: String {
-        let count = template.orderedExercises.count
-        let exercises = count == 1 ? "1 exercise" : "\(count) exercises"
-        let sets = template.totalPlannedSets == 1 ? "1 set" : "\(template.totalPlannedSets) sets"
-        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: ", ")
-        var parts = [exercises, sets]
-        if !groups.isEmpty { parts.append(groups) }
-        return parts.joined(separator: " · ")
+    /// First three exercise names — the row's identity. Template
+    /// names are abstract ("Lower B"); the lifts inside are not.
+    private var exercisePreview: String {
+        let names = template.orderedExercises.map(\.name)
+        guard !names.isEmpty else { return "" }
+        var preview = names.prefix(3).joined(separator: " · ")
+        if names.count > 3 {
+            preview += "  +\(names.count - 3)"
+        }
+        return preview
+    }
+
+    private var workloadLine: some View {
+        HStack(alignment: .center, spacing: Space.sm + 2) {
+            SetPipStrip(
+                groups: template.orderedExercises.map(\.effectiveSetCount).filter { $0 > 0 },
+                tint: isToday ? Ink.tertiary : Ink.quaternary
+            )
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text("\(template.totalPlannedSets)")
+                    .font(Typography.metricInline)
+                    .foregroundStyle(isToday ? Ink.primary : Ink.tertiary)
+                Text(template.totalPlannedSets == 1 ? "set" : "sets")
+                    .font(Typography.micro)
+                    .foregroundStyle(Ink.quaternary)
+            }
+        }
+    }
+
+    /// Pinned days as quiet inline text ("Mon · Thu"). Today's day —
+    /// only ever present on the card tier — reads brighter, not
+    /// accented: the eyebrow and Start button own the orange budget.
+    private var scheduleText: Text {
+        let scheduled = Set(template.scheduledWeekdays)
+        let days = WeekdayLabels.ordered().filter(scheduled.contains)
+        var result = Text(verbatim: "")
+        for (i, day) in days.enumerated() {
+            var token = Text(WeekdayLabels.short(day))
+            if day == today {
+                token = token.foregroundStyle(Ink.primary).fontWeight(.semibold)
+            }
+            result = i == 0 ? token : Text("\(result) · \(token)")
+        }
+        return result
+    }
+
+    private var startButton: some View {
+        Button {
+            onStart?()
+        } label: {
+            Text("Start")
+                .font(Typography.sectionLabel.weight(.semibold))
+                .foregroundStyle(Tint.onAccent)
+                .padding(.horizontal, Space.lg)
+                .frame(minHeight: Space.tapMin)
+        }
+        .buttonStyle(.borderless)
+        .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.primary)
+        .accessibilityLabel("Start \(template.name)")
     }
 }
 
-// MARK: - Weekday rail
+// MARK: - Set-pip strip
 
-/// Seven single-letter weekdays in the calendar's display order,
-/// each inside a small circle — the "quiet calendar" treatment of a
-/// template's schedule. Pinned days get a filled circle: today's in
-/// orange (the row's single loud accent), the rest a dim white-tint
-/// fill under primary ink. Unpinned days stay a faint hairline ring
-/// so the rail reads as background texture, not a control strip.
-private struct WeekdayRail: View {
-    let scheduled: Set<Int>
-    let today: Int
+/// Tally-style workload texture: one pip per planned set, grouped
+/// per exercise, so each row carries a physical fingerprint of its
+/// plan. Decorative — capped so outlier templates can't blow the row
+/// width; the numeral beside it carries the exact count.
+private struct SetPipStrip: View {
+    let groups: [Int]
+    let tint: Color
 
-    private static let diameter: CGFloat = 18
+    private static let pipCap = 24
+
+    private var cappedGroups: [Int] {
+        var remaining = Self.pipCap
+        var result: [Int] = []
+        for count in groups {
+            guard remaining > 0 else { break }
+            let take = min(count, remaining)
+            result.append(take)
+            remaining -= take
+        }
+        return result
+    }
 
     var body: some View {
-        HStack(spacing: Space.xs + 2) {
-            ForEach(WeekdayLabels.ordered(), id: \.self) { day in
-                dayCircle(day)
-            }
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Scheduled \(WeekdayLabels.summary(Array(scheduled)))")
-    }
-
-    private func dayCircle(_ day: Int) -> some View {
-        let isOn = scheduled.contains(day)
-        return Text(WeekdayLabels.veryShort(day))
-            .font(Typography.metricMicro)
-            .foregroundStyle(labelColor(day: day, isOn: isOn))
-            .frame(width: Self.diameter, height: Self.diameter)
-            .background {
-                if isOn {
-                    Circle().fill(day == today ? Tint.primary : Ink.quaternary)
-                } else {
-                    Circle().strokeBorder(Surface.edge, lineWidth: 1)
+        HStack(spacing: Space.sm) {
+            ForEach(Array(cappedGroups.enumerated()), id: \.offset) { _, count in
+                HStack(spacing: 2.5) {
+                    ForEach(0..<count, id: \.self) { _ in
+                        Capsule()
+                            .fill(tint)
+                            .frame(width: 3, height: 9)
+                    }
                 }
             }
-    }
-
-    private func labelColor(day: Int, isOn: Bool) -> Color {
-        guard isOn else { return Ink.quaternary }
-        return day == today ? Tint.onAccent : Ink.primary
+        }
+        .accessibilityHidden(true)
     }
 }

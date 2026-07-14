@@ -15,7 +15,7 @@ extension TodayScreen {
     // MARK: - Sections
 
     /// Anatomical body model — the screen's hero and the subject of
-    /// the readiness line beneath it. Edge-to-edge; drag horizontally
+    /// the readiness section below. Edge-to-edge; drag horizontally
     /// to rotate, vertical drags fall through to the scroll. Lit by
     /// how developed each muscle is (vivid orange where you've trained
     /// hard, fading toward a muted tone where you've eased off), so it
@@ -34,41 +34,28 @@ extension TodayScreen {
             .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
     }
 
-    /// The figure's placard, placed directly beneath the portrait (over
-    /// the plain background, not overlaid — the muscle/skeleton detail
-    /// made an overlaid caption unreadable). Once anything is logged the
-    /// readiness line gives the body a voice ("Fresh and in the zone");
-    /// at cold start, when the untrained figure is uniform, the legend
-    /// decodes what the colours will mean instead.
+    /// The figure's placard, shown only at cold start when the
+    /// untrained figure is uniform: the legend decodes what the
+    /// colours will come to mean. Once anything is logged the figure
+    /// stands alone and readiness moves into its own section below
+    /// (see `readinessSection`).
     @ViewBuilder
     var figureCaption: some View {
-        if let line = completedSessions.readiness() {
-            readinessLine(line)
-        } else {
+        if completedSessions.isEmpty {
             developmentLegend
         }
     }
 
-    /// The body's voice: one short verdict on how ready you are to train
-    /// again, from freshness + the personal workload trend. The lead
-    /// clause is brightened against the dimmer nudge; the colour stays
-    /// in the figure, so the words read calm and grayscale.
-    func readinessLine(_ line: ReadinessLine) -> some View {
-        var lead = AttributedString(line.tail.isEmpty ? line.lead : line.lead + " ")
-        lead.foregroundColor = Ink.primary
-        var tail = AttributedString(line.tail)
-        tail.foregroundColor = Ink.secondary
-
-        return Text(lead + tail)
-            .font(Typography.body)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, Space.xl)
-            .padding(.vertical, Space.md)
-            .contentChip()
-            .frame(maxWidth: .infinity)
-            .accessibilityElement()
-            .accessibilityLabel(line.phrase)
+    /// The readiness section: how ready you are to train again, drawn
+    /// rather than spoken — the labelled seven-day activity strip and
+    /// the personal load-range gauge, with the verdict as the header's
+    /// trailing note. The readiness sentence survives as the card's
+    /// VoiceOver label.
+    func readinessSection(_ report: TrainingLoadReport, line: ReadinessLine) -> some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Readiness", trailing: ReadinessCard.statusText(for: report))
+            ReadinessCard(report: report, line: line)
+        }
     }
 
     /// The cold-start placard: with no history the figure is uniform, so

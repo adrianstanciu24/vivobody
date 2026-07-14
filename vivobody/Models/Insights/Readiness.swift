@@ -2,9 +2,11 @@
 //  Readiness.swift
 //  vivobody
 //
-//  The body figure's voice on the Today screen. The 3D model shows
-//  WHERE you've trained; this one line says HOW READY you are to train
-//  again right now — a short, glanceable verdict, not a dashboard.
+//  The body figure's voice. The 3D model shows WHERE you've trained;
+//  this one line says HOW READY you are to train again right now.
+//  On the Today screen the verdict is drawn, not spoken — the
+//  ReadinessCard renders the same signals visually and keeps this
+//  sentence as its VoiceOver label; widgets surface the phrase as-is.
 //
 //  It reads two cheap signals already on hand:
 //    • freshness — whole days since your last completed session.
@@ -37,8 +39,13 @@ nonisolated struct ReadinessLine: Hashable {
 
 extension Array where Element == WorkoutSession {
     /// The readiness verdict as of `now`, or nil when nothing has been
-    /// logged yet (cold start).
-    func readiness(now: Date = Date(), calendar: Calendar = .current) -> ReadinessLine? {
+    /// logged yet (cold start). Pass an already-computed load report
+    /// (e.g. the `SessionAnalytics` cache) to skip the session replay.
+    func readiness(
+        load: TrainingLoadReport? = nil,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> ReadinessLine? {
         guard let last = compactMap({ $0.completedAt }).max() else { return nil }
 
         let days = calendar.dateComponents(
@@ -53,7 +60,7 @@ extension Array where Element == WorkoutSession {
             return ReadinessLine(lead: "Today's in the bank.", tail: "Recover well.")
         }
 
-        let report = trainingLoad(now: now)
+        let report = load ?? trainingLoad(now: now)
 
         // Until the load model has enough history, lead with recency.
         guard report.hasEnoughHistory else { return Self.formingLine(days: days) }

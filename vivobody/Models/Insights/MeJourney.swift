@@ -35,18 +35,20 @@ struct WorkoutStreak: Hashable {
 
 // MARK: - Milestone
 
-/// One lifetime-progress badge. Either a goal you're climbing toward
-/// (`achieved == false`, with a 0…1 `progress` and "84 / 100" text)
-/// or a fully-cleared category (`achieved == true`, "Reached").
+/// One lifetime-progress badge showing the user's standing against
+/// the next threshold. The progress value always matches the visible
+/// ratio, so "84 / 100" renders as 84% filled.
 struct Milestone: Identifiable, Hashable {
     let id = UUID()
     let icon: String
-    /// The target this badge represents, e.g. "100 workouts".
-    let title: String
-    /// Progress readout — "84 / 100" while climbing, "Reached" when maxed.
-    let valueText: String
-    /// 0…1 fill toward the next threshold (1 when maxed).
-    let progress: Double
+    /// Silkscreen category legend — "Workouts", "Volume", "PRs".
+    let legend: String
+    /// Current standing, the tile's big numeral — "84", "39.8k".
+    let valueLabel: String
+    /// Next threshold — "100", "45.4k kg". Nil once every tier is cleared.
+    let targetLabel: String?
+    /// 0…1 ratio of the standing value to the visible next threshold.
+    let targetProgress: Double
     /// True once every threshold in the category is cleared.
     let achieved: Bool
 }
@@ -184,12 +186,12 @@ extension Array where Element == WorkoutSession {
         let longestStreak = workoutStreak.longest
 
         return [
-            countMilestone(icon: "flame.fill", suffix: "workouts",
+            countMilestone(icon: "flame.fill", legend: "Workouts",
                            value: workouts, thresholds: [10, 50, 100, 250, 500, 1000]),
             volumeMilestone(volume: volume, unit: unit),
-            countMilestone(icon: "trophy.fill", suffix: "PRs",
+            countMilestone(icon: "trophy.fill", legend: "PRs",
                            value: prCount, thresholds: [5, 10, 25, 50, 100]),
-            countMilestone(icon: "flame", suffix: "week streak",
+            countMilestone(icon: "calendar", legend: "Week streak",
                            value: longestStreak, thresholds: [4, 8, 12, 26, 52]),
         ]
     }
@@ -229,32 +231,29 @@ extension Array where Element == WorkoutSession {
 
     // MARK: - Milestone builders
 
-    private func countMilestone(icon: String, suffix: String, value: Int, thresholds: [Int]) -> Milestone {
-        let cleared = thresholds.filter { value >= $0 }
+    private func countMilestone(icon: String, legend: String, value: Int, thresholds: [Int]) -> Milestone {
         if let next = thresholds.first(where: { value < $0 }) {
-            let floor = cleared.last ?? 0
-            let progress = Double(value - floor) / Double(next - floor)
             return Milestone(
                 icon: icon,
-                title: "\(next) \(suffix)",
-                valueText: "\(value) / \(next)",
-                progress: Swift.min(1, Swift.max(0, progress)),
+                legend: legend,
+                valueLabel: "\(value)",
+                targetLabel: "\(next)",
+                targetProgress: Swift.min(1, Swift.max(0, Double(value) / Double(next))),
                 achieved: false
             )
         }
-        let top = thresholds.last ?? value
         return Milestone(
             icon: icon,
-            title: "\(top) \(suffix)",
-            valueText: "Reached",
-            progress: 1,
+            legend: legend,
+            valueLabel: "\(value)",
+            targetLabel: nil,
+            targetProgress: 1,
             achieved: true
         )
     }
 
     private func volumeMilestone(volume: Double, unit: WeightUnit) -> Milestone {
         let thresholds: [Double] = [100_000, 500_000, 1_000_000, 5_000_000]
-        let cleared = thresholds.filter { volume >= $0 }
         // Compact display unit-aware: "100k", "1M", "5M".
         func compact(_ lb: Double) -> String {
             let display = WeightFormatter.toDisplay(lb, unit: unit)
@@ -265,22 +264,21 @@ extension Array where Element == WorkoutSession {
             return WeightFormatter.volumeValue(lb, unit: unit)
         }
         if let next = thresholds.first(where: { volume < $0 }) {
-            let floor = cleared.last ?? 0
-            let progress = (volume - floor) / (next - floor)
             return Milestone(
                 icon: "scalemass.fill",
-                title: "\(compact(next)) \(unit.symbol)",
-                valueText: "\(compact(volume)) / \(compact(next))",
-                progress: Swift.min(1, Swift.max(0, progress)),
+                legend: "Volume",
+                valueLabel: compact(volume),
+                targetLabel: "\(compact(next)) \(unit.symbol)",
+                targetProgress: Swift.min(1, Swift.max(0, volume / next)),
                 achieved: false
             )
         }
-        let top = thresholds.last ?? volume
         return Milestone(
             icon: "scalemass.fill",
-            title: "\(compact(top)) \(unit.symbol)",
-            valueText: "Reached",
-            progress: 1,
+            legend: "Volume",
+            valueLabel: compact(volume),
+            targetLabel: nil,
+            targetProgress: 1,
             achieved: true
         )
     }

@@ -62,19 +62,22 @@ struct TodayScreen: View {
     var body: some View {
         ScrollView {
                     // The body leads — your trained figure is the hero
-                    // and the readout's subject. The readiness line gives
-                    // it a voice; then START is the biggest, first-thing-
-                    // you-reach target. The calendar and last workout are
-                    // the journal you scroll down to once you've decided.
+                    // and the readout's subject. The readiness section
+                    // below draws how ready it is to train again; START
+                    // is the biggest, first-thing-you-reach target. The
+                    // calendar and last workout are the journal you
+                    // scroll down to once you've decided.
                     //
                     // The development model is replayed once per data
                     // change (memoised in SessionAnalytics on AppState)
-                    // and every consumer (figure, readiness words, the
+                    // and every consumer (figure, readiness card, the
                     // drill-down boards) derives from this single state.
                     let _ = appState.analytics.update(for: completedSessions)
                     let modelState = appState.analytics.development
                     let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
                     let outlook = appState.analytics.strength
+                    let load = appState.analytics.load
+                    let readiness = completedSessions.readiness(load: load)
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -101,13 +104,17 @@ struct TodayScreen: View {
                             }
                             .settleIn(0)
 
-                        if upNext.isPresentable {
-                            upNextView(upNext, outlook: outlook).settleIn(1)
+                        if let readiness {
+                            readinessSection(load, line: readiness).settleIn(1)
                             SectionDivider().settleIn(2)
                         }
-                        consistencySection.settleIn(3)
-                        SectionDivider().settleIn(4)
-                        lastWorkoutSection.settleIn(5)
+                        if upNext.isPresentable {
+                            upNextView(upNext, outlook: outlook).settleIn(3)
+                            SectionDivider().settleIn(4)
+                        }
+                        consistencySection.settleIn(5)
+                        SectionDivider().settleIn(6)
+                        lastWorkoutSection.settleIn(7)
                     }
                     .padding(.top, Space.xs)
                     .padding(.bottom, Space.xxl)

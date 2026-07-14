@@ -249,14 +249,19 @@ struct MeScreen: View {
 
     /// Lifetime-progress badges in a horizontal rail. Each tile is a
     /// goal you're climbing toward (or a cleared category wearing the
-    /// accent) — the achievement layer the odometer only counts.
+    /// accent) — the achievement layer the odometer only counts. Tiles
+    /// light in sequence (`powerOn`), the rail's lamps warming up.
     private var milestonesSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Milestones")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
-                    ForEach(completedSessions.milestones(unit: weightUnit, prCount: personalRecords)) { milestone in
+                    let milestones = completedSessions.milestones(unit: weightUnit, prCount: personalRecords)
+                    // Positional identity: Milestone ids are freshly minted
+                    // on every recompute, which would re-fire powerOn.
+                    ForEach(Array(milestones.enumerated()), id: \.offset) { index, milestone in
                         MilestoneBadge(milestone: milestone)
+                            .powerOn(index)
                     }
                 }
             }
