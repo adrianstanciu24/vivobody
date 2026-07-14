@@ -74,7 +74,6 @@ struct TodayScreen: View {
                     let _ = appState.analytics.update(for: completedSessions)
                     let modelState = appState.analytics.development
                     let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
-                    let attention = attentionMuscles()
                     let outlook = appState.analytics.strength
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
@@ -102,17 +101,13 @@ struct TodayScreen: View {
                             }
                             .settleIn(0)
 
-                        if !attention.isEmpty {
-                            needsAttentionSection(attention).settleIn(1)
+                        if upNext.isPresentable {
+                            upNextView(upNext, outlook: outlook).settleIn(1)
                             SectionDivider().settleIn(2)
                         }
-                        if upNext.isPresentable {
-                            upNextView(upNext, outlook: outlook).settleIn(3)
-                            SectionDivider().settleIn(4)
-                        }
-                        consistencySection.settleIn(5)
-                        SectionDivider().settleIn(6)
-                        lastWorkoutSection.settleIn(7)
+                        consistencySection.settleIn(3)
+                        SectionDivider().settleIn(4)
+                        lastWorkoutSection.settleIn(5)
                     }
                     .padding(.top, Space.xs)
                     .padding(.bottom, Space.xxl)
@@ -185,42 +180,6 @@ struct TodayScreen: View {
         action?()
     }
 
-}
-
-/// Circular recency ring for one neglected-muscle tile. The arc
-/// animates from empty to its fill fraction on appear, so the ring
-/// "fills" as the section settles in. Honors Reduce Motion by
-/// showing the final value immediately.
-struct AttentionRing: View {
-    let fraction: Double
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var shown = false
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(Surface.edge, lineWidth: 3)
-            if fraction > 0 {
-                Circle()
-                    .trim(from: 0, to: shown ? fraction : 0)
-                    .stroke(
-                        Tint.primary,
-                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-            }
-        }
-        .frame(width: 40, height: 40)
-        .onAppear {
-            if reduceMotion {
-                shown = true
-            } else {
-                withAnimation(.spring(response: 0.7, dampingFraction: 0.8).delay(0.15)) {
-                    shown = true
-                }
-            }
-        }
-    }
 }
 
 #Preview("Today") {

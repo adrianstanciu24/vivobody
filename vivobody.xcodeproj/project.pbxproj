@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A1B2C3D4E5F6A1B2C3D40004 /* VivoKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D4E5F6A1B2C3D40002 /* VivoKit */; };
 		A1B2C3D4E5F6A1B2C3D40005 /* VivoKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D4E5F6A1B2C3D40003 /* VivoKit */; };
-		C289A4AFB8854C44B600B66D /* vivobodyWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C289A4AFB8854C44B600B66D /* vivobodyWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 67F2DBE5F8214A8F82FC470B /* vivobodyWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,15 +37,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E6D106A3A0C04D76A94D2A46 /* Embed App Extensions */ = {
+		E6D106A3A0C04D76A94D2A46 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				C289A4AFB8854C44B600B66D /* vivobodyWidgets.appex in Embed App Extensions */,
+				C289A4AFB8854C44B600B66D /* vivobodyWidgets.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -171,7 +171,7 @@
 				781FC19E2FBB8CC000EE0477 /* Sources */,
 				781FC19F2FBB8CC000EE0477 /* Frameworks */,
 				781FC1A02FBB8CC000EE0477 /* Resources */,
-				E6D106A3A0C04D76A94D2A46 /* Embed App Extensions */,
+				E6D106A3A0C04D76A94D2A46 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -266,7 +266,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2640;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					781FC1A12FBB8CC000EE0477 = {
 						CreatedOnToolsVersion = 26.4;

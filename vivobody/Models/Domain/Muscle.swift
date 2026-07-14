@@ -180,6 +180,37 @@ nonisolated extension Muscle {
         /// At/above this a contribution reads as a prime mover.
         static let primeThreshold = 0.85
 
+        /// The bounded vocabulary used when authoring involvement.
+        /// Catalog analytics keep storing Doubles, while the editor
+        /// avoids implying precision the underlying data does not have.
+        nonisolated enum Level: Double, CaseIterable {
+            case prime = 1.0
+            case major = 0.7
+            case minor = 0.4
+            case trace = 0.2
+            case none = 0
+
+            var displayName: String {
+                switch self {
+                case .prime: return "Prime"
+                case .major: return "Major"
+                case .minor: return "Minor"
+                case .trace: return "Trace"
+                case .none:  return "None"
+                }
+            }
+
+            init(weight: Double) {
+                guard weight > 0 else {
+                    self = .none
+                    return
+                }
+                self = Self.allCases.min {
+                    Swift.abs($0.rawValue - weight) < Swift.abs($1.rawValue - weight)
+                } ?? .none
+            }
+        }
+
         let contributions: [(muscle: Muscle, weight: Double)]
 
         static let empty = Involvement(contributions: [])
@@ -217,6 +248,9 @@ nonisolated extension Muscle {
         /// Everything below prime but still involved.
         var secondary: [Muscle] {
             contributions.filter { $0.weight > 0 && $0.weight < Self.primeThreshold }.map(\.muscle)
+        }
+        var hasPrime: Bool {
+            contributions.contains { $0.weight >= Self.primeThreshold }
         }
         var isEmpty: Bool { contributions.isEmpty }
     }

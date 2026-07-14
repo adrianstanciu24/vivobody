@@ -207,13 +207,13 @@ struct LibraryTemplatesContent: View {
 
 /// A saved plan as a full-width hairline row — no card. Two tiers,
 /// mirroring the Exercises segment: a template scheduled for today
-/// reads prominent (brighter name, larger numeral, taller row), the
-/// rest stay quiet. Left side: name, a sentence-case meta line
-/// ("4 exercises · Chest · Back"), and — when scheduled — a seven-
-/// letter weekday rail with the pinned days lit (today's in orange).
-/// Right side: the total planned-set count as a monospaced numeral,
-/// the row's instrument anchor. The List that hosts it draws the
-/// separators.
+/// reads prominent (brighter name, taller row), the rest stay quiet.
+/// Three stacked lines: name (same size as an exercise row's name),
+/// a sentence-case meta line carrying exercise count, set count, and
+/// the muscles worked ("4 exercises · 12 sets · Chest, Back"), and —
+/// when scheduled — a seven-day rail of lettered circles with the
+/// pinned days filled (today's in orange). The List that hosts it
+/// draws the separators.
 struct TemplateCard: View {
     let template: WorkoutTemplate
 
@@ -222,43 +222,27 @@ struct TemplateCard: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: Space.md) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(template.name)
-                    .font(Typography.title)
-                    .foregroundStyle(isToday ? Ink.primary : Ink.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Text(subtitle)
-                    .font(Typography.caption)
-                    .foregroundStyle(isToday ? Ink.tertiary : Ink.quaternary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                if template.isScheduled {
-                    WeekdayRail(
-                        scheduled: Set(template.scheduledWeekdays),
-                        today: Calendar.current.component(.weekday, from: Date())
-                    )
-                    .padding(.top, 2)
-                }
+        VStack(alignment: .leading, spacing: 3) {
+            Text(template.name)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(isToday ? Ink.primary : Ink.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            Text(subtitle)
+                .font(Typography.caption)
+                .foregroundStyle(isToday ? Ink.tertiary : Ink.quaternary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            if template.isScheduled {
+                WeekdayRail(
+                    scheduled: Set(template.scheduledWeekdays),
+                    today: Calendar.current.component(.weekday, from: Date())
+                )
+                .padding(.top, Space.sm)
             }
-
-            Spacer(minLength: Space.sm)
-
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("\(template.totalPlannedSets)")
-                    .font(isToday ? Typography.statValue : Typography.metricInline)
-                    .foregroundStyle(Ink.primary)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                Text(template.totalPlannedSets == 1 ? "set" : "sets")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-            }
-            .layoutPriority(1)
         }
-        .frame(minHeight: isToday ? 72 : Space.rowMin)
-        .padding(.vertical, Space.sm)
+        .frame(minHeight: isToday ? 72 : Space.rowMin, alignment: .leading)
+        .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
@@ -267,36 +251,55 @@ struct TemplateCard: View {
     private var subtitle: String {
         let count = template.orderedExercises.count
         let exercises = count == 1 ? "1 exercise" : "\(count) exercises"
-        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
-        return groups.isEmpty ? exercises : "\(exercises) · \(groups)"
+        let sets = template.totalPlannedSets == 1 ? "1 set" : "\(template.totalPlannedSets) sets"
+        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: ", ")
+        var parts = [exercises, sets]
+        if !groups.isEmpty { parts.append(groups) }
+        return parts.joined(separator: " · ")
     }
 }
 
 // MARK: - Weekday rail
 
-/// Seven single-letter weekdays in the calendar's display order —
-/// the "quiet calendar" treatment of a template's schedule. Pinned
-/// days read in primary ink, today's pinned day in orange, the rest
-/// stay faint. Replaces the old "Wed · Fri · Sat" prose line.
+/// Seven single-letter weekdays in the calendar's display order,
+/// each inside a small circle — the "quiet calendar" treatment of a
+/// template's schedule. Pinned days get a filled circle: today's in
+/// orange (the row's single loud accent), the rest a dim white-tint
+/// fill under primary ink. Unpinned days stay a faint hairline ring
+/// so the rail reads as background texture, not a control strip.
 private struct WeekdayRail: View {
     let scheduled: Set<Int>
     let today: Int
 
+    private static let diameter: CGFloat = 18
+
     var body: some View {
-        HStack(spacing: Space.xs) {
+        HStack(spacing: Space.xs + 2) {
             ForEach(WeekdayLabels.ordered(), id: \.self) { day in
-                Text(WeekdayLabels.veryShort(day))
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(color(for: day))
-                    .frame(minWidth: 13)
+                dayCircle(day)
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Scheduled \(WeekdayLabels.summary(Array(scheduled)))")
     }
 
-    private func color(for day: Int) -> Color {
-        guard scheduled.contains(day) else { return Ink.quaternary }
-        return day == today ? Tint.primary : Ink.primary
+    private func dayCircle(_ day: Int) -> some View {
+        let isOn = scheduled.contains(day)
+        return Text(WeekdayLabels.veryShort(day))
+            .font(Typography.metricMicro)
+            .foregroundStyle(labelColor(day: day, isOn: isOn))
+            .frame(width: Self.diameter, height: Self.diameter)
+            .background {
+                if isOn {
+                    Circle().fill(day == today ? Tint.primary : Ink.quaternary)
+                } else {
+                    Circle().strokeBorder(Surface.edge, lineWidth: 1)
+                }
+            }
+    }
+
+    private func labelColor(day: Int, isOn: Bool) -> Color {
+        guard isOn else { return Ink.quaternary }
+        return day == today ? Tint.onAccent : Ink.primary
     }
 }

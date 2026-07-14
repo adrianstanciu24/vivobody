@@ -39,6 +39,7 @@ struct CustomExerciseEditorSheet: View {
     @State private var draft: CatalogDraft
 
     @State private var saveError: SaveErrorBox? = nil
+    @State private var isMuscleEditorPresented = false
 
     @FocusState private var nameFieldFocused: Bool
 
@@ -64,6 +65,7 @@ struct CustomExerciseEditorSheet: View {
 
     private var canSave: Bool {
         !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
+            && draft.muscleInvolvement.hasPrime
     }
 
     var body: some View {
@@ -72,6 +74,7 @@ struct CustomExerciseEditorSheet: View {
                 VStack(alignment: .leading, spacing: Space.section) {
                     nameField
                     muscleGroupField
+                    muscleInvolvementField
                     equipmentField
                     mechanicField
                     if draft.mechanic == .compound {
@@ -108,6 +111,13 @@ struct CustomExerciseEditorSheet: View {
                     // keyboard slides up immediately so the user can
                     // start typing without an extra tap.
                     nameFieldFocused = true
+                }
+            }
+            .sheet(isPresented: $isMuscleEditorPresented) {
+                MuscleInvolvementEditorSheet(
+                    initialSnapshot: draft.muscleInvolvementSnapshot
+                ) { snapshot in
+                    draft.muscleInvolvementSnapshot = snapshot
                 }
             }
             .saveErrorAlert($saveError)
@@ -148,11 +158,66 @@ struct CustomExerciseEditorSheet: View {
                         ForEach(MuscleGroup.allCases, id: \.self) { g in
                             chip(label: g.displayName, isSelected: draft.group == g) {
                                 Haptics.selection()
+                                guard draft.group != g else { return }
                                 draft.group = g
+                                draft.applyMusclePreset(for: g)
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private var muscleInvolvementField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Muscles worked")
+                    .sectionLabelStyle(Opacity.medium)
+                Spacer()
+                Text("group sets preset")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+            }
+
+            Button {
+                Haptics.selection()
+                isMuscleEditorPresented = true
+            } label: {
+                HStack(spacing: Space.md) {
+                    VStack(alignment: .leading, spacing: Space.xs) {
+                        Text(draft.muscleSummary)
+                            .font(Typography.body)
+                            .foregroundStyle(Ink.secondary)
+                            .multilineTextAlignment(.leading)
+                        Text("Set each muscle as Prime, Major, Minor, Trace, or None")
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.quaternary)
+                            .multilineTextAlignment(.leading)
+                    }
+
+                    Spacer(minLength: Space.sm)
+
+                    Image(systemName: "chevron.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
+                .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+                .background {
+                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                        .fill(Surface.cardTint)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Edit muscle involvement")
+            .accessibilityValue(draft.muscleSummary)
+
+            if !draft.muscleInvolvement.hasPrime {
+                Text("Choose at least one Prime muscle to save.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.danger)
             }
         }
     }
@@ -474,6 +539,7 @@ struct CustomExerciseEditorSheet: View {
                 plane: draft.plane,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
+                muscleInvolvement: draft.muscleInvolvement,
                 isUserCreated: true
             )
             modelContext.insert(item)
@@ -500,6 +566,7 @@ struct CustomExerciseEditorSheet: View {
             item.plane = draft.plane
             item.laterality = draft.laterality
             item.aliases = parsedAliases
+            item.muscleInvolvementSnapshot = draft.muscleInvolvementSnapshot
             savedItem = item
         }
 
@@ -535,6 +602,7 @@ struct CatalogDraft {
     var pattern: MovementPattern?
     var plane: MovementPlane
     var laterality: Laterality
+    var muscleInvolvementSnapshot: [String: Double]
 
     /// Raw editor input for aliases — comma-separated free text.
     /// Parsed into `[String]` on save via `parsedAliases`. Keeping
@@ -553,6 +621,7 @@ struct CatalogDraft {
         pattern: nil,
         plane: .sagittal,
         laterality: .bilateral,
+        muscleInvolvementSnapshot: Muscle.defaultInvolvement(for: .chest).snapshot,
         aliasesInput: ""
     )
 
@@ -567,6 +636,7 @@ struct CatalogDraft {
         pattern: MovementPattern?,
         plane: MovementPlane,
         laterality: Laterality,
+        muscleInvolvementSnapshot: [String: Double],
         aliasesInput: String
     ) {
         self.name = name
@@ -579,6 +649,7 @@ struct CatalogDraft {
         self.pattern = pattern
         self.plane = plane
         self.laterality = laterality
+        self.muscleInvolvementSnapshot = muscleInvolvementSnapshot
         self.aliasesInput = aliasesInput
     }
 
@@ -593,10 +664,29 @@ struct CatalogDraft {
         self.pattern = item.pattern
         self.plane = item.plane
         self.laterality = item.laterality
+        self.muscleInvolvementSnapshot = item.muscleInvolvement.snapshot
         // Rebuild the comma-separated string so the editor's text
         // field reflects the stored list. Two-space readability for
         // long lists, but the parser tolerates either.
         self.aliasesInput = item.aliases.joined(separator: ", ")
+    }
+
+    var muscleInvolvement: Muscle.Involvement {
+        Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
+    }
+
+    var muscleSummary: String {
+        let involvement = muscleInvolvement
+        let prime = involvement.primary.map(\.displayName).joined(separator: " · ")
+        let supportingCount = involvement.secondary.count
+        guard !prime.isEmpty else { return "No Prime muscle selected" }
+        guard supportingCount > 0 else { return "\(prime) · Prime" }
+        let suffix = supportingCount == 1 ? "1 supporting muscle" : "\(supportingCount) supporting muscles"
+        return "\(prime) · \(suffix)"
+    }
+
+    mutating func applyMusclePreset(for group: MuscleGroup) {
+        muscleInvolvementSnapshot = Muscle.defaultInvolvement(for: group).snapshot
     }
 
     /// Split the comma-separated `aliasesInput` into a clean array.

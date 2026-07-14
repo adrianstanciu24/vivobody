@@ -5,8 +5,8 @@
 //  Persistent catalog of lifts the user picks from when building a
 //  template or adding an exercise mid-workout. Stored as @Model so
 //  the user can extend it with custom entries — name + muscle group
-//  + equipment + mechanic + pattern + aliases + sensible defaults —
-//  and edit/delete them in place.
+//  + equipment + mechanic + pattern + aliases + graded muscle
+//  involvement + sensible defaults — and edit/delete them in place.
 //
 //  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
 //  to populate it from the bundled `catalog.json` (see `CatalogData`). After
@@ -221,6 +221,12 @@ final class ExerciseCatalogItem: Identifiable {
     /// alongside `name` in the picker. Empty by default.
     var aliases: [String] = []
 
+    /// Explicit graded muscle contribution authored for this catalog
+    /// item. An empty snapshot preserves legacy behavior: seeded lifts
+    /// resolve from catalog.json and older custom lifts use their broad
+    /// muscle-group preset. Additive defaulted field, so no migration.
+    var muscleInvolvementSnapshot: [String: Double] = [:]
+
     /// Stamped at creation. Used as a sort tiebreaker after
     /// muscle-group and name, so two items with the same name (which
     /// shouldn't happen but isn't enforced) have a stable order.
@@ -296,12 +302,14 @@ final class ExerciseCatalogItem: Identifiable {
         set { lateralityRaw = newValue.rawValue }
     }
 
-    /// Muscles worked, with their graded contribution weights. Seeded
-    /// items resolve from the curated catalog map; custom names fall
-    /// back to their coarse muscle group so analytics still count
-    /// user-created exercises.
+    /// Muscles worked, with their graded contribution weights. Explicit
+    /// user-authored values win; seeded and legacy entries retain their
+    /// curated-name or coarse-group fallback.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
+        if !muscleInvolvementSnapshot.isEmpty {
+            return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
+        }
+        return Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
     }
 
     init(
@@ -319,6 +327,7 @@ final class ExerciseCatalogItem: Identifiable {
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
+        muscleInvolvement: Muscle.Involvement? = nil,
         isUserCreated: Bool = false,
         createdAt: Date = Date()
     ) {
@@ -336,6 +345,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.planeRaw = plane.rawValue
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
+        self.muscleInvolvementSnapshot = muscleInvolvement?.snapshot ?? [:]
         self.isUserCreated = isUserCreated
         self.createdAt = createdAt
     }

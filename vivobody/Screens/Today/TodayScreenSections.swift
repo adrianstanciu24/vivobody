@@ -4,8 +4,7 @@
 //
 //  Section view builders extracted from TodayScreen: the
 //  body-model hero + caption, the Up Next recommendation card,
-//  and the Needs-attention / consistency / last-workout journal
-//  sections.
+//  and the consistency / last-workout journal sections.
 //
 
 import VivoKit
@@ -322,79 +321,6 @@ extension TodayScreen {
     static func article(for name: String) -> String {
         guard let first = name.lowercased().first else { return "a" }
         return "aeiou".contains(first) ? "an" : "a"
-    }
-
-    // MARK: - Needs attention
-
-    /// The two or three muscles most worth training next: previously
-    /// trained but now stale lead, then never-trained, capped so the
-    /// row stays a glance rather than a guilt-list. Empty (and hidden)
-    /// until there's training to judge against.
-    func attentionMuscles() -> [MuscleVolumeStat] {
-        let neglected = appState.analytics.volume.summary.neglected
-        let rested = neglected.filter { $0.daysSinceLastTrained != nil }
-        let never = neglected.filter { $0.daysSinceLastTrained == nil }
-        return Array((rested + never).prefix(3))
-    }
-
-    func needsAttentionSection(_ muscles: [MuscleVolumeStat]) -> some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Needs attention")
-            HStack(spacing: Space.sm) {
-                ForEach(muscles) { stat in
-                    attentionTile(stat)
-                }
-            }
-        }
-    }
-
-    /// One neglected muscle as a vertical tile anchored by a recency
-    /// ring. The ring fills proportionally to how recently the muscle
-    /// was trained (or how close its volume is to the minimum
-    /// effective threshold), so an empty ring reads "zero work" at a
-    /// glance — no text parsing needed. The muscle name and a short
-    /// qualifier sit beneath the ring as detail.
-    func attentionTile(_ stat: MuscleVolumeStat) -> some View {
-        VStack(spacing: Space.sm) {
-            AttentionRing(fraction: attentionRecencyFraction(stat))
-            Text(stat.muscle.displayName)
-                .font(Typography.headline)
-                .foregroundStyle(Ink.primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-            Text(attentionQualifier(stat))
-                .font(Typography.metricMicro)
-                .foregroundStyle(Ink.tertiary)
-                .monospacedDigit()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, Space.lg)
-        .contentChip()
-        .accessibilityElement(children: .combine)
-    }
-
-    /// Recency ring fill fraction (0…1). For untrained muscles the
-    /// arc depletes over a 14-day reference — 0 days rest = full,
-    /// 14+ days = empty, never-trained = empty. For under-volume
-    /// muscles the arc represents how close the weekly effective-set
-    /// count is to the muscle's minimum effective volume.
-    func attentionRecencyFraction(_ stat: MuscleVolumeStat) -> Double {
-        switch stat.zone {
-        case .untrained:
-            guard let days = stat.daysSinceLastTrained else { return 0 }
-            return max(0, 1 - Double(days) / 14)
-        default:
-            return min(1, stat.effectiveSets / stat.landmark.mev)
-        }
-    }
-
-    func attentionQualifier(_ stat: MuscleVolumeStat) -> String {
-        switch stat.zone {
-        case .untrained:
-            return stat.daysSinceLastTrained.map { "\($0)d" } ?? "new"
-        default:
-            return "low"
-        }
     }
 
     /// The figure is the hero, so it takes nearly the whole first

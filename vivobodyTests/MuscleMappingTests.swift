@@ -14,6 +14,7 @@ import Foundation
 import Testing
 @testable import vivobody
 
+@MainActor
 struct MuscleMappingTests {
 
     @Test func catalogDecodesFromBundle() {
@@ -103,6 +104,64 @@ struct MuscleMappingTests {
         #expect(w[.deltoids]! > w[.biceps]!)
         #expect(bench.primary == [.pectorals])
         #expect(bench.secondary == [.triceps, .deltoids, .biceps])
+    }
+
+    @Test func authoringLevelsUseCatalogWeights() {
+        #expect(Muscle.Involvement.Level.prime.rawValue == Muscle.Involvement.prime)
+        #expect(Muscle.Involvement.Level.major.rawValue == Muscle.Involvement.major)
+        #expect(Muscle.Involvement.Level.minor.rawValue == Muscle.Involvement.minor)
+        #expect(Muscle.Involvement.Level.trace.rawValue == Muscle.Involvement.trace)
+        #expect(Muscle.Involvement.Level.none.rawValue == 0)
+    }
+
+    @Test func everyGroupPresetHasPrimeMover() {
+        for group in MuscleGroup.allCases {
+            #expect(
+                Muscle.defaultInvolvement(for: group).hasPrime,
+                "\(group.rawValue) preset has no Prime muscle"
+            )
+        }
+    }
+
+    @Test @MainActor func explicitCatalogInvolvementOverridesCuratedName() {
+        let custom = Muscle.Involvement(contributions: [
+            (.quads, Muscle.Involvement.prime),
+            (.glutes, Muscle.Involvement.major),
+            (.calves, Muscle.Involvement.trace),
+        ])
+        let item = ExerciseCatalogItem(
+            name: "Bench Press",
+            group: .legs,
+            defaultWeight: 0,
+            muscleInvolvement: custom,
+            isUserCreated: true
+        )
+
+        #expect(item.muscleInvolvement.snapshot == custom.snapshot)
+        #expect(item.muscleInvolvement.primary == [.quads])
+        #expect(item.muscleInvolvement.weights[.pectorals] == nil)
+    }
+
+    @Test @MainActor func legacyCatalogItemRetainsFallbackInvolvement() {
+        let item = ExerciseCatalogItem(
+            name: "Totally Made Up Lift",
+            group: .back,
+            defaultWeight: 0,
+            isUserCreated: true
+        )
+
+        #expect(item.muscleInvolvementSnapshot.isEmpty)
+        #expect(item.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .back).snapshot)
+    }
+
+    @Test @MainActor func catalogDraftUsesAndReplacesGroupPreset() {
+        var draft = CatalogDraft.empty
+        #expect(draft.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .chest).snapshot)
+
+        draft.applyMusclePreset(for: .legs)
+
+        #expect(draft.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .legs).snapshot)
+        #expect(draft.muscleInvolvement.hasPrime)
     }
 
     @Test @MainActor func classificationResolvesForKnownLift() {
