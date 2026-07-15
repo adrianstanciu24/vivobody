@@ -277,6 +277,24 @@ struct MuscleDevelopmentTests {
         #expect(nodes["Vastus_Lateralis_L"] == nil)
     }
 
+    @Test func gluteMaxAndMedPaintIndependently() {
+        let extensionSession = session(
+            at: day(0),
+            [lift("Barbell Hip Thrust", .legs, sets: 3, reps: 10, weight: 185)]
+        )
+        let extensionNodes = MuscleDevelopment.nodeIntensities(from: [extensionSession], now: day(0))
+        #expect((extensionNodes["Gluteus_Maximus_L"] ?? 0) > 0)
+        #expect(extensionNodes["Gluteus_Medius_L"] == nil)
+
+        let abductionSession = session(
+            at: day(0),
+            [lift("Machine Hip Abduction", .legs, sets: 3, reps: 15, weight: 90)]
+        )
+        let abductionNodes = MuscleDevelopment.nodeIntensities(from: [abductionSession], now: day(0))
+        #expect((abductionNodes["Gluteus_Medius_L"] ?? 0) > 0)
+        #expect(abductionNodes["Gluteus_Maximus_L"] == nil)
+    }
+
     // MARK: - Colour mapping
 
     @Test(arguments: [BodyModelTheme.dark, .light])

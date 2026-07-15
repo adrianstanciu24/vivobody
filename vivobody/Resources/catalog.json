@@ -117,7 +117,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -884,7 +884,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -1245,7 +1245,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -3586,7 +3586,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -3661,7 +3661,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4005,7 +4005,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -4103,7 +4103,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4187,7 +4187,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4271,7 +4271,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4398,7 +4398,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4483,7 +4483,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -4528,7 +4528,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -4783,7 +4783,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -4851,7 +4851,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -4961,7 +4961,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -5387,7 +5387,7 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -5460,7 +5460,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -5496,7 +5496,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -5544,7 +5544,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -5827,7 +5827,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -5928,7 +5928,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -6063,7 +6063,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -6126,8 +6126,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.2
       },
       {
         "muscle": "hamstrings",
@@ -6210,7 +6214,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -6630,10 +6634,6 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
         "muscle": "adductors",
         "weight": 0.2
       },
@@ -6706,10 +6706,6 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
         "muscle": "adductors",
         "weight": 0.2
       },
@@ -6741,7 +6737,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -6865,7 +6861,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -7067,7 +7063,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -7201,7 +7197,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -7284,7 +7280,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -7323,7 +7319,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -7866,8 +7862,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.2
       },
       {
         "muscle": "hamstrings",
@@ -7910,7 +7910,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -8157,7 +8157,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -8232,10 +8232,6 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
         "muscle": "adductors",
         "weight": 0.2
       },
@@ -8304,7 +8300,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -8516,10 +8512,6 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
         "muscle": "adductors",
         "weight": 0.2
       },
@@ -8634,10 +8626,6 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
-        "weight": 0.2
-      },
-      {
         "muscle": "adductors",
         "weight": 0.2
       },
@@ -8707,10 +8695,6 @@
       },
       {
         "muscle": "hamstrings",
-        "weight": 0.2
-      },
-      {
-        "muscle": "glutes",
         "weight": 0.2
       },
       {
@@ -8972,7 +8956,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -9017,7 +9001,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -9224,7 +9208,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -9325,7 +9309,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -9447,7 +9431,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -9639,7 +9623,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -10051,7 +10035,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -12332,7 +12316,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -13303,7 +13287,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -13422,7 +13406,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -13464,7 +13448,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -13609,7 +13593,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ],
@@ -13644,7 +13628,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -13703,8 +13687,12 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.2
       },
       {
         "muscle": "deltoids",
@@ -13748,7 +13736,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       }
     ]
@@ -13769,7 +13757,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -13886,8 +13874,8 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
-        "weight": 0.4
+        "muscle": "gluteMed",
+        "weight": 1.0
       }
     ]
   },
@@ -14492,7 +14480,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -14525,7 +14513,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -14650,7 +14638,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -14689,7 +14677,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -14727,7 +14715,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -14798,7 +14786,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -14835,7 +14823,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -14882,7 +14870,11 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
+        "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
         "weight": 0.7
       },
       {
@@ -14962,7 +14954,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -15009,7 +15001,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15174,8 +15166,12 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.4
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.2
       },
       {
         "muscle": "deltoids",
@@ -15229,7 +15225,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.4
       },
       {
@@ -15424,7 +15420,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -15536,7 +15532,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15635,7 +15631,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -15673,7 +15669,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -15720,7 +15716,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15770,7 +15766,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15816,7 +15812,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15867,8 +15863,12 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
-        "weight": 0.4
+        "muscle": "gluteMax",
+        "weight": 0.2
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.7
       },
       {
         "muscle": "deltoids",
@@ -15912,7 +15912,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -15964,8 +15964,12 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.2
       },
       {
         "muscle": "hamstrings",
@@ -16019,7 +16023,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -16064,8 +16068,12 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.2
       },
       {
         "muscle": "deltoids",
@@ -16110,7 +16118,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -16176,7 +16184,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -16325,7 +16333,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -16619,7 +16627,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       },
       {
@@ -16708,7 +16716,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -16794,7 +16802,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -16893,7 +16901,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.7
       },
       {
@@ -17053,7 +17061,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.4
       },
       {
@@ -17130,7 +17138,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -17316,7 +17324,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       }
     ]
@@ -17462,8 +17470,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "obliques",
@@ -17640,7 +17652,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -17678,8 +17690,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -17724,7 +17740,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -17786,7 +17802,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -17824,7 +17840,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -17859,8 +17875,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -17909,7 +17929,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -17959,7 +17979,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18005,8 +18025,12 @@
     "bodyweightFraction": 0.6,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -18059,7 +18083,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18103,7 +18127,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18153,7 +18177,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18198,7 +18222,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -18230,7 +18254,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -18268,8 +18292,12 @@
     "bodyweightFraction": 0.4,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -18318,7 +18346,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18369,7 +18397,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18408,7 +18436,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -18447,8 +18475,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -18502,8 +18534,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -18557,8 +18593,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -18612,7 +18652,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18659,8 +18699,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -18709,7 +18753,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18759,7 +18803,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18813,7 +18857,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -18863,8 +18907,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -18918,7 +18966,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -19032,7 +19080,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -19095,7 +19143,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19174,8 +19222,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -19220,7 +19272,11 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
+        "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
         "weight": 0.7
       },
       {
@@ -19270,7 +19326,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19350,8 +19406,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -19400,7 +19460,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19448,7 +19508,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -19523,7 +19583,11 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
+        "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
         "weight": 0.4
       },
       {
@@ -19552,7 +19616,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -19587,7 +19651,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19646,7 +19710,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19696,7 +19760,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -19735,8 +19799,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -19790,8 +19858,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -19845,8 +19917,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -19900,7 +19976,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -19959,8 +20035,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -20006,8 +20086,12 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -20077,8 +20161,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -20128,7 +20216,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -20191,7 +20279,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -20292,7 +20380,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -20345,7 +20433,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -20378,7 +20466,7 @@
     "bodyweightFraction": 0.2,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -20411,7 +20499,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -20477,7 +20565,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -20508,7 +20596,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -20543,7 +20631,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -20577,8 +20665,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -20632,8 +20724,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hipFlexors",
@@ -20691,8 +20787,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -20746,7 +20846,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -20820,7 +20920,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -20862,7 +20962,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -20908,7 +21008,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ]
@@ -20937,7 +21037,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -20979,7 +21079,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21029,7 +21129,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21063,7 +21163,7 @@
     "bodyweightFraction": 0.4,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -21097,7 +21197,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21131,7 +21231,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -21170,8 +21270,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -21224,7 +21328,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21272,8 +21376,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -21326,8 +21434,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -21376,8 +21488,12 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -21435,7 +21551,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21487,7 +21603,11 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
+        "weight": 0.4
+      },
+      {
+        "muscle": "gluteMed",
         "weight": 0.7
       },
       {
@@ -21534,8 +21654,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "lowerBack",
@@ -21581,7 +21705,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21632,7 +21756,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -21691,7 +21815,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -21757,8 +21881,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "lowerBack",
@@ -21800,7 +21928,7 @@
     "bodyweightFraction": 0.25,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -21833,8 +21961,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hipFlexors",
@@ -21896,8 +22028,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "lowerBack",
@@ -21943,7 +22079,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -21998,7 +22134,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22061,8 +22197,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -22119,7 +22259,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ],
@@ -22145,7 +22285,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ]
@@ -22170,7 +22310,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ],
@@ -22198,10 +22338,6 @@
       {
         "muscle": "calves",
         "weight": 0.4
-      },
-      {
-        "muscle": "glutes",
-        "weight": 0.2
       }
     ],
     "defaultWeightKg": 37.5,
@@ -22229,7 +22365,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.2
       }
     ],
@@ -22272,7 +22408,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22311,7 +22447,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22350,7 +22486,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22400,7 +22536,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -22439,7 +22575,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22478,7 +22614,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22529,8 +22665,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "deltoids",
@@ -22596,8 +22736,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -22646,8 +22790,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -22695,7 +22843,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -22741,7 +22889,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -22784,7 +22932,7 @@
         "weight": 0.4
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       },
       {
@@ -22809,7 +22957,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22872,7 +23020,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -22911,7 +23059,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22953,7 +23101,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -22992,7 +23140,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -23043,8 +23191,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -23101,7 +23253,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -23139,7 +23291,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -23189,7 +23341,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -23235,7 +23387,7 @@
     "bodyweightFraction": 0.15,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -23264,7 +23416,7 @@
     "bodyweightFraction": 0.3,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -23293,7 +23445,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -23328,8 +23480,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -23386,7 +23542,7 @@
         "weight": 0.2
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.2
       }
     ]
@@ -23407,7 +23563,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -23461,7 +23617,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -23511,7 +23667,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -23575,8 +23731,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -23621,7 +23781,7 @@
     "bodyweightFraction": 0.2,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -23650,8 +23810,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "quads",
@@ -23684,7 +23848,7 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -23735,8 +23899,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -23777,8 +23945,12 @@
     "bodyweightFraction": 0.4,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -23831,8 +24003,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "lowerBack",
@@ -23873,8 +24049,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "lowerBack",
@@ -23920,8 +24100,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -23975,8 +24159,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -24047,8 +24235,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMax",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -24097,7 +24289,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -24132,7 +24324,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24182,8 +24374,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -24237,7 +24433,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24284,7 +24480,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -24351,7 +24547,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24397,7 +24593,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24443,7 +24639,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24499,7 +24695,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24594,8 +24790,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -24657,7 +24857,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24708,7 +24908,7 @@
     "bodyweightFraction": 0.0,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -24778,7 +24978,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24824,7 +25024,7 @@
     "bodyweightFraction": 0.15,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMed",
         "weight": 1.0
       },
       {
@@ -24857,7 +25057,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -24941,7 +25141,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
       },
       {
@@ -25003,7 +25203,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -25058,8 +25258,12 @@
     "bodyweightFraction": 0.5,
     "involvement": [
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 1.0
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "hamstrings",
@@ -25108,8 +25312,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -25158,8 +25366,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -25216,7 +25428,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -25283,7 +25495,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.4
       },
       {
@@ -25326,8 +25538,12 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
+      },
+      {
+        "muscle": "gluteMed",
+        "weight": 0.4
       },
       {
         "muscle": "adductors",
@@ -25597,7 +25813,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -25729,7 +25945,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -26213,7 +26429,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -26285,7 +26501,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -26349,7 +26565,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -26903,7 +27119,7 @@
         "weight": 1.0
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -27145,7 +27361,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -27967,7 +28183,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {
@@ -28031,7 +28247,7 @@
         "weight": 0.7
       },
       {
-        "muscle": "glutes",
+        "muscle": "gluteMax",
         "weight": 0.7
       },
       {

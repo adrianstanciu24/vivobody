@@ -53,7 +53,8 @@ enum Muscle: String, Hashable, CaseIterable {
     // Legs
     case quads
     case hamstrings
-    case glutes
+    case gluteMax
+    case gluteMed
     case calves
     case adductors
     case hipFlexors
@@ -76,7 +77,8 @@ enum Muscle: String, Hashable, CaseIterable {
         case .obliques:   return "Obliques"
         case .quads:      return "Quads"
         case .hamstrings: return "Hamstrings"
-        case .glutes:     return "Glutes"
+        case .gluteMax:   return "Glute Max"
+        case .gluteMed:   return "Glute Med"
         case .calves:     return "Calves"
         case .adductors:  return "Adductors"
         case .hipFlexors: return "Hip Flexors"
@@ -95,7 +97,7 @@ enum Muscle: String, Hashable, CaseIterable {
         case .deltoids:                                   return .shoulders
         case .biceps, .triceps, .forearms:                return .arms
         case .abs, .obliques:                             return .core
-        case .quads, .hamstrings, .glutes, .calves,
+        case .quads, .hamstrings, .gluteMax, .gluteMed, .calves,
              .adductors, .hipFlexors, .shins:             return .legs
         }
     }
@@ -141,8 +143,10 @@ enum Muscle: String, Hashable, CaseIterable {
             return ["Rectus_Femoris", "Vastus_Lateralis", "Vastus_Medialis", "Vastus_Intermedius"]
         case .hamstrings:
             return ["Biceps_femoris", "Semitendinosus", "Semimembranosus"]
-        case .glutes:
-            return ["Gluteus_Maximus", "Gluteus_Medius"]
+        case .gluteMax:
+            return ["Gluteus_Maximus"]
+        case .gluteMed:
+            return ["Gluteus_Medius"]
         case .calves:
             return ["Gastrocnemius", "Soleus"]
         case .adductors:
@@ -220,13 +224,17 @@ nonisolated extension Muscle {
         }
 
         init(snapshot: [String: Double]) {
-            let weightsByMuscle = Dictionary(
+            var weightsByMuscle = Dictionary(
                 snapshot.compactMap { raw, weight -> (Muscle, Double)? in
                     guard let muscle = Muscle(rawValue: raw), weight > 0 else { return nil }
                     return (muscle, weight)
                 },
                 uniquingKeysWith: max
             )
+            if let legacyGlutes = snapshot["glutes"], legacyGlutes > 0 {
+                weightsByMuscle[.gluteMax] = max(weightsByMuscle[.gluteMax] ?? 0, legacyGlutes)
+                weightsByMuscle[.gluteMed] = max(weightsByMuscle[.gluteMed] ?? 0, legacyGlutes)
+            }
             self.contributions = Muscle.allCases.compactMap { muscle in
                 guard let weight = weightsByMuscle[muscle] else { return nil }
                 return (muscle: muscle, weight: weight)
@@ -267,7 +275,12 @@ nonisolated extension Muscle {
         case .shoulders:
             return Involvement(contributions: [(.deltoids, Involvement.prime)])
         case .legs:
-            return Involvement(contributions: [(.quads, Involvement.prime), (.hamstrings, Involvement.major), (.glutes, Involvement.major)])
+            return Involvement(contributions: [
+                (.quads, Involvement.prime),
+                (.hamstrings, Involvement.major),
+                (.gluteMax, Involvement.major),
+                (.gluteMed, Involvement.minor),
+            ])
         case .arms:
             return Involvement(contributions: [(.biceps, Involvement.prime), (.triceps, Involvement.prime), (.forearms, Involvement.minor)])
         case .core:

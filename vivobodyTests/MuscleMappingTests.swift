@@ -106,6 +106,23 @@ struct MuscleMappingTests {
         #expect(bench.secondary == [.triceps, .deltoids, .biceps])
     }
 
+    @Test func gluteExercisesKeepMaxAndMedSeparate() {
+        let hipThrust = Muscle.involvement(forExerciseNamed: "Barbell Hip Thrust")
+        #expect(hipThrust.weights[.gluteMax] == Muscle.Involvement.prime)
+        #expect(hipThrust.weights[.gluteMed] == nil)
+
+        let hipAbduction = Muscle.involvement(forExerciseNamed: "Machine Hip Abduction")
+        #expect(hipAbduction.weights[.gluteMed] == Muscle.Involvement.prime)
+        #expect(hipAbduction.weights[.gluteMax] == nil)
+    }
+
+    @Test func legacyGlutesSnapshotCreditsBothNewRegions() {
+        let involvement = Muscle.Involvement(snapshot: ["glutes": Muscle.Involvement.major])
+        #expect(involvement.weights[.gluteMax] == Muscle.Involvement.major)
+        #expect(involvement.weights[.gluteMed] == Muscle.Involvement.major)
+        #expect(involvement.snapshot["glutes"] == nil)
+    }
+
     @Test func authoringLevelsUseCatalogWeights() {
         #expect(Muscle.Involvement.Level.prime.rawValue == Muscle.Involvement.prime)
         #expect(Muscle.Involvement.Level.major.rawValue == Muscle.Involvement.major)
@@ -126,7 +143,8 @@ struct MuscleMappingTests {
     @Test @MainActor func explicitCatalogInvolvementOverridesCuratedName() {
         let custom = Muscle.Involvement(contributions: [
             (.quads, Muscle.Involvement.prime),
-            (.glutes, Muscle.Involvement.major),
+            (.gluteMax, Muscle.Involvement.major),
+            (.gluteMed, Muscle.Involvement.minor),
             (.calves, Muscle.Involvement.trace),
         ])
         let item = ExerciseCatalogItem(
@@ -237,6 +255,12 @@ struct MuscleMappingTests {
             #expect(!nodes.isEmpty, "\(muscle) maps to no mesh nodes")
             #expect(nodes.allSatisfy { $0.hasSuffix("_L") || $0.hasSuffix("_R") })
         }
+    }
+
+    @Test func gluteRegionsMapToIndependentMeshes() {
+        #expect(Muscle.gluteMax.nodeNames == ["Gluteus_Maximus_L", "Gluteus_Maximus_R"])
+        #expect(Muscle.gluteMed.nodeNames == ["Gluteus_Medius_L", "Gluteus_Medius_R"])
+        #expect(Set(Muscle.gluteMax.nodeNames).isDisjoint(with: Muscle.gluteMed.nodeNames))
     }
 
     private static func muscleList(_ muscles: Set<Muscle>) -> String {

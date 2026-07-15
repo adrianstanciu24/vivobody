@@ -55,9 +55,9 @@ nonisolated struct VolumeLandmark: Hashable {
         case .deltoids, .calves, .abs, .obliques, .biceps, .triceps, .forearms:
             return VolumeLandmark(mev: 8, optimalHigh: 22)
         case .lowerBack, .hipFlexors, .shins, .serratus,
-             .teres, .rhomboids, .adductors:
+             .teres, .rhomboids, .adductors, .gluteMed:
             return VolumeLandmark(mev: 5, optimalHigh: 14)
-        case .pectorals, .lats, .traps, .quads, .hamstrings, .glutes:
+        case .pectorals, .lats, .traps, .quads, .hamstrings, .gluteMax:
             return VolumeLandmark(mev: 8, optimalHigh: 20)
         }
     }
