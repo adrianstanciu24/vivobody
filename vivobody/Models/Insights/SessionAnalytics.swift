@@ -73,7 +73,7 @@ final class SessionAnalytics {
         intensityWeeks = sessions.weeklyIntensity(now: now)
         migration = sessions.repRangeMigration(now: now)
         composition = sessions.compoundIsolationSplit(now: now)
-        symmetry = sessions.antagonistBalance()
+        symmetry = sessions.antagonistBalance(now: now)
         consistency = sessions.consistency()
         load = sessions.trainingLoad(now: now)
         lastInstances = sessions.lastInstanceByExercise()

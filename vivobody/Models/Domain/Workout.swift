@@ -85,6 +85,17 @@ final class Exercise: Identifiable {
     /// current catalog name, then to the coarse muscle group.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
+    /// Pick-time movement classification. All raw fields are optional
+    /// so a row without a snapshot remains honestly unknown rather than
+    /// inheriting catalog-editor defaults. Pattern and direction can
+    /// also be nil within an otherwise complete snapshot.
+    var equipmentRaw: String? = nil
+    var mechanicRaw: String? = nil
+    var patternRaw: String? = nil
+    var directionRaw: String? = nil
+    var planeRaw: String? = nil
+    var lateralityRaw: String? = nil
+
     /// How this exercise is measured — reps or a timed hold. Stored
     /// as a raw value; defaulted so existing data reads as reps with
     /// no migration. Copied from the catalog/template at pick-time.
@@ -133,6 +144,20 @@ final class Exercise: Identifiable {
         return Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
     }
 
+    /// Snapshotted movement metadata wins over name lookup so custom
+    /// exercises and renamed catalog entries remain classifiable.
+    /// Rows with no snapshot retain the bundled-name fallback.
+    var classification: ExerciseClassification? {
+        ExerciseClassification(
+            equipmentRaw: equipmentRaw,
+            mechanicRaw: mechanicRaw,
+            patternRaw: patternRaw,
+            directionRaw: directionRaw,
+            planeRaw: planeRaw,
+            lateralityRaw: lateralityRaw
+        ) ?? ExerciseClassification.forExerciseNamed(name)
+    }
+
     /// Sets returned in their stable order. Used everywhere the UI
     /// needs to enumerate set rows.
     var orderedSets: [WorkoutSet] {
@@ -148,6 +173,7 @@ final class Exercise: Identifiable {
         plannedReps: Int = 8,
         plannedWeight: Double,
         muscleInvolvement: Muscle.Involvement? = nil,
+        classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
@@ -160,6 +186,12 @@ final class Exercise: Identifiable {
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.equipmentRaw = classification?.equipment.rawValue
+        self.mechanicRaw = classification?.mechanic.rawValue
+        self.patternRaw = classification?.pattern?.rawValue
+        self.directionRaw = classification?.direction?.rawValue
+        self.planeRaw = classification?.plane.rawValue
+        self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
@@ -327,6 +359,7 @@ extension Exercise {
             plannedReps: firstSet?.reps ?? source.plannedReps,
             plannedWeight: firstSet?.weight ?? source.plannedWeight,
             muscleInvolvement: source.muscleInvolvement,
+            classification: source.classification,
             trackingMode: source.trackingMode,
             plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder

@@ -12,11 +12,11 @@
 //  Counts completed `.reps` sets over a rolling window (4 weeks by
 //  default, to read CURRENT emphasis) — the same window IntensityMix
 //  uses. Timed holds carry no reps and are excluded. Each exercise is
-//  classified by name via `ExerciseClassification.forExerciseNamed`,
-//  which reads the bundled catalog; custom exercises the catalog
-//  can't resolve are bucketed as `unclassifiedSets` and left out of
-//  the ratio and shares so the split stays honest. Pure value-type
-//  computation on injected dates (see `MovementCompositionTests`).
+//  classified from its persisted pick-time snapshot, with bundled-name
+//  fallback for older rows. Unknown exercises are bucketed as
+//  `unclassifiedSets` and left out of the ratio and shares so the split
+//  stays honest. Pure value-type computation on injected dates (see
+//  `MovementCompositionTests`).
 //
 
 import Foundation
@@ -62,8 +62,8 @@ nonisolated struct CompositionSplit: Hashable {
 extension Array where Element == WorkoutSession {
     /// Compound-vs-isolation distribution of completed `.reps` sets
     /// over the trailing `window` (default 4 weeks) as of `now`.
-    /// Sets from exercises the catalog can't classify by name are
-    /// bucketed as unclassified and excluded from the ratio.
+    /// Sets from exercises without a persisted or bundled-name
+    /// classification are bucketed as unclassified and excluded.
     func compoundIsolationSplit(
         window: TimeInterval = 28 * 86_400,
         now: Date = Date()
@@ -77,7 +77,7 @@ extension Array where Element == WorkoutSession {
             for exercise in session.orderedExercises where exercise.trackingMode == .reps {
                 let completed = exercise.orderedSets.filter { $0.isCompleted && $0.reps > 0 }.count
                 guard completed > 0 else { continue }
-                guard let mechanic = ExerciseClassification.forExerciseNamed(exercise.name)?.mechanic else {
+                guard let mechanic = exercise.classification?.mechanic else {
                     unclassified += completed
                     continue
                 }

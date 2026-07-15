@@ -123,6 +123,16 @@ final class TemplateExercise: Identifiable {
     /// lifts keep contributing to muscle analytics.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
+    /// Pick-time movement classification. Optional raw values preserve
+    /// an honest "not snapshotted" state for unknown rows instead of
+    /// silently applying catalog-editor defaults.
+    var equipmentRaw: String? = nil
+    var mechanicRaw: String? = nil
+    var patternRaw: String? = nil
+    var directionRaw: String? = nil
+    var planeRaw: String? = nil
+    var lateralityRaw: String? = nil
+
     /// How this exercise is measured — reps or a timed hold. Stored
     /// as a raw value; defaulted so existing templates read as reps
     /// with no migration. Copied to the spawned Exercise at start.
@@ -160,6 +170,20 @@ final class TemplateExercise: Identifiable {
         set { trackingModeRaw = newValue.rawValue }
     }
 
+    /// Snapshotted movement metadata wins; templates without a snapshot
+    /// retain the bundled-name fallback used before classification was
+    /// persisted.
+    var classification: ExerciseClassification? {
+        ExerciseClassification(
+            equipmentRaw: equipmentRaw,
+            mechanicRaw: mechanicRaw,
+            patternRaw: patternRaw,
+            directionRaw: directionRaw,
+            planeRaw: planeRaw,
+            lateralityRaw: lateralityRaw
+        ) ?? ExerciseClassification.forExerciseNamed(name)
+    }
+
     /// Sets in their stable order. Use everywhere the UI enumerates
     /// per-set rows — SwiftData relationship arrays aren't ordered.
     var orderedSets: [TemplateSet] {
@@ -185,6 +209,7 @@ final class TemplateExercise: Identifiable {
         plannedReps: Int = 8,
         plannedWeight: Double,
         muscleInvolvement: Muscle.Involvement? = nil,
+        classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
@@ -197,6 +222,12 @@ final class TemplateExercise: Identifiable {
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.equipmentRaw = classification?.equipment.rawValue
+        self.mechanicRaw = classification?.mechanic.rawValue
+        self.patternRaw = classification?.pattern?.rawValue
+        self.directionRaw = classification?.direction?.rawValue
+        self.planeRaw = classification?.plane.rawValue
+        self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
@@ -213,6 +244,7 @@ final class TemplateExercise: Identifiable {
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
             muscleInvolvement: item.muscleInvolvement,
+            classification: item.classification,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
@@ -285,6 +317,7 @@ extension Exercise {
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
                 plannedWeight: orderedSets.first?.weight ?? templateExercise.plannedWeight,
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: orderedSets.first?.duration ?? templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
@@ -311,6 +344,7 @@ extension Exercise {
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
@@ -331,6 +365,7 @@ extension Exercise {
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
             muscleInvolvement: item.muscleInvolvement,
+            classification: item.classification,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder

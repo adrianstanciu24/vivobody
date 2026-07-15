@@ -45,6 +45,10 @@ struct ExerciseDraft: Identifiable, Hashable {
     /// editing a template does not strip analytics identity.
     var muscleInvolvementSnapshot: [String: Double]
 
+    /// Pick-time movement metadata carried through value-type editing
+    /// so saving or reconfiguring a template does not strip it.
+    var classification: ExerciseClassification?
+
     /// How the exercise is measured — reps or a timed hold. Carried
     /// from the catalog pick so a plank / dead hang in a template
     /// starts a timed exercise, not a rep count.
@@ -71,6 +75,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         plannedReps: Int = 8,
         plannedWeight: Double = 0,
         muscleInvolvement: Muscle.Involvement? = nil,
+        classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
         plannedDuration: TimeInterval = 0,
         isPerSet: Bool = false,
@@ -84,6 +89,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.classification = classification
         self.trackingMode = trackingMode
         self.plannedDuration = plannedDuration
         self.isPerSet = isPerSet
@@ -121,6 +127,7 @@ extension ExerciseDraft {
             plannedReps: item.defaultReps,
             plannedWeight: item.defaultWeightSeed,
             muscleInvolvement: item.muscleInvolvement,
+            classification: item.classification,
             trackingMode: item.trackingMode,
             plannedDuration: item.defaultDuration,
             isPerSet: false,
@@ -143,6 +150,7 @@ extension ExerciseDraft {
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: true,
@@ -159,12 +167,51 @@ extension ExerciseDraft {
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: false,
                 sets: []
             )
         }
+    }
+
+    /// Materialize the persisted model when the template editor saves.
+    /// Keeping this bridge on the draft makes the catalog → draft →
+    /// template snapshot path explicit and directly testable.
+    func makeTemplateExercise(sortOrder: Int) -> TemplateExercise {
+        let fallbackReps = isPerSet ? (sets.first?.reps ?? plannedReps) : plannedReps
+        let fallbackWeight = isPerSet ? (sets.first?.weight ?? plannedWeight) : plannedWeight
+        let fallbackCount = isPerSet ? max(1, sets.count) : plannedSets
+        let fallbackDuration = isPerSet ? (sets.first?.duration ?? plannedDuration) : plannedDuration
+
+        let exercise = TemplateExercise(
+            name: name,
+            catalogItemID: catalogItemID,
+            group: group,
+            plannedSets: fallbackCount,
+            plannedReps: fallbackReps,
+            plannedWeight: fallbackWeight,
+            muscleInvolvement: Muscle.Involvement(snapshot: muscleInvolvementSnapshot),
+            classification: classification,
+            trackingMode: trackingMode,
+            plannedDuration: fallbackDuration,
+            sortOrder: sortOrder
+        )
+
+        if isPerSet {
+            for (index, set) in sets.enumerated() {
+                exercise.sets.append(
+                    TemplateSet(
+                        weight: set.weight,
+                        reps: set.reps,
+                        duration: set.duration,
+                        sortOrder: index
+                    )
+                )
+            }
+        }
+        return exercise
     }
 
     // MARK: - Mode transitions

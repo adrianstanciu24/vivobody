@@ -349,6 +349,20 @@ final class ExerciseCatalogItem: Identifiable {
         set { lateralityRaw = newValue.rawValue }
     }
 
+    /// Movement metadata copied into templates and logged exercises at
+    /// pick-time. Catalog fields are non-optional where the taxonomy
+    /// requires a value, so every catalog item has a classification.
+    var classification: ExerciseClassification {
+        ExerciseClassification(
+            equipment: equipment,
+            mechanic: mechanic,
+            pattern: pattern,
+            direction: direction,
+            plane: plane,
+            laterality: laterality
+        )
+    }
+
     /// Muscles worked, with their graded contribution weights. Explicit
     /// user-authored values win; seeded and legacy entries retain their
     /// curated-name or coarse-group fallback.

@@ -336,10 +336,22 @@ struct TemplateEditorScreen: View {
     /// existing row (edit) or append a new one (add). Identity is the
     /// draft's stable UUID, preserved across the configure round-trip.
     private func applyConfigured(_ updated: ExerciseDraft) {
-        if let idx = draft.exercises.firstIndex(where: { $0.id == updated.id }) {
-            draft.exercises[idx] = updated
+        var classified = updated
+        if classified.classification == nil {
+            switch configureTarget {
+            case .some(.adding(let item)):
+                classified.classification = item.classification
+            case .some(.editing(let original)):
+                classified.classification = original.classification
+            case nil:
+                break
+            }
+        }
+
+        if let idx = draft.exercises.firstIndex(where: { $0.id == classified.id }) {
+            draft.exercises[idx] = classified
         } else {
-            draft.exercises.append(updated)
+            draft.exercises.append(classified)
         }
         Haptics.soft()
     }
@@ -401,41 +413,8 @@ struct TemplateEditorScreen: View {
 
     private func attachExercises(to template: WorkoutTemplate) {
         for (i, ed) in draft.exercises.enumerated() {
-            // In per-set mode, persist the FIRST row's values into the
-            // uniform fields too — they act as a fallback for any
-            // legacy code that hasn't learned about `sets` yet.
-            let fallbackReps   = ed.isPerSet ? (ed.sets.first?.reps ?? ed.plannedReps) : ed.plannedReps
-            let fallbackWeight = ed.isPerSet ? (ed.sets.first?.weight ?? ed.plannedWeight) : ed.plannedWeight
-            let fallbackCount  = ed.isPerSet ? max(1, ed.sets.count) : ed.plannedSets
-
-            let fallbackDuration = ed.isPerSet ? (ed.sets.first?.duration ?? ed.plannedDuration) : ed.plannedDuration
-
-            let ex = TemplateExercise(
-                name: ed.name,
-                catalogItemID: ed.catalogItemID,
-                group: ed.group,
-                plannedSets: fallbackCount,
-                plannedReps: fallbackReps,
-                plannedWeight: fallbackWeight,
-                muscleInvolvement: Muscle.Involvement(snapshot: ed.muscleInvolvementSnapshot),
-                trackingMode: ed.trackingMode,
-                plannedDuration: fallbackDuration,
-                sortOrder: i
-            )
+            let ex = ed.makeTemplateExercise(sortOrder: i)
             template.exercises.append(ex)
-
-            if ed.isPerSet {
-                for (j, setDraft) in ed.sets.enumerated() {
-                    ex.sets.append(
-                        TemplateSet(
-                            weight: setDraft.weight,
-                            reps: setDraft.reps,
-                            duration: setDraft.duration,
-                            sortOrder: j
-                        )
-                    )
-                }
-            }
         }
     }
 }

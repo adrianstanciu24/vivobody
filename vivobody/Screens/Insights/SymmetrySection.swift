@@ -2,15 +2,14 @@
 //  SymmetrySection.swift
 //  vivobody
 //
-//  Opposing groups weighed against each other over the last 4 weeks:
-//  push vs pull, quads vs hamstrings, and so on. Each pair draws a
-//  butterfly bar — two wings growing outward from a shared centre
-//  axis, each wing's reach proportional to that side's effective
-//  sets on one common scale, so both the lean of a pair and the
-//  relative size of the pairs read straight off the picture. The
-//  heavier wing of a lopsided pair wears the danger tint; balanced
-//  pairs stay in the accent. One caption line below calls out the
-//  most lopsided pair.
+//  Opposing groups and movement patterns weighed against each other
+//  over the last 4 weeks. Nine comparisons are gathered into upper
+//  body, lower body, and training style groups for quick scanning.
+//  Each pair draws a butterfly bar, with two wings growing outward
+//  from a shared centre axis. Every wing uses one common scale, so
+//  both the lean of a pair and the relative size of all pairs read
+//  straight off the picture. Trained wings use the app's orange
+//  accent, while zero-data pairs remain neutral.
 //
 
 import VivoKit
@@ -23,22 +22,28 @@ struct SymmetrySection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(title: "Symmetry", trailing: "last 4 weeks")
 
-            if !board.hasAny {
-                Text("Symmetry weighs opposing groups against each other — log some pushing and pulling work and the balance shows here.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else {
-                VStack(spacing: Space.xl) {
-                    ForEach(board.pairs) { pair in
-                        ButterflyRow(pair: pair, maxSide: maxSide)
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(groups) { group in
+                    VStack(alignment: .leading, spacing: Space.lg) {
+                        Text(group.title)
+                            .panelLegend()
+                            .accessibilityAddTraits(.isHeader)
+
+                        VStack(spacing: Space.xl) {
+                            ForEach(group.pairs) { pair in
+                                ButterflyRow(pair: pair, maxSide: maxSide)
+                            }
+                        }
+                    }
+
+                    if group.id != groups.last?.id {
+                        SectionDivider()
+                            .padding(.vertical, Space.xl)
                     }
                 }
-                .padding(Space.xl)
-                .contentCard()
-
-                caption
             }
+            .padding(Space.xl)
+            .contentCard()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -50,22 +55,52 @@ struct SymmetrySection: View {
         board.pairs.map { max($0.leftSets, $0.rightSets) }.max() ?? 1
     }
 
-    // MARK: - Caption
+    /// Stable analytics IDs assign each pair to one scan-friendly
+    /// group while preserving the board's order within that group.
+    private var groups: [SymmetryGroup] {
+        let definitions: [(String, String, Set<String>)] = [
+            (
+                "upper-body",
+                "Upper body",
+                [
+                    "push-pull",
+                    "horizontal-push-pull",
+                    "vertical-push-pull",
+                    "bi-tri",
+                ]
+            ),
+            (
+                "lower-body",
+                "Lower body",
+                [
+                    "quad-ham",
+                    "hip-abductors-adductors",
+                    "calves-shins",
+                ]
+            ),
+            (
+                "training-style",
+                "Training style",
+                [
+                    "squat-hinge",
+                    "bilateral-unilateral",
+                ]
+            ),
+        ]
 
-    @ViewBuilder
-    private var caption: some View {
-        if let worst = board.worst {
-            Text("\(worst.heavierLabel) is outpacing \(worst.lighterLabel) — bring up your \(worst.lighterLabel).")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-        } else {
-            Text("All pairs evenly matched — symmetrical work.")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
+        return definitions.compactMap { id, title, pairIDs in
+            let pairs = board.pairs.filter { pairIDs.contains($0.id) }
+            guard !pairs.isEmpty else { return nil }
+            return SymmetryGroup(id: id, title: title, pairs: pairs)
         }
     }
+
+}
+
+private struct SymmetryGroup: Identifiable {
+    let id: String
+    let title: String
+    let pairs: [AntagonistPair]
 }
 
 // MARK: - Butterfly row
@@ -86,16 +121,26 @@ private struct ButterflyRow: View {
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                 Text(pair.leftLabel)
                     .font(Typography.sectionHeading)
-                    .foregroundStyle(leftIsHeavier ? Ink.primary : Ink.secondary)
-                Spacer(minLength: Space.sm)
-                Text(pair.isBalanced ? "balanced" : "\(leanPercent)% \(pair.heavierLabel.lowercased())")
+                    .foregroundStyle(leftLabelColor)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+                    .allowsTightening(true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(verdictText)
                     .font(Typography.metricMicro)
-                    .foregroundStyle(pair.isBalanced ? Tint.primary : Tint.danger)
+                    .foregroundStyle(verdictColor)
                     .monospacedDigit()
-                Spacer(minLength: Space.sm)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .allowsTightening(true)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 Text(pair.rightLabel)
                     .font(Typography.sectionHeading)
-                    .foregroundStyle(leftIsHeavier ? Ink.secondary : Ink.primary)
+                    .foregroundStyle(rightLabelColor)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+                    .allowsTightening(true)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
             butterfly
@@ -157,23 +202,54 @@ private struct ButterflyRow: View {
         return max(4, halfWidth * sets / maxSide)
     }
 
-    /// Wing colour: the heavier side of a lopsided pair burns danger,
-    /// its lighter side sits dim; a balanced pair keeps both wings in
-    /// the accent.
+    /// Trained wings use the app accent; the lighter side stays dim so
+    /// the imbalance remains readable without introducing another hue.
     private func wingColor(isHeavier: Bool) -> Color {
+        guard pair.hasMeaningfulWork else {
+            return Ink.primary.opacity(0.12)
+        }
         if pair.isBalanced { return Tint.primary.opacity(0.8) }
-        return isHeavier ? Tint.danger : Ink.primary.opacity(0.25)
+        return isHeavier ? Tint.primary : Ink.primary.opacity(0.25)
     }
 
     private var leftIsHeavier: Bool { pair.leftShare >= 0.5 }
+
+    private var leftLabelColor: Color {
+        guard pair.hasMeaningfulWork else { return Ink.secondary }
+        return leftIsHeavier ? Ink.primary : Ink.secondary
+    }
+
+    private var rightLabelColor: Color {
+        guard pair.hasMeaningfulWork else { return Ink.secondary }
+        return leftIsHeavier ? Ink.secondary : Ink.primary
+    }
+
+    private var verdictColor: Color {
+        guard pair.hasMeaningfulWork else { return Ink.tertiary }
+        return Tint.primary
+    }
 
     /// The heavier side's share of the pair, for the lean chip.
     private var leanPercent: Int {
         Int((max(pair.leftShare, 1 - pair.leftShare) * 100).rounded())
     }
 
+    private var verdictText: String {
+        guard pair.hasMeaningfulWork else { return "no data" }
+        return pair.isBalanced
+            ? "balanced"
+            : "\(leanPercent)% \(pair.heavierLabel.lowercased())"
+    }
+
     private var accessibilityText: String {
-        let l = Int((pair.leftShare * 100).rounded())
-        return "\(pair.leftLabel) \(l) percent versus \(pair.rightLabel) \(100 - l) percent, \(pair.isBalanced ? "balanced" : "imbalanced")"
+        guard pair.hasMeaningfulWork else {
+            return "\(pair.leftLabel), \(effectiveSetsText(pair.leftSets)), versus \(pair.rightLabel), \(effectiveSetsText(pair.rightSets)). No data yet."
+        }
+        return "\(pair.leftLabel), \(effectiveSetsText(pair.leftSets)), versus \(pair.rightLabel), \(effectiveSetsText(pair.rightSets)). Verdict: \(verdictText)."
+    }
+
+    private func effectiveSetsText(_ sets: Double) -> String {
+        let unit = abs(sets - 1) < 0.001 ? "effective set" : "effective sets"
+        return "\(InsightsFormat.setsLabel(sets)) \(unit)"
     }
 }

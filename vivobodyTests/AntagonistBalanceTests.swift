@@ -2,12 +2,11 @@
 //  AntagonistBalanceTests.swift
 //  vivobodyTests
 //
-//  Guards the Insights "Symmetry" board. The verdict math is a pure
-//  share calculation (tested directly), and the aggregation is graded
-//  effective-set volume over a window (tested on a virtual clock):
-//  a press-only block flags the pull side, adding rows pulls the
-//  split back toward even, squats skew quad-dominant, pairs without
-//  enough work drop off, and an empty archive yields nothing.
+//  Guards the Insights "Symmetry" board. It covers verdict math,
+//  graded muscle comparisons, whole-exercise movement comparisons,
+//  directional isolation, squat/hinge filtering, laterality counting,
+//  chronological hard-set pricing, and the 28-day/future boundaries
+//  on a virtual clock.
 //
 
 import Foundation
@@ -30,10 +29,30 @@ struct AntagonistBalanceTests {
         return s
     }
 
-    private func lift(_ name: String, _ group: MuscleGroup, sets: Int = 4) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: 8, plannedWeight: 100)
+    private func lift(
+        _ name: String,
+        _ group: MuscleGroup,
+        sets: Int = 4,
+        weight: Double = 100
+    ) -> Exercise {
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: sets,
+            plannedReps: 8,
+            plannedWeight: weight
+        )
         ex.sets.forEach { $0.isCompleted = true }
         return ex
+    }
+
+    private func expectEqual(
+        _ actual: Double?,
+        _ expected: Double,
+        tolerance: Double = 1e-9
+    ) {
+        #expect(actual != nil)
+        #expect(abs((actual ?? 0) - expected) < tolerance)
     }
 
     // MARK: - Verdict math (pure)
@@ -43,6 +62,11 @@ struct AntagonistBalanceTests {
         #expect(even.verdict == .balanced)
         #expect(abs(even.leftShare - 0.5) < 1e-9)
         #expect(abs(even.skew) < 1e-9)
+
+        let empty = AntagonistPair(id: "x", leftLabel: "A", rightLabel: "B", leftSets: 0, rightSets: 0)
+        #expect(empty.verdict == .noData)
+        #expect(!empty.hasMeaningfulWork)
+        #expect(!empty.isBalanced)
 
         let leftHeavy = AntagonistPair(id: "x", leftLabel: "A", rightLabel: "B", leftSets: 24, rightSets: 8)
         #expect(leftHeavy.verdict == .leftHeavy)
@@ -106,25 +130,234 @@ struct AntagonistBalanceTests {
         #expect((quadHam?.leftShare ?? 0) > 0.5)
     }
 
-    // MARK: - Pairs without work are dropped
+    // MARK: - New comparisons
 
-    @Test func untouchedPairDropped() {
+    @Test func directionalPushPullPairsCountWholeExerciseStimulus() {
+        let board = [
+            session(at: day(1), [
+                lift("Bench Press", .chest, sets: 2),
+                lift("Bent Over Rowing", .back, sets: 3),
+                lift("Overhead Press", .shoulders, sets: 4),
+                lift("Lat Pull Down", .back, sets: 5),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        let horizontal = board.pair("horizontal-push-pull")
+        expectEqual(horizontal?.leftSets, 2)
+        expectEqual(horizontal?.rightSets, 3)
+
+        let vertical = board.pair("vertical-push-pull")
+        expectEqual(vertical?.leftSets, 4)
+        expectEqual(vertical?.rightSets, 5)
+    }
+
+    @Test func directionsDoNotLeakIntoEachOther() {
+        let horizontalOnly = [
+            session(at: day(1), [
+                lift("Bench Press", .chest),
+                lift("Bent Over Rowing", .back),
+            ]),
+        ].antagonistBalance(now: day(2))
+        #expect(horizontalOnly.pair("horizontal-push-pull") != nil)
+        expectEqual(horizontalOnly.pair("vertical-push-pull")?.leftSets, 0)
+        expectEqual(horizontalOnly.pair("vertical-push-pull")?.rightSets, 0)
+        #expect(horizontalOnly.pair("vertical-push-pull")?.verdict == .noData)
+
+        let verticalOnly = [
+            session(at: day(1), [
+                lift("Overhead Press", .shoulders),
+                lift("Lat Pull Down", .back),
+            ]),
+        ].antagonistBalance(now: day(2))
+        expectEqual(verticalOnly.pair("horizontal-push-pull")?.leftSets, 0)
+        expectEqual(verticalOnly.pair("horizontal-push-pull")?.rightSets, 0)
+        #expect(verticalOnly.pair("horizontal-push-pull")?.verdict == .noData)
+        #expect(verticalOnly.pair("vertical-push-pull") != nil)
+    }
+
+    @Test func hipAndLowerLegPairsKeepGradedMuscleCredit() {
+        let board = [
+            session(at: day(1), [
+                lift("Clamshell", .legs, sets: 2),
+                lift("Copenhagen Adduction Exercise", .legs, sets: 3),
+                lift("Standing Calf Raises", .legs, sets: 4),
+                lift("Tibialis raises", .legs, sets: 5),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        let hip = board.pair("hip-abductors-adductors")
+        expectEqual(hip?.leftSets, 2)
+        expectEqual(hip?.rightSets, 3)
+
+        let lowerLeg = board.pair("calves-shins")
+        expectEqual(lowerLeg?.leftSets, 4)
+        expectEqual(lowerLeg?.rightSets, 5)
+    }
+
+    @Test func squatHingeExcludesLungesAndOtherPatterns() {
+        let board = [
+            session(at: day(1), [
+                lift("Squats", .legs, sets: 2),
+                lift("Romanian Deadlift", .legs, sets: 3),
+                lift("Walking Lunges", .legs, sets: 6),
+                lift("Bench Press", .chest, sets: 7),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        let pair = board.pair("squat-hinge")
+        expectEqual(pair?.leftSets, 2)
+        expectEqual(pair?.rightSets, 3)
+    }
+
+    @Test func unilateralExercisesAreNotDoubled() {
+        let board = [
+            session(at: day(1), [
+                lift("Bench Press", .chest, sets: 2),
+                lift("Single arm row", .back, sets: 3),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        let pair = board.pair("bilateral-unilateral")
+        expectEqual(pair?.leftSets, 2)
+        expectEqual(pair?.rightSets, 3)
+    }
+
+    @Test func unknownClassificationIsExcludedFromMovementPairs() {
+        let board = [
+            session(at: day(1), [
+                lift("My Custom Press", .chest, sets: 4),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        #expect(board.pair("push-pull") != nil)
+        #expect(board.pair("horizontal-push-pull")?.verdict == .noData)
+        #expect(board.pair("vertical-push-pull")?.verdict == .noData)
+        #expect(board.pair("squat-hinge")?.verdict == .noData)
+        #expect(board.pair("bilateral-unilateral")?.verdict == .noData)
+    }
+
+    @Test func displayOrderIsDeterministicAndGrouped() {
+        let board = [
+            session(at: day(1), [
+                lift("Bench Press", .chest),
+                lift("Bent Over Rowing", .back),
+                lift("Overhead Press", .shoulders),
+                lift("Lat Pull Down", .back),
+                lift("Squats", .legs),
+                lift("Romanian Deadlift", .legs),
+                lift("Clamshell", .legs),
+                lift("Copenhagen Adduction Exercise", .legs),
+                lift("Standing Calf Raises", .legs),
+                lift("Tibialis raises", .legs),
+                lift("Single arm row", .back),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        #expect(board.pairs.map(\.id) == [
+            "push-pull",
+            "horizontal-push-pull",
+            "vertical-push-pull",
+            "bi-tri",
+            "quad-ham",
+            "hip-abductors-adductors",
+            "calves-shins",
+            "squat-hinge",
+            "bilateral-unilateral",
+        ])
+    }
+
+    // MARK: - Causality and time boundaries
+
+    @Test func chronologicalReplayPricesMovementStimulusCausally() {
+        let heavy = session(
+            at: day(0),
+            [lift("Bench Press", .chest, sets: 1, weight: 300)]
+        )
+        let light = session(
+            at: day(10),
+            [lift("Bench Press", .chest, sets: 4, weight: 100)]
+        )
+
+        let chronological = [heavy, light].antagonistBalance(now: day(30))
+        let reversed = [light, heavy].antagonistBalance(now: day(30))
+        let first = chronological.pair("horizontal-push-pull")?.leftSets
+        let second = reversed.pair("horizontal-push-pull")?.leftSets
+
+        #expect(first != nil)
+        #expect((first ?? 4) < 4)
+        expectEqual(second, first ?? 0)
+    }
+
+    @Test func respectsWindowAndExcludesFutureSessions() {
+        let old = session(
+            at: day(0),
+            [lift("Bench Press", .chest, sets: 2, weight: 300)]
+        )
+        let recent = session(
+            at: day(30),
+            [lift("Bench Press", .chest, sets: 4, weight: 100)]
+        )
+        let future = session(
+            at: day(41),
+            [lift("Overhead Press", .shoulders, sets: 4)]
+        )
+        let board = [future, recent, old].antagonistBalance(now: day(40))
+
+        let horizontal = board.pair("horizontal-push-pull")
+        #expect(horizontal != nil)
+        #expect((horizontal?.leftSets ?? 4) < 4)
+        #expect(horizontal?.rightSets == 0)
+        #expect(board.pair("vertical-push-pull")?.verdict == .noData)
+    }
+
+    @Test func sessionAnalyticsForwardsInjectedNow() {
+        let analytics = SessionAnalytics()
+        let recent = session(
+            at: day(39),
+            [lift("Bench Press", .chest, sets: 2)]
+        )
+
+        analytics.update(for: [recent], now: day(40))
+
+        #expect(analytics.symmetry.pair("horizontal-push-pull") != nil)
+    }
+
+    // MARK: - Pairs without work remain visible
+
+    @Test func untouchedPairRemainsWithNoData() {
         // Bench works chest/tri/delts but never the legs.
         let s = (0..<4).map { i in
             session(at: day(Double(i) * 5), [lift("Bench Press", .chest)])
         }
         let board = s.antagonistBalance(now: day(20))
 
-        #expect(board.pair("quad-ham") == nil)   // no leg work at all
-        #expect(board.pair("push-pull") != nil)  // pressing still registers
+        let quadHam = board.pair("quad-ham")
+        expectEqual(quadHam?.leftSets, 0)
+        expectEqual(quadHam?.rightSets, 0)
+        #expect(quadHam?.verdict == .noData)
+        #expect(board.pair("push-pull")?.hasMeaningfulWork == true)
     }
 
     // MARK: - Empty
 
-    @Test func emptyArchiveHasNoPairs() {
+    @Test func emptyArchiveHasAllPairsWithNoData() {
         let board = [WorkoutSession]().antagonistBalance(now: day(0))
         #expect(!board.hasAny)
-        #expect(board.pairs.isEmpty)
+        #expect(board.pairs.map(\.id) == [
+            "push-pull",
+            "horizontal-push-pull",
+            "vertical-push-pull",
+            "bi-tri",
+            "quad-ham",
+            "hip-abductors-adductors",
+            "calves-shins",
+            "squat-hinge",
+            "bilateral-unilateral",
+        ])
+        #expect(board.pairs.allSatisfy { $0.leftSets == 0 })
+        #expect(board.pairs.allSatisfy { $0.rightSets == 0 })
+        #expect(board.pairs.allSatisfy { $0.verdict == .noData })
+        #expect(board.imbalancedCount == 0)
         #expect(board.worst == nil)
     }
 }

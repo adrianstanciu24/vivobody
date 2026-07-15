@@ -2,27 +2,40 @@
 //  AntagonistBalance.swift
 //  vivobody
 //
-//  The symmetry instrument for the Insights tab. The muscle-balance
-//  view judges each muscle against its own volume landmark; this
-//  judges OPPOSING groups against EACH OTHER — the push/pull,
-//  quad/hamstring and biceps/triceps ratios coaches watch because a
-//  lopsided one nudges posture and joints toward trouble.
+//  The symmetry instrument for the Insights tab. It judges opposing
+//  muscles and movement patterns against each other: broad push/pull,
+//  directional push/pull, lower-body muscle pairs, squat/hinge,
+//  biceps/triceps, and bilateral/unilateral work.
 //
-//  It reuses the effective-set engine (`muscleVolume`) over a 4-week
-//  window — long enough that both sides of a pair have accumulated
-//  representative work — then sums each side's graded sets and asks
-//  how far the split strays from 50/50.
+//  All nine comparisons share the `SetStimulus` hard-set-equivalent
+//  currency over a 4-week window. Muscle comparisons retain graded
+//  involvement credit; movement comparisons count each exercise's
+//  whole stimulus once. The archive is replayed chronologically so
+//  load references stay causal.
 //
-//  Pairs with too little work to judge are dropped. Pure value type
-//  on injected dates, so it's testable on a virtual clock (see
-//  `AntagonistBalanceTests`).
+//  All pairs remain present so the UI can preview every comparison;
+//  pairs with too little work are marked as having no data. Pure
+//  value type on injected dates, so it's testable on a virtual clock
+//  (see `AntagonistBalanceTests`).
 //
 
 import Foundation
 
+private nonisolated enum SymmetryMovementBucket: Hashable {
+    case horizontalPush
+    case horizontalPull
+    case verticalPush
+    case verticalPull
+    case squat
+    case hinge
+    case bilateral
+    case unilateral
+}
+
 // MARK: - Verdict
 
 nonisolated enum SymmetryVerdict: Hashable {
+    case noData
     case balanced
     case leftHeavy
     case rightHeavy
@@ -45,12 +58,14 @@ nonisolated struct AntagonistPair: Identifiable, Hashable {
     var leftShare: Double { total > 0 ? leftSets / total : 0.5 }
 
     var verdict: SymmetryVerdict {
+        guard total >= AntagonistBoard.minSets else { return .noData }
         let share = leftShare
         if share > 0.5 + AntagonistBoard.tolerance { return .leftHeavy }
         if share < 0.5 - AntagonistBoard.tolerance { return .rightHeavy }
         return .balanced
     }
 
+    var hasMeaningfulWork: Bool { verdict != .noData }
     var isBalanced: Bool { verdict == .balanced }
 
     /// Distance from a perfect split, `0` (even) … `0.5` (all one side).
@@ -70,15 +85,22 @@ nonisolated struct AntagonistBoard {
     /// A pair needs at least this much combined work to be judged.
     static let minSets = 1.0
 
-    /// Fixed display order: upper body, lower body, arms.
+    /// Fixed display order, grouped by broad upper-body balance,
+    /// directional balance, lower-body balance, then laterality.
     let pairs: [AntagonistPair]
 
-    var hasAny: Bool { !pairs.isEmpty }
-    var imbalancedCount: Int { pairs.lazy.filter { !$0.isBalanced }.count }
+    var hasAny: Bool { pairs.contains { $0.hasMeaningfulWork } }
+    var imbalancedCount: Int {
+        pairs.lazy.filter {
+            $0.hasMeaningfulWork && !$0.isBalanced
+        }.count
+    }
 
     /// The most lopsided pair — drives the headline.
     var worst: AntagonistPair? {
-        pairs.filter { !$0.isBalanced }.max { $0.skew < $1.skew }
+        pairs.filter {
+            $0.hasMeaningfulWork && !$0.isBalanced
+        }.max { $0.skew < $1.skew }
     }
 
     func pair(_ id: String) -> AntagonistPair? { pairs.first { $0.id == id } }
@@ -90,38 +112,158 @@ extension Array where Element == WorkoutSession {
     /// Effective-set split for each antagonist pair over the trailing
     /// 4 weeks as of `now`.
     func antagonistBalance(now: Date = Date()) -> AntagonistBoard {
-        let stats = muscleVolume(
-            window: Double(AntagonistBoard.windowDays) * 86_400,
-            now: now
+        let cutoff = now.addingTimeInterval(
+            -Double(AntagonistBoard.windowDays) * 86_400
         )
-        var sets: [Muscle: Double] = [:]
-        for stat in stats { sets[stat.muscle] = stat.effectiveSets }
-        func sum(_ muscles: [Muscle]) -> Double {
-            muscles.reduce(0) { $0 + (sets[$1] ?? 0) }
+        var muscleSets: [Muscle: Double] = [:]
+        var movementSets: [SymmetryMovementBucket: Double] = [:]
+        var calculator = SetStimulus.Calculator()
+
+        let ordered = sorted {
+            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
         }
 
-        // (id, leftLabel, leftMuscles, rightLabel, rightMuscles)
-        let definitions: [(String, String, [Muscle], String, [Muscle])] = [
-            ("push-pull", "Push", [.pectorals, .deltoids, .triceps],
-             "Pull", [.lats, .rhomboids, .traps, .teres, .biceps]),
-            ("quad-ham", "Quads", [.quads],
-             "Hamstrings", [.hamstrings]),
-            ("bi-tri", "Biceps", [.biceps],
-             "Triceps", [.triceps]),
-        ]
+        for session in ordered {
+            let date = session.completedAt ?? session.startedAt
+            guard date <= now else { continue }
 
-        let pairs: [AntagonistPair] = definitions.compactMap { def in
-            let left = sum(def.2)
-            let right = sum(def.4)
-            guard left + right >= AntagonistBoard.minSets else { return nil }
-            return AntagonistPair(
-                id: def.0,
-                leftLabel: def.1,
-                rightLabel: def.3,
-                leftSets: left,
-                rightSets: right
+            for exercise in session.orderedExercises {
+                // Price the exercise once. Calling both calculator APIs
+                // would update its load reference twice and would also
+                // risk doubling unilateral work.
+                let stimulus = calculator.setEquivalentCredit(
+                    for: exercise,
+                    at: date
+                )
+                guard date >= cutoff, stimulus > 0 else { continue }
+
+                for (muscle, weight) in exercise.muscleInvolvement.weights {
+                    muscleSets[muscle, default: 0] += stimulus * weight
+                }
+
+                guard let classification = exercise.classification else {
+                    continue
+                }
+                let bucket: SymmetryMovementBucket?
+                switch (classification.pattern, classification.direction) {
+                case (.push, .horizontal): bucket = .horizontalPush
+                case (.pull, .horizontal): bucket = .horizontalPull
+                case (.push, .vertical): bucket = .verticalPush
+                case (.pull, .vertical): bucket = .verticalPull
+                case (.squat, _): bucket = .squat
+                case (.hinge, _): bucket = .hinge
+                default: bucket = nil
+                }
+                if let bucket {
+                    movementSets[bucket, default: 0] += stimulus
+                }
+
+                let laterality: SymmetryMovementBucket =
+                    classification.laterality == .bilateral
+                    ? .bilateral
+                    : .unilateral
+                movementSets[laterality, default: 0] += stimulus
+            }
+        }
+
+        func muscleSum(_ muscles: [Muscle]) -> Double {
+            muscles.reduce(0) { $0 + (muscleSets[$1] ?? 0) }
+        }
+        func musclePair(
+            _ id: String,
+            _ leftLabel: String,
+            _ leftMuscles: [Muscle],
+            _ rightLabel: String,
+            _ rightMuscles: [Muscle]
+        ) -> AntagonistPair {
+            makePair(
+                id: id,
+                leftLabel: leftLabel,
+                leftSets: muscleSum(leftMuscles),
+                rightLabel: rightLabel,
+                rightSets: muscleSum(rightMuscles)
             )
         }
+        func movementPair(
+            _ id: String,
+            _ leftLabel: String,
+            _ left: SymmetryMovementBucket,
+            _ rightLabel: String,
+            _ right: SymmetryMovementBucket
+        ) -> AntagonistPair {
+            makePair(
+                id: id,
+                leftLabel: leftLabel,
+                leftSets: movementSets[left] ?? 0,
+                rightLabel: rightLabel,
+                rightSets: movementSets[right] ?? 0
+            )
+        }
+        func makePair(
+            id: String,
+            leftLabel: String,
+            leftSets: Double,
+            rightLabel: String,
+            rightSets: Double
+        ) -> AntagonistPair {
+            AntagonistPair(
+                id: id,
+                leftLabel: leftLabel,
+                rightLabel: rightLabel,
+                leftSets: leftSets,
+                rightSets: rightSets
+            )
+        }
+
+        // Stable order keeps related comparisons adjacent for the
+        // grouped Symmetry presentation.
+        let pairs: [AntagonistPair] = [
+            musclePair(
+                "push-pull",
+                "Push", [.pectorals, .deltoids, .triceps],
+                "Pull", [.lats, .rhomboids, .traps, .teres, .biceps]
+            ),
+            movementPair(
+                "horizontal-push-pull",
+                "Horizontal Push", .horizontalPush,
+                "Horizontal Pull", .horizontalPull
+            ),
+            movementPair(
+                "vertical-push-pull",
+                "Vertical Push", .verticalPush,
+                "Vertical Pull", .verticalPull
+            ),
+            musclePair(
+                "bi-tri",
+                "Biceps", [.biceps],
+                "Triceps", [.triceps]
+            ),
+            musclePair(
+                "quad-ham",
+                "Quads", [.quads],
+                "Hamstrings", [.hamstrings]
+            ),
+            musclePair(
+                "hip-abductors-adductors",
+                "Hip Abductors", [.gluteMed],
+                "Hip Adductors", [.adductors]
+            ),
+            musclePair(
+                "calves-shins",
+                "Calves", [.calves],
+                "Shins", [.shins]
+            ),
+            movementPair(
+                "squat-hinge",
+                "Squat", .squat,
+                "Hinge", .hinge
+            ),
+            movementPair(
+                "bilateral-unilateral",
+                "Bilateral", .bilateral,
+                "Unilateral", .unilateral
+            ),
+        ]
 
         return AntagonistBoard(pairs: pairs)
     }
