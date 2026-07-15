@@ -110,7 +110,6 @@ struct TodayScreen: View {
                         }
                         if upNext.isPresentable {
                             upNextView(upNext, outlook: outlook).settleIn(3)
-                            SectionDivider().settleIn(4)
                         }
                         consistencySection.settleIn(5)
                         SectionDivider().settleIn(6)

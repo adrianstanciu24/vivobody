@@ -93,12 +93,12 @@ extension TodayScreen {
         }
     }
 
-    /// Rich preview card for the next scheduled workout: template
-    /// name, muscle-group subtitle, a capped exercise list with
-    /// set/rep/load schemes, an optional ease-off warning, and a
-    /// start button at the bottom. When the workout is today the
-    /// card wears the accent tint and the button is live; future
-    /// days read as a neutral preview with a disabled button.
+    /// Rich preview card for the next scheduled workout. The card is
+    /// deliberately quiet: hierarchy comes from type, whitespace, a
+    /// compact muscle summary, and numbered exercise rows rather than
+    /// rules or decorative bars. Today's one-tap Start sits outside
+    /// the content surface so the preview and its action remain two
+    /// distinct objects.
     func upNextSection(
         template: WorkoutTemplate,
         when: String,
@@ -111,40 +111,40 @@ extension TodayScreen {
         let maxPreview = 5
         let preview = Array(exercises.prefix(maxPreview))
         let remaining = exercises.count - maxPreview
-
         return VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Up next", trailing: when)
 
-            VStack(alignment: .leading, spacing: Space.md) {
-                VStack(alignment: .leading, spacing: Space.xs) {
+            VStack(alignment: .leading, spacing: Space.lg) {
+                VStack(alignment: .leading, spacing: Space.sm) {
                     Text(template.name)
                         .font(Typography.display)
                         .foregroundStyle(Ink.primary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
 
-                    Text(upNextSubtitle(template, more: more))
+                    Text(upNextMeta(template, more: more))
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
+
+                    Text(upNextMuscleSummary(template))
+                        .panelLegend()
+                        .padding(.horizontal, Space.md)
+                        .padding(.vertical, Space.sm)
+                        .background(Surface.cardTintBright, in: Capsule())
                 }
 
-                VStack(spacing: 0) {
+                VStack(spacing: Space.md) {
                     ForEach(Array(preview.enumerated()), id: \.element.id) { index, exercise in
-                        upNextExerciseRow(exercise)
-                        if index < preview.count - 1 || remaining > 0 {
-                            Rectangle()
-                                .fill(Surface.edge)
-                                .frame(height: 0.5)
-                        }
+                        upNextExerciseRow(exercise, index: index + 1)
                     }
                     if remaining > 0 {
                         Text("+\(remaining) more")
                             .font(Typography.caption)
                             .foregroundStyle(Ink.tertiary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, Space.sm)
+                            .padding(.leading, 36)
                     }
                 }
 
@@ -173,97 +173,207 @@ extension TodayScreen {
                     }
                     .accessibilityLabel("High training load, keep this session lighter")
                 }
-
-                Rectangle()
-                    .fill(Surface.edge)
-                    .frame(height: 0.5)
-
-                upNextStartButton(template: template, startable: startable)
             }
-            .padding(.horizontal, Space.lg)
-            .padding(.vertical, Space.lg)
-            .contentCard(tint: startable ? Tint.primary : nil)
+            .padding(Space.lg)
+            .contentCard(bright: true)
+
+            if startable {
+                upNextStartButton(template: template)
+            }
         }
     }
 
-    /// One exercise in the Up Next preview: name on the left,
-    /// set/rep/load scheme on the right. Compact, non-interactive.
-    func upNextExerciseRow(_ exercise: TemplateExercise) -> some View {
-        HStack(spacing: Space.sm) {
+    /// Meta line under the template name: exercise count and a rough
+    /// duration estimate, plus how many other workouts share the day.
+    func upNextMeta(_ template: WorkoutTemplate, more: Int) -> String {
+        let count = template.orderedExercises.count
+        var parts = ["\(count) \(count == 1 ? "exercise" : "exercises")"]
+        if let estimate = upNextDurationEstimate(template) {
+            parts.append(estimate)
+        }
+        let base = parts.joined(separator: "  ·  ")
+        return more > 0 ? "\(base)  ·  +\(more) more" : base
+    }
+
+    /// Rough session length from the plan: work + rest per set, using
+    /// the user's default rest, rounded to a 5-minute grain so it
+    /// reads as an estimate rather than a promise.
+    func upNextDurationEstimate(_ template: WorkoutTemplate) -> String? {
+        let sets = template.totalPlannedSets
+        guard sets > 0 else { return nil }
+        let storedRest = UserDefaults.standard.integer(forKey: SettingsKey.defaultRestSeconds)
+        let rest = storedRest > 0 ? storedRest : SettingsDefaults.defaultRestSeconds
+        let workSecondsPerSet = 45.0
+        let total = Double(sets) * (Double(rest) + workSecondsPerSet)
+        let minutes = max(5, Int((total / 60 / 5).rounded()) * 5)
+        return "~\(minutes) min"
+    }
+
+    /// Compact text summary of planned sets by muscle group.
+    func upNextMuscleSummary(_ template: WorkoutTemplate) -> String {
+        var counts: [MuscleGroup: Int] = [:]
+        var order: [MuscleGroup] = []
+        for exercise in template.orderedExercises {
+            if counts[exercise.group] == nil { order.append(exercise.group) }
+            counts[exercise.group, default: 0] += exercise.effectiveSetCount
+        }
+        return order
+            .map { group in
+                let sets = counts[group] ?? 0
+                return "\(group.displayName) · \(sets) \(sets == 1 ? "set" : "sets")"
+            }
+            .joined(separator: "   ")
+    }
+
+    /// One exercise in the Up Next preview. A quiet numbered marker
+    /// gives the list visual rhythm without separators or set bars.
+    func upNextExerciseRow(_ exercise: TemplateExercise, index: Int) -> some View {
+        let scheme = upNextScheme(exercise)
+        return HStack(alignment: .center, spacing: Space.sm) {
+            Text("\(index)")
+                .font(Typography.metricMicro)
+                .foregroundStyle(Ink.secondary)
+                .frame(width: 24, height: 24)
+                .background(Surface.cardTintBright, in: Circle())
+
             Text(exercise.name)
                 .font(Typography.headline)
                 .foregroundStyle(Ink.primary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
+
             Spacer(minLength: Space.sm)
-            Text(exerciseScheme(exercise))
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.tertiary)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                Text(scheme.count)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                if let load = scheme.load {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(load)
+                            .font(Typography.metricInline)
+                            .foregroundStyle(Ink.secondary)
+                            .monospacedDigit()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        if let loadUnit = scheme.loadUnit {
+                            Text(loadUnit)
+                                .font(Typography.metricMicro)
+                                .foregroundStyle(Ink.tertiary)
+                        }
+                    }
+                }
+            }
         }
         .padding(.vertical, Space.sm)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(exercise.name), \(upNextSchemeAccessibility(scheme))")
     }
 
-    /// Compact set/rep/load summary for one template exercise,
-    /// matching the format used on the Template Detail screen.
-    func exerciseScheme(_ exercise: TemplateExercise) -> String {
+    /// The scheme readout, split into typographic parts so the row
+    /// can weight them separately: a dim count token ("3 × 12") and
+    /// a louder load token ("37.5" + unit). Numerals do the work.
+    struct UpNextScheme {
+        let count: String
+        var load: String? = nil
+        var loadUnit: String? = nil
+    }
+
+    func upNextScheme(_ exercise: TemplateExercise) -> UpNextScheme {
         switch exercise.trackingMode {
         case .reps:
             if exercise.hasPerSetData {
                 let sets = exercise.orderedSets
+                let reps = sets.map(\.reps)
                 let weights = sets.map(\.weight)
-                guard let lo = weights.min(), let hi = weights.max() else { return "" }
-                if lo == hi, let first = sets.first {
-                    return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+                guard let loW = weights.min(), let hiW = weights.max(),
+                      let loR = reps.min(), let hiR = reps.max() else {
+                    return UpNextScheme(count: "\(sets.count) sets")
                 }
-                let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
-                let hiStr = WeightFormatter.string(hi, unit: unit)
-                return "\(sets.count) sets · \(loStr)–\(hiStr)"
+                let count = loR == hiR ? "\(sets.count) × \(loR)" : "\(sets.count) × \(loR)–\(hiR)"
+                if loW == hiW {
+                    return schemeWithLoad(count: count, weight: loW)
+                }
+                let loStr = WeightFormatter.string(loW, unit: unit, includeUnit: false)
+                let hiStr = WeightFormatter.string(hiW, unit: unit, includeUnit: false)
+                return UpNextScheme(count: count, load: "\(loStr)–\(hiStr)", loadUnit: unit.symbol)
             }
-            return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+            return schemeWithLoad(
+                count: "\(exercise.plannedSets) × \(exercise.plannedReps)",
+                weight: exercise.plannedWeight
+            )
 
         case .duration:
             if exercise.hasPerSetData {
                 let sets = exercise.orderedSets
                 let durations = sets.map(\.duration)
-                guard let lo = durations.min(), let hi = durations.max() else { return "" }
-                if lo == hi {
-                    return "\(sets.count) × \(DurationFormatter.string(lo)) hold"
+                guard let lo = durations.min(), let hi = durations.max() else {
+                    return UpNextScheme(count: "\(sets.count) sets")
                 }
-                return "\(sets.count) sets · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+                if lo == hi {
+                    return UpNextScheme(count: "\(sets.count) ×", load: DurationFormatter.string(lo), loadUnit: "hold")
+                }
+                return UpNextScheme(
+                    count: "\(sets.count) ×",
+                    load: "\(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))",
+                    loadUnit: "hold"
+                )
             }
-            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) hold"
-            return exercise.plannedWeight > 0
-                ? "\(base) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
-                : base
+            return UpNextScheme(
+                count: "\(exercise.plannedSets) ×",
+                load: DurationFormatter.string(exercise.plannedDuration),
+                loadUnit: "hold"
+            )
         }
     }
 
-    /// Start button at the bottom of the Up Next card. Solid accent
-    /// fill with black text when the workout is startable today; a
-    /// neutral surface with dimmed text when it's a future-day
-    /// preview.
-    func upNextStartButton(template: WorkoutTemplate, startable: Bool) -> some View {
-        let shape = RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
-        return Button {
+    /// Bodyweight plans (zero load) drop the load token entirely
+    /// instead of reading "@ 0".
+    private func schemeWithLoad(count: String, weight: Double) -> UpNextScheme {
+        guard weight > 0 else { return UpNextScheme(count: count) }
+        return UpNextScheme(
+            count: count,
+            load: WeightFormatter.string(weight, unit: unit, includeUnit: false),
+            loadUnit: unit.symbol
+        )
+    }
+
+    func upNextSchemeAccessibility(_ scheme: UpNextScheme) -> String {
+        var parts = [scheme.count]
+        if let load = scheme.load {
+            parts.append("at \(load) \(scheme.loadUnit ?? "")".trimmingCharacters(in: .whitespaces))
+        }
+        return parts.joined(separator: " ")
+    }
+
+    /// Card-specific one-tap start. It floats beside the card rather
+    /// than becoming part of the content surface.
+    func upNextStartButton(template: WorkoutTemplate) -> some View {
+        Button {
             Haptics.crescendo()
             appState.workout.startWorkoutFromTemplate(template)
         } label: {
-            Text("Start")
-                .font(Typography.headline)
-                .foregroundStyle(startable ? Tint.onAccent : Ink.tertiary)
+            HStack(spacing: Space.md) {
+                Text("Start this workout")
+                    .font(Typography.headline)
+                    .foregroundStyle(Tint.primary)
+                Spacer()
+                Image(systemName: "arrow.right")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Tint.primary)
+                    .accessibilityHidden(true)
+            }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, Space.md)
-                .background {
-                    shape.fill(startable ? Tint.primary : Surface.cardTintBright)
-                }
+                .padding(.horizontal, Space.xl)
+                .frame(minHeight: 50)
         }
-        .disabled(!startable)
+        .buttonStyle(.plain)
+        .coloredGlassControl(cornerRadius: Radius.pill)
+        .softElevation(radius: 14, y: 7, opacity: 0.35)
         .accessibilityLabel("Start \(template.name)")
-        .accessibilityHint(startable ? "Scheduled for today" : "Not available yet")
+        .accessibilityHint("Scheduled for today")
     }
 
     func upNextWhen(_ daysUntil: Int) -> String {
@@ -272,14 +382,6 @@ extension TodayScreen {
         case 1:  return "Tomorrow"
         default: return "in \(daysUntil) days"
         }
-    }
-
-    func upNextSubtitle(_ template: WorkoutTemplate, more: Int) -> String {
-        let groups = template.muscleGroups.prefix(3).map(\.displayName).joined(separator: " · ")
-        let base = groups.isEmpty
-            ? "\(template.orderedExercises.count) ex · \(template.totalPlannedSets) sets"
-            : groups
-        return more > 0 ? "\(base)  ·  +\(more) more" : base
     }
 
     /// "4 lb from a Bench Press PR" — the weight-gap framing of the
