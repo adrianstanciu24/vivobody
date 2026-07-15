@@ -437,8 +437,8 @@ struct ExercisePickerSheet: View {
     /// shared with the rest of the app.
     private func rowSubtitle(_ item: ExerciseCatalogItem) -> String {
         var parts: [String] = [item.equipment.displayName]
-        if item.mechanic == .compound, let pattern = item.pattern {
-            parts.append(pattern.displayName)
+        if item.mechanic == .compound, let movementLabel = item.movementLabel {
+            parts.append(movementLabel)
         } else if item.mechanic == .isolation {
             parts.append("Isolation")
         }

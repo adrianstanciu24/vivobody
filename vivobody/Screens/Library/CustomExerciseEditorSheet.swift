@@ -66,6 +66,7 @@ struct CustomExerciseEditorSheet: View {
     private var canSave: Bool {
         !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
             && draft.muscleInvolvement.hasPrime
+            && (!draft.requiresDirection || draft.direction != nil)
     }
 
     var body: some View {
@@ -79,6 +80,9 @@ struct CustomExerciseEditorSheet: View {
                     mechanicField
                     if draft.mechanic == .compound {
                         patternField
+                        if draft.requiresDirection {
+                            directionField
+                        }
                     }
                     planeField
                     lateralityField
@@ -260,12 +264,14 @@ struct CustomExerciseEditorSheet: View {
                                 draft.mechanic = m
                                 if m == .isolation {
                                     draft.pattern = nil
+                                    draft.direction = nil
                                 }
                             } else {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
                                     draft.mechanic = m
                                     if m == .isolation {
                                         draft.pattern = nil
+                                        draft.direction = nil
                                     }
                                 }
                             }
@@ -289,12 +295,40 @@ struct CustomExerciseEditorSheet: View {
                         chip(label: "None", isSelected: draft.pattern == nil) {
                             Haptics.selection()
                             draft.pattern = nil
+                            draft.direction = nil
                         }
                         ForEach(MovementPattern.allCases, id: \.self) { p in
                             chip(label: p.displayName, isSelected: draft.pattern == p) {
                                 Haptics.selection()
                                 draft.pattern = p
+                                if p != .push && p != .pull {
+                                    draft.direction = nil
+                                }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Direction (push/pull only)
+
+    private var directionField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Direction")
+                .sectionLabelStyle(Opacity.medium)
+
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(PushPullDirection.allCases, id: \.self) { direction in
+                        chip(
+                            label: direction.displayName,
+                            isSelected: draft.direction == direction,
+                            fullWidth: true
+                        ) {
+                            Haptics.selection()
+                            draft.direction = direction
                         }
                     }
                 }
@@ -536,6 +570,7 @@ struct CustomExerciseEditorSheet: View {
                 equipment: draft.equipment,
                 mechanic: draft.mechanic,
                 pattern: draft.mechanic == .compound ? draft.pattern : nil,
+                direction: draft.requiresDirection ? draft.direction : nil,
                 plane: draft.plane,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
@@ -563,6 +598,7 @@ struct CustomExerciseEditorSheet: View {
             // here explicitly. Order matters: mechanic first.
             item.mechanic = draft.mechanic
             item.pattern = draft.mechanic == .compound ? draft.pattern : nil
+            item.direction = draft.requiresDirection ? draft.direction : nil
             item.plane = draft.plane
             item.laterality = draft.laterality
             item.aliases = parsedAliases
@@ -600,6 +636,7 @@ struct CatalogDraft {
     var equipment: Equipment
     var mechanic: Mechanic
     var pattern: MovementPattern?
+    var direction: PushPullDirection?
     var plane: MovementPlane
     var laterality: Laterality
     var muscleInvolvementSnapshot: [String: Double]
@@ -619,6 +656,7 @@ struct CatalogDraft {
         equipment: .barbell,
         mechanic: .compound,
         pattern: nil,
+        direction: nil,
         plane: .sagittal,
         laterality: .bilateral,
         muscleInvolvementSnapshot: Muscle.defaultInvolvement(for: .chest).snapshot,
@@ -634,6 +672,7 @@ struct CatalogDraft {
         equipment: Equipment,
         mechanic: Mechanic,
         pattern: MovementPattern?,
+        direction: PushPullDirection?,
         plane: MovementPlane,
         laterality: Laterality,
         muscleInvolvementSnapshot: [String: Double],
@@ -647,6 +686,7 @@ struct CatalogDraft {
         self.equipment = equipment
         self.mechanic = mechanic
         self.pattern = pattern
+        self.direction = direction
         self.plane = plane
         self.laterality = laterality
         self.muscleInvolvementSnapshot = muscleInvolvementSnapshot
@@ -662,6 +702,7 @@ struct CatalogDraft {
         self.equipment = item.equipment
         self.mechanic = item.mechanic
         self.pattern = item.pattern
+        self.direction = item.direction
         self.plane = item.plane
         self.laterality = item.laterality
         self.muscleInvolvementSnapshot = item.muscleInvolvement.snapshot
@@ -673,6 +714,10 @@ struct CatalogDraft {
 
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
+    }
+
+    var requiresDirection: Bool {
+        mechanic == .compound && (pattern == .push || pattern == .pull)
     }
 
     var muscleSummary: String {

@@ -46,6 +46,9 @@ nonisolated enum SettingsKey {
     /// so it doesn't fetch every Exercise + TemplateExercise on every
     /// launch after the first successful pass.
     static let exerciseIdentityBackfilled = "settings.exerciseIdentityBackfilled"
+    /// Bool — whether bundled horizontal/vertical push/pull metadata
+    /// has been copied into catalog rows seeded before that field existed.
+    static let movementDirectionsBackfilled = "settings.movementDirectionsBackfilled"
     /// String — the last `CFBundleShortVersionString` that triggered
     /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
     /// delete-all + reindex runs once per app version, not every launch.

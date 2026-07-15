@@ -146,8 +146,11 @@ enum SpotlightIndexer {
         keywords.append(item.group.displayName)
         keywords.append(item.equipment.displayName)
         keywords.append(item.mechanic.displayName)
-        if let pattern = item.pattern {
-            keywords.append(pattern.displayName)
+        if let movementLabel = item.movementLabel {
+            keywords.append(movementLabel)
+        }
+        if let direction = item.direction {
+            keywords.append(direction.displayName)
         }
         attributes.keywords = keywords
         return CSSearchableItem(

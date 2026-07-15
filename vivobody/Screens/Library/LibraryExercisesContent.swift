@@ -417,8 +417,8 @@ struct LibraryExercisesContent: View {
     /// "Dumbbell · Isolation".
     private func metaLine(_ item: ExerciseCatalogItem) -> String {
         var parts: [String] = [item.equipment.displayName]
-        if item.mechanic == .compound, let pattern = item.pattern {
-            parts.append(pattern.displayName)
+        if item.mechanic == .compound, let movementLabel = item.movementLabel {
+            parts.append(movementLabel)
         } else if item.mechanic == .isolation {
             parts.append("Isolation")
         }

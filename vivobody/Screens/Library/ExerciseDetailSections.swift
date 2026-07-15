@@ -71,8 +71,8 @@ extension ExerciseDetailScreen {
     /// catalog row meta.
     var metaLine: String {
         var parts = [item.equipment.displayName]
-        if item.mechanic == .compound, let pattern = item.pattern {
-            parts.append(pattern.displayName)
+        if item.mechanic == .compound, let movementLabel = item.movementLabel {
+            parts.append(movementLabel)
         }
         parts.append(item.mechanic.displayName)
         parts.append(item.plane.displayName)

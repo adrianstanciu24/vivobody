@@ -5,7 +5,7 @@
 //  Persistent catalog of lifts the user picks from when building a
 //  template or adding an exercise mid-workout. Stored as @Model so
 //  the user can extend it with custom entries — name + muscle group
-//  + equipment + mechanic + pattern + aliases + graded muscle
+//  + equipment + mechanic + pattern + push/pull direction + aliases + graded muscle
 //  involvement + sensible defaults — and edit/delete them in place.
 //
 //  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
@@ -35,7 +35,7 @@ enum Equipment: String, Hashable, CaseIterable {
     case band
     case other
 
-    var displayName: String {
+    nonisolated var displayName: String {
         switch self {
         case .barbell:    return "Barbell"
         case .dumbbell:   return "Dumbbell"
@@ -58,7 +58,7 @@ enum Mechanic: String, Hashable, CaseIterable {
     case compound
     case isolation
 
-    var displayName: String {
+    nonisolated var displayName: String {
         switch self {
         case .compound:  return "Compound"
         case .isolation: return "Isolation"
@@ -81,7 +81,7 @@ enum MovementPattern: String, Hashable, CaseIterable {
     case carry    // farmer's carry, suitcase, yoke
     case core     // planks, leg raises, anti-rotation
 
-    var displayName: String {
+    nonisolated var displayName: String {
         switch self {
         case .push:  return "Push"
         case .pull:  return "Pull"
@@ -90,6 +90,23 @@ enum MovementPattern: String, Hashable, CaseIterable {
         case .lunge: return "Lunge"
         case .carry: return "Carry"
         case .core:  return "Core"
+        }
+    }
+}
+
+// MARK: - Push/pull direction
+
+/// Whether a push/pull moves the load primarily away from/toward the
+/// torso or overhead/down from overhead. Optional because it only has
+/// meaning for `.push` and `.pull` movement patterns.
+enum PushPullDirection: String, Hashable, CaseIterable {
+    case horizontal
+    case vertical
+
+    nonisolated var displayName: String {
+        switch self {
+        case .horizontal: return "Horizontal"
+        case .vertical:   return "Vertical"
         }
     }
 }
@@ -204,6 +221,11 @@ final class ExerciseCatalogItem: Identifiable {
     /// mechanic is isolation.
     var patternRaw: String? = nil
 
+    /// Horizontal vs. vertical orientation for push/pull patterns.
+    /// Nil for every other movement pattern. Stored as an optional raw
+    /// value so this is an additive field for existing SwiftData stores.
+    var directionRaw: String? = nil
+
     /// Anatomical plane the lift primarily trains. Non-optional with a
     /// `.sagittal` default — every exercise lives in some plane and
     /// most live here. Stored as raw value so `MovementPlane` can
@@ -283,13 +305,38 @@ final class ExerciseCatalogItem: Identifiable {
             // same rule.
             if newValue == .isolation {
                 patternRaw = nil
+                directionRaw = nil
             }
         }
     }
 
     var pattern: MovementPattern? {
         get { patternRaw.flatMap(MovementPattern.init(rawValue:)) }
-        set { patternRaw = newValue?.rawValue }
+        set {
+            patternRaw = newValue?.rawValue
+            if newValue != .push && newValue != .pull {
+                directionRaw = nil
+            }
+        }
+    }
+
+    var direction: PushPullDirection? {
+        get { directionRaw.flatMap(PushPullDirection.init(rawValue:)) }
+        set {
+            directionRaw = (pattern == .push || pattern == .pull)
+                ? newValue?.rawValue
+                : nil
+        }
+    }
+
+    /// User-facing movement label, combining direction with push/pull
+    /// while leaving the other movement patterns unchanged.
+    var movementLabel: String? {
+        guard let pattern else { return nil }
+        if let direction, pattern == .push || pattern == .pull {
+            return "\(direction.displayName) \(pattern.displayName)"
+        }
+        return pattern.displayName
     }
 
     var plane: MovementPlane {
@@ -324,6 +371,7 @@ final class ExerciseCatalogItem: Identifiable {
         equipment: Equipment = .barbell,
         mechanic: Mechanic = .compound,
         pattern: MovementPattern? = nil,
+        direction: PushPullDirection? = nil,
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
@@ -342,6 +390,9 @@ final class ExerciseCatalogItem: Identifiable {
         self.equipmentRaw = equipment.rawValue
         self.mechanicRaw = mechanic.rawValue
         self.patternRaw = (mechanic == .isolation) ? nil : pattern?.rawValue
+        self.directionRaw = (mechanic == .compound && (pattern == .push || pattern == .pull))
+            ? direction?.rawValue
+            : nil
         self.planeRaw = plane.rawValue
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
@@ -369,6 +420,7 @@ extension ExerciseCatalogItem {
             equipment: record.equipmentValue,
             mechanic: record.mechanicValue,
             pattern: record.patternValue,
+            direction: record.directionValue,
             plane: record.planeValue,
             laterality: record.lateralityValue,
             aliases: record.aliasesValue,
@@ -487,6 +539,33 @@ extension ExerciseCatalogItem {
         guard !defaults.bool(forKey: SettingsKey.exerciseIdentityBackfilled) else { return }
         backfillCopiedExerciseIdentity(in: context)
         defaults.set(true, forKey: SettingsKey.exerciseIdentityBackfilled)
+    }
+
+    /// Copies newly-authored horizontal/vertical metadata into seeded
+    /// catalog rows that predate the field. User-created exercises and
+    /// already-tagged rows are left untouched.
+    static func backfillMovementDirectionsIfNeeded(in context: ModelContext) {
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: SettingsKey.movementDirectionsBackfilled) else { return }
+
+        let items = (try? context.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
+        var changed = false
+        for item in items where !item.isUserCreated && item.directionRaw == nil {
+            guard let direction = CatalogData.record(forExerciseNamed: item.name)?.directionValue else {
+                continue
+            }
+            item.direction = direction
+            changed = true
+        }
+
+        do {
+            if changed {
+                try context.saveOrRollback()
+            }
+            defaults.set(true, forKey: SettingsKey.movementDirectionsBackfilled)
+        } catch {
+            // Leave the gate unset so a later launch retries the backfill.
+        }
     }
 }
 

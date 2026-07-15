@@ -105,6 +105,7 @@ struct AppRoot: View {
                 // fix-ups, Spotlight indexing, or widget snapshot writes.
                 Task(priority: .utility) { @MainActor in
                     ExerciseCatalogItem.backfillCopiedExerciseIdentityIfNeeded(in: modelContext)
+                    ExerciseCatalogItem.backfillMovementDirectionsIfNeeded(in: modelContext)
                     let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
                     let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
                     SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)

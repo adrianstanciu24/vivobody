@@ -168,6 +168,67 @@ struct MuscleMappingTests {
         let classification = ExerciseClassification.forExerciseNamed("Bench Press")
         #expect(classification?.equipment == .barbell)
         #expect(classification?.mechanic == .compound)
+        #expect(classification?.pattern == .push)
+        #expect(classification?.direction == .horizontal)
+    }
+
+    @Test func everyPushPullRecordHasDirectionAndOtherPatternsDoNot() {
+        for record in CatalogData.records {
+            if record.patternValue == .push || record.patternValue == .pull {
+                #expect(
+                    record.directionValue != nil,
+                    "'\(record.name)' is \(record.pattern ?? "push/pull") without a direction"
+                )
+            } else {
+                #expect(
+                    record.direction == nil,
+                    "'\(record.name)' has direction but is not push/pull"
+                )
+            }
+        }
+    }
+
+    @Test func correctedPushPullExercisesKeepTheirCuratedDirections() {
+        let verticalDips = [
+            "Bench Dips On Floor HD",
+            "Dips Between Two Benches",
+            "Floor dips",
+            "Ring Dips",
+            "Triceps Dips (Assisted)",
+            "TRX dips",
+        ]
+
+        for name in verticalDips {
+            let record = CatalogData.record(forExerciseNamed: name)
+            #expect(record?.mechanicValue == .compound)
+            #expect(record?.patternValue == .push)
+            #expect(record?.directionValue == .vertical)
+        }
+
+        let invertedPulldown = CatalogData.record(forExerciseNamed: "Inverted Lat Pull Down")
+        #expect(invertedPulldown?.equipmentValue == .cable)
+        #expect(invertedPulldown?.patternValue == .pull)
+        #expect(invertedPulldown?.directionValue == .vertical)
+        #expect(invertedPulldown?.bodyweightFractionValue == 0)
+
+        let ropeRow = CatalogData.record(forExerciseNamed: "Rope Pullover/row")
+        #expect(ropeRow?.patternValue == .pull)
+        #expect(ropeRow?.directionValue == .horizontal)
+    }
+
+    @Test @MainActor func catalogItemKeepsDirectionConsistentWithPattern() {
+        let item = ExerciseCatalogItem(
+            name: "Test Press",
+            group: .chest,
+            defaultWeight: 0,
+            pattern: .push,
+            direction: .horizontal
+        )
+        #expect(item.movementLabel == "Horizontal Push")
+
+        item.pattern = .squat
+        #expect(item.direction == nil)
+        #expect(item.movementLabel == "Squat")
     }
 
     @Test func everyMuscleExpandsToLeftRightNodes() {

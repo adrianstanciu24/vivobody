@@ -3,8 +3,9 @@
 //  vivobody
 //
 //  A static, by-name resolver for an exercise's movement metadata —
-//  equipment, mechanic (compound/isolation), movement pattern, plane,
-//  and laterality. It exists to close the same gap the muscle map and
+//  equipment, mechanic (compound/isolation), movement pattern,
+//  push/pull direction, plane, and laterality. It exists to close the
+//  same gap the muscle map and
 //  bodyweight-fraction table already close: a logged `Exercise` (or
 //  `TemplateExercise`) copies only name + group + plan defaults, so it
 //  carries none of the classification fields that live on
@@ -34,6 +35,8 @@ struct ExerciseClassification: Hashable {
     let mechanic: Mechanic
     /// Optional — isolation work has no meaningful pattern.
     let pattern: MovementPattern?
+    /// Optional — only push/pull patterns have a direction.
+    let direction: PushPullDirection?
     let plane: MovementPlane
     let laterality: Laterality
 }

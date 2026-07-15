@@ -129,7 +129,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Barbell Reverse Wrist Curl",
@@ -229,7 +230,7 @@
     "defaultWeight": 0,
     "reps": 12,
     "equipment": "bodyweight",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.45,
@@ -262,7 +263,9 @@
         "muscle": "abs",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Bench Press Narrow Grip",
@@ -293,7 +296,8 @@
       }
     ],
     "defaultWeightKg": 52.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Biceps Close Grip Pull Down",
@@ -348,7 +352,8 @@
       }
     ],
     "defaultWeightKg": 37.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Biceps Curl Machine",
@@ -818,7 +823,7 @@
     "defaultWeight": 0,
     "reps": 12,
     "equipment": "bodyweight",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.45,
@@ -851,7 +856,9 @@
         "muscle": "abs",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Double Kettlebell Clean and Press",
@@ -922,7 +929,8 @@
       }
     ],
     "defaultWeightKg": 15.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Drag Pushdown",
@@ -999,7 +1007,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Dumbbell Cheat Curl",
@@ -1052,7 +1061,8 @@
       }
     ],
     "defaultWeightKg": 20.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Dumbbell Concentration Curl",
@@ -1256,7 +1266,8 @@
       }
     ],
     "defaultWeightKg": 22.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Dumbbell wide bicep curls",
@@ -1357,7 +1368,8 @@
       }
     ],
     "defaultWeightKg": 20.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Finger Pushup",
@@ -1411,7 +1423,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Fingerboard 20 mm edge",
@@ -1466,7 +1479,7 @@
     "defaultWeight": 0,
     "reps": 12,
     "equipment": "bodyweight",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.45,
@@ -1499,7 +1512,9 @@
         "muscle": "abs",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Floor Skull Crusher",
@@ -1670,7 +1685,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Incline Skull Crush",
@@ -1768,7 +1784,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "L-Sit Pull-ups",
@@ -1826,7 +1843,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Lying Dumbbell Curls",
@@ -2128,7 +2146,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Plate Pinch Hold",
@@ -2271,7 +2290,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Reverse Bar Curl",
@@ -2389,7 +2409,7 @@
     "defaultWeight": 0,
     "reps": 8,
     "equipment": "bodyweight",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.95,
@@ -2430,7 +2450,9 @@
         "muscle": "forearms",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Rocking Triceps Pushdown",
@@ -2587,7 +2609,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Shrugs, Barbells",
@@ -2837,7 +2860,8 @@
       }
     ],
     "defaultWeightKg": 52.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Spider Curl",
@@ -3011,7 +3035,7 @@
     "defaultWeight": 0,
     "reps": 10,
     "equipment": "machine",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.6,
@@ -3040,7 +3064,9 @@
         "muscle": "serratus",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Triceps Extensions on Cable",
@@ -3191,7 +3217,7 @@
     "defaultWeight": 0,
     "reps": 10,
     "equipment": "bodyweight",
-    "mechanic": "isolation",
+    "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
     "bodyweightFraction": 0.9,
@@ -3232,7 +3258,9 @@
         "muscle": "forearms",
         "weight": 0.2
       }
-    ]
+    ],
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "TRX gorilla biceps curl",
@@ -3382,7 +3410,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Wrist curl, cable",
@@ -3496,6 +3525,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Half-Kneeling Single-Arm Pulldown"
     ]
@@ -3570,6 +3600,7 @@
     ],
     "defaultWeightKg": 37.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Alternating Cable High Row"
     ]
@@ -3652,6 +3683,7 @@
     ],
     "defaultWeightKg": 32.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Gorilla Row",
       "Dumbbell Gorilla Row"
@@ -3710,6 +3742,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Archer Pull-up"
     ]
@@ -3768,6 +3801,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Assisted Chin-up",
       "Machine Assisted Chin-up"
@@ -3827,6 +3861,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Assisted Pull-up Machine",
       "Band-Assisted Pull-up"
@@ -4090,6 +4125,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Pronated Barbell Row",
       "Overhand Bent-Over Row"
@@ -4173,6 +4209,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Supinated Barbell Row",
       "Underhand Bent-Over Row"
@@ -4256,6 +4293,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Bent-Over Dumbbell Row",
       "Two-Arm DB Row"
@@ -4299,6 +4337,7 @@
     ],
     "defaultWeightKg": 7.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Row to External Rotation"
     ]
@@ -4381,6 +4420,7 @@
     ],
     "defaultWeightKg": 50,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Barbell Row",
       "Bent-Over Row",
@@ -4465,6 +4505,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Underhand Barbell Row",
       "Yates Row",
@@ -4568,6 +4609,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Chin-up",
       "Chinup",
@@ -4628,6 +4670,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Close-Grip Pulldown"
     ]
@@ -4685,6 +4728,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Commando Pull-Up",
       "Alternating Grip Pull-Up"
@@ -4899,6 +4943,7 @@
     ],
     "defaultWeightKg": 7.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Bent-Over Face Pull",
       "DB Face Pull"
@@ -5047,6 +5092,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Band Face Pull"
     ]
@@ -5155,6 +5201,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Narrow-Grip Front Pulldown"
     ]
@@ -5213,6 +5260,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Wide-Grip Front Pulldown"
     ]
@@ -5267,6 +5315,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Chest-Supported Helms Row"
     ]
@@ -5321,6 +5370,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Machine High Row"
     ]
@@ -5423,6 +5473,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "horizontal",
     "trackingMode": "duration",
     "defaultDuration": 30,
     "aliases": [
@@ -5602,6 +5653,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Chest-Supported Incline DB Row",
       "Dumbbell Prone Row"
@@ -5657,6 +5709,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Incline Chest-Supported Row",
       "Incline DB Row"
@@ -5665,13 +5718,13 @@
   {
     "name": "Inverted Lat Pull Down",
     "group": "back",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
+    "defaultWeight": 100,
+    "reps": 10,
+    "equipment": "cable",
     "mechanic": "compound",
     "plane": "sagittal",
     "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
+    "bodyweightFraction": 0.0,
     "involvement": [
       {
         "muscle": "lats",
@@ -5679,15 +5732,15 @@
       },
       {
         "muscle": "rhomboids",
-        "weight": 1.0
+        "weight": 0.4
       },
       {
         "muscle": "traps",
-        "weight": 0.7
+        "weight": 0.4
       },
       {
         "muscle": "biceps",
-        "weight": 0.7
+        "weight": 1.0
       },
       {
         "muscle": "teres",
@@ -5703,18 +5756,6 @@
       },
       {
         "muscle": "abs",
-        "weight": 0.4
-      },
-      {
-        "muscle": "obliques",
-        "weight": 0.2
-      },
-      {
-        "muscle": "lowerBack",
-        "weight": 0.2
-      },
-      {
-        "muscle": "glutes",
         "weight": 0.2
       },
       {
@@ -5726,11 +5767,12 @@
         "weight": 0.2
       }
     ],
+    "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
-      "Inverted Row",
-      "Bodyweight Row",
-      "Australian Pull-up"
+      "Reverse-Grip Lat Pulldown",
+      "Supinated Lat Pulldown"
     ]
   },
   {
@@ -5798,6 +5840,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Bodyweight Row",
       "Australian Pullup",
@@ -5866,6 +5909,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Drag Row",
       "Kettlebell Drag",
@@ -5997,6 +6041,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "KB Row and Rotate",
       "Row to Rotation"
@@ -6060,6 +6105,7 @@
     ],
     "defaultWeightKg": 25.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "KB Sumo High Pull"
     ]
@@ -6186,6 +6232,7 @@
     ],
     "defaultWeightKg": 37.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Heavy Dumbbell Row"
     ]
@@ -6228,6 +6275,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Dumbbell Lat Pullover"
     ]
@@ -6286,6 +6334,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Lat Pulldown",
       "Pulldown"
@@ -6345,6 +6394,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Leaning-Back Lat Pulldown"
     ]
@@ -6403,6 +6453,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Straight-Back Lat Pulldown"
     ]
@@ -6461,6 +6512,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Single-Arm Lat Pulldown",
       "Cross-Body Pulldown"
@@ -6516,6 +6568,7 @@
     ],
     "defaultWeightKg": 40.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Iso-Lateral Row",
       "Hammer Strength Row"
@@ -6591,6 +6644,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Low Cable Row",
       "Long Pulley Row"
@@ -6666,6 +6720,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Narrow-Grip Cable Row"
     ]
@@ -6751,7 +6806,8 @@
       }
     ],
     "defaultWeightKg": 17.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Meadows Row",
@@ -6831,6 +6887,7 @@
     ],
     "defaultWeightKg": 32.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Landmine Meadows Row"
     ]
@@ -6892,6 +6949,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Muscle-up",
       "Bar Muscle-up"
@@ -6951,6 +7009,7 @@
     ],
     "defaultWeightKg": 47.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Neutral-Grip Pulldown",
       "V-Grip Pulldown"
@@ -7021,6 +7080,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Neutral-Grip Pull-up",
       "TRX Row",
@@ -7077,6 +7137,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Single-Arm Dumbbell Row",
       "One-Arm Row",
@@ -7162,6 +7223,7 @@
     ],
     "defaultWeightKg": 37.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Heavy One-Arm Dumbbell Row"
     ]
@@ -7244,6 +7306,7 @@
     ],
     "defaultWeightKg": 60.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Pendlay Row"
     ]
@@ -7443,6 +7506,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Machine Assisted Pull-up"
     ]
@@ -7559,6 +7623,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Pull-up",
       "Pullup",
@@ -7620,6 +7685,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Neutral-Grip Pull-up",
       "Hammer-Grip Pull-up"
@@ -7678,6 +7744,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Wide-Grip Pull-up"
     ]
@@ -7777,6 +7844,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Hangboard Pull-up",
       "Fingerboard Pull-up"
@@ -7947,6 +8015,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Plank Row"
     ]
@@ -8102,6 +8171,7 @@
     ],
     "defaultWeightKg": 32.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Rope Cable Pullover Row"
     ]
@@ -8176,6 +8246,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Close-Grip Seated Cable Row",
       "Narrow-Grip Row"
@@ -8246,6 +8317,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "TRX Row",
       "Suspension Row"
@@ -8301,6 +8373,7 @@
     ],
     "defaultWeightKg": 42.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Chest-Supported Barbell Row"
     ]
@@ -8457,6 +8530,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Seated Row",
       "Cable Row",
@@ -8574,6 +8648,7 @@
     ],
     "defaultWeightKg": 55.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Machine Row",
       "Seated Machine Row"
@@ -8649,6 +8724,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "V-Bar Seated Row"
     ]
@@ -8715,6 +8791,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Single-Arm Shotgun Row"
     ]
@@ -8822,6 +8899,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Plank to Row"
     ]
@@ -8875,7 +8953,8 @@
       }
     ],
     "defaultWeightKg": 22.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Skydiver with arms in T-position",
@@ -9224,6 +9303,7 @@
     ],
     "defaultWeightKg": 40.0,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "T-Bar Row",
       "Rowing, T-bar"
@@ -9380,6 +9460,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "TRX Inverted Row"
     ]
@@ -9437,6 +9518,7 @@
       }
     ],
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Typewriter Pull-up"
     ]
@@ -9495,6 +9577,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Reverse-Grip Pulldown",
       "Supinated Pulldown"
@@ -9570,6 +9653,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Single-Arm Cable Row"
     ]
@@ -9615,7 +9699,8 @@
       }
     ],
     "defaultWeightKg": 32.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "V-Bar Pulldown",
@@ -9671,6 +9756,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Close Neutral-Grip Pulldown"
     ]
@@ -9727,7 +9813,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Wide-grip Pulldown",
@@ -9783,6 +9870,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Wide-Grip Lat Pulldown"
     ]
@@ -9860,6 +9948,7 @@
     ],
     "defaultWeightKg": 60.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "BP",
       "Flat Bench",
@@ -9896,6 +9985,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Dumbbell Bench Press",
       "DB Bench",
@@ -9997,7 +10087,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Butterfly",
@@ -10092,6 +10183,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Decline Cable Press"
     ]
@@ -10130,6 +10222,7 @@
     ],
     "defaultWeightKg": 27.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Incline Cable Press"
     ]
@@ -10355,7 +10448,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Chest Press",
@@ -10391,6 +10485,7 @@
     ],
     "defaultWeightKg": 40.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Machine Press",
       "Seated Chest Press"
@@ -10445,6 +10540,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Clap Push-Up",
       "Plyometric Push-Up",
@@ -10481,6 +10577,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "CGBP",
       "Close Grip Bench Press"
@@ -10535,6 +10632,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Close-Grip Push-Up",
       "Narrow Push-Up"
@@ -10610,7 +10708,8 @@
       }
     ],
     "defaultWeightKg": 17.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Decline Bench Press Barbell",
@@ -10642,6 +10741,7 @@
     ],
     "defaultWeightKg": 60.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Decline Bench Press"
     ]
@@ -10676,6 +10776,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Decline Dumbbell Press"
     ]
@@ -10729,6 +10830,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Decline Push-Up",
       "Feet-Elevated Push-Up"
@@ -10782,7 +10884,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Diamond push ups",
@@ -10833,6 +10936,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Diamond Push-Up",
       "Triangle Push-Up"
@@ -10879,6 +10983,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Dip",
       "Chest Dip"
@@ -10914,6 +11019,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "DB Floor Press"
     ]
@@ -10948,6 +11054,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Hex Press",
       "Squeeze Press",
@@ -11006,7 +11113,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Flat Machine Press",
@@ -11041,7 +11149,8 @@
       }
     ],
     "defaultWeightKg": 40.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Fly With Cable",
@@ -11184,6 +11293,7 @@
     ],
     "defaultWeightKg": 50.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Decline Machine Press",
       "Hammer Strength Decline Press"
@@ -11269,7 +11379,8 @@
       }
     ],
     "defaultWeightKg": 37.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Incline Bench Press - Barbell",
@@ -11305,6 +11416,7 @@
     ],
     "defaultWeightKg": 42.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Incline Bench Press",
       "Incline Barbell Press"
@@ -11343,7 +11455,8 @@
       }
     ],
     "defaultWeightKg": 17.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Incline Bench Press - MP",
@@ -11378,7 +11491,8 @@
       }
     ],
     "defaultWeightKg": 40.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Incline Chest Press DB",
@@ -11413,7 +11527,8 @@
       }
     ],
     "defaultWeightKg": 17.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Incline Dumbbell Fly",
@@ -11486,6 +11601,7 @@
     ],
     "defaultWeightKg": 17.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Incline DB Press"
     ]
@@ -11531,6 +11647,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Incline Push-Up",
       "Hands-Elevated Push-Up"
@@ -11607,6 +11724,7 @@
     ],
     "defaultWeightKg": 42.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Incline Smith Machine Press"
     ]
@@ -11684,6 +11802,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "trackingMode": "duration",
     "defaultDuration": 30,
     "aliases": [
@@ -11730,7 +11849,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "KB Press-Ups with Bands",
@@ -11785,6 +11905,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Banded Push-Up",
       "Band-Resisted Push-Up"
@@ -11819,7 +11940,8 @@
       }
     ],
     "defaultWeightKg": 60.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Legend Chest Press",
@@ -11854,7 +11976,8 @@
       }
     ],
     "defaultWeightKg": 45.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Legend Incline Bench Press",
@@ -11889,7 +12012,8 @@
       }
     ],
     "defaultWeightKg": 40.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Leverage Machine Chest Press",
@@ -11924,7 +12048,8 @@
       }
     ],
     "defaultWeightKg": 45.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Low Pulley Cable Fly",
@@ -12066,6 +12191,7 @@
     ],
     "defaultWeightKg": 45.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Seated Machine Press"
     ]
@@ -12103,7 +12229,8 @@
       }
     ],
     "defaultWeightKg": 45.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Medicine Ball Punch Throw",
@@ -12151,6 +12278,7 @@
     ],
     "defaultWeightKg": 2.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Med Ball Punch",
       "Med Ball Press Throw"
@@ -12185,7 +12313,8 @@
       }
     ],
     "defaultWeightKg": 20.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "No push-up burpees",
@@ -12309,6 +12438,7 @@
     ],
     "defaultWeightKg": 60.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Paused Bench Press"
     ]
@@ -12373,6 +12503,7 @@
     ],
     "defaultWeightKg": 60.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Pin Press",
       "Dead Bench Press"
@@ -12427,6 +12558,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Pushup",
       "Press-up",
@@ -12481,7 +12613,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Push-Ups | Incline",
@@ -12523,7 +12656,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Push-Ups | Parallettes",
@@ -12574,6 +12708,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Parallette Push-Up",
       "Deep Push-Up"
@@ -12609,6 +12744,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Underhand Bench Press",
       "Supinated Bench Press"
@@ -12698,7 +12834,8 @@
       }
     ],
     "defaultWeightKg": 40.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Seated Cable chest fly",
@@ -12782,7 +12919,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Smith Machine Slight Incline Press",
@@ -12817,7 +12955,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Strict Press-Ups",
@@ -12868,6 +13007,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Strict Push-Up",
       "Strict Push-Ups"
@@ -12911,6 +13051,7 @@
     ],
     "defaultWeightKg": 2.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Lying Med Ball Chest Pass"
     ]
@@ -13006,6 +13147,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Weighted Push-Up"
     ]
@@ -13059,6 +13201,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Push Up",
       "Pushup"
@@ -14279,7 +14422,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Front Wood Chop",
@@ -14411,6 +14555,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Glute Bridge Floor Press",
       "Single-Arm Bridge Press"
@@ -15463,7 +15608,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "horizontal"
   },
   {
     "name": "Pallof Press",
@@ -25311,6 +25457,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Arnold Press"
     ]
@@ -25422,6 +25569,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "trackingMode": "duration",
     "defaultDuration": 30
   },
@@ -25494,7 +25642,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Barbell Silverback Shrug",
@@ -25617,7 +25766,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Bent-over Lateral Raises",
@@ -25995,7 +26145,8 @@
         "weight": 0.2
       }
     ],
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Chest-Supported Rear Delt Raise",
@@ -26107,7 +26258,8 @@
       }
     ],
     "defaultWeightKg": 60.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Clean and Press",
@@ -26178,7 +26330,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Devil’s Press",
@@ -26246,6 +26399,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Devils Press",
       "Devil Press"
@@ -26300,7 +26454,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Dumbbell Bradford press",
@@ -26352,6 +26507,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Bradford Press"
     ]
@@ -26394,6 +26550,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Rear Delt Row"
     ]
@@ -26503,6 +26660,7 @@
     ],
     "defaultWeightKg": 22.5,
     "pattern": "pull",
+    "direction": "horizontal",
     "aliases": [
       "Face Pull"
     ]
@@ -26719,6 +26877,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "HSPU",
       "Handstand Pushup"
@@ -26782,6 +26941,7 @@
     ],
     "defaultWeightKg": 52.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Barbell High Pull"
     ]
@@ -26865,6 +27025,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Hindu Push-up",
       "Dive Bomber Push-up"
@@ -26957,7 +27118,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Jerk OL",
@@ -27020,7 +27182,8 @@
       }
     ],
     "defaultWeightKg": 60.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Kreis Press DB",
@@ -27072,6 +27235,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Arnold Press",
       "Circle Press"
@@ -27127,6 +27291,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Landmine Press",
       "Landmine Shoulder Press"
@@ -27182,6 +27347,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Landmine Press-Out"
     ]
@@ -27413,7 +27579,8 @@
       }
     ],
     "defaultWeightKg": 35.0,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Overhead Barbell Press",
@@ -27464,7 +27631,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Overhead Press",
@@ -27516,6 +27684,7 @@
     ],
     "defaultWeightKg": 42.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "OHP",
       "Standing Press",
@@ -27601,7 +27770,8 @@
       }
     ],
     "defaultWeightKg": 27.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "horizontal"
   },
   {
     "name": "Pin OHP",
@@ -27640,7 +27810,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Prone Banded Press",
@@ -27728,6 +27899,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "aliases": [
       "Pseudo Planche Pushup"
     ]
@@ -27832,7 +28004,8 @@
       }
     ],
     "defaultWeightKg": 52.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Push Press",
@@ -27895,7 +28068,8 @@
       }
     ],
     "defaultWeightKg": 52.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Rear Delt Raise",
@@ -28219,7 +28393,8 @@
       }
     ],
     "defaultWeightKg": 42.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Shoulder Press, Dumbbells",
@@ -28271,6 +28446,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Dumbbell Shoulder Press",
       "DB Shoulder Press",
@@ -28315,6 +28491,7 @@
     ],
     "defaultWeightKg": 32.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Machine Shoulder Press"
     ]
@@ -28356,7 +28533,8 @@
       }
     ],
     "defaultWeightKg": 32.5,
-    "pattern": "push"
+    "pattern": "push",
+    "direction": "vertical"
   },
   {
     "name": "Shoulder Raise Side and Front DB",
@@ -28455,7 +28633,8 @@
       }
     ],
     "defaultWeightKg": 12.5,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Shrugs on Multipress",
@@ -28699,6 +28878,7 @@
     ],
     "defaultWeightKg": 15.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Single-Arm DB Shoulder Press"
     ]
@@ -28741,6 +28921,7 @@
     ],
     "defaultWeightKg": 30.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Smith Machine Shoulder Press"
     ]
@@ -28862,6 +29043,7 @@
       }
     ],
     "pattern": "push",
+    "direction": "horizontal",
     "trackingMode": "duration",
     "defaultDuration": 15,
     "aliases": [
@@ -28944,6 +29126,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "Upright Row",
       "Dumbbell Upright Row"
@@ -28986,7 +29169,8 @@
       }
     ],
     "defaultWeightKg": 30.0,
-    "pattern": "pull"
+    "pattern": "pull",
+    "direction": "vertical"
   },
   {
     "name": "Upright Row, SZ-bar",
@@ -29026,6 +29210,7 @@
     ],
     "defaultWeightKg": 30.0,
     "pattern": "pull",
+    "direction": "vertical",
     "aliases": [
       "EZ-Bar Upright Row",
       "Upright Row"
@@ -29081,6 +29266,7 @@
     ],
     "defaultWeightKg": 12.5,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Half-Kneeling Dumbbell Press",
       "Half Kneeling DB Press"
@@ -29136,6 +29322,7 @@
     ],
     "defaultWeightKg": 20.0,
     "pattern": "push",
+    "direction": "vertical",
     "aliases": [
       "Half-Kneeling Landmine Press"
     ]

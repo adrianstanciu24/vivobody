@@ -51,6 +51,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let equipment: String?
     let mechanic: String?
     let pattern: String?
+    let direction: String?
     let plane: String?
     let laterality: String?
     let aliases: [String]?
@@ -70,6 +71,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     var equipmentValue: Equipment { equipment.flatMap(Equipment.init(rawValue:)) ?? .other }
     var mechanicValue: Mechanic { mechanic.flatMap(Mechanic.init(rawValue:)) ?? .compound }
     var patternValue: MovementPattern? { pattern.flatMap(MovementPattern.init(rawValue:)) }
+    var directionValue: PushPullDirection? { direction.flatMap(PushPullDirection.init(rawValue:)) }
     var planeValue: MovementPlane { plane.flatMap(MovementPlane.init(rawValue:)) ?? .sagittal }
     var lateralityValue: Laterality { laterality.flatMap(Laterality.init(rawValue:)) ?? .bilateral }
     var aliasesValue: [String] { aliases ?? [] }
@@ -89,6 +91,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
             equipment: equipmentValue,
             mechanic: mechanicValue,
             pattern: patternValue,
+            direction: directionValue,
             plane: planeValue,
             laterality: lateralityValue
         )
