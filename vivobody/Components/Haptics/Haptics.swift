@@ -9,10 +9,10 @@
 //    • CHHapticEngine     — custom patterns (crescendo, breath, swell).
 //
 //  Sound is opt-in for ordinary atoms and always present only for
-//  signature patterns / notifications. Navigation, selections, and
-//  routine taps stay haptic-only; scrub mechanisms and meaningful
-//  state changes carry audio. Sound calls sit before the haptics guard
-//  so the two Me-tab toggles remain independent.
+//  signature patterns / notifications. Navigation and routine taps
+//  stay haptic-only; scrub mechanisms, value-choice selections, and
+//  meaningful state changes carry audio. Sound calls sit before the
+//  haptics guard so the two Me-tab toggles remain independent.
 //
 
 import CoreHaptics
@@ -191,6 +191,33 @@ enum Haptics {
         selectionGen.prepare()
     }
 
+    /// Normalized pitch for an ordered option set: the first option
+    /// sits at the bottom of the span, the last at the top, so
+    /// stepping across a value-choice segment bar walks up the scale
+    /// like flicking a parameter switch. Feed the result to
+    /// `selection(pitch:playsSound:)`.
+    static func optionPitch(index: Int, count: Int) -> Double {
+        guard count > 1 else { return 0 }
+        return Double(index) / Double(count - 1) - 0.5
+    }
+
+    /// RIR selection — feedback graded by the effort the number
+    /// represents. Each value 0…5 speaks its own warm note (higher
+    /// notes mean more in the tank) and 0 — to failure — lands as a
+    /// heavy thud under the lowest note. The haptic mirrors the
+    /// weight: a medium impact at 0, a selection change elsewhere.
+    static func rir(_ value: Int) {
+        Sounds.playRIR(value)
+        guard isEnabled else { return }
+        if value == 0 {
+            mediumImpact.impactOccurred()
+            mediumImpact.prepare()
+        } else {
+            selectionGen.selectionChanged()
+            selectionGen.prepare()
+        }
+    }
+
     // MARK: - Notifications
 
     static func success() {
@@ -282,6 +309,23 @@ enum Haptics {
             relativeTime: 0.38
         )
         playPattern(events: [continuous, slam], curves: [intensityCurve, sharpnessCurve])
+    }
+
+    /// The workout-done fanfare — a quick rising run into a double-hit
+    /// landing. Reserved for the summary card's Done button, so
+    /// finishing a session feels bigger than finishing any set.
+    /// Haptic events mirror the sound's run-up and "ba-DUM" timings.
+    static func finale() {
+        Sounds.play(.finale)
+        guard isEnabled else { return }
+        play(events: [
+            transient(intensity: 0.30, sharpness: 0.40, at: 0.00),
+            transient(intensity: 0.40, sharpness: 0.45, at: 0.06),
+            transient(intensity: 0.50, sharpness: 0.50, at: 0.12),
+            transient(intensity: 0.60, sharpness: 0.55, at: 0.18),
+            transient(intensity: 0.75, sharpness: 0.60, at: 0.26),
+            transient(intensity: 1.00, sharpness: 0.80, at: 0.34),
+        ])
     }
 
     // MARK: - Pattern helpers

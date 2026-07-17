@@ -29,16 +29,12 @@ struct RIRSelector: View {
     }
 
     /// Feedback graded by the effort the number represents, not by
-    /// which direction the finger moved. 5+ (easy) is the standard
-    /// light selection blip; each step toward failure drops the tone,
-    /// and 0 — to failure — lands as a deep, heavy thud instead of a
-    /// blip. You hear how hard the set was.
+    /// which direction the finger moved. Every value speaks its own
+    /// warm note — higher notes mean more in the tank — and 0, to
+    /// failure, lands as a heavy thud under the lowest note. You hear
+    /// how hard the set was.
     private static func effortFeedback(for rir: Int) {
-        if rir == 0 {
-            Haptics.thunk(pitch: -0.5)
-        } else {
-            Haptics.selection(pitch: Double(rir - 5) / 5)
-        }
+        Haptics.rir(rir)
     }
 
     var body: some View {

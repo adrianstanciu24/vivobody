@@ -3,15 +3,18 @@
 //  vivobody
 //
 //  The audio twin of Haptics. Every haptic atom and pattern has a
-//  matching physical or synthesized UI sound, baked as .caf files in
-//  Resources/Sounds by Scripts/generate_sounds.py. Complete Set uses a
-//  dry mechanical register aligned to its three haptic pulses.
+//  matching synthesized UI sound, baked as .caf files in
+//  Resources/Sounds by Scripts/generate_sounds.py. The palette mimics
+//  a Teenage Engineering OP-1: warm detuned FM notes, marimba and
+//  electric-piano registers, rounded kicks, and a light tape-ish
+//  crush. Scrub detents share the same warm voice as tick/tick-deep.
 //
 //  One-shots go through an AVAudioEngine with a round-robin voice pool
 //  (player -> varispeed -> mixer), so rapid ticks overlap. Scrubbers
-//  rotate through short Kenney scroll detents: scroll_001 for standard
-//  values/reps, scroll_003 for load/weight. Every crossed value boundary
-//  emits one complete event, and silence is immediate when values stop.
+//  rotate through six synthesized detent variants per register:
+//  sfx-scrub-reps for standard values/reps, sfx-scrub-load for
+//  load/weight. Every crossed value boundary emits one complete event,
+//  and silence is immediate when values stop.
 //
 //  Character details:
 //    • Callers can pass a pitch (-1…1, ≈ ±600 cents) — scrubbers map
@@ -19,7 +22,8 @@
 //      like an OP-1 encoder. Varispeed (not time-pitch) does the
 //      shifting: sampler-style, zero added latency.
 //    • Synth-effect emissions get ±20 cents / ±1 dB of jitter. The
-//      extracted scrub detents stay at their original pitch and level.
+//      scrub detents bake per-variant jitter into their six files and
+//      play at their original pitch and level.
 //    • Synth effects rate-limit at ~28/s. Scrub detents do not: every
 //      crossed value boundary remains audible.
 //    • When other audio is playing (gym playlist), the mix ducks to
@@ -40,7 +44,9 @@ enum Sounds {
         case tick, thunk, slam, rigid, soft, selection
         case tickDeep = "tick-deep"
         case success, warning, failure
-        case crescendo, breath, swell
+        case crescendo, breath, swell, finale
+        case rir0 = "rir-0", rir1 = "rir-1", rir2 = "rir-2"
+        case rir3 = "rir-3", rir4 = "rir-4", rir5 = "rir-5"
 
         var resourceName: String { "sfx-\(rawValue)" }
     }
@@ -196,6 +202,14 @@ enum Sounds {
 
         voice.player.scheduleBuffer(buffer, at: nil, options: .interrupts)
         if !voice.player.isPlaying { voice.player.play() }
+    }
+
+    /// The RIR selector's effort scale: one warm note per value,
+    /// heavier as reps-in-reserve approach failure. Values outside
+    /// 0…5 clamp to the nearest end.
+    static func playRIR(_ value: Int) {
+        let scale: [Effect] = [.rir0, .rir1, .rir2, .rir3, .rir4, .rir5]
+        play(scale[max(0, min(5, value))])
     }
 
     /// Emit one scroll detent for one crossed value boundary.

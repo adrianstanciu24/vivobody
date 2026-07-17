@@ -18,10 +18,11 @@ struct StepSelector<T: Hashable>: View {
     @Binding var selection: T
     let options: [T]
     let label: (T) -> String
-    /// Optional replacement for the default Haptics.selection() fired
-    /// when an option is picked. Lets semantically-loaded selectors
-    /// (RIR: 0 = to failure) grade their feedback by the value chosen
-    /// rather than emitting one uniform blip.
+    /// Optional replacement for the default feedback fired when an
+    /// option is picked (a selection blip whose pitch rises with the
+    /// option's position in the bar). Lets semantically-loaded
+    /// selectors (RIR: 0 = to failure) grade their feedback by the
+    /// value chosen rather than by position.
     var feedback: ((T) -> Void)? = nil
 
     @Namespace private var indicatorNS
@@ -60,7 +61,11 @@ struct StepSelector<T: Hashable>: View {
             if let feedback {
                 feedback(option)
             } else {
-                Haptics.selection()
+                let index = options.firstIndex(of: option) ?? 0
+                Haptics.selection(
+                    pitch: Haptics.optionPitch(index: index, count: options.count),
+                    playsSound: true
+                )
             }
             selection = option
         } label: {

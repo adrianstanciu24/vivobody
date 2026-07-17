@@ -275,7 +275,13 @@ struct SettingsScreen: View {
     private func appearanceChip(_ option: AppAppearance) -> some View {
         let isSelected = option == appearance
         return Button {
-            Haptics.selection()
+            Haptics.selection(
+                pitch: Haptics.optionPitch(
+                    index: AppAppearance.allCases.firstIndex(of: option) ?? 0,
+                    count: AppAppearance.allCases.count
+                ),
+                playsSound: true
+            )
             appearanceRaw = option.rawValue
         } label: {
             Text(option.label)
@@ -316,7 +322,13 @@ struct SettingsScreen: View {
     private func weightUnitChip(_ unit: WeightUnit) -> some View {
         let isSelected = unit == weightUnit
         return Button {
-            Haptics.selection()
+            Haptics.selection(
+                pitch: Haptics.optionPitch(
+                    index: WeightUnit.allCases.firstIndex(of: unit) ?? 0,
+                    count: WeightUnit.allCases.count
+                ),
+                playsSound: true
+            )
             weightUnitRaw = unit.rawValue
         } label: {
             VStack(spacing: 2) {
@@ -367,7 +379,13 @@ struct SettingsScreen: View {
     private func restChip(seconds: Int) -> some View {
         let isSelected = defaultRestSeconds == seconds
         return Button {
-            Haptics.selection()
+            Haptics.selection(
+                pitch: Haptics.optionPitch(
+                    index: restOptions.firstIndex(of: seconds) ?? 0,
+                    count: restOptions.count
+                ),
+                playsSound: true
+            )
             defaultRestSeconds = seconds
         } label: {
             Text("\(seconds)s")

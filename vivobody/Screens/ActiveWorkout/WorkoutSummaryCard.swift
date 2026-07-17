@@ -294,7 +294,7 @@ struct WorkoutSummaryCard: View {
     /// per-set button.
     private func doneButton(onDone: @escaping () -> Void) -> some View {
         Button {
-            Haptics.thunk()
+            Haptics.finale()
             onDone()
         } label: {
             HStack(alignment: .center, spacing: 0) {

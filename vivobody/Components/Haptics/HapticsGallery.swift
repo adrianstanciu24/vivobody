@@ -26,6 +26,15 @@ struct HapticsGallery: View {
                     HapticRow(label: "selection", subtitle: "picker, segments")       { Haptics.selection(playsSound: true) }
                 }
 
+                section(title: "RIR SCALE") {
+                    ForEach(0..<6) { rir in
+                        HapticRow(
+                            label: "rir \(RIRSelector.displayLabel(rir))",
+                            subtitle: rir == 0 ? "to failure — heaviest" : "\(rir) left in the tank"
+                        ) { Haptics.rir(rir) }
+                    }
+                }
+
                 section(title: "NOTIFICATIONS") {
                     HapticRow(label: "success", subtitle: "PR confirmed")              { Haptics.success() }
                     HapticRow(label: "warning", subtitle: "rest ending soon")          { Haptics.warning() }
@@ -36,6 +45,7 @@ struct HapticsGallery: View {
                     HapticRow(label: "crescendo", subtitle: "set complete (signature)") { Haptics.crescendo() }
                     HapticRow(label: "breath",    subtitle: "rest timer warning")       { Haptics.breath() }
                     HapticRow(label: "swell",     subtitle: "PR celebration")           { Haptics.swell() }
+                    HapticRow(label: "finale",    subtitle: "workout done (fanfare)")   { Haptics.finale() }
                 }
 
                 Spacer(minLength: 40)

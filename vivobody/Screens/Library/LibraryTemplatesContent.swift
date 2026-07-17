@@ -205,10 +205,10 @@ struct LibraryTemplatesContent: View {
     }
 
     /// Start a workout from a template without leaving Library — the
-    /// same entry point Today exposes. AppState swaps in the active
-    /// session; the app shell surfaces the live workout.
+    /// same entry point Today exposes, with the same crescendo so
+    /// starting a session sounds identical from either surface.
     private func startWorkout(from template: WorkoutTemplate) {
-        Haptics.soft()
+        Haptics.crescendo()
         appState.workout.startWorkoutFromTemplate(template)
     }
 }
