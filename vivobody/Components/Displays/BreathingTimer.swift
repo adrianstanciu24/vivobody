@@ -287,7 +287,7 @@ struct BreathingTimer: View {
                     Haptics.thunk()
                     skipNow()
                 } else if raw < -threshold {
-                    Haptics.tick()
+                    Haptics.tick(playsSound: true)
                     extend(by: 30)
                 }
                 if reduceMotion {
@@ -323,9 +323,9 @@ struct BreathingTimer: View {
         if remaining == lastTickSecond { return }
         lastTickSecond = remaining
         switch remaining {
-        case 3: Haptics.tick()
-        case 2: Haptics.soft()
-        case 1: Haptics.thunk()
+        case 3: Haptics.tick(playsSound: true)
+        case 2: Haptics.soft(playsSound: true)
+        case 1: Haptics.thunk(playsSound: true)
         case 0:
             if !hasFinished {
                 hasFinished = true

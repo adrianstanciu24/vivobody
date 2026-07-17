@@ -2,10 +2,11 @@
 """
 generate_sounds.py — synthesizes the app's UI sound set.
 
-Teenage-Engineering-style palette: short sine/square blips with fast
-exponential decays, subtle pitch drops, and clicky transients. Pure
-stdlib (wave + math), no dependencies. Writes WAV to a temp dir, then
-converts to .caf via afconvert into vivobody/Resources/Sounds/.
+Most effects use short sine/square blips with fast exponential decays,
+subtle pitch drops, and clicky transients. Signature sounds can instead
+come from mastered WAV files in AudioSources. Pure stdlib (wave + math),
+no dependencies. Writes WAV to a temp dir, then converts to .caf via
+afconvert into vivobody/Resources/Sounds/.
 
 Each sound maps 1:1 to a Haptics atom or pattern; multi-event pattern
 sounds (crescendo, breath, swell) bake the haptic event timings into
@@ -24,6 +25,13 @@ import wave
 
 SR = 44100
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "vivobody", "Resources", "Sounds")
+SOURCE_OVERRIDES = {
+    # A dry mechanical register synchronized to crescendo's three haptic
+    # beats: take-up at 0 ms, counter advance at 100 ms, lock at 220 ms.
+    "sfx-crescendo": os.path.join(
+        os.path.dirname(__file__), "AudioSources", "complete_set_register_lock.wav"
+    ),
+}
 
 
 def samples(duration):
@@ -240,6 +248,8 @@ def main():
     sounds = build_all()
     with tempfile.TemporaryDirectory() as tmp:
         for name, data in sounds.items():
+            if name in SOURCE_OVERRIDES:
+                continue
             wav_path = os.path.join(tmp, f"{name}.wav")
             caf_path = os.path.abspath(os.path.join(OUT_DIR, f"{name}.caf"))
             write_wav(wav_path, data)
@@ -249,6 +259,16 @@ def main():
             )
             dur_ms = len(data) / SR * 1000
             print(f"{name}.caf  ({dur_ms:.0f} ms)")
+
+        for name, source_path in SOURCE_OVERRIDES.items():
+            caf_path = os.path.abspath(os.path.join(OUT_DIR, f"{name}.caf"))
+            subprocess.run(
+                ["afconvert", "-f", "caff", "-d", f"LEI16@{SR}", source_path, caf_path],
+                check=True,
+            )
+            with wave.open(source_path, "rb") as source:
+                dur_ms = source.getnframes() / source.getframerate() * 1000
+            print(f"{name}.caf  ({dur_ms:.0f} ms, AudioSources override)")
     print(f"\nWrote {len(sounds)} sounds to {os.path.abspath(OUT_DIR)}")
 
 

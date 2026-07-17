@@ -18,12 +18,12 @@ struct HapticsGallery: View {
                 header
 
                 section(title: "ATOMS") {
-                    HapticRow(label: "tick",      subtitle: "scrubber increments")    { Haptics.tick() }
-                    HapticRow(label: "thunk",     subtitle: "set complete")           { Haptics.thunk() }
+                    HapticRow(label: "tick",      subtitle: "scrubber increments")    { Haptics.tick(playsSound: true) }
+                    HapticRow(label: "thunk",     subtitle: "set complete")           { Haptics.thunk(playsSound: true) }
                     HapticRow(label: "slam",      subtitle: "PR, final set")          { Haptics.slam() }
-                    HapticRow(label: "rigid",     subtitle: "hard stops")             { Haptics.rigid() }
-                    HapticRow(label: "soft",      subtitle: "subtle transitions")     { Haptics.soft() }
-                    HapticRow(label: "selection", subtitle: "picker, segments")       { Haptics.selection() }
+                    HapticRow(label: "rigid",     subtitle: "hard stops")             { Haptics.rigid(playsSound: true) }
+                    HapticRow(label: "soft",      subtitle: "subtle transitions")     { Haptics.soft(playsSound: true) }
+                    HapticRow(label: "selection", subtitle: "picker, segments")       { Haptics.selection(playsSound: true) }
                 }
 
                 section(title: "NOTIFICATIONS") {

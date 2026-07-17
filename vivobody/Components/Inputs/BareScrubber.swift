@@ -406,7 +406,7 @@ struct BareScrubber: View {
             withAnimation(.easeOut(duration: 0.28)) { nudgeOffset = -12 }
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled, !isDragging else { nudgeOffset = 0; return }
-            Haptics.tick(tone: tickTone)
+            Haptics.scrubTick(tone: tickTone)
             try? await Task.sleep(for: .milliseconds(170))
             guard !Task.isCancelled, !isDragging else { nudgeOffset = 0; return }
             withAnimation(.easeInOut(duration: 0.34)) { nudgeOffset = 0 }
@@ -497,10 +497,9 @@ struct BareScrubber: View {
 
                 let actualStepDelta = Int(((clamped - dragStartValue) / step).rounded())
                 if actualStepDelta != lastStepReported {
-                    // Pitch tracks the drag: each step from the grab
-                    // point shifts the tick ~30 cents, so scrubbing up
-                    // literally sounds like the number going up.
-                    Haptics.tick(pitch: Double(actualStepDelta) / 20, tone: tickTone)
+                    // One crossed value boundary, one complete
+                    // safe-dial detent.
+                    Haptics.scrubTick(tone: tickTone)
                     lastStepReported = actualStepDelta
                 }
             }
@@ -538,9 +537,9 @@ struct BareScrubber: View {
 
     /// A released flick keeps the value rolling. The drag's projected
     /// momentum converts to a run of detents stepped through with
-    /// decaying velocity — each detent ticks (sound pitch still
-    /// tracking the climb), a wall stops the flywheel with the rigid
-    /// end-stop + flash + a rubber bump. Damped well below 1:1 so a
+    /// decaying velocity — each detent drives the safe-dial mechanism,
+    /// while a wall stops the flywheel with the rigid end-stop + flash
+    /// + a rubber bump. Damped well below 1:1 so a
     /// coast reads as "heavy wheel", not "runaway value". Only true
     /// flicks reach here (the caller gates on `flickMaxDuration`);
     /// a targeted scrub always lands exactly where the finger let
@@ -554,7 +553,6 @@ struct BareScrubber: View {
         let capped = max(-24, min(24, projected))
         let direction: Double = capped > 0 ? 1 : -1
         let total = abs(capped)
-        let anchor = dragStartValue
         // Each detent takes a bit longer than the last; the ratio is
         // sized so the final detent lands ~5× slower than the first.
         let growth = pow(5.0, 1.0 / Double(max(total - 1, 1)))
@@ -576,8 +574,7 @@ struct BareScrubber: View {
                     return
                 }
                 value = clamped
-                let totalDelta = (clamped - anchor) / step
-                Haptics.tick(pitch: totalDelta / 20, tone: tickTone)
+                Haptics.scrubTick(tone: tickTone)
                 interval *= growth
             }
         }
@@ -635,7 +632,7 @@ struct BareScrubber: View {
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {
             value = clamped
-            Haptics.tick(pitch: Double(direction) * 0.15, tone: tickTone)
+            Haptics.scrubTick(tone: tickTone)
             // A VoiceOver adjustable action is also a "real scrub" —
             // retire the hint so it never nags an accessible user who
             // has already demonstrated the gesture.

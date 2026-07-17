@@ -8,9 +8,11 @@
 //    • UIFeedbackGenerator — sub-frame latency atoms (tick, thunk, slam).
 //    • CHHapticEngine     — custom patterns (crescendo, breath, swell).
 //
-//  Every emission also fires its Sounds twin (see Sounds.swift). The
-//  sound call sits BEFORE the haptics-enabled guard so the two Me-tab
-//  toggles stay independent: sounds-only, haptics-only, both, neither.
+//  Sound is opt-in for ordinary atoms and always present only for
+//  signature patterns / notifications. Navigation, selections, and
+//  routine taps stay haptic-only; scrub mechanisms and meaningful
+//  state changes carry audio. Sound calls sit before the haptics guard
+//  so the two Me-tab toggles remain independent.
 //
 
 import CoreHaptics
@@ -113,18 +115,33 @@ enum Haptics {
     /// about half an octave. Scrubbers pass their step delta so ticks
     /// rise while the value climbs and fall while it drops, OP-1
     /// encoder style. The haptic itself is pitch-agnostic.
-    static func tick(pitch: Double = 0, tone: TickTone = .standard) {
-        Sounds.play(tone == .deep ? .tickDeep : .tick, pitch: pitch)
+    static func tick(
+        pitch: Double = 0,
+        tone: TickTone = .standard,
+        playsSound: Bool = false
+    ) {
+        if playsSound {
+            Sounds.play(tone == .deep ? .tickDeep : .tick, pitch: pitch)
+        }
         guard isEnabled else { return }
         lightImpact.impactOccurred(intensity: 0.6)
         lightImpact.prepare()
     }
 
+    /// One isolated scroll detent plus the normal precise
+    /// haptic. Every crossed value boundary is one complete event.
+    static func scrubTick(tone: TickTone = .standard) {
+        Sounds.playScrubDetent(deep: tone == .deep)
+        guard isEnabled else { return }
+        rigidImpact.impactOccurred(intensity: 0.48)
+        rigidImpact.prepare()
+    }
+
     /// Medium thunk — the workhorse. Set complete, primary action.
     /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
     /// the haptic is pitch-agnostic.
-    static func thunk(pitch: Double = 0) {
-        Sounds.play(.thunk, pitch: pitch)
+    static func thunk(pitch: Double = 0, playsSound: Bool = false) {
+        if playsSound { Sounds.play(.thunk, pitch: pitch) }
         guard isEnabled else { return }
         mediumImpact.impactOccurred()
         mediumImpact.prepare()
@@ -149,16 +166,16 @@ enum Haptics {
     /// `pitch` (-1…1, default 0) shifts the sound up or down; pass
     /// `ceilingPitch` at a range's top wall. The haptic is
     /// pitch-agnostic.
-    static func rigid(pitch: Double = 0) {
-        Sounds.play(.rigid, pitch: pitch)
+    static func rigid(pitch: Double = 0, playsSound: Bool = false) {
+        if playsSound { Sounds.play(.rigid, pitch: pitch) }
         guard isEnabled else { return }
         rigidImpact.impactOccurred()
         rigidImpact.prepare()
     }
 
     /// Soft tap — subtle transitions, ambient confirmation.
-    static func soft() {
-        Sounds.play(.soft)
+    static func soft(playsSound: Bool = false) {
+        if playsSound { Sounds.play(.soft) }
         guard isEnabled else { return }
         softImpact.impactOccurred()
         softImpact.prepare()
@@ -167,8 +184,8 @@ enum Haptics {
     /// Selection change — for pickers, segmented controls, wheel rolls.
     /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
     /// the haptic is pitch-agnostic.
-    static func selection(pitch: Double = 0) {
-        Sounds.play(.selection, pitch: pitch)
+    static func selection(pitch: Double = 0, playsSound: Bool = false) {
+        if playsSound { Sounds.play(.selection, pitch: pitch) }
         guard isEnabled else { return }
         selectionGen.selectionChanged()
         selectionGen.prepare()

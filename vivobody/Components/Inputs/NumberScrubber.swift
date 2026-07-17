@@ -234,10 +234,9 @@ struct NumberScrubber: View {
 
                 let actualStepDelta = Int(((clamped - dragStartValue) / step).rounded())
                 if actualStepDelta != lastStepReported {
-                    // Pitch tracks the drag: each step from the grab
-                    // point shifts the tick ~30 cents, so scrubbing up
-                    // literally sounds like the number going up.
-                    Haptics.tick(pitch: Double(actualStepDelta) / 20, tone: tickTone)
+                    // One crossed value boundary, one complete
+                    // safe-dial detent.
+                    Haptics.scrubTick(tone: tickTone)
                     lastStepReported = actualStepDelta
                 }
             }
@@ -273,7 +272,7 @@ struct NumberScrubber: View {
         let clamped = min(max(next, range.lowerBound), range.upperBound)
         if clamped != value {
             value = clamped
-            Haptics.tick(pitch: Double(direction) * 0.15, tone: tickTone)
+            Haptics.scrubTick(tone: tickTone)
         } else {
             Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
         }
