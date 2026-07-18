@@ -265,7 +265,7 @@ struct BareScrubber: View {
                 value: value,
                 font: .system(size: fontSize, weight: .bold, design: .monospaced),
                 color: numberColor,
-                fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
+                fractionalDigits: WeightUnit.fractionDigits(forStep: step, value: value),
                 rolls: !isDragging && !isCoasting,
                 formatter: formatter
             )
@@ -651,8 +651,8 @@ struct BareScrubber: View {
     /// so both always render through the same formatting path.
     private func format(_ v: Double) -> String {
         if let formatter { return formatter(v) }
-        let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
-        return isIntegerStep ? "\(Int(v))" : String(format: "%.1f", v)
+        let d = WeightUnit.fractionDigits(forStep: step, value: value)
+        return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
     }
 }
 

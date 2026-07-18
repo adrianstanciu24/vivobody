@@ -72,6 +72,28 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
         }
     }
 
+    /// Increment choices offered by the step toggle, in the unit's
+    /// native scale. Each mirrors real gym hardware: 1 kg dumbbell
+    /// jumps, 1.25 kg micro discs, the 2.5 kg plate-pair default,
+    /// 5 kg for big barbell moves — and the lb equivalents.
+    var strengthStepOptions: [Double] {
+        switch self {
+        case .lb: return [1, 2.5, 5, 10]
+        case .kg: return [1, 1.25, 2.5, 5]
+        }
+    }
+
+    /// Resolve a stored per-exercise step preference against this
+    /// unit's options. Nil (never chosen) and foreign values (a step
+    /// picked in the other unit that this unit doesn't offer) fall
+    /// back to the unit's natural default.
+    func resolvedStrengthStep(preferred: Double?) -> Double {
+        guard let preferred, strengthStepOptions.contains(preferred) else {
+            return strengthStep
+        }
+        return preferred
+    }
+
     /// Strength scrubber range in the unit's native scale.
     /// 600 lb (≈272 kg) covers any human; 270 kg matches the rough
     /// upper bound of the world's strongest squatters. Lower bound
@@ -111,6 +133,32 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
         case .lb: return 0
         case .kg: return 1
         }
+    }
+
+    /// Fraction digits a scrubber should render for a given step +
+    /// value: the larger of what the step needs (1.25 → 2) and what
+    /// the value needs, so off-grid residue (27.5 scrubbed with ±1)
+    /// keeps its fraction. Values on no clean 2-digit grid (unit-
+    /// conversion artifacts like 135 lb → 61.23 kg) fall back to the
+    /// step's own precision.
+    static func fractionDigits(forStep step: Double, value: Double) -> Int {
+        let stepD = digits(step)
+        let valueD = digits(value)
+        return valueD <= 2 ? max(stepD, valueD) : stepD
+    }
+
+    private static func digits(_ v: Double) -> Int {
+        if abs(v - v.rounded()) < 0.001 { return 0 }
+        if abs(v * 10 - (v * 10).rounded()) < 0.001 { return 1 }
+        if abs(v * 100 - (v * 100).rounded()) < 0.001 { return 2 }
+        return 3
+    }
+
+    /// Short label for a step value: "±2.5 kg", "±1 lb", etc.
+    static func stepLabel(_ step: Double, unit: String) -> String {
+        let d = digits(step)
+        let v = d == 0 ? "\(Int(step))" : String(format: "%.\(d)f", step)
+        return "±\(v) \(unit)"
     }
 }
 

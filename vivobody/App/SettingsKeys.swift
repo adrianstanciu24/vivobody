@@ -21,6 +21,12 @@ nonisolated enum SettingsKey {
     /// @AppStorage at every weight display + scrubber so flipping
     /// the toggle updates all surfaces synchronously.
     static let weightUnit = "settings.weightUnit"
+    /// Per-exercise weight increment, keyed by the stable catalog UUID.
+    /// Stored outside SwiftData because this is a control preference,
+    /// not workout history or catalog content.
+    static func weightStep(catalogItemID: UUID) -> String {
+        "settings.weightStep.\(catalogItemID.uuidString)"
+    }
     /// Stores `AppAppearance.rawValue`. Read via @AppStorage at the
     /// app root to drive `.preferredColorScheme`; "system" defers to
     /// the OS.

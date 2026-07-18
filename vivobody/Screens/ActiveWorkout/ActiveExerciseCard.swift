@@ -62,6 +62,10 @@ struct ActiveExerciseCard: View {
     /// that completed set.
     @State var deletingSet: WorkoutSet? = nil
 
+    /// Per-exercise increment preference loaded from UserDefaults.
+    /// Exercises without a catalog identity keep it for this card only.
+    @State var sessionOnlyStep: Double? = nil
+
     /// Surfaces failures from saving the active workout draft.
     @State private var saveError: SaveErrorBox? = nil
 
@@ -113,6 +117,44 @@ struct ActiveExerciseCard: View {
             Text("\(WeightFormatter.string(setToDelete.weight, unit: unit)) · \(setToDelete.reps) reps. This can't be undone.")
         }
         .saveErrorAlert($saveError)
+        .onAppear { loadWeightStepPreference() }
+    }
+
+    // MARK: - Weight increment
+
+    private func loadWeightStepPreference() {
+        guard sessionOnlyStep == nil, let itemID = exercise.catalogItemID else { return }
+        let key = SettingsKey.weightStep(catalogItemID: itemID)
+        sessionOnlyStep = (UserDefaults.standard.object(forKey: key) as? NSNumber)?.doubleValue
+    }
+
+    /// Current scrub step for this exercise in display units.
+    var weightStep: Double {
+        unit.resolvedStrengthStep(preferred: sessionOnlyStep)
+    }
+
+    /// Persist a picked increment and snap the working weight onto
+    /// the new grid.
+    func setWeightStep(_ step: Double) {
+        sessionOnlyStep = step
+        if let itemID = exercise.catalogItemID {
+            UserDefaults.standard.set(
+                step,
+                forKey: SettingsKey.weightStep(catalogItemID: itemID)
+            )
+        }
+
+        if session.activeSet(for: exercise) != nil {
+            let display = WeightFormatter.toDisplay(displayedWeight, unit: unit)
+            let snapped = (display / step).rounded() * step
+            if snapped != display {
+                session.updateActiveWeight(
+                    for: exercise,
+                    weight: WeightFormatter.toCanonical(snapped, unit: unit)
+                )
+            }
+        }
+        saveActiveSessionChanges()
     }
 
     // MARK: - Edit / delete plumbing
@@ -142,7 +184,7 @@ struct ActiveExerciseCard: View {
         exercise.plannedSets = exercise.sets.count
         session.completedAt = nil
         saveActiveSessionChanges()
-        Haptics.tick()
+        Haptics.tick(pitch: 0.3, playsSound: true)
     }
 
     /// Remove a still-pending set (the count went too high). Never
@@ -160,7 +202,7 @@ struct ActiveExerciseCard: View {
         exercise.plannedSets = exercise.sets.count
         session.completedAt = nil
         saveActiveSessionChanges()
-        Haptics.soft()
+        Haptics.tick(pitch: -0.3, playsSound: true)
     }
 
     /// Remove a completed set from this exercise. The remaining sets'

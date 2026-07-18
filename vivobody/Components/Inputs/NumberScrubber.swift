@@ -89,7 +89,7 @@ struct NumberScrubber: View {
                     value: value,
                     font: .system(size: valueFontSize, weight: .bold, design: .rounded),
                     color: Ink.primary,
-                    fractionalDigits: step.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 1,
+                    fractionalDigits: WeightUnit.fractionDigits(forStep: step, value: value),
                     rolls: !isDragging,
                     formatter: formatter
                 )
@@ -280,8 +280,8 @@ struct NumberScrubber: View {
 
     private var formattedValue: String {
         if let formatter { return formatter(value) }
-        let isIntegerStep = step.truncatingRemainder(dividingBy: 1) == 0
-        return isIntegerStep ? "\(Int(value))" : String(format: "%.1f", value)
+        let d = WeightUnit.fractionDigits(forStep: step, value: value)
+        return d == 0 ? "\(Int(value))" : String(format: "%.\(d)f", value)
     }
 
     /// Position of the value within `range`, clamped to [0, 1] and

@@ -62,6 +62,7 @@ extension ActiveExerciseCard {
                     pipView
                 }
             }
+            removeSetButton
             addSetButton
         }
         .frame(height: 44)
@@ -114,6 +115,31 @@ extension ActiveExerciseCard {
         .accessibilityInputLabels([Text("Add a set"), Text("Add Set"), Text("Add")])
     }
 
+    /// One-tap removal for the final pending set. Completed sets stay
+    /// protected behind their existing context-menu delete flow, and
+    /// an exercise always retains at least one set.
+    var removeSetButton: some View {
+        let removableSet = sets.last(where: { !$0.isCompleted })
+        let canRemove = sets.count > 1 && removableSet != nil
+
+        return Button {
+            guard let removableSet else { return }
+            removeSet(removableSet)
+        } label: {
+            Image(systemName: "minus")
+                .font(Typography.sectionLabel)
+                .foregroundStyle(canRemove ? Ink.tertiary : Ink.quaternary)
+                .frame(width: 26, height: 26)
+                .overlay(Circle().strokeBorder(Ink.quaternary, lineWidth: 2))
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(!canRemove)
+        .accessibilityLabel("Remove a set")
+        .accessibilityInputLabels([Text("Remove a set"), Text("Remove Set"), Text("Remove")])
+    }
+
     /// Set pips as LED lamps: pending is unlit, the active set is
     /// armed (standby breathe), a completed set is lit — completing
     /// one overdrives the lamp past resting brightness before it
@@ -142,7 +168,7 @@ extension ActiveExerciseCard {
             BareScrubber(
                 value: weightDisplayBinding,
                 range: unit.strengthRange,
-                step: unit.strengthStep,
+                step: weightStep,
                 pointsPerStep: 8,
                 fontSize: 104,
                 unit: unit.symbol,
@@ -158,7 +184,7 @@ extension ActiveExerciseCard {
                 showsRail: true
             )
 
-            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+            HStack(alignment: .center, spacing: Space.sm) {
                 Text("×")
                     .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
@@ -177,6 +203,8 @@ extension ActiveExerciseCard {
                     showsScrubHint: isActive,
                     hitSlop: 18
                 )
+                Spacer(minLength: Space.md)
+                stepToggle
             }
         }
     }
@@ -210,7 +238,7 @@ extension ActiveExerciseCard {
                 BareScrubber(
                     value: weightDisplayBinding,
                     range: unit.strengthRange,
-                    step: unit.strengthStep,
+                    step: weightStep,
                     pointsPerStep: 8,
                     fontSize: 46,
                     unit: unit.symbol,
@@ -315,6 +343,37 @@ extension ActiveExerciseCard {
                 .allowsHitTesting(isLive)
                 .accessibilityHidden(!isLive)
         }
+    }
+
+    /// Small tappable pill showing the current weight increment.
+    /// Tap cycles through the unit's offered steps (1 / 1.25 / 2.5 / 5
+    /// for kg, 1 / 2.5 / 5 / 10 for lb). Sits at the trailing edge
+    /// of the reps row, directly beneath the load it controls.
+    var stepToggle: some View {
+        let options = unit.strengthStepOptions
+        let label = WeightUnit.stepLabel(weightStep, unit: unit.symbol)
+        return Button {
+            let idx = options.firstIndex(of: weightStep) ?? 0
+            let next = options[(idx + 1) % options.count]
+            Haptics.selection(
+                pitch: Haptics.optionPitch(index: idx, count: options.count),
+                playsSound: true
+            )
+            setWeightStep(next)
+        } label: {
+            Text(label)
+                .font(Typography.metricUnit)
+                .monospacedDigit()
+                .foregroundStyle(Ink.secondary)
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .padding(4)
+        .coloredGlassControl(cornerRadius: Radius.pill)
+        .accessibilityLabel("Weight increment")
+        .accessibilityValue(label)
     }
 
     var rirBinding: Binding<Int> {
