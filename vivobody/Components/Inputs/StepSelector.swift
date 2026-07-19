@@ -24,6 +24,10 @@ struct StepSelector<T: Hashable>: View {
     /// selectors (RIR: 0 = to failure) grade their feedback by the
     /// value chosen rather than by position.
     var feedback: ((T) -> Void)? = nil
+    /// Whether tapping the already-selected option should repeat its
+    /// feedback. Disabled by default so ordinary segmented pickers
+    /// only confirm actual value changes.
+    var feedbackOnReselection: Bool = false
 
     @Namespace private var indicatorNS
 
@@ -57,7 +61,7 @@ struct StepSelector<T: Hashable>: View {
     private func optionButton(_ option: T) -> some View {
         let isSelected = option == selection
         return Button {
-            guard option != selection else { return }
+            guard option != selection || feedbackOnReselection else { return }
             if let feedback {
                 feedback(option)
             } else {
@@ -67,7 +71,9 @@ struct StepSelector<T: Hashable>: View {
                     playsSound: true
                 )
             }
-            selection = option
+            if option != selection {
+                selection = option
+            }
         } label: {
             Text(label(option))
                 .font(Typography.metricUnit)

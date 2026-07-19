@@ -32,7 +32,11 @@ struct TrainingSignatureTests {
 
     private func lift(_ name: String, _ group: MuscleGroup, sets: Int = 3, rir: Int = 2) -> Exercise {
         let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: 8, plannedWeight: 100)
-        ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = rir }
+        ex.sets.forEach {
+            $0.isCompleted = true
+            $0.repsInReserve = rir
+            $0.rirLogged = true
+        }
         return ex
     }
 
@@ -106,6 +110,7 @@ struct TrainingSignatureTests {
             plannedReps: 0,
             plannedWeight: 0,
             trackingMode: .duration,
+            modality: .isometricStrength,
             plannedDuration: 45
         )
         plank.sets.forEach { $0.isCompleted = true }

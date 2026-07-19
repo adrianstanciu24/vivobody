@@ -36,6 +36,11 @@ struct CustomExerciseEditorSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Used only to enforce the same globally-unique canonical-name /
+    /// alias namespace as the bundled catalog. The edited item is
+    /// excluded from its own collision check.
+    @Query private var catalogItems: [ExerciseCatalogItem]
+
     @State private var draft: CatalogDraft
 
     @State private var saveError: SaveErrorBox? = nil
@@ -63,32 +68,101 @@ struct CustomExerciseEditorSheet: View {
         return false
     }
 
+    /// Bundled records own a stable semantic identity. Users may tune
+    /// logging defaults, but changing anatomy, mechanics, modality, or
+    /// load interpretation in place would merge an unrelated movement
+    /// into the bundled exercise's history key.
+    private var isBundledEdit: Bool {
+        guard case .edit(let item) = target else { return false }
+        return item.catalogID != nil && !item.isUserCreated
+    }
+
     private var canSave: Bool {
         !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-            && draft.muscleInvolvement.hasPrime
+            && !draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && hasValidMuscleRoles
+            && (draft.mechanic != .compound || draft.pattern != nil)
             && (!draft.requiresDirection || draft.direction != nil)
+            && hasValidLoadProfile
+            && hasUniqueSearchTerms
+    }
+
+    private var editedItemID: UUID? {
+        guard case .edit(let item) = target else { return nil }
+        return item.id
+    }
+
+    private var hasValidMuscleRoles: Bool {
+        let involvement = draft.muscleInvolvement
+        guard !involvement.isEmpty else { return false }
+        guard draft.modality.requiresPrimaryMuscle else { return true }
+        return involvement.primary.contains { $0.group == draft.group }
+    }
+
+    private var hasValidLoadProfile: Bool {
+        if draft.equipment == .band {
+            return draft.loadMode == .nonComparable && draft.bodyweightFraction == 0
+        }
+        switch draft.loadMode {
+        case .external, .nonComparable:
+            return draft.bodyweightFraction == 0
+        case .bodyweightAdded, .assistanceSubtracted:
+            return draft.bodyweightFraction > 0
+        }
+    }
+
+    private var hasUniqueSearchTerms: Bool {
+        let ownTerms = [draft.name] + draft.parsedAliases
+        let normalizedOwn = ownTerms.map(Self.normalizedSearchTerm)
+        guard normalizedOwn.allSatisfy({ !$0.isEmpty }),
+              Set(normalizedOwn).count == normalizedOwn.count else { return false }
+
+        let occupied = Set(catalogItems
+            .filter { $0.id != editedItemID }
+            .flatMap { [$0.name] + $0.aliases }
+            .map(Self.normalizedSearchTerm))
+        return occupied.isDisjoint(with: normalizedOwn)
+    }
+
+    private static func normalizedSearchTerm(_ value: String) -> String {
+        value
+            .split(whereSeparator: \.isWhitespace)
+            .joined(separator: " ")
+            .lowercased()
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Space.section) {
-                    nameField
-                    muscleGroupField
-                    muscleInvolvementField
-                    equipmentField
-                    mechanicField
-                    if draft.mechanic == .compound {
-                        patternField
-                        if draft.requiresDirection {
-                            directionField
+                    if isBundledEdit {
+                        bundledIdentitySummary
+                        defaultsRow
+                    } else {
+                        nameField
+                        movementDefinitionField
+                        muscleGroupField
+                        muscleInvolvementField
+                        equipmentField
+                        modalityField
+                        mechanicField
+                        if draft.mechanic == .compound {
+                            patternField
+                            if draft.requiresDirection {
+                                directionField
+                            }
                         }
+                        planeField
+                        lateralityField
+                        aliasesField
+                        trackingModeField
+                        loadModeField
+                        if draft.loadMode == .bodyweightAdded
+                            || draft.loadMode == .assistanceSubtracted {
+                            bodyweightFractionField
+                        }
+                        defaultsRow
                     }
-                    planeField
-                    lateralityField
-                    aliasesField
-                    trackingModeField
-                    defaultsRow
                 }
                 .padding(.top, Space.md)
                 .padding(.bottom, Space.xxl)
@@ -97,7 +171,7 @@ struct CustomExerciseEditorSheet: View {
             .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .screenBackground()
-            .navigationTitle(isEditMode ? "Edit Exercise" : "New Exercise")
+            .navigationTitle(isBundledEdit ? "Exercise Defaults" : (isEditMode ? "Edit Exercise" : "New Exercise"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -110,6 +184,10 @@ struct CustomExerciseEditorSheet: View {
                 }
             }
             .onAppear {
+                if !isBundledEdit, draft.equipment == .band {
+                    draft.loadMode = .nonComparable
+                    draft.bodyweightFraction = 0
+                }
                 if !isEditMode {
                     // Focus the name field for create-mode; the
                     // keyboard slides up immediately so the user can
@@ -119,7 +197,8 @@ struct CustomExerciseEditorSheet: View {
             }
             .sheet(isPresented: $isMuscleEditorPresented) {
                 MuscleInvolvementEditorSheet(
-                    initialSnapshot: draft.muscleInvolvementSnapshot
+                    initialSnapshot: draft.muscleInvolvementSnapshot,
+                    requiresPrimary: draft.modality.requiresPrimaryMuscle
                 ) { snapshot in
                     draft.muscleInvolvementSnapshot = snapshot
                 }
@@ -129,6 +208,21 @@ struct CustomExerciseEditorSheet: View {
     }
 
     // MARK: - Fields
+
+    private var bundledIdentitySummary: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text(draft.name)
+                .font(Typography.title)
+                .foregroundStyle(Ink.primary)
+            Text(draft.movementDefinition)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Canonical mechanics, modality, load semantics, and muscle roles are locked so this exercise keeps one stable history identity.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.quaternary)
+        }
+    }
 
     private var nameField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
@@ -164,7 +258,10 @@ struct CustomExerciseEditorSheet: View {
                                 Haptics.selection()
                                 guard draft.group != g else { return }
                                 draft.group = g
-                                draft.applyMusclePreset(for: g)
+                                // A browse group cannot safely infer anatomy
+                                // (especially glute max vs glute med), so a
+                                // group change requires an explicit re-pick.
+                                draft.muscleInvolvementSnapshot = [:]
                             }
                         }
                     }
@@ -179,7 +276,7 @@ struct CustomExerciseEditorSheet: View {
                 Text("Muscles worked")
                     .sectionLabelStyle(Opacity.medium)
                 Spacer()
-                Text("group sets preset")
+                Text("explicit roles")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
             }
@@ -194,7 +291,7 @@ struct CustomExerciseEditorSheet: View {
                             .font(Typography.body)
                             .foregroundStyle(Ink.secondary)
                             .multilineTextAlignment(.leading)
-                        Text("Set each muscle as Prime, Major, Minor, Trace, or None")
+                        Text("Set each muscle as Primary, Secondary, Stabilizer, or None")
                             .font(Typography.caption)
                             .foregroundStyle(Ink.quaternary)
                             .multilineTextAlignment(.leading)
@@ -218,8 +315,38 @@ struct CustomExerciseEditorSheet: View {
             .accessibilityLabel("Edit muscle involvement")
             .accessibilityValue(draft.muscleSummary)
 
-            if !draft.muscleInvolvement.hasPrime {
-                Text("Choose at least one Prime muscle to save.")
+            if draft.modality.requiresPrimaryMuscle,
+               !hasValidMuscleRoles {
+                Text("Choose a Primary muscle in the selected muscle group to save.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.danger)
+            }
+        }
+    }
+
+    private var movementDefinitionField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Movement definition")
+                .sectionLabelStyle(Opacity.medium)
+
+            TextField(
+                "Describe the setup and joint movement",
+                text: $draft.movementDefinition,
+                axis: .vertical
+            )
+            .font(Typography.body)
+            .foregroundStyle(Ink.primary)
+            .lineLimit(3...6)
+            .padding(.vertical, Space.sm)
+            .accessibilityLabel("Movement definition")
+
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 1)
+                .accessibilityHidden(true)
+
+            if draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                Text("Describe the movement precisely enough to distinguish it from similar exercises.")
                     .font(Typography.caption)
                     .foregroundStyle(Tint.danger)
             }
@@ -240,6 +367,40 @@ struct CustomExerciseEditorSheet: View {
                             chip(label: e.displayName, isSelected: draft.equipment == e) {
                                 Haptics.selection()
                                 draft.equipment = e
+                                if e == .band {
+                                    draft.loadMode = .nonComparable
+                                    draft.bodyweightFraction = 0
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Modality
+
+    private var modalityField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Modality")
+                .sectionLabelStyle(Opacity.medium)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        ForEach(ExerciseModality.allCases, id: \.self) { modality in
+                            chip(
+                                label: modality.displayName,
+                                isSelected: draft.modality == modality
+                            ) {
+                                Haptics.selection()
+                                draft.modality = modality
+                                if modality == .dynamicStrength || modality == .power {
+                                    draft.trackingMode = .reps
+                                } else if modality == .isometricStrength {
+                                    draft.trackingMode = .duration
+                                }
                             }
                         }
                     }
@@ -308,6 +469,12 @@ struct CustomExerciseEditorSheet: View {
                         }
                     }
                 }
+            }
+
+            if draft.pattern == nil {
+                Text("Choose the compound movement pattern to save.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.danger)
             }
         }
     }
@@ -428,15 +595,21 @@ struct CustomExerciseEditorSheet: View {
                 .fill(Surface.edge)
                 .frame(height: 1)
                 .accessibilityHidden(true)
+
+            if !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               !hasUniqueSearchTerms {
+                Text("Name and aliases must be unique across the exercise catalog.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.danger)
+            }
         }
     }
 
     // MARK: - Measure (reps vs. time)
 
-    /// Chooses how the exercise is logged. Time turns the defaults
-    /// row into a Hold + Load pair (vs. Weight + Reps), and is what
-    /// makes a plank / dead hang / loaded carry track as a held
-    /// interval instead of a rep count.
+    /// Chooses how the exercise is logged. Time replaces reps with a
+    /// modality-aware duration: Hold for isometric strength, Interval
+    /// for conditioning, and Time for other timed work.
     private var trackingModeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Measure")
@@ -444,7 +617,7 @@ struct CustomExerciseEditorSheet: View {
 
             GlassEffectContainer(spacing: Space.sm) {
                 HStack(spacing: Space.sm) {
-                    ForEach(TrackingMode.allCases, id: \.self) { m in
+                    ForEach(availableTrackingModes, id: \.self) { m in
                         chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
                             Haptics.selection()
                             if reduceMotion {
@@ -461,6 +634,69 @@ struct CustomExerciseEditorSheet: View {
         }
     }
 
+    private var availableTrackingModes: [TrackingMode] {
+        switch draft.modality {
+        case .dynamicStrength, .power: return [.reps]
+        case .isometricStrength: return [.duration]
+        case .conditioning, .mobility: return TrackingMode.allCases
+        }
+    }
+
+    private var loadModeField: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Load interpretation")
+                .sectionLabelStyle(Opacity.medium)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                GlassEffectContainer(spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        ForEach(
+                            draft.equipment == .band ? [.nonComparable] : ExerciseLoadMode.allCases,
+                            id: \.self
+                        ) { mode in
+                            chip(label: mode.displayName, isSelected: draft.loadMode == mode) {
+                                Haptics.selection()
+                                draft.loadMode = mode
+                                switch mode {
+                                case .external, .nonComparable:
+                                    draft.bodyweightFraction = 0
+                                case .bodyweightAdded, .assistanceSubtracted:
+                                    if draft.bodyweightFraction == 0 {
+                                        draft.bodyweightFraction = 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var bodyweightFractionField: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            valueColumn(label: "Bodyweight carried") {
+                BareScrubber(
+                    value: $draft.bodyweightFraction,
+                    range: 0...1,
+                    step: 0.05,
+                    pointsPerStep: 14,
+                    fontSize: 40,
+                    numberColor: Ink.primary,
+                    formatter: { value in
+                        "\(Int((value * 100).rounded()))%"
+                    },
+                    accessibilityLabel: "Bodyweight carried"
+                )
+            }
+            if draft.bodyweightFraction == 0 {
+                Text("Bodyweight load modes require a carried fraction above zero.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Tint.danger)
+            }
+        }
+    }
+
     private var defaultsRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Defaults")
@@ -469,7 +705,7 @@ struct CustomExerciseEditorSheet: View {
             HStack(alignment: .top, spacing: Space.xxl) {
                 switch draft.trackingMode {
                 case .reps:
-                    valueColumn(label: "Weight") {
+                    valueColumn(label: draft.loadMode.inputLabel) {
                         BareScrubber(
                             value: defaultWeightBinding,
                             range: unit.strengthRange,
@@ -480,12 +716,12 @@ struct CustomExerciseEditorSheet: View {
                             unitFontSize: 13,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: "Weight",
+                            accessibilityLabel: draft.loadMode.inputLabel,
                             tickTone: .deep
                         )
                     }
                 case .duration:
-                    valueColumn(label: "Hold") {
+                    valueColumn(label: draft.modality.durationLabel) {
                         BareScrubber(
                             value: defaultDurationBinding,
                             range: DurationFormatter.scrubRange,
@@ -494,10 +730,10 @@ struct CustomExerciseEditorSheet: View {
                             fontSize: 40,
                             numberColor: Ink.primary,
                             formatter: { DurationFormatter.string($0) },
-                            accessibilityLabel: "Hold"
+                            accessibilityLabel: draft.modality.durationLabel
                         )
                     }
-                    valueColumn(label: "Load") {
+                    valueColumn(label: draft.loadMode.inputLabel) {
                         BareScrubber(
                             value: defaultWeightBinding,
                             range: unit.strengthRange,
@@ -508,7 +744,7 @@ struct CustomExerciseEditorSheet: View {
                             unitFontSize: 13,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: "Load",
+                            accessibilityLabel: draft.loadMode.inputLabel,
                             tickTone: .deep
                         )
                     }
@@ -566,6 +802,9 @@ struct CustomExerciseEditorSheet: View {
                 group: draft.group,
                 defaultWeight: draft.defaultWeight,
                 trackingMode: draft.trackingMode,
+                modality: draft.modality,
+                loadMode: draft.loadMode,
+                bodyweightFraction: draft.bodyweightFraction,
                 defaultDuration: draft.defaultDuration,
                 equipment: draft.equipment,
                 mechanic: draft.mechanic,
@@ -574,6 +813,7 @@ struct CustomExerciseEditorSheet: View {
                 plane: draft.plane,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
+                movementDefinition: draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines),
                 muscleInvolvement: draft.muscleInvolvement,
                 isUserCreated: true
             )
@@ -581,6 +821,26 @@ struct CustomExerciseEditorSheet: View {
             savedItem = item
 
         case .edit(let item):
+            if isBundledEdit {
+                let weightChanged = draft.defaultWeight != item.defaultWeight
+                item.defaultWeight = draft.defaultWeight
+                if weightChanged {
+                    item.defaultWeightKg = unit == .kg
+                        ? WeightFormatter.toDisplay(draft.defaultWeight, unit: .kg)
+                        : nil
+                }
+                item.defaultDuration = draft.defaultDuration
+                savedItem = item
+                break
+            }
+            let editedPerformanceSignature = ExercisePerformanceSignature(
+                modality: draft.modality,
+                trackingMode: draft.trackingMode,
+                loadMode: draft.loadMode,
+                bodyweightFraction: draft.bodyweightFraction
+            )
+            let performanceSemanticsChanged =
+                item.performanceSignature != editedPerformanceSignature
             item.name = trimmedName
             item.group = draft.group
             let weightChanged = draft.defaultWeight != item.defaultWeight
@@ -591,6 +851,9 @@ struct CustomExerciseEditorSheet: View {
                     : nil
             }
             item.trackingMode = draft.trackingMode
+            item.modality = draft.modality
+            item.loadMode = draft.loadMode
+            item.bodyweightFraction = draft.bodyweightFraction
             item.defaultDuration = draft.defaultDuration
             item.equipment = draft.equipment
             // Setting mechanic to isolation auto-clears pattern via
@@ -602,7 +865,15 @@ struct CustomExerciseEditorSheet: View {
             item.plane = draft.plane
             item.laterality = draft.laterality
             item.aliases = parsedAliases
+            item.movementDefinition = draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
             item.muscleInvolvementSnapshot = draft.muscleInvolvementSnapshot
+            if performanceSemanticsChanged {
+                // A measured max belongs to the old load equation. Do
+                // not silently reinterpret it after a custom exercise
+                // changes tracking, modality, assistance, or carried
+                // bodyweight semantics.
+                item.oneRepMax = nil
+            }
             savedItem = item
         }
 
@@ -629,9 +900,13 @@ struct CustomExerciseEditorSheet: View {
 /// dismissed before Save.
 struct CatalogDraft {
     var name: String
+    var movementDefinition: String
     var group: MuscleGroup
     var defaultWeight: Double
     var trackingMode: TrackingMode
+    var modality: ExerciseModality
+    var loadMode: ExerciseLoadMode
+    var bodyweightFraction: Double
     var defaultDuration: TimeInterval
     var equipment: Equipment
     var mechanic: Mechanic
@@ -649,9 +924,13 @@ struct CatalogDraft {
 
     static let empty = CatalogDraft(
         name: "",
+        movementDefinition: "",
         group: .chest,
         defaultWeight: 0,
         trackingMode: .reps,
+        modality: .dynamicStrength,
+        loadMode: .external,
+        bodyweightFraction: 0,
         defaultDuration: 45,
         equipment: .barbell,
         mechanic: .compound,
@@ -659,15 +938,19 @@ struct CatalogDraft {
         direction: nil,
         plane: .sagittal,
         laterality: .bilateral,
-        muscleInvolvementSnapshot: Muscle.defaultInvolvement(for: .chest).snapshot,
+        muscleInvolvementSnapshot: [:],
         aliasesInput: ""
     )
 
     init(
         name: String,
+        movementDefinition: String,
         group: MuscleGroup,
         defaultWeight: Double,
         trackingMode: TrackingMode,
+        modality: ExerciseModality,
+        loadMode: ExerciseLoadMode,
+        bodyweightFraction: Double,
         defaultDuration: TimeInterval,
         equipment: Equipment,
         mechanic: Mechanic,
@@ -679,9 +962,13 @@ struct CatalogDraft {
         aliasesInput: String
     ) {
         self.name = name
+        self.movementDefinition = movementDefinition
         self.group = group
         self.defaultWeight = defaultWeight
         self.trackingMode = trackingMode
+        self.modality = modality
+        self.loadMode = loadMode
+        self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.defaultDuration = defaultDuration
         self.equipment = equipment
         self.mechanic = mechanic
@@ -695,9 +982,13 @@ struct CatalogDraft {
 
     init(from item: ExerciseCatalogItem) {
         self.name = item.name
+        self.movementDefinition = item.movementDefinition
         self.group = item.group
         self.defaultWeight = item.defaultWeight
         self.trackingMode = item.trackingMode
+        self.modality = item.modality
+        self.loadMode = item.loadMode
+        self.bodyweightFraction = item.bodyweightFraction
         self.defaultDuration = item.defaultDuration > 0 ? item.defaultDuration : 45
         self.equipment = item.equipment
         self.mechanic = item.mechanic
@@ -705,7 +996,7 @@ struct CatalogDraft {
         self.direction = item.direction
         self.plane = item.plane
         self.laterality = item.laterality
-        self.muscleInvolvementSnapshot = item.muscleInvolvement.snapshot
+        self.muscleInvolvementSnapshot = item.muscleInvolvementSnapshot
         // Rebuild the comma-separated string so the editor's text
         // field reflects the stored list. Two-space readability for
         // long lists, but the parser tolerates either.
@@ -722,16 +1013,17 @@ struct CatalogDraft {
 
     var muscleSummary: String {
         let involvement = muscleInvolvement
-        let prime = involvement.primary.map(\.displayName).joined(separator: " · ")
-        let supportingCount = involvement.secondary.count
-        guard !prime.isEmpty else { return "No Prime muscle selected" }
-        guard supportingCount > 0 else { return "\(prime) · Prime" }
+        let primary = involvement.primary.map(\.displayName).joined(separator: " · ")
+        let supportingCount = involvement.secondary.count + involvement.stabilizers.count
+        guard !primary.isEmpty else {
+            let visual = (involvement.secondary + involvement.stabilizers)
+                .map(\.displayName)
+                .joined(separator: " · ")
+            return visual.isEmpty ? "No muscles selected" : "\(visual) · Visual roles only"
+        }
+        guard supportingCount > 0 else { return "\(primary) · Primary" }
         let suffix = supportingCount == 1 ? "1 supporting muscle" : "\(supportingCount) supporting muscles"
-        return "\(prime) · \(suffix)"
-    }
-
-    mutating func applyMusclePreset(for group: MuscleGroup) {
-        muscleInvolvementSnapshot = Muscle.defaultInvolvement(for: group).snapshot
+        return "\(primary) · \(suffix)"
     }
 
     /// Split the comma-separated `aliasesInput` into a clean array.

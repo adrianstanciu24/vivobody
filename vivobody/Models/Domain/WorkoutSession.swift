@@ -13,6 +13,39 @@
 import SwiftUI
 import SwiftData
 
+/// Whether a comparable-tonnage subtotal represents all eligible work.
+/// Non-comparable and timed exercises are outside this accounting pool,
+/// so they do not make an otherwise complete summary partial.
+nonisolated enum ComparableTonnageAvailability: Hashable {
+    case complete
+    case partial
+    case unavailable
+}
+
+/// Honest comparable tonnage for a workout or collection of workouts.
+/// `knownSubtotal` remains useful for partial data, while `availability`
+/// prevents callers from presenting that subtotal as the complete total.
+nonisolated struct ComparableTonnageSummary: Hashable {
+    let knownSubtotal: Double
+    let availability: ComparableTonnageAvailability
+
+    static let zero = ComparableTonnageSummary(
+        knownSubtotal: 0,
+        availability: .complete
+    )
+
+    func merging(_ other: ComparableTonnageSummary) -> ComparableTonnageSummary {
+        let subtotal = knownSubtotal + other.knownSubtotal
+        let hasMissing = availability != .complete || other.availability != .complete
+        return ComparableTonnageSummary(
+            knownSubtotal: subtotal,
+            availability: hasMissing
+                ? (subtotal > 0 ? .partial : .unavailable)
+                : .complete
+        )
+    }
+}
+
 @Model
 final class WorkoutSession: Identifiable {
     #Index<WorkoutSession>([\.completedAt])
@@ -34,6 +67,13 @@ final class WorkoutSession: Identifiable {
     /// Duration (seconds) of each rest interval between sets. Stored
     /// per-session so the user could change defaults over time.
     var restDuration: TimeInterval = 90
+
+    /// User body weight in canonical pounds when this workout began.
+    /// Bodyweight exercise resistance must remain historically stable
+    /// even when the user later gains or loses weight. Zero means the
+    /// user has not logged a measurement yet; it is an unknown sentinel,
+    /// not an assumed body mass.
+    var bodyweightAtStart: Double = ExerciseLoad.unknownBodyweight
 
     /// Exercises that make up this session. Cascade-deletes when the
     /// session is removed. Order is determined by `Exercise.sortOrder`
@@ -89,11 +129,15 @@ final class WorkoutSession: Identifiable {
         id: UUID = UUID(),
         exercises: [Exercise] = [],
         restDuration: TimeInterval = 90,
+        bodyweightAtStart: Double = ExerciseLoad.unknownBodyweight,
         startedAt: Date = Date()
     ) {
         self.id = id
         self.exercises = exercises
         self.restDuration = restDuration
+        self.bodyweightAtStart = bodyweightAtStart.isFinite && bodyweightAtStart > 0
+            ? bodyweightAtStart
+            : ExerciseLoad.unknownBodyweight
         self.startedAt = startedAt
         self.completedAt = nil
     }
@@ -224,17 +268,21 @@ final class WorkoutSession: Identifiable {
         exercises.flatMap(\.sets)
     }
 
-    /// Sum of `weight × reps` across all completed sets of `.reps`
-    /// exercises. Timed (`.duration`) holds carry no weight×reps
-    /// volume — their effort is tracked as `totalHoldTime` instead —
-    /// so they're excluded here to keep the headline metric honest.
-    var totalVolume: Double {
-        exercises.reduce(0) { acc, ex in
-            guard ex.trackingMode == .reps else { return acc }
-            return acc + ex.sets
-                .filter(\.isCompleted)
-                .reduce(0) { $0 + $1.weight * Double($1.reps) }
+    /// Comparable tonnage and its completeness across completed
+    /// dynamic-strength sets and external-load power sets. Each reps
+    /// set uses effective load, so added body weight and assistance have
+    /// the correct polarity. Conditioning, mobility, timed, and
+    /// non-comparable work are excluded rather than treated as missing.
+    var comparableTonnageSummary: ComparableTonnageSummary {
+        exercises.reduce(.zero) { summary, exercise in
+            summary.merging(exercise.comparableTonnageSummary)
         }
+    }
+
+    /// Known comparable-tonnage subtotal. Callers that present this as
+    /// a total must also respect `comparableTonnageSummary.availability`.
+    var totalVolume: Double {
+        comparableTonnageSummary.knownSubtotal
     }
 
     var totalReps: Int {
@@ -246,11 +294,10 @@ final class WorkoutSession: Identifiable {
         }
     }
 
-    /// Total time held across completed sets of every `.duration`
-    /// exercise — the timed counterpart to `totalVolume`. Surfaced
-    /// alongside volume on the summary only when any holds were
-    /// logged, so reps-only sessions read exactly as before.
-    var totalHoldTime: TimeInterval {
+    /// Total elapsed work across completed sets of every `.duration`
+    /// exercise — isometric holds, conditioning intervals, and timed
+    /// mobility alike.
+    var totalTimedWork: TimeInterval {
         exercises.reduce(0) { acc, ex in
             guard ex.trackingMode == .duration else { return acc }
             return acc + ex.sets
@@ -268,24 +315,12 @@ final class WorkoutSession: Identifiable {
     }
 
     /// Returns the single representative "top set" for an exercise.
-    /// For `.reps` exercises that's the heaviest completed set (reps
-    /// as tiebreaker); for `.duration` exercises it's the longest
-    /// completed hold (weight as tiebreaker). Used by the summary
-    /// card and history detail.
+    /// Record-eligible work uses the same shared comparison as live and
+    /// history PRs: dynamic/external-power load then reps, comparable
+    /// isometric load then duration, duration-only isometrics by hold.
+    /// Other work keeps an ordinary display-oriented representative set.
     func topSet(for exercise: Exercise) -> WorkoutSet? {
-        let completed = exercise.sets.filter(\.isCompleted)
-        switch exercise.trackingMode {
-        case .reps:
-            return completed.max(by: { (a, b) in
-                if a.weight == b.weight { return a.reps < b.reps }
-                return a.weight < b.weight
-            })
-        case .duration:
-            return completed.max(by: { (a, b) in
-                if a.duration == b.duration { return a.weight < b.weight }
-                return a.duration < b.duration
-            })
-        }
+        exercise.representativeTopSet
     }
 
     /// Live wall-clock duration. When the workout is still in
@@ -320,5 +355,186 @@ final class WorkoutSession: Identifiable {
         }
         s.completedAt = Date()
         return s
+    }
+}
+
+// MARK: - Exercise tonnage
+
+extension Exercise {
+    /// Body weight captured by the owning session. Detached exercises
+    /// and sessions created before any measurement use zero as an honest
+    /// unknown sentinel. Bodyweight-dependent load profiles turn that
+    /// sentinel into nil rather than fabricating resistance.
+    var loadBodyweight: Double {
+        let value = session?.bodyweightAtStart ?? ExerciseLoad.unknownBodyweight
+        return value.isFinite && value > 0 ? value : ExerciseLoad.unknownBodyweight
+    }
+
+    /// Comparable resistance for a logged value using this exercise's
+    /// snapshotted load semantics and its session's historical body weight.
+    func effectiveLoad(loggedWeight: Double) -> Double? {
+        loadProfile.effectiveLoad(
+            loggedWeight: loggedWeight,
+            bodyweight: loadBodyweight
+        )
+    }
+
+    /// Display/history representative completed set. Absolute record
+    /// performance wins when available. If bodyweight is unknown, the
+    /// within-snapshot marker preserves added-load/assistance polarity
+    /// solely for choosing among this exercise's own sets.
+    var representativeTopSet: WorkoutSet? {
+        sets.filter(\.isAnalyticsEligible).max(by: isOrderedBeforeForRepresentativeSet)
+    }
+
+    private func isOrderedBeforeForRepresentativeSet(
+        _ lhs: WorkoutSet,
+        _ rhs: WorkoutSet
+    ) -> Bool {
+        let leftPerformance = strengthPerformance(for: lhs)
+        let rightPerformance = strengthPerformance(for: rhs)
+        switch (leftPerformance, rightPerformance) {
+        case let (.some(left), .some(right)):
+            return right.beats(left)
+        case (nil, .some):
+            return true
+        case (.some, nil):
+            return false
+        case (nil, nil):
+            break
+        }
+
+        if performanceSemanticKind.comparesLoad,
+           let leftMarker = loadProfile.withinSnapshotLoadMarker(
+                loggedWeight: lhs.weight
+           ),
+           let rightMarker = loadProfile.withinSnapshotLoadMarker(
+                loggedWeight: rhs.weight
+           ),
+           leftMarker != rightMarker {
+            return leftMarker < rightMarker
+        }
+
+        switch trackingMode {
+        case .reps:
+            if lhs.reps == rhs.reps { return lhs.weight < rhs.weight }
+            return lhs.reps < rhs.reps
+        case .duration:
+            if lhs.duration == rhs.duration { return lhs.weight < rhs.weight }
+            return lhs.duration < rhs.duration
+        }
+    }
+
+    /// Record-comparison value for one completed set using this
+    /// exercise's snapshotted modality, load semantics, and historical
+    /// body weight.
+    func strengthPerformance(for set: WorkoutSet) -> StrengthPerformance? {
+        guard set.isAnalyticsEligible else { return nil }
+
+        switch performanceSemanticKind {
+        case .dynamicLoadAndReps, .powerLoadAndReps:
+            return StrengthPerformance.makeDynamic(
+                effectiveLoad: effectiveLoad(loggedWeight: set.weight),
+                reps: set.reps
+            )
+        case .isometricLoadAndDuration:
+            return StrengthPerformance.makeIsometric(
+                effectiveLoad: effectiveLoad(loggedWeight: set.weight),
+                comparesLoad: true,
+                duration: set.duration
+            )
+        case .isometricDuration:
+            return StrengthPerformance.makeIsometric(duration: set.duration)
+        case .unrankedReps, .unrankedDuration:
+            return nil
+        }
+    }
+
+    /// Best completed record performance for this exercise under its
+    /// snapshotted semantic kind.
+    var bestStrengthPerformance: StrengthPerformance? {
+        sets.compactMap(strengthPerformance(for:)).reduce(nil as StrengthPerformance?) { best, candidate in
+            guard let best else { return candidate }
+            return candidate.beats(best) ? candidate : best
+        }
+    }
+
+    /// Completed working sets that can honestly enter strength-set
+    /// analytics. Dynamic work requires logged reps; isometric work
+    /// requires logged hold time. Conditioning and mobility never
+    /// masquerade as strength volume even when they happen to use a
+    /// reps or duration input.
+    var completedHardSetCount: Int {
+        guard modality.supportsHardSetAnalytics else { return 0 }
+
+        switch (modality, trackingMode) {
+        case (.dynamicStrength, .reps):
+            return sets.filter { $0.isAnalyticsEligible && $0.reps > 0 }.count
+        case (.isometricStrength, .duration):
+            return sets.filter { $0.isAnalyticsEligible && $0.duration > 0 }.count
+        default:
+            return 0
+        }
+    }
+
+    /// Completed tonnage when this exercise has honest load-comparison
+    /// semantics, or nil when it must not enter a tonnage pool.
+    var completedComparableTonnage: Double? {
+        guard modality.supportsComparableTonnage(
+            for: trackingMode,
+            loadMode: loadMode
+        ) else { return nil }
+
+        let completed = sets.filter { $0.isAnalyticsEligible && $0.reps > 0 }
+        guard !completed.isEmpty else { return 0 }
+
+        var total = 0.0
+        for set in completed {
+            guard let effectiveLoad = effectiveLoad(loggedWeight: set.weight) else {
+                // A bodyweight-dependent exercise with no captured body
+                // weight has unknown tonnage, not zero tonnage.
+                return nil
+            }
+            total += effectiveLoad * Double(set.reps)
+        }
+        return total
+    }
+
+    /// Completeness-aware tonnage for this exercise. Unsupported
+    /// modalities and load modes are excluded (`.complete` zero), while
+    /// eligible completed work whose effective load is unknown is
+    /// explicitly unavailable.
+    var comparableTonnageSummary: ComparableTonnageSummary {
+        guard modality.supportsComparableTonnage(
+            for: trackingMode,
+            loadMode: loadMode
+        ) else {
+            return .zero
+        }
+
+        let hasCompletedReps = sets.contains { set in
+            set.isAnalyticsEligible && set.reps > 0
+        }
+        guard hasCompletedReps else { return .zero }
+
+        guard let tonnage = completedComparableTonnage else {
+            return ComparableTonnageSummary(
+                knownSubtotal: 0,
+                availability: .unavailable
+            )
+        }
+        return ComparableTonnageSummary(
+            knownSubtotal: tonnage,
+            availability: .complete
+        )
+    }
+}
+
+extension Array where Element == WorkoutSession {
+    /// Completeness-aware comparable tonnage across the collection.
+    var comparableTonnageSummary: ComparableTonnageSummary {
+        reduce(.zero) { summary, session in
+            summary.merging(session.comparableTonnageSummary)
+        }
     }
 }

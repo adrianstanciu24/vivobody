@@ -2,8 +2,9 @@
 //  PersonalRecordsScreen.swift
 //  vivobody
 //
-//  The full PR wall, pushed from the Me tab. Every tracked lift's
-//  standing record — heaviest set (or longest hold for timed work) —
+//  The full PR wall, pushed from the Me tab. Every record-eligible
+//  exercise's standing performance — load then reps, load then duration,
+//  or duration alone according to its snapshotted semantics —
 //  ordered by how recently it was set, so fresh achievements lead.
 //  Records set in the last 30 days wear the accent.
 //
@@ -71,7 +72,8 @@ struct PRRow: View {
             title: record.name,
             subtitle: subtitle
         ) {
-            // The weight is the record; the reps/hold only qualify it.
+            // Record ordering uses effective load; presentation keeps
+            // the raw number's meaning visible (BW + load / assistance).
             // Splitting the hierarchy (huge weight, small dim
             // qualifier) keeps the trailing value on ONE line — the
             // old single statValue string wrapped mid-value next to
@@ -106,10 +108,21 @@ struct PRRow: View {
         guard let point = record.recordPoint else { return "—" }
         switch record.trackingMode {
         case .reps:
-            return WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)
+            return point.loadMode.loggedLoadLabel(
+                point.topWeight,
+                unit: unit,
+                includeUnit: false
+            ) ?? "—"
         case .duration:
-            guard point.topWeight > 0 else { return DurationFormatter.string(point.topDuration) }
-            return WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)
+            if point.performanceSemanticKind.comparesLoad,
+               let load = point.loadMode.loggedLoadLabel(
+                    point.topWeight,
+                    unit: unit,
+                    includeUnit: false
+               ) {
+                return load
+            }
+            return DurationFormatter.string(point.topDuration)
         }
     }
 
@@ -121,7 +134,12 @@ struct PRRow: View {
         case .reps:
             return "× \(point.topReps)"
         case .duration:
-            guard point.topWeight > 0 else { return nil }
+            guard point.performanceSemanticKind.comparesLoad,
+                  point.loadMode.loggedLoadLabel(
+                    point.topWeight,
+                    unit: unit,
+                    includeUnit: false
+                  ) != nil else { return nil }
             return "× \(DurationFormatter.string(point.topDuration))"
         }
     }
@@ -140,11 +158,21 @@ struct PRRow: View {
         guard let point = record.recordPoint else { return "—" }
         switch record.trackingMode {
         case .reps:
-            return "\(WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)) × \(point.topReps)"
+            let load = point.loadMode.loggedLoadLabel(
+                point.topWeight,
+                unit: unit,
+                includeUnit: true
+            )
+            return load.map { "\($0) × \(point.topReps)" } ?? "\(point.topReps) reps"
         case .duration:
             let time = DurationFormatter.string(point.topDuration)
-            guard point.topWeight > 0 else { return time }
-            return "\(WeightFormatter.string(point.topWeight, unit: unit, includeUnit: false)) × \(time)"
+            guard point.performanceSemanticKind.comparesLoad,
+                  let load = point.loadMode.loggedLoadLabel(
+                    point.topWeight,
+                    unit: unit,
+                    includeUnit: true
+                  ) else { return time }
+            return "\(load) × \(time)"
         }
     }
 }

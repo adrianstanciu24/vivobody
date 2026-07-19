@@ -58,6 +58,7 @@ struct OnboardingScreen: View {
             // Bottom half: the one real choice, then the way in.
             VStack(spacing: Space.section) {
                 unitPicker
+                    .padding(.bottom, Space.section)
                     .settleIn(1)
                 startButton
                     .settleIn(2)
@@ -103,7 +104,7 @@ struct OnboardingScreen: View {
     // MARK: - Unit picker
 
     private var unitPicker: some View {
-        VStack(spacing: Space.sm) {
+        VStack(spacing: Space.lg) {
             Text("Which units do you lift in?")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
@@ -143,7 +144,7 @@ struct OnboardingScreen: View {
                     .opacity(Opacity.emphasis)
             }
             .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+            .frame(maxWidth: .infinity, minHeight: Space.rowMin)
             .modifier(UnitChipSurface(isSelected: isSelected, shape: shape, namespace: glassNamespace))
             .contentShape(shape)
         }

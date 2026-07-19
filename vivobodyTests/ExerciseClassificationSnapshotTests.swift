@@ -57,6 +57,42 @@ struct ExerciseClassificationSnapshotTests {
         #expect(exercise.classification?.direction == nil)
     }
 
+    @Test func draftPreservesIdentityModalityAndLoadSemantics() {
+        let item = ExerciseCatalogItem(
+            catalogID: "plank-fixture",
+            name: "Plank Fixture",
+            group: .core,
+            defaultWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 0.65,
+            defaultDuration: 45,
+            equipment: .bodyweight,
+            mechanic: .compound,
+            pattern: .core,
+            plane: .sagittal,
+            laterality: .bilateral
+        )
+
+        let draft = ExerciseDraft(from: item)
+        let templateExercise = draft.makeTemplateExercise(sortOrder: 0)
+        let exercise = Exercise(from: templateExercise)
+
+        #expect(draft.catalogID == item.catalogID)
+        #expect(draft.modality == .isometricStrength)
+        #expect(draft.loadMode == .bodyweightAdded)
+        #expect(draft.bodyweightFraction == 0.65)
+        #expect(templateExercise.catalogID == item.catalogID)
+        #expect(templateExercise.modality == .isometricStrength)
+        #expect(templateExercise.loadMode == .bodyweightAdded)
+        #expect(templateExercise.bodyweightFraction == 0.65)
+        #expect(exercise.catalogID == item.catalogID)
+        #expect(exercise.modality == .isometricStrength)
+        #expect(exercise.loadMode == .bodyweightAdded)
+        #expect(exercise.bodyweightFraction == 0.65)
+    }
+
     @Test func snapshotSurvivesCatalogAndExerciseRenames() {
         let item = customItem()
         let expected = item.classification
@@ -106,6 +142,25 @@ struct ExerciseClassificationSnapshotTests {
         #expect(copy.directionRaw == source.directionRaw)
         #expect(copy.planeRaw == source.planeRaw)
         #expect(copy.lateralityRaw == source.lateralityRaw)
+    }
+
+    @Test func warmUpIntentRoundTripsThroughDraftTemplateAndWorkout() {
+        var draft = ExerciseDraft(
+            name: "Bench Press",
+            group: .chest,
+            isPerSet: true,
+            sets: [
+                SetDraft(weight: 45, reps: 10, kind: .warmUp),
+                SetDraft(weight: 135, reps: 8, kind: .working),
+            ]
+        )
+        draft.plannedSets = 2
+        let template = draft.makeTemplateExercise(sortOrder: 0)
+        let workout = Exercise(from: template)
+
+        #expect(template.orderedSets.map(\.kind) == [.warmUp, .working])
+        #expect(workout.orderedSets.map(\.kind) == [.warmUp, .working])
+        #expect(ExerciseDraft(from: template).sets.map(\.kind) == [.warmUp, .working])
     }
 
     @Test func bundledNamesFallbackWhileUnknownRowsStayUnknown() {

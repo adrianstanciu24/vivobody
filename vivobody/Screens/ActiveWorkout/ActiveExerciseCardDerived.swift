@@ -85,12 +85,17 @@ extension ActiveExerciseCard {
         )
     }
 
-    /// Verb for the complete button — mode + position aware. Timed
-    /// holds finish as "Finish hold"; reps finish as "Finish exercise."
-    func completeTitle(isLastSet: Bool, isHold: Bool) -> String {
-        if isLastSet {
-            return isHold ? "Finish hold" : "Finish exercise"
+    /// Verb for the complete button — modality + position aware. Only
+    /// isometric duration work is called a hold; conditioning uses
+    /// interval and other duration work uses time.
+    func completeTitle(isLastSet: Bool) -> String {
+        if session.activeSet(for: exercise)?.kind == .warmUp {
+            return "Complete warm-up"
         }
-        return isHold ? "Complete hold" : "Complete set"
+        if exercise.trackingMode == .duration {
+            let verb = isLastSet ? "Finish" : "Complete"
+            return "\(verb) \(exercise.modality.durationLabelLowercased)"
+        }
+        return isLastSet ? "Finish exercise" : "Complete set"
     }
 }

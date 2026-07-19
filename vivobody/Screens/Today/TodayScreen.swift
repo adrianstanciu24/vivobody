@@ -20,6 +20,7 @@ import SwiftData
 
 struct TodayScreen: View {
     @Bindable var appState: AppState
+    @Environment(\.colorScheme) var colorScheme
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -52,6 +53,7 @@ struct TodayScreen: View {
     /// Whether the start-workout sheet is presented (raised by the
     /// pinned "+ Start" pill).
     @State var showStartSheet = false
+    @State var showMuscleMapDetails = false
 
     /// The start action chosen in the sheet, deferred until the sheet
     /// fully dismisses. Running it in the sheet's onDismiss avoids
@@ -84,7 +86,7 @@ struct TodayScreen: View {
                         // just beneath the feet (over the plain background, not
                         // over the model — the muscle detail made an overlaid
                         // caption unreadable).
-                        VStack(spacing: Space.sm) {
+                        VStack(spacing: Space.section) {
                             bodyModelHero(
                                 height: bodyHeroHeight(),
                                 state: modelState
@@ -159,6 +161,9 @@ struct TodayScreen: View {
                 templates: sortedTemplates,
                 onSelect: queueStart
             )
+        }
+        .sheet(isPresented: $showMuscleMapDetails) {
+            MuscleMapDetailsSheet(report: appState.analytics.muscleMap)
         }
     }
 

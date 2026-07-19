@@ -77,24 +77,23 @@ extension HistoryScreen {
     }
 
     /// IDs of sessions in which at least one exercise hit a new
-    /// all-time record at the moment it was logged. Reps exercises
-    /// track top weight; duration exercises track longest hold. Walks
-    /// the archive in chronological order, keyed by stable exercise
-    /// identity.
+    /// all-time strength record at the moment it was logged. Dynamic
+    /// strength compares effective resistance then reps at equal load,
+    /// so machine assistance has the correct inverse polarity; isometric strength compares
+    /// hold duration. Conditioning, mobility, and non-comparable load
+    /// records never produce a strength PR.
     var sessionsWithPR: Set<UUID> {
-        var bestByExercise: [String: Double] = [:]
+        var bestByExercise: [String: StrengthPerformance] = [:]
         var prIDs: Set<UUID> = []
 
         // sessions are sorted newest-first; iterate oldest-first.
         let chronological = sessions.reversed()
         for session in chronological {
             for exercise in session.orderedExercises {
-                let metric = prMetric(for: exercise)
-                guard metric > 0 else { continue }
+                guard let performance = exercise.bestStrengthPerformance else { continue }
                 let key = exercise.historyKey
-                let prev = bestByExercise[key, default: 0]
-                if metric > prev {
-                    bestByExercise[key] = metric
+                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
+                    bestByExercise[key] = performance
                     prIDs.insert(session.id)
                 }
             }
@@ -131,8 +130,10 @@ extension HistoryScreen {
         for session in sessions {
             let date = session.completedAt ?? session.startedAt
             guard date >= weekRange.start && date < weekRange.end else { continue }
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted && set.rirLogged {
+            for exercise in session.exercises
+            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                for set in exercise.sets
+                where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
                     rirSum += set.repsInReserve
                     rirCount += 1
                 }
@@ -142,13 +143,4 @@ extension HistoryScreen {
         return Double(rirSum) / Double(rirCount)
     }
 
-    func prMetric(for exercise: Exercise) -> Double {
-        let completed = exercise.sets.filter(\.isCompleted)
-        switch exercise.trackingMode {
-        case .reps:
-            return completed.map(\.weight).max() ?? 0
-        case .duration:
-            return completed.map(\.duration).max() ?? 0
-        }
-    }
 }

@@ -40,9 +40,9 @@ struct WeeklyHero: View {
                     Stat(value: rirLabel, label: "Avg RIR", accent: isRIROnTarget),
                     Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
                     Stat(
-                        value: WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit),
-                        unit: unit.symbol,
-                        label: "Volume"
+                        value: weeklyVolumeValue,
+                        unit: weeklyVolumeUnit,
+                        label: weeklyVolumeLabel
                     ),
                 ],
                 valueFont: Typography.statValue
@@ -71,7 +71,9 @@ struct WeeklyHero: View {
     /// Hidden when there's no prior week to compare against.
     @ViewBuilder
     var trendDelta: some View {
-        if comparison.lastWeek.volume > 0 {
+        if comparison.thisWeek.volumeAvailability == .complete,
+           comparison.lastWeek.volumeAvailability == .complete,
+           comparison.lastWeek.volume > 0 {
             let pct = Int((comparison.volumeDelta / comparison.lastWeek.volume * 100).rounded())
             HStack(spacing: 3) {
                 Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
@@ -91,6 +93,24 @@ struct WeeklyHero: View {
     var isRIROnTarget: Bool {
         guard let rir = averageRIR else { return false }
         return rir >= 1.0 && rir <= 3.0
+    }
+
+    private var weeklyVolumeValue: String {
+        let value = WeightFormatter.volumeValue(comparison.thisWeek.volume, unit: unit)
+        return comparison.thisWeek.volumeAvailability == .partial ? "\(value)+" :
+            (comparison.thisWeek.volumeAvailability == .unavailable ? "—" : value)
+    }
+
+    private var weeklyVolumeUnit: String? {
+        comparison.thisWeek.volumeAvailability == .unavailable ? nil : unit.symbol
+    }
+
+    private var weeklyVolumeLabel: String {
+        switch comparison.thisWeek.volumeAvailability {
+        case .complete: "Volume"
+        case .partial: "Known volume"
+        case .unavailable: "Volume unavailable"
+        }
     }
 }
 
@@ -287,14 +307,18 @@ struct SessionRow: View {
             // fingerprint) leads. The accent lives only in the rare PR
             // badge, never on every line.
             HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
+                Text(volumeValue)
                     .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
-                Text(unit.symbol)
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
+                if session.comparableTonnageSummary.availability != .unavailable {
+                    Text(unit.symbol)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.tertiary)
+                }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(volumeAccessibilityLabel)
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
@@ -326,6 +350,30 @@ struct SessionRow: View {
     /// rows lead with their date.
     var titleLine: String {
         prominent ? workoutTitle : dateLine
+    }
+
+    private var volumeValue: String {
+        let summary = session.comparableTonnageSummary
+        switch summary.availability {
+        case .complete:
+            return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
+        case .partial:
+            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+"
+        case .unavailable:
+            return "—"
+        }
+    }
+
+    private var volumeAccessibilityLabel: String {
+        let summary = session.comparableTonnageSummary
+        switch summary.availability {
+        case .complete:
+            return "\(volumeValue) \(unit.symbol) volume"
+        case .partial:
+            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)) \(unit.symbol) known volume; total unavailable"
+        case .unavailable:
+            return "Volume unavailable"
+        }
     }
 
     /// Secondary line: the session's muscle fingerprint followed by

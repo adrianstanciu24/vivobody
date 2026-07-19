@@ -61,6 +61,7 @@ struct MonthlyRecap: Hashable {
     let monthLabel: String
     let workouts: Int
     let volume: Double
+    let volumeAvailability: ComparableTonnageAvailability
     let sets: Int
     /// New personal records set during this month.
     let prs: Int
@@ -72,11 +73,11 @@ struct MonthlyRecap: Hashable {
 
 extension ExerciseProgress {
     /// The point at which this exercise's *standing* record was set.
-    /// Points are chronological ascending and `isWeightPR` flags each
+    /// Points are chronological ascending and `isStrengthPR` flags each
     /// running-max moment, so the last flagged point is when today's
     /// best was achieved.
     var recordPoint: ExerciseProgressPoint? {
-        points.last(where: { $0.isWeightPR })
+        points.last(where: { $0.isStrengthPR })
     }
 
     /// Date the standing record was set.
@@ -172,7 +173,7 @@ extension Array where Element == WorkoutSession {
     /// record — freshest achievements first. Reuses `progressByExercise`
     /// (≥2 data points), the same source as the lifetime PR count.
     var personalRecords: [ExerciseProgress] {
-        progressByExercise.sorted {
+        progressByExercise.filter { $0.recordDate != nil }.sorted {
             ($0.recordDate ?? .distantPast) > ($1.recordDate ?? .distantPast)
         }
     }
@@ -182,13 +183,13 @@ extension Array where Element == WorkoutSession {
     /// this stays a single pass per category.
     func milestones(unit: WeightUnit, prCount: Int) -> [Milestone] {
         let workouts = count
-        let volume = reduce(0) { $0 + $1.totalVolume }
+        let tonnage = comparableTonnageSummary
         let longestStreak = workoutStreak.longest
 
         return [
             countMilestone(icon: "flame.fill", legend: "Workouts",
                            value: workouts, thresholds: [10, 50, 100, 250, 500, 1000]),
-            volumeMilestone(volume: volume, unit: unit),
+            volumeMilestone(tonnage: tonnage, unit: unit),
             countMilestone(icon: "trophy.fill", legend: "PRs",
                            value: prCount, thresholds: [5, 10, 25, 50, 100]),
             countMilestone(icon: "calendar", legend: "Week streak",
@@ -213,17 +214,19 @@ extension Array where Element == WorkoutSession {
         if let interval {
             prs = progressByExercise.reduce(0) { acc, prog in
                 acc + prog.points.filter {
-                    $0.isWeightPR && $0.date >= interval.start && $0.date < interval.end
+                    $0.isStrengthPR && $0.date >= interval.start && $0.date < interval.end
                 }.count
             }
         } else {
             prs = 0
         }
 
+        let tonnage = monthSessions.comparableTonnageSummary
         return MonthlyRecap(
             monthLabel: label,
             workouts: monthSessions.count,
-            volume: monthSessions.reduce(0) { $0 + $1.totalVolume },
+            volume: tonnage.knownSubtotal,
+            volumeAvailability: tonnage.availability,
             sets: monthSessions.reduce(0) { $0 + $1.totalSets },
             prs: prs
         )
@@ -252,7 +255,10 @@ extension Array where Element == WorkoutSession {
         )
     }
 
-    private func volumeMilestone(volume: Double, unit: WeightUnit) -> Milestone {
+    private func volumeMilestone(
+        tonnage: ComparableTonnageSummary,
+        unit: WeightUnit
+    ) -> Milestone {
         let thresholds: [Double] = [100_000, 500_000, 1_000_000, 5_000_000]
         // Compact display unit-aware: "100k", "1M", "5M".
         func compact(_ lb: Double) -> String {
@@ -263,11 +269,23 @@ extension Array where Element == WorkoutSession {
             }
             return WeightFormatter.volumeValue(lb, unit: unit)
         }
+        guard tonnage.availability != .unavailable else {
+            return Milestone(
+                icon: "scalemass.fill",
+                legend: "Volume unavailable",
+                valueLabel: "—",
+                targetLabel: nil,
+                targetProgress: 0,
+                achieved: false
+            )
+        }
+        let volume = tonnage.knownSubtotal
+        let valueSuffix = tonnage.availability == .partial ? "+" : ""
         if let next = thresholds.first(where: { volume < $0 }) {
             return Milestone(
                 icon: "scalemass.fill",
-                legend: "Volume",
-                valueLabel: compact(volume),
+                legend: tonnage.availability == .partial ? "Known volume" : "Volume",
+                valueLabel: compact(volume) + valueSuffix,
                 targetLabel: "\(compact(next)) \(unit.symbol)",
                 targetProgress: Swift.min(1, Swift.max(0, volume / next)),
                 achieved: false
@@ -275,8 +293,8 @@ extension Array where Element == WorkoutSession {
         }
         return Milestone(
             icon: "scalemass.fill",
-            legend: "Volume",
-            valueLabel: compact(volume),
+            legend: tonnage.availability == .partial ? "Known volume" : "Volume",
+            valueLabel: compact(volume) + valueSuffix,
             targetLabel: nil,
             targetProgress: 1,
             achieved: true

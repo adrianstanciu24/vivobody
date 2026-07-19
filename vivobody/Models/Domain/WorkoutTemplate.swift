@@ -113,6 +113,11 @@ final class TemplateExercise: Identifiable {
     var id: UUID = UUID()
     var name: String = ""
     var catalogItemID: UUID? = nil
+
+    /// Stable bundled-catalog identity copied with the planned lift.
+    /// Nil for user-created exercises.
+    var catalogID: String? = nil
+
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
@@ -137,6 +142,12 @@ final class TemplateExercise: Identifiable {
     /// as a raw value; defaulted so existing templates read as reps
     /// with no migration. Copied to the spawned Exercise at start.
     var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Analytics semantics copied from the selected catalog item and
+    /// passed unchanged into every workout spawned from this template.
+    var modalityRaw: String = ExerciseModality.dynamicStrength.rawValue
+    var loadModeRaw: String = ExerciseLoadMode.external.rawValue
+    var bodyweightFraction: Double = 0
 
     /// Planned hold length (seconds) for `.duration` exercises.
     /// Mirrors `plannedReps` for the timed case. Additive defaulted
@@ -168,6 +179,20 @@ final class TemplateExercise: Identifiable {
     var trackingMode: TrackingMode {
         get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
         set { trackingModeRaw = newValue.rawValue }
+    }
+
+    var modality: ExerciseModality {
+        get { ExerciseModality(rawValue: modalityRaw) ?? .dynamicStrength }
+        set { modalityRaw = newValue.rawValue }
+    }
+
+    var loadMode: ExerciseLoadMode {
+        get { ExerciseLoadMode(rawValue: loadModeRaw) ?? .external }
+        set { loadModeRaw = newValue.rawValue }
+    }
+
+    var loadProfile: ExerciseLoadProfile {
+        ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
     }
 
     /// Snapshotted movement metadata wins; templates without a snapshot
@@ -204,6 +229,7 @@ final class TemplateExercise: Identifiable {
         id: UUID = UUID(),
         name: String,
         catalogItemID: UUID? = nil,
+        catalogID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -211,17 +237,21 @@ final class TemplateExercise: Identifiable {
         muscleInvolvement: Muscle.Involvement? = nil,
         classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength,
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.name = name
         self.catalogItemID = catalogItemID
+        self.catalogID = catalogID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
-        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.equipmentRaw = classification?.equipment.rawValue
         self.mechanicRaw = classification?.mechanic.rawValue
         self.patternRaw = classification?.pattern?.rawValue
@@ -229,6 +259,9 @@ final class TemplateExercise: Identifiable {
         self.planeRaw = classification?.plane.rawValue
         self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
+        self.modalityRaw = modality.rawValue
+        self.loadModeRaw = loadMode.rawValue
+        self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
     }
@@ -239,6 +272,7 @@ final class TemplateExercise: Identifiable {
         self.init(
             name: item.name,
             catalogItemID: item.id,
+            catalogID: item.catalogID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
@@ -246,6 +280,9 @@ final class TemplateExercise: Identifiable {
             muscleInvolvement: item.muscleInvolvement,
             classification: item.classification,
             trackingMode: item.trackingMode,
+            modality: item.modality,
+            loadMode: item.loadMode,
+            bodyweightFraction: item.bodyweightFraction,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
         )
@@ -267,6 +304,15 @@ final class TemplateSet: Identifiable {
     /// exercise. Zero for the reps case. Additive defaulted field.
     var duration: TimeInterval = 0
 
+    /// Planned set intent, copied into the workout at start. Additive
+    /// defaulted field so old rows remain working sets.
+    var kindRaw: String = WorkoutSetKind.working.rawValue
+
+    var kind: WorkoutSetKind {
+        get { WorkoutSetKind(rawValue: kindRaw) ?? .working }
+        set { kindRaw = newValue.rawValue }
+    }
+
     /// Stable position within the parent exercise's `sets`.
     var sortOrder: Int = 0
 
@@ -279,12 +325,14 @@ final class TemplateSet: Identifiable {
         weight: Double,
         reps: Int,
         duration: TimeInterval = 0,
+        kind: WorkoutSetKind = .working,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.weight = weight
         self.reps = reps
         self.duration = duration
+        self.kindRaw = kind.rawValue
         self.sortOrder = sortOrder
     }
 }
@@ -312,6 +360,7 @@ extension Exercise {
             self.init(
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
+                catalogID: templateExercise.catalogID,
                 group: templateExercise.group,
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
@@ -319,6 +368,9 @@ extension Exercise {
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
+                modality: templateExercise.modality,
+                loadMode: templateExercise.loadMode,
+                bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: orderedSets.first?.duration ?? templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
@@ -328,6 +380,7 @@ extension Exercise {
                         weight: templateSet.weight,
                         reps: templateSet.reps,
                         duration: templateSet.duration,
+                        kind: templateSet.kind,
                         sortOrder: i,
                         plannedWeight: templateSet.weight,
                         plannedReps: templateSet.reps,
@@ -339,6 +392,7 @@ extension Exercise {
             self.init(
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
+                catalogID: templateExercise.catalogID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -346,6 +400,9 @@ extension Exercise {
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
+                modality: templateExercise.modality,
+                loadMode: templateExercise.loadMode,
+                bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: templateExercise.plannedDuration,
                 sortOrder: templateExercise.sortOrder
             )
@@ -360,6 +417,7 @@ extension Exercise {
         self.init(
             name: item.name,
             catalogItemID: item.id,
+            catalogID: item.catalogID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
@@ -367,6 +425,9 @@ extension Exercise {
             muscleInvolvement: item.muscleInvolvement,
             classification: item.classification,
             trackingMode: item.trackingMode,
+            modality: item.modality,
+            loadMode: item.loadMode,
+            bodyweightFraction: item.bodyweightFraction,
             plannedDuration: item.defaultDuration,
             sortOrder: sortOrder
         )

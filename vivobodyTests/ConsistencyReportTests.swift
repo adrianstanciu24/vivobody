@@ -41,9 +41,26 @@ struct ConsistencyReportTests {
         return s
     }
 
-    private func lift(_ name: String = "Bench Press", _ group: MuscleGroup = .chest, sets: Int = 4, rir: Int = 2) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: 8, plannedWeight: 100)
-        ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = rir }
+    private func lift(
+        _ name: String = "Bench Press",
+        _ group: MuscleGroup = .chest,
+        sets: Int = 4,
+        rir: Int? = nil,
+        modality: ExerciseModality = .dynamicStrength
+    ) -> Exercise {
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: sets,
+            plannedReps: 8,
+            plannedWeight: 100,
+            modality: modality
+        )
+        ex.sets.forEach {
+            $0.isCompleted = true
+            $0.repsInReserve = rir ?? 2
+            $0.rirLogged = rir != nil
+        }
         return ex
     }
 
@@ -55,6 +72,7 @@ struct ConsistencyReportTests {
             plannedReps: 0,
             plannedWeight: 0,
             trackingMode: .duration,
+            modality: .isometricStrength,
             plannedDuration: 45
         )
         ex.sets.forEach { $0.isCompleted = true }
@@ -117,6 +135,53 @@ struct ConsistencyReportTests {
         let report = [session(at: now, [lift(sets: 4, rir: 1)])].consistency(now: now)
         #expect(report.averageRIR != nil)
         #expect(abs((report.averageRIR ?? 0) - 1.0) < 1e-9)
+    }
+
+    @Test func defaultRIRValueWithoutExplicitLogIsIgnored() {
+        let now = day(100)
+        let unrated = lift(sets: 2)
+
+        #expect(unrated.sets.allSatisfy { $0.repsInReserve == 2 && !$0.rirLogged })
+        #expect([session(at: now, [unrated])].consistency(now: now).averageRIR == nil)
+    }
+
+    @Test func effortExcludesEmptyIncompleteAndNonStrengthSets() {
+        let now = day(100)
+        let strength = lift(sets: 4)
+        let strengthSets = strength.orderedSets
+        strengthSets[0].repsInReserve = 1
+        strengthSets[0].rirLogged = true
+        strengthSets[1].repsInReserve = 5       // Stored default-like value, never rated.
+        strengthSets[2].reps = 0
+        strengthSets[2].repsInReserve = 0
+        strengthSets[2].rirLogged = true        // Empty completed set.
+        strengthSets[3].isCompleted = false
+        strengthSets[3].repsInReserve = 0
+        strengthSets[3].rirLogged = true        // Rated but incomplete.
+
+        let conditioning = lift(sets: 2, rir: 0, modality: .conditioning)
+        let mobility = lift(sets: 2, rir: 5, modality: .mobility)
+        let report = [session(at: now, [strength, conditioning, mobility])]
+            .consistency(now: now)
+
+        #expect(abs((report.averageRIR ?? -1) - 1) < 1e-9)
+    }
+
+    @Test func isometricRepsMismatchDoesNotContributeRIR() {
+        let now = day(100)
+        // Isometric strength is eligible for hard-set analytics only
+        // when duration-tracked. A corrupt reps snapshot must not make
+        // its stored RIR look like a valid dynamic-strength rating.
+        let mismatched = lift(
+            "Invalid Isometric Reps",
+            .core,
+            sets: 3,
+            rir: 0,
+            modality: .isometricStrength
+        )
+
+        let report = [session(at: now, [mismatched])].consistency(now: now)
+        #expect(report.averageRIR == nil)
     }
 
     @Test func timedHoldsCarryNoRIR() {

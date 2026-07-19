@@ -107,19 +107,44 @@ struct SessionDetailScreen: View {
     private var heroVolume: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(WeightFormatter.volumeValue(session.totalVolume, unit: unit))
+                Text(heroVolumeValue)
                     .font(Typography.metricHero)
                     .foregroundStyle(sessionHasPR ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                Text(unit.symbol)
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Ink.tertiary)
+                if session.comparableTonnageSummary.availability != .unavailable {
+                    Text(unit.symbol)
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.tertiary)
+                }
             }
-            Text(sessionHasPR ? "Volume · personal record" : "Volume")
+            Text(heroVolumeLabel)
                 .panelLegendType()
                 .foregroundStyle(sessionHasPR ? Tint.complete : Ink.tertiary)
+        }
+    }
+
+    private var heroVolumeValue: String {
+        let summary = session.comparableTonnageSummary
+        switch summary.availability {
+        case .complete:
+            return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
+        case .partial:
+            return "\(WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit))+"
+        case .unavailable:
+            return "—"
+        }
+    }
+
+    private var heroVolumeLabel: String {
+        switch session.comparableTonnageSummary.availability {
+        case .complete:
+            return sessionHasPR ? "Volume · personal record" : "Volume"
+        case .partial:
+            return "Known volume · total unavailable"
+        case .unavailable:
+            return "Volume unavailable"
         }
     }
 
@@ -174,29 +199,39 @@ struct SessionDetailScreen: View {
         max(0, Int(session.duration / 60))
     }
 
-    /// Heaviest weight × reps logged across the entire session,
-    /// rendered as "135×8". Falls back to "—" when no sets completed.
+    /// Strongest comparable dynamic-strength set in the session.
+    /// Selection uses effective resistance (including inverse machine
+    /// assistance), while the label preserves exactly what the user
+    /// logged. Non-comparable and non-strength work is excluded.
     private var topSetValue: String {
-        let heaviest = session.exercises
-            .flatMap(\.sets)
-            .filter(\.isCompleted)
-            .max(by: { (a, b) in
-                if a.weight == b.weight { return a.reps < b.reps }
-                return a.weight < b.weight
-            })
-
-        guard let set = heaviest else { return "—" }
-        let weight = WeightFormatter.string(set.weight, unit: unit, includeUnit: false)
-        return "\(weight)×\(set.reps)"
+        let candidates = session.orderedExercises.flatMap { exercise in
+            guard exercise.modality == .dynamicStrength,
+                  exercise.trackingMode == .reps else {
+                return [(Exercise, WorkoutSet, Double)]()
+            }
+            return exercise.sets.compactMap { set -> (Exercise, WorkoutSet, Double)? in
+                guard set.isAnalyticsEligible,
+                      let load = exercise.effectiveLoad(loggedWeight: set.weight) else {
+                    return nil
+                }
+                return (exercise, set, load)
+            }
+        }
+        guard let (exercise, set, _) = candidates.max(by: { lhs, rhs in
+            if lhs.2 == rhs.2 { return lhs.1.reps < rhs.1.reps }
+            return lhs.2 < rhs.2
+        }) else { return "—" }
+        return exercise.setLabel(set, unit: unit)
     }
 
     /// Walks all completed sessions in chronological order up to and
     /// including this one, tracking the running record per stable
-    /// exercise identity. Reps exercises track top weight; duration
-    /// exercises track longest hold. Same semantics as the PR
+    /// exercise identity. Reps exercises compare effective load then
+    /// reps at equal load; loaded holds rank load then duration, while
+    /// duration-only holds rank time. Same semantics as the PR
     /// detection on the History list, scoped to one session.
     private var prExerciseIDs: Set<UUID> {
-        var bestByExercise: [String: Double] = [:]
+        var bestByExercise: [String: StrengthPerformance] = [:]
         var result: Set<UUID> = []
 
         let cutoff = session.completedAt ?? session.startedAt
@@ -204,12 +239,10 @@ struct SessionDetailScreen: View {
             let sTime = s.completedAt ?? s.startedAt
             if sTime > cutoff { break }
             for exercise in s.orderedExercises {
-                let metric = prMetric(for: exercise)
-                guard metric > 0 else { continue }
+                guard let performance = exercise.bestStrengthPerformance else { continue }
                 let key = exercise.historyKey
-                let prev = bestByExercise[key, default: 0]
-                if metric > prev {
-                    bestByExercise[key] = metric
+                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
+                    bestByExercise[key] = performance
                     if s.id == session.id {
                         result.insert(exercise.id)
                     }
@@ -221,15 +254,6 @@ struct SessionDetailScreen: View {
 
     private var sessionHasPR: Bool { !prExerciseIDs.isEmpty }
 
-    private func prMetric(for exercise: Exercise) -> Double {
-        let completed = exercise.sets.filter(\.isCompleted)
-        switch exercise.trackingMode {
-        case .reps:
-            return completed.map(\.weight).max() ?? 0
-        case .duration:
-            return completed.map(\.duration).max() ?? 0
-        }
-    }
 }
 
 // MARK: - Per-exercise row
@@ -246,31 +270,20 @@ private struct ExerciseDetailRow: View {
     private var orderedSets: [WorkoutSet] { exercise.orderedSets }
 
     /// The exercise's standout completed set, singled out with the
-    /// gold completion accent. Mode-aware: heaviest lift for reps
-    /// (tiebreak on reps so 135×10 beats 135×8), longest hold for
-    /// duration.
+    /// gold completion accent. The domain selector preserves load-mode
+    /// polarity and avoids inventing an absolute load when bodyweight
+    /// is unknown.
     private var topSet: WorkoutSet? {
-        let completed = exercise.sets.filter(\.isCompleted)
-        switch mode {
-        case .reps:
-            return completed.max { a, b in
-                if a.weight == b.weight { return a.reps < b.reps }
-                return a.weight < b.weight
-            }
-        case .duration:
-            return completed.max { a, b in a.duration < b.duration }
-        }
+        exercise.representativeTopSet
     }
 
     private var exerciseVolume: Double {
-        exercise.sets
-            .filter(\.isCompleted)
-            .reduce(0) { $0 + $1.weight * Double($1.reps) }
+        exercise.completedComparableTonnage ?? 0
     }
 
-    /// Total time held across completed sets — the `.duration`
+    /// Total timed work across completed sets — the `.duration`
     /// counterpart to `exerciseVolume`, shown in the row header.
-    private var totalHold: TimeInterval {
+    private var totalDuration: TimeInterval {
         exercise.sets
             .filter(\.isCompleted)
             .reduce(0) { $0 + $1.duration }
@@ -327,13 +340,13 @@ private struct ExerciseDetailRow: View {
                 }
             }
         case .duration:
-            if totalHold > 0 {
+            if totalDuration > 0 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(DurationFormatter.compact(totalHold))
+                    Text(DurationFormatter.compact(totalDuration))
                         .font(Typography.metricInline)
                         .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
                         .monospacedDigit()
-                    Text("hold")
+                    Text(exercise.modality.durationLabelLowercased)
                         .font(Typography.metricMicro)
                         .foregroundStyle(Ink.quaternary)
                 }
@@ -366,6 +379,11 @@ private struct ExerciseDetailRow: View {
                     .foregroundStyle(set.isCompleted ? Ink.tertiary : Ink.quaternary)
                     .minimumScaleFactor(0.6)
                     .frame(width: 24, alignment: .leading)
+                if set.kind == .warmUp {
+                    Text("WARM-UP")
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Ink.tertiary)
+                }
             }
 
             Spacer(minLength: 12)
@@ -383,15 +401,14 @@ private struct ExerciseDetailRow: View {
     private func setValue(set: WorkoutSet, textColor: Color) -> some View {
         switch mode {
         case .reps:
-            HStack(alignment: .lastTextBaseline, spacing: 3) {
-                Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
-                    .font(Typography.metricInline)
-                    .foregroundStyle(textColor)
-                    .monospacedDigit()
-                Text(unit.symbol)
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.quaternary)
-            }
+            Text(exercise.loadMode.loggedLoadLabel(
+                set.weight,
+                unit: unit,
+                includeUnit: true
+            ) ?? "—")
+                .font(Typography.metricInline)
+                .foregroundStyle(textColor)
+                .monospacedDigit()
 
             Text("×")
                 .font(Typography.metricUnit)
@@ -407,15 +424,14 @@ private struct ExerciseDetailRow: View {
 
         case .duration:
             if set.weight > 0 {
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(WeightFormatter.string(set.weight, unit: unit, includeUnit: false))
-                        .font(Typography.metricInline)
-                        .foregroundStyle(textColor)
-                        .monospacedDigit()
-                    Text(unit.symbol)
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.quaternary)
-                }
+                Text(exercise.loadMode.loggedLoadLabel(
+                    set.weight,
+                    unit: unit,
+                    includeUnit: true
+                ) ?? "")
+                    .font(Typography.metricInline)
+                    .foregroundStyle(textColor)
+                    .monospacedDigit()
                 Text("·")
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.quaternary)

@@ -8,11 +8,10 @@
 //
 //  Walking forward from today, the first weekday that carries a
 //  scheduled template wins; its distance becomes the "Today / Tomorrow
-//  / in N days" label. Today is only offered as a startable workout
-//  when it's a scheduled day and nothing has been logged yet — any
-//  completed session today satisfies the day, so the card rolls on to
-//  the next one. When recent load is high the scheduled day still
-//  stands, just flagged to keep the session lighter.
+//  / in N days" label. A template pinned to today always remains
+//  startable, matching the Library schedule. When recent load is high
+//  the scheduled day still stands, just flagged to keep the session
+//  lighter.
 //
 //  Pure value-type computation on injected dates (see `UpNextTests`).
 //  Holds live `WorkoutTemplate` references, so it's main-actor work
@@ -30,7 +29,7 @@ struct UpNext {
     }
 
     enum Kind {
-        /// Train today: a scheduled template with nothing logged yet.
+        /// Train today: a template pinned to today's weekday.
         /// `more` counts other templates also pinned to today;
         /// `easeOff` flags a high recent training load.
         case scheduled(template: WorkoutTemplate, more: Int, easeOff: Bool)
@@ -76,9 +75,11 @@ struct UpNext {
             return scheduled.filter { $0.isScheduled(on: weekday) }.sorted(by: rotationOrder)
         }
 
-        // Train today — a scheduled day with nothing logged yet.
+        // A template pinned to today always wins. Logging another
+        // workout must not make the Today and Library schedules
+        // disagree.
         let todays = pinned(at: 0)
-        if !trainedToday, let pick = todays.first {
+        if let pick = todays.first {
             let easeOff = sessions.trainingLoad(now: now, calendar: calendar).verdict == .high
             return UpNext(kind: .scheduled(template: pick, more: todays.count - 1, easeOff: easeOff))
         }

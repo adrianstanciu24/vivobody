@@ -138,13 +138,29 @@ final class WorkoutSessionController {
         with plan: [Exercise],
         beforeSave: (() -> Void)? = nil
     ) {
-        let session = WorkoutSession(exercises: plan, restDuration: preferredRestDuration)
         guard let context = modelContext else {
+            let session = WorkoutSession(
+                exercises: plan,
+                restDuration: preferredRestDuration
+            )
             beforeSave?()
             activeSession = session
             isWorkoutExpanded = true
             return
         }
+
+        var bodyweightDescriptor = FetchDescriptor<BodyWeightEntry>(
+            predicate: #Predicate { $0.weight > 0 },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        bodyweightDescriptor.fetchLimit = 1
+        let bodyweight = (try? context.fetch(bodyweightDescriptor).first?.weight)
+            ?? ExerciseLoad.unknownBodyweight
+        let session = WorkoutSession(
+            exercises: plan,
+            restDuration: preferredRestDuration,
+            bodyweightAtStart: bodyweight
+        )
 
         context.insert(session)
         beforeSave?()

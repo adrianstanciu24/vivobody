@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the Insights "Symmetry" board. It covers verdict math,
-//  graded muscle comparisons, whole-exercise movement comparisons,
+//  role-based muscle comparisons, whole-exercise movement comparisons,
 //  directional isolation, squat/hinge filtering, laterality counting,
 //  chronological hard-set pricing, and the 28-day/future boundaries
 //  on a virtual clock.
@@ -86,7 +86,7 @@ struct AntagonistBalanceTests {
 
     @Test func pressOnlyFlagsPull() {
         let s = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Overhead Press", .shoulders)])
+            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Shoulder Press, Dumbbells", .shoulders)])
         }
         let board = s.antagonistBalance(now: day(20))
 
@@ -137,7 +137,7 @@ struct AntagonistBalanceTests {
             session(at: day(1), [
                 lift("Bench Press", .chest, sets: 2),
                 lift("Bent Over Rowing", .back, sets: 3),
-                lift("Overhead Press", .shoulders, sets: 4),
+                lift("Shoulder Press, Dumbbells", .shoulders, sets: 4),
                 lift("Lat Pull Down", .back, sets: 5),
             ]),
         ].antagonistBalance(now: day(2))
@@ -165,7 +165,7 @@ struct AntagonistBalanceTests {
 
         let verticalOnly = [
             session(at: day(1), [
-                lift("Overhead Press", .shoulders),
+                lift("Shoulder Press, Dumbbells", .shoulders),
                 lift("Lat Pull Down", .back),
             ]),
         ].antagonistBalance(now: day(2))
@@ -198,8 +198,8 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Squats", .legs, sets: 2),
-                lift("Romanian Deadlift", .legs, sets: 3),
-                lift("Walking Lunges", .legs, sets: 6),
+                lift("Barbell Romanian Deadlift (RDL)", .legs, sets: 3),
+                lift("Dumbbell Lunges Walking", .legs, sets: 6),
                 lift("Bench Press", .chest, sets: 7),
             ]),
         ].antagonistBalance(now: day(2))
@@ -213,7 +213,7 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Bench Press", .chest, sets: 2),
-                lift("Single arm row", .back, sets: 3),
+                lift("One Arm Bent Row", .back, sets: 3),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -241,15 +241,15 @@ struct AntagonistBalanceTests {
             session(at: day(1), [
                 lift("Bench Press", .chest),
                 lift("Bent Over Rowing", .back),
-                lift("Overhead Press", .shoulders),
+                lift("Shoulder Press, Dumbbells", .shoulders),
                 lift("Lat Pull Down", .back),
                 lift("Squats", .legs),
-                lift("Romanian Deadlift", .legs),
+                lift("Barbell Romanian Deadlift (RDL)", .legs),
                 lift("Clamshell", .legs),
                 lift("Copenhagen Adduction Exercise", .legs),
                 lift("Standing Calf Raises", .legs),
                 lift("Tibialis raises", .legs),
-                lift("Single arm row", .back),
+                lift("One Arm Bent Row", .back),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -299,7 +299,7 @@ struct AntagonistBalanceTests {
         )
         let future = session(
             at: day(41),
-            [lift("Overhead Press", .shoulders, sets: 4)]
+            [lift("Shoulder Press, Dumbbells", .shoulders, sets: 4)]
         )
         let board = [future, recent, old].antagonistBalance(now: day(40))
 

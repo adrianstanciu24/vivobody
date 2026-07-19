@@ -4,7 +4,8 @@
 //
 //  Guards recent working-set allocation: name grouping across
 //  sessions, set-count ordering, four-week windowing, share
-//  arithmetic, exclusions, and the empty-history edge.
+//  arithmetic, modality gates, isometric holds, exclusions, and the
+//  empty-history edge.
 //
 
 import Foundation
@@ -28,6 +29,7 @@ struct ExerciseDominanceTests {
         _ name: String = "Bench Press",
         group: MuscleGroup = .chest,
         catalogItemID: UUID? = nil,
+        modality: ExerciseModality = .dynamicStrength,
         _ sets: [(weight: Double, reps: Int, completed: Bool)]
     ) -> Exercise {
         let ex = Exercise(
@@ -35,7 +37,8 @@ struct ExerciseDominanceTests {
             catalogItemID: catalogItemID,
             group: group,
             plannedSets: 0,
-            plannedWeight: 0
+            plannedWeight: 0,
+            modality: modality
         )
         for (i, s) in sets.enumerated() {
             ex.sets.append(WorkoutSet(
@@ -48,14 +51,15 @@ struct ExerciseDominanceTests {
         return ex
     }
 
-    /// Timed-hold exercise, excluded from working-set allocation.
+    /// Isometric timed-hold exercise.
     private func hold(seconds: [TimeInterval]) -> Exercise {
         let ex = Exercise(
             name: "Plank",
             group: .core,
             plannedSets: 0,
             plannedWeight: 0,
-            trackingMode: .duration
+            trackingMode: .duration,
+            modality: .isometricStrength
         )
         for (i, sec) in seconds.enumerated() {
             ex.sets.append(WorkoutSet(weight: 0, reps: 0, duration: sec, isCompleted: true, sortOrder: i))
@@ -131,20 +135,42 @@ struct ExerciseDominanceTests {
         let board = [session(daysAgo: 1, [second, first])].exerciseDominance(now: now)
 
         #expect(board.stats.map(\.historyKey) == [
-            "catalog:\(firstID.uuidString)",
-            "catalog:\(secondID.uuidString)",
+            first.historyKey,
+            second.historyKey,
         ])
     }
 
     // MARK: - Exclusions
 
-    @Test func excludesDurationHolds() {
+    @Test func countsOnlyCompletedNonemptyIsometricHolds() {
         let reps = lift("Bench Press", group: .chest, [(100, 8, true)])
-        let plank = hold(seconds: [60, 45])
+        let plank = hold(seconds: [60, 0, 45])
+        plank.sets[2].isCompleted = false
         let board = [session(daysAgo: 1, [reps, plank])].exerciseDominance(now: now)
 
-        #expect(board.stats.count == 1)
-        #expect(board.top?.name == "Bench Press")
+        #expect(board.stats.count == 2)
+        #expect(board.stats.first { $0.name == "Plank" }?.sets == 1)
+        #expect(board.totalSets == 2)
+    }
+
+    @Test func excludesConditioningAndMobilitySets() {
+        let strength = lift("Bench Press", group: .chest, [(100, 8, true)])
+        let conditioning = lift(
+            "Burpee",
+            group: .chest,
+            modality: .conditioning,
+            [(0, 20, true), (0, 20, true)]
+        )
+        let mobility = lift(
+            "Shoulder CAR",
+            group: .shoulders,
+            modality: .mobility,
+            [(0, 5, true), (0, 5, true), (0, 5, true)]
+        )
+        let board = [session(daysAgo: 1, [strength, conditioning, mobility])]
+            .exerciseDominance(now: now)
+
+        #expect(board.stats.map(\.name) == ["Bench Press"])
         #expect(board.totalSets == 1)
     }
 

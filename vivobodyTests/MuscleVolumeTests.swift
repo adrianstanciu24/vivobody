@@ -4,12 +4,11 @@
 //
 //  Guards the weekly effective-set engine behind the Insights tab's
 //  muscle-balance view. The interesting behaviour is all date- and
-//  graded-weight-driven, so — like the development model — it's tested
+//  role-driven, so — like the development model — it's tested
 //  on a virtual clock with no simulator.
 //
 //  Covered:
-//    • Graded credit — a set splits across muscles by involvement
-//      weight (chest 1.0, triceps 0.7, delts 0.4 from a bench set).
+//    • Role credit — primary gets 1.0, secondary 0.5, stabilizer 0.
 //    • Completion gate — only completed sets count.
 //    • Rolling window — work outside the 7-day window stops counting
 //      toward volume but still updates recency.
@@ -39,8 +38,21 @@ struct MuscleVolumeTests {
     }
 
     /// A lift whose first `completed` sets are marked done.
-    private func lift(_ name: String, _ group: MuscleGroup, sets: Int, completed: Int? = nil) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: 8, plannedWeight: 100)
+    private func lift(
+        _ name: String,
+        _ group: MuscleGroup,
+        sets: Int,
+        completed: Int? = nil,
+        involvement: Muscle.Involvement? = nil
+    ) -> Exercise {
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: sets,
+            plannedReps: 8,
+            plannedWeight: 100,
+            muscleInvolvement: involvement
+        )
         let doneCount = completed ?? sets
         for (i, set) in ex.orderedSets.enumerated() {
             set.isCompleted = i < doneCount
@@ -52,23 +64,23 @@ struct MuscleVolumeTests {
         stats.first { $0.muscle == muscle }!
     }
 
-    // MARK: - Graded credit
+    // MARK: - Role credit
 
-    @Test func benchSplitsSetsAcrossMusclesByWeight() {
-        // The engine credits each muscle `sets × involvementWeight`.
-        // Read the weights from the catalog so the test tracks the
-        // shipped data instead of hard-coding a grading that can shift
-        // when catalog.json is regenerated.
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3)])
+    @Test func rolesCreditPrimarySecondaryAndNotStabilizer() {
+        let involvement = Muscle.Involvement(contributions: [
+            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .triceps, role: .secondary),
+            .init(muscle: .serratus, role: .stabilizer),
+        ])
+        let s = session(at: day(0), [
+            lift("Role Fixture", .chest, sets: 3, involvement: involvement),
+        ])
         let stats = [s].muscleVolume(now: day(0))
-        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
 
-        #expect(abs(stat(.pectorals, in: stats).effectiveSets - 3.0 * (w[.pectorals] ?? 0)) < 1e-9)
-        #expect(abs(stat(.triceps, in: stats).effectiveSets - 3.0 * (w[.triceps] ?? 0)) < 1e-9)
-        #expect(abs(stat(.deltoids, in: stats).effectiveSets - 3.0 * (w[.deltoids] ?? 0)) < 1e-9)
-        // Chest is the prime mover; the assistors are graded lower.
-        #expect(w[.pectorals] == Muscle.Involvement.prime)
-        #expect((w[.triceps] ?? 0) < w[.pectorals]!)
+        #expect(stat(.pectorals, in: stats).effectiveSets == 3)
+        #expect(stat(.triceps, in: stats).effectiveSets == 1.5)
+        #expect(stat(.serratus, in: stats).effectiveSets == 0)
+        #expect(stat(.serratus, in: stats).daysSinceLastTrained == nil)
     }
 
     @Test func everyMuscleIsRepresentedEvenWhenUntrained() {

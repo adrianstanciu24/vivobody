@@ -55,9 +55,14 @@ struct ConfigureExerciseSheet: View {
 
     private let name: String
     private let catalogItemID: UUID?
+    private let catalogID: String?
     private let group: MuscleGroup
     private let muscleInvolvement: Muscle.Involvement
+    private let classification: ExerciseClassification?
     private let mode: TrackingMode
+    private let modality: ExerciseModality
+    private let loadMode: ExerciseLoadMode
+    private let bodyweightFraction: Double
     private let isEditing: Bool
     private let draftID: UUID
     private let originalDraft: ExerciseDraft?
@@ -69,9 +74,14 @@ struct ConfigureExerciseSheet: View {
         case .adding(let item):
             name = item.name
             catalogItemID = item.id
+            catalogID = item.catalogID
             group = item.group
             muscleInvolvement = item.muscleInvolvement
+            classification = item.classification
             mode = item.trackingMode
+            modality = item.modality
+            loadMode = item.loadMode
+            bodyweightFraction = item.bodyweightFraction
             _sets = State(initialValue: 3)
             _reps = State(initialValue: item.defaultReps)
             _weight = State(initialValue: item.defaultWeightSeed)
@@ -82,9 +92,14 @@ struct ConfigureExerciseSheet: View {
         case .editing(let draft):
             name = draft.name
             catalogItemID = draft.catalogItemID
+            catalogID = draft.catalogID
             group = draft.group
             muscleInvolvement = Muscle.Involvement(snapshot: draft.muscleInvolvementSnapshot)
+            classification = draft.classification
             mode = draft.trackingMode
+            modality = draft.modality
+            loadMode = draft.loadMode
+            bodyweightFraction = draft.bodyweightFraction
             _sets = State(initialValue: draft.plannedSets)
             _reps = State(initialValue: draft.plannedReps)
             _weight = State(initialValue: draft.plannedWeight)
@@ -129,7 +144,7 @@ struct ConfigureExerciseSheet: View {
                             )
                         }
                     case .duration:
-                        valueRow(label: "Hold") {
+                        valueRow(label: modality.durationLabel) {
                             BareScrubber(
                                 value: durationBinding,
                                 range: DurationFormatter.scrubRange,
@@ -138,14 +153,14 @@ struct ConfigureExerciseSheet: View {
                                 fontSize: 56,
                                 numberColor: Ink.primary,
                                 formatter: { DurationFormatter.string($0) },
-                                accessibilityLabel: "Hold"
+                                accessibilityLabel: modality.durationLabel
                             )
                         }
                     }
 
                     SectionDivider()
 
-                    valueRow(label: mode == .duration ? "Added load" : "Weight") {
+                    valueRow(label: loadMode.inputLabel) {
                         BareScrubber(
                             value: weightDisplayBinding,
                             range: unit.strengthRange,
@@ -156,7 +171,7 @@ struct ConfigureExerciseSheet: View {
                             unitFontSize: 16,
                             numberColor: Ink.primary,
                             unitColor: Ink.tertiary,
-                            accessibilityLabel: mode == .duration ? "Added load" : "Weight",
+                            accessibilityLabel: loadMode.inputLabel,
                             tickTone: .deep
                         )
                     }
@@ -237,10 +252,12 @@ struct ConfigureExerciseSheet: View {
     private var previewLine: String {
         switch mode {
         case .reps:
-            return "\(sets) × \(reps) @ \(WeightFormatter.string(weight, unit: unit))"
+            let load = loadMode.summaryLoadLabel(weight, unit: unit)
+            return load.map { "\(sets) × \(reps) @ \($0)" } ?? "\(sets) × \(reps)"
         case .duration:
-            let base = "\(sets) × \(DurationFormatter.string(duration)) hold"
-            return weight > 0 ? "\(base) @ \(WeightFormatter.string(weight, unit: unit))" : base
+            let base = "\(sets) × \(DurationFormatter.string(duration)) \(modality.durationLabelLowercased)"
+            guard let load = loadMode.summaryLoadLabel(weight, unit: unit) else { return base }
+            return "\(base) @ \(load)"
         }
     }
 
@@ -282,12 +299,17 @@ struct ConfigureExerciseSheet: View {
                 id: draftID,
                 name: name,
                 catalogItemID: originalDraft.catalogItemID,
+                catalogID: originalDraft.catalogID,
                 group: group,
                 plannedSets: originalDraft.plannedSets,
                 plannedReps: originalDraft.plannedReps,
                 plannedWeight: originalDraft.plannedWeight,
                 muscleInvolvement: Muscle.Involvement(snapshot: originalDraft.muscleInvolvementSnapshot),
+                classification: originalDraft.classification,
                 trackingMode: mode,
+                modality: originalDraft.modality,
+                loadMode: originalDraft.loadMode,
+                bodyweightFraction: originalDraft.bodyweightFraction,
                 plannedDuration: originalDraft.plannedDuration,
                 isPerSet: true,
                 sets: originalDraft.sets
@@ -298,12 +320,17 @@ struct ConfigureExerciseSheet: View {
             id: draftID,
             name: name,
             catalogItemID: catalogItemID,
+            catalogID: catalogID,
             group: group,
             plannedSets: sets,
             plannedReps: reps,
             plannedWeight: weight,
             muscleInvolvement: muscleInvolvement,
+            classification: classification,
             trackingMode: mode,
+            modality: modality,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction,
             plannedDuration: duration,
             isPerSet: false,
             sets: []

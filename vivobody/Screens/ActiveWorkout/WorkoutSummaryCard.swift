@@ -9,8 +9,9 @@
 //
 //  Architecture:
 //    • A tiny status kicker — "In progress" (Volt) / "Complete" (gold).
-//    • The HERO: total volume as a huge monospaced numeral — the
-//      session's score — counting up on arrival via DigitTicker.
+//    • The HERO: known comparable volume as a huge monospaced numeral,
+//      with partial/unavailable state kept explicit, counting up on
+//      arrival via DigitTicker when a subtotal exists.
 //    • A small mono support line for the rest (duration, sets, reps).
 //    • The exercise list as type rows divided by hairlines, each with
 //      its top set and the same gold/dim set pips used on the pages.
@@ -65,6 +66,10 @@ struct WorkoutSummaryCard: View {
 
     private var displayVolume: Double {
         isHistorical ? session.totalVolume : animatedVolume
+    }
+
+    private var tonnageAvailability: ComparableTonnageAvailability {
+        session.comparableTonnageSummary.availability
     }
 
     private var isComplete: Bool { session.isAllComplete }
@@ -135,22 +140,41 @@ struct WorkoutSummaryCard: View {
     private var heroVolume: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                DigitTicker(
-                    value: WeightFormatter.toDisplay(displayVolume, unit: unit),
-                    font: Typography.metricHero,
-                    color: Ink.primary,
-                    formatter: { value in
-                        Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+                if tonnageAvailability == .unavailable {
+                    Text("—")
+                        .font(Typography.metricHero)
+                        .foregroundStyle(Ink.primary)
+                } else {
+                    DigitTicker(
+                        value: WeightFormatter.toDisplay(displayVolume, unit: unit),
+                        font: Typography.metricHero,
+                        color: Ink.primary,
+                        formatter: { value in
+                            Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
+                        }
+                    )
+                    if tonnageAvailability == .partial {
+                        Text("+")
+                            .font(Typography.metricInline)
+                            .foregroundStyle(Ink.secondary)
                     }
-                )
-                Text(unit.symbol)
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Ink.tertiary)
+                    Text(unit.symbol)
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.tertiary)
+                }
             }
-            Text("Volume")
+            Text(volumeLegend)
                 .panelLegend()
         }
         .accessibilityElement(children: .combine)
+    }
+
+    private var volumeLegend: String {
+        switch tonnageAvailability {
+        case .complete: "Volume"
+        case .partial: "Known volume · total unavailable"
+        case .unavailable: "Volume unavailable"
+        }
     }
 
     private var supportLine: some View {
@@ -168,8 +192,8 @@ struct WorkoutSummaryCard: View {
         if session.totalReps > 0 {
             parts.append("\(session.totalReps) reps")
         }
-        if session.totalHoldTime > 0 {
-            parts.append("\(DurationFormatter.compact(session.totalHoldTime)) held")
+        if session.totalTimedWork > 0 {
+            parts.append("\(DurationFormatter.compact(session.totalTimedWork)) timed")
         }
         return parts.joined(separator: "   ·   ")
     }
@@ -242,7 +266,7 @@ struct WorkoutSummaryCard: View {
             ForEach(sets) { set in
                 if set.isCompleted {
                     Circle()
-                        .fill(Tint.complete)
+                        .fill(set.kind == .working ? Tint.complete : Ink.tertiary)
                         .frame(width: 8, height: 8)
                 } else {
                     Circle()

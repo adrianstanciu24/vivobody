@@ -42,6 +42,21 @@ nonisolated enum ProGate {
         hasVerifiedPurchase && !isRevoked ? .pro : .free
     }
 
+    /// First-frame entitlement before StoreKit settles the receipt.
+    /// A fresh install is free. The cache may preserve a previously
+    /// verified purchase across an offline launch; DEBUG's explicit
+    /// `--pro` override wins, while `--no-iap` fails closed because no
+    /// receipt verification will follow.
+    static func launchStatus(
+        cachedUnlocked: Bool,
+        forcedPro: Bool = false,
+        storeKitDisabled: Bool = false
+    ) -> ProStatus {
+        if forcedPro { return .pro }
+        if storeKitDisabled { return .free }
+        return cachedUnlocked ? .pro : .free
+    }
+
     static func canCreateTemplate(existingCount: Int, status: ProStatus) -> Bool {
         status == .pro || existingCount < freeTemplateLimit
     }
@@ -81,27 +96,27 @@ final class ProStore {
     @ObservationIgnored private var updatesTask: Task<Void, Never>?
 
     #if DEBUG
-    /// DEBUG builds default to fully unlocked so day-to-day
-    /// development never hits a paywall or a locked gate — no launch
-    /// argument needed. Pass `--free` to opt INTO the real gated
-    /// state (test the locked Insights card, template limit, etc).
-    /// Pass `--no-iap` to also kill all StoreKit contact. Pass `--pro`
-    /// to force unlocked while letting StoreKit resolve in the
-    /// background (test the purchase flow with Xcode's StoreKit
-    /// config). All three are no-ops in Release.
-    @ObservationIgnored private let forcedFree = CommandLine.arguments.contains("--free")
+    /// DEBUG follows the production entitlement path: free until a
+    /// verified purchase exists. `--pro` is the sole explicit unlock
+    /// override for screenshots and gated-state tests; `--no-iap`
+    /// disables StoreKit and deliberately remains free. Both flags are
+    /// no-ops in Release.
     @ObservationIgnored private let forcedPro = CommandLine.arguments.contains("--pro")
     @ObservationIgnored private let storeKitDisabled = CommandLine.arguments.contains("--no-iap")
-    /// True in DEBUG unless `--free` is passed. Pins status to `.pro`
-    /// and blocks StoreKit from overriding it back, so the default
-    /// dev experience is the full app with no gates.
-    @ObservationIgnored private let debugUnlockedByDefault = !CommandLine.arguments.contains("--free")
     #endif
 
     init() {
-        status = UserDefaults.standard.bool(forKey: SettingsKey.proUnlockedCache) ? .pro : .free
+        let cachedUnlocked = UserDefaults.standard.bool(forKey: SettingsKey.proUnlockedCache)
         #if DEBUG
-        if debugUnlockedByDefault || forcedPro || storeKitDisabled { status = .pro }
+        let shouldForcePro = CommandLine.arguments.contains("--pro")
+        let shouldDisableStoreKit = CommandLine.arguments.contains("--no-iap")
+        status = ProGate.launchStatus(
+            cachedUnlocked: cachedUnlocked,
+            forcedPro: shouldForcePro,
+            storeKitDisabled: shouldDisableStoreKit
+        )
+        #else
+        status = ProGate.launchStatus(cachedUnlocked: cachedUnlocked)
         #endif
         #if DEBUG
         guard !storeKitDisabled else { return }
@@ -165,7 +180,7 @@ final class ProStore {
 
     private func setStatus(_ new: ProStatus) {
         #if DEBUG
-        if debugUnlockedByDefault || forcedPro || storeKitDisabled { return }
+        if forcedPro { return }
         #endif
         let changed = status != new
         status = new

@@ -33,6 +33,7 @@ import SwiftUI
 struct SectionHeader: View {
     let title: String
     var trailing: String? = nil
+    var trailingIsInProgress: Bool = false
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -44,11 +45,43 @@ struct SectionHeader: View {
                 .accessibilityAddTraits(.isHeader)
             if let trailing {
                 Spacer(minLength: Space.sm)
-                Text(trailing)
-                    .panelLegend()
+                HStack(spacing: Space.sm) {
+                    if trailingIsInProgress {
+                        InProgressDot()
+                    }
+                    Text(trailing)
+                        .panelLegend()
+                }
             }
         }
         .padding(.top, Space.sm)
+    }
+}
+
+/// A quiet live-state cue used beside a section header's trailing
+/// status. It breathes while work is still forming and freezes to a
+/// steady orange dot when Reduce Motion is enabled.
+private struct InProgressDot: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isBright = false
+
+    var body: some View {
+        Circle()
+            .fill(Tint.inProgress)
+            .frame(width: 8, height: 8)
+            .opacity(reduceMotion || isBright ? 1.0 : 0.62)
+            .scaleEffect(reduceMotion || isBright ? 1.0 : 0.82)
+            .shadow(
+                color: Tint.inProgress.opacity(reduceMotion || isBright ? 0.45 : 0.12),
+                radius: reduceMotion || isBright ? 4 : 2
+            )
+            .accessibilityHidden(true)
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                    isBright = true
+                }
+            }
     }
 }
 
@@ -224,12 +257,12 @@ struct AdherenceBadge: View {
     }
 
     private var label: String? {
+        if adherence.weightDelta != 0 {
+            return WeightFormatter.deltaString(adherence.weightDelta, unit: unit)
+        }
         if adherence.isDuration {
             guard adherence.durationDelta != 0 else { return nil }
             return DurationFormatter.deltaString(adherence.durationDelta)
-        }
-        if adherence.weightDelta != 0 {
-            return WeightFormatter.deltaString(adherence.weightDelta, unit: unit)
         }
         if adherence.repsDelta != 0 {
             let n = abs(adherence.repsDelta)

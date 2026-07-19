@@ -8,7 +8,7 @@
 //  biceps/triceps, and bilateral/unilateral work.
 //
 //  All nine comparisons share the `SetStimulus` hard-set-equivalent
-//  currency over a 4-week window. Muscle comparisons retain graded
+//  currency over a 4-week window. Muscle comparisons retain role-based
 //  involvement credit; movement comparisons count each exercise's
 //  whole stimulus once. The archive is replayed chronologically so
 //  load references stay causal.
@@ -137,8 +137,8 @@ extension Array where Element == WorkoutSession {
                 )
                 guard date >= cutoff, stimulus > 0 else { continue }
 
-                for (muscle, weight) in exercise.muscleInvolvement.weights {
-                    muscleSets[muscle, default: 0] += stimulus * weight
+                for (muscle, credit) in exercise.muscleInvolvement.volumeCredits {
+                    muscleSets[muscle, default: 0] += stimulus * credit
                 }
 
                 guard let classification = exercise.classification else {
@@ -221,7 +221,7 @@ extension Array where Element == WorkoutSession {
             musclePair(
                 "push-pull",
                 "Push", [.pectorals, .deltoids, .triceps],
-                "Pull", [.lats, .rhomboids, .traps, .teres, .biceps]
+                "Pull", [.lats, .rhomboids, .traps, .teresMajor, .externalRotators, .biceps]
             ),
             movementPair(
                 "horizontal-push-pull",

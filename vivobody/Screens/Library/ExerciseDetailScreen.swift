@@ -10,17 +10,17 @@
 //
 //  Surfaces (when data exists):
 //    • Hero    — muscle group accent + exercise name + metadata line,
-//                plus a plateau / "ready to add load" status pill
-//    • Stats   — Last (top set + relative date), Best (all-time top
-//                weight), Times (sessions that included this lift)
-//    • 1RM     — Dedicated, tappable row (reps only): a user-measured
+//                plus a plateau / load-mode-aware readiness status pill
+//    • Stats   — Last (top set + relative date), Best (standing record
+//                under the exercise's performance semantics), Times
+//    • 1RM     — Dedicated, tappable row (dynamic strength only): a user-measured
 //                max (precise) overrides the estimated e1RM; empty
 //                until there's data. Tap opens the scrubber editor.
-//    • Chart   — SwiftUI Charts line with PR dots + a Weight | e1RM |
+//    • Chart   — SwiftUI Charts line with PR dots + a Load | e1RM |
 //                Volume metric toggle (reps only) + time-range chips
-//    • Effort  — average RIR + progression verdict (reps only, gated
-//                on having ≥3 logged RIR readings)
-//    • Muscles — primary / secondary involvement from the catalog map
+//    • Effort  — average RIR + progression verdict (dynamic strength
+//                only, gated on having ≥3 logged RIR readings)
+//    • Muscles — primary / secondary / stabilizer roles from the catalog map
 //    • Recents — Last 5 sessions, top set + date + PR flag
 //    • Defaults— The catalog item's starting weight × reps
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
@@ -50,6 +50,7 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.sessionAnalytics) var sessionAnalytics
 
     /// Pro entitlement, injected by AppRoot. Optional so previews
@@ -67,10 +68,20 @@ struct ExerciseDetailScreen: View {
     )
     var completedSessions: [WorkoutSession]
 
+    /// Current bodyweight is used only for an unlogged catalog default.
+    /// Historical points carry their own session snapshots.
+    @Query(sort: \BodyWeightEntry.date, order: .reverse)
+    var bodyWeightEntries: [BodyWeightEntry]
+
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
 
     var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+
+    var currentBodyweight: Double {
+        bodyWeightEntries.first(where: { $0.weight > 0 })?.weight
+            ?? ExerciseLoad.unknownBodyweight
+    }
 
     @State private var editorTarget: CatalogEditorTarget?
     @State private var isConfirmingDelete: Bool = false
@@ -96,7 +107,7 @@ struct ExerciseDetailScreen: View {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .weight: return "Weight"
+            case .weight: return "Load"
             case .e1rm:   return "e1RM"
             case .volume: return "Volume"
             }
@@ -138,17 +149,18 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 statsRow
-                if item.trackingMode == .reps {
+                if supportsEstimatedOneRepMax {
                     oneRepMaxRow
                 }
                 if hasHistory {
-                    if pro?.isUnlocked ?? true {
+                    if pro?.isUnlocked == true {
                         chartSection
                     } else {
                         lockedChartSection
                     }
                 }
                 effortSection
+                exerciseAnatomySection
                 muscleBreakdownSection
                 if hasHistory {
                     recentSessionsSection
@@ -203,7 +215,9 @@ struct ExerciseDetailScreen: View {
                 hasMeasured: item.oneRepMax != nil,
                 hasEstimate: estimatedOneRepMax != nil,
                 onSave: { newValue in
-                    item.oneRepMax = newValue
+                    item.oneRepMax = newValue.flatMap { value in
+                        value.isFinite && value > 0 ? value : nil
+                    }
                     do {
                         try modelContext.saveOrRollback()
                     } catch {
@@ -254,4 +268,3 @@ struct ExerciseDetailScreen: View {
         return f
     }()
 }
-

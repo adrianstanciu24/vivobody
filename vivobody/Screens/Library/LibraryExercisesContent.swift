@@ -398,17 +398,18 @@ struct LibraryExercisesContent: View {
     }
 
     /// Mode-aware right-side default for an exercise with no history —
-    /// "135 lb · 8 reps" for strength, "0:45 hold" for a timed hold.
+    /// "135 lb · 8 reps" for strength; timed work is labelled from its
+    /// modality (hold, interval, or time).
     private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
         let seed = item.defaultWeight(forUnit: unit)
         switch item.trackingMode {
         case .reps:
-            return "\(WeightFormatter.string(seed, unit: unit)) · \(item.defaultReps) reps"
+            let load = item.loadMode.summaryLoadLabel(seed, unit: unit)
+            return load.map { "\($0) · \(item.defaultReps) reps" } ?? "\(item.defaultReps) reps"
         case .duration:
-            let base = "\(DurationFormatter.string(item.defaultDuration)) hold"
-            return seed > 0
-                ? "\(WeightFormatter.string(seed, unit: unit)) · \(base)"
-                : base
+            let base = "\(DurationFormatter.string(item.defaultDuration)) \(item.modality.durationLabelLowercased)"
+            guard let load = item.loadMode.summaryLoadLabel(seed, unit: unit) else { return base }
+            return "\(load) · \(base)"
         }
     }
 

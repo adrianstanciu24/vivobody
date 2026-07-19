@@ -32,6 +32,7 @@ enum SetIntensity {
 struct SetCompleteButton: View {
     let reps: Int
     let weight: Double
+    var loadMode: ExerciseLoadMode = .external
     let isComplete: Bool
     var intensity: SetIntensity = .standard
     /// When set, the button renders this verb (e.g. "Complete set")
@@ -41,9 +42,9 @@ struct SetCompleteButton: View {
     /// deletes. Icons are reserved for navigation — the action is a
     /// word.
     var title: String? = nil
-    /// Overrides the spoken VoiceOver label. Used for timed holds,
-    /// where "8 reps at 0 pounds" would be meaningless — the card
-    /// passes "Hold 0:45" instead.
+    /// Overrides the spoken VoiceOver label for duration-tracked work.
+    /// Rep work falls back to `loadMode`'s semantic wording so bodyweight,
+    /// added load, assistance, and resistance never collapse to pounds.
     var accessibilityLabelOverride: String? = nil
     let onToggle: () -> Void
 
@@ -90,7 +91,14 @@ struct SetCompleteButton: View {
         )
         .gesture(tapGesture)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabelOverride ?? "\(reps) reps at \(WeightFormatter.string(weight, unit: unit, fractionDigits: 0, includeUnit: false)) \(unit.displayName.lowercased())")
+        .accessibilityLabel(
+            accessibilityLabelOverride
+                ?? loadMode.completionAccessibilityLabel(
+                    reps: reps,
+                    loggedWeight: weight,
+                    unit: unit
+                )
+        )
         .accessibilityValue(isComplete ? "completed" : "not completed")
         .accessibilityAddTraits(.isButton)
         .accessibilityInputLabels(inputLabelValues)

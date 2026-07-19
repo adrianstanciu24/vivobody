@@ -1,5 +1,13 @@
 # Exercise Anatomy Review Report
 
+> Historical audit artifact. Its 20-muscle vocabulary and numeric
+> `1.0`/`0.7`/`0.4`/`0.2` tiers describe the pre-remediation catalog and must
+> not be used as the current data contract. The implemented contract is
+> `specs/exercise-data-contract.md`: categorical primary/secondary/stabilizer
+> roles, separate glute max and glute med regions, and distinct external
+> rotator, teres major, and subscapularis regions. The generated catalog and
+> its validation tests are authoritative.
+
 Reviewer: Codex  
 Started: 2026-06-27  
 Catalog: `vivobody/Resources/catalog.json`  

@@ -23,6 +23,11 @@ struct OneRepMaxEditorSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draft: Double
 
+    /// Zero is the honest seed when no absolute effective load is
+    /// available (for example, bodyweight has not been measured). It
+    /// must never be persisted as a measured one-rep max.
+    private var canSave: Bool { draft.isFinite && draft > 0 }
+
     init(
         initialValue: Double,
         hasMeasured: Bool,
@@ -80,6 +85,7 @@ struct OneRepMaxEditorSheet: View {
                         dismiss()
                     }
                     .fontWeight(.semibold)
+                    .disabled(!canSave)
                 }
             }
             .presentationDetents([.medium])

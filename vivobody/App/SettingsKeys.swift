@@ -21,11 +21,14 @@ nonisolated enum SettingsKey {
     /// @AppStorage at every weight display + scrubber so flipping
     /// the toggle updates all surfaces synchronously.
     static let weightUnit = "settings.weightUnit"
-    /// Per-exercise weight increment, keyed by the stable catalog UUID.
-    /// Stored outside SwiftData because this is a control preference,
-    /// not workout history or catalog content.
-    static func weightStep(catalogItemID: UUID) -> String {
-        "settings.weightStep.\(catalogItemID.uuidString)"
+    /// Per-exercise weight increment. Bundled exercises use their stable
+    /// catalog ID so the preference survives a catalog reset; custom
+    /// exercises fall back to their installation-local SwiftData UUID.
+    static func weightStep(catalogID: String?, catalogItemID: UUID) -> String {
+        if let catalogID, !catalogID.isEmpty {
+            return "settings.weightStep.catalog.\(catalogID)"
+        }
+        return "settings.weightStep.custom.\(catalogItemID.uuidString)"
     }
     /// Stores `AppAppearance.rawValue`. Read via @AppStorage at the
     /// app root to drive `.preferredColorScheme`; "system" defers to
@@ -47,14 +50,6 @@ nonisolated enum SettingsKey {
     /// Teaches the drag-to-adjust gesture without an onboarding
     /// wizard, which the product principles cut outright.
     static let hasScrubbedNumber = "settings.hasScrubbedNumber"
-    /// Bool — whether the one-time legacy exercise identity backfill
-    /// has already run. Gates `backfillCopiedExerciseIdentityIfNeeded`
-    /// so it doesn't fetch every Exercise + TemplateExercise on every
-    /// launch after the first successful pass.
-    static let exerciseIdentityBackfilled = "settings.exerciseIdentityBackfilled"
-    /// Bool — whether bundled horizontal/vertical push/pull metadata
-    /// has been copied into catalog rows seeded before that field existed.
-    static let movementDirectionsBackfilled = "settings.movementDirectionsBackfilled"
     /// String — the last `CFBundleShortVersionString` that triggered
     /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
     /// delete-all + reindex runs once per app version, not every launch.

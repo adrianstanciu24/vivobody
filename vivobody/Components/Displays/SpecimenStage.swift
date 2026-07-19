@@ -166,7 +166,7 @@ struct SilkscreenGraticule: View {
 /// per-frame updates from a spin re-render only this subtree.
 struct StagedBodyModel: View {
     var renderHeight: CGFloat
-    var channels: [String: MuscleDevelopment.Channels]
+    var channels: [String: MuscleMapChannels]
     var warmth: Double
 
     @State private var rotation: Double = 0

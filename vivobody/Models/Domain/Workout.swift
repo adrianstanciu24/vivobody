@@ -18,7 +18,7 @@ import SwiftData
 /// Stored as the raw value on `Exercise`; exposed as `Exercise.group`.
 /// Display name and accent color are derived per case — no need to
 /// persist them.
-enum MuscleGroup: String, Hashable, CaseIterable {
+nonisolated enum MuscleGroup: String, Codable, Hashable, CaseIterable, Sendable {
     case chest, back, shoulders, legs, arms, core
 
     var displayName: String {
@@ -45,11 +45,11 @@ enum MuscleGroup: String, Hashable, CaseIterable {
 
 /// How an exercise's sets are measured. Most lifts are `reps`
 /// (weight × reps); isometric / timed work (plank, dead hang,
-/// timed carries) is `duration` — a held interval in seconds, with
+/// timed carries) is `duration` — a timed interval in seconds, with
 /// weight still optional (weighted plank, loaded carry). Stored as
 /// a raw value on the catalog item, the template exercise, and the
 /// session exercise so the enum can evolve without migrations.
-enum TrackingMode: String, Hashable, CaseIterable {
+nonisolated enum TrackingMode: String, Codable, Hashable, CaseIterable, Sendable {
     case reps
     case duration
 
@@ -69,20 +69,25 @@ enum TrackingMode: String, Hashable, CaseIterable {
 /// `exercise.session`, and vice versa.
 @Model
 final class Exercise: Identifiable {
-    #Index<Exercise>([\.name])
+    #Index<Exercise>([\.name], [\.catalogID], [\.catalogItemID])
     var id: UUID = UUID()
     var name: String = ""
     var catalogItemID: UUID? = nil
+
+    /// Stable bundled-catalog identity copied at pick time. Nil for
+    /// user-created exercises; `catalogItemID` remains the local-store
+    /// reference used by settings and in-place catalog edits.
+    var catalogID: String? = nil
+
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
     var plannedWeight: Double = 0
 
-    /// Snapshot of the catalog item's graded muscle involvement at
+    /// Snapshot of the catalog item's categorical muscle roles at
     /// pick-time. This keeps custom/renamed/deleted catalog exercises
     /// contributing to analytics even when their display name changes
-    /// later. Empty for legacy rows; computed access falls back to the
-    /// current catalog name, then to the coarse muscle group.
+    /// later. Empty custom rows fall back to the coarse muscle group.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Pick-time movement classification. All raw fields are optional
@@ -100,6 +105,12 @@ final class Exercise: Identifiable {
     /// as a raw value; defaulted so existing data reads as reps with
     /// no migration. Copied from the catalog/template at pick-time.
     var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Pick-time analytics semantics. These are snapshots so catalog
+    /// edits cannot silently reinterpret completed sessions.
+    var modalityRaw: String = ExerciseModality.dynamicStrength.rawValue
+    var loadModeRaw: String = ExerciseLoadMode.external.rawValue
+    var bodyweightFraction: Double = 0
 
     /// Planned hold length (seconds) for `.duration` exercises.
     /// Mirrors `plannedReps` for the timed case; ignored when the
@@ -134,14 +145,28 @@ final class Exercise: Identifiable {
         set { trackingModeRaw = newValue.rawValue }
     }
 
-    /// Muscles worked, with their graded contribution weights. New
-    /// rows read their pick-time snapshot; legacy rows fall back to
-    /// the current catalog name, then to the coarse muscle group.
+    var modality: ExerciseModality {
+        get { ExerciseModality(rawValue: modalityRaw) ?? .dynamicStrength }
+        set { modalityRaw = newValue.rawValue }
+    }
+
+    var loadMode: ExerciseLoadMode {
+        get { ExerciseLoadMode(rawValue: loadModeRaw) ?? .external }
+        set { loadModeRaw = newValue.rawValue }
+    }
+
+    var loadProfile: ExerciseLoadProfile {
+        ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
+    }
+
+    /// Muscles worked by categorical role. Rows read their pick-time
+    /// snapshot; unknown empty rows remain empty rather than acquiring
+    /// invented anatomy from a coarse browse group.
     var muscleInvolvement: Muscle.Involvement {
         if !muscleInvolvementSnapshot.isEmpty {
             return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
         }
-        return Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
+        return Muscle.involvement(forExerciseNamed: name)
     }
 
     /// Snapshotted movement metadata wins over name lookup so custom
@@ -168,6 +193,7 @@ final class Exercise: Identifiable {
         id: UUID = UUID(),
         name: String,
         catalogItemID: UUID? = nil,
+        catalogID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -175,17 +201,21 @@ final class Exercise: Identifiable {
         muscleInvolvement: Muscle.Involvement? = nil,
         classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength,
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0,
         plannedDuration: TimeInterval = 0,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.name = name
         self.catalogItemID = catalogItemID
+        self.catalogID = catalogID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
-        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.equipmentRaw = classification?.equipment.rawValue
         self.mechanicRaw = classification?.mechanic.rawValue
         self.patternRaw = classification?.pattern?.rawValue
@@ -193,6 +223,9 @@ final class Exercise: Identifiable {
         self.planeRaw = classification?.plane.rawValue
         self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
+        self.modalityRaw = modality.rawValue
+        self.loadModeRaw = loadMode.rawValue
+        self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.plannedDuration = plannedDuration
         self.sortOrder = sortOrder
 
@@ -216,6 +249,21 @@ final class Exercise: Identifiable {
 
 // MARK: - Set
 
+/// A logged set's intent. Warm-ups remain visible in the workout log
+/// but do not enter PR, comparable-tonnage, RIR, or hypertrophy-credit
+/// calculations. Raw-string storage keeps the SwiftData field additive.
+enum WorkoutSetKind: String, Codable, CaseIterable, Sendable {
+    case working
+    case warmUp
+
+    var displayName: String {
+        switch self {
+        case .working: return "Working"
+        case .warmUp: return "Warm-up"
+        }
+    }
+}
+
 /// One logged set within an exercise. The unit of completion.
 @Model
 final class WorkoutSet: Identifiable {
@@ -230,6 +278,18 @@ final class WorkoutSet: Identifiable {
     var duration: TimeInterval = 0
 
     var isCompleted: Bool = false
+
+    /// Explicit working/warm-up intent. Additive defaulted field — a
+    /// clean or older store reads existing sets as working sets.
+    var kindRaw: String = WorkoutSetKind.working.rawValue
+
+    var kind: WorkoutSetKind {
+        get { WorkoutSetKind(rawValue: kindRaw) ?? .working }
+        set { kindRaw = newValue.rawValue }
+    }
+
+    /// Shared eligibility gate for performance-oriented analytics.
+    var isAnalyticsEligible: Bool { isCompleted && kind == .working }
 
     /// Reps in reserve — how many more reps the lifter felt they had
     /// left at the end of this set. The session-logged read on how
@@ -279,6 +339,7 @@ final class WorkoutSet: Identifiable {
         reps: Int,
         duration: TimeInterval = 0,
         isCompleted: Bool = false,
+        kind: WorkoutSetKind = .working,
         repsInReserve: Int = 2,
         rirLogged: Bool = false,
         sortOrder: Int = 0,
@@ -291,6 +352,7 @@ final class WorkoutSet: Identifiable {
         self.reps = reps
         self.duration = duration
         self.isCompleted = isCompleted
+        self.kindRaw = kind.rawValue
         self.repsInReserve = repsInReserve
         self.rirLogged = rirLogged
         self.sortOrder = sortOrder
@@ -316,6 +378,7 @@ extension Exercise {
             reps: set.reps,
             duration: set.duration,
             trackingMode: trackingMode,
+            loadMode: loadMode,
             unit: unit
         )
     }
@@ -354,6 +417,7 @@ extension Exercise {
         let copy = Exercise(
             name: source.name,
             catalogItemID: source.catalogItemID,
+            catalogID: source.catalogID,
             group: source.group,
             plannedSets: 0,
             plannedReps: firstSet?.reps ?? source.plannedReps,
@@ -361,6 +425,9 @@ extension Exercise {
             muscleInvolvement: source.muscleInvolvement,
             classification: source.classification,
             trackingMode: source.trackingMode,
+            modality: source.modality,
+            loadMode: source.loadMode,
+            bodyweightFraction: source.bodyweightFraction,
             plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder
         )
@@ -371,6 +438,7 @@ extension Exercise {
                     reps: sourceSet.reps,
                     duration: sourceSet.duration,
                     isCompleted: false,
+                    kind: sourceSet.kind,
                     sortOrder: i,
                     plannedWeight: sourceSet.weight,
                     plannedReps: sourceSet.reps,
@@ -384,9 +452,9 @@ extension Exercise {
     static func samplePlan() -> [Exercise] {
         let templates: [(name: String, group: MuscleGroup, sets: Int, reps: Int, weight: Double)] = [
             ("Bench Press",    .chest,     3, 8, 135),
-            ("Barbell Row",    .back,      3, 8, 115),
-            ("Overhead Press", .shoulders, 3, 8, 95),
-            ("Back Squat",     .legs,      3, 8, 185),
+            ("Bent Over Rowing", .back,      3, 8, 115),
+            ("Shoulder Press, Dumbbells", .shoulders, 3, 8, 95),
+            ("Barbell Full Squat", .legs,      3, 8, 185),
         ]
         return templates.enumerated().map { i, t in
             Exercise(

@@ -12,10 +12,17 @@ import SwiftData
 
 #if DEBUG
 
-/// UI-test helpers driven by launch arguments. Reset wipes the
-/// store for a clean test base; seed inserts a partial active
-/// workout so the MiniBar / active-workout tests have state.
+/// UI-test and verification helpers driven by launch arguments.
+/// Reset wipes the store for a clean test base; seeds insert focused
+/// workout states; requestedTab chooses a capture start tab.
 enum UITestSupport {
+    static func requestedTab() -> AppTab? {
+        guard let index = CommandLine.arguments.firstIndex(of: "--verify-tab"),
+              CommandLine.arguments.indices.contains(index + 1)
+        else { return nil }
+        return AppTab(rawValue: CommandLine.arguments[index + 1])
+    }
+
     static func resetIfRequested(in context: ModelContext) {
         guard CommandLine.arguments.contains("--ui-test-reset") else { return }
         // UI tests must land on the tab shell, not the first-launch
@@ -31,7 +38,15 @@ enum UITestSupport {
     }
 
     static func seedIfRequested(in context: ModelContext) {
-        guard CommandLine.arguments.contains("--ui-test-active-partial") else { return }
+        if CommandLine.arguments.contains("--ui-test-active-partial") {
+            seedActivePartial(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-scheduled-template") {
+            seedScheduledTemplate(in: context)
+        }
+    }
+
+    private static func seedActivePartial(in context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.completedAt == nil }
         ))) ?? []
@@ -50,6 +65,28 @@ enum UITestSupport {
         }
         let session = WorkoutSession(exercises: [exercise], restDuration: 90)
         context.insert(session)
+        try? context.save()
+    }
+
+    private static func seedScheduledTemplate(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
+        guard existing.isEmpty else { return }
+
+        let template = WorkoutTemplate(
+            name: "Scheduled Test",
+            exercises: [
+                TemplateExercise(
+                    name: "Bench Press",
+                    group: .chest,
+                    plannedSets: 2,
+                    plannedReps: 8,
+                    plannedWeight: 135,
+                    sortOrder: 0
+                )
+            ]
+        )
+        template.scheduledWeekdays = [Calendar.current.component(.weekday, from: Date())]
+        context.insert(template)
         try? context.save()
     }
 
@@ -199,7 +236,7 @@ enum HistorySeeder {
         // Developed: a progressive press block.
         block([("Bench Press", .chest, 135),
                ("Incline Bench Press - Barbell", .chest, 95),
-               ("Overhead Press", .shoulders, 75)],
+               ("Shoulder Press, Dumbbells", .shoulders, 75)],
               startDaysAgo: 56, endDaysAgo: 6, count: 11, overload: 55, sets: 4, reps: 8)
 
         // Moderate development (lower body): a light, brief raise block.
@@ -294,8 +331,8 @@ enum HistorySeeder {
         let lower = WorkoutTemplate(name: "Lower Day B", sortOrder: 0)
         lower.scheduledWeekdays = [today, plusDays(3)].sorted()
         lower.exercises = [
-            TemplateExercise(name: "Back Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
-            TemplateExercise(name: "Romanian Deadlift", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
+            TemplateExercise(name: "Barbell Full Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
+            TemplateExercise(name: "Barbell Romanian Deadlift (RDL)", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
             TemplateExercise(name: "Leg Press", group: .legs, plannedSets: 3, plannedReps: 10, plannedWeight: 270, sortOrder: 2),
         ]
         context.insert(lower)
@@ -304,15 +341,15 @@ enum HistorySeeder {
         upper.scheduledWeekdays = [plusDays(2), plusDays(5)].sorted()
         upper.exercises = [
             TemplateExercise(name: "Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0),
-            TemplateExercise(name: "Barbell Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
-            TemplateExercise(name: "Overhead Press", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
-            TemplateExercise(name: "Barbell Curl", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
+            TemplateExercise(name: "Bent Over Rowing", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
+            TemplateExercise(name: "Shoulder Press, Dumbbells", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
+            TemplateExercise(name: "Biceps Curls With Barbell", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
         ]
         context.insert(upper)
 
         let core = WorkoutTemplate(name: "Core A", sortOrder: 2)
         core.exercises = [
-            TemplateExercise(name: "Hanging Leg Raise", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
+            TemplateExercise(name: "Hanging Leg Raises", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
         ]
         context.insert(core)
 
@@ -322,11 +359,11 @@ enum HistorySeeder {
     private static func templateExercise(for group: MuscleGroup, variant: Int) -> (name: String, weight: Double) {
         switch group {
         case .chest:     return ("Bench Press", 135)
-        case .back:      return ("Barbell Row", 115)
-        case .shoulders: return ("Overhead Press", 95)
-        case .legs:      return ("Back Squat", 185)
-        case .arms:      return ("Barbell Curl", 65)
-        case .core:      return ("Hanging Leg Raise", 0)
+        case .back:      return ("Bent Over Rowing", 115)
+        case .shoulders: return ("Shoulder Press, Dumbbells", 95)
+        case .legs:      return ("Barbell Full Squat", 185)
+        case .arms:      return ("Biceps Curls With Barbell", 65)
+        case .core:      return ("Hanging Leg Raises", 0)
         }
     }
 }

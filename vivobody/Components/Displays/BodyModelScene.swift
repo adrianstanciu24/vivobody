@@ -10,12 +10,11 @@
 //  keep in code rather than bake into the file: a camera, a 3-light
 //  rig, and per-part PBR materials.
 //
-//  Muscles are coloured by training (see `MuscleColor`): development
-//  sets the diffuse — a tint ramp from the theme's untrained base to
-//  a vivid, saturated orange. The input is a `channels` map keyed by
-//  node name (see `MuscleDevelopment`). The skeleton and connective
-//  tissue keep fixed anatomical tones per theme; an empty channels map
-//  renders every muscle at the untrained base.
+//  Muscles are coloured through `MuscleColor`: Today supplies chronic
+//  development, while Exercise Detail supplies temporary anatomy-role
+//  intensity. The input is a generic channel map keyed by node name.
+//  The skeleton and connective tissue keep fixed anatomical tones per
+//  theme; absent nodes render at the neutral no-data baseline.
 //
 //  Everything is themed (see `BodyModelTheme`): on the dark stage the
 //  figure separates by being LIGHTER than black — bright rim lights
@@ -31,11 +30,11 @@ import UIKit
 enum BodyModelScene {
     /// Loads the baked geometry, applies themed materials + lights,
     /// and adds the camera. `channels` maps a mesh's node name to its
-    /// development channels; absent nodes render untrained. Returns nil
+    /// muscle-map channels; absent nodes render at no-data. Returns nil
     /// only if the bundled archive is missing
     /// (a build-packaging error, not a runtime condition).
     static func make(
-        channels: [String: MuscleDevelopment.Channels] = [:],
+        channels: [String: MuscleMapChannels] = [:],
         theme: BodyModelTheme
     ) -> SCNScene? {
         guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
@@ -51,7 +50,7 @@ enum BodyModelScene {
     /// 26 MB archive. Used by the SwiftUI wrapper when the development
     /// map or the resolved appearance changes.
     static func apply(
-        channels: [String: MuscleDevelopment.Channels],
+        channels: [String: MuscleMapChannels],
         theme: BodyModelTheme,
         to scene: SCNScene
     ) {
@@ -167,17 +166,16 @@ enum BodyModelScene {
         return mat
     }
 
-    /// Channels for a muscle that has never been trained — the dark,
-    /// desaturated base every untargeted mesh renders at.
-    private static let untrainedChannels = MuscleDevelopment.Channels(adaptation: 0)
+    /// Channels for a muscle without data or anatomy context.
+    private static let untrainedChannels = MuscleMapChannels.noData
 
     /// Builds a muscle's material from its channels via the
-    /// `MuscleColor` map: development sets the diffuse (untrained
-    /// base → vivid orange on the theme's ramp). Developed muscle reads
+    /// `MuscleColor` map: intensity sets the diffuse (trained base →
+    /// vivid orange on the theme's ramp). Higher intensity reads
     /// a touch glossier. A fresh material per mesh (≈240) is cheap to
     /// rebuild on each re-tint.
     private static func muscleMaterial(
-        for channels: MuscleDevelopment.Channels,
+        for channels: MuscleMapChannels,
         theme: BodyModelTheme
     ) -> SCNMaterial {
         let c = MuscleColor.rgb(for: channels, theme: theme)
@@ -212,7 +210,7 @@ enum BodyModelScene {
 
     private static func applyMaterials(
         pivot: SCNNode,
-        channels: [String: MuscleDevelopment.Channels],
+        channels: [String: MuscleMapChannels],
         theme: BodyModelTheme
     ) {
         let bone = boneMaterial(for: theme)
@@ -235,7 +233,7 @@ enum BodyModelScene {
 
     private static func materialFor(
         name: String,
-        channels: [String: MuscleDevelopment.Channels],
+        channels: [String: MuscleMapChannels],
         theme: BodyModelTheme,
         bone: SCNMaterial,
         tissue: SCNMaterial

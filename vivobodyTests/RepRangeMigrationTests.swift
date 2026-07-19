@@ -34,8 +34,17 @@ struct RepRangeMigrationTests {
 
     /// Reps exercise built from (reps, completed) tuples at a fixed
     /// weight, mirroring `IntensityMixTests.lift`.
-    private func lift(_ sets: [(reps: Int, completed: Bool)]) -> Exercise {
-        let ex = Exercise(name: "Bench Press", group: .chest, plannedSets: 0, plannedWeight: 0)
+    private func lift(
+        _ sets: [(reps: Int, completed: Bool)],
+        modality: ExerciseModality = .dynamicStrength
+    ) -> Exercise {
+        let ex = Exercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0,
+            modality: modality
+        )
         for (i, s) in sets.enumerated() {
             ex.sets.append(WorkoutSet(weight: 100, reps: s.reps, isCompleted: s.completed, sortOrder: i))
         }
@@ -49,7 +58,14 @@ struct RepRangeMigrationTests {
 
     /// Timed-hold exercise (`.duration`) with completed sets.
     private func hold(seconds: [TimeInterval]) -> Exercise {
-        let ex = Exercise(name: "Plank", group: .core, plannedSets: 0, plannedWeight: 0, trackingMode: .duration)
+        let ex = Exercise(
+            name: "Plank",
+            group: .core,
+            plannedSets: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength
+        )
         for (i, sec) in seconds.enumerated() {
             ex.sets.append(WorkoutSet(weight: 0, reps: 0, duration: sec, isCompleted: true, sortOrder: i))
         }
@@ -156,6 +172,20 @@ struct RepRangeMigrationTests {
         // sets are dropped from the weekly average.
         let ex = lift([(8, true), (8, false), (0, true)])
         let report = [session(daysAgo: 1, [ex])].repRangeMigration(now: now)
+
+        #expect(report.points.count == 1)
+        #expect(report.points.first?.sets == 1)
+        #expect(abs((report.points.first?.averageReps ?? -1) - 8.0) < 0.001)
+    }
+
+    @Test func onlyDynamicStrengthRepsEnterWeeklyAverages() {
+        let dynamic = lift([(8, true)])
+        let conditioning = lift([(30, true)], modality: .conditioning)
+        let mobility = lift([(2, true)], modality: .mobility)
+        let invalidIsometricReps = lift([(20, true)], modality: .isometricStrength)
+        let report = [
+            session(daysAgo: 1, [dynamic, conditioning, mobility, invalidIsometricReps])
+        ].repRangeMigration(now: now)
 
         #expect(report.points.count == 1)
         #expect(report.points.first?.sets == 1)

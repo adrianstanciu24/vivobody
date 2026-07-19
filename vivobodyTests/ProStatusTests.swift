@@ -31,6 +31,28 @@ struct ProStatusTests {
         #expect(ProGate.status(hasVerifiedPurchase: false, isRevoked: true) == .free)
     }
 
+    // MARK: - Launch state
+
+    @Test func freshInstallStartsFree() {
+        #expect(ProGate.launchStatus(cachedUnlocked: false) == .free)
+    }
+
+    @Test func verifiedEntitlementCacheAvoidsOfflineLockFlash() {
+        #expect(ProGate.launchStatus(cachedUnlocked: true) == .pro)
+    }
+
+    @Test func disabledStoreKitFailsClosed() {
+        #expect(ProGate.launchStatus(cachedUnlocked: true, storeKitDisabled: true) == .free)
+    }
+
+    @Test func explicitProOverrideUnlocksDebugState() {
+        #expect(ProGate.launchStatus(
+            cachedUnlocked: false,
+            forcedPro: true,
+            storeKitDisabled: true
+        ) == .pro)
+    }
+
     // MARK: - Template limit
 
     @Test func freeTierIncludesFiveTemplates() {

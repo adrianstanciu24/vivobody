@@ -12,8 +12,8 @@
 //  block sneaking into "everything is 8s" or a strength block pulling
 //  sets back toward triples without a deliberate reset.
 //
-//  Completed `.reps` sets are bucketed by ISO week start, each week's
-//  average reps = totalReps / completedSetCount, and a least-squares
+//  Completed dynamic-strength `.reps` sets are bucketed by ISO week
+//  start, each week's average reps = totalReps / completedSetCount, and a least-squares
 //  line is fit to the weekly points (x = days since the first point,
 //  y = averageReps) — the same fit math as `StrengthOutlook`. The
 //  slope is reported in reps/week and mapped to a verdict:
@@ -21,8 +21,8 @@
 //    • towardStrength  — slope ≤ -0.1 reps/week (sets trending heavier)
 //    • stable          — |slope| < 0.1 reps/week
 //
-//  Timed (`.duration`) holds carry no reps and are excluded, as are
-//  incomplete sets and sets logged with zero reps. Pure value type on
+//  Timed (`.duration`) holds, conditioning reps, and mobility drills
+//  are excluded, as are incomplete sets and sets logged with zero reps. Pure value type on
 //  injected dates, so it's testable on a virtual clock (see
 //  `RepRangeMigrationTests`).
 //
@@ -94,8 +94,9 @@ extension Array where Element == WorkoutSession {
                 from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
             ) else { continue }
 
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted && set.reps > 0 {
+            for exercise in session.exercises
+            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
                     totalRepsByWeek[weekStart, default: 0] += set.reps
                     setCountByWeek[weekStart, default: 0] += 1
                 }

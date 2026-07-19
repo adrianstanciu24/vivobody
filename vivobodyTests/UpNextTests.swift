@@ -4,8 +4,9 @@
 //
 //  Guards the schedule-driven "Up next" engine on a virtual clock:
 //  the unscheduled short-circuit, train-today, the rest-day rollover
-//  (off-day vs already-trained), week wrap-around, same-day rotation,
-//  and the high-load lighter-session flag.
+//  (off-day vs already-trained), today's schedule after training,
+//  week wrap-around, same-day rotation, and the high-load lighter-
+//  session flag.
 //
 
 import Foundation
@@ -109,22 +110,37 @@ struct UpNextTests {
         #expect(daysUntil == 3)
     }
 
-    @Test func trainedTodayAdvancesToNext() {
-        let today = template(name: "Push", days: [weekday(offset: 0)], sortOrder: 0)
+    @Test func scheduledTodayStillWinsAfterTraining() {
+        let today = template(name: "Push", days: [weekday(offset: 0)], lastUsed: now, sortOrder: 0)
         let later = template(name: "Pull", days: [weekday(offset: 3)], sortOrder: 1)
         let upNext = UpNext.compute(templates: [today, later], sessions: [session(daysAgo: 0)], now: now, calendar: cal)
-        guard case let .rest(reason, next, daysUntil, _) = upNext.kind else { Issue.record("expected rest"); return }
-        #expect(reason == .doneToday)
-        #expect(next?.name == "Pull")
-        #expect(daysUntil == 3)
+        guard case let .scheduled(template, more, _) = upNext.kind else { Issue.record("expected scheduled"); return }
+        #expect(template.name == "Push")
+        #expect(more == 0)
     }
 
-    @Test func onlyTodayScheduledAndTrainedRollsAWeek() {
-        let t = template(name: "Push", days: [weekday(offset: 0)])
+    @Test func onlyTodayScheduledRemainsStartableAfterTraining() {
+        let t = template(name: "Push", days: [weekday(offset: 0)], lastUsed: now)
         let upNext = UpNext.compute(templates: [t], sessions: [session(daysAgo: 0)], now: now, calendar: cal)
-        guard case let .rest(reason, next, daysUntil, _) = upNext.kind else { Issue.record("expected rest"); return }
-        #expect(reason == .doneToday)
-        #expect(next?.name == "Push")
-        #expect(daysUntil == 7)
+        guard case let .scheduled(template, more, _) = upNext.kind else { Issue.record("expected scheduled"); return }
+        #expect(template.name == "Push")
+        #expect(more == 0)
+    }
+
+    @Test func unusedTemplateScheduledTodayRemainsStartableAfterTraining() {
+        let completed = template(name: "Push", days: [weekday(offset: 0)], lastUsed: now, sortOrder: 0)
+        let newlyScheduled = template(name: "Pull", days: [weekday(offset: 0)], sortOrder: 1)
+        let upNext = UpNext.compute(
+            templates: [completed, newlyScheduled],
+            sessions: [session(daysAgo: 0)],
+            now: now,
+            calendar: cal
+        )
+        guard case let .scheduled(template, more, _) = upNext.kind else {
+            Issue.record("expected newly scheduled template")
+            return
+        }
+        #expect(template.name == "Pull")
+        #expect(more == 1)
     }
 }

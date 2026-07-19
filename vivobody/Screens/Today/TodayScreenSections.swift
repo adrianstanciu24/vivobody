@@ -34,16 +34,11 @@ extension TodayScreen {
             .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
     }
 
-    /// The figure's placard, shown only at cold start when the
-    /// untrained figure is uniform: the legend decodes what the
-    /// colours will come to mean. Once anything is logged the figure
-    /// stands alone and readiness moves into its own section below
-    /// (see `readinessSection`).
-    @ViewBuilder
+    /// The always-visible key for the continuous development ramp.
+    /// Five semantic labels make it glanceable without presenting a
+    /// noisy percentage as physiological precision.
     var figureCaption: some View {
-        if completedSessions.isEmpty {
-            developmentLegend
-        }
+        developmentLegend
     }
 
     /// The readiness section: how ready you are to train again, drawn
@@ -53,24 +48,60 @@ extension TodayScreen {
     /// VoiceOver label.
     func readinessSection(_ report: TrainingLoadReport, line: ReadinessLine) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: "Readiness", trailing: ReadinessCard.statusText(for: report))
+            SectionHeader(
+                title: "Training Load",
+                trailing: ReadinessCard.statusText(for: report),
+                trailingIsInProgress: report.verdict == .insufficient
+            )
             ReadinessCard(report: report, line: line)
         }
     }
 
-    /// The cold-start placard: with no history the figure is uniform, so
-    /// this names what the colours will come to mean as you train.
+    /// Compact placard; tapping opens the evidence and confidence for
+    /// each region while keeping confidence out of the colour itself.
     var developmentLegend: some View {
-        Text("Each muscle wears a more vivid orange the more developed it is, fading toward a muted tone as you ease off.")
-            .font(Typography.caption)
-            .foregroundStyle(Ink.secondary)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, Space.xl)
+        Button {
+            showMuscleMapDetails = true
+        } label: {
+            VStack(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                        VStack(spacing: 4) {
+                            Circle()
+                                .fill(legendColor(for: band))
+                                .frame(width: 14, height: 14)
+                            Text(band.displayName)
+                                .font(Typography.metricMicro)
+                                .foregroundStyle(Ink.tertiary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.65)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                Text("Training development · tap for details")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.secondary)
+            }
+            .padding(.horizontal, Space.md)
             .padding(.vertical, Space.md)
             .contentChip()
             .frame(maxWidth: .infinity)
-            .accessibilityHidden(true)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Training development legend. Tap for muscle details.")
+    }
+
+    func legendColor(for band: MuscleDevelopmentBand) -> Color {
+        let channels = band == .noData
+            ? MuscleMapChannels.noData
+            : MuscleMapChannels(intensity: band.representativeIntensity)
+        let rgb = MuscleColor.rgb(
+            for: channels,
+            theme: colorScheme == .dark ? .dark : .light
+        )
+        return Color(red: rgb.red, green: rgb.green, blue: rgb.blue)
     }
 
     // MARK: - Up next
@@ -294,15 +325,21 @@ extension TodayScreen {
                 }
                 let count = loR == hiR ? "\(sets.count) × \(loR)" : "\(sets.count) × \(loR)–\(hiR)"
                 if loW == hiW {
-                    return schemeWithLoad(count: count, weight: loW)
+                    return schemeWithLoad(
+                        count: count,
+                        weight: loW,
+                        loadMode: exercise.loadMode
+                    )
                 }
-                let loStr = WeightFormatter.string(loW, unit: unit, includeUnit: false)
-                let hiStr = WeightFormatter.string(hiW, unit: unit, includeUnit: false)
-                return UpNextScheme(count: count, load: "\(loStr)–\(hiStr)", loadUnit: unit.symbol)
+                return UpNextScheme(
+                    count: count,
+                    load: exercise.loadMode.summaryLoadRangeLabel(loW, hiW, unit: unit)
+                )
             }
             return schemeWithLoad(
                 count: "\(exercise.plannedSets) × \(exercise.plannedReps)",
-                weight: exercise.plannedWeight
+                weight: exercise.plannedWeight,
+                loadMode: exercise.loadMode
             )
 
         case .duration:
@@ -312,39 +349,64 @@ extension TodayScreen {
                 guard let lo = durations.min(), let hi = durations.max() else {
                     return UpNextScheme(count: "\(sets.count) sets")
                 }
-                if lo == hi {
-                    return UpNextScheme(count: "\(sets.count) ×", load: DurationFormatter.string(lo), loadUnit: "hold")
-                }
-                return UpNextScheme(
+                let duration = lo == hi
+                    ? DurationFormatter.string(lo)
+                    : "\(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+                return durationScheme(
                     count: "\(sets.count) ×",
-                    load: "\(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))",
-                    loadUnit: "hold"
+                    duration: duration,
+                    modality: exercise.modality,
+                    loadMode: exercise.loadMode,
+                    weights: sets.map(\.weight)
                 )
             }
-            return UpNextScheme(
+            return durationScheme(
                 count: "\(exercise.plannedSets) ×",
-                load: DurationFormatter.string(exercise.plannedDuration),
-                loadUnit: "hold"
+                duration: DurationFormatter.string(exercise.plannedDuration),
+                modality: exercise.modality,
+                loadMode: exercise.loadMode,
+                weights: [exercise.plannedWeight]
             )
         }
     }
 
-    /// Bodyweight plans (zero load) drop the load token entirely
-    /// instead of reading "@ 0".
-    private func schemeWithLoad(count: String, weight: Double) -> UpNextScheme {
-        guard weight > 0 else { return UpNextScheme(count: count) }
+    /// Raw planned load with its actual meaning: bodyweight, added load,
+    /// assistance, and resistance never collapse into an ordinary weight.
+    private func schemeWithLoad(
+        count: String,
+        weight: Double,
+        loadMode: ExerciseLoadMode
+    ) -> UpNextScheme {
         return UpNextScheme(
             count: count,
-            load: WeightFormatter.string(weight, unit: unit, includeUnit: false),
-            loadUnit: unit.symbol
+            load: loadMode.summaryLoadLabel(weight, unit: unit)
         )
+    }
+
+    private func durationScheme(
+        count: String,
+        duration: String,
+        modality: ExerciseModality,
+        loadMode: ExerciseLoadMode,
+        weights: [Double]
+    ) -> UpNextScheme {
+        let load: String?
+        if let lower = weights.min(), let upper = weights.max() {
+            load = lower == upper
+                ? loadMode.summaryLoadLabel(lower, unit: unit)
+                : loadMode.summaryLoadRangeLabel(lower, upper, unit: unit)
+        } else {
+            load = nil
+        }
+        let details = ([modality.durationLabelLowercased] + (load.map { ["·", $0] } ?? []))
+            .joined(separator: " ")
+        return UpNextScheme(count: count, load: duration, loadUnit: details)
     }
 
     func upNextSchemeAccessibility(_ scheme: UpNextScheme) -> String {
         var parts = [scheme.count]
-        if let load = scheme.load {
-            parts.append("at \(load) \(scheme.loadUnit ?? "")".trimmingCharacters(in: .whitespaces))
-        }
+        if let load = scheme.load { parts.append(load) }
+        if let loadUnit = scheme.loadUnit { parts.append(loadUnit) }
         return parts.joined(separator: " ")
     }
 
@@ -368,9 +430,9 @@ extension TodayScreen {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, Space.xl)
                 .frame(minHeight: 50)
+                .coloredGlassControl(cornerRadius: Radius.pill)
         }
         .buttonStyle(.plain)
-        .coloredGlassControl(cornerRadius: Radius.pill)
         .softElevation(radius: 14, y: 7, opacity: 0.35)
         .accessibilityLabel("Start \(template.name)")
         .accessibilityHint("Scheduled for today")
@@ -397,7 +459,17 @@ extension TodayScreen {
         let gapLb = pr.bestE1RM - pr.currentE1RM
         guard gapLb >= 1 else { return nil }
         let inTemplate = template.orderedExercises.contains {
-            $0.name.caseInsensitiveCompare(pr.exercise) == .orderedSame
+            ExerciseIdentity.key(
+                catalogID: $0.catalogID,
+                catalogItemID: $0.catalogItemID,
+                name: $0.name,
+                performanceSignature: ExercisePerformanceSignature(
+                    modality: $0.modality,
+                    trackingMode: $0.trackingMode,
+                    loadMode: $0.loadMode,
+                    bodyweightFraction: $0.bodyweightFraction
+                )
+            ) == pr.historyKey
         }
         guard inTemplate else { return nil }
         let gap = WeightFormatter.string(gapLb, unit: unit, includeUnit: false)
@@ -419,8 +491,9 @@ extension TodayScreen {
     /// START is pinned separately in a native safe-area bar. Because
     /// `safeAreaBar` floats over the scroll view instead of reducing
     /// the hero's initial layout height, the figure subtracts the CTA
-    /// clearance explicitly so the caption and next section do not sit
-    /// underneath the button. `heroHeight` is frozen on first layout
+    /// clearance explicitly so the legend and next section do not sit
+    /// underneath the button. The persistent five-band legend needs a
+    /// second small clearance of its own. `heroHeight` is frozen on first layout
     /// (see `body`), so the model holds a constant size as the large
     /// title collapses on scroll rather than rescaling mid-gesture.
     func bodyHeroHeight() -> CGFloat {
@@ -434,12 +507,17 @@ extension TodayScreen {
         guard base > 0 else { return 0 }
         return max(
             base * Self.minimumHeroFraction,
-            base * Self.heroFraction - Self.pinnedStartBarClearance
+            base * Self.heroFraction
+                - Self.pinnedStartBarClearance
+                - Self.developmentLegendClearance
         )
     }
 
     static let heroFraction: CGFloat = 0.98
-    static let minimumHeroFraction: CGFloat = 0.80
+    static let minimumHeroFraction: CGFloat = 0.68
+    /// Includes the legend itself plus the 24-point increase from the
+    /// old 8-point model-to-legend gap to the current 32-point gap.
+    static let developmentLegendClearance: CGFloat = 88
 
     /// Reserve the height occupied by the pinned primary CTA above the
     /// floating tab bar. `safeAreaBar` provides native chrome placement;
@@ -542,7 +620,7 @@ extension TodayScreen {
         StatStrip(
             stats: [
                 Stat(value: "\(Int(session.duration / 60))", unit: "min", label: "Time"),
-                Stat(value: volumeLabel(session.totalVolume), unit: unit.symbol, label: "Volume", accent: lastWorkoutHasPR),
+                lastWorkoutVolumeStat(for: session),
                 Stat(value: "\(session.totalSets)", label: "Sets"),
             ],
             valueFont: Typography.statValue,
@@ -551,6 +629,27 @@ extension TodayScreen {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Space.xl)
         .contentCard()
+    }
+
+    private func lastWorkoutVolumeStat(for session: WorkoutSession) -> Stat {
+        let summary = session.comparableTonnageSummary
+        switch summary.availability {
+        case .complete:
+            return Stat(
+                value: volumeLabel(summary.knownSubtotal),
+                unit: unit.symbol,
+                label: "Volume",
+                accent: lastWorkoutHasPR
+            )
+        case .partial:
+            return Stat(
+                value: "\(volumeLabel(summary.knownSubtotal))+",
+                unit: unit.symbol,
+                label: "Known volume"
+            )
+        case .unavailable:
+            return Stat(value: "—", label: "Volume unavailable")
+        }
     }
 
     /// Relative day + time of the last session, surfaced as the dim

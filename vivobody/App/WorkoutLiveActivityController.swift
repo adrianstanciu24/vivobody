@@ -98,6 +98,7 @@ enum WorkoutLiveActivityController {
             reps: set.reps,
             duration: set.duration,
             trackingMode: exercise.trackingMode,
+            loadMode: exercise.loadMode,
             unit: .current
         )
     }

@@ -28,6 +28,8 @@ struct TrainingLoadTests {
         weight: Double = 100,
         completed: Bool = true,
         mode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength,
+        setCompleted: Bool = true,
         duration: TimeInterval = 0
     ) -> WorkoutSession {
         let date = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
@@ -36,7 +38,8 @@ struct TrainingLoadTests {
             group: mode == .duration ? .core : .chest,
             plannedSets: 0,
             plannedWeight: 0,
-            trackingMode: mode
+            trackingMode: mode,
+            modality: modality
         )
         for i in 0..<sets {
             ex.sets.append(
@@ -44,7 +47,7 @@ struct TrainingLoadTests {
                     weight: weight,
                     reps: reps,
                     duration: duration,
-                    isCompleted: true,
+                    isCompleted: setCompleted,
                     sortOrder: i
                 )
             )
@@ -171,10 +174,67 @@ struct TrainingLoadTests {
     @Test func bodyweightAndTimedWorkContribute() {
         let sessions = [
             session(daysAgo: 1, sets: 1, reps: 10, weight: 0),
-            session(daysAgo: 2, sets: 1, reps: 0, weight: 0, mode: .duration, duration: 30),
+            session(
+                daysAgo: 2,
+                sets: 1,
+                reps: 0,
+                weight: 0,
+                mode: .duration,
+                modality: .isometricStrength,
+                duration: 30
+            ),
         ]
         let report = sessions.trainingLoad(now: now, calendar: calendar)
         #expect(abs(report.currentLoad - 2) < 0.001)
+    }
+
+    @Test func mixedModalitiesCreditStrengthWorkOnly() {
+        let sessions = [
+            session(daysAgo: 1, sets: 2, reps: 5, modality: .dynamicStrength),
+            session(daysAgo: 2, sets: 3, reps: 3, modality: .conditioning),
+            session(
+                daysAgo: 3,
+                sets: 2,
+                reps: 0,
+                mode: .duration,
+                modality: .isometricStrength,
+                duration: 30
+            ),
+            session(
+                daysAgo: 4,
+                sets: 4,
+                reps: 0,
+                mode: .duration,
+                modality: .mobility,
+                duration: 30
+            ),
+        ]
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(abs(report.currentLoad - 4) < 0.001)
+        #expect(report.drivers.sessions.current == 2)
+        #expect(report.drivers.heavySets.current == 2)
+    }
+
+    @Test func incompleteWorkingSetsDoNotContribute() {
+        let sessions = [
+            session(daysAgo: 1, sets: 1, reps: 8),
+            session(daysAgo: 2, sets: 3, reps: 8, setCompleted: false),
+            session(
+                daysAgo: 3,
+                sets: 2,
+                reps: 0,
+                mode: .duration,
+                modality: .isometricStrength,
+                setCompleted: false,
+                duration: 30
+            ),
+        ]
+        let report = sessions.trainingLoad(now: now, calendar: calendar)
+
+        #expect(abs(report.currentLoad - 1) < 0.001)
+        #expect(report.drivers.sessions.current == 1)
+        #expect(report.drivers.heavySets.current == 0)
     }
 
     // MARK: - Drivers

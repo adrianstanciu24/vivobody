@@ -91,6 +91,9 @@ struct AppRoot: View {
                     workout.modelContext = modelContext
                 }
 #if DEBUG
+                if let requestedTab = UITestSupport.requestedTab() {
+                    appState.selectedTab = requestedTab
+                }
                 UITestSupport.resetIfRequested(in: modelContext)
 #endif
                 ExerciseCatalogItem.seedIfEmpty(in: modelContext)
@@ -101,11 +104,9 @@ struct AppRoot: View {
                 consumeIncomingActions()
 
                 // Non-critical path — defer to a low-priority Task so
-                // SwiftUI's first render isn't blocked by legacy data
-                // fix-ups, Spotlight indexing, or widget snapshot writes.
+                // SwiftUI's first render isn't blocked by Spotlight
+                // indexing or widget snapshot writes.
                 Task(priority: .utility) { @MainActor in
-                    ExerciseCatalogItem.backfillCopiedExerciseIdentityIfNeeded(in: modelContext)
-                    ExerciseCatalogItem.backfillMovementDirectionsIfNeeded(in: modelContext)
                     let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
                     let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
                     SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)

@@ -11,7 +11,7 @@
 //  muscle's productive weekly set range. It shares its work currency
 //  with `MuscleVolume` (each completed set is priced in HARD-SET
 //  EQUIVALENTS — load, reps, and RIR aware — then credited to each
-//  involved muscle by its graded involvement weight; see
+//  primary or secondary muscle by its volume-bearing role; see
 //  `SetStimulus`), so the body, the volume bars, and the neglect
 //  list agree by construction.
 //
@@ -106,13 +106,7 @@ nonisolated enum MuscleDevelopment {
     /// pure value-type model (and its `Equatable` conformance) is
     /// usable off the main actor — replayed in tests and by
     /// `TrainingSignature` outside any isolation domain.
-    nonisolated struct Channels: Equatable {
-        var adaptation: Double   // 0...1  → development tint ramp
-
-        init(adaptation: Double) {
-            self.adaptation = adaptation
-        }
-    }
+    typealias Channels = MuscleMapChannels
 
     // MARK: - Full model state
 
@@ -160,7 +154,7 @@ nonisolated enum MuscleDevelopment {
         /// All channels for one muscle (zeroed if untrained).
         func channels(_ muscle: Muscle) -> Channels {
             guard let f = fibers[muscle] else {
-                return Channels(adaptation: 0)
+                return .noData
             }
             return Channels(adaptation: development(weeklyVolume: f.weeklyVolume, for: muscle))
         }

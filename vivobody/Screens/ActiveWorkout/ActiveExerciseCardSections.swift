@@ -27,7 +27,8 @@ extension ActiveExerciseCard {
 
     var setCountLabel: String {
         if let active = activeIndex {
-            return "Set \(active + 1) of \(sets.count)"
+            let kind = sets[active].kind == .warmUp ? " · Warm-up" : ""
+            return "Set \(active + 1) of \(sets.count)\(kind)"
         }
         return "All sets complete"
     }
@@ -46,20 +47,30 @@ extension ActiveExerciseCard {
         HStack(spacing: Space.md) {
             ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
                 let pipView = pip(isCompleted: set.isCompleted, isActive: idx == activeIndex)
-                // Skip the menu on a lone pending set — there'd be
-                // nothing to offer (can't remove the last set, nothing
-                // logged to edit).
+                // Every pip exposes set intent. Completed sets also
+                // edit/delete; pending sets can be removed when more
+                // than one exists.
                 if set.isCompleted {
                     pipView
                         .contextMenu { pipMenu(for: set) }
                         .accessibilityAction(named: "Edit set") { editingSet = set }
                         .accessibilityAction(named: "Delete set") { deletingSet = set }
+                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
+                            toggleKind(of: set)
+                        }
                 } else if sets.count > 1 {
                     pipView
                         .contextMenu { pipMenu(for: set) }
                         .accessibilityAction(named: "Remove set") { removeSet(set) }
+                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
+                            toggleKind(of: set)
+                        }
                 } else {
                     pipView
+                        .contextMenu { pipMenu(for: set) }
+                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
+                            toggleKind(of: set)
+                        }
                 }
             }
             removeSetButton
@@ -73,6 +84,14 @@ extension ActiveExerciseCard {
     /// (so long as it isn't the only one).
     @ViewBuilder
     func pipMenu(for set: WorkoutSet) -> some View {
+        Button {
+            toggleKind(of: set)
+        } label: {
+            Label(
+                set.kind == .working ? "Mark as warm-up" : "Mark as working",
+                systemImage: set.kind == .working ? "flame" : "dumbbell"
+            )
+        }
         if set.isCompleted {
             Button {
                 editingSet = set
@@ -91,6 +110,12 @@ extension ActiveExerciseCard {
                 Label("Remove set", systemImage: "minus.circle")
             }
         }
+    }
+
+    func toggleKind(of set: WorkoutSet) {
+        set.kind = set.kind == .working ? .warmUp : .working
+        saveActiveSessionChanges()
+        Haptics.selection()
     }
 
     /// One-tap "add a set" — a quiet outlined plus that lives at the
@@ -165,6 +190,8 @@ extension ActiveExerciseCard {
     /// Weight × reps instrument — the default lift.
     var repsHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
+            Text(exercise.loadMode.inputLabel)
+                .panelLegend()
             BareScrubber(
                 value: weightDisplayBinding,
                 range: unit.strengthRange,
@@ -175,7 +202,7 @@ extension ActiveExerciseCard {
                 unitFontSize: 18,
                 numberColor: Ink.primary,
                 unitColor: Ink.tertiary,
-                accessibilityLabel: "Weight",
+                accessibilityLabel: exercise.loadMode.inputLabel,
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
                 fitsWidth: true,
@@ -209,11 +236,13 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Timed-hold instrument — the big number is the target duration
-    /// (mm:ss); the optional load below handles weighted holds and
-    /// loaded carries. Left at 0 the load simply reads as bodyweight.
+    /// Timed instrument — the big number is the target duration
+    /// (mm:ss). Modality supplies the noun: isometric work is a hold,
+    /// conditioning is an interval, and other duration work is time.
     var durationHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
+            Text(exercise.modality.durationLabel)
+                .panelLegend()
             BareScrubber(
                 value: durationBinding,
                 range: DurationFormatter.scrubRange,
@@ -222,7 +251,7 @@ extension ActiveExerciseCard {
                 fontSize: 104,
                 numberColor: Ink.primary,
                 formatter: { DurationFormatter.string($0) },
-                accessibilityLabel: "Hold duration",
+                accessibilityLabel: exercise.modality.durationLabel,
                 showsScrubHint: isActive,
                 performsScrubNudge: isActive,
                 fitsWidth: true,
@@ -230,8 +259,10 @@ extension ActiveExerciseCard {
                 showsRail: true
             )
 
+            Text(exercise.loadMode.inputLabel)
+                .panelLegend()
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text("+")
+                Text(exercise.loadMode.inputOperatorSymbol)
                     .font(Typography.statValue)
                     .foregroundStyle(Ink.quaternary)
                     .accessibilityHidden(true)
@@ -245,7 +276,7 @@ extension ActiveExerciseCard {
                     unitFontSize: 14,
                     numberColor: Ink.secondary,
                     unitColor: Ink.tertiary,
-                    accessibilityLabel: "Weight",
+                    accessibilityLabel: exercise.loadMode.inputLabel,
                     showsScrubHint: isActive,
                     tickTone: .deep,
                     hitSlop: 18
@@ -267,20 +298,17 @@ extension ActiveExerciseCard {
     }
 
     func completedRepsHero(_ top: WorkoutSet?) -> some View {
-        let weightText = top.map { WeightFormatter.string($0.weight, unit: unit, includeUnit: false) } ?? "—"
+        let weightText = top.flatMap {
+            exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
+        } ?? "—"
         let repsText = top.map { "\($0.reps)" } ?? "—"
         return VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(weightText)
-                    .font(Typography.bigMetric)
-                    .foregroundStyle(Tint.complete)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                Text(unit.symbol)
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Tint.complete.opacity(Opacity.emphasis))
-            }
+            Text(weightText)
+                .font(Typography.bigMetric)
+                .foregroundStyle(Tint.complete)
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.35)
             HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                 Text("×")
                     .font(Typography.statValue)
@@ -300,42 +328,47 @@ extension ActiveExerciseCard {
 
     func completedDurationHero(_ top: WorkoutSet?) -> some View {
         let timeText = top.map { DurationFormatter.string($0.duration) } ?? "—"
-        let loaded = (top?.weight ?? 0) > 0
+        let loadText = top.flatMap {
+            exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
+        }
+        let accessibilityLoad = top.flatMap {
+            exercise.loadMode.accessibilityLoadDescription($0.weight, unit: unit)
+        }
         return VStack(alignment: .leading, spacing: Space.sm) {
+            Text(exercise.modality.durationLabel)
+                .panelLegend()
             Text(timeText)
                 .font(Typography.bigMetric)
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
-            if loaded, let top {
+            if let loadText {
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                    Text("+")
-                        .font(Typography.statValue)
-                        .foregroundStyle(Ink.quaternary)
-                        .accessibilityHidden(true)
-                    Text(WeightFormatter.string(top.weight, unit: unit, includeUnit: false))
+                    Text(loadText)
                         .font(Typography.metricLg)
                         .foregroundStyle(Tint.complete.opacity(Opacity.strong))
                         .monospacedDigit()
-                    Text(unit.symbol)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(Ink.tertiary)
                 }
             }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            "\(exercise.modality.durationLabel) \(timeText)"
+                + (accessibilityLoad.map { ", \($0)" } ?? "")
+        )
     }
 
     // MARK: - RIR
 
-    /// Reps-in-reserve pill — reps mode only (timed holds have no
-    /// "reps left"). Panel discipline: when the exercise finishes the
+    /// Reps-in-reserve pill — dynamic-strength reps only. Panel
+    /// discipline: when the exercise finishes the
     /// control goes dark but HOLDS ITS PLACE, like a hardware control
     /// whose lamp went out — the panel never reflows between states.
     @ViewBuilder
     var rirControl: some View {
-        if exercise.trackingMode == .reps {
+        if exercise.modality == .dynamicStrength,
+           exercise.trackingMode == .reps {
             let isLive = session.activeSet(for: exercise) != nil
             RIRSelector(value: rirBinding)
                 .padding(.bottom, Space.md)
@@ -387,9 +420,11 @@ extension ActiveExerciseCard {
     }
 
     /// Echoes the previously-logged set's RIR in the "Last …" caption.
-    /// Reps mode only — timed holds carry no reps-in-reserve.
+    /// Dynamic-strength reps only; omit untouched default values.
     func lastSetRIRSuffix(_ set: WorkoutSet) -> String {
-        guard exercise.trackingMode == .reps else { return "" }
+        guard exercise.modality == .dynamicStrength,
+              exercise.trackingMode == .reps,
+              set.rirLogged else { return "" }
         return "  ·  \(RIRSelector.displayLabel(set.repsInReserve)) RIR"
     }
 
@@ -432,15 +467,18 @@ extension ActiveExerciseCard {
     var actionArea: some View {
         if let active = session.activeSet(for: exercise) {
             let isLastSet = activeIndex == sets.count - 1
-            let isHold = exercise.trackingMode == .duration
+            let durationAccessibilityLabel = "\(exercise.modality.durationLabel) \(DurationFormatter.string(active.duration))"
+                + (exercise.loadMode.accessibilityLoadDescription(active.weight, unit: unit)
+                    .map { ", \($0)" } ?? "")
             SetCompleteButton(
                 reps: active.reps,
                 weight: active.weight,
+                loadMode: exercise.loadMode,
                 isComplete: pendingCompletionSetID == active.id,
                 intensity: isLastSet ? .peak : .standard,
-                title: completeTitle(isLastSet: isLastSet, isHold: isHold),
-                accessibilityLabelOverride: isHold
-                    ? "Hold \(DurationFormatter.string(active.duration))"
+                title: completeTitle(isLastSet: isLastSet),
+                accessibilityLabelOverride: exercise.trackingMode == .duration
+                    ? durationAccessibilityLabel
                     : nil,
                 onToggle: { handleSetToggle(active) }
             )

@@ -3,9 +3,9 @@
 //  vivobodyTests
 //
 //  Guards the compound-vs-isolation split: classification by name via
-//  the catalog, the 4-week window, exclusion of holds and incomplete
-//  sets, unclassified bucketing for custom names, and the dominant-
-//  mechanic read (ties break to compound).
+//  the catalog, the 4-week window, isometric holds, modality and set
+//  validity gates, unclassified bucketing for custom names, and the
+//  dominant-mechanic read (ties break to compound).
 //
 
 import Foundation
@@ -28,8 +28,15 @@ struct MovementCompositionTests {
     /// Name drives classification, so it's parameterised.
     private func lift(_ name: String,
                       _ group: MuscleGroup,
+                      modality: ExerciseModality = .dynamicStrength,
                       _ sets: [(reps: Int, completed: Bool)]) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: 0, plannedWeight: 0)
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: 0,
+            plannedWeight: 0,
+            modality: modality
+        )
         for (i, s) in sets.enumerated() {
             ex.sets.append(WorkoutSet(weight: 100, reps: s.reps, isCompleted: s.completed, sortOrder: i))
         }
@@ -37,7 +44,14 @@ struct MovementCompositionTests {
     }
 
     private func hold(seconds: [TimeInterval]) -> Exercise {
-        let ex = Exercise(name: "Plank", group: .core, plannedSets: 0, plannedWeight: 0, trackingMode: .duration)
+        let ex = Exercise(
+            name: "Plank",
+            group: .core,
+            plannedSets: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength
+        )
         for (i, sec) in seconds.enumerated() {
             ex.sets.append(WorkoutSet(weight: 0, reps: 0, duration: sec, isCompleted: true, sortOrder: i))
         }
@@ -68,10 +82,36 @@ struct MovementCompositionTests {
         #expect(split.classifiedTotal == 2)
     }
 
-    @Test func ignoresTimedHolds() {
-        let split = [session(daysAgo: 1, [hold(seconds: [60, 45])])].compoundIsolationSplit(now: now)
-        #expect(split.hasData == false)
-        #expect(split.classifiedTotal == 0)
+    @Test func countsOnlyCompletedNonemptyIsometricHolds() {
+        let plank = hold(seconds: [60, 0, 45])
+        plank.sets[2].isCompleted = false
+        let split = [session(daysAgo: 1, [plank])].compoundIsolationSplit(now: now)
+
+        #expect(split.hasData)
+        #expect(split.isolationSets == 1)
+        #expect(split.classifiedTotal == 1)
+        #expect(split.unclassifiedSets == 0)
+    }
+
+    @Test func ignoresConditioningAndMobilitySets() {
+        let bench = lift("Bench Press", .chest, [(8, true)])
+        let conditioning = lift(
+            "Burpee",
+            .chest,
+            modality: .conditioning,
+            [(20, true), (20, true)]
+        )
+        let mobility = lift(
+            "Shoulder CAR",
+            .shoulders,
+            modality: .mobility,
+            [(5, true), (5, true), (5, true)]
+        )
+        let split = [session(daysAgo: 1, [bench, conditioning, mobility])]
+            .compoundIsolationSplit(now: now)
+
+        #expect(split.compoundSets == 1)
+        #expect(split.isolationSets == 0)
         #expect(split.unclassifiedSets == 0)
     }
 

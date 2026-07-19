@@ -6,12 +6,13 @@
 //  The contract under test: a normal hard working set is worth exactly
 //  1.0 (the neutral anchor that keeps the volume landmarks and every
 //  existing colour calibrated), absence of signal is always neutral
-//  (unlogged RIR, bodyweight, first instance, timed holds), and the
-//  three factor curves demote exactly the junk they were built for —
-//  warm-up loads, token weights, heavy singles, sets far from failure.
-//  Load references must be causal (a PR raises the bar only for what
-//  follows) and must relax after a layoff (decaying max, not all-time
-//  max). Like every model suite: virtual clock, in-memory graphs.
+//  (unlogged RIR, unavailable load, first instance), and the factor
+//  curves demote exactly the junk they were built for — warm-up loads,
+//  token weights, heavy singles, short/light holds, and sets far from
+//  failure. Load references must be causal (a stronger set raises the
+//  bar only for what follows) and must relax after a layoff (decaying
+//  max, not all-time max). Like every model suite: virtual clock,
+//  in-memory graphs.
 //
 
 import Foundation
@@ -34,22 +35,30 @@ struct SetStimulusTests {
         var reps: Int
         var rir: Int? = nil        // nil = never rated (rirLogged false)
         var duration: TimeInterval = 0
+        var isCompleted = true
     }
 
-    private func lift(_ name: String, _ group: MuscleGroup, sets: [SetSpec], mode: TrackingMode = .reps) -> Exercise {
+    private func lift(
+        _ name: String,
+        _ group: MuscleGroup,
+        sets: [SetSpec],
+        mode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength
+    ) -> Exercise {
         let ex = Exercise(
             name: name,
             group: group,
             plannedSets: sets.count,
             plannedReps: sets.first?.reps ?? 8,
             plannedWeight: sets.first?.weight ?? 0,
-            trackingMode: mode
+            trackingMode: mode,
+            modality: modality
         )
         for (spec, set) in zip(sets, ex.orderedSets) {
             set.weight = spec.weight
             set.reps = spec.reps
             set.duration = spec.duration
-            set.isCompleted = true
+            set.isCompleted = spec.isCompleted
             if let rir = spec.rir {
                 set.repsInReserve = rir
                 set.rirLogged = true
@@ -58,14 +67,9 @@ struct SetStimulusTests {
         return ex
     }
 
-    /// Total hard-set equivalents an exercise earns, read back through
-    /// its prime mover's involvement weight (credit / weight = raw
-    /// per-exercise total, independent of the catalog grading).
+    /// Total hard-set equivalents before role-based muscle credit.
     private func total(_ calculator: inout SetStimulus.Calculator, _ ex: Exercise, at date: Date) -> Double {
-        let credit = calculator.credit(for: ex, at: date)
-        let weights = ex.muscleInvolvement.weights
-        let prime = weights.max { $0.value < $1.value }!
-        return (credit[prime.key] ?? 0) / prime.value
+        calculator.setEquivalentCredit(for: ex, at: date)
     }
 
     // MARK: - Anchors: a hard working set is worth exactly 1.0
@@ -93,6 +97,107 @@ struct SetStimulusTests {
         #expect(abs(calculator.setEquivalentCredit(for: ex, at: day(0)) - 3.0) < 1e-9)
     }
 
+    @Test func muscleRolesCreditPrimarySecondaryAndNotStabilizer() {
+        let involvement = Muscle.Involvement(contributions: [
+            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .triceps, role: .secondary),
+            .init(muscle: .serratus, role: .stabilizer),
+        ])
+        let ex = Exercise(
+            name: "Role Fixture",
+            group: .chest,
+            plannedSets: 1,
+            plannedReps: 8,
+            plannedWeight: 100,
+            muscleInvolvement: involvement
+        )
+        ex.orderedSets.forEach { $0.isCompleted = true }
+
+        var calculator = SetStimulus.Calculator()
+        let credit = calculator.credit(for: ex, at: day(0))
+        #expect(credit[.pectorals] == 1)
+        #expect(credit[.triceps] == 0.5)
+        #expect(credit[.serratus] == nil)
+    }
+
+    @Test func powerMobilityAndConditioningEarnNoHardSetCredit() {
+        for modality in [ExerciseModality.power, .mobility, .conditioning] {
+            let ex = lift("Non-strength Fixture", .core, sets: [
+                SetSpec(weight: 25, reps: 10),
+            ], modality: modality)
+            var calculator = SetStimulus.Calculator()
+            #expect(calculator.setEquivalentCredit(for: ex, at: day(0)) == 0)
+            #expect(calculator.credit(for: ex, at: day(0)).isEmpty)
+        }
+    }
+
+    @Test func onlyExactStrengthModalityAndTrackingPairsEarnCredit() {
+        let mismatches = [
+            lift(
+                "Dynamic Duration Mismatch",
+                .core,
+                sets: [SetSpec(weight: 25, reps: 0, duration: 30)],
+                mode: .duration,
+                modality: .dynamicStrength
+            ),
+            lift(
+                "Isometric Reps Mismatch",
+                .core,
+                sets: [SetSpec(weight: 25, reps: 10)],
+                mode: .reps,
+                modality: .isometricStrength
+            ),
+        ]
+
+        for exercise in mismatches {
+            var calculator = SetStimulus.Calculator()
+            #expect(calculator.setEquivalentCredit(for: exercise, at: day(0)) == 0)
+        }
+    }
+
+    @Test func zeroAndIncompleteSetsEarnNoCredit() {
+        let invalid = [
+            lift("Zero Reps", .chest, sets: [SetSpec(weight: 135, reps: 0)]),
+            lift(
+                "Zero Duration",
+                .core,
+                sets: [SetSpec(weight: 25, reps: 0, duration: 0)],
+                mode: .duration,
+                modality: .isometricStrength
+            ),
+            lift("Incomplete Reps", .chest, sets: [
+                SetSpec(weight: 135, reps: 8, isCompleted: false),
+            ]),
+            lift(
+                "Incomplete Duration",
+                .core,
+                sets: [SetSpec(weight: 25, reps: 0, duration: 30, isCompleted: false)],
+                mode: .duration,
+                modality: .isometricStrength
+            ),
+        ]
+
+        for exercise in invalid {
+            var calculator = SetStimulus.Calculator()
+            #expect(calculator.setEquivalentCredit(for: exercise, at: day(0)) == 0)
+        }
+    }
+
+    @Test func explicitWarmUpEarnsNoCreditOrTonnageOrRecord() {
+        let exercise = lift("Bench Press", .chest, sets: [
+            SetSpec(weight: 135, reps: 8),
+            SetSpec(weight: 185, reps: 8),
+        ])
+        exercise.orderedSets[1].kind = .warmUp
+
+        var calculator = SetStimulus.Calculator()
+        #expect(total(&calculator, exercise, at: day(0)) == 1)
+        let tonnage = exercise.completedComparableTonnage ?? -1
+        #expect(abs(tonnage - 135 * 8) < 1e-9)
+        #expect(exercise.representativeTopSet === exercise.orderedSets[0])
+        #expect(exercise.bestStrengthPerformance == exercise.strengthPerformance(for: exercise.orderedSets[0]))
+    }
+
     /// RIR 0–2 all count as full hard sets — the landmark band.
     @Test func nearFailureRIRKeepsFullCredit() {
         for rir in 0...2 {
@@ -111,14 +216,46 @@ struct SetStimulusTests {
         #expect(abs(total(&calc, ex, at: day(0)) - 1.0) < 1e-9)
     }
 
-    /// Bodyweight work (weight 0) carries no load signal — neutral,
-    /// forever, not just on the first instance.
-    @Test func bodyweightSetsAreLoadNeutral() {
+    /// Detached fixtures have no measured bodyweight. Bodyweight-
+    /// dependent load is unavailable and therefore neutral forever,
+    /// rather than being calculated from an invented default.
+    @Test func unknownBodyweightSetsAreLoadNeutral() {
         var calc = SetStimulus.Calculator()
         for d in [0.0, 3, 6] {
             let ex = lift("Pull-ups", .back, sets: [SetSpec(weight: 0, reps: 10)])
+            ex.loadMode = .bodyweightAdded
+            ex.bodyweightFraction = 1
             #expect(abs(total(&calc, ex, at: day(d)) - 1.0) < 1e-9)
         }
+    }
+
+    @Test func machineAssistanceUsesInverseLoadPolarity() {
+        func assisted(_ assistance: Double) -> Exercise {
+            let exercise = lift("Assistance Fixture", .back, sets: [
+                SetSpec(weight: assistance, reps: 8),
+            ])
+            exercise.loadMode = .assistanceSubtracted
+            exercise.bodyweightFraction = 1
+            exercise.session = WorkoutSession(bodyweightAtStart: 100)
+            return exercise
+        }
+
+        var calculator = SetStimulus.Calculator()
+        _ = total(&calculator, assisted(40), at: day(0))
+        let moreAssistance = total(&calculator, assisted(80), at: day(3))
+        let lessAssistance = total(&calculator, assisted(20), at: day(6))
+
+        #expect(moreAssistance < 1)
+        #expect(lessAssistance == 1)
+    }
+
+    @Test func nonComparableLoadRemainsNeutral() {
+        var calculator = SetStimulus.Calculator()
+        let exercise = lift("Band Fixture", .back, sets: [
+            SetSpec(weight: 1, reps: 8),
+        ])
+        exercise.loadMode = .nonComparable
+        #expect(total(&calculator, exercise, at: day(0)) == 1)
     }
 
     // MARK: - Effort curve
@@ -146,12 +283,119 @@ struct SetStimulusTests {
         #expect(SetStimulus.holdFactor(duration: 90) == 1.0)
     }
 
-    /// Timed holds skip the effort and load factors entirely — a
-    /// weighted 30 s plank is one full set.
-    @Test func durationModeUsesOnlyTheLengthFactor() {
+    /// The first valid loaded hold is neutral on load and seeds its
+    /// own isometric reference, while duration still controls credit.
+    @Test func firstLoadedIsometricUsesDurationAndSeedsLoadReference() {
         var calc = SetStimulus.Calculator()
-        let ex = lift("Plank", .core, sets: [SetSpec(weight: 25, reps: 0, duration: 30)], mode: .duration)
-        #expect(abs(total(&calc, ex, at: day(0)) - 1.0) < 1e-9)
+        let ex = lift(
+            "Weighted Plank",
+            .core,
+            sets: [SetSpec(weight: 100, reps: 0, duration: 15)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        #expect(abs(total(&calc, ex, at: day(0)) - 0.75) < 1e-9)
+    }
+
+    @Test func loadedIsometricReflectsBothLoadAndDuration() {
+        var calculator = SetStimulus.Calculator()
+        let seed = lift(
+            "Weighted Plank",
+            .core,
+            sets: [SetSpec(weight: 100, reps: 0, duration: 30)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        #expect(total(&calculator, seed, at: day(0)) == 1)
+
+        let lighterAndShorter = lift(
+            "Weighted Plank",
+            .core,
+            sets: [SetSpec(weight: 20, reps: 0, duration: 15)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        // 0.75 duration factor × 0.30 load floor.
+        #expect(abs(total(&calculator, lighterAndShorter, at: day(0)) - 0.225) < 1e-9)
+    }
+
+    @Test func invalidIsometricDoesNotSeedLoadReference() {
+        var calculator = SetStimulus.Calculator()
+        let invalid = lift(
+            "Weighted Hold",
+            .core,
+            sets: [SetSpec(weight: 100, reps: 0, duration: 0)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        #expect(total(&calculator, invalid, at: day(0)) == 0)
+
+        let firstValid = lift(
+            "Weighted Hold",
+            .core,
+            sets: [SetSpec(weight: 20, reps: 0, duration: 30)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        #expect(total(&calculator, firstValid, at: day(3)) == 1)
+    }
+
+    @Test func isometricLoadReferenceRelaxesAfterALayoff() {
+        var calculator = SetStimulus.Calculator()
+        let peak = lift(
+            "Weighted Hold",
+            .core,
+            sets: [SetSpec(weight: 100, reps: 0, duration: 30)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        _ = total(&calculator, peak, at: day(0))
+
+        let comeback = lift(
+            "Weighted Hold",
+            .core,
+            sets: [SetSpec(weight: 60, reps: 0, duration: 30)],
+            mode: .duration,
+            modality: .isometricStrength
+        )
+        #expect(total(&calculator, comeback, at: day(180)) == 1)
+    }
+
+    @Test func nonComparableIsometricLoadStaysDurationOnly() {
+        func bandHold(_ resistance: Double) -> Exercise {
+            let exercise = lift(
+                "Band Hold",
+                .shoulders,
+                sets: [SetSpec(weight: resistance, reps: 0, duration: 15)],
+                mode: .duration,
+                modality: .isometricStrength
+            )
+            exercise.loadMode = .nonComparable
+            return exercise
+        }
+
+        var calculator = SetStimulus.Calculator()
+        #expect(total(&calculator, bandHold(100), at: day(0)) == 0.75)
+        #expect(total(&calculator, bandHold(1), at: day(3)) == 0.75)
+    }
+
+    @Test func unknownBodyweightIsometricLoadStaysDurationOnly() {
+        func bodyweightHold(_ addedLoad: Double) -> Exercise {
+            let exercise = lift(
+                "Bodyweight Hold",
+                .core,
+                sets: [SetSpec(weight: addedLoad, reps: 0, duration: 15)],
+                mode: .duration,
+                modality: .isometricStrength
+            )
+            exercise.loadMode = .bodyweightAdded
+            exercise.bodyweightFraction = 1
+            return exercise
+        }
+
+        var calculator = SetStimulus.Calculator()
+        #expect(total(&calculator, bodyweightHold(100), at: day(0)) == 0.75)
+        #expect(total(&calculator, bodyweightHold(0), at: day(3)) == 0.75)
     }
 
     // MARK: - Load curve

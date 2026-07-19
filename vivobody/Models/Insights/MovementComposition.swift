@@ -9,9 +9,9 @@
 //  muscles. Neither is right or wrong, but the balance tells you
 //  what kind of training this really is.
 //
-//  Counts completed `.reps` sets over a rolling window (4 weeks by
-//  default, to read CURRENT emphasis) — the same window IntensityMix
-//  uses. Timed holds carry no reps and are excluded. Each exercise is
+//  Counts completed dynamic- and isometric-strength sets over a rolling
+//  window (4 weeks by default, to read CURRENT emphasis). Conditioning
+//  and mobility are excluded. Each exercise is
 //  classified from its persisted pick-time snapshot, with bundled-name
 //  fallback for older rows. Unknown exercises are bucketed as
 //  `unclassifiedSets` and left out of the ratio and shares so the split
@@ -60,7 +60,7 @@ nonisolated struct CompositionSplit: Hashable {
 // MARK: - Aggregation
 
 extension Array where Element == WorkoutSession {
-    /// Compound-vs-isolation distribution of completed `.reps` sets
+    /// Compound-vs-isolation distribution of completed strength sets
     /// over the trailing `window` (default 4 weeks) as of `now`.
     /// Sets from exercises without a persisted or bundled-name
     /// classification are bucketed as unclassified and excluded.
@@ -74,8 +74,8 @@ extension Array where Element == WorkoutSession {
         for session in self {
             let date = session.completedAt ?? session.startedAt
             guard date > cutoff, date <= now else { continue }
-            for exercise in session.orderedExercises where exercise.trackingMode == .reps {
-                let completed = exercise.orderedSets.filter { $0.isCompleted && $0.reps > 0 }.count
+            for exercise in session.orderedExercises where exercise.modality.supportsHardSetAnalytics {
+                let completed = exercise.completedHardSetCount
                 guard completed > 0 else { continue }
                 guard let mechanic = exercise.classification?.mechanic else {
                     unclassified += completed

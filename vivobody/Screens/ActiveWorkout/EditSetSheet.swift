@@ -21,8 +21,10 @@ struct EditSetSheet: View {
     @State private var saveError: SaveErrorBox? = nil
 
     /// The set's tracking mode comes from its owning exercise —
-    /// decides whether we edit reps or a held interval.
+    /// decides whether we edit reps or a timed effort.
     private var mode: TrackingMode { self.set.exercise?.trackingMode ?? .reps }
+    private var modality: ExerciseModality { self.set.exercise?.modality ?? .dynamicStrength }
+    private var loadMode: ExerciseLoadMode { self.set.exercise?.loadMode ?? .external }
 
     /// NumberScrubber operates on Double; reps live as Int in the
     /// model. Round on every set so the model stays integer-clean.
@@ -59,12 +61,20 @@ struct EditSetSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: Space.lg) {
+                Picker("Set type", selection: $set.kindRaw) {
+                    ForEach(WorkoutSetKind.allCases, id: \.rawValue) { kind in
+                        Text(kind.displayName).tag(kind.rawValue)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .accessibilityLabel("Set type")
+
                 switch mode {
                 case .reps:
                     WeightScrubber(
                         canonicalWeight: weightBinding,
                         purpose: .strength,
-                        label: "weight",
+                        label: loadMode.inputLabel.lowercased(),
                         pointsPerStep: 8,
                         valueFontSize: 40,
                         verticalPadding: 14
@@ -81,7 +91,9 @@ struct EditSetSheet: View {
                         verticalPadding: 12
                     )
 
-                    RIRSelector(value: rirBinding)
+                    if modality == .dynamicStrength {
+                        RIRSelector(value: rirBinding)
+                    }
 
                 case .duration:
                     NumberScrubber(
@@ -89,7 +101,7 @@ struct EditSetSheet: View {
                         range: DurationFormatter.scrubRange,
                         step: DurationFormatter.scrubStep,
                         pointsPerStep: 10,
-                        label: "hold",
+                        label: modality.durationLabelLowercased,
                         valueFontSize: 40,
                         verticalPadding: 14,
                         formatter: { DurationFormatter.string($0) }
@@ -98,7 +110,7 @@ struct EditSetSheet: View {
                     WeightScrubber(
                         canonicalWeight: weightBinding,
                         purpose: .strength,
-                        label: "added load",
+                        label: loadMode.inputLabel.lowercased(),
                         pointsPerStep: 8,
                         valueFontSize: 32,
                         verticalPadding: 12
@@ -130,12 +142,13 @@ struct EditSetSheet: View {
         .onChange(of: set.reps) { _, _ in save() }
         .onChange(of: set.duration) { _, _ in save() }
         .onChange(of: set.repsInReserve) { _, _ in save() }
+        .onChange(of: set.kindRaw) { _, _ in save() }
         .saveErrorAlert($saveError)
     }
 
     private func save() {
         do {
-            try modelContext.save()
+            try modelContext.saveOrRollback()
         } catch {
             saveError = SaveErrorBox(error)
         }

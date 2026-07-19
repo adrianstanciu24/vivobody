@@ -5,7 +5,7 @@
 //  The calibration sweep for the development model — the lesson from
 //  the salmon-collapse bug, encoded. Realistic multi-week programs
 //  must land in VISUALLY DISTINCT bands of the colour ramp: a
-//  dedicated program clearly ahead of a casual one, prime movers
+//  dedicated program clearly ahead of a casual one, primary muscles
 //  clearly ahead of their assistors, and a long layoff visibly faded
 //  but not erased. If a parameter change squeezes real training data
 //  into one indistinguishable mid-tone, this file fails before the
@@ -47,6 +47,7 @@ struct MuscleCalibrationTests {
         var weight: Double
         var reps: Int
         var rir: Int? = nil
+        var kind: WorkoutSetKind = .working
     }
 
     /// A completed bench press with per-set control over weight,
@@ -63,6 +64,7 @@ struct MuscleCalibrationTests {
             set.weight = spec.weight
             set.reps = spec.reps
             set.isCompleted = true
+            set.kind = spec.kind
             if let rir = spec.rir {
                 set.repsInReserve = rir
                 set.rirLogged = true
@@ -104,7 +106,7 @@ struct MuscleCalibrationTests {
         #expect(light > 0.2 && light < 0.5)    // visible, but clearly behind
     }
 
-    /// Prime movers must separate from their assistors: a bench-only
+    /// Primary muscles must separate from their assistors: a bench-only
     /// block lights the chest clearly ahead of the front delts, which
     /// only collect fractional credit.
     @Test func primeMoversSeparateFromAssistors() {
@@ -143,6 +145,27 @@ struct MuscleCalibrationTests {
 
         #expect(b > a + 0.05)   // visibly apart on the ramp
         #expect(a > 0.4)        // the working half still reads as real training
+    }
+
+    /// Explicit warm-ups are audit rows, not discounted work. Adding
+    /// any number of them to the same program must leave development
+    /// exactly where the working sets put it.
+    @Test func explicitWarmupsDoNotMoveDevelopment() {
+        func program(includeWarmups: Bool) -> [WorkoutSession] {
+            (0..<24).map { i in
+                let working = SetsSpec(weight: 135, reps: 8)
+                let warmup = SetsSpec(weight: 55, reps: 8, kind: .warmUp)
+                let plan = includeWarmups
+                    ? [warmup, warmup, warmup, working, working, working]
+                    : [working, working, working]
+                return session(at: day(Double(i) * 3.5), [bench(plan)])
+            }
+        }
+        let padded = program(includeWarmups: true)
+        let workingOnly = program(includeWarmups: false)
+        let a = chest(padded, at: padded.last!.completedAt!)
+        let b = chest(workingOnly, at: workingOnly.last!.completedAt!)
+        #expect(abs(a - b) < 1e-9)
     }
 
     /// Token weights against established strength: after four honest

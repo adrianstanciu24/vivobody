@@ -1,7 +1,7 @@
 # Spec: Hard-set-equivalent work currency (load / reps / RIR awareness)
 
-Status: implemented (2026-07-11)
-Date: 2026-07-11
+Status: implemented; modality/load semantics hardened (2026-07-19)
+Date: 2026-07-11 (updated 2026-07-19)
 Scope: new `Models/Insights/SetStimulus.swift`, `MuscleVolume` (currency +
 session ordering), `MuscleDevelopment` (currency, header), consumers unchanged
 (`SessionAnalytics`, `TrainingSignature`, `AntagonistBalance`, Today attention
@@ -48,18 +48,29 @@ currency measures.
   genuinely hard working set is still worth exactly 1.0 sets.
 - Graded involvement weights. Still the outermost multiplier.
 - `MuscleColor` / `BodyModelScene` / `Channels` / `State` API shapes. Untouched.
-- The completion gate — only `isCompleted` sets count.
+- The working-set gate — only completed rows explicitly classified as
+  `working` count. Completed `warmUp` rows stay in history but return zero.
+  The exact eligible
+  pairs are `.dynamicStrength + .reps` with `reps > 0` and
+  `.isometricStrength + .duration` with `duration > 0`. Zero-valued,
+  mismatched, power, conditioning, and mobility work earns no hypertrophy
+  hard-set credit.
 
 This is a currency upgrade, not a model rework. The one-sentence read becomes:
 **colour = your estimated recent weekly hard sets, versus your productive
 target.**
+
+Explicit warm-up intent takes precedence over the relative-load heuristic.
+The heuristic remains useful for default working rows and accidental ramps,
+but a set marked `warmUp` receives exactly zero hard-set credit and cannot
+seed or update a load reference.
 
 ## The new currency: hard-set equivalents
 
 One completed set credits each involved muscle:
 
 ```
-credit = involvement × effort(RIR) × repFactor(reps | duration) × loadFactor(e1RM ratio)
+credit = involvement × effort(RIR) × lengthFactor(reps | duration) × loadFactor(relative load)
 ```
 
 Each factor is ≤ 1 (multipliers only subtract; junk fades, nothing inflates),
@@ -69,9 +80,11 @@ existing landmark calibration holds.
 
 ### 1. effort(RIR) — proximity to failure
 
-Only meaningful when `rirLogged == true` (`.reps` sets only; the flag is never
-true for `.duration` holds). Unlogged → **neutral 1.0**: never punish a user
-for not rating.
+Only meaningful for a completed, positive-repetition
+`.dynamicStrength + .reps` set when `rirLogged == true`. Isometric, power,
+conditioning, mobility, zero-repetition, and mismatched modality/tracking work
+never contributes an RIR reading even if stale stored fields exist. Unlogged →
+**neutral 1.0**: never punish a user for not rating.
 
 ```
 effort = effortDecayPerRIR ^ max(0, rir − 2)      // effortDecayPerRIR = 0.8
@@ -111,10 +124,15 @@ The term that kills the 5 lb curl problem and demotes warm-up ramps even when
 RIR isn't logged. No absolute thresholds — everything is relative to the
 lifter's own demonstrated strength on that exercise.
 
-Per `.reps` set with `weight > 0`:
+Dynamic-strength `.reps` sets use effective-load Epley e1RM. Isometric-
+strength `.duration` sets use effective load directly, so a loaded hold
+reflects both its duration and its resistance without pretending a hold has a
+rep-based 1RM:
 
 ```
-r          = e1RM(set) / reference          // e1RM = weight × (1 + reps/30), Epley — same formula as ExerciseProgress
+dynamic metric   = effectiveLoad × (1 + reps/30) // Epley
+isometric metric = effectiveLoad
+r                = metric / same-kind reference
 loadFactor = loadFloor + (1 − loadFloor) × clamp((r − rampLow) / (rampHigh − rampLow), 0, 1)
 ```
 
@@ -131,18 +149,27 @@ someone who curls 50 (r ≈ 0.1) earns the 0.3 floor before the rep/effort terms
 
 Neutral (1.0) cases, all deliberate:
 
-- `weight == 0` — bodyweight movements (pull-ups, dips, push-ups) and
-  unloaded holds carry no load signal; involvement + effort + reps carry them.
-- `.duration` sets — e1RM is a rep construct; weighted holds get no load term.
-- No reference yet — the first-ever instance of a lift full-credits and seeds
-  the reference. New exercises are never punished for having no history.
+- Effective load is unavailable — resistance is explicitly non-comparable, or
+  a bodyweight-dependent mode has no measured session bodyweight. No fallback
+  bodyweight is invented.
+- Effective load is zero — unloaded external work carries no load signal.
+- No same-kind reference yet — the first valid comparable instance full-
+  credits and seeds the reference. New exercises are never punished for
+  having no history.
 
-**The reference** is a per-exercise **decaying max** of set e1RM, keyed by
-`ExerciseIdentity.key(catalogItemID:name:)` (stable-ID with name fallback, the
-same identity every other per-exercise surface uses):
+**The reference** is a per-exercise **decaying max**, keyed by
+`Exercise.historyKey`, the same identity every other per-exercise surface uses.
+Bundled movements use stable `catalogID`; custom movements use their persistent
+item UUID plus the complete normalized performance signature (semantic kind,
+modality, tracking mode, load mode, and bodyweight-fraction basis points).
+Changing a custom performance signature therefore starts a separate reference
+series. It also clears any hand-entered measured 1RM, which belongs to the old
+load equation; measured 1RM is not an input to this hard-set reference.
+Dynamic e1RM and isometric load use separate tables so unlike units can never
+contaminate each other:
 
 ```
-on each completed set:   reference = max(e1RM(set), reference × exp(−Δt / referenceTau))
+on each valid set:   reference = max(metric(set), reference × exp(−Δt / referenceTau))
 ```
 
 `referenceTau = 130` days (a ~90-day half-life). A decaying max instead of an
@@ -155,9 +182,9 @@ warm-ups before it are judged against real history.
 ### Total floor
 
 `credit` per set is floored at `stimulusFloor = 0.1` × involvement before
-crediting, so any completed set still registers (a muscle that did *something*
-never reads identical to one that did nothing, and `VolumeZone.untrained`
-still means literally untrained).
+crediting, so any valid completed strength set still registers (a muscle that
+did *something* never reads identical to one that did nothing, and
+`VolumeZone.untrained` still means literally untrained).
 
 ### Worked example — one bench session, 315 lb e1RM reference
 
@@ -207,8 +234,9 @@ nonisolated enum SetStimulus {
 }
 ```
 
-Internals: `[String: (e1RM: Double, at: Date)]` keyed by exercise identity;
-per-set factor functions exposed (internal) for direct unit testing.
+Internals: separate `[String: (metric: Double, at: Date)]` tables for dynamic
+e1RM and isometric effective load, keyed by exercise identity; per-set factor
+functions exposed (internal) for direct unit testing.
 
 ### `MuscleVolume` changes
 
@@ -269,8 +297,12 @@ New `SetStimulusTests` (virtual clock, in-memory models, per
 `TrainingLoadTests` template):
 
 - **Anchors**: hard working set (≥5 reps, r ≥ 0.7, RIR ≤ 2 or unlogged) = 1.0
-  exactly; unlogged RIR neutral; `weight == 0` neutral; first instance neutral
-  and seeds the reference; `.duration` sets skip effort + load.
+  exactly; unlogged RIR neutral; unavailable load neutral; first valid
+  comparable instance neutral and seeds the reference.
+- **Eligibility**: exact strength modality/tracking pairs only; zero,
+  incomplete, mismatched, power, conditioning, and mobility sets return zero.
+- **Isometrics**: comparable loaded holds multiply duration and relative-load
+  factors; non-comparable or unknown-bodyweight holds remain duration-only.
 - **Factor curves**: table-driven checks of the three ramps and their floors;
   total floor at 0.1.
 - **Causality**: within one exercise, a PR set gets full credit and raises the

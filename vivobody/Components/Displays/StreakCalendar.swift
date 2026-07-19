@@ -199,25 +199,11 @@ private struct DayDot: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var pulse = false
     @State private var overdrive = false
-    @State private var breathDim = false
 
     private var shouldPulse: Bool { isPR && !reduceMotion }
 
     var body: some View {
         ZStack {
-            if isToday {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [fillColor.opacity(0.22), Color.clear],
-                            center: .center,
-                            startRadius: 0,
-                            endRadius: size * 0.7
-                        )
-                    )
-                    .frame(width: size * 1.35, height: size * 1.35)
-            }
-
             Circle()
                 .fill(dotFillColor)
                 .scaleEffect(reduceMotion ? 1.0 : dotFillScale)
@@ -227,7 +213,6 @@ private struct DayDot: View {
 
             Circle()
                 .stroke(strokeColor, lineWidth: strokeWidth)
-                .opacity(isToday ? (breathDim ? 0.6 : 1.0) : 1.0)
 
             Text("\(day)")
                 .font(Typography.metricMicro)
@@ -242,7 +227,6 @@ private struct DayDot: View {
         )
         .onAppear {
             if isWorkout && !reduceMotion { fireOverdrive() }
-            if isToday && !reduceMotion { startBreathing() }
             guard shouldPulse else { return }
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 pulse = true
@@ -259,13 +243,6 @@ private struct DayDot: View {
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(130))
             withAnimation(.easeOut(duration: 0.7)) { overdrive = false }
-        }
-    }
-
-    private func startBreathing() {
-        breathDim = false
-        withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) {
-            breathDim = true
         }
     }
 
@@ -286,11 +263,11 @@ private struct DayDot: View {
         isWorkout || isPast ? 1.0 : 0.0
     }
 
-    /// Today wears a brighter ring; future rest days keep the hairline
+    /// Today wears an accent ring; future rest days keep the hairline
     /// ring; trained and past rest days need no ring (the fill carries
     /// the shape).
     private var strokeColor: Color {
-        if isToday { return Ink.secondary }
+        if isToday { return fillColor }
         if isWorkout { return Color.clear }
         if isPast { return Color.clear }
         return Surface.edge

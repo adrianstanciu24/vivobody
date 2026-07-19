@@ -5,8 +5,9 @@
 //  Persistent catalog of lifts the user picks from when building a
 //  template or adding an exercise mid-workout. Stored as @Model so
 //  the user can extend it with custom entries — name + muscle group
-//  + equipment + mechanic + pattern + push/pull direction + aliases + graded muscle
-//  involvement + sensible defaults — and edit/delete them in place.
+//  + equipment + mechanic + pattern + push/pull direction + aliases +
+//  categorical muscle roles + sensible defaults — and edit/delete them
+//  in place.
 //
 //  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
 //  to populate it from the bundled `catalog.json` (see `CatalogData`). After
@@ -25,7 +26,7 @@ import SwiftData
 /// chip strip at the top of the picker / Library. Stored as the raw
 /// value on `ExerciseCatalogItem` so the enum can evolve without
 /// migrations.
-enum Equipment: String, Hashable, CaseIterable {
+nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
     case barbell
     case dumbbell
     case cable
@@ -54,7 +55,7 @@ enum Equipment: String, Hashable, CaseIterable {
 /// Compound (multi-joint) vs. isolation (single-joint). Affects
 /// PR-detection sensitivity and which patterns make sense — only
 /// compound lifts carry a `MovementPattern`.
-enum Mechanic: String, Hashable, CaseIterable {
+nonisolated enum Mechanic: String, Codable, Hashable, CaseIterable, Sendable {
     case compound
     case isolation
 
@@ -72,7 +73,7 @@ enum Mechanic: String, Hashable, CaseIterable {
 /// lifts have a meaningful pattern; isolation work is left nil.
 /// Useful for programming-aware features (push/pull balance,
 /// session structure suggestions) we'll layer in later.
-enum MovementPattern: String, Hashable, CaseIterable {
+nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable, Sendable {
     case push     // bench, OHP, dips
     case pull     // rows, pulldowns
     case squat    // back squat, front squat, leg press
@@ -80,6 +81,7 @@ enum MovementPattern: String, Hashable, CaseIterable {
     case lunge    // split squat, step-up, walking lunge
     case carry    // farmer's carry, suitcase, yoke
     case core     // planks, leg raises, anti-rotation
+    case locomotion // gait, skips, and conditioning footwork
 
     nonisolated var displayName: String {
         switch self {
@@ -90,6 +92,7 @@ enum MovementPattern: String, Hashable, CaseIterable {
         case .lunge: return "Lunge"
         case .carry: return "Carry"
         case .core:  return "Core"
+        case .locomotion: return "Locomotion"
         }
     }
 }
@@ -99,7 +102,7 @@ enum MovementPattern: String, Hashable, CaseIterable {
 /// Whether a push/pull moves the load primarily away from/toward the
 /// torso or overhead/down from overhead. Optional because it only has
 /// meaning for `.push` and `.pull` movement patterns.
-enum PushPullDirection: String, Hashable, CaseIterable {
+nonisolated enum PushPullDirection: String, Codable, Hashable, CaseIterable, Sendable {
     case horizontal
     case vertical
 
@@ -133,7 +136,7 @@ enum PushPullDirection: String, Hashable, CaseIterable {
 /// Multi-joint presses stay sagittal even though the shoulder
 /// horizontally adducts — the press pattern dominates; a pure fly,
 /// whose only action is that adduction, is transverse.
-enum MovementPlane: String, Hashable, CaseIterable {
+nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable, Sendable {
     case sagittal
     case frontal
     case transverse
@@ -155,7 +158,7 @@ enum MovementPlane: String, Hashable, CaseIterable {
 /// lunges) are logged/loaded per side, so this is the hook a future
 /// per-side logging or left/right balance feature reads. Bounded,
 /// trivially taggable on seeds and user-created entries alike.
-enum Laterality: String, Hashable, CaseIterable {
+nonisolated enum Laterality: String, Codable, Hashable, CaseIterable, Sendable {
     case bilateral
     case unilateral
 
@@ -172,7 +175,14 @@ enum Laterality: String, Hashable, CaseIterable {
 /// weight can still be adjusted per-template afterward.
 @Model
 final class ExerciseCatalogItem: Identifiable {
+    #Index<ExerciseCatalogItem>([\.catalogID])
     var id: UUID = UUID()
+
+    /// Stable ID from the bundled catalog (for example `bench-press`).
+    /// Nil only for user-created exercises. Unlike the install-local
+    /// UUID, this survives a factory reset and catalog reseed.
+    var catalogID: String? = nil
+
     var name: String = ""
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var defaultWeight: Double = 0
@@ -191,6 +201,17 @@ final class ExerciseCatalogItem: Identifiable {
     /// as a raw value; defaulted so existing catalogs read as reps
     /// with no migration. Copied to templates / sessions at pick-time.
     var trackingModeRaw: String = TrackingMode.reps.rawValue
+
+    /// Whether this is dynamic strength, isometric strength,
+    /// conditioning, or mobility work.
+    var modalityRaw: String = ExerciseModality.dynamicStrength.rawValue
+
+    /// How logged resistance combines with body weight.
+    var loadModeRaw: String = ExerciseLoadMode.external.rawValue
+
+    /// Share of body weight carried by the movement. Its meaning is
+    /// governed by `loadMode`; external and non-comparable work use 0.
+    var bodyweightFraction: Double = 0
 
     /// Default hold length (seconds) for `.duration` exercises —
     /// the timed counterpart to `defaultReps`. Ignored when the mode
@@ -243,10 +264,13 @@ final class ExerciseCatalogItem: Identifiable {
     /// alongside `name` in the picker. Empty by default.
     var aliases: [String] = []
 
-    /// Explicit graded muscle contribution authored for this catalog
-    /// item. An empty snapshot preserves legacy behavior: seeded lifts
-    /// resolve from catalog.json and older custom lifts use their broad
-    /// muscle-group preset. Additive defaulted field, so no migration.
+    /// Concise canonical movement definition used to disambiguate
+    /// similarly named exercises. Bundled records always provide one.
+    var movementDefinition: String = ""
+
+    /// Explicit categorical muscle roles authored for this item. The
+    /// compact Double values encode visual intensity only; analytics
+    /// recover roles and use their separate volume credits.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Stamped at creation. Used as a sort tiebreaker after
@@ -288,6 +312,20 @@ final class ExerciseCatalogItem: Identifiable {
     var trackingMode: TrackingMode {
         get { TrackingMode(rawValue: trackingModeRaw) ?? .reps }
         set { trackingModeRaw = newValue.rawValue }
+    }
+
+    var modality: ExerciseModality {
+        get { ExerciseModality(rawValue: modalityRaw) ?? .dynamicStrength }
+        set { modalityRaw = newValue.rawValue }
+    }
+
+    var loadMode: ExerciseLoadMode {
+        get { ExerciseLoadMode(rawValue: loadModeRaw) ?? .external }
+        set { loadModeRaw = newValue.rawValue }
+    }
+
+    var loadProfile: ExerciseLoadProfile {
+        ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
     }
 
     var equipment: Equipment {
@@ -363,24 +401,28 @@ final class ExerciseCatalogItem: Identifiable {
         )
     }
 
-    /// Muscles worked, with their graded contribution weights. Explicit
-    /// user-authored values win; seeded and legacy entries retain their
-    /// curated-name or coarse-group fallback.
+    /// Muscles worked by categorical role. Bundled and user-created
+    /// items persist explicit roles; an unknown empty item stays empty
+    /// rather than fabricating anatomy from its browse group.
     var muscleInvolvement: Muscle.Involvement {
         if !muscleInvolvementSnapshot.isEmpty {
             return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
         }
-        return Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)
+        return Muscle.involvement(forExerciseNamed: name)
     }
 
     init(
         id: UUID = UUID(),
+        catalogID: String? = nil,
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
         defaultReps: Int? = nil,
         defaultWeightKg: Double? = nil,
         trackingMode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength,
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0,
         defaultDuration: TimeInterval = 0,
         equipment: Equipment = .barbell,
         mechanic: Mechanic = .compound,
@@ -389,17 +431,22 @@ final class ExerciseCatalogItem: Identifiable {
         plane: MovementPlane = .sagittal,
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
+        movementDefinition: String = "",
         muscleInvolvement: Muscle.Involvement? = nil,
         isUserCreated: Bool = false,
         createdAt: Date = Date()
     ) {
         self.id = id
+        self.catalogID = catalogID
         self.name = name
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
         self.defaultReps = defaultReps ?? (mechanic == .compound ? 8 : 12)
         self.defaultWeightKg = defaultWeightKg
         self.trackingModeRaw = trackingMode.rawValue
+        self.modalityRaw = modality.rawValue
+        self.loadModeRaw = loadMode.rawValue
+        self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.defaultDuration = defaultDuration
         self.equipmentRaw = equipment.rawValue
         self.mechanicRaw = mechanic.rawValue
@@ -410,6 +457,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.planeRaw = plane.rawValue
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
+        self.movementDefinition = movementDefinition
         self.muscleInvolvementSnapshot = muscleInvolvement?.snapshot ?? [:]
         self.isUserCreated = isUserCreated
         self.createdAt = createdAt
@@ -424,12 +472,16 @@ extension ExerciseCatalogItem {
     /// mirrors each record into a `@Model` instance the user can edit.
     convenience init(record: CatalogRecord, createdAt: Date) {
         self.init(
+            catalogID: record.catalogID,
             name: record.name,
             group: record.muscleGroup,
             defaultWeight: record.defaultWeightValue,
             defaultReps: record.defaultRepsValue,
             defaultWeightKg: record.defaultWeightKgValue,
             trackingMode: record.trackingModeValue,
+            modality: record.modality,
+            loadMode: record.loadMode,
+            bodyweightFraction: record.bodyweightFraction,
             defaultDuration: record.defaultDurationValue,
             equipment: record.equipmentValue,
             mechanic: record.mechanicValue,
@@ -438,6 +490,8 @@ extension ExerciseCatalogItem {
             plane: record.planeValue,
             laterality: record.lateralityValue,
             aliases: record.aliasesValue,
+            movementDefinition: record.movementDefinition,
+            muscleInvolvement: record.muscleInvolvement,
             isUserCreated: false,
             createdAt: createdAt
         )
@@ -486,109 +540,76 @@ extension ExerciseCatalogItem {
         seedIfEmpty(in: context)
     }
 
-    /// Link legacy copied exercises/templates to catalog rows when the
-    /// current names still match, and snapshot muscle involvement so
-    /// custom/renamed exercises keep contributing to analytics. Safe
-    /// to run repeatedly; it only fills missing additive fields.
-    static func backfillCopiedExerciseIdentity(in context: ModelContext) {
-        let items = (try? context.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
-        guard !items.isEmpty else { return }
-
-        let itemsByName = Dictionary(
-            items.map { ($0.name.exerciseIdentityName, $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
-        let itemsByID = Dictionary(
-            items.map { ($0.id, $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
-
-        var changed = false
-
-        let exercises = (try? context.fetch(FetchDescriptor<Exercise>())) ?? []
-        for exercise in exercises {
-            let item = exercise.catalogItemID.flatMap { itemsByID[$0] }
-                ?? itemsByName[exercise.name.exerciseIdentityName]
-            if exercise.catalogItemID == nil, let item {
-                exercise.catalogItemID = item.id
-                changed = true
-            }
-            if exercise.muscleInvolvementSnapshot.isEmpty {
-                let involvement = item?.muscleInvolvement
-                    ?? Muscle.involvement(forExerciseNamed: exercise.name, fallbackGroup: exercise.group)
-                exercise.muscleInvolvementSnapshot = involvement.snapshot
-                changed = true
-            }
-        }
-
-        let templateExercises = (try? context.fetch(FetchDescriptor<TemplateExercise>())) ?? []
-        for exercise in templateExercises {
-            let item = exercise.catalogItemID.flatMap { itemsByID[$0] }
-                ?? itemsByName[exercise.name.exerciseIdentityName]
-            if exercise.catalogItemID == nil, let item {
-                exercise.catalogItemID = item.id
-                changed = true
-            }
-            if exercise.muscleInvolvementSnapshot.isEmpty {
-                let involvement = item?.muscleInvolvement
-                    ?? Muscle.involvement(forExerciseNamed: exercise.name, fallbackGroup: exercise.group)
-                exercise.muscleInvolvementSnapshot = involvement.snapshot
-                changed = true
-            }
-        }
-
-        if changed {
-            try? context.saveOrRollback()
-        }
-    }
-
-    /// One-time wrapper around `backfillCopiedExerciseIdentity` that
-    /// skips the expensive all-Exercise + all-TemplateExercise fetch
-    /// after the first successful pass. New exercises created post-
-    /// backfill already carry `catalogItemID` and
-    /// `muscleInvolvementSnapshot` from their initializer, so the
-    /// legacy fix-up is never needed again.
-    static func backfillCopiedExerciseIdentityIfNeeded(in context: ModelContext) {
-        let defaults = UserDefaults.standard
-        guard !defaults.bool(forKey: SettingsKey.exerciseIdentityBackfilled) else { return }
-        backfillCopiedExerciseIdentity(in: context)
-        defaults.set(true, forKey: SettingsKey.exerciseIdentityBackfilled)
-    }
-
-    /// Copies newly-authored horizontal/vertical metadata into seeded
-    /// catalog rows that predate the field. User-created exercises and
-    /// already-tagged rows are left untouched.
-    static func backfillMovementDirectionsIfNeeded(in context: ModelContext) {
-        let defaults = UserDefaults.standard
-        guard !defaults.bool(forKey: SettingsKey.movementDirectionsBackfilled) else { return }
-
-        let items = (try? context.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
-        var changed = false
-        for item in items where !item.isUserCreated && item.directionRaw == nil {
-            guard let direction = CatalogData.record(forExerciseNamed: item.name)?.directionValue else {
-                continue
-            }
-            item.direction = direction
-            changed = true
-        }
-
-        do {
-            if changed {
-                try context.saveOrRollback()
-            }
-            defaults.set(true, forKey: SettingsKey.movementDirectionsBackfilled)
-        } catch {
-            // Leave the gate unset so a later launch retries the backfill.
-        }
-    }
 }
 
 // MARK: - Exercise identity
 
+/// The complete comparison contract captured by a custom exercise.
+/// Catalog UUID alone is not enough: changing an external lift into an
+/// assisted movement, or changing how much bodyweight it carries, makes
+/// old loads physically non-interchangeable even when the broad record
+/// kind remains "load then reps".
+nonisolated struct ExercisePerformanceSignature: Hashable, Sendable {
+    /// One basis point keeps the key deterministic without embedding a
+    /// floating-point description. The editor works in 5% increments,
+    /// while this finer scale also preserves curated fractional values.
+    private static let fractionScale = 10_000.0
+
+    let modality: ExerciseModality
+    let trackingMode: TrackingMode
+    let loadMode: ExerciseLoadMode
+    let bodyweightFractionBasisPoints: Int
+
+    init(
+        modality: ExerciseModality,
+        trackingMode: TrackingMode,
+        loadMode: ExerciseLoadMode,
+        bodyweightFraction: Double
+    ) {
+        self.modality = modality
+        self.trackingMode = trackingMode
+        self.loadMode = loadMode
+        let finiteFraction = bodyweightFraction.isFinite ? bodyweightFraction : 0
+        let clampedFraction = max(0, min(finiteFraction, 1))
+        self.bodyweightFractionBasisPoints = Int(
+            (clampedFraction * Self.fractionScale).rounded()
+        )
+    }
+
+    var performanceKind: PerformanceSemanticKind {
+        modality.performanceSemanticKind(
+            for: trackingMode,
+            loadMode: loadMode
+        )
+    }
+
+    /// Delimiters and labels are intentionally fixed so this remains a
+    /// stable derived identity rather than locale-dependent display text.
+    var keyComponent: String {
+        [
+            performanceKind.rawValue,
+            "modality=\(modality.rawValue)",
+            "tracking=\(trackingMode.rawValue)",
+            "load=\(loadMode.rawValue)",
+            "bodyweightBps=\(bodyweightFractionBasisPoints)",
+        ].joined(separator: ":")
+    }
+}
+
 nonisolated enum ExerciseIdentity {
-    static func key(catalogItemID: UUID?, name: String) -> String {
+    static func key(
+        catalogID: String?,
+        catalogItemID: UUID?,
+        name: String,
+        performanceSignature: ExercisePerformanceSignature? = nil
+    ) -> String {
+        if let catalogID, !catalogID.isEmpty {
+            return "bundled:\(catalogID)"
+        }
         if let catalogItemID {
-            return "catalog:\(catalogItemID.uuidString)"
+            let base = "catalog:\(catalogItemID.uuidString)"
+            guard let performanceSignature else { return base }
+            return "\(base):performance:\(performanceSignature.keyComponent)"
         }
         return nameKey(name)
     }
@@ -605,8 +626,26 @@ extension String {
 }
 
 extension ExerciseCatalogItem {
+    var performanceSignature: ExercisePerformanceSignature {
+        ExercisePerformanceSignature(
+            modality: modality,
+            trackingMode: trackingMode,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
+    }
+
+    var performanceSemanticKind: PerformanceSemanticKind {
+        performanceSignature.performanceKind
+    }
+
     var historyKey: String {
-        ExerciseIdentity.key(catalogItemID: id, name: name)
+        ExerciseIdentity.key(
+            catalogID: catalogID,
+            catalogItemID: id,
+            name: name,
+            performanceSignature: performanceSignature
+        )
     }
 
     var legacyHistoryKey: String {
@@ -615,8 +654,26 @@ extension ExerciseCatalogItem {
 }
 
 extension Exercise {
+    var performanceSignature: ExercisePerformanceSignature {
+        ExercisePerformanceSignature(
+            modality: modality,
+            trackingMode: trackingMode,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
+    }
+
+    var performanceSemanticKind: PerformanceSemanticKind {
+        performanceSignature.performanceKind
+    }
+
     var historyKey: String {
-        ExerciseIdentity.key(catalogItemID: catalogItemID, name: name)
+        ExerciseIdentity.key(
+            catalogID: catalogID,
+            catalogItemID: catalogItemID,
+            name: name,
+            performanceSignature: performanceSignature
+        )
     }
 
     var legacyHistoryKey: String {
@@ -624,8 +681,12 @@ extension Exercise {
     }
 
     func matchesCatalogItem(_ item: ExerciseCatalogItem) -> Bool {
+        if let catalogID, let itemCatalogID = item.catalogID {
+            return catalogID == itemCatalogID
+        }
         if let catalogItemID {
             return catalogItemID == item.id
+                && performanceSignature == item.performanceSignature
         }
         return name.exerciseIdentityName == item.name.exerciseIdentityName
     }

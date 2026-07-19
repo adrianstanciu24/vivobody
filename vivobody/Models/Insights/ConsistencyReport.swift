@@ -134,8 +134,9 @@ extension Array where Element == WorkoutSession {
             let day = calendar.startOfDay(for: session.completedAt ?? session.startedAt)
             guard day >= recentCutoff else { continue }
             recentSessions += 1
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted {
+            for exercise in session.exercises
+            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
                     rirSum += set.repsInReserve
                     rirCount += 1
                 }

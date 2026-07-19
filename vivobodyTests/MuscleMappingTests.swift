@@ -2,12 +2,10 @@
 //  MuscleMappingTests.swift
 //  vivobodyTests
 //
-//  Guards the exercise → muscle taxonomy that both the body model and
-//  the development engine build on, now sourced from the bundled
-//  `catalog.json` (`CatalogData`): the catalog decodes, involvement
-//  weights are well-formed, the lookup is case-insensitive, unknown
-//  names fall back to empty, and every muscle expands to real `_L`/`_R`
-//  mesh nodes.
+//  Guards the categorical exercise → muscle taxonomy shared by body
+//  visualization and volume analytics: catalog roles decode strictly,
+//  visual intensity differs from volume credit, glute regions remain
+//  independent, and every visual muscle maps to real model nodes.
 //
 
 import Foundation
@@ -18,63 +16,51 @@ import Testing
 struct MuscleMappingTests {
 
     @Test func catalogDecodesFromBundle() {
-        #expect(CatalogData.records.count > 650)
+        #expect(CatalogData.records.count == 599)
         #expect(CatalogData.record(forExerciseNamed: "Bench Press") != nil)
     }
 
-    @Test func involvementWeightsAreWellFormed() {
+    @Test func involvementRolesProjectToCanonicalVisualAndVolumeValues() {
         for record in CatalogData.records {
-            for (_, weight) in record.muscleInvolvement.contributions {
-                #expect(
-                    weight > 0 && weight <= 1,
-                    "'\(record.name)' has out-of-range involvement weight \(weight)"
-                )
+            for contribution in record.muscleInvolvement.contributions {
+                #expect(contribution.visualIntensity == contribution.role.visualIntensity)
+                #expect(contribution.volumeCredit == contribution.role.volumeCredit)
             }
         }
+
+        #expect(MuscleRole.primary.visualIntensity == 1)
+        #expect(MuscleRole.primary.volumeCredit == 1)
+        #expect(MuscleRole.secondary.visualIntensity == 0.5)
+        #expect(MuscleRole.secondary.volumeCredit == 0.5)
+        #expect(MuscleRole.stabilizer.visualIntensity == 0.2)
+        #expect(MuscleRole.stabilizer.volumeCredit == 0)
     }
 
-    @Test func everyRecordGroupIsValid() {
+    @Test func everyRecordHasAStableIdentityAndMovementDefinition() {
+        let ids = CatalogData.records.map(\.catalogID)
+        #expect(Set(ids).count == ids.count)
+
         for record in CatalogData.records {
-            #expect(
-                MuscleGroup(rawValue: record.group) != nil,
-                "'\(record.name)' has unknown group '\(record.group)'"
-            )
+            #expect(!record.catalogID.isEmpty)
+            #expect(!record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
     }
 
     @Test func everyMuscleIsTargetedByAtLeastOneCatalogExercise() {
         let positiveInvolvement = CatalogData.records.flatMap { record in
-            (record.involvement ?? []).filter { $0.weight > 0 }
+            record.involvement
         }
-        let targeted = Set(
-            positiveInvolvement.compactMap { involvement -> Muscle? in
-                Muscle(rawValue: involvement.muscle)
-            }
-        )
+        let targeted = Set(positiveInvolvement.map(\.muscle))
         let expected = Set(Muscle.allCases)
-        let expectedRawValues = Set(Muscle.allCases.map(\.rawValue))
         let missing = expected.subtracting(targeted)
-        let unexpectedRawValues = Set(positiveInvolvement.map(\.muscle)).subtracting(expectedRawValues)
 
         #expect(
-            targeted == expected && unexpectedRawValues.isEmpty,
+            targeted == expected,
             """
             Catalog muscle coverage does not match Muscle.allCases.
             Missing: \(Self.muscleList(missing))
-            Unexpected: \(Self.rawMuscleList(unexpectedRawValues))
             """
         )
-    }
-
-    @Test func everyCatalogMuscleStringIsValidMuscleRawValue() {
-        for record in CatalogData.records {
-            for involvement in record.involvement ?? [] {
-                #expect(
-                    Muscle(rawValue: involvement.muscle) != nil,
-                    "'\(record.name)' has invalid catalog muscle '\(involvement.muscle)'"
-                )
-            }
-        }
     }
 
     @Test func mappingIsCaseInsensitive() {
@@ -89,63 +75,83 @@ struct MuscleMappingTests {
         #expect(involvement.secondary.isEmpty)
     }
 
-    @Test func benchPressContributionsGradeFromPrime() {
+    @Test func benchPressRolesSeparateSynergistsFromStabilizers() {
         let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
-        let w = bench.weights
-        // Authored grading: chest is the prime mover, triceps a heavier
-        // synergist than the assisting front delt, with biceps only as a
-        // trace dynamic stabilizer.
-        #expect(w[.pectorals] == Muscle.Involvement.prime)
-        #expect(w[.triceps] == Muscle.Involvement.major)
-        #expect(w[.deltoids] == Muscle.Involvement.minor)
-        #expect(w[.biceps] == Muscle.Involvement.trace)
-        #expect(w[.pectorals]! > w[.triceps]!)
-        #expect(w[.triceps]! > w[.deltoids]!)
-        #expect(w[.deltoids]! > w[.biceps]!)
+        #expect(bench.role(for: .pectorals) == .primary)
+        #expect(bench.role(for: .triceps) == .secondary)
+        #expect(bench.role(for: .deltoids) == .secondary)
+        #expect(bench.role(for: .biceps) == .stabilizer)
+        #expect(bench.volumeCredit(for: .biceps) == 0)
+        #expect(bench.visualIntensity(for: .biceps) == 0.2)
         #expect(bench.primary == [.pectorals])
-        #expect(bench.secondary == [.triceps, .deltoids, .biceps])
+        #expect(bench.secondary == [.triceps, .deltoids])
+        #expect(bench.stabilizers == [.biceps])
+    }
+
+    @Test func anatomyProjectionIncludesStabilizersAtVisualIntensity() {
+        let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
+        let nodes = bench.anatomyNodeChannels
+        #expect(nodes["Pectoralis_Major_L"]?.intensity == 1)
+        #expect(nodes["Triceps_L"]?.intensity == 0.5)
+        #expect(nodes["Biceps_L"]?.intensity == 0.2)
+        #expect(nodes["Biceps_L"]?.baseline == .trained)
+    }
+
+    @Test func powerKeepsAnatomyButEarnsNoDevelopmentCredit() throws {
+        let power = try #require(CatalogData.record(forExerciseNamed: "Kettlebell sumo high pull"))
+        #expect(!power.muscleInvolvement.anatomyNodeChannels.isEmpty)
+
+        let exercise = Exercise(
+            name: power.name,
+            group: power.group,
+            plannedSets: 3,
+            plannedReps: 5,
+            plannedWeight: 0,
+            muscleInvolvement: power.muscleInvolvement,
+            modality: .power
+        )
+        exercise.sets.forEach { $0.isCompleted = true }
+        var calculator = SetStimulus.Calculator()
+        #expect(calculator.credit(for: exercise, at: Date()).isEmpty)
     }
 
     @Test func gluteExercisesKeepMaxAndMedSeparate() {
         let hipThrust = Muscle.involvement(forExerciseNamed: "Barbell Hip Thrust")
-        #expect(hipThrust.weights[.gluteMax] == Muscle.Involvement.prime)
-        #expect(hipThrust.weights[.gluteMed] == nil)
+        #expect(hipThrust.role(for: .gluteMax) == .primary)
+        #expect(hipThrust.role(for: .gluteMed) == nil)
 
         let hipAbduction = Muscle.involvement(forExerciseNamed: "Machine Hip Abduction")
-        #expect(hipAbduction.weights[.gluteMed] == Muscle.Involvement.prime)
-        #expect(hipAbduction.weights[.gluteMax] == nil)
+        #expect(hipAbduction.role(for: .gluteMed) == .primary)
+        #expect(hipAbduction.role(for: .gluteMax) == nil)
     }
 
-    @Test func legacyGlutesSnapshotCreditsBothNewRegions() {
-        let involvement = Muscle.Involvement(snapshot: ["glutes": Muscle.Involvement.major])
-        #expect(involvement.weights[.gluteMax] == Muscle.Involvement.major)
-        #expect(involvement.weights[.gluteMed] == Muscle.Involvement.major)
-        #expect(involvement.snapshot["glutes"] == nil)
+    @Test func obsoleteMuscleSnapshotKeysAreNotDecoded() {
+        let involvement = Muscle.Involvement(snapshot: [
+            "glutes": MuscleRole.primary.visualIntensity,
+            "teres": MuscleRole.primary.visualIntensity,
+        ])
+        #expect(involvement.isEmpty)
     }
 
-    @Test func authoringLevelsUseCatalogWeights() {
-        #expect(Muscle.Involvement.Level.prime.rawValue == Muscle.Involvement.prime)
-        #expect(Muscle.Involvement.Level.major.rawValue == Muscle.Involvement.major)
-        #expect(Muscle.Involvement.Level.minor.rawValue == Muscle.Involvement.minor)
-        #expect(Muscle.Involvement.Level.trace.rawValue == Muscle.Involvement.trace)
-        #expect(Muscle.Involvement.Level.none.rawValue == 0)
-    }
+    @Test func snapshotsRoundTripOnlyCanonicalRoles() {
+        let source = Muscle.Involvement(contributions: [
+            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .triceps, role: .secondary),
+            .init(muscle: .biceps, role: .stabilizer),
+        ])
+        let decoded = Muscle.Involvement(snapshot: source.snapshot)
+        #expect(decoded.roles == source.roles)
 
-    @Test func everyGroupPresetHasPrimeMover() {
-        for group in MuscleGroup.allCases {
-            #expect(
-                Muscle.defaultInvolvement(for: group).hasPrime,
-                "\(group.rawValue) preset has no Prime muscle"
-            )
-        }
+        let obsoleteTier = Muscle.Involvement(snapshot: ["pectorals": 0.7])
+        #expect(obsoleteTier.isEmpty)
     }
 
     @Test @MainActor func explicitCatalogInvolvementOverridesCuratedName() {
         let custom = Muscle.Involvement(contributions: [
-            (.quads, Muscle.Involvement.prime),
-            (.gluteMax, Muscle.Involvement.major),
-            (.gluteMed, Muscle.Involvement.minor),
-            (.calves, Muscle.Involvement.trace),
+            .init(muscle: .quads, role: .primary),
+            .init(muscle: .gluteMax, role: .secondary),
+            .init(muscle: .gluteMed, role: .secondary),
+            .init(muscle: .calves, role: .stabilizer),
         ])
         let item = ExerciseCatalogItem(
             name: "Bench Press",
@@ -157,10 +163,10 @@ struct MuscleMappingTests {
 
         #expect(item.muscleInvolvement.snapshot == custom.snapshot)
         #expect(item.muscleInvolvement.primary == [.quads])
-        #expect(item.muscleInvolvement.weights[.pectorals] == nil)
+        #expect(item.muscleInvolvement.role(for: .pectorals) == nil)
     }
 
-    @Test @MainActor func legacyCatalogItemRetainsFallbackInvolvement() {
+    @Test @MainActor func unknownCustomCatalogItemDoesNotInventGroupAnatomy() {
         let item = ExerciseCatalogItem(
             name: "Totally Made Up Lift",
             group: .back,
@@ -169,17 +175,22 @@ struct MuscleMappingTests {
         )
 
         #expect(item.muscleInvolvementSnapshot.isEmpty)
-        #expect(item.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .back).snapshot)
+        #expect(item.muscleInvolvement.isEmpty)
     }
 
-    @Test @MainActor func catalogDraftUsesAndReplacesGroupPreset() {
+    @Test @MainActor func catalogDraftRequiresExplicitMuscleRoles() {
         var draft = CatalogDraft.empty
-        #expect(draft.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .chest).snapshot)
+        #expect(draft.muscleInvolvement.isEmpty)
 
-        draft.applyMusclePreset(for: .legs)
+        draft.group = .legs
+        #expect(draft.muscleInvolvement.isEmpty)
 
-        #expect(draft.muscleInvolvement.snapshot == Muscle.defaultInvolvement(for: .legs).snapshot)
-        #expect(draft.muscleInvolvement.hasPrime)
+        draft.muscleInvolvementSnapshot = Muscle.Involvement(contributions: [
+            .init(muscle: .gluteMed, role: .primary)
+        ]).snapshot
+        #expect(draft.muscleInvolvement.hasPrimary)
+        #expect(draft.muscleInvolvement.role(for: .gluteMed) == .primary)
+        #expect(draft.muscleInvolvement.role(for: .gluteMax) == nil)
     }
 
     @Test @MainActor func classificationResolvesForKnownLift() {
@@ -195,11 +206,11 @@ struct MuscleMappingTests {
             if record.patternValue == .push || record.patternValue == .pull {
                 #expect(
                     record.directionValue != nil,
-                    "'\(record.name)' is \(record.pattern ?? "push/pull") without a direction"
+                    "'\(record.name)' is \(record.pattern?.rawValue ?? "push/pull") without a direction"
                 )
             } else {
                 #expect(
-                    record.direction == nil,
+                    record.directionValue == nil,
                     "'\(record.name)' has direction but is not push/pull"
                 )
             }
@@ -208,11 +219,9 @@ struct MuscleMappingTests {
 
     @Test func correctedPushPullExercisesKeepTheirCuratedDirections() {
         let verticalDips = [
-            "Bench Dips On Floor HD",
             "Dips Between Two Benches",
             "Floor dips",
             "Ring Dips",
-            "Triceps Dips (Assisted)",
             "TRX dips",
         ]
 
@@ -223,15 +232,13 @@ struct MuscleMappingTests {
             #expect(record?.directionValue == .vertical)
         }
 
-        let invertedPulldown = CatalogData.record(forExerciseNamed: "Inverted Lat Pull Down")
+        let invertedPulldown = CatalogData.record(forExerciseNamed: "Underhand Lat Pull Down")
         #expect(invertedPulldown?.equipmentValue == .cable)
         #expect(invertedPulldown?.patternValue == .pull)
         #expect(invertedPulldown?.directionValue == .vertical)
         #expect(invertedPulldown?.bodyweightFractionValue == 0)
 
-        let ropeRow = CatalogData.record(forExerciseNamed: "Rope Pullover/row")
-        #expect(ropeRow?.patternValue == .pull)
-        #expect(ropeRow?.directionValue == .horizontal)
+        #expect(CatalogData.record(forExerciseNamed: "Rope Pullover/row") == nil)
     }
 
     @Test @MainActor func catalogItemKeepsDirectionConsistentWithPattern() {
@@ -252,9 +259,19 @@ struct MuscleMappingTests {
     @Test func everyMuscleExpandsToLeftRightNodes() {
         for muscle in Muscle.allCases {
             let nodes = muscle.nodeNames
-            #expect(!nodes.isEmpty, "\(muscle) maps to no mesh nodes")
+            #expect(nodes.isEmpty == !muscle.isVisualized)
             #expect(nodes.allSatisfy { $0.hasSuffix("_L") || $0.hasSuffix("_R") })
         }
+    }
+
+    @Test func rotatorCuffRegionsAreAnatomicallySeparated() {
+        #expect(Muscle.externalRotators.nodeNames == [
+            "Teres_Minor_L", "Teres_Minor_R",
+            "Infraspinatus_L", "Infraspinatus_R",
+        ])
+        #expect(Muscle.teresMajor.nodeNames == ["Teres_Major_L", "Teres_Major_R"])
+        #expect(Muscle.subscapularis.nodeNames.isEmpty)
+        #expect(!Muscle.subscapularis.isVisualized)
     }
 
     @Test func gluteRegionsMapToIndependentMeshes() {
@@ -268,8 +285,4 @@ struct MuscleMappingTests {
         return rawValues.isEmpty ? "none" : rawValues.joined(separator: ", ")
     }
 
-    private static func rawMuscleList(_ rawValues: Set<String>) -> String {
-        let sorted = rawValues.sorted()
-        return sorted.isEmpty ? "none" : sorted.joined(separator: ", ")
-    }
 }

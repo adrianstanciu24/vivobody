@@ -229,9 +229,9 @@ struct MeScreen: View {
             } else {
                 VStack(alignment: .leading, spacing: Space.md) {
                     MetricView(
-                        label: "Total volume",
+                        label: lifetimeVolumeLabel,
                         value: volumeLabel,
-                        unit: weightUnit.symbol,
+                        unit: lifetimeVolumeUnit,
                         valueFont: Typography.metricHero
                     )
                     lifetimeLine
@@ -311,7 +311,7 @@ struct MeScreen: View {
             SectionHeader(title: "This month", trailing: recap.monthLabel)
             StatStrip(stats: [
                 Stat(value: "\(recap.workouts)", label: recap.workouts == 1 ? "workout" : "workouts"),
-                Stat(value: WeightFormatter.volumeValue(recap.volume, unit: weightUnit), unit: weightUnit.symbol, label: "volume"),
+                monthlyVolumeStat(recap),
                 Stat(value: "\(recap.prs)", label: recap.prs == 1 ? "PR" : "PRs", accent: recap.prs > 0),
             ])
             .padding(Space.xl)
@@ -381,18 +381,56 @@ struct MeScreen: View {
     /// is, by definition, a PR you hold). Drives the accented PR
     /// numeral in the lifetime odometer.
     private var personalRecords: Int {
-        appState.analytics.progress.count
+        appState.analytics.progress.lazy.filter { $0.recordDate != nil }.count
     }
 
-    private var totalVolume: Double {
-        completedSessions.reduce(0) { $0 + $1.totalVolume }
+    private var lifetimeTonnage: ComparableTonnageSummary {
+        completedSessions.comparableTonnageSummary
     }
 
     /// Volume label tuned for the lifetime totals card. The
     /// formatter handles the < 10k vs ≥ 10k branching (full-grouped
     /// vs compact "k") AND unit conversion in one call.
     private var volumeLabel: String {
-        WeightFormatter.volumeValue(totalVolume, unit: weightUnit)
+        switch lifetimeTonnage.availability {
+        case .complete:
+            return WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit)
+        case .partial:
+            return "\(WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit))+"
+        case .unavailable:
+            return "—"
+        }
+    }
+
+    private var lifetimeVolumeUnit: String? {
+        lifetimeTonnage.availability == .unavailable ? nil : weightUnit.symbol
+    }
+
+    private var lifetimeVolumeLabel: String {
+        switch lifetimeTonnage.availability {
+        case .complete: "Total volume"
+        case .partial: "Known volume · total unavailable"
+        case .unavailable: "Volume unavailable"
+        }
+    }
+
+    private func monthlyVolumeStat(_ recap: MonthlyRecap) -> Stat {
+        switch recap.volumeAvailability {
+        case .complete:
+            return Stat(
+                value: WeightFormatter.volumeValue(recap.volume, unit: weightUnit),
+                unit: weightUnit.symbol,
+                label: "volume"
+            )
+        case .partial:
+            return Stat(
+                value: "\(WeightFormatter.volumeValue(recap.volume, unit: weightUnit))+",
+                unit: weightUnit.symbol,
+                label: "known volume"
+            )
+        case .unavailable:
+            return Stat(value: "—", label: "volume unavailable")
+        }
     }
 }
 

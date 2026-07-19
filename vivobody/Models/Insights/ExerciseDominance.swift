@@ -7,9 +7,10 @@
 //  over the trailing four weeks, so heavy and light exercises use the
 //  same honest unit instead of tonnage favoring squats and deadlifts.
 //
-//  Timed holds (`.duration` mode), incomplete sets, and sets with no
-//  logged reps are excluded. Exercises are grouped by copied catalog
-//  identity, falling back to normalized name for legacy history.
+//  Dynamic-strength rep sets and isometric-strength timed sets count;
+//  conditioning, mobility, incomplete, and empty sets do not. Exercises
+//  are grouped by copied catalog identity, falling back to normalized
+//  name for custom history.
 //
 //  Pure value-type computation on injected dates, so it's testable
 //  on a virtual clock (see `ExerciseDominanceTests`).
@@ -46,7 +47,7 @@ nonisolated struct ExerciseDominanceBoard {
     /// Combined share of the top two lifts, `0…1`. The "are two
     /// lifts doing half the work?" headline read.
     var topTwoShare: Double { stats.prefix(2).reduce(0) { $0 + $1.share } }
-    /// Whether any qualifying reps-mode sets have been logged.
+    /// Whether any qualifying strength sets have been logged.
     var hasAny: Bool { !stats.isEmpty }
 }
 
@@ -70,9 +71,9 @@ extension Array where Element == WorkoutSession {
             let date = session.completedAt ?? session.startedAt
             guard date > cutoff, date <= now else { continue }
 
-            for exercise in session.orderedExercises where exercise.trackingMode == .reps {
+            for exercise in session.orderedExercises where exercise.modality.supportsHardSetAnalytics {
                 let key = exercise.historyKey
-                let sets = exercise.orderedSets.filter { $0.isCompleted && $0.reps > 0 }.count
+                let sets = exercise.completedHardSetCount
                 guard sets > 0 else { continue }
 
                 if var bucket = byExercise[key] {

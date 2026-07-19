@@ -236,12 +236,12 @@ private struct StartTileSurface: ViewModifier {
 private func sampleTemplates() -> [WorkoutTemplate] {
     let three = WorkoutTemplate(name: "Test 3", exercises: [
         TemplateExercise(name: "Bench Press", group: .chest, plannedWeight: 135, sortOrder: 0),
-        TemplateExercise(name: "Barbell Row", group: .back, plannedWeight: 95, sortOrder: 1),
-        TemplateExercise(name: "Overhead Press", group: .shoulders, plannedWeight: 65, sortOrder: 2),
+        TemplateExercise(name: "Bent Over Rowing", group: .back, plannedWeight: 95, sortOrder: 1),
+        TemplateExercise(name: "Shoulder Press, Dumbbells", group: .shoulders, plannedWeight: 65, sortOrder: 2),
     ])
     let two = WorkoutTemplate(name: "Test", exercises: [
-        TemplateExercise(name: "Incline Press", group: .chest, plannedWeight: 95, sortOrder: 0),
-        TemplateExercise(name: "Lat Pulldown", group: .back, plannedWeight: 110, sortOrder: 1),
+        TemplateExercise(name: "Incline Dumbbell Press", group: .chest, plannedWeight: 95, sortOrder: 0),
+        TemplateExercise(name: "Lat Pull Down", group: .back, plannedWeight: 110, sortOrder: 1),
     ])
     return [three, two]
 }

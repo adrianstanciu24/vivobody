@@ -188,20 +188,29 @@ struct ActiveWorkoutScreen: View {
     }
 
     /// The same catalog exercise from the most recently completed
-    /// session, or nil if the user has never logged it. Stable catalog
-    /// ID wins; name fallback only covers legacy history from before
-    /// exercises stored that ID.
+    /// session, or nil if the user has never logged it. Stable bundled
+    /// identity or the custom item's exact performance signature wins;
+    /// name-only matching is reserved for rows with no catalog identity.
     private func mostRecentLoggedExercise(matching item: ExerciseCatalogItem) -> Exercise? {
         let itemName = item.name
         let itemID = item.id
-        let descriptor = FetchDescriptor<Exercise>(
-            predicate: #Predicate {
-                $0.session?.completedAt != nil && (
-                    $0.catalogItemID == itemID
-                        || ($0.catalogItemID == nil && $0.name == itemName)
-                )
-            }
-        )
+        let descriptor: FetchDescriptor<Exercise>
+        if let catalogID = item.catalogID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.catalogID == catalogID
+                }
+            )
+        } else {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && (
+                        $0.catalogItemID == itemID
+                            || ($0.catalogItemID == nil && $0.name == itemName)
+                    )
+                }
+            )
+        }
         let matches = (try? modelContext.fetch(descriptor)) ?? []
         return matches
             .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }

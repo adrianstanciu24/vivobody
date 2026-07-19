@@ -55,10 +55,10 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// underlying view — both let the figure "zoom" mid-scroll.
     var renderHeight: CGFloat
 
-    /// Per-muscle development channels, keyed by BodyModel mesh node
-    /// name (see `MuscleDevelopment`). Drives the development tint
-    /// ramp. Empty renders every muscle untrained.
-    var channels: [String: MuscleDevelopment.Channels] = [:]
+    /// Per-muscle render channels keyed by BodyModel mesh node name.
+    /// The owning surface decides whether intensity means chronic
+    /// development or temporary exercise anatomy.
+    var channels: [String: MuscleMapChannels] = [:]
 
     /// Reports the pivot's live Y rotation (radians) on every change —
     /// drag and coast alike. The specimen stage's degree ticks ride
@@ -142,7 +142,7 @@ struct RotatableBodyModel: UIViewRepresentable {
     @MainActor
     final class Coordinator: NSObject {
         var heightConstraint: NSLayoutConstraint?
-        var appliedChannels: [String: MuscleDevelopment.Channels] = [:]
+        var appliedChannels: [String: MuscleMapChannels] = [:]
         var appliedTheme: BodyModelTheme = .dark
         var onRotation: ((Double) -> Void)?
         private var lastX: CGFloat = 0

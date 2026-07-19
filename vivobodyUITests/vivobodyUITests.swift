@@ -41,6 +41,20 @@ final class vivobodyUITests: XCTestCase {
     }
 
     @MainActor
+    func testScheduledWorkoutStartsFromToday() throws {
+        let app = launchApp(arguments: ["--ui-test-reset", "--ui-test-scheduled-template"])
+        let start = waitFor(app.buttons["Start Scheduled Test"])
+
+        for _ in 0..<4 where !start.isHittable {
+            app.swipeUp()
+        }
+
+        XCTAssertTrue(start.isHittable)
+        start.tap()
+        waitFor(app.buttons["endWorkoutButton"])
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()

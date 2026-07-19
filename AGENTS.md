@@ -28,26 +28,30 @@ gesture-first, all data on-device. Single developer (astanciu), iterative work.
 All commands run from `/Users/astanciu/Developer/vivobody`:
 
 ```bash
-# Compile check (zero warnings is the bar; AppIntents.framework warning is benign)
+# Default validator: compile without booting a simulator
+# (zero warnings is the bar; AppIntents.framework warning is benign)
 xcodebuild -scheme vivobody -destination 'generic/platform=iOS Simulator' build
 
-# Tests (Swift Testing framework, in vivobodyTests/ and vivobodyUITests/)
+# Full tests, only when explicitly requested
 xcodebuild -scheme vivobody -destination 'platform=iOS Simulator,name=iPhone 17 Pro' test
 
-# One test suite only (much faster while iterating)
+# Targeted test suite, preferred over the full suite when explicitly requested
 xcodebuild -scheme vivobody -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
   test -only-testing:vivobodyTests/TrainingLoadTests
 ```
 
-Always compile before declaring a change "done." For UI-affecting changes, also run `Scripts/verify.sh` (see below). For logic changes under `Models/Insights/`, run the matching test suite — nearly every insight has one.
+Always compile before declaring a change "done." Do not run simulator test suites by default; the user will manually verify behavior that Baguette cannot observe. For UI-affecting changes, run `Scripts/verify.sh` and inspect its screenshot plus accessibility tree. Run full or targeted tests only when the user explicitly requests them.
 
 ## Visual verification
 
-`Scripts/verify.sh` builds, boots a headless simulator via `baguette`, installs + launches the app, then writes a screenshot + accessibility tree to `.verify/`. Use this **before declaring any UI change done** — it would have caught the NavigationLink loop and the too-small-densities issues on the first try.
+`Scripts/verify.sh` incrementally builds, reuses a headless simulator through `baguette`, installs + launches a deterministic app state, then writes a screenshot + accessibility tree to `.verify/`. Use this before declaring any UI change done. This is the default runtime verification path; do not open Simulator.app or fall back to simulator-driven test suites when Baguette cannot verify a flow.
 
 ```bash
 Scripts/verify.sh                       # Today screen at launch
-TAB=insights Scripts/verify.sh          # Tap a tab first (today | history | library | insights | me)
+TAB=insights Scripts/verify.sh          # Launch directly into a tab
+CAPTURE_ONLY=1 Scripts/verify.sh         # Capture the running app without rebuilding/relaunching
+CLEAN_BUILD=1 Scripts/verify.sh          # Explicitly discard the build cache
+RESET_STATE=0 Scripts/verify.sh          # Preserve app data instead of using a deterministic reset
 SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
 SIMULATOR_OS=26.2 Scripts/verify.sh
 LAUNCH_ARGS='--seed-history' Scripts/verify.sh   # launch with seeded data (see Debug seeding)
@@ -57,7 +61,9 @@ Two outputs per run:
 - `.verify/<state>.jpg` — visual screenshot
 - `.verify/<state>-ui.json` — accessibility tree (every label, role, frame). The JSON is the killer feature: verify a button exists, a heading is correct, a value matches, all without parsing pixels.
 
-Requires `baguette` (`brew install baguette`). Tab tap coordinates are calibrated for iPhone 17 Pro (402×874 points); adjust the case statement in `verify.sh` if you switch device sizes.
+The default run preserves DerivedData, reuses the booted device, avoids uninstalling the app, waits for the Vivobody accessibility tree, and launches with `--ui-test-reset` so onboarding cannot block checks. `TAB` uses the debug-only `--verify-tab` launch argument instead of flaky coordinate taps. `CAPTURE_ONLY=1` is the fastest loop after interacting through the Baguette UI (`baguette serve`); when combined with `TAB`, it validates that the requested tab is already visible rather than navigating. Anything not visible in the screenshot or accessibility tree is left for user verification.
+
+Requires `baguette` (`brew install baguette`).
 
 ## Debug seeding
 

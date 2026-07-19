@@ -19,7 +19,7 @@
 //    • Frequency  — the same weekly volume develops the same, however
 //                   it is split across sessions.
 //    • Currency   — effective sets match `MuscleVolume`'s crediting,
-//                   scaled by graded involvement.
+//                   scaled by categorical muscle roles.
 //    • Invariants — constant-rate decay is order-independent (semigroup),
 //                   and the model is deterministic.
 //    • Colour     — the perceptual map behaves (the orange deepens
@@ -186,20 +186,28 @@ struct MuscleDevelopmentTests {
 
     // MARK: - Currency
 
-    /// A muscle's session stimulus scales with its graded involvement
-    /// weight: from a bench press the assisting triceps and front delt
-    /// earn exact fractions of the chest's prime-mover credit. Weights
-    /// come from the catalog so the test follows the shipped data.
-    @Test func gradedInvolvementScalesSessionStimulus() {
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
+    /// Primary and secondary roles earn the same explicit credit used
+    /// by weekly volume; stabilizers remain visual-only.
+    @Test func roleInvolvementScalesSessionStimulus() {
+        let involvement = Muscle.Involvement(contributions: [
+            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .triceps, role: .secondary),
+            .init(muscle: .serratus, role: .stabilizer),
+        ])
+        let ex = Exercise(
+            name: "Role Fixture",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 10,
+            plannedWeight: 135,
+            muscleInvolvement: involvement
+        )
+        ex.orderedSets.forEach { $0.isCompleted = true }
+        let s = session(at: day(0), [ex])
         let stim = MuscleDevelopment.sessionStimulus(s)
-        let w = Muscle.involvement(forExerciseNamed: "Bench Press").weights
-        let chest = stim[.pectorals] ?? 0
-        #expect(chest > 0)
-        #expect(abs((stim[.triceps] ?? 0) - (w[.triceps]! / w[.pectorals]!) * chest) < 1e-9)
-        #expect(abs((stim[.deltoids] ?? 0) - (w[.deltoids]! / w[.pectorals]!) * chest) < 1e-9)
-        // The assistors receive strictly less stimulus than the prime mover.
-        #expect((stim[.triceps] ?? 0) < chest)
+        #expect(stim[.pectorals] == 3)
+        #expect(stim[.triceps] == 1.5)
+        #expect(stim[.serratus] == nil)
     }
 
     /// The development model and the volume bars share ONE work
@@ -343,6 +351,24 @@ struct MuscleDevelopmentTests {
             #expect(c.green >= 0 && c.green <= 1)
             #expect(c.blue >= 0 && c.blue <= 1)
         }
+    }
+
+    @Test(arguments: [BodyModelTheme.dark, .light])
+    func neverTrainedAndFadedTrainedRemainDistinct(theme: BodyModelTheme) {
+        let never = MuscleColor.rgb(for: .noData, theme: theme)
+        let faded = MuscleColor.rgb(
+            for: MuscleMapChannels(intensity: 0, baseline: .trained),
+            theme: theme
+        )
+        #expect(never != faded)
+    }
+
+    @Test func developmentBandsUseCoarseStableThresholds() {
+        #expect(MuscleDevelopmentBand.resolve(.noData) == .noData)
+        #expect(MuscleDevelopmentBand.resolve(.init(intensity: 0.24)) == .low)
+        #expect(MuscleDevelopmentBand.resolve(.init(intensity: 0.25)) == .building)
+        #expect(MuscleDevelopmentBand.resolve(.init(intensity: 0.50)) == .consistent)
+        #expect(MuscleDevelopmentBand.resolve(.init(intensity: 0.75)) == .high)
     }
 
     // MARK: - Helpers

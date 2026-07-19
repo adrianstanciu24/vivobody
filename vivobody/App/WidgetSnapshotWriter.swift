@@ -58,10 +58,19 @@ enum WidgetSnapshotWriter {
         let templates = fetchTemplates(in: context)
         let completed = fetchCompletedSessions(in: context)
         let active = fetchActiveSession(in: context)
+        let bodyweight = fetchCurrentBodyweight(in: context)
         let unit = WeightUnit.current
 
         mirrorPreferences(unit: unit)
-        write(upNextSnapshot(templates: templates, sessions: completed, unit: unit), key: WidgetShared.upNextSnapshotKey)
+        write(
+            upNextSnapshot(
+                templates: templates,
+                sessions: completed,
+                unit: unit,
+                bodyweight: bodyweight
+            ),
+            key: WidgetShared.upNextSnapshotKey
+        )
         write(consistencySnapshot(sessions: completed), key: WidgetShared.consistencySnapshotKey)
         write(signatureSnapshot(sessions: completed), key: WidgetShared.signatureSnapshotKey)
         write(strengthSnapshot(sessions: completed), key: WidgetShared.strengthSnapshotKey)
@@ -108,12 +117,22 @@ enum WidgetSnapshotWriter {
         return (try? context.fetch(descriptor))?.first
     }
 
+    private static func fetchCurrentBodyweight(in context: ModelContext) -> Double? {
+        var descriptor = FetchDescriptor<BodyWeightEntry>(
+            predicate: #Predicate { $0.weight > 0 },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = 1
+        return (try? context.fetch(descriptor))?.first?.weight
+    }
+
     // MARK: - Snapshots
 
     private static func upNextSnapshot(
         templates: [WorkoutTemplate],
         sessions: [WorkoutSession],
-        unit: WeightUnit
+        unit: WeightUnit,
+        bodyweight: Double?
     ) -> UpNextSnapshot {
         let upNext = UpNext.compute(templates: templates, sessions: sessions)
         let readiness = sessions.readiness()?.phrase
@@ -125,7 +144,7 @@ enum WidgetSnapshotWriter {
                 templateName: template.name,
                 exerciseCount: template.orderedExercises.count,
                 totalSets: template.totalPlannedSets,
-                totalVolume: plannedVolume(template, unit: unit),
+                totalVolume: plannedVolume(template, bodyweight: bodyweight),
                 easeOff: easeOff,
                 restReason: nil,
                 nextTemplateName: nil,
@@ -140,7 +159,9 @@ enum WidgetSnapshotWriter {
                 templateName: nil,
                 exerciseCount: next?.orderedExercises.count ?? 0,
                 totalSets: next?.totalPlannedSets ?? 0,
-                totalVolume: next.map { plannedVolume($0, unit: unit) } ?? 0,
+                totalVolume: next.map {
+                    plannedVolume($0, bodyweight: bodyweight)
+                } ?? 0,
                 easeOff: false,
                 restReason: reason == .offDay ? .offDay : .doneToday,
                 nextTemplateName: next?.name,
@@ -208,7 +229,7 @@ enum WidgetSnapshotWriter {
         // Same running-max PR flagging the Insights strength chart
         // uses, kept in canonical lb; the widget converts at display.
         let series = sessions.progressByExercise
-            .first { $0.name.caseInsensitiveCompare(lead.exercise) == .orderedSame }
+            .first { $0.id == lead.historyKey }
         var runningMax = -Double.infinity
         var points: [StrengthPointSnapshot] = []
         for point in series?.points ?? [] where point.estimated1RM > 0 {
@@ -282,31 +303,91 @@ enum WidgetSnapshotWriter {
             let count = exercise.orderedSets.count
             switch exercise.trackingMode {
             case .reps:
-                return "\(count) x \(first.reps) @ \(WeightFormatter.string(first.weight, unit: unit))"
+                let base = "\(count) x \(first.reps)"
+                guard let load = exercise.loadMode.summaryLoadLabel(first.weight, unit: unit) else {
+                    return base
+                }
+                return "\(base) @ \(load)"
             case .duration:
                 let duration = DurationFormatter.compact(first.duration)
-                guard first.weight > 0 else { return "\(count) x \(duration)" }
-                return "\(count) x \(duration) @ \(WeightFormatter.string(first.weight, unit: unit))"
+                let base = "\(count) x \(duration) \(exercise.modality.durationLabelLowercased)"
+                guard let load = exercise.loadMode.summaryLoadLabel(first.weight, unit: unit) else {
+                    return base
+                }
+                return "\(base) @ \(load)"
             }
         }
 
         switch exercise.trackingMode {
         case .reps:
-            return "\(exercise.plannedSets) x \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+            let base = "\(exercise.plannedSets) x \(exercise.plannedReps)"
+            guard let load = exercise.loadMode.summaryLoadLabel(
+                exercise.plannedWeight,
+                unit: unit
+            ) else { return base }
+            return "\(base) @ \(load)"
         case .duration:
             let duration = DurationFormatter.compact(exercise.plannedDuration)
-            guard exercise.plannedWeight > 0 else { return "\(exercise.plannedSets) x \(duration)" }
-            return "\(exercise.plannedSets) x \(duration) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+            let base = "\(exercise.plannedSets) x \(duration) \(exercise.modality.durationLabelLowercased)"
+            guard let load = exercise.loadMode.summaryLoadLabel(
+                exercise.plannedWeight,
+                unit: unit
+            ) else { return base }
+            return "\(base) @ \(load)"
         }
     }
 
-    private static func plannedVolume(_ template: WorkoutTemplate, unit: WeightUnit) -> Double {
+    private static func plannedVolume(
+        _ template: WorkoutTemplate,
+        bodyweight: Double?
+    ) -> Double {
         template.exercises.reduce(0) { total, exercise in
-            guard exercise.trackingMode == .reps else { return total }
+            guard exercise.modality.supportsComparableTonnage(
+                for: exercise.trackingMode,
+                loadMode: exercise.loadMode
+            ) else { return total }
             if !exercise.orderedSets.isEmpty {
-                return total + exercise.orderedSets.reduce(0) { $0 + $1.weight * Double($1.reps) }
+                return total + exercise.orderedSets.reduce(0) { subtotal, set in
+                    guard let load = plannedLoad(
+                        for: exercise,
+                        loggedWeight: set.weight,
+                        bodyweight: bodyweight
+                    ) else {
+                        return subtotal
+                    }
+                    return subtotal + load * Double(set.reps)
+                }
             }
-            return total + Double(exercise.plannedSets * exercise.plannedReps) * exercise.plannedWeight
+            guard let load = plannedLoad(
+                for: exercise,
+                loggedWeight: exercise.plannedWeight,
+                bodyweight: bodyweight
+            ) else { return total }
+            return total + Double(exercise.plannedSets * exercise.plannedReps) * load
+        }
+    }
+
+    /// Bodyweight-derived tonnage is unavailable until the user has
+    /// supplied body weight. External load remains independently known.
+    private static func plannedLoad(
+        for exercise: TemplateExercise,
+        loggedWeight: Double,
+        bodyweight: Double?
+    ) -> Double? {
+        switch exercise.loadMode {
+        case .external:
+            return exercise.loadProfile.effectiveLoad(
+                loggedWeight: loggedWeight,
+                bodyweight: 0
+            )
+        case .bodyweightAdded, .assistanceSubtracted:
+            guard let bodyweight else { return nil }
+            return exercise.loadProfile.effectiveLoad(
+                loggedWeight: loggedWeight,
+                bodyweight: bodyweight
+            )
+        case .nonComparable:
+            return nil
         }
     }
 
@@ -317,6 +398,7 @@ enum WidgetSnapshotWriter {
             reps: set.reps,
             duration: set.duration,
             trackingMode: exercise.trackingMode,
+            loadMode: exercise.loadMode,
             unit: unit
         )
     }

@@ -416,18 +416,18 @@ struct ExercisePickerSheet: View {
     }
 
     /// Right-side default for an exercise the user has never logged.
-    /// Mode-aware: a strength lift reads "135 lb · 8 reps"; a timed
-    /// hold reads "0:45 hold" (with optional load).
+    /// Mode-aware: a strength lift reads "135 lb · 8 reps"; duration
+    /// uses hold, interval, or time according to the exercise modality.
     private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
         let seed = item.defaultWeight(forUnit: unit)
         switch item.trackingMode {
         case .reps:
-            return "\(WeightFormatter.string(seed, unit: unit)) · \(item.defaultReps) reps"
+            let load = item.loadMode.summaryLoadLabel(seed, unit: unit)
+            return load.map { "\($0) · \(item.defaultReps) reps" } ?? "\(item.defaultReps) reps"
         case .duration:
-            let base = "\(DurationFormatter.string(item.defaultDuration)) hold"
-            return seed > 0
-                ? "\(WeightFormatter.string(seed, unit: unit)) · \(base)"
-                : base
+            let base = "\(DurationFormatter.string(item.defaultDuration)) \(item.modality.durationLabelLowercased)"
+            guard let load = item.loadMode.summaryLoadLabel(seed, unit: unit) else { return base }
+            return "\(load) · \(base)"
         }
     }
 

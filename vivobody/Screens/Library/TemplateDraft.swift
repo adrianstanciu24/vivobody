@@ -32,6 +32,7 @@ struct ExerciseDraft: Identifiable, Hashable {
     let id: UUID
     var name: String
     var catalogItemID: UUID?
+    var catalogID: String?
     var group: MuscleGroup
 
     // Uniform fields — used when isPerSet == false. Always retained
@@ -54,6 +55,13 @@ struct ExerciseDraft: Identifiable, Hashable {
     /// starts a timed exercise, not a rep count.
     var trackingMode: TrackingMode
 
+    /// Pick-time analytics and resistance semantics. These travel with
+    /// the draft so reconfiguring a template cannot strip the catalog
+    /// exercise's interpretation before it becomes logged history.
+    var modality: ExerciseModality
+    var loadMode: ExerciseLoadMode
+    var bodyweightFraction: Double
+
     /// Planned hold length (seconds) for `.duration` exercises.
     var plannedDuration: TimeInterval
 
@@ -70,6 +78,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         id: UUID = UUID(),
         name: String,
         catalogItemID: UUID? = nil,
+        catalogID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -77,6 +86,9 @@ struct ExerciseDraft: Identifiable, Hashable {
         muscleInvolvement: Muscle.Involvement? = nil,
         classification: ExerciseClassification? = nil,
         trackingMode: TrackingMode = .reps,
+        modality: ExerciseModality = .dynamicStrength,
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0,
         plannedDuration: TimeInterval = 0,
         isPerSet: Bool = false,
         sets: [SetDraft] = []
@@ -84,33 +96,45 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.id = id
         self.name = name
         self.catalogItemID = catalogItemID
+        self.catalogID = catalogID
         self.group = group
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
         self.plannedWeight = plannedWeight
-        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name, fallbackGroup: group)).snapshot
+        self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.classification = classification
         self.trackingMode = trackingMode
+        self.modality = modality
+        self.loadMode = loadMode
+        self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.plannedDuration = plannedDuration
         self.isPerSet = isPerSet
         self.sets = sets
     }
 }
 
-/// One row inside an ExerciseDraft's per-set list. Just weight +
-/// reps plus a stable id so SwiftUI's ForEach can identify rows
+/// One row inside an ExerciseDraft's per-set list. Weight, reps, set
+/// intent, and a stable id so SwiftUI's ForEach can identify rows
 /// across reorder / insert / delete.
 struct SetDraft: Identifiable, Hashable {
     let id: UUID
     var weight: Double
     var reps: Int
     var duration: TimeInterval
+    var kind: WorkoutSetKind
 
-    init(id: UUID = UUID(), weight: Double, reps: Int, duration: TimeInterval = 0) {
+    init(
+        id: UUID = UUID(),
+        weight: Double,
+        reps: Int,
+        duration: TimeInterval = 0,
+        kind: WorkoutSetKind = .working
+    ) {
         self.id = id
         self.weight = weight
         self.reps = reps
         self.duration = duration
+        self.kind = kind
     }
 }
 
@@ -122,6 +146,7 @@ extension ExerciseDraft {
         self.init(
             name: item.name,
             catalogItemID: item.id,
+            catalogID: item.catalogID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
@@ -129,6 +154,9 @@ extension ExerciseDraft {
             muscleInvolvement: item.muscleInvolvement,
             classification: item.classification,
             trackingMode: item.trackingMode,
+            modality: item.modality,
+            loadMode: item.loadMode,
+            bodyweightFraction: item.bodyweightFraction,
             plannedDuration: item.defaultDuration,
             isPerSet: false,
             sets: []
@@ -145,6 +173,7 @@ extension ExerciseDraft {
             self.init(
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
+                catalogID: templateExercise.catalogID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -152,16 +181,20 @@ extension ExerciseDraft {
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
+                modality: templateExercise.modality,
+                loadMode: templateExercise.loadMode,
+                bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: true,
                 sets: orderedTemplateSets.map {
-                    SetDraft(weight: $0.weight, reps: $0.reps, duration: $0.duration)
+                    SetDraft(weight: $0.weight, reps: $0.reps, duration: $0.duration, kind: $0.kind)
                 }
             )
         } else {
             self.init(
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
+                catalogID: templateExercise.catalogID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -169,6 +202,9 @@ extension ExerciseDraft {
                 muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
+                modality: templateExercise.modality,
+                loadMode: templateExercise.loadMode,
+                bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: false,
                 sets: []
@@ -188,6 +224,7 @@ extension ExerciseDraft {
         let exercise = TemplateExercise(
             name: name,
             catalogItemID: catalogItemID,
+            catalogID: catalogID,
             group: group,
             plannedSets: fallbackCount,
             plannedReps: fallbackReps,
@@ -195,6 +232,9 @@ extension ExerciseDraft {
             muscleInvolvement: Muscle.Involvement(snapshot: muscleInvolvementSnapshot),
             classification: classification,
             trackingMode: trackingMode,
+            modality: modality,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction,
             plannedDuration: fallbackDuration,
             sortOrder: sortOrder
         )
@@ -206,6 +246,7 @@ extension ExerciseDraft {
                         weight: set.weight,
                         reps: set.reps,
                         duration: set.duration,
+                        kind: set.kind,
                         sortOrder: index
                     )
                 )
@@ -250,7 +291,10 @@ extension ExerciseDraft {
     /// so collapsing to uniform is lossless.
     var canCollapseToUniform: Bool {
         guard let first = sets.first else { return true }
-        return sets.allSatisfy { $0.weight == first.weight && $0.reps == first.reps }
+        return sets.allSatisfy {
+            $0.weight == first.weight && $0.reps == first.reps
+                && $0.duration == first.duration && $0.kind == first.kind
+        }
     }
 
     // MARK: - Summary line
@@ -268,27 +312,30 @@ extension ExerciseDraft {
                 guard let lo = weights.min(), let hi = weights.max() else { return "" }
                 if lo == hi {
                     // All rows happen to be identical — read uniformly.
-                    return "\(sets.count) × \(sets[0].reps) @ \(WeightFormatter.string(lo, unit: unit))"
+                    let load = loadMode.summaryLoadLabel(lo, unit: unit)
+                    return load.map { "\(sets.count) × \(sets[0].reps) @ \($0)" }
+                        ?? "\(sets.count) × \(sets[0].reps)"
                 }
-                let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
-                let hiStr = WeightFormatter.string(hi, unit: unit)
-                return "\(sets.count) sets · \(loStr)–\(hiStr)"
+                let loadRange = loadMode.summaryLoadRangeLabel(lo, hi, unit: unit)
+                return loadRange.map { "\(sets.count) sets · \($0)" }
+                    ?? "\(sets.count) sets"
             }
-            return "\(plannedSets) × \(plannedReps) @ \(WeightFormatter.string(plannedWeight, unit: unit))"
+            let load = loadMode.summaryLoadLabel(plannedWeight, unit: unit)
+            return load.map { "\(plannedSets) × \(plannedReps) @ \($0)" }
+                ?? "\(plannedSets) × \(plannedReps)"
 
         case .duration:
             if isPerSet, !sets.isEmpty {
                 let durations = sets.map(\.duration)
                 guard let lo = durations.min(), let hi = durations.max() else { return "" }
                 if lo == hi {
-                    return "\(sets.count) × \(DurationFormatter.string(lo)) hold"
+                    return "\(sets.count) × \(DurationFormatter.string(lo)) \(modality.durationLabelLowercased)"
                 }
-                return "\(sets.count) sets · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+                return "\(sets.count) \(modality.durationCountLabel) · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
             }
-            let base = "\(plannedSets) × \(DurationFormatter.string(plannedDuration)) hold"
-            return plannedWeight > 0
-                ? "\(base) @ \(WeightFormatter.string(plannedWeight, unit: unit))"
-                : base
+            let base = "\(plannedSets) × \(DurationFormatter.string(plannedDuration)) \(modality.durationLabelLowercased)"
+            guard let load = loadMode.summaryLoadLabel(plannedWeight, unit: unit) else { return base }
+            return "\(base) @ \(load)"
         }
     }
 }

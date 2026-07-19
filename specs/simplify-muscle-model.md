@@ -1,8 +1,10 @@
 # Spec: Simplify the muscle development model
 
-Status: implemented (2026-06-12). Notes: `MuscleForecastBoard.fadeThreshold`
-recalibrated 0.92 → 0.95 for the γ-softened decay curve; `ExerciseLoad` is
-now orphaned (kept, like `TemplateEditorScreen`).
+Status: implemented (2026-06-12), with exercise semantics updated by
+`exercise-data-contract.md` (2026-07-19). Notes:
+`MuscleForecastBoard.fadeThreshold` recalibrated 0.92 → 0.95 for the
+γ-softened decay curve. `ExerciseLoad` now owns comparable resistance
+semantics and is no longer orphaned.
 Date: 2026-06-11
 Scope: `MuscleDevelopment`, `Muscle`, `BodyReadiness`, `MuscleTightness`,
 `MuscleMomentum`, `MuscleForecast`, `TodayScreen`, `InsightsScreen`, tests.
@@ -34,8 +36,9 @@ core, and computes the model state once per screen pass.
 
 These parts earn their complexity and are untouched:
 
-- **Graded involvement weights** (`Muscle.Involvement`) — fractional credit
-  per muscle is what makes everything honest.
+- **Categorical involvement roles** (`Muscle.Involvement`) — primary and
+  secondary muscles project to fractional volume credit; stabilizers remain
+  visual but earn no hard-set credit.
 - **Grace-gated closed-form decay** (`decayFactor` / softplus) — exact,
   order-independent, already tested. It is the "holds for a week, then fades"
   behaviour, and the forecast board marches it into the future.
@@ -44,9 +47,10 @@ These parts earn their complexity and are untouched:
   momentum board reads them.
 - **Fatigue channel shape** — saturating bump + half-life decay (re-based to
   set units, see below).
-- **`MuscleColor` and `BodyModelScene`** — the colour ramp, linear-light
-  blending, themed endpoints, and single-muscle tightness pulse are all
-  unchanged. Input remains a `Channels` map.
+- **`MuscleColor` and `BodyModelScene`** — the renderer consumes a generic
+  muscle-map channel. Continuous trained colours interpolate in perceptual
+  OKLab space; a neutral no-history baseline remains distinct from faded
+  trained tissue.
 - **Public API shapes** — `Channels`, `State`, `simulate`, `nodeChannels`,
   and the four downstream boards keep their types; only internals and
   parameters change.
@@ -62,7 +66,7 @@ discount leave the model entirely.
 
 ```
 sessionSets[muscle] = Σ over strength exercises:
-    completedSetCount × involvement.weights[muscle]
+    completedSetCount × involvement.volumeCredits[muscle]
 ```
 
 ### Level: leaky integrator with the existing grace-gated decay

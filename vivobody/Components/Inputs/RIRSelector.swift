@@ -51,7 +51,8 @@ struct RIRSelector: View {
                 selection: $value,
                 options: options,
                 label: { Self.displayLabel($0) },
-                feedback: { Self.effortFeedback(for: $0) }
+                feedback: { Self.effortFeedback(for: $0) },
+                feedbackOnReselection: true
             )
         }
         .accessibilityElement(children: .ignore)

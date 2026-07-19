@@ -30,6 +30,14 @@ extension ExerciseDetailScreen {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
 
+            if !movementDefinition.isEmpty {
+                Text(movementDefinition)
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, Space.xs)
+            }
+
             if hasStatusPill {
                 statusPill
             }
@@ -40,7 +48,13 @@ extension ExerciseDetailScreen {
     /// gates the conditional include so the VStack spacing doesn't
     /// leave a gap when neither fires.
     var hasStatusPill: Bool {
-        plateauStatus != nil || effortSummary?.verdict == .ready
+        plateauStatus != nil || readinessAction != nil
+    }
+
+    /// Resistance progression follows the exercise's load polarity.
+    /// Machine-assisted work advances by reducing assistance.
+    var readinessAction: String? {
+        effortSummary?.verdict.progressionAction(for: item.loadMode)
     }
 
     /// Plateau wins over readiness when both could fire — a stall is
@@ -49,8 +63,8 @@ extension ExerciseDetailScreen {
     var statusPill: some View {
         if let plateau = plateauStatus {
             pill(text: "Stalled · \(plateau.sessions) sessions", accent: false)
-        } else if effortSummary?.verdict == .ready {
-            pill(text: "Ready to add load", accent: true)
+        } else if let readinessAction {
+            pill(text: "Ready to \(readinessAction)", accent: true)
         }
     }
 
@@ -80,6 +94,10 @@ extension ExerciseDetailScreen {
             parts.append(item.laterality.displayName)
         }
         return parts.joined(separator: " · ")
+    }
+
+    var movementDefinition: String {
+        item.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: - Stats row
@@ -144,7 +162,8 @@ extension ExerciseDetailScreen {
     /// precise, hand-entered value) when set; otherwise the estimated
     /// e1RM from logged sets; otherwise an empty "tap to add" prompt
     /// when there's nothing to show yet. Tapping opens the scrubber
-    /// editor. Reps-only — holds have no meaningful 1RM.
+    /// editor. Dynamic-strength e1RM semantics only — power and holds
+    /// never surface this row.
     var oneRepMaxRow: some View {
         let measured = item.oneRepMax
         let value = measured ?? estimatedOneRepMax
@@ -215,7 +234,7 @@ extension ExerciseDetailScreen {
             if item.trackingMode == .reps {
                 GlassEffectContainer(spacing: 8) {
                     HStack(spacing: 8) {
-                        ForEach(ChartMetric.allCases) { m in
+                        ForEach(availableChartMetrics) { m in
                             metricChip(m)
                         }
                     }
@@ -235,7 +254,7 @@ extension ExerciseDetailScreen {
     }
 
     func metricChip(_ m: ChartMetric) -> some View {
-        let isSelected = m == chartMetric
+        let isSelected = m == effectiveChartMetric
         return Button {
             Haptics.selection()
             chartMetric = m
@@ -262,34 +281,36 @@ extension ExerciseDetailScreen {
         let prIDs = prPointIDs(from: prog)
         return Chart {
             ForEach(visible) { point in
-                LineMark(
-                    x: .value("Date", point.date),
-                    y: .value("Metric", chartValue(for: point))
-                )
-                .interpolationMethod(.monotone)
-                .foregroundStyle(Ink.primary.opacity(Opacity.strong))
-
-                AreaMark(
-                    x: .value("Date", point.date),
-                    y: .value("Metric", chartValue(for: point))
-                )
-                .interpolationMethod(.monotone)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-
-                if prIDs.contains(point.id) {
-                    PointMark(
+                if let value = chartValue(for: point) {
+                    LineMark(
                         x: .value("Date", point.date),
-                        y: .value("Metric", chartValue(for: point))
+                        y: .value("Metric", value)
                     )
-                    .symbol(.circle)
-                    .symbolSize(60)
-                    .foregroundStyle(prColor)
+                    .interpolationMethod(.monotone)
+                    .foregroundStyle(Ink.primary.opacity(Opacity.strong))
+
+                    AreaMark(
+                        x: .value("Date", point.date),
+                        y: .value("Metric", value)
+                    )
+                    .interpolationMethod(.monotone)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+
+                    if prIDs.contains(point.id) {
+                        PointMark(
+                            x: .value("Date", point.date),
+                            y: .value("Metric", value)
+                        )
+                        .symbol(.circle)
+                        .symbolSize(60)
+                        .foregroundStyle(prColor)
+                    }
                 }
             }
         }
@@ -391,7 +412,7 @@ extension ExerciseDetailScreen {
 
                     Spacer(minLength: 8)
 
-                    if let headline = effort.verdict.headline {
+                    if let headline = effort.verdict.headline(for: item.loadMode) {
                         Text(headline)
                             .font(Typography.sectionLabel)
                             .foregroundStyle(verdictColor(effort.verdict))
@@ -420,6 +441,57 @@ extension ExerciseDetailScreen {
 
     // MARK: - Muscles
 
+    /// A temporary anatomy map for the exercise being inspected. It
+    /// uses authored visual roles (1 / 0.5 / 0.2), including power and
+    /// stabilizers, and is intentionally separate from Today's chronic
+    /// training-development estimate.
+    @ViewBuilder
+    var exerciseAnatomySection: some View {
+        let involvement = item.muscleInvolvement
+        if !involvement.isEmpty && involvement.contributions.contains(where: { $0.muscle.isVisualized }) {
+            VStack(alignment: .leading, spacing: Space.md) {
+                Text("Exercise anatomy")
+                    .sectionLabelStyle(Opacity.medium)
+
+                StagedBodyModel(
+                    renderHeight: 310,
+                    channels: involvement.anatomyNodeChannels,
+                    warmth: 0.55
+                )
+                .frame(height: 310)
+                .accessibilityElement()
+                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint.")
+
+                HStack(spacing: Space.lg) {
+                    anatomyLegend(role: .primary)
+                    anatomyLegend(role: .secondary)
+                    anatomyLegend(role: .stabilizer)
+                }
+
+                Text("Movement roles, not training development. Stabilizers are shown but receive no hypertrophy credit.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    func anatomyLegend(role: MuscleRole) -> some View {
+        let rgb = MuscleColor.rgb(
+            for: MuscleMapChannels(intensity: role.visualIntensity),
+            theme: colorScheme == .dark ? .dark : .light
+        )
+        return HStack(spacing: 5) {
+            Circle()
+                .fill(Color(red: rgb.red, green: rgb.green, blue: rgb.blue))
+                .frame(width: 10, height: 10)
+            Text(role.displayName)
+                .font(Typography.metricMicro)
+                .foregroundStyle(Ink.tertiary)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
     /// Primary / secondary muscle involvement for the lift, resolved
     /// from the curated catalog map. Rendered as middot-joined text
     /// lines (matching the hero meta line) rather than chips, in step
@@ -435,11 +507,15 @@ extension ExerciseDetailScreen {
 
                 let primary = involvement.primary
                 let secondary = involvement.secondary
+                let stabilizers = involvement.stabilizers
                 if !primary.isEmpty {
                     muscleRow(label: "Primary", muscles: primary, prominent: true)
                 }
                 if !secondary.isEmpty {
                     muscleRow(label: "Secondary", muscles: secondary, prominent: false)
+                }
+                if !stabilizers.isEmpty {
+                    muscleRow(label: "Stabilizers", muscles: stabilizers, prominent: false)
                 }
             }
         }
@@ -524,20 +600,35 @@ extension ExerciseDetailScreen {
             HStack(spacing: Space.lg) {
                 switch item.trackingMode {
                 case .reps:
-                    defaultStat(label: "Weight", value: WeightFormatter.string(item.defaultWeight(forUnit: unit), unit: unit))
+                    defaultStat(
+                        label: item.loadMode.inputLabel,
+                        value: item.loadMode.summaryLoadLabel(
+                            item.defaultWeight(forUnit: unit),
+                            unit: unit
+                        ) ?? "None"
+                    )
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(width: 0.5, height: 32)
                         .accessibilityHidden(true)
                     defaultStat(label: "Reps", value: "\(item.defaultReps)")
                 case .duration:
-                    defaultStat(label: "Hold", value: DurationFormatter.string(item.defaultDuration))
+                    defaultStat(
+                        label: item.modality.durationLabel,
+                        value: DurationFormatter.string(item.defaultDuration)
+                    )
                     if item.defaultWeight > 0 {
                         Rectangle()
                             .fill(Surface.edge)
                             .frame(width: 0.5, height: 32)
                             .accessibilityHidden(true)
-                        defaultStat(label: "Load", value: WeightFormatter.string(item.defaultWeight(forUnit: unit), unit: unit))
+                        defaultStat(
+                            label: item.loadMode.inputLabel,
+                            value: item.loadMode.summaryLoadLabel(
+                                item.defaultWeight(forUnit: unit),
+                                unit: unit
+                            ) ?? "None"
+                        )
                     }
                 }
                 Spacer()
@@ -594,6 +685,7 @@ extension ExerciseDetailScreen {
         let topWeight: Double
         let topReps: Int
         let topDuration: TimeInterval
+        let loadMode: ExerciseLoadMode
         let setCount: Int
         let isPR: Bool
     }
@@ -603,12 +695,18 @@ extension ExerciseDetailScreen {
     func recentMetricLabel(_ row: RecentSessionRow) -> String {
         switch item.trackingMode {
         case .reps:
-            return "\(WeightFormatter.string(row.topWeight, unit: unit)) × \(row.topReps)"
+            let load = row.loadMode.summaryLoadLabel(
+                row.topWeight,
+                unit: unit
+            )
+            return load.map { "\($0) × \(row.topReps)" } ?? "\(row.topReps) reps"
         case .duration:
             let time = DurationFormatter.string(row.topDuration)
-            return row.topWeight > 0
-                ? "\(WeightFormatter.string(row.topWeight, unit: unit)) × \(time)"
-                : time
+            guard let load = row.loadMode.summaryLoadLabel(
+                    row.topWeight,
+                    unit: unit
+                  ) else { return time }
+            return "\(load) × \(time)"
         }
     }
 
@@ -624,19 +722,18 @@ extension ExerciseDetailScreen {
     /// at least 2 points to be more than a dot.
     var progress: ExerciseProgress? {
         let allProgress = sessionAnalytics?.progress ?? completedSessions.progressByExercise
-        return allProgress.first { progress in
-            if let catalogItemID = progress.catalogItemID {
-                return catalogItemID == item.id
-            }
-            return progress.name.exerciseIdentityName == item.name.exerciseIdentityName
-        }
+        // Custom exercise IDs deliberately include their performance
+        // semantics. Resolve that complete identity before consulting the
+        // name-only key used by history from before copied IDs existed.
+        return allProgress.first { $0.id == historyKey }
+            ?? allProgress.first { $0.id == legacyHistoryKey }
     }
 
-    /// Recent RIR read + progression verdict. Nil for timed holds and
-    /// for lifts with fewer than three logged RIR readings — the card
-    /// hides entirely in those cases.
+    /// Recent RIR read + progression verdict. Nil outside comparable
+    /// dynamic strength and for lifts with fewer than three logged RIR
+    /// readings — the card hides entirely in those cases.
     var effortSummary: ExerciseEffortSummary? {
-        guard item.trackingMode == .reps else { return nil }
+        guard supportsEstimatedOneRepMax else { return nil }
         return completedSessions.effortSummary(for: item)
     }
 
@@ -660,7 +757,7 @@ extension ExerciseDetailScreen {
         completedSessions.reduce(0) { acc, session in
             acc + (session.orderedExercises.contains(where: {
                 $0.matchesCatalogItem(item)
-                && $0.sets.contains(where: \.isCompleted)
+                && $0.sets.contains(where: \.isAnalyticsEligible)
             }) ? 1 : 0)
         }
     }
@@ -674,43 +771,39 @@ extension ExerciseDetailScreen {
     /// Latest 5 sessions for this exercise (newest first), with
     /// top set + total completed-set count + PR flag computed.
     var recentRows: [RecentSessionRow] {
-        // Walk archive newest-first (already sorted that way via
-        // the @Query order: .reverse), pick up to 5 sessions that
-        // include this exercise. The "best" axis is mode-aware:
-        // heaviest weight for reps, longest hold for duration.
-        let isDuration = item.trackingMode == .duration
-        let completedSets = completedSessions
+        // Walk archive newest-first (already sorted that way via the
+        // @Query order: .reverse), pick up to 5 sessions that include
+        // this exercise. The shared representative-set ordering handles
+        // effective load, assistance polarity, reps, and hold duration.
+        let completedExercises = completedSessions
             .flatMap(\.orderedExercises)
             .filter { $0.matchesCatalogItem(item) }
-            .flatMap { $0.sets.filter(\.isCompleted) }
-        let allTimeBest = isDuration
-            ? (completedSets.map(\.duration).max() ?? 0)
-            : (completedSets.map(\.weight).max() ?? 0)
+        let allTimeBest = completedExercises
+            .compactMap(\.bestStrengthPerformance)
+            .reduce(nil as StrengthPerformance?) { best, candidate in
+                guard let best else { return candidate }
+                return candidate.beats(best) ? candidate : best
+            }
 
         var rows: [RecentSessionRow] = []
         for session in completedSessions {
             guard let exercise = session.orderedExercises.first(where: {
                 $0.matchesCatalogItem(item)
             }) else { continue }
-            let completed = exercise.sets.filter(\.isCompleted)
-            guard !completed.isEmpty else { continue }
-
-            let top = isDuration
-                ? completed.max { a, b in a.duration < b.duration }!
-                : completed.max { a, b in
-                    if a.weight == b.weight { return a.reps < b.reps }
-                    return a.weight < b.weight
-                }!
+            let completed = exercise.sets.filter(\.isAnalyticsEligible)
+            guard !completed.isEmpty,
+                  let top = exercise.representativeTopSet else { continue }
             let date = session.completedAt ?? session.startedAt
-            let metric = isDuration ? top.duration : top.weight
+            let performance = exercise.strengthPerformance(for: top)
 
             rows.append(RecentSessionRow(
                 date: date,
                 topWeight: top.weight,
                 topReps: top.reps,
                 topDuration: top.duration,
+                loadMode: exercise.loadMode,
                 setCount: completed.count,
-                isPR: metric >= allTimeBest && metric > 0
+                isPR: supportsPerformanceRecord && performance != nil && performance == allTimeBest
             ))
 
             if rows.count >= 5 { break }
@@ -733,38 +826,91 @@ extension ExerciseDetailScreen {
     }
 
     var bestValueString: String {
-        let isDuration = item.trackingMode == .duration
         guard let prog = progress else {
             // Progress requires >=2 sessions. If we have 1, surface
             // that single top set as the "best" so the column isn't
             // empty when the user is just getting started.
-            if let last = lastInstance {
-                return isDuration
-                    ? DurationFormatter.string(last.topDuration)
-                    : WeightFormatter.string(last.topWeight, unit: unit, includeUnit: false)
+            guard let last = lastInstance else { return "—" }
+            if item.performanceSemanticKind.comparesLoad {
+                return last.loadMode.loggedLoadLabel(
+                    last.topWeight,
+                    unit: unit,
+                    includeUnit: false
+                ) ?? "—"
             }
-            return "—"
+            if item.trackingMode == .duration {
+                return DurationFormatter.string(last.topDuration)
+            }
+            return last.loadMode.loggedLoadLabel(
+                last.topWeight,
+                unit: unit,
+                includeUnit: false
+            ) ?? "—"
         }
-        return isDuration
-            ? DurationFormatter.string(prog.bestDuration)
-            : WeightFormatter.string(prog.bestWeight, unit: unit, includeUnit: false)
+
+        guard let best = bestDisplayPoint(in: prog) else { return "—" }
+        if best.performanceSemanticKind.comparesLoad {
+            return best.loadMode.loggedLoadLabel(
+                best.topWeight,
+                unit: unit,
+                includeUnit: false
+            ) ?? "—"
+        }
+        if best.trackingMode == .duration {
+            return DurationFormatter.string(best.topDuration)
+        }
+        return best.loadMode.loggedLoadLabel(
+            best.topWeight,
+            unit: unit,
+            includeUnit: false
+        ) ?? "—"
     }
 
     var bestDetailString: String? {
-        let isDuration = item.trackingMode == .duration
         guard let prog = progress else {
             // For a one-session user the "best" IS today's session.
             guard let last = lastInstance else { return nil }
-            return RelativeDate.short(last.sessionDate)
+            return bestDetail(
+                reps: last.topReps,
+                duration: last.topDuration,
+                date: last.sessionDate
+            )
         }
-        // Find when the all-time best was achieved (on the active axis).
-        let bestPoint = isDuration
-            ? prog.points.first(where: { $0.topDuration == prog.bestDuration })
-            : prog.points.first(where: { $0.topWeight == prog.bestWeight })
-        if let bestPoint {
-            return RelativeDate.short(bestPoint.date)
+        guard let best = bestDisplayPoint(in: prog) else { return nil }
+        return bestDetail(
+            reps: best.topReps,
+            duration: best.topDuration,
+            date: best.date
+        )
+    }
+
+    /// Standing record when the semantic contract supports one; otherwise
+    /// the ordinary best history marker. Comparable loaded holds therefore
+    /// use the canonical load-first record instead of the globally longest
+    /// duration, while duration-only work keeps its time-based best.
+    func bestDisplayPoint(in prog: ExerciseProgress) -> ExerciseProgressPoint? {
+        if supportsPerformanceRecord {
+            return prog.recordPoint
         }
-        return nil
+        if item.trackingMode == .duration {
+            return prog.points.max { $0.topDuration < $1.topDuration }
+        }
+        return prog.bestWeightPoint
+    }
+
+    /// The Best card's secondary line preserves the record tie-breaker.
+    /// Load-ranked reps use reps; load-ranked isometrics use duration;
+    /// duration-only and unranked history need only the record date.
+    func bestDetail(reps: Int, duration: TimeInterval, date: Date) -> String {
+        let relativeDate = RelativeDate.short(date)
+        switch item.performanceSemanticKind {
+        case .dynamicLoadAndReps, .powerLoadAndReps:
+            return "× \(reps) · \(relativeDate)"
+        case .isometricLoadAndDuration:
+            return "× \(DurationFormatter.string(duration)) · \(relativeDate)"
+        case .isometricDuration, .unrankedReps, .unrankedDuration:
+            return relativeDate
+        }
     }
 
     /// All-time best estimated 1RM (canonical lb), or nil when there
@@ -772,11 +918,16 @@ extension ExerciseDetailScreen {
     /// Epley estimate before a 2-session trend exists. Drives the
     /// estimated fallback in the dedicated 1RM row.
     var estimatedOneRepMax: Double? {
+        guard item.modality == .dynamicStrength,
+              item.loadMode.supportsLoadComparison,
+              item.trackingMode == .reps else { return nil }
         if let prog = progress {
             return prog.bestE1RM > 0 ? prog.bestE1RM : nil
         }
         if let last = lastInstance, last.topReps > 0 {
-            return last.topWeight * (1.0 + Double(last.topReps) / 30.0)
+            guard let effectiveLoad = last.effectiveTopLoad,
+                  effectiveLoad > 0 else { return nil }
+            return effectiveLoad * (1.0 + Double(last.topReps) / 30.0)
         }
         return nil
     }
@@ -784,6 +935,9 @@ extension ExerciseDetailScreen {
     /// When the estimated 1RM peaked — surfaced as the row's "Estimated
     /// · 7d ago" sub-label.
     var estimatedOneRepMaxDate: Date? {
+        guard item.modality == .dynamicStrength,
+              item.loadMode.supportsLoadComparison,
+              item.trackingMode == .reps else { return nil }
         if let prog = progress, let point = prog.bestE1RMPoint {
             return point.date
         }
@@ -794,15 +948,26 @@ extension ExerciseDetailScreen {
     }
 
     /// Value the editor opens on: the measured max if set, else the
-    /// estimate, else the heaviest logged weight or the catalog
-    /// default — anything to avoid scrubbing up from zero.
+    /// estimate, else the greatest logged effective load or catalog
+    /// default. Unknown bodyweight deliberately remains a neutral zero.
     var oneRepMaxSeed: Double {
         if let measured = item.oneRepMax { return measured }
         if let estimate = estimatedOneRepMax { return estimate }
         if let prog = progress, prog.bestWeight > 0 { return prog.bestWeight }
-        let seed = item.defaultWeight(forUnit: unit)
-        if seed > 0 { return seed }
-        return 135
+        let loggedSeed = item.defaultWeight(forUnit: unit)
+        if let seed = item.loadProfile.effectiveLoad(
+            loggedWeight: loggedSeed,
+            bodyweight: currentBodyweight
+        ), seed > 0 {
+            return seed
+        }
+        // A raw assistance or added-load value is not an absolute 1RM.
+        // Keep bodyweight-dependent exercises neutral until a measured
+        // bodyweight makes their effective load knowable.
+        // A zero-default custom lift has supplied no measured-load
+        // evidence either. Keep the editor unsaveable until the user
+        // enters the value they actually tested.
+        return 0
     }
 
     var countString: String {
@@ -822,8 +987,26 @@ extension ExerciseDetailScreen {
     /// `progress` mints fresh point UUIDs on every access.
     func visiblePoints(from prog: ExerciseProgress?) -> [ExerciseProgressPoint] {
         guard let prog else { return [] }
-        guard let cutoff = range.cutoff else { return prog.points }
-        return prog.points.filter { $0.date >= cutoff }
+        var points = prog.points
+        if let cutoff = range.cutoff {
+            points = points.filter { $0.date >= cutoff }
+        }
+        if effectiveChartMetric == .weight,
+           item.performanceSemanticKind.comparesLoad {
+            // Never relabel raw added load or machine assistance as an
+            // absolute resistance when the historical bodyweight is absent.
+            points = points.filter { $0.effectiveTopLoad != nil }
+        } else if effectiveChartMetric == .e1rm {
+            points = points.filter { $0.estimated1RM > 0 }
+        } else if effectiveChartMetric == .volume {
+            // An unavailable effective load is a missing tonnage point,
+            // not a zero-volume performance. Partial values are also
+            // withheld so the line never implies a complete subtotal.
+            points = points.filter {
+                $0.comparableTonnageAvailability == .complete
+            }
+        }
+        return points
     }
 
     /// IDs of the points that set a new high on the *currently
@@ -831,11 +1014,19 @@ extension ExerciseDetailScreen {
     /// chronological series (not just the visible window) so a PR dot
     /// only appears where the value beat everything before it.
     func prPointIDs(from prog: ExerciseProgress?) -> Set<UUID> {
-        guard let prog else { return [] }
+        guard let prog,
+              supportsPerformanceRecord else { return [] }
+        if item.trackingMode == .reps, effectiveChartMetric == .volume {
+            return []
+        }
+        if item.trackingMode == .duration || effectiveChartMetric == .weight {
+            return Set(prog.points.filter(\.isStrengthPR).map(\.id))
+        }
         var ids = Set<UUID>()
         var runningMax = -Double.infinity
         for point in prog.points {
-            let value = metricValue(for: point)
+            let value = point.estimated1RM
+            guard value > 0 else { continue }
             if value > runningMax {
                 runningMax = value
                 ids.insert(point.id)
@@ -844,27 +1035,47 @@ extension ExerciseDetailScreen {
         return ids
     }
 
-    /// The y-value for a chart point in the user's display unit.
-    /// Duration exercises always plot hold length; strength exercises
-    /// follow the selected `chartMetric`.
-    func chartValue(for point: ExerciseProgressPoint) -> Double {
-        guard item.trackingMode == .reps else { return point.topDuration }
-        switch chartMetric {
-        case .weight: return WeightFormatter.toDisplay(point.topWeight, unit: unit)
+    /// The y-value for a chart point in the user's display unit. Loaded
+    /// isometrics plot absolute effective resistance; duration-only work
+    /// plots time. Nil keeps unavailable absolute load or incomplete
+    /// comparable tonnage off the chart.
+    func chartValue(for point: ExerciseProgressPoint) -> Double? {
+        if item.trackingMode == .duration {
+            if item.performanceSemanticKind.comparesLoad {
+                guard let effectiveLoad = point.effectiveTopLoad else { return nil }
+                return WeightFormatter.toDisplay(effectiveLoad, unit: unit)
+            }
+            return point.topDuration
+        }
+        switch effectiveChartMetric {
+        case .weight:
+            guard let historyLoad = point.historyTopLoad else { return nil }
+            return WeightFormatter.toDisplay(historyLoad, unit: unit)
         case .e1rm:   return WeightFormatter.toDisplay(point.estimated1RM, unit: unit)
-        case .volume: return WeightFormatter.toDisplay(point.totalVolume, unit: unit)
+        case .volume:
+            guard point.comparableTonnageAvailability == .complete else { return nil }
+            return WeightFormatter.toDisplay(point.totalVolume, unit: unit)
         }
     }
 
-    /// Raw (canonical) metric for PR detection — same axis selection
-    /// as `chartValue` but without unit conversion, which is
-    /// monotonic and so doesn't affect the running-max comparison.
-    func metricValue(for point: ExerciseProgressPoint) -> Double {
-        guard item.trackingMode == .reps else { return point.topDuration }
-        switch chartMetric {
-        case .weight: return point.topWeight
-        case .e1rm:   return point.estimated1RM
-        case .volume: return point.totalVolume
-        }
+    /// Unsupported metrics fall back to the ordinary load-history
+    /// line. Only comparable dynamic strength exposes e1RM/tonnage.
+    var effectiveChartMetric: ChartMetric {
+        availableChartMetrics.contains(chartMetric) ? chartMetric : .weight
+    }
+
+    var availableChartMetrics: [ChartMetric] {
+        supportsEstimatedOneRepMax ? ChartMetric.allCases : [.weight]
+    }
+
+    var supportsPerformanceRecord: Bool {
+        item.performanceSemanticKind.supportsRecord
+    }
+
+    var supportsEstimatedOneRepMax: Bool {
+        item.modality.supportsEstimatedOneRepMax(
+            for: item.trackingMode,
+            loadMode: item.loadMode
+        )
     }
 }

@@ -2,21 +2,18 @@
 //  Muscle.swift
 //  vivobody
 //
-//  The trainable-muscle taxonomy that bridges two layers that never
-//  spoke before: an exercise knows only a coarse `MuscleGroup`
-//  (chest/back/legs/…), while `BodyModel.scn` ships ~240 individually
-//  named anatomical meshes (`Pectoralis_Major_L`, `Vastus_Lateralis_R`,
-//  …). This file defines the middle layer — ~20 trainable muscle
-//  regions — and three things built on top of it:
+//  The trainable-muscle taxonomy bridging exercise programming,
+//  muscle-volume analytics, and the individually named anatomical
+//  meshes in BodyModel.scn. It also defines categorical exercise roles
+//  so visual emphasis and hard-set credit remain separate concepts.
 //
 //    1. `Muscle.nodeNames` — which model meshes each region paints.
-//    2. `Muscle.Involvement` — graded per-muscle contribution for an
-//       exercise: an ordered list of (muscle, weight) pairs, where
-//       weight ∈ 0...1 is the fraction of effort each muscle receives.
-//    3. `Muscle.involvement(forExerciseNamed:)` — the curated, graded
-//       per-exercise muscle map for the seeded catalog. The single
-//       source of truth that every `muscleInvolvement` resolver reads
-//       from, keyed purely by exercise name.
+//    2. `MuscleRole` / `Muscle.Involvement` — primary, secondary, and
+//       stabilizer roles, each with independent visual and volume values.
+//    3. `Muscle.involvement(forExerciseNamed:)` — a bundled-catalog
+//       lookup used when constructing a snapshot directly by canonical
+//       name. Catalog picks persist the authored roles; custom exercises
+//       must author their own rather than inheriting a browse-group guess.
 //
 //  The model node names are exact strings baked into BodyModel.scn,
 //  including its spelling quirks (`Adductor_Mangus`, `Biceps_femoris`).
@@ -31,7 +28,7 @@ import Foundation
 /// meshes (one region paints several `_L`/`_R` nodes) but finer than
 /// `MuscleGroup`. Stored as a raw string on exercises so the set can
 /// grow without a migration.
-enum Muscle: String, Hashable, CaseIterable {
+nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
     // Chest
     case pectorals
     case serratus
@@ -39,7 +36,9 @@ enum Muscle: String, Hashable, CaseIterable {
     case lats
     case traps
     case rhomboids
-    case teres          // teres major/minor + infraspinatus cluster
+    case externalRotators
+    case teresMajor
+    case subscapularis
     case lowerBack
     // Shoulders
     case deltoids
@@ -67,7 +66,9 @@ enum Muscle: String, Hashable, CaseIterable {
         case .lats:       return "Lats"
         case .traps:      return "Traps"
         case .rhomboids:  return "Rhomboids"
-        case .teres:      return "Upper Back"
+        case .externalRotators: return "External Rotators"
+        case .teresMajor: return "Teres Major"
+        case .subscapularis: return "Subscapularis"
         case .lowerBack:  return "Lower Back"
         case .deltoids:   return "Shoulders"
         case .biceps:     return "Biceps"
@@ -93,8 +94,9 @@ enum Muscle: String, Hashable, CaseIterable {
     nonisolated var group: MuscleGroup {
         switch self {
         case .pectorals, .serratus:                       return .chest
-        case .lats, .traps, .rhomboids, .teres, .lowerBack: return .back
-        case .deltoids:                                   return .shoulders
+        case .lats, .traps, .rhomboids, .teresMajor,
+             .lowerBack:                                  return .back
+        case .deltoids, .externalRotators, .subscapularis: return .shoulders
         case .biceps, .triceps, .forearms:                return .arms
         case .abs, .obliques:                             return .core
         case .quads, .hamstrings, .gluteMax, .gluteMed, .calves,
@@ -117,8 +119,15 @@ enum Muscle: String, Hashable, CaseIterable {
             return ["Trapezius"]
         case .rhomboids:
             return ["Rhomboideus_Major", "Rhomboideus_Minor"]
-        case .teres:
-            return ["Teres_Major", "Teres_Minor", "Infraspinatus"]
+        case .externalRotators:
+            return ["Teres_Minor", "Infraspinatus"]
+        case .teresMajor:
+            return ["Teres_Major"]
+        case .subscapularis:
+            // BodyModel.scn has no subscapularis mesh. The region is
+            // still modeled for exercise analytics, but deliberately
+            // contributes no visual nodes.
+            return []
         case .lowerBack:
             return ["Quadratus_Lumborum", "Serratus_Posterior_Inferior", "Serratus_Posterior_Superior"]
         case .deltoids:
@@ -164,140 +173,177 @@ enum Muscle: String, Hashable, CaseIterable {
     nonisolated var nodeNames: [String] {
         nodeBaseNames.flatMap { ["\($0)_L", "\($0)_R"] }
     }
+
+    /// Whether BodyModel.scn can paint this region. Subscapularis is
+    /// anatomically modeled but has no corresponding surface mesh.
+    nonisolated var isVisualized: Bool { !nodeBaseNames.isEmpty }
 }
 
-// MARK: - Default exercise → muscle map
+// MARK: - Muscle role
+
+/// A muscle's categorical contribution to an exercise. Role is the
+/// authored fact; visual intensity and hard-set volume credit are two
+/// deliberately independent projections of that role.
+nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
+    case primary
+    case secondary
+    case stabilizer
+
+    nonisolated var displayName: String {
+        switch self {
+        case .primary: return "Primary"
+        case .secondary: return "Secondary"
+        case .stabilizer: return "Stabilizer"
+        }
+    }
+
+    /// Body-model emphasis. This is also the compact value persisted in
+    /// SwiftData snapshots, but must not be interpreted as set volume.
+    nonisolated var visualIntensity: Double {
+        switch self {
+        case .primary: return 1
+        case .secondary: return 0.5
+        case .stabilizer: return 0.2
+        }
+    }
+
+    /// Fractional hard-set credit used by muscle-volume analytics.
+    /// Stabilization alone is visible but earns no hypertrophy volume.
+    nonisolated var volumeCredit: Double {
+        switch self {
+        case .primary: return 1
+        case .secondary: return 0.5
+        case .stabilizer: return 0
+        }
+    }
+
+    /// Decodes the compact SwiftData representation. Only the three
+    /// canonical values are valid; old effort tiers are intentionally
+    /// unsupported because the app is starting from a clean store.
+    nonisolated init?(visualIntensity: Double) {
+        guard let role = Self.allCases.first(where: {
+            abs($0.visualIntensity - visualIntensity) < 0.000_001
+        }) else {
+            return nil
+        }
+        self = role
+    }
+}
+
+// MARK: - Exercise involvement
 
 nonisolated extension Muscle {
-    /// Per-muscle contribution for one exercise: an ordered list of
-    /// (muscle, weight) pairs, where weight ∈ 0...1 is the fraction of
-    /// the exercise's effort credited to that muscle. Prime movers sit
-    /// at/above `primeThreshold`; lighter synergists grade down. The
-    /// `primary`/`secondary` accessors project this back onto the old
-    /// two-tier view for callers that still want it.
+    /// Ordered categorical muscle roles for one exercise.
     nonisolated struct Involvement {
-        /// Standard contribution levels used to author the catalog.
-        static let prime = 1.0   // the target muscle
-        static let major = 0.7   // heavily-loaded synergist
-        static let minor = 0.4   // clear assistor
-        static let trace = 0.2   // light stabiliser
-        /// At/above this a contribution reads as a prime mover.
-        static let primeThreshold = 0.85
+        nonisolated struct Contribution: Hashable, Sendable {
+            let muscle: Muscle
+            let role: MuscleRole
 
-        /// The bounded vocabulary used when authoring involvement.
-        /// Catalog analytics keep storing Doubles, while the editor
-        /// avoids implying precision the underlying data does not have.
-        nonisolated enum Level: Double, CaseIterable {
-            case prime = 1.0
-            case major = 0.7
-            case minor = 0.4
-            case trace = 0.2
-            case none = 0
-
-            var displayName: String {
-                switch self {
-                case .prime: return "Prime"
-                case .major: return "Major"
-                case .minor: return "Minor"
-                case .trace: return "Trace"
-                case .none:  return "None"
-                }
+            nonisolated init(muscle: Muscle, role: MuscleRole) {
+                self.muscle = muscle
+                self.role = role
             }
 
-            init(weight: Double) {
-                guard weight > 0 else {
-                    self = .none
-                    return
-                }
-                self = Self.allCases.min {
-                    Swift.abs($0.rawValue - weight) < Swift.abs($1.rawValue - weight)
-                } ?? .none
-            }
+            nonisolated var visualIntensity: Double { role.visualIntensity }
+            nonisolated var volumeCredit: Double { role.volumeCredit }
         }
 
-        let contributions: [(muscle: Muscle, weight: Double)]
+        let contributions: [Contribution]
 
         static let empty = Involvement(contributions: [])
 
-        init(contributions: [(muscle: Muscle, weight: Double)]) {
-            self.contributions = contributions
+        init(contributions: [Contribution]) {
+            var strongestRoleByMuscle: [Muscle: MuscleRole] = [:]
+            var authoredOrder: [Muscle] = []
+
+            for contribution in contributions {
+                if strongestRoleByMuscle[contribution.muscle] == nil {
+                    authoredOrder.append(contribution.muscle)
+                }
+                let existing = strongestRoleByMuscle[contribution.muscle]
+                if existing.map({ contribution.role.visualIntensity > $0.visualIntensity }) ?? true {
+                    strongestRoleByMuscle[contribution.muscle] = contribution.role
+                }
+            }
+
+            self.contributions = authoredOrder.compactMap { muscle in
+                strongestRoleByMuscle[muscle].map { Contribution(muscle: muscle, role: $0) }
+            }
         }
 
         init(snapshot: [String: Double]) {
-            var weightsByMuscle = Dictionary(
-                snapshot.compactMap { raw, weight -> (Muscle, Double)? in
-                    guard let muscle = Muscle(rawValue: raw), weight > 0 else { return nil }
-                    return (muscle, weight)
-                },
-                uniquingKeysWith: max
-            )
-            if let legacyGlutes = snapshot["glutes"], legacyGlutes > 0 {
-                weightsByMuscle[.gluteMax] = max(weightsByMuscle[.gluteMax] ?? 0, legacyGlutes)
-                weightsByMuscle[.gluteMed] = max(weightsByMuscle[.gluteMed] ?? 0, legacyGlutes)
-            }
             self.contributions = Muscle.allCases.compactMap { muscle in
-                guard let weight = weightsByMuscle[muscle] else { return nil }
-                return (muscle: muscle, weight: weight)
+                guard
+                    let value = snapshot[muscle.rawValue],
+                    let role = MuscleRole(visualIntensity: value)
+                else {
+                    return nil
+                }
+                return Contribution(muscle: muscle, role: role)
             }
         }
 
         var snapshot: [String: Double] {
-            Dictionary(contributions.map { ($0.muscle.rawValue, $0.weight) }, uniquingKeysWith: max)
+            Dictionary(
+                contributions.map { ($0.muscle.rawValue, $0.visualIntensity) },
+                uniquingKeysWith: max
+            )
         }
 
-        /// Effort multiplier per muscle, deduplicated by max.
-        var weights: [Muscle: Double] {
-            Dictionary(contributions.map { ($0.muscle, $0.weight) }, uniquingKeysWith: max)
+        var roles: [Muscle: MuscleRole] {
+            Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.role) })
         }
-        /// Prime movers (weight ≥ `primeThreshold`), in author order.
+
+        /// Body-model weights. These values intentionally differ from
+        /// hard-set volume for stabilizers.
+        var visualWeights: [Muscle: Double] {
+            Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.visualIntensity) })
+        }
+
+        /// Temporary Exercise Anatomy colours keyed by exact SceneKit
+        /// mesh name. Unlike chronic development this projection shows
+        /// stabilizers at 0.2 and applies to every modality, including
+        /// power, because it describes anatomy rather than hypertrophy.
+        var anatomyNodeChannels: [String: MuscleMapChannels] {
+            var result: [String: MuscleMapChannels] = [:]
+            for contribution in contributions {
+                let channels = MuscleMapChannels(intensity: contribution.visualIntensity)
+                for node in contribution.muscle.nodeNames {
+                    result[node] = channels
+                }
+            }
+            return result
+        }
+
+        /// Fractional hard-set credits consumed by volume analytics.
+        var volumeCredits: [Muscle: Double] {
+            Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.volumeCredit) })
+        }
+
+        func role(for muscle: Muscle) -> MuscleRole? { roles[muscle] }
+        func visualIntensity(for muscle: Muscle) -> Double { visualWeights[muscle] ?? 0 }
+        func volumeCredit(for muscle: Muscle) -> Double { volumeCredits[muscle] ?? 0 }
+
         var primary: [Muscle] {
-            contributions.filter { $0.weight >= Self.primeThreshold }.map(\.muscle)
+            contributions.filter { $0.role == .primary }.map(\.muscle)
         }
-        /// Everything below prime but still involved.
         var secondary: [Muscle] {
-            contributions.filter { $0.weight > 0 && $0.weight < Self.primeThreshold }.map(\.muscle)
+            contributions.filter { $0.role == .secondary }.map(\.muscle)
         }
-        var hasPrime: Bool {
-            contributions.contains { $0.weight >= Self.primeThreshold }
+        var stabilizers: [Muscle] {
+            contributions.filter { $0.role == .stabilizer }.map(\.muscle)
         }
+        var hasPrimary: Bool { contributions.contains { $0.role == .primary } }
         var isEmpty: Bool { contributions.isEmpty }
     }
 
-    /// Coarse fallback for custom or renamed exercises that have no
-    /// curated catalog entry. This keeps user-created work visible in
-    /// muscle analytics instead of disappearing entirely.
-    static func defaultInvolvement(for group: MuscleGroup) -> Involvement {
-        switch group {
-        case .chest:
-            return Involvement(contributions: [(.pectorals, Involvement.prime)])
-        case .back:
-            return Involvement(contributions: [(.lats, Involvement.prime), (.traps, Involvement.major), (.rhomboids, Involvement.major)])
-        case .shoulders:
-            return Involvement(contributions: [(.deltoids, Involvement.prime)])
-        case .legs:
-            return Involvement(contributions: [
-                (.quads, Involvement.prime),
-                (.hamstrings, Involvement.major),
-                (.gluteMax, Involvement.major),
-                (.gluteMed, Involvement.minor),
-            ])
-        case .arms:
-            return Involvement(contributions: [(.biceps, Involvement.prime), (.triceps, Involvement.prime), (.forearms, Involvement.minor)])
-        case .core:
-            return Involvement(contributions: [(.abs, Involvement.prime), (.obliques, Involvement.major)])
-        }
-    }
-
-    /// Graded muscle involvement for an exercise, resolved by name
+    /// Categorical muscle involvement for an exercise, resolved by name
     /// (case-insensitive) from the bundled catalog (`CatalogData`).
-    /// Unknown names fall back to a coarse group map when provided so
-    /// custom exercises still contribute to analytics.
+    /// Unknown names stay empty. Inventing roles from a browse group is
+    /// biomechanically unsafe (for example, “legs” cannot tell gluteus
+    /// maximus from gluteus medius), so custom exercises must author
+    /// their roles explicitly in the editor.
     static func involvement(forExerciseNamed name: String) -> Involvement {
         CatalogData.record(forExerciseNamed: name)?.muscleInvolvement ?? .empty
-    }
-
-    static func involvement(forExerciseNamed name: String, fallbackGroup group: MuscleGroup) -> Involvement {
-        let curated = involvement(forExerciseNamed: name)
-        return curated.isEmpty ? defaultInvolvement(for: group) : curated
     }
 }

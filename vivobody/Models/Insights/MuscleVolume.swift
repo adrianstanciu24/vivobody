@@ -8,12 +8,12 @@
 //  chest/back/legs rollup can't: which muscles are getting enough
 //  work, and which are quietly being neglected.
 //
-//  Two ideas make the count honest. First, the GRADED involvement
-//  map (`Muscle.involvement`): a set isn't credited whole to one
-//  bucket — it's split across every muscle it actually works, by that
-//  muscle's contribution weight. One Bench Press set therefore counts
-//  as 1.0 set for chest, 0.7 for triceps, and 0.4 for the front
-//  delts. Second, the shared `SetStimulus` currency: each completed
+//  Two ideas make the count honest. First, the role-based involvement
+//  map (`Muscle.involvement`): primary muscles receive one set,
+//  secondary muscles receive half a set, and stabilizers receive no
+//  hypertrophy-volume credit. Stabilizers remain available to the body
+//  visualization without inflating training volume. Second, the shared
+//  `SetStimulus` currency: each completed
 //  set is priced as a hard-set equivalent — full credit for a real
 //  working set, demoted for warm-up loads, token weights, heavy
 //  singles, and sets stopped far from failure (RIR). A logged plank
@@ -55,7 +55,8 @@ nonisolated struct VolumeLandmark: Hashable {
         case .deltoids, .calves, .abs, .obliques, .biceps, .triceps, .forearms:
             return VolumeLandmark(mev: 8, optimalHigh: 22)
         case .lowerBack, .hipFlexors, .shins, .serratus,
-             .teres, .rhomboids, .adductors, .gluteMed:
+             .externalRotators, .teresMajor, .subscapularis,
+             .rhomboids, .adductors, .gluteMed:
             return VolumeLandmark(mev: 5, optimalHigh: 14)
         case .pectorals, .lats, .traps, .quads, .hamstrings, .gluteMax:
             return VolumeLandmark(mev: 8, optimalHigh: 20)

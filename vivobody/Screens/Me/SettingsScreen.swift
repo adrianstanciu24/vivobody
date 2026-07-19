@@ -26,11 +26,11 @@ struct SettingsScreen: View {
     @Environment(\.modelContext) private var modelContext
 
     /// Pro entitlement, injected by AppRoot. Optional so previews
-    /// still build — nil renders as unlocked. Drives the Vivobody
+    /// still build — nil fails closed as free. Drives the Vivobody
     /// Pro row and the Apple Health gate.
     @Environment(ProStore.self) private var pro: ProStore?
 
-    private var isPro: Bool { pro?.isUnlocked ?? true }
+    private var isPro: Bool { pro?.isUnlocked == true }
 
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled

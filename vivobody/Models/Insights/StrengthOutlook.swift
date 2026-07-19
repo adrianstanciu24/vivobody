@@ -39,7 +39,12 @@ nonisolated enum PRTrend: Hashable {
 // MARK: - Per-lift stat
 
 nonisolated struct StrengthOutlookStat: Identifiable, Hashable {
-    var id: String { exercise }
+    /// The same stable identity used by `ExerciseProgress`: bundled
+    /// catalog ID or the custom item's UUID plus full performance
+    /// signature, with a normalized-name key only when neither exists.
+    let historyKey: String
+    var id: String { historyKey }
+    let catalogID: String?
     let exercise: String
     let group: MuscleGroup
     /// Most recent estimated 1-rep max (lb).
@@ -94,8 +99,8 @@ nonisolated struct StrengthOutlookBoard {
         stats.first { $0.trend == .climbing }
     }
 
-    func stat(for exercise: String) -> StrengthOutlookStat? {
-        stats.first { $0.exercise.caseInsensitiveCompare(exercise) == .orderedSame }
+    func stat(forHistoryKey historyKey: String) -> StrengthOutlookStat? {
+        stats.first { $0.historyKey == historyKey }
     }
 }
 
@@ -170,14 +175,20 @@ extension Array where Element == WorkoutSession {
                 to: calendar.startOfDay(for: now)
             ).day.map { Swift.max(0, $0) / 7 }
 
+            // Strength math uses the latest comparable e1RM point, but
+            // training recency must include a later session whose
+            // bodyweight-dependent load could not be resolved.
+            let latestTrainedDate = progress.latest?.date ?? current.date
             let daysSince = calendar.dateComponents(
                 [.day],
-                from: calendar.startOfDay(for: current.date),
+                from: calendar.startOfDay(for: latestTrainedDate),
                 to: calendar.startOfDay(for: now)
             ).day
 
             stats.append(
                 StrengthOutlookStat(
+                    historyKey: progress.id,
+                    catalogID: progress.catalogID,
                     exercise: progress.name,
                     group: progress.group,
                     currentE1RM: currentE1RM,

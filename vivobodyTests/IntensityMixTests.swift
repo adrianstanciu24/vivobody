@@ -24,8 +24,17 @@ struct IntensityMixTests {
     }
 
     /// Reps exercise from (reps, completed) tuples at a fixed weight.
-    private func lift(_ sets: [(reps: Int, completed: Bool)]) -> Exercise {
-        let ex = Exercise(name: "Bench Press", group: .chest, plannedSets: 0, plannedWeight: 0)
+    private func lift(
+        _ sets: [(reps: Int, completed: Bool)],
+        modality: ExerciseModality = .dynamicStrength
+    ) -> Exercise {
+        let ex = Exercise(
+            name: "Bench Press",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0,
+            modality: modality
+        )
         for (i, s) in sets.enumerated() {
             ex.sets.append(WorkoutSet(weight: 100, reps: s.reps, isCompleted: s.completed, sortOrder: i))
         }
@@ -33,7 +42,14 @@ struct IntensityMixTests {
     }
 
     private func hold(seconds: [TimeInterval]) -> Exercise {
-        let ex = Exercise(name: "Plank", group: .core, plannedSets: 0, plannedWeight: 0, trackingMode: .duration)
+        let ex = Exercise(
+            name: "Plank",
+            group: .core,
+            plannedSets: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength
+        )
         for (i, sec) in seconds.enumerated() {
             ex.sets.append(WorkoutSet(weight: 0, reps: 0, duration: sec, isCompleted: true, sortOrder: i))
         }
@@ -73,6 +89,25 @@ struct IntensityMixTests {
         let mix = [session(daysAgo: 1, [hold(seconds: [60, 45])])].intensityMix(now: now)
         #expect(mix.hasData == false)
         #expect(mix.total == 0)
+    }
+
+    @Test func onlyDynamicStrengthRepsEnterTheMix() {
+        let dynamic = lift([(5, true), (8, true)])
+        let conditioning = lift([(20, true)], modality: .conditioning)
+        let mobility = lift([(3, true)], modality: .mobility)
+        let invalidIsometricReps = lift([(12, true)], modality: .isometricStrength)
+        let archive = [session(daysAgo: 1, [dynamic, conditioning, mobility, invalidIsometricReps])]
+
+        let mix = archive.intensityMix(now: now)
+        #expect(mix.strengthSets == 1)
+        #expect(mix.hypertrophySets == 1)
+        #expect(mix.enduranceSets == 0)
+
+        let week = archive.weeklyIntensity(now: now)
+        #expect(week.count == 1)
+        #expect(week[0].strengthSets == 1)
+        #expect(week[0].hypertrophySets == 1)
+        #expect(week[0].enduranceSets == 0)
     }
 
     @Test func respectsTheWindow() {

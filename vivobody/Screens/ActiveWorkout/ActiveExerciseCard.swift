@@ -114,7 +114,7 @@ struct ActiveExerciseCard: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: { setToDelete in
-            Text("\(WeightFormatter.string(setToDelete.weight, unit: unit)) · \(setToDelete.reps) reps. This can't be undone.")
+            Text("\(exercise.setLabel(setToDelete, unit: unit)). This can't be undone.")
         }
         .saveErrorAlert($saveError)
         .onAppear { loadWeightStepPreference() }
@@ -124,7 +124,7 @@ struct ActiveExerciseCard: View {
 
     private func loadWeightStepPreference() {
         guard sessionOnlyStep == nil, let itemID = exercise.catalogItemID else { return }
-        let key = SettingsKey.weightStep(catalogItemID: itemID)
+        let key = SettingsKey.weightStep(catalogID: exercise.catalogID, catalogItemID: itemID)
         sessionOnlyStep = (UserDefaults.standard.object(forKey: key) as? NSNumber)?.doubleValue
     }
 
@@ -140,7 +140,7 @@ struct ActiveExerciseCard: View {
         if let itemID = exercise.catalogItemID {
             UserDefaults.standard.set(
                 step,
-                forKey: SettingsKey.weightStep(catalogItemID: itemID)
+                forKey: SettingsKey.weightStep(catalogID: exercise.catalogID, catalogItemID: itemID)
             )
         }
 
@@ -176,6 +176,7 @@ struct ActiveExerciseCard: View {
             weight: seed?.weight ?? exercise.plannedWeight,
             reps: seed?.reps ?? exercise.plannedReps,
             duration: seed?.duration ?? exercise.plannedDuration,
+            kind: seed?.kind ?? .working,
             sortOrder: exercise.sets.count
         )
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
@@ -231,7 +232,12 @@ struct ActiveExerciseCard: View {
         let duration = set.duration
         let exerciseName = exercise.name
         let catalogItemID = exercise.catalogItemID
+        let catalogID = exercise.catalogID
         let mode = exercise.trackingMode
+        let modality = exercise.modality
+        let loadMode = exercise.loadMode
+        let bodyweightFraction = exercise.bodyweightFraction
+        let bodyweight = exercise.loadBodyweight
 
         pendingCompletionSetID = set.id
 
@@ -241,14 +247,19 @@ struct ActiveExerciseCard: View {
                 try await Task.sleep(for: .milliseconds(550))
             } catch { return }
 
-            let prKind = detectPersonalRecord(
+            let prKind = set.kind == .working ? detectPersonalRecord(
                 exerciseName: exerciseName,
                 catalogItemID: catalogItemID,
+                catalogID: catalogID,
                 mode: mode,
+                modality: modality,
+                loadMode: loadMode,
+                bodyweightFraction: bodyweightFraction,
+                bodyweight: bodyweight,
                 weight: weight,
                 reps: reps,
                 duration: duration
-            )
+            ) : nil
 
             withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)
@@ -257,20 +268,38 @@ struct ActiveExerciseCard: View {
             pendingCompletionSetID = nil
 
             if let prKind {
+                let payload: (value: String, unit: String?)?
                 switch prKind {
-                case .weight, .volume:
-                    session.pendingPRValue = WeightFormatter.string(weight, unit: unit, includeUnit: false)
-                    session.pendingPRUnit = unit.symbol
+                case .weight, .reps:
+                    let effectiveLoad = ExerciseLoadProfile(
+                        mode: loadMode,
+                        bodyweightFraction: bodyweightFraction
+                    ).effectiveLoad(loggedWeight: weight, bodyweight: bodyweight)
+                    payload = effectiveLoad.map {
+                        (
+                            WeightFormatter.string(
+                                $0,
+                                unit: unit,
+                                includeUnit: false
+                            ),
+                            unit.symbol
+                        )
+                    }
                 case .duration:
-                    session.pendingPRValue = DurationFormatter.string(duration)
-                    session.pendingPRUnit = nil
+                    payload = (DurationFormatter.string(duration), nil)
                 }
-                session.pendingPRDetail = detailLine(
-                    exerciseName: exerciseName,
-                    reps: reps,
-                    kind: prKind
-                )
-                saveActiveSessionChanges()
+                if let payload {
+                    session.pendingPRValue = payload.value
+                    session.pendingPRUnit = payload.unit
+                    session.pendingPRDetail = detailLine(
+                        exerciseName: exerciseName,
+                        reps: reps,
+                        kind: prKind,
+                        loadMode: loadMode,
+                        modality: modality
+                    )
+                    saveActiveSessionChanges()
+                }
             }
 
             let exerciseNowDone = exercise.orderedSets.allSatisfy(\.isCompleted)
@@ -302,37 +331,78 @@ struct ActiveExerciseCard: View {
 
     // MARK: - PR detection
 
-    /// The two transparent axes of progress this app celebrates.
-    /// Both use numbers the user already sees on the button — no
-    /// hidden formulas like Epley 1RM, which made PRs feel arbitrary.
+    /// The transparent ways a set can advance the standing record.
+    /// Dynamic strength and eligible external-load power prioritize
+    /// effective load, then reps at the same load. Comparable holds use
+    /// load then duration; non-comparable holds use duration.
     private enum PRKind {
         case weight
-        case volume
+        case reps
         case duration
     }
 
     /// Returns the *kind* of PR a completed set sets, or nil if it
     /// doesn't beat the user's previous best on this exercise. For
-    /// `.reps` exercises the axes are weight (priority) then volume;
-    /// for `.duration` exercises it's the longest hold. Compares
-    /// against archived + in-session prior sets.
+    /// Uses every archived exercise's own snapshotted modality, tracking,
+    /// load profile, and bodyweight. The first valid performance counts,
+    /// matching the chronological history policy.
     private func detectPersonalRecord(
         exerciseName: String,
         catalogItemID: UUID?,
+        catalogID: String?,
         mode: TrackingMode,
+        modality: ExerciseModality,
+        loadMode: ExerciseLoadMode,
+        bodyweightFraction: Double,
+        bodyweight: Double,
         weight: Double,
         reps: Int,
         duration: TimeInterval
     ) -> PRKind? {
-        let legacyKey = exerciseName.exerciseIdentityName
+        let candidateSignature = ExercisePerformanceSignature(
+            modality: modality,
+            trackingMode: mode,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
+        let semanticKind = candidateSignature.performanceKind
+        guard semanticKind.supportsRecord else { return nil }
+
+        let candidateHistoryKey = ExerciseIdentity.key(
+            catalogID: catalogID,
+            catalogItemID: catalogItemID,
+            name: exerciseName,
+            performanceSignature: candidateSignature
+        )
+
+        let candidateProfile = ExerciseLoadProfile(
+            mode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
+        let candidateEffectiveLoad = semanticKind.comparesLoad
+            ? candidateProfile.effectiveLoad(
+                loggedWeight: weight,
+                bodyweight: bodyweight
+            )
+            : nil
+        guard let candidate = StrengthPerformance.make(
+            kind: semanticKind,
+            effectiveLoad: candidateEffectiveLoad,
+            reps: reps,
+            duration: duration
+        ) else { return nil }
+
         let descriptor: FetchDescriptor<Exercise>
-        if let catalogItemID {
+        if let catalogID {
             descriptor = FetchDescriptor<Exercise>(
                 predicate: #Predicate {
-                    $0.session?.completedAt != nil && (
-                        $0.catalogItemID == catalogItemID
-                            || ($0.catalogItemID == nil && $0.name == exerciseName)
-                    )
+                    $0.session?.completedAt != nil && $0.catalogID == catalogID
+                }
+            )
+        } else if let catalogItemID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.catalogItemID == catalogItemID
                 }
             )
         } else {
@@ -342,63 +412,59 @@ struct ActiveExerciseCard: View {
                 }
             )
         }
-        let archivedExercises = (try? modelContext.fetch(descriptor)) ?? []
-        let archivedPriorSets = archivedExercises
+        // A read failure is not an empty history. Treating it as one
+        // would celebrate any valid set as a first record.
+        guard let archivedExercises = try? modelContext.fetch(descriptor) else {
+            return nil
+        }
+        let archivedPrior = archivedExercises
             .filter { archived in
-                guard archived.session?.completedAt != nil else { return false }
-                if let catalogItemID {
-                    return archived.catalogItemID == catalogItemID
-                        || (archived.catalogItemID == nil && archived.name.exerciseIdentityName == legacyKey)
+                if catalogID == nil, catalogItemID != nil {
+                    return archived.historyKey == candidateHistoryKey
                 }
-                return archived.name.exerciseIdentityName == legacyKey
+                return archived.performanceSemanticKind == semanticKind
             }
-            .flatMap(\.sets)
-            .filter(\.isCompleted)
+            .compactMap(\.bestStrengthPerformance)
+        let inSessionPrior = exercise.sets.compactMap {
+            exercise.strengthPerformance(for: $0)
+        }
+        let priorBest = (archivedPrior + inSessionPrior).reduce(
+            nil as StrengthPerformance?
+        ) { best, performance in
+            guard let best else { return performance }
+            return performance.beats(best) ? performance : best
+        }
 
-        let inSessionPriorSets = exercise.sets.filter(\.isCompleted)
-
-        let allPriorSets = archivedPriorSets + inSessionPriorSets
-
-        switch mode {
-        case .reps:
-            guard !allPriorSets.isEmpty else { return nil }
-            let maxWeight = allPriorSets.map(\.weight).max() ?? 0
-            let maxVolume = allPriorSets
-                .map { $0.weight * Double($0.reps) }
-                .max() ?? 0
-            let candidateVolume = weight * Double(reps)
-            if weight > maxWeight { return .weight }
-            if candidateVolume > maxVolume { return .volume }
-            return nil
-        case .duration:
-            // Only compare against prior *timed* holds, so a newly
-            // tracked hold doesn't "beat" legacy zero-duration
-            // records and fire a hollow PR.
-            let priorHolds = allPriorSets.map(\.duration).filter { $0 > 0 }
-            guard let maxDuration = priorHolds.max() else { return nil }
-            if duration > maxDuration { return .duration }
-            return nil
+        switch candidate.advancement(over: priorBest) {
+        case .load: return .weight
+        case .repetitions: return .reps
+        case .duration: return .duration
+        case nil: return nil
         }
     }
 
     private func detailLine(
         exerciseName: String,
         reps: Int,
-        kind: PRKind
+        kind: PRKind,
+        loadMode: ExerciseLoadMode,
+        modality: ExerciseModality
     ) -> String {
         switch kind {
         case .weight:
-            return "\(exerciseName) · New max"
-        case .volume:
+            return loadMode == .external
+                ? "\(exerciseName) · New max"
+                : "\(exerciseName) · New effective load"
+        case .reps:
             return "\(exerciseName) · \(reps) reps"
         case .duration:
-            return "\(exerciseName) · Longest hold"
+            return "\(exerciseName) · \(loadMode.durationRecordDetail(modality: modality))"
         }
     }
 
     func saveActiveSessionChanges() {
         do {
-            try modelContext.save()
+            try modelContext.saveOrRollback()
             SessionSideEffects.handle(.updated, session: session, in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)

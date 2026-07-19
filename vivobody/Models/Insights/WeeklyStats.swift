@@ -21,8 +21,20 @@ struct WeeklyTotals: Hashable {
     var workouts: Int = 0
     var sets: Int = 0
     var volume: Double = 0
+    var volumeAvailability: ComparableTonnageAvailability = .complete
 
     static let zero = WeeklyTotals()
+
+    mutating func add(_ session: WorkoutSession) {
+        workouts += 1
+        sets += session.totalSets
+        let merged = ComparableTonnageSummary(
+            knownSubtotal: volume,
+            availability: volumeAvailability
+        ).merging(session.comparableTonnageSummary)
+        volume = merged.knownSubtotal
+        volumeAvailability = merged.availability
+    }
 }
 
 /// Pair of weekly totals — current week + the immediately prior
@@ -75,13 +87,9 @@ extension Array where Element == WorkoutSession {
         for session in self {
             guard let completed = session.completedAt else { continue }
             if thisWeekRange.contains(completed) {
-                thisWeek.workouts += 1
-                thisWeek.sets += session.totalSets
-                thisWeek.volume += session.totalVolume
+                thisWeek.add(session)
             } else if lastWeekRange.contains(completed) {
-                lastWeek.workouts += 1
-                lastWeek.sets += session.totalSets
-                lastWeek.volume += session.totalVolume
+                lastWeek.add(session)
             }
         }
 
@@ -118,9 +126,7 @@ extension Array where Element == WorkoutSession {
         for session in self {
             guard let completed = session.completedAt else { continue }
             if let idx = ranges.firstIndex(where: { $0.contains(completed) }) {
-                totals[idx].workouts += 1
-                totals[idx].sets += session.totalSets
-                totals[idx].volume += session.totalVolume
+                totals[idx].add(session)
             }
         }
         return totals

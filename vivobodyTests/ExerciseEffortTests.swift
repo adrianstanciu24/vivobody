@@ -4,10 +4,11 @@
 //
 //  Guards the per-exercise effort read behind the Exercise detail
 //  "Effort" card. The verdict is the actionable bit: reps left in the
-//  tank with the plan finished reads "ready to add load"; grinding to
-//  failure while the top set regresses reads "grinding"; the middle
-//  reads "pushing". Everything is gated on real `rirLogged` readings
-//  and a minimum sample, and timed holds carry no RIR at all.
+//  tank with the plan finished reads "ready" with a load-mode-aware
+//  action; grinding to failure while the top set regresses reads
+//  "grinding"; the middle reads "pushing". Everything is gated on real
+//  `rirLogged` readings and a minimum sample, and timed holds carry no
+//  RIR at all.
 //
 
 import Foundation
@@ -24,8 +25,16 @@ struct ExerciseEffortTests {
 
     // MARK: - Builders
 
-    private func session(at date: Date, _ exercises: [Exercise]) -> WorkoutSession {
-        let s = WorkoutSession(exercises: exercises, startedAt: date)
+    private func session(
+        at date: Date,
+        _ exercises: [Exercise],
+        bodyweightAtStart: Double = ExerciseLoad.unknownBodyweight
+    ) -> WorkoutSession {
+        let s = WorkoutSession(
+            exercises: exercises,
+            bodyweightAtStart: bodyweightAtStart,
+            startedAt: date
+        )
         s.completedAt = date
         return s
     }
@@ -36,9 +45,19 @@ struct ExerciseEffortTests {
     private func lift(
         _ name: String = "Bench Press",
         _ group: MuscleGroup = .chest,
-        sets: [(weight: Double, reps: Int, rir: Int?, completed: Bool)]
+        sets: [(weight: Double, reps: Int, rir: Int?, completed: Bool)],
+        loadMode: ExerciseLoadMode = .external,
+        bodyweightFraction: Double = 0
     ) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: 0, plannedReps: 8, plannedWeight: 100)
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: 0,
+            plannedReps: 8,
+            plannedWeight: 100,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
         for (i, s) in sets.enumerated() {
             ex.sets.append(
                 WorkoutSet(
@@ -82,6 +101,21 @@ struct ExerciseEffortTests {
         #expect(summary?.loggedSetCount == 6)
     }
 
+    @Test func readyCopyRespectsAssistancePolarity() {
+        #expect(
+            ProgressionVerdict.ready.headline(for: .external)
+                == "Ready · add load"
+        )
+        #expect(
+            ProgressionVerdict.ready.headline(for: .assistanceSubtracted)
+                == "Ready · reduce assistance"
+        )
+        #expect(
+            ProgressionVerdict.ready.progressionAction(for: .assistanceSubtracted)
+                == "reduce assistance"
+        )
+    }
+
     @Test func grindWhenTrainedToFailureAndRegressing() {
         let prior = session(at: day(0), [lift(sets: [(100, 8, 0, true), (100, 8, 0, true), (100, 7, 0, true)])])
         // Lighter top set the next session, still hammering to failure.
@@ -90,6 +124,50 @@ struct ExerciseEffortTests {
         let summary = [prior, last].effortSummary(forExerciseNamed: "Bench Press")
         #expect(summary?.verdict == .grind)
         #expect((summary?.avgRIR ?? 9) <= 0.5)
+    }
+
+    @Test func assistanceRegressionUsesEffectiveResistance() {
+        let prior = session(at: day(0), [lift(
+            "Assisted Pull-Up",
+            .back,
+            sets: [(40, 8, 0, true), (40, 8, 0, true), (40, 7, 0, true)],
+            loadMode: .assistanceSubtracted,
+            bodyweightFraction: 1
+        )], bodyweightAtStart: 155)
+        // More assistance means less effective resistance even though
+        // the entered number rose from 40 to 60 lb.
+        let last = session(at: day(4), [lift(
+            "Assisted Pull-Up",
+            .back,
+            sets: [(60, 8, 0, true), (60, 8, 0, true), (60, 7, 0, true)],
+            loadMode: .assistanceSubtracted,
+            bodyweightFraction: 1
+        )], bodyweightAtStart: 155)
+
+        let summary = [prior, last].effortSummary(forExerciseNamed: "Assisted Pull-Up")
+        #expect(summary?.verdict == .grind)
+    }
+
+    @Test func unknownBodyweightDoesNotFabricateCrossSessionRegression() {
+        let prior = session(at: day(0), [lift(
+            "Unknown Assisted Pull-Up",
+            .back,
+            sets: [(40, 8, 0, true), (40, 8, 0, true), (40, 7, 0, true)],
+            loadMode: .assistanceSubtracted,
+            bodyweightFraction: 1
+        )])
+        let last = session(at: day(4), [lift(
+            "Unknown Assisted Pull-Up",
+            .back,
+            sets: [(60, 8, 0, true), (60, 8, 0, true), (60, 7, 0, true)],
+            loadMode: .assistanceSubtracted,
+            bodyweightFraction: 1
+        )])
+
+        let summary = [prior, last].effortSummary(
+            forExerciseNamed: "Unknown Assisted Pull-Up"
+        )
+        #expect(summary?.verdict == .push)
     }
 
     @Test func pushInTheProductiveMiddle() {

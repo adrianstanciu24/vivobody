@@ -233,13 +233,17 @@ struct TemplateDetailScreen: View {
                 let weights = sets.map(\.weight)
                 guard let lo = weights.min(), let hi = weights.max() else { return "" }
                 if lo == hi, let first = sets.first {
-                    return "\(sets.count) × \(first.reps) @ \(WeightFormatter.string(lo, unit: unit))"
+                    let load = exercise.loadMode.summaryLoadLabel(lo, unit: unit)
+                    return load.map { "\(sets.count) × \(first.reps) @ \($0)" }
+                        ?? "\(sets.count) × \(first.reps)"
                 }
-                let loStr = WeightFormatter.string(lo, unit: unit, includeUnit: false)
-                let hiStr = WeightFormatter.string(hi, unit: unit)
-                return "\(sets.count) sets · \(loStr)–\(hiStr)"
+                let loadRange = exercise.loadMode.summaryLoadRangeLabel(lo, hi, unit: unit)
+                return loadRange.map { "\(sets.count) sets · \($0)" }
+                    ?? "\(sets.count) sets"
             }
-            return "\(exercise.plannedSets) × \(exercise.plannedReps) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
+            let load = exercise.loadMode.summaryLoadLabel(exercise.plannedWeight, unit: unit)
+            return load.map { "\(exercise.plannedSets) × \(exercise.plannedReps) @ \($0)" }
+                ?? "\(exercise.plannedSets) × \(exercise.plannedReps)"
 
         case .duration:
             if exercise.hasPerSetData {
@@ -247,14 +251,16 @@ struct TemplateDetailScreen: View {
                 let durations = sets.map(\.duration)
                 guard let lo = durations.min(), let hi = durations.max() else { return "" }
                 if lo == hi {
-                    return "\(sets.count) × \(DurationFormatter.string(lo)) hold"
+                    return "\(sets.count) × \(DurationFormatter.string(lo)) \(exercise.modality.durationLabelLowercased)"
                 }
-                return "\(sets.count) sets · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
+                return "\(sets.count) \(exercise.modality.durationCountLabel) · \(DurationFormatter.string(lo))–\(DurationFormatter.string(hi))"
             }
-            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) hold"
-            return exercise.plannedWeight > 0
-                ? "\(base) @ \(WeightFormatter.string(exercise.plannedWeight, unit: unit))"
-                : base
+            let base = "\(exercise.plannedSets) × \(DurationFormatter.string(exercise.plannedDuration)) \(exercise.modality.durationLabelLowercased)"
+            guard let load = exercise.loadMode.summaryLoadLabel(
+                exercise.plannedWeight,
+                unit: unit
+            ) else { return base }
+            return "\(base) @ \(load)"
         }
     }
 

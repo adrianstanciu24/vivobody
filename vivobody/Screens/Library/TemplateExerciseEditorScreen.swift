@@ -67,7 +67,7 @@ struct TemplateExerciseEditorScreen: View {
                         )
                     }
                 case .duration:
-                    valueRow(label: "Hold") {
+                    valueRow(label: exercise.modality.durationLabel) {
                         BareScrubber(
                             value: durationBinding,
                             range: DurationFormatter.scrubRange,
@@ -76,14 +76,14 @@ struct TemplateExerciseEditorScreen: View {
                             fontSize: 64,
                             numberColor: Ink.primary,
                             formatter: { DurationFormatter.string($0) },
-                            accessibilityLabel: "Hold"
+                            accessibilityLabel: exercise.modality.durationLabel
                         )
                     }
                 }
 
                 SectionDivider()
 
-                valueRow(label: exercise.trackingMode == .duration ? "Added load" : "Weight") {
+                valueRow(label: exercise.loadMode.inputLabel) {
                     BareScrubber(
                         value: weightDisplayBinding,
                         range: unit.strengthRange,
@@ -94,15 +94,13 @@ struct TemplateExerciseEditorScreen: View {
                         unitFontSize: 16,
                         numberColor: Ink.primary,
                         unitColor: Ink.tertiary,
-                        accessibilityLabel: exercise.trackingMode == .duration ? "Added load" : "Weight",
+                        accessibilityLabel: exercise.loadMode.inputLabel,
                         tickTone: .deep
                     )
                 }
 
-                if exercise.hasPerSetData {
-                    SectionDivider()
-                    perSetNotice
-                }
+                SectionDivider()
+                setIntentSection
             }
             .padding(.top, Space.lg)
             .padding(.bottom, Space.xxl)
@@ -157,23 +155,67 @@ struct TemplateExerciseEditorScreen: View {
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: - Per-set notice
+    // MARK: - Set intent
 
-    /// Surfaces when the template has explicit pyramid/wave rows.
-    /// The Sets/Reps/Weight scrubbers above act as fallback values
-    /// in that mode — the per-set rows are the source of truth at
-    /// runtime. Per-set editing UI is future work.
-    private var perSetNotice: some View {
+    /// Warm-up intent is inherently per-set. A uniform plan expands
+    /// losslessly before any row is classified.
+    private var setIntentSection: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            Text("Per-set programming")
+            Text("Set intent")
                 .font(Typography.sectionHeading)
                 .foregroundStyle(Ink.secondary)
-            Text("This exercise uses pyramid / wave programming with \(exercise.orderedSets.count) explicit set rows. The values above are fallbacks — the per-set rows are the source of truth at runtime.")
+            Text("Warm-ups stay in the workout log but do not count toward records, tonnage, or muscle development.")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
                 .fixedSize(horizontal: false, vertical: true)
+
+            if exercise.hasPerSetData {
+                ForEach(Array(exercise.orderedSets.enumerated()), id: \.element.id) { index, set in
+                    Button {
+                        set.kind = set.kind == .working ? .warmUp : .working
+                        Haptics.selection()
+                        save()
+                    } label: {
+                        HStack {
+                            Text("Set \(index + 1)")
+                                .font(Typography.body)
+                                .foregroundStyle(Ink.primary)
+                            Spacer()
+                            Text(set.kind.displayName)
+                                .font(Typography.caption)
+                                .foregroundStyle(set.kind == .working ? Ink.secondary : Tint.inProgress)
+                        }
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            } else {
+                Button("Choose warm-up sets") {
+                    expandToPerSet()
+                }
+                .font(Typography.body)
+                .foregroundStyle(Tint.inProgress)
+                .frame(minHeight: 44)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func expandToPerSet() {
+        guard !exercise.hasPerSetData else { return }
+        for index in 0..<max(1, exercise.plannedSets) {
+            exercise.sets.append(
+                TemplateSet(
+                    weight: exercise.plannedWeight,
+                    reps: exercise.plannedReps,
+                    duration: exercise.plannedDuration,
+                    sortOrder: index
+                )
+            )
+        }
+        Haptics.selection()
+        save()
     }
 
     // MARK: - Bindings

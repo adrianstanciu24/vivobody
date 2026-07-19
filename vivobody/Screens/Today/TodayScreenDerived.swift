@@ -57,35 +57,25 @@ extension TodayScreen {
     }
 
     /// IDs of sessions in which at least one exercise hit a new
-    /// all-time record at the moment it was logged. Reps exercises
-    /// track top weight; duration exercises track longest hold. Walks
-    /// the archive oldest-first by stable exercise identity. Matches
+    /// all-time strength record at the moment it was logged. Dynamic
+    /// strength compares effective resistance then reps at equal load,
+    /// isometric strength compares hold duration, and other modalities opt out. Walks the
+    /// archive oldest-first by stable exercise identity. Matches
     /// `HistoryScreen.sessionsWithPR` exactly.
     var prSessionIDs: Set<UUID> {
-        var bestByExercise: [String: Double] = [:]
+        var bestByExercise: [String: StrengthPerformance] = [:]
         var prIDs: Set<UUID> = []
         for session in completedSessions.reversed() {
             for exercise in session.orderedExercises {
-                let metric = prMetric(for: exercise)
-                guard metric > 0 else { continue }
+                guard let performance = exercise.bestStrengthPerformance else { continue }
                 let key = exercise.historyKey
-                if metric > bestByExercise[key, default: 0] {
-                    bestByExercise[key] = metric
+                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
+                    bestByExercise[key] = performance
                     prIDs.insert(session.id)
                 }
             }
         }
         return prIDs
-    }
-
-    func prMetric(for exercise: Exercise) -> Double {
-        let completed = exercise.sets.filter(\.isCompleted)
-        switch exercise.trackingMode {
-        case .reps:
-            return completed.map(\.weight).max() ?? 0
-        case .duration:
-            return completed.map(\.duration).max() ?? 0
-        }
     }
 
     // MARK: - Formatters

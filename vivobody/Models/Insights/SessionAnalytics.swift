@@ -23,6 +23,7 @@ final class SessionAnalytics {
     // Cached reports — set by update(for:) and read by screens.
     var volume: [MuscleVolumeStat]
     var development: MuscleDevelopment.State
+    var muscleMap: MuscleMapReport
     var strength: StrengthOutlookBoard
     var progress: [ExerciseProgress]
     var dominance: ExerciseDominanceBoard
@@ -41,6 +42,11 @@ final class SessionAnalytics {
         let empty: [WorkoutSession] = []
         volume = empty.muscleVolume()
         development = MuscleDevelopment.simulate(from: empty)
+        muscleMap = MuscleMapReport.compute(
+            sessions: empty,
+            development: development,
+            volume: volume
+        )
         strength = empty.strengthOutlook()
         progress = empty.progressByExercise
         dominance = empty.exerciseDominance()
@@ -65,7 +71,13 @@ final class SessionAnalytics {
         fingerprint = sig
 
         volume = sessions.muscleVolume()
-        development = MuscleDevelopment.simulate(from: sessions)
+        development = MuscleDevelopment.simulate(from: sessions, now: now)
+        muscleMap = MuscleMapReport.compute(
+            sessions: sessions,
+            development: development,
+            volume: volume,
+            now: now
+        )
         strength = sessions.strengthOutlook()
         progress = sessions.progressByExercise
         dominance = sessions.exerciseDominance(now: now)

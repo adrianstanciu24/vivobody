@@ -2,130 +2,320 @@
 //  CatalogData.swift
 //  vivobody
 //
-//  The single source of truth for the starter exercise catalog,
-//  decoded once from the bundled `catalog.json` (generated from the
-//  wger open exercise database by Scripts/transform_wger.py — wger
-//  data is Creative Commons licensed).
-//
-//  Before this file the catalog lived in four hand-authored, name-keyed
-//  Swift tables that had to be kept in sync by hand:
-//    • ExerciseCatalogItem.seedItems  (defaults + classification)
-//    • Muscle.defaultMap              (graded involvement)
-//    • ExerciseClassification         (derived from seedItems)
-//    • ExerciseLoad.fractions         (bodyweight fraction)
-//  All four now read from one `CatalogRecord` per exercise, so there is
-//  nothing to keep consistent by hand: regenerate catalog.json and the
-//  whole app follows.
-//
-//  Resolution stays by lowercased name (not by model reference) so a
-//  logged `Exercise` — which copies only its name — still resolves its
-//  muscles, classification, and bodyweight load retroactively across
-//  all history, exactly as before.
+//  Strict decoder and validator for the bundled exercise catalog.
+//  catalog.json is authored by Scripts/curate.py and is a build-time
+//  contract: malformed enums, missing required biomechanics fields,
+//  duplicate stable IDs, or ambiguous names fail loudly rather than
+//  acquiring silent defaults.
 //
 
 import Foundation
 
 // MARK: - Decoded record
 
-/// One exercise as shipped in catalog.json. Only `name` and `group` are
-/// required — everything else is optional so the bundled catalog can
-/// start as a names-only roster (imported from wger) and be enriched one
-/// exercise at a time with our own authored data. Enum-typed fields are
-/// stored as raw strings and projected to the app enums through computed
-/// accessors (with sensible defaults) so an uncurated record still
-/// decodes and a future catalog can add cases without a decode failure.
+/// One fully curated exercise shipped in catalog.json. Optional values
+/// are optional by domain meaning, not to tolerate incomplete records.
 nonisolated struct CatalogRecord: Decodable, Sendable {
-    /// One graded muscle contribution (weight ∈ 0...1).
-    struct MuscleWeight: Decodable, Sendable {
-        let muscle: String
-        let weight: Double
+    struct MuscleAssignment: Decodable, Sendable {
+        let muscle: Muscle
+        let role: MuscleRole
     }
 
+    let catalogID: String
     let name: String
-    let group: String
-    let defaultWeight: Double?
+    let group: MuscleGroup
+    let defaultWeight: Double
     let defaultWeightKg: Double?
-    let reps: Int?
-    let trackingMode: String?
+    let reps: Int
+    let trackingMode: TrackingMode
     let defaultDuration: TimeInterval?
-    let equipment: String?
-    let mechanic: String?
-    let pattern: String?
-    let direction: String?
-    let plane: String?
-    let laterality: String?
-    let aliases: [String]?
-    let bodyweightFraction: Double?
-    let involvement: [MuscleWeight]?
+    let equipment: Equipment
+    let mechanic: Mechanic
+    let pattern: MovementPattern?
+    let direction: PushPullDirection?
+    let plane: MovementPlane
+    let laterality: Laterality
+    let aliases: [String]
+    let bodyweightFraction: Double
+    let modality: ExerciseModality
+    let loadMode: ExerciseLoadMode
+    let movementDefinition: String
+    let involvement: [MuscleAssignment]
 
-    // MARK: Projected enum accessors (defaults apply to uncurated records)
-
-    var muscleGroup: MuscleGroup { MuscleGroup(rawValue: group) ?? .chest }
-    var defaultWeightValue: Double { defaultWeight ?? 0 }
-    var defaultRepsValue: Int { reps ?? (mechanicValue == .compound ? 8 : 12) }
-    /// Native kg seed (multiple of 2.5 kg), or nil for unloaded /
-    /// uncurated records — those fall back to the lb default.
+    // Compatibility-free projections used by persistent seeding.
+    var muscleGroup: MuscleGroup { group }
+    var defaultWeightValue: Double { defaultWeight }
+    var defaultRepsValue: Int { reps }
     var defaultWeightKgValue: Double? { defaultWeightKg }
     var defaultDurationValue: TimeInterval { defaultDuration ?? 0 }
-    var trackingModeValue: TrackingMode { trackingMode.flatMap(TrackingMode.init(rawValue:)) ?? .reps }
-    var equipmentValue: Equipment { equipment.flatMap(Equipment.init(rawValue:)) ?? .other }
-    var mechanicValue: Mechanic { mechanic.flatMap(Mechanic.init(rawValue:)) ?? .compound }
-    var patternValue: MovementPattern? { pattern.flatMap(MovementPattern.init(rawValue:)) }
-    var directionValue: PushPullDirection? { direction.flatMap(PushPullDirection.init(rawValue:)) }
-    var planeValue: MovementPlane { plane.flatMap(MovementPlane.init(rawValue:)) ?? .sagittal }
-    var lateralityValue: Laterality { laterality.flatMap(Laterality.init(rawValue:)) ?? .bilateral }
-    var aliasesValue: [String] { aliases ?? [] }
-    var bodyweightFractionValue: Double { bodyweightFraction ?? 0 }
+    var trackingModeValue: TrackingMode { trackingMode }
+    var equipmentValue: Equipment { equipment }
+    var mechanicValue: Mechanic { mechanic }
+    var patternValue: MovementPattern? { pattern }
+    var directionValue: PushPullDirection? { direction }
+    var planeValue: MovementPlane { plane }
+    var lateralityValue: Laterality { laterality }
+    var aliasesValue: [String] { aliases }
+    var bodyweightFractionValue: Double { bodyweightFraction }
 
-    /// Graded involvement, dropping any muscle name the app doesn't model.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.Involvement(contributions: (involvement ?? []).compactMap { mw in
-            guard let m = Muscle(rawValue: mw.muscle) else { return nil }
-            return (muscle: m, weight: mw.weight)
+        Muscle.Involvement(contributions: involvement.map {
+            .init(muscle: $0.muscle, role: $0.role)
         })
     }
 
-    /// Movement metadata, for the by-name classification resolver.
     var classification: ExerciseClassification {
         ExerciseClassification(
-            equipment: equipmentValue,
-            mechanic: mechanicValue,
-            pattern: patternValue,
-            direction: directionValue,
-            plane: planeValue,
-            laterality: lateralityValue
+            equipment: equipment,
+            mechanic: mechanic,
+            pattern: pattern,
+            direction: direction,
+            plane: plane,
+            laterality: laterality
         )
     }
 }
 
 // MARK: - Loaded catalog
 
-/// Loads and caches the bundled catalog once. `records` preserves file
-/// order (the transform sorts by group then name); `byName` is the
-/// lowercased-name index every resolver reads.
+/// Loads and caches the bundled catalog once. Both indexes are safe
+/// because validation rejects duplicate normalized names and stable IDs.
 nonisolated enum CatalogData {
     static let records: [CatalogRecord] = load()
 
     static let byName: [String: CatalogRecord] = Dictionary(
-        records.map { ($0.name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines), $0) },
-        uniquingKeysWith: { first, _ in first }
+        uniqueKeysWithValues: records.map { (normalized($0.name), $0) }
+    )
+
+    static let byCatalogID: [String: CatalogRecord] = Dictionary(
+        uniqueKeysWithValues: records.map { ($0.catalogID, $0) }
     )
 
     static func record(forExerciseNamed name: String) -> CatalogRecord? {
-        byName[name.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)]
+        byName[normalized(name)]
+    }
+
+    static func record(forCatalogID catalogID: String) -> CatalogRecord? {
+        byCatalogID[catalogID]
+    }
+
+    /// Exposed internally so domain tests can prove malformed bundled
+    /// records fail instead of receiving fallback classifications.
+    static func decode(_ data: Data) throws -> [CatalogRecord] {
+        let records = try JSONDecoder().decode([CatalogRecord].self, from: data)
+        try validate(records)
+        return records
     }
 
     private static func load() -> [CatalogRecord] {
         guard let url = Bundle.main.url(forResource: "catalog", withExtension: "json") else {
-            assertionFailure("catalog.json missing from the app bundle")
-            return []
+            preconditionFailure("catalog.json is missing from the app bundle")
         }
+
         do {
-            let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode([CatalogRecord].self, from: data)
+            return try decode(Data(contentsOf: url))
         } catch {
-            assertionFailure("Failed to load catalog.json: \(error)")
-            return []
+            preconditionFailure("Invalid bundled catalog.json: \(error)")
+        }
+    }
+
+    static func validate(_ records: [CatalogRecord]) throws {
+        guard !records.isEmpty else { throw ValidationError.emptyCatalog }
+
+        var catalogIDs: Set<String> = []
+        var names: Set<String> = []
+
+        for record in records {
+            let normalizedName = normalized(record.name)
+            guard !normalizedName.isEmpty else {
+                throw ValidationError.emptyName(record.catalogID)
+            }
+            guard names.insert(normalizedName).inserted else {
+                throw ValidationError.duplicateName(record.name)
+            }
+        }
+
+        var aliases: Set<String> = []
+
+        for record in records {
+            guard isStableCatalogID(record.catalogID) else {
+                throw ValidationError.invalidCatalogID(record.catalogID)
+            }
+            guard catalogIDs.insert(record.catalogID).inserted else {
+                throw ValidationError.duplicateCatalogID(record.catalogID)
+            }
+
+            guard !record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                throw ValidationError.emptyMovementDefinition(record.catalogID)
+            }
+            guard record.defaultWeight >= 0, record.reps > 0 else {
+                throw ValidationError.invalidDefaults(record.catalogID)
+            }
+            guard (0...1).contains(record.bodyweightFraction) else {
+                throw ValidationError.invalidBodyweightFraction(record.catalogID)
+            }
+            if let kilograms = record.defaultWeightKg {
+                let gridUnits = kilograms / 2.5
+                guard kilograms > 0, abs(gridUnits.rounded() - gridUnits) < 0.000_001 else {
+                    throw ValidationError.invalidKilogramDefault(record.catalogID)
+                }
+            }
+            guard record.trackingMode != .duration || (record.defaultDuration ?? 0) > 0 else {
+                throw ValidationError.missingDuration(record.catalogID)
+            }
+
+            switch record.modality {
+            case .dynamicStrength:
+                guard record.trackingMode == .reps else {
+                    throw ValidationError.invalidModalityTracking(record.catalogID)
+                }
+            case .isometricStrength:
+                guard record.trackingMode == .duration else {
+                    throw ValidationError.invalidModalityTracking(record.catalogID)
+                }
+            case .power:
+                guard record.trackingMode == .reps else {
+                    throw ValidationError.invalidModalityTracking(record.catalogID)
+                }
+            case .conditioning, .mobility:
+                break
+            }
+
+            switch record.loadMode {
+            case .external, .nonComparable:
+                guard record.bodyweightFraction == 0 else {
+                    throw ValidationError.invalidLoadFraction(record.catalogID)
+                }
+            case .bodyweightAdded, .assistanceSubtracted:
+                guard record.bodyweightFraction > 0 else {
+                    throw ValidationError.invalidLoadFraction(record.catalogID)
+                }
+            }
+
+            // A band color or nominal stack value is not a force at the
+            // joint: resistance varies through the range of motion and
+            // between products. Until the model captures a calibrated
+            // force curve, band work must remain explicitly unranked.
+            if record.equipment == .band, record.loadMode != .nonComparable {
+                throw ValidationError.comparableBandLoad(record.catalogID)
+            }
+
+            switch record.mechanic {
+            case .compound:
+                guard record.pattern != nil else {
+                    throw ValidationError.invalidMechanicPattern(record.catalogID)
+                }
+            case .isolation:
+                guard record.pattern == nil else {
+                    throw ValidationError.invalidMechanicPattern(record.catalogID)
+                }
+            }
+
+            let muscles = record.involvement.map(\.muscle)
+            guard !muscles.isEmpty else {
+                throw ValidationError.emptyInvolvement(record.catalogID)
+            }
+            guard Set(muscles).count == muscles.count else {
+                throw ValidationError.duplicateMuscle(record.catalogID)
+            }
+            if record.modality.requiresPrimaryMuscle {
+                guard record.involvement.contains(where: { $0.role == .primary }) else {
+                    throw ValidationError.missingPrimary(record.catalogID)
+                }
+                guard record.involvement.contains(where: {
+                    $0.role == .primary && $0.muscle.group == record.group
+                }) else {
+                    throw ValidationError.primaryGroupMismatch(record.catalogID)
+                }
+            }
+
+            let isPushPull = record.pattern == .push || record.pattern == .pull
+            guard isPushPull == (record.direction != nil) else {
+                throw ValidationError.invalidDirection(record.catalogID)
+            }
+
+            for alias in record.aliases {
+                let normalizedAlias = normalized(alias)
+                guard !normalizedAlias.isEmpty, !names.contains(normalizedAlias) else {
+                    throw ValidationError.aliasConflictsWithName(alias)
+                }
+                guard aliases.insert(normalizedAlias).inserted else {
+                    throw ValidationError.duplicateAlias(alias)
+                }
+            }
+        }
+    }
+
+    private static func normalized(_ value: String) -> String {
+        value
+            .split(whereSeparator: \.isWhitespace)
+            .joined(separator: " ")
+            .lowercased()
+    }
+
+    private static func isStableCatalogID(_ value: String) -> Bool {
+        guard
+            !value.isEmpty,
+            value.first != "-",
+            value.last != "-",
+            !value.contains("--")
+        else {
+            return false
+        }
+        return value.unicodeScalars.allSatisfy { scalar in
+            (97...122).contains(scalar.value)
+                || (48...57).contains(scalar.value)
+                || scalar.value == 45
+        }
+    }
+
+    enum ValidationError: Error, Equatable, CustomStringConvertible {
+        case emptyCatalog
+        case invalidCatalogID(String)
+        case duplicateCatalogID(String)
+        case emptyName(String)
+        case duplicateName(String)
+        case emptyMovementDefinition(String)
+        case invalidDefaults(String)
+        case invalidBodyweightFraction(String)
+        case invalidKilogramDefault(String)
+        case missingDuration(String)
+        case invalidModalityTracking(String)
+        case invalidLoadFraction(String)
+        case comparableBandLoad(String)
+        case invalidMechanicPattern(String)
+        case emptyInvolvement(String)
+        case duplicateMuscle(String)
+        case missingPrimary(String)
+        case primaryGroupMismatch(String)
+        case invalidDirection(String)
+        case aliasConflictsWithName(String)
+        case duplicateAlias(String)
+
+        var description: String {
+            switch self {
+            case .emptyCatalog: return "catalog contains no records"
+            case .invalidCatalogID(let id): return "invalid catalogID '\(id)'"
+            case .duplicateCatalogID(let id): return "duplicate catalogID '\(id)'"
+            case .emptyName(let id): return "record '\(id)' has an empty name"
+            case .duplicateName(let name): return "duplicate exercise name '\(name)'"
+            case .emptyMovementDefinition(let id): return "record '\(id)' has no movement definition"
+            case .invalidDefaults(let id): return "record '\(id)' has invalid weight/reps defaults"
+            case .invalidBodyweightFraction(let id): return "record '\(id)' has an invalid bodyweight fraction"
+            case .invalidKilogramDefault(let id): return "record '\(id)' has an invalid kilogram default"
+            case .missingDuration(let id): return "duration record '\(id)' has no positive default duration"
+            case .invalidModalityTracking(let id): return "record '\(id)' has modality-incompatible tracking"
+            case .invalidLoadFraction(let id): return "record '\(id)' has load-mode-incompatible bodyweight fraction"
+            case .comparableBandLoad(let id): return "band record '\(id)' claims a comparable load"
+            case .invalidMechanicPattern(let id): return "record '\(id)' has mechanic-incompatible movement pattern"
+            case .emptyInvolvement(let id): return "record '\(id)' has no muscle involvement"
+            case .duplicateMuscle(let id): return "record '\(id)' assigns the same muscle more than once"
+            case .missingPrimary(let id): return "strength/power record '\(id)' has no primary muscle"
+            case .primaryGroupMismatch(let id): return "strength/power record '\(id)' group has no matching primary muscle"
+            case .invalidDirection(let id): return "record '\(id)' has inconsistent push/pull direction"
+            case .aliasConflictsWithName(let alias): return "alias '\(alias)' conflicts with a canonical name"
+            case .duplicateAlias(let alias): return "duplicate alias '\(alias)'"
+            }
         }
     }
 }

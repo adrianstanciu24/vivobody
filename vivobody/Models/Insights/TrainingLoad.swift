@@ -231,10 +231,11 @@ extension Array where Element == WorkoutSession {
             var heavySets = 0.0
             for exercise in session.orderedExercises {
                 load += calculator.setEquivalentCredit(for: exercise, at: date)
-                guard exercise.trackingMode == .reps else { continue }
+                guard exercise.modality == .dynamicStrength,
+                      exercise.trackingMode == .reps else { continue }
                 heavySets += Double(
                     exercise.orderedSets.filter {
-                        $0.isCompleted && (1...5).contains($0.reps)
+                        $0.isAnalyticsEligible && (1...5).contains($0.reps)
                     }.count
                 )
             }

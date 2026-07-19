@@ -4,7 +4,7 @@
 //
 //  Central formatting + scrubber metadata for timed (`.duration`)
 //  exercises — the isometric / hold counterpart to WeightFormatter.
-//  A held set is stored as a `TimeInterval` of seconds on WorkoutSet
+//  A timed set is stored as a `TimeInterval` of seconds on WorkoutSet
 //  / TemplateSet; every display site routes through here so the
 //  minutes:seconds presentation stays consistent across the app
 //  (the live hero, set rows, summary, history, progress, editors).

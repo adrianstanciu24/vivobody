@@ -10,10 +10,10 @@
 //    • hypertrophy — 6–12 reps (the growth zone)
 //    • endurance   — 13+ reps (metabolic / conditioning)
 //
-//  Counts completed `.reps` sets over a rolling window (4 weeks by
-//  default, to read CURRENT emphasis). Timed holds carry no reps and
-//  are excluded. Pure value-type computation on injected dates (see
-//  `IntensityMixTests`).
+//  Counts completed dynamic-strength `.reps` sets over a rolling
+//  window (4 weeks by default, to read CURRENT emphasis). Timed holds,
+//  conditioning reps, and mobility drills are excluded. Pure value-
+//  type computation on injected dates (see `IntensityMixTests`).
 //
 
 import Foundation
@@ -125,8 +125,9 @@ extension Array where Element == WorkoutSession {
         for session in self {
             let date = session.completedAt ?? session.startedAt
             guard date > cutoff else { continue }
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted && set.reps > 0 {
+            for exercise in session.exercises
+            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
                     switch IntensityZone.zone(forReps: set.reps) {
                     case .strength:    strength += 1
                     case .hypertrophy: hypertrophy += 1
@@ -163,8 +164,9 @@ extension Array where Element == WorkoutSession {
                 from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
             ) else { continue }
 
-            for exercise in session.exercises where exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isCompleted && set.reps > 0 {
+            for exercise in session.exercises
+            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
                     var bucket = byWeek[weekStart] ?? (0, 0, 0)
                     switch IntensityZone.zone(forReps: set.reps) {
                     case .strength:    bucket.strength += 1

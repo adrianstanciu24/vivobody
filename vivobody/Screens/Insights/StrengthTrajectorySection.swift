@@ -75,7 +75,7 @@ struct StrengthTrajectorySection: View {
     }
 
     private func liftSummary(_ stat: StrengthOutlookStat) -> some View {
-        let points = chartPoints(for: stat.exercise)
+        let points = chartPoints(for: stat)
         let delta = chartDelta(points)
 
         return HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
@@ -107,7 +107,7 @@ struct StrengthTrajectorySection: View {
     }
 
     private func chart(for stat: StrengthOutlookStat) -> some View {
-        let points = chartPoints(for: stat.exercise)
+        let points = chartPoints(for: stat)
         let color = prColor(stat.trend)
         let best = WeightFormatter.toDisplay(stat.bestE1RM, unit: unit)
         let showsBestRule = abs(stat.currentE1RM - stat.bestE1RM) > 1e-6
@@ -185,8 +185,8 @@ struct StrengthTrajectorySection: View {
 
     private var currentStat: StrengthOutlookStat? { board.stats.first }
 
-    private func e1rmSeries(for exercise: String) -> [E1RMPoint] {
-        guard let series = progress.first(where: { $0.name.caseInsensitiveCompare(exercise) == .orderedSame }) else {
+    private func e1rmSeries(for stat: StrengthOutlookStat) -> [E1RMPoint] {
+        guard let series = progress.first(where: { $0.id == stat.historyKey }) else {
             return []
         }
         return series.points.compactMap { point in
@@ -195,8 +195,8 @@ struct StrengthTrajectorySection: View {
         }
     }
 
-    private func chartPoints(for exercise: String) -> [E1RMPoint] {
-        let all = e1rmSeries(for: exercise)
+    private func chartPoints(for stat: StrengthOutlookStat) -> [E1RMPoint] {
+        let all = e1rmSeries(for: stat)
         guard let latest = all.last else { return [] }
         let cutoff = latest.date.addingTimeInterval(-84 * 86_400)
         let recent = all.filter { $0.date >= cutoff }

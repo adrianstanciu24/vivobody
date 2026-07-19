@@ -5,7 +5,7 @@
 //  The shared work currency: HARD-SET EQUIVALENTS. One completed set
 //  credits each involved muscle
 //
-//      involvement × effort(RIR) × repFactor(reps|duration) × loadFactor
+//      role credit × effort(RIR) × lengthFactor × loadFactor
 //
 //  Every factor is ≤ 1 and anchored at 1.0 for a normal hard working
 //  set (≥ 5 reps, ≥ 70% of your demonstrated e1RM, RIR ≤ 2 or
@@ -13,18 +13,20 @@
 //  volume landmarks were calibrated against — the multipliers only
 //  demote junk: warm-up ramps, token weights, heavy singles, and sets
 //  stopped far from failure. Absence of signal is always neutral:
-//  unlogged RIR, bodyweight sets (weight 0), timed holds, and a
-//  lift's first-ever instance all read 1.0 on the factors they can't
-//  answer.
+//  unlogged RIR, unavailable/non-comparable load, and a lift's
+//  first-ever valid instance all read 1.0 on the factors they can't
+//  answer. Only completed dynamic-strength reps and completed
+//  isometric-strength holds enter this currency.
 //
-//  The load factor is self-calibrating per exercise: a set's Epley
-//  e1RM is judged against a DECAYING MAX of that lift's own history
-//  (~90-day half-life, so a returning lifter isn't demoted against a
-//  year-old PR). References update causally — a PR set is judged
-//  against prior history, then raises the bar for the next set — so
-//  `Calculator` must be fed sessions in chronological order. Keyed by
-//  `Exercise.historyKey` (stable catalog ID, name fallback), the same
-//  identity every per-exercise surface uses.
+//  The load factor is self-calibrating per exercise: dynamic sets use
+//  Epley e1RM while loaded isometric sets use effective resistance.
+//  Each metric has its own DECAYING MAX (~90-day half-life, so a
+//  returning lifter isn't demoted against a year-old PR). References
+//  update causally — a stronger set is judged against prior history,
+//  then raises the bar for the next set — so `Calculator` must be fed
+//  sessions in chronological order. Keyed by `Exercise.historyKey`:
+//  stable catalog ID for bundled work and the full performance signature
+//  for custom work, matching every other per-exercise surface.
 //
 //  `MuscleVolume` (weekly bars, neglect list) and `MuscleDevelopment`
 //  (the 3D body) both consume this one calculator, so every surface
@@ -70,14 +72,14 @@ nonisolated enum SetStimulus {
         /// Load-factor floor for token weights.
         var loadFloor: Double = 0.3
 
-        /// Time-constant (days) of the per-exercise reference e1RM
+        /// Time-constant (days) of the per-exercise load-reference
         /// decay — ≈ 130 d is a ~90-day half-life, so the bar relaxes
         /// toward what the lifter currently lifts after a layoff.
         var referenceTau: Double = 130.0
 
         /// Absolute floor on one set's credit (before involvement):
-        /// any completed set registers, so "did something" never
-        /// reads identical to "did nothing."
+        /// any valid completed strength set registers, so "did
+        /// something" never reads identical to "did nothing."
         var stimulusFloor: Double = 0.1
 
         static let `default` = Parameters()
@@ -110,9 +112,9 @@ nonisolated enum SetStimulus {
         return min(1, max(parameters.repFloor, duration / parameters.fullCreditSeconds))
     }
 
-    /// Relative-load multiplier from the ratio of a set's e1RM to the
-    /// lifter's (decayed) best on that exercise: floor at `rampLow`,
-    /// full credit at `rampHigh`.
+    /// Relative-load multiplier from the ratio of a set's comparable
+    /// load metric to the lifter's decayed best on that exercise: floor
+    /// at `rampLow`, full credit at `rampHigh`.
     static func loadFactor(e1RMRatio r: Double, parameters: Parameters = .default) -> Double {
         let span = parameters.rampHigh - parameters.rampLow
         guard span > 0 else { return r >= parameters.rampHigh ? 1 : parameters.loadFloor }
@@ -136,37 +138,63 @@ nonisolated enum SetStimulus {
     struct Calculator {
         let parameters: Parameters
 
-        /// Decaying-max reference e1RM per exercise identity, with
-        /// the wall-clock time it was last touched.
-        private var references: [String: (e1RM: Double, at: Date)] = [:]
+        /// Dynamic e1RM and isometric effective-load references stay
+        /// separate because their values have different units even if
+        /// an exercise's semantics are edited between sessions.
+        private var dynamicReferences: [String: (metric: Double, at: Date)] = [:]
+        private var isometricReferences: [String: (metric: Double, at: Date)] = [:]
+
+        private enum HardSetKind {
+            case dynamic
+            case isometric
+        }
+
+        private enum ReferenceKind {
+            case dynamic
+            case isometric
+        }
 
         init(parameters: Parameters = .default) {
             self.parameters = parameters
         }
 
-        /// Hard-set-equivalent credit per involved muscle for one
+        /// Hard-set-equivalent credit per volume-bearing muscle for one
         /// exercise's completed sets, judged against — then updating —
         /// the trailing reference. `date` is the owning session's
-        /// clock.
+        /// clock. Stabilizers remain available to body visualization,
+        /// but intentionally earn no hypertrophy-volume credit.
         mutating func credit(for exercise: Exercise, at date: Date) -> [Muscle: Double] {
-            let weights = exercise.muscleInvolvement.weights
-            guard !weights.isEmpty else { return [:] }
+            let volumeCredits = exercise.muscleInvolvement.volumeCredits.filter {
+                $0.value > 0
+            }
+            guard !volumeCredits.isEmpty else { return [:] }
 
             let total = setEquivalentCredit(for: exercise, at: date)
             guard total > 0 else { return [:] }
-            return weights.mapValues { total * $0 }
+            return volumeCredits.mapValues { total * $0 }
         }
 
         /// Whole-exercise hard-set equivalents before muscle
         /// involvement is applied. Training load uses this systemic
         /// total while muscle analytics use `credit(for:at:)`.
         mutating func setEquivalentCredit(for exercise: Exercise, at date: Date) -> Double {
-            exercise.orderedSets
-                .filter(\.isCompleted)
+            let kind: HardSetKind
+            switch (exercise.modality, exercise.trackingMode) {
+            case (.dynamicStrength, .reps):
+                kind = .dynamic
+            case (.isometricStrength, .duration):
+                kind = .isometric
+            default:
+                return 0
+            }
+
+            return exercise.orderedSets
                 .reduce(into: 0.0) { total, set in
                     total += hardSetEquivalent(
                         for: set,
-                        mode: exercise.trackingMode,
+                        kind: kind,
+                        loadProfile: exercise.loadProfile,
+                        bodyweight: exercise.loadBodyweight,
                         key: exercise.historyKey,
                         at: date
                     )
@@ -177,20 +205,38 @@ nonisolated enum SetStimulus {
 
         private mutating func hardSetEquivalent(
             for set: WorkoutSet,
-            mode: TrackingMode,
+            kind: HardSetKind,
+            loadProfile: ExerciseLoadProfile,
+            bodyweight: Double,
             key: String,
             at date: Date
         ) -> Double {
+            guard set.isAnalyticsEligible else { return 0 }
+
             let credit: Double
-            switch mode {
-            case .duration:
-                // Holds carry no RIR and e1RM is a rep construct —
-                // only the length factor applies.
-                credit = SetStimulus.holdFactor(duration: set.duration, parameters: parameters)
-            case .reps:
+            switch kind {
+            case .dynamic:
+                guard set.reps > 0 else { return 0 }
                 credit = SetStimulus.effortFactor(rir: set.repsInReserve, logged: set.rirLogged, parameters: parameters)
                     * SetStimulus.repFactor(reps: set.reps, parameters: parameters)
-                    * loadFactorUpdatingReference(weight: set.weight, reps: set.reps, key: key, at: date)
+                    * dynamicLoadFactorUpdatingReference(
+                        loggedWeight: set.weight,
+                        reps: set.reps,
+                        loadProfile: loadProfile,
+                        bodyweight: bodyweight,
+                        key: key,
+                        at: date
+                    )
+            case .isometric:
+                guard set.duration > 0 else { return 0 }
+                credit = SetStimulus.holdFactor(duration: set.duration, parameters: parameters)
+                    * isometricLoadFactorUpdatingReference(
+                        loggedWeight: set.weight,
+                        loadProfile: loadProfile,
+                        bodyweight: bodyweight,
+                        key: key,
+                        at: date
+                    )
             }
             return max(parameters.stimulusFloor, credit)
         }
@@ -198,32 +244,108 @@ nonisolated enum SetStimulus {
         /// Judge a set against the exercise's decayed reference, then
         /// fold the set into it — in that order, so a PR set earns
         /// full credit and only raises the bar for what follows.
-        private mutating func loadFactorUpdatingReference(
-            weight: Double,
+        private mutating func dynamicLoadFactorUpdatingReference(
+            loggedWeight: Double,
             reps: Int,
+            loadProfile: ExerciseLoadProfile,
+            bodyweight: Double,
             key: String,
             at date: Date
         ) -> Double {
-            let e1RM = SetStimulus.estimatedOneRepMax(weight: weight, reps: reps)
-            // Bodyweight / unloaded sets carry no load signal.
+            // Non-comparable resistance carries no load signal and is
+            // therefore neutral rather than arbitrarily penalized.
+            guard let effectiveLoad = loadProfile.effectiveLoad(
+                loggedWeight: loggedWeight,
+                bodyweight: bodyweight
+            ) else { return 1 }
+            let e1RM = SetStimulus.estimatedOneRepMax(weight: effectiveLoad, reps: reps)
+            // Unloaded external work carries no load signal.
             guard e1RM > 0 else { return 1 }
 
-            guard let existing = references[key] else {
+            return loadFactorUpdatingReference(
+                metric: e1RM,
+                key: key,
+                at: date,
+                kind: .dynamic
+            )
+        }
+
+        /// Isometric strength has no meaningful rep-based e1RM, but a
+        /// comparable effective resistance still distinguishes a loaded
+        /// working hold from a token-load hold. Unavailable load (unknown
+        /// bodyweight) and intentionally non-comparable resistance stay
+        /// neutral and do not seed a misleading reference.
+        private mutating func isometricLoadFactorUpdatingReference(
+            loggedWeight: Double,
+            loadProfile: ExerciseLoadProfile,
+            bodyweight: Double,
+            key: String,
+            at date: Date
+        ) -> Double {
+            guard let effectiveLoad = loadProfile.effectiveLoad(
+                loggedWeight: loggedWeight,
+                bodyweight: bodyweight
+            ), effectiveLoad > 0 else { return 1 }
+
+            return loadFactorUpdatingReference(
+                metric: effectiveLoad,
+                key: key,
+                at: date,
+                kind: .isometric
+            )
+        }
+
+        /// Judge a comparable metric against its same-kind decayed
+        /// reference, then fold it in. Dynamic and isometric histories
+        /// deliberately use different tables because one is e1RM and the
+        /// other is effective load.
+        private mutating func loadFactorUpdatingReference(
+            metric: Double,
+            key: String,
+            at date: Date,
+            kind: ReferenceKind
+        ) -> Double {
+            let existing: (metric: Double, at: Date)?
+            switch kind {
+            case .dynamic:
+                existing = dynamicReferences[key]
+            case .isometric:
+                existing = isometricReferences[key]
+            }
+
+            guard let existing else {
                 // First-ever instance: neutral, and it seeds the bar.
-                references[key] = (e1RM, date)
+                setReference((metric: metric, at: date), for: key, kind: kind)
                 return 1
             }
 
             let dtDays = max(0, date.timeIntervalSince(existing.at)) / 86_400
-            let decayed = existing.e1RM * exp(-dtDays / parameters.referenceTau)
+            let decayed = existing.metric * exp(-dtDays / parameters.referenceTau)
             let factor: Double
             if decayed > 0 {
-                factor = SetStimulus.loadFactor(e1RMRatio: e1RM / decayed, parameters: parameters)
+                factor = SetStimulus.loadFactor(e1RMRatio: metric / decayed, parameters: parameters)
             } else {
                 factor = 1
             }
-            references[key] = (max(e1RM, decayed), date)
+            setReference(
+                (metric: max(metric, decayed), at: date),
+                for: key,
+                kind: kind
+            )
             return factor
+        }
+
+        private mutating func setReference(
+            _ reference: (metric: Double, at: Date),
+            for key: String,
+            kind: ReferenceKind
+        ) {
+            switch kind {
+            case .dynamic:
+                dynamicReferences[key] = reference
+            case .isometric:
+                isometricReferences[key] = reference
+            }
         }
     }
 }
