@@ -26,6 +26,11 @@
 //  app: black, type-forward, the single orange accent for "on
 //  target," danger-red only where something's slipping.
 //
+//  Free-tier users see this exact same sequence and spacing, frozen
+//  beneath one frameless frosted layer per major section. No paywall
+//  cards or labels alter the content layout; a single persistent
+//  unlock control carries the purchase action.
+//
 
 import VivoKit
 import SwiftUI
@@ -57,66 +62,74 @@ struct InsightsScreen: View {
 
     // MARK: - Locked state (free tier)
 
-    /// The user's REAL insights, frozen behind frosted glass, with a
-    /// single quiet unlock card floated on top. Their own symmetry
-    /// chart is the pitch — not a feature list. Never shown before
-    /// the first workout (the empty state wins), and never as a
-    /// popup anywhere else in the app.
+    /// The user's real insights, each frozen beneath its own frosted
+    /// cover. Its layout is identical to the unlocked screen: no
+    /// inserted introduction, padding, card shape, or Pro labels.
+    /// Every frozen section opens the shared purchase sheet, and one
+    /// persistent control carries the only explicit CTA. Never shown
+    /// before the first workout (the empty state wins), and never as
+    /// a popup anywhere else.
     private var lockedContent: some View {
-        ZStack {
-            loadedContent
-                .blur(radius: 16)
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
+        let _ = appState.analytics.update(for: completedSessions)
+        let a = appState.analytics
+        let signature = TrainingSignature(
+            volume: a.volume,
+            development: a.development.intensities,
+            consistency: a.consistency
+        )
 
-            Surface.background
-                .opacity(0.45)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-
-            unlockCard
-                .padding(.horizontal, Space.gutter)
+        return ScrollView(.vertical) {
+            LazyVStack(alignment: .leading, spacing: 0) {
+                insightSections(analytics: a, signature: signature, locked: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.xxl)
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            unlockControl
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Space.sm)
         }
     }
 
-    private var unlockCard: some View {
-        VStack(spacing: Space.lg) {
-            Text("Vivobody Pro")
-                .font(Typography.title)
-                .foregroundStyle(Ink.primary)
+    private var unlockControl: some View {
+        Button(action: requestUnlock) {
+            HStack(spacing: Space.md) {
+                Text("Unlock Vivobody Pro")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
 
-            Text("The full read on your training — signature, strength trajectory, symmetry, and where your lifts are heading. Built from the \(sessionCountLabel) you've already logged.")
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Button {
-                appState.pro.requestUnlock()
-            } label: {
-                Text(unlockButtonLabel)
+                if let price = appState.pro.displayPrice {
+                    Text("· \(price)")
+                        .monospacedDigit()
+                        .lineLimit(1)
+                }
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .accessibilityLabel("Unlock Vivobody Pro")
-
-            Text("One-time purchase. Logging stays free forever.")
-                .font(Typography.micro)
-                .foregroundStyle(Ink.quaternary)
+            .font(Typography.headline)
+            .foregroundStyle(Tint.onAccent)
+            .frame(minHeight: Space.tapMin)
+            .padding(.horizontal, Space.xl)
+            .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.primary)
+            .softElevation(radius: 14, y: 7, opacity: 0.42)
         }
-        .padding(Space.xxl)
-        .glassCard()
+        .buttonStyle(.plain)
+        .accessibilityLabel(unlockButtonLabel)
+        .accessibilityHint("Opens the Vivobody Pro purchase sheet")
     }
 
     private var unlockButtonLabel: String {
         if let price = appState.pro.displayPrice {
-            return "Unlock · \(price)"
+            return "Unlock Vivobody Pro, \(price)"
         }
-        return "Unlock"
+        return "Unlock Vivobody Pro"
     }
 
-    private var sessionCountLabel: String {
-        let count = completedSessions.count
-        return count == 1 ? "workout" : "\(count) workouts"
+    private func requestUnlock() {
+        appState.pro.requestUnlock()
     }
 
     private var loadedContent: some View {
@@ -126,28 +139,7 @@ struct InsightsScreen: View {
 
         return ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 0) {
-                Group {
-                    SignatureSection(signature: signature, report: a.consistency)
-                        .settleIn(0)
-                    GroupSeparator()
-                    StrengthTrajectorySection(board: a.strength, progress: a.progress)
-                        .settleIn(1)
-                    GroupSeparator()
-                    ExerciseDominanceSection(board: a.dominance, split: a.composition)
-                        .settleIn(2)
-                    GroupSeparator()
-                    IntensityMixSection(mix: a.intensity, weeks: a.intensityWeeks, migration: a.migration)
-                        .settleIn(3)
-                    GroupSeparator()
-                    ConsistencySection(report: a.consistency)
-                        .settleIn(4)
-                    GroupSeparator()
-                    TrainingLoadSection(report: a.load)
-                        .settleIn(5)
-                    GroupSeparator()
-                    SymmetrySection(board: a.symmetry)
-                        .settleIn(6)
-                }
+                insightSections(analytics: a, signature: signature, locked: false)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, Space.sm)
@@ -158,6 +150,69 @@ struct InsightsScreen: View {
         .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 
+    /// The one canonical section order for both entitlement states.
+    /// Keeping the sequence shared means a future insight cannot be
+    /// added to the unlocked screen while silently missing its Pro
+    /// preview (or vice versa).
+    @ViewBuilder
+    private func insightSections(
+        analytics a: SessionAnalytics,
+        signature: TrainingSignature,
+        locked: Bool
+    ) -> some View {
+        insightSection(title: "Your signature", index: 0, locked: locked) {
+            SignatureSection(signature: signature, report: a.consistency)
+        }
+        insightSection(title: "Strength", index: 1, locked: locked) {
+            StrengthTrajectorySection(board: a.strength, progress: a.progress)
+        }
+        insightSection(title: "Composition", index: 2, locked: locked) {
+            ExerciseDominanceSection(board: a.dominance, split: a.composition)
+        }
+        insightSection(title: "Intensity", index: 3, locked: locked) {
+            IntensityMixSection(
+                mix: a.intensity,
+                weeks: a.intensityWeeks,
+                migration: a.migration
+            )
+        }
+        insightSection(title: "Consistency", index: 4, locked: locked) {
+            ConsistencySection(report: a.consistency)
+        }
+        insightSection(title: "Training load", index: 5, locked: locked) {
+            TrainingLoadSection(report: a.load)
+        }
+        insightSection(title: "Symmetry", index: 6, locked: locked, isLast: true) {
+            SymmetrySection(board: a.symmetry)
+        }
+    }
+
+    @ViewBuilder
+    private func insightSection<Content: View>(
+        title: String,
+        index: Int,
+        locked: Bool,
+        isLast: Bool = false,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        if locked {
+            LockedInsightPreview(
+                title: title,
+                action: requestUnlock,
+                content: content
+            )
+            if !isLast {
+                GroupSeparator()
+            }
+        } else {
+            content()
+                .settleIn(index)
+            if !isLast {
+                GroupSeparator()
+            }
+        }
+    }
+
     // MARK: - Empty state
 
     private var emptyState: some View {
@@ -166,6 +221,37 @@ struct InsightsScreen: View {
             systemImage: "chart.xyaxis.line",
             description: Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
         )
+    }
+}
+
+// MARK: - Locked preview
+
+/// One full Insights movement frozen in place beneath an interactive,
+/// frameless frosted treatment. It adds no padding, shape, border, or
+/// separate labels: the original header, timeframe, chart, and values
+/// all receive the same blur and dimming. Accessibility sees only the
+/// locked section, never the analytics hidden beneath it.
+private struct LockedInsightPreview<Content: View>: View {
+    let title: String
+    let action: () -> Void
+    @ViewBuilder let content: () -> Content
+
+    @Environment(\.accessibilityReduceTransparency)
+    private var reduceTransparency
+
+    var body: some View {
+        Button(action: action) {
+            content()
+                .blur(radius: reduceTransparency ? 0 : 8)
+                .opacity(reduceTransparency ? 0 : 0.90)
+                .accessibilityHidden(true)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("\(title), locked")
+        .accessibilityHint("Unlocks with Vivobody Pro")
     }
 }
 
