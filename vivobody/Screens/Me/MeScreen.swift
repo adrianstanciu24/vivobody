@@ -122,21 +122,23 @@ struct MeScreen: View {
         }
     }
 
-    /// Type-forward empty body-weight state: one explanatory line and
-    /// a single color-preserving glass action — no ghost preview, no card.
+    /// Quiet inline empty state, matching the Personal-records prompt
+    /// one section up: a single caption line and a compact left-aligned
+    /// action — no icon, no centered full-screen treatment.
     private var bodyWeightEmptyCard: some View {
-        ContentUnavailableView {
-            Label("Track your body weight to see how it trends alongside your training.", systemImage: "scalemass")
-        } actions: {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            Text("Track your body weight to see how it trends alongside your training.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
             Button {
                 Haptics.soft()
                 logTarget = .create
             } label: {
                 Text("Log weight")
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .padding(.top, Space.md)
+            .buttonStyle(PrimaryButtonStyle(compact: true))
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var bodyWeightPopulatedCard: some View {

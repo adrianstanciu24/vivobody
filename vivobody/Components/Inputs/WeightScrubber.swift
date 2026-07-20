@@ -2,7 +2,8 @@
 //  WeightScrubber.swift
 //  vivobody
 //
-//  Unit-aware wrapper around NumberScrubber for weight values.
+//  Unit-aware wrapper around the app's card and bare scrubbers for
+//  weight values.
 //  The bound canonical value is always in lb; this view reads the
 //  user's WeightUnit preference, converts the value to the display
 //  unit for scrubbing, and converts back on write. Step and range
@@ -42,10 +43,16 @@ struct WeightScrubber: View {
 
     var valueFontSize: CGFloat = 64
     var verticalPadding: CGFloat = 28
+    var presentation: Presentation = .card
 
     enum Purpose {
         case strength
         case body
+    }
+
+    enum Presentation {
+        case card
+        case bare
     }
 
     @AppStorage(SettingsKey.weightUnit)
@@ -55,18 +62,37 @@ struct WeightScrubber: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
+    @ViewBuilder
     var body: some View {
-        NumberScrubber(
-            value: displayBinding,
-            range: displayRange,
-            step: step,
-            pointsPerStep: pointsPerStep,
-            unit: unit.symbol,
-            label: label,
-            valueFontSize: valueFontSize,
-            verticalPadding: verticalPadding,
-            tickTone: .deep
-        )
+        switch presentation {
+        case .card:
+            NumberScrubber(
+                value: displayBinding,
+                range: displayRange,
+                step: step,
+                pointsPerStep: pointsPerStep,
+                unit: unit.symbol,
+                label: label,
+                valueFontSize: valueFontSize,
+                verticalPadding: verticalPadding,
+                tickTone: .deep
+            )
+        case .bare:
+            BareScrubber(
+                value: displayBinding,
+                range: displayRange,
+                step: step,
+                pointsPerStep: pointsPerStep,
+                fontSize: valueFontSize,
+                unit: unit.symbol,
+                unitFontSize: 16,
+                accessibilityLabel: label ?? "Weight",
+                fitsWidth: true,
+                tickTone: .deep,
+                hitSlop: 16,
+                showsRail: true
+            )
+        }
     }
 
     // MARK: - Bridging

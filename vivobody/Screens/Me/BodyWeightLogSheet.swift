@@ -5,8 +5,9 @@
 //  Quick-log experience for body weight. Two controls:
 //    • DatePicker — defaults to "today" for new entries; locked to
 //      the entry's own date when editing.
-//    • WeightScrubber (.body) — fine-grained step (0.2 lb / 0.1 kg)
-//      with a body-weight-appropriate range. Reads the user's unit
+//    • Bare WeightScrubber (.body) — the same number-first control as
+//      Active Workout, with a fine-grained step (0.2 lb / 0.1 kg) and
+//      a body-weight-appropriate range. Reads the user's unit
 //      preference automatically; canonical lb stays at the binding.
 //
 //  Behavior:
@@ -179,8 +180,8 @@ struct BodyWeightLogSheet: View {
                 canonicalWeight: $weight,
                 purpose: .body,
                 label: nil,
-                valueFontSize: 56,
-                verticalPadding: 24
+                valueFontSize: 72,
+                presentation: .bare
             )
         }
     }

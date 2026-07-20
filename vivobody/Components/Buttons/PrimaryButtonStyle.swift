@@ -19,6 +19,10 @@
 //  passes a label with `.frame(maxWidth: .infinity)` to fill the
 //  width; empty-state CTAs pass a bare `Text` and auto-size.
 //
+//  `compact: true` keeps the same tinted-glass surface but drops to
+//  headline type and tighter padding — for inline section prompts
+//  where the hero scale would overwhelm surrounding content.
+//
 
 import VivoKit
 import SwiftUI
@@ -26,12 +30,14 @@ import SwiftUI
 struct PrimaryButtonStyle: ButtonStyle {
     var accent: Color = Tint.primary
     var cornerRadius: CGFloat = Radius.card
+    var compact: Bool = false
 
     func makeBody(configuration: Configuration) -> some View {
         PrimaryButtonContent(
             configuration: configuration,
             accent: accent,
-            cornerRadius: cornerRadius
+            cornerRadius: cornerRadius,
+            compact: compact
         )
     }
 }
@@ -44,20 +50,21 @@ private struct PrimaryButtonContent: View {
     let configuration: PrimaryButtonStyle.Configuration
     let accent: Color
     let cornerRadius: CGFloat
+    let compact: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         configuration.label
-            .font(Typography.title)
+            .font(compact ? Typography.headline : Typography.title)
             .tracking(0.4)
             .foregroundStyle(Tint.onAccent)
-            .padding(.horizontal, Space.xxl)
-            .padding(.vertical, Space.xl)
+            .padding(.horizontal, compact ? Space.xl : Space.xxl)
+            .padding(.vertical, compact ? Space.md : Space.xl)
             .glassTinted(accent, interactive: true, in: shape)
-            .shadow(color: accent.opacity(0.18), radius: 18, y: 8)
-            .shadow(color: .black.opacity(0.45), radius: 10, y: 5)
+            .shadow(color: accent.opacity(compact ? 0.12 : 0.18), radius: compact ? 10 : 18, y: compact ? 4 : 8)
+            .shadow(color: .black.opacity(compact ? 0.3 : 0.45), radius: compact ? 6 : 10, y: compact ? 3 : 5)
             .contentShape(shape)
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(
