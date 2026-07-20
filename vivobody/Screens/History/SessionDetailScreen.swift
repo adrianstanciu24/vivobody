@@ -15,10 +15,10 @@
 //      numeral, rendered in the gold completion accent when any
 //      exercise set an all-time top weight at the moment it was
 //      logged (matching the gold numeral on the History row).
-//    • A card-free stat strip — Duration / Sets / Reps / Top set,
-//      hairline-divided.
+//    • A card-free stat strip — Duration / Sets / Reps,
+//      hairline-divided, followed by the wider Top set detail.
 //    • Exercise breakdown — one hairline-divided block per exercise:
-//      group label + name + the per-exercise volume on the right,
+//      group label + per-exercise volume, then the full-width name,
 //      then a set grid of `1   135 × 8` rows in tabular monospace.
 //      The top set's numerals render gold; incomplete sets dim with
 //      a hollow status pip.
@@ -60,15 +60,18 @@ struct SessionDetailScreen: View {
                         Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
                         Stat(value: "\(session.totalSets)", label: "Sets"),
                         Stat(value: "\(session.totalReps)", label: "Reps"),
-                        Stat(value: topSetValue, label: "Top set"),
                     ],
-                    valueFont: Typography.statValue
+                    valueFont: Typography.statValue,
+                    edgeAligned: true
                 )
                 .padding(.top, Space.xl)
 
+                topSetDetail
+                    .padding(.top, Space.lg)
+
                 if SessionIntensityLine.hasContent(session) {
                     SessionIntensityLine(session: session, unit: unit)
-                        .padding(.top, Space.md)
+                        .padding(.top, Space.sm)
                 }
 
                 SectionDivider()
@@ -148,6 +151,22 @@ struct SessionDetailScreen: View {
         }
     }
 
+    private var topSetDetail: some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+            Text("Top set")
+                .panelLegend()
+            Spacer(minLength: Space.lg)
+            Text(topSetValue)
+                .font(Typography.metricInline)
+                .foregroundStyle(sessionHasPR ? Tint.complete : Ink.secondary)
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(topSetValue) top set")
+    }
+
     // MARK: - Exercises
 
     private var exercisesSection: some View {
@@ -163,7 +182,8 @@ struct SessionDetailScreen: View {
                         unit: unit,
                         isPR: prExerciseIDs.contains(exercise.id),
                         contribution: breakdown[exercise.id],
-                        adherence: session.adherence(for: exercise)
+                        adherence: session.adherence(for: exercise),
+                        showsContributionBar: session.orderedExercises.count > 1
                     )
                 }
             }
@@ -264,6 +284,7 @@ private struct ExerciseDetailRow: View {
     let isPR: Bool
     var contribution: SessionContribution? = nil
     var adherence: ExerciseAdherence? = nil
+    var showsContributionBar: Bool = false
 
     private var mode: TrackingMode { exercise.trackingMode }
 
@@ -292,7 +313,7 @@ private struct ExerciseDetailRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             header
-            if let contribution, contribution.metric > 0 {
+            if showsContributionBar, let contribution, contribution.metric > 0 {
                 WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
             }
             setsGrid
@@ -302,25 +323,33 @@ private struct ExerciseDetailRow: View {
     }
 
     private var header: some View {
-        HStack(alignment: .center, spacing: Space.md) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.group.displayName)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                Text(exercise.name)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(2)
-            }
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+                HStack(spacing: Space.sm) {
+                    Text(exercise.group.displayName)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                    if isPR {
+                        Text("PR")
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Tint.complete)
+                    }
+                }
 
-            Spacer(minLength: Space.sm)
+                Spacer(minLength: Space.sm)
 
-            VStack(alignment: .trailing, spacing: 4) {
-                volumeCluster
-                if let adherence, !adherence.isOnPlan {
-                    AdherenceBadge(adherence: adherence, unit: unit)
+                VStack(alignment: .trailing, spacing: 3) {
+                    volumeCluster
+                    if let adherence, !adherence.isOnPlan {
+                        AdherenceBadge(adherence: adherence, unit: unit)
+                    }
                 }
             }
+
+            Text(exercise.name)
+                .font(Typography.headline)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(2)
         }
     }
 
@@ -332,7 +361,7 @@ private struct ExerciseDetailRow: View {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(WeightFormatter.volumeValue(exerciseVolume, unit: unit))
                         .font(Typography.metricInline)
-                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                        .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
                     Text(unit.symbol)
                         .font(Typography.metricMicro)
@@ -344,7 +373,7 @@ private struct ExerciseDetailRow: View {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(DurationFormatter.compact(totalDuration))
                         .font(Typography.metricInline)
-                        .foregroundStyle(isPR ? Tint.complete : Ink.secondary)
+                        .foregroundStyle(Ink.secondary)
                         .monospacedDigit()
                     Text(exercise.modality.durationLabelLowercased)
                         .font(Typography.metricMicro)
@@ -360,7 +389,7 @@ private struct ExerciseDetailRow: View {
     /// hollow status pip in place of the filled dot so "lifted" vs
     /// "planned but skipped" stays legible.
     private var setsGrid: some View {
-        VStack(spacing: Space.sm) {
+        VStack(spacing: 0) {
             ForEach(Array(orderedSets.enumerated()), id: \.element.id) { idx, set in
                 setRow(index: idx + 1, set: set)
             }
@@ -390,7 +419,7 @@ private struct ExerciseDetailRow: View {
 
             setValue(set: set, textColor: textColor)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity)
     }
 
@@ -449,7 +478,7 @@ private struct ExerciseDetailRow: View {
     private func statusPip(isCompleted: Bool, isTopSet: Bool) -> some View {
         ZStack {
             Circle()
-                .fill(isCompleted ? Tint.complete.opacity(isTopSet ? 1.0 : 0.85) : Color.clear)
+                .fill(isCompleted ? (isTopSet ? Tint.complete : Ink.tertiary) : Color.clear)
                 .frame(width: 8, height: 8)
             Circle()
                 .strokeBorder(isCompleted ? Color.clear : Ink.quaternary, lineWidth: 1.5)

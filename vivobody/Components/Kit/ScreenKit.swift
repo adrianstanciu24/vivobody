@@ -200,16 +200,26 @@ struct StatStrip: View {
 
 /// A thin horizontal proportion bar. Used for the session
 /// "waterfall": each exercise's share of the workout's volume (or
-/// hold-time). Renders as a discrete SegmentLadder — devices count
-/// in steps, so a column of these reads as a bank of gauges, and the
-/// discreteness matches the app's detent-based sound world.
+/// hold-time). A continuous fill makes relative contributions easy
+/// to compare without adding visual noise to the receipt.
 struct ShareBar: View {
     /// 0…1 portion of the track to fill.
     let fraction: Double
     var tint: Color = Ink.secondary
 
     var body: some View {
-        SegmentLadder(fraction: fraction, segments: 24, tint: tint)
+        GeometryReader { proxy in
+            let clamped = min(1, max(0, fraction))
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Surface.edge)
+                Capsule()
+                    .fill(tint)
+                    .frame(width: proxy.size.width * clamped)
+            }
+        }
+        .frame(height: 3)
+        .accessibilityHidden(true)
     }
 }
 
@@ -223,7 +233,10 @@ struct WaterfallRow: View {
 
     var body: some View {
         HStack(spacing: Space.sm) {
-            ShareBar(fraction: share, tint: isDuration ? Ink.tertiary : Ink.secondary)
+            ShareBar(
+                fraction: share,
+                tint: isDuration ? Tint.complete.opacity(Opacity.medium) : Tint.complete
+            )
             Text("\(Int((share * 100).rounded()))%")
                 .font(Typography.metricMicro)
                 .foregroundStyle(Ink.quaternary)

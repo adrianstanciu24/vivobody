@@ -10,8 +10,8 @@
 //  Architecture:
 //    • A tiny status kicker — "In progress" (Volt) / "Complete" (gold).
 //    • The HERO: known comparable volume as a huge monospaced numeral,
-//      with partial/unavailable state kept explicit, counting up on
-//      arrival via DigitTicker when a subtotal exists.
+//      with partial/unavailable state kept explicit and shown
+//      immediately at its final value.
 //    • A small mono support line for the rest (duration, sets, reps).
 //    • The exercise list as type rows divided by hairlines, each with
 //      its top set and the same gold/dim set pips used on the pages.
@@ -45,15 +45,12 @@ struct WorkoutSummaryCard: View {
     /// or success haptic. Reserved for non-celebratory review.
     var isHistorical: Bool = false
 
-    // Count-up state lives on `session` (not @State) so it survives
-    // view remounts — e.g. minimizing to the MiniBar and re-expanding.
+    // Duration count-up state lives on `session` (not @State) so it
+    // survives view remounts — e.g. minimizing to the MiniBar and
+    // re-expanding.
     private var animatedMinutes: Double {
         get { session.summaryAnimatedMinutes }
         nonmutating set { session.summaryAnimatedMinutes = newValue }
-    }
-    private var animatedVolume: Double {
-        get { session.summaryAnimatedVolume }
-        nonmutating set { session.summaryAnimatedVolume = newValue }
     }
     private var didCelebrate: Bool {
         get { session.summaryDidCelebrate }
@@ -62,10 +59,6 @@ struct WorkoutSummaryCard: View {
 
     private var displayMinutes: Double {
         isHistorical ? session.duration / 60 : animatedMinutes
-    }
-
-    private var displayVolume: Double {
-        isHistorical ? session.totalVolume : animatedVolume
     }
 
     private var tonnageAvailability: ComparableTonnageAvailability {
@@ -145,14 +138,10 @@ struct WorkoutSummaryCard: View {
                         .font(Typography.metricHero)
                         .foregroundStyle(Ink.primary)
                 } else {
-                    DigitTicker(
-                        value: WeightFormatter.toDisplay(displayVolume, unit: unit),
-                        font: Typography.metricHero,
-                        color: Ink.primary,
-                        formatter: { value in
-                            Self.volumeFormatter.string(from: NSNumber(value: Int(value))) ?? "\(Int(value))"
-                        }
-                    )
+                    Text(volumeValue)
+                        .font(Typography.metricHero)
+                        .foregroundStyle(Ink.primary)
+                        .monospacedDigit()
                     if tonnageAvailability == .partial {
                         Text("+")
                             .font(Typography.metricInline)
@@ -167,6 +156,11 @@ struct WorkoutSummaryCard: View {
                 .panelLegend()
         }
         .accessibilityElement(children: .combine)
+    }
+
+    private var volumeValue: String {
+        let display = WeightFormatter.toDisplay(session.totalVolume, unit: unit)
+        return Self.volumeFormatter.string(from: NSNumber(value: Int(display))) ?? "\(Int(display))"
     }
 
     private var volumeLegend: String {
@@ -366,39 +360,24 @@ struct WorkoutSummaryCard: View {
 
     private func playEntrance() {
         let fromMin = animatedMinutes
-        let fromVol = animatedVolume
         let targetMin = session.duration / 60
-        let targetVol = session.totalVolume
 
         let minChanged = abs(targetMin - fromMin) >= 0.5
-        let volChanged = abs(targetVol - fromVol) >= 0.5
 
-        if !minChanged && !volChanged { return }
+        if !minChanged { return }
 
-        let isFirstVisit = fromMin == 0 && fromVol == 0
+        let isFirstVisit = fromMin == 0
         let minDuration = isFirstVisit ? 0.9 : 0.5
-        let volDuration = isFirstVisit ? 1.6 : 0.7
 
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(180))
 
-            if minChanged {
-                await countUp(
-                    from: fromMin,
-                    to: targetMin,
-                    duration: minDuration,
-                    set: { animatedMinutes = $0 }
-                )
-            }
-
-            if volChanged {
-                await countUp(
-                    from: fromVol,
-                    to: targetVol,
-                    duration: volDuration,
-                    set: { animatedVolume = $0 }
-                )
-            }
+            await countUp(
+                from: fromMin,
+                to: targetMin,
+                duration: minDuration,
+                set: { animatedMinutes = $0 }
+            )
 
             if isComplete && !didCelebrate {
                 Haptics.success()
