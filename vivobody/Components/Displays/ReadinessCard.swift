@@ -42,6 +42,32 @@ struct ReadinessCard: View {
         }
     }
 
+    /// The verdict's ink, shared with the training-load decoder sheet
+    /// so today's bar, the gauge marker, and the sheet's status dot
+    /// always agree.
+    static func statusColor(for report: TrainingLoadReport) -> Color {
+        switch report.verdict {
+        case .productive:   return Tint.primary
+        case .high:         return Tint.primary
+        case .low:          return Ink.secondary
+        case .insufficient: return Ink.primary
+        }
+    }
+
+    /// Segment ink for the personal load-range gauge: the lit marker
+    /// (provisional markers stay tinted while the range forms), the
+    /// productive band, or the unlit track. Shared with the decoder
+    /// sheet so both gauges read identically.
+    static func gaugeSegmentColor(at position: Double, for report: TrainingLoadReport) -> Color {
+        if let marker = report.gaugeMarkerPosition, abs(position - marker) < 0.025 {
+            return report.hasEnoughHistory ? statusColor(for: report) : Tint.primary
+        }
+        if TrainingLoadReport.gaugeProductiveBand.contains(position) {
+            return Tint.primary.opacity(0.28)
+        }
+        return Surface.edge
+    }
+
     // MARK: - Seven-day strip
 
     private static let stripHeight: CGFloat = 34
@@ -69,7 +95,7 @@ struct ReadinessCard: View {
                     }
                     .frame(height: Self.stripHeight)
 
-                    Text(weekdayInitial(day.date))
+                    Text(day.weekdayInitial())
                         .font(Typography.metricMicro)
                         .foregroundStyle(isToday ? Ink.secondary : Ink.quaternary)
                 }
@@ -86,17 +112,9 @@ struct ReadinessCard: View {
 
     private func barColor(trained: Bool, isToday: Bool) -> Color {
         if isToday {
-            return trained ? statusColor : Ink.quaternary
+            return trained ? Self.statusColor(for: report) : Ink.quaternary
         }
         return trained ? Ink.tertiary : Surface.edge
-    }
-
-    private func weekdayInitial(_ date: Date) -> String {
-        let calendar = Calendar.current
-        let index = calendar.component(.weekday, from: date) - 1
-        let symbols = calendar.veryShortStandaloneWeekdaySymbols
-        guard symbols.indices.contains(index) else { return "" }
-        return symbols[index]
     }
 
     // MARK: - Personal range gauge
@@ -107,14 +125,7 @@ struct ReadinessCard: View {
     private var rangeGauge: some View {
         VStack(spacing: Space.sm) {
             SegmentGauge(segments: 48, height: 8, spacing: 2) { _, position in
-                if let gaugePosition,
-                   abs(position - gaugePosition) < 0.025 {
-                    return report.hasEnoughHistory ? statusColor : Tint.primary
-                }
-                if Self.productiveBand.contains(position) {
-                    return Tint.primary.opacity(0.28)
-                }
-                return Surface.edge
+                Self.gaugeSegmentColor(at: position, for: report)
             }
 
             HStack {
@@ -127,20 +138,5 @@ struct ReadinessCard: View {
             .panelLegend()
         }
         .accessibilityHidden(true)
-    }
-
-    private var gaugePosition: Double? {
-        report.gaugeRatio.map { min(1, max(0, $0 / 2)) }
-    }
-
-    private static let productiveBand: ClosedRange<Double> = (0.8 / 2)...(1.3 / 2)
-
-    private var statusColor: Color {
-        switch report.verdict {
-        case .productive:   return Tint.primary
-        case .high:         return Tint.primary
-        case .low:          return Ink.secondary
-        case .insufficient: return Ink.primary
-        }
     }
 }

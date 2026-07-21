@@ -54,6 +54,7 @@ struct TodayScreen: View {
     /// pinned "+ Start" pill).
     @State var showStartSheet = false
     @State var showMuscleMapDetails = false
+    @State var showTrainingLoadDetails = false
 
     /// The start action chosen in the sheet, deferred until the sheet
     /// fully dismisses. Running it in the sheet's onDismiss avoids
@@ -164,6 +165,9 @@ struct TodayScreen: View {
         }
         .sheet(isPresented: $showMuscleMapDetails) {
             MuscleMapDetailsSheet(report: appState.analytics.muscleMap)
+        }
+        .sheet(isPresented: $showTrainingLoadDetails) {
+            TrainingLoadDetailsSheet(report: appState.analytics.load)
         }
     }
 

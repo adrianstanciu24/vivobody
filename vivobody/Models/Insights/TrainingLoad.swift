@@ -29,11 +29,16 @@ nonisolated enum LoadVerdict: Hashable {
     case productive
     case high
 
+    /// The productive band for current ÷ usual load. Single source of
+    /// truth — the report's absolute range and every gauge derive from
+    /// these bounds.
+    static let productiveRatioBand: ClosedRange<Double> = 0.8...1.3
+
     static func from(ratio: Double) -> LoadVerdict {
         switch ratio {
-        case ..<0.8: return .low
-        case ...1.3: return .productive
-        default:     return .high
+        case ..<productiveRatioBand.lowerBound: return .low
+        case ...productiveRatioBand.upperBound: return .productive
+        default:                                return .high
         }
     }
 }
@@ -57,6 +62,14 @@ nonisolated struct DayLoad: Identifiable, Hashable {
     let load: Double
 
     var trained: Bool { load > 0 }
+
+    /// Very short weekday symbol ("M", "T", …) for day-strip labels.
+    func weekdayInitial(calendar: Calendar = .current) -> String {
+        let index = calendar.component(.weekday, from: date) - 1
+        let symbols = calendar.veryShortStandaloneWeekdaySymbols
+        guard symbols.indices.contains(index) else { return "" }
+        return symbols[index]
+    }
 }
 
 nonisolated struct LoadDriver: Hashable {
@@ -109,12 +122,35 @@ nonisolated struct TrainingLoadReport: Hashable {
 
     var productiveRange: ClosedRange<Double>? {
         guard let usualLoad else { return nil }
-        return (usualLoad * 0.8)...(usualLoad * 1.3)
+        let band = LoadVerdict.productiveRatioBand
+        return (usualLoad * band.lowerBound)...(usualLoad * band.upperBound)
     }
 
     var changeFromUsual: Double? {
         guard let usualLoad, usualLoad > 0 else { return nil }
         return (currentLoad - usualLoad) / usualLoad
+    }
+
+    // MARK: Gauge geometry
+
+    /// The compact gauges plot ratios on a 0…2× track.
+    static let gaugeRatioSpan: Double = 2
+
+    /// Fractional position (0…1) of a ratio along the gauge track.
+    static func gaugePosition(forRatio ratio: Double) -> Double {
+        min(1, max(0, ratio / gaugeRatioSpan))
+    }
+
+    /// The productive band mapped onto the gauge track.
+    static var gaugeProductiveBand: ClosedRange<Double> {
+        let band = LoadVerdict.productiveRatioBand
+        return gaugePosition(forRatio: band.lowerBound)...gaugePosition(forRatio: band.upperBound)
+    }
+
+    /// Marker position for the best available ratio; nil while no
+    /// comparison exists at all.
+    var gaugeMarkerPosition: Double? {
+        gaugeRatio.map(Self.gaugePosition(forRatio:))
     }
 }
 
@@ -269,8 +305,8 @@ extension Array where Element == WorkoutSession {
             return LoadPoint(
                 date: day,
                 load: current.load,
-                productiveLower: usual.map { $0 * 0.8 },
-                productiveUpper: usual.map { $0 * 1.3 }
+                productiveLower: usual.map { $0 * LoadVerdict.productiveRatioBand.lowerBound },
+                productiveUpper: usual.map { $0 * LoadVerdict.productiveRatioBand.upperBound }
             )
         }
     }

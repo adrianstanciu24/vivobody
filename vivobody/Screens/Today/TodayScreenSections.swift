@@ -44,17 +44,43 @@ extension TodayScreen {
     /// The readiness section: how ready you are to train again, drawn
     /// rather than spoken — the labelled seven-day activity strip and
     /// the personal load-range gauge, with the verdict as the header's
-    /// trailing note. The readiness sentence survives as the card's
-    /// VoiceOver label.
+    /// trailing note. The whole instrument opens a plain-language
+    /// decoder because neither the seven-day bars nor a personal range
+    /// should require fitness jargon to understand. The readiness
+    /// sentence survives as the combined element's VoiceOver value.
     func readinessSection(_ report: TrainingLoadReport, line: ReadinessLine) -> some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(
-                title: "Training Load",
-                trailing: ReadinessCard.statusText(for: report),
-                trailingIsInProgress: report.verdict == .insufficient
-            )
-            ReadinessCard(report: report, line: line)
+        Button {
+            Haptics.selection()
+            showTrainingLoadDetails = true
+        } label: {
+            VStack(alignment: .leading, spacing: Space.md) {
+                SectionHeader(
+                    title: "Training Load",
+                    trailing: ReadinessCard.statusText(for: report),
+                    trailingIsInProgress: report.verdict == .insufficient
+                )
+                ReadinessCard(report: report, line: line)
+
+                HStack(spacing: Space.sm) {
+                    Text("How this reading works")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
+                }
+                .padding(.horizontal, Space.md)
+                .frame(minHeight: Space.tapMin)
+            }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Training load. \(ReadinessCard.statusText(for: report) ?? "No reading yet").")
+        .accessibilityValue(line.phrase)
+        .accessibilityHint("Opens an explanation of your seven-day load and personal range")
     }
 
     /// Compact placard; tapping opens the evidence and confidence for

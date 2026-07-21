@@ -85,7 +85,7 @@ struct TrainingLoadSection: View {
                 if abs(position - gaugePosition) < 0.025 {
                     return statusColor
                 }
-                if productiveBand.contains(position) {
+                if TrainingLoadReport.gaugeProductiveBand.contains(position) {
                     return Tint.primary.opacity(0.28)
                 }
                 return Surface.edge
@@ -105,11 +105,7 @@ struct TrainingLoadSection: View {
     }
 
     private var gaugePosition: Double {
-        min(1, max(0, report.ratio / 2))
-    }
-
-    private var productiveBand: ClosedRange<Double> {
-        (0.8 / 2)...(1.3 / 2)
+        TrainingLoadReport.gaugePosition(forRatio: report.ratio)
     }
 
     // MARK: - Trend
