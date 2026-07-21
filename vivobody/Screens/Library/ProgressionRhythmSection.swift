@@ -5,10 +5,9 @@
 //  "Progression rhythm" section for ExerciseDetailScreen: the median
 //  time between load increases (running-max step-ups from
 //  ProgressionCadence), a live "day N of your cycle" read, and a
-//  rhythm strip where each tick is a day the lifter added load —
-//  spacing proportional to real time, "today" marked at the right
-//  edge. Dense ticks read as fast progression; widening gaps read as
-//  an approaching plateau.
+//  proportional staircase that makes both the timing and the rising
+//  load visible. The card closes with the actual increase count and
+//  load range instead of a legend the user has to decode.
 //
 //  Pro-gated with the same frameless frosted treatment as the
 //  Insights tab: the real card frozen beneath a blur, tap opens the
@@ -49,7 +48,7 @@ extension ExerciseDetailScreen {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Progression rhythm")
                 .sectionLabelStyle(Opacity.medium)
-            ProgressionRhythmCard(cadence: cadence)
+            ProgressionRhythmCard(cadence: cadence, unit: unit)
         }
     }
 }
@@ -58,135 +57,380 @@ extension ExerciseDetailScreen {
 
 private struct ProgressionRhythmCard: View {
     let cadence: ProgressionCadence
+    let unit: WeightUnit
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            HStack(alignment: .firstTextBaseline, spacing: Space.lg) {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text("~\(cadence.medianGapDays)")
-                            .font(Typography.statValue)
-                            .foregroundStyle(Ink.primary)
-                            .monospacedDigit()
-                        Text(cadence.medianGapDays == 1 ? "day" : "days")
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(Ink.secondary)
-                    }
-                    Text("between load increases")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
+        VStack(alignment: .leading, spacing: Space.xl) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: Space.xl) {
+                    paceReadout
+                    Spacer(minLength: Space.md)
+                    currentReadout
                 }
 
-                Spacer(minLength: Space.sm)
-
-                Text(cycleStatus)
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(cadence.isPastUsualRhythm ? Tint.complete : Ink.tertiary)
-                    .multilineTextAlignment(.trailing)
-                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    paceReadout
+                    currentReadout
+                }
             }
 
             VStack(alignment: .leading, spacing: Space.sm) {
-                RhythmStrip(
-                    events: cadence.events,
-                    isPastUsualRhythm: cadence.isPastUsualRhythm
-                )
-                Text("Each tick is a load increase · the dot is today")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
+                HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                    Text("Load progression")
+                        .panelLegend()
+
+                    Spacer(minLength: Space.sm)
+
+                    Text(loadRange)
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                }
+
+                ProgressionStaircase(events: cadence.events, tailTint: statusTint)
+
+                HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                    Text(increaseCountLabel)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+
+                    Spacer(minLength: Space.sm)
+
+                    Text("Today")
+                        .panelLegend()
+                }
             }
         }
-        .padding(Space.lg)
+        .padding(Space.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                .fill(Surface.cardTint)
-        )
+        .contentCard(bright: true)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilitySummary)
     }
 
-    /// Right-aligned read connecting the median to today. "Day N of
-    /// ~M" while inside the usual window; a quiet "due" nudge once
-    /// the current gap outruns the rhythm.
-    private var cycleStatus: String {
+    private var paceReadout: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text("Usual interval")
+                .panelLegend()
+
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text("~\(cadence.medianGapDays)")
+                    .font(Typography.metricLg)
+                    .foregroundStyle(Ink.primary)
+                    .monospacedDigit()
+
+                Text(cadence.medianGapDays == 1 ? "day" : "days")
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.secondary)
+                    .padding(.bottom, 3)
+            }
+        }
+    }
+
+    /// A separate live read prevents the historical median and the
+    /// current cycle from collapsing into one ambiguous sentence.
+    private var currentReadout: some View {
+        VStack(alignment: .trailing, spacing: Space.xs) {
+            Text("Current")
+                .panelLegend()
+
+            HStack(spacing: Space.sm) {
+                Circle()
+                    .fill(statusTint)
+                    .frame(width: 8, height: 8)
+                    .shadow(color: statusTint.opacity(0.35), radius: 4)
+                    .accessibilityHidden(true)
+
+                Text(currentHeadline)
+                    .font(Typography.metricInline)
+                    .foregroundStyle(statusTint)
+                    .monospacedDigit()
+            }
+
+            Text(currentDetail)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+
+    private var currentHeadline: String {
         if cadence.daysSinceLastIncrease == 0 {
-            return "Increased today"
+            return "Today"
         }
-        if cadence.isPastUsualRhythm {
-            return "Day \(cadence.daysSinceLastIncrease) · past your usual rhythm"
+        return "Day \(cadence.daysSinceLastIncrease)"
+    }
+
+    private var currentDetail: String {
+        if cadence.daysSinceLastIncrease == 0 {
+            return "Load increased"
         }
-        return "Day \(cadence.daysSinceLastIncrease) of ~\(cadence.medianGapDays)"
+        return cadence.isPastUsualRhythm
+            ? "Past your usual interval"
+            : "of ~\(cadence.medianGapDays)"
+    }
+
+    private var statusTint: Color {
+        cadence.daysSinceLastIncrease == 0 || cadence.isPastUsualRhythm
+            ? Tint.complete
+            : Ink.secondary
+    }
+
+    private var increaseCountLabel: String {
+        let count = cadence.increases.count
+        return "\(count) load \(count == 1 ? "increase" : "increases")"
+    }
+
+    private var loadRange: String {
+        let first = WeightFormatter.string(
+            cadence.baseline.load,
+            unit: unit,
+            includeUnit: false
+        )
+        let latest = WeightFormatter.string(
+            cadence.increases.last?.load ?? cadence.baseline.load,
+            unit: unit,
+            includeUnit: false
+        )
+        return "\(first) → \(latest) \(unit.symbol)"
     }
 
     private var accessibilitySummary: String {
-        let unit = cadence.medianGapDays == 1 ? "day" : "days"
-        return "Progression rhythm. You typically add load every \(cadence.medianGapDays) \(unit). \(cycleStatus)."
+        let dayUnit = cadence.medianGapDays == 1 ? "day" : "days"
+        let first = WeightFormatter.string(cadence.baseline.load, unit: unit)
+        let latest = WeightFormatter.string(
+            cadence.increases.last?.load ?? cadence.baseline.load,
+            unit: unit
+        )
+        return "Progression rhythm. You typically add load every \(cadence.medianGapDays) \(dayUnit). \(currentHeadline), \(currentDetail). \(increaseCountLabel), from \(first) to \(latest)."
     }
 }
 
-// MARK: - Rhythm strip
+// MARK: - Progression staircase
 
-/// Thin proportional timeline: a dim tick for the baseline session,
-/// a bright tick per load increase, and a dot for today at the right
-/// edge. Long histories keep only the most recent events so ticks
-/// stay legible.
-private struct RhythmStrip: View {
+/// Time runs left-to-right while load rises bottom-to-top. Each
+/// running-max event creates a literal step, so the graphic carries
+/// its meaning without a separate tick-and-dot legend. History fades
+/// from dim to bright toward now, a soft underglow grounds the line,
+/// and the run since the last increase renders as a dotted lead-out
+/// in the card's status tint so chart and Current readout agree. On
+/// first appear the staircase traces itself in and the beads pop
+/// into their sockets; Reduce Motion shows everything at rest.
+private struct ProgressionStaircase: View {
     let events: [ProgressionCadence.Event]
-    let isPastUsualRhythm: Bool
+    /// Tint for the dotted "since last increase" lead-out.
+    var tailTint: Color = Tint.complete
 
     var now: Date = Date()
 
-    /// Most-recent events kept on the strip. Older history compresses
-    /// into nothing rather than crowding the left edge.
-    private static let maxTicks = 7
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var trace: CGFloat = 0
+    @State private var tailTrace: CGFloat = 0
+    @State private var beadsShown = false
+
+    /// Keep enough turns to read as a rhythm without producing a
+    /// dense sparkline on long-lived exercises.
+    private static let maxEvents = 7
+    private static let inset: CGFloat = 7
 
     private var visibleEvents: [ProgressionCadence.Event] {
-        Array(events.suffix(Self.maxTicks))
-    }
-
-    /// The leading tick is the true starting level only when nothing
-    /// was trimmed; a trimmed strip starts on an increase.
-    private var firstVisibleIsBaseline: Bool {
-        events.count <= Self.maxTicks
+        Array(events.suffix(Self.maxEvents))
     }
 
     var body: some View {
-        let visible = visibleEvents
-        let start = visible.first?.date ?? now
-        let span = max(now.timeIntervalSince(start), 1)
-
+        let units = Self.unitPoints(for: visibleEvents, now: now)
         GeometryReader { geo in
-            let width = geo.size.width
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.edge)
-                    .frame(height: 2)
-                    .frame(maxHeight: .infinity, alignment: .center)
+            if units.count >= 2 {
+                let points = scaledStairPoints(
+                    units,
+                    in: CGRect(origin: .zero, size: geo.size),
+                    inset: Self.inset
+                )
+                ZStack {
+                    StaircaseArea(unitPoints: units, inset: Self.inset)
+                        .fill(
+                            LinearGradient(
+                                colors: [Ink.primary.opacity(0.10), .clear],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .opacity(trace)
 
-                ForEach(Array(visible.enumerated()), id: \.offset) { index, event in
-                    let fraction = min(max(event.date.timeIntervalSince(start) / span, 0), 1)
-                    Capsule()
-                        .fill(tickColor(index: index))
-                        .frame(width: 3, height: 16)
-                        .offset(x: fraction * (width - 3))
+                    StaircaseLine(unitPoints: units, inset: Self.inset)
+                        .trim(from: 0, to: trace)
+                        .stroke(
+                            LinearGradient(
+                                colors: [Ink.quaternary, Ink.primary],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ),
+                            style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)
+                        )
+
+                    TailLine(unitPoints: units, inset: Self.inset)
+                        .trim(from: 0, to: tailTrace)
+                        .stroke(
+                            tailTint.opacity(0.75),
+                            style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.1, 6])
+                        )
+
+                    // Sockets punch through line and underglow so each
+                    // bead sits in a small gap instead of on the wire.
+                    ForEach(points.indices, id: \.self) { index in
+                        socket(at: index, points: points)
+                    }
+
+                    ForEach(points.indices, id: \.self) { index in
+                        bead(at: index, points: points)
+                    }
                 }
-
-                Circle()
-                    .fill(isPastUsualRhythm ? Tint.complete : Ink.tertiary)
-                    .frame(width: 6, height: 6)
-                    .frame(maxHeight: .infinity, alignment: .center)
-                    .offset(x: width - 6)
+                .compositingGroup()
             }
         }
-        .frame(height: 16)
+        .frame(height: 72)
+        .onAppear(perform: enter)
         .accessibilityHidden(true)
     }
 
-    private func tickColor(index: Int) -> Color {
-        index == 0 && firstVisibleIsBaseline
-            ? Ink.tertiary
-            : Ink.primary.opacity(Opacity.strong)
+    private func socket(at index: Int, points: [CGPoint]) -> some View {
+        let isLatest = index == points.count - 1
+        let diameter: CGFloat = isLatest ? 14 : 10
+        return Circle()
+            .fill(Color.black)
+            .frame(width: diameter, height: diameter)
+            .scaleEffect(beadsShown ? 1 : 0.2)
+            .opacity(beadsShown ? 1 : 0)
+            .blendMode(.destinationOut)
+            .position(points[index])
+            .animation(beadAnimation(index), value: beadsShown)
+    }
+
+    private func bead(at index: Int, points: [CGPoint]) -> some View {
+        let count = points.count
+        let isLatest = index == count - 1
+        let diameter: CGFloat = isLatest ? 10 : 6
+        let recency = count > 1 ? Double(index) / Double(count - 1) : 1
+        return Circle()
+            .fill(isLatest ? Tint.complete : Ink.primary.opacity(0.45 + 0.55 * recency))
+            .frame(width: diameter, height: diameter)
+            .shadow(color: isLatest ? Tint.complete.opacity(0.35) : .clear, radius: 4)
+            .scaleEffect(beadsShown ? 1 : 0.2)
+            .opacity(beadsShown ? 1 : 0)
+            .position(points[index])
+            .animation(beadAnimation(index), value: beadsShown)
+    }
+
+    private func beadAnimation(_ index: Int) -> Animation? {
+        guard !reduceMotion else { return nil }
+        return .spring(response: 0.45, dampingFraction: 0.7)
+            .delay(0.25 + Double(index) * 0.07)
+    }
+
+    private func enter() {
+        guard trace == 0 else { return }
+        if reduceMotion {
+            trace = 1
+            tailTrace = 1
+            beadsShown = true
+            return
+        }
+        withAnimation(.spring(response: 0.8, dampingFraction: 0.95)) { trace = 1 }
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.9).delay(0.5)) { tailTrace = 1 }
+        beadsShown = true
+    }
+
+    /// Normalize events into unit space: x is the fraction of the
+    /// span from first event to now, y is the fraction of the load
+    /// climb (0 at the bottom).
+    private static func unitPoints(
+        for events: [ProgressionCadence.Event],
+        now: Date
+    ) -> [CGPoint] {
+        guard let first = events.first, let last = events.last else { return [] }
+        let dateSpan = max(now.timeIntervalSince(first.date), 1)
+        let loadSpan = max(last.load - first.load, 1)
+        return events.map { event in
+            CGPoint(
+                x: min(max(event.date.timeIntervalSince(first.date) / dateSpan, 0), 1),
+                y: min(max((event.load - first.load) / loadSpan, 0), 1)
+            )
+        }
+    }
+}
+
+/// Scale unit-space stair points into a rect, honoring the drawing
+/// inset. Shared by the shapes and the bead layout so every layer
+/// lands on identical coordinates.
+private nonisolated func scaledStairPoints(
+    _ unitPoints: [CGPoint],
+    in rect: CGRect,
+    inset: CGFloat
+) -> [CGPoint] {
+    let width = max(1, rect.width - inset * 2)
+    let height = max(1, rect.height - inset * 2)
+    return unitPoints.map { unit in
+        CGPoint(
+            x: rect.minX + inset + width * unit.x,
+            y: rect.minY + inset + height * (1 - unit.y)
+        )
+    }
+}
+
+/// The recorded history: baseline through the newest increase.
+private struct StaircaseLine: Shape {
+    let unitPoints: [CGPoint]
+    let inset: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let points = scaledStairPoints(unitPoints, in: rect, inset: inset)
+        guard let start = points.first else { return path }
+        path.move(to: start)
+        for index in points.indices.dropFirst() {
+            path.addLine(to: CGPoint(x: points[index].x, y: points[index - 1].y))
+            path.addLine(to: points[index])
+        }
+        return path
+    }
+}
+
+/// The run since the last increase: a flat lead-out from the newest
+/// event to today's right edge.
+private struct TailLine: Shape {
+    let unitPoints: [CGPoint]
+    let inset: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let points = scaledStairPoints(unitPoints, in: rect, inset: inset)
+        guard let last = points.last else { return path }
+        path.move(to: last)
+        path.addLine(to: CGPoint(x: rect.maxX - inset, y: last.y))
+        return path
+    }
+}
+
+/// Region beneath the staircase (including the lead-out), for the
+/// soft underglow fill.
+private struct StaircaseArea: Shape {
+    let unitPoints: [CGPoint]
+    let inset: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let points = scaledStairPoints(unitPoints, in: rect, inset: inset)
+        guard let start = points.first, let last = points.last else { return path }
+        path.move(to: CGPoint(x: start.x, y: rect.maxY))
+        path.addLine(to: start)
+        for index in points.indices.dropFirst() {
+            path.addLine(to: CGPoint(x: points[index].x, y: points[index - 1].y))
+            path.addLine(to: points[index])
+        }
+        path.addLine(to: CGPoint(x: rect.maxX - inset, y: last.y))
+        path.addLine(to: CGPoint(x: rect.maxX - inset, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -237,13 +481,27 @@ private struct LockedRhythmCover<Content: View>: View {
         medianGapDays: 9,
         daysSinceLastIncrease: 13
     )
-    return VStack(spacing: Space.xxl) {
-        ProgressionRhythmCard(cadence: cadence)
-        LockedRhythmCover(action: {}) {
-            ProgressionRhythmCard(cadence: cadence)
+    let midCycle = ProgressionCadence(
+        baseline: .init(date: now.addingTimeInterval(-40 * day), load: 95),
+        increases: [
+            .init(date: now.addingTimeInterval(-31 * day), load: 100),
+            .init(date: now.addingTimeInterval(-22 * day), load: 105),
+            .init(date: now.addingTimeInterval(-12 * day), load: 110),
+            .init(date: now.addingTimeInterval(-4 * day), load: 115),
+        ],
+        medianGapDays: 9,
+        daysSinceLastIncrease: 4
+    )
+    return ScrollView {
+        VStack(spacing: Space.xxl) {
+            ProgressionRhythmCard(cadence: cadence, unit: .lb)
+            ProgressionRhythmCard(cadence: midCycle, unit: .lb)
+            LockedRhythmCover(action: {}) {
+                ProgressionRhythmCard(cadence: cadence, unit: .lb)
+            }
         }
+        .padding(Space.gutter)
     }
-    .padding(Space.gutter)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black)
     .preferredColorScheme(.dark)

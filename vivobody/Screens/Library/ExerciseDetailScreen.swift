@@ -24,13 +24,12 @@
 //                only, gated on having ≥3 logged RIR readings)
 //    • Muscles — primary / secondary / stabilizer roles from the catalog map
 //    • Recents — Last 5 sessions, top set + date + PR flag
-//    • Defaults— The catalog item's starting weight × reps
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
 //
 //  Empty-state behavior: when the user has never logged this
 //  exercise, the stats row shows em-dashes, the chart and recents
 //  sections are hidden, and the rest of the screen still functions
-//  (defaults, CTA, edit/delete).
+//  (CTA, edit/delete).
 //
 
 import VivoKit
@@ -147,7 +146,7 @@ struct ExerciseDetailScreen: View {
 
     var body: some View {
         let _ = sessionAnalytics?.update(for: completedSessions)
-        ScrollView {
+        ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 statsRow
@@ -168,10 +167,14 @@ struct ExerciseDetailScreen: View {
                 if hasHistory {
                     recentSessionsSection
                 }
-                defaultsSection
             }
             .padding(.top, 8)
             .padding(.bottom, Space.xxl)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            // Keep intrinsically wide detail sections from expanding the
+            // scroll content and turning this vertical screen into a
+            // horizontally pannable canvas.
+            .containerRelativeFrame(.horizontal)
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)

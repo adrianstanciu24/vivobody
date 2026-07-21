@@ -590,65 +590,6 @@ extension ExerciseDetailScreen {
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: - Defaults
-
-    var defaultsSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            Text("Defaults")
-                .sectionLabelStyle(Opacity.medium)
-
-            HStack(spacing: Space.lg) {
-                switch item.trackingMode {
-                case .reps:
-                    defaultStat(
-                        label: item.loadMode.inputLabel,
-                        value: item.loadMode.summaryLoadLabel(
-                            item.defaultWeight(forUnit: unit),
-                            unit: unit
-                        ) ?? "None"
-                    )
-                    Rectangle()
-                        .fill(Surface.edge)
-                        .frame(width: 0.5, height: 32)
-                        .accessibilityHidden(true)
-                    defaultStat(label: "Reps", value: "\(item.defaultReps)")
-                case .duration:
-                    defaultStat(
-                        label: item.modality.durationLabel,
-                        value: DurationFormatter.string(item.defaultDuration)
-                    )
-                    if item.defaultWeight > 0 {
-                        Rectangle()
-                            .fill(Surface.edge)
-                            .frame(width: 0.5, height: 32)
-                            .accessibilityHidden(true)
-                        defaultStat(
-                            label: item.loadMode.inputLabel,
-                            value: item.loadMode.summaryLoadLabel(
-                                item.defaultWeight(forUnit: unit),
-                                unit: unit
-                            ) ?? "None"
-                        )
-                    }
-                }
-                Spacer()
-                Text("Used when first picked")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-            }
-        }
-    }
-
-    func defaultStat(label: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label)
-                .sectionLabelStyle(Opacity.soft)
-            Text(value)
-                .font(Typography.metricInline)
-                .foregroundStyle(Ink.primary)
-        }
-    }
-
     // MARK: - CTA
 
     var addToWorkoutCTA: some View {

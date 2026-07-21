@@ -74,8 +74,14 @@
             ReferencedContainer = "container:vivobody.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--pro"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <StoreKitConfigurationFileReference
-         identifier = "../../../Products.storekit">
+         identifier = "../Products.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

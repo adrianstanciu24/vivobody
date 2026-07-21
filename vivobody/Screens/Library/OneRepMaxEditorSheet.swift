@@ -4,8 +4,10 @@
 //
 //  Small sheet for entering a measured one-rep max. Opens seeded on
 //  the current value (measured / estimated / heaviest set), scrubs in
-//  the user's unit via `WeightScrubber`, and saves a canonical-lb
-//  value. The secondary action clears the measured max (passing nil)
+//  the user's unit via the bare `WeightScrubber` — the same
+//  number-first instrument as Active Workout — and saves a
+//  canonical-lb value.
+//  The secondary action clears the measured max (passing nil)
 //  — it only appears when one is set, and reads "Use estimate
 //  instead" when there's an estimate to fall back to, otherwise
 //  "Remove measured max" (which returns the row to empty).
@@ -43,16 +45,25 @@ struct OneRepMaxEditorSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: Space.lg) {
+            VStack(alignment: .leading, spacing: Space.xl) {
                 Text("Enter your tested one-rep max. A measured max is more accurate than the estimate from your logged sets.")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
-                    .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, Space.xl)
                     .padding(.top, Space.lg)
 
-                WeightScrubber(canonicalWeight: $draft, purpose: .strength, label: "One-rep max")
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("One-rep max")
+                        .panelLegend()
+
+                    WeightScrubber(
+                        canonicalWeight: $draft,
+                        purpose: .strength,
+                        label: "One-rep max",
+                        valueFontSize: 72,
+                        presentation: .bare
+                    )
+                }
 
                 if hasMeasured {
                     Button {
@@ -66,11 +77,13 @@ struct OneRepMaxEditorSheet: View {
                             .frame(minHeight: 44)
                     }
                     .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
                 }
 
                 Spacer()
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, Space.gutter)
             .background(Surface.background.ignoresSafeArea())
             .navigationTitle("One-Rep Max")
             .navigationBarTitleDisplayMode(.inline)
