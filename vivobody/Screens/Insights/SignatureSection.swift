@@ -75,23 +75,77 @@ struct SignatureSection: View {
 /// around the rim count weekly cadence, and the whole emblem burns
 /// brighter the harder the training. Drawn in a single Canvas so the
 /// petals overlap as translucent, organic strokes.
+///
+/// The mark is quietly alive: the core breathes — swelling harder the
+/// more intense the training — the dominant petal's burn dims and
+/// swells in step with it, and the cadence beads circulate around the
+/// rim like a watch movement, the weekly rhythm visibly running. Petal
+/// geometry never moves; the shape is the data, only its light
+/// breathes. Holds perfectly still under Reduce Motion.
 private struct TrainingSignatureView: View {
     let signature: TrainingSignature
 
-    var body: some View {
-        Canvas { context, size in
-            let center = CGPoint(x: size.width / 2, y: size.height / 2)
-            let radius = Swift.min(size.width, size.height) / 2
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-            drawRing(in: &context, center: center, radius: radius)
-            drawSpokes(in: &context, center: center, radius: radius)
-            drawCadenceBeads(in: &context, center: center, radius: radius)
-            drawPetals(in: &context, center: center, radius: radius)
-            drawLabels(in: &context, center: center, radius: radius)
-            drawCore(in: &context, center: center, radius: radius)
+    /// Ambient-motion tuning — the numbers to play with when judging
+    /// how alive the emblem should feel.
+    private enum Motion {
+        /// One full bead lap around the rim takes this long.
+        static let beadLapSeconds: Double = 75
+
+        /// One core breath (swell and relax) takes this long.
+        static let breathSeconds: Double = 4
+
+        /// How much the breath registers at all — scaled by training
+        /// intensity so a hard block beats visibly and a light week
+        /// barely stirs, but the heart never fully stops.
+        static func breathStrength(for intensity: Double) -> Double {
+            0.2 + 0.8 * intensity
+        }
+
+        /// Core radius gain at the top of a full-strength breath.
+        static let coreSwell: Double = 0.3
+
+        /// Peak opacity of the halo the core exhales.
+        static let haloOpacity: Double = 0.35
+
+        /// How deeply the dominant petal's burn dims at the bottom of
+        /// a breath, as a fraction of its resting opacity. Luminance
+        /// only — petal geometry is the data and never moves.
+        static let petalBreathDepth: Double = 0.25
+    }
+
+    var body: some View {
+        Group {
+            if reduceMotion {
+                emblem(time: 0, animated: false)
+            } else {
+                // 30fps is plenty for a slow breath and a creeping orbit.
+                TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
+                    emblem(time: timeline.date.timeIntervalSinceReferenceDate, animated: true)
+                }
+            }
         }
         .frame(height: 272)
         .accessibilityLabel(Text(accessibilityText))
+    }
+
+    private func emblem(time: TimeInterval, animated: Bool) -> some View {
+        Canvas { context, size in
+            let center = CGPoint(x: size.width / 2, y: size.height / 2)
+            let radius = Swift.min(size.width, size.height) / 2
+            let breath = animated ? (sin(time * 2 * .pi / Motion.breathSeconds) + 1) / 2 : 0
+            let orbit = animated ? (time / Motion.beadLapSeconds) * 2 * .pi : 0
+
+            drawRing(in: &context, center: center, radius: radius)
+            drawSpokes(in: &context, center: center, radius: radius)
+            drawCadenceBeads(in: &context, center: center, radius: radius, orbit: orbit)
+            // At rest the petal sits at full burn (breath 1); the core's
+            // halo instead vanishes at rest (breath 0) — hence two values.
+            drawPetals(in: &context, center: center, radius: radius, breath: animated ? breath : 1)
+            drawLabels(in: &context, center: center, radius: radius)
+            drawCore(in: &context, center: center, radius: radius, breath: breath)
+        }
     }
 
     private func drawRing(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
@@ -126,19 +180,19 @@ private struct TrainingSignatureView: View {
         }
     }
 
-    private func drawCadenceBeads(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+    private func drawCadenceBeads(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat, orbit: Double) {
         let beads = Swift.min(7, Swift.max(0, Int(signature.cadence.rounded())))
         guard beads > 0 else { return }
         let r = radius * 0.78
         for i in 0..<beads {
-            let angle = (Double(i) / Double(beads)) * 2 * .pi - .pi / 2
+            let angle = (Double(i) / Double(beads)) * 2 * .pi - .pi / 2 + orbit
             let p = CGPoint(x: center.x + cos(angle) * r, y: center.y + sin(angle) * r)
             let dot = CGRect(x: p.x - 2.5, y: p.y - 2.5, width: 5, height: 5)
             context.fill(Path(ellipseIn: dot), with: .color(Tint.primary.opacity(0.55)))
         }
     }
 
-    private func drawPetals(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+    private func drawPetals(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat, breath: Double) {
         let petals = signature.petals
         let count = petals.count
         let maxShare = petals.map(\.volumeShare).max() ?? 0
@@ -154,7 +208,14 @@ private struct TrainingSignatureView: View {
             let base = (0.28 + 0.55 * petal.development) * (0.55 + 0.45 * signature.intensity)
             // The lead region burns a touch brighter so the bloom
             // itself communicates the focus the caption spells out.
-            let opacity = isDominant ? Swift.min(1, base + 0.22) : base
+            var opacity = isDominant ? Swift.min(1, base + 0.22) : base
+            if isDominant {
+                // The lead petal's burn breathes in step with the core —
+                // dimming from its resting brightness and swelling back,
+                // scaled by intensity like the core's beat.
+                let depth = Motion.petalBreathDepth * Motion.breathStrength(for: signature.intensity)
+                opacity *= 1 - depth * (1 - breath)
+            }
 
             var leaf = Path()
             let tip = CGPoint(x: length, y: 0)
@@ -192,8 +253,27 @@ private struct TrainingSignatureView: View {
         }
     }
 
-    private func drawCore(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
-        let r = radius * 0.05
+    private func drawCore(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat, breath: Double) {
+        let strength = Motion.breathStrength(for: signature.intensity) * breath
+        let r = radius * 0.05 * (1 + CGFloat(Motion.coreSwell * strength))
+
+        // The exhale: a soft halo that swells and fades with the beat.
+        // At rest (breath == 0) it vanishes and the core sits at its
+        // base size — exactly the still emblem Reduce Motion renders.
+        if strength > 0 {
+            let haloR = r * 2.6
+            let haloRect = CGRect(x: center.x - haloR, y: center.y - haloR, width: haloR * 2, height: haloR * 2)
+            context.fill(
+                Path(ellipseIn: haloRect),
+                with: .radialGradient(
+                    Gradient(colors: [Tint.primary.opacity(Motion.haloOpacity * strength), .clear]),
+                    center: center,
+                    startRadius: 0,
+                    endRadius: haloR
+                )
+            )
+        }
+
         let rect = CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)
         context.fill(Path(ellipseIn: rect), with: .color(Tint.primary))
     }
