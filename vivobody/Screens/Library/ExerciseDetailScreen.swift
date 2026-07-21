@@ -16,6 +16,8 @@
 //    • 1RM     — Dedicated, tappable row (dynamic strength only): a user-measured
 //                max (precise) overrides the estimated e1RM; empty
 //                until there's data. Tap opens the scrubber editor.
+//    • Rhythm  — median time between load increases + rhythm strip
+//                (Pro, comparable-load lifts with ≥2 increases)
 //    • Chart   — SwiftUI Charts line with PR dots + a Load | e1RM |
 //                Volume metric toggle (reps only) + time-range chips
 //    • Effort  — average RIR + progression verdict (dynamic strength
@@ -152,6 +154,7 @@ struct ExerciseDetailScreen: View {
                 if supportsEstimatedOneRepMax {
                     oneRepMaxRow
                 }
+                progressionRhythmSection
                 if hasHistory {
                     if pro?.isUnlocked == true {
                         chartSection
