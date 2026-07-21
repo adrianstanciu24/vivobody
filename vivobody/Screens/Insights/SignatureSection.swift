@@ -226,14 +226,6 @@ private struct TrainingSignatureView: View {
             var transform = CGAffineTransform(translationX: center.x, y: center.y)
             transform = transform.rotated(by: angle)
             context.fill(leaf.applying(transform), with: .color(Tint.primary.opacity(Swift.min(1, opacity))))
-
-            // A bright bead at the dominant petal's tip pins the eye to
-            // the leading region.
-            if isDominant {
-                let tipPoint = CGPoint(x: center.x + cos(angle) * length, y: center.y + sin(angle) * length)
-                let dot = CGRect(x: tipPoint.x - 3, y: tipPoint.y - 3, width: 6, height: 6)
-                context.fill(Path(ellipseIn: dot), with: .color(Tint.primary))
-            }
         }
     }
 
