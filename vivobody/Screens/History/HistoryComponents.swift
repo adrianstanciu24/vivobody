@@ -120,8 +120,8 @@ struct WeeklyHero: View {
 /// Monday-to-Sunday per the user's calendar. A filled orange dot is
 /// a day you trained; a dim filled circle is a past rest day (the
 /// day is gone, you didn't train); a hollow ring is a future rest
-/// day (still ahead, nothing logged yet); today wears a brighter
-/// ring. Days with a PR gently pulsate — a soft ember breath that
+/// day (still ahead, nothing logged yet); an empty today wears an
+/// orange ring. Days with a PR gently pulsate — a soft ember breath that
 /// draws the eye to achievements. This is the streak's calendar DNA
 /// compressed to a single, glanceable row — History's signature.
 struct WeekCadenceStrip: View {
@@ -225,9 +225,10 @@ struct CadenceDot: View {
         return .clear
     }
 
-    /// Today wears a brighter ring; future rest days keep the hairline
-    /// ring; trained and past rest days need no ring.
+    /// An empty today wears the in-progress orange ring; future rest
+    /// days keep the hairline ring; trained and past rest days need no ring.
     var ringColor: Color {
+        if isToday && !isWorkout { return Tint.inProgress }
         if isToday { return Ink.primary.opacity(Opacity.medium) }
         if isWorkout { return .clear }
         return Surface.edge
