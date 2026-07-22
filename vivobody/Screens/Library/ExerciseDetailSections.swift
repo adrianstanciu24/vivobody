@@ -335,38 +335,25 @@ extension ExerciseDetailScreen {
     }
 
     /// Free-tier stand-in for `chartSection`: the user's real chart,
-    /// frozen behind a blur, with one quiet unlock row. Numeric stats
-    /// above and below stay free — only the trend visualisation is
-    /// part of Pro.
+    /// frozen behind a blur. Numeric stats above and below stay free —
+    /// only the trend visualisation is part of Pro. The whole area
+    /// opens the paywall; the explicit CTA is the screen's floating
+    /// unlock control.
     var lockedChartSection: some View {
-        ZStack {
+        Button {
+            Haptics.soft()
+            isPaywallPresented = true
+        } label: {
             chartSection
                 .blur(radius: 12)
                 .allowsHitTesting(false)
-                .accessibilityHidden(true)
-
-            VStack(spacing: Space.md) {
-                Text("Progress charts are part of Pro")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .multilineTextAlignment(.center)
-
-                Button {
-                    Haptics.soft()
-                    isPaywallPresented = true
-                } label: {
-                    Text("Unlock")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Tint.onAccent)
-                        .padding(.horizontal, Space.xxl)
-                        .frame(minHeight: Space.tapMin)
-                        .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.inProgress)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Unlock Vivobody Pro")
-            }
-            .padding(Space.xl)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("Progress chart, locked")
+        .accessibilityHint("Unlocks with Vivobody Pro")
     }
 
     func rangeChip(_ r: TimeRange) -> some View {
@@ -591,6 +578,53 @@ extension ExerciseDetailScreen {
     }
 
     // MARK: - CTA
+
+    /// The floating unlock pill shows only while something on this
+    /// screen is actually frozen: the progress chart or the rhythm
+    /// card. Free users with no history never see an unprompted CTA.
+    var showsUnlockControl: Bool {
+        guard let pro, !pro.isUnlocked else { return false }
+        return hasHistory || progressionCadence != nil
+    }
+
+    /// Same persistent pill as the Insights tab's unlock control, but
+    /// wired to this screen's local paywall sheet (the app-root sheet
+    /// can't present on top of the picker/Spotlight sheets this
+    /// screen can live inside).
+    var unlockProControl: some View {
+        Button {
+            Haptics.soft()
+            isPaywallPresented = true
+        } label: {
+            HStack(spacing: Space.md) {
+                Text("Unlock Vivobody Pro")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+
+                if let price = pro?.displayPrice {
+                    Text("· \(price)")
+                        .monospacedDigit()
+                        .lineLimit(1)
+                }
+            }
+            .font(Typography.headline)
+            .foregroundStyle(Tint.onAccent)
+            .frame(minHeight: Space.tapMin)
+            .padding(.horizontal, Space.xl)
+            .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.primary)
+            .softElevation(radius: 14, y: 7, opacity: 0.42)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(unlockProControlLabel)
+        .accessibilityHint("Opens the Vivobody Pro purchase sheet")
+    }
+
+    var unlockProControlLabel: String {
+        if let price = pro?.displayPrice {
+            return "Unlock Vivobody Pro, \(price)"
+        }
+        return "Unlock Vivobody Pro"
+    }
 
     var addToWorkoutCTA: some View {
         Button {

@@ -182,7 +182,10 @@ struct AppRoot: View {
                 }
                 .presentationDragIndicator(.visible)
             }
-            .sheet(isPresented: $pro.isPaywallPresented) {
+            .sheet(
+                isPresented: $pro.isPaywallPresented,
+                onDismiss: { appState.pro.paywallContext = .general }
+            ) {
                 PaywallSheet(pro: appState.pro)
             }
             .fullScreenCover(isPresented: showOnboarding) {

@@ -28,6 +28,9 @@ struct PaywallSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Space.section) {
                 header
+                if let notice = contextNotice {
+                    contextBanner(notice)
+                }
                 featureList
             }
             .padding(.horizontal, Space.gutter)
@@ -78,6 +81,34 @@ struct PaywallSheet: View {
         .accessibilityElement(children: .combine)
     }
 
+    // MARK: - Context notice
+
+    /// One accent-tinted line explaining what just happened, shown
+    /// only when a specific gate (not a generic entry point) raised
+    /// the paywall. Answers "why am I looking at this?" before the
+    /// pitch starts.
+    private var contextNotice: String? {
+        switch pro.paywallContext {
+        case .general:
+            return nil
+        case .templateLimit:
+            return "You've reached the free tier's limit of \(ProGate.freeTemplateLimit) templates. Pro removes the cap."
+        }
+    }
+
+    private func contextBanner(_ text: String) -> some View {
+        Text(text)
+            .font(Typography.sectionHeading)
+            .foregroundStyle(Tint.primary)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(Space.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
+                    .fill(Tint.primary.opacity(0.12))
+            )
+    }
+
     // MARK: - Features
 
     private var featureList: some View {
@@ -94,7 +125,7 @@ struct PaywallSheet: View {
             SectionDivider()
             featureRow(
                 title: "Unlimited templates",
-                detail: "The free tier includes \(ProGate.freeTemplateLimit)"
+                detail: "The free tier includes up to \(ProGate.freeTemplateLimit); Pro removes the cap"
             )
             SectionDivider()
             featureRow(

@@ -62,6 +62,14 @@ nonisolated enum ProGate {
     }
 }
 
+/// Why the paywall was presented. `.templateLimit` lets the sheet
+/// lead with "you hit the cap" instead of the generic pitch, so the
+/// user isn't left guessing why the editor didn't open.
+nonisolated enum PaywallContext: Equatable {
+    case general
+    case templateLimit
+}
+
 @MainActor
 @Observable
 final class ProStore {
@@ -86,6 +94,11 @@ final class ProStore {
     /// Whether the PaywallSheet is presented. AppRoot binds one sheet
     /// to this, so every gate in the app presents the same surface.
     var isPaywallPresented: Bool = false
+
+    /// Why the paywall is up. Set alongside presentation and reset
+    /// to `.general` when the sheet comes down (AppRoot's onDismiss),
+    /// so a stale reason never leaks into the next presentation.
+    var paywallContext: PaywallContext = .general
 
     /// Human-readable purchase / restore failure, surfaced as an
     /// alert by PaywallSheet. `.userCancelled` never sets this.
@@ -136,8 +149,9 @@ final class ProStore {
 
     /// Present the paywall. The single entry point every locked
     /// surface calls — quiet, no interstitials anywhere else.
-    func requestUnlock() {
+    func requestUnlock(context: PaywallContext = .general) {
         Haptics.soft()
+        paywallContext = context
         isPaywallPresented = true
     }
 

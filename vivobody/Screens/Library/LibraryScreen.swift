@@ -155,7 +155,7 @@ struct LibraryScreen: View {
             // instead of the editor. Existing templates always stay
             // editable, startable, and deletable — only creation gates.
             guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
-                appState.pro.requestUnlock()
+                appState.pro.requestUnlock(context: .templateLimit)
                 return
             }
             templateEditorTarget = .new(sortOrder: count)

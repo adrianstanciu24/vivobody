@@ -25,6 +25,8 @@
 //    • Muscles — primary / secondary / stabilizer roles from the catalog map
 //    • Recents — Last 5 sessions, top set + date + PR flag
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
+//    • Unlock  — Insights-style floating Pro pill in the bottom bar
+//                while any Pro-gated section above is frozen
 //
 //  Empty-state behavior: when the user has never logged this
 //  exercise, the stats row shows em-dashes, the chart and recents
@@ -203,8 +205,15 @@ struct ExerciseDetailScreen: View {
             }
         }
         .safeAreaBar(edge: .bottom) {
-            if onPickAndDismiss != nil {
-                addToWorkoutCTA
+            VStack(spacing: 0) {
+                if showsUnlockControl {
+                    unlockProControl
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, Space.sm)
+                }
+                if onPickAndDismiss != nil {
+                    addToWorkoutCTA
+                }
             }
         }
         .sheet(item: $editorTarget) { target in
