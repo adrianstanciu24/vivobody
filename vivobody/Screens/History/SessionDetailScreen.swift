@@ -408,11 +408,6 @@ private struct ExerciseDetailRow: View {
                     .foregroundStyle(set.isCompleted ? Ink.tertiary : Ink.quaternary)
                     .minimumScaleFactor(0.6)
                     .frame(width: 24, alignment: .leading)
-                if set.kind == .warmUp {
-                    Text("WARM-UP")
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.tertiary)
-                }
             }
 
             Spacer(minLength: 12)

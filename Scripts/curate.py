@@ -1182,12 +1182,11 @@ CURATION = {
     "Sloper hanging": ex("arms", "bodyweight", "isolation", None, reps=1, bw=1.0, tracking="duration", duration=15, prime=("forearms",), minor=("lats", "biceps"), aliases=["Sloper Hang", "Hangboard Sloper"]),
     "Pullup on fingerboard": ex("back", "bodyweight", "compound", "pull", direction="vertical", reps=5, bw=1.0, prime=("lats",), major=("biceps", "forearms"), minor=("teresMajor", "rhomboids"), trace=("traps",), aliases=["Hangboard Pull-up", "Fingerboard Pull-up"]),
 
-    # ===================== Batch 8: warm-up / activation =====================
-    # App-authored warm-up drills. Activation work loads and primes
+    # ===================== Batch 8: activation =====================
+    # App-authored activation drills. Activation work loads and primes
     # the muscle, so it credits its muscles by set count like any other
-    # strength move. Iso holds use duration tracking. No "warm-up" muscle
-    # group exists, so each drill is filed under the muscle group it
-    # primarily trains.
+    # strength move. Iso holds use duration tracking. Each drill is
+    # filed under the muscle group it primarily trains.
     "Banded Side Clams": ex("legs", "band", "isolation", None, reps=15, plane="frontal", lat="unilateral", prime=["gluteMax"], minor=["adductors"], aliases=["Banded Clamshell"]),
     "Hinge with Broomstick": ex("legs", "bodyweight", "compound", "hinge", reps=10, bw=0.3, prime=["hamstrings", "gluteMax"], minor=["lowerBack"], trace=["abs"]),
     "Single Leg Clockface": ex("legs", "bodyweight", "compound", None, reps=8, lat="unilateral", bw=0.5, prime=["gluteMax", "quads"], major=["hamstrings"], minor=["adductors", "calves"], trace=["abs"]),
@@ -1195,17 +1194,11 @@ CURATION = {
     "Prone Banded Press": ex("shoulders", "band", "isolation", None, reps=15, prime=["deltoids"], minor=["rhomboids", "traps", "teresMajor"]),
     "Quadruped Hip Extensions": ex("legs", "bodyweight", "isolation", None, reps=15, lat="unilateral", bw=0.3, prime=["gluteMax"], minor=["hamstrings", "lowerBack"]),
     "Fire Hydrants": ex("legs", "bodyweight", "isolation", None, plane="frontal", reps=15, lat="unilateral", bw=0.2, prime=["gluteMax"], minor=["adductors"]),
-    "Kettlebell RDL (warm-up)": ex("legs", "kettlebell", "compound", "hinge", weight=35, reps=12, prime=["hamstrings", "gluteMax"], major=["lowerBack"], minor=["forearms"], trace=["abs", "traps"]),
     "Prisoner Squats with Overhead Reach": ex("legs", "bodyweight", "compound", "squat", reps=12, bw=0.5, prime=["quads", "gluteMax"], major=["hamstrings"], minor=["deltoids", "adductors"], trace=["abs", "calves"]),
     "Banded Side Walks": ex("legs", "band", "isolation", None, plane="frontal", reps=15, prime=["gluteMax"], minor=["adductors", "quads"], aliases=["Lateral Walk", "Banded Lateral Walk", "Monster Walk"]),
     "Banded External Rotations": ex("shoulders", "band", "isolation", None, plane="transverse", reps=15, prime=["teresMajor"], minor=["deltoids"], trace=["rhomboids"]),
     "Banded Shadow Box": ex("shoulders", "band", "compound", "push", direction="horizontal", reps=1, tracking="duration", duration=30, plane="transverse", prime=["deltoids"], major=["pectorals", "triceps"], minor=["serratus", "obliques"], trace=["forearms"]),
-    "Plank Row with Toe Touch (warm-up)": ex("core", "dumbbell", "compound", "core", weight=15, reps=10, lat="unilateral", prime=["abs"], major=["lats", "deltoids"], minor=["obliques", "gluteMax", "hamstrings"], trace=["biceps", "rhomboids"], aliases=["Plank Row with Toe Touch (core)", "Plank Row with Toe Touch"]),
-    "Single Leg Hip Thrusts (warm-up)": ex("legs", "bodyweight", "compound", "hinge", reps=12, lat="unilateral", bw=0.4, prime=["gluteMax"], major=["hamstrings"], minor=["abs"], trace=["quads"], aliases=["Dumbbell Single-leg Hip Thrust", "Single-leg Hip Thrust"]),
-    "Lunge + Overhead Press (warm-up)": ex("legs", "dumbbell", "compound", "lunge", weight=20, reps=10, lat="unilateral", prime=["quads", "gluteMax"], major=["deltoids", "hamstrings"], minor=["triceps", "abs"], trace=["calves", "adductors"]),
-    "Weighted ½ Deadbugs (warm-up)": ex("core", "dumbbell", "compound", "core", weight=10, reps=12, lat="unilateral", prime=["abs"], major=["hipFlexors"], minor=["obliques"], trace=["deltoids", "quads"]),
     "Standing Plate Rotations": ex("core", "other", "compound", "core", weight=10, reps=15, plane="transverse", prime=["obliques"], major=["abs"], minor=["lowerBack"], trace=["deltoids"]),
-    "Plank Clockface with Bands (warm-up)": ex("core", "band", "compound", "core", reps=10, lat="unilateral", bw=0.6, prime=["abs"], major=["deltoids", "obliques"], minor=["serratus", "gluteMax"], trace=["rhomboids"]),
 
     # ===================== Batch 9: plyometrics / fight circuit =====================
     # Explosive jump / bound / footwork work. The muscle model is load-
@@ -1227,7 +1220,6 @@ CURATION = {
     "Criss Cross Jump": ex("legs", "bodyweight", "compound", "squat", reps=20, plane="frontal", bw=0.4, prime=["calves", "quads"], major=["adductors", "gluteMax"], minor=["hamstrings"], trace=["abs"], aliases=["Crossover Jacks", "Cross Jacks"]),
     "Ali Shuffle": ex("legs", "bodyweight", "compound", None, reps=1, tracking="duration", duration=30, bw=0.3, prime=["calves"], major=["quads", "hipFlexors"], minor=["gluteMax"], trace=["abs"]),
     "Slow Hands, Fast Feet": ex("legs", "bodyweight", "compound", None, reps=1, tracking="duration", duration=30, bw=0.3, prime=["calves"], major=["quads", "hipFlexors"], minor=["deltoids", "gluteMax"], trace=["abs"]),
-    "Rotational Med Ball Slams (warm-up)": ex("core", "other", "compound", "core", weight=10, reps=12, plane="transverse", lat="unilateral", prime=["obliques"], major=["abs", "lats"], minor=["deltoids", "gluteMax"], trace=["triceps", "lowerBack"], aliases=["Rotational Slam", "Side Med Ball Slam", "Rotational Slams"]),
 
     # ===================== Batch 10: key strength exercises =====================
     # Loaded primary lifts and their implement / stance variants
@@ -1423,7 +1415,7 @@ POWER_EXERCISES = {
     "Jerk OL", "Kettlebell sumo high pull", "Kettlebell Swings",
     "Kneeling Rotational Throws", "Lateral Push Off",
     "Lateral Shuffle to MB Throw", "Medicine Ball Punch Throw", "Pogos",
-    "Power Clean", "Push Press", "Rotational Med Ball Slams (warm-up)",
+    "Power Clean", "Push Press",
     "Snatch OL", "Split Stance Rotational Throws", "Squat Jumps",
     "Supine Med Ball Chest Pass", "Wall balls",
     "½ Kneeling Rotational Med Ball Throws", "dumbbell snatch",
@@ -1457,7 +1449,7 @@ NONCOMPARABLE_BALLISTIC_EXERCISES = {
     "Ice Skaters to Vertical Hop", "Ice Skaters with Medicine Ball",
     "Kneeling Rotational Throws", "Lateral Push Off",
     "Lateral Shuffle to MB Throw", "Medicine Ball Punch Throw",
-    "No push-up burpees", "Pogos", "Rotational Med Ball Slams (warm-up)",
+    "No push-up burpees", "Pogos",
     "Split Stance Rotational Throws", "Squat Jumps", "Squat Thrust",
     "Supine Med Ball Chest Pass", "Wall balls",
     "½ Kneeling Rotational Med Ball Throws",

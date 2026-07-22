@@ -27,8 +27,7 @@ extension ActiveExerciseCard {
 
     var setCountLabel: String {
         if let active = activeIndex {
-            let kind = sets[active].kind == .warmUp ? " · Warm-up" : ""
-            return "Set \(active + 1) of \(sets.count)\(kind)"
+            return "Set \(active + 1) of \(sets.count)"
         }
         return "All sets complete"
     }
@@ -47,30 +46,19 @@ extension ActiveExerciseCard {
         HStack(spacing: Space.md) {
             ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
                 let pipView = pip(isCompleted: set.isCompleted, isActive: idx == activeIndex)
-                // Every pip exposes set intent. Completed sets also
-                // edit/delete; pending sets can be removed when more
-                // than one exists.
+                // Completed sets edit/delete; pending sets can be
+                // removed when more than one exists.
                 if set.isCompleted {
                     pipView
                         .contextMenu { pipMenu(for: set) }
                         .accessibilityAction(named: "Edit set") { editingSet = set }
                         .accessibilityAction(named: "Delete set") { deletingSet = set }
-                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
-                            toggleKind(of: set)
-                        }
                 } else if sets.count > 1 {
                     pipView
                         .contextMenu { pipMenu(for: set) }
                         .accessibilityAction(named: "Remove set") { removeSet(set) }
-                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
-                            toggleKind(of: set)
-                        }
                 } else {
                     pipView
-                        .contextMenu { pipMenu(for: set) }
-                        .accessibilityAction(named: set.kind == .working ? "Mark as warm-up" : "Mark as working") {
-                            toggleKind(of: set)
-                        }
                 }
             }
             removeSetButton
@@ -84,14 +72,6 @@ extension ActiveExerciseCard {
     /// (so long as it isn't the only one).
     @ViewBuilder
     func pipMenu(for set: WorkoutSet) -> some View {
-        Button {
-            toggleKind(of: set)
-        } label: {
-            Label(
-                set.kind == .working ? "Mark as warm-up" : "Mark as working",
-                systemImage: set.kind == .working ? "flame" : "dumbbell"
-            )
-        }
         if set.isCompleted {
             Button {
                 editingSet = set
@@ -110,12 +90,6 @@ extension ActiveExerciseCard {
                 Label("Remove set", systemImage: "minus.circle")
             }
         }
-    }
-
-    func toggleKind(of set: WorkoutSet) {
-        set.kind = set.kind == .working ? .warmUp : .working
-        saveActiveSessionChanges()
-        Haptics.selection()
     }
 
     /// One-tap "add a set" — a quiet outlined plus that lives at the

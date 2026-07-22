@@ -183,21 +183,6 @@ struct SetStimulusTests {
         }
     }
 
-    @Test func explicitWarmUpEarnsNoCreditOrTonnageOrRecord() {
-        let exercise = lift("Bench Press", .chest, sets: [
-            SetSpec(weight: 135, reps: 8),
-            SetSpec(weight: 185, reps: 8),
-        ])
-        exercise.orderedSets[1].kind = .warmUp
-
-        var calculator = SetStimulus.Calculator()
-        #expect(total(&calculator, exercise, at: day(0)) == 1)
-        let tonnage = exercise.completedComparableTonnage ?? -1
-        #expect(abs(tonnage - 135 * 8) < 1e-9)
-        #expect(exercise.representativeTopSet === exercise.orderedSets[0])
-        #expect(exercise.bestStrengthPerformance == exercise.strengthPerformance(for: exercise.orderedSets[0]))
-    }
-
     /// RIR 0–2 all count as full hard sets — the landmark band.
     @Test func nearFailureRIRKeepsFullCredit() {
         for rir in 0...2 {

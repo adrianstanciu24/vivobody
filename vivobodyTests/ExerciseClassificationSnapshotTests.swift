@@ -144,23 +144,24 @@ struct ExerciseClassificationSnapshotTests {
         #expect(copy.lateralityRaw == source.lateralityRaw)
     }
 
-    @Test func warmUpIntentRoundTripsThroughDraftTemplateAndWorkout() {
+    @Test func perSetRowsRoundTripThroughDraftTemplateAndWorkout() {
         var draft = ExerciseDraft(
             name: "Bench Press",
             group: .chest,
             isPerSet: true,
             sets: [
-                SetDraft(weight: 45, reps: 10, kind: .warmUp),
-                SetDraft(weight: 135, reps: 8, kind: .working),
+                SetDraft(weight: 45, reps: 10),
+                SetDraft(weight: 135, reps: 8),
             ]
         )
         draft.plannedSets = 2
         let template = draft.makeTemplateExercise(sortOrder: 0)
         let workout = Exercise(from: template)
 
-        #expect(template.orderedSets.map(\.kind) == [.warmUp, .working])
-        #expect(workout.orderedSets.map(\.kind) == [.warmUp, .working])
-        #expect(ExerciseDraft(from: template).sets.map(\.kind) == [.warmUp, .working])
+        #expect(template.orderedSets.map(\.weight) == [45, 135])
+        #expect(workout.orderedSets.map(\.weight) == [45, 135])
+        #expect(workout.orderedSets.map(\.reps) == [10, 8])
+        #expect(ExerciseDraft(from: template).sets.map(\.weight) == [45, 135])
     }
 
     @Test func bundledNamesFallbackWhileUnknownRowsStayUnknown() {

@@ -61,14 +61,6 @@ struct EditSetSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: Space.lg) {
-                Picker("Set type", selection: $set.kindRaw) {
-                    ForEach(WorkoutSetKind.allCases, id: \.rawValue) { kind in
-                        Text(kind.displayName).tag(kind.rawValue)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .accessibilityLabel("Set type")
-
                 switch mode {
                 case .reps:
                     WeightScrubber(
@@ -142,7 +134,6 @@ struct EditSetSheet: View {
         .onChange(of: set.reps) { _, _ in save() }
         .onChange(of: set.duration) { _, _ in save() }
         .onChange(of: set.repsInReserve) { _, _ in save() }
-        .onChange(of: set.kindRaw) { _, _ in save() }
         .saveErrorAlert($saveError)
     }
 

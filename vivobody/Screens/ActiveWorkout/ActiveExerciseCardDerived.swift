@@ -89,9 +89,6 @@ extension ActiveExerciseCard {
     /// isometric duration work is called a hold; conditioning uses
     /// interval and other duration work uses time.
     func completeTitle(isLastSet: Bool) -> String {
-        if session.activeSet(for: exercise)?.kind == .warmUp {
-            return "Complete warm-up"
-        }
         if exercise.trackingMode == .duration {
             let verb = isLastSet ? "Finish" : "Complete"
             return "\(verb) \(exercise.modality.durationLabelLowercased)"

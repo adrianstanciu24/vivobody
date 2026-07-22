@@ -304,15 +304,6 @@ final class TemplateSet: Identifiable {
     /// exercise. Zero for the reps case. Additive defaulted field.
     var duration: TimeInterval = 0
 
-    /// Planned set intent, copied into the workout at start. Additive
-    /// defaulted field so old rows remain working sets.
-    var kindRaw: String = WorkoutSetKind.working.rawValue
-
-    var kind: WorkoutSetKind {
-        get { WorkoutSetKind(rawValue: kindRaw) ?? .working }
-        set { kindRaw = newValue.rawValue }
-    }
-
     /// Stable position within the parent exercise's `sets`.
     var sortOrder: Int = 0
 
@@ -325,14 +316,12 @@ final class TemplateSet: Identifiable {
         weight: Double,
         reps: Int,
         duration: TimeInterval = 0,
-        kind: WorkoutSetKind = .working,
         sortOrder: Int = 0
     ) {
         self.id = id
         self.weight = weight
         self.reps = reps
         self.duration = duration
-        self.kindRaw = kind.rawValue
         self.sortOrder = sortOrder
     }
 }
@@ -380,7 +369,6 @@ extension Exercise {
                         weight: templateSet.weight,
                         reps: templateSet.reps,
                         duration: templateSet.duration,
-                        kind: templateSet.kind,
                         sortOrder: i,
                         plannedWeight: templateSet.weight,
                         plannedReps: templateSet.reps,

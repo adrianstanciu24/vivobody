@@ -98,9 +98,6 @@ struct TemplateExerciseEditorScreen: View {
                         tickTone: .deep
                     )
                 }
-
-                SectionDivider()
-                setIntentSection
             }
             .padding(.top, Space.lg)
             .padding(.bottom, Space.xxl)
@@ -153,69 +150,6 @@ struct TemplateExerciseEditorScreen: View {
             scrubber()
         }
         .accessibilityElement(children: .combine)
-    }
-
-    // MARK: - Set intent
-
-    /// Warm-up intent is inherently per-set. A uniform plan expands
-    /// losslessly before any row is classified.
-    private var setIntentSection: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            Text("Set intent")
-                .font(Typography.sectionHeading)
-                .foregroundStyle(Ink.secondary)
-            Text("Warm-ups stay in the workout log but do not count toward records, tonnage, or muscle development.")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            if exercise.hasPerSetData {
-                ForEach(Array(exercise.orderedSets.enumerated()), id: \.element.id) { index, set in
-                    Button {
-                        set.kind = set.kind == .working ? .warmUp : .working
-                        Haptics.selection()
-                        save()
-                    } label: {
-                        HStack {
-                            Text("Set \(index + 1)")
-                                .font(Typography.body)
-                                .foregroundStyle(Ink.primary)
-                            Spacer()
-                            Text(set.kind.displayName)
-                                .font(Typography.caption)
-                                .foregroundStyle(set.kind == .working ? Ink.secondary : Tint.inProgress)
-                        }
-                        .frame(minHeight: 44)
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
-            } else {
-                Button("Choose warm-up sets") {
-                    expandToPerSet()
-                }
-                .font(Typography.body)
-                .foregroundStyle(Tint.inProgress)
-                .frame(minHeight: 44)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func expandToPerSet() {
-        guard !exercise.hasPerSetData else { return }
-        for index in 0..<max(1, exercise.plannedSets) {
-            exercise.sets.append(
-                TemplateSet(
-                    weight: exercise.plannedWeight,
-                    reps: exercise.plannedReps,
-                    duration: exercise.plannedDuration,
-                    sortOrder: index
-                )
-            )
-        }
-        Haptics.selection()
-        save()
     }
 
     // MARK: - Bindings

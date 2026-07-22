@@ -104,9 +104,13 @@ struct AppRoot: View {
                 consumeIncomingActions()
 
                 // Non-critical path — defer to a low-priority Task so
-                // SwiftUI's first render isn't blocked by Spotlight
-                // indexing or widget snapshot writes.
+                // SwiftUI's first render isn't blocked by catalog
+                // pruning, Spotlight indexing, or widget snapshot
+                // writes.
                 Task(priority: .utility) { @MainActor in
+                    for id in ExerciseCatalogItem.pruneRemovedSeeds(in: modelContext) {
+                        SpotlightIndexer.removeExercise(id: id)
+                    }
                     let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
                     let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
                     SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)

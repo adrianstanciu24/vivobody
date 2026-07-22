@@ -176,7 +176,6 @@ struct ActiveExerciseCard: View {
             weight: seed?.weight ?? exercise.plannedWeight,
             reps: seed?.reps ?? exercise.plannedReps,
             duration: seed?.duration ?? exercise.plannedDuration,
-            kind: seed?.kind ?? .working,
             sortOrder: exercise.sets.count
         )
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
@@ -247,7 +246,7 @@ struct ActiveExerciseCard: View {
                 try await Task.sleep(for: .milliseconds(550))
             } catch { return }
 
-            let prKind = set.kind == .working ? detectPersonalRecord(
+            let prKind = detectPersonalRecord(
                 exerciseName: exerciseName,
                 catalogItemID: catalogItemID,
                 catalogID: catalogID,
@@ -259,7 +258,7 @@ struct ActiveExerciseCard: View {
                 weight: weight,
                 reps: reps,
                 duration: duration
-            ) : nil
+            )
 
             withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)

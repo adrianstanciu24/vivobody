@@ -15,7 +15,7 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
-        #expect(CatalogData.records.count == 599)
+        #expect(CatalogData.records.count == 592)
         var catalogIDs: Set<String> = []
         var vocabularyOwners: [String: String] = [:]
 

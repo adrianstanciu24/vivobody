@@ -12,9 +12,11 @@
 //  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
 //  to populate it from the bundled `catalog.json` (see `CatalogData`). After
 //  that, user adds/edits/deletes flow through SwiftData like any
-//  other model. Templates and sessions copy stable catalog IDs plus
-//  display fields at creation time, so renaming a catalog item keeps
-//  history connected while deleting one never breaks old workouts.
+//  other model. `pruneRemovedSeeds` keeps existing installs in step
+//  when a record is retired from the bundled catalog. Templates and
+//  sessions copy stable catalog IDs plus display fields at creation
+//  time, so renaming a catalog item keeps history connected while
+//  deleting one never breaks old workouts.
 //
 
 import Foundation
@@ -519,6 +521,35 @@ extension ExerciseCatalogItem {
             context.insert(item)
         }
         try? context.saveOrRollback()
+    }
+
+    /// Delete seeded items whose stable catalog ID no longer ships in
+    /// the bundled catalog. `seedIfEmpty` only runs on an empty store,
+    /// so a record removed from `catalog.json` would otherwise linger
+    /// on every existing install. User-created entries (nil catalogID)
+    /// are never touched, and templates + history are unaffected
+    /// because they copy values at pick-time. Returns the deleted
+    /// install-local IDs so the caller can deindex them from Spotlight.
+    @discardableResult
+    static func pruneRemovedSeeds(in context: ModelContext) -> [UUID] {
+        let descriptor = FetchDescriptor<ExerciseCatalogItem>(
+            predicate: #Predicate { !$0.isUserCreated }
+        )
+        guard let seeded = try? context.fetch(descriptor), !seeded.isEmpty else { return [] }
+
+        let bundledIDs = Set(CatalogData.records.map(\.catalogID))
+        let stale = seeded.filter { item in
+            guard let catalogID = item.catalogID else { return false }
+            return !bundledIDs.contains(catalogID)
+        }
+        guard !stale.isEmpty else { return [] }
+
+        let removedIDs = stale.map(\.id)
+        for item in stale {
+            context.delete(item)
+        }
+        try? context.saveOrRollback()
+        return removedIDs
     }
 
     /// Wipe the entire catalog and re-seed from the bundled list.

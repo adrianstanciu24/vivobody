@@ -30,7 +30,7 @@ struct MuscleMapDetailsSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("An estimate from working strength sets, muscle roles, effort, and recency. Warm-ups and power work do not add development credit.")
+                    Text("An estimate from completed strength sets, muscle roles, effort, and recency. Power work does not add development credit.")
                         .font(Typography.body)
                         .foregroundStyle(Ink.secondary)
                         .fixedSize(horizontal: false, vertical: true)

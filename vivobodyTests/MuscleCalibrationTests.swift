@@ -47,7 +47,6 @@ struct MuscleCalibrationTests {
         var weight: Double
         var reps: Int
         var rir: Int? = nil
-        var kind: WorkoutSetKind = .working
     }
 
     /// A completed bench press with per-set control over weight,
@@ -64,7 +63,6 @@ struct MuscleCalibrationTests {
             set.weight = spec.weight
             set.reps = spec.reps
             set.isCompleted = true
-            set.kind = spec.kind
             if let rir = spec.rir {
                 set.repsInReserve = rir
                 set.rirLogged = true
@@ -145,27 +143,6 @@ struct MuscleCalibrationTests {
 
         #expect(b > a + 0.05)   // visibly apart on the ramp
         #expect(a > 0.4)        // the working half still reads as real training
-    }
-
-    /// Explicit warm-ups are audit rows, not discounted work. Adding
-    /// any number of them to the same program must leave development
-    /// exactly where the working sets put it.
-    @Test func explicitWarmupsDoNotMoveDevelopment() {
-        func program(includeWarmups: Bool) -> [WorkoutSession] {
-            (0..<24).map { i in
-                let working = SetsSpec(weight: 135, reps: 8)
-                let warmup = SetsSpec(weight: 55, reps: 8, kind: .warmUp)
-                let plan = includeWarmups
-                    ? [warmup, warmup, warmup, working, working, working]
-                    : [working, working, working]
-                return session(at: day(Double(i) * 3.5), [bench(plan)])
-            }
-        }
-        let padded = program(includeWarmups: true)
-        let workingOnly = program(includeWarmups: false)
-        let a = chest(padded, at: padded.last!.completedAt!)
-        let b = chest(workingOnly, at: workingOnly.last!.completedAt!)
-        #expect(abs(a - b) < 1e-9)
     }
 
     /// Token weights against established strength: after four honest

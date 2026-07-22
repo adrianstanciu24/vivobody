@@ -113,28 +113,25 @@ struct ExerciseDraft: Identifiable, Hashable {
     }
 }
 
-/// One row inside an ExerciseDraft's per-set list. Weight, reps, set
-/// intent, and a stable id so SwiftUI's ForEach can identify rows
-/// across reorder / insert / delete.
+/// One row inside an ExerciseDraft's per-set list. Weight, reps, and
+/// a stable id so SwiftUI's ForEach can identify rows across reorder
+/// / insert / delete.
 struct SetDraft: Identifiable, Hashable {
     let id: UUID
     var weight: Double
     var reps: Int
     var duration: TimeInterval
-    var kind: WorkoutSetKind
 
     init(
         id: UUID = UUID(),
         weight: Double,
         reps: Int,
-        duration: TimeInterval = 0,
-        kind: WorkoutSetKind = .working
+        duration: TimeInterval = 0
     ) {
         self.id = id
         self.weight = weight
         self.reps = reps
         self.duration = duration
-        self.kind = kind
     }
 }
 
@@ -187,7 +184,7 @@ extension ExerciseDraft {
                 plannedDuration: templateExercise.plannedDuration,
                 isPerSet: true,
                 sets: orderedTemplateSets.map {
-                    SetDraft(weight: $0.weight, reps: $0.reps, duration: $0.duration, kind: $0.kind)
+                    SetDraft(weight: $0.weight, reps: $0.reps, duration: $0.duration)
                 }
             )
         } else {
@@ -246,7 +243,6 @@ extension ExerciseDraft {
                         weight: set.weight,
                         reps: set.reps,
                         duration: set.duration,
-                        kind: set.kind,
                         sortOrder: index
                     )
                 )
@@ -293,7 +289,7 @@ extension ExerciseDraft {
         guard let first = sets.first else { return true }
         return sets.allSatisfy {
             $0.weight == first.weight && $0.reps == first.reps
-                && $0.duration == first.duration && $0.kind == first.kind
+                && $0.duration == first.duration
         }
     }
 

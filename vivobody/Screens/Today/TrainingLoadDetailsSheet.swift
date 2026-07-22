@@ -208,13 +208,11 @@ struct TrainingLoadDetailsSheet: View {
                     creditRow("Hard working set", value: "≈ 1.0", tint: Tint.primary)
                     rowDivider
                     creditRow("Short, light, or easy", value: "< 1.0", tint: Ink.secondary)
-                    rowDivider
-                    creditRow("Warm-up set", value: "0", tint: Ink.tertiary)
                 }
                 .padding(.horizontal, Space.lg)
                 .contentChip()
 
-                Text("Completed strength reps and timed strength holds count. Warm-ups and non-strength work stay in your log but do not raise this number.")
+                Text("Completed strength reps and timed strength holds count. Non-strength work stays in your log but does not raise this number.")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .fixedSize(horizontal: false, vertical: true)

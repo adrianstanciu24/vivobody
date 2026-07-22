@@ -14492,58 +14492,6 @@
     "movementDefinition": "Support the body on the forearms and toes in a straight line. Brace the abdomen and glutes, keep the pelvis level, and hold for the prescribed duration without letting the lower back sag."
   },
   {
-    "name": "Plank Clockface with Bands (warm-up)",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "core",
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "plank-clockface-with-bands-warm-up",
-    "movementDefinition": "Complete the limb movement named by Plank Clockface with Bands (warm-up) from a braced plank without losing trunk or pelvic alignment."
-  },
-  {
     "name": "Plank Holds with Elevated Hands",
     "group": "core",
     "defaultWeight": 0,
@@ -14750,74 +14698,6 @@
     "trackingMode": "reps",
     "catalogID": "plank-reach",
     "movementDefinition": "Position your body in plank position, keeping your eyes on the ground. Raise one arm in front of you and return it. Repeat with the other arm. Raise and return slowly while keeping your body as still as possible."
-  },
-  {
-    "name": "Plank Row with Toe Touch (warm-up)",
-    "group": "core",
-    "defaultWeight": 15,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 7.5,
-    "pattern": "core",
-    "aliases": [
-      "Plank Row with Toe Touch (core)",
-      "Plank Row with Toe Touch"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "plank-row-with-toe-touch-warm-up",
-    "movementDefinition": "Pull the load toward the torso in Plank Row with Toe Touch (warm-up) by driving the elbow back and controlling the shoulder blade, then extend the arm."
   },
   {
     "name": "Plank Shoulder Taps",
@@ -15119,59 +14999,6 @@
     "aliases": [],
     "catalogID": "rotary-torso-machine",
     "movementDefinition": "Sit firmly against the machine pads and rotate the torso through the selected range while keeping the hips fixed."
-  },
-  {
-    "name": "Rotational Med Ball Slams (warm-up)",
-    "group": "core",
-    "defaultWeight": 10,
-    "reps": 12,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 5.0,
-    "pattern": "core",
-    "aliases": [
-      "Rotational Slam",
-      "Side Med Ball Slam",
-      "Rotational Slams"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "rotational-med-ball-slams-warm-up",
-    "movementDefinition": "Raise a medicine ball above one shoulder, rotate through the trunk, and drive the ball diagonally into the floor outside the opposite foot before retrieving it and alternating sides."
   },
   {
     "name": "Rotational Plank",
@@ -16380,39 +16207,6 @@
     "trackingMode": "reps",
     "catalogID": "weighted-leg-lowers",
     "movementDefinition": "From supine, lower the straight legs in Weighted Leg Lowers while keeping the lumbar spine controlled, then raise them again."
-  },
-  {
-    "name": "Weighted ½ Deadbugs (warm-up)",
-    "group": "core",
-    "defaultWeight": 10,
-    "reps": 12,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      }
-    ],
-    "defaultWeightKg": 5.0,
-    "pattern": "core",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "weighted-half-deadbugs-warm-up",
-    "movementDefinition": "From supine with hips and knees flexed, lower opposite arm and leg while maintaining abdominal bracing, then alternate."
   },
   {
     "name": "Windshield Wipers",
@@ -21154,67 +20948,6 @@
     "movementDefinition": "This exercise involves holding a kettlebell in one hand and standing on one leg while bending forward to touch the kettlebell to the ground. It targets the hamstrings, glutes, and lower back while also improving balance and stability."
   },
   {
-    "name": "Kettlebell RDL (warm-up)",
-    "group": "legs",
-    "defaultWeight": 35,
-    "reps": 12,
-    "equipment": "kettlebell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "adductors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 15.0,
-    "pattern": "hinge",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "kettlebell-rdl-warm-up",
-    "movementDefinition": "Hinge at the hips with a braced spine in Kettlebell RDL (warm-up), then extend the hips to return to standing."
-  },
-  {
     "name": "kettlebell sumo deadlift",
     "group": "legs",
     "defaultWeight": 53,
@@ -22151,83 +21884,6 @@
     "aliases": [],
     "catalogID": "low-box-squat-wide-stance",
     "movementDefinition": "Unrack the bar and set your stance wide, beyond your hips. Push your hips back and sit down to a box that takes you below parallel. Sit completely down, do not touch and go. Then explosively stand up. Stay tight in your upper back and torso throughout the movement."
-  },
-  {
-    "name": "Lunge + Overhead Press (warm-up)",
-    "group": "legs",
-    "defaultWeight": 20,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 10.0,
-    "pattern": "lunge",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "lunge-overhead-press-warm-up",
-    "movementDefinition": "Hold light dumbbells at the shoulders, step into a lunge, and lower with the front knee aligned over the foot. As you rise, press the dumbbells overhead, then return them to the shoulders and alternate legs."
   },
   {
     "name": "Lunges",
@@ -23568,65 +23224,6 @@
     "aliases": [],
     "catalogID": "single-leg-glute-bridge",
     "movementDefinition": "A glute bridge, where you use just one leg at a time."
-  },
-  {
-    "name": "Single Leg Hip Thrusts (warm-up)",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.4,
-    "involvement": [
-      {
-        "muscle": "gluteMax",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "adductors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "hinge",
-    "aliases": [
-      "Dumbbell Single-leg Hip Thrust",
-      "Single-leg Hip Thrust"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "single-leg-hip-thrusts-warm-up",
-    "movementDefinition": "The single-leg hip thrust is performed by placing your upper back on a weight bench, raising one leg, and extending the hip of the other leg to achieve an isolated contraction of the glute. By working each side separately, you can fully isolate your glutes unilaterally, providing maximal training stimulus."
   },
   {
     "name": "Single Leg RDL",

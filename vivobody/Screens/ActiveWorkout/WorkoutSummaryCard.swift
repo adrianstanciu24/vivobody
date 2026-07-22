@@ -260,7 +260,7 @@ struct WorkoutSummaryCard: View {
             ForEach(sets) { set in
                 if set.isCompleted {
                     Circle()
-                        .fill(set.kind == .working ? Tint.complete : Ink.tertiary)
+                        .fill(Tint.complete)
                         .frame(width: 8, height: 8)
                 } else {
                     Circle()

@@ -249,21 +249,6 @@ final class Exercise: Identifiable {
 
 // MARK: - Set
 
-/// A logged set's intent. Warm-ups remain visible in the workout log
-/// but do not enter PR, comparable-tonnage, RIR, or hypertrophy-credit
-/// calculations. Raw-string storage keeps the SwiftData field additive.
-enum WorkoutSetKind: String, Codable, CaseIterable, Sendable {
-    case working
-    case warmUp
-
-    var displayName: String {
-        switch self {
-        case .working: return "Working"
-        case .warmUp: return "Warm-up"
-        }
-    }
-}
-
 /// One logged set within an exercise. The unit of completion.
 @Model
 final class WorkoutSet: Identifiable {
@@ -279,17 +264,8 @@ final class WorkoutSet: Identifiable {
 
     var isCompleted: Bool = false
 
-    /// Explicit working/warm-up intent. Additive defaulted field — a
-    /// clean or older store reads existing sets as working sets.
-    var kindRaw: String = WorkoutSetKind.working.rawValue
-
-    var kind: WorkoutSetKind {
-        get { WorkoutSetKind(rawValue: kindRaw) ?? .working }
-        set { kindRaw = newValue.rawValue }
-    }
-
     /// Shared eligibility gate for performance-oriented analytics.
-    var isAnalyticsEligible: Bool { isCompleted && kind == .working }
+    var isAnalyticsEligible: Bool { isCompleted }
 
     /// Reps in reserve — how many more reps the lifter felt they had
     /// left at the end of this set. The session-logged read on how
@@ -339,7 +315,6 @@ final class WorkoutSet: Identifiable {
         reps: Int,
         duration: TimeInterval = 0,
         isCompleted: Bool = false,
-        kind: WorkoutSetKind = .working,
         repsInReserve: Int = 2,
         rirLogged: Bool = false,
         sortOrder: Int = 0,
@@ -352,7 +327,6 @@ final class WorkoutSet: Identifiable {
         self.reps = reps
         self.duration = duration
         self.isCompleted = isCompleted
-        self.kindRaw = kind.rawValue
         self.repsInReserve = repsInReserve
         self.rirLogged = rirLogged
         self.sortOrder = sortOrder
@@ -438,7 +412,6 @@ extension Exercise {
                     reps: sourceSet.reps,
                     duration: sourceSet.duration,
                     isCompleted: false,
-                    kind: sourceSet.kind,
                     sortOrder: i,
                     plannedWeight: sourceSet.weight,
                     plannedReps: sourceSet.reps,
