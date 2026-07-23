@@ -336,6 +336,19 @@ final class WorkoutSet: Identifiable {
     }
 }
 
+extension WorkoutSet {
+    /// True when both sets were spawned from the same planned
+    /// prescription. Zero-valued plans (ad-hoc sets, pre-snapshot
+    /// data) compare equal to each other, which is the desired
+    /// behavior: they carry no deliberate per-set programming that
+    /// needs protecting.
+    func sharesPlan(with other: WorkoutSet) -> Bool {
+        plannedWeight == other.plannedWeight
+            && plannedReps == other.plannedReps
+            && plannedDuration == other.plannedDuration
+    }
+}
+
 // MARK: - Set display
 
 extension Exercise {
@@ -424,10 +437,10 @@ extension Exercise {
 
     static func samplePlan() -> [Exercise] {
         let templates: [(name: String, group: MuscleGroup, sets: Int, reps: Int, weight: Double)] = [
-            ("Bench Press",    .chest,     3, 8, 135),
-            ("Bent Over Rowing", .back,      3, 8, 115),
-            ("Shoulder Press, Dumbbells", .shoulders, 3, 8, 95),
-            ("Barbell Full Squat", .legs,      3, 8, 185),
+            ("Barbell Bench Press",    .chest,     3, 8, 135),
+            ("Barbell Bent-Over Row", .back,      3, 8, 115),
+            ("Dumbbell Shoulder Press", .shoulders, 3, 8, 95),
+            ("Barbell Back Squat", .legs,      3, 8, 185),
         ]
         return templates.enumerated().map { i, t in
             Exercise(

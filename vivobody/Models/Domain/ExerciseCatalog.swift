@@ -234,7 +234,7 @@ final class ExerciseCatalogItem: Identifiable {
     var equipmentRaw: String = Equipment.barbell.rawValue
 
     /// Compound vs. isolation. Defaults to compound — a brand-new
-    /// "Bench Press"-style entry is more likely compound than not.
+    /// "Barbell Bench Press"-style entry is more likely compound than not.
     var mechanicRaw: String = Mechanic.compound.rawValue
 
     /// Movement pattern (push/pull/squat/hinge/lunge/carry/core).
@@ -720,6 +720,17 @@ extension Exercise {
                 && performanceSignature == item.performanceSignature
         }
         return name.exerciseIdentityName == item.name.exerciseIdentityName
+    }
+}
+
+extension TemplateExercise {
+    var performanceSignature: ExercisePerformanceSignature {
+        ExercisePerformanceSignature(
+            modality: modality,
+            trackingMode: trackingMode,
+            loadMode: loadMode,
+            bodyweightFraction: bodyweightFraction
+        )
     }
 }
 

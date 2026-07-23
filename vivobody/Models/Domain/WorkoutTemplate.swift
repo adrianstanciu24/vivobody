@@ -420,4 +420,77 @@ extension Exercise {
             sortOrder: sortOrder
         )
     }
+
+    /// Spawn a ready-to-start Exercise from a template row with each
+    /// set's working weight / reps / duration mirrored from the
+    /// user's most recent archived performance of the same exercise,
+    /// matched set by set, so the scrubbers start where the user
+    /// actually worked last time instead of at the template's seed
+    /// values. The per-set `planned*` snapshots keep the template's
+    /// prescription, so adherence analytics still measure against
+    /// the plan. Per-set (pyramid / wave) templates are deliberate
+    /// programming and spawn exactly as written; so does an exercise
+    /// the user has never logged.
+    static func fromTemplate(
+        _ templateExercise: TemplateExercise,
+        history context: ModelContext?
+    ) -> Exercise {
+        let exercise = Exercise(from: templateExercise)
+        guard
+            !templateExercise.hasPerSetData,
+            let context,
+            let last = mostRecentLogged(matching: templateExercise, in: context)
+        else { return exercise }
+
+        let logged = last.orderedSets.filter(\.isCompleted)
+        guard !logged.isEmpty else { return exercise }
+
+        for (i, set) in exercise.orderedSets.enumerated() {
+            let source = logged[min(i, logged.count - 1)]
+            set.weight = source.weight
+            set.reps = source.reps
+            set.duration = source.duration
+        }
+        return exercise
+    }
+
+    /// The same exercise from the most recently archived session, or
+    /// nil when the user has never logged it. Identity mirrors
+    /// `matchesCatalogItem`: stable bundled catalogID first, then the
+    /// custom item reference, then name-only for rows with no catalog
+    /// identity. The performance signature must agree so values
+    /// measured under different semantics (a hold turned into reps,
+    /// changed assistance) never seed the wrong scrubber.
+    private static func mostRecentLogged(
+        matching templateExercise: TemplateExercise,
+        in context: ModelContext
+    ) -> Exercise? {
+        let name = templateExercise.name
+        let descriptor: FetchDescriptor<Exercise>
+        if let catalogID = templateExercise.catalogID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.catalogID == catalogID
+                }
+            )
+        } else if let itemID = templateExercise.catalogItemID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.catalogItemID == itemID
+                }
+            )
+        } else {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil
+                        && $0.catalogItemID == nil && $0.name == name
+                }
+            )
+        }
+        let matches = (try? context.fetch(descriptor)) ?? []
+        let signature = templateExercise.performanceSignature
+        return matches
+            .filter { $0.performanceSignature == signature }
+            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
+    }
 }

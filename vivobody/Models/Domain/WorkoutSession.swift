@@ -167,7 +167,20 @@ final class WorkoutSession: Identifiable {
     func completeActiveSet(for exercise: Exercise) {
         let ordered = exercise.orderedSets
         guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return }
-        ordered[index].isCompleted = true
+        let completed = ordered[index]
+        completed.isCompleted = true
+
+        // Carry the just-logged values onto the remaining pending
+        // sets so the next set starts where the user actually worked,
+        // not back at the plan. Only sets spawned from the same
+        // prescription inherit — deliberate per-set programming
+        // (pyramid / wave) keeps its own targets.
+        for pending in ordered.dropFirst(index + 1)
+        where !pending.isCompleted && pending.sharesPlan(with: completed) {
+            pending.weight = completed.weight
+            pending.reps = completed.reps
+            pending.duration = completed.duration
+        }
 
         // Only start a rest interval if there are more sets to do on
         // THIS exercise. The view layer auto-advances the pager when

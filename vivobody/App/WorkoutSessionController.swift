@@ -110,14 +110,19 @@ final class WorkoutSessionController {
     }
 
     /// Start a workout from a saved template. Each TemplateExercise
-    /// spawns a fresh Exercise. The template's `lastUsedAt` is stamped
-    /// so the Library list can highlight recent picks.
+    /// spawns a fresh Exercise, with working values prefilled from
+    /// the user's most recent logged version of that exercise (see
+    /// `Exercise.fromTemplate(_:history:)`). The template's
+    /// `lastUsedAt` is stamped so the Library list can highlight
+    /// recent picks.
     func startWorkoutFromTemplate(_ template: WorkoutTemplate) {
         guard activeSession == nil else {
             isWorkoutExpanded = true
             return
         }
-        let plan = template.orderedExercises.map(Exercise.init(from:))
+        let plan = template.orderedExercises.map {
+            Exercise.fromTemplate($0, history: modelContext)
+        }
         beginActiveWorkout(with: plan) {
             template.lastUsedAt = Date()
         }
