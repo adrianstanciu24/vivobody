@@ -11,7 +11,7 @@
 //  Ranking tiers (best -> worst), evaluated per whitespace token.
 //  An item matches only if EVERY token matches at least at the
 //  substring tier; the item's score is the worst (highest) token
-//  score, so "lat pull" ranks "Lat Pull Down" above single-token
+//  score, so "lat pull" ranks "Lat Pulldown" above single-token
 //  noise. Within a tier, exercises the user has actually logged
 //  sort first (tracked boost), then shorter names, then alphabetical.
 //
@@ -85,8 +85,8 @@ enum ExerciseSearch {
         return nil
     }
 
-    /// Split on any non-alphanumeric boundary so "Pull-ups" and
-    /// "Lat Pull Down" both tokenize to clean words.
+    /// Split on any non-alphanumeric boundary so "Pull-Up" and
+    /// "Lat Pulldown" both tokenize to clean words.
     private static func words(of s: String) -> [String] {
         s.split(omittingEmptySubsequences: true, whereSeparator: { !$0.isLetter && !$0.isNumber })
             .map(String.init)

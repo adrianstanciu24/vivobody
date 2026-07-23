@@ -17,7 +17,7 @@
 //
 //  Sectioned by muscle group for browsing; while a search query is
 //  active the sections collapse into a flat, relevance-ranked list
-//  (see ExerciseSearch) so "pull" surfaces "Pull-ups" first instead
+//  (see ExerciseSearch) so "pull" surfaces "Pull-Up" first instead
 //  of respecting muscle-group enum order. Search uses
 //  .searchable(placement: .toolbar) + .searchToolbarBehavior(.minimize)
 //  — the field lives in the bottom toolbar and collapses on scroll,
@@ -188,7 +188,7 @@ struct ExercisePickerSheet: View {
         var scope = scopedItems
 
         // Then narrow by search query — matches against name OR any
-        // alias. Aliases let "BP" find "Bench Press"; case-insensitive
+        // alias. Aliases let "BP" find "Barbell Bench Press"; case-insensitive
         // substring keeps the matching forgiving. (Only reached when
         // not searching, since the search path uses ExerciseSearch.)
         if !trimmed.isEmpty {
@@ -263,8 +263,8 @@ struct ExercisePickerSheet: View {
 
     /// While a query is active, drops the muscle-group sections for
     /// one flat, best-match-first list — the grouped layout can only
-    /// rank within a group, so it can never put "Pull-ups" above
-    /// "Cable pull through" by relevance. Rows reuse `pickerRow` so
+    /// rank within a group, so it can never put "Pull-Up" above
+    /// "Cable Pull-Through" by relevance. Rows reuse `pickerRow` so
     /// the pick-on-tap / navigate / context-menu behavior is
     /// identical to the grouped path.
     @ViewBuilder
@@ -357,7 +357,8 @@ struct ExercisePickerSheet: View {
                 Text(item.name)
                     .font(Typography.sectionHeading)
                     .foregroundStyle(Ink.primary)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(rowSubtitle(item))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)

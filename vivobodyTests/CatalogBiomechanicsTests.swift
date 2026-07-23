@@ -15,7 +15,7 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
-        #expect(CatalogData.records.count == 592)
+        #expect(CatalogData.records.count == 548)
         var catalogIDs: Set<String> = []
         var vocabularyOwners: [String: String] = [:]
 
@@ -44,6 +44,33 @@ struct CatalogBiomechanicsTests {
         }
     }
 
+    @Test func sportPracticeDrillsStayOutsideTheGymCatalog() {
+        let vocabulary = Set(CatalogData.records.flatMap { record in
+            ([record.name] + record.aliases).map(Self.normalized)
+        })
+        let excludedSportDrills = [
+            "Heavy Bag Striking",
+            "Banded Shadowboxing",
+            "Ali Shuffle",
+            "Fast Hands, Fast Feet",
+            "Single-Arm Medicine Ball Punch Throw",
+            "Lateral Shuffle to Medicine Ball Throw",
+            "Altitude Landing to Lateral Shuffle",
+            "Lateral Slide and Squat",
+            "Landmine Punch",
+        ]
+
+        for name in excludedSportDrills {
+            #expect(
+                !vocabulary.contains(Self.normalized(name)),
+                "Sport-specific movement remains in the gym catalog: '\(name)'"
+            )
+        }
+
+        let rotationalPress = CatalogData.record(forExerciseNamed: "Standing Rotational Landmine Press")
+        #expect(rotationalPress?.catalogID == "landmine-punch")
+    }
+
     @Test func movementDefinitionsAreAuthoredAndNonGeneric() {
         let generatedPrefixes = ["a bilateral ", "a unilateral "]
 
@@ -51,12 +78,31 @@ struct CatalogBiomechanicsTests {
             let definition = record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
             let normalizedDefinition = definition.lowercased()
             let hasGeneratedPrefix = generatedPrefixes.contains { normalizedDefinition.hasPrefix($0) }
+            let words = definition
+                .split(whereSeparator: \.isWhitespace)
+                .map {
+                    String($0)
+                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+                        .lowercased()
+                }
+                .filter { !$0.isEmpty }
+            let hasRepeatedAdjacentWord = zip(words, words.dropFirst()).contains { left, right in
+                left == right
+            }
 
             #expect(!definition.isEmpty, "'\(record.name)' has no movement definition")
             #expect(definition.count >= 24, "'\(record.name)' has an underspecified movement definition")
             #expect(
+                definition.first?.isUppercase == true,
+                "'\(record.name)' has a movement definition that does not begin with a capital letter"
+            )
+            #expect(
                 definition.last == "." || definition.last == "!" || definition.last == "?",
                 "'\(record.name)' has an incomplete movement definition"
+            )
+            #expect(
+                !hasRepeatedAdjacentWord,
+                "'\(record.name)' has a repeated adjacent word in its movement definition"
             )
             #expect(
                 !hasGeneratedPrefix,
@@ -174,24 +220,133 @@ struct CatalogBiomechanicsTests {
         }
 
         let replacements: [String: String] = [
-            "Supine Serratus Punch": "supine-serratus-punch",
+            "Supine Dumbbell Serratus Punch": "supine-serratus-punch",
             "Plank In-and-Out Jump": "plank-in-and-out-jump",
-            "Kettlebell Suitcase Hold with March": "kettlebell-suitcase-hold-with-march",
+            "Kettlebell Suitcase March": "kettlebell-suitcase-hold-with-march",
             "Codman Pendulum": "codman-pendulum",
             "Clamshell": "clamshell",
-            "Side-Plank Clamshell": "side-plank-clamshell",
+            "Side Plank Clamshell": "side-plank-clamshell",
             "Dumbbell Frog Pump": "dumbbell-frog-pump",
             "Pendlay Row": "pendlay-row",
             "Side-Lying Dumbbell Internal Rotation": "side-lying-dumbbell-internal-rotation",
-            "Lying Leg Curl": "lying-leg-curl",
-            "Single-Leg Lunge with Kettlebell": "single-leg-lunge-with-kettlebell",
-            "Push-Up Wipers": "push-up-wipers",
+            "Lying Machine Leg Curl": "lying-leg-curl",
+            "Kettlebell Forward Lunge": "single-leg-lunge-with-kettlebell",
+            "Push-Up Wiper": "push-up-wipers",
         ]
         for (name, expectedID) in replacements {
             let record = CatalogData.record(forExerciseNamed: name)
             #expect(record != nil, "Missing canonical replacement '\(name)'")
             #expect(record?.catalogID == expectedID, "'\(name)' changed stable catalog ID")
         }
+    }
+
+    @Test func reviewedSemanticDuplicatesResolveToOneCanonicalRecord() {
+        let merges: [(retired: String, survivor: String)] = [
+            ("Low-Pulley Cable Chest Fly", "Low-to-High Cable Chest Fly"),
+            ("Low-to-High Cable Crossover", "Low-to-High Cable Chest Fly"),
+            ("Behind-the-Body Cable Lateral Raise", "Behind-the-Back Cable Lateral Raise"),
+            ("Cable Lateral Raise", "Single-Arm Cable Lateral Raise"),
+            ("High Cable Lateral Raise", "Single-Arm Cable Lateral Raise"),
+            ("Cable Reverse Fly", "Cable Rear Delt Fly"),
+            ("Cable Biceps Curl", "Straight-Bar Cable Biceps Curl"),
+            ("Underhand-Grip Dumbbell Wrist Curl", "Dumbbell Wrist Curl"),
+            ("Barbell Full Squat", "Barbell Back Squat"),
+            ("Machine Leg Curl", "Lying Machine Leg Curl"),
+            ("Cable Chest Fly", "Mid-Height Cable Chest Fly"),
+            ("Incline Multipress Bench Press", "Moderate-Incline Smith Machine Press"),
+            ("45-Degree Dumbbell Lateral Raise", "Dumbbell Scaption"),
+            ("Bent-Over Dumbbell Lateral Raise", "Seated Dumbbell Rear Delt Raise"),
+            ("Incline Dumbbell Reverse Fly", "Chest-Supported Dumbbell Rear Delt Raise"),
+            ("Heavy Single-Arm Dumbbell Row", "Single-Arm Dumbbell Row"),
+            ("V-Bar Lat Pulldown", "Neutral-Grip Lat Pulldown"),
+            ("Weighted Push-Up", "Push-Up"),
+            ("Overhand Barbell Row", "Barbell Bent-Over Row"),
+            ("Cross-Bench Dumbbell Pullover", "Dumbbell Pullover"),
+            ("Cable Woodchop", "High-to-Low Cable Woodchop"),
+            ("Leg Raise", "Lying Leg Raise"),
+            ("Straight-Arm Cable Pulldown", "Straight-Bar Cable Pulldown"),
+            ("Cable Triceps Pushdown", "Straight-Bar Cable Triceps Pushdown"),
+            ("Legend Machine Chest Press", "Plate-Loaded Leverage Chest Press"),
+        ]
+        let canonicalNames = Set(CatalogData.records.map { Self.normalized($0.name) })
+
+        for merge in merges {
+            #expect(
+                !canonicalNames.contains(Self.normalized(merge.retired)),
+                "Retired duplicate remains canonical: '\(merge.retired)'"
+            )
+
+            guard let survivor = CatalogData.record(forExerciseNamed: merge.survivor) else {
+                Issue.record("Missing duplicate survivor '\(merge.survivor)'")
+                continue
+            }
+            let aliases = Set(survivor.aliases.map(Self.normalized))
+            #expect(
+                aliases.contains(Self.normalized(merge.retired)),
+                "'\(merge.survivor)' lost the retired search term '\(merge.retired)'"
+            )
+        }
+
+        // This consolidation reused the retired row's display name, so its
+        // stable IDs — rather than its canonical label — disambiguate the merge.
+        let standingCurl = CatalogData.record(forExerciseNamed: "Standing Dumbbell Biceps Curl")
+        #expect(standingCurl?.catalogID == "biceps-curls-with-dumbbell")
+        #expect(CatalogData.record(forCatalogID: "standing-bicep-curl") == nil)
+        #expect(
+            standingCurl?.aliases.map(Self.normalized).contains(Self.normalized("Dumbbell Biceps Curl")) == true
+        )
+    }
+
+    @Test func auditedNamesAndObjectiveMetadataStayAligned() throws {
+        let skullCrusher = try #require(
+            CatalogData.record(forExerciseNamed: "Incline Dumbbell Skull Crusher")
+        )
+        #expect(skullCrusher.equipment == .dumbbell)
+
+        let abdominalPress = try #require(
+            CatalogData.record(forExerciseNamed: "Double-Leg Abdominal Press Hold")
+        )
+        #expect(abdominalPress.trackingMode == .duration)
+        #expect(abdominalPress.defaultDuration == 10)
+
+        let wallPress = try #require(CatalogData.record(forExerciseNamed: "Isometric Wall Press"))
+        #expect(wallPress.trackingMode == .duration)
+        #expect(wallPress.defaultDuration == 30)
+
+        let bracedSquat = try #require(CatalogData.record(forExerciseNamed: "Plate-Held Braced Squat"))
+        #expect(bracedSquat.equipment == .other)
+
+        let wristRoller = try #require(CatalogData.record(forExerciseNamed: "Standing Wrist Roller"))
+        #expect(wristRoller.equipment == .other)
+
+        let ballPlank = try #require(
+            CatalogData.record(forExerciseNamed: "Stability Ball Plank with Alternating Foot Touch")
+        )
+        #expect(ballPlank.equipment == .other)
+
+        let battleRope = try #require(
+            CatalogData.record(forExerciseNamed: "Alternating Battle Rope Wave")
+        )
+        #expect(battleRope.laterality == .unilateral)
+        #expect(battleRope.mechanic == .compound)
+        #expect(battleRope.pattern == .core)
+
+        let uprightRow = try #require(CatalogData.record(forExerciseNamed: "Cross-Cable Upright Row"))
+        #expect(uprightRow.group == .shoulders)
+        #expect(uprightRow.plane == .frontal)
+
+        let sideLegPress = try #require(
+            CatalogData.record(forExerciseNamed: "Side-Seated Single-Leg Machine Leg Press")
+        )
+        #expect(sideLegPress.mechanic == .compound)
+        #expect(sideLegPress.pattern == .squat)
+
+        let straightArmPullback = try #require(
+            CatalogData.record(forExerciseNamed: "Bent-Over Dumbbell Straight-Arm Pullback")
+        )
+        #expect(straightArmPullback.mechanic == .isolation)
+        #expect(straightArmPullback.pattern == nil)
+        #expect(straightArmPullback.direction == nil)
     }
 
     @Test func modalityLoadAndClassificationInvariantsHoldAcrossBundle() {
@@ -267,7 +422,7 @@ struct CatalogBiomechanicsTests {
         #expect(clamshell.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(clamshell.muscleInvolvement.role(for: .gluteMax) == .secondary)
 
-        let sidePlankClamshell = try #require(CatalogData.record(forExerciseNamed: "Side-Plank Clamshell"))
+        let sidePlankClamshell = try #require(CatalogData.record(forExerciseNamed: "Side Plank Clamshell"))
         #expect(sidePlankClamshell.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(sidePlankClamshell.muscleInvolvement.role(for: .gluteMax) == .secondary)
         #expect(sidePlankClamshell.muscleInvolvement.role(for: .obliques) == .primary)
@@ -279,18 +434,18 @@ struct CatalogBiomechanicsTests {
         #expect(externalRotation.muscleInvolvement.role(for: .subscapularis) == nil)
         #expect(externalRotation.muscleInvolvement.role(for: .teresMajor) == nil)
 
-        let internalRotation = try #require(CatalogData.record(forExerciseNamed: "Shoulder Internal Rotation (Cable)"))
+        let internalRotation = try #require(CatalogData.record(forExerciseNamed: "Cable Internal Rotation"))
         #expect(internalRotation.muscleInvolvement.role(for: .subscapularis) == .primary)
         #expect(internalRotation.muscleInvolvement.role(for: .teresMajor) == .secondary)
         #expect(internalRotation.muscleInvolvement.role(for: .externalRotators) == nil)
 
-        let verticalPull = try #require(CatalogData.record(forExerciseNamed: "L-Sit Pull-ups"))
+        let verticalPull = try #require(CatalogData.record(forExerciseNamed: "L-Sit Pull-Up"))
         #expect(verticalPull.muscleInvolvement.role(for: .teresMajor) == .secondary)
         #expect(verticalPull.muscleInvolvement.role(for: .subscapularis) == nil)
     }
 
     @Test func renamedMovementsKeepTheirIntendedSemantics() throws {
-        let serratusPunch = try #require(CatalogData.record(forExerciseNamed: "Supine Serratus Punch"))
+        let serratusPunch = try #require(CatalogData.record(forExerciseNamed: "Supine Dumbbell Serratus Punch"))
         #expect(serratusPunch.group == .chest)
         #expect(serratusPunch.mechanic == .isolation)
         #expect(serratusPunch.plane == .transverse)
@@ -304,7 +459,7 @@ struct CatalogBiomechanicsTests {
         #expect(plankJump.loadMode == .nonComparable)
         #expect(plankJump.pattern == .core)
 
-        let suitcaseMarch = try #require(CatalogData.record(forExerciseNamed: "Kettlebell Suitcase Hold with March"))
+        let suitcaseMarch = try #require(CatalogData.record(forExerciseNamed: "Kettlebell Suitcase March"))
         #expect(suitcaseMarch.group == .core)
         #expect(suitcaseMarch.modality == .isometricStrength)
         #expect(suitcaseMarch.trackingMode == .duration)
@@ -324,7 +479,7 @@ struct CatalogBiomechanicsTests {
     }
 
     @Test func highRiskMovementCorrectionsRemainCurated() throws {
-        let jumpingJacks = try #require(CatalogData.record(forExerciseNamed: "Jumping Jacks"))
+        let jumpingJacks = try #require(CatalogData.record(forExerciseNamed: "Jumping Jack"))
         #expect(jumpingJacks.modality == .conditioning)
         #expect(jumpingJacks.trackingMode == .duration)
         #expect(jumpingJacks.pattern == .locomotion)
@@ -332,13 +487,13 @@ struct CatalogBiomechanicsTests {
         #expect(jumpingJacks.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(jumpingJacks.muscleInvolvement.role(for: .deltoids) == .primary)
 
-        let toePress = try #require(CatalogData.record(forExerciseNamed: "Calf Press Using Leg Press Machine"))
+        let toePress = try #require(CatalogData.record(forExerciseNamed: "Leg Press Calf Raise"))
         #expect(toePress.group == .legs)
         #expect(toePress.mechanic == .isolation)
         #expect(toePress.muscleInvolvement.role(for: .calves) == .primary)
         #expect(toePress.muscleInvolvement.role(for: .quads) == .stabilizer)
 
-        let sideSlides = try #require(CatalogData.record(forExerciseNamed: "Side Slides + Squats"))
+        let sideSlides = try #require(CatalogData.record(forExerciseNamed: "Bodyweight Lateral Step to Squat"))
         #expect(sideSlides.plane == .frontal)
         #expect(sideSlides.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(sideSlides.muscleInvolvement.role(for: .quads) == .primary)
@@ -356,33 +511,33 @@ struct CatalogBiomechanicsTests {
         #expect(sidePlank.muscleInvolvement.role(for: .obliques) == .primary)
         #expect(sidePlank.muscleInvolvement.role(for: .gluteMed) == .secondary)
 
-        let powerClean = try #require(CatalogData.record(forExerciseNamed: "Power Clean"))
+        let powerClean = try #require(CatalogData.record(forExerciseNamed: "Barbell Power Clean"))
         #expect(powerClean.modality == .power)
         #expect(powerClean.loadMode == .external)
 
-        let squatJump = try #require(CatalogData.record(forExerciseNamed: "Squat Jumps"))
+        let squatJump = try #require(CatalogData.record(forExerciseNamed: "Squat Jump"))
         #expect(squatJump.modality == .power)
         #expect(squatJump.loadMode == .nonComparable)
 
-        let plankJacks = try #require(CatalogData.record(forExerciseNamed: "Plank Jacks"))
+        let plankJacks = try #require(CatalogData.record(forExerciseNamed: "Plank Jack"))
         #expect(plankJacks.modality == .conditioning)
         #expect(plankJacks.pattern == .core)
         #expect(plankJacks.plane == .frontal)
 
-        let hamstringKicks = try #require(CatalogData.record(forExerciseNamed: "Hamstring Kicks"))
+        let hamstringKicks = try #require(CatalogData.record(forExerciseNamed: "Dynamic Straight-Leg Kick"))
         #expect(hamstringKicks.modality == .mobility)
         #expect(hamstringKicks.loadMode == .nonComparable)
     }
 
     @Test func correctedGroupsPlanesAndLateralityRemainExplicit() {
         let groupFixtures: [(String, MuscleGroup)] = [
-            ("L-Sit Pull-ups", .back),
-            ("Push-up rotations", .chest),
-            ("Wall Pushup", .chest),
-            ("Chair dips", .arms),
-            ("No push-up burpees", .legs),
+            ("L-Sit Pull-Up", .back),
+            ("Push-Up Rotation", .chest),
+            ("Wall Push-Up", .chest),
+            ("Chair Dip", .arms),
+            ("No-Push-Up Burpee", .legs),
             ("Sled Push", .legs),
-            ("Glute Bridge Single-Arm Press", .chest),
+            ("Single-Arm Dumbbell Glute Bridge Press", .chest),
         ]
         for (name, expectedGroup) in groupFixtures {
             let record = CatalogData.record(forExerciseNamed: name)
@@ -392,11 +547,11 @@ struct CatalogBiomechanicsTests {
 
         let planeFixtures: [(String, MovementPlane)] = [
             ("Reverse Snow Angel", .frontal),
-            ("Prone Scapular Retraction - Arms at Side", .transverse),
+            ("Prone Scapular Retraction with Arms at Sides", .transverse),
             ("Cable External Rotation", .transverse),
-            ("Low-Cable Cross-Over - NB", .transverse),
-            ("Omni Cable Cross-over", .transverse),
-            ("Bus Drivers", .transverse),
+            ("Low-to-High Cable Chest Fly", .transverse),
+            ("Omni Cable Crossover", .transverse),
+            ("Plate Bus Driver", .transverse),
         ]
         for (name, expectedPlane) in planeFixtures {
             let record = CatalogData.record(forExerciseNamed: name)
@@ -406,13 +561,13 @@ struct CatalogBiomechanicsTests {
 
         let unilateralFixtures = [
             "Alternating High Cable Row",
-            "bicycle crunches",
+            "Bicycle Crunch",
             "Bird Dog",
-            "Black Widow Knee Slides",
-            "Deadbug",
-            "Mountain climbers",
-            "Plank Shoulder Taps",
-            "TRX Obliques",
+            "Black Widow Knee Slide",
+            "Dead Bug",
+            "Mountain Climber",
+            "Plank Shoulder Tap",
+            "TRX Oblique Knee Tuck",
             "Cable External Rotation",
         ]
         for name in unilateralFixtures {

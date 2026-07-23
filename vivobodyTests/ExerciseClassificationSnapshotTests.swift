@@ -166,7 +166,7 @@ struct ExerciseClassificationSnapshotTests {
 
     @Test func bundledNamesFallbackWhileUnknownRowsStayUnknown() {
         let bundled = Exercise(
-            name: "Bench Press",
+            name: "Barbell Bench Press",
             group: .chest,
             plannedSets: 0,
             plannedWeight: 0
@@ -178,7 +178,7 @@ struct ExerciseClassificationSnapshotTests {
             plannedWeight: 0
         )
         let bundledTemplate = TemplateExercise(
-            name: "Bench Press",
+            name: "Barbell Bench Press",
             group: .chest,
             plannedWeight: 0
         )

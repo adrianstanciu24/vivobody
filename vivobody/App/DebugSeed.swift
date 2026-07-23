@@ -53,7 +53,7 @@ enum UITestSupport {
         guard existing.isEmpty else { return }
 
         let exercise = Exercise(
-            name: "Bench Press",
+            name: "Barbell Bench Press",
             group: .chest,
             plannedSets: 2,
             plannedReps: 8,
@@ -76,7 +76,7 @@ enum UITestSupport {
             name: "Scheduled Test",
             exercises: [
                 TemplateExercise(
-                    name: "Bench Press",
+                    name: "Barbell Bench Press",
                     group: .chest,
                     plannedSets: 2,
                     plannedReps: 8,
@@ -230,27 +230,27 @@ enum HistorySeeder {
         // end of the ramp, clearly the most-developed region on
         // the body. The extreme top weight is a deliberate artefact of
         // keeping overload alive long enough to reach ceiling.
-        block([("Barbell Full Squat", .legs, 185)],
+        block([("Barbell Back Squat", .legs, 185)],
               startDaysAgo: 120, endDaysAgo: 1, count: 55, overload: 555, sets: 6, reps: 6)
 
         // Developed: a progressive press block.
-        block([("Bench Press", .chest, 135),
-               ("Incline Bench Press - Barbell", .chest, 95),
-               ("Shoulder Press, Dumbbells", .shoulders, 75)],
+        block([("Barbell Bench Press", .chest, 135),
+               ("Incline Barbell Bench Press", .chest, 95),
+               ("Dumbbell Shoulder Press", .shoulders, 75)],
               startDaysAgo: 56, endDaysAgo: 6, count: 11, overload: 55, sets: 4, reps: 8)
 
         // Moderate development (lower body): a light, brief raise block.
-        block([("Standing Calf Raises", .legs, 70)],
+        block([("Standing Machine Calf Raise", .legs, 70)],
               startDaysAgo: 30, endDaysAgo: 9, count: 4, overload: 15, sets: 3, reps: 10)
 
         // Plateau: identical load for fourteen sessions ⇒ developed but
         // no longer climbing — a steady mid-orange.
-        block([("Biceps Curls With Barbell", .arms, 65),
-               ("Triceps Pushdown", .arms, 55)],
+        block([("Barbell Biceps Curl", .arms, 65),
+               ("Straight-Bar Cable Triceps Pushdown", .arms, 55)],
               startDaysAgo: 60, endDaysAgo: 6, count: 14, overload: 0, sets: 3, reps: 10)
 
         // Fading: trained hard early, abandoned four weeks ago.
-        block([("Barbell Row (Overhand)", .back, 135)],
+        block([("Barbell Bent-Over Row", .back, 135)],
               startDaysAgo: 70, endDaysAgo: 28, count: 6, overload: 30, sets: 4, reps: 8)
 
         try? context.save()
@@ -284,7 +284,7 @@ enum HistorySeeder {
                 let started = calendar.date(byAdding: .hour, value: -1, to: day)
             else { continue }
             let exercise = Exercise(
-                name: "Bench Press",
+                name: "Barbell Bench Press",
                 group: .chest,
                 plannedSets: 1,
                 plannedReps: 5,
@@ -304,7 +304,7 @@ enum HistorySeeder {
         template.scheduledWeekdays = [todayWeekday]
         context.insert(template)
         let templateExercise = TemplateExercise(
-            name: "Bench Press",
+            name: "Barbell Bench Press",
             group: .chest,
             plannedSets: 5,
             plannedReps: 5,
@@ -331,25 +331,25 @@ enum HistorySeeder {
         let lower = WorkoutTemplate(name: "Lower Day B", sortOrder: 0)
         lower.scheduledWeekdays = [today, plusDays(3)].sorted()
         lower.exercises = [
-            TemplateExercise(name: "Barbell Full Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
-            TemplateExercise(name: "Barbell Romanian Deadlift (RDL)", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
-            TemplateExercise(name: "Leg Press", group: .legs, plannedSets: 3, plannedReps: 10, plannedWeight: 270, sortOrder: 2),
+            TemplateExercise(name: "Barbell Back Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
+            TemplateExercise(name: "Barbell Romanian Deadlift", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
+            TemplateExercise(name: "Machine Leg Press", group: .legs, plannedSets: 3, plannedReps: 10, plannedWeight: 270, sortOrder: 2),
         ]
         context.insert(lower)
 
         let upper = WorkoutTemplate(name: "Upper Day A", sortOrder: 1)
         upper.scheduledWeekdays = [plusDays(2), plusDays(5)].sorted()
         upper.exercises = [
-            TemplateExercise(name: "Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0),
-            TemplateExercise(name: "Bent Over Rowing", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
-            TemplateExercise(name: "Shoulder Press, Dumbbells", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
-            TemplateExercise(name: "Biceps Curls With Barbell", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
+            TemplateExercise(name: "Barbell Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0),
+            TemplateExercise(name: "Barbell Bent-Over Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
+            TemplateExercise(name: "Dumbbell Shoulder Press", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
+            TemplateExercise(name: "Barbell Biceps Curl", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
         ]
         context.insert(upper)
 
         let core = WorkoutTemplate(name: "Core A", sortOrder: 2)
         core.exercises = [
-            TemplateExercise(name: "Hanging Leg Raises", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
+            TemplateExercise(name: "Hanging Leg Raise", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
         ]
         context.insert(core)
 
@@ -358,12 +358,12 @@ enum HistorySeeder {
 
     private static func templateExercise(for group: MuscleGroup, variant: Int) -> (name: String, weight: Double) {
         switch group {
-        case .chest:     return ("Bench Press", 135)
-        case .back:      return ("Bent Over Rowing", 115)
-        case .shoulders: return ("Shoulder Press, Dumbbells", 95)
-        case .legs:      return ("Barbell Full Squat", 185)
-        case .arms:      return ("Biceps Curls With Barbell", 65)
-        case .core:      return ("Hanging Leg Raises", 0)
+        case .chest:     return ("Barbell Bench Press", 135)
+        case .back:      return ("Barbell Bent-Over Row", 115)
+        case .shoulders: return ("Dumbbell Shoulder Press", 95)
+        case .legs:      return ("Barbell Back Squat", 185)
+        case .arms:      return ("Barbell Biceps Curl", 65)
+        case .core:      return ("Hanging Leg Raise", 0)
         }
     }
 }

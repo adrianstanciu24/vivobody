@@ -139,7 +139,7 @@ public struct UpNextSnapshot: Codable, Hashable, Sendable {
         daysUntil: 0,
         readinessPhrase: "Fresh and in the zone.",
         exercises: [
-            UpNextExerciseSnapshot(name: "Bench Press", setSpec: "3 x 8 @ 135 lb"),
+            UpNextExerciseSnapshot(name: "Barbell Bench Press", setSpec: "3 x 8 @ 135 lb"),
             UpNextExerciseSnapshot(name: "Overhead Press", setSpec: "3 x 8 @ 95 lb"),
             UpNextExerciseSnapshot(name: "Incline Press", setSpec: "3 x 10 @ 105 lb"),
         ]
@@ -345,7 +345,7 @@ public struct StrengthSnapshot: Codable, Hashable, Sendable {
     }
 
     public static let placeholder = StrengthSnapshot(
-        exercise: "Bench Press",
+        exercise: "Barbell Bench Press",
         points: WidgetSampleData.strengthPoints,
         currentE1RM: 245,
         bestE1RM: 245,
@@ -428,7 +428,7 @@ public struct ActiveWorkoutSnapshot: Codable, Hashable, Sendable {
 
     public static let placeholder = ActiveWorkoutSnapshot(
         isActive: true,
-        exerciseName: "Bench Press",
+        exerciseName: "Barbell Bench Press",
         exerciseIndex: 0,
         totalExercises: 4,
         setNumber: 3,

@@ -145,8 +145,27 @@ nonisolated enum CatalogData {
                 throw ValidationError.duplicateCatalogID(record.catalogID)
             }
 
-            guard !record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            let definition = record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !definition.isEmpty else {
                 throw ValidationError.emptyMovementDefinition(record.catalogID)
+            }
+            let definitionWords = definition
+                .split(whereSeparator: \.isWhitespace)
+                .map {
+                    String($0)
+                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+                        .lowercased()
+                }
+                .filter { !$0.isEmpty }
+            let repeatsAdjacentWord = zip(definitionWords, definitionWords.dropFirst())
+                .contains { pair in pair.0 == pair.1 }
+            guard
+                definition.count >= 24,
+                definition.first?.isUppercase == true,
+                definition.last == "." || definition.last == "!" || definition.last == "?",
+                !repeatsAdjacentWord
+            else {
+                throw ValidationError.invalidMovementDefinition(record.catalogID)
             }
             guard record.defaultWeight >= 0, record.reps > 0 else {
                 throw ValidationError.invalidDefaults(record.catalogID)
@@ -276,6 +295,7 @@ nonisolated enum CatalogData {
         case emptyName(String)
         case duplicateName(String)
         case emptyMovementDefinition(String)
+        case invalidMovementDefinition(String)
         case invalidDefaults(String)
         case invalidBodyweightFraction(String)
         case invalidKilogramDefault(String)
@@ -300,6 +320,7 @@ nonisolated enum CatalogData {
             case .emptyName(let id): return "record '\(id)' has an empty name"
             case .duplicateName(let name): return "duplicate exercise name '\(name)'"
             case .emptyMovementDefinition(let id): return "record '\(id)' has no movement definition"
+            case .invalidMovementDefinition(let id): return "record '\(id)' has a malformed movement definition"
             case .invalidDefaults(let id): return "record '\(id)' has invalid weight/reps defaults"
             case .invalidBodyweightFraction(let id): return "record '\(id)' has an invalid bodyweight fraction"
             case .invalidKilogramDefault(let id): return "record '\(id)' has an invalid kilogram default"

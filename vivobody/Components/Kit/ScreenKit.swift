@@ -408,7 +408,7 @@ extension View {
 
             VStack(alignment: .leading, spacing: Space.md) {
                 SectionHeader(title: "Exercises", trailing: "12 tracked")
-                KitRow(title: "Bench Press", subtitle: "Barbell · Push") {
+                KitRow(title: "Barbell Bench Press", subtitle: "Barbell · Push") {
                     Text("135×8")
                         .font(Typography.statValue)
                         .foregroundStyle(Ink.primary)

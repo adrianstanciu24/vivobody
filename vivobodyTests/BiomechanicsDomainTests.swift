@@ -167,7 +167,7 @@ struct BiomechanicsDomainTests {
     }
 
     @Test func catalogSemanticsSnapshotThroughTemplateAndWorkout() throws {
-        let record = try #require(CatalogData.record(forExerciseNamed: "Bench Press"))
+        let record = try #require(CatalogData.record(forExerciseNamed: "Barbell Bench Press"))
         let item = ExerciseCatalogItem(record: record, createdAt: Date(timeIntervalSince1970: 0))
         let templateExercise = TemplateExercise(from: item, sortOrder: 0)
         let exercise = Exercise(from: templateExercise)

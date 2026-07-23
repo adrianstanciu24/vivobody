@@ -38,7 +38,7 @@ import WidgetKit
 #Preview("Live Activity Rest") {
     ActiveWorkoutActivityView(
         state: WorkoutActivityAttributes.ContentState(
-            exerciseName: "Bench Press",
+            exerciseName: "Barbell Bench Press",
             exerciseIndex: 0,
             setNumber: 3,
             plannedSets: 5,
@@ -56,7 +56,7 @@ import WidgetKit
 #Preview("Live Activity Set") {
     ActiveWorkoutActivityView(
         state: WorkoutActivityAttributes.ContentState(
-            exerciseName: "Bench Press",
+            exerciseName: "Barbell Bench Press",
             exerciseIndex: 0,
             setNumber: 3,
             plannedSets: 5,

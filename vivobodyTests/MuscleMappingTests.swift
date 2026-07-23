@@ -16,8 +16,8 @@ import Testing
 struct MuscleMappingTests {
 
     @Test func catalogDecodesFromBundle() {
-        #expect(CatalogData.records.count == 592)
-        #expect(CatalogData.record(forExerciseNamed: "Bench Press") != nil)
+        #expect(CatalogData.records.count == 548)
+        #expect(CatalogData.record(forExerciseNamed: "Barbell Bench Press") != nil)
     }
 
     @Test func involvementRolesProjectToCanonicalVisualAndVolumeValues() {
@@ -64,7 +64,7 @@ struct MuscleMappingTests {
     }
 
     @Test func mappingIsCaseInsensitive() {
-        let lower = Muscle.involvement(forExerciseNamed: "bench press")
+        let lower = Muscle.involvement(forExerciseNamed: "barbell bench press")
         #expect(lower.primary == [.pectorals])
     }
 
@@ -76,7 +76,7 @@ struct MuscleMappingTests {
     }
 
     @Test func benchPressRolesSeparateSynergistsFromStabilizers() {
-        let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
+        let bench = Muscle.involvement(forExerciseNamed: "Barbell Bench Press")
         #expect(bench.role(for: .pectorals) == .primary)
         #expect(bench.role(for: .triceps) == .secondary)
         #expect(bench.role(for: .deltoids) == .secondary)
@@ -89,7 +89,7 @@ struct MuscleMappingTests {
     }
 
     @Test func anatomyProjectionIncludesStabilizersAtVisualIntensity() {
-        let bench = Muscle.involvement(forExerciseNamed: "Bench Press")
+        let bench = Muscle.involvement(forExerciseNamed: "Barbell Bench Press")
         let nodes = bench.anatomyNodeChannels
         #expect(nodes["Pectoralis_Major_L"]?.intensity == 1)
         #expect(nodes["Triceps_L"]?.intensity == 0.5)
@@ -98,7 +98,7 @@ struct MuscleMappingTests {
     }
 
     @Test func powerKeepsAnatomyButEarnsNoDevelopmentCredit() throws {
-        let power = try #require(CatalogData.record(forExerciseNamed: "Kettlebell sumo high pull"))
+        let power = try #require(CatalogData.record(forExerciseNamed: "Kettlebell Sumo High Pull"))
         #expect(!power.muscleInvolvement.anatomyNodeChannels.isEmpty)
 
         let exercise = Exercise(
@@ -154,7 +154,7 @@ struct MuscleMappingTests {
             .init(muscle: .calves, role: .stabilizer),
         ])
         let item = ExerciseCatalogItem(
-            name: "Bench Press",
+            name: "Barbell Bench Press",
             group: .legs,
             defaultWeight: 0,
             muscleInvolvement: custom,
@@ -194,7 +194,7 @@ struct MuscleMappingTests {
     }
 
     @Test @MainActor func classificationResolvesForKnownLift() {
-        let classification = ExerciseClassification.forExerciseNamed("Bench Press")
+        let classification = ExerciseClassification.forExerciseNamed("Barbell Bench Press")
         #expect(classification?.equipment == .barbell)
         #expect(classification?.mechanic == .compound)
         #expect(classification?.pattern == .push)
@@ -219,10 +219,10 @@ struct MuscleMappingTests {
 
     @Test func correctedPushPullExercisesKeepTheirCuratedDirections() {
         let verticalDips = [
-            "Dips Between Two Benches",
-            "Floor dips",
-            "Ring Dips",
-            "TRX dips",
+            "Two-Bench Dip",
+            "Floor Dip",
+            "Ring Dip",
+            "TRX Dip",
         ]
 
         for name in verticalDips {
@@ -232,7 +232,7 @@ struct MuscleMappingTests {
             #expect(record?.directionValue == .vertical)
         }
 
-        let invertedPulldown = CatalogData.record(forExerciseNamed: "Underhand Lat Pull Down")
+        let invertedPulldown = CatalogData.record(forExerciseNamed: "Underhand Lat Pulldown")
         #expect(invertedPulldown?.equipmentValue == .cable)
         #expect(invertedPulldown?.patternValue == .pull)
         #expect(invertedPulldown?.directionValue == .vertical)

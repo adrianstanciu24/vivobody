@@ -119,7 +119,7 @@ struct LibraryExercisesContent: View {
 
     /// Flat, relevance-ranked results for the active query. Equipment
     /// filter is applied first (via `scopedItems`), then `ExerciseSearch`
-    /// tiers and sorts so "pull" surfaces "Pull-ups" before "Lat Pull
+    /// tiers and sorts so "pull" surfaces "Pull-Up" before "Lat Pull
     /// Down" instead of respecting muscle-group enum order.
     private var searchResults: [ExerciseCatalogItem] {
         ExerciseSearch.rank(items: scopedItems, query: searchText, trackedKeys: trackedKeys)
@@ -212,7 +212,7 @@ struct LibraryExercisesContent: View {
     /// While a search query is active, muscle-group sections are
     /// dropped in favor of one flat, best-match-first list — the
     /// grouped layout can only rank *within* a group, so it can never
-    /// put "Pull-ups" (back) above "Cable pull through" (legs) by
+    /// put "Pull-Up" (back) above "Cable Pull-Through" (legs) by
     /// relevance. Rows reuse the same `row(_:)` renderer as the
     /// grouped path so the prominent/recent decoration stays
     /// consistent. Empty query keeps the grouped browse (`exerciseList`).
