@@ -13,6 +13,8 @@
 //                plus a plateau / load-mode-aware readiness status pill
 //    • Stats   — Last (top set + relative date), Best (standing record
 //                under the exercise's performance semantics), Times
+//    • Load    — Bodyweight/assistance-only effective-load breakdown,
+//                using the historical workout snapshot behind the record
 //    • 1RM     — Dedicated, tappable row (dynamic strength only): a user-measured
 //                max (precise) overrides the estimated e1RM; empty
 //                until there's data. Tap opens the scrubber editor.
@@ -152,8 +154,8 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 statsRow
-                if supportsEstimatedOneRepMax {
-                    oneRepMaxRow
+                if showsPerformanceRows {
+                    performanceRows
                 }
                 progressionRhythmSection
                 if hasHistory {

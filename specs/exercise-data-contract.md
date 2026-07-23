@@ -135,6 +135,10 @@ model would need an explicit calibrated force curve before that can change.
 The session snapshots the latest measured body weight at start. A persisted
 `bodyweightAtStart` value of `0` means unknown; it is a sentinel, not a
 physiological value. There is no assumed-average or fabricated fallback.
+Saving or correcting a body-weight entry refreshes snapshots for workouts
+started on that same calendar day. This treats the daily measurement as the
+source of truth while preserving snapshots from other days as immutable
+history; a later genuine weight change never rewrites an older workout.
 `bodyweightAdded` and `assistanceSubtracted` therefore return no effective load
 until a positive measured body weight exists, so their load-based records and
 tonnage are omitted for that session. `external` load remains usable without a

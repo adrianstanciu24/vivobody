@@ -25,11 +25,11 @@ enum UITestSupport {
 
     static func resetIfRequested(in context: ModelContext) {
         guard CommandLine.arguments.contains("--ui-test-reset") else { return }
-        // UI tests must land on the tab shell, not the first-launch
-        // welcome cover. Without this, tests only pass when the base
-        // simulator happens to have completed onboarding — the cover
-        // sits over the MiniBar and swallows its taps.
-        UserDefaults.standard.set(true, forKey: SettingsKey.onboardingCompleted)
+        // UI tests normally land on the tab shell. The focused onboarding
+        // fixture deliberately reverses that gate so the one-time cover can
+        // be visually verified through the same deterministic reset path.
+        let shouldShowOnboarding = CommandLine.arguments.contains("--ui-test-onboarding")
+        UserDefaults.standard.set(!shouldShowOnboarding, forKey: SettingsKey.onboardingCompleted)
         deleteAll(WorkoutSession.self, in: context)
         deleteAll(WorkoutTemplate.self, in: context)
         deleteAll(ExerciseCatalogItem.self, in: context)
@@ -40,6 +40,12 @@ enum UITestSupport {
     static func seedIfRequested(in context: ModelContext) {
         if CommandLine.arguments.contains("--ui-test-active-partial") {
             seedActivePartial(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-active-bodyweight") {
+            seedActiveBodyweight(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-active-bodyweight-duration") {
+            seedActiveBodyweightDuration(in: context)
         }
         if CommandLine.arguments.contains("--ui-test-scheduled-template") {
             seedScheduledTemplate(in: context)
@@ -64,6 +70,67 @@ enum UITestSupport {
             first.isCompleted = true
         }
         let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// Focused visual-verification fixture for the active bodyweight
+    /// instrument. The set stores zero added load while the exercise's
+    /// snapshotted load profile supplies the bodyweight semantics.
+    private static func seedActiveBodyweight(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Pull-Up",
+            catalogID: "pull-ups",
+            group: .back,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 0,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1,
+            sortOrder: 0
+        )
+        let session = WorkoutSession(
+            exercises: [exercise],
+            restDuration: 90,
+            bodyweightAtStart: 180
+        )
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// Duration counterpart to the reps fixture above, used to verify
+    /// that holds retain time as the hero while bodyweight and added
+    /// load remain explicit beneath it.
+    private static func seedActiveBodyweightDuration(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Dead Hang",
+            catalogID: "deadhang",
+            group: .arms,
+            plannedSets: 3,
+            plannedReps: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength,
+            loadMode: .bodyweightAdded,
+            bodyweightFraction: 1,
+            plannedDuration: 30,
+            sortOrder: 0
+        )
+        let session = WorkoutSession(
+            exercises: [exercise],
+            restDuration: 90,
+            bodyweightAtStart: 180
+        )
         context.insert(session)
         try? context.save()
     }

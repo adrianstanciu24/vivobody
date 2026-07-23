@@ -476,3 +476,23 @@ struct ActiveExerciseCard: View {
     .background(Color.black.ignoresSafeArea())
     .preferredColorScheme(.dark)
 }
+
+#Preview("Exercise · bodyweight") {
+    let exercise = Exercise(
+        name: "Pull-Up",
+        group: .back,
+        plannedSets: 3,
+        plannedReps: 8,
+        plannedWeight: 0,
+        loadMode: .bodyweightAdded,
+        bodyweightFraction: 1
+    )
+    let session = WorkoutSession(
+        exercises: [exercise],
+        bodyweightAtStart: 180
+    )
+    return ActiveExerciseCard(exercise: exercise, session: session)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+}

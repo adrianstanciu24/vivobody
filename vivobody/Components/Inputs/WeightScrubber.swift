@@ -25,6 +25,12 @@ struct WeightScrubber: View {
     /// adult body-weight extremes.
     var purpose: Purpose = .strength
 
+    /// Optional scrub increment in the CURRENT DISPLAY UNIT. Callers that
+    /// expose an increment picker (for example first-launch body-weight
+    /// setup) can override the purpose default without leaking unit
+    /// conversion into their canonical-pound binding.
+    var displayStep: Double? = nil
+
     /// Optional override for the underlying scrubber's range, in
     /// CANONICAL POUNDS. If supplied, it overrides the purpose's
     /// default; if nil, the purpose's range is used. Values are
@@ -44,6 +50,11 @@ struct WeightScrubber: View {
     var valueFontSize: CGFloat = 64
     var verticalPadding: CGFloat = 28
     var presentation: Presentation = .card
+    var showsScrubHint: Bool = false
+    var performsScrubNudge: Bool = false
+    /// Keeps the shared scrubber's established leading alignment unless a
+    /// quiet calibration surface explicitly asks to center the value.
+    var centersValue: Bool = false
 
     enum Purpose {
         case strength
@@ -87,7 +98,10 @@ struct WeightScrubber: View {
                 unit: unit.symbol,
                 unitFontSize: 16,
                 accessibilityLabel: label ?? "Weight",
+                showsScrubHint: showsScrubHint,
+                performsScrubNudge: performsScrubNudge,
                 fitsWidth: true,
+                centersValue: centersValue,
                 tickTone: .deep,
                 hitSlop: 16,
                 showsRail: true
@@ -122,6 +136,9 @@ struct WeightScrubber: View {
     }
 
     private var step: Double {
+        if let displayStep, displayStep.isFinite, displayStep > 0 {
+            return displayStep
+        }
         switch purpose {
         case .strength: return unit.strengthStep
         case .body:     return unit.bodyWeightStep

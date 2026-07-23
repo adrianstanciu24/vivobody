@@ -57,6 +57,10 @@ struct BareScrubber: View {
     /// when the digit count changes (99.5 → 100.0). Off elsewhere so
     /// intrinsic-width layouts (editors, galleries) are unaffected.
     var fitsWidth: Bool = false
+    /// Opt-in centering for full-width scrubbers. Leading remains the
+    /// default because Active Workout aligns its instrument readouts to
+    /// the panel grid; onboarding uses centered calibration instead.
+    var centersValue: Bool = false
     /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
     /// weight sounds heavier than reps/sets/duration.
     var tickTone: Haptics.TickTone = .standard
@@ -321,13 +325,16 @@ struct BareScrubber: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: max(fontSize, templateHeight))
                 .background(widthReader($availableWidth))
-                .overlay(alignment: .leading) {
+                .overlay(alignment: fittedContentAlignment) {
                     HStack(alignment: .center, spacing: Space.sm) {
                         numberUnitRow
                             .fixedSize(horizontal: true, vertical: false)
                             .background(widthReader($naturalWidth))
-                            .scaleEffect(fitScale, anchor: .leading)
-                            .frame(width: naturalWidth > 0 ? naturalWidth * fitScale : nil, alignment: .leading)
+                            .scaleEffect(fitScale, anchor: fittedScaleAnchor)
+                            .frame(
+                                width: naturalWidth > 0 ? naturalWidth * fitScale : nil,
+                                alignment: fittedContentAlignment
+                            )
                         hintChevrons
                     }
                 }
@@ -355,6 +362,14 @@ struct BareScrubber: View {
         let target = max(1, availableWidth - reserve)
         guard templateWidth > target else { return 1 }
         return target / templateWidth
+    }
+
+    private var fittedContentAlignment: Alignment {
+        centersValue ? .center : .leading
+    }
+
+    private var fittedScaleAnchor: UnitPoint {
+        centersValue ? .center : .leading
     }
 
     /// Writes a view's measured width into `binding`. Uses

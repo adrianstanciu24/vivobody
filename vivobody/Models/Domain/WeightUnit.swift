@@ -115,6 +115,17 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
         }
     }
 
+    /// Fine-grained increment choices for body-weight entry. These are
+    /// intentionally tighter than barbell steps: the first value matches
+    /// ordinary digital-scale precision, while the larger values make a
+    /// first-time setup faster without turning the control into a keyboard.
+    var bodyWeightStepOptions: [Double] {
+        switch self {
+        case .lb: return [0.2, 0.5, 1]
+        case .kg: return [0.1, 0.5, 1]
+        }
+    }
+
     /// Body-weight scrubber range. 60 lb (≈27 kg) is below any
     /// realistic adult; 500 lb (≈227 kg) covers the heaviest.
     var bodyWeightRange: ClosedRange<Double> {

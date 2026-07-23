@@ -7,6 +7,8 @@
 //  every report computes at most once per data change, not once
 //  per render. Held on AppState so both TodayScreen and
 //  InsightsScreen share the same cache — switching tabs is free.
+//  Explicit invalidation covers the rare intentional mutation of an
+//  archived session, such as correcting its same-day body weight.
 //
 //  Replaces the ad-hoc BodyModelStateCache in TodayScreen and
 //  eliminates the 11-model recompute-per-render in InsightsScreen.
@@ -89,6 +91,14 @@ final class SessionAnalytics {
         consistency = sessions.consistency()
         load = sessions.trainingLoad(now: now)
         lastInstances = sessions.lastInstanceByExercise()
+    }
+
+    /// Forces the next consumer to rebuild every derived report. Archived
+    /// sessions are ordinarily immutable, so the compact fingerprint above
+    /// is sufficient; correction flows call this after changing a snapshot
+    /// without altering session count or completion time.
+    func invalidate() {
+        fingerprint = ""
     }
 }
 

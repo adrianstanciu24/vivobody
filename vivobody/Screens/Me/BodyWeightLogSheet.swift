@@ -17,6 +17,9 @@
 //    • Editing an existing entry → save mutates the original, unless
 //      the new date already has another row; then it merges into that
 //      row and deletes the duplicate.
+//    • Any save refreshes workouts started on that calendar day, so a
+//      corrected measurement immediately updates effective load, 1RM,
+//      tonnage, records, and other bodyweight-derived analytics.
 //
 //  Sheet is reused from both the Me-tab card (empty state) and the
 //  BodyWeightDetail screen.
@@ -46,6 +49,7 @@ struct BodyWeightLogSheet: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     /// All known entries — needed so we can detect "today already
     /// has a row" during a `.create` flow and overwrite rather than
@@ -242,10 +246,20 @@ struct BodyWeightLogSheet: View {
 
     private func performSave() {
         do {
+            let synchronizedSessions = try BodyWeightSessionSynchronizer.apply(
+                weight: weight,
+                on: date,
+                in: context
+            )
             try context.saveOrRollback()
+            sessionAnalytics?.invalidate()
             WidgetSnapshotWriter.writeAll(in: context)
+            for session in synchronizedSessions where session.completedAt == nil {
+                SessionSideEffects.handle(.updated, session: session, in: context)
+            }
             dismiss()
         } catch {
+            context.rollback()
             saveError = SaveErrorBox(error)
             isSaving = false
         }

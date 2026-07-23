@@ -305,6 +305,15 @@ struct LastExerciseInstance: Hashable {
     /// entries never render as an unexplained raw zero or generic load.
     var loadMode: ExerciseLoadMode = .external
 
+    /// Load-profile snapshot from the most recent session. Exercise
+    /// details use this with `bodyweightAtSession` to explain the exact
+    /// effective-load value that fed records and strength estimates.
+    var bodyweightFraction: Double = 0
+
+    /// Historical body weight captured when the most recent workout
+    /// began. Zero remains the honest unknown sentinel.
+    var bodyweightAtSession: Double = ExerciseLoad.unknownBodyweight
+
     /// Comparable resistance for the most recent top set, calculated
     /// with that session's bodyweight snapshot. The picker still shows
     /// the user's raw entry; detail strength summaries may use this.
@@ -435,6 +444,8 @@ extension Array where Element == WorkoutSession {
                 topDuration: mostRecent.top.duration,
                 trackingMode: mode,
                 loadMode: mostRecent.loadProfile.mode,
+                bodyweightFraction: mostRecent.loadProfile.bodyweightFraction,
+                bodyweightAtSession: mostRecent.bodyweight,
                 effectiveTopLoad: currentEffectiveLoad,
                 sessionDate: mostRecent.date,
                 isAllTimeBest: isBest

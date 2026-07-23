@@ -6,28 +6,31 @@
 //  AppRoot until SettingsKey.onboardingCompleted flips true.
 //
 //  Deliberately NOT a wizard. workout-app-principles.md cuts
-//  onboarding wizards, tutorial carousels, and "crush your goals"
-//  hero copy outright, so this is a single calm beat: the wordmark,
-//  one honest line, and the only setting that's genuinely painful to
-//  get wrong later — pounds vs kilograms (every weight in the app is
-//  displayed through it). Permissions (Health, notifications) stay
-//  out of here and are requested in context the first time they
-//  matter.
+//  onboarding wizards, tutorial carousels, and motivational hero copy,
+//  so this stays a single calm beat: brand, initial body weight, units,
+//  and one way in. Body weight is worth capturing here because it makes
+//  bodyweight-exercise load analytics accurate from the first workout.
+//  Permissions (Health, notifications) remain contextual.
 //
-//  The screen owns no completion state itself; tapping Start calls
-//  back to AppRoot, which sets the @AppStorage flag and dismisses
-//  the cover. The unit choice writes straight to the same
-//  SettingsKey.weightUnit that Settings reads, so it's already in
-//  effect by the time the app appears.
+//  Tapping Start persists a real BodyWeightEntry before calling AppRoot,
+//  which sets the @AppStorage completion flag and dismisses the cover.
+//  The unit choice writes straight to SettingsKey.weightUnit; canonical
+//  body-weight storage remains pounds at the scrubber boundary.
 //
 
 import VivoKit
 import SwiftUI
+import SwiftData
 
 struct OnboardingScreen: View {
     /// Raised when the user taps Start. AppRoot owns the
     /// onboarding-completed flag and the cover's dismissal.
     let onStart: () -> Void
+
+    @Environment(\.modelContext) private var context
+
+    @Query(sort: \BodyWeightEntry.date, order: .reverse)
+    private var bodyWeightEntries: [BodyWeightEntry]
 
     @AppStorage(SettingsKey.weightUnit)
     private var weightUnitRaw: String = SettingsDefaults.weightUnit
@@ -35,6 +38,13 @@ struct OnboardingScreen: View {
     private var weightUnit: WeightUnit {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
+
+    /// Canonical pounds. The scrubber converts at its UI boundary.
+    @State private var bodyWeight: Double = 180
+    /// Display-unit increment, local to this one-time setup surface.
+    @State private var bodyWeightStep: Double = WeightUnit.lb.bodyWeightStep
+    @State private var isSaving = false
+    @State private var saveError: SaveErrorBox? = nil
 
     /// Shared identity for the single tinted glass "thumb" that morphs
     /// across the unit chips. Lives in one GlassEffectContainer so the
@@ -45,29 +55,33 @@ struct OnboardingScreen: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Top half: the brand mark leads, wordmark + motto beneath.
-            VStack(spacing: Space.xl) {
-                Spacer(minLength: Space.section)
-                logo
-                wordmark
-                Spacer(minLength: Space.section)
-            }
-            .frame(maxHeight: .infinity)
-            .settleIn(0)
+            // Deliberately top-anchored: the brand opens the screen and
+            // leaves the centre to the one piece of personal setup.
+            brand
+                .padding(.top, Space.section)
+                .settleIn(0)
 
-            // Bottom half: the one real choice, then the way in.
-            VStack(spacing: Space.section) {
+            Spacer(minLength: Space.md)
+
+            VStack(spacing: Space.section + Space.xl) {
+                bodyWeightPicker
+
                 unitPicker
-                    .padding(.bottom, Space.section)
-                    .settleIn(1)
-                startButton
-                    .settleIn(2)
             }
+            .frame(maxWidth: 360)
+            .settleIn(1)
+
+            Spacer(minLength: Space.xl)
+
+            startButton
+                .settleIn(2)
         }
         .padding(.horizontal, Space.gutter)
-        .padding(.bottom, Space.xxl)
+        .padding(.bottom, Space.xl)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .forgeBackground(intensity: 0.7)
+        .onAppear(perform: hydrate)
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Logo
@@ -77,28 +91,87 @@ struct OnboardingScreen: View {
             .renderingMode(.template)
             .resizable()
             .scaledToFit()
-            .frame(width: 104, height: 104)
+            .frame(width: 88, height: 88)
             .foregroundStyle(Tint.primary)
             .accessibilityHidden(true)
     }
 
     // MARK: - Wordmark
 
-    private var wordmark: some View {
-        VStack(spacing: Space.sm) {
+    private var brand: some View {
+        VStack(spacing: Space.md) {
+            logo
+
             Text("vivobody")
                 .font(Typography.display)
                 .foregroundStyle(Ink.primary)
-
-            Text("Track your lifts. Nothing else.")
-                .font(.system(.title3, design: .serif).italic())
-                .foregroundStyle(Ink.secondary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("vivobody. Track your lifts. Nothing else.")
+        .accessibilityLabel("vivobody")
+    }
+
+    // MARK: - Body weight
+
+    private var bodyWeightPicker: some View {
+        VStack(spacing: Space.sm) {
+            Text("Your body weight")
+                .panelLegend()
+
+            WeightScrubber(
+                canonicalWeight: $bodyWeight,
+                purpose: .body,
+                displayStep: bodyWeightStep,
+                label: nil,
+                pointsPerStep: 8,
+                valueFontSize: 88,
+                presentation: .bare,
+                showsScrubHint: true,
+                performsScrubNudge: true,
+                centersValue: true
+            )
+
+            HStack(spacing: Space.md) {
+                Text("Drag to adjust")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+
+                Spacer(minLength: Space.md)
+
+                bodyWeightStepButton
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    /// The compact cycling increment control from Active Workout, tuned
+    /// to scale precision instead of plate jumps.
+    private var bodyWeightStepButton: some View {
+        let options = weightUnit.bodyWeightStepOptions
+        let label = WeightUnit.stepLabel(bodyWeightStep, unit: weightUnit.symbol)
+        return Button {
+            let index = options.firstIndex(of: bodyWeightStep) ?? 0
+            let next = options[(index + 1) % options.count]
+            Haptics.selection(
+                pitch: Haptics.optionPitch(index: index, count: options.count),
+                playsSound: true
+            )
+            bodyWeightStep = next
+            snapBodyWeight(to: next, unit: weightUnit)
+        } label: {
+            Text(label)
+                .font(Typography.metricUnit)
+                .monospacedDigit()
+                .foregroundStyle(Ink.secondary)
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .padding(4)
+        .coloredGlassControl(cornerRadius: Radius.pill)
+        .accessibilityLabel("Body weight increment")
+        .accessibilityValue(label)
     }
 
     // MARK: - Unit picker
@@ -125,14 +198,19 @@ struct OnboardingScreen: View {
         let shape = RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
         return Button {
             Haptics.selection()
+            let selectUnit = {
+                weightUnitRaw = unit.rawValue
+                bodyWeightStep = unit.bodyWeightStep
+                snapBodyWeight(to: unit.bodyWeightStep, unit: unit)
+            }
             // Drive the assignment through an animation transaction so
             // the shared-ID glass thumb morphs to the new cell instead
             // of snapping. Reduce Motion takes the instant path.
             if reduceMotion {
-                weightUnitRaw = unit.rawValue
+                selectUnit()
             } else {
                 withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
-                    weightUnitRaw = unit.rawValue
+                    selectUnit()
                 }
             }
         } label: {
@@ -164,9 +242,50 @@ struct OnboardingScreen: View {
             icon: "arrow.right",
             inputLabels: ["Start", "Begin", "Get Started"]
         ) {
-            onStart()
+            saveAndStart()
         }
+        .disabled(isSaving)
+        .opacity(isSaving ? Opacity.medium : 1)
         .accessibilityHint("Finishes setup and opens the app")
+    }
+
+    // MARK: - Setup state
+
+    private func hydrate() {
+        if let latest = bodyWeightEntries.latest {
+            bodyWeight = latest.weight
+        }
+        bodyWeightStep = weightUnit.bodyWeightStep
+        snapBodyWeight(to: bodyWeightStep, unit: weightUnit)
+    }
+
+    private func snapBodyWeight(to step: Double, unit: WeightUnit) {
+        let displayed = WeightFormatter.toDisplay(bodyWeight, unit: unit)
+        let snapped = (displayed / step).rounded() * step
+        bodyWeight = WeightFormatter.toCanonical(snapped, unit: unit)
+    }
+
+    private func saveAndStart() {
+        guard !isSaving, bodyWeight.isFinite, bodyWeight > 0 else { return }
+        isSaving = true
+        Haptics.soft()
+
+        let now = Date()
+        if let existing = bodyWeightEntries.entry(on: now) {
+            existing.date = now
+            existing.weight = bodyWeight
+        } else {
+            context.insert(BodyWeightEntry(date: now, weight: bodyWeight))
+        }
+
+        do {
+            try context.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: context)
+            onStart()
+        } catch {
+            saveError = SaveErrorBox(error)
+            isSaving = false
+        }
     }
 }
 
@@ -195,4 +314,5 @@ private struct UnitChipSurface: ViewModifier {
 #Preview {
     OnboardingScreen(onStart: {})
         .preferredColorScheme(.dark)
+        .modelContainer(for: BodyWeightEntry.self, inMemory: true)
 }

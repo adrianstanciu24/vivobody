@@ -156,6 +156,53 @@ extension ExerciseDetailScreen {
             .accessibilityHidden(true)
     }
 
+    // MARK: - Performance rows
+
+    /// Effective resistance and 1RM belong together: the first explains
+    /// the historical load input, the second shows the estimate derived
+    /// from it and reps. External-load exercises retain their existing
+    /// single 1RM row; only bodyweight-dependent history gains a row.
+    var showsPerformanceRows: Bool {
+        effectiveLoadDetail != nil || supportsEstimatedOneRepMax
+    }
+
+    var performanceRows: some View {
+        VStack(spacing: Space.sm) {
+            if let detail = effectiveLoadDetail {
+                effectiveLoadRow(detail)
+            }
+            if supportsEstimatedOneRepMax {
+                oneRepMaxRow
+            }
+        }
+    }
+
+    /// The standing record's absolute resistance, presented beside the
+    /// exact bodyweight snapshot, movement coefficient, and added load or
+    /// assistance that produced it. `KitRow` keeps this new explanation in
+    /// the same list-row vocabulary as the rest of the app.
+    func effectiveLoadRow(_ detail: EffectiveLoadDetail) -> some View {
+        let value = detail.effectiveLoad.map {
+            WeightFormatter.string($0, unit: unit)
+        } ?? "—"
+        let subtitle = detail.formula(unit: unit)
+            ?? "Body weight unavailable for this session"
+
+        return KitRow(
+            title: "Effective load",
+            subtitle: subtitle
+        ) {
+            Text(value)
+                .font(Typography.statValue)
+                .foregroundStyle(Ink.primary)
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Effective load, \(value). \(subtitle)")
+    }
+
     // MARK: - One-rep max
 
     /// Dedicated, tappable 1RM row. Shows a user-measured max (the
@@ -665,6 +712,42 @@ extension ExerciseDetailScreen {
         let isPR: Bool
     }
 
+    /// The historical ingredients behind the standing effective-load
+    /// record. Values stay canonical pounds until the row formats them.
+    struct EffectiveLoadDetail {
+        let effectiveLoad: Double?
+        let loggedWeight: Double
+        let loadMode: ExerciseLoadMode
+        let bodyweightFraction: Double
+        let bodyweightAtSession: Double
+
+        func formula(unit: WeightUnit) -> String? {
+            guard bodyweightAtSession.isFinite, bodyweightAtSession > 0 else {
+                return nil
+            }
+
+            let bodyweight = WeightFormatter.string(
+                bodyweightAtSession,
+                unit: unit,
+                fractionDigits: 1
+            )
+            let logged = WeightFormatter.string(
+                max(0, loggedWeight),
+                unit: unit
+            )
+            let percent = Int((bodyweightFraction * 100).rounded())
+
+            switch loadMode {
+            case .bodyweightAdded:
+                return "\(bodyweight) BW × \(percent)% + \(logged)"
+            case .assistanceSubtracted:
+                return "\(bodyweight) BW × \(percent)% − \(logged)"
+            case .external, .nonComparable:
+                return nil
+            }
+        }
+    }
+
     /// Mode-aware top-set label for a recent row — "145 lb × 8" for
     /// strength, "0:45" (or "25 lb × 0:45" when loaded) for a hold.
     func recentMetricLabel(_ row: RecentSessionRow) -> String {
@@ -725,6 +808,36 @@ extension ExerciseDetailScreen {
     var lastInstance: LastExerciseInstance? {
         let lookup = sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
         return lookup[historyKey] ?? lookup[legacyHistoryKey]
+    }
+
+    /// Standing effective-load record for bodyweight-added and assisted
+    /// movements. With two or more sessions, use the same record point as
+    /// the Best stat and PR wall; with one session, use its cached top set.
+    /// Unknown bodyweight still produces a detail so the row can explain
+    /// why the absolute value is unavailable instead of silently vanishing.
+    var effectiveLoadDetail: EffectiveLoadDetail? {
+        guard hasHistory else { return nil }
+        guard item.loadMode == .bodyweightAdded
+                || item.loadMode == .assistanceSubtracted else { return nil }
+
+        if let point = progress?.recordPoint ?? progress?.latest {
+            return EffectiveLoadDetail(
+                effectiveLoad: point.effectiveTopLoad,
+                loggedWeight: point.topWeight,
+                loadMode: point.loadMode,
+                bodyweightFraction: point.bodyweightFraction,
+                bodyweightAtSession: point.bodyweightAtSession
+            )
+        }
+
+        guard let last = lastInstance else { return nil }
+        return EffectiveLoadDetail(
+            effectiveLoad: last.effectiveTopLoad,
+            loggedWeight: last.topWeight,
+            loadMode: last.loadMode,
+            bodyweightFraction: last.bodyweightFraction,
+            bodyweightAtSession: last.bodyweightAtSession
+        )
     }
 
     /// Number of archived sessions that include this exercise.

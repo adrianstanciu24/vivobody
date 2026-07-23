@@ -161,8 +161,19 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Weight × reps instrument — the default lift.
+    /// Weight × reps instrument. Bodyweight movements keep `BW` as the
+    /// stable hero and demote the added-load encoder beside it; ordinary
+    /// external-load work keeps the logged weight as the hero.
+    @ViewBuilder
     var repsHero: some View {
+        if exercise.loadMode == .bodyweightAdded {
+            bodyweightRepsHero
+        } else {
+            externalLoadRepsHero
+        }
+    }
+
+    var externalLoadRepsHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(exercise.loadMode.inputLabel)
                 .panelLegend()
@@ -184,6 +195,76 @@ extension ActiveExerciseCard {
                 hitSlop: 12,
                 showsRail: true
             )
+
+            HStack(alignment: .center, spacing: Space.sm) {
+                Text("×")
+                    .font(Typography.statValue)
+                    .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
+                BareScrubber(
+                    value: repsBinding,
+                    range: 1...30,
+                    step: 1,
+                    pointsPerStep: 16,
+                    fontSize: 46,
+                    unit: "reps",
+                    unitFontSize: 14,
+                    numberColor: Ink.secondary,
+                    unitColor: Ink.tertiary,
+                    accessibilityLabel: "Reps",
+                    showsScrubHint: isActive,
+                    hitSlop: 18
+                )
+                Spacer(minLength: Space.md)
+                stepToggle
+            }
+        }
+    }
+
+    /// Bodyweight is the resistance users performed against; zero in the
+    /// model means no load was added, not a zero-load set. The compact
+    /// encoder stays fully interactive so weighted variations use the same
+    /// vertical scrub gesture without replacing or moving the `BW` hero.
+    var bodyweightRepsHero: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Bodyweight")
+                    .panelLegend()
+                Spacer(minLength: Space.lg)
+                Text("Added load")
+                    .panelLegend()
+            }
+
+            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                Text("BW")
+                    .font(Typography.bigMetric)
+                    .foregroundStyle(Ink.primary)
+                    .monospaced()
+                    .accessibilityLabel("Bodyweight")
+
+                Spacer(minLength: Space.lg)
+
+                Text("+")
+                    .font(Typography.statValue)
+                    .foregroundStyle(Ink.quaternary)
+                    .accessibilityHidden(true)
+                BareScrubber(
+                    value: weightDisplayBinding,
+                    range: unit.strengthRange,
+                    step: weightStep,
+                    pointsPerStep: 8,
+                    fontSize: 40,
+                    unit: unit.symbol,
+                    unitFontSize: 13,
+                    numberColor: Ink.secondary,
+                    unitColor: Ink.tertiary,
+                    accessibilityLabel: exercise.loadMode.inputLabel,
+                    showsScrubHint: isActive,
+                    performsScrubNudge: isActive,
+                    tickTone: .deep,
+                    hitSlop: 18
+                )
+            }
 
             HStack(alignment: .center, spacing: Space.sm) {
                 Text("×")
@@ -233,28 +314,74 @@ extension ActiveExerciseCard {
                 showsRail: true
             )
 
-            Text(exercise.loadMode.inputLabel)
-                .panelLegend()
-            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text(exercise.loadMode.inputOperatorSymbol)
-                    .font(Typography.statValue)
-                    .foregroundStyle(Ink.quaternary)
-                    .accessibilityHidden(true)
-                BareScrubber(
-                    value: weightDisplayBinding,
-                    range: unit.strengthRange,
-                    step: weightStep,
-                    pointsPerStep: 8,
-                    fontSize: 46,
-                    unit: unit.symbol,
-                    unitFontSize: 14,
-                    numberColor: Ink.secondary,
-                    unitColor: Ink.tertiary,
-                    accessibilityLabel: exercise.loadMode.inputLabel,
-                    showsScrubHint: isActive,
-                    tickTone: .deep,
-                    hitSlop: 18
-                )
+            durationLoadControl
+        }
+    }
+
+    @ViewBuilder
+    var durationLoadControl: some View {
+        if exercise.loadMode == .bodyweightAdded {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Bodyweight")
+                        .panelLegend()
+                    Spacer(minLength: Space.lg)
+                    Text("Added load")
+                        .panelLegend()
+                }
+                HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                    Text("BW")
+                        .font(Typography.metricLg)
+                        .foregroundStyle(Ink.secondary)
+                        .monospaced()
+                        .accessibilityLabel("Bodyweight")
+                    Spacer(minLength: Space.lg)
+                    Text("+")
+                        .font(Typography.statValue)
+                        .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
+                    BareScrubber(
+                        value: weightDisplayBinding,
+                        range: unit.strengthRange,
+                        step: weightStep,
+                        pointsPerStep: 8,
+                        fontSize: 32,
+                        unit: unit.symbol,
+                        unitFontSize: 13,
+                        numberColor: Ink.secondary,
+                        unitColor: Ink.tertiary,
+                        accessibilityLabel: exercise.loadMode.inputLabel,
+                        showsScrubHint: isActive,
+                        tickTone: .deep,
+                        hitSlop: 18
+                    )
+                }
+            }
+        } else {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text(exercise.loadMode.inputLabel)
+                    .panelLegend()
+                HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
+                    Text(exercise.loadMode.inputOperatorSymbol)
+                        .font(Typography.statValue)
+                        .foregroundStyle(Ink.quaternary)
+                        .accessibilityHidden(true)
+                    BareScrubber(
+                        value: weightDisplayBinding,
+                        range: unit.strengthRange,
+                        step: weightStep,
+                        pointsPerStep: 8,
+                        fontSize: 46,
+                        unit: unit.symbol,
+                        unitFontSize: 14,
+                        numberColor: Ink.secondary,
+                        unitColor: Ink.tertiary,
+                        accessibilityLabel: exercise.loadMode.inputLabel,
+                        showsScrubHint: isActive,
+                        tickTone: .deep,
+                        hitSlop: 18
+                    )
+                }
             }
         }
     }
