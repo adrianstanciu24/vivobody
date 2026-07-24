@@ -28,9 +28,10 @@
 //                   aligned with the in-progress layout.
 //
 //  Component contract:
-//    Takes a session binding and a single onExpand callback. Knows
-//    nothing about TabView, NavigationStack, fullScreenCover, or
-//    AppState. The shell wires it.
+//    Takes a session binding, an onExpand callback, and a flag saying
+//    whether it owns rest expiry (false while the full workout screen
+//    is presented). Knows nothing about TabView, NavigationStack,
+//    fullScreenCover, or AppState. The shell wires it.
 //
 
 import VivoKit
@@ -40,6 +41,14 @@ import SwiftData
 struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
     var onExpand: () -> Void
+
+    /// When false, the expanded ActiveWorkoutScreen's rest overlay owns
+    /// rest expiry — including the skip-to-zero "Go" state, which
+    /// deliberately keeps the session resting at a passed deadline until
+    /// the user confirms with a second swipe. The bar (still mounted
+    /// behind the sheet) must not flip the session to Ready underneath
+    /// it. The shell passes `!isWorkoutExpanded`.
+    var autoEndsExpiredRest: Bool = true
 
     private let completedGreen = Tint.success
     private let restTint       = Tint.primary
@@ -76,8 +85,8 @@ struct ActiveWorkoutMiniBar: View {
         .accessibilityHint("Tap to expand workout")
         .accessibilityInputLabels([Text("Workout"), Text("Active workout"), Text("Resume")])
         .saveErrorAlert($saveError)
-        .task(id: restJustExpired(now: now)) {
-            if restJustExpired(now: now) {
+        .task(id: autoEndsExpiredRest && restJustExpired(now: now)) {
+            if autoEndsExpiredRest && restJustExpired(now: now) {
                 Haptics.swell()
                 session.skipRest()
                 do {

@@ -41,6 +41,10 @@ struct RestTimerOverlay: View {
                 onExtend: { seconds in
                     session.didExtendRest(by: seconds)
                     saveRestState()
+                },
+                onZero: {
+                    session.zeroRestDeadline()
+                    saveRestState()
                 }
             )
             .id(instanceID)

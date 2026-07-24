@@ -236,6 +236,17 @@ final class WorkoutSession: Identifiable {
         restEndsAt = nil
     }
 
+    /// Snap the rest deadline to now without leaving the rest state.
+    /// The overlay's first skip swipe zeroes the countdown but keeps
+    /// the Go screen up for a confirming second swipe; external
+    /// surfaces (Live Activity, MiniBar, rest notification) read this
+    /// deadline and must see the same zero, or a later extension
+    /// compounds on the stale deadline.
+    func zeroRestDeadline() {
+        guard isResting else { return }
+        restEndsAt = Date()
+    }
+
     /// Clear in-flight UI state before archiving so stale rest timers,
     /// PR celebration values, and summary animation flags don't
     /// persist forever on the archived session. Called at archive

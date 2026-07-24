@@ -13,6 +13,14 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
+/// A countdown range that never traps: skip-to-zero pushes a rest
+/// deadline at (or, by render time, just before) now, and
+/// ClosedRange requires lowerBound <= upperBound.
+private func restTimerRange(endingAt end: Date) -> ClosedRange<Date> {
+    let now = Date()
+    return now...max(now, end)
+}
+
 struct ActiveWorkoutLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: WorkoutActivityAttributes.self) { context in
@@ -66,7 +74,7 @@ struct ActiveWorkoutLiveActivity: Widget {
     @ViewBuilder
     private func restOrSetValue(_ state: WorkoutActivityAttributes.ContentState) -> some View {
         if state.isResting, let restEndsAt = state.restEndsAt {
-            Text(timerInterval: Date()...restEndsAt, countsDown: true)
+            Text(timerInterval: restTimerRange(endingAt: restEndsAt), countsDown: true)
                 .font(Typography.metricUnit)
                 .monospacedDigit()
         } else {
@@ -79,11 +87,12 @@ struct ActiveWorkoutLiveActivity: Widget {
     private func restTimerBlock(_ state: WorkoutActivityAttributes.ContentState) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             if let restEndsAt = state.restEndsAt {
-                Text(timerInterval: Date()...restEndsAt, countsDown: true)
+                let range = restTimerRange(endingAt: restEndsAt)
+                Text(timerInterval: range, countsDown: true)
                     .font(Typography.metricLg)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
-                ProgressView(timerInterval: Date()...restEndsAt, countsDown: true)
+                ProgressView(timerInterval: range, countsDown: true)
                     .tint(Tint.inProgress)
                     .frame(width: 92)
             }
@@ -115,11 +124,12 @@ struct ActiveWorkoutActivityView: View {
                 .lineLimit(1)
 
             if state.isResting, let restEndsAt = state.restEndsAt {
-                Text(timerInterval: Date()...restEndsAt, countsDown: true)
+                let range = restTimerRange(endingAt: restEndsAt)
+                Text(timerInterval: range, countsDown: true)
                     .font(Typography.metricLg)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
-                ProgressView(timerInterval: Date()...restEndsAt, countsDown: true)
+                ProgressView(timerInterval: range, countsDown: true)
                     .tint(Tint.inProgress)
                     .frame(height: 3)
                 Text("Set \(state.setNumber) of \(state.plannedSets)")

@@ -73,6 +73,7 @@ struct AppRoot: View {
             .tint(Tint.primary)
             .miniBarAccessory(
                 session: workout.activeSession,
+                isWorkoutExpanded: workout.isWorkoutExpanded,
                 onExpand: { workout.expandWorkout() }
             )
             .saveErrorAlert($workout.lastSaveError)
@@ -277,11 +278,16 @@ private extension View {
     @ViewBuilder
     func miniBarAccessory(
         session: WorkoutSession?,
+        isWorkoutExpanded: Bool,
         onExpand: @escaping () -> Void
     ) -> some View {
         if let session {
             self.tabViewBottomAccessory {
-                ActiveWorkoutMiniBar(session: session, onExpand: onExpand)
+                ActiveWorkoutMiniBar(
+                    session: session,
+                    onExpand: onExpand,
+                    autoEndsExpiredRest: !isWorkoutExpanded
+                )
             }
         } else {
             self

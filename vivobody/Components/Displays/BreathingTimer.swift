@@ -32,6 +32,7 @@ struct BreathingTimer: View {
     var onComplete: () -> Void = {}
     var onSkip: () -> Void = {}
     var onExtend: (TimeInterval) -> Void = { _ in }
+    var onZero: () -> Void = {}
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -55,13 +56,15 @@ struct BreathingTimer: View {
         nextSetLabel: String? = nil,
         onComplete: @escaping () -> Void = {},
         onSkip: @escaping () -> Void = {},
-        onExtend: @escaping (TimeInterval) -> Void = { _ in }
+        onExtend: @escaping (TimeInterval) -> Void = { _ in },
+        onZero: @escaping () -> Void = {}
     ) {
         self.duration = duration
         self.nextSetLabel = nextSetLabel
         self.onComplete = onComplete
         self.onSkip = onSkip
         self.onExtend = onExtend
+        self.onZero = onZero
         let now = Date()
         let end = now.addingTimeInterval(duration)
         self._startTime = State(initialValue: now)
@@ -341,16 +344,23 @@ struct BreathingTimer: View {
             // First swipe on a still-counting timer: snap to 0 / Go
             // state, but stay on the overlay. The user commits with a
             // second swipe to actually return to the exercise card —
-            // a confirmation beat in the "I'm ready" state.
+            // a confirmation beat in the "I'm ready" state. onZero
+            // lets the owner move the shared rest deadline too, so
+            // external surfaces (Live Activity, MiniBar) don't keep
+            // counting the old rest.
             endTime = Date()
             hasFinished = true
+            onZero()
         } else {
             onSkip()
         }
     }
 
     private func extend(by seconds: TimeInterval) {
-        endTime = endTime.addingTimeInterval(seconds)
+        // Clamp to now so extending from the Go state grants the full
+        // 30s instead of counting from the moment the timer hit zero —
+        // mirrors WorkoutSession.didExtendRest.
+        endTime = max(endTime, Date()).addingTimeInterval(seconds)
         totalDuration += seconds
         hasFiredWarning = false
         hasFinished = false
