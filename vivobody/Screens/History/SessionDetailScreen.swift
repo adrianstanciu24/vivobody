@@ -116,7 +116,7 @@ struct SessionDetailScreen: View {
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                if session.comparableTonnageSummary.availability != .unavailable {
+                if session.receiptTonnageSummary.availability != .unavailable {
                     Text(unit.symbol)
                         .font(Typography.metricInline)
                         .foregroundStyle(Ink.tertiary)
@@ -129,7 +129,7 @@ struct SessionDetailScreen: View {
     }
 
     private var heroVolumeValue: String {
-        let summary = session.comparableTonnageSummary
+        let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
             return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
@@ -141,7 +141,7 @@ struct SessionDetailScreen: View {
     }
 
     private var heroVolumeLabel: String {
-        switch session.comparableTonnageSummary.availability {
+        switch session.receiptTonnageSummary.availability {
         case .complete:
             return sessionHasPR ? "Volume · personal record" : "Volume"
         case .partial:
@@ -170,7 +170,7 @@ struct SessionDetailScreen: View {
     // MARK: - Exercises
 
     private var exercisesSection: some View {
-        let breakdown = session.contributions()
+        let breakdown = session.receiptContributions()
         return VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
 
@@ -299,7 +299,7 @@ private struct ExerciseDetailRow: View {
     }
 
     private var exerciseVolume: Double {
-        exercise.completedComparableTonnage ?? 0
+        exercise.completedReceiptTonnage ?? 0
     }
 
     /// Total timed work across completed sets — the `.duration`

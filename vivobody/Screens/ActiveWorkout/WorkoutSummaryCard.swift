@@ -14,7 +14,7 @@
 //      immediately at its final value.
 //    • A small mono support line for the rest (duration, sets, reps).
 //    • The exercise list as type rows divided by hairlines, each with
-//      its top set and the same gold/dim set pips used on the pages.
+//      its total volume and the same gold/dim set pips used on the pages.
 //    • Words for verbs: "Add exercise" and a gold "Done" verb
 //      button (finishing the session is a completion).
 //
@@ -62,7 +62,7 @@ struct WorkoutSummaryCard: View {
     }
 
     private var tonnageAvailability: ComparableTonnageAvailability {
-        session.comparableTonnageSummary.availability
+        session.receiptTonnageSummary.availability
     }
 
     private var isComplete: Bool { session.isAllComplete }
@@ -80,7 +80,7 @@ struct WorkoutSummaryCard: View {
                         .powerOn(1)
 
                     supportLine
-                        .padding(.top, Space.sm)
+                        .padding(.top, Space.lg)
                         .powerOn(2)
 
                     if SessionIntensityLine.hasContent(session) {
@@ -195,7 +195,6 @@ struct WorkoutSummaryCard: View {
     // MARK: - Exercise list
 
     private var exerciseList: some View {
-        let breakdown = session.contributions()
         return VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
                 if idx > 0 {
@@ -204,55 +203,53 @@ struct WorkoutSummaryCard: View {
                         .frame(height: 1)
                         .accessibilityHidden(true)
                 }
-                exerciseRow(for: exercise, contribution: breakdown[exercise.id])
+                exerciseRow(for: exercise)
             }
         }
     }
 
-    private func exerciseRow(for exercise: Exercise, contribution: SessionContribution?) -> some View {
+    private func exerciseRow(for exercise: Exercise) -> some View {
         let exerciseSets = exercise.orderedSets
-        let topLabel = session.topSetLabel(for: exercise, unit: unit)
-        let adherence = session.adherence(for: exercise)
+        let completedSetCount = exerciseSets.filter(\.isCompleted).count
 
-        return VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .center, spacing: Space.md) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(exercise.group.displayName)
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                    Text(exercise.name)
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                }
-
-                Spacer(minLength: Space.sm)
-
-                VStack(alignment: .trailing, spacing: 3) {
-                    if let topLabel {
-                        Text(topLabel)
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(Ink.secondary)
-                    } else {
-                        Text("—")
-                            .font(Typography.metricUnit)
-                            .foregroundStyle(Ink.quaternary)
-                    }
-                    if let adherence, !adherence.isOnPlan {
-                        AdherenceBadge(adherence: adherence, unit: unit)
-                    }
-                }
-
-                summaryPips(for: exerciseSets)
+        return HStack(alignment: .center, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(exercise.group.displayName)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                Text(exercise.name)
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            .layoutPriority(1)
 
-            if let contribution, contribution.metric > 0 {
-                WaterfallRow(share: contribution.share, isDuration: contribution.isDuration)
-            }
+            Spacer(minLength: Space.sm)
+
+            Text(exerciseTotalLabel(for: exercise))
+                .font(Typography.metricUnit)
+                .foregroundStyle(Ink.secondary)
+                .monospacedDigit()
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+
+            summaryPips(for: exerciseSets)
         }
         .padding(.vertical, Space.md)
         .accessibilityElement(children: .combine)
+        .accessibilityValue("\(completedSetCount) of \(exerciseSets.count) sets completed")
+    }
+
+    private func exerciseTotalLabel(for exercise: Exercise) -> String {
+        if exercise.trackingMode == .duration {
+            let total = exercise.sets
+                .filter(\.isCompleted)
+                .reduce(0) { $0 + $1.duration }
+            return DurationFormatter.compact(total)
+        }
+        guard let volume = exercise.completedReceiptTonnage else { return "—" }
+        return WeightFormatter.volumeString(volume, unit: unit)
     }
 
     private func summaryPips(for sets: [WorkoutSet]) -> some View {

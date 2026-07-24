@@ -312,7 +312,7 @@ struct SessionRow: View {
                     .font(prominent ? Typography.statValue : Typography.metricInline)
                     .foregroundStyle(Ink.secondary)
                     .monospacedDigit()
-                if session.comparableTonnageSummary.availability != .unavailable {
+                if session.receiptTonnageSummary.availability != .unavailable {
                     Text(unit.symbol)
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
@@ -354,7 +354,7 @@ struct SessionRow: View {
     }
 
     private var volumeValue: String {
-        let summary = session.comparableTonnageSummary
+        let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
             return WeightFormatter.volumeValue(summary.knownSubtotal, unit: unit)
@@ -366,7 +366,7 @@ struct SessionRow: View {
     }
 
     private var volumeAccessibilityLabel: String {
-        let summary = session.comparableTonnageSummary
+        let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
             return "\(volumeValue) \(unit.symbol) volume"

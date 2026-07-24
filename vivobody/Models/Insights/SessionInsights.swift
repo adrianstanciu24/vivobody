@@ -8,7 +8,7 @@
 //  the model, no SwiftUI, so they're unit-testable in isolation.
 //
 //  Four reads, all derived from data already on the session:
-//    • volumeDensity — tonnage per minute (reframes volume vs time).
+//    • volumeDensity — receipt volume per minute (reframes work vs time).
 //    • hardSetCount  — completed sets pushed to RIR ≤ 1.
 //    • contributions — each eligible exercise's share of the session's
 //                      work, measured in its own "currency" (comparable
@@ -23,14 +23,14 @@ import Foundation
 // MARK: - Session-level intensity
 
 extension WorkoutSession {
-    /// Tonnage per minute, in canonical lb. Nil when comparable
-    /// tonnage is partial/unavailable, when there's no weight-volume
+    /// Receipt volume per minute, in canonical lb. Nil when the
+    /// receipt total is partial/unavailable, when there's no volume
     /// (e.g. a holds-only session), or when the clock hasn't
     /// meaningfully advanced. A density derived from a known subtotal
     /// would falsely look like a complete session rate.
     var volumeDensity: Double? {
         let minutes = duration / 60
-        let tonnage = comparableTonnageSummary
+        let tonnage = receiptTonnageSummary
         guard tonnage.availability == .complete,
               minutes >= 1,
               tonnage.knownSubtotal > 0 else { return nil }
@@ -91,16 +91,35 @@ extension WorkoutSession {
     /// shares of a partial denominator are not meaningful; timed-work
     /// shares remain available in their independent pool.
     func contributions() -> [UUID: SessionContribution] {
+        contributions(includingLoggedNonComparable: false)
+    }
+
+    /// Receipt counterpart to `contributions()`: band and other
+    /// non-comparable dynamic resistance participates using the raw
+    /// resistance the user logged, without entering strict analytics.
+    func receiptContributions() -> [UUID: SessionContribution] {
+        contributions(includingLoggedNonComparable: true)
+    }
+
+    private func contributions(
+        includingLoggedNonComparable: Bool
+    ) -> [UUID: SessionContribution] {
         var tonnageByID: [UUID: Double] = [:]
         var durationByID: [UUID: Double] = [:]
-        let canShowTonnageShares = comparableTonnageSummary.availability == .complete
+        let tonnageSummary = includingLoggedNonComparable
+            ? receiptTonnageSummary
+            : comparableTonnageSummary
+        let canShowTonnageShares = tonnageSummary.availability == .complete
 
         for ex in orderedExercises {
             let completed = ex.sets.filter(\.isAnalyticsEligible)
             if ex.trackingMode == .duration {
                 durationByID[ex.id] = completed.reduce(0) { $0 + $1.duration }
-            } else if canShowTonnageShares,
-                      let tonnage = ex.completedComparableTonnage {
+            } else if canShowTonnageShares {
+                let tonnage = includingLoggedNonComparable
+                    ? ex.completedReceiptTonnage
+                    : ex.completedComparableTonnage
+                guard let tonnage else { continue }
                 tonnageByID[ex.id] = tonnage
             }
         }

@@ -658,7 +658,7 @@ extension TodayScreen {
     }
 
     private func lastWorkoutVolumeStat(for session: WorkoutSession) -> Stat {
-        let summary = session.comparableTonnageSummary
+        let summary = session.receiptTonnageSummary
         switch summary.availability {
         case .complete:
             return Stat(

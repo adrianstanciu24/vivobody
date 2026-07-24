@@ -31,9 +31,10 @@
 //                while any Pro-gated section above is frozen
 //
 //  Empty-state behavior: when the user has never logged this
-//  exercise, the stats row shows em-dashes, the chart and recents
-//  sections are hidden, and the rest of the screen still functions
-//  (CTA, edit/delete).
+//  exercise, the stats row shows em-dashes and history sections stay
+//  hidden. With history but fewer than two plottable points, Progress
+//  keeps its chart footprint and explains what is needed for a trend.
+//  The rest of the screen still functions (CTA, edit/delete).
 //
 
 import VivoKit

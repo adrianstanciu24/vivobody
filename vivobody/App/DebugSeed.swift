@@ -47,6 +47,12 @@ enum UITestSupport {
         if CommandLine.arguments.contains("--ui-test-active-bodyweight-duration") {
             seedActiveBodyweightDuration(in: context)
         }
+        if CommandLine.arguments.contains("--ui-test-active-band") {
+            seedActiveBand(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-single-exercise-history") {
+            seedSingleExerciseHistory(in: context)
+        }
         if CommandLine.arguments.contains("--ui-test-scheduled-template") {
             seedScheduledTemplate(in: context)
         }
@@ -131,6 +137,64 @@ enum UITestSupport {
             restDuration: 90,
             bodyweightAtStart: 180
         )
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// Completed non-comparable resistance fixture for verifying that
+    /// workout receipts report the raw band volume the user logged.
+    private static func seedActiveBand(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Band-Resisted Push-Up on Kettlebells",
+            catalogID: "kb-press-ups-with-bands",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 10,
+            plannedWeight: 30 * WeightUnit.lbPerKg,
+            modality: .dynamicStrength,
+            loadMode: .nonComparable,
+            sortOrder: 0
+        )
+        for set in exercise.sets {
+            set.isCompleted = true
+        }
+        let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// One archived point for verifying the Exercise Detail chart's
+    /// intentional pre-trend state. The catalog ID keeps the fixture
+    /// tied to the bundled row even if its display name later changes.
+    private static func seedSingleExerciseHistory(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Bent-Over Cable Fly",
+            catalogID: "bent-over-cable-flye",
+            group: .chest,
+            plannedSets: 1,
+            plannedReps: 12,
+            plannedWeight: 65 * WeightUnit.lbPerKg,
+            sortOrder: 0
+        )
+        exercise.sets.first?.isCompleted = true
+
+        let completedAt = Date().addingTimeInterval(-15 * 60)
+        let session = WorkoutSession(
+            exercises: [exercise],
+            restDuration: 90,
+            startedAt: completedAt.addingTimeInterval(-35 * 60)
+        )
+        session.completedAt = completedAt
         context.insert(session)
         try? context.save()
     }

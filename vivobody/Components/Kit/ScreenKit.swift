@@ -231,13 +231,21 @@ struct WaterfallRow: View {
     let share: Double
     var isDuration: Bool = false
 
+    private var percentageLabel: String {
+        "\(Int((share * 100).rounded()))%"
+    }
+
+    private var accessibilityText: String {
+        "\(Int((share * 100).rounded())) percent of session \(isDuration ? "timed work" : "volume")"
+    }
+
     var body: some View {
         HStack(spacing: Space.sm) {
             ShareBar(
                 fraction: share,
                 tint: isDuration ? Tint.complete.opacity(Opacity.medium) : Tint.complete
             )
-            Text("\(Int((share * 100).rounded()))%")
+            Text(percentageLabel)
                 .font(Typography.metricMicro)
                 .foregroundStyle(Ink.quaternary)
                 .monospacedDigit()
@@ -245,7 +253,7 @@ struct WaterfallRow: View {
                 .frame(width: 38, alignment: .trailing)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(Int((share * 100).rounded())) percent of session volume")
+        .accessibilityLabel(accessibilityText)
     }
 }
 

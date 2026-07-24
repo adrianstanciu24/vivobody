@@ -319,66 +319,109 @@ extension ExerciseDetailScreen {
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
 
+    @ViewBuilder
     var chart: some View {
         // Resolve the series ONCE: `progress` rebuilds its points
         // (and their UUIDs) on every access, so the visible slice and
         // the PR-id set must derive from the same instance to line up.
         let prog = progress
         let visible = visiblePoints(from: prog)
+        let plottable = visible.filter { chartValue(for: $0) != nil }
         let prIDs = prPointIDs(from: prog)
-        return Chart {
-            ForEach(visible) { point in
-                if let value = chartValue(for: point) {
-                    LineMark(
-                        x: .value("Date", point.date),
-                        y: .value("Metric", value)
-                    )
-                    .interpolationMethod(.monotone)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.strong))
 
-                    AreaMark(
-                        x: .value("Date", point.date),
-                        y: .value("Metric", value)
-                    )
-                    .interpolationMethod(.monotone)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-
-                    if prIDs.contains(point.id) {
-                        PointMark(
+        if plottable.count < 2 {
+            chartPlaceholder
+        } else {
+            Chart {
+                ForEach(plottable) { point in
+                    if let value = chartValue(for: point) {
+                        LineMark(
                             x: .value("Date", point.date),
                             y: .value("Metric", value)
                         )
-                        .symbol(.circle)
-                        .symbolSize(60)
-                        .foregroundStyle(prColor)
+                        .interpolationMethod(.monotone)
+                        .foregroundStyle(Ink.primary.opacity(Opacity.strong))
+
+                        AreaMark(
+                            x: .value("Date", point.date),
+                            y: .value("Metric", value)
+                        )
+                        .interpolationMethod(.monotone)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+
+                        if prIDs.contains(point.id) {
+                            PointMark(
+                                x: .value("Date", point.date),
+                                y: .value("Metric", value)
+                            )
+                            .symbol(.circle)
+                            .symbolSize(60)
+                            .foregroundStyle(prColor)
+                        }
                     }
                 }
             }
-        }
-        .chartXAxis {
-            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel()
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+            .chartXAxis {
+                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                    AxisGridLine().foregroundStyle(Surface.edge)
+                    AxisValueLabel()
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                }
             }
-        }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                AxisGridLine().foregroundStyle(Surface.edge)
-                AxisValueLabel()
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+            .chartYAxis {
+                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                    AxisGridLine().foregroundStyle(Surface.edge)
+                    AxisValueLabel()
+                        .font(Typography.metricMicro)
+                        .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                }
             }
+            .frame(height: 200)
+            .accessibilityLabel("Progress chart")
+        }
+    }
+
+    private var chartPlaceholder: some View {
+        ZStack {
+            GhostCard(padding: Space.lg) {
+                VStack(spacing: 0) {
+                    ForEach(0..<4, id: \.self) { index in
+                        GhostBar(height: 1, cornerRadius: 0, opacity: 0.06)
+                        if index < 3 { Spacer() }
+                    }
+                }
+                .frame(height: 160)
+            }
+
+            VStack(spacing: Space.sm) {
+                Text("Not enough data yet")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.secondary)
+                Text(chartPlaceholderMessage)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 250)
+            }
+            .padding(.horizontal, Space.xl)
         }
         .frame(height: 200)
-        .accessibilityLabel("Progress chart")
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Progress chart unavailable. \(chartPlaceholderMessage)")
+    }
+
+    private var chartPlaceholderMessage: String {
+        if sessionCount < 2 {
+            return "Complete this exercise in another workout to draw its trend."
+        }
+        return "Choose a longer range or log another session."
     }
 
     /// Free-tier stand-in for `chartSection`: the user's real chart,

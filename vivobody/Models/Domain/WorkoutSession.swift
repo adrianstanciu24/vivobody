@@ -303,10 +303,27 @@ final class WorkoutSession: Identifiable {
         }
     }
 
-    /// Known comparable-tonnage subtotal. Callers that present this as
-    /// a total must also respect `comparableTonnageSummary.availability`.
+    /// Workout-receipt volume. Comparable exercises contribute their
+    /// effective resistance; non-comparable dynamic-strength work
+    /// contributes the resistance the user explicitly logged. The
+    /// stricter `comparableTonnageSummary` remains the analytics source.
     var totalVolume: Double {
-        comparableTonnageSummary.knownSubtotal
+        receiptTonnageSummary.knownSubtotal
+    }
+
+    /// User-facing workout volume. Band and other non-comparable
+    /// resistance is meaningful inside the workout where it was logged,
+    /// even though it must not enter cross-exercise strength analytics.
+    var receiptTonnageSummary: ComparableTonnageSummary {
+        let loggedNonComparable = exercises.reduce(0.0) { total, exercise in
+            guard exercise.loadMode == .nonComparable else { return total }
+            return total + (exercise.completedReceiptTonnage ?? 0)
+        }
+        let loggedSummary = ComparableTonnageSummary(
+            knownSubtotal: loggedNonComparable,
+            availability: .complete
+        )
+        return comparableTonnageSummary.merging(loggedSummary)
     }
 
     var totalReps: Int {
@@ -522,6 +539,24 @@ extension Exercise {
             total += effectiveLoad * Double(set.reps)
         }
         return total
+    }
+
+    /// Volume shown on workout receipts. Normally this is the honest
+    /// comparable tonnage above. For non-comparable dynamic resistance
+    /// (notably bands), it falls back to the exact resistance × reps the
+    /// user logged so a completed workout never reads as zero work.
+    var completedReceiptTonnage: Double? {
+        if loadMode != .nonComparable {
+            return completedComparableTonnage
+        }
+        guard modality == .dynamicStrength, trackingMode == .reps else {
+            return nil
+        }
+        let completed = sets.filter { $0.isAnalyticsEligible && $0.reps > 0 }
+        guard !completed.isEmpty else { return 0 }
+        return completed.reduce(0) { total, set in
+            total + max(0, set.weight) * Double(set.reps)
+        }
     }
 
     /// Completeness-aware tonnage for this exercise. Unsupported
