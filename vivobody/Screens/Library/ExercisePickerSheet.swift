@@ -81,7 +81,9 @@ struct ExercisePickerSheet: View {
     }
 
     var body: some View {
-        let _ = sessionAnalytics?.update(for: completedSessions)
+        let analyticsRequest = sessionAnalytics?.requestKey(
+            for: completedSessions
+        )
         NavigationStack {
             ZStack {
                 Surface.background.ignoresSafeArea()
@@ -146,6 +148,9 @@ struct ExercisePickerSheet: View {
                 Text("This removes the exercise from the picker. Templates and history that already reference it stay intact.")
             }
             .saveErrorAlert($saveError)
+        }
+        .task(id: analyticsRequest) {
+            sessionAnalytics?.requestCore(for: completedSessions)
         }
     }
 

@@ -22,7 +22,7 @@ import Foundation
 
 /// One exercise's recent allocation: its identity, completed working
 /// set count, and share of all qualifying sets (`0…1`).
-nonisolated struct ExerciseDominanceStat: Identifiable, Hashable {
+nonisolated struct ExerciseDominanceStat: Identifiable, Hashable, Sendable {
     var id: String { historyKey }
     let historyKey: String
     /// The exercise name (original casing from first sighting).
@@ -35,7 +35,7 @@ nonisolated struct ExerciseDominanceStat: Identifiable, Hashable {
 // MARK: - Board
 
 /// Ranked recent working-set allocation plus concentration reads.
-nonisolated struct ExerciseDominanceBoard {
+nonisolated struct ExerciseDominanceBoard: Sendable {
     /// All tracked exercises sorted by completed set count.
     let stats: [ExerciseDominanceStat]
     let totalSets: Int
@@ -53,6 +53,7 @@ nonisolated struct ExerciseDominanceBoard {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Completed working-set share per exercise over the trailing
     /// `window`, ranked descending. Uses the same four-week default as
@@ -61,37 +62,86 @@ extension Array where Element == WorkoutSession {
         window: TimeInterval = 28 * 86_400,
         now: Date = Date()
     ) -> ExerciseDominanceBoard {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).exerciseDominance(window: window, now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed allocation used by the background analytics
+    /// worker. No SwiftData model crosses into this computation.
+    func exerciseDominance(
+        window: TimeInterval = 28 * 86_400,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> ExerciseDominanceBoard {
+        let cancelled = ExerciseDominanceBoard(stats: [], totalSets: 0)
+        guard !isCancelled() else { return cancelled }
+
         let cutoff = now.addingTimeInterval(-window)
 
         // Bucket keyed by stable identity; preserves the first-seen
         // display name and the muscle group.
         var byExercise: [String: (display: String, group: MuscleGroup, sets: Int)] = [:]
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
+        for session in sessions {
+            guard !isCancelled() else { return cancelled }
+            let date = session.date
             guard date > cutoff, date <= now else { continue }
 
-            for exercise in session.orderedExercises where exercise.modality.supportsHardSetAnalytics {
+            for replay in session.exercises {
+                guard !isCancelled() else { return cancelled }
+                guard replay.exercise.modality.supportsHardSetAnalytics else {
+                    continue
+                }
+
+                let exercise = replay.exercise
                 let key = exercise.historyKey
-                let sets = exercise.completedHardSetCount
+                var sets = 0
+                for set in exercise.sets {
+                    guard !isCancelled() else { return cancelled }
+                    switch (exercise.modality, exercise.trackingMode) {
+                    case (.dynamicStrength, .reps)
+                        where set.isAnalyticsEligible && set.reps > 0:
+                        sets += 1
+                    case (.isometricStrength, .duration)
+                        where set.isAnalyticsEligible && set.duration > 0:
+                        sets += 1
+                    default:
+                        break
+                    }
+                }
                 guard sets > 0 else { continue }
 
                 if var bucket = byExercise[key] {
                     bucket.sets += sets
                     byExercise[key] = bucket
                 } else {
-                    byExercise[key] = (display: exercise.name, group: exercise.group, sets: sets)
+                    let metadata = exerciseMetadata[key]
+                    byExercise[key] = (
+                        display: metadata?.name ?? exercise.name,
+                        group: metadata?.group ?? exercise.group,
+                        sets: sets
+                    )
                 }
             }
         }
 
-        let totalSets = byExercise.values.reduce(0) { $0 + $1.sets }
+        var totalSets = 0
+        for bucket in byExercise.values {
+            guard !isCancelled() else { return cancelled }
+            totalSets += bucket.sets
+        }
         guard totalSets > 0 else {
             return ExerciseDominanceBoard(stats: [], totalSets: 0)
         }
 
-        let stats = byExercise
-            .map { key, bucket -> ExerciseDominanceStat in
+        var stats: [ExerciseDominanceStat] = []
+        stats.reserveCapacity(byExercise.count)
+        for (key, bucket) in byExercise {
+            guard !isCancelled() else { return cancelled }
+            stats.append(
                 ExerciseDominanceStat(
                     historyKey: key,
                     name: bucket.display,
@@ -99,17 +149,20 @@ extension Array where Element == WorkoutSession {
                     sets: bucket.sets,
                     share: Double(bucket.sets) / Double(totalSets)
                 )
-            }
-            .sorted {
-                if $0.sets == $1.sets {
-                    let nameOrder = $0.name.localizedCaseInsensitiveCompare($1.name)
-                    if nameOrder == .orderedSame {
-                        return $0.historyKey < $1.historyKey
-                    }
-                    return nameOrder == .orderedAscending
+            )
+        }
+        guard !isCancelled() else { return cancelled }
+        stats.sort {
+            if $0.sets == $1.sets {
+                let nameOrder = $0.name.localizedCaseInsensitiveCompare($1.name)
+                if nameOrder == .orderedSame {
+                    return $0.historyKey < $1.historyKey
                 }
-                return $0.sets > $1.sets
+                return nameOrder == .orderedAscending
             }
+            return $0.sets > $1.sets
+        }
+        guard !isCancelled() else { return cancelled }
 
         return ExerciseDominanceBoard(stats: stats, totalSets: totalSets)
     }

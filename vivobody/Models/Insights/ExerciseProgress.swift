@@ -2,8 +2,10 @@
 //  ExerciseProgress.swift
 //  vivobody
 //
-//  Computes per-exercise time series from archived sessions for the
-//  Progress section on Me and the per-exercise detail chart.
+//  Computes per-exercise time series and most-recent set summaries
+//  from immutable analytics snapshots. SwiftData-facing convenience
+//  APIs snapshot on the main actor, then delegate to the same
+//  background-safe accumulator implementation.
 //
 //  Why not reuse the live PR detector in ActiveExerciseCard? That one
 //  asks "does the set the user is about to complete BEAT history?"
@@ -15,20 +17,10 @@
 
 import Foundation
 
-private extension Exercise {
-    /// Representative completed set for progress history. Comparable
-    /// resistance uses effective load (so less machine assistance is
-    /// better); non-comparable work retains a stable raw-marker choice
-    /// for ordinary history without becoming PR-eligible.
-    var progressTopSet: WorkoutSet? {
-        representativeTopSet
-    }
-}
-
 /// One data point in an exercise's progress series — the best set
 /// completed in a given session, plus that session's total volume
 /// for the exercise.
-struct ExerciseProgressPoint: Identifiable, Hashable {
+nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
     let id = UUID()
     let date: Date
     let topWeight: Double
@@ -138,7 +130,7 @@ struct ExerciseProgressPoint: Identifiable, Hashable {
 
 /// Aggregated progress data for a single exercise across the user's
 /// entire archive.
-struct ExerciseProgress: Identifiable, Hashable {
+nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
     var id: String {
         ExerciseIdentity.key(
             catalogID: catalogID,
@@ -264,7 +256,7 @@ struct ExerciseProgress: Identifiable, Hashable {
 }
 
 /// A detected progression stall on an exercise's primary metric.
-nonisolated struct PlateauStatus: Hashable {
+nonisolated struct PlateauStatus: Hashable, Sendable {
     /// Consecutive sessions since the last all-time high.
     let sessions: Int
     /// The complete standing performance preserves the tie-breaker and
@@ -285,7 +277,7 @@ nonisolated struct PlateauStatus: Hashable {
 /// Used by the ExercisePickerSheet rows to decorate each entry with
 /// fresh context ("LAST · 145 lb × 8 · 3d ago") instead of just the
 /// catalog's default values.
-struct LastExerciseInstance: Hashable {
+nonisolated struct LastExerciseInstance: Hashable, Sendable {
     /// Weight (canonical lb) of the representative top set in the
     /// most recent session that included this exercise.
     let topWeight: Double
@@ -353,40 +345,52 @@ struct LastExerciseInstance: Hashable {
     }
 }
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Build a stable exercise-key → LastExerciseInstance lookup in one pass over
     /// the archive. Picker rows do O(1) lookups against this map
-    /// instead of re-scanning history per row.
-    ///
-    /// Match is by the complete history key: stable ID for bundled
-    /// movements and full performance signature for custom movements.
-    func lastInstanceByExercise() -> [String: LastExerciseInstance] {
+    /// instead of re-scanning history per row. SwiftData models are
+    /// converted to immutable values before the analytics pass.
+    func lastInstanceByExercise(
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [String: LastExerciseInstance] {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).lastInstanceByExercise(isCancelled: isCancelled)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed last-instance lookup used by the background
+    /// analytics worker. Match is by the complete history key: stable
+    /// ID for bundled movements and full performance signature for
+    /// custom movements.
+    func lastInstanceByExercise(
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [String: LastExerciseInstance] {
         // Step 1: gather every "top set per session per exercise"
         // tuple. The top set is modality/load-aware (greatest
         // effective resistance for comparable work, duration for
-        // duration-only work) via `progressTopSet`. The arrays inside the
-        // dictionary are appended in archive order, not by date —
-        // sorting comes next.
+        // duration-only work) via `representativeTopSet`. The arrays
+        // inside the dictionary are appended in archive order, not by
+        // date — sorting comes next.
         var rawByKey: [String: [(
             date: Date,
-            top: WorkoutSet,
-            mode: TrackingMode,
-            modality: ExerciseModality,
-            loadProfile: ExerciseLoadProfile,
-            bodyweight: Double
+            top: AnalyticsSetSnapshot,
+            exercise: AnalyticsExerciseSnapshot
         )]] = [:]
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
-            for exercise in session.orderedExercises {
-                guard let top = exercise.progressTopSet else { continue }
+        sessionReplay: for replay in sessions {
+            guard !isCancelled() else { return [:] }
+            let date = replay.session.date
+            for exerciseReplay in replay.exercises {
+                guard !isCancelled() else { break sessionReplay }
+                let exercise = exerciseReplay.exercise
+                guard let top = exercise.representativeTopSet else { continue }
                 rawByKey[exercise.historyKey, default: []].append((
                     date: date,
                     top: top,
-                    mode: exercise.trackingMode,
-                    modality: exercise.modality,
-                    loadProfile: exercise.loadProfile,
-                    bodyweight: exercise.loadBodyweight
+                    exercise: exercise
                 ))
             }
         }
@@ -396,46 +400,46 @@ extension Array where Element == WorkoutSession {
         // primary metric. Two separate scans on a small list.
         var result: [String: LastExerciseInstance] = [:]
         for (key, entries) in rawByKey {
-            guard let mostRecent = entries.max(by: { $0.date < $1.date }) else { continue }
-            let mode = mostRecent.mode
-            let currentKind = mostRecent.modality.performanceSemanticKind(
+            guard !isCancelled() else { return [:] }
+            var mostRecent: (date: Date, top: AnalyticsSetSnapshot, exercise: AnalyticsExerciseSnapshot)?
+            for entry in entries {
+                guard !isCancelled() else { return [:] }
+                if mostRecent == nil || mostRecent!.date < entry.date {
+                    mostRecent = entry
+                }
+            }
+            guard let mostRecent else { continue }
+            let exercise = mostRecent.exercise
+            let mode = exercise.trackingMode
+            let currentKind = exercise.modality.performanceSemanticKind(
                 for: mode,
-                loadMode: mostRecent.loadProfile.mode
+                loadMode: exercise.loadMode
             )
             let currentEffectiveLoad = currentKind.comparesLoad
-                ? mostRecent.loadProfile.effectiveLoad(
+                ? exercise.loadProfile.effectiveLoad(
                     loggedWeight: mostRecent.top.weight,
-                    bodyweight: mostRecent.bodyweight
+                    bodyweight: exercise.loadBodyweight
                 )
                 : nil
-            let currentPerformance = StrengthPerformance.make(
-                kind: currentKind,
-                effectiveLoad: currentEffectiveLoad,
-                reps: mostRecent.top.reps,
-                duration: mostRecent.top.duration
-            )
-            let allPerformances = entries.compactMap { entry -> StrengthPerformance? in
-                let kind = entry.modality.performanceSemanticKind(
-                    for: entry.mode,
-                    loadMode: entry.loadProfile.mode
+            let currentPerformance = exercise.strengthPerformance(for: mostRecent.top)
+            var allTimeBest: StrengthPerformance?
+            for entry in entries {
+                guard !isCancelled() else { return [:] }
+                let entryExercise = entry.exercise
+                let kind = entryExercise.modality.performanceSemanticKind(
+                    for: entryExercise.trackingMode,
+                    loadMode: entryExercise.loadMode
                 )
-                guard kind == currentKind else { return nil }
-                let effectiveLoad = kind.comparesLoad
-                    ? entry.loadProfile.effectiveLoad(
-                        loggedWeight: entry.top.weight,
-                        bodyweight: entry.bodyweight
-                    )
-                    : nil
-                return StrengthPerformance.make(
-                    kind: kind,
-                    effectiveLoad: effectiveLoad,
-                    reps: entry.top.reps,
-                    duration: entry.top.duration
-                )
-            }
-            let allTimeBest = allPerformances.reduce(nil as StrengthPerformance?) { best, candidate in
-                guard let best else { return candidate }
-                return candidate.beats(best) ? candidate : best
+                guard kind == currentKind else { continue }
+                if let performance = entryExercise.strengthPerformance(for: entry.top) {
+                    if let best = allTimeBest {
+                        if performance.beats(best) {
+                            allTimeBest = performance
+                        }
+                    } else {
+                        allTimeBest = performance
+                    }
+                }
             }
             let isBest = currentPerformance != nil && currentPerformance == allTimeBest
             result[key] = LastExerciseInstance(
@@ -443,9 +447,9 @@ extension Array where Element == WorkoutSession {
                 topReps: mostRecent.top.reps,
                 topDuration: mostRecent.top.duration,
                 trackingMode: mode,
-                loadMode: mostRecent.loadProfile.mode,
-                bodyweightFraction: mostRecent.loadProfile.bodyweightFraction,
-                bodyweightAtSession: mostRecent.bodyweight,
+                loadMode: exercise.loadMode,
+                bodyweightFraction: exercise.bodyweightFraction,
+                bodyweightAtSession: exercise.loadBodyweight,
                 effectiveTopLoad: currentEffectiveLoad,
                 sessionDate: mostRecent.date,
                 isAllTimeBest: isBest
@@ -486,6 +490,7 @@ enum RelativeDate {
     }
 }
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Group archived sessions by stable exercise history key and produce
     /// a chronological progress series for each. Only sessions with at
@@ -497,9 +502,36 @@ extension Array where Element == WorkoutSession {
     /// Sorted descending by recency of the most recent data point,
     /// so the things the user has been working on lately come first.
     var progressByExercise: [ExerciseProgress] {
+        progressByExercise()
+    }
+
+    /// Cancellation-aware bridge for callers that already run inside
+    /// a cancellable analytics task.
+    func progressByExercise(
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [ExerciseProgress] {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).progressByExercise(isCancelled: isCancelled)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed progress history used by the background
+    /// analytics worker.
+    var progressByExercise: [ExerciseProgress] {
+        progressByExercise()
+    }
+
+    /// Cancellation-aware form used by background analytics tasks.
+    /// The property above remains as a source-compatible convenience
+    /// for synchronous callers.
+    func progressByExercise(
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [ExerciseProgress] {
         // Tuple bucket (not a nested struct) — Swift doesn't allow
         // nested types in generic function bodies, and this lives
-        // inside an extension on `Array where Element == ...`.
+        // inside an extension.
         var byKey: [String: (
             catalogID: String?,
             catalogItemID: UUID?,
@@ -508,9 +540,12 @@ extension Array where Element == WorkoutSession {
             points: [ExerciseProgressPoint]
         )] = [:]
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
-            for exercise in session.orderedExercises {
+        sessionReplay: for replay in sessions {
+            guard !isCancelled() else { return [] }
+            let date = replay.session.date
+            for exerciseReplay in replay.exercises {
+                guard !isCancelled() else { break sessionReplay }
+                let exercise = exerciseReplay.exercise
                 let completed = exercise.sets.filter(\.isAnalyticsEligible)
                 guard !completed.isEmpty else { continue }
 
@@ -518,7 +553,7 @@ extension Array where Element == WorkoutSession {
                 // resistance for comparable work, duration for
                 // duration-only work. Non-comparable work keeps an ordinary
                 // history marker without becoming PR-eligible.
-                guard let top = exercise.progressTopSet else { continue }
+                guard let top = exercise.representativeTopSet else { continue }
 
                 let tonnage = exercise.comparableTonnageSummary
 
@@ -541,20 +576,22 @@ extension Array where Element == WorkoutSession {
                     bucket.points.append(point)
                     byKey[key] = bucket
                 } else {
+                    let metadata = exerciseMetadata[key]
                     byKey[key] = (
-                        catalogID: exercise.catalogID,
-                        catalogItemID: exercise.catalogItemID,
-                        name: exercise.name,
-                        group: exercise.group,
+                        catalogID: metadata?.catalogID ?? exercise.catalogID,
+                        catalogItemID: metadata?.catalogItemID ?? exercise.catalogItemID,
+                        name: metadata?.name ?? exercise.name,
+                        group: metadata?.group ?? exercise.group,
                         points: [point]
                     )
                 }
             }
         }
 
-        return byKey
-            .filter { $0.value.points.count >= 2 }
-            .map { _, bucket in
+        var result: [ExerciseProgress] = []
+        result.reserveCapacity(byKey.count)
+        for (_, bucket) in byKey where bucket.points.count >= 2 {
+            guard !isCancelled() else { return [] }
                 // Sort by date ASC then walk to mark records at the
                 // moment they were achieved — only when the exercise
                 // modality supports a strength record for its mode.
@@ -563,6 +600,7 @@ extension Array where Element == WorkoutSession {
                 var flagged: [ExerciseProgressPoint] = []
                 flagged.reserveCapacity(sorted.count)
                 for var p in sorted {
+                    guard !isCancelled() else { return [] }
                     if let performance = p.strengthPerformance,
                        performance.advancement(over: runningBest) != nil {
                         p.isStrengthPR = true
@@ -570,18 +608,20 @@ extension Array where Element == WorkoutSession {
                     }
                     flagged.append(p)
                 }
-                return ExerciseProgress(
+                result.append(ExerciseProgress(
                     catalogID: bucket.catalogID,
                     catalogItemID: bucket.catalogItemID,
                     name: bucket.name,
                     group: bucket.group,
                     points: flagged
-                )
-            }
-            .sorted { (lhs, rhs) in
-                let lDate = lhs.latest?.date ?? .distantPast
-                let rDate = rhs.latest?.date ?? .distantPast
-                return lDate > rDate
-            }
+                ))
+        }
+
+        guard !isCancelled() else { return [] }
+        return result.sorted { lhs, rhs in
+            let lDate = lhs.latest?.date ?? .distantPast
+            let rDate = rhs.latest?.date ?? .distantPast
+            return lDate > rDate
+        }
     }
 }

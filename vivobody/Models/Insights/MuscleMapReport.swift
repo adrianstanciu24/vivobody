@@ -10,7 +10,7 @@
 
 import Foundation
 
-enum MuscleEstimateConfidence: String, Sendable {
+nonisolated enum MuscleEstimateConfidence: String, Sendable {
     case limited
     case moderate
     case high
@@ -18,7 +18,7 @@ enum MuscleEstimateConfidence: String, Sendable {
     var displayName: String { rawValue.capitalized }
 }
 
-struct MuscleMapEntry: Identifiable {
+nonisolated struct MuscleMapEntry: Identifiable, Sendable {
     var id: Muscle { muscle }
     let muscle: Muscle
     let channels: MuscleMapChannels
@@ -29,55 +29,59 @@ struct MuscleMapEntry: Identifiable {
     let confidence: MuscleEstimateConfidence?
 }
 
-struct MuscleMapReport {
+nonisolated struct MuscleMapReport: Sendable {
     let entries: [MuscleMapEntry]
 
+    @MainActor
     static func compute(
         sessions: [WorkoutSession],
         development: MuscleDevelopment.State,
         volume: [MuscleVolumeStat],
-        now: Date = Date()
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
     ) -> MuscleMapReport {
+        compute(
+            accumulator: AnalyticsAccumulator.replay(
+                AnalyticsSnapshot(sessions: sessions),
+                isCancelled: isCancelled
+            ),
+            development: development,
+            volume: volume,
+            now: now,
+            isCancelled: isCancelled
+        )
+    }
+
+    /// Interpret the muscle map from the shared hard-set replay.
+    static func compute(
+        accumulator: AnalyticsAccumulator,
+        development: MuscleDevelopment.State,
+        volume: [MuscleVolumeStat],
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> MuscleMapReport {
+        guard !isCancelled() else { return MuscleMapReport(entries: []) }
         let volumeByMuscle = Dictionary(uniqueKeysWithValues: volume.map { ($0.muscle, $0) })
         var exerciseCredit: [Muscle: [String: Double]] = [:]
-        var quality: [Muscle: (eligible: Int, complete: Int)] = [:]
-        var calculator = SetStimulus.Calculator()
         let cutoff = now.addingTimeInterval(-90 * 86_400)
 
-        let ordered = sessions.sorted {
-            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
-        }
-        for session in ordered {
-            let date = session.completedAt ?? session.startedAt
-            for exercise in session.orderedExercises {
-                let credit = calculator.credit(for: exercise, at: date)
-                if date >= cutoff {
-                    for (muscle, value) in credit where value > 0 {
+        sessionReplay: for session in accumulator.sessions {
+            guard !isCancelled() else { return MuscleMapReport(entries: []) }
+            for exercise in session.exercises {
+                guard !isCancelled() else { break sessionReplay }
+                if session.date >= cutoff {
+                    for (muscle, value) in exercise.byMuscle where value > 0 {
+                        guard !isCancelled() else { return MuscleMapReport(entries: []) }
                         exerciseCredit[muscle, default: [:]][exercise.name, default: 0] += value
-                    }
-                }
-
-                for contribution in exercise.muscleInvolvement.contributions
-                    where contribution.volumeCredit > 0 {
-                    for set in exercise.sets where set.isAnalyticsEligible {
-                        switch (exercise.modality, exercise.trackingMode) {
-                        case (.dynamicStrength, .reps) where set.reps > 0:
-                            quality[contribution.muscle, default: (0, 0)].eligible += 1
-                            if set.rirLogged {
-                                quality[contribution.muscle, default: (0, 0)].complete += 1
-                            }
-                        case (.isometricStrength, .duration) where set.duration > 0:
-                            quality[contribution.muscle, default: (0, 0)].eligible += 1
-                            quality[contribution.muscle, default: (0, 0)].complete += 1
-                        default:
-                            break
-                        }
                     }
                 }
             }
         }
 
-        let entries = Muscle.allCases.map { muscle in
+        var entries: [MuscleMapEntry] = []
+        entries.reserveCapacity(Muscle.allCases.count)
+        for muscle in Muscle.allCases {
+            guard !isCancelled() else { return MuscleMapReport(entries: []) }
             let channels = development.channels(muscle)
             let top = (exerciseCredit[muscle] ?? [:])
                 .sorted {
@@ -86,7 +90,8 @@ struct MuscleMapReport {
                 }
                 .prefix(3)
                 .map(\.key)
-            let counts = quality[muscle]
+            guard !isCancelled() else { return MuscleMapReport(entries: []) }
+            let counts = accumulator.muscleQuality[muscle]
             let confidence: MuscleEstimateConfidence?
             if channels.baseline == .noData || counts == nil || counts?.eligible == 0 {
                 confidence = nil
@@ -101,7 +106,7 @@ struct MuscleMapReport {
                 }
             }
             let weekly = volumeByMuscle[muscle]
-            return MuscleMapEntry(
+            entries.append(MuscleMapEntry(
                 muscle: muscle,
                 channels: channels,
                 band: MuscleDevelopmentBand.resolve(channels),
@@ -109,7 +114,7 @@ struct MuscleMapReport {
                 daysSinceLastTrained: weekly?.daysSinceLastTrained,
                 topExercises: top,
                 confidence: confidence
-            )
+            ))
         }
         return MuscleMapReport(entries: entries)
     }

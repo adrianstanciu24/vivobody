@@ -165,7 +165,7 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Send
 }
 
 /// The movement metadata for one exercise, resolved by name.
-nonisolated struct ExerciseClassification: Hashable {
+nonisolated struct ExerciseClassification: Hashable, Sendable {
     let equipment: Equipment
     let mechanic: Mechanic
     /// Optional — isolation work has no meaningful pattern.

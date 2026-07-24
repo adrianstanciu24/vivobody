@@ -23,7 +23,7 @@ import Foundation
 
 // MARK: - Split
 
-nonisolated struct CompositionSplit: Hashable {
+nonisolated struct CompositionSplit: Hashable, Sendable {
     let compoundSets: Int
     let isolationSets: Int
     let unclassifiedSets: Int
@@ -59,6 +59,7 @@ nonisolated struct CompositionSplit: Hashable {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Compound-vs-isolation distribution of completed strength sets
     /// over the trailing `window` (default 4 weeks) as of `now`.
@@ -68,13 +69,31 @@ extension Array where Element == WorkoutSession {
         window: TimeInterval = 28 * 86_400,
         now: Date = Date()
     ) -> CompositionSplit {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).compoundIsolationSplit(window: window, now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed movement split used by the background
+    /// analytics worker.
+    func compoundIsolationSplit(
+        window: TimeInterval = 28 * 86_400,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> CompositionSplit {
         let cutoff = now.addingTimeInterval(-window)
         var compound = 0, isolation = 0, unclassified = 0
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
+        sessionLoop: for session in sessions {
+            guard !isCancelled() else { break }
+            let date = session.date
             guard date > cutoff, date <= now else { continue }
-            for exercise in session.orderedExercises where exercise.modality.supportsHardSetAnalytics {
+            for replay in session.exercises
+            where replay.exercise.modality.supportsHardSetAnalytics {
+                guard !isCancelled() else { break sessionLoop }
+                let exercise = replay.exercise
                 let completed = exercise.completedHardSetCount
                 guard completed > 0 else { continue }
                 guard let mechanic = exercise.classification?.mechanic else {

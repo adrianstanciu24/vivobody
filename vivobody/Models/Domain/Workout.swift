@@ -380,13 +380,62 @@ extension WorkoutSession {
     }
 }
 
-// MARK: - Sample data
+// MARK: - Fresh exercise factories and sample data
 
-/// Templates for the seeded "Today's Plan". Returns fresh @Model
-/// instances each call — these are NOT inserted into any context;
-/// the caller is responsible for that (typically by attaching them
-/// to a draft WorkoutSession inserted at workout start).
+/// Factories used to populate new workout drafts, plus the preview
+/// sample plan. Every method returns fresh @Model instances that are
+/// not inserted into a context; callers attach them to a session.
 extension Exercise {
+    /// Build a fresh exercise from a catalog selection. When the user
+    /// has logged the same exercise before, mirror that most recent
+    /// set structure and working values; otherwise use catalog
+    /// defaults. Shared by the first-pick and mid-workout add paths so
+    /// starting fresh never changes the seed values users expect.
+    static func fresh(
+        from item: ExerciseCatalogItem,
+        history context: ModelContext?,
+        sortOrder: Int
+    ) -> Exercise {
+        if let context, let last = mostRecentLogged(matching: item, in: context) {
+            let copy = Exercise.freshCopy(of: last)
+            copy.sortOrder = sortOrder
+            return copy
+        }
+        return Exercise(from: item, sortOrder: sortOrder)
+    }
+
+    /// The same catalog exercise from the most recently completed
+    /// session, using stable bundled/custom identity before the
+    /// name-only legacy fallback.
+    private static func mostRecentLogged(
+        matching item: ExerciseCatalogItem,
+        in context: ModelContext
+    ) -> Exercise? {
+        let itemName = item.name
+        let itemID = item.id
+        let descriptor: FetchDescriptor<Exercise>
+        if let catalogID = item.catalogID {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && $0.catalogID == catalogID
+                }
+            )
+        } else {
+            descriptor = FetchDescriptor<Exercise>(
+                predicate: #Predicate {
+                    $0.session?.completedAt != nil && (
+                        $0.catalogItemID == itemID
+                            || ($0.catalogItemID == nil && $0.name == itemName)
+                    )
+                }
+            )
+        }
+        let matches = (try? context.fetch(descriptor)) ?? []
+        return matches
+            .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }
+            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
+    }
+
     /// Build a fresh, ready-to-start exercise from a previously-logged
     /// one. Same name, group, sort-order, and a separate WorkoutSet
     /// per source set (preserving each set's individual weight/reps —

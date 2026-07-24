@@ -310,14 +310,15 @@ struct AntagonistBalanceTests {
         #expect(board.pair("vertical-push-pull")?.verdict == .noData)
     }
 
-    @Test func sessionAnalyticsForwardsInjectedNow() {
+    @Test func sessionAnalyticsForwardsInjectedNow() async {
         let analytics = SessionAnalytics()
         let recent = session(
             at: day(39),
             [lift("Bench Press", .chest, sets: 2)]
         )
 
-        analytics.update(for: [recent], now: day(40))
+        analytics.requestInsights(for: [recent], now: day(40))
+        await analytics.waitForPendingWork()
 
         #expect(analytics.symmetry.pair("horizontal-push-pull") != nil)
     }

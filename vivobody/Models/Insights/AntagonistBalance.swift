@@ -34,7 +34,7 @@ private nonisolated enum SymmetryMovementBucket: Hashable {
 
 // MARK: - Verdict
 
-nonisolated enum SymmetryVerdict: Hashable {
+nonisolated enum SymmetryVerdict: Hashable, Sendable {
     case noData
     case balanced
     case leftHeavy
@@ -43,7 +43,7 @@ nonisolated enum SymmetryVerdict: Hashable {
 
 // MARK: - Pair
 
-nonisolated struct AntagonistPair: Identifiable, Hashable {
+nonisolated struct AntagonistPair: Identifiable, Hashable, Sendable {
     /// Stable key (e.g. "push-pull"), also the SwiftUI identity.
     let id: String
     let leftLabel: String
@@ -77,7 +77,7 @@ nonisolated struct AntagonistPair: Identifiable, Hashable {
 
 // MARK: - Board
 
-nonisolated struct AntagonistBoard {
+nonisolated struct AntagonistBoard: Sendable {
     /// Window over which both sides accumulate work.
     static let windowDays = 28
     /// Within ±this share of 50/50 reads as balanced.
@@ -108,37 +108,40 @@ nonisolated struct AntagonistBoard {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Effective-set split for each antagonist pair over the trailing
     /// 4 weeks as of `now`.
     func antagonistBalance(now: Date = Date()) -> AntagonistBoard {
+        AnalyticsAccumulator.replay(self).antagonistBalance(now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Build symmetry from the same priced exercise events used by the
+    /// core muscle and load reports.
+    func antagonistBalance(
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> AntagonistBoard {
         let cutoff = now.addingTimeInterval(
             -Double(AntagonistBoard.windowDays) * 86_400
         )
         var muscleSets: [Muscle: Double] = [:]
         var movementSets: [SymmetryMovementBucket: Double] = [:]
-        var calculator = SetStimulus.Calculator()
 
-        let ordered = sorted {
-            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
-        }
+        sessionLoop: for session in sessions {
+            guard !isCancelled() else { break }
+            guard session.date <= now else { continue }
 
-        for session in ordered {
-            let date = session.completedAt ?? session.startedAt
-            guard date <= now else { continue }
+            for exercise in session.exercises {
+                guard !isCancelled() else { break sessionLoop }
+                let stimulus = exercise.setEquivalent
+                guard session.date >= cutoff, stimulus > 0 else { continue }
 
-            for exercise in session.orderedExercises {
-                // Price the exercise once. Calling both calculator APIs
-                // would update its load reference twice and would also
-                // risk doubling unilateral work.
-                let stimulus = calculator.setEquivalentCredit(
-                    for: exercise,
-                    at: date
-                )
-                guard date >= cutoff, stimulus > 0 else { continue }
-
-                for (muscle, credit) in exercise.muscleInvolvement.volumeCredits {
-                    muscleSets[muscle, default: 0] += stimulus * credit
+                for (muscle, credit) in exercise.byMuscle {
+                    guard !isCancelled() else { break sessionLoop }
+                    muscleSets[muscle, default: 0] += credit
                 }
 
                 guard let classification = exercise.classification else {

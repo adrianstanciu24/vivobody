@@ -16,7 +16,7 @@ import SwiftData
 /// Whether a comparable-tonnage subtotal represents all eligible work.
 /// Non-comparable and timed exercises are outside this accounting pool,
 /// so they do not make an otherwise complete summary partial.
-nonisolated enum ComparableTonnageAvailability: Hashable {
+nonisolated enum ComparableTonnageAvailability: Hashable, Sendable {
     case complete
     case partial
     case unavailable
@@ -25,7 +25,7 @@ nonisolated enum ComparableTonnageAvailability: Hashable {
 /// Honest comparable tonnage for a workout or collection of workouts.
 /// `knownSubtotal` remains useful for partial data, while `availability`
 /// prevents callers from presenting that subtotal as the complete total.
-nonisolated struct ComparableTonnageSummary: Hashable {
+nonisolated struct ComparableTonnageSummary: Hashable, Sendable {
     let knownSubtotal: Double
     let availability: ComparableTonnageAvailability
 

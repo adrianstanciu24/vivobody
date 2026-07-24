@@ -109,7 +109,7 @@ struct StartWorkoutSheet: View {
                         PrimaryActionButton(title: "Start Fresh", icon: "plus", inputLabels: ["Start Fresh", "Fresh", "New Workout"]) {
                             select(.fresh)
                         }
-                        .accessibilityHint("Starts a blank workout")
+                        .accessibilityHint("Opens the exercise picker for a fresh workout")
                     } else {
                         startTile(
                             title: "Start Fresh",
@@ -118,7 +118,7 @@ struct StartWorkoutSheet: View {
                         ) {
                             select(.fresh)
                         }
-                        .accessibilityHint("Starts a blank workout")
+                        .accessibilityHint("Opens the exercise picker for a fresh workout")
                         .accessibilityInputLabels([Text("Start Fresh"), Text("Fresh"), Text("New Workout")])
                     }
 

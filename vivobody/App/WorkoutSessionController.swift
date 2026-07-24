@@ -27,10 +27,20 @@ final class WorkoutSessionController {
     /// bottom-accessory slot.
     var activeSession: WorkoutSession?
 
+    /// A discard requested from the expanded workout. The draft stays
+    /// alive until the sheet's dismissal animation finishes so
+    /// SwiftData's cascade delete cannot clear the visible exercise
+    /// hierarchy and briefly reveal an empty workout.
+    private var pendingDiscardSession: WorkoutSession?
+
+    /// Lets AppRoot suppress the MiniBar while the retained draft is
+    /// only waiting for the workout sheet to finish dismissing.
+    var isDiscardPending: Bool { pendingDiscardSession != nil }
+
     /// Whether the ActiveWorkoutScreen is presented as a sheet.
     /// False = workout is "minimized" to the MiniBar pill. Independent
     /// of `activeSession` lifetime: a session can exist while expanded
-    /// OR minimized; only `dismissActiveWorkout` ends the session.
+    /// OR minimized; archive and discard paths end the session.
     var isWorkoutExpanded: Bool = false
 
     /// Surfaces a save failure so AppRoot can present the standard
@@ -107,6 +117,23 @@ final class WorkoutSessionController {
             plan = []
         }
         beginActiveWorkout(with: plan)
+    }
+
+    /// Start a fresh workout with the user's first catalog selection
+    /// already attached. Today presents the exercise picker before
+    /// calling this method, so the normal fresh-start path lands
+    /// directly on a usable exercise card instead of an empty canvas.
+    func startFreshWorkout(with item: ExerciseCatalogItem) {
+        guard activeSession == nil else {
+            isWorkoutExpanded = true
+            return
+        }
+        let firstExercise = Exercise.fresh(
+            from: item,
+            history: modelContext,
+            sortOrder: 0
+        )
+        beginActiveWorkout(with: [firstExercise])
     }
 
     /// Start a workout from a saved template. Each TemplateExercise
@@ -200,22 +227,34 @@ final class WorkoutSessionController {
 
     // MARK: - Discard / dismiss
 
-    /// Throw the active workout away without archiving. Deletes the
-    /// persisted draft as well as clearing controller state.
+    /// Begin throwing the active workout away. The sheet comes down
+    /// first; `finalizePendingDiscard()` performs the SwiftData delete
+    /// from the sheet's onDismiss callback so cascade deletion never
+    /// mutates the hierarchy while it is still visible.
     func discardActiveWorkout() {
         guard let session = activeSession else { return }
+        pendingDiscardSession = session
+        isWorkoutExpanded = false
+    }
+
+    /// Complete a discard after the workout sheet is fully gone.
+    /// Swipe-to-minimize also fires the sheet's onDismiss callback,
+    /// but is a no-op because it never creates a pending discard.
+    func finalizePendingDiscard() {
+        guard let session = pendingDiscardSession else { return }
         if let context = modelContext {
             context.delete(session)
             do {
                 try context.saveOrRollback()
                 SessionSideEffects.handle(.discarded, session: session, in: context)
             } catch {
+                pendingDiscardSession = nil
                 lastSaveError = SaveErrorBox(error)
                 return
             }
         }
+        pendingDiscardSession = nil
         activeSession = nil
-        isWorkoutExpanded = false
     }
 
     /// Called when the user fully exits the workout — either via the

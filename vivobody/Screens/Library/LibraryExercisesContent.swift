@@ -14,9 +14,8 @@ import SwiftData
 
 /// Exercises segment — browsable catalog. Tap an exercise row to
 /// push its detail screen (no commit CTA in this context). Long-
-/// press for Edit / Delete via context menu. Equipment filter strip
-/// at the top mirrors the picker's chips so the two surfaces feel
-/// continuous.
+/// press for Edit / Delete via context menu. The filter strip offers
+/// equipment scopes plus a prominent Core shortcut.
 struct LibraryExercisesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
@@ -24,7 +23,7 @@ struct LibraryExercisesContent: View {
 
     /// Owned by LibraryScreen so the selected chip survives segment
     /// switches — this content view is recreated on every switch.
-    @Binding var equipmentFilter: Equipment?
+    @Binding var exerciseFilter: LibraryExerciseFilter
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.sessionAnalytics) private var sessionAnalytics
@@ -56,19 +55,24 @@ struct LibraryExercisesContent: View {
     }
 
     var body: some View {
-        let _ = sessionAnalytics?.update(for: completedSessions)
+        let analyticsRequest = sessionAnalytics?.requestKey(
+            for: completedSessions
+        )
         Group {
             if isSearching {
                 searchList
             } else if filteredGroups.isEmpty {
                 VStack(spacing: 0) {
                     LibrarySegmentBar(selection: $segment)
-                    equipmentFilterStrip
+                    catalogFilterStrip
                     emptyState
                 }
             } else {
                 exerciseList
             }
+        }
+        .task(id: analyticsRequest) {
+            sessionAnalytics?.requestCore(for: completedSessions)
         }
         .alert(
             "Delete \"\(pendingDeleteItem?.name ?? "exercise")\"?",
@@ -106,19 +110,22 @@ struct LibraryExercisesContent: View {
         Set(lastInstanceLookup.keys)
     }
 
-    /// Catalog narrowed by the equipment chip only (no text filter).
+    /// Catalog narrowed by the selected chip only (no text filter).
     /// Shared by the grouped browse path and the search-ranked path
-    /// so the equipment lens behaves identically in both modes.
+    /// so Core and equipment scopes behave identically in both modes.
     private var scopedItems: [ExerciseCatalogItem] {
-        var scope = items
-        if let filter = equipmentFilter {
-            scope = scope.filter { $0.equipment == filter }
+        switch exerciseFilter {
+        case .all:
+            items
+        case .core:
+            items.filter { $0.group == .core }
+        case .equipment(let equipment):
+            items.filter { $0.equipment == equipment }
         }
-        return scope
     }
 
-    /// Flat, relevance-ranked results for the active query. Equipment
-    /// filter is applied first (via `scopedItems`), then `ExerciseSearch`
+    /// Flat, relevance-ranked results for the active query. The chosen
+    /// catalog scope is applied first, then `ExerciseSearch`
     /// tiers and sorts so "pull" surfaces "Pull-Up" before "Lat Pull
     /// Down" instead of respecting muscle-group enum order.
     private var searchResults: [ExerciseCatalogItem] {
@@ -141,18 +148,21 @@ struct LibraryExercisesContent: View {
         Set(items.map(\.equipment))
     }
 
-    // MARK: - Equipment filter strip
+    // MARK: - Catalog filter strip
 
     @ViewBuilder
-    private var equipmentFilterStrip: some View {
-        if availableEquipment.count > 1 {
+    private var catalogFilterStrip: some View {
+        if availableEquipment.count > 1 || items.contains(where: { $0.group == .core }) {
             ScrollView(.horizontal, showsIndicators: false) {
                 GlassEffectContainer(spacing: Space.md) {
                     HStack(spacing: Space.md) {
-                        chip(nil, label: "All")
+                        chip(.all, label: "All")
+                        if items.contains(where: { $0.group == .core }) {
+                            chip(.core, label: "Core")
+                        }
                         ForEach(Equipment.allCases, id: \.self) { e in
                             if availableEquipment.contains(e) {
-                                chip(e, label: e.displayName)
+                                chip(.equipment(e), label: e.displayName)
                             }
                         }
                     }
@@ -163,11 +173,11 @@ struct LibraryExercisesContent: View {
         }
     }
 
-    private func chip(_ value: Equipment?, label: String) -> some View {
-        let isSelected = equipmentFilter == value
+    private func chip(_ filter: LibraryExerciseFilter, label: String) -> some View {
+        let isSelected = exerciseFilter == filter
         return Button {
             Haptics.selection()
-            equipmentFilter = value
+            exerciseFilter = filter
         } label: {
             Text(label)
                 .font(Typography.sectionLabel)
@@ -190,7 +200,7 @@ struct LibraryExercisesContent: View {
                 // collapses cleanly instead of fighting a pinned bar.
                 LibrarySegmentBar(selection: $segment)
                     .padding(.horizontal, -Space.gutter)
-                equipmentFilterStrip
+                catalogFilterStrip
                     .padding(.horizontal, -Space.gutter)
 
                 LazyVStack(alignment: .leading, spacing: Space.section) {
@@ -221,7 +231,7 @@ struct LibraryExercisesContent: View {
             VStack(alignment: .leading, spacing: 0) {
                 LibrarySegmentBar(selection: $segment)
                     .padding(.horizontal, -Space.gutter)
-                equipmentFilterStrip
+                catalogFilterStrip
                     .padding(.horizontal, -Space.gutter)
 
                 if searchResults.isEmpty {
@@ -446,10 +456,14 @@ struct LibraryExercisesContent: View {
         if !trimmed.isEmpty {
             return "No exercises match \"\(trimmed)\"."
         }
-        if equipmentFilter != nil {
+        switch exerciseFilter {
+        case .all:
+            return "Your catalog is empty."
+        case .core:
+            return "No Core exercises."
+        case .equipment:
             return "No exercises for that equipment."
         }
-        return "Your catalog is empty."
     }
 
     // MARK: - Mutations
@@ -466,4 +480,13 @@ struct LibraryExercisesContent: View {
         }
         Haptics.soft()
     }
+}
+
+/// Mutually-exclusive scopes for the Library exercise catalog. Core
+/// sits beside equipment filters as a high-value movement shortcut,
+/// while a single enum prevents contradictory chips being selected.
+enum LibraryExerciseFilter: Equatable {
+    case all
+    case core
+    case equipment(Equipment)
 }

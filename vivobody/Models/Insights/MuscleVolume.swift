@@ -41,7 +41,7 @@ import Foundation
 /// credit (a muscle accrues fractional sets from compounds it only
 /// assists on). They're directional guidance, not gospel — kept in
 /// one place so they can be calibrated without touching the UI.
-nonisolated struct VolumeLandmark: Hashable {
+nonisolated struct VolumeLandmark: Hashable, Sendable {
     var mev: Double
     var optimalHigh: Double
 
@@ -69,7 +69,7 @@ nonisolated struct VolumeLandmark: Hashable {
 /// Where a muscle's weekly effective-set count lands relative to its
 /// landmark band. Drives both the colour of its bar and the summary
 /// counts.
-nonisolated enum VolumeZone: Hashable {
+nonisolated enum VolumeZone: Hashable, Sendable {
     /// No completed work in the window at all — fully rested / neglected.
     case untrained
     /// Worked, but below the minimum effective volume.
@@ -86,7 +86,7 @@ nonisolated enum VolumeZone: Hashable {
 /// received in the window, when it was last trained (over the whole
 /// archive, not just the window), and the landmark it's judged
 /// against.
-nonisolated struct MuscleVolumeStat: Identifiable, Hashable {
+nonisolated struct MuscleVolumeStat: Identifiable, Hashable, Sendable {
     var id: Muscle { muscle }
     let muscle: Muscle
     let effectiveSets: Double
@@ -105,6 +105,7 @@ nonisolated struct MuscleVolumeStat: Identifiable, Hashable {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Hard-set equivalents per muscle over a rolling `window` ending
     /// at `now` (default: the last 7 days). Every trainable muscle is
@@ -116,31 +117,49 @@ extension Array where Element == WorkoutSession {
     /// load references are causal.
     func muscleVolume(
         window: TimeInterval = 7 * 86_400,
-        now: Date = Date()
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [MuscleVolumeStat] {
+        AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: self),
+            isCancelled: isCancelled
+        ).muscleVolume(
+            window: window,
+            now: now,
+            isCancelled: isCancelled
+        )
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Build weekly volume from the shared hard-set replay. This path is
+    /// used by SessionAnalytics so development, load, and map reports do
+    /// not each rerun SetStimulus.Calculator.
+    func muscleVolume(
+        window: TimeInterval = 7 * 86_400,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
     ) -> [MuscleVolumeStat] {
         let cutoff = now.addingTimeInterval(-window)
 
         var effective: [Muscle: Double] = [:]
         var lastTrained: [Muscle: Date] = [:]
-        var calculator = SetStimulus.Calculator()
 
-        let ordered = sorted {
-            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
-        }
-
-        for session in ordered {
-            let date = session.completedAt ?? session.startedAt
-            for exercise in session.orderedExercises {
-                let credit = calculator.credit(for: exercise, at: date)
+        sessionReplay: for session in sessions {
+            guard !isCancelled() else { return [] }
+            for exercise in session.exercises {
+                guard !isCancelled() else { break sessionReplay }
+                let credit = exercise.byMuscle
                 guard !credit.isEmpty else { continue }
 
-                let inWindow = date >= cutoff
+                let inWindow = session.date >= cutoff
                 for (muscle, sets) in credit {
+                    guard !isCancelled() else { return [] }
                     // Recency tracks the whole archive.
                     if let existing = lastTrained[muscle] {
-                        if date > existing { lastTrained[muscle] = date }
+                        if session.date > existing { lastTrained[muscle] = session.date }
                     } else {
-                        lastTrained[muscle] = date
+                        lastTrained[muscle] = session.date
                     }
                     // Effective sets only accrue inside the window.
                     if inWindow {
@@ -151,7 +170,10 @@ extension Array where Element == WorkoutSession {
         }
 
         let calendar = Calendar.current
-        return Muscle.allCases.map { muscle in
+        var result: [MuscleVolumeStat] = []
+        result.reserveCapacity(Muscle.allCases.count)
+        for muscle in Muscle.allCases {
+            guard !isCancelled() else { return [] }
             let days: Int?
             if let last = lastTrained[muscle] {
                 days = calendar.dateComponents(
@@ -162,13 +184,14 @@ extension Array where Element == WorkoutSession {
             } else {
                 days = nil
             }
-            return MuscleVolumeStat(
+            result.append(MuscleVolumeStat(
                 muscle: muscle,
                 effectiveSets: effective[muscle] ?? 0,
                 daysSinceLastTrained: days,
                 landmark: VolumeLandmark.landmark(for: muscle)
-            )
+            ))
         }
+        return result
     }
 }
 
@@ -177,7 +200,7 @@ extension Array where Element == WorkoutSession {
 /// Screen-level summary derived from a set of `MuscleVolumeStat`s:
 /// the zone tallies for the glance strip and the ranked neglect list
 /// for the headline insight.
-nonisolated struct MuscleVolumeSummary {
+nonisolated struct MuscleVolumeSummary: Sendable {
     let optimalCount: Int
     let underCount: Int
     let restingCount: Int
@@ -194,7 +217,7 @@ nonisolated struct MuscleVolumeSummary {
     }
 }
 
-extension Array where Element == MuscleVolumeStat {
+nonisolated extension Array where Element == MuscleVolumeStat {
     var summary: MuscleVolumeSummary {
         let optimal = filter { $0.zone == .optimal }.count
         let under = filter { $0.zone == .under }.count

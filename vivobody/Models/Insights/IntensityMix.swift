@@ -20,7 +20,7 @@ import Foundation
 
 // MARK: - Zone
 
-nonisolated enum IntensityZone: Hashable, CaseIterable {
+nonisolated enum IntensityZone: Hashable, CaseIterable, Sendable {
     case strength
     case hypertrophy
     case endurance
@@ -54,7 +54,7 @@ nonisolated enum IntensityZone: Hashable, CaseIterable {
 
 // MARK: - Mix
 
-nonisolated struct IntensityMix: Hashable {
+nonisolated struct IntensityMix: Hashable, Sendable {
     let strengthSets: Int
     let hypertrophySets: Int
     let enduranceSets: Int
@@ -91,7 +91,7 @@ nonisolated struct IntensityMix: Hashable {
 /// by the aggregator, so a gap in training reads as a gap. The current
 /// calendar week is marked so the chart can present it as incomplete
 /// rather than implying a finished-week drop.
-nonisolated struct IntensityWeek: Identifiable, Hashable {
+nonisolated struct IntensityWeek: Identifiable, Hashable, Sendable {
     var id: Date { weekStart }
     let weekStart: Date
     let strengthSets: Int
@@ -112,6 +112,7 @@ nonisolated struct IntensityWeek: Identifiable, Hashable {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Rep-range distribution of completed `.reps` sets over the
     /// trailing `window` (default 4 weeks) as of `now`.
@@ -119,15 +120,53 @@ extension Array where Element == WorkoutSession {
         window: TimeInterval = 28 * 86_400,
         now: Date = Date()
     ) -> IntensityMix {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).intensityMix(window: window, now: now)
+    }
+
+    /// Zone counts per calendar week over the trailing `weeks`
+    /// (default 12) as of `now`, chronological ascending.
+    func weeklyIntensity(weeks: Int = 12, now: Date = Date()) -> [IntensityWeek] {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).weeklyIntensity(weeks: weeks, now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed rep-range distribution used by the background
+    /// analytics worker.
+    func intensityMix(
+        window: TimeInterval = 28 * 86_400,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> IntensityMix {
+        let cancelled = IntensityMix(
+            strengthSets: 0,
+            hypertrophySets: 0,
+            enduranceSets: 0
+        )
+        guard !isCancelled() else { return cancelled }
+
         let cutoff = now.addingTimeInterval(-window)
         var strength = 0, hypertrophy = 0, endurance = 0
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
+        for session in sessions {
+            guard !isCancelled() else { return cancelled }
+            let date = session.date
             guard date > cutoff else { continue }
-            for exercise in session.exercises
-            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+            for replay in session.exercises {
+                guard !isCancelled() else { return cancelled }
+                guard replay.exercise.modality == .dynamicStrength,
+                      replay.exercise.trackingMode == .reps else {
+                    continue
+                }
+                for set in replay.exercise.sets {
+                    guard !isCancelled() else { return cancelled }
+                    guard set.isAnalyticsEligible, set.reps > 0 else {
+                        continue
+                    }
                     switch IntensityZone.zone(forReps: set.reps) {
                     case .strength:    strength += 1
                     case .hypertrophy: hypertrophy += 1
@@ -137,6 +176,7 @@ extension Array where Element == WorkoutSession {
             }
         }
 
+        guard !isCancelled() else { return cancelled }
         return IntensityMix(
             strengthSets: strength,
             hypertrophySets: hypertrophy,
@@ -144,11 +184,15 @@ extension Array where Element == WorkoutSession {
         )
     }
 
-    /// Zone counts per calendar week over the trailing `weeks`
-    /// (default 12) as of `now`, chronological ascending. Buckets by
-    /// the same locale-aware week start `repRangeMigration` uses so
-    /// the two reads always agree.
-    func weeklyIntensity(weeks: Int = 12, now: Date = Date()) -> [IntensityWeek] {
+    /// Buckets by the same locale-aware week start
+    /// `repRangeMigration` uses so the two reads always agree.
+    func weeklyIntensity(
+        weeks: Int = 12,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [IntensityWeek] {
+        guard !isCancelled() else { return [] }
+
         let calendar = Calendar.current
         let cutoff = now.addingTimeInterval(-Double(weeks) * 7 * 86_400)
         let currentWeekStart = calendar.date(
@@ -157,16 +201,25 @@ extension Array where Element == WorkoutSession {
 
         var byWeek: [Date: (strength: Int, hypertrophy: Int, endurance: Int)] = [:]
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
+        for session in sessions {
+            guard !isCancelled() else { return [] }
+            let date = session.date
             guard date >= cutoff else { continue }
             guard let weekStart = calendar.date(
                 from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
             ) else { continue }
 
-            for exercise in session.exercises
-            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+            for replay in session.exercises {
+                guard !isCancelled() else { return [] }
+                guard replay.exercise.modality == .dynamicStrength,
+                      replay.exercise.trackingMode == .reps else {
+                    continue
+                }
+                for set in replay.exercise.sets {
+                    guard !isCancelled() else { return [] }
+                    guard set.isAnalyticsEligible, set.reps > 0 else {
+                        continue
+                    }
                     var bucket = byWeek[weekStart] ?? (0, 0, 0)
                     switch IntensityZone.zone(forReps: set.reps) {
                     case .strength:    bucket.strength += 1
@@ -178,15 +231,21 @@ extension Array where Element == WorkoutSession {
             }
         }
 
-        return byWeek.keys.sorted().map { weekStart in
+        guard !isCancelled() else { return [] }
+        let orderedWeeks = byWeek.keys.sorted()
+        var result: [IntensityWeek] = []
+        result.reserveCapacity(orderedWeeks.count)
+        for weekStart in orderedWeeks {
+            guard !isCancelled() else { return [] }
             let bucket = byWeek[weekStart] ?? (0, 0, 0)
-            return IntensityWeek(
+            result.append(IntensityWeek(
                 weekStart: weekStart,
                 strengthSets: bucket.strength,
                 hypertrophySets: bucket.hypertrophy,
                 enduranceSets: bucket.endurance,
                 isCurrentWeek: weekStart == currentWeekStart
-            )
+            ))
         }
+        return result
     }
 }

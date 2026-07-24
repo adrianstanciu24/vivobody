@@ -24,7 +24,7 @@ import Foundation
 
 // MARK: - Heatmap day
 
-nonisolated struct ConsistencyDay: Hashable {
+nonisolated struct ConsistencyDay: Hashable, Sendable {
     let date: Date
     /// Completed sets logged that calendar day (summed across sessions).
     let sets: Int
@@ -38,7 +38,7 @@ nonisolated struct ConsistencyDay: Hashable {
 
 // MARK: - Report
 
-nonisolated struct ConsistencyReport {
+nonisolated struct ConsistencyReport: Sendable {
     /// How many weeks of history the heatmap spans (~6 months).
     static let windowWeeks = 26
     /// Trailing window for the rhythm + effort rollups.
@@ -75,18 +75,42 @@ nonisolated struct ConsistencyReport {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Build the consistency report as of `now`.
     func consistency(now: Date = Date()) -> ConsistencyReport {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).consistency(now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Build the consistency report from immutable session snapshots.
+    func consistency(
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> ConsistencyReport {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: now)
-        let completed = filter { $0.completedAt != nil }
+        var completed: [AnalyticsSessionReplay] = []
+        completed.reserveCapacity(sessions.count)
+        for session in sessions {
+            guard !isCancelled() else { break }
+            if session.session.completedAt != nil {
+                completed.append(session)
+            }
+        }
 
         // Completed sets per calendar day.
         var setsByDay: [Date: Int] = [:]
         for session in completed {
-            let day = calendar.startOfDay(for: session.completedAt ?? session.startedAt)
-            setsByDay[day, default: 0] += session.totalSets
+            guard !isCancelled() else { break }
+            let snapshot = session.session
+            let day = calendar.startOfDay(
+                for: snapshot.completedAt ?? snapshot.startedAt
+            )
+            setsByDay[day, default: 0] += snapshot.totalCompletedSets
         }
 
         // Grid aligned so the rightmost column is the current week.
@@ -101,9 +125,11 @@ extension Array where Element == WorkoutSession {
 
         var weeks: [[ConsistencyDay]] = []
         var daysTrained = 0
-        for w in 0..<ConsistencyReport.windowWeeks {
+        weekLoop: for w in 0..<ConsistencyReport.windowWeeks {
+            guard !isCancelled() else { break }
             var column: [ConsistencyDay] = []
             for d in 0..<7 {
+                guard !isCancelled() else { break weekLoop }
                 let date = calendar.date(byAdding: .day, value: w * 7 + d, to: gridStart) ?? gridStart
                 let sets = setsByDay[date] ?? 0
                 let inRange = date <= today
@@ -130,13 +156,21 @@ extension Array where Element == WorkoutSession {
         var recentSessions = 0
         var rirSum = 0
         var rirCount = 0
-        for session in completed {
-            let day = calendar.startOfDay(for: session.completedAt ?? session.startedAt)
+        recentSessionLoop: for session in completed {
+            guard !isCancelled() else { break }
+            let snapshot = session.session
+            let day = calendar.startOfDay(
+                for: snapshot.completedAt ?? snapshot.startedAt
+            )
             guard day >= recentCutoff else { continue }
             recentSessions += 1
-            for exercise in session.exercises
-            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
+            for replay in session.exercises
+            where replay.exercise.modality == .dynamicStrength
+                && replay.exercise.trackingMode == .reps {
+                guard !isCancelled() else { break recentSessionLoop }
+                for set in replay.exercise.sets
+                where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
+                    guard !isCancelled() else { break recentSessionLoop }
                     rirSum += set.repsInReserve
                     rirCount += 1
                 }

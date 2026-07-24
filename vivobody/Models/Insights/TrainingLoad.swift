@@ -23,7 +23,7 @@ import Foundation
 
 // MARK: - Verdict
 
-nonisolated enum LoadVerdict: Hashable {
+nonisolated enum LoadVerdict: Hashable, Sendable {
     case insufficient
     case low
     case productive
@@ -46,7 +46,7 @@ nonisolated enum LoadVerdict: Hashable {
 // MARK: - Trend and drivers
 
 /// One daily sample of the rolling seven-day load.
-nonisolated struct LoadPoint: Identifiable, Hashable {
+nonisolated struct LoadPoint: Identifiable, Hashable, Sendable {
     var id: Date { date }
     let date: Date
     let load: Double
@@ -56,7 +56,7 @@ nonisolated struct LoadPoint: Identifiable, Hashable {
 
 /// Estimated hard-set equivalents completed on one calendar day —
 /// the per-day (not rolling) sample behind the Today readiness strip.
-nonisolated struct DayLoad: Identifiable, Hashable {
+nonisolated struct DayLoad: Identifiable, Hashable, Sendable {
     var id: Date { date }
     let date: Date
     let load: Double
@@ -72,12 +72,12 @@ nonisolated struct DayLoad: Identifiable, Hashable {
     }
 }
 
-nonisolated struct LoadDriver: Hashable {
+nonisolated struct LoadDriver: Hashable, Sendable {
     let current: Double
     let usual: Double?
 }
 
-nonisolated struct TrainingLoadDrivers: Hashable {
+nonisolated struct TrainingLoadDrivers: Hashable, Sendable {
     let hardSets: LoadDriver
     let sessions: LoadDriver
     let heavySets: LoadDriver
@@ -91,7 +91,7 @@ nonisolated struct TrainingLoadDrivers: Hashable {
 
 // MARK: - Report
 
-nonisolated struct TrainingLoadReport: Hashable {
+nonisolated struct TrainingLoadReport: Hashable, Sendable {
     /// Estimated hard-set equivalents in the rolling last seven days.
     let currentLoad: Double
     /// Median weekly load across the four preceding weeks.
@@ -156,25 +156,57 @@ nonisolated struct TrainingLoadReport: Hashable {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Personal rolling workload report as of `now`.
     func trainingLoad(
         now: Date = Date(),
-        calendar: Calendar = .current
+        calendar: Calendar = .current,
+        isCancelled: @Sendable () -> Bool = { false }
     ) -> TrainingLoadReport {
-        let measurements = Self.measurements(from: self, through: now)
+        AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(
+                sessions: filter { $0.completedAt != nil }
+            ),
+            isCancelled: isCancelled
+        ).trainingLoad(
+            now: now,
+            calendar: calendar,
+            isCancelled: isCancelled
+        )
+    }
+
+    /// Build the report from SessionAnalytics' single stimulus replay.
+    func trainingLoad(
+        using accumulator: AnalyticsAccumulator,
+        now: Date = Date(),
+        calendar: Calendar = .current,
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> TrainingLoadReport {
+        accumulator.trainingLoad(
+            now: now,
+            calendar: calendar,
+            isCancelled: isCancelled
+        )
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Build the report from the single chronological stimulus replay.
+    func trainingLoad(
+        now: Date = Date(),
+        calendar: Calendar = .current,
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> TrainingLoadReport {
+        guard !isCancelled() else { return Self.emptyReport() }
+        let measurements = Self.measurements(
+            from: self,
+            through: now,
+            isCancelled: isCancelled
+        )
+        guard !isCancelled() else { return Self.emptyReport() }
         guard let first = measurements.first?.date else {
-            return TrainingLoadReport(
-                currentLoad: 0,
-                usualLoad: nil,
-                ratio: 0,
-                provisionalRatio: nil,
-                verdict: .insufficient,
-                daysLogged: 0,
-                points: [],
-                recentDays: [],
-                drivers: .empty
-            )
+            return Self.emptyReport()
         }
 
         let today = calendar.startOfDay(for: now)
@@ -186,13 +218,17 @@ extension Array where Element == WorkoutSession {
         let current = Self.window(
             endingOn: today,
             measurements: measurements,
-            calendar: calendar
+            calendar: calendar,
+            isCancelled: isCancelled
         )
+        guard !isCancelled() else { return Self.emptyReport() }
         let previous = Self.previousWindows(
             before: today,
             measurements: measurements,
-            calendar: calendar
+            calendar: calendar,
+            isCancelled: isCancelled
         )
+        guard !isCancelled() else { return Self.emptyReport() }
         let activeBaseline = previous.filter { $0.load > 0 }
         let usual = daysLogged >= 28 && activeBaseline.count >= 3
             ? Self.median(previous.map(\.load))
@@ -203,6 +239,21 @@ extension Array where Element == WorkoutSession {
             ? current.load / provisionalUsual
             : nil
         let verdict = usual == nil ? LoadVerdict.insufficient : LoadVerdict.from(ratio: ratio)
+        let points = Self.rollingPoints(
+            measurements: measurements,
+            firstDay: firstDay,
+            today: today,
+            calendar: calendar,
+            isCancelled: isCancelled
+        )
+        guard !isCancelled() else { return Self.emptyReport() }
+        let recentDays = Self.recentDailyLoads(
+            measurements: measurements,
+            today: today,
+            calendar: calendar,
+            isCancelled: isCancelled
+        )
+        guard !isCancelled() else { return Self.emptyReport() }
 
         return TrainingLoadReport(
             currentLoad: current.load,
@@ -211,17 +262,8 @@ extension Array where Element == WorkoutSession {
             provisionalRatio: provisionalRatio,
             verdict: verdict,
             daysLogged: daysLogged,
-            points: Self.rollingPoints(
-                measurements: measurements,
-                firstDay: firstDay,
-                today: today,
-                calendar: calendar
-            ),
-            recentDays: Self.recentDailyLoads(
-                measurements: measurements,
-                today: today,
-                calendar: calendar
-            ),
+            points: points,
+            recentDays: recentDays,
             drivers: TrainingLoadDrivers(
                 hardSets: LoadDriver(current: current.load, usual: usual),
                 sessions: LoadDriver(
@@ -233,6 +275,20 @@ extension Array where Element == WorkoutSession {
                     usual: usual == nil ? nil : Self.median(previous.map(\.heavySets))
                 )
             )
+        )
+    }
+
+    private static func emptyReport() -> TrainingLoadReport {
+        TrainingLoadReport(
+            currentLoad: 0,
+            usualLoad: nil,
+            ratio: 0,
+            provisionalRatio: nil,
+            verdict: .insufficient,
+            daysLogged: 0,
+            points: [],
+            recentDays: [],
+            drivers: .empty
         )
     }
 
@@ -251,125 +307,175 @@ extension Array where Element == WorkoutSession {
     /// Replay completed sessions chronologically so each set is
     /// judged against only the exercise history that preceded it.
     private static func measurements(
-        from sessions: [WorkoutSession],
-        through now: Date
+        from accumulator: AnalyticsAccumulator,
+        through now: Date,
+        isCancelled: @Sendable () -> Bool
     ) -> [Measurement] {
-        let completed = sessions
-            .compactMap { session -> (WorkoutSession, Date)? in
-                guard let date = session.completedAt, date <= now else { return nil }
-                return (session, date)
+        var result: [Measurement] = []
+        result.reserveCapacity(accumulator.sessions.count)
+        for session in accumulator.sessions {
+            guard !isCancelled() else { return [] }
+            guard session.isCompleted,
+                  session.date <= now,
+                  session.totalSetEquivalent > 0 else {
+                continue
             }
-            .sorted { $0.1 < $1.1 }
-
-        var calculator = SetStimulus.Calculator()
-        return completed.compactMap { session, date in
-            var load = 0.0
-            var heavySets = 0.0
-            for exercise in session.orderedExercises {
-                load += calculator.setEquivalentCredit(for: exercise, at: date)
-                guard exercise.modality == .dynamicStrength,
-                      exercise.trackingMode == .reps else { continue }
-                heavySets += Double(
-                    exercise.orderedSets.filter {
-                        $0.isAnalyticsEligible && (1...5).contains($0.reps)
-                    }.count
-                )
-            }
-            guard load > 0 else { return nil }
-            return Measurement(date: date, load: load, heavySets: heavySets)
+            result.append(Measurement(
+                date: session.date,
+                load: session.totalSetEquivalent,
+                heavySets: session.heavySets
+            ))
         }
+        return result
     }
 
     private static func rollingPoints(
         measurements: [Measurement],
         firstDay: Date,
         today: Date,
-        calendar: Calendar
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
     ) -> [LoadPoint] {
+        guard !isCancelled() else { return [] }
         guard let twelveWeeksAgo = calendar.date(byAdding: .day, value: -83, to: today) else {
             return []
         }
         let start = Swift.max(firstDay, twelveWeeksAgo)
         let days = Swift.max(0, calendar.dateComponents([.day], from: start, to: today).day ?? 0)
 
-        return (0...days).compactMap { offset in
+        var result: [LoadPoint] = []
+        result.reserveCapacity(days + 1)
+        for offset in 0...days {
+            guard !isCancelled() else { return [] }
             guard let day = calendar.date(byAdding: .day, value: offset, to: start) else {
-                return nil
+                continue
             }
-            let current = window(endingOn: day, measurements: measurements, calendar: calendar)
-            let previous = previousWindows(before: day, measurements: measurements, calendar: calendar)
+            let current = window(
+                endingOn: day,
+                measurements: measurements,
+                calendar: calendar,
+                isCancelled: isCancelled
+            )
+            guard !isCancelled() else { return [] }
+            let previous = previousWindows(
+                before: day,
+                measurements: measurements,
+                calendar: calendar,
+                isCancelled: isCancelled
+            )
+            guard !isCancelled() else { return [] }
             let age = calendar.dateComponents([.day], from: firstDay, to: day).day ?? 0
             let usual = age >= 28 && previous.filter({ $0.load > 0 }).count >= 3
                 ? median(previous.map(\.load))
                 : nil
-            return LoadPoint(
+            result.append(LoadPoint(
                 date: day,
                 load: current.load,
                 productiveLower: usual.map { $0 * LoadVerdict.productiveRatioBand.lowerBound },
                 productiveUpper: usual.map { $0 * LoadVerdict.productiveRatioBand.upperBound }
-            )
+            ))
         }
+        return result
     }
 
     private static func recentDailyLoads(
         measurements: [Measurement],
         today: Date,
-        calendar: Calendar
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
     ) -> [DayLoad] {
-        (0..<7).reversed().compactMap { offset in
+        var result: [DayLoad] = []
+        result.reserveCapacity(7)
+        for offset in (0..<7).reversed() {
+            guard !isCancelled() else { return [] }
             guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else {
-                return nil
+                continue
             }
-            let load = measurements
-                .filter { calendar.startOfDay(for: $0.date) == day }
-                .reduce(0) { $0 + $1.load }
-            return DayLoad(date: day, load: load)
+            var load = 0.0
+            for measurement in measurements {
+                guard !isCancelled() else { return [] }
+                if calendar.startOfDay(for: measurement.date) == day {
+                    load += measurement.load
+                }
+            }
+            result.append(DayLoad(date: day, load: load))
         }
+        return result
     }
 
     private static func window(
         endingOn day: Date,
         measurements: [Measurement],
-        calendar: Calendar
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
     ) -> Window {
+        guard !isCancelled() else { return Window(load: 0, sessions: 0, heavySets: 0) }
         guard
             let end = calendar.date(byAdding: .day, value: 1, to: day),
             let start = calendar.date(byAdding: .day, value: -6, to: day)
         else {
             return Window(load: 0, sessions: 0, heavySets: 0)
         }
-        return window(from: start, to: end, measurements: measurements)
+        return window(
+            from: start,
+            to: end,
+            measurements: measurements,
+            isCancelled: isCancelled
+        )
     }
 
     private static func previousWindows(
         before day: Date,
         measurements: [Measurement],
-        calendar: Calendar
+        calendar: Calendar,
+        isCancelled: @Sendable () -> Bool
     ) -> [Window] {
+        guard !isCancelled() else { return [] }
         guard let currentStart = calendar.date(byAdding: .day, value: -6, to: day) else {
             return []
         }
-        return (1...4).compactMap { offset in
+        var result: [Window] = []
+        result.reserveCapacity(4)
+        for offset in 1...4 {
+            guard !isCancelled() else { return [] }
             guard
                 let end = calendar.date(byAdding: .day, value: -7 * (offset - 1), to: currentStart),
                 let start = calendar.date(byAdding: .day, value: -7, to: end)
             else {
-                return nil
+                continue
             }
-            return window(from: start, to: end, measurements: measurements)
+            result.append(window(
+                from: start,
+                to: end,
+                measurements: measurements,
+                isCancelled: isCancelled
+            ))
         }
+        return result
     }
 
     private static func window(
         from start: Date,
         to end: Date,
-        measurements: [Measurement]
+        measurements: [Measurement],
+        isCancelled: @Sendable () -> Bool
     ) -> Window {
-        let included = measurements.filter { $0.date >= start && $0.date < end }
+        var load = 0.0
+        var sessions = 0
+        var heavySets = 0.0
+        for measurement in measurements {
+            guard !isCancelled() else {
+                return Window(load: 0, sessions: 0, heavySets: 0)
+            }
+            guard measurement.date >= start && measurement.date < end else { continue }
+            load += measurement.load
+            sessions += 1
+            heavySets += measurement.heavySets
+        }
         return Window(
-            load: included.reduce(0) { $0 + $1.load },
-            sessions: included.count,
-            heavySets: included.reduce(0) { $0 + $1.heavySets }
+            load: load,
+            sessions: sessions,
+            heavySets: heavySets
         )
     }
 

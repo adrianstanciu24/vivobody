@@ -46,7 +46,7 @@ nonisolated enum SetStimulus {
     /// currency can be calibrated (and swept in tests) without
     /// touching the math. Weights are canonical lb, times seconds,
     /// decay constants days.
-    struct Parameters {
+    struct Parameters: Sendable {
         /// Multiplicative penalty per RIR step beyond 2. RIR 0–2 all
         /// count as full hard sets (the "within a few reps of failure"
         /// band the landmarks assume); each rep further in reserve
@@ -136,6 +136,15 @@ nonisolated enum SetStimulus {
     /// completed sets in hard-set equivalents. A value type: copy it,
     /// replay alternate futures, nothing shared.
     struct Calculator {
+        /// The two views of one exercise's priced work. Returning both
+        /// prevents shared analytics replays from advancing the
+        /// per-exercise load reference twice just to serve systemic-load
+        /// and muscle-volume consumers.
+        struct ExerciseCredit: Sendable {
+            let setEquivalent: Double
+            let byMuscle: [Muscle: Double]
+        }
+
         let parameters: Parameters
 
         /// Dynamic e1RM and isometric effective-load references stay
@@ -163,21 +172,81 @@ nonisolated enum SetStimulus {
         /// the trailing reference. `date` is the owning session's
         /// clock. Stabilizers remain available to body visualization,
         /// but intentionally earn no hypertrophy-volume credit.
+        @MainActor
         mutating func credit(for exercise: Exercise, at date: Date) -> [Muscle: Double] {
-            let volumeCredits = exercise.muscleInvolvement.volumeCredits.filter {
-                $0.value > 0
-            }
-            guard !volumeCredits.isEmpty else { return [:] }
+            credit(
+                for: AnalyticsExerciseSnapshot(
+                    exercise,
+                    bodyweightAtSession: exercise.loadBodyweight
+                ),
+                at: date
+            )
+        }
 
-            let total = setEquivalentCredit(for: exercise, at: date)
+        mutating func credit(
+            for exercise: AnalyticsExerciseSnapshot,
+            at date: Date
+        ) -> [Muscle: Double] {
+            guard !exercise.volumeCredits.isEmpty else { return [:] }
+            let total = calculateSetEquivalentCredit(for: exercise, at: date)
             guard total > 0 else { return [:] }
-            return volumeCredits.mapValues { total * $0 }
+            return exercise.volumeCredits.mapValues { total * $0 }
         }
 
         /// Whole-exercise hard-set equivalents before muscle
         /// involvement is applied. Training load uses this systemic
         /// total while muscle analytics use `credit(for:at:)`.
+        @MainActor
         mutating func setEquivalentCredit(for exercise: Exercise, at date: Date) -> Double {
+            setEquivalentCredit(
+                for: AnalyticsExerciseSnapshot(
+                    exercise,
+                    bodyweightAtSession: exercise.loadBodyweight
+                ),
+                at: date
+            )
+        }
+
+        mutating func setEquivalentCredit(
+            for exercise: AnalyticsExerciseSnapshot,
+            at date: Date
+        ) -> Double {
+            calculateSetEquivalentCredit(for: exercise, at: date)
+        }
+
+        /// Price an exercise once and expose both systemic and
+        /// muscle-weighted credit to the analytics accumulator.
+        @MainActor
+        mutating func price(for exercise: Exercise, at date: Date) -> ExerciseCredit {
+            price(
+                for: AnalyticsExerciseSnapshot(
+                    exercise,
+                    bodyweightAtSession: exercise.loadBodyweight
+                ),
+                at: date
+            )
+        }
+
+        mutating func price(
+            for exercise: AnalyticsExerciseSnapshot,
+            at date: Date
+        ) -> ExerciseCredit {
+            let total = calculateSetEquivalentCredit(for: exercise, at: date)
+            let byMuscle: [Muscle: Double]
+            if total > 0 {
+                byMuscle = exercise.volumeCredits.reduce(into: [:]) { result, entry in
+                    result[entry.key] = total * entry.value
+                }
+            } else {
+                byMuscle = [:]
+            }
+            return ExerciseCredit(setEquivalent: total, byMuscle: byMuscle)
+        }
+
+        private mutating func calculateSetEquivalentCredit(
+            for exercise: AnalyticsExerciseSnapshot,
+            at date: Date
+        ) -> Double {
             let kind: HardSetKind
             switch (exercise.modality, exercise.trackingMode) {
             case (.dynamicStrength, .reps):
@@ -188,7 +257,7 @@ nonisolated enum SetStimulus {
                 return 0
             }
 
-            return exercise.orderedSets
+            return exercise.sets
                 .reduce(into: 0.0) { total, set in
                     total += hardSetEquivalent(
                         for: set,
@@ -204,7 +273,7 @@ nonisolated enum SetStimulus {
         // MARK: Per-set pricing
 
         private mutating func hardSetEquivalent(
-            for set: WorkoutSet,
+            for set: AnalyticsSetSnapshot,
             kind: HardSetKind,
             loadProfile: ExerciseLoadProfile,
             bodyweight: Double,

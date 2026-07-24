@@ -150,7 +150,9 @@ struct ExerciseDetailScreen: View {
     let prColor = Tint.complete
 
     var body: some View {
-        let _ = sessionAnalytics?.update(for: completedSessions)
+        let analyticsRequest = sessionAnalytics?.requestKey(
+            for: completedSessions
+        )
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
@@ -183,6 +185,9 @@ struct ExerciseDetailScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .task(id: analyticsRequest) {
+            sessionAnalytics?.requestCore(for: completedSessions)
+        }
         .detailForgeBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .navigationTitle(item.name)

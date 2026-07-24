@@ -2,103 +2,509 @@
 //  SessionAnalytics.swift
 //  vivobody
 //
-//  Shared cache for all session-derived analytics. Keyed by a
-//  dataset fingerprint (session count + newest completedAt + day) so
-//  every report computes at most once per data change, not once
-//  per render. Held on AppState so both TodayScreen and
-//  InsightsScreen share the same cache — switching tabs is free.
-//  Explicit invalidation covers the rare intentional mutation of an
-//  archived session, such as correcting its same-day body weight.
-//
-//  Replaces the ad-hoc BodyModelStateCache in TodayScreen and
-//  eliminates the 11-model recompute-per-render in InsightsScreen.
-//  New insights add one property + one line in update(for:).
+//  Observable two-tier coordinator for session-derived analytics.
+//  SwiftData models are copied into AnalyticsSnapshot on MainActor;
+//  an AnalyticsWorker actor then sorts and prices that immutable input
+//  once, builds the core reports, and reuses the retained accumulator
+//  only when Insights requests its deep tier. Superseded generations
+//  are cancelled and rejected on return, while the last complete
+//  reports remain visible during refreshes.
 //
 
 import Foundation
-import SwiftData
+import Observation
 import SwiftUI
 
 @MainActor
+@Observable
 final class SessionAnalytics {
 
-    // Cached reports — set by update(for:) and read by screens.
-    var volume: [MuscleVolumeStat]
-    var development: MuscleDevelopment.State
-    var muscleMap: MuscleMapReport
-    var strength: StrengthOutlookBoard
-    var progress: [ExerciseProgress]
-    var dominance: ExerciseDominanceBoard
-    var intensity: IntensityMix
-    var intensityWeeks: [IntensityWeek]
-    var migration: RepRangeMigrationReport
-    var composition: CompositionSplit
-    var symmetry: AntagonistBoard
-    var consistency: ConsistencyReport
-    var load: TrainingLoadReport
-    var lastInstances: [String: LastExerciseInstance]
+    /// Reports shared by Today, Me, Insights, and exercise-library
+    /// surfaces. Every stored value is safe to cross back from the
+    /// background worker.
+    nonisolated struct CoreReports: Sendable {
+        let volume: [MuscleVolumeStat]
+        let development: MuscleDevelopment.State
+        let muscleMap: MuscleMapReport
+        let strength: StrengthOutlookBoard
+        let progress: [ExerciseProgress]
+        let load: TrainingLoadReport
+        let lastInstances: [String: LastExerciseInstance]
 
-    private var fingerprint: String = ""
+        nonisolated static func make(
+            from common: AnalyticsAccumulator,
+            now: Date
+        ) -> CoreReports {
+            let progress = common.progressByExercise
+            let volume = common.muscleVolume(now: now)
+            let development = MuscleDevelopment.simulate(
+                from: common,
+                now: now
+            )
+            return CoreReports(
+                volume: volume,
+                development: development,
+                muscleMap: MuscleMapReport.compute(
+                    accumulator: common,
+                    development: development,
+                    volume: volume,
+                    now: now
+                ),
+                strength: StrengthOutlookBoard.compute(
+                    progress: progress,
+                    now: now
+                ),
+                progress: progress,
+                load: common.trainingLoad(now: now),
+                lastInstances: common.lastInstanceByExercise()
+            )
+        }
+    }
+
+    /// Reports whose only app consumer is Insights.
+    nonisolated struct DeepReports: Sendable {
+        let dominance: ExerciseDominanceBoard
+        let intensity: IntensityMix
+        let intensityWeeks: [IntensityWeek]
+        let migration: RepRangeMigrationReport
+        let composition: CompositionSplit
+        let symmetry: AntagonistBoard
+        let consistency: ConsistencyReport
+
+        nonisolated static func make(
+            from common: AnalyticsAccumulator,
+            now: Date
+        ) -> DeepReports {
+            DeepReports(
+                dominance: common.exerciseDominance(now: now),
+                intensity: common.intensityMix(now: now),
+                intensityWeeks: common.weeklyIntensity(now: now),
+                migration: common.repRangeMigration(now: now),
+                composition: common.compoundIsolationSplit(now: now),
+                symmetry: common.antagonistBalance(now: now),
+                consistency: common.consistency(now: now)
+            )
+        }
+    }
+
+    /// One coherent Insights payload. Core and deep reports are
+    /// published together only after both were built from the same
+    /// fingerprint and accumulator.
+    nonisolated struct InsightsReports: Sendable {
+        let core: CoreReports
+        let deep: DeepReports
+    }
+
+    /// Stable `.task(id:)` identity. The explicit revision changes on
+    /// same-count/same-date archived-history corrections.
+    nonisolated struct RequestKey: Hashable, Sendable {
+        let sessionCount: Int
+        let newestCompletion: TimeInterval
+        let day: TimeInterval
+        let revision: Int
+    }
+
+    private(set) var coreReports: CoreReports
+    private(set) var deepReports: DeepReports?
+    private(set) var insightsReports: InsightsReports?
+    private(set) var isCoreLoading = false
+    private(set) var isDeepLoading = false
+    private(set) var invalidationRevision = 0
+
+    var hasCoreReports: Bool { coreFingerprint != nil }
+    var hasInsightsReports: Bool { insightsReports != nil }
+
+    // Compatibility accessors keep non-Insights screens focused on the
+    // report they consume. Deep access never starts computation; before
+    // the first requested result it returns a lightweight empty value.
+    var volume: [MuscleVolumeStat] { coreReports.volume }
+    var development: MuscleDevelopment.State { coreReports.development }
+    var muscleMap: MuscleMapReport { coreReports.muscleMap }
+    var strength: StrengthOutlookBoard { coreReports.strength }
+    var progress: [ExerciseProgress] { coreReports.progress }
+    var load: TrainingLoadReport { coreReports.load }
+    var lastInstances: [String: LastExerciseInstance] {
+        coreReports.lastInstances
+    }
+
+    var dominance: ExerciseDominanceBoard {
+        deepReports?.dominance ?? Self.emptyDeepReports.dominance
+    }
+    var intensity: IntensityMix {
+        deepReports?.intensity ?? Self.emptyDeepReports.intensity
+    }
+    var intensityWeeks: [IntensityWeek] {
+        deepReports?.intensityWeeks ?? Self.emptyDeepReports.intensityWeeks
+    }
+    var migration: RepRangeMigrationReport {
+        deepReports?.migration ?? Self.emptyDeepReports.migration
+    }
+    var composition: CompositionSplit {
+        deepReports?.composition ?? Self.emptyDeepReports.composition
+    }
+    var symmetry: AntagonistBoard {
+        deepReports?.symmetry ?? Self.emptyDeepReports.symmetry
+    }
+    var consistency: ConsistencyReport {
+        deepReports?.consistency ?? Self.emptyDeepReports.consistency
+    }
+
+    @ObservationIgnored private let worker = AnalyticsWorker()
+    @ObservationIgnored private var coreTask: Task<Void, Never>?
+    @ObservationIgnored private var deepTask: Task<Void, Never>?
+    @ObservationIgnored private var requestedKey: RequestKey?
+    @ObservationIgnored private var desiredDeepKey: RequestKey?
+    @ObservationIgnored private var coreFingerprint: RequestKey?
+    @ObservationIgnored private var deepFingerprint: RequestKey?
+    @ObservationIgnored private var currentAccumulator: AnalyticsAccumulator?
+    @ObservationIgnored private var currentAccumulatorKey: RequestKey?
+    @ObservationIgnored private var currentNow: Date?
+    @ObservationIgnored private var deepTaskKey: RequestKey?
+    @ObservationIgnored private var generation = 0
 
     init() {
-        let empty: [WorkoutSession] = []
-        volume = empty.muscleVolume()
-        development = MuscleDevelopment.simulate(from: empty)
-        muscleMap = MuscleMapReport.compute(
-            sessions: empty,
-            development: development,
-            volume: volume
+        let empty = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: [AnalyticsSessionSnapshot]())
         )
-        strength = empty.strengthOutlook()
-        progress = empty.progressByExercise
-        dominance = empty.exerciseDominance()
-        intensity = empty.intensityMix()
-        intensityWeeks = empty.weeklyIntensity()
-        migration = empty.repRangeMigration()
-        composition = empty.compoundIsolationSplit()
-        symmetry = empty.antagonistBalance()
-        consistency = empty.consistency()
-        load = empty.trainingLoad()
-        lastInstances = empty.lastInstanceByExercise()
+        coreReports = CoreReports.make(from: empty, now: Date())
+        deepReports = nil
+        insightsReports = nil
     }
 
-    /// Recompute all reports only when the dataset has actually
-    /// changed or the calendar day rolls over. Archived sessions are
-    /// immutable history, so count + latest completion identify the
-    /// input within a day.
-    func update(for sessions: [WorkoutSession], now: Date = Date()) {
-        let day = Calendar.current.startOfDay(for: now).timeIntervalSince1970
-        let sig = "\(sessions.count)-\(sessions.first?.completedAt?.timeIntervalSince1970 ?? 0)-\(day)"
-        guard sig != fingerprint else { return }
-        fingerprint = sig
+    /// Constant-time identity for a view's analytics request. Every
+    /// analytics-facing query is newest-first, so the first completion
+    /// supplies the high-water mark without rescanning history during
+    /// each SwiftUI body evaluation. Archived sessions are ordinarily
+    /// immutable; correction flows call `invalidate()`.
+    func requestKey(
+        for sessions: [WorkoutSession],
+        now: Date = Date()
+    ) -> RequestKey {
+        let newest = sessions.first?.completedAt?.timeIntervalSince1970 ?? 0
+        let day = Calendar.current
+            .startOfDay(for: now)
+            .timeIntervalSince1970
+        return RequestKey(
+            sessionCount: sessions.count,
+            newestCompletion: newest,
+            day: day,
+            revision: invalidationRevision
+        )
+    }
 
-        volume = sessions.muscleVolume()
-        development = MuscleDevelopment.simulate(from: sessions, now: now)
-        muscleMap = MuscleMapReport.compute(
-            sessions: sessions,
+    /// Request reports used outside Insights. Snapshot construction is
+    /// the only full model-graph traversal on MainActor.
+    func requestCore(
+        for sessions: [WorkoutSession],
+        now: Date = Date()
+    ) {
+        request(for: sessions, now: now, includesDeepReports: false)
+    }
+
+    /// Request the core tier plus the lazy Insights-only tier.
+    func requestInsights(
+        for sessions: [WorkoutSession],
+        now: Date = Date()
+    ) {
+        request(for: sessions, now: now, includesDeepReports: true)
+    }
+
+    /// Forces the next visible consumer to build a new generation even
+    /// when an archived correction leaves count and completion time
+    /// unchanged. Existing reports remain visible until replacement.
+    func invalidate() {
+        invalidationRevision &+= 1
+        generation &+= 1
+        requestedKey = nil
+        desiredDeepKey = nil
+        currentAccumulator = nil
+        currentAccumulatorKey = nil
+        currentNow = nil
+        deepTaskKey = nil
+        coreTask?.cancel()
+        deepTask?.cancel()
+        coreTask = nil
+        deepTask = nil
+        isCoreLoading = false
+        isDeepLoading = false
+    }
+
+    /// Test/support hook that waits for the currently requested core
+    /// and any deep task it launches. Production views do not await it;
+    /// they observe published reports instead.
+    func waitForPendingWork() async {
+        await coreTask?.value
+        await deepTask?.value
+    }
+
+    private func request(
+        for sessions: [WorkoutSession],
+        now: Date,
+        includesDeepReports: Bool
+    ) {
+        let key = requestKey(for: sessions, now: now)
+
+        if requestedKey == key {
+            guard includesDeepReports else { return }
+            desiredDeepKey = key
+            if coreFingerprint == key,
+               currentAccumulatorKey == key,
+               let currentAccumulator,
+               let currentNow {
+                startDeepReports(
+                    from: currentAccumulator,
+                    core: coreReports,
+                    key: key,
+                    now: currentNow,
+                    generation: generation
+                )
+            } else {
+                isDeepLoading = true
+            }
+            return
+        }
+
+        let input = AnalyticsSnapshot(sessions: sessions)
+        generation &+= 1
+        let requestGeneration = generation
+
+        requestedKey = key
+        desiredDeepKey = includesDeepReports ? key : nil
+        currentAccumulator = nil
+        currentAccumulatorKey = nil
+        currentNow = nil
+        deepTaskKey = nil
+        coreTask?.cancel()
+        deepTask?.cancel()
+        isCoreLoading = true
+        isDeepLoading = includesDeepReports
+
+        let worker = worker
+        coreTask = Task { [weak self] in
+            do {
+                let build = try await worker.makeCore(
+                    from: input,
+                    now: now
+                )
+                guard !Task.isCancelled, let self else { return }
+                guard
+                    self.generation == requestGeneration,
+                    self.requestedKey == key
+                else { return }
+
+                self.coreReports = build.reports
+                self.coreFingerprint = key
+                self.currentAccumulator = build.accumulator
+                self.currentAccumulatorKey = key
+                self.currentNow = now
+                self.isCoreLoading = false
+                self.coreTask = nil
+
+                if self.desiredDeepKey == key {
+                    self.startDeepReports(
+                        from: build.accumulator,
+                        core: build.reports,
+                        key: key,
+                        now: now,
+                        generation: requestGeneration
+                    )
+                } else {
+                    self.isDeepLoading = false
+                }
+            } catch is CancellationError {
+                guard let self, self.generation == requestGeneration else {
+                    return
+                }
+                self.isCoreLoading = false
+            } catch {
+                guard let self, self.generation == requestGeneration else {
+                    return
+                }
+                self.isCoreLoading = false
+            }
+        }
+    }
+
+    private func startDeepReports(
+        from accumulator: AnalyticsAccumulator,
+        core: CoreReports,
+        key: RequestKey,
+        now: Date,
+        generation requestGeneration: Int
+    ) {
+        if deepFingerprint == key, insightsReports != nil {
+            isDeepLoading = false
+            return
+        }
+        guard deepTaskKey != key else { return }
+
+        deepTask?.cancel()
+        deepTaskKey = key
+        isDeepLoading = true
+
+        let worker = worker
+        deepTask = Task { [weak self] in
+            do {
+                let reports = try await worker.makeDeep(
+                    from: accumulator,
+                    now: now
+                )
+                guard !Task.isCancelled, let self else { return }
+                guard
+                    self.generation == requestGeneration,
+                    self.requestedKey == key,
+                    self.desiredDeepKey == key
+                else { return }
+
+                self.deepReports = reports
+                self.deepFingerprint = key
+                self.insightsReports = InsightsReports(
+                    core: core,
+                    deep: reports
+                )
+                self.isDeepLoading = false
+                self.deepTask = nil
+                self.deepTaskKey = nil
+            } catch is CancellationError {
+                guard let self, self.generation == requestGeneration else {
+                    return
+                }
+                self.isDeepLoading = false
+                self.deepTaskKey = nil
+            } catch {
+                guard let self, self.generation == requestGeneration else {
+                    return
+                }
+                self.isDeepLoading = false
+                self.deepTaskKey = nil
+            }
+        }
+    }
+
+    private static let emptyDeepReports: DeepReports = {
+        let empty = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: [AnalyticsSessionSnapshot]())
+        )
+        return DeepReports.make(from: empty, now: Date())
+    }()
+}
+
+/// The only executor that performs report construction. Its inputs and
+/// outputs are fully Sendable; no SwiftData object can reach this actor.
+private actor AnalyticsWorker {
+    nonisolated struct CoreBuild: Sendable {
+        let accumulator: AnalyticsAccumulator
+        let reports: SessionAnalytics.CoreReports
+    }
+
+    func makeCore(
+        from input: AnalyticsSnapshot,
+        now: Date
+    ) async throws -> CoreBuild {
+        let accumulator = AnalyticsAccumulator.replay(
+            input,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let progress = accumulator.progressByExercise(
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let volume = accumulator.muscleVolume(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let development = MuscleDevelopment.simulate(
+            from: accumulator,
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let muscleMap = MuscleMapReport.compute(
+            accumulator: accumulator,
             development: development,
             volume: volume,
-            now: now
+            now: now,
+            isCancelled: { Task.isCancelled }
         )
-        strength = sessions.strengthOutlook()
-        progress = sessions.progressByExercise
-        dominance = sessions.exerciseDominance(now: now)
-        intensity = sessions.intensityMix(now: now)
-        intensityWeeks = sessions.weeklyIntensity(now: now)
-        migration = sessions.repRangeMigration(now: now)
-        composition = sessions.compoundIsolationSplit(now: now)
-        symmetry = sessions.antagonistBalance(now: now)
-        consistency = sessions.consistency()
-        load = sessions.trainingLoad(now: now)
-        lastInstances = sessions.lastInstanceByExercise()
+        try Task.checkCancellation()
+        let strength = StrengthOutlookBoard.compute(
+            progress: progress,
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let load = accumulator.trainingLoad(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let lastInstances = accumulator.lastInstanceByExercise(
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let reports = SessionAnalytics.CoreReports(
+            volume: volume,
+            development: development,
+            muscleMap: muscleMap,
+            strength: strength,
+            progress: progress,
+            load: load,
+            lastInstances: lastInstances
+        )
+        return CoreBuild(accumulator: accumulator, reports: reports)
     }
 
-    /// Forces the next consumer to rebuild every derived report. Archived
-    /// sessions are ordinarily immutable, so the compact fingerprint above
-    /// is sufficient; correction flows call this after changing a snapshot
-    /// without altering session count or completion time.
-    func invalidate() {
-        fingerprint = ""
+    func makeDeep(
+        from accumulator: AnalyticsAccumulator,
+        now: Date
+    ) async throws -> SessionAnalytics.DeepReports {
+        try Task.checkCancellation()
+        let dominance = accumulator.exerciseDominance(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let intensity = accumulator.intensityMix(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let intensityWeeks = accumulator.weeklyIntensity(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let migration = accumulator.repRangeMigration(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let composition = accumulator.compoundIsolationSplit(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let symmetry = accumulator.antagonistBalance(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        let consistency = accumulator.consistency(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
+        return SessionAnalytics.DeepReports(
+            dominance: dominance,
+            intensity: intensity,
+            intensityWeeks: intensityWeeks,
+            migration: migration,
+            composition: composition,
+            symmetry: symmetry,
+            consistency: consistency
+        )
     }
 }
 

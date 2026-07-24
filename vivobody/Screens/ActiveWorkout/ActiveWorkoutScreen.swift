@@ -48,7 +48,9 @@ struct ActiveWorkoutScreen: View {
     /// open so the user can retry with their current in-memory state.
     @State private var saveError: SaveErrorBox? = nil
 
-    /// Drives the catalog picker for mid-workout exercise add.
+    /// Drives the catalog picker for exercise adds. Legacy/external
+    /// empty drafts initialize it as presented instead of showing a
+    /// separate empty-workout screen.
     @State private var showAddExercisePicker: Bool = false
 
     @AppStorage(SettingsKey.weightUnit)
@@ -62,6 +64,9 @@ struct ActiveWorkoutScreen: View {
         onDiscard: (() -> Void)? = nil
     ) {
         _session = State(wrappedValue: session)
+        _showAddExercisePicker = State(
+            initialValue: session.orderedExercises.isEmpty
+        )
         self.onDismiss = onDismiss
         self.onDiscard = onDiscard
     }
@@ -70,10 +75,7 @@ struct ActiveWorkoutScreen: View {
         ZStack {
             Surface.background.ignoresSafeArea()
 
-            if isEmpty {
-                emptyState
-                    .safeAreaBar(edge: .top, spacing: 8) { topBar }
-            } else {
+            if !isEmpty {
                 pager
                     .safeAreaBar(edge: .top, spacing: 8) { topBar }
                     .safeAreaBar(edge: .bottom, spacing: Space.md) { bottomBar }
@@ -133,7 +135,10 @@ struct ActiveWorkoutScreen: View {
                 Text("This workout will be removed.")
             }
         }
-        .sheet(isPresented: $showAddExercisePicker) {
+        .sheet(
+            isPresented: $showAddExercisePicker,
+            onDismiss: discardIfStillEmpty
+        ) {
             ExercisePickerSheet { item in
                 appendExercise(from: item)
             }
@@ -179,42 +184,7 @@ struct ActiveWorkoutScreen: View {
     /// catalog defaults (3 sets at the catalog reps × weight). Either
     /// way the count is then adjustable in the card (+ / − a set).
     private func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
-        if let last = mostRecentLoggedExercise(matching: item) {
-            let copy = Exercise.freshCopy(of: last)
-            copy.sortOrder = sortOrder
-            return copy
-        }
-        return Exercise(from: item, sortOrder: sortOrder)
-    }
-
-    /// The same catalog exercise from the most recently completed
-    /// session, or nil if the user has never logged it. Stable bundled
-    /// identity or the custom item's exact performance signature wins;
-    /// name-only matching is reserved for rows with no catalog identity.
-    private func mostRecentLoggedExercise(matching item: ExerciseCatalogItem) -> Exercise? {
-        let itemName = item.name
-        let itemID = item.id
-        let descriptor: FetchDescriptor<Exercise>
-        if let catalogID = item.catalogID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogID == catalogID
-                }
-            )
-        } else {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && (
-                        $0.catalogItemID == itemID
-                            || ($0.catalogItemID == nil && $0.name == itemName)
-                    )
-                }
-            )
-        }
-        let matches = (try? modelContext.fetch(descriptor)) ?? []
-        return matches
-            .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }
-            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
+        Exercise.fresh(from: item, history: modelContext, sortOrder: sortOrder)
     }
 
     /// Two-way binding for PRCelebration. When the user taps to
@@ -310,28 +280,8 @@ struct ActiveWorkoutScreen: View {
         .accessibilityIdentifier("endWorkoutButton")
     }
 
-    // MARK: - Empty state
+    // MARK: - Pager
 
-    /// Shown when the session has no exercises yet (a fresh, blank
-    /// start). The instrument's calm canvas: a type-forward prompt
-    /// and one prominent lime action. Tapping Add opens the same
-    /// picker used mid-workout; the first pick lands the user on its
-    /// card (see `appendExercise`).
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label("Empty canvas", systemImage: "square.dashed")
-        } description: {
-            Text("Add your first exercise to start logging sets.")
-        } actions: {
-            PrimaryActionButton(title: "Add exercise", icon: "plus", inputLabels: ["Add exercise", "Add", "Add Exercise"]) {
-                showAddExercisePicker = true
-            }
-            .padding(.horizontal, Space.gutter)
-        }
-    }
-
-    /// The single biggest target on the empty screen — a full-width
-    /// lime verb button, the same shape language as the cards' set
     private var pager: some View {
         let exercises = session.orderedExercises
         // Slimmer side chrome than the pager's default: the workout
@@ -376,6 +326,16 @@ struct ActiveWorkoutScreen: View {
     private var totalSetCount: Int     { session.totalPlannedSets }
     private var endWorkoutAlertTitle: String {
         session.totalSets > 0 ? "End this workout?" : "Discard this workout?"
+    }
+
+    /// Empty drafts can only come from legacy restoration or an
+    /// external start action. They open the picker immediately; if
+    /// the picker is cancelled, close the unused draft rather than
+    /// exposing a second empty-workout screen.
+    private func discardIfStillEmpty() {
+        if isEmpty {
+            onDiscard?()
+        }
     }
 
     private func saveActiveSessionChanges() {

@@ -58,11 +58,21 @@ struct TodayScreen: View {
 
     /// The start action chosen in the sheet, deferred until the sheet
     /// fully dismisses. Running it in the sheet's onDismiss avoids
-    /// presenting the focused ActiveWorkoutScreen over a still-
-    /// dismissing sheet.
+    /// presenting the next workout surface over a still-dismissing
+    /// sheet.
     @State private var pendingStart: (() -> Void)?
 
+    /// Fresh workouts begin in the exercise catalog rather than on
+    /// an empty active-workout canvas. The selected item is likewise
+    /// deferred until the picker dismisses, so the active workout
+    /// never competes with an outgoing sheet presentation.
+    @State private var showFreshExercisePicker = false
+    @State private var pendingFreshStart: (() -> Void)?
+
     var body: some View {
+        let analyticsRequest = appState.analytics.requestKey(
+            for: completedSessions
+        )
         ScrollView {
                     // The body leads — your trained figure is the hero
                     // and the readout's subject. The readiness section
@@ -75,7 +85,6 @@ struct TodayScreen: View {
                     // change (memoised in SessionAnalytics on AppState)
                     // and every consumer (figure, readiness card, the
                     // drill-down boards) derives from this single state.
-                    let _ = appState.analytics.update(for: completedSessions)
                     let modelState = appState.analytics.development
                     let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
                     let outlook = appState.analytics.strength
@@ -156,12 +165,22 @@ struct TodayScreen: View {
             // ambient-confirmation cousin of the workout's haptics.
             Haptics.soft()
         }
+        .task(id: analyticsRequest) {
+            appState.analytics.requestCore(for: completedSessions)
+        }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
                 lastSession: completedSessions.first,
                 templates: sortedTemplates,
                 onSelect: queueStart
             )
+        }
+        .sheet(isPresented: $showFreshExercisePicker, onDismiss: runPendingFreshStart) {
+            ExercisePickerSheet { item in
+                pendingFreshStart = {
+                    appState.workout.startFreshWorkout(with: item)
+                }
+            }
         }
         .sheet(isPresented: $showMuscleMapDetails) {
             MuscleMapDetailsSheet(report: appState.analytics.muscleMap)
@@ -183,7 +202,11 @@ struct TodayScreen: View {
             let last = completedSessions.first
             pendingStart = { appState.workout.startTodaysWorkout(basedOn: last) }
         case .fresh:
-            pendingStart = { appState.workout.startTodaysWorkout(basedOn: nil) }
+            if appState.workout.activeSession != nil {
+                pendingStart = { appState.workout.expandWorkout() }
+            } else {
+                pendingStart = { showFreshExercisePicker = true }
+            }
         case .template(let template):
             pendingStart = { appState.workout.startWorkoutFromTemplate(template) }
         }
@@ -192,6 +215,12 @@ struct TodayScreen: View {
     private func runPendingStart() {
         let action = pendingStart
         pendingStart = nil
+        action?()
+    }
+
+    private func runPendingFreshStart() {
+        let action = pendingFreshStart
+        pendingFreshStart = nil
         action?()
     }
 

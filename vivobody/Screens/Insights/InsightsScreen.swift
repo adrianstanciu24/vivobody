@@ -39,25 +39,39 @@ import SwiftData
 struct InsightsScreen: View {
     @Bindable var appState: AppState
 
-    /// All archived sessions. Drives every figure on the screen; the
-    /// models are recomputed each render (the dataset is small and
-    /// memoizing would risk staleness after a History edit).
+    /// All archived sessions. The shared cache refreshes its core tier
+    /// on data changes and builds Insights-only reports on first entry.
     @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil }
+        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
+        sort: [SortDescriptor(\.completedAt, order: .reverse)]
     )
     private var completedSessions: [WorkoutSession]
 
     var body: some View {
+        let analyticsRequest = appState.analytics.requestKey(
+            for: completedSessions
+        )
         Group {
             if completedSessions.isEmpty {
                 emptyState
-            } else if appState.pro.isUnlocked {
-                loadedContent
+            } else if let reports = appState.analytics.insightsReports {
+                if appState.pro.isUnlocked {
+                    loadedContent(reports)
+                } else {
+                    lockedContent(reports)
+                }
             } else {
-                lockedContent
+                loadingState
             }
         }
         .forgeBackground()
+        .task(id: analyticsRequest) {
+            if completedSessions.isEmpty {
+                appState.analytics.requestCore(for: completedSessions)
+            } else {
+                appState.analytics.requestInsights(for: completedSessions)
+            }
+        }
     }
 
     // MARK: - Locked state (free tier)
@@ -69,18 +83,22 @@ struct InsightsScreen: View {
     /// persistent control carries the only explicit CTA. Never shown
     /// before the first workout (the empty state wins), and never as
     /// a popup anywhere else.
-    private var lockedContent: some View {
-        let _ = appState.analytics.update(for: completedSessions)
-        let a = appState.analytics
+    private func lockedContent(
+        _ reports: SessionAnalytics.InsightsReports
+    ) -> some View {
         let signature = TrainingSignature(
-            volume: a.volume,
-            development: a.development.intensities,
-            consistency: a.consistency
+            volume: reports.core.volume,
+            development: reports.core.development.intensities,
+            consistency: reports.deep.consistency
         )
 
         return ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 0) {
-                insightSections(analytics: a, signature: signature, locked: true)
+                insightSections(
+                    reports: reports,
+                    signature: signature,
+                    locked: true
+                )
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, Space.sm)
@@ -132,14 +150,22 @@ struct InsightsScreen: View {
         appState.pro.requestUnlock()
     }
 
-    private var loadedContent: some View {
-        let _ = appState.analytics.update(for: completedSessions)
-        let a = appState.analytics
-        let signature = TrainingSignature(volume: a.volume, development: a.development.intensities, consistency: a.consistency)
+    private func loadedContent(
+        _ reports: SessionAnalytics.InsightsReports
+    ) -> some View {
+        let signature = TrainingSignature(
+            volume: reports.core.volume,
+            development: reports.core.development.intensities,
+            consistency: reports.deep.consistency
+        )
 
         return ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 0) {
-                insightSections(analytics: a, signature: signature, locked: false)
+                insightSections(
+                    reports: reports,
+                    signature: signature,
+                    locked: false
+                )
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, Space.sm)
@@ -156,34 +182,36 @@ struct InsightsScreen: View {
     /// preview (or vice versa).
     @ViewBuilder
     private func insightSections(
-        analytics a: SessionAnalytics,
+        reports: SessionAnalytics.InsightsReports,
         signature: TrainingSignature,
         locked: Bool
     ) -> some View {
+        let core = reports.core
+        let deep = reports.deep
         insightSection(title: "Your signature", index: 0, locked: locked) {
-            SignatureSection(signature: signature, report: a.consistency)
+            SignatureSection(signature: signature, report: deep.consistency)
         }
         insightSection(title: "Strength", index: 1, locked: locked) {
-            StrengthTrajectorySection(board: a.strength, progress: a.progress)
+            StrengthTrajectorySection(board: core.strength, progress: core.progress)
         }
         insightSection(title: "Composition", index: 2, locked: locked) {
-            ExerciseDominanceSection(board: a.dominance, split: a.composition)
+            ExerciseDominanceSection(board: deep.dominance, split: deep.composition)
         }
         insightSection(title: "Intensity", index: 3, locked: locked) {
             IntensityMixSection(
-                mix: a.intensity,
-                weeks: a.intensityWeeks,
-                migration: a.migration
+                mix: deep.intensity,
+                weeks: deep.intensityWeeks,
+                migration: deep.migration
             )
         }
         insightSection(title: "Consistency", index: 4, locked: locked) {
-            ConsistencySection(report: a.consistency)
+            ConsistencySection(report: deep.consistency)
         }
         insightSection(title: "Training load", index: 5, locked: locked) {
-            TrainingLoadSection(report: a.load)
+            TrainingLoadSection(report: core.load)
         }
         insightSection(title: "Symmetry", index: 6, locked: locked, isLast: true) {
-            SymmetrySection(board: a.symmetry)
+            SymmetrySection(board: deep.symmetry)
         }
     }
 
@@ -221,6 +249,13 @@ struct InsightsScreen: View {
             systemImage: "chart.xyaxis.line",
             description: Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
         )
+    }
+
+    private var loadingState: some View {
+        ProgressView("Building insights")
+            .controlSize(.large)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityHint("Your training history is being analyzed")
     }
 }
 

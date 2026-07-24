@@ -31,7 +31,7 @@ import Foundation
 
 // MARK: - Verdict
 
-nonisolated enum RepDriftVerdict: Hashable {
+nonisolated enum RepDriftVerdict: Hashable, Sendable {
     case towardStrength
     case stable
     case towardEndurance
@@ -40,7 +40,7 @@ nonisolated enum RepDriftVerdict: Hashable {
 // MARK: - Weekly point
 
 /// One week's average-reps sample on the migration curve.
-nonisolated struct RepRangePoint: Identifiable, Hashable {
+nonisolated struct RepRangePoint: Identifiable, Hashable, Sendable {
     var id: Date { weekStart }
     /// Calendar week start (Sunday/Monday per current calendar) the
     /// bucket's sets fall into.
@@ -53,7 +53,7 @@ nonisolated struct RepRangePoint: Identifiable, Hashable {
 
 // MARK: - Report
 
-nonisolated struct RepRangeMigrationReport {
+nonisolated struct RepRangeMigrationReport: Sendable {
     /// Weekly average-reps samples, chronological ascending.
     let points: [RepRangePoint]
     /// Fitted slope in reps per week (0 when there's no trend yet).
@@ -74,12 +74,36 @@ nonisolated struct RepRangeMigrationReport {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Average-reps-per-set trend over the trailing `weeks` (default
     /// 12) as of `now`. Buckets completed `.reps` sets by ISO week
     /// start, fits a least-squares line to the weekly averages, and
     /// reports the drift verdict.
     func repRangeMigration(weeks: Int = 12, now: Date = Date()) -> RepRangeMigrationReport {
+        AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: self)
+        ).repRangeMigration(weeks: weeks, now: now)
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Snapshot-backed rep-range drift used by the background
+    /// analytics worker.
+    func repRangeMigration(
+        weeks: Int = 12,
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> RepRangeMigrationReport {
+        let cancelled = RepRangeMigrationReport(
+            points: [],
+            slopePerWeek: 0,
+            currentAverage: 0,
+            earlierAverage: 0,
+            verdict: .stable
+        )
+        guard !isCancelled() else { return cancelled }
+
         let calendar = Calendar.current
         let cutoff = now.addingTimeInterval(-Double(weeks) * 7 * 86_400)
 
@@ -87,16 +111,25 @@ extension Array where Element == WorkoutSession {
         var totalRepsByWeek: [Date: Int] = [:]
         var setCountByWeek: [Date: Int] = [:]
 
-        for session in self {
-            let date = session.completedAt ?? session.startedAt
+        for session in sessions {
+            guard !isCancelled() else { return cancelled }
+            let date = session.date
             guard date >= cutoff else { continue }
             guard let weekStart = calendar.date(
                 from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
             ) else { continue }
 
-            for exercise in session.exercises
-            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
-                for set in exercise.sets where set.isAnalyticsEligible && set.reps > 0 {
+            for replay in session.exercises {
+                guard !isCancelled() else { return cancelled }
+                guard replay.exercise.modality == .dynamicStrength,
+                      replay.exercise.trackingMode == .reps else {
+                    continue
+                }
+                for set in replay.exercise.sets {
+                    guard !isCancelled() else { return cancelled }
+                    guard set.isAnalyticsEligible, set.reps > 0 else {
+                        continue
+                    }
                     totalRepsByWeek[weekStart, default: 0] += set.reps
                     setCountByWeek[weekStart, default: 0] += 1
                 }
@@ -104,11 +137,22 @@ extension Array where Element == WorkoutSession {
         }
 
         // Build chronological weekly points.
-        let points: [RepRangePoint] = totalRepsByWeek.keys.sorted().map { weekStart in
+        guard !isCancelled() else { return cancelled }
+        let orderedWeeks = totalRepsByWeek.keys.sorted()
+        var points: [RepRangePoint] = []
+        points.reserveCapacity(orderedWeeks.count)
+        for weekStart in orderedWeeks {
+            guard !isCancelled() else { return cancelled }
             let total = totalRepsByWeek[weekStart, default: 0]
             let count = setCountByWeek[weekStart, default: 0]
             let average = count > 0 ? Double(total) / Double(count) : 0
-            return RepRangePoint(weekStart: weekStart, averageReps: average, sets: count)
+            points.append(
+                RepRangePoint(
+                    weekStart: weekStart,
+                    averageReps: average,
+                    sets: count
+                )
+            )
         }
 
         // Not enough weeks for a trustworthy slope — return what we
@@ -126,13 +170,28 @@ extension Array where Element == WorkoutSession {
         // Least-squares fit on (days since first point, averageReps),
         // same shape as `StrengthOutlook`.
         let t0 = points.first!.weekStart
-        let xs = points.map { $0.weekStart.timeIntervalSince(t0) / 86_400 }
-        let ys = points.map { $0.averageReps }
+        var xs: [Double] = []
+        var ys: [Double] = []
+        xs.reserveCapacity(points.count)
+        ys.reserveCapacity(points.count)
+        for point in points {
+            guard !isCancelled() else { return cancelled }
+            xs.append(point.weekStart.timeIntervalSince(t0) / 86_400)
+            ys.append(point.averageReps)
+        }
         let n = Double(xs.count)
-        let meanX = xs.reduce(0, +) / n
-        let meanY = ys.reduce(0, +) / n
+        var sumX = 0.0
+        var sumY = 0.0
+        for i in xs.indices {
+            guard !isCancelled() else { return cancelled }
+            sumX += xs[i]
+            sumY += ys[i]
+        }
+        let meanX = sumX / n
+        let meanY = sumY / n
         var num = 0.0, den = 0.0
         for i in xs.indices {
+            guard !isCancelled() else { return cancelled }
             num += (xs[i] - meanX) * (ys[i] - meanY)
             den += (xs[i] - meanX) * (xs[i] - meanX)
         }
@@ -148,6 +207,7 @@ extension Array where Element == WorkoutSession {
             verdict = .stable
         }
 
+        guard !isCancelled() else { return cancelled }
         return RepRangeMigrationReport(
             points: points,
             slopePerWeek: slopePerWeek,

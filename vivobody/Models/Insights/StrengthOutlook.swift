@@ -30,7 +30,7 @@ import Foundation
 
 // MARK: - Trend
 
-nonisolated enum PRTrend: Hashable {
+nonisolated enum PRTrend: Hashable, Sendable {
     case climbing
     case plateaued
     case slipping
@@ -38,7 +38,7 @@ nonisolated enum PRTrend: Hashable {
 
 // MARK: - Per-lift stat
 
-nonisolated struct StrengthOutlookStat: Identifiable, Hashable {
+nonisolated struct StrengthOutlookStat: Identifiable, Hashable, Sendable {
     /// The same stable identity used by `ExerciseProgress`: bundled
     /// catalog ID or the custom item's UUID plus full performance
     /// signature, with a normalized-name key only when neither exists.
@@ -72,7 +72,7 @@ nonisolated struct StrengthOutlookStat: Identifiable, Hashable {
 
 // MARK: - Board
 
-nonisolated struct StrengthOutlookBoard {
+nonisolated struct StrengthOutlookBoard: Sendable {
     /// A lift needs at least this many e1RM points to earn a trend.
     static let minPoints = 3
     /// The trend line is fit to the most recent this-many points.
@@ -106,17 +106,61 @@ nonisolated struct StrengthOutlookBoard {
 
 // MARK: - Aggregation
 
+@MainActor
 extension Array where Element == WorkoutSession {
     /// Fit a strength trend to every weighted lift in the archive and
     /// rank them by PR outlook as of `now`.
-    func strengthOutlook(now: Date = Date()) -> StrengthOutlookBoard {
+    func strengthOutlook(
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> StrengthOutlookBoard {
+        strengthOutlook(
+            progress: AnalyticsAccumulator.history(
+                AnalyticsSnapshot(sessions: self)
+            ).progressByExercise(isCancelled: isCancelled),
+            now: now,
+            isCancelled: isCancelled
+        )
+    }
+
+    /// Fit outlook from a progress series already built by the shared
+    /// analytics cache.
+    func strengthOutlook(
+        progress: [ExerciseProgress],
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> StrengthOutlookBoard {
+        StrengthOutlookBoard.compute(
+            progress: progress,
+            now: now,
+            isCancelled: isCancelled
+        )
+    }
+}
+
+nonisolated extension StrengthOutlookBoard {
+    /// Pure outlook construction from the progress series already
+    /// produced by the shared analytics replay.
+    static func compute(
+        progress: [ExerciseProgress],
+        now: Date = Date(),
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> StrengthOutlookBoard {
         let calendar = Calendar.current
         var stats: [StrengthOutlookStat] = []
 
-        for progress in progressByExercise {
-            guard progress.trackingMode == .reps else { continue }
+        for exerciseProgress in progress {
+            guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
+            guard exerciseProgress.trackingMode == .reps else { continue }
 
-            let points = progress.points.filter { $0.estimated1RM > 0 }
+            var points: [ExerciseProgressPoint] = []
+            points.reserveCapacity(exerciseProgress.points.count)
+            for point in exerciseProgress.points {
+                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
+                if point.estimated1RM > 0 {
+                    points.append(point)
+                }
+            }
             guard points.count >= StrengthOutlookBoard.minPoints else { continue }
 
             // Recent-window least-squares fit on (days, e1RM).
@@ -129,6 +173,7 @@ extension Array where Element == WorkoutSession {
             let meanY = ys.reduce(0, +) / n
             var num = 0.0, den = 0.0
             for i in xs.indices {
+                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
                 num += (xs[i] - meanX) * (ys[i] - meanY)
                 den += (xs[i] - meanX) * (xs[i] - meanX)
             }
@@ -144,7 +189,11 @@ extension Array where Element == WorkoutSession {
             // A fresh PR means the latest session strictly beat every
             // prior one — not merely tied a long-standing best (which
             // a flat program would do every single session).
-            let priorBest = points.dropLast().map(\.estimated1RM).max() ?? 0
+            var priorBest = 0.0
+            for point in points.dropLast() {
+                guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
+                priorBest = Swift.max(priorBest, point.estimated1RM)
+            }
             let isFreshPR = currentE1RM > priorBest + 1e-6
 
             let trend: PRTrend
@@ -178,7 +227,7 @@ extension Array where Element == WorkoutSession {
             // Strength math uses the latest comparable e1RM point, but
             // training recency must include a later session whose
             // bodyweight-dependent load could not be resolved.
-            let latestTrainedDate = progress.latest?.date ?? current.date
+            let latestTrainedDate = exerciseProgress.latest?.date ?? current.date
             let daysSince = calendar.dateComponents(
                 [.day],
                 from: calendar.startOfDay(for: latestTrainedDate),
@@ -187,10 +236,10 @@ extension Array where Element == WorkoutSession {
 
             stats.append(
                 StrengthOutlookStat(
-                    historyKey: progress.id,
-                    catalogID: progress.catalogID,
-                    exercise: progress.name,
-                    group: progress.group,
+                    historyKey: exerciseProgress.id,
+                    catalogID: exerciseProgress.catalogID,
+                    exercise: exerciseProgress.name,
+                    group: exerciseProgress.group,
                     currentE1RM: currentE1RM,
                     bestE1RM: bestE1RM,
                     slopePerWeek: slopePerWeek,
@@ -203,6 +252,7 @@ extension Array where Element == WorkoutSession {
             )
         }
 
+        guard !isCancelled() else { return StrengthOutlookBoard(stats: []) }
         stats.sort { lhs, rhs in
             let a = Self.sortKey(lhs)
             let b = Self.sortKey(rhs)

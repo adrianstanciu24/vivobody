@@ -50,7 +50,9 @@ struct MeScreen: View {
     @State private var logTarget: BodyWeightLogTarget? = nil
 
     var body: some View {
-        let _ = appState.analytics.update(for: completedSessions)
+        let analyticsRequest = appState.analytics.requestKey(
+            for: completedSessions
+        )
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 statsSection
@@ -90,6 +92,9 @@ struct MeScreen: View {
         }
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
+        }
+        .task(id: analyticsRequest) {
+            appState.analytics.requestCore(for: completedSessions)
         }
     }
 

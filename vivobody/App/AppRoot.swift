@@ -72,7 +72,7 @@ struct AppRoot: View {
             .preferredColorScheme(appearance.colorScheme)
             .tint(Tint.primary)
             .miniBarAccessory(
-                session: workout.activeSession,
+                session: workout.isDiscardPending ? nil : workout.activeSession,
                 isWorkoutExpanded: workout.isWorkoutExpanded,
                 onExpand: { workout.expandWorkout() }
             )
@@ -170,7 +170,10 @@ struct AppRoot: View {
                     workout.handle(action)
                 }
             }
-            .sheet(isPresented: $workout.isWorkoutExpanded) {
+            .sheet(
+                isPresented: $workout.isWorkoutExpanded,
+                onDismiss: { workout.finalizePendingDiscard() }
+            ) {
                 if let session = workout.activeSession {
                     ActiveWorkoutScreen(
                         session: session,

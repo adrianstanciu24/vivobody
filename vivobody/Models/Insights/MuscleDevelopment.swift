@@ -70,7 +70,7 @@ nonisolated enum MuscleDevelopment {
     /// Every rate and time-constant in one struct so the model can be
     /// calibrated (and swept in tests) without touching the math.
     /// Days are the time unit throughout; work is in effective sets.
-    struct Parameters {
+    struct Parameters: Sendable {
         /// Concavity of the weekly-volume → development map. < 1
         /// rewards early sessions visibly (newbie gains) while keeping
         /// full vivid orange a months-long arc.
@@ -93,7 +93,7 @@ nonisolated enum MuscleDevelopment {
 
     /// The hidden state evolved per muscle. Not colour — colour is
     /// derived from this (see `State.channels`).
-    struct Fiber {
+    struct Fiber: Sendable {
         /// Frequency-invariant estimate of recent effective sets per
         /// week. The colour driver, read through the landmark-
         /// normalised map.
@@ -114,7 +114,7 @@ nonisolated enum MuscleDevelopment {
     /// the last advance. Replaying a history produces one of these;
     /// screens compute it ONCE per data change and every consumer
     /// derives from the same value.
-    struct State {
+    struct State: Sendable {
         var fibers: [Muscle: Fiber] = [:]
         /// Wall-clock time the state was last advanced to.
         var lastUpdate: Date?
@@ -177,31 +177,61 @@ nonisolated enum MuscleDevelopment {
     /// Replay a full session history into a `State` as of `now`.
     /// Sessions may arrive in any order; they're sorted by their
     /// completion (or start) time.
+    @MainActor
     static func simulate(
         from sessions: [WorkoutSession],
         now: Date = Date(),
-        parameters: Parameters = .default
+        parameters: Parameters = .default,
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> State {
+        let accumulator = AnalyticsAccumulator.replay(
+            AnalyticsSnapshot(sessions: sessions),
+            stimulusParameters: parameters.stimulus,
+            isCancelled: isCancelled
+        )
+        return simulate(
+            from: accumulator,
+            now: now,
+            parameters: parameters,
+            isCancelled: isCancelled
+        )
+    }
+
+    /// Replay the already-priced stimulus timeline retained by
+    /// SessionAnalytics. No SwiftData relationships or load-reference
+    /// tables are traversed again here.
+    static func simulate(
+        from accumulator: AnalyticsAccumulator,
+        now: Date = Date(),
+        parameters: Parameters = .default,
+        isCancelled: @Sendable () -> Bool = { false }
     ) -> State {
         var state = State(parameters: parameters)
-        var calculator = SetStimulus.Calculator(parameters: parameters.stimulus)
 
-        let ordered = sessions.sorted {
-            ($0.completedAt ?? $0.startedAt) < ($1.completedAt ?? $1.startedAt)
-        }
-
-        for session in ordered {
-            let date = session.completedAt ?? session.startedAt
-            advance(&state, to: date)
-            applyStimulus(sessionStimulus(session, at: date, calculator: &calculator), at: date, to: &state)
+        for session in accumulator.sessions {
+            guard !isCancelled() else { return state }
+            advance(&state, to: session.date)
+            var stimulus: [Muscle: Double] = [:]
+            for exercise in session.exercises {
+                guard !isCancelled() else { return state }
+                for (muscle, sets) in exercise.byMuscle {
+                    guard !isCancelled() else { return state }
+                    stimulus[muscle, default: 0] += sets
+                }
+            }
+            guard !isCancelled() else { return state }
+            applyStimulus(stimulus, at: session.date, to: &state)
         }
 
         // Fade from the last logged session up to the present moment.
+        guard !isCancelled() else { return state }
         advance(&state, to: now)
         return state
     }
 
     /// Development intensities keyed by `BodyModel.scn` node name
     /// (adaptation channel only). Both `_L`/`_R` meshes share a value.
+    @MainActor
     static func nodeIntensities(
         from sessions: [WorkoutSession],
         now: Date = Date(),
@@ -218,6 +248,7 @@ nonisolated enum MuscleDevelopment {
 
     /// All channels keyed by `BodyModel.scn` node name. Convenience
     /// over `simulate(...).nodeChannels` for one-shot callers.
+    @MainActor
     static func nodeChannels(
         from sessions: [WorkoutSession],
         now: Date = Date(),
@@ -275,6 +306,7 @@ nonisolated enum MuscleDevelopment {
     /// per-set credit `MuscleVolume` accrues — the weekly-rate scaling
     /// happens in `applyStimulus`, so the two surfaces share one
     /// definition of "a set of work."
+    @MainActor
     static func sessionStimulus(
         _ session: WorkoutSession,
         at date: Date,
@@ -291,6 +323,7 @@ nonisolated enum MuscleDevelopment {
 
     /// One-shot convenience for a standalone session, priced against
     /// a fresh calculator (every lift reads as its first instance).
+    @MainActor
     static func sessionStimulus(
         _ session: WorkoutSession,
         parameters: Parameters = .default
