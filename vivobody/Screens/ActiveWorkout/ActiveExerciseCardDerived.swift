@@ -5,8 +5,8 @@
 //  Derived/computed state for ActiveExerciseCard, extracted from the
 //  main file: the active-page flag, set/index lookups, the display
 //  bindings (weight / reps / duration / RIR) that convert at the UI
-//  boundary, and the complete-button title. Read-only views over the
-//  struct's stored state.
+//  boundary, and the complete-button title. Scrub bindings mutate the
+//  active set immediately; their owner persists once the scrub settles.
 //
 
 import SwiftUI
@@ -49,11 +49,12 @@ extension ActiveExerciseCard {
         Binding(
             get: { WeightFormatter.toDisplay(displayedWeight, unit: unit) },
             set: { newDisplay in
+                guard acceptsScrubInput, session.completedAt == nil else { return }
                 session.updateActiveWeight(
                     for: exercise,
                     weight: WeightFormatter.toCanonical(newDisplay, unit: unit)
                 )
-                saveActiveSessionChanges()
+                hasPendingScrubChanges = true
             }
         )
     }
@@ -63,8 +64,9 @@ extension ActiveExerciseCard {
         Binding(
             get: { Double(displayedReps) },
             set: { new in
+                guard acceptsScrubInput, session.completedAt == nil else { return }
                 session.updateActiveReps(for: exercise, reps: Int(new.rounded()))
-                saveActiveSessionChanges()
+                hasPendingScrubChanges = true
             }
         )
     }
@@ -79,8 +81,9 @@ extension ActiveExerciseCard {
         Binding(
             get: { displayedDuration },
             set: { new in
+                guard acceptsScrubInput, session.completedAt == nil else { return }
                 session.updateActiveDuration(for: exercise, duration: new)
-                saveActiveSessionChanges()
+                hasPendingScrubChanges = true
             }
         )
     }

@@ -3,11 +3,10 @@
 //  vivobody
 //
 //  Small modal for correcting a previously-completed set when the
-//  user mis-logged its weight or reps. Reuses the two NumberScrubbers
-//  from the active card so the editing motion (drag up/down) feels
-//  identical to logging the set the first time. Changes apply live
-//  via @Bindable on the WorkoutSet — there's no save/discard; pulling
-//  the sheet down commits the current values.
+//  user mis-logged its weight or reps. Changes apply immediately to
+//  the in-memory WorkoutSet. Persistence happens once when the scrub
+//  settles, or when the scene deactivates or sheet dismisses. RIR remains
+//  an immediate semantic save.
 //
 
 import VivoKit
@@ -16,9 +15,14 @@ import SwiftData
 
 struct EditSetSheet: View {
     @Bindable var set: WorkoutSet
+    var onImmediateUpdate: (() -> Void)? = nil
+    var onScrubEnded: (() -> Void)? = nil
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @State private var saveError: SaveErrorBox? = nil
+    @State private var hasPendingChanges: Bool = false
 
     /// The set's tracking mode comes from its owning exercise —
     /// decides whether we edit reps or a timed effort.
@@ -31,21 +35,30 @@ struct EditSetSheet: View {
     private var repsBinding: Binding<Double> {
         Binding(
             get: { Double(set.reps) },
-            set: { set.reps = Int($0.rounded()) }
+            set: {
+                set.reps = Int($0.rounded())
+                hasPendingChanges = true
+            }
         )
     }
 
     private var weightBinding: Binding<Double> {
         Binding(
             get: { set.weight },
-            set: { set.weight = $0 }
+            set: {
+                set.weight = $0
+                hasPendingChanges = true
+            }
         )
     }
 
     private var durationBinding: Binding<Double> {
         Binding(
             get: { set.duration },
-            set: { set.duration = $0 }
+            set: {
+                set.duration = $0
+                hasPendingChanges = true
+            }
         )
     }
 
@@ -54,7 +67,11 @@ struct EditSetSheet: View {
     private var rirBinding: Binding<Int> {
         Binding(
             get: { set.repsInReserve },
-            set: { set.repsInReserve = $0; set.rirLogged = true }
+            set: {
+                set.repsInReserve = $0
+                set.rirLogged = true
+                saveImmediately()
+            }
         )
     }
 
@@ -69,7 +86,8 @@ struct EditSetSheet: View {
                         label: loadMode.inputLabel.lowercased(),
                         pointsPerStep: 8,
                         valueFontSize: 40,
-                        verticalPadding: 14
+                        verticalPadding: 14,
+                        onScrubEnded: saveSettledScrub
                     )
 
                     NumberScrubber(
@@ -80,7 +98,8 @@ struct EditSetSheet: View {
                         unit: "reps",
                         label: "reps",
                         valueFontSize: 32,
-                        verticalPadding: 12
+                        verticalPadding: 12,
+                        onScrubEnded: saveSettledScrub
                     )
 
                     if modality == .dynamicStrength {
@@ -96,7 +115,8 @@ struct EditSetSheet: View {
                         label: modality.durationLabelLowercased,
                         valueFontSize: 40,
                         verticalPadding: 14,
-                        formatter: { DurationFormatter.string($0) }
+                        formatter: { DurationFormatter.string($0) },
+                        onScrubEnded: saveSettledScrub
                     )
 
                     WeightScrubber(
@@ -105,7 +125,8 @@ struct EditSetSheet: View {
                         label: loadMode.inputLabel.lowercased(),
                         pointsPerStep: 8,
                         valueFontSize: 32,
-                        verticalPadding: 12
+                        verticalPadding: 12,
+                        onScrubEnded: saveSettledScrub
                     )
                 }
 
@@ -121,7 +142,7 @@ struct EditSetSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         Haptics.soft()
-                        save()
+                        saveSettledScrub()
                         dismiss()
                     }
                     .fontWeight(.semibold)
@@ -130,17 +151,41 @@ struct EditSetSheet: View {
         }
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
-        .onChange(of: set.weight) { _, _ in save() }
-        .onChange(of: set.reps) { _, _ in save() }
-        .onChange(of: set.duration) { _, _ in save() }
-        .onChange(of: set.repsInReserve) { _, _ in save() }
+        .onChange(of: scenePhase) { oldPhase, phase in
+            if oldPhase == .active, phase != .active {
+                saveSettledScrub()
+            }
+        }
+        .onDisappear { saveSettledScrub() }
         .saveErrorAlert($saveError)
     }
 
-    private func save() {
+    private func saveSettledScrub() {
+        guard hasPendingChanges else { return }
+        if let onScrubEnded {
+            onScrubEnded()
+            hasPendingChanges = false
+            return
+        }
+        persistLocalChanges()
+    }
+
+    private func saveImmediately() {
+        if let onImmediateUpdate {
+            onImmediateUpdate()
+            hasPendingChanges = false
+            return
+        }
+        hasPendingChanges = true
+        persistLocalChanges()
+    }
+
+    private func persistLocalChanges() {
         do {
             try modelContext.saveOrRollback()
+            hasPendingChanges = false
         } catch {
+            hasPendingChanges = false
             saveError = SaveErrorBox(error)
         }
     }

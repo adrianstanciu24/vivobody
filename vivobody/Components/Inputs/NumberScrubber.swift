@@ -39,6 +39,9 @@ struct NumberScrubber: View {
     /// Voice of the per-step tick. Pass `.deep` on load scrubbers so
     /// weight sounds heavier than reps/sets/duration.
     var tickTone: Haptics.TickTone = .standard
+    /// Called after a drag, cancellation, or accessibility adjustment has
+    /// fully settled so persistence owners can flush coalesced writes.
+    var onScrubEnded: () -> Void = { }
 
     @State private var dragStartValue: Double = 0
     @State private var rubberOffset: CGFloat = 0
@@ -147,7 +150,17 @@ struct NumberScrubber: View {
         .onChange(of: gestureActive) { _, active in
             if !active, isDragging || axisClaim != .undecided {
                 axisClaim = .undecided
-                if isDragging { finishDrag() }
+                if isDragging {
+                    finishDrag()
+                    onScrubEnded()
+                }
+            }
+        }
+        .onDisappear {
+            axisClaim = .undecided
+            if isDragging {
+                finishDrag()
+                onScrubEnded()
             }
         }
         .animation(dragStateAnimation, value: isDragging)
@@ -245,6 +258,7 @@ struct NumberScrubber: View {
                 axisClaim = .undecided
                 guard ownedDrag else { return }
                 finishDrag()
+                onScrubEnded()
             }
     }
 
@@ -273,6 +287,7 @@ struct NumberScrubber: View {
         if clamped != value {
             value = clamped
             Haptics.scrubTick(tone: tickTone)
+            onScrubEnded()
         } else {
             Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
         }

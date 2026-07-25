@@ -55,6 +55,9 @@ struct WeightScrubber: View {
     /// Keeps the shared scrubber's established leading alignment unless a
     /// quiet calibration surface explicitly asks to center the value.
     var centersValue: Bool = false
+    /// Forwarded to the concrete scrubber so callers can flush coalesced
+    /// persistence after the interaction settles.
+    var onScrubEnded: () -> Void = { }
 
     enum Purpose {
         case strength
@@ -86,7 +89,8 @@ struct WeightScrubber: View {
                 label: label,
                 valueFontSize: valueFontSize,
                 verticalPadding: verticalPadding,
-                tickTone: .deep
+                tickTone: .deep,
+                onScrubEnded: onScrubEnded
             )
         case .bare:
             BareScrubber(
@@ -104,7 +108,8 @@ struct WeightScrubber: View {
                 centersValue: centersValue,
                 tickTone: .deep,
                 hitSlop: 16,
-                showsRail: true
+                showsRail: true,
+                onScrubEnded: onScrubEnded
             )
         }
     }

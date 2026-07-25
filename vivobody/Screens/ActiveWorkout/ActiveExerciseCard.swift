@@ -35,6 +35,13 @@ struct ActiveExerciseCard: View {
     let exercise: Exercise
     @Bindable var session: WorkoutSession
 
+    /// Production wiring routes all persistence through the session-
+    /// lifetime controller. Defaults keep standalone previews usable.
+    var onImmediateUpdate: (() -> Void)? = nil
+    var onScrubEnded: (() -> Void)? = nil
+    /// Parent-owned cancellation generation for archive/discard/minimize.
+    var scrubCancellationID: Int = 0
+
     /// SwiftData write context — used to query archived sessions
     /// when checking whether a just-completed set beats every prior
     /// recorded set for this exercise (i.e., is a personal record).
@@ -53,6 +60,15 @@ struct ActiveExerciseCard: View {
     /// Cancellable owner of the PR-detect + auto-advance pipeline so
     /// a re-toggle or card disappearance can abort an in-flight run.
     @State private var completionTask: Task<Void, Never>? = nil
+    @State private var completionGeneration: Int = 0
+
+    /// Semantic card actions invalidate coasting immediately rather than
+    /// letting a flywheel mutate the set behind a completion or edit.
+    @State private var localScrubCancellationID: Int = 0
+    @State var hasPendingScrubChanges: Bool = false
+    /// Completion snapshots the visible set at tap time. Gate binding writes
+    /// synchronously until the cancellation token reaches child scrubbers.
+    @State var acceptsScrubInput: Bool = true
 
     /// When non-nil, presents the EditSetSheet for that completed
     /// set. Driven by the last-set caption's long-press menu.
@@ -102,7 +118,11 @@ struct ActiveExerciseCard: View {
         .opacity(session.isAllComplete ? 0.45 : 1.0)
         .animation(.easeOut(duration: 0.6), value: session.isAllComplete)
         .sheet(item: $editingSet) { set in
-            EditSetSheet(set: set)
+            EditSetSheet(
+                set: set,
+                onImmediateUpdate: onImmediateUpdate,
+                onScrubEnded: onScrubEnded
+            )
         }
         .alert(
             "Delete this set?",
@@ -118,6 +138,12 @@ struct ActiveExerciseCard: View {
         }
         .saveErrorAlert($saveError)
         .onAppear { loadWeightStepPreference() }
+        .onDisappear {
+            completionGeneration &+= 1
+            completionTask?.cancel()
+            completionTask = nil
+            acceptsScrubInput = true
+        }
     }
 
     // MARK: - Weight increment
@@ -226,6 +252,13 @@ struct ActiveExerciseCard: View {
     /// "pending" state for 550ms so the button's ripple + fill +
     /// checkmark draw-on can land before the card moves on.
     func handleSetToggle(_ set: WorkoutSet) {
+        // Treat tapping Complete as the end of any flywheel interaction.
+        // Flush the value visible at the tap, then stop future coast detents
+        // before the completion animation's intentional delay.
+        acceptsScrubInput = false
+        localScrubCancellationID &+= 1
+        activeScrubDidEnd()
+
         let weight = set.weight
         let reps = set.reps
         let duration = set.duration
@@ -240,11 +273,19 @@ struct ActiveExerciseCard: View {
 
         pendingCompletionSetID = set.id
 
+        completionGeneration &+= 1
+        let generation = completionGeneration
         completionTask?.cancel()
         completionTask = Task { @MainActor in
             do {
                 try await Task.sleep(for: .milliseconds(550))
-            } catch { return }
+            } catch {
+                if completionGeneration == generation {
+                    acceptsScrubInput = true
+                }
+                return
+            }
+            guard completionGeneration == generation else { return }
 
             let prKind = detectPersonalRecord(
                 exerciseName: exerciseName,
@@ -263,6 +304,7 @@ struct ActiveExerciseCard: View {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)
             }
+            acceptsScrubInput = true
             saveActiveSessionChanges()
             pendingCompletionSetID = nil
 
@@ -456,13 +498,39 @@ struct ActiveExerciseCard: View {
         }
     }
 
-    func saveActiveSessionChanges() {
+    func saveActiveSessionChanges(cancelScrubbing: Bool = true) {
+        if cancelScrubbing {
+            localScrubCancellationID &+= 1
+        }
+        hasPendingScrubChanges = false
+        if let onImmediateUpdate {
+            onImmediateUpdate()
+            return
+        }
+
         do {
             try modelContext.saveOrRollback()
             SessionSideEffects.handle(.updated, session: session, in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)
         }
+    }
+
+    /// BareScrubber invokes this only after the drag and any coast settle.
+    func activeScrubDidEnd() {
+        guard hasPendingScrubChanges else { return }
+        hasPendingScrubChanges = false
+        if let onScrubEnded {
+            onScrubEnded()
+        } else {
+            saveActiveSessionChanges(cancelScrubbing: false)
+        }
+    }
+
+    /// One Equatable value covers parent lifecycle cancellation and local
+    /// semantic actions without exposing BareScrubber task ownership.
+    var effectiveScrubCancellationID: Int {
+        scrubCancellationID &+ localScrubCancellationID
     }
 }
 

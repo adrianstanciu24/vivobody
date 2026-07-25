@@ -14,6 +14,7 @@ import SwiftData
 
 struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession
+    var onSessionUpdate: (() -> Void)? = nil
     @Environment(\.modelContext) private var modelContext
 
     @State private var saveError: SaveErrorBox? = nil
@@ -74,8 +75,13 @@ struct RestTimerOverlay: View {
     }
 
     private func saveRestState() {
+        if let onSessionUpdate {
+            onSessionUpdate()
+            return
+        }
+
         do {
-            try modelContext.save()
+            try modelContext.saveOrRollback()
             SessionSideEffects.handle(.updated, session: session, in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)

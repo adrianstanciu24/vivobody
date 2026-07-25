@@ -193,7 +193,9 @@ extension ActiveExerciseCard {
                 fitsWidth: true,
                 tickTone: .deep,
                 hitSlop: 12,
-                showsRail: true
+                showsRail: true,
+                cancellationID: effectiveScrubCancellationID,
+                onScrubEnded: activeScrubDidEnd
             )
 
             HStack(alignment: .center, spacing: Space.sm) {
@@ -213,7 +215,9 @@ extension ActiveExerciseCard {
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
-                    hitSlop: 18
+                    hitSlop: 18,
+                    cancellationID: effectiveScrubCancellationID,
+                    onScrubEnded: activeScrubDidEnd
                 )
                 Spacer(minLength: Space.md)
                 stepToggle
@@ -262,7 +266,9 @@ extension ActiveExerciseCard {
                     showsScrubHint: isActive,
                     performsScrubNudge: isActive,
                     tickTone: .deep,
-                    hitSlop: 18
+                    hitSlop: 18,
+                    cancellationID: effectiveScrubCancellationID,
+                    onScrubEnded: activeScrubDidEnd
                 )
             }
 
@@ -283,7 +289,9 @@ extension ActiveExerciseCard {
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
-                    hitSlop: 18
+                    hitSlop: 18,
+                    cancellationID: effectiveScrubCancellationID,
+                    onScrubEnded: activeScrubDidEnd
                 )
                 Spacer(minLength: Space.md)
                 stepToggle
@@ -311,7 +319,9 @@ extension ActiveExerciseCard {
                 performsScrubNudge: isActive,
                 fitsWidth: true,
                 hitSlop: 12,
-                showsRail: true
+                showsRail: true,
+                cancellationID: effectiveScrubCancellationID,
+                onScrubEnded: activeScrubDidEnd
             )
 
             durationLoadControl
@@ -353,7 +363,9 @@ extension ActiveExerciseCard {
                         accessibilityLabel: exercise.loadMode.inputLabel,
                         showsScrubHint: isActive,
                         tickTone: .deep,
-                        hitSlop: 18
+                        hitSlop: 18,
+                        cancellationID: effectiveScrubCancellationID,
+                        onScrubEnded: activeScrubDidEnd
                     )
                 }
             }
@@ -379,7 +391,9 @@ extension ActiveExerciseCard {
                         accessibilityLabel: exercise.loadMode.inputLabel,
                         showsScrubHint: isActive,
                         tickTone: .deep,
-                        hitSlop: 18
+                        hitSlop: 18,
+                        cancellationID: effectiveScrubCancellationID,
+                        onScrubEnded: activeScrubDidEnd
                     )
                 }
             }

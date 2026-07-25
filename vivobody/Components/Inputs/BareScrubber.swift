@@ -76,9 +76,18 @@ struct BareScrubber: View {
     /// Reserve for the full-width hero scrubbers; dense editor rows
     /// have no room for it.
     var showsRail: Bool = false
+    /// Changing this value synchronously invalidates an in-flight drag or
+    /// coast on the next view update. Active Workout uses it before
+    /// completion, archive, and discard transitions.
+    var cancellationID: Int = 0
+    /// Called once when a real interaction has fully settled. For a flick,
+    /// this means the flywheel coast completed or was interrupted—not the
+    /// earlier finger-up event. Callers use this to flush coalesced state.
+    var onScrubEnded: () -> Void = { }
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     /// Retired permanently (app-wide) the first time the user
     /// completes a real scrub on any BareScrubber. See
@@ -91,6 +100,10 @@ struct BareScrubber: View {
     @State private var didHitMin: Bool = false
     @State private var didHitMax: Bool = false
     @State private var isDragging: Bool = false
+    /// External cancellation can arrive while the finger is still down.
+    /// Ignore all remaining events from that touch so it cannot re-claim
+    /// the axis after cancellation reset it to `.undecided`.
+    @State private var ignoresCurrentGesture: Bool = false
 
     /// Flywheel coast. A released flick (quick throw, finger down
     /// only an instant — see `flickMaxDuration`) keeps the value
@@ -102,6 +115,9 @@ struct BareScrubber: View {
     /// Cancellable owner of the coast run. A new touch anywhere on
     /// the scrubber grabs the flywheel and stops it instantly.
     @State private var coastTask: Task<Void, Never>? = nil
+    /// Distinguishes a superseded coast from the currently-owned run so
+    /// an old Task's defer cannot clear or flush a newer interaction.
+    @State private var coastGeneration: Int = 0
 
     /// Wall flash — the visual twin of the rigid end-stop haptic.
     /// One event, three senses: hitting a range wall flashes a thin
@@ -224,7 +240,13 @@ struct BareScrubber: View {
             // teleport the value.
             if !active, isDragging || axisClaim != .undecided {
                 axisClaim = .undecided
-                if isDragging { finishDrag() }
+                if isDragging {
+                    finishDrag()
+                    onScrubEnded()
+                }
+            }
+            if !active {
+                ignoresCurrentGesture = false
             }
         }
         .onAppear { if showsScrubHint, performsScrubNudge { startNudge() } }
@@ -238,10 +260,20 @@ struct BareScrubber: View {
                 nudgeOffset = 0
             }
         }
+        .onChange(of: cancellationID) { _, _ in
+            // The owner changes this token only when it is already saving,
+            // archiving, or discarding the current in-memory state.
+            cancelActiveInteraction(notifyEnd: false)
+        }
+        .onChange(of: scenePhase) { oldPhase, phase in
+            guard oldPhase == .active, phase != .active else { return }
+            // Stop the producer before AppRoot's active→inactive save.
+            // No coast detent can then land after the forced save.
+            cancelActiveInteraction(notifyEnd: false)
+        }
         .onDisappear {
             nudgeTask?.cancel()
-            coastTask?.cancel()
-            isCoasting = false
+            cancelActiveInteraction()
         }
         .accessibilityElement()
         .accessibilityLabel(accessibilityLabel ?? "")
@@ -434,7 +466,7 @@ struct BareScrubber: View {
         DragGesture(minimumDistance: 0)
             .updating($gestureActive) { _, state, _ in state = true }
             .onChanged { drag in
-                guard isEnabled else { return }
+                guard isEnabled, !ignoresCurrentGesture else { return }
 
                 switch axisClaim {
                 case .horizontal:
@@ -448,8 +480,7 @@ struct BareScrubber: View {
                     nudgeOffset = 0
                     // A touch grabs the flywheel: any in-flight coast
                     // stops dead the instant a finger lands.
-                    coastTask?.cancel()
-                    isCoasting = false
+                    cancelCoast()
                     let tw = abs(drag.translation.width)
                     let th = abs(drag.translation.height)
                     guard max(tw, th) >= Self.axisClaimDistance else { return }
@@ -519,14 +550,21 @@ struct BareScrubber: View {
                 }
             }
             .onEnded { drag in
+                if ignoresCurrentGesture {
+                    ignoresCurrentGesture = false
+                    axisClaim = .undecided
+                    return
+                }
                 let ownedDrag = axisClaim == .vertical
                 axisClaim = .undecided
                 guard ownedDrag else { return }
                 let momentum = drag.predictedEndTranslation.height - drag.translation.height
                 let touchDuration = drag.time.timeIntervalSince(dragClaimTime)
                 finishDrag()
-                if touchDuration <= Self.flickMaxDuration {
-                    startCoast(momentumPoints: momentum)
+                let didStartCoast = touchDuration <= Self.flickMaxDuration
+                    && startCoast(momentumPoints: momentum)
+                if !didStartCoast {
+                    onScrubEnded()
                 }
             }
     }
@@ -561,10 +599,10 @@ struct BareScrubber: View {
     /// go, however fast it was moving at release. Skipped under
     /// Reduce Motion: the value moving beyond the finger is exactly
     /// the surprise that setting exists to prevent.
-    private func startCoast(momentumPoints: CGFloat) {
-        guard !reduceMotion, isEnabled else { return }
+    private func startCoast(momentumPoints: CGFloat) -> Bool {
+        guard !reduceMotion, isEnabled else { return false }
         let projected = Int((-momentumPoints / pointsPerStep * 0.45).rounded())
-        guard abs(projected) >= 2 else { return }
+        guard abs(projected) >= 2 else { return false }
         let capped = max(-24, min(24, projected))
         let direction: Double = capped > 0 ? 1 : -1
         let total = abs(capped)
@@ -572,10 +610,18 @@ struct BareScrubber: View {
         // sized so the final detent lands ~5× slower than the first.
         let growth = pow(5.0, 1.0 / Double(max(total - 1, 1)))
 
-        coastTask?.cancel()
+        cancelCoast()
+        coastGeneration &+= 1
+        let generation = coastGeneration
         coastTask = Task { @MainActor in
             isCoasting = true
-            defer { isCoasting = false }
+            defer {
+                if coastGeneration == generation {
+                    coastTask = nil
+                    isCoasting = false
+                    onScrubEnded()
+                }
+            }
             var interval = 0.028
             for _ in 0..<total {
                 try? await Task.sleep(for: .seconds(interval))
@@ -593,6 +639,31 @@ struct BareScrubber: View {
                 interval *= growth
             }
         }
+        return true
+    }
+
+    /// Cancel every source that can still emit a detent. Owners that already
+    /// persist as part of the same lifecycle action can suppress the end
+    /// callback to avoid a duplicate save.
+    private func cancelActiveInteraction(notifyEnd: Bool = true) {
+        if gestureActive {
+            ignoresCurrentGesture = true
+        }
+        axisClaim = .undecided
+        if isDragging {
+            finishDrag()
+            if notifyEnd { onScrubEnded() }
+        }
+        cancelCoast(notifyEnd: notifyEnd)
+    }
+
+    private func cancelCoast(notifyEnd: Bool = true) {
+        guard let task = coastTask else { return }
+        coastGeneration &+= 1
+        coastTask = nil
+        isCoasting = false
+        task.cancel()
+        if notifyEnd { onScrubEnded() }
     }
 
     /// The flywheel slamming a wall mid-coast: a small offset bump on
@@ -654,6 +725,7 @@ struct BareScrubber: View {
             if !hasScrubbed {
                 withAnimation(.easeOut(duration: 0.4)) { hasScrubbed = true }
             }
+            onScrubEnded()
         } else {
             Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
             fireWallFlash(direction > 0 ? .top : .bottom)

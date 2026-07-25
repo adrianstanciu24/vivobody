@@ -122,18 +122,15 @@ struct AppRoot: View {
                     WidgetSnapshotWriter.writeAll(in: modelContext)
                 }
             }
-            .onChange(of: scenePhase) { _, phase in
+            .onChange(of: scenePhase) { oldPhase, phase in
                 if phase == .active {
                     consumeIncomingActions()
                     WidgetSnapshotWriter.writeAll(in: modelContext)
                     RestNotificationController.cancelPending()
-                } else if workout.activeSession != nil {
-                    do {
-                        try modelContext.save()
-                    } catch {
-                        workout.lastSaveError = SaveErrorBox(error)
-                    }
-                    WidgetSnapshotWriter.writeActiveWorkout(in: modelContext)
+                } else if oldPhase == .active, workout.activeSession != nil {
+                    // Force the latest in-memory scrub value to disk and
+                    // publish Live Activity state before suspension.
+                    workout.saveActiveSessionChanges()
                     RestNotificationController.scheduleIfResting(for: workout.activeSession)
                 }
             }
@@ -182,7 +179,13 @@ struct AppRoot: View {
                     ActiveWorkoutScreen(
                         session: session,
                         onDismiss: { workout.dismissActiveWorkout() },
-                        onDiscard: { workout.discardActiveWorkout() }
+                        onDiscard: { workout.discardActiveWorkout() },
+                        onSessionUpdate: {
+                            workout.saveActiveSessionChanges(for: session.id)
+                        },
+                        onScrubEnded: {
+                            workout.saveSettledScrub(for: session.id)
+                        }
                     )
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)

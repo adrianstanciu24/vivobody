@@ -41,12 +41,21 @@ struct ActiveWorkoutScreen: View {
     /// Distinct from `onDismiss`, which archives.
     private let onDiscard: (() -> Void)?
 
+    /// AppRoot wires these to WorkoutSessionController so semantic changes
+    /// and settled scrubs share the session lifetime. Nil in previews.
+    private let onSessionUpdate: (() -> Void)?
+    private let onScrubEnded: (() -> Void)?
+
     /// Drives the discard confirmation alert.
     @State private var showDiscardConfirm: Bool = false
 
     /// Surfaces failures from draft autosaves while the workout stays
     /// open so the user can retry with their current in-memory state.
     @State private var saveError: SaveErrorBox? = nil
+
+    /// Invalidates every visible scrubber before the workout sheet leaves
+    /// or its session is archived/discarded.
+    @State private var scrubCancellationID: Int = 0
 
     /// Drives the catalog picker for exercise adds. Legacy/external
     /// empty drafts initialize it as presented instead of showing a
@@ -61,7 +70,9 @@ struct ActiveWorkoutScreen: View {
     init(
         session: WorkoutSession = .sample,
         onDismiss: (() -> Void)? = nil,
-        onDiscard: (() -> Void)? = nil
+        onDiscard: (() -> Void)? = nil,
+        onSessionUpdate: (() -> Void)? = nil,
+        onScrubEnded: (() -> Void)? = nil
     ) {
         _session = State(wrappedValue: session)
         _showAddExercisePicker = State(
@@ -69,6 +80,8 @@ struct ActiveWorkoutScreen: View {
         )
         self.onDismiss = onDismiss
         self.onDiscard = onDiscard
+        self.onSessionUpdate = onSessionUpdate
+        self.onScrubEnded = onScrubEnded
     }
 
     var body: some View {
@@ -82,7 +95,10 @@ struct ActiveWorkoutScreen: View {
             }
 
             if session.isResting {
-                RestTimerOverlay(session: session)
+                RestTimerOverlay(
+                    session: session,
+                    onSessionUpdate: onSessionUpdate
+                )
                     .transition(.opacity)
                     .zIndex(10)
             }
@@ -108,6 +124,7 @@ struct ActiveWorkoutScreen: View {
         // entire workout to the mini-bar mid-ceremony.
         .interactiveDismissDisabled(session.pendingPRValue != nil)
         .onAppear { Haptics.prepare() }
+        .onDisappear { finishScrubbing() }
         .onChange(of: session.activeExerciseIndex) { _, _ in
             saveActiveSessionChanges()
         }
@@ -115,16 +132,16 @@ struct ActiveWorkoutScreen: View {
             if session.totalSets > 0 {
                 Button("Save Workout") {
                     Haptics.soft()
-                    onDismiss?()
+                    finishScrubbing(then: onDismiss)
                 }
                 Button("Discard", role: .destructive) {
                     Haptics.soft()
-                    onDiscard?()
+                    finishScrubbing(then: onDiscard)
                 }
             } else {
                 Button("Discard", role: .destructive) {
                     Haptics.soft()
-                    onDiscard?()
+                    finishScrubbing(then: onDiscard)
                 }
             }
             Button("Cancel", role: .cancel) { }
@@ -297,12 +314,15 @@ struct ActiveWorkoutScreen: View {
             if i < exercises.count {
                 ActiveExerciseCard(
                     exercise: exercises[i],
-                    session: session
+                    session: session,
+                    onImmediateUpdate: onSessionUpdate,
+                    onScrubEnded: onScrubEnded,
+                    scrubCancellationID: scrubCancellationID
                 )
             } else {
                 WorkoutSummaryCard(
                     session: session,
-                    onDone: onDismiss,
+                    onDone: { finishScrubbing(then: onDismiss) },
                     onAddExercise: { showAddExercisePicker = true }
                 )
             }
@@ -334,13 +354,30 @@ struct ActiveWorkoutScreen: View {
     /// exposing a second empty-workout screen.
     private func discardIfStillEmpty() {
         if isEmpty {
-            onDiscard?()
+            finishScrubbing(then: onDiscard)
+        }
+    }
+
+    /// Invalidate all child coast tasks before a lifecycle transition. A
+    /// minimize/disappear flushes here; archive saves the same in-memory
+    /// values itself, while discard intentionally throws them away.
+    private func finishScrubbing(then action: (() -> Void)? = nil) {
+        scrubCancellationID &+= 1
+        if let action {
+            action()
+        } else {
+            onScrubEnded?()
         }
     }
 
     private func saveActiveSessionChanges() {
+        if let onSessionUpdate {
+            onSessionUpdate()
+            return
+        }
+
         do {
-            try modelContext.save()
+            try modelContext.saveOrRollback()
             SessionSideEffects.handle(.updated, session: session, in: modelContext)
         } catch {
             saveError = SaveErrorBox(error)

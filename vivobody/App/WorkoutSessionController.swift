@@ -9,6 +9,10 @@
 //  widgets, HealthKit, notifications) routes through
 //  SessionSideEffects so adding a future subscriber is one line.
 //
+//  Also owns active-draft persistence boundaries: semantic interactions
+//  save immediately, while scrubber detents remain in memory until the
+//  gesture, coast, or scene ends.
+//
 //  Also the single dispatch site for IncomingAction — the unified
 //  enum that normalizes every external entry point (URL scheme,
 //  Handoff, Spotlight, widget / Siri mailboxes).
@@ -58,6 +62,49 @@ final class WorkoutSessionController {
     /// are created.
     weak var appState: AppState?
 
+    // MARK: - Active draft persistence
+
+    /// Immediate path for semantic workout changes such as completion,
+    /// rest edits, page changes, and scene deactivation.
+    @discardableResult
+    func saveActiveSessionChanges(for sessionID: UUID? = nil) -> Bool {
+        guard let activeSession else { return false }
+        let expectedSessionID = sessionID ?? activeSession.id
+        guard activeSession.id == expectedSessionID else { return false }
+        return persistActiveSessionChanges(
+            for: expectedSessionID,
+            event: .updated
+        )
+    }
+
+    /// Commit the final in-memory value once a scrub and any coast settle.
+    /// Live Activity presentation is debounced independently from this save.
+    @discardableResult
+    func saveSettledScrub(for sessionID: UUID) -> Bool {
+        persistActiveSessionChanges(for: sessionID, event: .scrubSettled)
+    }
+
+    @discardableResult
+    private func persistActiveSessionChanges(
+        for sessionID: UUID,
+        event: SessionEvent
+    ) -> Bool {
+        guard pendingDiscardSession == nil,
+              let session = activeSession,
+              session.id == sessionID,
+              let context = modelContext
+        else { return false }
+
+        do {
+            try context.saveOrRollback()
+            SessionSideEffects.handle(event, session: session, in: context)
+            return true
+        } catch {
+            lastSaveError = SaveErrorBox(error)
+            return false
+        }
+    }
+
     // MARK: - Restore / resume
 
     /// Restore the newest unarchived workout draft from disk. Called
@@ -85,7 +132,15 @@ final class WorkoutSessionController {
     /// session is missing or already archived, this is a no-op.
     @discardableResult
     func continueWorkout(with id: UUID) -> Bool {
-        guard let context = modelContext else { return false }
+        guard pendingDiscardSession == nil, let context = modelContext else {
+            return false
+        }
+        if let activeSession {
+            guard activeSession.id == id else { return false }
+            appState?.selectedTab = .today
+            isWorkoutExpanded = true
+            return true
+        }
         var descriptor = FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.id == id && $0.completedAt == nil }
         )
@@ -306,20 +361,14 @@ final class WorkoutSessionController {
     /// a widget "Complete set" tap. Saves, fires update side effects,
     /// and brings the workout sheet to the foreground.
     func completeActiveSet() {
-        guard let session = activeSession,
-              let context = modelContext
-        else { return }
+        guard let session = activeSession else { return }
         let exercises = session.orderedExercises
         guard exercises.indices.contains(session.activeExerciseIndex) else { return }
         let exercise = exercises[session.activeExerciseIndex]
         session.completeActiveSet(for: exercise)
-        do {
-            try context.save()
-            SessionSideEffects.handle(.updated, session: session, in: context)
+        if saveActiveSessionChanges() {
             appState?.selectedTab = .today
             isWorkoutExpanded = true
-        } catch {
-            lastSaveError = SaveErrorBox(error)
         }
     }
 

@@ -11,12 +11,15 @@
 
 import SwiftData
 
-/// The four moments in a session's lifetime that trigger side effects.
+/// The moments in a session's lifetime that trigger side effects.
 enum SessionEvent {
     /// A new draft session was inserted and saved.
     case started
     /// A set was completed or rest state changed mid-workout.
     case updated
+    /// The final value of a scrub interaction was persisted.
+    /// Expensive external presentation updates coalesce independently.
+    case scrubSettled
     /// The session was stamped `completedAt` and archived to history.
     case archived
     /// The session was thrown away without archiving.
@@ -38,6 +41,10 @@ enum SessionSideEffects {
 
         case .updated:
             WorkoutLiveActivityController.update(for: session)
+            WidgetSnapshotWriter.writeActiveWorkout(in: context)
+
+        case .scrubSettled:
+            WorkoutLiveActivityController.scheduleSettledScrubUpdate(for: session)
             WidgetSnapshotWriter.writeActiveWorkout(in: context)
 
         case .archived:
