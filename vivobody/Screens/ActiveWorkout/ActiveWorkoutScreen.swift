@@ -19,10 +19,10 @@ import SwiftData
 struct ActiveWorkoutScreen: View {
     @State private var session: WorkoutSession
 
-    /// Read-only access to archived sessions — used to seed a freshly
-    /// added exercise with the set count / reps / weight from the
-    /// last time the user logged it (see `makeAddedExercise`).
+    /// Used only to prime the shared history summary if its background
+    /// build has not finished when the user adds an exercise.
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Optional archive callback. Wired to the Summary card's DONE
@@ -201,7 +201,16 @@ struct ActiveWorkoutScreen: View {
     /// catalog defaults (3 sets at the catalog reps × weight). Either
     /// way the count is then adjustable in the card (+ / − a set).
     private func makeAddedExercise(from item: ExerciseCatalogItem, sortOrder: Int) -> Exercise {
-        Exercise.fresh(from: item, history: modelContext, sortOrder: sortOrder)
+        let history = sessionAnalytics?.resolvedExerciseHistory(
+            in: modelContext
+        )
+        let summary = history?[item.historyKey]
+            ?? history?[item.legacyHistoryKey]
+        return Exercise.fresh(
+            from: item,
+            history: summary,
+            sortOrder: sortOrder
+        )
     }
 
     /// Two-way binding for PRCelebration. When the user taps to

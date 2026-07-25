@@ -181,13 +181,31 @@ struct TemplatePrefillTests {
         }
     }
 
+    private func spawn(
+        _ templateExercise: TemplateExercise,
+        in context: ModelContext
+    ) throws -> Exercise {
+        let sessions = try context.fetch(
+            FetchDescriptor<WorkoutSession>(
+                predicate: #Predicate { $0.completedAt != nil }
+            )
+        )
+        let history = AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: sessions)
+        ).exerciseHistoryByExercise()
+        return Exercise.fromTemplate(
+            templateExercise,
+            history: history[templateExercise.historyKey]
+        )
+    }
+
     @Test func spawnedSetsMirrorLastLoggedValues() throws {
         let context = try makeContext()
         try archiveSession(in: context, daysAgo: 2) {
             appendCompletedSets([(155, 6), (155, 6), (150, 5)], to: $0)
         }
 
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
 
         let sets = spawned.orderedSets
         #expect(sets.count == 3)
@@ -207,7 +225,7 @@ struct TemplatePrefillTests {
             appendCompletedSets([(160, 5), (160, 5), (160, 5)], to: $0)
         }
 
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
         #expect(spawned.orderedSets.allSatisfy { $0.weight == 160 })
     }
 
@@ -217,7 +235,7 @@ struct TemplatePrefillTests {
             appendCompletedSets([(145, 8), (150, 6)], to: $0)
         }
 
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
 
         let sets = spawned.orderedSets
         #expect(sets[0].weight == 145)
@@ -227,7 +245,7 @@ struct TemplatePrefillTests {
 
     @Test func noHistoryKeepsTemplateValues() throws {
         let context = try makeContext()
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
         #expect(spawned.orderedSets.allSatisfy { $0.weight == 135 && $0.reps == 8 })
     }
 
@@ -237,7 +255,7 @@ struct TemplatePrefillTests {
             ex.sets.append(WorkoutSet(weight: 155, reps: 6, isCompleted: false, sortOrder: 0))
         }
 
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
         #expect(spawned.orderedSets.allSatisfy { $0.weight == 135 })
     }
 
@@ -261,8 +279,46 @@ struct TemplatePrefillTests {
         context.insert(session)
         try context.save()
 
-        let spawned = Exercise.fromTemplate(templateExercise(), history: context)
+        let spawned = try spawn(templateExercise(), in: context)
         #expect(spawned.orderedSets.allSatisfy { $0.weight == 135 && $0.reps == 8 })
+    }
+
+    @Test func newestMismatchedSignatureDoesNotHideOlderCompatibleHistory() throws {
+        let context = try makeContext()
+        try archiveSession(in: context, daysAgo: 5) {
+            appendCompletedSets([(150, 7), (145, 8)], to: $0)
+        }
+
+        let hold = Exercise(
+            name: "Bench Press",
+            catalogID: "bench-press",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .isometricStrength
+        )
+        hold.sets.append(
+            WorkoutSet(
+                weight: 0,
+                reps: 0,
+                duration: 60,
+                isCompleted: true,
+                sortOrder: 0
+            )
+        )
+        let recent = WorkoutSession(
+            exercises: [hold],
+            startedAt: now.addingTimeInterval(-86_400)
+        )
+        recent.completedAt = recent.startedAt
+        context.insert(recent)
+        try context.save()
+
+        let spawned = try spawn(templateExercise(), in: context)
+        #expect(spawned.orderedSets[0].weight == 150)
+        #expect(spawned.orderedSets[1].weight == 145)
+        #expect(spawned.orderedSets[2].weight == 145)
     }
 
     @Test func perSetTemplatesSpawnExactlyAsWritten() throws {
@@ -278,7 +334,7 @@ struct TemplatePrefillTests {
             TemplateSet(weight: 140, reps: 6, sortOrder: 2),
         ]
 
-        let spawned = Exercise.fromTemplate(te, history: context)
+        let spawned = try spawn(te, in: context)
 
         let sets = spawned.orderedSets
         #expect(sets[0].weight == 100 && sets[0].reps == 10)

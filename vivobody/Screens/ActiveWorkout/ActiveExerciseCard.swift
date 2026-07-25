@@ -42,10 +42,11 @@ struct ActiveExerciseCard: View {
     /// Parent-owned cancellation generation for archive/discard/minimize.
     var scrubCancellationID: Int = 0
 
-    /// SwiftData write context — used to query archived sessions
-    /// when checking whether a just-completed set beats every prior
-    /// recorded set for this exercise (i.e., is a personal record).
+    /// SwiftData write context persists the active draft and provides
+    /// the one-time fallback source if the shared history cache has not
+    /// finished its background build yet.
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.sessionAnalytics) private var sessionAnalytics
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -378,10 +379,10 @@ struct ActiveExerciseCard: View {
     }
 
     /// Returns the *kind* of PR a completed set sets, or nil if it
-    /// doesn't beat the user's previous best on this exercise. For
-    /// Uses every archived exercise's own snapshotted modality, tracking,
-    /// load profile, and bodyweight. The first valid performance counts,
-    /// matching the chronological history policy.
+    /// doesn't beat the user's previous best on this exercise. The
+    /// shared summary respects every archived exercise's snapshotted
+    /// modality, tracking, load profile, and bodyweight. The first valid
+    /// performance counts, matching the chronological history policy.
     private func detectPersonalRecord(
         exerciseName: String,
         catalogItemID: UUID?,
@@ -428,43 +429,19 @@ struct ActiveExerciseCard: View {
             duration: duration
         ) else { return nil }
 
-        let descriptor: FetchDescriptor<Exercise>
-        if let catalogID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogID == catalogID
-                }
-            )
-        } else if let catalogItemID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogItemID == catalogItemID
-                }
-            )
-        } else {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.name == exerciseName
-                }
-            )
-        }
-        // A read failure is not an empty history. Treating it as one
-        // would celebrate any valid set as a first record.
-        guard let archivedExercises = try? modelContext.fetch(descriptor) else {
+        // An unavailable cache is not an empty history. Treating it as
+        // one would celebrate any valid set as a first record.
+        guard let history = sessionAnalytics?.resolvedExerciseHistory(
+            in: modelContext
+        ) else {
             return nil
         }
-        let archivedPrior = archivedExercises
-            .filter { archived in
-                if catalogID == nil, catalogItemID != nil {
-                    return archived.historyKey == candidateHistoryKey
-                }
-                return archived.performanceSemanticKind == semanticKind
-            }
-            .compactMap(\.bestStrengthPerformance)
+        let archivedPrior = history[candidateHistoryKey]?
+            .allTimeBest(for: semanticKind)
         let inSessionPrior = exercise.sets.compactMap {
             exercise.strengthPerformance(for: $0)
         }
-        let priorBest = (archivedPrior + inSessionPrior).reduce(
+        let priorBest = ([archivedPrior].compactMap { $0 } + inSessionPrior).reduce(
             nil as StrengthPerformance?
         ) { best, performance in
             guard let best else { return performance }

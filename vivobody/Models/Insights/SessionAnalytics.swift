@@ -13,6 +13,7 @@
 
 import Foundation
 import Observation
+import SwiftData
 import SwiftUI
 
 @MainActor
@@ -29,8 +30,12 @@ final class SessionAnalytics {
         let strength: StrengthOutlookBoard
         let progress: [ExerciseProgress]
         let load: TrainingLoadReport
-        let lastInstances: [String: LastExerciseInstance]
+        let exerciseHistory: [String: ExerciseHistorySummary]
         let overview: ArchiveOverview
+
+        nonisolated var lastInstances: [String: LastExerciseInstance] {
+            exerciseHistory.compactMapValues { $0.lastExerciseInstance }
+        }
 
         nonisolated static func make(
             from common: AnalyticsAccumulator,
@@ -57,7 +62,7 @@ final class SessionAnalytics {
                 ),
                 progress: progress,
                 load: common.trainingLoad(now: now),
-                lastInstances: common.lastInstanceByExercise(),
+                exerciseHistory: common.exerciseHistoryByExercise(),
                 overview: common.archiveOverview(progress: progress, now: now)
             )
         }
@@ -112,9 +117,14 @@ final class SessionAnalytics {
     private(set) var isCoreLoading = false
     private(set) var isDeepLoading = false
     private(set) var invalidationRevision = 0
+    private(set) var exerciseHistorySummaries:
+        [String: ExerciseHistorySummary] = [:]
 
     var hasCoreReports: Bool { coreFingerprint != nil }
     var hasInsightsReports: Bool { insightsReports != nil }
+    var hasExerciseHistorySummaries: Bool {
+        exerciseHistoryFingerprint != nil
+    }
 
     // Compatibility accessors keep non-Insights screens focused on the
     // report they consume. Deep access never starts computation; before
@@ -126,7 +136,9 @@ final class SessionAnalytics {
     var progress: [ExerciseProgress] { coreReports.progress }
     var load: TrainingLoadReport { coreReports.load }
     var lastInstances: [String: LastExerciseInstance] {
-        coreReports.lastInstances
+        exerciseHistorySummaries.compactMapValues {
+            $0.lastExerciseInstance
+        }
     }
     var overview: ArchiveOverview { coreReports.overview }
     /// IDs of sessions that set a strength PR when logged — badge
@@ -164,6 +176,7 @@ final class SessionAnalytics {
     @ObservationIgnored private var desiredDeepKey: RequestKey?
     @ObservationIgnored private var coreFingerprint: RequestKey?
     @ObservationIgnored private var deepFingerprint: RequestKey?
+    @ObservationIgnored private var exerciseHistoryFingerprint: RequestKey?
     @ObservationIgnored private var currentAccumulator: AnalyticsAccumulator?
     @ObservationIgnored private var currentAccumulatorKey: RequestKey?
     @ObservationIgnored private var currentNow: Date?
@@ -175,6 +188,7 @@ final class SessionAnalytics {
             AnalyticsSnapshot(sessions: [AnalyticsSessionSnapshot]())
         )
         coreReports = CoreReports.make(from: empty, now: Date())
+        exerciseHistorySummaries = coreReports.exerciseHistory
         deepReports = nil
         insightsReports = nil
     }
@@ -228,6 +242,7 @@ final class SessionAnalytics {
         currentAccumulator = nil
         currentAccumulatorKey = nil
         currentNow = nil
+        exerciseHistoryFingerprint = nil
         deepTaskKey = nil
         coreTask?.cancel()
         deepTask?.cancel()
@@ -235,6 +250,34 @@ final class SessionAnalytics {
         deepTask = nil
         isCoreLoading = false
         isDeepLoading = false
+    }
+
+    /// Return a known-current history index, synchronously priming it
+    /// from the archive only when the background analytics feed has not
+    /// published yet or an explicit correction invalidated it. This is
+    /// the one fallback fetch for latency-sensitive startup/PR paths;
+    /// `nil` means the read failed, while an empty dictionary means the
+    /// archive was read successfully and truly contains no history.
+    func resolvedExerciseHistory(
+        in context: ModelContext
+    ) -> [String: ExerciseHistorySummary]? {
+        if exerciseHistoryFingerprint != nil {
+            return exerciseHistorySummaries
+        }
+
+        let descriptor = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        guard let sessions = try? context.fetch(descriptor) else {
+            return nil
+        }
+        let history = AnalyticsAccumulator.history(
+            AnalyticsSnapshot(sessions: sessions)
+        ).exerciseHistoryByExercise()
+        exerciseHistorySummaries = history
+        exerciseHistoryFingerprint = requestKey(for: sessions)
+        return history
     }
 
     /// Test/support hook that waits for the currently requested core
@@ -302,6 +345,8 @@ final class SessionAnalytics {
 
                 self.coreReports = build.reports
                 self.coreFingerprint = key
+                self.exerciseHistorySummaries = build.reports.exerciseHistory
+                self.exerciseHistoryFingerprint = key
                 self.currentAccumulator = build.accumulator
                 self.currentAccumulatorKey = key
                 self.currentNow = now
@@ -448,7 +493,7 @@ private actor AnalyticsWorker {
             isCancelled: { Task.isCancelled }
         )
         try Task.checkCancellation()
-        let lastInstances = accumulator.lastInstanceByExercise(
+        let exerciseHistory = accumulator.exerciseHistoryByExercise(
             isCancelled: { Task.isCancelled }
         )
         try Task.checkCancellation()
@@ -465,7 +510,7 @@ private actor AnalyticsWorker {
             strength: strength,
             progress: progress,
             load: load,
-            lastInstances: lastInstances,
+            exerciseHistory: exerciseHistory,
             overview: overview
         )
         return CoreBuild(accumulator: accumulator, reports: reports)

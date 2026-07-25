@@ -433,16 +433,17 @@ extension Exercise {
     /// the user has never logged.
     static func fromTemplate(
         _ templateExercise: TemplateExercise,
-        history context: ModelContext?
+        history summary: ExerciseHistorySummary?
     ) -> Exercise {
         let exercise = Exercise(from: templateExercise)
         guard
             !templateExercise.hasPerSetData,
-            let context,
-            let last = mostRecentLogged(matching: templateExercise, in: context)
+            let last = summary?.mostRecentInstance(
+                matching: templateExercise.performanceSignature
+            )
         else { return exercise }
 
-        let logged = last.orderedSets.filter(\.isCompleted)
+        let logged = last.completedSetPrescription
         guard !logged.isEmpty else { return exercise }
 
         for (i, set) in exercise.orderedSets.enumerated() {
@@ -452,45 +453,5 @@ extension Exercise {
             set.duration = source.duration
         }
         return exercise
-    }
-
-    /// The same exercise from the most recently archived session, or
-    /// nil when the user has never logged it. Identity mirrors
-    /// `matchesCatalogItem`: stable bundled catalogID first, then the
-    /// custom item reference, then name-only for rows with no catalog
-    /// identity. The performance signature must agree so values
-    /// measured under different semantics (a hold turned into reps,
-    /// changed assistance) never seed the wrong scrubber.
-    private static func mostRecentLogged(
-        matching templateExercise: TemplateExercise,
-        in context: ModelContext
-    ) -> Exercise? {
-        let name = templateExercise.name
-        let descriptor: FetchDescriptor<Exercise>
-        if let catalogID = templateExercise.catalogID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogID == catalogID
-                }
-            )
-        } else if let itemID = templateExercise.catalogItemID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogItemID == itemID
-                }
-            )
-        } else {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil
-                        && $0.catalogItemID == nil && $0.name == name
-                }
-            )
-        }
-        let matches = (try? context.fetch(descriptor)) ?? []
-        let signature = templateExercise.performanceSignature
-        return matches
-            .filter { $0.performanceSignature == signature }
-            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
     }
 }

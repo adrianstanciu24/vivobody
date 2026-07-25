@@ -393,47 +393,35 @@ extension Exercise {
     /// starting fresh never changes the seed values users expect.
     static func fresh(
         from item: ExerciseCatalogItem,
-        history context: ModelContext?,
+        history summary: ExerciseHistorySummary?,
         sortOrder: Int
     ) -> Exercise {
-        if let context, let last = mostRecentLogged(matching: item, in: context) {
-            let copy = Exercise.freshCopy(of: last)
-            copy.sortOrder = sortOrder
-            return copy
+        guard let prescription = summary?.mostRecentInstance.setPrescription,
+              !prescription.isEmpty else {
+            return Exercise(from: item, sortOrder: sortOrder)
         }
-        return Exercise(from: item, sortOrder: sortOrder)
-    }
 
-    /// The same catalog exercise from the most recently completed
-    /// session, using stable bundled/custom identity before the
-    /// name-only legacy fallback.
-    private static func mostRecentLogged(
-        matching item: ExerciseCatalogItem,
-        in context: ModelContext
-    ) -> Exercise? {
-        let itemName = item.name
-        let itemID = item.id
-        let descriptor: FetchDescriptor<Exercise>
-        if let catalogID = item.catalogID {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && $0.catalogID == catalogID
-                }
-            )
-        } else {
-            descriptor = FetchDescriptor<Exercise>(
-                predicate: #Predicate {
-                    $0.session?.completedAt != nil && (
-                        $0.catalogItemID == itemID
-                            || ($0.catalogItemID == nil && $0.name == itemName)
-                    )
-                }
+        let exercise = Exercise(from: item, sortOrder: sortOrder)
+        exercise.sets.removeAll()
+        exercise.plannedSets = 0
+        exercise.plannedReps = prescription[0].reps
+        exercise.plannedWeight = prescription[0].weight
+        exercise.plannedDuration = prescription[0].duration
+        for (index, source) in prescription.enumerated() {
+            exercise.sets.append(
+                WorkoutSet(
+                    weight: source.weight,
+                    reps: source.reps,
+                    duration: source.duration,
+                    isCompleted: false,
+                    sortOrder: index,
+                    plannedWeight: source.weight,
+                    plannedReps: source.reps,
+                    plannedDuration: source.duration
+                )
             )
         }
-        let matches = (try? context.fetch(descriptor)) ?? []
-        return matches
-            .filter { $0.session?.completedAt != nil && $0.matchesCatalogItem(item) }
-            .max { ($0.session?.completedAt ?? .distantPast) < ($1.session?.completedAt ?? .distantPast) }
+        return exercise
     }
 
     /// Build a fresh, ready-to-start exercise from a previously-logged

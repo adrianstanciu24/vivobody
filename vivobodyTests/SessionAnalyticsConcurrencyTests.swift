@@ -19,6 +19,9 @@ struct SessionAnalyticsConcurrencyTests {
     nonisolated func analyticsBoundaryIsSendable() {
         requireSendable(AnalyticsSnapshot.self)
         requireSendable(AnalyticsAccumulator.self)
+        requireSendable(ExerciseSetPrescription.self)
+        requireSendable(ExerciseHistoryInstance.self)
+        requireSendable(ExerciseHistorySummary.self)
         requireSendable(SessionAnalytics.CoreReports.self)
         requireSendable(SessionAnalytics.DeepReports.self)
         requireSendable(SessionAnalytics.InsightsReports.self)

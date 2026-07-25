@@ -361,101 +361,14 @@ extension Array where Element == WorkoutSession {
 }
 
 nonisolated extension AnalyticsAccumulator {
-    /// Snapshot-backed last-instance lookup used by the background
-    /// analytics worker. Match is by the complete history key: stable
-    /// ID for bundled movements and full performance signature for
-    /// custom movements.
+    /// Compatibility projection over the shared history summary. Match
+    /// is by the complete history key: stable ID for bundled movements
+    /// and full performance signature for custom movements.
     func lastInstanceByExercise(
         isCancelled: @Sendable () -> Bool = { false }
     ) -> [String: LastExerciseInstance] {
-        // Step 1: gather every "top set per session per exercise"
-        // tuple. The top set is modality/load-aware (greatest
-        // effective resistance for comparable work, duration for
-        // duration-only work) via `representativeTopSet`. The arrays
-        // inside the dictionary are appended in archive order, not by
-        // date — sorting comes next.
-        var rawByKey: [String: [(
-            date: Date,
-            top: AnalyticsSetSnapshot,
-            exercise: AnalyticsExerciseSnapshot
-        )]] = [:]
-
-        sessionReplay: for replay in sessions {
-            guard !isCancelled() else { return [:] }
-            let date = replay.session.date
-            for exerciseReplay in replay.exercises {
-                guard !isCancelled() else { break sessionReplay }
-                let exercise = exerciseReplay.exercise
-                guard let top = exercise.representativeTopSet else { continue }
-                rawByKey[exercise.historyKey, default: []].append((
-                    date: date,
-                    top: top,
-                    exercise: exercise
-                ))
-            }
-        }
-
-        // Step 2: for each exercise, find the most recent session's
-        // top set AND the all-time best, compared on the mode's
-        // primary metric. Two separate scans on a small list.
-        var result: [String: LastExerciseInstance] = [:]
-        for (key, entries) in rawByKey {
-            guard !isCancelled() else { return [:] }
-            var mostRecent: (date: Date, top: AnalyticsSetSnapshot, exercise: AnalyticsExerciseSnapshot)?
-            for entry in entries {
-                guard !isCancelled() else { return [:] }
-                if mostRecent == nil || mostRecent!.date < entry.date {
-                    mostRecent = entry
-                }
-            }
-            guard let mostRecent else { continue }
-            let exercise = mostRecent.exercise
-            let mode = exercise.trackingMode
-            let currentKind = exercise.modality.performanceSemanticKind(
-                for: mode,
-                loadMode: exercise.loadMode
-            )
-            let currentEffectiveLoad = currentKind.comparesLoad
-                ? exercise.loadProfile.effectiveLoad(
-                    loggedWeight: mostRecent.top.weight,
-                    bodyweight: exercise.loadBodyweight
-                )
-                : nil
-            let currentPerformance = exercise.strengthPerformance(for: mostRecent.top)
-            var allTimeBest: StrengthPerformance?
-            for entry in entries {
-                guard !isCancelled() else { return [:] }
-                let entryExercise = entry.exercise
-                let kind = entryExercise.modality.performanceSemanticKind(
-                    for: entryExercise.trackingMode,
-                    loadMode: entryExercise.loadMode
-                )
-                guard kind == currentKind else { continue }
-                if let performance = entryExercise.strengthPerformance(for: entry.top) {
-                    if let best = allTimeBest {
-                        if performance.beats(best) {
-                            allTimeBest = performance
-                        }
-                    } else {
-                        allTimeBest = performance
-                    }
-                }
-            }
-            let isBest = currentPerformance != nil && currentPerformance == allTimeBest
-            result[key] = LastExerciseInstance(
-                topWeight: mostRecent.top.weight,
-                topReps: mostRecent.top.reps,
-                topDuration: mostRecent.top.duration,
-                trackingMode: mode,
-                loadMode: exercise.loadMode,
-                bodyweightFraction: exercise.bodyweightFraction,
-                bodyweightAtSession: exercise.loadBodyweight,
-                effectiveTopLoad: currentEffectiveLoad,
-                sessionDate: mostRecent.date,
-                isAllTimeBest: isBest
-            )
-        }
-        return result
+        exerciseHistoryByExercise(isCancelled: isCancelled)
+            .compactMapValues { $0.lastExerciseInstance }
     }
 }
 

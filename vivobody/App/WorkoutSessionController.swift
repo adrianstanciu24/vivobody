@@ -183,9 +183,12 @@ final class WorkoutSessionController {
             isWorkoutExpanded = true
             return
         }
+        let history = resolvedExerciseHistory()
+        let summary = history?[item.historyKey]
+            ?? history?[item.legacyHistoryKey]
         let firstExercise = Exercise.fresh(
             from: item,
-            history: modelContext,
+            history: summary,
             sortOrder: 0
         )
         beginActiveWorkout(with: [firstExercise])
@@ -202,12 +205,26 @@ final class WorkoutSessionController {
             isWorkoutExpanded = true
             return
         }
-        let plan = template.orderedExercises.map {
-            Exercise.fromTemplate($0, history: modelContext)
+        let history = resolvedExerciseHistory()
+        let plan = template.orderedExercises.map { templateExercise in
+            Exercise.fromTemplate(
+                templateExercise,
+                history: history?[templateExercise.historyKey]
+            )
         }
         beginActiveWorkout(with: plan) {
             template.lastUsedAt = Date()
         }
+    }
+
+    /// One O(1)-lookup index shared by every exercise factory in a
+    /// startup operation. SessionAnalytics normally serves its
+    /// background-built cache; before that is ready it performs one
+    /// archive fetch rather than one fetch per exercise.
+    private func resolvedExerciseHistory()
+        -> [String: ExerciseHistorySummary]? {
+        guard let context = modelContext else { return nil }
+        return appState?.analytics.resolvedExerciseHistory(in: context)
     }
 
     /// The user's preferred default rest in seconds, read from
@@ -348,6 +365,7 @@ final class WorkoutSessionController {
         do {
             try context.saveOrRollback()
             SessionSideEffects.handle(.archived, session: session, in: context)
+            appState?.analytics.invalidate()
             activeSession = nil
             isWorkoutExpanded = false
         } catch {

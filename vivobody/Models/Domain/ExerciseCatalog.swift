@@ -732,6 +732,15 @@ extension TemplateExercise {
             bodyweightFraction: bodyweightFraction
         )
     }
+
+    var historyKey: String {
+        ExerciseIdentity.key(
+            catalogID: catalogID,
+            catalogItemID: catalogItemID,
+            name: name,
+            performanceSignature: performanceSignature
+        )
+    }
 }
 
 // MARK: - Grouping helper
