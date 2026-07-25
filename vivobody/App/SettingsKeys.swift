@@ -59,6 +59,14 @@ nonisolated enum SettingsKey {
     /// resolves. A render hint only — `Transaction.currentEntitlements`
     /// remains the source of truth and overwrites this on every launch.
     static let proUnlockedCache = "settings.proUnlockedCache"
+    /// Monotonic revision for data consumed by the full widget
+    /// snapshot set. Relevant mutation paths advance it only after
+    /// their SwiftData save succeeds.
+    static let widgetDatasetRevision = "widgets.datasetRevision"
+    /// Fingerprint of the last complete App Group snapshot publish.
+    /// It also carries date- and preference-based inputs that can
+    /// change without a SwiftData mutation.
+    static let widgetSnapshotFingerprint = "widgets.snapshotFingerprint"
 }
 
 nonisolated enum SettingsDefaults {

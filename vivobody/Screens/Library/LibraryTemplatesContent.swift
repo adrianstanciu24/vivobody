@@ -195,6 +195,7 @@ struct LibraryTemplatesContent: View {
                 t.sortOrder = i
             }
             try modelContext.saveOrRollback()
+            WidgetSnapshotWriter.writeAll(in: modelContext)
             SpotlightIndexer.removeTemplate(id: id)
         } catch {
             saveError = SaveErrorBox(error)

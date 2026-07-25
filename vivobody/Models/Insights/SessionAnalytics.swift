@@ -11,6 +11,7 @@
 //  reports remain visible during refreshes.
 //
 
+import VivoKit
 import Foundation
 import Observation
 import SwiftData
@@ -30,6 +31,7 @@ final class SessionAnalytics {
         let strength: StrengthOutlookBoard
         let progress: [ExerciseProgress]
         let load: TrainingLoadReport
+        let consistency: ConsistencyReport
         let exerciseHistory: [String: ExerciseHistorySummary]
         let overview: ArchiveOverview
 
@@ -47,6 +49,7 @@ final class SessionAnalytics {
                 from: common,
                 now: now
             )
+            let consistency = common.consistency(now: now)
             return CoreReports(
                 volume: volume,
                 development: development,
@@ -62,6 +65,7 @@ final class SessionAnalytics {
                 ),
                 progress: progress,
                 load: common.trainingLoad(now: now),
+                consistency: consistency,
                 exerciseHistory: common.exerciseHistoryByExercise(),
                 overview: common.archiveOverview(progress: progress, now: now)
             )
@@ -80,7 +84,8 @@ final class SessionAnalytics {
 
         nonisolated static func make(
             from common: AnalyticsAccumulator,
-            now: Date
+            now: Date,
+            consistency: ConsistencyReport? = nil
         ) -> DeepReports {
             DeepReports(
                 dominance: common.exerciseDominance(now: now),
@@ -89,7 +94,7 @@ final class SessionAnalytics {
                 migration: common.repRangeMigration(now: now),
                 composition: common.compoundIsolationSplit(now: now),
                 symmetry: common.antagonistBalance(now: now),
-                consistency: common.consistency(now: now)
+                consistency: consistency ?? common.consistency(now: now)
             )
         }
     }
@@ -100,6 +105,18 @@ final class SessionAnalytics {
     nonisolated struct InsightsReports: Sendable {
         let core: CoreReports
         let deep: DeepReports
+    }
+
+    /// Widget-only analytics derived beside the core tier from the
+    /// same accumulator. Keeping these Codable payloads here lets the
+    /// app-side writer reuse the central replay instead of traversing
+    /// the SwiftData archive and rebuilding consistency, signature,
+    /// strength, and progress independently.
+    nonisolated struct WidgetReports: Sendable {
+        let consistency: ConsistencySnapshot
+        let signature: SignatureSnapshot
+        let strength: StrengthSnapshot
+        let load: TrainingLoadReport
     }
 
     /// Stable `.task(id:)` identity. The explicit revision changes on
@@ -114,6 +131,7 @@ final class SessionAnalytics {
     private(set) var coreReports: CoreReports
     private(set) var deepReports: DeepReports?
     private(set) var insightsReports: InsightsReports?
+    private(set) var widgetReports: WidgetReports
     private(set) var isCoreLoading = false
     private(set) var isDeepLoading = false
     private(set) var invalidationRevision = 0
@@ -177,6 +195,7 @@ final class SessionAnalytics {
     @ObservationIgnored private var coreFingerprint: RequestKey?
     @ObservationIgnored private var deepFingerprint: RequestKey?
     @ObservationIgnored private var exerciseHistoryFingerprint: RequestKey?
+    @ObservationIgnored private var widgetFingerprint: RequestKey?
     @ObservationIgnored private var currentAccumulator: AnalyticsAccumulator?
     @ObservationIgnored private var currentAccumulatorKey: RequestKey?
     @ObservationIgnored private var currentNow: Date?
@@ -187,8 +206,12 @@ final class SessionAnalytics {
         let empty = AnalyticsAccumulator.replay(
             AnalyticsSnapshot(sessions: [AnalyticsSessionSnapshot]())
         )
-        coreReports = CoreReports.make(from: empty, now: Date())
-        exerciseHistorySummaries = coreReports.exerciseHistory
+        let initialCore = CoreReports.make(from: empty, now: Date())
+        coreReports = initialCore
+        widgetReports = Self.makeWidgetReports(
+            core: initialCore
+        )
+        exerciseHistorySummaries = initialCore.exerciseHistory
         deepReports = nil
         insightsReports = nil
     }
@@ -243,6 +266,7 @@ final class SessionAnalytics {
         currentAccumulatorKey = nil
         currentNow = nil
         exerciseHistoryFingerprint = nil
+        widgetFingerprint = nil
         deepTaskKey = nil
         coreTask?.cancel()
         deepTask?.cancel()
@@ -286,6 +310,22 @@ final class SessionAnalytics {
     func waitForPendingWork() async {
         await coreTask?.value
         await deepTask?.value
+    }
+
+    /// Return widget analytics for the requested archive generation.
+    /// If the core tier is already current this is an O(1) cache read;
+    /// otherwise it joins the same actor-backed build used by screens.
+    func resolvedWidgetReports(
+        for sessions: [WorkoutSession],
+        now: Date = Date()
+    ) async -> WidgetReports? {
+        let key = requestKey(for: sessions, now: now)
+        requestCore(for: sessions, now: now)
+        await coreTask?.value
+        guard !Task.isCancelled, widgetFingerprint == key else {
+            return nil
+        }
+        return widgetReports
     }
 
     private func request(
@@ -345,6 +385,8 @@ final class SessionAnalytics {
 
                 self.coreReports = build.reports
                 self.coreFingerprint = key
+                self.widgetReports = build.widgetReports
+                self.widgetFingerprint = key
                 self.exerciseHistorySummaries = build.reports.exerciseHistory
                 self.exerciseHistoryFingerprint = key
                 self.currentAccumulator = build.accumulator
@@ -400,7 +442,8 @@ final class SessionAnalytics {
             do {
                 let reports = try await worker.makeDeep(
                     from: accumulator,
-                    now: now
+                    now: now,
+                    consistency: core.consistency
                 )
                 guard !Task.isCancelled, let self else { return }
                 guard
@@ -440,6 +483,140 @@ final class SessionAnalytics {
         )
         return DeepReports.make(from: empty, now: Date())
     }()
+
+    fileprivate nonisolated static func makeWidgetReports(
+        core: CoreReports
+    ) -> WidgetReports {
+        let consistency = core.consistency
+        let consistencySnapshot = ConsistencySnapshot(
+            weeks: consistency.weeks.map { column in
+                column.map {
+                    ConsistencyDaySnapshot(
+                        date: $0.date,
+                        level: $0.level,
+                        isInRange: $0.isInRange,
+                        isToday: $0.isToday
+                    )
+                }
+            },
+            sessionsPerWeek: consistency.sessionsPerWeek,
+            weekStreak: consistency.weekStreak,
+            averageRIR: consistency.averageRIR,
+            daysTrained: consistency.daysTrainedInWindow,
+            weeklyVolume: consistency.weeks.map { column in
+                column.filter(\.isInRange).reduce(0) { $0 + $1.sets }
+            }
+        )
+
+        let signature = TrainingSignature(
+            volume: core.volume,
+            development: core.development.intensities,
+            consistency: consistency
+        )
+        let signatureSnapshot: SignatureSnapshot
+        if signature.hasSignature {
+            signatureSnapshot = SignatureSnapshot(
+                petals: signature.petals.map {
+                    SignaturePetalSnapshot(
+                        group: $0.group.displayName,
+                        volumeShare: $0.volumeShare,
+                        development: $0.development
+                    )
+                },
+                intensity: signature.intensity,
+                cadence: signature.cadence,
+                balance: signature.balance,
+                dominantGroup: signature.dominantGroup?.displayName,
+                hasSignature: true,
+                verdictLine: signatureVerdict(signature),
+                weekStreak: consistency.weekStreak
+            )
+        } else {
+            signatureSnapshot = .empty
+        }
+
+        return WidgetReports(
+            consistency: consistencySnapshot,
+            signature: signatureSnapshot,
+            strength: strengthSnapshot(
+                board: core.strength,
+                progress: core.progress
+            ),
+            load: core.load
+        )
+    }
+
+    private nonisolated static func strengthSnapshot(
+        board: StrengthOutlookBoard,
+        progress: [ExerciseProgress]
+    ) -> StrengthSnapshot {
+        guard let lead = board.stats.first else { return .empty }
+        let series = progress.first { $0.id == lead.historyKey }
+        var runningMax = -Double.infinity
+        var points: [StrengthPointSnapshot] = []
+        for point in series?.points ?? [] where point.estimated1RM > 0 {
+            let isPR = point.estimated1RM > runningMax
+            if isPR { runningMax = point.estimated1RM }
+            points.append(
+                StrengthPointSnapshot(
+                    date: point.date,
+                    e1RM: point.estimated1RM,
+                    isPR: isPR
+                )
+            )
+        }
+
+        return StrengthSnapshot(
+            exercise: lead.exercise,
+            points: Array(points.suffix(StrengthSnapshot.maxPoints)),
+            currentE1RM: lead.currentE1RM,
+            bestE1RM: lead.bestE1RM,
+            trendLabel: strengthTrendLabel(lead),
+            climbingCount: board.climbingCount,
+            stalledCount: board.plateauedCount,
+            slippingCount: board.slippingCount,
+            hasData: !points.isEmpty
+        )
+    }
+
+    private nonisolated static func strengthTrendLabel(
+        _ stat: StrengthOutlookStat
+    ) -> String {
+        switch stat.trend {
+        case .climbing:
+            if stat.isFreshPR { return "PR" }
+            if let days = stat.daysToPR {
+                return days <= 21
+                    ? "~\(days)d"
+                    : "~\(Int((Double(days) / 7).rounded()))w"
+            }
+            return "up"
+        case .plateaued:
+            if let weeks = stat.weeksSinceBest, weeks > 0 {
+                return "\(weeks)w flat"
+            }
+            return "flat"
+        case .slipping:
+            return "down"
+        }
+    }
+
+    private nonisolated static func signatureVerdict(
+        _ signature: TrainingSignature
+    ) -> String {
+        let focus = signature.dominantGroup.map {
+            "\($0.displayName)-led"
+        } ?? "Balanced across every region"
+        let effort: String
+        if signature.intensity >= 0.6 {
+            effort = "Trained close to failure"
+        } else if signature.intensity >= 0.4 {
+            effort = "Pushed at a steady clip"
+        } else {
+            effort = "Plenty left in the tank"
+        }
+        return "\(focus). \(effort), \(InsightsFormat.perWeekLabel(signature.cadence))x a week."
+    }
 }
 
 /// The only executor that performs report construction. Its inputs and
@@ -448,6 +625,7 @@ private actor AnalyticsWorker {
     nonisolated struct CoreBuild: Sendable {
         let accumulator: AnalyticsAccumulator
         let reports: SessionAnalytics.CoreReports
+        let widgetReports: SessionAnalytics.WidgetReports
     }
 
     func makeCore(
@@ -493,6 +671,11 @@ private actor AnalyticsWorker {
             isCancelled: { Task.isCancelled }
         )
         try Task.checkCancellation()
+        let consistency = accumulator.consistency(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
         let exerciseHistory = accumulator.exerciseHistoryByExercise(
             isCancelled: { Task.isCancelled }
         )
@@ -510,15 +693,24 @@ private actor AnalyticsWorker {
             strength: strength,
             progress: progress,
             load: load,
+            consistency: consistency,
             exerciseHistory: exerciseHistory,
             overview: overview
         )
-        return CoreBuild(accumulator: accumulator, reports: reports)
+        let widgetReports = SessionAnalytics.makeWidgetReports(
+            core: reports
+        )
+        return CoreBuild(
+            accumulator: accumulator,
+            reports: reports,
+            widgetReports: widgetReports
+        )
     }
 
     func makeDeep(
         from accumulator: AnalyticsAccumulator,
-        now: Date
+        now: Date,
+        consistency: ConsistencyReport
     ) async throws -> SessionAnalytics.DeepReports {
         try Task.checkCancellation()
         let dominance = accumulator.exerciseDominance(
@@ -547,11 +739,6 @@ private actor AnalyticsWorker {
         )
         try Task.checkCancellation()
         let symmetry = accumulator.antagonistBalance(
-            now: now,
-            isCancelled: { Task.isCancelled }
-        )
-        try Task.checkCancellation()
-        let consistency = accumulator.consistency(
             now: now,
             isCancelled: { Task.isCancelled }
         )

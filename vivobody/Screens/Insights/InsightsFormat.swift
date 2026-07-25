@@ -32,7 +32,7 @@ enum InsightsFormat {
 
     /// Sessions per week, dropping a redundant decimal when the
     /// one-decimal value is a whole number.
-    static func perWeekLabel(_ value: Double) -> String {
+    nonisolated static func perWeekLabel(_ value: Double) -> String {
         let oneDecimal = (value * 10).rounded() / 10
         if oneDecimal == oneDecimal.rounded() {
             return String(format: "%.0f", oneDecimal)

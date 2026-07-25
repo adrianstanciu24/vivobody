@@ -92,6 +92,7 @@ struct AppRoot: View {
                 // restore any in-flight workout (MiniBar), and drain
                 // pending deep links.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
+                WidgetSnapshotWriter.configure(analytics: appState.analytics)
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }
@@ -119,13 +120,13 @@ struct AppRoot: View {
                     let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []
                     let items = (try? modelContext.fetch(FetchDescriptor<ExerciseCatalogItem>())) ?? []
                     SpotlightIndexer.reindexAllIfNeeded(templates: templates, items: items)
-                    WidgetSnapshotWriter.writeAll(in: modelContext)
+                    WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
                 }
             }
             .onChange(of: scenePhase) { oldPhase, phase in
                 if phase == .active {
                     consumeIncomingActions()
-                    WidgetSnapshotWriter.writeAll(in: modelContext)
+                    WidgetSnapshotWriter.writeAllIfStale(in: modelContext)
                     RestNotificationController.cancelPending()
                 } else if oldPhase == .active, workout.activeSession != nil {
                     // Force the latest in-memory scrub value to disk and

@@ -4,8 +4,11 @@
 //
 //  App-side bridge from SwiftData to WidgetKit. Widgets never open the
 //  model store; they read small Codable snapshots written into the App
-//  Group whenever workout, schedule, preference, or foreground state
-//  changes.
+//  Group whenever workout, schedule, or preference state changes.
+//  Full snapshot publishes carry a persisted input fingerprint, so a
+//  foreground transition only rebuilds when data, day, unit, Pro
+//  state, or snapshot schema is stale. Archive analytics are resolved
+//  through SessionAnalytics' actor-backed pipeline.
 //
 
 import VivoKit
@@ -15,8 +18,13 @@ import WidgetKit
 
 @MainActor
 enum WidgetSnapshotWriter {
+    /// The app's central analytics coordinator. AppRoot wires it once
+    /// before any production snapshot request; keeping a weak reference
+    /// avoids giving this process-wide bridge ownership of AppState.
+    private static weak var analytics: SessionAnalytics?
+
     /// Coalesces rapid successive `writeAll` calls (template edits,
-    /// body-weight saves, scene-phase changes) into a single deferred
+    /// body-weight saves, archive changes) into a single deferred
     /// update so the main thread isn't blocked synchronously on every
     /// trigger. The 300 ms window is imperceptible to the user but
     /// prevents stacking heavy fetches + analytics + 4 widget reloads.
@@ -28,12 +36,63 @@ enum WidgetSnapshotWriter {
     /// time-sensitive than the full analytics refresh.
     private static var pendingWriteActiveTask: Task<Void, Never>?
 
+    static func configure(analytics: SessionAnalytics) {
+        self.analytics = analytics
+    }
+
+    /// Mark full-widget inputs changed after their durable save, then
+    /// coalesce a publish for that exact revision.
     static func writeAll(in context: ModelContext, reload: Bool = true) {
+        let revision = advanceDatasetRevision()
+        scheduleWriteAll(
+            in: context,
+            revision: revision,
+            reload: reload
+        )
+    }
+
+    /// Foreground/startup path. Full analytics are skipped when the
+    /// last successful publish still matches all inputs. The active
+    /// workout remains a lightweight independent refresh because a
+    /// suspended debounce may not have reached the App Group.
+    static func writeAllIfStale(
+        in context: ModelContext,
+        reload: Bool = true,
+        now: Date = Date()
+    ) {
+        let revision = datasetRevision
+        let fingerprint = snapshotFingerprint(
+            revision: revision,
+            now: now
+        )
+        guard lastSnapshotFingerprint != fingerprint else {
+            writeActiveWorkout(in: context, reload: reload)
+            return
+        }
+        scheduleWriteAll(
+            in: context,
+            revision: revision,
+            reload: reload,
+            now: now
+        )
+    }
+
+    private static func scheduleWriteAll(
+        in context: ModelContext,
+        revision: Int,
+        reload: Bool,
+        now: Date = Date()
+    ) {
         pendingWriteAllTask?.cancel()
         pendingWriteAllTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled else { return }
-            writeAllNow(in: context, reload: reload)
+            await writeAllNow(
+                in: context,
+                revision: revision,
+                reload: reload,
+                now: now
+            )
         }
     }
 
@@ -54,33 +113,65 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
     }
 
-    private static func writeAllNow(in context: ModelContext, reload: Bool) {
+    private static func writeAllNow(
+        in context: ModelContext,
+        revision: Int,
+        reload: Bool,
+        now: Date
+    ) async {
         let templates = fetchTemplates(in: context)
         let completed = fetchCompletedSessions(in: context)
         let active = fetchActiveSession(in: context)
         let bodyweight = fetchCurrentBodyweight(in: context)
         let unit = WeightUnit.current
+        guard
+            let analytics,
+            let reports = await analytics.resolvedWidgetReports(
+                for: completed,
+                now: now
+            ),
+            !Task.isCancelled
+        else { return }
 
         mirrorPreferences(unit: unit)
-        write(
-            upNextSnapshot(
-                templates: templates,
-                sessions: completed,
-                unit: unit,
-                bodyweight: bodyweight
+        let snapshots: [(key: String, data: Data?)] = [
+            (
+                WidgetShared.upNextSnapshotKey,
+                encode(
+                    upNextSnapshot(
+                        templates: templates,
+                        sessions: completed,
+                        unit: unit,
+                        bodyweight: bodyweight,
+                        load: reports.load,
+                        now: now
+                    )
+                )
             ),
-            key: WidgetShared.upNextSnapshotKey
-        )
-        write(consistencySnapshot(sessions: completed), key: WidgetShared.consistencySnapshotKey)
-        write(signatureSnapshot(sessions: completed), key: WidgetShared.signatureSnapshotKey)
-        write(strengthSnapshot(sessions: completed), key: WidgetShared.strengthSnapshotKey)
-        write(activeWorkoutSnapshot(session: active, unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
-        // Publish the template list (id + name) so the Siri App Intent
-        // entity query can enumerate templates from the system process
-        // without opening the app's SwiftData store.
-        write(
-            templates.map { TemplateEntitySnapshot(id: $0.id.uuidString, name: $0.name) },
-            key: WidgetShared.templatesSnapshotKey
+            (WidgetShared.consistencySnapshotKey, encode(reports.consistency)),
+            (WidgetShared.signatureSnapshotKey, encode(reports.signature)),
+            (WidgetShared.strengthSnapshotKey, encode(reports.strength)),
+            (
+                WidgetShared.activeWorkoutSnapshotKey,
+                encode(activeWorkoutSnapshot(session: active, unit: unit))
+            ),
+            (
+                WidgetShared.templatesSnapshotKey,
+                encode(
+                    templates.map {
+                        TemplateEntitySnapshot(
+                            id: $0.id.uuidString,
+                            name: $0.name
+                        )
+                    }
+                )
+            ),
+        ]
+
+        guard publish(snapshots) else { return }
+        lastSnapshotFingerprint = snapshotFingerprint(
+            revision: revision,
+            now: now
         )
 
         guard reload else { return }
@@ -89,6 +180,55 @@ enum WidgetSnapshotWriter {
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.signatureKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.strengthKind)
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
+    }
+
+    // MARK: - Revision
+
+    private static var datasetRevision: Int {
+        UserDefaults.standard.integer(
+            forKey: SettingsKey.widgetDatasetRevision
+        )
+    }
+
+    private static var lastSnapshotFingerprint: String? {
+        get {
+            UserDefaults.standard.string(
+                forKey: SettingsKey.widgetSnapshotFingerprint
+            )
+        }
+        set {
+            UserDefaults.standard.set(
+                newValue,
+                forKey: SettingsKey.widgetSnapshotFingerprint
+            )
+        }
+    }
+
+    private static func advanceDatasetRevision() -> Int {
+        let revision = datasetRevision &+ 1
+        UserDefaults.standard.set(
+            revision,
+            forKey: SettingsKey.widgetDatasetRevision
+        )
+        return revision
+    }
+
+    private static func snapshotFingerprint(
+        revision: Int,
+        now: Date
+    ) -> String {
+        let day = Calendar.current.startOfDay(for: now)
+            .timeIntervalSinceReferenceDate
+        let proUnlocked = UserDefaults.standard.bool(
+            forKey: SettingsKey.proUnlockedCache
+        )
+        return [
+            String(revision),
+            String(day),
+            WeightUnit.current.rawValue,
+            proUnlocked ? "1" : "0",
+            String(WidgetSnapshotVersion.current),
+        ].joined(separator: "|")
     }
 
     // MARK: - Fetching
@@ -132,10 +272,17 @@ enum WidgetSnapshotWriter {
         templates: [WorkoutTemplate],
         sessions: [WorkoutSession],
         unit: WeightUnit,
-        bodyweight: Double?
+        bodyweight: Double?,
+        load: TrainingLoadReport,
+        now: Date
     ) -> UpNextSnapshot {
-        let upNext = UpNext.compute(templates: templates, sessions: sessions)
-        let readiness = sessions.readiness()?.phrase
+        let upNext = UpNext.compute(
+            templates: templates,
+            sessions: sessions,
+            load: load,
+            now: now
+        )
+        let readiness = sessions.readiness(load: load, now: now)?.phrase
 
         switch upNext.kind {
         case let .scheduled(template, _, easeOff):
@@ -172,99 +319,6 @@ enum WidgetSnapshotWriter {
 
         case .unscheduled:
             return UpNextSnapshot.empty
-        }
-    }
-
-    private static func consistencySnapshot(sessions: [WorkoutSession]) -> ConsistencySnapshot {
-        let report = sessions.consistency()
-        let weeks = report.weeks.map { column in
-            column.map {
-                ConsistencyDaySnapshot(
-                    date: $0.date,
-                    level: $0.level,
-                    isInRange: $0.isInRange,
-                    isToday: $0.isToday
-                )
-            }
-        }
-        let weeklyVolume = report.weeks.map { column in
-            column.filter(\.isInRange).reduce(0) { $0 + $1.sets }
-        }
-        return ConsistencySnapshot(
-            weeks: weeks,
-            sessionsPerWeek: report.sessionsPerWeek,
-            weekStreak: report.weekStreak,
-            averageRIR: report.averageRIR,
-            daysTrained: report.daysTrainedInWindow,
-            weeklyVolume: weeklyVolume
-        )
-    }
-
-    private static func signatureSnapshot(sessions: [WorkoutSession]) -> SignatureSnapshot {
-        let report = sessions.consistency()
-        let signature = sessions.trainingSignature()
-        guard signature.hasSignature else { return SignatureSnapshot.empty }
-        return SignatureSnapshot(
-            petals: signature.petals.map {
-                SignaturePetalSnapshot(
-                    group: $0.group.displayName,
-                    volumeShare: $0.volumeShare,
-                    development: $0.development
-                )
-            },
-            intensity: signature.intensity,
-            cadence: signature.cadence,
-            balance: signature.balance,
-            dominantGroup: signature.dominantGroup?.displayName,
-            hasSignature: signature.hasSignature,
-            verdictLine: signatureVerdict(signature),
-            weekStreak: report.weekStreak
-        )
-    }
-
-    private static func strengthSnapshot(sessions: [WorkoutSession]) -> StrengthSnapshot {
-        let board = sessions.strengthOutlook()
-        guard let lead = board.stats.first else { return .empty }
-
-        // Same running-max PR flagging the Insights strength chart
-        // uses, kept in canonical lb; the widget converts at display.
-        let series = sessions.progressByExercise
-            .first { $0.id == lead.historyKey }
-        var runningMax = -Double.infinity
-        var points: [StrengthPointSnapshot] = []
-        for point in series?.points ?? [] where point.estimated1RM > 0 {
-            let isPR = point.estimated1RM > runningMax
-            if isPR { runningMax = point.estimated1RM }
-            points.append(StrengthPointSnapshot(date: point.date, e1RM: point.estimated1RM, isPR: isPR))
-        }
-
-        return StrengthSnapshot(
-            exercise: lead.exercise,
-            points: Array(points.suffix(StrengthSnapshot.maxPoints)),
-            currentE1RM: lead.currentE1RM,
-            bestE1RM: lead.bestE1RM,
-            trendLabel: strengthTrendLabel(lead),
-            climbingCount: board.climbingCount,
-            stalledCount: board.plateauedCount,
-            slippingCount: board.slippingCount,
-            hasData: !points.isEmpty
-        )
-    }
-
-    /// Mirrors the Insights strength section's trend chip wording.
-    private static func strengthTrendLabel(_ stat: StrengthOutlookStat) -> String {
-        switch stat.trend {
-        case .climbing:
-            if stat.isFreshPR { return "PR" }
-            if let days = stat.daysToPR {
-                return days <= 21 ? "~\(days)d" : "~\(Int((Double(days) / 7).rounded()))w"
-            }
-            return "up"
-        case .plateaued:
-            if let w = stat.weeksSinceBest, w > 0 { return "\(w)w flat" }
-            return "flat"
-        case .slipping:
-            return "down"
         }
     }
 
@@ -403,19 +457,6 @@ enum WidgetSnapshotWriter {
         )
     }
 
-    private static func signatureVerdict(_ signature: TrainingSignature) -> String {
-        let focus = signature.dominantGroup.map { "\($0.displayName)-led" } ?? "Balanced across every region"
-        let effort: String
-        if signature.intensity >= 0.6 {
-            effort = "Trained close to failure"
-        } else if signature.intensity >= 0.4 {
-            effort = "Pushed at a steady clip"
-        } else {
-            effort = "Plenty left in the tank"
-        }
-        return "\(focus). \(effort), \(InsightsFormat.perWeekLabel(signature.cadence))x a week."
-    }
-
     // MARK: - Persistence
 
     private static func write<T: Codable>(_ snapshot: T, key: String) {
@@ -424,6 +465,27 @@ enum WidgetSnapshotWriter {
             let data = WidgetSnapshotCodec.encode(snapshot)
         else { return }
         defaults.set(data, forKey: key)
+    }
+
+    private static func encode<T: Codable>(_ snapshot: T) -> Data? {
+        WidgetSnapshotCodec.encode(snapshot)
+    }
+
+    /// Encode every payload before mutating the App Group. This keeps
+    /// the stored fingerprint honest: it advances only after a complete
+    /// snapshot set was available and published.
+    private static func publish(
+        _ snapshots: [(key: String, data: Data?)]
+    ) -> Bool {
+        guard
+            let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
+            snapshots.allSatisfy({ $0.data != nil })
+        else { return false }
+        for snapshot in snapshots {
+            guard let data = snapshot.data else { return false }
+            defaults.set(data, forKey: snapshot.key)
+        }
+        return true
     }
 
     private static func mirrorPreferences(unit: WeightUnit) {
