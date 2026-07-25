@@ -88,7 +88,7 @@ struct OnboardingScreen: View {
         .padding(.horizontal, Space.gutter)
         .padding(.bottom, Space.xl)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .forgeBackground(intensity: 0.7)
+        .screenBackground()
         .onAppear(perform: hydrate)
         .saveErrorAlert($saveError)
     }

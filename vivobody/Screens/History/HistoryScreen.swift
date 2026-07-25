@@ -107,7 +107,7 @@ struct HistoryContent: View {
                 content
             }
         }
-        .forgeBackground()
+        .screenBackground()
     }
 
     var hasMoreSessions: Bool { sessions.count == limit }

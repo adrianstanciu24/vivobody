@@ -39,7 +39,7 @@ struct PaywallSheet: View {
         }
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .safeAreaInset(edge: .bottom) { purchaseBar }
-        .forgeBackground()
+        .screenBackground()
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
         .onChange(of: pro.status) { _, status in

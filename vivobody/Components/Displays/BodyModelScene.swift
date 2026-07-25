@@ -37,8 +37,17 @@ enum BodyModelScene {
         channels: [String: MuscleMapChannels] = [:],
         theme: BodyModelTheme
     ) -> SCNScene? {
-        guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn"),
-              let scene = try? SCNScene(url: url) else { return nil }
+        let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.make")
+        defer { GraphicsPerformanceSignposts.end("BodyModelScene.make", interval) }
+
+        guard let url = Bundle.main.url(forResource: "BodyModel", withExtension: "scn") else {
+            return nil
+        }
+
+        let loadInterval = GraphicsPerformanceSignposts.begin("BodyModelScene.loadArchive")
+        let scene = try? SCNScene(url: url)
+        GraphicsPerformanceSignposts.end("BodyModelScene.loadArchive", loadInterval)
+        guard let scene else { return nil }
 
         apply(channels: channels, theme: theme, to: scene)
         configureCamera(scene: scene)
@@ -54,6 +63,9 @@ enum BodyModelScene {
         theme: BodyModelTheme,
         to scene: SCNScene
     ) {
+        let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.apply")
+        defer { GraphicsPerformanceSignposts.end("BodyModelScene.apply", interval) }
+
         if let pivot = scene.rootNode.childNode(withName: "bodyPivot", recursively: true) {
             applyMaterials(pivot: pivot, channels: channels, theme: theme)
         }
@@ -63,6 +75,9 @@ enum BodyModelScene {
     // MARK: - Camera
 
     private static func configureCamera(scene: SCNScene) {
+        let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.configureCamera")
+        defer { GraphicsPerformanceSignposts.end("BodyModelScene.configureCamera", interval) }
+
         let cameraNode = SCNNode()
         let camera = SCNCamera()
         camera.fieldOfView = 36
@@ -81,6 +96,9 @@ enum BodyModelScene {
     private static let lightRigName = "lightRig"
 
     private static func configureLighting(scene: SCNScene, theme: BodyModelTheme) {
+        let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.configureLighting")
+        defer { GraphicsPerformanceSignposts.end("BodyModelScene.configureLighting", interval) }
+
         scene.rootNode.childNode(withName: lightRigName, recursively: false)?
             .removeFromParentNode()
 
@@ -90,14 +108,12 @@ enum BodyModelScene {
         // The rig is deliberately warm. A neutral white key over the
         // gray base meshes read clinical — an anatomy plate, not a
         // living body. A warm key + warm ambient pulls the whole
-        // figure toward the app's molten/forge temperature so it feels
-        // lit from the same fire as the screen behind it; a faintly
+        // figure toward the app's warm accent temperature; a faintly
         // cool fill is kept only to preserve cross-form modelling.
         //
         // Per theme: the dark stage runs the key warmer and the rims
         // hot, carving the silhouette out of black. The light page
-        // cools the key a touch (the forge wash already heats the
-        // scene), neutralises the ambient so shadows read gray-warm
+        // cools the key a touch, neutralises the ambient so shadows read gray-warm
         // rather than muddy, and drops the rims to a whisper — bright
         // edges separate a figure from black but erase it into a
         // near-white page; there, separation comes from the figure
@@ -213,6 +229,9 @@ enum BodyModelScene {
         channels: [String: MuscleMapChannels],
         theme: BodyModelTheme
     ) {
+        let interval = GraphicsPerformanceSignposts.begin("BodyModelScene.applyMaterials")
+        defer { GraphicsPerformanceSignposts.end("BodyModelScene.applyMaterials", interval) }
+
         let bone = boneMaterial(for: theme)
         let tissue = tissueMaterial(for: theme)
         // Tint per mesh, keyed off each mesh's own name, so the figure

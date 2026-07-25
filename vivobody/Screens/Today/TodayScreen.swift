@@ -30,7 +30,7 @@ struct TodayScreen: View {
     /// Recent archived sessions (a ~45-day window), most-recent
     /// first. Drives the streak calendar, the "X this month" stat,
     /// and the Up Next trained-today check. Deliberately windowed —
-    /// lifetime aggregates (streak, PR sessions, forge warmth) come
+    /// lifetime aggregates (streak, PR sessions, stage warmth) come
     /// from the shared analytics cache, so Today never has to fault
     /// the whole archive. SwiftUI re-renders this screen automatically
     /// when a new session is inserted into the context.
@@ -134,7 +134,7 @@ struct TodayScreen: View {
                             )
                             figureCaption
                         }
-                            // Depth: the figure settles back into the forge as
+                            // Depth: the figure settles back into the stage as
                             // you scroll past it. Driven by .scrollTransition
                             // (render-thread) rather than a scroll-offset
                             // @State, so it never re-runs the body model's
@@ -171,15 +171,11 @@ struct TodayScreen: View {
                 // padding above reserves its occupied height so body
                 // copy never sits underneath the CTA or tab chrome.
                 .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
-                // The living atmosphere shared with every sibling tab:
-                // heat leaking at the chassis seams at a temperature set
-                // by streak + recency, so home reads as a powered-on
-                // instrument rather than a flat black report. The seam
-                // hugs the screen edges, so the faceplate behind the
-                // figure and copy stays pure black. `forgeBackground`
-                // also mirrors the ember under the nav/tab bars so it
-                // never hard-edges.
-                .forgeBackground()
+                // Keep the content on the app's static, edge-to-edge
+                // faceplate. The body-model stage carries the hero's
+                // training-driven warmth without continuously animating
+                // the entire screen background.
+                .screenBackground()
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
                     // Latch onto the LARGEST viewport height ever seen, not
                     // the first. Native bottom chrome can make the container

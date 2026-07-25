@@ -97,7 +97,7 @@ struct BodyWeightDetail: View {
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .detailForgeBackground()
+        .screenBackground()
         .navigationTitle("Body Weight")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $logTarget) { target in

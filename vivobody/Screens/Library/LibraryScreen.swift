@@ -100,7 +100,7 @@ struct LibraryScreen: View {
                 )
             }
         }
-        .forgeBackground()
+        .screenBackground()
         // Native search in the bottom toolbar with minimize-on-scroll:
         // the field collapses to a compact button when inactive and
         // scrolling, expanding on tap — the same behavior the custom

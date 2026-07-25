@@ -72,7 +72,7 @@ struct InsightsScreen: View {
                 loadingState
             }
         }
-        .forgeBackground()
+        .screenBackground()
     }
 
     // MARK: - Locked state (free tier)

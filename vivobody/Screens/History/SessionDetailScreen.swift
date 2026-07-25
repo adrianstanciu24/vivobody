@@ -87,7 +87,7 @@ struct SessionDetailScreen: View {
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .detailForgeBackground()
+        .screenBackground()
         .navigationTitle("Session")
         .navigationBarTitleDisplayMode(.inline)
     }

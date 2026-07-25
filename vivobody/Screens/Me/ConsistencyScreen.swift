@@ -52,7 +52,7 @@ struct ConsistencyScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .detailForgeBackground()
+        .screenBackground()
         .navigationTitle("Consistency")
         .navigationBarTitleDisplayMode(.inline)
     }

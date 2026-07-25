@@ -203,7 +203,7 @@ struct ExerciseDetailScreen: View {
         .task(id: analyticsRequest) {
             sessionAnalytics?.requestCore(for: completedSessions)
         }
-        .detailForgeBackground()
+        .screenBackground()
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)

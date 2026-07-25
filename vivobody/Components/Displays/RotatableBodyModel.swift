@@ -112,6 +112,9 @@ struct RotatableBodyModel: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UIView {
+        let interval = GraphicsPerformanceSignposts.begin("RotatableBodyModel.makeUIView")
+        defer { GraphicsPerformanceSignposts.end("RotatableBodyModel.makeUIView", interval) }
+
         let container = UIView()
         container.backgroundColor = .clear
         container.clipsToBounds = false

@@ -91,7 +91,7 @@ struct SettingsScreen: View {
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .detailForgeBackground()
+        .screenBackground()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
     }

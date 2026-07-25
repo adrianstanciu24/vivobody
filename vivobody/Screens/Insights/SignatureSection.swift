@@ -132,6 +132,9 @@ private struct TrainingSignatureView: View {
 
     private func emblem(time: TimeInterval, animated: Bool) -> some View {
         Canvas { context, size in
+            let interval = GraphicsPerformanceSignposts.begin("TrainingSignature.draw")
+            defer { GraphicsPerformanceSignposts.end("TrainingSignature.draw", interval) }
+
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             let radius = Swift.min(size.width, size.height) / 2
             let breath = animated ? (sin(time * 2 * .pi / Motion.breathSeconds) + 1) / 2 : 0

@@ -49,7 +49,7 @@ struct PersonalRecordsScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .detailForgeBackground()
+        .screenBackground()
         .navigationTitle("Personal Records")
         .navigationBarTitleDisplayMode(.inline)
     }
