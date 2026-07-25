@@ -11,8 +11,18 @@ import SwiftData
 @main
 struct vivobodyApp: App {
     /// The SwiftData container. Holds every archived workout. The
-    /// schema declares all three @Model classes; cascade-delete
+    /// schema declares all @Model classes; cascade-delete
     /// relationships keep exercises and sets bound to their session.
+    ///
+    /// Pre-production, the container deliberately opens WITHOUT the
+    /// staged migration plan: staged migration matches the on-disk
+    /// store against declared schema versions by checksum, and since
+    /// every SchemaVN references the live model classes, any field
+    /// change desyncs all checksums and bricks the store into the
+    /// fallback. Automatic lightweight migration handles additive
+    /// changes in place instead. Re-wire `VivobodyMigrationPlan`
+    /// (SchemaVersioning.swift) once real stores ship.
+    ///
     /// Nil only when both the on-disk store and the in-memory fallback
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
@@ -22,7 +32,6 @@ struct vivobodyApp: App {
         do {
             return try ModelContainer(
                 for: schema,
-                migrationPlan: VivobodyMigrationPlan.self,
                 configurations: [config]
             )
         } catch {
@@ -31,7 +40,7 @@ struct vivobodyApp: App {
             // the original store is left untouched on disk for recovery.
             StorageHealth.shared.didFallbackToInMemory = true
             let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-            if let memory = try? ModelContainer(for: schema, migrationPlan: VivobodyMigrationPlan.self, configurations: [fallback]) {
+            if let memory = try? ModelContainer(for: schema, configurations: [fallback]) {
                 return memory
             }
             // Even the in-memory fallback failed — return nil so the

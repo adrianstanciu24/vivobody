@@ -14,8 +14,9 @@ import SwiftData
 
 /// Exercises segment — browsable catalog. Tap an exercise row to
 /// push its detail screen (no commit CTA in this context). Long-
-/// press for Edit / Delete via context menu. The filter strip offers
-/// equipment scopes plus a prominent Core shortcut.
+/// press for Favorite / Edit / Delete via context menu. The filter
+/// strip offers equipment scopes plus prominent Favorites and Core
+/// shortcuts; favorited rows carry a star next to the name.
 struct LibraryExercisesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
@@ -117,6 +118,8 @@ struct LibraryExercisesContent: View {
         switch exerciseFilter {
         case .all:
             items
+        case .favorites:
+            items.filter(\.isFavorite)
         case .core:
             items.filter { $0.group == .core }
         case .equipment(let equipment):
@@ -150,13 +153,16 @@ struct LibraryExercisesContent: View {
 
     // MARK: - Catalog filter strip
 
+    /// Favorites is always offered — selecting it with no stars set
+    /// lands on an empty state that teaches the long-press gesture.
     @ViewBuilder
     private var catalogFilterStrip: some View {
-        if availableEquipment.count > 1 || items.contains(where: { $0.group == .core }) {
+        if !items.isEmpty {
             ScrollView(.horizontal, showsIndicators: false) {
                 GlassEffectContainer(spacing: Space.md) {
                     HStack(spacing: Space.md) {
                         chip(.all, label: "All")
+                        chip(.favorites, label: "Favorites")
                         if items.contains(where: { $0.group == .core }) {
                             chip(.core, label: "Core")
                         }
@@ -317,6 +323,14 @@ struct LibraryExercisesContent: View {
         .buttonStyle(.plain)
         .contextMenu {
             Button {
+                toggleFavorite(item)
+            } label: {
+                Label(
+                    item.isFavorite ? "Unfavorite" : "Favorite",
+                    systemImage: item.isFavorite ? "star.slash" : "star"
+                )
+            }
+            Button {
                 customExerciseTarget = .edit(item)
             } label: {
                 Label("Edit", systemImage: "pencil")
@@ -346,11 +360,19 @@ struct LibraryExercisesContent: View {
     ) -> some View {
         HStack(alignment: .center, spacing: Space.md) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(item.name)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                    Text(item.name)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(prominent ? Ink.primary : Ink.secondary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if item.isFavorite {
+                        Image(systemName: "star.fill")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.complete)
+                            .accessibilityLabel("Favorite")
+                    }
+                }
                 Text(metaLine(item))
                     .font(Typography.caption)
                     .foregroundStyle(prominent ? Ink.tertiary : Ink.quaternary)
@@ -438,16 +460,28 @@ struct LibraryExercisesContent: View {
 
     // MARK: - Empty state
 
+    /// The Favorites scope gets a teaching empty state (title +
+    /// smaller description, no CTA) — creating a new exercise
+    /// wouldn't fill it; starring an existing one would.
+    @ViewBuilder
     private var emptyState: some View {
-        ContentUnavailableView {
-            Label(emptyMessage, systemImage: "dumbbell")
-        } actions: {
-            Button {
-                customExerciseTarget = .create
-            } label: {
-                Text("Create custom exercise")
+        if !isSearching && exerciseFilter == .favorites {
+            ContentUnavailableView {
+                Label("No favorite exercises yet", systemImage: "dumbbell")
+            } description: {
+                Text("Long-press an exercise to favorite it.")
             }
-            .buttonStyle(PrimaryButtonStyle())
+        } else {
+            ContentUnavailableView {
+                Label(emptyMessage, systemImage: "dumbbell")
+            } actions: {
+                Button {
+                    customExerciseTarget = .create
+                } label: {
+                    Text("Create custom exercise")
+                }
+                .buttonStyle(PrimaryButtonStyle())
+            }
         }
     }
 
@@ -457,7 +491,7 @@ struct LibraryExercisesContent: View {
             return "No exercises match \"\(trimmed)\"."
         }
         switch exerciseFilter {
-        case .all:
+        case .all, .favorites:
             return "Your catalog is empty."
         case .core:
             return "No Core exercises."
@@ -467,6 +501,17 @@ struct LibraryExercisesContent: View {
     }
 
     // MARK: - Mutations
+
+    private func toggleFavorite(_ item: ExerciseCatalogItem) {
+        item.isFavorite.toggle()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
+        Haptics.tick()
+    }
 
     private func delete(_ item: ExerciseCatalogItem) {
         let id = item.id
@@ -482,11 +527,13 @@ struct LibraryExercisesContent: View {
     }
 }
 
-/// Mutually-exclusive scopes for the Library exercise catalog. Core
-/// sits beside equipment filters as a high-value movement shortcut,
-/// while a single enum prevents contradictory chips being selected.
+/// Mutually-exclusive scopes for the Library exercise catalog and the
+/// exercise picker. Favorites and Core sit beside equipment filters as
+/// high-value shortcuts, while a single enum prevents contradictory
+/// chips being selected.
 enum LibraryExerciseFilter: Equatable {
     case all
+    case favorites
     case core
     case equipment(Equipment)
 }

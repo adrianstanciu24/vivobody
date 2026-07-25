@@ -11,9 +11,12 @@
 //  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so
 //  users can extend it inline:
 //    • Toolbar "+" — create a new custom exercise.
-//    • Long-press on any row — context menu with Edit and Delete.
-//      Edit opens the same CustomExerciseEditorSheet in edit mode;
-//      Delete asks for confirmation, then removes the row.
+//    • Long-press on any row — context menu with Favorite, Edit and
+//      Delete. Edit opens the same CustomExerciseEditorSheet in edit
+//      mode; Delete asks for confirmation, then removes the row.
+//
+//  Favorited exercises carry a star next to their name, and the chip
+//  strip always offers a Favorites scope.
 //
 //  Sectioned by muscle group for browsing; while a search query is
 //  active the sections collapse into a flat, relevance-ranked list
@@ -65,10 +68,11 @@ struct ExercisePickerSheet: View {
     @State private var pendingDeleteItem: ExerciseCatalogItem?
     @State private var saveError: SaveErrorBox? = nil
 
-    /// Optional equipment filter. Nil means "all equipment." Chip
-    /// strip at the top of the picker toggles between this and the
-    /// individual Equipment cases.
-    @State private var equipmentFilter: Equipment? = nil
+    /// Catalog scope chosen in the chip strip — All, Favorites, or a
+    /// single equipment. Shares `LibraryExerciseFilter` with the
+    /// Library exercises tab so the two surfaces speak one filter
+    /// vocabulary (the picker just never offers the Core chip).
+    @State private var filter: LibraryExerciseFilter = .all
 
     /// "What did you last do for this exercise?" keyed by stable
     /// copied identity, served from the fingerprint-keyed
@@ -168,14 +172,19 @@ struct ExercisePickerSheet: View {
         Set(lastInstanceLookup.keys)
     }
 
-    /// Catalog narrowed by the equipment chip only (no text filter),
+    /// Catalog narrowed by the selected chip only (no text filter),
     /// shared by the grouped and search paths.
     private var scopedItems: [ExerciseCatalogItem] {
-        var scope = items
-        if let filter = equipmentFilter {
-            scope = scope.filter { $0.equipment == filter }
+        switch filter {
+        case .all:
+            items
+        case .favorites:
+            items.filter(\.isFavorite)
+        case .core:
+            items.filter { $0.group == .core }
+        case .equipment(let equipment):
+            items.filter { $0.equipment == equipment }
         }
-        return scope
     }
 
     /// Flat, relevance-ranked results for the active query — same
@@ -188,8 +197,8 @@ struct ExercisePickerSheet: View {
     private var filteredGroups: [(group: MuscleGroup, items: [ExerciseCatalogItem])] {
         let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
 
-        // First narrow by equipment filter — the chip strip toggles
-        // a global "show only this equipment" lens. Nil = all.
+        // First narrow by the chip strip's scope (All / Favorites /
+        // one equipment).
         var scope = scopedItems
 
         // Then narrow by search query — matches against name OR any
@@ -205,23 +214,24 @@ struct ExercisePickerSheet: View {
         return scope.groupedByMuscle
     }
 
-    // MARK: - Equipment filter strip
+    // MARK: - Catalog filter strip
 
-    /// Horizontal chip strip at the top of the picker. "All" + one
-    /// chip per Equipment case. Wraps the existing list so users can
-    /// narrow by gear before scrolling. Hidden when no items would
-    /// be filtered anyway (e.g., catalog has only one equipment
-    /// type — unusual but cleanly handled).
+    /// Horizontal chip strip at the top of the picker. "All" +
+    /// Favorites + one chip per Equipment case. Wraps the existing
+    /// list so users can narrow before scrolling. Favorites is always
+    /// offered — with no stars set it lands on an empty state that
+    /// teaches the long-press gesture. Hidden only for an empty catalog.
     @ViewBuilder
     private var equipmentFilterStrip: some View {
-        if availableEquipment.count > 1 {
+        if !items.isEmpty {
             ScrollView(.horizontal, showsIndicators: false) {
                 GlassEffectContainer(spacing: 8) {
                     HStack(spacing: 8) {
-                        equipmentFilterChip(nil, label: "All")
+                        filterChip(.all, label: "All")
+                        filterChip(.favorites, label: "Favorites")
                         ForEach(Equipment.allCases, id: \.self) { e in
                             if availableEquipment.contains(e) {
-                                equipmentFilterChip(e, label: e.displayName)
+                                filterChip(.equipment(e), label: e.displayName)
                             }
                         }
                     }
@@ -244,11 +254,11 @@ struct ExercisePickerSheet: View {
         Set(items.map(\.equipment))
     }
 
-    private func equipmentFilterChip(_ value: Equipment?, label: String) -> some View {
-        let isSelected = equipmentFilter == value
+    private func filterChip(_ value: LibraryExerciseFilter, label: String) -> some View {
+        let isSelected = filter == value
         return Button {
             Haptics.selection()
-            equipmentFilter = value
+            filter = value
         } label: {
             Text(label)
                 .font(Typography.sectionLabel)
@@ -334,9 +344,18 @@ struct ExercisePickerSheet: View {
                 .buttonStyle(.plain)
             }
         }
-        // Long-press still surfaces Edit / Delete in both modes —
-        // that gesture is unchanged.
+        // Long-press still surfaces Favorite / Edit / Delete in both
+        // modes — that gesture is unchanged.
         .contextMenu {
+            Button {
+                toggleFavorite(item)
+            } label: {
+                Label(
+                    item.isFavorite ? "Unfavorite" : "Favorite",
+                    systemImage: item.isFavorite ? "star.slash" : "star"
+                )
+            }
+
             Button {
                 editorTarget = .edit(item)
             } label: {
@@ -359,11 +378,19 @@ struct ExercisePickerSheet: View {
         let isAdd = trailingSymbol == "plus"
         return HStack(spacing: Space.md) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(item.name)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                    Text(item.name)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if item.isFavorite {
+                        Image(systemName: "star.fill")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.complete)
+                            .accessibilityLabel("Favorite")
+                    }
+                }
                 Text(rowSubtitle(item))
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
@@ -453,28 +480,51 @@ struct ExercisePickerSheet: View {
 
     // MARK: - Empty state
 
+    /// The Favorites scope gets a teaching empty state (title +
+    /// smaller description, no CTA) — creating a new exercise
+    /// wouldn't fill it; starring an existing one would.
+    @ViewBuilder
     private var emptyState: some View {
-        ContentUnavailableView {
-            Label(emptyStateMessage, systemImage: "dumbbell")
-        } actions: {
-            Button {
-                editorTarget = .create
-            } label: {
-                Text("Create custom exercise")
+        if query.trimmingCharacters(in: .whitespaces).isEmpty, filter == .favorites {
+            ContentUnavailableView {
+                Label("No favorite exercises yet", systemImage: "dumbbell")
+            } description: {
+                Text("Long-press an exercise to favorite it.")
             }
-            .buttonStyle(PrimaryButtonStyle())
+        } else {
+            ContentUnavailableView {
+                Label(emptyStateMessage, systemImage: "dumbbell")
+            } actions: {
+                Button {
+                    editorTarget = .create
+                } label: {
+                    Text("Create custom exercise")
+                }
+                .buttonStyle(PrimaryButtonStyle())
+            }
         }
     }
 
     private var emptyStateMessage: String {
         let trimmed = query.trimmingCharacters(in: .whitespaces)
-        if trimmed.isEmpty {
-            return "Your catalog is empty.\nTap below to add an exercise."
+        if !trimmed.isEmpty {
+            return "No exercises match \"\(trimmed)\"."
         }
-        return "No exercises match \"\(trimmed)\"."
+        return "Your catalog is empty.\nTap below to add an exercise."
     }
 
     // MARK: - Mutations
+
+    private func toggleFavorite(_ item: ExerciseCatalogItem) {
+        item.isFavorite.toggle()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
+        Haptics.tick()
+    }
 
     private func delete(_ item: ExerciseCatalogItem) {
         let id = item.id

@@ -209,6 +209,16 @@ struct ExerciseDetailScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    toggleFavorite()
+                } label: {
+                    Image(systemName: item.isFavorite ? "star.fill" : "star")
+                        .font(Typography.headline)
+                        .foregroundStyle(item.isFavorite ? Tint.complete : Ink.secondary)
+                }
+                .accessibilityLabel(item.isFavorite ? "Remove from favorites" : "Add to favorites")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
                         editorTarget = .edit(item)
@@ -279,6 +289,17 @@ struct ExerciseDetailScreen: View {
     }
 
     // MARK: - Mutations
+
+    private func toggleFavorite() {
+        item.isFavorite.toggle()
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = SaveErrorBox(error)
+            return
+        }
+        Haptics.tick()
+    }
 
     /// Remove the catalog item, save, then dismiss the screen — the
     /// picker's @Query will refresh and the row disappears. Templates

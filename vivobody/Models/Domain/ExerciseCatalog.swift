@@ -286,6 +286,12 @@ final class ExerciseCatalogItem: Identifiable {
     /// future "Reset catalog to defaults" affordance.
     var isUserCreated: Bool = false
 
+    /// User-starred favorite. Toggled from the Library catalog list,
+    /// the exercise picker, and the exercise detail toolbar; surfaces
+    /// a Favorites filter chip on both browse surfaces. Additive
+    /// defaulted field — no migration.
+    var isFavorite: Bool = false
+
     // MARK: - Computed accessors
 
     var group: MuscleGroup {

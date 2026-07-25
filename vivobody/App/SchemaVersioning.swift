@@ -2,10 +2,14 @@
 //  SchemaVersioning.swift
 //  vivobody
 //
-//  Versioned SwiftData schema + migration plan. Most changes ride
-//  automatic lightweight migration; V4 adds an explicit lightweight
-//  stage and marker entity so index-only changes are also materialized
-//  in existing stores.
+//  Versioned SwiftData schema + migration plan. Pre-production the
+//  plan is deliberately NOT wired into the container (see
+//  vivobodyApp.swift): staged migration matches stores by checksum,
+//  and because every SchemaVN references the live model classes, any
+//  field change desyncs all declared versions and bricks the store.
+//  All changes currently ride automatic lightweight migration; the
+//  versions and plan are kept so staged migration (with frozen model
+//  copies per version) can be adopted when real stores ship.
 //  Also surfaces the in-memory fallback flag so AppRoot can warn
 //  the user instead of silently losing all persistence.
 //
