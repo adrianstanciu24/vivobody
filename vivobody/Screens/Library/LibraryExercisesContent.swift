@@ -347,10 +347,10 @@ struct LibraryExercisesContent: View {
 
     /// One catalog row — full-width, card-free, divided from its
     /// neighbours by a hairline. Name + sentence-case meta (which
-    /// carries the equipment) on the left; on the right either the last session's
-    /// heaviest set as a monospaced `weight×reps` numeral (gold when
-    /// it's an all-time best) over a relative date, or — when the
-    /// exercise has never been logged — the quiet catalog default.
+    /// carries the equipment) on the left; on the right the last
+    /// session's heaviest set as a monospaced `weight×reps` numeral
+    /// (gold when it's an all-time best) over a relative date, or
+    /// nothing when the exercise has never been logged.
     /// `prominent` (lifted within 14 days) brightens the name and
     /// enlarges the numeral.
     private func exerciseRow(
@@ -382,7 +382,7 @@ struct LibraryExercisesContent: View {
 
             Spacer(minLength: Space.sm)
 
-            rowTrailing(item: item, last: last, prominent: prominent)
+            rowTrailing(last: last, prominent: prominent)
 
             Image(systemName: "chevron.right")
                 .font(Typography.caption)
@@ -396,9 +396,11 @@ struct LibraryExercisesContent: View {
         .accessibilityElement(children: .combine)
     }
 
+    /// Trailing side is history-only. Never-logged exercises show
+    /// nothing here — catalog defaults are input seeds, not numbers
+    /// worth displaying as if they were the user's own.
     @ViewBuilder
     private func rowTrailing(
-        item: ExerciseCatalogItem,
         last: LastExerciseInstance?,
         prominent: Bool
     ) -> some View {
@@ -408,7 +410,7 @@ struct LibraryExercisesContent: View {
             // "180 × 10" into a wrapped, oversized stack over the date.
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
-                    .font(prominent ? Typography.statValue : Typography.metricInline)
+                    .font(prominent ? Typography.statValueCompact : Typography.metricInline)
                     .foregroundStyle(last.isAllTimeBest ? Tint.complete : Ink.primary)
                     .monospacedDigit()
                     .lineLimit(1)
@@ -418,31 +420,11 @@ struct LibraryExercisesContent: View {
                     .foregroundStyle(Ink.quaternary)
             }
             .layoutPriority(1)
-        } else {
-            Text(catalogDefaultLabel(item))
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
         }
     }
 
     private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
         lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
-    }
-
-    /// Mode-aware right-side default for an exercise with no history —
-    /// "135 lb · 8 reps" for strength; timed work is labelled from its
-    /// modality (hold, interval, or time).
-    private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
-        let seed = item.defaultWeight(forUnit: unit)
-        switch item.trackingMode {
-        case .reps:
-            let load = item.loadMode.summaryLoadLabel(seed, unit: unit)
-            return load.map { "\($0) · \(item.defaultReps) reps" } ?? "\(item.defaultReps) reps"
-        case .duration:
-            let base = "\(DurationFormatter.string(item.defaultDuration)) \(item.modality.durationLabelLowercased)"
-            guard let load = item.loadMode.summaryLoadLabel(seed, unit: unit) else { return base }
-            return "\(load) · \(base)"
-        }
     }
 
     /// Sentence-case meta line shared by both row tiers — same

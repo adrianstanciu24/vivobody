@@ -399,11 +399,11 @@ struct ExercisePickerSheet: View {
 
             Spacer(minLength: Space.sm)
 
-            // Right side flips between "default" (never lifted)
-            // and "last" (have history). Last-side is the high-
-            // value variant — it answers "what should I aim to
-            // beat?" while the picker is still open.
-            rowRightSide(item: item, last: last)
+            // Right side is history-only — it answers "what should
+            // I aim to beat?" while the picker is still open. Never-
+            // logged exercises show nothing there: the catalog holds
+            // facts, not prescriptions, so no invented numbers.
+            rowRightSide(last: last)
 
             Image(systemName: trailingSymbol)
                 .font(isAdd ? Typography.headline : Typography.caption)
@@ -421,16 +421,14 @@ struct ExercisePickerSheet: View {
         lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
     }
 
-    /// Right-side rendering of a picker row. Branches on whether
-    /// we have a recent log of this exercise:
-    ///   • No history → show the catalog's default (`135 lb · 8 reps`)
-    ///     so brand-new users still see useful starting numbers.
-    ///   • Has history → show `LAST · 145 lb × 8` plus the relative
-    ///     date below in dim mono. If that last top set is also the
-    ///     all-time best, mark it with a small "PR" pill so the
-    ///     user knows their last bench WAS their PR.
+    /// Right-side rendering of a picker row. History-only: shows
+    /// `LAST · 145 lb × 8` plus the relative date below in dim mono.
+    /// If that last top set is also the all-time best, it renders in
+    /// the complete tint so the user knows their last bench WAS
+    /// their PR. Never-logged exercises get nothing — catalog
+    /// defaults are input seeds, not numbers worth displaying.
     @ViewBuilder
-    private func rowRightSide(item: ExerciseCatalogItem, last: LastExerciseInstance?) -> some View {
+    private func rowRightSide(last: LastExerciseInstance?) -> some View {
         if let last {
             VStack(alignment: .trailing, spacing: 2) {
                 Text(last.metricLabel(unit: unit))
@@ -441,26 +439,6 @@ struct ExercisePickerSheet: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.quaternary)
             }
-        } else {
-            Text(catalogDefaultLabel(item))
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
-        }
-    }
-
-    /// Right-side default for an exercise the user has never logged.
-    /// Mode-aware: a strength lift reads "135 lb · 8 reps"; duration
-    /// uses hold, interval, or time according to the exercise modality.
-    private func catalogDefaultLabel(_ item: ExerciseCatalogItem) -> String {
-        let seed = item.defaultWeight(forUnit: unit)
-        switch item.trackingMode {
-        case .reps:
-            let load = item.loadMode.summaryLoadLabel(seed, unit: unit)
-            return load.map { "\($0) · \(item.defaultReps) reps" } ?? "\(item.defaultReps) reps"
-        case .duration:
-            let base = "\(DurationFormatter.string(item.defaultDuration)) \(item.modality.durationLabelLowercased)"
-            guard let load = item.loadMode.summaryLoadLabel(seed, unit: unit) else { return base }
-            return "\(load) · \(base)"
         }
     }
 

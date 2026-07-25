@@ -91,6 +91,7 @@ public enum Typography {
 
     // Scalable numeric tokens — text-style-based so they react to Dynamic Type.
     public static let statValue = Font.system(.title, design: .monospaced, weight: .bold)
+    public static let statValueCompact = Font.system(.title2, design: .monospaced, weight: .bold)
     public static let metricInline = Font.system(.callout, design: .monospaced, weight: .semibold)
     public static let metricUnit = Font.system(.footnote, design: .monospaced, weight: .medium)
     public static let metricMicro = Font.system(.caption2, design: .monospaced, weight: .medium)
