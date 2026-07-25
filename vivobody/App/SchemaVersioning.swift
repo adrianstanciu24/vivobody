@@ -2,11 +2,10 @@
 //  SchemaVersioning.swift
 //  vivobody
 //
-//  Versioned SwiftData schema + empty migration plan. Every change
-//  so far rides automatic lightweight migration (additive defaulted
-//  fields; V3 dropped an attribute), so the plan carries no stages —
-//  the rail exists so the day a custom migration is needed, only a
-//  SchemaVN + MigrationStage are added, no structural rework.
+//  Versioned SwiftData schema + migration plan. Most changes ride
+//  automatic lightweight migration; V4 adds an explicit lightweight
+//  stage and marker entity so index-only changes are also materialized
+//  in existing stores.
 //  Also surfaces the in-memory fallback flag so AppRoot can warn
 //  the user instead of silently losing all persistence.
 //
@@ -52,7 +51,7 @@ enum SchemaV2: VersionedSchema {
     }
 }
 
-/// Current schema version (V3). Marks the removal of the warm-up set
+/// Schema version V3. Marks the removal of the warm-up set
 /// kind: the stored `kindRaw` attribute was dropped from `WorkoutSet`
 /// and `TemplateSet`. Attribute removal is lightweight-compatible —
 /// Core Data drops the column during automatic migration, the same
@@ -74,14 +73,49 @@ enum SchemaV3: VersionedSchema {
     }
 }
 
-/// Migration plan covering V1 → V2 → V3. Every change so far —
-/// including the V3 `kindRaw` attribute drop — is handled by
-/// SwiftData's automatic lightweight migration, so no explicit
-/// `MigrationStage` entries are needed. Add a `.lightweight` /
-/// `.custom` MigrationStage here the day one is required.
+/// Deliberately empty in normal use. SwiftData excludes index metadata
+/// from its schema checksum, so this V4-only entity gives the index
+/// migration a real model delta and ensures existing stores are upgraded.
+/// Keep it in every schema after V4; no rows need to be inserted.
+@Model
+private final class SchemaV4IndexMigrationMarker {
+    var generation: Int = 4
+
+    init() {}
+}
+
+/// Current schema version (V4). Adds targeted WorkoutSession indexes
+/// for date ranges, external UUID lookups, and active-draft ordering.
+enum SchemaV4: VersionedSchema {
+    static var versionIdentifier: Schema.Version { .init(4, 0, 0) }
+
+    static var models: [any PersistentModel.Type] {
+        [
+            WorkoutSession.self,
+            Exercise.self,
+            WorkoutSet.self,
+            WorkoutTemplate.self,
+            TemplateExercise.self,
+            TemplateSet.self,
+            ExerciseCatalogItem.self,
+            BodyWeightEntry.self,
+            SchemaV4IndexMigrationMarker.self,
+        ]
+    }
+}
+
+/// Migration plan covering V1 → V2 → V3 → V4. V4 is explicit because
+/// its performance indexes alone would not change the schema checksum.
 enum VivobodyMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self] }
-    static var stages: [MigrationStage] { [] }
+    static var schemas: [any VersionedSchema.Type] {
+        [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self]
+    }
+
+    static var stages: [MigrationStage] {
+        [
+            .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self),
+        ]
+    }
 }
 
 /// Set to true when the on-disk store couldn't be opened and the

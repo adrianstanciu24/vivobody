@@ -131,7 +131,7 @@ struct TemplatePrefillTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     private func makeContext() throws -> ModelContext {
-        let schema = Schema(SchemaV3.models, version: SchemaV3.versionIdentifier)
+        let schema = Schema(SchemaV4.models, version: SchemaV4.versionIdentifier)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
         return ModelContext(container)

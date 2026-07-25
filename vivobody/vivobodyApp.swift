@@ -17,7 +17,7 @@ struct vivobodyApp: App {
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
     private let container: ModelContainer? = {
-        let schema = Schema(SchemaV3.models, version: SchemaV3.versionIdentifier)
+        let schema = Schema(SchemaV4.models, version: SchemaV4.versionIdentifier)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
             return try ModelContainer(

@@ -48,7 +48,12 @@ nonisolated struct ComparableTonnageSummary: Hashable, Sendable {
 
 @Model
 final class WorkoutSession: Identifiable {
-    #Index<WorkoutSession>([\.completedAt])
+    #Index<WorkoutSession>(
+        [\.completedAt],
+        [\.startedAt],
+        [\.id],
+        [\.completedAt, \.startedAt]
+    )
     /// Stable UUID for SwiftUI `.sheet(item:)` and for distinguishing
     /// sessions in history lists. @Model classes also carry an
     /// internal `persistentModelID`; we keep our own UUID so external
