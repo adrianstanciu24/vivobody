@@ -53,9 +53,13 @@ struct UpNext {
         }
     }
 
+    /// `load` accepts an already-computed training-load report (the
+    /// SessionAnalytics cache) so per-render callers skip the archive
+    /// replay; when nil the report is derived from `sessions`.
     static func compute(
         templates: [WorkoutTemplate],
         sessions: [WorkoutSession],
+        load: TrainingLoadReport? = nil,
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> UpNext {
@@ -80,7 +84,8 @@ struct UpNext {
         // disagree.
         let todays = pinned(at: 0)
         if let pick = todays.first {
-            let easeOff = sessions.trainingLoad(now: now, calendar: calendar).verdict == .high
+            let report = load ?? sessions.trainingLoad(now: now, calendar: calendar)
+            let easeOff = report.verdict == .high
             return UpNext(kind: .scheduled(template: pick, more: todays.count - 1, easeOff: easeOff))
         }
 

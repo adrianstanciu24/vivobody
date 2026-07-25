@@ -28,18 +28,21 @@ extension TodayScreen {
         }
     }
 
-    /// Calendar days on which the user has at least one archived
+    /// Calendar days in the recent window with at least one archived
     /// session. Drives the StreakCalendar fills.
     var workoutDates: Set<Date> {
-        Set(completedSessions.map {
+        Set(recentSessions.map {
             Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt)
         })
     }
 
     /// Calendar days on which a PR was set. Passed to StreakCalendar
-    /// so PR dots can pulsate.
+    /// so PR dots can pulsate. PR-session membership is the cached
+    /// archive walk (see `ArchiveOverview.prSessionIDs`), joined to
+    /// the recent window here.
     var prDates: Set<Date> {
-        Set(completedSessions.filter { prSessionIDs.contains($0.id) }
+        let prIDs = appState.analytics.prSessionIDs
+        return Set(recentSessions.filter { prIDs.contains($0.id) }
             .map { Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
@@ -52,30 +55,8 @@ extension TodayScreen {
     /// the live PR-celebration overlay. When true, the Volume stat on
     /// the Last workout strip wears the completion accent.
     var lastWorkoutHasPR: Bool {
-        guard let lastID = completedSessions.first?.id else { return false }
-        return prSessionIDs.contains(lastID)
-    }
-
-    /// IDs of sessions in which at least one exercise hit a new
-    /// all-time strength record at the moment it was logged. Dynamic
-    /// strength compares effective resistance then reps at equal load,
-    /// isometric strength compares hold duration, and other modalities opt out. Walks the
-    /// archive oldest-first by stable exercise identity. Matches
-    /// `HistoryScreen.sessionsWithPR` exactly.
-    var prSessionIDs: Set<UUID> {
-        var bestByExercise: [String: StrengthPerformance] = [:]
-        var prIDs: Set<UUID> = []
-        for session in completedSessions.reversed() {
-            for exercise in session.orderedExercises {
-                guard let performance = exercise.bestStrengthPerformance else { continue }
-                let key = exercise.historyKey
-                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
-                    bestByExercise[key] = performance
-                    prIDs.insert(session.id)
-                }
-            }
-        }
-        return prIDs
+        guard let lastID = latestSession?.id else { return false }
+        return appState.analytics.prSessionIDs.contains(lastID)
     }
 
     // MARK: - Formatters

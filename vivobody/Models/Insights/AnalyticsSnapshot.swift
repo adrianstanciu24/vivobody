@@ -33,6 +33,10 @@ nonisolated struct AnalyticsSnapshot: Sendable {
 
 /// One workout detached from SwiftData.
 nonisolated struct AnalyticsSessionSnapshot: Sendable {
+    /// The persistent session identity, carried so archive-level
+    /// reports (e.g. PR-session membership) can be joined back to the
+    /// live rows a screen is showing.
+    let id: UUID
     let startedAt: Date
     let completedAt: Date?
     let bodyweightAtStart: Double
@@ -53,6 +57,7 @@ nonisolated struct AnalyticsSessionSnapshot: Sendable {
             ? bodyweight
             : ExerciseLoad.unknownBodyweight
 
+        id = session.id
         startedAt = session.startedAt
         completedAt = session.completedAt
         bodyweightAtStart = sanitizedBodyweight
@@ -65,11 +70,13 @@ nonisolated struct AnalyticsSessionSnapshot: Sendable {
     }
 
     nonisolated init(
+        id: UUID = UUID(),
         startedAt: Date,
         completedAt: Date?,
         bodyweightAtStart: Double,
         exercises: [AnalyticsExerciseSnapshot]
     ) {
+        self.id = id
         self.startedAt = startedAt
         self.completedAt = completedAt
         self.bodyweightAtStart = bodyweightAtStart
@@ -172,6 +179,19 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
             reps: set.reps,
             duration: set.duration
         )
+    }
+
+    /// Best completed record performance for this exercise under its
+    /// snapshotted semantic kind — the snapshot twin of
+    /// `Exercise.bestStrengthPerformance`, so PR-session membership
+    /// computed off the model graph matches the live detector.
+    nonisolated var bestStrengthPerformance: StrengthPerformance? {
+        sets.lazy
+            .compactMap { strengthPerformance(for: $0) }
+            .reduce(nil as StrengthPerformance?) { best, candidate in
+                guard let best else { return candidate }
+                return candidate.beats(best) ? candidate : best
+            }
     }
 
     /// The same modality/load-aware representative used by history and

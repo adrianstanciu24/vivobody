@@ -23,7 +23,7 @@ import Foundation
 /// workout. Consecutive *days* would reset to 1 on every rest day,
 /// which is meaningless for strength training — weeks-in-a-row is how
 /// lifters actually think about showing up.
-struct WorkoutStreak: Hashable {
+nonisolated struct WorkoutStreak: Hashable, Sendable {
     /// Weeks in a row ending at this week (or last week, so the
     /// streak doesn't read as broken before you've trained this week).
     let current: Int
@@ -31,6 +31,57 @@ struct WorkoutStreak: Hashable {
     let longest: Int
 
     static let none = WorkoutStreak(current: 0, longest: 0)
+
+    /// The single streak implementation, shared by the live-model
+    /// array extension and the background archive overview so the two
+    /// can never drift.
+    static func compute(
+        dates: [Date],
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> WorkoutStreak {
+        let weekStarts = Set(dates.compactMap { date in
+            calendar.dateInterval(of: .weekOfYear, for: date)?.start
+        }).sorted()
+
+        guard !weekStarts.isEmpty else { return .none }
+
+        // Longest run of consecutive weeks.
+        var longest = 1
+        var run = 1
+        for i in 1..<weekStarts.count {
+            if let nextWeek = calendar.date(byAdding: .weekOfYear, value: 1, to: weekStarts[i - 1]),
+               calendar.isDate(nextWeek, inSameDayAs: weekStarts[i]) {
+                run += 1
+                longest = Swift.max(longest, run)
+            } else {
+                run = 1
+            }
+        }
+
+        // Current run: anchored at this week, or last week so the
+        // streak survives until the current week elapses.
+        let weekSet = Set(weekStarts)
+        var current = 0
+        if let thisWeek = calendar.dateInterval(of: .weekOfYear, for: now)?.start {
+            let lastWeek = calendar.date(byAdding: .weekOfYear, value: -1, to: thisWeek)
+            var anchor: Date?
+            if weekSet.contains(thisWeek) {
+                anchor = thisWeek
+            } else if let lastWeek, weekSet.contains(lastWeek) {
+                anchor = lastWeek
+            }
+            if var cursor = anchor {
+                while weekSet.contains(cursor) {
+                    current += 1
+                    guard let prev = calendar.date(byAdding: .weekOfYear, value: -1, to: cursor) else { break }
+                    cursor = prev
+                }
+            }
+        }
+
+        return WorkoutStreak(current: current, longest: Swift.max(longest, current))
+    }
 }
 
 // MARK: - Milestone
@@ -38,7 +89,7 @@ struct WorkoutStreak: Hashable {
 /// One lifetime-progress badge showing the user's standing against
 /// the next threshold. The progress value always matches the visible
 /// ratio, so "84 / 100" renders as 84% filled.
-struct Milestone: Identifiable, Hashable {
+nonisolated struct Milestone: Identifiable, Hashable, Sendable {
     let id = UUID()
     let icon: String
     /// Silkscreen category legend — "Workouts", "Volume", "PRs".
@@ -56,7 +107,7 @@ struct Milestone: Identifiable, Hashable {
 // MARK: - Monthly recap
 
 /// The current calendar month's training recap.
-struct MonthlyRecap: Hashable {
+nonisolated struct MonthlyRecap: Hashable, Sendable {
     /// Full month name, e.g. "June".
     let monthLabel: String
     let workouts: Int
@@ -71,7 +122,7 @@ struct MonthlyRecap: Hashable {
 
 // MARK: - ExerciseProgress record helpers
 
-extension ExerciseProgress {
+nonisolated extension ExerciseProgress {
     /// The point at which this exercise's *standing* record was set.
     /// Points are chronological ascending and `isStrengthPR` flags each
     /// running-max moment, so the last flagged point is when today's
@@ -97,104 +148,32 @@ extension Array where Element == WorkoutSession {
     /// "Training since May 2026 · 13 months". Nil when there's no
     /// completed history yet.
     var trainingAgeText: String? {
-        guard let since = trainingSince else { return nil }
-        let cal = Calendar.current
-        let now = Date()
-        let sinceLabel = Self.monthYearFormatter.string(from: since)
-
-        let startDay = cal.startOfDay(for: since)
-        let nowDay = cal.startOfDay(for: now)
-        let months = cal.dateComponents([.month], from: startDay, to: nowDay).month ?? 0
-
-        let age: String
-        if months >= 12 {
-            let years = months / 12
-            let remMonths = months % 12
-            age = remMonths == 0
-                ? "\(years) \(years == 1 ? "year" : "years")"
-                : "\(years)y \(remMonths)mo"
-        } else if months >= 1 {
-            age = "\(months) \(months == 1 ? "month" : "months")"
-        } else {
-            let days = cal.dateComponents([.day], from: startDay, to: nowDay).day ?? 0
-            age = "\(days) \(days == 1 ? "day" : "days")"
-        }
-        return "Training since \(sinceLabel) · \(age)"
+        JourneyFormatting.trainingAgeText(since: trainingSince)
     }
 
     /// Consistency as weeks-in-a-row (see `WorkoutStreak`).
     var workoutStreak: WorkoutStreak {
-        let cal = Calendar.current
-        let weekStarts = Set(compactMap { session -> Date? in
-            let date = session.completedAt ?? session.startedAt
-            return cal.dateInterval(of: .weekOfYear, for: date)?.start
-        }).sorted()
-
-        guard !weekStarts.isEmpty else { return .none }
-
-        // Longest run of consecutive weeks.
-        var longest = 1
-        var run = 1
-        for i in 1..<weekStarts.count {
-            if let nextWeek = cal.date(byAdding: .weekOfYear, value: 1, to: weekStarts[i - 1]),
-               cal.isDate(nextWeek, inSameDayAs: weekStarts[i]) {
-                run += 1
-                longest = Swift.max(longest, run)
-            } else {
-                run = 1
-            }
-        }
-
-        // Current run: anchored at this week, or last week so the
-        // streak survives until the current week elapses.
-        let weekSet = Set(weekStarts)
-        var current = 0
-        if let thisWeek = cal.dateInterval(of: .weekOfYear, for: Date())?.start {
-            let lastWeek = cal.date(byAdding: .weekOfYear, value: -1, to: thisWeek)
-            var anchor: Date?
-            if weekSet.contains(thisWeek) {
-                anchor = thisWeek
-            } else if let lastWeek, weekSet.contains(lastWeek) {
-                anchor = lastWeek
-            }
-            if var cursor = anchor {
-                while weekSet.contains(cursor) {
-                    current += 1
-                    guard let prev = cal.date(byAdding: .weekOfYear, value: -1, to: cursor) else { break }
-                    cursor = prev
-                }
-            }
-        }
-
-        return WorkoutStreak(current: current, longest: Swift.max(longest, current))
+        WorkoutStreak.compute(dates: map { $0.completedAt ?? $0.startedAt })
     }
 
     /// Per-exercise progress ordered by the recency of its standing
     /// record — freshest achievements first. Reuses `progressByExercise`
     /// (≥2 data points), the same source as the lifetime PR count.
     var personalRecords: [ExerciseProgress] {
-        progressByExercise.filter { $0.recordDate != nil }.sorted {
-            ($0.recordDate ?? .distantPast) > ($1.recordDate ?? .distantPast)
-        }
+        progressByExercise.standingRecords
     }
 
     /// Lifetime milestone badges across four categories. `prCount`
     /// is passed in (callers already compute it for the odometer) so
     /// this stays a single pass per category.
     func milestones(unit: WeightUnit, prCount: Int) -> [Milestone] {
-        let workouts = count
-        let tonnage = comparableTonnageSummary
-        let longestStreak = workoutStreak.longest
-
-        return [
-            countMilestone(icon: "flame.fill", legend: "Workouts",
-                           value: workouts, thresholds: [10, 50, 100, 250, 500, 1000]),
-            volumeMilestone(tonnage: tonnage, unit: unit),
-            countMilestone(icon: "trophy.fill", legend: "PRs",
-                           value: prCount, thresholds: [5, 10, 25, 50, 100]),
-            countMilestone(icon: "calendar", legend: "Week streak",
-                           value: longestStreak, thresholds: [4, 8, 12, 26, 52]),
-        ]
+        JourneyMilestones.build(
+            workouts: count,
+            tonnage: comparableTonnageSummary,
+            longestStreak: workoutStreak.longest,
+            prCount: prCount,
+            unit: unit
+        )
     }
 
     /// Current calendar month's recap. PRs are the records *set this
@@ -232,9 +211,95 @@ extension Array where Element == WorkoutSession {
         )
     }
 
-    // MARK: - Milestone builders
+    // MARK: - Formatters
 
-    private func countMilestone(icon: String, legend: String, value: Int, thresholds: [Int]) -> Milestone {
+    private static let monthFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "LLLL"
+        return f
+    }()
+}
+
+// MARK: - Standing records
+
+nonisolated extension Array where Element == ExerciseProgress {
+    /// Progress series ordered by the recency of their standing
+    /// record — freshest achievements first. Works over any cached
+    /// progress list (e.g. `SessionAnalytics.progress`) so screens
+    /// don't have to re-walk the archive.
+    var standingRecords: [ExerciseProgress] {
+        filter { $0.recordDate != nil }.sorted {
+            ($0.recordDate ?? .distantPast) > ($1.recordDate ?? .distantPast)
+        }
+    }
+}
+
+// MARK: - Journey formatting
+
+/// Date-based copy for the journey header, shared by the live-model
+/// extension and cached-overview consumers.
+enum JourneyFormatting {
+    /// "Training since May 2026 · 13 months". Nil without history.
+    static func trainingAgeText(
+        since: Date?,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> String? {
+        guard let since else { return nil }
+        let sinceLabel = monthYearFormatter.string(from: since)
+
+        let startDay = calendar.startOfDay(for: since)
+        let nowDay = calendar.startOfDay(for: now)
+        let months = calendar.dateComponents([.month], from: startDay, to: nowDay).month ?? 0
+
+        let age: String
+        if months >= 12 {
+            let years = months / 12
+            let remMonths = months % 12
+            age = remMonths == 0
+                ? "\(years) \(years == 1 ? "year" : "years")"
+                : "\(years)y \(remMonths)mo"
+        } else if months >= 1 {
+            age = "\(months) \(months == 1 ? "month" : "months")"
+        } else {
+            let days = calendar.dateComponents([.day], from: startDay, to: nowDay).day ?? 0
+            age = "\(days) \(days == 1 ? "day" : "days")"
+        }
+        return "Training since \(sinceLabel) · \(age)"
+    }
+
+    private static let monthYearFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "MMM yyyy"
+        return f
+    }()
+}
+
+// MARK: - Milestone builders
+
+/// Threshold-badge construction from lifetime scalars, so both the
+/// live-model extension and the cached archive overview produce the
+/// exact same tiles.
+enum JourneyMilestones {
+    static func build(
+        workouts: Int,
+        tonnage: ComparableTonnageSummary,
+        longestStreak: Int,
+        prCount: Int,
+        unit: WeightUnit
+    ) -> [Milestone] {
+        [
+            countMilestone(icon: "flame.fill", legend: "Workouts",
+                           value: workouts, thresholds: [10, 50, 100, 250, 500, 1000]),
+            volumeMilestone(tonnage: tonnage, unit: unit),
+            countMilestone(icon: "trophy.fill", legend: "PRs",
+                           value: prCount, thresholds: [5, 10, 25, 50, 100]),
+            countMilestone(icon: "calendar", legend: "Week streak",
+                           value: longestStreak, thresholds: [4, 8, 12, 26, 52]),
+        ]
+    }
+
+    private static func countMilestone(icon: String, legend: String, value: Int, thresholds: [Int]) -> Milestone {
         if let next = thresholds.first(where: { value < $0 }) {
             return Milestone(
                 icon: icon,
@@ -255,7 +320,7 @@ extension Array where Element == WorkoutSession {
         )
     }
 
-    private func volumeMilestone(
+    private static func volumeMilestone(
         tonnage: ComparableTonnageSummary,
         unit: WeightUnit
     ) -> Milestone {
@@ -300,18 +365,4 @@ extension Array where Element == WorkoutSession {
             achieved: true
         )
     }
-
-    // MARK: - Formatters
-
-    private static let monthYearFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "MMM yyyy"
-        return f
-    }()
-
-    private static let monthFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "LLLL"
-        return f
-    }()
 }

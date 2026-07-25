@@ -21,7 +21,6 @@
 
 import VivoKit
 import SwiftUI
-import SwiftData
 
 struct AmbientForge: View {
     /// 0 = cold idle ember, 1 = forge running hot. Eased internally so
@@ -239,56 +238,6 @@ struct AmbientForge: View {
     ]
 }
 
-// MARK: - Shared warmth signal
-
-extension Array where Element == WorkoutSession {
-    /// Warmth (0–1) for the ambient forge: hottest right after training
-    /// and while a streak is alive, cooling toward a low idle glow as
-    /// days pass. Floored well above zero — the instrument is always on.
-    /// The single source of truth so every tab burns at one temperature.
-    var forgeWarmth: Double {
-        let streakBoost = Swift.min(1.0, Double(forgeStreakDays) / 7.0)
-        let recency: Double
-        if let days = daysSinceForgeWorkout {
-            recency = Swift.max(0.0, 1.0 - Double(days) / 5.0)
-        } else {
-            recency = 0.0
-        }
-        let trainedTodayBoost = daysSinceForgeWorkout == 0 ? 0.15 : 0.0
-        return Swift.min(1.0, Swift.max(0.34, 0.5 * recency + 0.5 * streakBoost + trainedTodayBoost))
-    }
-
-    /// Consecutive training days counting back from today — forgiving of
-    /// an unworked morning by starting from yesterday when needed.
-    private var forgeStreakDays: Int {
-        let cal = Calendar.current
-        let days = Set(map { cal.startOfDay(for: $0.completedAt ?? $0.startedAt) })
-        guard !days.isEmpty else { return 0 }
-        var cursor = cal.startOfDay(for: Date())
-        if !days.contains(cursor) {
-            cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
-        }
-        var count = 0
-        while days.contains(cursor) {
-            count += 1
-            cursor = cal.date(byAdding: .day, value: -1, to: cursor) ?? cursor
-        }
-        return count
-    }
-
-    /// Whole days since the most recent session, or nil when empty.
-    private var daysSinceForgeWorkout: Int? {
-        let cal = Calendar.current
-        let dates = map { $0.completedAt ?? $0.startedAt }
-        guard let latest = dates.max() else { return nil }
-        return cal.dateComponents(
-            [.day],
-            from: cal.startOfDay(for: latest),
-            to: cal.startOfDay(for: Date())
-        ).day
-    }
-}
-
 // MARK: - Shared backdrop
 
 extension View {
@@ -324,13 +273,15 @@ extension View {
 }
 
 /// Hosts the forge's data dependency so call sites stay a single
-/// modifier: it queries the archived sessions itself and renders the
-/// ember field at the warmth they imply, over the standard black.
+/// modifier: it reads the cached warmth from the shared analytics
+/// (computed once per archive change, see `ForgeWarmth`) and renders
+/// the ember field at that temperature, over the standard black.
+/// Reading the cache instead of querying keeps every backdrop
+/// instance free of its own complete-history fetch.
 private struct ForgeBackground: View {
     var intensity: Double = 0.9
 
-    @Query(filter: #Predicate<WorkoutSession> { $0.completedAt != nil })
-    private var sessions: [WorkoutSession]
+    @Environment(\.sessionAnalytics) private var analytics
 
     var body: some View {
         ZStack {
@@ -338,7 +289,10 @@ private struct ForgeBackground: View {
             // AmbientForge adapts its own compositing per appearance —
             // an additive ember on the black stage, a soft warm amber
             // wash on the light surface — so it renders in both.
-            AmbientForge(warmth: sessions.forgeWarmth, intensity: intensity)
+            AmbientForge(
+                warmth: analytics?.forgeWarmth ?? ForgeWarmth.idle,
+                intensity: intensity
+            )
         }
     }
 }

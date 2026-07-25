@@ -32,20 +32,72 @@ import SwiftData
 struct HistoryScreen: View {
     @Bindable var appState: AppState
 
+    /// How many archived sessions are currently materialized. Grows a
+    /// page at a time as the user scrolls toward the bottom, so the
+    /// list never loads the whole archive up front. Rebuilding
+    /// `HistoryContent` with the new limit re-creates its @Query with
+    /// the larger fetch limit while the scroll position holds.
+    @State private var limit = HistoryScreen.pageSize
+
+    static let pageSize = 60
+
+    var body: some View {
+        HistoryContent(appState: appState, limit: limit) {
+            limit += Self.pageSize
+        }
+    }
+}
+
+/// The History tab's real body. Split from `HistoryScreen` so the
+/// session query can be reconstructed with a growing fetch limit —
+/// a view cannot rebuild its own @Query from its own @State.
+struct HistoryContent: View {
+    var appState: AppState
+
+    /// Current page ceiling; `sessions.count == limit` means the
+    /// archive probably has more to load.
+    let limit: Int
+    let loadMore: () -> Void
+
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
 
     var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
-    /// Every completed (archived) session. SwiftData orders results
-    /// by completedAt descending, so the most-recent workout sits
-    /// at the top. Mid-flight sessions are still un-inserted and
-    /// therefore invisible to this query.
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .reverse)]
-    )
-    var sessions: [WorkoutSession]
+    /// The newest `limit` completed (archived) sessions, most-recent
+    /// first. Mid-flight sessions are still un-inserted and therefore
+    /// invisible to this query.
+    @Query var sessions: [WorkoutSession]
+
+    /// Sessions from the start of last week onward (with a one-day
+    /// pad for boundary-spanning workouts) — everything the weekly
+    /// hero needs, without touching the older archive.
+    @Query var recentSessions: [WorkoutSession]
+
+    init(appState: AppState, limit: Int, loadMore: @escaping () -> Void) {
+        self.appState = appState
+        self.limit = limit
+        self.loadMore = loadMore
+
+        var paged = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        paged.fetchLimit = limit
+        _sessions = Query(paged)
+
+        let calendar = Calendar.current
+        let thisWeekStart = calendar
+            .dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
+        let cutoff = calendar
+            .date(byAdding: .day, value: -8, to: thisWeekStart) ?? thisWeekStart
+        _recentSessions = Query(
+            filter: #Predicate<WorkoutSession> {
+                $0.completedAt != nil && $0.startedAt >= cutoff
+            },
+            sort: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+    }
 
     var body: some View {
         Group {
@@ -58,6 +110,7 @@ struct HistoryScreen: View {
         .forgeBackground()
     }
 
+    var hasMoreSessions: Bool { sessions.count == limit }
 }
 
 #Preview {

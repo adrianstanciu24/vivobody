@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Section view builders and derived/computed properties for
-//  HistoryScreen, extracted from the main file. The body and
+//  HistoryContent, extracted from the main file. The body and
 //  stored properties remain in HistoryScreen.swift; the rendering
 //  helpers and derived state live here.
 //
@@ -12,7 +12,7 @@ import VivoKit
 import SwiftUI
 import SwiftData
 
-extension HistoryScreen {
+extension HistoryContent {
     // MARK: - Empty state
 
     var emptyState: some View {
@@ -33,7 +33,7 @@ extension HistoryScreen {
             LazyVStack(alignment: .leading, spacing: Space.section) {
                 if showsWeeklyHero {
                     WeeklyHero(
-                        comparison: sessions.weeklyComparison(),
+                        comparison: recentSessions.weeklyComparison(),
                         averageRIR: thisWeekAverageRIR,
                         workoutDays: workoutDays,
                         prDays: prDays,
@@ -51,6 +51,18 @@ extension HistoryScreen {
                     )
                     .settleIn(index + 1)
                 }
+
+                // Keyset-style paging: the trigger materializes only
+                // once the lazy stack actually reaches the bottom of
+                // the loaded window, then the parent raises the fetch
+                // limit by one page.
+                if hasMoreSessions {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, Space.lg)
+                        .onAppear(perform: loadMore)
+                        .accessibilityLabel("Loading older workouts")
+                }
             }
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
@@ -66,7 +78,7 @@ extension HistoryScreen {
     /// in the current or prior week. Avoids a "0 / 0 / 0" tile
     /// for brand-new users on session #1.
     var showsWeeklyHero: Bool {
-        sessions.weeklyComparison().hasAnyActivity
+        recentSessions.weeklyComparison().hasAnyActivity
     }
 
     /// Grouped sessions, ordered most-recent bucket first. Buckets:
@@ -77,43 +89,27 @@ extension HistoryScreen {
     }
 
     /// IDs of sessions in which at least one exercise hit a new
-    /// all-time strength record at the moment it was logged. Dynamic
-    /// strength compares effective resistance then reps at equal load,
-    /// so machine assistance has the correct inverse polarity; isometric strength compares
-    /// hold duration. Conditioning, mobility, and non-comparable load
-    /// records never produce a strength PR.
+    /// all-time strength record at the moment it was logged — read
+    /// from the shared analytics cache, which performs the archive
+    /// walk once per data change instead of on every render.
     var sessionsWithPR: Set<UUID> {
-        var bestByExercise: [String: StrengthPerformance] = [:]
-        var prIDs: Set<UUID> = []
-
-        // sessions are sorted newest-first; iterate oldest-first.
-        let chronological = sessions.reversed()
-        for session in chronological {
-            for exercise in session.orderedExercises {
-                guard let performance = exercise.bestStrengthPerformance else { continue }
-                let key = exercise.historyKey
-                if bestByExercise[key] == nil || performance.beats(bestByExercise[key]!) {
-                    bestByExercise[key] = performance
-                    prIDs.insert(session.id)
-                }
-            }
-        }
-        return prIDs
+        appState.analytics.prSessionIDs
     }
 
-    /// Every calendar day (start-of-day) on which at least one
-    /// session was logged. Drives both the streak math and the
-    /// week-cadence strip in the hero.
+    /// Every recent calendar day (start-of-day) on which at least one
+    /// session was logged. Drives the week-cadence strip in the hero,
+    /// which only renders the current week.
     var workoutDays: Set<Date> {
         let calendar = Calendar.current
-        return Set(sessions.map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
+        return Set(recentSessions.map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
     /// Days (start-of-day) on which a PR was set. Passed to the
     /// cadence strip so PR dots can pulsate.
     var prDays: Set<Date> {
         let calendar = Calendar.current
-        return Set(sessions.filter { sessionsWithPR.contains($0.id) }
+        let prIDs = sessionsWithPR
+        return Set(recentSessions.filter { prIDs.contains($0.id) }
             .map { calendar.startOfDay(for: $0.completedAt ?? $0.startedAt) })
     }
 
@@ -127,7 +123,7 @@ extension HistoryScreen {
 
         var rirSum = 0
         var rirCount = 0
-        for session in sessions {
+        for session in recentSessions {
             let date = session.completedAt ?? session.startedAt
             guard date >= weekRange.start && date < weekRange.end else { continue }
             for exercise in session.exercises

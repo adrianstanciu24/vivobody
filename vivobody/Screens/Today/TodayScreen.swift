@@ -27,20 +27,50 @@ struct TodayScreen: View {
 
     var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
-    /// All archived sessions, most-recent first. Drives the streak
-    /// calendar, the "X this month" stat, and the "Last Workout"
-    /// card. SwiftUI re-renders this screen automatically when a new
-    /// session is inserted into the context (i.e. on workout archive).
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .reverse)]
-    )
-    var completedSessions: [WorkoutSession]
+    /// Recent archived sessions (a ~45-day window), most-recent
+    /// first. Drives the streak calendar, the "X this month" stat,
+    /// and the Up Next trained-today check. Deliberately windowed —
+    /// lifetime aggregates (streak, PR sessions, forge warmth) come
+    /// from the shared analytics cache, so Today never has to fault
+    /// the whole archive. SwiftUI re-renders this screen automatically
+    /// when a new session is inserted into the context.
+    @Query var recentSessions: [WorkoutSession]
+
+    /// The single most recent archived session, regardless of age —
+    /// the "Last Workout" card must survive a long training gap that
+    /// falls outside the recent window.
+    @Query var latestSessions: [WorkoutSession]
+
+    var latestSession: WorkoutSession? { latestSessions.first }
 
     /// All saved templates. Sorted on-the-fly into a most-recently-
     /// used-first list for the chip strip; the raw @Query order
     /// doesn't matter beyond identity.
     @Query var templates: [WorkoutTemplate]
+
+    init(appState: AppState) {
+        self.appState = appState
+
+        // The window is anchored once at view construction. 45 days
+        // comfortably covers the displayed calendar month plus its
+        // leading grid days for any realistic app-resident stretch.
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let cutoff = calendar.date(byAdding: .day, value: -45, to: today) ?? today
+        _recentSessions = Query(
+            filter: #Predicate<WorkoutSession> {
+                $0.completedAt != nil && $0.startedAt >= cutoff
+            },
+            sort: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+
+        var latest = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        latest.fetchLimit = 1
+        _latestSessions = Query(latest)
+    }
 
     /// Frozen on first layout and never updated afterwards. The
     /// scroll container's height shrinks as the large navigation
@@ -70,9 +100,6 @@ struct TodayScreen: View {
     @State private var pendingFreshStart: (() -> Void)?
 
     var body: some View {
-        let analyticsRequest = appState.analytics.requestKey(
-            for: completedSessions
-        )
         ScrollView {
                     // The body leads — your trained figure is the hero
                     // and the readout's subject. The readiness section
@@ -86,10 +113,14 @@ struct TodayScreen: View {
                     // and every consumer (figure, readiness card, the
                     // drill-down boards) derives from this single state.
                     let modelState = appState.analytics.development
-                    let upNext = UpNext.compute(templates: templates, sessions: completedSessions)
+                    let upNext = UpNext.compute(
+                        templates: templates,
+                        sessions: recentSessions,
+                        load: appState.analytics.load
+                    )
                     let outlook = appState.analytics.strength
                     let load = appState.analytics.load
-                    let readiness = completedSessions.readiness(load: load)
+                    let readiness = latestSessions.readiness(load: load)
                     VStack(alignment: .leading, spacing: Space.section) {
                         // The figure and its caption read as one unit: the
                         // portrait, then the line decoding its colours sitting
@@ -165,12 +196,9 @@ struct TodayScreen: View {
             // ambient-confirmation cousin of the workout's haptics.
             Haptics.soft()
         }
-        .task(id: analyticsRequest) {
-            appState.analytics.requestCore(for: completedSessions)
-        }
         .sheet(isPresented: $showStartSheet, onDismiss: runPendingStart) {
             StartWorkoutSheet(
-                lastSession: completedSessions.first,
+                lastSession: latestSession,
                 templates: sortedTemplates,
                 onSelect: queueStart
             )
@@ -199,7 +227,7 @@ struct TodayScreen: View {
     private func queueStart(_ intent: StartIntent) {
         switch intent {
         case .repeatLast:
-            let last = completedSessions.first
+            let last = latestSession
             pendingStart = { appState.workout.startTodaysWorkout(basedOn: last) }
         case .fresh:
             if appState.workout.activeSession != nil {

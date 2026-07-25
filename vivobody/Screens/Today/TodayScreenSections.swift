@@ -27,7 +27,7 @@ extension TodayScreen {
         StagedBodyModel(
             renderHeight: height,
             channels: state.nodeChannels,
-            warmth: completedSessions.forgeWarmth
+            warmth: appState.analytics.forgeWarmth
         )
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
@@ -552,7 +552,7 @@ extension TodayScreen {
     static let pinnedStartBarClearance: CGFloat = 104
 
     var consistencySection: some View {
-        let streak = completedSessions.workoutStreak
+        let streak = appState.analytics.overview.streak
         return VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
                 title: "Consistency",
@@ -630,7 +630,7 @@ extension TodayScreen {
 
     var lastWorkoutSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            if let session = completedSessions.first {
+            if let session = latestSession {
                 SectionHeader(title: "Last workout", trailing: lastWorkoutMeta(for: session))
                 lastWorkoutCard(for: session)
             } else {

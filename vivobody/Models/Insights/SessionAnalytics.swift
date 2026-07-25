@@ -30,6 +30,7 @@ final class SessionAnalytics {
         let progress: [ExerciseProgress]
         let load: TrainingLoadReport
         let lastInstances: [String: LastExerciseInstance]
+        let overview: ArchiveOverview
 
         nonisolated static func make(
             from common: AnalyticsAccumulator,
@@ -56,7 +57,8 @@ final class SessionAnalytics {
                 ),
                 progress: progress,
                 load: common.trainingLoad(now: now),
-                lastInstances: common.lastInstanceByExercise()
+                lastInstances: common.lastInstanceByExercise(),
+                overview: common.archiveOverview(progress: progress, now: now)
             )
         }
     }
@@ -126,6 +128,12 @@ final class SessionAnalytics {
     var lastInstances: [String: LastExerciseInstance] {
         coreReports.lastInstances
     }
+    var overview: ArchiveOverview { coreReports.overview }
+    /// IDs of sessions that set a strength PR when logged — badge
+    /// membership for History rows and Today's calendar/last-workout.
+    var prSessionIDs: Set<UUID> { coreReports.overview.prSessionIDs }
+    /// Cached ambient-forge temperature shared by every tab backdrop.
+    var forgeWarmth: Double { coreReports.overview.forgeWarmth }
 
     var dominance: ExerciseDominanceBoard {
         deepReports?.dominance ?? Self.emptyDeepReports.dominance
@@ -444,6 +452,12 @@ private actor AnalyticsWorker {
             isCancelled: { Task.isCancelled }
         )
         try Task.checkCancellation()
+        let overview = accumulator.archiveOverview(
+            progress: progress,
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
         let reports = SessionAnalytics.CoreReports(
             volume: volume,
             development: development,
@@ -451,7 +465,8 @@ private actor AnalyticsWorker {
             strength: strength,
             progress: progress,
             load: load,
-            lastInstances: lastInstances
+            lastInstances: lastInstances,
+            overview: overview
         )
         return CoreBuild(accumulator: accumulator, reports: reports)
     }

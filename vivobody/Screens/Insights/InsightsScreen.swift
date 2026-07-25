@@ -39,20 +39,28 @@ import SwiftData
 struct InsightsScreen: View {
     @Bindable var appState: AppState
 
-    /// All archived sessions. The shared cache refreshes its core tier
-    /// on data changes and builds Insights-only reports on first entry.
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .reverse)]
-    )
-    private var completedSessions: [WorkoutSession]
+    /// One-row probe: does any archived session exist? Only the empty
+    /// state hangs off this. The reports themselves are requested by
+    /// the shared AnalyticsFeeder (which builds the Insights-only tier
+    /// while this tab is selected), so this screen holds no
+    /// complete-archive query of its own.
+    @Query private var latestSessions: [WorkoutSession]
+
+    private var hasHistory: Bool { latestSessions.first != nil }
+
+    init(appState: AppState) {
+        self.appState = appState
+        var latest = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        latest.fetchLimit = 1
+        _latestSessions = Query(latest)
+    }
 
     var body: some View {
-        let analyticsRequest = appState.analytics.requestKey(
-            for: completedSessions
-        )
         Group {
-            if completedSessions.isEmpty {
+            if !hasHistory {
                 emptyState
             } else if let reports = appState.analytics.insightsReports {
                 if appState.pro.isUnlocked {
@@ -65,13 +73,6 @@ struct InsightsScreen: View {
             }
         }
         .forgeBackground()
-        .task(id: analyticsRequest) {
-            if completedSessions.isEmpty {
-                appState.analytics.requestCore(for: completedSessions)
-            } else {
-                appState.analytics.requestInsights(for: completedSessions)
-            }
-        }
     }
 
     // MARK: - Locked state (free tier)

@@ -69,6 +69,10 @@ struct AppRoot: View {
         @Bindable var pro = appState.pro
 
         tabView
+            // The one complete-archive query in the app. It keeps the
+            // shared analytics cache current so tabs and backdrops read
+            // reports instead of re-querying the archive themselves.
+            .background(AnalyticsFeeder(appState: appState))
             .preferredColorScheme(appearance.colorScheme)
             .tint(Tint.primary)
             .miniBarAccessory(

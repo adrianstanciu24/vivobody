@@ -23,14 +23,26 @@ import SwiftData
 struct MeScreen: View {
     @Bindable var appState: AppState
 
-    /// All archived sessions. Drives the stats header — we sum
-    /// across the full set rather than relying on cached counters,
-    /// so the totals stay correct after any edit/delete in History.
-    @Query(
-        filter: #Predicate<WorkoutSession> { $0.completedAt != nil },
-        sort: [SortDescriptor(\.completedAt, order: .reverse)]
-    )
-    private var completedSessions: [WorkoutSession]
+    /// One-row probe: does any archived session exist? Drives the
+    /// empty-state gates instantly. The stats themselves come from the
+    /// shared analytics overview — recomputed on every archive change
+    /// (so totals stay correct after any edit/delete in History)
+    /// without this screen faulting every exercise and set.
+    @Query private var latestSessions: [WorkoutSession]
+
+    private var hasHistory: Bool { latestSessions.first != nil }
+
+    private var overview: ArchiveOverview { appState.analytics.overview }
+
+    init(appState: AppState) {
+        self.appState = appState
+        var latest = FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        latest.fetchLimit = 1
+        _latestSessions = Query(latest)
+    }
 
     /// Body-weight log. Sorted reverse-chronological for the card's
     /// "latest" lookup; the sparkline normalizes order itself.
@@ -50,31 +62,35 @@ struct MeScreen: View {
     @State private var logTarget: BodyWeightLogTarget? = nil
 
     var body: some View {
-        let analyticsRequest = appState.analytics.requestKey(
-            for: completedSessions
-        )
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                statsSection
-                    .settleIn(0)
+            // The overview lands one worker pass after launch; until
+            // then a populated archive shows a quiet placeholder
+            // instead of momentary zeroed odometers.
+            if hasHistory && !appState.analytics.hasCoreReports {
+                loadingState
+            } else {
+                VStack(alignment: .leading, spacing: 0) {
+                    statsSection
+                        .settleIn(0)
 
-                GroupSeparator()
-                milestonesSection
-                    .settleIn(1)
-                GroupSeparator()
-                personalRecordsSection
-                    .settleIn(2)
-                GroupSeparator()
-                bodyWeightSection
-                    .settleIn(3)
-                GroupSeparator()
-                monthlyRecapSection
-                    .settleIn(4)
+                    GroupSeparator()
+                    milestonesSection
+                        .settleIn(1)
+                    GroupSeparator()
+                    personalRecordsSection
+                        .settleIn(2)
+                    GroupSeparator()
+                    bodyWeightSection
+                        .settleIn(3)
+                    GroupSeparator()
+                    monthlyRecapSection
+                        .settleIn(4)
+                }
+                .padding(.top, Space.sm)
+                // Extra tail so the last row clears the floating tab bar
+                // at rest instead of peeking out from under it.
+                .padding(.bottom, Space.section + Space.md)
             }
-            .padding(.top, Space.sm)
-            // Extra tail so the last row clears the floating tab bar
-            // at rest instead of peeking out from under it.
-            .padding(.bottom, Space.section + Space.md)
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
@@ -93,9 +109,14 @@ struct MeScreen: View {
         .sheet(item: $logTarget) { target in
             BodyWeightLogSheet(target: target)
         }
-        .task(id: analyticsRequest) {
-            appState.analytics.requestCore(for: completedSessions)
-        }
+    }
+
+    private var loadingState: some View {
+        ProgressView()
+            .controlSize(.large)
+            .frame(maxWidth: .infinity)
+            .padding(.top, Space.xxl)
+            .accessibilityLabel("Loading your training totals")
     }
 
     // MARK: - Body weight
@@ -228,10 +249,10 @@ struct MeScreen: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
                 title: "Your journey",
-                trailing: completedSessions.isEmpty ? nil : "All time"
+                trailing: hasHistory ? "All time" : nil
             )
 
-            if completedSessions.isEmpty {
+            if !hasHistory {
                 emptyJourney
             } else {
                 VStack(alignment: .leading, spacing: Space.md) {
@@ -242,7 +263,9 @@ struct MeScreen: View {
                         valueFont: Typography.metricHero
                     )
                     lifetimeLine
-                    if let ageText = completedSessions.trainingAgeText {
+                    if let ageText = JourneyFormatting.trainingAgeText(
+                        since: overview.trainingSince
+                    ) {
                         Text(ageText)
                             .font(Typography.caption)
                             .foregroundStyle(Ink.tertiary)
@@ -263,7 +286,13 @@ struct MeScreen: View {
             SectionHeader(title: "Milestones")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Space.sm) {
-                    let milestones = completedSessions.milestones(unit: weightUnit, prCount: personalRecords)
+                    let milestones = JourneyMilestones.build(
+                        workouts: overview.totalWorkouts,
+                        tonnage: overview.lifetimeTonnage,
+                        longestStreak: overview.streak.longest,
+                        prCount: personalRecords,
+                        unit: weightUnit
+                    )
                     // Positional identity: Milestone ids are freshly minted
                     // on every recompute, which would re-fire powerOn.
                     ForEach(Array(milestones.enumerated()), id: \.offset) { index, milestone in
@@ -282,7 +311,7 @@ struct MeScreen: View {
     /// history but no exercise tracked across two sessions yet.
     @ViewBuilder
     private var personalRecordsSection: some View {
-        let records = completedSessions.personalRecords
+        let records = appState.analytics.progress.standingRecords
         VStack(alignment: .leading, spacing: Space.md) {
             if records.isEmpty {
                 SectionHeader(title: "Personal records")
@@ -313,7 +342,7 @@ struct MeScreen: View {
     // MARK: - This month
 
     private var monthlyRecapSection: some View {
-        let recap = completedSessions.monthlyRecap
+        let recap = overview.monthlyRecap
         return VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "This month", trailing: recap.monthLabel)
             StatStrip(stats: [
@@ -377,11 +406,9 @@ struct MeScreen: View {
 
     // MARK: - Derived
 
-    private var totalWorkouts: Int { completedSessions.count }
+    private var totalWorkouts: Int { overview.totalWorkouts }
 
-    private var totalSets: Int {
-        completedSessions.reduce(0) { $0 + $1.totalSets }
-    }
+    private var totalSets: Int { overview.totalSets }
 
     /// Count of personal records the user currently holds — one per
     /// tracked lift across the archive (each exercise's all-time best
@@ -392,7 +419,7 @@ struct MeScreen: View {
     }
 
     private var lifetimeTonnage: ComparableTonnageSummary {
-        completedSessions.comparableTonnageSummary
+        overview.lifetimeTonnage
     }
 
     /// Volume label tuned for the lifetime totals card. The
