@@ -76,7 +76,7 @@ struct ExerciseDetailScreen: View {
 
     /// Current bodyweight is used only for an unlogged catalog default.
     /// Historical points carry their own session snapshots.
-    @Query(sort: \BodyWeightEntry.date, order: .reverse)
+    @Query
     var bodyWeightEntries: [BodyWeightEntry]
 
     @AppStorage(SettingsKey.weightUnit)
@@ -85,8 +85,23 @@ struct ExerciseDetailScreen: View {
     var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
     var currentBodyweight: Double {
-        bodyWeightEntries.first(where: { $0.weight > 0 })?.weight
+        bodyWeightEntries.first?.weight
             ?? ExerciseLoad.unknownBodyweight
+    }
+
+    init(
+        item: ExerciseCatalogItem,
+        onPickAndDismiss: ((ExerciseCatalogItem) -> Void)?
+    ) {
+        self.item = item
+        self.onPickAndDismiss = onPickAndDismiss
+
+        var latestBodyweight = FetchDescriptor<BodyWeightEntry>(
+            predicate: #Predicate { $0.weight > 0 },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        latestBodyweight.fetchLimit = 1
+        _bodyWeightEntries = Query(latestBodyweight)
     }
 
     @State private var editorTarget: CatalogEditorTarget?

@@ -29,8 +29,17 @@ struct OnboardingScreen: View {
 
     @Environment(\.modelContext) private var context
 
-    @Query(sort: \BodyWeightEntry.date, order: .reverse)
+    @Query
     private var bodyWeightEntries: [BodyWeightEntry]
+
+    init(onStart: @escaping () -> Void) {
+        self.onStart = onStart
+        var latestBodyweight = FetchDescriptor<BodyWeightEntry>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        latestBodyweight.fetchLimit = 1
+        _bodyWeightEntries = Query(latestBodyweight)
+    }
 
     @AppStorage(SettingsKey.weightUnit)
     private var weightUnitRaw: String = SettingsDefaults.weightUnit
@@ -252,7 +261,7 @@ struct OnboardingScreen: View {
     // MARK: - Setup state
 
     private func hydrate() {
-        if let latest = bodyWeightEntries.latest {
+        if let latest = bodyWeightEntries.first {
             bodyWeight = latest.weight
         }
         bodyWeightStep = weightUnit.bodyWeightStep

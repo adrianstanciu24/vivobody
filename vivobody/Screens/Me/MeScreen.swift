@@ -42,11 +42,19 @@ struct MeScreen: View {
         )
         latest.fetchLimit = 1
         _latestSessions = Query(latest)
+
+        // The card needs only a compact recent sparkline plus the two
+        // newest values for its hero and delta, never the full history.
+        var recentWeights = FetchDescriptor<BodyWeightEntry>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        recentWeights.fetchLimit = 30
+        _bodyWeightEntries = Query(recentWeights)
     }
 
-    /// Body-weight log. Sorted reverse-chronological for the card's
-    /// "latest" lookup; the sparkline normalizes order itself.
-    @Query(sort: \BodyWeightEntry.date, order: .reverse)
+    /// A bounded reverse-chronological window for the card's current
+    /// value, delta, and compact recent sparkline.
+    @Query
     private var bodyWeightEntries: [BodyWeightEntry]
 
     @AppStorage(SettingsKey.weightUnit)
@@ -168,11 +176,13 @@ struct MeScreen: View {
     }
 
     private var bodyWeightPopulatedCard: some View {
-        // Sparkline series is chronological so the line reads
-        // left-to-right as time-forward, matching the detail chart.
-        let sparkValues = bodyWeightEntries.chronological.map(\.weight)
-        let latest = bodyWeightEntries.latest
-        let delta = bodyWeightEntries.latestDelta
+        // The query is newest-first; reverse its bounded window once so
+        // the sparkline reads left-to-right as time-forward.
+        let sparkValues = bodyWeightEntries.reversed().map(\.weight)
+        let latest = bodyWeightEntries.first
+        let delta = bodyWeightEntries.count >= 2
+            ? bodyWeightEntries[0].weight - bodyWeightEntries[1].weight
+            : nil
 
         return HStack(alignment: .center, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {

@@ -5,9 +5,10 @@
 //  Full drill-down on body-weight progress:
 //    • Hero header — current weight + delta chip + meta line
 //    • Prominent Log button — same sheet used from the Me-tab card
-//    • SwiftUI Charts line chart — area-filled, monotone curves
+//    • SwiftUI Charts line chart — area-filled, monotone curves,
+//      weekly sampling for the unbounded All range
 //    • Time-range chips — 1M / 3M / 6M / All (HIG-compliant 44pt)
-//    • Recent table — swipe-to-delete, tap-to-edit
+//    • Recent table — lazy 40-row pages, context-delete, tap-to-edit
 //
 //  Empty state is intentionally light: the user only sees this
 //  screen if they've already logged at least one entry (the Me-tab
@@ -34,6 +35,9 @@ struct BodyWeightDetail: View {
     @State private var logTarget: BodyWeightLogTarget? = nil
     @State private var pendingDelete: BodyWeightEntry? = nil
     @State private var saveError: SaveErrorBox? = nil
+    @State private var recentEntryLimit = Self.recentEntryPageSize
+
+    private static let recentEntryPageSize = 40
 
     enum TimeRange: String, CaseIterable, Identifiable {
         case oneMonth, threeMonths, sixMonths, all
@@ -58,12 +62,22 @@ struct BodyWeightDetail: View {
     }
 
     var body: some View {
+        // `entries` is already oldest → newest. Derive each view input
+        // once so rows never repeat an O(n log n) sort while rendering.
+        let latest = entries.last
+        let latestDelta = entries.count >= 2
+            ? entries[entries.count - 1].weight - entries[entries.count - 2].weight
+            : nil
+        let visiblePoints = chartPoints(from: entries)
+        let reversedEntries = Array(entries.reversed())
+        let recentEntries = Array(reversedEntries.prefix(recentEntryLimit))
+
         ScrollView {
             VStack(alignment: .leading, spacing: Space.xxl) {
-                header
+                header(latest: latest, delta: latestDelta)
                 logButton
                 if visiblePoints.count >= 2 {
-                    chart
+                    chart(points: visiblePoints)
                     rangeStrip
                 } else if !entries.isEmpty {
                     // Single-entry case — a quiet caption instead of
@@ -72,7 +86,10 @@ struct BodyWeightDetail: View {
                     singleEntryHint
                 }
                 if !entries.isEmpty {
-                    recentTable
+                    recentTable(
+                        entries: recentEntries,
+                        hasMore: recentEntries.count < reversedEntries.count
+                    )
                 }
             }
             .padding(.vertical, 16)
@@ -112,13 +129,13 @@ struct BodyWeightDetail: View {
 
     // MARK: - Header
 
-    private var header: some View {
+    private func header(latest: BodyWeightEntry?, delta: Double?) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Current")
                 .panelLegend()
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
-                Text(currentWeightLabel)
+                Text(currentWeightLabel(for: latest))
                     .font(Typography.metricHero)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
@@ -128,13 +145,13 @@ struct BodyWeightDetail: View {
 
                 Spacer()
 
-                if let delta = entries.latestDelta, delta != 0 {
+                if let delta, delta != 0 {
                     deltaChip(delta: delta)
                 }
             }
 
-            if let last = entries.latest {
-                Text("Last logged \(Self.dayFormatter.string(from: last.date))")
+            if let latest {
+                Text("Last logged \(Self.dayFormatter.string(from: latest.date))")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.primary.opacity(Opacity.soft))
             } else {
@@ -165,9 +182,9 @@ struct BodyWeightDetail: View {
         .background(Capsule().fill(Surface.cardTintBright))
     }
 
-    private var currentWeightLabel: String {
-        guard let last = entries.latest else { return "—" }
-        return WeightFormatter.string(last.weight, unit: unit, fractionDigits: 1, includeUnit: false)
+    private func currentWeightLabel(for latest: BodyWeightEntry?) -> String {
+        guard let latest else { return "—" }
+        return WeightFormatter.string(latest.weight, unit: unit, fractionDigits: 1, includeUnit: false)
     }
 
     // MARK: - Log button
@@ -193,9 +210,9 @@ struct BodyWeightDetail: View {
 
     // MARK: - Chart
 
-    private var chart: some View {
+    private func chart(points: [BodyWeightEntry]) -> some View {
         Chart {
-            ForEach(visiblePoints) { point in
+            ForEach(points) { point in
                 let displayWeight = WeightFormatter.toDisplay(point.weight, unit: unit)
                 LineMark(
                     x: .value("Date", point.date),
@@ -274,13 +291,13 @@ struct BodyWeightDetail: View {
 
     // MARK: - Recent table
 
-    private var recentTable: some View {
+    private func recentTable(entries: [BodyWeightEntry], hasMore: Bool) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
             Text("Recent")
                 .panelLegend()
 
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(reversedEntries.enumerated()), id: \.element.id) { idx, entry in
+            LazyVStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(entries.enumerated()), id: \.element.id) { idx, entry in
                     Button {
                         Haptics.soft()
                         logTarget = .edit(entry)
@@ -301,7 +318,7 @@ struct BodyWeightDetail: View {
                         }
                     }
 
-                    if idx < reversedEntries.count - 1 {
+                    if idx < entries.count - 1 {
                         Rectangle()
                             .fill(Surface.edge)
                             .frame(height: 0.5)
@@ -310,6 +327,17 @@ struct BodyWeightDetail: View {
                 }
             }
             .contentCard(cornerRadius: Radius.card)
+
+            if hasMore {
+                Button("Load more") {
+                    recentEntryLimit += Self.recentEntryPageSize
+                }
+                .font(Typography.headline)
+                .foregroundStyle(Tint.primary)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows older body weight entries")
+            }
         }
     }
 
@@ -338,14 +366,48 @@ struct BodyWeightDetail: View {
 
     // MARK: - Derived
 
-    private var visiblePoints: [BodyWeightEntry] {
-        let chrono = entries.chronological
-        guard let cutoff = range.cutoff else { return chrono }
-        return chrono.filter { $0.date >= cutoff }
+    private func chartPoints(from chronologicalEntries: [BodyWeightEntry]) -> [BodyWeightEntry] {
+        guard let cutoff = range.cutoff else {
+            return Self.weeklySamples(from: chronologicalEntries)
+        }
+        return chronologicalEntries.filter { $0.date >= cutoff }
     }
 
-    private var reversedEntries: [BodyWeightEntry] {
-        entries.chronological.reversed()
+    /// The All range can span decades. Keeping the first measurement
+    /// and the final measurement from each calendar week preserves the
+    /// long-term shape while bounding a daily history to ~52 points/year.
+    private static func weeklySamples(
+        from chronologicalEntries: [BodyWeightEntry],
+        calendar: Calendar = .current
+    ) -> [BodyWeightEntry] {
+        guard chronologicalEntries.count > 2,
+              let first = chronologicalEntries.first,
+              let firstWeek = calendar.dateInterval(of: .weekOfYear, for: first.date)?.start
+        else { return chronologicalEntries }
+
+        var samples = [first]
+        var currentWeek = firstWeek
+        var latestInWeek = first
+
+        for entry in chronologicalEntries.dropFirst() {
+            guard let week = calendar.dateInterval(of: .weekOfYear, for: entry.date)?.start else {
+                continue
+            }
+            if week == currentWeek {
+                latestInWeek = entry
+            } else {
+                if samples.last?.id != latestInWeek.id {
+                    samples.append(latestInWeek)
+                }
+                currentWeek = week
+                latestInWeek = entry
+            }
+        }
+
+        if samples.last?.id != latestInWeek.id {
+            samples.append(latestInWeek)
+        }
+        return samples
     }
 
     private static let dayFormatter: DateFormatter = {

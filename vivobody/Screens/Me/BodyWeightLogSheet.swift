@@ -140,7 +140,7 @@ struct BodyWeightLogSheet: View {
             date = Date()
             if let todayEntry = entries.entry(on: Date()) {
                 weight = todayEntry.weight
-            } else if let last = entries.latest {
+            } else if let last = entries.first {
                 weight = last.weight
             } else {
                 weight = 180
