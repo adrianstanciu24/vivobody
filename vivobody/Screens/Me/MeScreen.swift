@@ -3,14 +3,16 @@
 //  vivobody
 //
 //  Personal tab — a personal dashboard. Stacked surfaces:
-//    • Your journey — lifetime totals + training age.
-//    • Milestones — threshold badges across the lifetime totals.
+//    • Your journey — engraved lifetime odometer + training-age rail.
+//    • Milestones — the closest threshold leads a horizontal rail.
 //    • Personal records — top standing records, full wall on tap.
 //    • Body weight — latest entry + sparkline, linking to detail.
 //    • This month — the current calendar month's recap.
 //
-//  Everything past the journey is gated on having completed history,
-//  so a brand-new user sees only the journey + body-weight prompts.
+//  Sections stay data-aware: Personal records does not reserve a dead
+//  block before the first record, while body weight keeps an actionable
+//  empty card. The mix of borderless hero, tactile rail, and resting
+//  cards gives the long dashboard depth without turning it into tiles.
 //
 //  App configuration lives on SettingsScreen, pushed from the gear
 //  button in the trailing toolbar slot.
@@ -81,18 +83,22 @@ struct MeScreen: View {
                     statsSection
                         .settleIn(0)
 
-                    GroupSeparator()
+                    GroupSeparator(verticalPadding: Space.lg)
                     milestonesSection
                         .settleIn(1)
-                    GroupSeparator()
-                    personalRecordsSection
-                        .settleIn(2)
-                    GroupSeparator()
+
+                    if hasStandingRecords {
+                        GroupSeparator(verticalPadding: Space.lg)
+                        personalRecordsSection
+                            .settleIn(2)
+                    }
+
+                    GroupSeparator(verticalPadding: Space.lg)
                     bodyWeightSection
-                        .settleIn(3)
-                    GroupSeparator()
+                        .settleIn(hasStandingRecords ? 3 : 2)
+                    GroupSeparator(verticalPadding: Space.lg)
                     monthlyRecapSection
-                        .settleIn(4)
+                        .settleIn(hasStandingRecords ? 4 : 3)
                 }
                 .padding(.top, Space.sm)
                 // Extra tail so the last row clears the floating tab bar
@@ -110,7 +116,9 @@ struct MeScreen: View {
                     SettingsScreen()
                 } label: {
                     Image(systemName: "gearshape")
+                        .foregroundStyle(Ink.secondary)
                 }
+                .tint(Ink.secondary)
                 .accessibilityLabel("Settings")
             }
         }
@@ -139,7 +147,7 @@ struct MeScreen: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(
                 title: "Body weight",
-                trailing: bodyWeightEntries.isEmpty ? nil : "Tap for detail"
+                trailing: bodyWeightEntries.isEmpty ? nil : "View trend"
             )
 
             if bodyWeightEntries.isEmpty {
@@ -156,9 +164,8 @@ struct MeScreen: View {
         }
     }
 
-    /// Quiet inline empty state, matching the Personal-records prompt
-    /// one section up: a single caption line and a compact left-aligned
-    /// action — no icon, no centered full-screen treatment.
+    /// Quiet resting-surface empty state: one caption line and a compact
+    /// left-aligned action — no icon or centered full-screen treatment.
     private var bodyWeightEmptyCard: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             Text("Track your body weight to see how it trends alongside your training.")
@@ -172,7 +179,9 @@ struct MeScreen: View {
             }
             .buttonStyle(PrimaryButtonStyle(compact: true))
         }
+        .padding(Space.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .contentCard()
     }
 
     private var bodyWeightPopulatedCard: some View {
@@ -219,9 +228,10 @@ struct MeScreen: View {
                 .accessibilityHidden(true)
         }
         .frame(minHeight: Space.rowMin)
-        .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
+        .padding(Space.lg)
+        .contentCard(bright: true)
+        .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 
@@ -246,9 +256,9 @@ struct MeScreen: View {
 
     // MARK: - Stats
 
-    /// Lifetime totals as an *odometer*: one giant volume numeral is
+    /// Lifetime totals as an *odometer*: one engraved volume numeral is
     /// the whole story, with workouts / sets / PRs trailing as a quiet
-    /// single-line spec beneath it — not a second hairline stat strip.
+    /// single-line spec and the training-age rail anchoring it in time.
     /// That's deliberate: History and Insights both carry a 3-up strip
     /// (a centered weekly scoreboard, an edge-aligned verdict legend),
     /// so repeating it here made Me read as their wallpaper. Demoting
@@ -265,24 +275,39 @@ struct MeScreen: View {
             if !hasHistory {
                 emptyJourney
             } else {
-                VStack(alignment: .leading, spacing: Space.md) {
-                    MetricView(
-                        label: lifetimeVolumeLabel,
-                        value: volumeLabel,
-                        unit: lifetimeVolumeUnit,
-                        valueFont: Typography.metricHero
-                    )
-                    lifetimeLine
-                    if let ageText = JourneyFormatting.trainingAgeText(
-                        since: overview.trainingSince
-                    ) {
-                        Text(ageText)
-                            .font(Typography.caption)
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                }
+                journeyHero
             }
         }
+    }
+
+    /// Borderless hero relief: the engraved numeral is the material,
+    /// shared with History's volume readouts. The only orange is the
+    /// live endpoint on the training-age rail below it.
+    private var journeyHero: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                CarvedVolumeText(
+                    value: volumeLabel,
+                    unit: lifetimeVolumeUnit ?? "",
+                    size: 56
+                )
+                Text(lifetimeVolumeLabel)
+                    .panelLegend()
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(
+                "\(volumeLabel)\(lifetimeVolumeUnit.map { " \($0)" } ?? "") \(lifetimeVolumeLabel)"
+            )
+
+            lifetimeLine
+
+            if let ageText = JourneyFormatting.trainingAgeText(
+                since: overview.trainingSince
+            ) {
+                JourneyTimeline(caption: ageText)
+            }
+        }
+        .padding(.vertical, Space.md)
     }
 
     // MARK: - Milestones
@@ -303,49 +328,76 @@ struct MeScreen: View {
                         prCount: personalRecords,
                         unit: weightUnit
                     )
+                    let featuredIndex = featuredMilestoneIndex(in: milestones)
+                    let orderedIndices = milestoneOrder(
+                        for: milestones,
+                        featuredIndex: featuredIndex
+                    )
                     // Positional identity: Milestone ids are freshly minted
                     // on every recompute, which would re-fire powerOn.
-                    ForEach(Array(milestones.enumerated()), id: \.offset) { index, milestone in
-                        MilestoneBadge(milestone: milestone)
-                            .powerOn(index)
+                    ForEach(Array(orderedIndices.enumerated()), id: \.offset) { order, index in
+                        MilestoneBadge(
+                            milestone: milestones[index],
+                            featured: index == featuredIndex
+                        )
+                        .powerOn(order)
                     }
                 }
             }
         }
     }
 
+    /// The unfinished category nearest its visible threshold leads the
+    /// rail. Equal progress keeps the domain order, avoiding arbitrary
+    /// reshuffles at a fresh zeroed state.
+    private func featuredMilestoneIndex(in milestones: [Milestone]) -> Int? {
+        var bestIndex: Int?
+        for index in milestones.indices {
+            let candidate = milestones[index]
+            guard !candidate.achieved, candidate.targetLabel != nil else { continue }
+            guard let currentBest = bestIndex else {
+                bestIndex = index
+                continue
+            }
+            if candidate.targetProgress > milestones[currentBest].targetProgress {
+                bestIndex = index
+            }
+        }
+        return bestIndex
+    }
+
+    private func milestoneOrder(
+        for milestones: [Milestone],
+        featuredIndex: Int?
+    ) -> [Int] {
+        guard let featuredIndex else { return Array(milestones.indices) }
+        return [featuredIndex] + milestones.indices.filter { $0 != featuredIndex }
+    }
+
     // MARK: - Personal records
 
     /// Top standing records as a preview; the full wall is one tap
-    /// away via the header. Renders a quiet prompt when the user has
-    /// history but no exercise tracked across two sessions yet.
-    @ViewBuilder
+    /// away via the header. The parent inserts this section only once
+    /// a record exists, avoiding an empty chapter in the dashboard.
     private var personalRecordsSection: some View {
         let records = appState.analytics.progress.standingRecords
-        VStack(alignment: .leading, spacing: Space.md) {
-            if records.isEmpty {
-                SectionHeader(title: "Personal records")
-                Text("Log a lift across two or more sessions to set your first record.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-            } else {
-                NavigationLink {
-                    PersonalRecordsScreen()
-                } label: {
-                    SectionHeader(
-                        title: "Personal records",
-                        trailing: records.count > 3 ? "See all" : nil
-                    )
-                    .frame(minHeight: Space.tapMin)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityHint("Opens all personal records")
+        return VStack(alignment: .leading, spacing: Space.md) {
+            NavigationLink {
+                PersonalRecordsScreen()
+            } label: {
+                SectionHeader(
+                    title: "Personal records",
+                    trailing: records.count > 3 ? "See all" : nil
+                )
+                .frame(minHeight: Space.tapMin)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Opens all personal records")
 
-                VStack(spacing: Space.sm) {
-                    ForEach(Array(records.prefix(3))) { record in
-                        PRRow(record: record, unit: weightUnit)
-                    }
+            VStack(spacing: Space.sm) {
+                ForEach(Array(records.prefix(3))) { record in
+                    PRRow(record: record, unit: weightUnit)
                 }
             }
         }
@@ -422,6 +474,10 @@ struct MeScreen: View {
 
     private var totalSets: Int { overview.totalSets }
 
+    private var hasStandingRecords: Bool {
+        !appState.analytics.progress.standingRecords.isEmpty
+    }
+
     /// Count of personal records the user currently holds — one per
     /// tracked lift across the archive (each exercise's all-time best
     /// is, by definition, a PR you hold). Drives the accented PR
@@ -477,6 +533,51 @@ struct MeScreen: View {
         case .unavailable:
             return Stat(value: "—", label: "volume unavailable")
         }
+    }
+}
+
+/// A qualitative start-to-now rail. It does not pretend training age
+/// is progress toward an arbitrary goal; it simply gives the lifetime
+/// caption a physical origin and a live endpoint.
+private struct JourneyTimeline: View {
+    let caption: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(spacing: 0) {
+                Circle()
+                    .fill(Ink.quaternary)
+                    .frame(width: 6, height: 6)
+
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Ink.quaternary, Tint.primary.opacity(0.86)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(height: 1)
+
+                Circle()
+                    .fill(Tint.primary)
+                    .frame(width: 7, height: 7)
+                    .shadow(color: Tint.primary.opacity(0.42), radius: 4)
+            }
+
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                Text(caption)
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                Spacer(minLength: Space.sm)
+                Text("Today")
+                    .panelLegend()
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(caption)
     }
 }
 

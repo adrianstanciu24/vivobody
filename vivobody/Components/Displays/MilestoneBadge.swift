@@ -8,8 +8,9 @@
 //  over a thin track matching that exact ratio. The category
 //  glyph sits inside the top-trailing header margin. A cleared category
 //  wears the accent and a glowing seal; a near-done tile's numeral
-//  warms up. Same resting-surface vocabulary as every other content
-//  chip — the glass stays on the floating controls layer.
+//  warms up. The closest unfinished target can be featured as a wider,
+//  brighter "Next" tile. Same resting-surface vocabulary as every
+//  other content chip — the glass stays on the floating controls layer.
 //
 
 import VivoKit
@@ -17,6 +18,7 @@ import SwiftUI
 
 struct MilestoneBadge: View {
     let milestone: Milestone
+    var featured: Bool = false
 
     /// Accent warm-up threshold — close enough that "almost there"
     /// should read from across the room.
@@ -27,9 +29,11 @@ struct MilestoneBadge: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             HStack(spacing: Space.xs) {
-                Text(milestone.legend)
+                Text(featured ? "Next · \(milestone.legend)" : milestone.legend)
                     .panelLegendType()
-                    .foregroundStyle(milestone.achieved ? Tint.primary : Ink.tertiary)
+                    .foregroundStyle(
+                        milestone.achieved || featured ? Tint.primary : Ink.tertiary
+                    )
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 Spacer(minLength: Space.sm)
@@ -63,26 +67,32 @@ struct MilestoneBadge: View {
                 warm: nearDone || milestone.achieved
             )
         }
-        .padding(Space.md)
+        .padding(featured ? Space.lg : Space.md)
         // Fixed width: the progress track fills the tile edge-to-edge, so
         // every tile in the rail shares one rhythm regardless of how
-        // large its next threshold is.
-        .frame(width: 170, alignment: .leading)
+        // large its next threshold is. The closest target gets enough
+        // extra width to announce itself as the rail's lead card.
+        .frame(width: featured ? 204 : 170, alignment: .leading)
         .frame(maxHeight: .infinity, alignment: .top)
-        .contentChip(cornerRadius: Radius.chip, tint: milestone.achieved ? Tint.primary : nil)
+        .contentChip(
+            cornerRadius: Radius.chip,
+            tint: milestone.achieved ? Tint.primary : nil,
+            bright: featured
+        )
         .clipShape(RoundedRectangle(cornerRadius: Radius.chip, style: .continuous))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityText)
     }
 
     private var accessibilityText: String {
+        let prefix = featured ? "Next milestone, " : ""
         if milestone.achieved {
-            return "\(milestone.legend), all milestones reached, \(milestone.valueLabel)"
+            return "\(prefix)\(milestone.legend), all milestones reached, \(milestone.valueLabel)"
         }
         if let target = milestone.targetLabel {
-            return "\(milestone.legend), \(milestone.valueLabel) of \(target)"
+            return "\(prefix)\(milestone.legend), \(milestone.valueLabel) of \(target)"
         }
-        return "\(milestone.legend), \(milestone.valueLabel)"
+        return "\(prefix)\(milestone.legend), \(milestone.valueLabel)"
     }
 }
 

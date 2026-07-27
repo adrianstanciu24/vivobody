@@ -115,10 +115,14 @@ struct SectionDivider: View {
 /// a full-width hairline with generous air on both sides so each
 /// group reads as its own block. Distinct from a bare `SectionDivider`
 /// used as an inline row separator (which carries no vertical padding).
+/// Screens with denser, dashboard-like content can tighten the air
+/// without inventing a second separator treatment.
 struct GroupSeparator: View {
+    var verticalPadding: CGFloat = Space.xxl
+
     var body: some View {
         SectionDivider()
-            .padding(.vertical, Space.xxl)
+            .padding(.vertical, verticalPadding)
     }
 }
 

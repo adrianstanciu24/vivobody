@@ -3,10 +3,10 @@
 //  MilestoneBadgeGallery.swift
 //  vivobody
 //
-//  Every MilestoneBadge state side by side: fresh start, mid-climb,
-//  near-done (accent warm-up), and fully cleared. The scrubber drives
-//  one live tile through its targets so the progress track, warm-up
-//  threshold, and numeral hierarchy can be tuned by eye.
+//  Every MilestoneBadge state side by side: featured next target,
+//  fresh start, near-done (accent warm-up), and fully cleared. The
+//  scrubber drives one live tile through its targets so the progress
+//  track, warm-up threshold, and numeral hierarchy can be tuned by eye.
 //
 
 import VivoKit
@@ -46,7 +46,7 @@ struct MilestoneBadgeGallery: View {
                                 icon: "flame.fill", legend: "Workouts",
                                 valueLabel: "3", targetLabel: "10",
                                 targetProgress: 0.3, achieved: false
-                            ))
+                            ), featured: true)
                             MilestoneBadge(milestone: Milestone(
                                 icon: "scalemass.fill", legend: "Volume",
                                 valueLabel: "39.8k", targetLabel: "45.4k kg",
