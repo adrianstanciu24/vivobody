@@ -5,7 +5,8 @@
 //  App configuration, pushed from the gear button on Me. Carries the
 //  preference rows that used to live inline on MeScreen — appearance,
 //  weight unit, default rest, haptics — plus the destructive Reset
-//  Exercise Catalog action and the app footer.
+//  Exercise Catalog action, the About links (privacy policy and
+//  support, required for App Store distribution), and the app footer.
 //
 //  Settings persist via @AppStorage (UserDefaults). The Haptics
 //  engine reads its enabled flag directly from UserDefaults on every
@@ -19,6 +20,14 @@
 import VivoKit
 import SwiftUI
 import SwiftData
+
+/// Public-facing URLs surfaced from Settings. Hosted via GitHub
+/// Pages from the repo's docs/ folder; these same URLs go in the
+/// App Store Connect metadata fields.
+private enum SupportLinks {
+    static let privacyPolicy = URL(string: "https://adrianstanciu24.github.io/vivobody/privacy.html")!
+    static let support = URL(string: "https://adrianstanciu24.github.io/vivobody/support.html")!
+}
 
 struct SettingsScreen: View {
     /// SwiftData context — needed for the Reset Catalog action,
@@ -79,9 +88,12 @@ struct SettingsScreen: View {
                 preferencesSection
                     .padding(.top, Space.section)
                     .settleIn(1)
+                aboutSection
+                    .padding(.top, Space.section)
+                    .settleIn(2)
                 footer
                     .padding(.top, Space.xxl)
-                    .settleIn(2)
+                    .settleIn(3)
             }
             .padding(.top, Space.sm)
             // Extra tail so the last row clears the floating tab bar
@@ -543,6 +555,57 @@ struct SettingsScreen: View {
             .fill(Surface.edge)
             .frame(height: 0.5)
             .accessibilityHidden(true)
+    }
+
+    // MARK: - About
+
+    /// External links App Review expects to find in-app: the privacy
+    /// policy (required for HealthKit apps) and a support contact.
+    private var aboutSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "About")
+
+            VStack(alignment: .leading, spacing: Space.lg + 2) {
+                linkRow(
+                    title: "Privacy Policy",
+                    subtitle: "Everything stays on your device",
+                    url: SupportLinks.privacyPolicy
+                )
+                rowDivider
+                linkRow(
+                    title: "Contact & Support",
+                    subtitle: "Questions, bugs, feature requests",
+                    url: SupportLinks.support
+                )
+            }
+        }
+    }
+
+    private func linkRow(title: String, subtitle: String, url: URL) -> some View {
+        Link(destination: url) {
+            HStack {
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text(title)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                    Text(subtitle)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                }
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(Typography.sectionLabel)
+                    .foregroundStyle(Ink.tertiary)
+                    .frame(width: 44, height: 44)
+                    .accessibilityHidden(true)
+            }
+            .padding(.horizontal, Space.md)
+            .padding(.vertical, Space.sm)
+            .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
+            .coloredGlassControl(cornerRadius: Radius.chip)
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Opens in your browser")
     }
 
     // MARK: - Footer

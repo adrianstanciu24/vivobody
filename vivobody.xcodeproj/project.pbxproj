@@ -73,6 +73,13 @@
 			);
 			target = 781FC1A12FBB8CC000EE0477 /* vivobody */;
 		};
+		A7C4D1E2F3B54A6980C1D2E3 /* Exceptions for "vivobody" folder in "vivobodyWidgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				logo.icon,
+			);
+			target = F62DDA2F8BF844CABA5A477F /* vivobodyWidgets */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -88,6 +95,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				781FC1C52FBB8CC200EE0477 /* Exceptions for "vivobody" folder in "vivobody" target */,
+				A7C4D1E2F3B54A6980C1D2E3 /* Exceptions for "vivobody" folder in "vivobodyWidgets" target */,
 			);
 			path = vivobody;
 			sourceTree = "<group>";
@@ -395,6 +403,7 @@
 			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = logo;
 				CODE_SIGN_ENTITLEMENTS = vivobodyWidgets/vivobodyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
@@ -698,6 +707,7 @@
 			baseConfigurationReference = E1F2A3B4C5D6E7F8A9B0C1D2 /* Shared.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = logo;
 				CODE_SIGN_ENTITLEMENTS = vivobodyWidgets/vivobodyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9ALX28GU6P;
