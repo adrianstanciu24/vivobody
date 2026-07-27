@@ -5,12 +5,13 @@
 //  Vertical drag to adjust a numeric value — the same gesture, feel,
 //  and haptics as NumberScrubber, but stripped of all chrome. No
 //  chip, no liquid fill, no glass: just the number itself, rendered
-//  as a huge monospaced odometer on black.
+//  as a huge tabular-figure odometer on black.
 //
 //  This is the instrument-design counterpart to NumberScrubber. The
-//  product principles call for "huge, monospaced, weight-bearing
-//  numerals" with the value being something you can physically move —
-//  so the digit IS the control, not a value sitting inside a control.
+//  product principles call for huge, stable, weight-bearing numerals.
+//  SF Pro tabular figures keep widths fixed without the slashed zero
+//  of SF Mono, so the digit remains the control without losing the
+//  value's at-a-glance readability.
 //
 //  Behaviour (identical to NumberScrubber, intentionally):
 //    • up = increase, down = decrease.
@@ -298,7 +299,7 @@ struct BareScrubber: View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
             DigitTicker(
                 value: value,
-                font: .system(size: fontSize, weight: .bold, design: .monospaced),
+                font: .system(size: fontSize, weight: .bold),
                 color: numberColor,
                 fractionalDigits: WeightUnit.fractionDigits(forStep: step, value: value),
                 rolls: !isDragging && !isCoasting,
@@ -330,7 +331,8 @@ struct BareScrubber: View {
     private var sizingRow: some View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
             Text(format(range.upperBound))
-                .font(.system(size: fontSize, weight: .bold, design: .monospaced))
+                .font(.system(size: fontSize, weight: .bold))
+                .monospacedDigit()
             if !unit.isEmpty {
                 Text(unit)
                     .font(.system(size: unitFontSize, weight: .semibold, design: .monospaced))

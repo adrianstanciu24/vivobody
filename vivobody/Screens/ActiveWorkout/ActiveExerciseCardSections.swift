@@ -3,10 +3,10 @@
 //  vivobody
 //
 //  Section view builders for ActiveExerciseCard, extracted from the
-//  main file for readability: top meta, name + pips, hero (reps /
-//  duration / completed), RIR, and the last-set caption + action
-//  area. Members live on the ActiveExerciseCard extension and share
-//  the struct's stored state.
+//  main file for readability: name + pips, hero (reps / duration /
+//  completed), RIR, and the last-set caption + action area. Members
+//  live on the ActiveExerciseCard extension and share the struct's
+//  stored state.
 //
 
 import VivoKit
@@ -14,32 +14,15 @@ import SwiftUI
 import SwiftData
 
 extension ActiveExerciseCard {
-    // MARK: - Top meta
-
-    var topMeta: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(setCountLabel)
-                .panelLegend()
-            Spacer()
-        }
-        .padding(.top, Space.xs)
-    }
-
-    var setCountLabel: String {
-        if let active = activeIndex {
-            return "Set \(active + 1) of \(sets.count)"
-        }
-        return "All sets complete"
-    }
-
     // MARK: - Name + pips
 
     var nameRow: some View {
         Text(exercise.name)
             .font(Typography.display)
             .foregroundStyle(Ink.primary)
-            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
-            .minimumScaleFactor(0.6)
+            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
+            .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
+            .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
     }
 
@@ -74,11 +57,9 @@ extension ActiveExerciseCard {
                         pipView
                     }
                 }
-                removeSetButton
-                addSetButton
             }
         }
-        .frame(minHeight: 44)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
         .scrollBounceBehavior(.basedOnSize)
     }
 
@@ -107,11 +88,35 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// One-tap "add a set" — a quiet outlined plus that lives at the
-    /// end of the pip row, where the count is already shown. Tapping
-    /// it appends a set seeded from the current working set, so "one
-    /// more" matches the weight you're already lifting. Adding a set
-    /// to a finished exercise re-opens it for the new set.
+    /// Set-count stepper used in the configuration row below the lamps.
+    /// Keeping it in its own glass capsule prevents plus/minus glyphs
+    /// from reading as two more set-status indicators.
+    var setCountControls: some View {
+        HStack(spacing: Space.xs) {
+            Text(sets.count == 1 ? "SET" : "SETS")
+                .panelLegend()
+                .accessibilityHidden(true)
+
+            HStack(spacing: 0) {
+                removeSetButton
+
+                Text("\(sets.count)")
+                    .font(Typography.metricUnit)
+                    .monospacedDigit()
+                    .foregroundStyle(Ink.secondary)
+                    .frame(minWidth: 22)
+                    .accessibilityHidden(true)
+
+                addSetButton
+            }
+            .coloredGlassControl(cornerRadius: Radius.pill)
+        }
+        .fixedSize(horizontal: true, vertical: false)
+    }
+
+    /// One-tap "add a set." Tapping it appends a set seeded from the
+    /// current working set, so "one more" matches the weight already
+    /// being lifted. Adding to a finished exercise re-opens it.
     var addSetButton: some View {
         Button {
             addSet()
@@ -119,8 +124,6 @@ extension ActiveExerciseCard {
             Image(systemName: "plus")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.tertiary)
-                .frame(width: 26, height: 26)
-                .overlay(Circle().strokeBorder(Ink.quaternary, lineWidth: 2))
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
@@ -143,8 +146,6 @@ extension ActiveExerciseCard {
             Image(systemName: "minus")
                 .font(Typography.sectionLabel)
                 .foregroundStyle(canRemove ? Ink.tertiary : Ink.quaternary)
-                .frame(width: 26, height: 26)
-                .overlay(Circle().strokeBorder(Ink.quaternary, lineWidth: 2))
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
@@ -166,13 +167,32 @@ extension ActiveExerciseCard {
 
     @ViewBuilder
     var heroBlock: some View {
-        if session.activeSet(for: exercise) != nil {
-            switch exercise.trackingMode {
-            case .reps:     repsHero
-            case .duration: durationHero
+        VStack(alignment: .leading, spacing: Space.sm) {
+            exerciseConfigurationRow
+
+            if session.activeSet(for: exercise) != nil {
+                switch exercise.trackingMode {
+                case .reps:     repsHero
+                case .duration: durationHero
+                }
+            } else {
+                completedHero
             }
-        } else {
-            completedHero
+        }
+    }
+
+    /// Configuration is deliberately separate from status: lamps get
+    /// the full row above, while this line owns set count and the load
+    /// increment. The step control is useful only while a rep set is live;
+    /// completed and duration exercises retain just the set stepper.
+    var exerciseConfigurationRow: some View {
+        HStack(alignment: .center, spacing: Space.md) {
+            setCountControls
+            Spacer(minLength: Space.md)
+            if session.activeSet(for: exercise) != nil,
+               exercise.trackingMode == .reps {
+                stepToggle
+            }
         }
     }
 
@@ -190,8 +210,13 @@ extension ActiveExerciseCard {
 
     var externalLoadRepsHero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text(exercise.loadMode.inputLabel)
-                .panelLegend()
+            // A bare value plus its unit is self-explanatory for weight and
+            // band resistance. Assistance retains its semantic noun because
+            // its value is subtracted from bodyweight rather than added.
+            if exercise.loadMode == .assistanceSubtracted {
+                Text(exercise.loadMode.inputLabel)
+                    .panelLegend()
+            }
             BareScrubber(
                 value: weightDisplayBinding,
                 range: unit.strengthRange,
@@ -226,7 +251,7 @@ extension ActiveExerciseCard {
                     fontSize: 46,
                     unit: "reps",
                     unitFontSize: 14,
-                    numberColor: Ink.secondary,
+                    numberColor: Ink.primary.opacity(Opacity.strong),
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
@@ -234,8 +259,7 @@ extension ActiveExerciseCard {
                     cancellationID: effectiveScrubCancellationID,
                     onScrubEnded: activeScrubDidEnd
                 )
-                Spacer(minLength: Space.md)
-                stepToggle
+                Spacer(minLength: 0)
             }
         }
     }
@@ -300,7 +324,7 @@ extension ActiveExerciseCard {
                     fontSize: 46,
                     unit: "reps",
                     unitFontSize: 14,
-                    numberColor: Ink.secondary,
+                    numberColor: Ink.primary.opacity(Opacity.strong),
                     unitColor: Ink.tertiary,
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
@@ -308,8 +332,7 @@ extension ActiveExerciseCard {
                     cancellationID: effectiveScrubCancellationID,
                     onScrubEnded: activeScrubDidEnd
                 )
-                Spacer(minLength: Space.md)
-                stepToggle
+                Spacer(minLength: 0)
             }
         }
     }
@@ -386,8 +409,10 @@ extension ActiveExerciseCard {
             }
         } else {
             VStack(alignment: .leading, spacing: Space.xs) {
-                Text(exercise.loadMode.inputLabel)
-                    .panelLegend()
+                if exercise.loadMode == .assistanceSubtracted {
+                    Text(exercise.loadMode.inputLabel)
+                        .panelLegend()
+                }
                 HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
                     Text(exercise.loadMode.inputOperatorSymbol)
                         .font(Typography.statValue)
@@ -434,7 +459,7 @@ extension ActiveExerciseCard {
         let repsText = top.map { "\($0.reps)" } ?? "—"
         return VStack(alignment: .leading, spacing: Space.sm) {
             Text(weightText)
-                .font(Typography.bigMetric)
+                .font(.system(size: 104, weight: .bold))
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
                 .lineLimit(1)
@@ -468,7 +493,7 @@ extension ActiveExerciseCard {
             Text(exercise.modality.durationLabel)
                 .panelLegend()
             Text(timeText)
-                .font(Typography.bigMetric)
+                .font(.system(size: 104, weight: .bold))
                 .foregroundStyle(Tint.complete)
                 .monospacedDigit()
                 .lineLimit(1)
@@ -508,13 +533,16 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Small tappable pill showing the current weight increment.
+    /// Small, explicitly-labelled pill showing the weight increment.
     /// Tap cycles through the unit's offered steps (1 / 1.25 / 2.5 / 5
-    /// for kg, 1 / 2.5 / 5 / 10 for lb). Sits at the trailing edge
-    /// of the reps row, directly beneath the load it controls.
+    /// for kg, 1 / 2.5 / 5 / 10 for lb). It shares the configuration
+    /// row with the set stepper, directly above the load it controls.
     var stepToggle: some View {
         let options = unit.strengthStepOptions
-        let label = WeightUnit.stepLabel(weightStep, unit: unit.symbol)
+        let setStepperWidth = (Space.tapMin * 2) + 22
+        let label = weightStep.formatted(
+            .number.precision(.fractionLength(0...2))
+        ) + " \(unit.symbol)"
         return Button {
             let idx = options.firstIndex(of: weightStep) ?? 0
             let next = options[(idx + 1) % options.count]
@@ -524,16 +552,21 @@ extension ActiveExerciseCard {
             )
             setWeightStep(next)
         } label: {
-            Text(label)
-                .font(Typography.metricUnit)
-                .monospacedDigit()
-                .foregroundStyle(Ink.secondary)
-                .padding(.horizontal, Space.lg)
-                .padding(.vertical, Space.md)
-                .contentShape(Capsule())
+            HStack(spacing: Space.xs) {
+                Text("STEP")
+                    .font(Typography.metricMicro)
+                    .tracking(1)
+                    .foregroundStyle(Ink.tertiary)
+                Text(label)
+                    .font(Typography.metricUnit)
+                    .monospacedDigit()
+                    .foregroundStyle(Ink.secondary)
+            }
+            .padding(.horizontal, Space.md)
+            .frame(minWidth: setStepperWidth, minHeight: Space.tapMin)
+            .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .padding(4)
         .coloredGlassControl(cornerRadius: Radius.pill)
         .accessibilityLabel("Weight increment")
         .accessibilityValue(label)
@@ -626,7 +659,11 @@ extension ActiveExerciseCard {
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
             }
-            .frame(minHeight: 96)
+            .frame(
+                minHeight: dynamicTypeSize.isAccessibilitySize ? 96 : 72,
+                idealHeight: 96,
+                maxHeight: dynamicTypeSize.isAccessibilitySize ? .infinity : 96
+            )
         }
     }
 }

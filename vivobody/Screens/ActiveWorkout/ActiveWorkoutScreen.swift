@@ -246,25 +246,24 @@ struct ActiveWorkoutScreen: View {
                     }
                     if !isEmpty {
                         HStack(spacing: Space.sm) {
-                            setTally
                             Spacer(minLength: Space.sm)
                             addButton
                         }
                     }
                 }
             } else {
-                HStack(spacing: 0) {
+                HStack(spacing: Space.sm) {
                     workoutTitle
-                    Spacer()
-                    if !isEmpty {
-                        setTally
-                        addButton
-                    }
+                    Spacer(minLength: Space.sm)
+                    if !isEmpty { addButton }
                     if onDiscard != nil { discardButton }
                 }
             }
         }
-        .padding(.horizontal, 20)
+        // Pull the quiet workout label closer to the sheet's leading edge
+        // while the action controls keep their existing trailing alignment.
+        .padding(.leading, Space.md)
+        .padding(.trailing, Space.gutter)
         .padding(.vertical, 8)
     }
 
@@ -274,28 +273,21 @@ struct ActiveWorkoutScreen: View {
             .accessibilityAddTraits(.isHeader)
     }
 
-    private var setTally: some View {
-        Text("\(completedSetCount) / \(totalSetCount)")
-            .font(Typography.metricUnit)
-            .foregroundStyle(Ink.tertiary)
-            .accessibilityLabel("\(completedSetCount) of \(totalSetCount) sets completed")
-    }
-
-    /// Compact chip — plus on a tinted circle, matching the discard
-    /// X. Lets the user add an exercise without swiping all the way
-    /// to the Summary card. Neutral (not lime) so it doesn't compete
-    /// with the per-set in-progress accent on the cards below.
+    /// Explicitly-labelled chip so this action cannot be mistaken for
+    /// the set-count plus inside an exercise card. Neutral (not orange)
+    /// so it doesn't compete with the per-set in-progress accent below.
     private var addButton: some View {
         Button {
             Haptics.soft()
             showAddExercisePicker = true
         } label: {
-            Image(systemName: "plus")
-                .font(Typography.sectionLabel)
+            Label("Exercise", systemImage: "plus")
+                .font(Typography.caption)
                 .foregroundStyle(Ink.secondary)
-                .frame(width: 26, height: 26)
+                .padding(.horizontal, Space.md)
+                .frame(height: 32)
                 .coloredGlassControl(cornerRadius: Radius.pill)
-                .frame(width: 44, height: 44)
+                .frame(minHeight: Space.tapMin)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -371,8 +363,6 @@ struct ActiveWorkoutScreen: View {
     private var isBlockingOverlayPresented: Bool {
         session.isResting || session.pendingPRValue != nil
     }
-    private var completedSetCount: Int { session.totalSets }
-    private var totalSetCount: Int     { session.totalPlannedSets }
     private var endWorkoutAlertTitle: String {
         session.totalSets > 0 ? "End this workout?" : "Discard this workout?"
     }

@@ -55,6 +55,11 @@ struct RIRSelector: View {
                 feedbackOnReselection: true
             )
         }
+        // This control is already compact. Preserve its ideal vertical
+        // footprint when a long exercise name makes the fixed workout
+        // panel negotiate for space; the hero or completion action can
+        // yield instead.
+        .fixedSize(horizontal: false, vertical: true)
         .accessibilityRepresentation {
             Slider(value: accessibilitySliderBinding, in: 0...5, step: 1) {
                 Text("Reps in reserve")

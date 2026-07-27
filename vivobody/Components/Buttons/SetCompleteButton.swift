@@ -7,9 +7,9 @@
 //
 //  Composition of effects on idle → complete:
 //    1. Haptics.crescendo()
-//    2. Glass surface tints from live accent to completion accent.
+//    2. Neutral glass floods with the completion accent.
 //    3. Numbers spring-overshoot (1.0 → 1.06 → 1.0).
-//    4. Chevron morphs into a checkmark (stroke draw-on).
+//    4. A checkmark draws on only after completion.
 //    5. A single radial ring expands from the tap point and fades.
 //
 //  Complete → idle (undo): Haptics.soft() and the same path in reverse.
@@ -71,7 +71,7 @@ struct SetCompleteButton: View {
     /// fill, the checkmark draw-on, and the haptic, not a new hue.
     private let accent = Tint.complete
     /// The live, "you're about to do this" colour worn by the idle
-    /// button — rim, verb text, chevron.
+    /// button's verb text and ripple.
     private let liveAccent = Tint.inProgress
 
     var body: some View {
@@ -81,8 +81,15 @@ struct SetCompleteButton: View {
             content
         }
         .frame(maxWidth: .infinity)
-        .frame(minHeight: 96)
-        .frame(height: dynamicTypeSize.isAccessibilitySize ? nil : 96)
+        // Keep 96pt as the normal instrument height, but let this large
+        // target yield before compact controls when a two-line exercise
+        // name makes the fixed panel crowded. Accessibility sizes scroll,
+        // so they retain a 96pt minimum and may grow for wrapped text.
+        .frame(
+            minHeight: dynamicTypeSize.isAccessibilitySize ? 96 : 72,
+            idealHeight: 96,
+            maxHeight: dynamicTypeSize.isAccessibilitySize ? .infinity : 96
+        )
         .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .scaleEffect(pressScale)
         .background(
@@ -116,24 +123,21 @@ struct SetCompleteButton: View {
 
     private var background: some View {
         let shape = RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-        let glassTint = isComplete ? accent : liveAccent
-        // Completion floods the surface; idle stays a faint lift so the
-        // accent verb and chevron read against the glass instead of
-        // drowning in a same-hue orange wash.
-        let surfaceTint = isComplete ? accent : liveAccent.opacity(0.16)
+        // Idle is neutral, crisp glass: the orange verb supplies the
+        // affordance without a muddy pre-filled state. Completion then
+        // earns the full accent flood and bloom.
         return shape
             .fill(reduceTransparency
-                    ? glassTint.opacity(isComplete ? 1.0 : 0.35)
-                    : glassTint.opacity(isComplete ? 0.85 : 0.10))
-            .glassTinted(surfaceTint, interactive: true, in: shape)
-            // Completion glow — accent bloom when done. Idle stays a
-            // faint lift, no ambient bloom on the live state.
+                    ? (isComplete ? accent : Ink.primary.opacity(0.14))
+                    : (isComplete ? accent.opacity(0.85) : Surface.cardTintBright))
+            .glassTinted(isComplete ? accent : nil, interactive: true, in: shape)
+            // Accent bloom belongs only to the completed state.
             .shadow(
-                color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.16),
-                radius: isComplete ? 24 : 10,
-                y: isComplete ? 9 : 4
+                color: isComplete ? accent.opacity(0.50) : .clear,
+                radius: isComplete ? 24 : 0,
+                y: isComplete ? 9 : 0
             )
-            .shadow(color: .black.opacity(0.50), radius: 6, y: 3)
+            .shadow(color: .black.opacity(0.50), radius: 8, y: 4)
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 
@@ -146,15 +150,17 @@ struct SetCompleteButton: View {
     @ViewBuilder
     private var content: some View {
         if let title {
-            HStack(alignment: .center, spacing: 0) {
+            ZStack(alignment: .trailing) {
                 Text(title)
                     .font(Typography.title)
                     .tracking(0.4)
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                     .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.55 : 0.7)
                     .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
+                    .multilineTextAlignment(.center)
                     .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
-                Spacer(minLength: 8)
+                    .padding(.horizontal, Space.tapMin)
+                    .frame(maxWidth: .infinity)
                 statusIndicator
             }
             .padding(.horizontal, Space.xxl)
@@ -199,11 +205,11 @@ struct SetCompleteButton: View {
 
     private var statusIndicator: some View {
         ZStack {
-            Circle()
-                .fill(isComplete ? Tint.onAccent.opacity(0.12) : Surface.cardTint)
-                .frame(width: 44, height: 44)
-
             if isComplete {
+                Circle()
+                    .fill(Tint.onAccent.opacity(0.12))
+                    .frame(width: 44, height: 44)
+
                 Checkmark()
                     .trim(from: 0, to: 1)
                     .stroke(
@@ -219,13 +225,11 @@ struct SetCompleteButton: View {
                                 removal: .opacity.combined(with: .scale(scale: 0.6))
                             )
                     )
-            } else {
-                Image(systemName: "chevron.right")
-                    .font(Typography.headline)
-                    .foregroundStyle(liveAccent)
-                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.6)))
             }
         }
+        // Reserve the completion lamp's footprint so its arrival never
+        // shifts the verb, while leaving the idle action icon-free.
+        .frame(width: 44, height: 44)
         .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.62), value: isComplete)
     }
 

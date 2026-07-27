@@ -7,7 +7,6 @@
 //  read from arm's length in half a second.
 //
 //  First-principles layout (top → bottom):
-//    • Set N of M (tiny — context, not chrome).
 //    • Exercise name (the page's identity).
 //    • Set pips — done / active / pending, glanceable at a flick.
 //    • The HERO: the working weight as a huge monospaced odometer
@@ -142,30 +141,25 @@ struct ActiveExerciseCard: View {
     /// principles.
     private func cardContent(expandsVertically: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            topMeta
-                .powerOn(0)
-
-            Spacer(minLength: Space.lg)
-
             nameRow
-                .powerOn(1)
+                .powerOn(0)
             setPips
                 .padding(.top, Space.md)
-                .powerOn(2)
+                .powerOn(1)
 
             Spacer(minLength: Space.xl)
 
             heroBlock
-                .powerOn(3)
+                .powerOn(2)
 
             Spacer(minLength: Space.xl)
 
             rirControl
-                .powerOn(4)
+                .powerOn(3)
             lastSetCaption
             actionArea
                 .padding(.top, Space.md)
-                .powerOn(5)
+                .powerOn(4)
         }
         .padding(.horizontal, Space.gutter)
         .frame(
