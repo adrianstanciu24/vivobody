@@ -79,7 +79,6 @@ struct CustomExerciseEditorSheet: View {
 
     private var canSave: Bool {
         !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-            && !draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && hasValidMuscleRoles
             && (draft.mechanic != .compound || draft.pattern != nil)
             && (!draft.requiresDirection || draft.direction != nil)
@@ -140,7 +139,6 @@ struct CustomExerciseEditorSheet: View {
                         defaultsRow
                     } else {
                         nameField
-                        movementDefinitionField
                         muscleGroupField
                         muscleInvolvementField
                         equipmentField
@@ -155,7 +153,9 @@ struct CustomExerciseEditorSheet: View {
                         planeField
                         lateralityField
                         aliasesField
-                        trackingModeField
+                        if availableTrackingModes.count > 1 {
+                            trackingModeField
+                        }
                         loadModeField
                         if draft.loadMode == .bodyweightAdded
                             || draft.loadMode == .assistanceSubtracted {
@@ -324,35 +324,6 @@ struct CustomExerciseEditorSheet: View {
         }
     }
 
-    private var movementDefinitionField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Movement definition")
-                .sectionLabelStyle(Opacity.medium)
-
-            TextField(
-                "Describe the setup and joint movement",
-                text: $draft.movementDefinition,
-                axis: .vertical
-            )
-            .font(Typography.body)
-            .foregroundStyle(Ink.primary)
-            .lineLimit(3...6)
-            .padding(.vertical, Space.sm)
-            .accessibilityLabel("Movement definition")
-
-            Rectangle()
-                .fill(Surface.edge)
-                .frame(height: 1)
-                .accessibilityHidden(true)
-
-            if draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                Text("Describe the movement precisely enough to distinguish it from similar exercises.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.danger)
-            }
-        }
-    }
-
     // MARK: - Equipment
 
     private var equipmentField: some View {
@@ -422,23 +393,32 @@ struct CustomExerciseEditorSheet: View {
                         chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
                             Haptics.selection()
                             if reduceMotion {
-                                draft.mechanic = m
-                                if m == .isolation {
-                                    draft.pattern = nil
-                                    draft.direction = nil
-                                }
+                                applyMechanic(m)
                             } else {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                    draft.mechanic = m
-                                    if m == .isolation {
-                                        draft.pattern = nil
-                                        draft.direction = nil
-                                    }
+                                    applyMechanic(m)
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    /// Isolation lifts carry no pattern; compound always needs one,
+    /// so returning to compound backfills Push/Horizontal instead of
+    /// reopening an invalid nil-pattern state.
+    private func applyMechanic(_ mechanic: Mechanic) {
+        draft.mechanic = mechanic
+        switch mechanic {
+        case .isolation:
+            draft.pattern = nil
+            draft.direction = nil
+        case .compound:
+            if draft.pattern == nil {
+                draft.pattern = .push
+                draft.direction = .horizontal
             }
         }
     }
@@ -453,28 +433,21 @@ struct CustomExerciseEditorSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 GlassEffectContainer(spacing: Space.sm) {
                     HStack(spacing: Space.sm) {
-                        chip(label: "None", isSelected: draft.pattern == nil) {
-                            Haptics.selection()
-                            draft.pattern = nil
-                            draft.direction = nil
-                        }
                         ForEach(MovementPattern.allCases, id: \.self) { p in
                             chip(label: p.displayName, isSelected: draft.pattern == p) {
                                 Haptics.selection()
                                 draft.pattern = p
-                                if p != .push && p != .pull {
+                                if p == .push || p == .pull {
+                                    if draft.direction == nil {
+                                        draft.direction = .horizontal
+                                    }
+                                } else {
                                     draft.direction = nil
                                 }
                             }
                         }
                     }
                 }
-            }
-
-            if draft.pattern == nil {
-                Text("Choose the compound movement pattern to save.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.danger)
             }
         }
     }
@@ -609,7 +582,9 @@ struct CustomExerciseEditorSheet: View {
 
     /// Chooses how the exercise is logged. Time replaces reps with a
     /// modality-aware duration: Hold for isometric strength, Interval
-    /// for conditioning, and Time for other timed work.
+    /// for conditioning, and Time for other timed work. Shown only
+    /// when the modality leaves a real choice; strength and isometric
+    /// modalities force their measure, so no picker is rendered.
     private var trackingModeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Measure")
@@ -934,8 +909,8 @@ struct CatalogDraft {
         defaultDuration: 45,
         equipment: .barbell,
         mechanic: .compound,
-        pattern: nil,
-        direction: nil,
+        pattern: .push,
+        direction: .horizontal,
         plane: .sagittal,
         laterality: .bilateral,
         muscleInvolvementSnapshot: [:],

@@ -144,15 +144,26 @@ struct MuscleInvolvementEditorSheet: View {
                     }
                 }
             } label: {
-                Text(role(for: muscle)?.displayName ?? "None")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(role(for: muscle) == nil ? Ink.quaternary : Ink.primary)
-                    .padding(.horizontal, Space.md)
-                    .frame(minHeight: 44)
-                    .background {
-                        Capsule()
-                            .fill(role(for: muscle) == nil ? Surface.cardTint : Tint.inProgress.opacity(0.18))
+                // Chrome stays outside the label: UIKit re-hosts the label
+                // during the menu-dismiss transition, and an in-label capsule
+                // fill renders as a stretched rectangle until it settles.
+                // Hidden templates reserve the widest role's width so the
+                // button never animates a resize (which clips the text).
+                ZStack {
+                    ForEach(MuscleRole.allCases, id: \.self) { role in
+                        Text(role.displayName).hidden()
                     }
+                    Text(role(for: muscle)?.displayName ?? "None")
+                        .foregroundStyle(role(for: muscle) == nil ? Ink.quaternary : Ink.primary)
+                }
+                .font(Typography.sectionLabel)
+                .padding(.horizontal, Space.md)
+                .frame(minHeight: 44)
+                .contentShape(Capsule())
+            }
+            .background {
+                Capsule()
+                    .fill(role(for: muscle) == nil ? Surface.cardTint : Tint.inProgress.opacity(0.18))
             }
             .accessibilityLabel("\(muscle.displayName) involvement")
             .accessibilityValue(role(for: muscle)?.displayName ?? "None")
