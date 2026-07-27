@@ -29,6 +29,25 @@ enum CatalogEditorTarget: Identifiable {
     }
 }
 
+private enum CatalogPicker: String, Identifiable {
+    case muscleGroup
+    case equipment
+    case modality
+    case movementPattern
+    case loadMode
+
+    var id: String { rawValue }
+}
+
+private enum CatalogValidationAnchor: Hashable {
+    case name
+    case muscles
+    case movementPattern
+    case direction
+    case loadMode
+    case aliases
+}
+
 struct CustomExerciseEditorSheet: View {
     let target: CatalogEditorTarget
 
@@ -45,6 +64,8 @@ struct CustomExerciseEditorSheet: View {
 
     @State private var saveError: SaveErrorBox? = nil
     @State private var isMuscleEditorPresented = false
+    @State private var activePicker: CatalogPicker? = nil
+    @State private var showsValidationErrors = false
 
     @FocusState private var nameFieldFocused: Bool
 
@@ -84,6 +105,28 @@ struct CustomExerciseEditorSheet: View {
             && (!draft.requiresDirection || draft.direction != nil)
             && hasValidLoadProfile
             && hasUniqueSearchTerms
+    }
+
+    private var firstValidationAnchor: CatalogValidationAnchor? {
+        if draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return .name
+        }
+        if !hasValidMuscleRoles {
+            return .muscles
+        }
+        if draft.mechanic == .compound, draft.pattern == nil {
+            return .movementPattern
+        }
+        if draft.requiresDirection, draft.direction == nil {
+            return .direction
+        }
+        if !hasValidLoadProfile {
+            return .loadMode
+        }
+        if !hasUniqueSearchTerms {
+            return .aliases
+        }
+        return nil
     }
 
     private var editedItemID: UUID? {
@@ -132,82 +175,138 @@ struct CustomExerciseEditorSheet: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Space.section) {
-                    if isBundledEdit {
-                        bundledIdentitySummary
-                        defaultsRow
-                    } else {
-                        nameField
-                        muscleGroupField
-                        muscleInvolvementField
-                        equipmentField
-                        modalityField
-                        mechanicField
-                        if draft.mechanic == .compound {
-                            patternField
-                            if draft.requiresDirection {
-                                directionField
-                            }
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Space.section) {
+                        if isBundledEdit {
+                            bundledIdentitySummary
+                            defaultsRow
+                        } else {
+                            editorFields
                         }
-                        planeField
-                        lateralityField
-                        aliasesField
-                        if availableTrackingModes.count > 1 {
-                            trackingModeField
+                    }
+                    .padding(.top, Space.md)
+                    .padding(.bottom, Space.xxl)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+                .scrollDismissesKeyboard(.interactively)
+                .screenBackground()
+                .navigationTitle(isBundledEdit ? "Exercise Defaults" : (isEditMode ? "Edit Exercise" : "New Exercise"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            attemptSave(using: scrollProxy)
                         }
-                        loadModeField
-                        if draft.loadMode == .bodyweightAdded
-                            || draft.loadMode == .assistanceSubtracted {
-                            bodyweightFractionField
-                        }
-                        defaultsRow
+                        .bold()
                     }
                 }
-                .padding(.top, Space.md)
-                .padding(.bottom, Space.xxl)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            .screenBackground()
-            .navigationTitle(isBundledEdit ? "Exercise Defaults" : (isEditMode ? "Edit Exercise" : "New Exercise"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: save)
-                        .disabled(!canSave)
-                        .bold()
+                .onAppear {
+                    if !isBundledEdit, draft.equipment == .band {
+                        draft.loadMode = .nonComparable
+                        draft.bodyweightFraction = 0
+                    }
+                    if !isEditMode {
+                        // Focus the name field for create-mode; the
+                        // keyboard slides up immediately so the user can
+                        // start typing without an extra tap.
+                        nameFieldFocused = true
+                    }
                 }
             }
-            .onAppear {
-                if !isBundledEdit, draft.equipment == .band {
-                    draft.loadMode = .nonComparable
-                    draft.bodyweightFraction = 0
-                }
-                if !isEditMode {
-                    // Focus the name field for create-mode; the
-                    // keyboard slides up immediately so the user can
-                    // start typing without an extra tap.
-                    nameFieldFocused = true
-                }
-            }
-            .sheet(isPresented: $isMuscleEditorPresented) {
-                MuscleInvolvementEditorSheet(
-                    initialSnapshot: draft.muscleInvolvementSnapshot,
-                    requiresPrimary: draft.modality.requiresPrimaryMuscle
-                ) { snapshot in
-                    draft.muscleInvolvementSnapshot = snapshot
-                }
-            }
-            .saveErrorAlert($saveError)
         }
+        .sheet(isPresented: $isMuscleEditorPresented) {
+            MuscleInvolvementEditorSheet(
+                initialSnapshot: draft.muscleInvolvementSnapshot,
+                requiresPrimary: draft.modality.requiresPrimaryMuscle
+            ) { snapshot in
+                draft.muscleInvolvementSnapshot = snapshot
+            }
+        }
+        .sheet(item: $activePicker) { picker in
+            pickerSheet(for: picker)
+        }
+        .saveErrorAlert($saveError)
     }
 
     // MARK: - Fields
+
+    @ViewBuilder
+    private var editorFields: some View {
+        basicsSection
+        classificationSection
+        loggingDefaultsSection
+        searchSection
+    }
+
+    private var basicsSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Basics")
+            nameField
+                .id(CatalogValidationAnchor.name)
+            muscleGroupField
+            muscleInvolvementField
+                .id(CatalogValidationAnchor.muscles)
+            equipmentField
+        }
+    }
+
+    private var classificationSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Classification")
+            modalityField
+            mechanicField
+
+            if draft.mechanic == .compound {
+                patternField
+                    .id(CatalogValidationAnchor.movementPattern)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+
+                if draft.requiresDirection {
+                    directionField
+                        .id(CatalogValidationAnchor.direction)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+
+            planeField
+            lateralityField
+        }
+    }
+
+    private var loggingDefaultsSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Logging defaults")
+
+            if availableTrackingModes.count > 1 {
+                trackingModeField
+            }
+
+            loadModeField
+                .id(CatalogValidationAnchor.loadMode)
+
+            if draft.loadMode == .bodyweightAdded
+                || draft.loadMode == .assistanceSubtracted {
+                bodyweightFractionField
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
+            defaultsRow
+        }
+    }
+
+    private var searchSection: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            SectionHeader(title: "Search")
+            aliasesField
+                .id(CatalogValidationAnchor.aliases)
+        }
+    }
 
     private var bundledIdentitySummary: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
@@ -242,84 +341,36 @@ struct CustomExerciseEditorSheet: View {
                 .fill(Surface.edge)
                 .frame(height: 1)
                 .accessibilityHidden(true)
+
+            if showsValidationErrors,
+               draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                validationMessage("Enter an exercise name.")
+            }
         }
     }
 
     private var muscleGroupField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Muscle group")
-                .sectionLabelStyle(Opacity.medium)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(MuscleGroup.allCases, id: \.self) { g in
-                            chip(label: g.displayName, isSelected: draft.group == g) {
-                                Haptics.selection()
-                                guard draft.group != g else { return }
-                                draft.group = g
-                                // A browse group cannot safely infer anatomy
-                                // (especially glute max vs glute med), so a
-                                // group change requires an explicit re-pick.
-                                draft.muscleInvolvementSnapshot = [:]
-                            }
-                        }
-                    }
-                }
-            }
+        pickerRow(title: "Muscle group", value: draft.group.displayName) {
+            presentPicker(.muscleGroup)
         }
     }
 
     private var muscleInvolvementField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Muscles worked")
-                    .sectionLabelStyle(Opacity.medium)
-                Spacer()
-                Text("explicit roles")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-            }
-
-            Button {
-                Haptics.selection()
+            pickerRow(
+                title: "Muscles worked",
+                subtitle: draft.muscleSummary
+            ) {
+                nameFieldFocused = false
                 isMuscleEditorPresented = true
-            } label: {
-                HStack(spacing: Space.md) {
-                    VStack(alignment: .leading, spacing: Space.xs) {
-                        Text(draft.muscleSummary)
-                            .font(Typography.body)
-                            .foregroundStyle(Ink.secondary)
-                            .multilineTextAlignment(.leading)
-                        Text("Set each muscle as Primary, Secondary, Stabilizer, or None")
-                            .font(Typography.caption)
-                            .foregroundStyle(Ink.quaternary)
-                            .multilineTextAlignment(.leading)
-                    }
-
-                    Spacer(minLength: Space.sm)
-
-                    Image(systemName: "chevron.right")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
-                }
-                .padding(.horizontal, Space.lg)
-                .padding(.vertical, Space.md)
-                .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
-                .background {
-                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                        .fill(Surface.cardTint)
-                }
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Edit muscle involvement")
-            .accessibilityValue(draft.muscleSummary)
 
-            if draft.modality.requiresPrimaryMuscle,
+            if showsValidationErrors,
+               draft.modality.requiresPrimaryMuscle,
                !hasValidMuscleRoles {
-                Text("Choose a Primary muscle in the selected muscle group to save.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.danger)
+                validationMessage("Choose a Primary muscle in the selected muscle group.")
+            } else if showsValidationErrors, !hasValidMuscleRoles {
+                validationMessage("Choose at least one muscle.")
             }
         }
     }
@@ -327,83 +378,33 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Equipment
 
     private var equipmentField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Equipment")
-                .sectionLabelStyle(Opacity.medium)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(Equipment.allCases, id: \.self) { e in
-                            chip(label: e.displayName, isSelected: draft.equipment == e) {
-                                Haptics.selection()
-                                draft.equipment = e
-                                if e == .band {
-                                    draft.loadMode = .nonComparable
-                                    draft.bodyweightFraction = 0
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        pickerRow(title: "Equipment", value: draft.equipment.displayName) {
+            presentPicker(.equipment)
         }
     }
 
     // MARK: - Modality
 
     private var modalityField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Modality")
-                .sectionLabelStyle(Opacity.medium)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(ExerciseModality.allCases, id: \.self) { modality in
-                            chip(
-                                label: modality.displayName,
-                                isSelected: draft.modality == modality
-                            ) {
-                                Haptics.selection()
-                                draft.modality = modality
-                                if modality == .dynamicStrength || modality == .power {
-                                    draft.trackingMode = .reps
-                                } else if modality == .isometricStrength {
-                                    draft.trackingMode = .duration
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        pickerRow(title: "Modality", value: draft.modality.displayName) {
+            presentPicker(.modality)
         }
     }
 
     // MARK: - Mechanic
 
     private var mechanicField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Mechanic")
-                .sectionLabelStyle(Opacity.medium)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(Mechanic.allCases, id: \.self) { m in
-                        chip(label: m.displayName, isSelected: draft.mechanic == m, fullWidth: true) {
-                            Haptics.selection()
-                            if reduceMotion {
-                                applyMechanic(m)
-                            } else {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                    applyMechanic(m)
-                                }
-                            }
-                        }
-                    }
+        segmentedField(
+            title: "Mechanic",
+            selection: Binding(
+                get: { draft.mechanic },
+                set: { mechanic in
+                    applyAnimatedSelection { applyMechanic(mechanic) }
                 }
-            }
-        }
+            ),
+            options: Mechanic.allCases,
+            label: { $0.displayName }
+        )
     }
 
     /// Isolation lifts carry no pattern; compound always needs one,
@@ -427,27 +428,15 @@ struct CustomExerciseEditorSheet: View {
 
     private var patternField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Movement pattern")
-                .sectionLabelStyle(Opacity.medium)
+            pickerRow(
+                title: "Movement pattern",
+                value: draft.pattern?.displayName ?? "Choose"
+            ) {
+                presentPicker(.movementPattern)
+            }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(MovementPattern.allCases, id: \.self) { p in
-                            chip(label: p.displayName, isSelected: draft.pattern == p) {
-                                Haptics.selection()
-                                draft.pattern = p
-                                if p == .push || p == .pull {
-                                    if draft.direction == nil {
-                                        draft.direction = .horizontal
-                                    }
-                                } else {
-                                    draft.direction = nil
-                                }
-                            }
-                        }
-                    }
-                }
+            if showsValidationErrors, draft.pattern == nil {
+                validationMessage("Choose a compound movement pattern.")
             }
         }
     }
@@ -456,22 +445,21 @@ struct CustomExerciseEditorSheet: View {
 
     private var directionField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Direction")
-                .sectionLabelStyle(Opacity.medium)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(PushPullDirection.allCases, id: \.self) { direction in
-                        chip(
-                            label: direction.displayName,
-                            isSelected: draft.direction == direction,
-                            fullWidth: true
-                        ) {
-                            Haptics.selection()
-                            draft.direction = direction
-                        }
+            segmentedField(
+                title: "Direction",
+                selection: Binding(
+                    get: { draft.direction ?? .horizontal },
+                    set: { direction in
+                        Haptics.selection()
+                        draft.direction = direction
                     }
-                }
+                ),
+                options: PushPullDirection.allCases,
+                label: { $0.displayName }
+            )
+
+            if showsValidationErrors, draft.direction == nil {
+                validationMessage("Choose a push or pull direction.")
             }
         }
     }
@@ -479,67 +467,212 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Plane (every exercise)
 
     private var planeField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Plane of movement")
-                .sectionLabelStyle(Opacity.medium)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(MovementPlane.allCases, id: \.self) { p in
-                        chip(label: p.displayName, isSelected: draft.plane == p, fullWidth: true) {
-                            Haptics.selection()
-                            draft.plane = p
-                        }
-                    }
+        segmentedField(
+            title: "Plane of movement",
+            selection: Binding(
+                get: { draft.plane },
+                set: { plane in
+                    Haptics.selection()
+                    draft.plane = plane
                 }
-            }
-        }
+            ),
+            options: MovementPlane.allCases,
+            label: { $0.displayName }
+        )
     }
 
     // MARK: - Laterality (every exercise)
 
     private var lateralityField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Sides")
-                .sectionLabelStyle(Opacity.medium)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(Laterality.allCases, id: \.self) { l in
-                        chip(label: l.displayName, isSelected: draft.laterality == l, fullWidth: true) {
-                            Haptics.selection()
-                            draft.laterality = l
-                        }
-                    }
+        segmentedField(
+            title: "Sides",
+            selection: Binding(
+                get: { draft.laterality },
+                set: { laterality in
+                    Haptics.selection()
+                    draft.laterality = laterality
                 }
+            ),
+            options: Laterality.allCases,
+            label: { $0.displayName }
+        )
+    }
+
+    // MARK: - Form controls
+
+    /// Metadata with more than three choices uses the canonical row
+    /// surface and opens a focused checkmark sheet. This keeps the
+    /// editor vertically scannable without clipping options offscreen.
+    private func pickerRow(
+        title: String,
+        subtitle: String? = nil,
+        value: String? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button {
+            Haptics.selection()
+            action()
+        } label: {
+            KitRow(title: title, subtitle: subtitle) {
+                HStack(spacing: Space.sm) {
+                    if let value {
+                        Text(value)
+                            .font(Typography.body)
+                            .foregroundStyle(Ink.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+
+                    Image(systemName: "chevron.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(title)
+        .accessibilityValue(value ?? subtitle ?? "Not set")
+        .accessibilityHint("Opens choices")
+    }
+
+    /// Two- and three-way choices remain visible, but share one track
+    /// with a single orange thumb instead of separate glass pills.
+    private func segmentedField<Option: Hashable>(
+        title: String,
+        selection: Binding<Option>,
+        options: [Option],
+        label: @escaping (Option) -> String
+    ) -> some View {
+        CatalogSegmentedField(
+            title: title,
+            selection: selection,
+            options: options,
+            label: label
+        )
+    }
+
+    private func validationMessage(_ message: String) -> some View {
+        Text(message)
+            .font(Typography.caption)
+            .foregroundStyle(Tint.danger)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func presentPicker(_ picker: CatalogPicker) {
+        nameFieldFocused = false
+        activePicker = picker
+    }
+
+    private func applyAnimatedSelection(_ changes: () -> Void) {
+        Haptics.selection()
+        if reduceMotion {
+            changes()
+        } else {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                changes()
             }
         }
     }
 
-    // MARK: - Chip
+    @ViewBuilder
+    private func pickerSheet(for picker: CatalogPicker) -> some View {
+        switch picker {
+        case .muscleGroup:
+            CatalogChoiceSheet(
+                title: "Muscle Group",
+                options: MuscleGroup.allCases,
+                label: { $0.displayName },
+                isSelected: { draft.group == $0 },
+                onSelect: applyMuscleGroup
+            )
 
-    /// The one selectable chip used across every field: glass tinted
-    /// lime when chosen, neutral translucent glass when not — matching
-    /// the picker and catalog equipment strips, which share one
-    /// continuous glass region via GlassEffectContainer.
-    private func chip(
-        label: String,
-        isSelected: Bool,
-        fullWidth: Bool = false,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Text(label)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
-                .frame(maxWidth: fullWidth ? .infinity : nil)
-                .padding(.horizontal, fullWidth ? Space.md : Space.lg)
-                .frame(minHeight: 44)
-                .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
+        case .equipment:
+            CatalogChoiceSheet(
+                title: "Equipment",
+                options: Equipment.allCases,
+                label: { $0.displayName },
+                isSelected: { draft.equipment == $0 },
+                onSelect: applyEquipment
+            )
+
+        case .modality:
+            CatalogChoiceSheet(
+                title: "Modality",
+                options: ExerciseModality.allCases,
+                label: { $0.displayName },
+                isSelected: { draft.modality == $0 },
+                onSelect: applyModality
+            )
+
+        case .movementPattern:
+            CatalogChoiceSheet(
+                title: "Movement Pattern",
+                options: MovementPattern.allCases,
+                label: { $0.displayName },
+                isSelected: { draft.pattern == $0 },
+                onSelect: applyPattern
+            )
+
+        case .loadMode:
+            CatalogChoiceSheet(
+                title: "Load Interpretation",
+                options: draft.equipment == .band
+                    ? [ExerciseLoadMode.nonComparable]
+                    : ExerciseLoadMode.allCases,
+                label: { $0.displayName },
+                isSelected: { draft.loadMode == $0 },
+                onSelect: applyLoadMode
+            )
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityValue(isSelected ? "Selected" : "Not selected")
+    }
+
+    private func applyMuscleGroup(_ group: MuscleGroup) {
+        guard draft.group != group else { return }
+        draft.group = group
+        // A browse group cannot safely infer anatomy (especially glute
+        // max vs. glute med), so a group change requires a fresh pick.
+        draft.muscleInvolvementSnapshot = [:]
+    }
+
+    private func applyEquipment(_ equipment: Equipment) {
+        draft.equipment = equipment
+        if equipment == .band {
+            draft.loadMode = .nonComparable
+            draft.bodyweightFraction = 0
+        }
+    }
+
+    private func applyModality(_ modality: ExerciseModality) {
+        draft.modality = modality
+        if modality == .dynamicStrength || modality == .power {
+            draft.trackingMode = .reps
+        } else if modality == .isometricStrength {
+            draft.trackingMode = .duration
+        }
+    }
+
+    private func applyPattern(_ pattern: MovementPattern) {
+        draft.pattern = pattern
+        if pattern == .push || pattern == .pull {
+            if draft.direction == nil {
+                draft.direction = .horizontal
+            }
+        } else {
+            draft.direction = nil
+        }
+    }
+
+    private func applyLoadMode(_ mode: ExerciseLoadMode) {
+        draft.loadMode = mode
+        switch mode {
+        case .external, .nonComparable:
+            draft.bodyweightFraction = 0
+        case .bodyweightAdded, .assistanceSubtracted:
+            if draft.bodyweightFraction == 0 {
+                draft.bodyweightFraction = 1
+            }
+        }
     }
 
     // MARK: - Aliases
@@ -569,11 +702,10 @@ struct CustomExerciseEditorSheet: View {
                 .frame(height: 1)
                 .accessibilityHidden(true)
 
-            if !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+            if showsValidationErrors,
+               !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                !hasUniqueSearchTerms {
-                Text("Name and aliases must be unique across the exercise catalog.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.danger)
+                validationMessage("Name and aliases must be unique across the exercise catalog.")
             }
         }
     }
@@ -586,27 +718,17 @@ struct CustomExerciseEditorSheet: View {
     /// when the modality leaves a real choice; strength and isometric
     /// modalities force their measure, so no picker is rendered.
     private var trackingModeField: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Measure")
-                .sectionLabelStyle(Opacity.medium)
-
-            GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(availableTrackingModes, id: \.self) { m in
-                        chip(label: m.displayName, isSelected: draft.trackingMode == m, fullWidth: true) {
-                            Haptics.selection()
-                            if reduceMotion {
-                                draft.trackingMode = m
-                            } else {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                    draft.trackingMode = m
-                                }
-                            }
-                        }
-                    }
+        segmentedField(
+            title: "Measure",
+            selection: Binding(
+                get: { draft.trackingMode },
+                set: { mode in
+                    applyAnimatedSelection { draft.trackingMode = mode }
                 }
-            }
-        }
+            ),
+            options: availableTrackingModes,
+            label: { $0.displayName }
+        )
     }
 
     private var availableTrackingModes: [TrackingMode] {
@@ -619,31 +741,15 @@ struct CustomExerciseEditorSheet: View {
 
     private var loadModeField: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Load interpretation")
-                .sectionLabelStyle(Opacity.medium)
+            pickerRow(
+                title: "Load interpretation",
+                value: draft.loadMode.displayName
+            ) {
+                presentPicker(.loadMode)
+            }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                GlassEffectContainer(spacing: Space.sm) {
-                    HStack(spacing: Space.sm) {
-                        ForEach(
-                            draft.equipment == .band ? [.nonComparable] : ExerciseLoadMode.allCases,
-                            id: \.self
-                        ) { mode in
-                            chip(label: mode.displayName, isSelected: draft.loadMode == mode) {
-                                Haptics.selection()
-                                draft.loadMode = mode
-                                switch mode {
-                                case .external, .nonComparable:
-                                    draft.bodyweightFraction = 0
-                                case .bodyweightAdded, .assistanceSubtracted:
-                                    if draft.bodyweightFraction == 0 {
-                                        draft.bodyweightFraction = 1
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if showsValidationErrors, !hasValidLoadProfile {
+                validationMessage("Choose a load interpretation that matches this equipment.")
             }
         }
     }
@@ -664,10 +770,8 @@ struct CustomExerciseEditorSheet: View {
                     accessibilityLabel: "Bodyweight carried"
                 )
             }
-            if draft.bodyweightFraction == 0 {
-                Text("Bodyweight load modes require a carried fraction above zero.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.danger)
+            if showsValidationErrors, draft.bodyweightFraction == 0 {
+                validationMessage("Bodyweight load modes require a carried fraction above zero.")
             }
         }
     }
@@ -762,9 +866,34 @@ struct CustomExerciseEditorSheet: View {
 
     // MARK: - Save
 
+    private func attemptSave(using scrollProxy: ScrollViewProxy) {
+        guard canSave else {
+            showsValidationErrors = true
+            Haptics.soft()
+
+            guard let anchor = firstValidationAnchor else { return }
+            if anchor == .name {
+                nameFieldFocused = true
+            } else {
+                nameFieldFocused = false
+            }
+
+            if reduceMotion {
+                scrollProxy.scrollTo(anchor, anchor: .center)
+            } else {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    scrollProxy.scrollTo(anchor, anchor: .center)
+                }
+            }
+            return
+        }
+
+        save()
+    }
+
     private func save() {
+        guard canSave else { return }
         let trimmedName = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedName.isEmpty else { return }
 
         let parsedAliases = draft.parsedAliases
 
@@ -863,6 +992,162 @@ struct CustomExerciseEditorSheet: View {
         }
         Haptics.thunk()
         dismiss()
+    }
+}
+
+// MARK: - Segmented field
+
+/// Form-specific segmented control. The neutral track reads as one
+/// control while the selected option owns the app's orange accent;
+/// resting options stay grayscale so the selection is unmistakable.
+private struct CatalogSegmentedField<Option: Hashable>: View {
+    let title: String
+    @Binding var selection: Option
+    let options: [Option]
+    let label: (Option) -> String
+
+    @Namespace private var selectionThumb
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text(title)
+                .sectionLabelStyle(Opacity.medium)
+
+            HStack(spacing: 2) {
+                ForEach(options, id: \.self) { option in
+                    optionButton(option)
+                }
+            }
+            .padding(2)
+            .background {
+                Capsule()
+                    .fill(Surface.cardTintBright)
+            }
+            .overlay {
+                Capsule()
+                    .stroke(Surface.edge, lineWidth: 1)
+            }
+        }
+        .animation(
+            reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.85),
+            value: selection
+        )
+    }
+
+    private func optionButton(_ option: Option) -> some View {
+        let selected = option == selection
+        return Button {
+            guard !selected else { return }
+            selection = option
+        } label: {
+            HStack(spacing: Space.xs) {
+                if selected, differentiateWithoutColor {
+                    Image(systemName: "checkmark")
+                        .accessibilityHidden(true)
+                }
+
+                Text(label(option))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+            }
+            .font(Typography.body)
+            .fontWeight(selected ? .semibold : .regular)
+            .foregroundStyle(selected ? Tint.onAccent : Ink.primary)
+            .padding(.horizontal, Space.sm)
+            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+            .background {
+                if selected {
+                    Capsule()
+                        .fill(Tint.inProgress)
+                        .matchedGeometryEffect(id: "selection", in: selectionThumb)
+                }
+            }
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label(option))
+        .accessibilityValue(selected ? "Selected" : "Not selected")
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+// MARK: - Choice sheet
+
+/// Focused single-choice list for the editor's longer taxonomies.
+/// Selection applies immediately and dismisses, while the checkmark
+/// keeps the current value legible before the user commits the draft.
+private struct CatalogChoiceSheet<Option: Hashable>: View {
+    let title: String
+    let options: [Option]
+    let label: (Option) -> String
+    let isSelected: (Option) -> Bool
+    let onSelect: (Option) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(options, id: \.self) { option in
+                        choiceRow(option)
+
+                        if option != options.last {
+                            SectionDivider()
+                                .padding(.horizontal, Space.lg)
+                        }
+                    }
+                }
+                .contentCard()
+                .padding(.vertical, Space.md)
+            }
+            .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+            .screenBackground()
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+
+    private func choiceRow(_ option: Option) -> some View {
+        let selected = isSelected(option)
+        return Button {
+            Haptics.selection()
+            onSelect(option)
+            dismiss()
+        } label: {
+            HStack(spacing: Space.md) {
+                Text(label(option))
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.primary)
+
+                Spacer(minLength: Space.sm)
+
+                if selected {
+                    Image(systemName: "checkmark")
+                        .font(Typography.headline)
+                        .foregroundStyle(Tint.primary)
+                        .accessibilityHidden(true)
+                }
+            }
+            .padding(.horizontal, Space.lg)
+            .frame(minHeight: Space.rowMin)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label(option))
+        .accessibilityValue(selected ? "Selected" : "Not selected")
+        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
 
