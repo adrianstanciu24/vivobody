@@ -164,18 +164,13 @@ struct NumberScrubber: View {
             }
         }
         .animation(dragStateAnimation, value: isDragging)
-        .accessibilityElement()
-        .accessibilityLabel(label ?? "Adjustable value")
-        .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
-        .accessibilityHint("Swipe up or down to change")
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment: stepValue(by: 1)
-            case .decrement: stepValue(by: -1)
-            @unknown default: break
+        .accessibilityRepresentation {
+            Slider(value: accessibilitySliderBinding, in: range, step: step) {
+                Text(label ?? "Adjustable value")
             }
+            .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
+            .accessibilityHint("Swipe up or down to change")
         }
-        .focusable()
         .accessibilityRespondsToUserInteraction(true)
     }
 
@@ -297,6 +292,20 @@ struct NumberScrubber: View {
         if let formatter { return formatter(value) }
         let d = WeightUnit.fractionDigits(forStep: step, value: value)
         return d == 0 ? "\(Int(value))" : String(format: "%.\(d)f", value)
+    }
+
+    private var accessibilitySliderBinding: Binding<Double> {
+        Binding(
+            get: { value.isFinite ? value : range.lowerBound },
+            set: { newValue in
+                guard newValue.isFinite else { return }
+                let clamped = min(max(newValue, range.lowerBound), range.upperBound)
+                guard clamped != value else { return }
+                value = clamped
+                Haptics.scrubTick(tone: tickTone)
+                onScrubEnded()
+            }
+        )
     }
 
     /// Position of the value within `range`, clamped to [0, 1] and

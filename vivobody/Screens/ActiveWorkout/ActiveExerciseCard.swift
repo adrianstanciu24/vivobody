@@ -47,6 +47,8 @@ struct ActiveExerciseCard: View {
     /// finished its background build yet.
     @Environment(\.modelContext) private var modelContext
     @Environment(\.sessionAnalytics) private var sessionAnalytics
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -87,37 +89,24 @@ struct ActiveExerciseCard: View {
     @State private var saveError: SaveErrorBox? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            topMeta
-                .powerOn(0)
-
-            Spacer(minLength: Space.lg)
-
-            nameRow
-                .powerOn(1)
-            setPips
-                .padding(.top, Space.md)
-                .powerOn(2)
-
-            Spacer(minLength: Space.xl)
-
-            heroBlock
-                .powerOn(3)
-
-            Spacer(minLength: Space.xl)
-
-            rirControl
-                .powerOn(4)
-            lastSetCaption
-            actionArea
-                .padding(.top, Space.md)
-                .powerOn(5)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView(.vertical, showsIndicators: false) {
+                    cardContent(expandsVertically: false)
+                        .padding(.vertical, Space.sm)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+                // Keep enlarged controls above the pager's persistent page
+                // indicator instead of letting the viewport sit underneath
+                // that bottom safe-area bar.
+                .padding(.bottom, Space.tapMin)
+            } else {
+                cardContent(expandsVertically: true)
+            }
         }
-        .padding(.horizontal, Space.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .contentShape(Rectangle())
         .opacity(session.isAllComplete ? 0.45 : 1.0)
-        .animation(.easeOut(duration: 0.6), value: session.isAllComplete)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.6), value: session.isAllComplete)
         .sheet(item: $editingSet) { set in
             EditSetSheet(
                 set: set,
@@ -145,6 +134,45 @@ struct ActiveExerciseCard: View {
             completionTask = nil
             acceptsScrubInput = true
         }
+    }
+
+    /// Accessibility text sizes need a vertically scrollable instrument so
+    /// the completion action can never be pushed below the sheet. At standard
+    /// sizes this remains the fixed, glanceable panel described by the design
+    /// principles.
+    private func cardContent(expandsVertically: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            topMeta
+                .powerOn(0)
+
+            Spacer(minLength: Space.lg)
+
+            nameRow
+                .powerOn(1)
+            setPips
+                .padding(.top, Space.md)
+                .powerOn(2)
+
+            Spacer(minLength: Space.xl)
+
+            heroBlock
+                .powerOn(3)
+
+            Spacer(minLength: Space.xl)
+
+            rirControl
+                .powerOn(4)
+            lastSetCaption
+            actionArea
+                .padding(.top, Space.md)
+                .powerOn(5)
+        }
+        .padding(.horizontal, Space.gutter)
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: expandsVertically ? .infinity : nil,
+            alignment: .leading
+        )
     }
 
     // MARK: - Weight increment
@@ -205,7 +233,7 @@ struct ActiveExerciseCard: View {
             duration: seed?.duration ?? exercise.plannedDuration,
             sortOrder: exercise.sets.count
         )
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+        withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
             exercise.sets.append(newSet)
         }
         exercise.plannedSets = exercise.sets.count
@@ -220,7 +248,7 @@ struct ActiveExerciseCard: View {
         guard exercise.sets.count > 1,
               let idx = exercise.sets.firstIndex(where: { $0.id == set.id })
         else { return }
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+        withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
             _ = exercise.sets.remove(at: idx)
         }
         for (i, remaining) in exercise.orderedSets.enumerated() {
@@ -302,7 +330,7 @@ struct ActiveExerciseCard: View {
                 duration: duration
             )
 
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+            withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)
             }
             acceptsScrubInput = true
@@ -358,7 +386,7 @@ struct ActiveExerciseCard: View {
                             try await Task.sleep(for: .milliseconds(300))
                         } catch { return }
                     }
-                    withAnimation(.spring(response: 0.55, dampingFraction: 0.85)) {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.55, dampingFraction: 0.85)) {
                         session.activeExerciseIndex = nextIdx
                     }
                 }

@@ -65,8 +65,7 @@ struct SwipePager<Content: View>: View {
 
             HStack(spacing: spacing) {
                 ForEach(0..<count, id: \.self) { i in
-                    content(i)
-                        .frame(width: cardWidth, height: H)
+                    page(i, width: cardWidth, height: H)
                         .scaleEffect(reduceMotion ? 1.0 : scale(for: i, virtual: virtual))
                         .opacity(opacity(for: i, virtual: virtual))
                 }
@@ -81,18 +80,25 @@ struct SwipePager<Content: View>: View {
             // gates the pager so it only acts on horizontally-
             // dominant drags — vertical scrubs pass through cleanly.
             .simultaneousGesture(dragGesture(stride: stride))
-            .accessibilityAction(named: "Next exercise") {
-                guard selection < count - 1 else { return }
-                selection += 1
-                Haptics.soft()
-            }
-            .accessibilityAction(named: "Previous exercise") {
-                guard selection > 0 else { return }
-                selection -= 1
-                Haptics.soft()
-            }
-            .focusable()
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.82), value: selection)
+        }
+    }
+
+    /// Keep neighboring cards rendered as visual swipe cues while replacing
+    /// their accessibility representation with an empty view. The explicit
+    /// conditional is intentional: some accessibility runtimes continue to
+    /// expose descendants when `accessibilityHidden` receives a changing
+    /// Boolean on a transformed pager page.
+    @ViewBuilder
+    private func page(_ index: Int, width: CGFloat, height: CGFloat) -> some View {
+        if index == selection {
+            content(index)
+                .frame(width: width, height: height)
+        } else {
+            content(index)
+                .frame(width: width, height: height)
+                .accessibilityRepresentation { EmptyView() }
+                .accessibilityHidden(true)
         }
     }
 
@@ -215,7 +221,7 @@ struct SwipePager<Content: View>: View {
 
 struct PageDots: View {
     let count: Int
-    let selection: Int
+    @Binding var selection: Int
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -228,6 +234,41 @@ struct PageDots: View {
                     .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.78), value: selection)
             }
         }
-        .accessibilityHidden(true)
+        // The visible page indicator doubles as the semantic page control.
+        // Keeping this separate from SwipePager's content preserves every
+        // control on the selected card while still providing direct page
+        // navigation for VoiceOver.
+        .frame(minWidth: Space.tapMin, minHeight: Space.tapMin)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Exercise pages")
+        .accessibilityValue("Page \(selection + 1) of \(count)")
+        .accessibilityHint("Double tap for the next page, or use the actions menu")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction {
+            guard count > 1 else { return }
+            if selection < count - 1 {
+                moveSelection(by: 1)
+            } else {
+                selection = 0
+                Haptics.soft()
+            }
+        }
+        .accessibilityAction(named: "Next exercise") {
+            moveSelection(by: 1)
+        }
+        .accessibilityAction(named: "Previous exercise") {
+            moveSelection(by: -1)
+        }
+    }
+
+    private func moveSelection(by delta: Int) {
+        let next = min(max(selection + delta, 0), max(0, count - 1))
+        guard next != selection else {
+            Haptics.rigid(pitch: delta > 0 ? Haptics.ceilingPitch : 0)
+            return
+        }
+        selection = next
+        Haptics.soft()
     }
 }

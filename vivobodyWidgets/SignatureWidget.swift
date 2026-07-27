@@ -46,7 +46,6 @@ struct SignatureWidgetView: View {
         }
         .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
-        .dynamicTypeSize(.large)
     }
 
     private var small: some View {

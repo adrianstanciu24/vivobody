@@ -53,7 +53,6 @@ struct StrengthWidgetView: View {
         }
         .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
-        .dynamicTypeSize(.large)
     }
 
     @ViewBuilder

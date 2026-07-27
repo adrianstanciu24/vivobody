@@ -21,6 +21,8 @@ import SwiftData
 struct TodayScreen: View {
     @Bindable var appState: AppState
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
@@ -100,6 +102,7 @@ struct TodayScreen: View {
     @State private var pendingFreshStart: (() -> Void)?
 
     var body: some View {
+        let shouldReduceMotion = reduceMotion
         ScrollView {
                     // The body leads — your trained figure is the hero
                     // and the readout's subject. The readiness section
@@ -142,8 +145,11 @@ struct TodayScreen: View {
                             // made scrolling feel like slow motion.
                             .scrollTransition(.interactive, axis: .vertical) { content, phase in
                                 content
-                                    .scaleEffect(1 - abs(phase.value) * 0.07, anchor: .top)
-                                    .opacity(1 - abs(phase.value) * 0.30)
+                                    .scaleEffect(
+                                        shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.07,
+                                        anchor: .top
+                                    )
+                                    .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
                             }
                             .settleIn(0)
 
@@ -246,6 +252,13 @@ struct TodayScreen: View {
         let action = pendingFreshStart
         pendingFreshStart = nil
         action?()
+    }
+
+    /// At accessibility text sizes the body remains useful context,
+    /// but it no longer consumes nearly a full viewport before the
+    /// text-based training information begins.
+    var usesAccessibilityLayout: Bool {
+        dynamicTypeSize.isAccessibilitySize
     }
 
 }

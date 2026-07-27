@@ -54,6 +54,7 @@ struct SegmentedControl: View {
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Space.md)
+                .frame(minHeight: Space.tapMin)
                 .background {
                     if isSelected {
                         Color.clear
@@ -81,7 +82,6 @@ struct LibrarySegmentBar: View {
 
     var body: some View {
         SegmentedControl(selection: $selection)
-            .accessibilityLabel("Library segment")
             .padding(.horizontal, Space.gutter)
             .padding(.top, Space.sm)
             .padding(.bottom, Space.lg)

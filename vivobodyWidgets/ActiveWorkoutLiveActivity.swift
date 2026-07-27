@@ -161,6 +161,5 @@ struct ActiveWorkoutActivityView: View {
             }
         }
         .padding()
-        .dynamicTypeSize(.large)
     }
 }

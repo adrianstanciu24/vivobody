@@ -12,28 +12,105 @@ import SwiftUI
 import UIKit
 
 public enum Tint {
-    public static let primary       = Color(.sRGB, red: 1.0, green: 0.45, blue: 0.0, opacity: 1.0)
-    public static let primaryDim    = Color(.sRGB, red: 1.0, green: 0.45, blue: 0.0, opacity: 0.35)
-    public static let primaryShadow = Color(.sRGB, red: 0.72, green: 0.30, blue: 0.0, opacity: 1.0)
+    // Bright orange stays unchanged on the dark canvas. Light mode uses
+    // a deeper brand orange so accent-colored text still clears 4.5:1;
+    // `onAccent` flips with it to keep filled-control labels legible.
+    public static let primary = adaptiveColor(
+        dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 1.0),
+        light: UIColor(red: 0.65, green: 0.25, blue: 0.0, alpha: 1.0),
+        highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 1.0),
+        highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 1.0)
+    )
+    public static let primaryDim = adaptiveColor(
+        dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.35),
+        light: UIColor(red: 0.65, green: 0.25, blue: 0.0, alpha: 0.35),
+        highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 0.55),
+        highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 0.55)
+    )
+    public static let primaryShadow = adaptiveColor(
+        dark: UIColor(red: 0.72, green: 0.30, blue: 0.0, alpha: 1.0),
+        light: UIColor(red: 0.45, green: 0.14, blue: 0.0, alpha: 1.0),
+        highContrastDark: UIColor(red: 0.84, green: 0.35, blue: 0.0, alpha: 1.0),
+        highContrastLight: UIColor(red: 0.38, green: 0.10, blue: 0.0, alpha: 1.0)
+    )
 
     public static let success    = primary
     public static let successDim = primaryDim
     public static let inProgress = primary
     public static let complete    = primary
     public static let completeDim = primaryDim
-    public static let onAccent   = Color.black
-    public static let danger     = Color(.sRGB, red: 0.96, green: 0.42, blue: 0.42, opacity: 1.0)
+    public static let onAccent = adaptiveColor(
+        dark: .black,
+        light: .white,
+        highContrastDark: .black,
+        highContrastLight: .white
+    )
+    public static let danger = adaptiveColor(
+        dark: UIColor(red: 0.96, green: 0.42, blue: 0.42, alpha: 1.0),
+        light: UIColor(red: 0.70, green: 0.12, blue: 0.12, alpha: 1.0),
+        highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.52, alpha: 1.0),
+        highContrastLight: UIColor(red: 0.58, green: 0.06, blue: 0.06, alpha: 1.0)
+    )
+
+    nonisolated private static func adaptiveColor(
+        dark: UIColor,
+        light: UIColor,
+        highContrastDark: UIColor,
+        highContrastLight: UIColor
+    ) -> Color {
+        Color(UIColor { traits in
+            switch (traits.userInterfaceStyle, traits.accessibilityContrast) {
+            case (.dark, .high): highContrastDark
+            case (_, .high):     highContrastLight
+            case (.dark, _):     dark
+            default:             light
+            }
+        })
+    }
 }
 
 public enum Ink {
-    public static let primary    = adaptiveColor(dark: .white.withAlphaComponent(0.95), light: .black.withAlphaComponent(0.88))
-    public static let secondary  = adaptiveColor(dark: .white.withAlphaComponent(0.68), light: .black.withAlphaComponent(0.62))
-    public static let tertiary   = adaptiveColor(dark: .white.withAlphaComponent(0.44), light: .black.withAlphaComponent(0.42))
-    public static let quaternary = adaptiveColor(dark: .white.withAlphaComponent(0.22), light: .black.withAlphaComponent(0.22))
+    // The normal-contrast tertiary and quaternary roles clear 4.5:1
+    // against the app's black/white backgrounds, even at caption sizes.
+    // High Contrast keeps the same hierarchy while increasing separation.
+    public static let primary = adaptiveColor(
+        dark: .white.withAlphaComponent(0.96),
+        light: .black.withAlphaComponent(0.92),
+        highContrastDark: .white,
+        highContrastLight: .black
+    )
+    public static let secondary = adaptiveColor(
+        dark: .white.withAlphaComponent(0.74),
+        light: .black.withAlphaComponent(0.76),
+        highContrastDark: .white.withAlphaComponent(0.88),
+        highContrastLight: .black.withAlphaComponent(0.88)
+    )
+    public static let tertiary = adaptiveColor(
+        dark: .white.withAlphaComponent(0.58),
+        light: .black.withAlphaComponent(0.64),
+        highContrastDark: .white.withAlphaComponent(0.78),
+        highContrastLight: .black.withAlphaComponent(0.80)
+    )
+    public static let quaternary = adaptiveColor(
+        dark: .white.withAlphaComponent(0.48),
+        light: .black.withAlphaComponent(0.56),
+        highContrastDark: .white.withAlphaComponent(0.65),
+        highContrastLight: .black.withAlphaComponent(0.70)
+    )
 
-    nonisolated private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
+    nonisolated private static func adaptiveColor(
+        dark: UIColor,
+        light: UIColor,
+        highContrastDark: UIColor,
+        highContrastLight: UIColor
+    ) -> Color {
         Color(UIColor { traits in
-            traits.userInterfaceStyle == .dark ? dark : light
+            switch (traits.userInterfaceStyle, traits.accessibilityContrast) {
+            case (.dark, .high): highContrastDark
+            case (_, .high):     highContrastLight
+            case (.dark, _):     dark
+            default:             light
+            }
         })
     }
 }
@@ -67,15 +144,50 @@ public enum Space {
 }
 
 public enum Surface {
-    public static let background = adaptiveColor(dark: .black, light: UIColor.systemGroupedBackground)
-    public static let cardTint = adaptiveColor(dark: .white.withAlphaComponent(0.055), light: .black.withAlphaComponent(0.045))
-    public static let cardTintBright = adaptiveColor(dark: .white.withAlphaComponent(0.085), light: .black.withAlphaComponent(0.075))
-    public static let edge = adaptiveColor(dark: .white.withAlphaComponent(0.10), light: .black.withAlphaComponent(0.10))
-    public static let edgeBright = adaptiveColor(dark: .white.withAlphaComponent(0.18), light: .black.withAlphaComponent(0.16))
+    public static let background = adaptiveColor(
+        dark: .black,
+        light: UIColor.systemGroupedBackground,
+        highContrastDark: .black,
+        highContrastLight: UIColor.systemGroupedBackground
+    )
+    public static let cardTint = adaptiveColor(
+        dark: .white.withAlphaComponent(0.055),
+        light: .black.withAlphaComponent(0.045),
+        highContrastDark: .white.withAlphaComponent(0.10),
+        highContrastLight: .black.withAlphaComponent(0.09)
+    )
+    public static let cardTintBright = adaptiveColor(
+        dark: .white.withAlphaComponent(0.085),
+        light: .black.withAlphaComponent(0.075),
+        highContrastDark: .white.withAlphaComponent(0.15),
+        highContrastLight: .black.withAlphaComponent(0.14)
+    )
+    public static let edge = adaptiveColor(
+        dark: .white.withAlphaComponent(0.10),
+        light: .black.withAlphaComponent(0.10),
+        highContrastDark: .white.withAlphaComponent(0.24),
+        highContrastLight: .black.withAlphaComponent(0.24)
+    )
+    public static let edgeBright = adaptiveColor(
+        dark: .white.withAlphaComponent(0.18),
+        light: .black.withAlphaComponent(0.16),
+        highContrastDark: .white.withAlphaComponent(0.34),
+        highContrastLight: .black.withAlphaComponent(0.32)
+    )
 
-    nonisolated private static func adaptiveColor(dark: UIColor, light: UIColor) -> Color {
+    nonisolated private static func adaptiveColor(
+        dark: UIColor,
+        light: UIColor,
+        highContrastDark: UIColor,
+        highContrastLight: UIColor
+    ) -> Color {
         Color(UIColor { traits in
-            traits.userInterfaceStyle == .dark ? dark : light
+            switch (traits.userInterfaceStyle, traits.accessibilityContrast) {
+            case (.dark, .high): highContrastDark
+            case (_, .high):     highContrastLight
+            case (.dark, _):     dark
+            default:             light
+            }
         })
     }
 }

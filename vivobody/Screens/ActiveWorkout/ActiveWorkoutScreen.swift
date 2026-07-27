@@ -24,6 +24,7 @@ struct ActiveWorkoutScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.sessionAnalytics) private var sessionAnalytics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     /// Optional archive callback. Wired to the Summary card's DONE
     /// button — that's the canonical "workout is over, save it"
@@ -92,6 +93,7 @@ struct ActiveWorkoutScreen: View {
                 pager
                     .safeAreaBar(edge: .top, spacing: 8) { topBar }
                     .safeAreaBar(edge: .bottom, spacing: Space.md) { bottomBar }
+                    .accessibilityHidden(isBlockingOverlayPresented)
             }
 
             if session.isResting {
@@ -101,6 +103,7 @@ struct ActiveWorkoutScreen: View {
                 )
                     .transition(.opacity)
                     .zIndex(10)
+                    .accessibilityHidden(session.pendingPRValue != nil)
             }
 
             // Personal-record celebration. Sits at the highest zIndex
@@ -233,34 +236,49 @@ struct ActiveWorkoutScreen: View {
     // MARK: - Bars
 
     private var topBar: some View {
-        HStack(spacing: 0) {
-            Text("Active workout")
-                .sectionLabelStyle(Opacity.medium)
-
-            Spacer()
-
-            // The set tally + mid-workout add are meaningless while
-            // the workout is still empty — the empty state owns the
-            // single "Add exercise" action there.
-            if !isEmpty {
-                Text("\(completedSetCount) / \(totalSetCount)")
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
-                    .accessibilityLabel("\(completedSetCount) of \(totalSetCount) sets completed")
-
-                addButton
-            }
-
-            // Trailing: X — cancel workout (with confirmation alert).
-            // Logged sets are lost. To minimize, swipe the sheet
-            // down. To finish & archive, swipe to the Summary card
-            // and tap Done.
-            if onDiscard != nil {
-                discardButton
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: Space.xs) {
+                    HStack(spacing: Space.sm) {
+                        workoutTitle
+                        Spacer(minLength: Space.sm)
+                        if onDiscard != nil { discardButton }
+                    }
+                    if !isEmpty {
+                        HStack(spacing: Space.sm) {
+                            setTally
+                            Spacer(minLength: Space.sm)
+                            addButton
+                        }
+                    }
+                }
+            } else {
+                HStack(spacing: 0) {
+                    workoutTitle
+                    Spacer()
+                    if !isEmpty {
+                        setTally
+                        addButton
+                    }
+                    if onDiscard != nil { discardButton }
+                }
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 8)
+    }
+
+    private var workoutTitle: some View {
+        Text("Active workout")
+            .sectionLabelStyle(Opacity.medium)
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    private var setTally: some View {
+        Text("\(completedSetCount) / \(totalSetCount)")
+            .font(Typography.metricUnit)
+            .foregroundStyle(Ink.tertiary)
+            .accessibilityLabel("\(completedSetCount) of \(totalSetCount) sets completed")
     }
 
     /// Compact chip — plus on a tinted circle, matching the discard
@@ -342,15 +360,17 @@ struct ActiveWorkoutScreen: View {
     private var bottomBar: some View {
         PageDots(
             count: session.orderedExercises.count + 1,
-            selection: session.activeExerciseIndex
+            selection: $session.activeExerciseIndex
         )
         .padding(.bottom, 4)
-        .accessibilityHidden(true)
     }
 
     // MARK: - Derived
 
     private var isEmpty: Bool { session.orderedExercises.isEmpty }
+    private var isBlockingOverlayPresented: Bool {
+        session.isResting || session.pendingPRValue != nil
+    }
     private var completedSetCount: Int { session.totalSets }
     private var totalSetCount: Int     { session.totalPlannedSets }
     private var endWorkoutAlertTitle: String {

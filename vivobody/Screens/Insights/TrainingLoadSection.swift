@@ -169,9 +169,20 @@ struct TrainingLoadSection: View {
                 }
             }
             .frame(height: 180)
-            .accessibilityElement()
-            .accessibilityLabel("Rolling seven-day training load over \(report.points.count) days")
+            // Keep Swift Charts' per-point accessibility representation so
+            // VoiceOver users can inspect the trend instead of receiving a
+            // single flattened summary.
+            .accessibilityLabel("Training load trend")
+            .accessibilityValue(chartAccessibilitySummary)
         }
+    }
+
+    private var chartAccessibilitySummary: String {
+        guard let latest = report.points.last else {
+            return "No training load data"
+        }
+        let date = latest.date.formatted(date: .abbreviated, time: .omitted)
+        return "\(report.points.count) daily values. Latest, \(format(latest.load)) estimated hard sets on \(date)."
     }
 
     private func legend(color: Color, label: String) -> some View {

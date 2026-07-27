@@ -336,6 +336,8 @@ struct MeScreen: View {
                         title: "Personal records",
                         trailing: records.count > 3 ? "See all" : nil
                     )
+                    .frame(minHeight: Space.tapMin)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint("Opens all personal records")

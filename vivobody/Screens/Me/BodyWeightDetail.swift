@@ -141,7 +141,7 @@ struct BodyWeightDetail: View {
                     .monospacedDigit()
                 Text(unit.symbol)
                     .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                    .foregroundStyle(Ink.tertiary)
 
                 Spacer()
 
@@ -153,11 +153,11 @@ struct BodyWeightDetail: View {
             if let latest {
                 Text("Last logged \(Self.dayFormatter.string(from: latest.date))")
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.soft))
+                    .foregroundStyle(Ink.tertiary)
             } else {
                 Text("No entries yet")
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.soft))
+                    .foregroundStyle(Ink.tertiary)
             }
         }
     }
@@ -240,7 +240,7 @@ struct BodyWeightDetail: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                    .foregroundStyle(Ink.tertiary)
             }
         }
         .chartYAxis {
@@ -248,16 +248,31 @@ struct BodyWeightDetail: View {
                 AxisGridLine().foregroundStyle(Surface.edge)
                 AxisValueLabel()
                     .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                    .foregroundStyle(Ink.tertiary)
             }
         }
         .frame(height: 220)
+        // Swift Charts supplies the individual date/value elements; this
+        // label and summary add context without collapsing those children.
+        .accessibilityLabel("Body weight progress")
+        .accessibilityValue(chartAccessibilitySummary(points: points))
+    }
+
+    private func chartAccessibilitySummary(points: [BodyWeightEntry]) -> String {
+        guard let first = points.first, let last = points.last else {
+            return "No body weight data"
+        }
+        let firstDate = first.date.formatted(date: .abbreviated, time: .omitted)
+        let lastDate = last.date.formatted(date: .abbreviated, time: .omitted)
+        let firstWeight = WeightFormatter.string(first.weight, unit: unit, fractionDigits: 1)
+        let lastWeight = WeightFormatter.string(last.weight, unit: unit, fractionDigits: 1)
+        return "\(points.count) entries. From \(firstWeight) on \(firstDate) to \(lastWeight) on \(lastDate)."
     }
 
     private var singleEntryHint: some View {
         Text("Log another entry to see your trend")
             .font(Typography.caption)
-            .foregroundStyle(Ink.primary.opacity(Opacity.soft))
+            .foregroundStyle(Ink.tertiary)
             .frame(maxWidth: .infinity)
     }
 
@@ -345,7 +360,7 @@ struct BodyWeightDetail: View {
         HStack(spacing: 12) {
             Text(Self.dayFormatter.string(from: entry.date))
                 .font(Typography.metricUnit)
-                .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                .foregroundStyle(Ink.tertiary)
                 .frame(width: 110, alignment: .leading)
 
             Text(WeightFormatter.string(entry.weight, unit: unit, fractionDigits: 1))

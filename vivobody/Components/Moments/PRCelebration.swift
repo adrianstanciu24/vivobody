@@ -30,6 +30,7 @@
 
 import VivoKit
 import SwiftUI
+import UIKit
 
 struct PRCelebration: View {
     @Binding var isPresented: Bool
@@ -49,6 +50,7 @@ struct PRCelebration: View {
     @State private var promptVisible: Bool = false
     @State private var breathing: CGFloat = 1.0
     @State private var isDismissing: Bool = false
+    @AccessibilityFocusState private var isAccessibilityFocused: Bool
 
     /// Cancellable owners of the entrance choreography and the
     /// dismiss fade so either can be aborted cleanly when the
@@ -85,13 +87,32 @@ struct PRCelebration: View {
                         if drift < 10 { dismiss() }
                     }
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(title)
+            .accessibilityValue(accessibilitySummary)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { dismiss() }
             .accessibilityAction(named: "Continue") { dismiss() }
             .accessibilityHint("Double tap to continue")
+            .accessibilityFocused($isAccessibilityFocused)
             .focusable()
-            .onAppear { startSequence() }
+            .onAppear {
+                startSequence()
+                Task { @MainActor in
+                    await Task.yield()
+                    isAccessibilityFocused = true
+                    UIAccessibility.post(notification: .screenChanged, argument: nil)
+                }
+            }
             .onDisappear { sequenceTask?.cancel(); dismissTask?.cancel() }
             .transition(.opacity)
         }
+    }
+
+    private var accessibilitySummary: String {
+        [value + (unit.map { " \($0)" } ?? ""), detail]
+            .compactMap { $0 }
+            .joined(separator: ". ")
     }
 
     // MARK: - Content

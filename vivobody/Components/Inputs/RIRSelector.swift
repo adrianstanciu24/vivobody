@@ -44,7 +44,7 @@ struct RIRSelector: View {
                     .panelLegend()
                 Text(caption)
                     .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
+                    .foregroundStyle(Ink.tertiary)
             }
 
             StepSelector(
@@ -55,20 +55,12 @@ struct RIRSelector: View {
                 feedbackOnReselection: true
             )
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Reps in reserve")
-        .accessibilityValue(accessibilityValue)
-        .accessibilityAdjustableAction { direction in
-            let next: Int
-            switch direction {
-            case .increment: next = min(5, value + 1)
-            case .decrement: next = max(0, value - 1)
-            @unknown default: return
+        .accessibilityRepresentation {
+            Slider(value: accessibilitySliderBinding, in: 0...5, step: 1) {
+                Text("Reps in reserve")
             }
-            if next != value {
-                value = next
-                Self.effortFeedback(for: next)
-            }
+            .accessibilityValue(accessibilityValue)
+            .accessibilityHint("Swipe up or down to change")
         }
     }
 
@@ -86,6 +78,19 @@ struct RIRSelector: View {
         case 5: return "5 or more reps in reserve"
         default: return "\(value) reps in reserve"
         }
+    }
+
+    private var accessibilitySliderBinding: Binding<Double> {
+        Binding(
+            get: { Double(value) },
+            set: { newValue in
+                guard newValue.isFinite else { return }
+                let next = min(5, max(0, Int(newValue.rounded())))
+                guard next != value else { return }
+                value = next
+                Self.effortFeedback(for: next)
+            }
+        )
     }
 }
 

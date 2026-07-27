@@ -66,6 +66,7 @@ struct LEDLamp: View {
     var size: CGFloat = 18
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
 
     @State private var overdrive: Bool = false
     @State private var breathDim: Bool = false
@@ -94,6 +95,24 @@ struct LEDLamp: View {
                         color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
                         radius: overdrive ? 9 : 3
                     )
+            }
+
+            if differentiateWithoutColor {
+                switch state {
+                case .off:
+                    Circle()
+                        .fill(Ink.primary)
+                        .frame(width: 3, height: 3)
+                case .armed:
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(Ink.primary)
+                        .frame(width: 6, height: 6)
+                        .rotationEffect(.degrees(45))
+                case .lit:
+                    Image(systemName: "checkmark")
+                        .font(.system(size: max(7, size * 0.48), weight: .black))
+                        .foregroundStyle(Color.black)
+                }
             }
         }
         .frame(width: size + 6, height: size + 6)

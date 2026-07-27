@@ -31,7 +31,15 @@ extension TodayScreen {
         )
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
-            .accessibilityLabel("Your body, coloured by how developed each muscle is — a vivid orange where you've trained hard, fading toward a muted tone where you've eased off.")
+            .accessibilityLabel("Training development body model")
+            .accessibilityValue("Muscle colour reflects your recent training development")
+            .accessibilityHint("Opens a text summary for each muscle group")
+            .accessibilityAction {
+                showMuscleMapDetails = true
+            }
+            .accessibilityAction(named: "Show muscle details") {
+                showMuscleMapDetails = true
+            }
     }
 
     /// The always-visible key for the continuous development ramp.
@@ -90,21 +98,7 @@ extension TodayScreen {
             showMuscleMapDetails = true
         } label: {
             VStack(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-                        VStack(spacing: 4) {
-                            Circle()
-                                .fill(legendColor(for: band))
-                                .frame(width: 14, height: 14)
-                            Text(band.displayName)
-                                .font(Typography.metricMicro)
-                                .foregroundStyle(Ink.tertiary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.65)
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                }
+                developmentLegendBands
                 Text("Training development · tap for details")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.secondary)
@@ -116,7 +110,44 @@ extension TodayScreen {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Training development legend. Tap for muscle details.")
+        .accessibilityLabel("Training development legend")
+        .accessibilityHint("Opens muscle details")
+    }
+
+    @ViewBuilder
+    private var developmentLegendBands: some View {
+        if usesAccessibilityLayout {
+            VStack(alignment: .leading, spacing: Space.sm) {
+                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                    HStack(spacing: Space.sm) {
+                        Circle()
+                            .fill(legendColor(for: band))
+                            .frame(width: 14, height: 14)
+                            .accessibilityHidden(true)
+                        Text(band.displayName)
+                            .font(Typography.caption)
+                            .foregroundStyle(Ink.tertiary)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            HStack(spacing: Space.sm) {
+                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                    VStack(spacing: 4) {
+                        Circle()
+                            .fill(legendColor(for: band))
+                            .frame(width: 14, height: 14)
+                        Text(band.displayName)
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Ink.tertiary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
     }
 
     func legendColor(for band: MuscleDevelopmentBand) -> Color {
@@ -531,6 +562,9 @@ extension TodayScreen {
         // content past the screen width and shifting every row right).
         let base = heroHeight
         guard base > 0 else { return 0 }
+        if usesAccessibilityLayout {
+            return min(base * 0.5, 420)
+        }
         return max(
             base * Self.minimumHeroFraction,
             base * Self.heroFraction
@@ -576,6 +610,7 @@ extension TodayScreen {
                 }
                 .padding(.horizontal, Space.lg)
                 .padding(.vertical, Space.md)
+                .frame(minHeight: Space.tapMin)
                 .contentChip()
             }
             .buttonStyle(.plain)
@@ -600,6 +635,7 @@ extension TodayScreen {
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)
         .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
+        .accessibilitySortPriority(100)
     }
 
     /// START, pinned to the bottom via iOS 26's native safe-area bar.

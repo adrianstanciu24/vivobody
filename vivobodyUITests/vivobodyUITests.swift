@@ -2,9 +2,9 @@
 //  vivobodyUITests.swift
 //  vivobodyUITests
 //
-//  UI workflow coverage for active-workout persistence and partial
-//  save behavior. Tests launch with debug-only seed arguments so each
-//  run starts from deterministic on-device SwiftData state.
+//  UI workflow and accessibility-audit coverage for the Today and
+//  active-workout surfaces. Tests launch with debug-only seed arguments
+//  so each run starts from deterministic on-device SwiftData state.
 //
 
 import XCTest
@@ -13,6 +13,23 @@ final class vivobodyUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+    }
+
+    @MainActor
+    func testTodayAccessibilityAudit() throws {
+        let app = launchApp(arguments: ["--ui-test-reset"])
+        waitFor(app.buttons["Start Workout"])
+
+        try app.performAccessibilityAudit()
+    }
+
+    @MainActor
+    func testActiveWorkoutAccessibilityAudit() throws {
+        let app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
+        waitFor(app.buttons["activeWorkoutMiniBar"]).tap()
+        waitFor(app.buttons["endWorkoutButton"])
+
+        try app.performAccessibilityAudit()
     }
 
     @MainActor

@@ -31,7 +31,7 @@ struct SwipePagerGallery: View {
             }
             .frame(height: 420)
 
-            PageDots(count: exercises.count, selection: index)
+            PageDots(count: exercises.count, selection: $index)
                 .frame(maxWidth: .infinity)
 
             Spacer()

@@ -37,6 +37,7 @@
 import VivoKit
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
@@ -88,6 +89,7 @@ struct ActiveWorkoutMiniBar: View {
         .task(id: autoEndsExpiredRest && restJustExpired(now: now)) {
             if autoEndsExpiredRest && restJustExpired(now: now) {
                 Haptics.swell()
+                UIAccessibility.post(notification: .announcement, argument: "Rest complete. Ready for the next set.")
                 session.skipRest()
                 do {
                     try modelContext.save()
@@ -260,6 +262,7 @@ private struct PulseDot: View {
     let isPulsing: Bool
 
     @State private var phase: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         Circle()
@@ -271,18 +274,22 @@ private struct PulseDot: View {
             .brightness(phase ? 0.18 : 0)
             .shadow(color: color.opacity(phase ? 0.55 : 0.12), radius: phase ? 5 : 2)
             .animation(animation, value: phase)
-            .onAppear { phase = isPulsing }
+            .onAppear { phase = isPulsing && !reduceMotion }
             .onChange(of: isPulsing) { _, newValue in
-                phase = newValue
+                phase = newValue && !reduceMotion
+            }
+            .onChange(of: reduceMotion) { _, shouldReduce in
+                phase = shouldReduce ? false : isPulsing
             }
     }
 
-    private var animation: Animation {
-        if isPulsing {
+    private var animation: Animation? {
+        if isPulsing && !reduceMotion {
             return .easeInOut(duration: 1.4).repeatForever(autoreverses: true)
-        } else {
+        } else if !reduceMotion {
             return .easeOut(duration: 0.3)
         }
+        return nil
     }
 }
 

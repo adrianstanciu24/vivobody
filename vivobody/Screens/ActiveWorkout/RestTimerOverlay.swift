@@ -11,6 +11,7 @@
 import VivoKit
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession
@@ -18,6 +19,7 @@ struct RestTimerOverlay: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var saveError: SaveErrorBox? = nil
+    @AccessibilityFocusState private var timerFocused: Bool
 
     /// Bumped each time a rest begins so the BreathingTimer inside is
     /// reconstructed with a fresh `duration` rather than reusing its
@@ -49,6 +51,7 @@ struct RestTimerOverlay: View {
                 }
             )
             .id(instanceID)
+            .accessibilityFocused($timerFocused)
         }
         // Bump the instance whenever a brand new rest BEGINS
         // (restStartedAt becomes a non-nil value), so the
@@ -59,6 +62,11 @@ struct RestTimerOverlay: View {
         .onChange(of: session.restStartedAt, initial: true) { _, new in
             if new != nil {
                 instanceID += 1
+                Task { @MainActor in
+                    await Task.yield()
+                    timerFocused = true
+                    UIAccessibility.post(notification: .screenChanged, argument: nil)
+                }
             }
         }
         .saveErrorAlert($saveError)

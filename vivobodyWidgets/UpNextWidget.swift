@@ -37,7 +37,6 @@ struct UpNextWidgetView: View {
             .padding()
             .widgetURL(URL(string: "vivobody://today"))
             .containerBackground(.black, for: .widget)
-            .dynamicTypeSize(.large)
     }
 
     private var small: some View {

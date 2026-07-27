@@ -78,6 +78,8 @@ struct StepSelector<T: Hashable>: View {
             Text(label(option))
                 .font(Typography.metricUnit)
                 .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
                 .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Space.md)

@@ -25,6 +25,7 @@
 
 import VivoKit
 import SwiftUI
+import UIKit
 
 struct BreathingTimer: View {
     let duration: TimeInterval
@@ -35,6 +36,7 @@ struct BreathingTimer: View {
     var onZero: () -> Void = {}
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var endTime: Date
     @State private var startTime: Date
@@ -120,6 +122,10 @@ struct BreathingTimer: View {
                     .padding(.top, Space.sm)
                 progressBar(progress: progress)
                     .padding(.top, Space.lg)
+                if dynamicTypeSize.isAccessibilitySize {
+                    accessibilityGestureHints
+                        .padding(.top, Space.md)
+                }
 
                 Spacer()
 
@@ -130,16 +136,19 @@ struct BreathingTimer: View {
             .padding(.bottom, Space.xl)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-            swipeAffordances
+            if !dynamicTypeSize.isAccessibilitySize {
+                swipeAffordances
+            }
         }
         .offset(y: dragOffset)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Surface.background.ignoresSafeArea())
         .contentShape(Rectangle())
         .gesture(skipOrExtendGesture)
-        .accessibilityElement(children: .contain)
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel("Rest timer")
-        .accessibilityValue("\(secondsRemaining) seconds remaining of \(formatted(totalDuration))")
+        .accessibilityValue(accessibilityValue)
+        .accessibilityAddTraits(.updatesFrequently)
         .accessibilityAction(named: "Skip rest") { skipNow() }
         .accessibilityAction(named: "Add 30 seconds") { extend(by: 30) }
         .focusable()
@@ -182,7 +191,7 @@ struct BreathingTimer: View {
         }
         .scaleEffect(reduceMotion ? 1.0 : breath, anchor: .leading)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: breath)
-        .animation(.easeInOut(duration: 0.3), value: urgent)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: urgent)
     }
 
     private static func timeString(_ time: TimeInterval) -> String {
@@ -203,22 +212,51 @@ struct BreathingTimer: View {
         SegmentLadder(fraction: 1 - progress, segments: 40, tint: Tint.inProgress)
     }
 
+    /// At accessibility text sizes the edge-positioned gesture prompts would
+    /// collide with the expanded next-set block. Keep the same instructions
+    /// in the normal content flow; VoiceOver receives named actions instead.
+    private var accessibilityGestureHints: some View {
+        HStack {
+            Label("Skip", systemImage: "chevron.down")
+            Spacer()
+            Label("+30s", systemImage: "chevron.up")
+        }
+        .font(Typography.metricMicro)
+        .foregroundStyle(Ink.tertiary)
+        .dynamicTypeSize(.large)
+        .accessibilityHidden(true)
+    }
+
     @ViewBuilder
     private var nextLine: some View {
         if let nextSetLabel {
-            HStack(spacing: Space.md) {
-                Text("Next")
-                    .panelLegendType()
-                    .foregroundStyle(Tint.inProgress)
-                Rectangle()
-                    .fill(Surface.edge)
-                    .frame(width: 1, height: 12)
-                    .accessibilityHidden(true)
-                Text(nextSetLabel)
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    Text("Next")
+                        .panelLegendType()
+                        .foregroundStyle(Tint.inProgress)
+                    Text(nextSetLabel)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.secondary)
+                        .lineLimit(4)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(spacing: Space.md) {
+                    Text("Next")
+                        .panelLegendType()
+                        .foregroundStyle(Tint.inProgress)
+                    Rectangle()
+                        .fill(Surface.edge)
+                        .frame(width: 1, height: 12)
+                        .accessibilityHidden(true)
+                    Text(nextSetLabel)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
             }
         }
     }
@@ -244,6 +282,11 @@ struct BreathingTimer: View {
             .padding(.bottom, 130)
         }
         .allowsHitTesting(false)
+        // These words only teach the physical swipe and are hidden from
+        // assistive technologies, which receive named actions instead. Keep
+        // them compact so accessibility text sizes leave room for the actual
+        // next-set description.
+        .dynamicTypeSize(.large)
         .accessibilityHidden(true)
     }
 
@@ -333,10 +376,20 @@ struct BreathingTimer: View {
             if !hasFinished {
                 hasFinished = true
                 Haptics.success()
+                UIAccessibility.post(
+                    notification: .announcement,
+                    argument: "Rest complete. Go."
+                )
                 onComplete()
             }
         default: break
         }
+    }
+
+    private var accessibilityValue: String {
+        let remaining = "\(secondsRemaining) seconds remaining of \(formatted(totalDuration))"
+        guard let nextSetLabel else { return remaining }
+        return "\(remaining). Next: \(nextSetLabel)"
     }
 
     private func skipNow() {

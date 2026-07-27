@@ -230,8 +230,8 @@ struct BareScrubber: View {
         .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
         .animation(valueAnimation, value: value)
         .animation(dragStateAnimation, value: isDragging)
-        .animation(.easeInOut(duration: 0.3), value: showsScrubHint)
-        .animation(.easeInOut(duration: 0.4), value: hasScrubbed)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: showsScrubHint)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: hasScrubbed)
         .contentShape(Rectangle().inset(by: -hitSlop))
         .gesture(scrubGesture)
         .onChange(of: gestureActive) { _, active in
@@ -275,18 +275,17 @@ struct BareScrubber: View {
             nudgeTask?.cancel()
             cancelActiveInteraction()
         }
-        .accessibilityElement()
-        .accessibilityLabel(accessibilityLabel ?? "")
-        .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
-        .accessibilityHint("Swipe up or down to change")
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment: stepValue(by: 1)
-            case .decrement: stepValue(by: -1)
-            @unknown default: break
+        // Give assistive technologies a real ranged control rather than a
+        // custom element that only looks adjustable. This supplies finite
+        // min/max/current values to the accessibility runtime (and avoids
+        // the `nan` value some inspectors emitted for the custom action).
+        .accessibilityRepresentation {
+            Slider(value: accessibilitySliderBinding, in: range, step: step) {
+                Text(accessibilityLabel ?? "Adjustable value")
             }
+            .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
+            .accessibilityHint("Swipe up or down to change")
         }
-        .focusable()
         .accessibilityRespondsToUserInteraction(true)
     }
 
@@ -733,6 +732,25 @@ struct BareScrubber: View {
     }
 
     private var formattedValue: String { format(value) }
+
+    private var accessibilitySliderBinding: Binding<Double> {
+        Binding(
+            get: { value.isFinite ? value : range.lowerBound },
+            set: { newValue in
+                guard newValue.isFinite else { return }
+                let clamped = min(max(newValue, range.lowerBound), range.upperBound)
+                guard clamped != value else { return }
+                value = clamped
+                Haptics.scrubTick(tone: tickTone)
+                if !hasScrubbed {
+                    withAnimation(reduceMotion ? nil : .easeOut(duration: 0.4)) {
+                        hasScrubbed = true
+                    }
+                }
+                onScrubEnded()
+            }
+        )
+    }
 
     /// Shared by the visible value and the worst-case sizing template
     /// so both always render through the same formatting path.

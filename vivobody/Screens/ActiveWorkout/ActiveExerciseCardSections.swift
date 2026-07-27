@@ -38,33 +38,48 @@ extension ActiveExerciseCard {
         Text(exercise.name)
             .font(Typography.display)
             .foregroundStyle(Ink.primary)
-            .lineLimit(1)
+            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
             .minimumScaleFactor(0.6)
+            .accessibilityAddTraits(.isHeader)
     }
 
     var setPips: some View {
-        HStack(spacing: Space.md) {
-            ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
-                let pipView = pip(isCompleted: set.isCompleted, isActive: idx == activeIndex)
-                // Completed sets edit/delete; pending sets can be
-                // removed when more than one exists.
-                if set.isCompleted {
-                    pipView
-                        .contextMenu { pipMenu(for: set) }
-                        .accessibilityAction(named: "Edit set") { editingSet = set }
-                        .accessibilityAction(named: "Delete set") { deletingSet = set }
-                } else if sets.count > 1 {
-                    pipView
-                        .contextMenu { pipMenu(for: set) }
-                        .accessibilityAction(named: "Remove set") { removeSet(set) }
-                } else {
-                    pipView
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: Space.md) {
+                ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
+                    let isActiveSet = idx == activeIndex
+                    let pipView = pip(isCompleted: set.isCompleted, isActive: isActiveSet)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(Rectangle())
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Set \(idx + 1)")
+                        .accessibilityValue(
+                            set.isCompleted ? "Completed" : (isActiveSet ? "Current" : "Pending")
+                        )
+                        .accessibilityAddTraits(isActiveSet ? .isSelected : [])
+                    // Completed sets edit/delete; pending sets can be
+                    // removed when more than one exists.
+                    if set.isCompleted {
+                        pipView
+                            .contextMenu { pipMenu(for: set) }
+                            .accessibilityAction { editingSet = set }
+                            .accessibilityAction(named: "Edit set") { editingSet = set }
+                            .accessibilityAction(named: "Delete set") { deletingSet = set }
+                            .accessibilityHint("Double tap to edit this set")
+                    } else if sets.count > 1 {
+                        pipView
+                            .contextMenu { pipMenu(for: set) }
+                            .accessibilityAction(named: "Remove set") { removeSet(set) }
+                    } else {
+                        pipView
+                    }
                 }
+                removeSetButton
+                addSetButton
             }
-            removeSetButton
-            addSetButton
         }
-        .frame(height: 44)
+        .frame(minHeight: 44)
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     /// Per-set long-press menu, surfaced from the pips. Completed sets

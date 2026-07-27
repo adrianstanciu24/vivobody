@@ -61,8 +61,28 @@ struct OnboardingScreen: View {
     @Namespace private var glassNamespace
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    @ViewBuilder
     var body: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            ScrollView {
+                accessibilityLayout
+            }
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+            .scrollIndicators(.hidden)
+            .screenBackground()
+            .onAppear(perform: hydrate)
+            .saveErrorAlert($saveError)
+        } else {
+            standardLayout
+                .screenBackground()
+                .onAppear(perform: hydrate)
+                .saveErrorAlert($saveError)
+        }
+    }
+
+    private var standardLayout: some View {
         VStack(spacing: 0) {
             // Deliberately top-anchored: the brand opens the screen and
             // leaves the centre to the one piece of personal setup.
@@ -88,9 +108,29 @@ struct OnboardingScreen: View {
         .padding(.horizontal, Space.gutter)
         .padding(.bottom, Space.xl)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .screenBackground()
-        .onAppear(perform: hydrate)
-        .saveErrorAlert($saveError)
+    }
+
+    /// Accessibility categories trade the fixed, spacer-driven stage
+    /// for a single continuous scroll so every label and control can
+    /// grow at its requested size without clipping the Start action.
+    private var accessibilityLayout: some View {
+        VStack(spacing: Space.section) {
+            brand
+                .settleIn(0)
+
+            VStack(spacing: Space.section) {
+                bodyWeightPicker
+                unitPicker
+            }
+            .frame(maxWidth: 360)
+            .settleIn(1)
+
+            startButton
+                .settleIn(2)
+        }
+        .padding(.horizontal, Space.gutter)
+        .padding(.vertical, Space.section)
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Logo
@@ -140,6 +180,22 @@ struct OnboardingScreen: View {
                 centersValue: true
             )
 
+            bodyWeightAdjustmentFooter
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder
+    private var bodyWeightAdjustmentFooter: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: Space.sm) {
+                Text("Drag to adjust")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+                bodyWeightStepButton
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
             HStack(spacing: Space.md) {
                 Text("Drag to adjust")
                     .font(Typography.caption)
@@ -150,7 +206,6 @@ struct OnboardingScreen: View {
                 bodyWeightStepButton
             }
         }
-        .accessibilityElement(children: .contain)
     }
 
     /// The compact cycling increment control from Active Workout, tuned
@@ -192,13 +247,21 @@ struct OnboardingScreen: View {
                 .foregroundStyle(Ink.tertiary)
 
             GlassEffectContainer(spacing: Space.sm) {
-                HStack(spacing: Space.sm) {
-                    ForEach(WeightUnit.allCases) { unit in
-                        unitChip(unit)
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(spacing: Space.sm) {
+                        ForEach(WeightUnit.allCases) { unit in
+                            unitChip(unit)
+                        }
+                    }
+                } else {
+                    HStack(spacing: Space.sm) {
+                        ForEach(WeightUnit.allCases) { unit in
+                            unitChip(unit)
+                        }
                     }
                 }
             }
-            .frame(maxWidth: 260)
+            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? 360 : 260)
         }
     }
 

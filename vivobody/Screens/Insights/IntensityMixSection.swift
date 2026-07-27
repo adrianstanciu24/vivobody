@@ -181,8 +181,10 @@ struct IntensityMixSection: View {
                 }
             }
             .frame(height: 200)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(chartAccessibilityLabel)
+            // Leave the generated bar-series semantics intact so every week
+            // and zone remains explorable with VoiceOver and Audio Graphs.
+            .accessibilityLabel("Weekly completed sets by rep range")
+            .accessibilityValue(chartAccessibilitySummary)
         }
     }
 
@@ -194,8 +196,8 @@ struct IntensityMixSection: View {
         weeks.last { $0.isCurrentWeek }
     }
 
-    private var chartAccessibilityLabel: String {
-        var label = "Weekly completed sets by rep range over 12 weeks."
+    private var chartAccessibilitySummary: String {
+        var label = "\(weeks.count) weeks shown."
         if let latestCompleteWeek {
             label += " The latest full week had \(setLabel(latestCompleteWeek.total))."
         }

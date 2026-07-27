@@ -189,7 +189,13 @@ struct AppRoot: View {
                         }
                     )
                     .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+                    // The PR moment is accessibility-modal as well as visual:
+                    // remove the system grabber so it cannot become a second
+                    // VoiceOver dismissal target while the celebration owns
+                    // the sheet. Resting workouts remain minimizable.
+                    .presentationDragIndicator(
+                        session.pendingPRValue == nil ? .visible : .hidden
+                    )
                 }
             }
             .sheet(item: $appState.pendingSpotlightExercise) { item in

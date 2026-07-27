@@ -50,6 +50,7 @@ struct SetCompleteButton: View {
 
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
     private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
@@ -80,7 +81,8 @@ struct SetCompleteButton: View {
             content
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 96)
+        .frame(minHeight: 96)
+        .frame(height: dynamicTypeSize.isAccessibilitySize ? nil : 96)
         .contentShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
         .scaleEffect(pressScale)
         .background(
@@ -103,6 +105,9 @@ struct SetCompleteButton: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityInputLabels(inputLabelValues)
         .accessibilityHint(isComplete ? "Double tap to undo." : "Double tap to complete the set.")
+        .accessibilityAction {
+            fire(at: CGPoint(x: size.width / 2, y: size.height / 2))
+        }
         .focusable()
         .accessibilityRespondsToUserInteraction(true)
     }
@@ -145,8 +150,9 @@ struct SetCompleteButton: View {
                 Text(title)
                     .font(Typography.title)
                     .tracking(0.4)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.55 : 0.7)
+                    .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
                     .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
                 Spacer(minLength: 8)
                 statusIndicator

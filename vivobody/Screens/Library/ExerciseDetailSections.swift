@@ -337,14 +337,14 @@ extension ExerciseDetailScreen {
                     if let value = chartValue(for: point) {
                         LineMark(
                             x: .value("Date", point.date),
-                            y: .value("Metric", value)
+                            y: .value(chartMetricAccessibilityName, value)
                         )
                         .interpolationMethod(.monotone)
                         .foregroundStyle(Ink.primary.opacity(Opacity.strong))
 
                         AreaMark(
                             x: .value("Date", point.date),
-                            y: .value("Metric", value)
+                            y: .value(chartMetricAccessibilityName, value)
                         )
                         .interpolationMethod(.monotone)
                         .foregroundStyle(
@@ -358,7 +358,7 @@ extension ExerciseDetailScreen {
                         if prIDs.contains(point.id) {
                             PointMark(
                                 x: .value("Date", point.date),
-                                y: .value("Metric", value)
+                                y: .value(chartMetricAccessibilityName, value)
                             )
                             .symbol(.circle)
                             .symbolSize(60)
@@ -372,7 +372,7 @@ extension ExerciseDetailScreen {
                     AxisGridLine().foregroundStyle(Surface.edge)
                     AxisValueLabel()
                         .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
             .chartYAxis {
@@ -380,12 +380,44 @@ extension ExerciseDetailScreen {
                     AxisGridLine().foregroundStyle(Surface.edge)
                     AxisValueLabel()
                         .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.primary.opacity(Opacity.medium))
+                        .foregroundStyle(Ink.tertiary)
                 }
             }
             .frame(height: 200)
-            .accessibilityLabel("Progress chart")
+            .accessibilityLabel("\(item.name) \(chartMetricAccessibilityName.lowercased()) progress")
+            .accessibilityValue(chartAccessibilitySummary(points: plottable))
         }
+    }
+
+    private var chartMetricAccessibilityName: String {
+        if item.trackingMode == .duration {
+            return item.performanceSemanticKind.comparesLoad ? "Effective load" : "Duration"
+        }
+        switch effectiveChartMetric {
+        case .weight: return "Load"
+        case .e1rm:   return "Estimated one-rep max"
+        case .volume: return "Volume"
+        }
+    }
+
+    private func chartAccessibilitySummary(points: [ExerciseProgressPoint]) -> String {
+        guard let first = points.first,
+              let last = points.last,
+              let firstValue = chartValue(for: first),
+              let lastValue = chartValue(for: last)
+        else { return "No progress data" }
+
+        let firstDate = first.date.formatted(date: .abbreviated, time: .omitted)
+        let lastDate = last.date.formatted(date: .abbreviated, time: .omitted)
+        return "\(points.count) sessions. From \(chartAccessibilityValue(firstValue)) on \(firstDate) to \(chartAccessibilityValue(lastValue)) on \(lastDate)."
+    }
+
+    private func chartAccessibilityValue(_ value: Double) -> String {
+        if item.trackingMode == .duration && !item.performanceSemanticKind.comparesLoad {
+            return DurationFormatter.string(value)
+        }
+        let formatted = value.formatted(.number.precision(.fractionLength(0...1)))
+        return "\(formatted) \(unit.symbol)"
     }
 
     private var chartPlaceholder: some View {

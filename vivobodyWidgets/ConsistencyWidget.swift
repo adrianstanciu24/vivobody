@@ -47,7 +47,6 @@ struct ConsistencyWidgetView: View {
         }
         .widgetURL(URL(string: isPro ? "vivobody://insights/consistency" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
-        .dynamicTypeSize(.large)
     }
 
     private var graph: some View {
