@@ -209,7 +209,12 @@ final class ProStore {
 
     // MARK: - Product
 
-    private func loadProductIfNeeded() async {
+    /// Fetch the App Store product once. Called at launch and again
+    /// by PaywallSheet on every presentation, so a launch-time
+    /// failure (store unreachable, offline) self-heals the next time
+    /// the paywall opens rather than leaving the CTA price-less for
+    /// the whole session. A no-op once the product is loaded.
+    func loadProductIfNeeded() async {
         #if DEBUG
         guard !storeKitDisabled else { return }
         #endif

@@ -8,10 +8,16 @@
 //  lands on the same screen. Black, type-forward, single accent —
 //  no checkmark spam, no countdown timers, no dark patterns.
 //
+//  The feature list renders as one ledger block — rows grouped
+//  inside a shared content card with inset hairlines, the same
+//  surface language as Settings, History, and Library.
+//
 //  Price always comes from `Product.displayPrice`; nothing is
-//  hardcoded. Restore Purchases is always reachable (App Review
-//  requirement). A successful purchase dismisses with the same
-//  rigid haptic thunk a completed set earns.
+//  hardcoded. The product query retries on every presentation so
+//  a slow store never leaves the CTA price-less. Restore Purchases
+//  is always reachable (App Review requirement). A successful
+//  purchase dismisses with the same rigid haptic thunk a completed
+//  set earns.
 //
 
 import VivoKit
@@ -40,6 +46,10 @@ struct PaywallSheet: View {
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .safeAreaInset(edge: .bottom) { purchaseBar }
         .screenBackground()
+        // Retry the product query on every presentation — the
+        // launch-time load may have run before the store was
+        // reachable, and the CTA must never stand price-less.
+        .task { await pro.loadProductIfNeeded() }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
         .onChange(of: pro.status) { _, status in
@@ -103,10 +113,7 @@ struct PaywallSheet: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(Space.md)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                    .fill(Tint.primary.opacity(0.12))
-            )
+            .contentCard(tint: Tint.primary)
     }
 
     // MARK: - Features
@@ -117,42 +124,54 @@ struct PaywallSheet: View {
                 title: "Insights",
                 detail: "Signature, strength trajectory, symmetry, training load — the full read on your training"
             )
-            SectionDivider()
+            rowDivider
             featureRow(
                 title: "Progress charts",
                 detail: "Per-exercise weight, e1RM, and volume trends with PR markers"
             )
-            SectionDivider()
+            rowDivider
             featureRow(
                 title: "Unlimited templates",
                 detail: "The free tier includes up to \(ProGate.freeTemplateLimit); Pro removes the cap"
             )
-            SectionDivider()
+            rowDivider
             featureRow(
                 title: "Home Screen widgets",
                 detail: "Your Signature and Consistency, at a glance"
             )
-            SectionDivider()
+            rowDivider
             featureRow(
                 title: "Apple Health",
                 detail: "Finished workouts mirrored to the Health app"
             )
         }
+        .contentCard()
     }
 
     private func featureRow(title: String, detail: String) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(title)
-                .font(Typography.sectionHeading)
+                .font(Typography.headline)
                 .foregroundStyle(Ink.primary)
             Text(detail)
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
                 .fixedSize(horizontal: false, vertical: true)
         }
+        .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
+    }
+
+    /// In-card hairline between feature rows, inset so it never runs
+    /// into the card's rounded corners — same treatment as Settings.
+    private var rowDivider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
+            .padding(.horizontal, Space.lg)
+            .accessibilityHidden(true)
     }
 
     // MARK: - Purchase bar

@@ -8,6 +8,12 @@
 //  Exercise Catalog action, the About links (privacy policy and
 //  support, required for App Store distribution), and the app footer.
 //
+//  Sections render as ledger blocks, matching History and Library:
+//  the SectionHeader stays on black and the section's rows sit
+//  together inside one shared content card with inset hairlines.
+//  Glass stays reserved for the genuine controls — the option chips
+//  and toggles inside the rows.
+//
 //  Settings persist via @AppStorage (UserDefaults). The Haptics
 //  engine reads its enabled flag directly from UserDefaults on every
 //  emission, so toggling here takes effect immediately throughout
@@ -134,10 +140,10 @@ struct SettingsScreen: View {
                         .foregroundStyle(Tint.primary)
                         .accessibilityHidden(true)
                 }
-                .padding(.horizontal, Space.md)
-                .padding(.vertical, Space.sm)
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
                 .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-                .coloredGlassControl(cornerRadius: Radius.chip, interactive: false)
+                .contentCard()
                 .accessibilityElement(children: .combine)
             } else {
                 Button {
@@ -156,13 +162,15 @@ struct SettingsScreen: View {
                         Image(systemName: "chevron.right")
                             .font(Typography.sectionLabel)
                             .foregroundStyle(Ink.tertiary)
-                            .frame(width: 44, height: 44)
                             .accessibilityHidden(true)
                     }
-                    .padding(.horizontal, Space.md)
-                    .padding(.vertical, Space.sm)
+                    .padding(.horizontal, Space.lg)
+                    .padding(.vertical, Space.md)
                     .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-                    .coloredGlassControl(cornerRadius: Radius.chip)
+                    // The one tappable promo on the screen wears the
+                    // bright surface — the same lift History gives
+                    // today's ledger card.
+                    .contentCard(bright: true)
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint("Opens the Vivobody Pro purchase sheet")
@@ -176,7 +184,7 @@ struct SettingsScreen: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Preferences")
 
-            VStack(alignment: .leading, spacing: Space.lg + 2) {
+            VStack(alignment: .leading, spacing: 0) {
                 appearanceRow
                 rowDivider
                 weightUnitRow
@@ -193,6 +201,7 @@ struct SettingsScreen: View {
                 rowDivider
                 resetCatalogRow
             }
+            .contentCard()
         }
         .alert(
             "Reset Exercise Catalog?",
@@ -224,10 +233,10 @@ struct SettingsScreen: View {
         }
     }
 
-    /// Destructive-action row inside Preferences. Tapping the whole
-    /// row opens a confirmation alert — never single-tap destructive,
-    /// per the rest of the app's pattern (delete set, cancel
-    /// workout, etc.).
+    /// Destructive-action row — the Preferences card's last row.
+    /// Tapping the whole row opens a confirmation alert — never
+    /// single-tap destructive, per the rest of the app's pattern
+    /// (delete set, cancel workout, etc.).
     private var resetCatalogRow: some View {
         Button {
             Haptics.soft()
@@ -246,14 +255,12 @@ struct SettingsScreen: View {
                 Image(systemName: "arrow.counterclockwise")
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
                     .accessibilityHidden(true)
             }
-            .padding(.horizontal, Space.md)
-            .padding(.vertical, Space.sm)
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.md)
             .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-            .coloredGlassControl(cornerRadius: Radius.chip)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityHint("Wipes and reseeds the exercise catalog")
@@ -282,6 +289,8 @@ struct SettingsScreen: View {
                 }
             }
         }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
     }
 
     private func appearanceChip(_ option: AppAppearance) -> some View {
@@ -329,6 +338,8 @@ struct SettingsScreen: View {
                 }
             }
         }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
     }
 
     private func weightUnitChip(_ unit: WeightUnit) -> some View {
@@ -375,6 +386,7 @@ struct SettingsScreen: View {
                     .font(Typography.metricInline)
                     .foregroundStyle(Ink.primary)
             }
+            .padding(.horizontal, Space.lg)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 GlassEffectContainer(spacing: Space.sm) {
@@ -385,7 +397,11 @@ struct SettingsScreen: View {
                     }
                 }
             }
+            // Chips inset like the other rows at rest, but scroll all
+            // the way to the card's edges once the strip moves.
+            .contentMargins(.horizontal, Space.lg, for: .scrollContent)
         }
+        .padding(.vertical, Space.md)
     }
 
     private func restChip(seconds: Int) -> some View {
@@ -440,6 +456,8 @@ struct SettingsScreen: View {
             .tint(Tint.inProgress)
             .accessibilityLabel("Haptics")
         }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
     }
 
     private var soundsRow: some View {
@@ -469,6 +487,8 @@ struct SettingsScreen: View {
             .tint(Tint.inProgress)
             .accessibilityLabel("Sounds")
         }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
     }
 
     /// Apple Health opt-in. Enabling requests write authorization;
@@ -498,9 +518,11 @@ struct SettingsScreen: View {
                     Image(systemName: "lock.fill")
                         .font(Typography.sectionLabel)
                         .foregroundStyle(Ink.tertiary)
-                        .frame(width: 44, height: 44)
                         .accessibilityHidden(true)
                 }
+                .padding(.horizontal, Space.lg)
+                .padding(.vertical, Space.md)
+                .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -539,6 +561,8 @@ struct SettingsScreen: View {
             .tint(Tint.inProgress)
             .accessibilityLabel("Apple Health")
         }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
     }
 
     /// Runs the HealthKit write-authorization request and settles the
@@ -550,10 +574,14 @@ struct SettingsScreen: View {
         if granted { Haptics.soft() }
     }
 
+    /// In-card hairline between rows, inset so it never runs into
+    /// the card's rounded corners — same treatment as History's
+    /// ledger blocks.
     private var rowDivider: some View {
         Rectangle()
             .fill(Surface.edge)
             .frame(height: 0.5)
+            .padding(.horizontal, Space.lg)
             .accessibilityHidden(true)
     }
 
@@ -565,7 +593,7 @@ struct SettingsScreen: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "About")
 
-            VStack(alignment: .leading, spacing: Space.lg + 2) {
+            VStack(alignment: .leading, spacing: 0) {
                 linkRow(
                     title: "Privacy Policy",
                     subtitle: "Everything stays on your device",
@@ -578,6 +606,7 @@ struct SettingsScreen: View {
                     url: SupportLinks.support
                 )
             }
+            .contentCard()
         }
     }
 
@@ -596,13 +625,12 @@ struct SettingsScreen: View {
                 Image(systemName: "arrow.up.right")
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
-                    .frame(width: 44, height: 44)
                     .accessibilityHidden(true)
             }
-            .padding(.horizontal, Space.md)
-            .padding(.vertical, Space.sm)
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.md)
             .frame(maxWidth: .infinity, minHeight: Space.rowMin, alignment: .leading)
-            .coloredGlassControl(cornerRadius: Radius.chip)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityHint("Opens in your browser")
