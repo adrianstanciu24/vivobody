@@ -335,6 +335,24 @@ struct DateGroupSection: View {
     }
 }
 
+// MARK: - PR tag
+
+/// The lone accent in the history ledger: a small outlined "PR"
+/// capsule marking a session or exercise that set a new all-time top
+/// weight. Shared by the list rows and the session detail so the
+/// signal reads identically in both places.
+struct PRTag: View {
+    var body: some View {
+        Text("PR")
+            .font(Typography.micro)
+            .foregroundStyle(Tint.primary)
+            .padding(.horizontal, Space.sm)
+            .padding(.vertical, 1)
+            .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
+            .accessibilityLabel("Personal record")
+    }
+}
+
 // MARK: - Session row
 
 /// One archived session as a row inside a date-group card. The left
@@ -402,18 +420,12 @@ struct SessionRow: View {
         .accessibilityElement(children: .combine)
     }
 
-    /// The lone accent in the list: a small outlined "PR" tag next to
-    /// a session that set a new top weight. Replaces the old practice
-    /// of flooding the whole volume numeral orange, which made every
-    /// row shout.
+    /// The lone accent in the list: the shared outlined "PR" tag next
+    /// to a session that set a new top weight. Replaces the old
+    /// practice of flooding the whole volume numeral orange, which
+    /// made every row shout.
     var prBadge: some View {
-        Text("PR")
-            .font(Typography.micro)
-            .foregroundStyle(Tint.primary)
-            .padding(.horizontal, Space.sm)
-            .padding(.vertical, 1)
-            .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
-            .accessibilityLabel("Personal record")
+        PRTag()
     }
 
     /// Today's rows lead with the workout's muscle identity; earlier

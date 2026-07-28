@@ -3,25 +3,24 @@
 //  vivobody
 //
 //  The view a history row pushes into — the permanent record of a
-//  past workout, built in the same instrument language as the live
-//  summary "receipt": full-bleed on black, no cards or carved glass,
-//  type and hairlines doing the work.
+//  past workout, rendered in the same carded-ledger language as the
+//  History list it opens from: one focal hero card, then the
+//  exercises as a stack of cards beneath it.
 //
 //  Layout, top to bottom:
 //
-//    • Kicker — the date, then the derived workout title (e.g.
-//      "Full body") as the entry's identity.
-//    • The HERO — the session's total volume as a large monospaced
-//      numeral, rendered in the gold completion accent when any
-//      exercise set an all-time top weight at the moment it was
-//      logged (matching the gold numeral on the History row).
-//    • A card-free stat strip — Duration / Sets / Reps,
-//      hairline-divided, followed by the wider Top set detail.
-//    • Exercise breakdown — one hairline-divided block per exercise:
-//      group label + per-exercise volume, then the full-width name,
-//      then a set grid of `1   135 × 8` rows in tabular monospace.
-//      The top set's numerals render gold; incomplete sets dim with
-//      a hollow status pip.
+//    • SESSION HERO — the screen's one focal card. The date and the
+//      derived workout title (e.g. "Full body") carry the entry's
+//      identity, with the outlined PR capsule beside the title when
+//      the session set an all-time top weight; the total volume
+//      follows as a huge monospaced numeral in the completion
+//      accent; Duration / Sets / Reps close as a stat strip, with
+//      the Top set detail and intensity line as the card's footer.
+//    • EXERCISES — one card per exercise: group label + per-exercise
+//      volume (+ the PR capsule when earned), the contribution
+//      waterfall, then the set grid of `1   135 × 8` rows in tabular
+//      monospace. The top set's numerals render in the completion
+//      accent; incomplete sets dim with a hollow status pip.
 //
 
 import VivoKit
@@ -51,36 +50,13 @@ struct SessionDetailScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                kicker
-                heroVolume
-                    .padding(.top, Space.lg)
-                StatStrip(
-                    stats: [
-                        Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
-                        Stat(value: "\(session.totalSets)", label: "Sets"),
-                        Stat(value: "\(session.totalReps)", label: "Reps"),
-                    ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
-                )
-                .padding(.top, Space.xl)
-
-                topSetDetail
-                    .padding(.top, Space.lg)
-
-                if SessionIntensityLine.hasContent(session) {
-                    SessionIntensityLine(session: session, unit: unit)
-                        .padding(.top, Space.sm)
-                }
-
-                SectionDivider()
-                    .padding(.top, Space.xl)
-
+            VStack(alignment: .leading, spacing: Space.section) {
+                heroCard
+                    .settleIn(0)
                 exercisesSection
-                    .padding(.top, Space.lg)
+                    .settleIn(1)
             }
-            .padding(.top, Space.sm)
+            .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -92,18 +68,50 @@ struct SessionDetailScreen: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: - Kicker + hero
+    // MARK: - Session hero
 
-    private var kicker: some View {
+    /// The session as one physical object, mirroring History's week
+    /// hero: identity on top, the lead numeral next, counts as a
+    /// strip, the standout set as the footer note.
+    private var heroCard: some View {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            header
+            heroVolume
+            StatStrip(
+                stats: [
+                    Stat(value: "\(durationMinutes)", unit: "min", label: "Duration"),
+                    Stat(value: "\(session.totalSets)", label: "Sets"),
+                    Stat(value: "\(session.totalReps)", label: "Reps"),
+                ],
+                valueFont: Typography.statValue,
+                edgeAligned: true
+            )
+            .padding(.top, Space.xs)
+
+            VStack(alignment: .leading, spacing: Space.sm) {
+                topSetDetail
+                if SessionIntensityLine.hasContent(session) {
+                    SessionIntensityLine(session: session, unit: unit)
+                }
+            }
+        }
+        .padding(Space.lg)
+        .contentCard()
+    }
+
+    private var header: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(dateLine)
                 .panelLegendType()
                 .foregroundStyle(Ink.primary.opacity(Opacity.soft))
-            Text(workoutTitle)
-                .font(Typography.title)
-                .foregroundStyle(Ink.primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+            HStack(spacing: Space.sm) {
+                Text(workoutTitle)
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if sessionHasPR { PRTag() }
+            }
         }
     }
 
@@ -174,9 +182,8 @@ struct SessionDetailScreen: View {
         return VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
 
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
-                    if idx > 0 { SectionDivider() }
+            VStack(alignment: .leading, spacing: Space.md) {
+                ForEach(session.orderedExercises, id: \.id) { exercise in
                     ExerciseDetailRow(
                         exercise: exercise,
                         unit: unit,
@@ -318,8 +325,10 @@ private struct ExerciseDetailRow: View {
             }
             setsGrid
         }
+        .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .contentCard()
     }
 
     private var header: some View {
@@ -329,11 +338,7 @@ private struct ExerciseDetailRow: View {
                     Text(exercise.group.displayName)
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
-                    if isPR {
-                        Text("PR")
-                            .font(Typography.metricMicro)
-                            .foregroundStyle(Tint.complete)
-                    }
+                    if isPR { PRTag() }
                 }
 
                 Spacer(minLength: Space.sm)
