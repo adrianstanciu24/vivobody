@@ -14,7 +14,9 @@
 //      legends on an instrument faceplate.
 //    • LEDLamp — an indicator lamp with true LED behavior: off is a
 //      dim ring, armed glows and breathes at standby, lit overdrives
-//      past resting brightness then settles with an afterglow.
+//      past resting brightness then settles with an afterglow. A
+//      segment (capsule) shape serves set pips so progress reads as
+//      filling segments, never as the pager's page dots.
 //    • SegmentLadder — a discrete segment bar. Devices count in
 //      steps; a ladder fills click-by-click instead of smearing.
 //    • SegmentReadout + SegmentDisplay.ghost — LCD-style numeric
@@ -58,12 +60,22 @@ enum LEDLampState: Equatable {
     case lit
 }
 
+/// Lamp geometry. `circle` is the classic panel indicator; `segment`
+/// is a short capsule — Active Workout's set pips use it so set
+/// progress reads as filling segments and never reads as the pager's
+/// page dots.
+enum LEDLampShape {
+    case circle
+    case segment
+}
+
 /// An indicator lamp that behaves like an LED rather than a tinted
 /// circle. Constant outer frame across all states, so a row of lamps
 /// never reflows as they light — panel discipline.
 struct LEDLamp: View {
     let state: LEDLampState
     var size: CGFloat = 18
+    var shape: LEDLampShape = .circle
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
@@ -74,18 +86,18 @@ struct LEDLamp: View {
 
     var body: some View {
         ZStack {
-            switch state {
-            case .off:
+            switch (shape, state) {
+            case (.circle, .off):
                 Circle()
                     .strokeBorder(Ink.quaternary, lineWidth: 2)
                     .frame(width: size - 2, height: size - 2)
-            case .armed:
+            case (.circle, .armed):
                 Circle()
                     .stroke(Tint.inProgress, lineWidth: 3)
                     .frame(width: size + 2, height: size + 2)
                     .opacity(breathDim ? 0.68 : 1.0)
                     .shadow(color: Tint.inProgress.opacity(breathDim ? 0.10 : 0.30), radius: 4)
-            case .lit:
+            case (.circle, .lit):
                 Circle()
                     .fill(Tint.complete)
                     .frame(width: size, height: size)
@@ -95,27 +107,59 @@ struct LEDLamp: View {
                         color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
                         radius: overdrive ? 9 : 3
                     )
+            case (.segment, .off):
+                Capsule(style: .continuous)
+                    .strokeBorder(Ink.quaternary, lineWidth: 1.5)
+                    .frame(width: 26, height: 9)
+            case (.segment, .armed):
+                Capsule(style: .continuous)
+                    .stroke(Tint.inProgress, lineWidth: 2.5)
+                    .frame(width: 28, height: 9)
+                    .opacity(breathDim ? 0.68 : 1.0)
+                    .shadow(color: Tint.inProgress.opacity(breathDim ? 0.10 : 0.30), radius: 4)
+            case (.segment, .lit):
+                Capsule(style: .continuous)
+                    .fill(Tint.complete)
+                    .frame(width: 26, height: 9)
+                    .brightness(overdrive ? 0.32 : 0)
+                    .scaleEffect(overdrive ? 1.22 : 1.0)
+                    .shadow(
+                        color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
+                        radius: overdrive ? 9 : 3
+                    )
             }
 
             if differentiateWithoutColor {
-                switch state {
-                case .off:
+                switch (shape, state) {
+                case (.circle, .off):
                     Circle()
                         .fill(Ink.primary)
                         .frame(width: 3, height: 3)
-                case .armed:
+                case (.circle, .armed):
                     RoundedRectangle(cornerRadius: 1)
                         .fill(Ink.primary)
                         .frame(width: 6, height: 6)
                         .rotationEffect(.degrees(45))
-                case .lit:
+                case (.circle, .lit):
                     Image(systemName: "checkmark")
                         .font(.system(size: max(7, size * 0.48), weight: .black))
                         .foregroundStyle(Color.black)
+                case (.segment, .armed):
+                    // Filled vs outline already separates lit from the
+                    // rest without colour; only armed — also an
+                    // outline — needs an extra mark.
+                    Circle()
+                        .fill(Ink.primary)
+                        .frame(width: 3, height: 3)
+                case (.segment, .off), (.segment, .lit):
+                    EmptyView()
                 }
             }
         }
-        .frame(width: size + 6, height: size + 6)
+        .frame(
+            width: shape == .segment ? 34 : size + 6,
+            height: size + 6
+        )
         .onChange(of: state) { old, new in
             if new == .lit, old != .lit { fireOverdrive() }
             if new == .armed {

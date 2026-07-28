@@ -7,7 +7,7 @@
 //
 //  Composition of effects on idle → complete:
 //    1. Haptics.crescendo()
-//    2. Neutral glass floods with the completion accent.
+//    2. The dim volt tint floods with the full completion accent.
 //    3. Numbers spring-overshoot (1.0 → 1.06 → 1.0).
 //    4. A checkmark draws on only after completion.
 //    5. A single radial ring expands from the tap point and fades.
@@ -123,26 +123,30 @@ struct SetCompleteButton: View {
 
     private var background: some View {
         let shape = RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-        // Idle is neutral, crisp glass: the orange verb supplies the
-        // affordance without a muddy pre-filled state. Completion then
-        // earns the full accent flood and bloom.
+        // Idle wears a dim volt wash under NEUTRAL glass: the one live
+        // action on the panel is its warmest surface, but the glass
+        // stays untinted so the volt verb keeps its contrast. (A volt
+        // glass tint renders near-solid and swallows the verb.)
+        // Completion then earns the full accent flood — same hue,
+        // overdriven.
         return shape
             .fill(reduceTransparency
-                    ? (isComplete ? accent : Ink.primary.opacity(0.14))
-                    : (isComplete ? accent.opacity(0.85) : Surface.cardTintBright))
+                    ? (isComplete ? accent : liveAccent.opacity(0.30))
+                    : (isComplete ? accent.opacity(0.85) : liveAccent.opacity(0.22)))
             .glassTinted(isComplete ? accent : nil, interactive: true, in: shape)
-            // Accent bloom belongs only to the completed state.
+            // The full accent bloom belongs to the completed state;
+            // idle gets a quieter ember.
             .shadow(
-                color: isComplete ? accent.opacity(0.50) : .clear,
-                radius: isComplete ? 24 : 0,
-                y: isComplete ? 9 : 0
+                color: isComplete ? accent.opacity(0.50) : liveAccent.opacity(0.20),
+                radius: isComplete ? 24 : 12,
+                y: isComplete ? 9 : 4
             )
             .shadow(color: .black.opacity(0.50), radius: 8, y: 4)
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.78), value: isComplete)
     }
 
     private var ripple: some View {
-        Ripple(triggerId: rippleId, origin: ripplePoint, color: isComplete ? .white : liveAccent, reduceMotion: reduceMotion)
+        Ripple(triggerId: rippleId, origin: ripplePoint, color: .white, reduceMotion: reduceMotion)
             .allowsHitTesting(false)
             .clipShape(RoundedRectangle(cornerRadius: Radius.card, style: .continuous))
     }

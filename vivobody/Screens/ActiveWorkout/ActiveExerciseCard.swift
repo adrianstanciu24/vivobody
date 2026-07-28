@@ -8,13 +8,18 @@
 //
 //  First-principles layout (top → bottom):
 //    • Exercise name (the page's identity).
-//    • Set pips — done / active / pending, glanceable at a flick.
+//    • Set segments — done / active / pending capsules, glanceable
+//      at a flick and never mistakable for the pager's page dots.
 //    • The HERO: the working weight as a huge monospaced odometer
 //      you scrub with a vertical drag, with reps beneath it. The
 //      numbers are the interface; there is no chip around them.
 //    • A tiny "Last 135 × 8" line (long-press to edit/delete).
 //    • The single biggest target on screen: a full-width verb
-//      button — "Complete set" / "Finish exercise."
+//      button — "Complete set" / "Finish exercise" — wearing a dim
+//      volt tint so the live action is the panel's loudest surface.
+//      Everything from the hero down holds a fixed rhythm; the one
+//      flexible gap sits above the hero so the interactive cluster
+//      stays low, in the thumb's arc.
 //
 //  Two accents, per the product principles: Volt for in-progress
 //  (the live action), gold for complete (a finished set, exercise,
@@ -151,8 +156,11 @@ struct ActiveExerciseCard: View {
 
             heroBlock
                 .powerOn(2)
-
-            Spacer(minLength: Space.xl)
+                // One flexible gap above the hero; everything below it
+                // (RIR → last set → verb) holds a fixed rhythm so the
+                // interactive cluster sits low, in the thumb's arc,
+                // instead of floating mid-panel on tall screens.
+                .padding(.bottom, Space.xxl)
 
             rirControl
                 .powerOn(3)

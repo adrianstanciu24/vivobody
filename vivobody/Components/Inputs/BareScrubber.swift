@@ -77,6 +77,11 @@ struct BareScrubber: View {
     /// Reserve for the full-width hero scrubbers; dense editor rows
     /// have no room for it.
     var showsRail: Bool = false
+    /// Clear width reserved after the number row when `showsRail` is
+    /// on for a NON-full-width scrubber: the rail renders into this
+    /// strip instead of overlapping the unit text. Ignored by
+    /// full-width heroes — their rail already lands in open space.
+    var railClearance: CGFloat = 0
     /// Changing this value synchronously invalidates an in-flight drag or
     /// coast on the next view update. Active Workout uses it before
     /// completion, archive, and discard transitions.
@@ -301,7 +306,7 @@ struct BareScrubber: View {
                 value: value,
                 font: .system(size: fontSize, weight: .bold),
                 color: numberColor,
-                fractionalDigits: WeightUnit.fractionDigits(forStep: step, value: value),
+                fractionalDigits: displayFractionDigits(for: value),
                 rolls: !isDragging && !isCoasting,
                 formatter: formatter
             )
@@ -330,7 +335,7 @@ struct BareScrubber: View {
     /// monospaced.
     private var sizingRow: some View {
         HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-            Text(format(range.upperBound))
+            Text(templateFormat(range.upperBound))
                 .font(.system(size: fontSize, weight: .bold))
                 .monospacedDigit()
             if !unit.isEmpty {
@@ -382,6 +387,7 @@ struct BareScrubber: View {
                 numberUnitRow
                 hintChevrons
             }
+            .padding(.trailing, railClearance)
         }
     }
 
@@ -754,11 +760,29 @@ struct BareScrubber: View {
         )
     }
 
-    /// Shared by the visible value and the worst-case sizing template
-    /// so both always render through the same formatting path.
+    /// Live readout. A whole value drops the step's trailing ".0"
+    /// (60, not 60.0); any off-grid value keeps the precision it
+    /// needs (62.5) so the number always tells the truth.
     private func format(_ v: Double) -> String {
         if let formatter { return formatter(v) }
-        let d = WeightUnit.fractionDigits(forStep: step, value: value)
+        let d = displayFractionDigits(for: v)
+        return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
+    }
+
+    /// Fraction digits for a live value: the step's precision, unless
+    /// the value is whole — then none.
+    private func displayFractionDigits(for v: Double) -> Int {
+        let d = WeightUnit.fractionDigits(forStep: step, value: v)
+        return d > 0 && abs(v - v.rounded()) < 0.001 ? 0 : d
+    }
+
+    /// Worst-case sizing keeps the step's precision even when the
+    /// upper bound is whole: a mid-scrub value can always grow a
+    /// fraction (275 → 272.5), and the fit scale must already
+    /// account for it.
+    private func templateFormat(_ v: Double) -> String {
+        if let formatter { return formatter(v) }
+        let d = WeightUnit.fractionDigits(forStep: step, value: v)
         return d == 0 ? "\(Int(v))" : String(format: "%.\(d)f", v)
     }
 }

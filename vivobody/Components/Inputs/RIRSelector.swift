@@ -7,8 +7,9 @@
 //  many left in the tank); 0…5 is the usable RIR range, beyond which
 //  the self-estimate is noise. Reuses the app's standard StepSelector
 //  pill so it reads like every other "pick one of a small set" control
-//  (weight step, units). A live caption translates the number into
-//  plain language so the scale never needs explaining.
+//  (weight step, units). A caption names the effort in plain language
+//  ("left in the tank") while the pill owns the number, so the scale
+//  never needs explaining and nothing reads twice.
 //
 
 import VivoKit
@@ -69,11 +70,13 @@ struct RIRSelector: View {
         }
     }
 
+    /// The effort in words, without restating the number — the
+    /// selected chip already says "2", the caption says what it means.
     private var caption: String {
         switch value {
         case 0: return "to failure"
-        case 5: return "5 or more left in the tank"
-        default: return "\(value) left in the tank"
+        case 5: return "well short of failure"
+        default: return "left in the tank"
         }
     }
 

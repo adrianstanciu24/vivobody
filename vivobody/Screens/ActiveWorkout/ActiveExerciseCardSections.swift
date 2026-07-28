@@ -88,29 +88,26 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Set-count stepper used in the configuration row below the lamps.
-    /// Keeping it in its own glass capsule prevents plus/minus glyphs
-    /// from reading as two more set-status indicators.
+    /// Set-count stepper used in the configuration cluster below the
+    /// lamps. Its legend lives above the capsule (see
+    /// `exerciseConfigurationRow`), matching the RIR selector's
+    /// legend-over-control treatment. Keeping the stepper in its own
+    /// glass capsule prevents plus/minus glyphs from reading as two
+    /// more set-status indicators.
     var setCountControls: some View {
-        HStack(spacing: Space.xs) {
-            Text(sets.count == 1 ? "SET" : "SETS")
-                .panelLegend()
+        HStack(spacing: 0) {
+            removeSetButton
+
+            Text("\(sets.count)")
+                .font(Typography.metricUnit)
+                .monospacedDigit()
+                .foregroundStyle(Ink.secondary)
+                .frame(minWidth: 22)
                 .accessibilityHidden(true)
 
-            HStack(spacing: 0) {
-                removeSetButton
-
-                Text("\(sets.count)")
-                    .font(Typography.metricUnit)
-                    .monospacedDigit()
-                    .foregroundStyle(Ink.secondary)
-                    .frame(minWidth: 22)
-                    .accessibilityHidden(true)
-
-                addSetButton
-            }
-            .coloredGlassControl(cornerRadius: Radius.pill)
+            addSetButton
         }
+        .coloredGlassControl(cornerRadius: Radius.pill)
         .fixedSize(horizontal: true, vertical: false)
     }
 
@@ -155,12 +152,14 @@ extension ActiveExerciseCard {
         .accessibilityInputLabels([Text("Remove a set"), Text("Remove Set"), Text("Remove")])
     }
 
-    /// Set pips as LED lamps: pending is unlit, the active set is
-    /// armed (standby breathe), a completed set is lit — completing
-    /// one overdrives the lamp past resting brightness before it
-    /// settles with an afterglow, in the same frame as the crescendo.
+    /// Set pips as LED segments: pending is an unlit outline, the
+    /// active set is armed (standby breathe), a completed set fills —
+    /// completing one overdrives the segment past resting brightness
+    /// before it settles with an afterglow, in the same frame as the
+    /// crescendo. Capsules, not lamps, so set progress can never be
+    /// mistaken for the pager's page dots.
     func pip(isCompleted: Bool, isActive: Bool) -> some View {
-        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off))
+        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off), shape: .segment)
     }
 
     // MARK: - Hero
@@ -181,17 +180,31 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Configuration is deliberately separate from status: lamps get
-    /// the full row above, while this line owns set count and the load
-    /// increment. The step control is useful only while a rep set is live;
-    /// completed and duration exercises retain just the set stepper.
+    /// Configuration is deliberately separate from status: segments
+    /// get the full row above, while this cluster owns set count and
+    /// the load increment. Both instruments group on the left and
+    /// share one legend-above-control treatment (the RIR selector's
+    /// pattern), so the row reads as a labeled control panel rather
+    /// than two pills flung to opposite edges. The step control is
+    /// useful only while a rep set is live; completed and duration
+    /// exercises retain just the set stepper.
     var exerciseConfigurationRow: some View {
-        HStack(alignment: .center, spacing: Space.md) {
-            setCountControls
-            Spacer(minLength: Space.md)
+        HStack(alignment: .top, spacing: Space.lg) {
+            VStack(alignment: .leading, spacing: Space.sm) {
+                Text(sets.count == 1 ? "SET" : "SETS")
+                    .panelLegend()
+                    .accessibilityHidden(true)
+                setCountControls
+            }
+
             if session.activeSet(for: exercise) != nil,
                exercise.trackingMode == .reps {
-                stepToggle
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    Text("STEP")
+                        .panelLegend()
+                        .accessibilityHidden(true)
+                    stepToggle
+                }
             }
         }
     }
@@ -256,6 +269,8 @@ extension ActiveExerciseCard {
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
                     hitSlop: 18,
+                    showsRail: true,
+                    railClearance: 26,
                     cancellationID: effectiveScrubCancellationID,
                     onScrubEnded: activeScrubDidEnd
                 )
@@ -329,6 +344,8 @@ extension ActiveExerciseCard {
                     accessibilityLabel: "Reps",
                     showsScrubHint: isActive,
                     hitSlop: 18,
+                    showsRail: true,
+                    railClearance: 26,
                     cancellationID: effectiveScrubCancellationID,
                     onScrubEnded: activeScrubDidEnd
                 )
@@ -533,10 +550,12 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Small, explicitly-labelled pill showing the weight increment.
-    /// Tap cycles through the unit's offered steps (1 / 1.25 / 2.5 / 5
-    /// for kg, 1 / 2.5 / 5 / 10 for lb). It shares the configuration
-    /// row with the set stepper, directly above the load it controls.
+    /// Small pill showing the weight increment, named by the legend
+    /// above it rather than a label inside. Tap cycles through the
+    /// unit's offered steps (1 / 1.25 / 2.5 / 5 for kg, 1 / 2.5 / 5 /
+    /// 10 for lb). It sits beside the set stepper in the configuration
+    /// cluster, directly above the load it controls, and shares the
+    /// stepper's width so the two instruments read as a pair.
     var stepToggle: some View {
         let options = unit.strengthStepOptions
         let setStepperWidth = (Space.tapMin * 2) + 22
@@ -552,24 +571,19 @@ extension ActiveExerciseCard {
             )
             setWeightStep(next)
         } label: {
-            HStack(spacing: Space.xs) {
-                Text("STEP")
-                    .font(Typography.metricMicro)
-                    .tracking(1)
-                    .foregroundStyle(Ink.tertiary)
-                Text(label)
-                    .font(Typography.metricUnit)
-                    .monospacedDigit()
-                    .foregroundStyle(Ink.secondary)
-            }
-            .padding(.horizontal, Space.md)
-            .frame(minWidth: setStepperWidth, minHeight: Space.tapMin)
-            .contentShape(Capsule())
+            Text(label)
+                .font(Typography.metricUnit)
+                .monospacedDigit()
+                .foregroundStyle(Ink.secondary)
+                .padding(.horizontal, Space.md)
+                .frame(minWidth: setStepperWidth, minHeight: Space.tapMin)
+                .contentShape(Capsule())
         }
         .buttonStyle(.plain)
         .coloredGlassControl(cornerRadius: Radius.pill)
         .accessibilityLabel("Weight increment")
         .accessibilityValue(label)
+        .accessibilityHint("Cycles through the available increments")
     }
 
     var rirBinding: Binding<Int> {
