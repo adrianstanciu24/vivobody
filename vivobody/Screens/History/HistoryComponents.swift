@@ -2,10 +2,10 @@
 //  HistoryComponents.swift
 //  vivobody
 //
-//  Supporting view types for the History screen: weekly hero, week
-//  cadence strip, cadence dot, date-group sections, session rows,
-//  date grouping logic, and shared formatters. Extracted from
-//  HistoryScreen.swift.
+//  Supporting view types for the History screen: the carded weekly
+//  hero (volume-led), week cadence strip, ember cadence dot, carded
+//  date-group sections, session rows, date grouping logic, and
+//  shared formatters. Extracted from HistoryScreen.swift.
 //
 
 import VivoKit
@@ -14,13 +14,13 @@ import SwiftData
 
 // MARK: - Weekly hero
 
-/// The week as a *log*, not a ledger: a "This week" kicker with a
-/// colored trend delta, then the seven-dot cadence strip as the
-/// dominant element (which days you showed up), then a card-free
-/// stat strip led by the streak. Volume lives here too, but demoted
-/// to a single cell — the hero is time, not tonnage. That's what
-/// keeps History from reading as a recolored copy of Me's all-time
-/// volume odometer.
+/// The week as one physical object: the only surface on the screen,
+/// so the log below reads as entries under it. Inside the card the
+/// hierarchy is strict — a "This week" kicker with a colored trend
+/// delta, then the week's tonnage as the huge lead numeral (the one
+/// figure that must read from three feet), then the seven-dot
+/// cadence strip (which days you showed up), then Avg RIR and the
+/// workout count demoted to a compact secondary strip.
 struct WeeklyHero: View {
     let comparison: WeeklyComparison
     let averageRIR: Double?
@@ -32,6 +32,8 @@ struct WeeklyHero: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             header
 
+            volumeHero
+
             WeekCadenceStrip(workoutDays: workoutDays, prDays: prDays)
                 .padding(.top, Space.xs)
 
@@ -39,16 +41,14 @@ struct WeeklyHero: View {
                 stats: [
                     Stat(value: rirLabel, label: "Avg RIR", accent: isRIROnTarget),
                     Stat(value: "\(comparison.thisWeek.workouts)", label: "Workouts"),
-                    Stat(
-                        value: weeklyVolumeValue,
-                        unit: weeklyVolumeUnit,
-                        label: weeklyVolumeLabel
-                    ),
                 ],
-                valueFont: Typography.statValue
+                valueFont: Typography.statValueCompact,
+                edgeAligned: true
             )
             .padding(.top, Space.sm)
         }
+        .padding(Space.lg)
+        .contentCard()
     }
 
     /// "This week" with the volume trend pinned to the right — the
@@ -63,7 +63,31 @@ struct WeeklyHero: View {
             Spacer(minLength: Space.sm)
             trendDelta
         }
-        .padding(.top, Space.sm)
+    }
+
+    /// The week's lead numeral: total tonnage, set at display size so
+    /// the hero has a focal point. The label underneath carries the
+    /// volume-availability nuance ("Known volume" when partial).
+    var volumeHero: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text(weeklyVolumeValue)
+                    .font(Typography.metricLg)
+                    .monospacedDigit()
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                if let symbol = weeklyVolumeUnit {
+                    Text(symbol)
+                        .font(Typography.metricUnit)
+                        .foregroundStyle(Ink.tertiary)
+                }
+            }
+            Text(weeklyVolumeLabel)
+                .panelLegend()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(weeklyVolumeValue)\(weeklyVolumeUnit.map { " \($0)" } ?? ""), \(weeklyVolumeLabel)")
     }
 
     /// Direction-of-change against last week, as a colored numeral
@@ -117,13 +141,14 @@ struct WeeklyHero: View {
 // MARK: - Week cadence strip
 
 /// Seven dots — the current locale week, Sunday-to-Saturday or
-/// Monday-to-Sunday per the user's calendar. A filled orange dot is
-/// a day you trained; a dim filled circle is a past rest day (the
-/// day is gone, you didn't train); a hollow ring is a future rest
-/// day (still ahead, nothing logged yet); an empty today wears an
-/// orange ring. Days with a PR gently pulsate — a soft ember breath that
-/// draws the eye to achievements. This is the streak's calendar DNA
-/// compressed to a single, glanceable row — History's signature.
+/// Monday-to-Sunday per the user's calendar. A trained day is an
+/// ember: a radial-gradient orange disc with a soft glow. Everything
+/// else whispers so the trained days own the row — a past rest day
+/// is a small dim pip, a future rest day a faint hollow ring, an
+/// empty today a bright orange ring. Days with a PR gently pulsate —
+/// a soft ember breath that draws the eye to achievements. This is
+/// the streak's calendar DNA compressed to a single, glanceable row —
+/// History's signature.
 struct WeekCadenceStrip: View {
     let workoutDays: Set<Date>
     let prDays: Set<Date>
@@ -155,7 +180,7 @@ struct WeekCadenceStrip: View {
         return VStack(spacing: Space.sm) {
             Text(Self.weekdayLetter.string(from: day))
                 .font(Typography.caption)
-                .foregroundStyle(Ink.primary.opacity(Opacity.soft))
+                .foregroundStyle(isWorkout ? Ink.secondary : Ink.primary.opacity(Opacity.soft))
             CadenceDot(
                 isWorkout: isWorkout,
                 isToday: isToday,
@@ -181,15 +206,19 @@ struct WeekCadenceStrip: View {
     }()
 }
 
-/// A single cadence dot. PR days gently pulsate — a soft scale breath
-/// plus an ember-colored glow that appears and disappears, matching
-/// the forge's living-motion vocabulary. Non-PR days are static.
+/// A single cadence dot. A trained day is an ember — radial-gradient
+/// fill, warm rim, and a soft steady glow — while rest days recede:
+/// past ones shrink to a dim pip, future ones are only a faint ring.
+/// PR days gently pulsate on top of that, a scale breath plus a
+/// brightening glow, matching the forge's living-motion vocabulary.
 /// Reduce Motion users see a static dot.
 struct CadenceDot: View {
     let isWorkout: Bool
     let isToday: Bool
     let isPast: Bool
     let isPR: Bool
+
+    static let size: CGFloat = 34
 
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @State var pulse = false
@@ -198,17 +227,29 @@ struct CadenceDot: View {
 
     var body: some View {
         ZStack {
-            Circle()
-                .fill(fillColor)
-            Circle()
-                .stroke(ringColor, lineWidth: isToday ? 1.5 : 1)
+            if isWorkout {
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Tint.primary, Tint.primaryShadow],
+                            center: UnitPoint(x: 0.35, y: 0.3),
+                            startRadius: 2,
+                            endRadius: Self.size * 0.55
+                        )
+                    )
+            } else if isPast {
+                Circle()
+                    .fill(Surface.edge)
+                    .frame(width: 9, height: 9)
+            }
+            if showsRing {
+                Circle()
+                    .stroke(ringColor, lineWidth: isToday ? 1.5 : 1)
+            }
         }
-        .frame(width: 30, height: 30)
+        .frame(width: Self.size, height: Self.size)
         .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
-        .shadow(
-            color: shouldPulse ? Tint.primary.opacity(pulse ? 0.35 : 0) : .clear,
-            radius: pulse ? 8 : 0
-        )
+        .shadow(color: glowColor, radius: glowRadius)
         .onAppear {
             guard shouldPulse else { return }
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
@@ -217,26 +258,42 @@ struct CadenceDot: View {
         }
     }
 
-    /// Trained days fill bright orange; past rest days fill dim;
-    /// today and future rest days stay clear.
-    var fillColor: Color {
-        if isWorkout { return Tint.primary }
-        if isPast { return Surface.edge }
-        return .clear
+    /// Rings mark days that are still open: today always wears one,
+    /// future rest days keep a faint one. Trained days (gradient does
+    /// the work) and past rest days (the pip) go ringless.
+    var showsRing: Bool {
+        isToday || (!isWorkout && !isPast)
     }
 
-    /// An empty today wears the in-progress orange ring; future rest
-    /// days keep the hairline ring; trained and past rest days need no ring.
+    /// An empty today wears the in-progress orange ring; a trained
+    /// today gets a quiet bright rim; future rest days stay faint.
     var ringColor: Color {
         if isToday && !isWorkout { return Tint.inProgress }
         if isToday { return Ink.primary.opacity(Opacity.medium) }
-        if isWorkout { return .clear }
-        return Surface.edge
+        return Surface.edge.opacity(0.5)
+    }
+
+    /// Every trained day carries a low steady ember glow; PR days
+    /// breathe up from there.
+    var glowColor: Color {
+        guard isWorkout else { return .clear }
+        if shouldPulse { return Tint.primary.opacity(pulse ? 0.4 : 0.12) }
+        return Tint.primary.opacity(0.25)
+    }
+
+    var glowRadius: CGFloat {
+        guard isWorkout else { return 0 }
+        if shouldPulse { return pulse ? 9 : 4 }
+        return 6
     }
 }
 
 // MARK: - Date group section
 
+/// One date bucket as a ledger block: the `SectionHeader` stays on
+/// black, the bucket's rows sit together inside a single content
+/// card with inset hairlines between them. Today's card uses the
+/// bright surface so the freshest sessions lift off the screen.
 struct DateGroupSection: View {
     let group: HistoryDateGroup
     let unit: WeightUnit
@@ -248,7 +305,7 @@ struct DateGroupSection: View {
 
             VStack(spacing: 0) {
                 ForEach(Array(group.sessions.enumerated()), id: \.element.id) { index, session in
-                    if index > 0 { SectionDivider() }
+                    if index > 0 { rowDivider }
                     NavigationLink {
                         SessionDetailScreen(session: session)
                     } label: {
@@ -263,18 +320,29 @@ struct DateGroupSection: View {
                     .accessibilityHint("Opens workout details")
                 }
             }
+            .contentCard(bright: group.style == .rich)
         }
+    }
+
+    /// In-card hairline between rows, inset so it never runs into
+    /// the card's rounded corners.
+    var rowDivider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
+            .padding(.horizontal, Space.lg)
+            .accessibilityHidden(true)
     }
 }
 
 // MARK: - Session row
 
-/// One archived session as a full-width hairline row — no card, no
-/// carved glass. The left column carries identity (a workout title
-/// for today, a date for earlier sessions) plus a muscle/time meta
-/// line; the right column anchors the volume numeral in monospace.
-/// `prominent` (today's sessions) enlarges the numeral and promotes
-/// the title. A PR renders its numeral in the gold completion accent.
+/// One archived session as a row inside a date-group card. The left
+/// column carries identity (a workout title for today, a date for
+/// earlier sessions) plus a muscle/time meta line; the right column
+/// anchors the volume numeral in monospace. `prominent` (today's
+/// sessions) enlarges the numeral and promotes the title. A PR adds
+/// the lone accent: a small outlined tag beside the title.
 struct SessionRow: View {
     let session: WorkoutSession
     let unit: WeightUnit
@@ -327,6 +395,7 @@ struct SessionRow: View {
                 .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, minHeight: prominent ? 72 : Space.rowMin, alignment: .leading)
+        .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.md)
         .contentShape(Rectangle())
         .accessibilityIdentifier("historySessionRow")
@@ -395,15 +464,17 @@ struct SessionRow: View {
         }
     }
 
-    /// Up to three muscle groups, in worked order, with a "+N" tail
-    /// when the session spans more. Gives even a generic "Full body"
-    /// row a legible signature of what was actually trained.
+    /// Up to two muscle groups, in worked order, with a "+N" tail
+    /// when the session spans more — capped short enough that the
+    /// trailing time never truncates inside the card. Gives even a
+    /// generic "Full body" row a legible signature of what was
+    /// actually trained.
     var muscleFingerprint: String {
         let names = muscleTags.map(\.displayName)
         switch names.count {
         case 0: return "Workout"
-        case 1, 2, 3: return names.joined(separator: " · ")
-        default: return names.prefix(3).joined(separator: " · ") + " +\(names.count - 3)"
+        case 1, 2: return names.joined(separator: " · ")
+        default: return names.prefix(2).joined(separator: " · ") + " +\(names.count - 2)"
         }
     }
 

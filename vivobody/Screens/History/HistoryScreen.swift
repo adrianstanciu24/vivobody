@@ -2,24 +2,27 @@
 //  HistoryScreen.swift
 //  vivobody
 //
-//  Live list of every archived workout, rendered as an instrument:
-//  no cards, no carved glass — structure comes from type, whitespace,
-//  and hairlines on black. The screen opens as a *training-week log*:
-//  a seven-dot cadence strip (one dot per day, filled when you
-//  trained, ringed on today), a colored trend delta, and a card-free
-//  stat strip led by the streak. This is deliberately about *time*,
-//  not tonnage — Me is the all-time volume odometer; History is the
-//  rhythm. Below it, sessions are grouped by date bucket (Today /
-//  Yesterday / This Week / Last Week / month) and laid out as
-//  full-width hairline-separated rows:
+//  Live list of every archived workout, rendered as a training log
+//  with one focal object at the top: the week hero, the screen's
+//  only standalone surface. Inside it the hierarchy is volume-led —
+//  the week's tonnage as a huge monospaced numeral, then the
+//  seven-dot cadence strip (ember dots on trained days, a ring on
+//  today), then Avg RIR and workout count as compact secondary
+//  stats. The colored trend delta stays pinned to the header.
+//
+//  Below the hero, sessions are grouped by date bucket (Today /
+//  Yesterday / This Week / Last Week / month). Each bucket is a
+//  ledger block: a SectionHeader on black, then the bucket's rows
+//  inside one shared content card with inset hairlines — Today's
+//  card uses the bright surface so the freshest sessions lift.
 //
 //    • Today — elevated rows: workout title + meta on the left, a
 //      larger volume numeral on the right.
 //    • Earlier — same row, tighter: date + muscle summary + time on
 //      the left, a smaller volume numeral on the right.
 //
-//  PR sessions render their volume numeral in the gold completion
-//  accent — a typographic cue only, no badge chrome.
+//  PR sessions carry a small outlined "PR" tag beside the title —
+//  the lone accent in the list, so it never dilutes.
 //
 //  Tapping any row pushes a detail view that reuses
 //  WorkoutSummaryCard — the same "receipt" the user saw at the end

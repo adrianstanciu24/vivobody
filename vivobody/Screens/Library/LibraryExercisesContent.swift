@@ -246,11 +246,12 @@ struct LibraryExercisesContent: View {
                 } else {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(Array(searchResults.enumerated()), id: \.element.id) { idx, item in
-                            if idx > 0 { SectionDivider() }
+                            if idx > 0 { insetRowDivider }
                             row(item)
                                 .settleIn(idx)
                         }
                     }
+                    .contentCard()
                     .padding(.bottom, Space.xxl + Space.xs)
                 }
             }
@@ -260,6 +261,10 @@ struct LibraryExercisesContent: View {
         .scrollEdgeEffectStyle(.soft, for: .bottom)
     }
 
+    /// One muscle group as a ledger block, mirroring History's date
+    /// groups: the `SectionHeader` stays on black, the group's rows
+    /// sit together inside a single content card with inset
+    /// hairlines between them.
     private func groupSection(group: MuscleGroup, items: [ExerciseCatalogItem]) -> some View {
         let trackedCount = items.reduce(into: 0) { acc, item in
             if lastInstance(for: item) != nil { acc += 1 }
@@ -272,11 +277,22 @@ struct LibraryExercisesContent: View {
             )
             VStack(spacing: 0) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { idx, item in
-                    if idx > 0 { SectionDivider() }
+                    if idx > 0 { insetRowDivider }
                     row(item)
                 }
             }
+            .contentCard()
         }
+    }
+
+    /// In-card hairline between rows, inset so it never runs into
+    /// the card's rounded corners.
+    private var insetRowDivider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
+            .padding(.horizontal, Space.lg)
+            .accessibilityHidden(true)
     }
 
     private func sectionSubtitle(total: Int, tracked: Int) -> String {
@@ -345,12 +361,12 @@ struct LibraryExercisesContent: View {
 
     // MARK: Exercise row
 
-    /// One catalog row — full-width, card-free, divided from its
-    /// neighbours by a hairline. Name + sentence-case meta (which
-    /// carries the equipment) on the left; on the right the last
-    /// session's heaviest set as a monospaced `weight×reps` numeral
-    /// (gold when it's an all-time best) over a relative date, or
-    /// nothing when the exercise has never been logged.
+    /// One catalog row inside its muscle-group card, divided from
+    /// its neighbours by an inset hairline. Name + sentence-case
+    /// meta (which carries the equipment) on the left; on the right
+    /// the last session's heaviest set as a monospaced `weight×reps`
+    /// numeral (gold when it's an all-time best) over a relative
+    /// date, or nothing when the exercise has never been logged.
     /// `prominent` (lifted within 14 days) brightens the name and
     /// enlarges the numeral.
     private func exerciseRow(
@@ -390,6 +406,7 @@ struct LibraryExercisesContent: View {
                 .accessibilityHidden(true)
         }
         .frame(minHeight: prominent ? 64 : Space.rowMin, alignment: .leading)
+        .padding(.horizontal, Space.lg)
         .padding(.vertical, Space.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())

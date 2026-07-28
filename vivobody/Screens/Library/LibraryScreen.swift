@@ -27,15 +27,19 @@
 //  surface. The system also provides the "no results" state
 //  automatically.
 //
-//  Both segments speak the same instrument language as the rest of
-//  the app: no cards or carved glass — full-width hairline rows on
-//  black, monospaced numerals, two accents (lime for the live
-//  selection, gold for an all-time best). The segmented control is a
-//  pair of words with a sliding lime underline; the Exercises catalog
-//  groups by muscle under sentence-case headers ("12 exercises · 5
-//  tracked") and splits rows by recency — anything lifted in the last
-//  14 days reads prominent with a larger weight×reps numeral, the
-//  rest tighter. An all-time best renders its numeral in gold.
+//  Both segments speak the same ledger-block language as History:
+//  content cards on black, monospaced numerals, orange reserved for
+//  live selections and today's schedule, gold for an all-time best.
+//  Templates render as a stack of cards — today's plan on the bright
+//  surface with an inline Start, each pinned schedule drawn as a
+//  mini ember week strip. The Exercises catalog groups by muscle
+//  under sentence-case headers ("12 exercises · 5 tracked"), each
+//  group's rows inside one shared card with inset hairlines, and
+//  splits rows by recency — anything lifted in the last 14 days
+//  reads prominent with a larger weight×reps numeral, the rest
+//  tighter. An all-time best renders its numeral in gold. The
+//  segmented control is a Liquid Glass track with a sliding orange
+//  thumb.
 //
 
 import VivoKit

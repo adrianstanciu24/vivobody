@@ -40,7 +40,6 @@ extension HistoryContent {
                         unit: unit
                     )
                     .settleIn(0)
-                    SectionDivider()
                 }
 
                 ForEach(Array(groups.enumerated()), id: \.element.id) { index, group in

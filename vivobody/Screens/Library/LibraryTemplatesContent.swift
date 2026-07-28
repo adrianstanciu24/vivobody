@@ -99,16 +99,16 @@ struct LibraryTemplatesContent: View {
                     onStart: isToday ? { startWorkout(from: template) } : nil
                 )
                 .listRowBackground(Color.clear)
-                .listRowSeparator(isToday ? .hidden : .visible)
-                .listRowSeparatorTint(Surface.edge)
-                // The card tier pulls its background out toward the
-                // screen edge (inset + internal padding == gutter) so
-                // its text stays column-aligned with the quiet rows.
+                .listRowSeparator(.hidden)
+                // Every row is a card now. The cards pull out toward
+                // the screen edge (inset + internal padding == gutter)
+                // so their text stays column-aligned with the large
+                // "Library" title.
                 .listRowInsets(EdgeInsets(
                     top: 0,
-                    leading: isToday ? Space.sm : Space.gutter,
-                    bottom: isToday ? Space.md : 0,
-                    trailing: isToday ? Space.sm : Space.gutter
+                    leading: Space.sm,
+                    bottom: Space.md,
+                    trailing: Space.sm
                 ))
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
                     Button {
@@ -215,14 +215,15 @@ struct LibraryTemplatesContent: View {
 
 // MARK: - Template row
 
-/// A saved plan in the Library list. Two tiers with real hierarchy:
-/// a template scheduled for today lifts onto a card surface with a
-/// "TODAY" eyebrow and an inline Start action; the rest stay quiet
-/// full-width hairline rows (the List draws their separators). Every
-/// row shares one anatomy: name, an exercise-name preview line, a
-/// workload line (set pips grouped per exercise beside the set count
-/// as a tabular numeral), and — when pinned — the scheduled days as
-/// quiet text with today's day brightened.
+/// A saved plan in the Library list. Every row is a card — the list
+/// is a stack of plan objects, not text on black — with hierarchy in
+/// the surface: a template scheduled for today gets the bright card,
+/// a "TODAY" eyebrow, and an inline Start action; the rest get the
+/// standard card. Every row shares one anatomy: name, an
+/// exercise-name preview line, a workload line (set pips grouped per
+/// exercise beside the set count as a tabular numeral), and — when
+/// pinned — the schedule as a mini ember week strip (scheduled days
+/// filled, today's day glowing).
 struct TemplateCard: View {
     let template: WorkoutTemplate
     let onOpen: () -> Void
@@ -237,20 +238,11 @@ struct TemplateCard: View {
     }
 
     var body: some View {
-        Group {
-            if isToday {
-                rowContent
-                    .padding(.horizontal, Space.md)
-                    .padding(.vertical, Space.lg)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentCard()
-            } else {
-                rowContent
-                    .padding(.vertical, Space.md)
-                    .frame(minHeight: Space.rowMin)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
+        rowContent
+            .padding(.horizontal, Space.md)
+            .padding(.vertical, isToday ? Space.lg : Space.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentCard(bright: isToday)
     }
 
     /// Open-editor and Start are SIBLING buttons, not nested — a
@@ -294,10 +286,11 @@ struct TemplateCard: View {
             workloadLine
                 .padding(.top, Space.sm)
             if template.isScheduled {
-                scheduleText
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-                    .padding(.top, Space.xs)
+                ScheduleStrip(
+                    scheduled: Set(template.scheduledWeekdays),
+                    today: today
+                )
+                .padding(.top, Space.xs + 2)
             }
         }
         .accessibilityElement(children: .combine)
@@ -319,34 +312,17 @@ struct TemplateCard: View {
         HStack(alignment: .center, spacing: Space.sm + 2) {
             SetPipStrip(
                 groups: template.orderedExercises.map(\.effectiveSetCount).filter { $0 > 0 },
-                tint: isToday ? Ink.tertiary : Ink.quaternary
+                tint: isToday ? Ink.secondary : Ink.tertiary
             )
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text("\(template.totalPlannedSets)")
                     .font(Typography.metricInline)
-                    .foregroundStyle(isToday ? Ink.primary : Ink.tertiary)
+                    .foregroundStyle(isToday ? Ink.primary : Ink.secondary)
                 Text(template.totalPlannedSets == 1 ? "set" : "sets")
                     .font(Typography.micro)
                     .foregroundStyle(Ink.quaternary)
             }
         }
-    }
-
-    /// Pinned days as quiet inline text ("Mon · Thu"). Today's day —
-    /// only ever present on the card tier — reads brighter, not
-    /// accented: the eyebrow and Start button own the orange budget.
-    private var scheduleText: Text {
-        let scheduled = Set(template.scheduledWeekdays)
-        let days = WeekdayLabels.ordered().filter(scheduled.contains)
-        var result = Text(verbatim: "")
-        for (i, day) in days.enumerated() {
-            var token = Text(WeekdayLabels.short(day))
-            if day == today {
-                token = token.foregroundStyle(Ink.primary).fontWeight(.semibold)
-            }
-            result = i == 0 ? token : Text("\(result) · \(token)")
-        }
-        return result
     }
 
     private var startButton: some View {
@@ -362,6 +338,52 @@ struct TemplateCard: View {
         .buttonStyle(.borderless)
         .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.primary)
         .accessibilityLabel("Start \(template.name)")
+    }
+}
+
+// MARK: - Schedule strip
+
+/// The template's week as seven tiny letter-over-dot cells — the
+/// History cadence strip's DNA at miniature scale. A scheduled day
+/// is a filled ember (today's ember glows full-bright), an
+/// unscheduled day a faint pip that recedes into the card. Replaces
+/// the old gray "Mon · Thu" text line: every pinned row now carries
+/// a quiet accent texture instead of another string of gray.
+private struct ScheduleStrip: View {
+    let scheduled: Set<Int>
+    let today: Int
+
+    var body: some View {
+        HStack(spacing: Space.md) {
+            ForEach(WeekdayLabels.ordered(), id: \.self) { day in
+                cell(for: day)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Scheduled \(WeekdayLabels.summary(Array(scheduled)))")
+    }
+
+    private func cell(for day: Int) -> some View {
+        let isScheduled = scheduled.contains(day)
+        let isToday = day == today
+        return VStack(spacing: 3) {
+            Text(WeekdayLabels.veryShort(day))
+                .font(Typography.micro)
+                .foregroundStyle(isScheduled ? Ink.secondary : Ink.quaternary.opacity(0.7))
+            Circle()
+                .fill(dotColor(isScheduled: isScheduled, isToday: isToday))
+                .frame(width: 5, height: 5)
+                .shadow(
+                    color: isScheduled && isToday ? Tint.primary.opacity(0.55) : .clear,
+                    radius: 4
+                )
+        }
+        .frame(width: 14)
+    }
+
+    private func dotColor(isScheduled: Bool, isToday: Bool) -> Color {
+        guard isScheduled else { return Surface.edge.opacity(0.6) }
+        return isToday ? Tint.primary : Tint.primaryDim
     }
 }
 
