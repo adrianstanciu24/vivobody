@@ -3,7 +3,9 @@
 //  vivobody
 //
 //  Personal tab — a personal dashboard. Stacked surfaces:
-//    • Your journey — engraved lifetime odometer + training-age rail.
+//    • Your journey — one carded hero: the engraved lifetime odometer
+//      with its kicker inside, spec line, and training-age rail (the
+//      same physical-object shape as History's week hero).
 //    • Milestones — the closest threshold leads a horizontal rail.
 //    • Personal records — top standing records, full wall on tap.
 //    • Body weight — latest entry + sparkline, linking to detail.
@@ -11,7 +13,7 @@
 //
 //  Sections stay data-aware: Personal records does not reserve a dead
 //  block before the first record, while body weight keeps an actionable
-//  empty card. The mix of borderless hero, tactile rail, and resting
+//  empty card. The mix of the carded hero, tactile rail, and resting
 //  cards gives the long dashboard depth without turning it into tiles.
 //
 //  App configuration lives on SettingsScreen, pushed from the gear
@@ -265,26 +267,37 @@ struct MeScreen: View {
     /// it to an inline footnote lets the odometer be Me's singular
     /// number, the counterpart to History's this-week *log*. The
     /// accented PR count keeps the achievement identity History lacks.
+    @ViewBuilder
     private var statsSection: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(
-                title: "Your journey",
-                trailing: hasHistory ? "All time" : nil
-            )
-
-            if !hasHistory {
+        if !hasHistory {
+            VStack(alignment: .leading, spacing: Space.lg) {
+                SectionHeader(title: "Your journey")
                 emptyJourney
-            } else {
-                journeyHero
             }
+        } else {
+            journeyHero
         }
     }
 
-    /// Borderless hero relief: the engraved numeral is the material,
-    /// shared with History's volume readouts. The only orange is the
-    /// live endpoint on the training-age rail below it.
+    /// The journey as one physical object, the same shape History's
+    /// week hero wears: a single carded surface with its kicker
+    /// ("Your journey" / "All time") inside, then the engraved
+    /// lifetime odometer — carved into the card rather than floating
+    /// on black — then the workouts · sets · PRs spec line, then the
+    /// training-age rail. The only orange stays the PR count and the
+    /// rail's live endpoint.
     private var journeyHero: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Your journey")
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.primary.opacity(Opacity.strong))
+                    .accessibilityAddTraits(.isHeader)
+                Spacer(minLength: Space.sm)
+                Text("All time")
+                    .panelLegend()
+            }
+
             VStack(alignment: .leading, spacing: Space.xs) {
                 CarvedVolumeText(
                     value: volumeLabel,
@@ -307,7 +320,8 @@ struct MeScreen: View {
                 JourneyTimeline(caption: ageText)
             }
         }
-        .padding(.vertical, Space.md)
+        .padding(Space.lg)
+        .contentCard()
     }
 
     // MARK: - Milestones
