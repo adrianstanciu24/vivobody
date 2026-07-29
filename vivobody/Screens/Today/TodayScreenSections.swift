@@ -592,7 +592,13 @@ extension TodayScreen {
                 title: "Consistency",
                 trailing: streakText(streak)
             )
-            StreakCalendar(workoutDates: workoutDates, prDates: prDates, month: Date())
+            // Two weeks, not a month: at typical training density a
+            // month grid is mostly empty cells, and the streak reads
+            // the same off the rolling strip. The month itself is one
+            // tap away below. Ember size carries the day's tonnage, so
+            // the strip doubles as an effort landscape rather than
+            // repeating History's binary week at twice the width.
+            ConsistencyStrip(workoutDates: workoutDates, prDates: prDates, effortByDay: workoutVolumeByDay)
                 .padding(Space.xl)
                 .contentCard()
             NavigationLink {
@@ -638,30 +644,108 @@ extension TodayScreen {
         .accessibilitySortPriority(100)
     }
 
+    /// The running workout in the same slot START occupies, so a live
+    /// session never adds a bar: the CTA takes over as the resume
+    /// control (and the finish affordance once every set is logged),
+    /// which is why AppRoot suppresses the MiniBar pill on this tab.
+    /// The elapsed clock ticks in its own TimelineView so the per-second
+    /// update re-renders the button, not the screen.
+    func activeWorkoutCTA(_ session: WorkoutSession) -> some View {
+        TimelineView(.periodic(from: .now, by: 1.0)) { context in
+            PrimaryActionButton(
+                title: session.isAllComplete ? "Finish Workout" : "Resume Workout",
+                subtitle: activeWorkoutStatus(session, now: context.date),
+                icon: "chevron.up",
+                inputLabels: ["Resume Workout", "Resume", "Workout"]
+            ) {
+                appState.workout.expandWorkout()
+            }
+            .accessibilityIdentifier("activeWorkoutResumeBar")
+            .accessibilityHint(
+                session.isAllComplete
+                    ? "Opens the workout to finish and save it"
+                    : "Opens the workout you have in progress"
+            )
+        }
+        .softElevation(radius: 18, y: 10, opacity: 0.45)
+        .accessibilitySortPriority(100)
+    }
+
+    /// Elapsed time plus the one thing the workout is waiting on —
+    /// short enough to hold a single line at any text size, since the
+    /// pinned bar's height is reserved by `pinnedStartBarClearance`.
+    func activeWorkoutStatus(_ session: WorkoutSession, now: Date) -> String {
+        let elapsed = Self.elapsedText(session.startedAt, to: now)
+        if session.isAllComplete {
+            return "\(elapsed)  ·  All sets logged"
+        }
+        if session.isResting {
+            let remaining = max(0, Int(session.restRemaining.rounded(.up)))
+            return "\(elapsed)  ·  Rest \(Self.clockText(remaining))"
+        }
+        let exercises = session.orderedExercises
+        if exercises.indices.contains(session.activeExerciseIndex) {
+            let exercise = exercises[session.activeExerciseIndex]
+            if let next = session.activeSetIndex(for: exercise) {
+                return "\(elapsed)  ·  Set \(next + 1) of \(exercise.orderedSets.count)"
+            }
+        }
+        return elapsed
+    }
+
+    static func elapsedText(_ start: Date, to now: Date) -> String {
+        clockText(max(0, Int(now.timeIntervalSince(start))))
+    }
+
+    /// m:ss while a workout is under an hour, h:mm:ss once it isn't.
+    static func clockText(_ seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let secs = seconds % 60
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, secs)
+        }
+        return String(format: "%d:%02d", minutes, secs)
+    }
+
+    /// The active workout as the bar should treat it: a draft that is
+    /// only waiting for the workout sheet to finish dismissing is
+    /// already gone as far as this screen is concerned.
+    var barSession: WorkoutSession? {
+        appState.workout.isDiscardPending ? nil : appState.workout.activeSession
+    }
+
     /// START, pinned to the bottom via iOS 26's native safe-area bar.
     /// No custom black tray — the system owns the bar chrome and the
-    /// button keeps the app's Liquid Glass CTA treatment.
+    /// button keeps the app's Liquid Glass CTA treatment. One bar, one
+    /// row: it carries either the start action or the running workout.
     var pinnedStartBar: some View {
-        startCTA
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, Space.lg)
-            .padding(.bottom, Space.sm)
-            // Scrim: content scrolling beneath the pinned CTA fades
-            // into the background instead of reading at full strength
-            // through and around the button (section titles used to
-            // collide with the verb mid-scroll).
-            .background {
-                LinearGradient(
-                    colors: [
-                        Surface.background.opacity(0),
-                        Surface.background.opacity(0.9),
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
+        Group {
+            if let session = barSession {
+                activeWorkoutCTA(session)
+            } else {
+                startCTA
             }
+        }
+        .padding(.horizontal, Space.gutter)
+        .padding(.top, Space.lg)
+        .padding(.bottom, Space.sm)
+        // Scrim: content scrolling beneath the pinned CTA fades
+        // into the background instead of reading at full strength
+        // through and around the button (section titles used to
+        // collide with the verb mid-scroll).
+        .background {
+            LinearGradient(
+                colors: [
+                    Surface.background.opacity(0),
+                    Surface.background.opacity(0.9),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+        }
     }
 
     var lastWorkoutSection: some View {

@@ -28,37 +28,26 @@
 //                   aligned with the in-progress layout.
 //
 //  Component contract:
-//    Takes a session binding, an onExpand callback, and a flag saying
-//    whether it owns rest expiry (false while the full workout screen
-//    is presented). Knows nothing about TabView, NavigationStack,
-//    fullScreenCover, or AppState. The shell wires it.
+//    Takes a session binding and an onExpand callback. Renders state,
+//    never mutates it: rest expiry belongs to the shell's clock (see
+//    WorkoutSessionController.endExpiredRestIfNeeded) because Today
+//    swaps this pill for its pinned resume CTA, and the transition must
+//    fire once regardless of which bar is on screen. Knows nothing
+//    about TabView, NavigationStack, fullScreenCover, or AppState.
 //
 
 import VivoKit
 import SwiftUI
-import SwiftData
-import UIKit
 
 struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
     var onExpand: () -> Void
-
-    /// When false, the expanded ActiveWorkoutScreen's rest overlay owns
-    /// rest expiry — including the skip-to-zero "Go" state, which
-    /// deliberately keeps the session resting at a passed deadline until
-    /// the user confirms with a second swipe. The bar (still mounted
-    /// behind the sheet) must not flip the session to Ready underneath
-    /// it. The shell passes `!isWorkoutExpanded`.
-    var autoEndsExpiredRest: Bool = true
 
     private let completedGreen = Tint.success
     private let restTint       = Tint.primary
     private let readyTint      = Ink.secondary
 
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
-    @Environment(\.modelContext) private var modelContext
-
-    @State private var saveError: SaveErrorBox? = nil
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1.0)) { context in
@@ -85,20 +74,6 @@ struct ActiveWorkoutMiniBar: View {
         .accessibilityIdentifier("activeWorkoutMiniBar")
         .accessibilityHint("Tap to expand workout")
         .accessibilityInputLabels([Text("Workout"), Text("Active workout"), Text("Resume")])
-        .saveErrorAlert($saveError)
-        .task(id: autoEndsExpiredRest && restJustExpired(now: now)) {
-            if autoEndsExpiredRest && restJustExpired(now: now) {
-                Haptics.swell()
-                UIAccessibility.post(notification: .announcement, argument: "Rest complete. Ready for the next set.")
-                session.skipRest()
-                do {
-                    try modelContext.save()
-                    SessionSideEffects.handle(.updated, session: session, in: modelContext)
-                } catch {
-                    saveError = SaveErrorBox(error)
-                }
-            }
-        }
     }
 
     private func compactLayout(now: Date) -> some View {
@@ -229,18 +204,6 @@ struct ActiveWorkoutMiniBar: View {
             parts.append("Ready for next set")
         }
         return parts.joined(separator: ". ")
-    }
-
-    /// True only at the exact tick when rest has elapsed and we
-    /// haven't yet flipped session state. Drives the haptic + state
-    /// transition.
-    private func restJustExpired(now: Date) -> Bool {
-        guard session.isResting else { return false }
-        if let deadline = session.restEndsAt {
-            return now >= deadline
-        }
-        guard let started = session.restStartedAt else { return false }
-        return now.timeIntervalSince(started) >= session.restDuration
     }
 
     private func formatTime(_ seconds: Int) -> String {

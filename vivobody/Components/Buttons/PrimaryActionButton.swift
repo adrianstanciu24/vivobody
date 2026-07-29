@@ -45,6 +45,11 @@ struct PrimaryActionButton: View {
                         Text(subtitle)
                             .font(Typography.caption)
                             .foregroundStyle(Tint.onAccent.opacity(Opacity.medium))
+                            // Subtitles carry live clocks (elapsed
+                            // time, rest countdowns), which must not
+                            // reflow the button as digits change.
+                            .monospacedDigit()
+                            .lineLimit(1)
                     }
                     Text(title)
                         .font(Typography.title)

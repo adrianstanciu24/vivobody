@@ -5,8 +5,10 @@
 //  The app's home tab. Quiet, scannable, anchored by the big
 //  "Start Workout" call-to-action. Composes previously-built
 //  atoms into their first real screen home:
-//    • StreakCalendar — the current month with workout dots + PR pulse
-//    • PrimaryActionButton — the START WORKOUT call-to-action
+//    • ConsistencyStrip — the rolling two weeks of workout embers, sized
+//      by each day's tonnage, with the PR pulse on record days
+//    • PrimaryActionButton — the START WORKOUT call-to-action, which
+//      becomes the resume/finish control while a workout is running
 //    • DigitTicker — used inside the LastWorkout stats strip
 //
 //  The screen reads AppState directly (workout dates, PR dates,
@@ -30,8 +32,8 @@ struct TodayScreen: View {
     var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
 
     /// Recent archived sessions (a ~45-day window), most-recent
-    /// first. Drives the streak calendar, the "X this month" stat,
-    /// and the Up Next trained-today check. Deliberately windowed —
+    /// first. Drives the consistency strip, its session count, and
+    /// the Up Next trained-today check. Deliberately windowed —
     /// lifetime aggregates (streak, PR sessions, stage warmth) come
     /// from the shared analytics cache, so Today never has to fault
     /// the whole archive. SwiftUI re-renders this screen automatically
@@ -54,8 +56,8 @@ struct TodayScreen: View {
         self.appState = appState
 
         // The window is anchored once at view construction. 45 days
-        // comfortably covers the displayed calendar month plus its
-        // leading grid days for any realistic app-resident stretch.
+        // comfortably covers the rolling two-week strip and the Up
+        // Next lookback for any realistic app-resident stretch.
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let cutoff = calendar.date(byAdding: .day, value: -45, to: today) ?? today

@@ -26,7 +26,9 @@ final class vivobodyUITests: XCTestCase {
     @MainActor
     func testActiveWorkoutAccessibilityAudit() throws {
         let app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
-        waitFor(app.buttons["activeWorkoutMiniBar"]).tap()
+        // Today merges the running workout into its pinned CTA, so the
+        // MiniBar pill only exists on the other tabs.
+        waitFor(app.buttons["activeWorkoutResumeBar"]).tap()
         waitFor(app.buttons["endWorkoutButton"])
 
         try app.performAccessibilityAudit()
@@ -35,23 +37,23 @@ final class vivobodyUITests: XCTestCase {
     @MainActor
     func testActiveWorkoutDraftRestoresAfterRelaunch() throws {
         var app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
-        waitFor(app.buttons["activeWorkoutMiniBar"])
+        waitFor(app.buttons["activeWorkoutResumeBar"])
 
         app.terminate()
 
         app = launchApp(arguments: ["--ui-test-active-partial"])
-        waitFor(app.buttons["activeWorkoutMiniBar"])
+        waitFor(app.buttons["activeWorkoutResumeBar"])
     }
 
     @MainActor
     func testPartialWorkoutCanBeSavedToHistory() throws {
         let app = launchApp(arguments: ["--ui-test-reset", "--ui-test-active-partial"])
 
-        waitFor(app.buttons["activeWorkoutMiniBar"]).tap()
+        waitFor(app.buttons["activeWorkoutResumeBar"]).tap()
         waitFor(app.buttons["endWorkoutButton"]).tap()
         waitFor(app.buttons["Save Workout"]).tap()
 
-        XCTAssertFalse(app.buttons["activeWorkoutMiniBar"].waitForExistence(timeout: 1))
+        XCTAssertFalse(app.buttons["activeWorkoutResumeBar"].waitForExistence(timeout: 1))
 
         tapTab("History", in: app)
         waitFor(app.descendants(matching: .any)["historySessionRow"])

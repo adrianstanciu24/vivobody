@@ -29,14 +29,27 @@ extension TodayScreen {
     }
 
     /// Calendar days in the recent window with at least one archived
-    /// session. Drives the StreakCalendar fills.
+    /// session. Drives the ConsistencyStrip fills.
     var workoutDates: Set<Date> {
         Set(recentSessions.map {
             Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt)
         })
     }
 
-    /// Calendar days on which a PR was set. Passed to StreakCalendar
+    /// Tonnage logged per calendar day in the recent window (canonical
+    /// lb, summed when a day holds more than one session). Drives the
+    /// ConsistencyStrip's effort-scaled embers; days whose sessions
+    /// carry no tonnage land at 0 and render at the strip's floor.
+    var workoutVolumeByDay: [Date: Double] {
+        var totals: [Date: Double] = [:]
+        for session in recentSessions {
+            let day = Calendar.current.startOfDay(for: session.completedAt ?? session.startedAt)
+            totals[day, default: 0] += session.receiptTonnageSummary.knownSubtotal
+        }
+        return totals
+    }
+
+    /// Calendar days on which a PR was set. Passed to ConsistencyStrip
     /// so PR dots can pulsate. PR-session membership is the cached
     /// archive walk (see `ArchiveOverview.prSessionIDs`), joined to
     /// the recent window here.

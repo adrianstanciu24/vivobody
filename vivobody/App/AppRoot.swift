@@ -11,17 +11,18 @@
 //    2. .tabViewBottomAccessory — the MiniBar pill that sits above
 //       the tab bar whenever a workout is running. Tapping it expands
 //       the workout back to the full screen. Inspired by Music's
-//       MiniPlayer.
+//       MiniPlayer. Suppressed on Today, where the pinned CTA itself
+//       becomes the resume control rather than stacking a third bar.
 //    3. .sheet(isPresented:) — the focused ActiveWorkoutScreen
 //       when the workout is expanded. Presented as a .large sheet
 //       with a grabber so swipe-down minimizes it back to the MiniBar
 //       (Music-style). Hides the tab bar while expanded.
 //
 //  Session lifetime vs. presentation lifetime are intentionally
-//  decoupled here: `workout.activeSession != nil` controls whether the
-//  MiniBar exists; `workout.isWorkoutExpanded` controls whether the
-//  full screen is presented. A workout can be minimized and resumed
-//  any number of times before it's archived.
+//  decoupled here: `workout.activeSession != nil` controls whether a
+//  compact form of the workout exists at all; `workout.isWorkoutExpanded`
+//  controls whether the full screen is presented. A workout can be
+//  minimized and resumed any number of times before it's archived.
 //
 //  Every external entry point (URL scheme, Handoff, Spotlight, widget
 //  / Siri mailboxes) is parsed by IncomingActionParser into an
@@ -73,11 +74,21 @@ struct AppRoot: View {
             // shared analytics cache current so tabs and backdrops read
             // reports instead of re-querying the archive themselves.
             .background(AnalyticsFeeder(appState: appState))
+            // One clock owns rest expiry while the workout is
+            // minimized, since Today shows its pinned resume CTA and
+            // every other tab shows the MiniBar — neither bar may own a
+            // transition that has to fire exactly once.
+            .background {
+                if workout.activeSession != nil,
+                   !workout.isDiscardPending,
+                   !workout.isWorkoutExpanded {
+                    RestExpiryTicker(workout: workout)
+                }
+            }
             .preferredColorScheme(appearance.colorScheme)
             .tint(Tint.primary)
             .miniBarAccessory(
-                session: workout.isDiscardPending ? nil : workout.activeSession,
-                isWorkoutExpanded: workout.isWorkoutExpanded,
+                session: miniBarSession(workout),
                 onExpand: { workout.expandWorkout() }
             )
             .saveErrorAlert($workout.lastSaveError)
@@ -217,6 +228,16 @@ struct AppRoot: View {
             .environment(appState.pro)
     }
 
+    /// The session the accessory pill should render, if any. Today owns
+    /// the active workout itself: its pinned CTA becomes "Resume
+    /// Workout" so the screen never stacks a start bar, a pill, and the
+    /// tab bar into three rows of chrome. Every other tab keeps the
+    /// pill as its way back into the workout.
+    private func miniBarSession(_ workout: WorkoutSessionController) -> WorkoutSession? {
+        guard !workout.isDiscardPending, appState.selectedTab != .today else { return nil }
+        return workout.activeSession
+    }
+
     private var tabView: some View {
         TabView(selection: $appState.selectedTab) {
             Tab(AppTab.today.label,
@@ -295,20 +316,35 @@ private extension View {
     @ViewBuilder
     func miniBarAccessory(
         session: WorkoutSession?,
-        isWorkoutExpanded: Bool,
         onExpand: @escaping () -> Void
     ) -> some View {
         if let session {
             self.tabViewBottomAccessory {
-                ActiveWorkoutMiniBar(
-                    session: session,
-                    onExpand: onExpand,
-                    autoEndsExpiredRest: !isWorkoutExpanded
-                )
+                ActiveWorkoutMiniBar(session: session, onExpand: onExpand)
             }
         } else {
             self
         }
+    }
+}
+
+// MARK: - Rest expiry clock
+
+/// A one-second tick that asks the controller to end an elapsed rest.
+/// Mounted zero-size in the shell so the countdown keeps running behind
+/// whichever bottom bar the selected tab happens to show.
+private struct RestExpiryTicker: View {
+    let workout: WorkoutSessionController
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1.0)) { context in
+            Color.clear
+                .frame(width: 0, height: 0)
+                .task(id: context.date) {
+                    workout.endExpiredRestIfNeeded(now: context.date)
+                }
+        }
+        .accessibilityHidden(true)
     }
 }
 

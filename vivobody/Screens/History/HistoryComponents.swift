@@ -3,9 +3,11 @@
 //  vivobody
 //
 //  Supporting view types for the History screen: the carded weekly
-//  hero (volume-led), week cadence strip, ember cadence dot, carded
-//  date-group sections, session rows, date grouping logic, and
-//  shared formatters. Extracted from HistoryScreen.swift.
+//  hero (volume-led), week cadence strip, carded date-group sections,
+//  session rows, date grouping logic, and shared formatters.
+//  Extracted from HistoryScreen.swift. The ember dot the strip plots
+//  lives in Components/Displays/CadenceDot.swift — Today's consistency
+//  strip draws the same day.
 //
 
 import VivoKit
@@ -204,88 +206,6 @@ struct WeekCadenceStrip: View {
         f.dateFormat = "EEEE"
         return f
     }()
-}
-
-/// A single cadence dot. A trained day is an ember — radial-gradient
-/// fill, warm rim, and a soft steady glow — while rest days recede:
-/// past ones shrink to a dim pip, future ones are only a faint ring.
-/// PR days gently pulsate on top of that, a scale breath plus a
-/// brightening glow, matching the forge's living-motion vocabulary.
-/// Reduce Motion users see a static dot.
-struct CadenceDot: View {
-    let isWorkout: Bool
-    let isToday: Bool
-    let isPast: Bool
-    let isPR: Bool
-
-    static let size: CGFloat = 34
-
-    @Environment(\.accessibilityReduceMotion) var reduceMotion
-    @State var pulse = false
-
-    var shouldPulse: Bool { isPR && !reduceMotion }
-
-    var body: some View {
-        ZStack {
-            if isWorkout {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [Tint.primary, Tint.primaryShadow],
-                            center: UnitPoint(x: 0.35, y: 0.3),
-                            startRadius: 2,
-                            endRadius: Self.size * 0.55
-                        )
-                    )
-            } else if isPast {
-                Circle()
-                    .fill(Surface.edge)
-                    .frame(width: 9, height: 9)
-            }
-            if showsRing {
-                Circle()
-                    .stroke(ringColor, lineWidth: isToday ? 1.5 : 1)
-            }
-        }
-        .frame(width: Self.size, height: Self.size)
-        .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
-        .shadow(color: glowColor, radius: glowRadius)
-        .onAppear {
-            guard shouldPulse else { return }
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                pulse = true
-            }
-        }
-    }
-
-    /// Rings mark days that are still open: today always wears one,
-    /// future rest days keep a faint one. Trained days (gradient does
-    /// the work) and past rest days (the pip) go ringless.
-    var showsRing: Bool {
-        isToday || (!isWorkout && !isPast)
-    }
-
-    /// An empty today wears the in-progress orange ring; a trained
-    /// today gets a quiet bright rim; future rest days stay faint.
-    var ringColor: Color {
-        if isToday && !isWorkout { return Tint.inProgress }
-        if isToday { return Ink.primary.opacity(Opacity.medium) }
-        return Surface.edge.opacity(0.5)
-    }
-
-    /// Every trained day carries a low steady ember glow; PR days
-    /// breathe up from there.
-    var glowColor: Color {
-        guard isWorkout else { return .clear }
-        if shouldPulse { return Tint.primary.opacity(pulse ? 0.4 : 0.12) }
-        return Tint.primary.opacity(0.25)
-    }
-
-    var glowRadius: CGFloat {
-        guard isWorkout else { return 0 }
-        if shouldPulse { return pulse ? 9 : 4 }
-        return 6
-    }
 }
 
 // MARK: - Date group section

@@ -20,6 +20,7 @@
 
 import SwiftData
 import SwiftUI
+import UIKit
 
 @MainActor
 @Observable
@@ -103,6 +104,38 @@ final class WorkoutSessionController {
             lastSaveError = SaveErrorBox(error)
             return false
         }
+    }
+
+    // MARK: - Rest expiry
+
+    /// End a rest interval whose deadline has passed. The shell drives
+    /// this from a single one-second clock while the workout is
+    /// minimized, because which bottom bar is on screen depends on the
+    /// selected tab — the transition, its haptic, and its announcement
+    /// must fire exactly once wherever the user is standing. The
+    /// expanded workout's rest overlay owns expiry while it is
+    /// presented (a skip-to-zero deliberately waits for confirmation).
+    @discardableResult
+    func endExpiredRestIfNeeded(now: Date = Date()) -> Bool {
+        guard pendingDiscardSession == nil,
+              let session = activeSession,
+              session.isResting,
+              hasRestElapsed(session, now: now)
+        else { return false }
+
+        Haptics.swell()
+        UIAccessibility.post(
+            notification: .announcement,
+            argument: "Rest complete. Ready for the next set."
+        )
+        session.skipRest()
+        return saveActiveSessionChanges(for: session.id)
+    }
+
+    private func hasRestElapsed(_ session: WorkoutSession, now: Date) -> Bool {
+        if let deadline = session.restEndsAt { return now >= deadline }
+        guard let started = session.restStartedAt else { return false }
+        return now.timeIntervalSince(started) >= session.restDuration
     }
 
     // MARK: - Restore / resume
