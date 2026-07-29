@@ -129,9 +129,15 @@ struct ActiveWorkoutActivityView: View {
                     .font(Typography.metricLg)
                     .foregroundStyle(Ink.primary)
                     .monospacedDigit()
-                ProgressView(timerInterval: range, countsDown: true)
-                    .tint(Tint.inProgress)
-                    .frame(height: 3)
+                // Empty labels: the default currentValueLabel repeats the
+                // countdown under the bar, duplicating the hero timer.
+                ProgressView(timerInterval: range, countsDown: true) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
+                }
+                .tint(Tint.inProgress)
+                .frame(height: 3)
                 Text("Set \(state.setNumber) of \(state.plannedSets)")
                     .font(Typography.metricUnit)
                     .foregroundStyle(Ink.secondary)

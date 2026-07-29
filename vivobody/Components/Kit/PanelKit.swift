@@ -83,6 +83,7 @@ struct LEDLamp: View {
     @State private var overdrive: Bool = false
     @State private var breathDim: Bool = false
     @State private var overdriveTask: Task<Void, Never>? = nil
+    @State private var breathTask: Task<Void, Never>? = nil
 
     var body: some View {
         ZStack {
@@ -95,8 +96,9 @@ struct LEDLamp: View {
                 Circle()
                     .stroke(Tint.inProgress, lineWidth: 3)
                     .frame(width: size + 2, height: size + 2)
-                    .opacity(breathDim ? 0.68 : 1.0)
-                    .shadow(color: Tint.inProgress.opacity(breathDim ? 0.10 : 0.30), radius: 4)
+                    .opacity(breathDim ? 0.42 : 1.0)
+                    .scaleEffect(breathDim ? 0.86 : 1.06)
+                    .shadow(color: Tint.inProgress.opacity(breathDim ? 0.05 : 0.45), radius: breathDim ? 2 : 7)
             case (.circle, .lit):
                 Circle()
                     .fill(Tint.complete)
@@ -169,7 +171,10 @@ struct LEDLamp: View {
             }
         }
         .onAppear { if state == .armed { startBreathing() } }
-        .onDisappear { overdriveTask?.cancel() }
+        .onDisappear {
+            overdriveTask?.cancel()
+            breathTask?.cancel()
+        }
     }
 
     private func fireOverdrive() {
@@ -185,13 +190,22 @@ struct LEDLamp: View {
 
     private func startBreathing() {
         guard !reduceMotion else { return }
+        breathTask?.cancel()
         breathDim = false
-        withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) {
-            breathDim = true
+        // A repeatForever animation started inside the same transaction
+        // that mounts the lamp gets swallowed; one runloop hop later it
+        // reliably latches.
+        breathTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(16))
+            guard !Task.isCancelled, state == .armed else { return }
+            withAnimation(.easeInOut(duration: 1.15).repeatForever(autoreverses: true)) {
+                breathDim = true
+            }
         }
     }
 
     private func stopBreathing() {
+        breathTask?.cancel()
         withAnimation(.easeOut(duration: 0.2)) { breathDim = false }
     }
 }

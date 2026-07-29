@@ -152,14 +152,13 @@ extension ActiveExerciseCard {
         .accessibilityInputLabels([Text("Remove a set"), Text("Remove Set"), Text("Remove")])
     }
 
-    /// Set pips as LED segments: pending is an unlit outline, the
-    /// active set is armed (standby breathe), a completed set fills —
-    /// completing one overdrives the segment past resting brightness
+    /// Set pips as LED lamps: pending is an unlit outline, the active
+    /// set is armed (standby breathe), a completed set fills —
+    /// completing one overdrives the lamp past resting brightness
     /// before it settles with an afterglow, in the same frame as the
-    /// crescendo. Capsules, not lamps, so set progress can never be
-    /// mistaken for the pager's page dots.
+    /// crescendo.
     func pip(isCompleted: Bool, isActive: Bool) -> some View {
-        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off), shape: .segment)
+        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off))
     }
 
     // MARK: - Hero

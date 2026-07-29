@@ -34,13 +34,21 @@ struct PrimaryActionButton: View {
     var inputLabels: [String]? = nil
     let action: () -> Void
 
+    private static let labelSpacing: CGFloat = 3
+
+    /// Height the subtitle line adds to the label stack, measured at the
+    /// current text size. Half of it is trimmed from the style's vertical
+    /// padding on each edge so a subtitled CTA stands exactly as tall as a
+    /// title-only one — Today swaps between the two in the same slot.
+    @State private var subtitleHeight: CGFloat = 0
+
     var body: some View {
         Button {
             Haptics.crescendo()
             action()
         } label: {
             HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading, spacing: Self.labelSpacing) {
                     if let subtitle {
                         Text(subtitle)
                             .font(Typography.caption)
@@ -50,6 +58,11 @@ struct PrimaryActionButton: View {
                             // reflow the button as digits change.
                             .monospacedDigit()
                             .lineLimit(1)
+                            .onGeometryChange(for: CGFloat.self) { proxy in
+                                proxy.size.height
+                            } action: { height in
+                                subtitleHeight = height
+                            }
                     }
                     Text(title)
                         .font(Typography.title)
@@ -66,6 +79,7 @@ struct PrimaryActionButton: View {
                 }
             }
             .frame(maxWidth: .infinity)
+            .padding(.vertical, -subtitleInset)
         }
         .buttonStyle(PrimaryButtonStyle(accent: accent))
         .accessibilityElement()
@@ -73,6 +87,11 @@ struct PrimaryActionButton: View {
         .accessibilityHint(subtitle ?? "Activates primary action")
         .accessibilityAddTraits(.isButton)
         .accessibilityInputLabels((inputLabels ?? [title]).map { Text($0) })
+    }
+
+    private var subtitleInset: CGFloat {
+        guard subtitle != nil, subtitleHeight > 0 else { return 0 }
+        return (subtitleHeight + Self.labelSpacing) / 2
     }
 }
 
