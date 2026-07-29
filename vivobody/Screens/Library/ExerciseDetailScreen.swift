@@ -10,9 +10,13 @@
 //
 //  Surfaces (when data exists):
 //    • Hero    — muscle group accent + exercise name + metadata line,
-//                plus a plateau / load-mode-aware readiness status pill
-//    • Stats   — Last (top set + relative date), Best (standing record
-//                under the exercise's performance semantics), Times
+//                plus a plateau / load-mode-aware readiness status pill;
+//                the inline nav title stays hidden until this scrolls off
+//    • Figure  — the staged anatomy model (primary/secondary/stabilizer
+//                channels) in a card under the hero text, with a keyed
+//                legend row per role naming the muscles it lights up
+//    • Stats   — a focal Best-set card (huge monospaced record numeral)
+//                over supporting Last / Times half-cards
 //    • Load    — Bodyweight/assistance-only effective-load breakdown,
 //                using the historical workout snapshot behind the record
 //    • 1RM     — Dedicated, tappable row (dynamic strength only): a user-measured
@@ -20,11 +24,11 @@
 //                until there's data. Tap opens the scrubber editor.
 //    • Rhythm  — median time between load increases + rhythm strip
 //                (Pro, comparable-load lifts with ≥2 increases)
-//    • Chart   — SwiftUI Charts line with PR dots + a Load | e1RM |
-//                Volume metric toggle (reps only) + time-range chips
+//    • Chart   — carded SwiftUI Charts line with an accent area
+//                gradient, PR dots, and an endpoint value readout,
+//                plus a Load | e1RM | Volume toggle and range chips
 //    • Effort  — average RIR + progression verdict (dynamic strength
 //                only, gated on having ≥3 logged RIR readings)
-//    • Muscles — primary / secondary / stabilizer roles from the catalog map
 //    • Recents — Last 5 sessions, top set + date + PR flag
 //    • CTA     — "+ Add to Workout" pinned to the bottom safe area
 //    • Unlock  — Insights-style floating Pro pill in the bottom bar
@@ -114,6 +118,9 @@ struct ExerciseDetailScreen: View {
     @State var range: TimeRange = .all
     @State var chartMetric: ChartMetric = .e1rm
     @State private var saveError: SaveErrorBox? = nil
+    /// Drives the inline nav title's fade: the hero owns the name at
+    /// rest, so the bar only claims it once the hero has scrolled under.
+    @State private var showsInlineTitle: Bool = false
 
     /// Number of consecutive stale sessions before the hero flags a
     /// plateau. Five matches the "a working block didn't move the
@@ -171,6 +178,7 @@ struct ExerciseDetailScreen: View {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
+                heroFigureSection
                 statsRow
                 if showsPerformanceRows {
                     performanceRows
@@ -184,8 +192,6 @@ struct ExerciseDetailScreen: View {
                     }
                 }
                 effortSection
-                exerciseAnatomySection
-                muscleBreakdownSection
                 if hasHistory {
                     recentSessionsSection
                 }
@@ -200,6 +206,16 @@ struct ExerciseDetailScreen: View {
         }
         .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .onScrollGeometryChange(
+            for: CGFloat.self,
+            of: { $0.contentOffset.y + $0.contentInsets.top }
+        ) { _, offset in
+            let show = offset > 56
+            guard show != showsInlineTitle else { return }
+            withAnimation(.smooth(duration: 0.2)) {
+                showsInlineTitle = show
+            }
+        }
         .task(id: analyticsRequest) {
             sessionAnalytics?.requestCore(for: completedSessions)
         }
@@ -208,6 +224,14 @@ struct ExerciseDetailScreen: View {
         .navigationTitle(item.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(item.name)
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(1)
+                    .opacity(showsInlineTitle ? 1 : 0)
+                    .accessibilityHidden(!showsInlineTitle)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     toggleFavorite()

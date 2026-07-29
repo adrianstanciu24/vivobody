@@ -30,17 +30,73 @@ extension ExerciseDetailScreen {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
 
-            if !movementDefinition.isEmpty {
-                Text(movementDefinition)
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, Space.xs)
-            }
-
             if hasStatusPill {
                 statusPill
             }
+        }
+    }
+
+    // MARK: - Hero figure
+
+    /// The staged anatomy model, promoted from the old mid-screen
+    /// "Exercise anatomy" section into the hero so the screen opens
+    /// with a visual instead of a wall of type. Same temporary
+    /// role-based map as before (primary 1 / secondary 0.5 /
+    /// stabilizer 0.2), framed as a card with its legend printed
+    /// underneath. Hidden for custom exercises the map doesn't know.
+    @ViewBuilder
+    var heroFigureSection: some View {
+        let involvement = item.muscleInvolvement
+        if !involvement.isEmpty && involvement.contributions.contains(where: { $0.muscle.isVisualized }) {
+            VStack(spacing: Space.lg) {
+                StagedBodyModel(
+                    renderHeight: 240,
+                    channels: involvement.anatomyNodeChannels,
+                    warmth: 0.55
+                )
+                .frame(height: 240)
+                .accessibilityElement()
+                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint.")
+
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    anatomyRoleRow(role: .primary, muscles: involvement.primary)
+                    anatomyRoleRow(role: .secondary, muscles: involvement.secondary)
+                    anatomyRoleRow(role: .stabilizer, muscles: involvement.stabilizers)
+                }
+            }
+            .padding(Space.md)
+            .contentCard()
+        }
+    }
+
+    /// One keyed legend row: the role's color dot (same ramp the model
+    /// renders) + role label + the muscle names that carry it. Rows
+    /// for roles with no muscles hide themselves. Replaces both the
+    /// old dots-only legend and the separate mid-screen Muscles list.
+    @ViewBuilder
+    func anatomyRoleRow(role: MuscleRole, muscles: [Muscle]) -> some View {
+        if !muscles.isEmpty {
+            let rgb = MuscleColor.rgb(
+                for: MuscleMapChannels(intensity: role.visualIntensity),
+                theme: colorScheme == .dark ? .dark : .light
+            )
+            HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(Color(red: rgb.red, green: rgb.green, blue: rgb.blue))
+                        .frame(width: 9, height: 9)
+                    Text(role.displayName)
+                        .sectionLabelStyle(Opacity.soft)
+                        .minimumScaleFactor(0.7)
+                }
+                .frame(width: 100, alignment: .leading)
+                Text(muscles.map(\.displayName).joined(separator: " · "))
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(role == .primary ? Ink.secondary : Ink.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .accessibilityElement(children: .combine)
         }
     }
 
@@ -96,32 +152,104 @@ extension ExerciseDetailScreen {
         return parts.joined(separator: " · ")
     }
 
-    var movementDefinition: String {
-        item.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
     // MARK: - Stats row
 
+    /// Focal-first arrangement: the standing record gets a hero card
+    /// with the huge monospaced numeral (the screen's one editorial
+    /// moment), while Last and Times step back into supporting
+    /// half-width cards. Replaces the old flat three-up band where
+    /// every number competed at the same weight.
     var statsRow: some View {
-        HStack(spacing: 0) {
-            statCard(
-                label: "Last",
-                value: lastValueString,
-                detail: lastDetailString
-            )
-            statDivider
-            statCard(
-                label: "Best",
-                value: bestValueString,
-                detail: bestDetailString
-            )
-            statDivider
-            statCard(
-                label: "Times",
-                value: countString,
-                detail: countDetailString
-            )
+        VStack(spacing: Space.sm) {
+            bestHeroCard
+            HStack(spacing: Space.sm) {
+                statCard(
+                    label: "Last",
+                    value: lastValueString,
+                    detail: lastDetailString
+                )
+                statCard(
+                    label: "Times",
+                    value: countString,
+                    detail: countDetailString
+                )
+            }
         }
+    }
+
+    var bestHeroCard: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text("Best set")
+                .sectionLabelStyle(Opacity.soft)
+
+            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                Text(bestValueString)
+                    .font(Typography.metricHero)
+                    .foregroundStyle(Ink.primary)
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.45)
+                if showsBestUnit {
+                    Text(unit.symbol)
+                        .font(Typography.statValueCompact)
+                        .foregroundStyle(Ink.tertiary)
+                }
+                if let fragment = bestSetFragment {
+                    Text(fragment)
+                        .font(Typography.statValueCompact)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+                Spacer(minLength: 0)
+            }
+
+            Text(bestSetDate ?? " ")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.quaternary)
+        }
+        .padding(Space.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentCard(bright: true)
+        .accessibilityElement(children: .combine)
+    }
+
+    /// Unit symbol rides beside the hero numeral only when the record
+    /// is an actual load — duration and unranked records have none.
+    var showsBestUnit: Bool {
+        item.performanceSemanticKind.comparesLoad && bestValueString != "—"
+    }
+
+    /// The record's reps/duration fragment ("× 8", "× 0:45"), kept
+    /// separate from the date so the hero card can set it at medium
+    /// scale next to the numeral instead of burying it in a caption.
+    var bestSetFragment: String? {
+        guard let source = bestRecordSource else { return nil }
+        switch item.performanceSemanticKind {
+        case .dynamicLoadAndReps, .powerLoadAndReps:
+            return "× \(source.reps)"
+        case .isometricLoadAndDuration:
+            return "× \(DurationFormatter.string(source.duration))"
+        case .isometricDuration, .unrankedReps, .unrankedDuration:
+            return nil
+        }
+    }
+
+    var bestSetDate: String? {
+        bestRecordSource.map { RelativeDate.short($0.date) }
+    }
+
+    /// Resolves the same record `bestValueString` describes, as raw
+    /// values: the progress-series record point when a trend exists,
+    /// else the single logged instance.
+    private var bestRecordSource: (reps: Int, duration: TimeInterval, date: Date)? {
+        if let prog = progress {
+            guard let best = bestDisplayPoint(in: prog) else { return nil }
+            return (best.topReps, best.topDuration, best.date)
+        }
+        guard let last = lastInstance else { return nil }
+        return (last.topReps, last.topDuration, last.sessionDate)
     }
 
     func statCard(label: String, value: String, detail: String?) -> some View {
@@ -145,15 +273,10 @@ extension ExerciseDetailScreen {
                     .font(Typography.caption)
             }
         }
+        .padding(.vertical, Space.lg)
         .frame(maxWidth: .infinity)
+        .contentCard()
         .accessibilityElement(children: .combine)
-    }
-
-    var statDivider: some View {
-        Rectangle()
-            .fill(Surface.edge)
-            .frame(width: 0.5, height: 54)
-            .accessibilityHidden(true)
     }
 
     // MARK: - Performance rows
@@ -246,10 +369,7 @@ extension ExerciseDetailScreen {
             }
             .padding(Space.lg)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                    .fill(Surface.cardTint)
-            )
+            .contentCard()
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -349,7 +469,7 @@ extension ExerciseDetailScreen {
                         .interpolationMethod(.monotone)
                         .foregroundStyle(
                             LinearGradient(
-                                colors: [Ink.primary.opacity(0.20), Ink.primary.opacity(0)],
+                                colors: [Tint.primary.opacity(0.22), Tint.primary.opacity(0)],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
@@ -364,6 +484,26 @@ extension ExerciseDetailScreen {
                             .symbolSize(60)
                             .foregroundStyle(prColor)
                         }
+                    }
+                }
+
+                // Endpoint marker + value readout: anchors the trend to
+                // a number so the latest state reads at a glance. Sits
+                // on top of a PR dot without conflict when they coincide.
+                if let lastPoint = plottable.last,
+                   let lastValue = chartValue(for: lastPoint) {
+                    PointMark(
+                        x: .value("Date", lastPoint.date),
+                        y: .value(chartMetricAccessibilityName, lastValue)
+                    )
+                    .symbol(.circle)
+                    .symbolSize(60)
+                    .foregroundStyle(prColor)
+                    .annotation(position: .top, alignment: .trailing, spacing: 6) {
+                        Text(chartAccessibilityValue(lastValue))
+                            .font(Typography.metricUnit)
+                            .foregroundStyle(Ink.secondary)
+                            .monospacedDigit()
                     }
                 }
             }
@@ -384,6 +524,8 @@ extension ExerciseDetailScreen {
                 }
             }
             .frame(height: 200)
+            .padding(Space.md)
+            .contentCard()
             .accessibilityLabel("\(item.name) \(chartMetricAccessibilityName.lowercased()) progress")
             .accessibilityValue(chartAccessibilitySummary(points: plottable))
         }
@@ -531,10 +673,7 @@ extension ExerciseDetailScreen {
                 }
                 .padding(Space.lg)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-                        .fill(Surface.cardTint)
-                )
+                .contentCard()
             }
         }
     }
@@ -548,102 +687,6 @@ extension ExerciseDetailScreen {
         }
     }
 
-    // MARK: - Muscles
-
-    /// A temporary anatomy map for the exercise being inspected. It
-    /// uses authored visual roles (1 / 0.5 / 0.2), including power and
-    /// stabilizers, and is intentionally separate from Today's chronic
-    /// training-development estimate.
-    @ViewBuilder
-    var exerciseAnatomySection: some View {
-        let involvement = item.muscleInvolvement
-        if !involvement.isEmpty && involvement.contributions.contains(where: { $0.muscle.isVisualized }) {
-            VStack(alignment: .leading, spacing: Space.md) {
-                Text("Exercise anatomy")
-                    .sectionLabelStyle(Opacity.medium)
-
-                StagedBodyModel(
-                    renderHeight: 310,
-                    channels: involvement.anatomyNodeChannels,
-                    warmth: 0.55
-                )
-                .frame(height: 310)
-                .accessibilityElement()
-                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint.")
-
-                HStack(spacing: Space.lg) {
-                    anatomyLegend(role: .primary)
-                    anatomyLegend(role: .secondary)
-                    anatomyLegend(role: .stabilizer)
-                }
-
-                Text("Movement roles, not training development. Stabilizers are shown but receive no hypertrophy credit.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-    }
-
-    func anatomyLegend(role: MuscleRole) -> some View {
-        let rgb = MuscleColor.rgb(
-            for: MuscleMapChannels(intensity: role.visualIntensity),
-            theme: colorScheme == .dark ? .dark : .light
-        )
-        return HStack(spacing: 5) {
-            Circle()
-                .fill(Color(red: rgb.red, green: rgb.green, blue: rgb.blue))
-                .frame(width: 10, height: 10)
-            Text(role.displayName)
-                .font(Typography.metricMicro)
-                .foregroundStyle(Ink.tertiary)
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    /// Primary / secondary muscle involvement for the lift, resolved
-    /// from the curated catalog map. Rendered as middot-joined text
-    /// lines (matching the hero meta line) rather than chips, in step
-    /// with the app's move away from chip strips. Hidden entirely for
-    /// custom exercises the map doesn't know (`.empty`).
-    @ViewBuilder
-    var muscleBreakdownSection: some View {
-        let involvement = item.muscleInvolvement
-        if !involvement.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Muscles")
-                    .sectionLabelStyle(Opacity.medium)
-
-                let primary = involvement.primary
-                let secondary = involvement.secondary
-                let stabilizers = involvement.stabilizers
-                if !primary.isEmpty {
-                    muscleRow(label: "Primary", muscles: primary, prominent: true)
-                }
-                if !secondary.isEmpty {
-                    muscleRow(label: "Secondary", muscles: secondary, prominent: false)
-                }
-                if !stabilizers.isEmpty {
-                    muscleRow(label: "Stabilizers", muscles: stabilizers, prominent: false)
-                }
-            }
-        }
-    }
-
-    func muscleRow(label: String, muscles: [Muscle], prominent: Bool) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-            Text(label)
-                .sectionLabelStyle(Opacity.soft)
-                .frame(width: 100, alignment: .leading)
-                .minimumScaleFactor(0.7)
-            Text(muscles.map(\.displayName).joined(separator: " · "))
-                .font(Typography.body)
-                .foregroundStyle(prominent ? Ink.secondary : Ink.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
     // MARK: - Recent sessions
 
     var recentSessionsSection: some View {
@@ -654,11 +697,24 @@ extension ExerciseDetailScreen {
             let rows = recentRows
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(rows.enumerated()), id: \.offset) { idx, row in
-                    if idx > 0 { SectionDivider() }
+                    if idx > 0 { recentRowDivider }
                     recentRow(row)
                 }
             }
+            .padding(.horizontal, Space.lg)
+            .padding(.vertical, Space.xs)
+            .contentCard()
         }
+    }
+
+    /// In-card hairline between ledger rows — the same plain, edge
+    /// inset line History's date-group cards use (SectionDivider's
+    /// gradient fade is the card-free counterpart and stays outside).
+    private var recentRowDivider: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(height: 0.5)
+            .accessibilityHidden(true)
     }
 
     func recentRow(_ row: RecentSessionRow) -> some View {
@@ -1029,24 +1085,6 @@ extension ExerciseDetailScreen {
         ) ?? "—"
     }
 
-    var bestDetailString: String? {
-        guard let prog = progress else {
-            // For a one-session user the "best" IS today's session.
-            guard let last = lastInstance else { return nil }
-            return bestDetail(
-                reps: last.topReps,
-                duration: last.topDuration,
-                date: last.sessionDate
-            )
-        }
-        guard let best = bestDisplayPoint(in: prog) else { return nil }
-        return bestDetail(
-            reps: best.topReps,
-            duration: best.topDuration,
-            date: best.date
-        )
-    }
-
     /// Standing record when the semantic contract supports one; otherwise
     /// the ordinary best history marker. Comparable loaded holds therefore
     /// use the canonical load-first record instead of the globally longest
@@ -1059,21 +1097,6 @@ extension ExerciseDetailScreen {
             return prog.points.max { $0.topDuration < $1.topDuration }
         }
         return prog.bestWeightPoint
-    }
-
-    /// The Best card's secondary line preserves the record tie-breaker.
-    /// Load-ranked reps use reps; load-ranked isometrics use duration;
-    /// duration-only and unranked history need only the record date.
-    func bestDetail(reps: Int, duration: TimeInterval, date: Date) -> String {
-        let relativeDate = RelativeDate.short(date)
-        switch item.performanceSemanticKind {
-        case .dynamicLoadAndReps, .powerLoadAndReps:
-            return "× \(reps) · \(relativeDate)"
-        case .isometricLoadAndDuration:
-            return "× \(DurationFormatter.string(duration)) · \(relativeDate)"
-        case .isometricDuration, .unrankedReps, .unrankedDuration:
-            return relativeDate
-        }
     }
 
     /// All-time best estimated 1RM (canonical lb), or nil when there
