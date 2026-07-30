@@ -4,8 +4,10 @@
 //  How training is distributed across rep ranges over time. A
 //  dominant-zone hero and four-week mix lead, followed by 12 weeks of
 //  completed sets stacked into strength (1–5), hypertrophy (6–12),
-//  and endurance (13+) zones. The current partial week is deliberately
-//  subdued, and the closing instrument condenses average-rep drift.
+//  and endurance (13+) zones. The current partial week keeps full
+//  colour — dimming shifted the accent toward brown and read as a
+//  separate category — and is marked by the "Now" annotation alone.
+//  The closing instrument condenses average-rep drift.
 //
 //  Hypertrophy wears the accent as the productive default zone; the
 //  heavy and high-rep ends sit in grayscale luminance — one accent,
@@ -128,7 +130,6 @@ struct IntensityMixSection: View {
                             )
                             .foregroundStyle(by: .value("Zone", zone.label))
                             .cornerRadius(3)
-                            .opacity(week.isCurrentWeek ? 0.42 : 1)
                         }
                     }
                 }

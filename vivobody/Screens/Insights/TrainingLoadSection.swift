@@ -4,8 +4,8 @@
 //
 //  The personal workload lens. A plain-language Low / Productive /
 //  High status leads, followed by the user's position against their
-//  own range, a Swift Charts rolling seven-day trend, the work that
-//  drove it, and one calm next action.
+//  own range, a Swift Charts rolling seven-day trend, and the work
+//  that drove it.
 //
 
 import VivoKit
@@ -30,7 +30,6 @@ struct TrainingLoadSection: View {
                 }
                 chart
                 drivers
-                guidance
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -39,19 +38,11 @@ struct TrainingLoadSection: View {
     // MARK: - Status
 
     private var status: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
-            Text(statusTitle)
-                .font(Typography.display)
-                .foregroundStyle(statusColor)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-
-            Text(statusSummary)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .accessibilityElement(children: .combine)
+        Text(statusTitle)
+            .font(Typography.display)
+            .foregroundStyle(statusColor)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
     }
 
     private var statusTitle: String {
@@ -61,20 +52,6 @@ struct TrainingLoadSection: View {
         case .productive:   return "Productive load"
         case .high:         return "High load"
         }
-    }
-
-    private var statusSummary: String {
-        guard let change = report.changeFromUsual else {
-            let remaining = max(1, 28 - report.daysLogged)
-            return "\(format(report.currentLoad)) estimated hard sets in the last 7 days. Keep logging for about \(remaining) more day\(remaining == 1 ? "" : "s") to form your personal range."
-        }
-
-        let percent = Int((abs(change) * 100).rounded())
-        if percent <= 1 {
-            return "Your last 7 days match your usual training."
-        }
-        let direction = change > 0 ? "above" : "below"
-        return "Your last 7 days are \(percent)% \(direction) your usual training."
     }
 
     // MARK: - Personal range
@@ -249,37 +226,6 @@ struct TrainingLoadSection: View {
         }
         let sign = delta > 0 ? "+" : "−"
         return "\(sign)\(format(abs(delta))) vs usual"
-    }
-
-    // MARK: - Guidance
-
-    private var guidance: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-            Circle()
-                .fill(statusColor)
-                .frame(width: 7, height: 7)
-            Text(guidanceText)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.horizontal, Space.lg)
-        .padding(.vertical, Space.md)
-        .contentChip()
-        .accessibilityElement(children: .combine)
-    }
-
-    private var guidanceText: String {
-        switch report.verdict {
-        case .insufficient:
-            return "Keep training normally while your personal range takes shape."
-        case .low:
-            return "If you feel ready, add a normal session."
-        case .productive:
-            return "Maintain your current training rhythm."
-        case .high:
-            return "Keep the next session lighter, or add a rest day."
-        }
     }
 
     // MARK: - Formatting

@@ -18,8 +18,9 @@
 //    • Effort (consistency / reps-in-reserve) → the emblem's
 //      INTENSITY: training near failure burns vivid, easy work
 //      reads faint.
-//    • Cadence (sessions per week) → a ring of beads around the
-//      bloom: how often you show up.
+//    • Cadence (sessions per week) → the stat strip's per-week
+//      numeral; the bloom keeps only a lone orbiting satellite, so
+//      the mark carries life, not a count.
 //
 //  Pure value type built from the other models' outputs, so the
 //  mapping is deterministic and testable (see `TrainingSignatureTests`).

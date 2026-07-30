@@ -84,40 +84,98 @@ struct SignatureEmblem: View {
             let radius = min(size.width, size.height) / 2
             let count = snapshot.petals.count
             let maxShare = snapshot.petals.map(\.volumeShare).max() ?? 0
-            let ring = Path(ellipseIn: CGRect(
-                x: center.x - radius * 0.78,
-                y: center.y - radius * 0.78,
-                width: radius * 1.56,
-                height: radius * 1.56
+            let ring = radius * SignatureEmblemTuning.ringFraction
+            let ringPath = Path(ellipseIn: CGRect(
+                x: center.x - ring,
+                y: center.y - ring,
+                width: ring * 2,
+                height: ring * 2
             ))
-            context.stroke(ring, with: .color(Surface.cardTint), lineWidth: 1)
+            context.stroke(ringPath, with: .color(Surface.cardTint), lineWidth: 1)
 
             for (index, petal) in snapshot.petals.enumerated() {
                 let angle = (Double(index) / Double(count)) * 2 * .pi - .pi / 2
                 let dominant = petal.group == snapshot.dominantGroup
                 var spoke = Path()
-                spoke.move(to: CGPoint(x: center.x + cos(angle) * radius * 0.08, y: center.y + sin(angle) * radius * 0.08))
-                spoke.addLine(to: CGPoint(x: center.x + cos(angle) * radius * 0.82, y: center.y + sin(angle) * radius * 0.82))
+                spoke.move(to: CGPoint(x: center.x + cos(angle) * radius * SignatureEmblemTuning.spokeInnerFraction, y: center.y + sin(angle) * radius * SignatureEmblemTuning.spokeInnerFraction))
+                spoke.addLine(to: CGPoint(x: center.x + cos(angle) * ring, y: center.y + sin(angle) * ring))
                 context.stroke(spoke, with: .color(spokeColor(isDominant: dominant)), lineWidth: 1)
+            }
+
+            // The ghost bloom: every petal outlined at full size, the
+            // silhouette the live petals grow into.
+            let ghostLength = radius * SignatureEmblemTuning.reachFraction(development: 1)
+            let ghostHalfWidth = SignatureEmblemTuning.halfWidth(shareNorm: 1, length: ghostLength, radius: radius)
+            let ghostLeaf = SignatureEmblemTuning.petalPath(length: ghostLength, halfWidth: ghostHalfWidth)
+            for index in snapshot.petals.indices {
+                let angle = (Double(index) / Double(count)) * 2 * .pi - .pi / 2
+                var transform = CGAffineTransform(translationX: center.x, y: center.y)
+                transform = transform.rotated(by: angle)
+                context.stroke(
+                    ghostLeaf.applying(transform),
+                    with: .color(Ink.primary.opacity(SignatureEmblemTuning.ghostOpacity)),
+                    style: StrokeStyle(lineWidth: SignatureEmblemTuning.ghostLineWidth, dash: SignatureEmblemTuning.ghostDash)
+                )
+            }
+
+            // Additive petals glow toward a hot core in full colour;
+            // vibrant (lock-screen) rendering keeps plain alpha so the
+            // white-on-white sum can't blow out.
+            var glow = context
+            if renderingMode != .vibrant {
+                glow.blendMode = .plusLighter
+                // The ambient ember — the same warmth the app's bloom
+                // sits in. Skipped in vibrant rendering, where the
+                // system controls the material.
+                let emberR = radius * 1.04
+                glow.fill(
+                    Path(ellipseIn: CGRect(x: center.x - emberR, y: center.y - emberR, width: emberR * 2, height: emberR * 2)),
+                    with: .radialGradient(
+                        Gradient(colors: [
+                            Tint.primary.opacity(SignatureEmblemTuning.ambientOpacity(intensity: snapshot.intensity)),
+                            .clear,
+                        ]),
+                        center: center,
+                        startRadius: 0,
+                        endRadius: emberR
+                    )
+                )
             }
 
             for (index, petal) in snapshot.petals.enumerated() {
                 let angle = (Double(index) / Double(count)) * 2 * .pi - .pi / 2
-                let length = radius * (0.20 + 0.62 * petal.development)
+                let length = radius * SignatureEmblemTuning.reachFraction(development: petal.development)
                 let share = maxShare > 0 ? petal.volumeShare / maxShare : 0
-                let halfWidth = radius * (0.05 + 0.28 * share)
+                let halfWidth = SignatureEmblemTuning.halfWidth(shareNorm: share, length: length, radius: radius)
                 let dominant = petal.group == snapshot.dominantGroup
-                let opacity = min(1, (0.28 + 0.55 * petal.development) * (0.55 + 0.45 * snapshot.intensity) + (dominant ? 0.18 : 0))
+                let opacity = SignatureEmblemTuning.petalOpacity(development: petal.development, intensity: snapshot.intensity, isDominant: dominant)
 
-                var leaf = Path()
+                // Same organic leaf and multi-stop burn as the app —
+                // incandescent gold at the core cooling to deep ember
+                // at the tip — drawn in local coordinates so the
+                // gradient runs base-to-tip before rotation.
+                let leaf = SignatureEmblemTuning.petalPath(length: length, halfWidth: halfWidth)
                 let tip = CGPoint(x: length, y: 0)
-                leaf.move(to: .zero)
-                leaf.addQuadCurve(to: tip, control: CGPoint(x: length * 0.5, y: halfWidth))
-                leaf.addQuadCurve(to: .zero, control: CGPoint(x: length * 0.5, y: -halfWidth))
 
-                var transform = CGAffineTransform(translationX: center.x, y: center.y)
-                transform = transform.rotated(by: angle)
-                context.fill(leaf.applying(transform), with: .color(petalColor(opacity: opacity)))
+                var c = glow
+                c.translateBy(x: center.x, y: center.y)
+                c.rotate(by: .radians(angle))
+                let burn = renderingMode == .vibrant
+                    ? Gradient(stops: [
+                        .init(color: petalColor(opacity: opacity), location: 0),
+                        .init(color: petalColor(opacity: opacity * SignatureEmblemTuning.burnMidScale), location: SignatureEmblemTuning.burnMidLocation),
+                        .init(color: petalColor(opacity: opacity * SignatureEmblemTuning.burnTipScale), location: 1),
+                    ])
+                    : SignatureEmblemTuning.burnGradient(opacity: opacity)
+                c.fill(leaf, with: .linearGradient(burn, startPoint: .zero, endPoint: tip))
+
+                if renderingMode != .vibrant {
+                    let rim = Gradient(stops: [
+                        .init(color: SignatureEmblemTuning.burnGold.opacity(SignatureEmblemTuning.rimOpacity * opacity), location: 0),
+                        .init(color: Tint.primary.opacity(SignatureEmblemTuning.rimOpacity * SignatureEmblemTuning.rimTipScale * opacity), location: 1),
+                    ])
+                    c.stroke(leaf, with: .linearGradient(rim, startPoint: .zero, endPoint: tip), lineWidth: SignatureEmblemTuning.rimLineWidth)
+                }
 
                 if showsLabels {
                     let p = CGPoint(x: center.x + cos(angle) * radius * 0.88, y: center.y + sin(angle) * radius * 0.88)
