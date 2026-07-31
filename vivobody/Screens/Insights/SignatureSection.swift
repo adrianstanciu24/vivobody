@@ -51,8 +51,7 @@ struct SignatureSection: View {
                         Stat(value: "\(report.weekStreak)", label: "Week streak"),
                         Stat(value: "\(Int((signature.balance * 100).rounded()))", unit: "%", label: "Balance"),
                     ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
+                    valueFont: Typography.statValue
                 )
                 .padding(.vertical, Space.xs)
 
@@ -83,10 +82,11 @@ struct SignatureSection: View {
 /// at the core, cooling toward the tips.
 ///
 /// The mark is quietly alive: the core breathes — swelling harder the
-/// more intense the training — the dominant petal's burn dims and
-/// swells in step with it, and the satellite laps the rim like a
-/// watch movement. Petal geometry never moves; the shape is the data,
-/// only its light breathes. Holds perfectly still under Reduce Motion.
+/// more intense the training — the bloom's glow dims and swells in
+/// step with it, and the satellite laps the rim like a watch
+/// movement. Petal geometry and material never move; the shape is the
+/// data, only its light breathes. Holds perfectly still under Reduce
+/// Motion.
 private struct TrainingSignatureView: View {
     let signature: TrainingSignature
 
@@ -114,10 +114,10 @@ private struct TrainingSignatureView: View {
         /// Peak opacity of the halo the core exhales.
         static let haloOpacity: Double = 0.35
 
-        /// How deeply the dominant petal's burn dims at the bottom of
-        /// a breath, as a fraction of its resting opacity. Luminance
-        /// only — petal geometry is the data and never moves.
-        static let petalBreathDepth: Double = 0.25
+        /// How deeply the bloom's additive light dims at the bottom
+        /// of a breath. Glow only — petal geometry and material are
+        /// the data and never move.
+        static let glowBreathDepth: Double = 0.22
     }
 
     var body: some View {
@@ -145,16 +145,41 @@ private struct TrainingSignatureView: View {
             let breath = animated ? (sin(time * 2 * .pi / Motion.breathSeconds) + 1) / 2 : 0
             let orbit = animated ? (time / Motion.satelliteLapSeconds) * 2 * .pi : 0
 
+            drawAtmosphere(in: &context, center: center, radius: radius)
             drawRing(in: &context, center: center, radius: radius)
             drawSpokes(in: &context, center: center, radius: radius)
             drawSatellite(in: &context, center: center, radius: radius, orbit: orbit, animated: animated)
             drawGhostBloom(in: &context, center: center, radius: radius)
             // At rest the petal sits at full burn (breath 1); the core's
             // halo instead vanishes at rest (breath 0) — hence two values.
-            drawPetals(in: &context, center: center, radius: radius, breath: animated ? breath : 1)
+            drawPetals(
+                in: &context,
+                center: center,
+                radius: radius,
+                breath: animated ? breath : 1,
+                time: time,
+                animated: animated
+            )
             drawLabels(in: &context, center: center, radius: radius)
             drawCore(in: &context, center: center, radius: radius, breath: breath)
         }
+    }
+
+    /// The night the bloom sits in — a barely-lit pocket of warm air
+    /// instead of dead flat black, so the emblem has depth before a
+    /// single petal is drawn.
+    private func drawAtmosphere(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+        let r = radius * SignatureEmblemTuning.atmosphereFraction
+        let rect = CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)
+        context.fill(
+            Path(ellipseIn: rect),
+            with: .radialGradient(
+                SignatureEmblemTuning.atmosphereGradient(intensity: signature.intensity),
+                center: center,
+                startRadius: 0,
+                endRadius: r
+            )
+        )
     }
 
     private func drawRing(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
@@ -231,16 +256,15 @@ private struct TrainingSignatureView: View {
     /// One petal's placement and burn for a frame.
     private struct PetalLayout {
         let angle: Double
-        let length: CGFloat
-        let halfWidth: CGFloat
         let opacity: Double
+        let hueShift: Double
+        let isDominant: Bool
+        let shape: SignatureEmblemTuning.PetalShape
+        let hotBase: Path
+        let hotTip: CGPoint
     }
 
-    /// The leaf in local coordinates (base at the origin, tip at
-    /// (length, 0)) comes from VivoKit's `SignatureEmblemTuning` so
-    /// the widget's bloom is the identical silhouette.
-
-    private func petalLayouts(radius: CGFloat, breath: Double) -> [PetalLayout] {
+    private func petalLayouts(radius: CGFloat) -> [PetalLayout] {
         let petals = signature.petals
         let count = petals.count
         let maxShare = petals.map(\.volumeShare).max() ?? 0
@@ -251,34 +275,48 @@ private struct TrainingSignatureView: View {
             let length = radius * SignatureEmblemTuning.reachFraction(development: petal.development)
             let shareNorm = maxShare > 0 ? petal.volumeShare / maxShare : 0
             let halfWidth = SignatureEmblemTuning.halfWidth(shareNorm: shareNorm, length: length, radius: radius)
+            let shape = SignatureEmblemTuning.petalShape(
+                length: length,
+                halfWidth: halfWidth
+            )
+            let hotScale = CGAffineTransform(scaleX: 0.42, y: 0.5)
             let isDominant = petal.group == signature.dominantGroup
-            var opacity = SignatureEmblemTuning.petalOpacity(
+            let opacity = SignatureEmblemTuning.petalOpacity(
                 development: petal.development,
                 intensity: signature.intensity,
                 isDominant: isDominant
             )
-            if isDominant {
-                // The lead petal's burn breathes in step with the core —
-                // dimming from its resting brightness and swelling back,
-                // scaled by intensity like the core's beat.
-                let depth = Motion.petalBreathDepth * Motion.breathStrength(for: signature.intensity)
-                opacity *= 1 - depth * (1 - breath)
-            }
-            return PetalLayout(angle: angle, length: length, halfWidth: halfWidth, opacity: Swift.min(1, opacity))
+            return PetalLayout(
+                angle: angle,
+                opacity: Swift.min(1, opacity),
+                hueShift: SignatureEmblemTuning.hueShift(index: i, count: count),
+                isDominant: isDominant,
+                shape: shape,
+                hotBase: shape.outline.applying(hotScale),
+                hotTip: shape.tip.applying(hotScale)
+            )
         }
     }
 
-    /// Petals are lit forms, not cut paper — the same light the logo
-    /// is drawn with. Five passes build the depth: a broad ambient
-    /// ember warms the black canvas beneath the whole bloom; a
-    /// blurred additive bloom pass glows; a crisp body pass carries
-    /// the multi-stop burn (incandescent gold at the core cooling to
-    /// deep ember at the tip); a short additive hot-base pass relights
-    /// each petal's root so the heart sums toward white; and a fine
-    /// rim light plus a whisper of vein give each petal a definite,
-    /// crafted silhouette.
-    private func drawPetals(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat, breath: Double) {
-        let layout = petalLayouts(radius: radius, breath: breath)
+    /// Each leaf is a small material study: its folded underside casts
+    /// onto the leaf below, a mesh-gradient blade carries light in two
+    /// axes, the logo cleft separates both planes, and a soft specular
+    /// streak catches near the incandescent core.
+    private func drawPetals(
+        in context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        breath: Double,
+        time: TimeInterval,
+        animated: Bool
+    ) {
+        let layout = petalLayouts(radius: radius)
+
+        // Only the light breathes: every additive pass below dims and
+        // swells with the core's beat while the petal material — the
+        // data — holds perfectly still.
+        let glowBreath = 1 - Motion.glowBreathDepth
+            * Motion.breathStrength(for: signature.intensity) * (1 - breath)
 
         // Ambient ember — the emblem's presence on the black canvas,
         // warming with training intensity.
@@ -297,106 +335,282 @@ private struct TrainingSignatureView: View {
             )
         )
 
+        // The halo each petal throws on the dark. The dominant petal
+        // is drawn into the bloom twice — the data's lead is also the
+        // light's lead.
         context.drawLayer { bloom in
-            bloom.addFilter(.blur(radius: radius * 0.05))
+            bloom.addFilter(.blur(radius: radius * SignatureEmblemTuning.bloomRadiusFraction))
             bloom.blendMode = .plusLighter
             for petal in layout {
                 var c = bloom
                 c.translateBy(x: center.x, y: center.y)
                 c.rotate(by: .radians(petal.angle))
+                let strength = petal.opacity * SignatureEmblemTuning.bloomOpacity * glowBreath
                 c.fill(
-                    SignatureEmblemTuning.petalPath(length: petal.length, halfWidth: petal.halfWidth),
-                    with: .color(Tint.primary.opacity(petal.opacity * 0.5))
+                    petal.shape.outline,
+                    with: .color(
+                        SignatureEmblemTuning.petalGold(hueShift: petal.hueShift)
+                            .opacity(strength)
+                    )
                 )
+                if petal.isDominant {
+                    c.fill(
+                        petal.shape.outline,
+                        with: .color(
+                            Tint.primary.opacity(strength * SignatureEmblemTuning.dominantHaloBoost)
+                        )
+                    )
+                }
             }
         }
 
-        // Body — the definite form, in normal blend so the multi-stop
-        // burn reads true.
+        drawEmberDust(
+            in: &context,
+            center: center,
+            radius: radius,
+            time: time,
+            animated: animated
+        )
+
+        // Bodies are deliberately interleaved with their shadows.
+        // Later leaves overlap earlier ones, making the clockwise sweep
+        // read as a stacked bloom instead of six coplanar lenses.
         for petal in layout {
             var c = context
             c.translateBy(x: center.x, y: center.y)
             c.rotate(by: .radians(petal.angle))
-            c.fill(
-                SignatureEmblemTuning.petalPath(length: petal.length, halfWidth: petal.halfWidth),
+            let shape = petal.shape
+            let gold = SignatureEmblemTuning.petalGold(hueShift: petal.hueShift)
+            let ember = SignatureEmblemTuning.petalEmber(hueShift: petal.hueShift)
+
+            var foldedBase = c
+            foldedBase.addFilter(
+                .shadow(
+                    color: .black.opacity(SignatureEmblemTuning.castShadowOpacity * petal.opacity),
+                    radius: SignatureEmblemTuning.castShadowBlur,
+                    x: 0.4,
+                    y: SignatureEmblemTuning.castShadowOffset
+                )
+            )
+            foldedBase.fill(
+                shape.outline,
                 with: .linearGradient(
-                    SignatureEmblemTuning.burnGradient(opacity: petal.opacity),
+                    SignatureEmblemTuning.foldGradient(
+                        opacity: petal.opacity,
+                        hueShift: petal.hueShift
+                    ),
                     startPoint: .zero,
-                    endPoint: CGPoint(x: petal.length, y: 0)
+                    endPoint: shape.tip
+                )
+            )
+
+            c.fill(
+                shape.blade,
+                with: .meshGradient(
+                    bladeMesh(opacity: petal.opacity, hueShift: petal.hueShift)
+                )
+            )
+
+            // The crease fades as it leaves the root so it reads as a
+            // fold in the leaf, not a crack across the light.
+            c.stroke(
+                shape.crease,
+                with: .linearGradient(
+                    Gradient(stops: [
+                        .init(
+                            color: Color.black.opacity(SignatureEmblemTuning.creaseOpacity * petal.opacity),
+                            location: 0
+                        ),
+                        .init(
+                            color: Color.black.opacity(SignatureEmblemTuning.creaseOpacity * petal.opacity * 0.25),
+                            location: 1
+                        ),
+                    ]),
+                    startPoint: .zero,
+                    endPoint: shape.tip
+                ),
+                lineWidth: 1.0
+            )
+            var creaseLight = c
+            creaseLight.translateBy(x: 0, y: 0.85)
+            creaseLight.stroke(
+                shape.crease,
+                with: .color(
+                    gold.opacity(SignatureEmblemTuning.creaseHighlightOpacity * petal.opacity)
+                ),
+                lineWidth: 0.6
+            )
+
+            c.stroke(
+                shape.leadingEdge,
+                with: .linearGradient(
+                    SignatureEmblemTuning.rimGradient(
+                        opacity: petal.opacity,
+                        hueShift: petal.hueShift
+                    ),
+                    startPoint: .zero,
+                    endPoint: shape.tip
+                ),
+                lineWidth: SignatureEmblemTuning.rimLineWidth
+            )
+            c.stroke(
+                shape.trailingEdge,
+                with: .color(
+                    ember.opacity(SignatureEmblemTuning.trailingRimOpacity * petal.opacity)
+                ),
+                lineWidth: SignatureEmblemTuning.trailingRimLineWidth
+            )
+        }
+
+        // The core's light landing on the bloom: an additive radial
+        // wash clipped to the petal bodies, so every root ignites
+        // white-hot where it meets the bead and the whole mark reads
+        // as lit from within.
+        do {
+            var spill = context
+            spill.blendMode = .plusLighter
+            var bodies = Path()
+            for petal in layout {
+                var transform = CGAffineTransform(translationX: center.x, y: center.y)
+                transform = transform.rotated(by: petal.angle)
+                bodies.addPath(petal.shape.outline.applying(transform))
+            }
+            spill.clip(to: bodies)
+            let spillR = radius * SignatureEmblemTuning.coreSpillFraction
+            let strength = (0.55 + 0.35 * signature.intensity) * glowBreath
+            spill.fill(
+                Path(ellipseIn: CGRect(
+                    x: center.x - spillR,
+                    y: center.y - spillR,
+                    width: spillR * 2,
+                    height: spillR * 2
+                )),
+                with: .radialGradient(
+                    SignatureEmblemTuning.coreSpillGradient(strength: strength),
+                    center: center,
+                    startRadius: 0,
+                    endRadius: spillR
                 )
             )
         }
 
-        // Hot base — a soft additive relight of each petal's root, so
-        // the heart of the bloom sums toward incandescent. Blurred so
-        // no edge can read as a separate shape.
+        // One additive pass relights both the root and the curved
+        // specular streak, so highlights bloom without extra filters.
         do {
             var hot = context
             hot.blendMode = .plusLighter
-            hot.addFilter(.blur(radius: radius * 0.02))
+            hot.addFilter(.blur(radius: radius * SignatureEmblemTuning.hotRadiusFraction))
             for petal in layout {
                 var c = hot
                 c.translateBy(x: center.x, y: center.y)
                 c.rotate(by: .radians(petal.angle))
-                let l = petal.length * 0.42
+                let gold = SignatureEmblemTuning.petalGold(hueShift: petal.hueShift)
                 c.fill(
-                    SignatureEmblemTuning.petalPath(length: l, halfWidth: petal.halfWidth * 0.5),
+                    petal.hotBase,
                     with: .linearGradient(
                         Gradient(stops: [
-                            .init(color: SignatureEmblemTuning.burnGold.opacity(petal.opacity * 0.45), location: 0),
-                            .init(color: Tint.primary.opacity(petal.opacity * 0.15), location: 0.5),
+                            .init(color: gold.opacity(petal.opacity * 0.6 * glowBreath), location: 0),
+                            .init(color: Tint.primary.opacity(petal.opacity * 0.2 * glowBreath), location: 0.5),
                             .init(color: .clear, location: 1),
                         ]),
                         startPoint: .zero,
-                        endPoint: CGPoint(x: l, y: 0)
+                        endPoint: petal.hotTip
+                    )
+                )
+                c.stroke(
+                    petal.shape.specular,
+                    with: .color(
+                        gold.opacity(SignatureEmblemTuning.specularOpacity * petal.opacity)
+                    ),
+                    style: StrokeStyle(
+                        lineWidth: SignatureEmblemTuning.specularLineWidth,
+                        lineCap: .round
                     )
                 )
             }
         }
+    }
 
-        // Cross-section shading, rim light and vein — the folded-leaf
-        // volume, the crafted edge and the cleft, all scaled by the
-        // petal's burn so faint regions stay faint.
-        for petal in layout {
-            var c = context
-            c.translateBy(x: center.x, y: center.y)
-            c.rotate(by: .radians(petal.angle))
-            let path = SignatureEmblemTuning.petalPath(length: petal.length, halfWidth: petal.halfWidth)
+    /// The blade's material: hottest at the root column (nearest the
+    /// core), full brand orange through the belly, cooling to crimson
+    /// ember at the tip — the full white-to-black value ramp a burn
+    /// needs, in one mesh.
+    private func bladeMesh(opacity: Double, hueShift: Double) -> MeshGradient {
+        let hot = SignatureEmblemTuning.petalHot(hueShift: hueShift)
+        let gold = SignatureEmblemTuning.petalGold(hueShift: hueShift)
+        let ember = SignatureEmblemTuning.petalEmber(hueShift: hueShift)
+        return MeshGradient(
+            width: 3,
+            height: 3,
+            points: Self.bladeMeshPoints,
+            colors: [
+                gold.opacity(opacity * 0.8),
+                Tint.primary.opacity(opacity * 0.8),
+                ember.opacity(opacity * 0.42),
+                hot.opacity(min(1, opacity * 1.1)),
+                gold.opacity(min(1, opacity * 1.05)),
+                ember.opacity(opacity * 0.6),
+                gold.opacity(opacity * 0.72),
+                Tint.primary.opacity(opacity * 0.72),
+                ember.opacity(opacity * 0.4),
+            ],
+            smoothsColors: true,
+            colorSpace: .perceptual
+        )
+    }
 
-            let shade = Tint.primaryShadow.opacity(SignatureEmblemTuning.edgeShadeOpacity * petal.opacity)
-            let spine = SignatureEmblemTuning.burnGold.opacity(SignatureEmblemTuning.spineLightOpacity * petal.opacity)
-            c.fill(
-                path,
-                with: .linearGradient(
-                    Gradient(stops: [
-                        .init(color: shade, location: 0),
-                        .init(color: spine, location: 0.5),
-                        .init(color: shade, location: 1),
+    private static let bladeMeshPoints: [SIMD2<Float>] = [
+        SIMD2<Float>(0, 0), SIMD2<Float>(0.5, 0), SIMD2<Float>(1, 0),
+        SIMD2<Float>(0, 0.5), SIMD2<Float>(0.38, 0.45), SIMD2<Float>(1, 0.5),
+        SIMD2<Float>(0, 1), SIMD2<Float>(0.55, 1), SIMD2<Float>(1, 1),
+    ]
+
+    /// Sparks rising off the burn — additive so they read as motes of
+    /// the core's light, never as stray grey dots. They stay inside
+    /// the bloom's warmth and twinkle on the fire's timetable.
+    private func drawEmberDust(
+        in context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        time: TimeInterval,
+        animated: Bool
+    ) {
+        var sparks = context
+        sparks.blendMode = .plusLighter
+        let burn = 0.12 + 0.3 * signature.intensity
+        for index in 0..<6 {
+            let seed = Double(index)
+            let drift = animated ? time * (0.010 + seed * 0.002) : 0
+            let angle = seed * 2.399963 + 0.35 + drift
+            let distance = radius * (0.2 + 0.07 * Double((index * 3) % 5))
+            let twinkle = animated
+                ? 0.55 + 0.45 * sin(time * (0.45 + seed * 0.04) + seed * 1.7)
+                : 0.65
+            let size = 1.8 + CGFloat(index % 3) * 0.7
+            let point = CGPoint(
+                x: center.x + cos(angle) * distance,
+                y: center.y + sin(angle) * distance
+            )
+            let rect = CGRect(
+                x: point.x - size,
+                y: point.y - size,
+                width: size * 2,
+                height: size * 2
+            )
+            sparks.fill(
+                Path(ellipseIn: rect),
+                with: .radialGradient(
+                    Gradient(colors: [
+                        SignatureEmblemTuning.petalHot(
+                            hueShift: SignatureEmblemTuning.hueShift(index: index, count: 6)
+                        )
+                        .opacity(burn * twinkle),
+                        .clear,
                     ]),
-                    startPoint: CGPoint(x: 0, y: -petal.halfWidth),
-                    endPoint: CGPoint(x: 0, y: petal.halfWidth)
+                    center: point,
+                    startRadius: 0,
+                    endRadius: size
                 )
-            )
-
-            let rim = Gradient(stops: [
-                .init(color: SignatureEmblemTuning.burnGold.opacity(SignatureEmblemTuning.rimOpacity * petal.opacity), location: 0),
-                .init(color: Tint.primary.opacity(SignatureEmblemTuning.rimOpacity * SignatureEmblemTuning.rimTipScale * petal.opacity), location: 1),
-            ])
-            c.stroke(
-                path,
-                with: .linearGradient(rim, startPoint: .zero, endPoint: CGPoint(x: petal.length, y: 0)),
-                lineWidth: SignatureEmblemTuning.rimLineWidth
-            )
-            var vein = Path()
-            vein.move(to: CGPoint(x: petal.length * 0.12, y: 0))
-            vein.addQuadCurve(
-                to: CGPoint(x: petal.length * 0.86, y: 0),
-                control: CGPoint(x: petal.length * 0.5, y: petal.halfWidth * 0.05)
-            )
-            c.stroke(
-                vein,
-                with: .color(Tint.primaryShadow.opacity(SignatureEmblemTuning.veinOpacity * petal.opacity)),
-                lineWidth: 1
             )
         }
     }
@@ -435,11 +649,30 @@ private struct TrainingSignatureView: View {
         let strength = Motion.breathStrength(for: signature.intensity) * breath
         let r = radius * 0.05 * (1 + CGFloat(Motion.coreSwell * strength))
 
+        // Contact shadow tucks every petal root beneath the bead. The
+        // bright halo is drawn afterward, preserving the core's light
+        // while leaving a narrow depth seam at its edge.
+        let contactR = r * 2.05
+        context.fill(
+            Path(ellipseIn: CGRect(
+                x: center.x - contactR,
+                y: center.y - contactR,
+                width: contactR * 2,
+                height: contactR * 2
+            )),
+            with: .radialGradient(
+                Gradient(colors: [Color.black.opacity(0.52), .clear]),
+                center: center,
+                startRadius: r * 0.78,
+                endRadius: contactR
+            )
+        )
+
         // The exhale: a soft halo that swells and fades with the beat.
         // At rest (breath == 0) it vanishes and the core sits at its
         // base size — exactly the still emblem Reduce Motion renders.
         if strength > 0 {
-            let haloR = r * 2.6
+            let haloR = r * 2.9
             let haloRect = CGRect(x: center.x - haloR, y: center.y - haloR, width: haloR * 2, height: haloR * 2)
             context.fill(
                 Path(ellipseIn: haloRect),
@@ -448,6 +681,43 @@ private struct TrainingSignatureView: View {
                     center: center,
                     startRadius: 0,
                     endRadius: haloR
+                )
+            )
+        }
+
+        // The lens streak — a hairline horizontal flare through the
+        // bead, the cue that makes it read as a photographed light
+        // source rather than a dot. It rides the breath: a touch
+        // longer and brighter at the top of each swell.
+        do {
+            var flare = context
+            flare.blendMode = .plusLighter
+            let streakR = radius * 0.3 * (0.85 + 0.3 * CGFloat(strength))
+            let glow = 0.7 + 0.3 * strength
+            let soft = CGRect(x: center.x - streakR, y: center.y - 1.6, width: streakR * 2, height: 3.2)
+            flare.fill(
+                Path(soft),
+                with: .linearGradient(
+                    Gradient(stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: Tint.primary.opacity(0.34 * glow), location: 0.5),
+                        .init(color: .clear, location: 1),
+                    ]),
+                    startPoint: CGPoint(x: soft.minX, y: center.y),
+                    endPoint: CGPoint(x: soft.maxX, y: center.y)
+                )
+            )
+            let hair = CGRect(x: center.x - streakR * 0.72, y: center.y - 0.6, width: streakR * 1.44, height: 1.2)
+            flare.fill(
+                Path(hair),
+                with: .linearGradient(
+                    Gradient(stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: Color.white.opacity(0.5 * glow), location: 0.5),
+                        .init(color: .clear, location: 1),
+                    ]),
+                    startPoint: CGPoint(x: hair.minX, y: center.y),
+                    endPoint: CGPoint(x: hair.maxX, y: center.y)
                 )
             )
         }

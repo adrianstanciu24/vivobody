@@ -2,13 +2,11 @@
 //  SignatureEmblemTuning.swift
 //  VivoKit
 //
-//  The single source of truth for the signature bloom's geometry, so
-//  the app's animated emblem (the Insights hero) and the widget's
-//  static one (SignatureWidget) can never drift. Pure value mapping
-//  only: development / volume share / intensity in, radius fractions
-//  and opacities out. Each renderer still draws its own Canvas (the
-//  app adds the breath and the orbiting satellite; the widget stays
-//  still), but every load-bearing number comes from here.
+//  The single source of truth for the signature bloom's geometry and
+//  colour, so the app's animated emblem and the static widget cannot
+//  drift. Its swept, folded leaf echoes the Vivo mark while preserving
+//  the data mapping: development controls reach, volume controls width,
+//  and effort controls luminance.
 //
 
 import CoreGraphics
@@ -16,6 +14,20 @@ import Foundation
 import SwiftUI
 
 public enum SignatureEmblemTuning {
+    /// A logo-derived leaf split into separately renderable surfaces.
+    /// The broad blade catches the core light while the narrow fold
+    /// turns under it; the shared crease and asymmetric edges let each
+    /// renderer build depth without reconstructing geometry.
+    public struct PetalShape {
+        public let outline: Path
+        public let blade: Path
+        public let leadingEdge: Path
+        public let trailingEdge: Path
+        public let crease: Path
+        public let specular: Path
+        public let tip: CGPoint
+    }
+
     /// Ring radius (and the satellite's orbit), as a fraction of the
     /// emblem radius.
     public static let ringFraction: CGFloat = 0.78
@@ -36,72 +48,196 @@ public enum SignatureEmblemTuning {
     public static let burnMidScale: Double = 0.72
     public static let burnTipScale: Double = 0.45
 
-    /// The petal's hottest colour — the near-white gold the burn
-    /// starts from at the core, the same light the logo's petal is
-    /// lit with. Only ever seen multiplied down by a petal's burn.
-    public static let burnGold = Color(red: 1.0, green: 0.74, blue: 0.38)
+    /// A stable clockwise hue drift. It is deliberately subtle: data
+    /// remains encoded by geometry and luminance, never by colour.
+    public static func hueShift(index: Int, count: Int) -> Double {
+        guard count > 1 else { return 0 }
+        return min(1, max(0, Double(index) / Double(count - 1)))
+    }
+
+    /// The incandescent root — barely-tinted white, metal about to
+    /// melt. Only shown where the core's light lands, so the bloom
+    /// keeps one true white-hot point in its range.
+    public static func petalHot(hueShift: Double) -> Color {
+        interpolatedColor(
+            from: (1.0, 0.87, 0.62),
+            to: (1.0, 0.83, 0.55),
+            amount: hueShift
+        )
+    }
+
+    public static func petalGold(hueShift: Double) -> Color {
+        interpolatedColor(
+            from: (1.0, 0.78, 0.40),
+            to: (1.0, 0.66, 0.30),
+            amount: hueShift
+        )
+    }
+
+    public static func petalEmber(hueShift: Double) -> Color {
+        interpolatedColor(
+            from: (0.80, 0.22, 0.02),
+            to: (0.88, 0.15, 0.06),
+            amount: hueShift
+        )
+    }
 
     /// The multi-stop burn: incandescent gold where the petal leaves
     /// the core, settling to the tint through the belly, cooling to
     /// deep ember at the tip. All stops scaled by the petal's burn
-    /// (`petalOpacity`). Shared verbatim by app and widget so the
-    /// bloom is the same object in both places.
-    public static func burnGradient(opacity: Double) -> Gradient {
+    /// (`petalOpacity`). The widget uses it directly while the app's
+    /// mesh blade is built from the same palette.
+    public static func burnGradient(opacity: Double, hueShift: Double) -> Gradient {
         Gradient(stops: [
-            .init(color: burnGold.opacity(min(1, opacity * 1.05)), location: 0),
-            .init(color: Tint.primary.opacity(opacity), location: 0.2),
+            .init(color: petalHot(hueShift: hueShift).opacity(min(1, opacity * 1.1)), location: 0),
+            .init(color: petalGold(hueShift: hueShift).opacity(min(1, opacity * 1.02)), location: 0.14),
+            .init(color: Tint.primary.opacity(opacity), location: 0.38),
             .init(color: Tint.primary.opacity(opacity * burnMidScale), location: burnMidLocation),
-            .init(color: Tint.primaryShadow.opacity(opacity * burnTipScale), location: 1),
+            .init(color: petalEmber(hueShift: hueShift).opacity(opacity * burnTipScale), location: 1),
         ])
     }
 
-    /// One petal in local coordinates — base at the origin, tip at
-    /// (length, 0) — so a base-to-tip gradient can be applied before
-    /// the petal is rotated onto its axis. An organic leaf, not a
-    /// lens: the belly sits forward of the midpoint, the tip tapers
-    /// to a soft point — the silhouette the logo's petal is cut from.
-    public static func petalPath(length: CGFloat, halfWidth: CGFloat) -> Path {
-        let tip = CGPoint(x: length, y: 0)
-        var leaf = Path()
-        leaf.move(to: .zero)
-        leaf.addCurve(
-            to: tip,
-            control1: CGPoint(x: length * 0.24, y: halfWidth * 1.04),
-            control2: CGPoint(x: length * 0.72, y: halfWidth * 0.58)
+    /// One clockwise-swept leaf in local coordinates. The asymmetric
+    /// belly and curled tip replace the old mirrored lens; two tiled
+    /// interior paths reproduce the Vivo logo's folded-leaf cleft.
+    public static func petalShape(length: CGFloat, halfWidth: CGFloat) -> PetalShape {
+        let base = CGPoint.zero
+        let tip = CGPoint(x: length, y: halfWidth * 0.14)
+        let leadingControl1 = CGPoint(x: length * 0.16, y: halfWidth)
+        let leadingControl2 = CGPoint(x: length * 0.58, y: halfWidth * 0.86)
+        let trailingControl1 = CGPoint(x: length * 0.74, y: -halfWidth * 0.46)
+        let trailingControl2 = CGPoint(x: length * 0.30, y: -halfWidth * 0.58)
+        let creaseStart = CGPoint(x: length * 0.06, y: -halfWidth * 0.08)
+        let creaseControl = CGPoint(x: length * 0.40, y: -halfWidth * 0.30)
+        let creaseEnd = CGPoint(x: length * 0.82, y: halfWidth * 0.06)
+
+        var outline = Path()
+        outline.move(to: base)
+        outline.addCurve(to: tip, control1: leadingControl1, control2: leadingControl2)
+        outline.addCurve(to: base, control1: trailingControl1, control2: trailingControl2)
+        outline.closeSubpath()
+
+        var leadingEdge = Path()
+        leadingEdge.move(to: base)
+        leadingEdge.addCurve(to: tip, control1: leadingControl1, control2: leadingControl2)
+
+        var trailingEdge = Path()
+        trailingEdge.move(to: tip)
+        trailingEdge.addCurve(to: base, control1: trailingControl1, control2: trailingControl2)
+
+        var crease = Path()
+        crease.move(to: creaseStart)
+        crease.addQuadCurve(to: creaseEnd, control: creaseControl)
+
+        var blade = Path()
+        blade.move(to: creaseStart)
+        blade.addQuadCurve(to: creaseEnd, control: creaseControl)
+        blade.addLine(to: tip)
+        blade.addCurve(to: base, control1: leadingControl2, control2: leadingControl1)
+        blade.closeSubpath()
+
+        var specular = Path()
+        specular.move(to: CGPoint(x: length * 0.07, y: halfWidth * 0.06))
+        specular.addQuadCurve(
+            to: CGPoint(x: length * 0.42, y: halfWidth * 0.25),
+            control: CGPoint(x: length * 0.21, y: halfWidth * 0.24)
         )
-        leaf.addCurve(
-            to: .zero,
-            control1: CGPoint(x: length * 0.72, y: -halfWidth * 0.58),
-            control2: CGPoint(x: length * 0.24, y: -halfWidth * 1.04)
+
+        return PetalShape(
+            outline: outline,
+            blade: blade,
+            leadingEdge: leadingEdge,
+            trailingEdge: trailingEdge,
+            crease: crease,
+            specular: specular,
+            tip: tip
         )
-        return leaf
     }
 
-    /// Rim light — a fine bright stroke along each petal's outline,
-    /// strongest where it leaves the core and fading toward the tip,
-    /// so petals read as lit forms with a definite silhouette rather
-    /// than soft blobs. Scaled by the petal's burn at draw time.
-    public static let rimOpacity: Double = 0.38
+    /// Compatibility surface used by the full-growth ghost.
+    public static func petalPath(length: CGFloat, halfWidth: CGFloat) -> Path {
+        petalShape(length: length, halfWidth: halfWidth).outline
+    }
+
+    public static let rimOpacity: Double = 0.85
     public static let rimTipScale: Double = 0.3
-    public static let rimLineWidth: CGFloat = 1
+    public static let rimLineWidth: CGFloat = 1.1
+    public static let trailingRimOpacity: Double = 0.4
+    public static let trailingRimLineWidth: CGFloat = 0.7
+    public static let foldOpacity: Double = 0.9
+    public static let creaseOpacity: Double = 0.5
+    public static let creaseHighlightOpacity: Double = 0.3
+    public static let specularOpacity: Double = 0.75
+    public static let specularLineWidth: CGFloat = 2.2
+    public static let castShadowOpacity: Double = 0.34
+    public static let castShadowBlur: CGFloat = 2.4
+    public static let castShadowOffset: CGFloat = 1.8
 
-    /// The vein — a whisper of shadow along each petal's spine, the
-    /// cleft the logo's petal carries. Nearly invisible; it just
-    /// keeps wide petals from reading as flat fill.
-    public static let veinOpacity: Double = 0.4
+    // Light architecture — the shared strengths of the additive
+    // passes, so the app's animated emblem and the widget's still one
+    // glow with the same voice. The bloom is the halo each petal
+    // throws on the dark; the spill is the core's light landing on
+    // the petal roots; the hot pass relights roots and speculars.
+    public static let bloomRadiusFraction: CGFloat = 0.075
+    public static let bloomOpacity: Double = 0.6
+    public static let hotRadiusFraction: CGFloat = 0.02
+    public static let dominantHaloBoost: Double = 0.55
+    public static let coreSpillFraction: CGFloat = 0.5
 
-    /// Cross-section shading — each petal is a folded leaf, not a
-    /// flat fill: light runs down the spine and falls off toward the
-    /// edges. Applied as a single across-the-width gradient (shade →
-    /// spine light → shade), scaled by the petal's burn.
-    public static let edgeShadeOpacity: Double = 0.5
-    public static let spineLightOpacity: Double = 0.16
+    /// The core's light cast onto the bloom, clipped to the petal
+    /// bodies by each renderer: white-hot at the bead, brand orange
+    /// through the falloff, gone by half a radius. The white is kept
+    /// deliberately warm — additive light over orange drifts green
+    /// if the source carries too much green.
+    public static func coreSpillGradient(strength: Double) -> Gradient {
+        Gradient(stops: [
+            .init(color: Color(red: 1.0, green: 0.76, blue: 0.44).opacity(strength), location: 0),
+            .init(color: Tint.primary.opacity(strength * 0.42), location: 0.45),
+            .init(color: .clear, location: 1),
+        ])
+    }
+
+    /// The night behind the bloom — a barely-lit pocket of warm air
+    /// instead of dead flat black, so the emblem sits in an
+    /// atmosphere. Deepens with training intensity.
+    public static let atmosphereFraction: CGFloat = 1.16
+    public static func atmosphereGradient(intensity: Double) -> Gradient {
+        let a = 0.6 + 0.4 * min(1, max(0, intensity))
+        return Gradient(stops: [
+            .init(color: Color(red: 0.30, green: 0.12, blue: 0.03).opacity(0.50 * a), location: 0),
+            .init(color: Color(red: 0.13, green: 0.05, blue: 0.01).opacity(0.38 * a), location: 0.55),
+            .init(color: .clear, location: 1),
+        ])
+    }
+
+    public static func foldGradient(opacity: Double, hueShift: Double) -> Gradient {
+        let gold = petalGold(hueShift: hueShift)
+        let ember = petalEmber(hueShift: hueShift)
+        return Gradient(stops: [
+            .init(color: gold.opacity(opacity * 0.36), location: 0),
+            .init(color: ember.opacity(foldOpacity * opacity), location: 0.32),
+            .init(color: ember.opacity(opacity * 0.34), location: 1),
+        ])
+    }
+
+    public static func rimGradient(opacity: Double, hueShift: Double) -> Gradient {
+        Gradient(stops: [
+            .init(
+                color: petalGold(hueShift: hueShift).opacity(rimOpacity * opacity),
+                location: 0
+            ),
+            .init(
+                color: Tint.primary.opacity(rimOpacity * rimTipScale * opacity),
+                location: 1
+            ),
+        ])
+    }
 
     /// The ambient ember behind the whole bloom — a broad, soft
     /// warmth on the black canvas that scales with training
     /// intensity, giving the emblem the presence the logo has.
     public static func ambientOpacity(intensity: Double) -> Double {
-        0.08 + 0.09 * min(1, max(0, intensity))
+        0.10 + 0.10 * min(1, max(0, intensity))
     }
 
     /// The ghost bloom — a dashed white outline of every petal at
@@ -135,12 +271,25 @@ public enum SignatureEmblemTuning {
 
     /// Development × effort → petal burn. The floor keeps even a weak
     /// region a deliberate shape on black; the dominant region burns a
-    /// touch brighter. Renderers draw petals additively (plus-lighter),
-    /// so overlaps glow toward a hot core instead of muddying.
+    /// touch brighter. Renderers use this for both crisp material and
+    /// additive light passes.
     public static func petalOpacity(development: Double, intensity: Double, isDominant: Bool) -> Double {
         let d = min(1, max(0, development))
         let i = min(1, max(0, intensity))
         let base = (0.42 + 0.46 * d) * (0.6 + 0.4 * i)
         return min(1, base + (isDominant ? 0.2 : 0))
+    }
+
+    private static func interpolatedColor(
+        from start: (red: Double, green: Double, blue: Double),
+        to end: (red: Double, green: Double, blue: Double),
+        amount: Double
+    ) -> Color {
+        let t = min(1, max(0, amount))
+        return Color(
+            red: start.red + (end.red - start.red) * t,
+            green: start.green + (end.green - start.green) * t,
+            blue: start.blue + (end.blue - start.blue) * t
+        )
     }
 }
