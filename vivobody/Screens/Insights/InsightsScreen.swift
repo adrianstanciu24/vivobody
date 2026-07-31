@@ -21,10 +21,13 @@
 //  Every section is chart-first: the graphic leads at full size, one
 //  caption line reads it, and the numbers ride the chart instead of
 //  repeating it. This screen fetches the data, runs the value-type
-//  models, and lays the movements out gutter-to-gutter with a
-//  hairline between each. Visual language follows the rest of the
-//  app: black, type-forward, the single orange accent for "on
-//  target," danger-red only where something's slipping.
+//  models, and lays the movements out with a hairline between each.
+//  Each analytic instrument rests on a contentCard (header on the
+//  canvas, chart in the card, chip footnotes between); only the
+//  signature hero stays frameless so its glow bleeds into the black,
+//  mirroring Today's edge-to-edge figure. Visual language follows the
+//  rest of the app: black, type-forward, the single orange accent for
+//  "on target," danger-red only where something's slipping.
 //
 //  Free-tier users see this exact same sequence and spacing, frozen
 //  beneath one frameless frosted layer per major section. No paywall

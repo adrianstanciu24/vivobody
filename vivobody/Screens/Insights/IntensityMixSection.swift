@@ -25,7 +25,7 @@ struct IntensityMixSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Intensity", trailing: "12 weeks")
+            SectionHeader(title: "Intensity")
 
             if weeks.isEmpty {
                 Text("As you log weighted sets, this stacks each week's work across strength, hypertrophy, and endurance rep ranges so you can see what your training emphasizes and where it is drifting.")
@@ -33,9 +33,14 @@ struct IntensityMixSection: View {
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                currentMixHero
-                chartBlock
-                zoneLegend
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    currentMixHero
+                    chartBlock
+                    zoneLegend
+                }
+                .padding(Space.xl)
+                .contentCard()
+
                 trendSummary
             }
         }
@@ -116,7 +121,9 @@ struct IntensityMixSection: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("Weekly sets by rep range")
                     .panelLegend()
-                Spacer(minLength: 0)
+                Spacer(minLength: Space.sm)
+                Text("12 weeks")
+                    .panelLegend()
             }
 
             Chart {
@@ -165,6 +172,7 @@ struct IntensityMixSection: View {
                 range: IntensityZone.allCases.map { color($0) }
             )
             .chartLegend(.hidden)
+            .chartXScale(domain: chartDomain)
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                     AxisGridLine().foregroundStyle(Surface.edge)
@@ -187,6 +195,26 @@ struct IntensityMixSection: View {
             .accessibilityLabel("Weekly completed sets by rep range")
             .accessibilityValue(chartAccessibilitySummary)
         }
+    }
+
+    /// The chart always frames the full 12-week window — like the
+    /// consistency heatmap draws its whole six months — so sparse
+    /// history reads as a few true-width bars entering a constant
+    /// instrument, not giant bars stretched across an elastic one.
+    /// The start widens only if an aggregated week bucket falls just
+    /// before the window (a session near the cutoff can round back
+    /// to an earlier locale week start).
+    private var chartDomain: ClosedRange<Date> {
+        let calendar = Calendar.current
+        let currentWeekStart = calendar.date(
+            from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
+        ) ?? Date()
+        let end = calendar.date(byAdding: .weekOfYear, value: 1, to: currentWeekStart)
+            ?? currentWeekStart
+        let windowStart = calendar.date(byAdding: .weekOfYear, value: -11, to: currentWeekStart)
+            ?? currentWeekStart
+        let start = min(weeks.first?.weekStart ?? windowStart, windowStart)
+        return start ... end
     }
 
     private var latestCompleteWeek: IntensityWeek? {

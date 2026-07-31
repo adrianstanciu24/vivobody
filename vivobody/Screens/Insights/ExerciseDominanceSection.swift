@@ -29,7 +29,6 @@ struct ExerciseDominanceSection: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 allocationCard
-                caption
                 if split.hasData {
                     exerciseTypeCard
                 }
@@ -181,28 +180,6 @@ struct ExerciseDominanceSection: View {
                 .panelLegend()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    // MARK: - Caption
-
-    private var caption: some View {
-        Text(line)
-            .font(Typography.caption)
-            .foregroundStyle(Ink.tertiary)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private var line: String {
-        if board.topTwoShare > 0.5 {
-            let pct = Int((board.topTwoShare * 100).rounded())
-            return "Two exercises receive \(pct)% of your recent working sets."
-        }
-        if board.topShare > 0.4, let top = board.top {
-            let pct = Int((top.share * 100).rounded())
-            return "\(top.name) receives \(pct)% of your recent working sets."
-        }
-        let count = board.stats.count
-        return "Working sets are spread across \(count) \(count == 1 ? "exercise" : "exercises")."
     }
 
     // MARK: - Derived rows

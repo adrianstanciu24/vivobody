@@ -24,11 +24,16 @@ struct TrainingLoadSection: View {
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
             } else {
-                status
-                if report.hasEnoughHistory {
-                    rangeIndicator
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    status
+                    if report.hasEnoughHistory {
+                        rangeIndicator
+                    }
+                    chart
                 }
-                chart
+                .padding(Space.xl)
+                .contentCard()
+
                 drivers
             }
         }

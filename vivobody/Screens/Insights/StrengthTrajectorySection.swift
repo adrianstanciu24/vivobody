@@ -36,12 +36,14 @@ struct StrengthTrajectorySection: View {
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-            } else {
-                if let stat = currentStat {
+            } else if let stat = currentStat {
+                VStack(alignment: .leading, spacing: Space.lg) {
                     liftHeading(stat)
                     liftSummary(stat)
                     chart(for: stat)
                 }
+                .padding(Space.xl)
+                .contentCard()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

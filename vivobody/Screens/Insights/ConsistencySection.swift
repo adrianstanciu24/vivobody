@@ -26,22 +26,26 @@ struct ConsistencySection: View {
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                StatStrip(
-                    stats: [
-                        Stat(value: InsightsFormat.perWeekLabel(report.sessionsPerWeek), label: "Workouts / wk", accent: report.sessionsPerWeek >= 2),
-                        Stat(value: "\(report.weekStreak)", label: "Week streak"),
-                        Stat(value: "\(report.daysTrainedInWindow)", label: "Days trained"),
-                    ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
-                )
-                .padding(.vertical, Space.xs)
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    StatStrip(
+                        stats: [
+                            Stat(value: InsightsFormat.perWeekLabel(report.sessionsPerWeek), label: "Workouts / wk", accent: report.sessionsPerWeek >= 2),
+                            Stat(value: "\(report.weekStreak)", label: "Week streak"),
+                            Stat(value: "\(report.daysTrainedInWindow)", label: "Days trained"),
+                        ],
+                        valueFont: Typography.statValue,
+                        edgeAligned: true
+                    )
+                    .padding(.vertical, Space.xs)
 
-                weeklyVolumeSpark
+                    weeklyVolumeSpark
 
-                ConsistencyHeatmap(weeks: report.weeks, daysTrained: report.daysTrainedInWindow)
+                    ConsistencyHeatmap(weeks: report.weeks, daysTrained: report.daysTrainedInWindow)
 
-                heatmapLegend
+                    heatmapLegend
+                }
+                .padding(Space.xl)
+                .contentCard()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
