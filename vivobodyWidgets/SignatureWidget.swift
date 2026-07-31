@@ -151,8 +151,7 @@ struct SignatureEmblem: View {
             // vibrant rendering stays plain so the system material can
             // control contrast.
             if renderingMode != .vibrant {
-                var ambient = context
-                ambient.blendMode = .plusLighter
+                let ambient = context
                 // The ambient ember — the same warmth the app's bloom
                 // sits in. Skipped in vibrant rendering, where the
                 // system controls the material.
@@ -197,7 +196,6 @@ struct SignatureEmblem: View {
             if renderingMode != .vibrant {
                 context.drawLayer { bloom in
                     bloom.addFilter(.blur(radius: radius * SignatureEmblemTuning.bloomRadiusFraction))
-                    bloom.blendMode = .plusLighter
                     for item in placed {
                         let strength = item.opacity * SignatureEmblemTuning.bloomOpacity
                         bloom.fill(
@@ -305,12 +303,10 @@ struct SignatureEmblem: View {
                 }
             }
 
-            // The core's light landing on the petal roots — clipped
-            // to the bodies so the still emblem also reads as lit
-            // from within.
+            // The core's orange light landing on the petal roots,
+            // clipped to the bodies without additive colour shifts.
             if renderingMode != .vibrant {
                 var spill = context
-                spill.blendMode = .plusLighter
                 var bodies = Path()
                 for item in placed {
                     bodies.addPath(item.placedOutline)
@@ -325,7 +321,9 @@ struct SignatureEmblem: View {
                         height: spillR * 2
                     )),
                     with: .radialGradient(
-                        SignatureEmblemTuning.coreSpillGradient(strength: 0.55 + 0.35 * snapshot.intensity),
+                        SignatureEmblemTuning.coreSpillGradient(
+                            strength: 0.42 + 0.18 * snapshot.intensity
+                        ),
                         center: center,
                         startRadius: 0,
                         endRadius: spillR
@@ -341,7 +339,17 @@ struct SignatureEmblem: View {
                 with: renderingMode == .vibrant
                     ? .color(.white)
                     : .radialGradient(
-                        Gradient(colors: [.white.opacity(0.9), Tint.primary]),
+                        Gradient(stops: [
+                            .init(
+                                color: SignatureEmblemTuning.petalHot(hueShift: 0.5),
+                                location: 0
+                            ),
+                            .init(color: Tint.primary, location: 0.58),
+                            .init(
+                                color: SignatureEmblemTuning.petalEmber(hueShift: 0.5),
+                                location: 1
+                            ),
+                        ]),
                         center: center,
                         startRadius: 0,
                         endRadius: 4

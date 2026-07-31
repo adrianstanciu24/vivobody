@@ -77,9 +77,8 @@ struct SignatureSection: View {
 /// and the whole emblem burns brighter the harder the training. Every
 /// load-bearing number comes from VivoKit's `SignatureEmblemTuning`
 /// so the widget draws the identical shape. Drawn in a single Canvas:
-/// a blurred bloom pass glows beneath crisp flame-gradient petals,
-/// all blended additively so the emblem reads as light — incandescent
-/// at the core, cooling toward the tips.
+/// a restrained bloom pass glows beneath crisp orange-gradient petals,
+/// brightest at the core and cooling toward the tips.
 ///
 /// The mark is quietly alive: the core breathes — swelling harder the
 /// more intense the training — the bloom's glow dims and swells in
@@ -301,7 +300,7 @@ private struct TrainingSignatureView: View {
     /// Each leaf is a small material study: its folded underside casts
     /// onto the leaf below, a mesh-gradient blade carries light in two
     /// axes, the logo cleft separates both planes, and a soft specular
-    /// streak catches near the incandescent core.
+    /// streak catches near the bright orange core.
     private func drawPetals(
         in context: inout GraphicsContext,
         center: CGPoint,
@@ -340,7 +339,6 @@ private struct TrainingSignatureView: View {
         // light's lead.
         context.drawLayer { bloom in
             bloom.addFilter(.blur(radius: radius * SignatureEmblemTuning.bloomRadiusFraction))
-            bloom.blendMode = .plusLighter
             for petal in layout {
                 var c = bloom
                 c.translateBy(x: center.x, y: center.y)
@@ -462,13 +460,11 @@ private struct TrainingSignatureView: View {
             )
         }
 
-        // The core's light landing on the bloom: an additive radial
-        // wash clipped to the petal bodies, so every root ignites
-        // white-hot where it meets the bead and the whole mark reads
-        // as lit from within.
+        // The core's orange light landing on the bloom, clipped to
+        // the petal bodies so the roots stay warm without additive
+        // colour shifts where all six leaves converge.
         do {
             var spill = context
-            spill.blendMode = .plusLighter
             var bodies = Path()
             for petal in layout {
                 var transform = CGAffineTransform(translationX: center.x, y: center.y)
@@ -477,7 +473,7 @@ private struct TrainingSignatureView: View {
             }
             spill.clip(to: bodies)
             let spillR = radius * SignatureEmblemTuning.coreSpillFraction
-            let strength = (0.55 + 0.35 * signature.intensity) * glowBreath
+            let strength = (0.42 + 0.18 * signature.intensity) * glowBreath
             spill.fill(
                 Path(ellipseIn: CGRect(
                     x: center.x - spillR,
@@ -494,11 +490,10 @@ private struct TrainingSignatureView: View {
             )
         }
 
-        // One additive pass relights both the root and the curved
-        // specular streak, so highlights bloom without extra filters.
+        // One orange pass relights both the root and the curved
+        // specular streak without additive colour shifts.
         do {
             var hot = context
-            hot.blendMode = .plusLighter
             hot.addFilter(.blur(radius: radius * SignatureEmblemTuning.hotRadiusFraction))
             for petal in layout {
                 var c = hot
@@ -531,10 +526,8 @@ private struct TrainingSignatureView: View {
         }
     }
 
-    /// The blade's material: hottest at the root column (nearest the
-    /// core), full brand orange through the belly, cooling to crimson
-    /// ember at the tip — the full white-to-black value ramp a burn
-    /// needs, in one mesh.
+    /// The blade's material: bright orange at the root column, full
+    /// brand orange through the belly, and deep ember at the tip.
     private func bladeMesh(opacity: Double, hueShift: Double) -> MeshGradient {
         let hot = SignatureEmblemTuning.petalHot(hueShift: hueShift)
         let gold = SignatureEmblemTuning.petalGold(hueShift: hueShift)
@@ -690,8 +683,7 @@ private struct TrainingSignatureView: View {
         // source rather than a dot. It rides the breath: a touch
         // longer and brighter at the top of each swell.
         do {
-            var flare = context
-            flare.blendMode = .plusLighter
+            let flare = context
             let streakR = radius * 0.3 * (0.85 + 0.3 * CGFloat(strength))
             let glow = 0.7 + 0.3 * strength
             let soft = CGRect(x: center.x - streakR, y: center.y - 1.6, width: streakR * 2, height: 3.2)
@@ -713,7 +705,11 @@ private struct TrainingSignatureView: View {
                 with: .linearGradient(
                     Gradient(stops: [
                         .init(color: .clear, location: 0),
-                        .init(color: Color.white.opacity(0.5 * glow), location: 0.5),
+                        .init(
+                            color: SignatureEmblemTuning.petalHot(hueShift: 0.5)
+                                .opacity(0.42 * glow),
+                            location: 0.5
+                        ),
                         .init(color: .clear, location: 1),
                     ]),
                     startPoint: CGPoint(x: hair.minX, y: center.y),
@@ -722,22 +718,36 @@ private struct TrainingSignatureView: View {
             )
         }
 
-        // The core is incandescent: a white-hot centre cooling to the
-        // tint at its edge, so the whole bloom reads as lit from within.
+        // The core stays inside one orange ramp, avoiding a pale
+        // additive center where all six petal roots meet.
         let rect = CGRect(x: center.x - r, y: center.y - r, width: r * 2, height: r * 2)
         let bead = Path(ellipseIn: rect)
         context.fill(
             bead,
             with: .radialGradient(
-                Gradient(colors: [Color.white.opacity(0.9), Tint.primary]),
+                Gradient(stops: [
+                    .init(
+                        color: SignatureEmblemTuning.petalHot(hueShift: 0.5),
+                        location: 0
+                    ),
+                    .init(color: Tint.primary, location: 0.58),
+                    .init(
+                        color: SignatureEmblemTuning.petalEmber(hueShift: 0.5),
+                        location: 1
+                    ),
+                ]),
                 center: center,
                 startRadius: 0,
                 endRadius: r
             )
         )
-        // A hairline rim so the bead reads as a polished point of
-        // light rather than a soft blot.
-        context.stroke(bead, with: .color(Color.white.opacity(0.4)), lineWidth: 0.5)
+        context.stroke(
+            bead,
+            with: .color(
+                SignatureEmblemTuning.petalHot(hueShift: 0.5).opacity(0.5)
+            ),
+            lineWidth: 0.5
+        )
     }
 
     private var accessibilityText: String {

@@ -55,21 +55,20 @@ public enum SignatureEmblemTuning {
         return min(1, max(0, Double(index) / Double(count - 1)))
     }
 
-    /// The incandescent root — barely-tinted white, metal about to
-    /// melt. Only shown where the core's light lands, so the bloom
-    /// keeps one true white-hot point in its range.
+    /// The hottest orange used at the root. It stays inside the brand
+    /// hue instead of approaching white or yellow.
     public static func petalHot(hueShift: Double) -> Color {
         interpolatedColor(
-            from: (1.0, 0.87, 0.62),
-            to: (1.0, 0.83, 0.55),
+            from: (1.0, 0.58, 0.10),
+            to: (1.0, 0.50, 0.05),
             amount: hueShift
         )
     }
 
     public static func petalGold(hueShift: Double) -> Color {
         interpolatedColor(
-            from: (1.0, 0.78, 0.40),
-            to: (1.0, 0.66, 0.30),
+            from: (1.0, 0.52, 0.06),
+            to: (1.0, 0.45, 0.0),
             amount: hueShift
         )
     }
@@ -82,9 +81,8 @@ public enum SignatureEmblemTuning {
         )
     }
 
-    /// The multi-stop burn: incandescent gold where the petal leaves
-    /// the core, settling to the tint through the belly, cooling to
-    /// deep ember at the tip. All stops scaled by the petal's burn
+    /// The multi-stop orange burn: bright at the root, brand orange
+    /// through the belly, and deep ember at the tip. All stops scaled by the petal's burn
     /// (`petalOpacity`). The widget uses it directly while the app's
     /// mesh blade is built from the same palette.
     public static func burnGradient(opacity: Double, hueShift: Double) -> Gradient {
@@ -178,21 +176,20 @@ public enum SignatureEmblemTuning {
     // glow with the same voice. The bloom is the halo each petal
     // throws on the dark; the spill is the core's light landing on
     // the petal roots; the hot pass relights roots and speculars.
-    public static let bloomRadiusFraction: CGFloat = 0.075
-    public static let bloomOpacity: Double = 0.6
+    public static let bloomRadiusFraction: CGFloat = 0.055
+    public static let bloomOpacity: Double = 0.36
     public static let hotRadiusFraction: CGFloat = 0.02
     public static let dominantHaloBoost: Double = 0.55
-    public static let coreSpillFraction: CGFloat = 0.5
+    public static let coreSpillFraction: CGFloat = 0.38
 
     /// The core's light cast onto the bloom, clipped to the petal
-    /// bodies by each renderer: white-hot at the bead, brand orange
-    /// through the falloff, gone by half a radius. The white is kept
-    /// deliberately warm — additive light over orange drifts green
-    /// if the source carries too much green.
+    /// bodies by each renderer: bright orange at the bead, brand
+    /// orange through the falloff, then deep ember before fading.
     public static func coreSpillGradient(strength: Double) -> Gradient {
         Gradient(stops: [
-            .init(color: Color(red: 1.0, green: 0.76, blue: 0.44).opacity(strength), location: 0),
-            .init(color: Tint.primary.opacity(strength * 0.42), location: 0.45),
+            .init(color: Color(red: 1.0, green: 0.52, blue: 0.06).opacity(strength * 0.72), location: 0),
+            .init(color: Tint.primary.opacity(strength * 0.38), location: 0.38),
+            .init(color: Color(red: 0.78, green: 0.20, blue: 0.0).opacity(strength * 0.12), location: 0.72),
             .init(color: .clear, location: 1),
         ])
     }
@@ -200,12 +197,12 @@ public enum SignatureEmblemTuning {
     /// The night behind the bloom — a barely-lit pocket of warm air
     /// instead of dead flat black, so the emblem sits in an
     /// atmosphere. Deepens with training intensity.
-    public static let atmosphereFraction: CGFloat = 1.16
+    public static let atmosphereFraction: CGFloat = 0.86
     public static func atmosphereGradient(intensity: Double) -> Gradient {
         let a = 0.6 + 0.4 * min(1, max(0, intensity))
         return Gradient(stops: [
-            .init(color: Color(red: 0.30, green: 0.12, blue: 0.03).opacity(0.50 * a), location: 0),
-            .init(color: Color(red: 0.13, green: 0.05, blue: 0.01).opacity(0.38 * a), location: 0.55),
+            .init(color: Color(red: 0.24, green: 0.08, blue: 0.0).opacity(0.22 * a), location: 0),
+            .init(color: Color(red: 0.10, green: 0.025, blue: 0.0).opacity(0.10 * a), location: 0.55),
             .init(color: .clear, location: 1),
         ])
     }
@@ -237,7 +234,7 @@ public enum SignatureEmblemTuning {
     /// warmth on the black canvas that scales with training
     /// intensity, giving the emblem the presence the logo has.
     public static func ambientOpacity(intensity: Double) -> Double {
-        0.10 + 0.10 * min(1, max(0, intensity))
+        0.03 + 0.04 * min(1, max(0, intensity))
     }
 
     /// The ghost bloom — a dashed white outline of every petal at
