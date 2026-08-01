@@ -217,7 +217,7 @@ struct SettingsScreen: View {
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Restores the original 90 exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
+            Text("Restores the \(bundledExerciseCount) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
         }
         .sheet(isPresented: $showHealthKitPriming) {
             HealthKitPrimingSheet(
@@ -247,7 +247,7 @@ struct SettingsScreen: View {
                     Text("Reset Exercise Catalog")
                         .font(Typography.sectionHeading)
                         .foregroundStyle(Ink.primary)
-                    Text("Restore the original 90 exercises")
+                    Text("Restore \(bundledExerciseCount) bundled exercises")
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                 }
@@ -265,6 +265,10 @@ struct SettingsScreen: View {
         .buttonStyle(.plain)
         .accessibilityHint("Wipes and reseeds the exercise catalog")
     }
+
+    /// Reads the generated bundle instead of duplicating a count that drifts
+    /// whenever the curated default roster changes.
+    private var bundledExerciseCount: Int { CatalogData.records.count }
 
     private var appearanceRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {

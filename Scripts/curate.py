@@ -15,12 +15,13 @@
 #      python3 Scripts/curate.py           # rebuild catalog.json from scratch
 #      python3 Scripts/curate.py --check   # verify the checked-in output is current
 #
-#  CURATION is normalized by the explicit duplicate-merge and canonical-rename
-#  tables below before anything ships. To add an exercise, author its final
-#  canonical name in all three tracked sources. Every output record is built
-#  fresh, so obsolete keys or deleted records cannot survive from the previous
-#  catalog. Everything is validated against the app enums, so a typo'd muscle,
-#  equipment, movement direction, or other contract value fails loudly.
+#  CURATION is normalized by the explicit duplicate-merge, canonical-rename,
+#  and retirement tables below before anything ships. To add an exercise,
+#  author its final canonical name in all three tracked sources. Every output
+#  record is built fresh, so obsolete keys or deleted records cannot survive
+#  from the previous catalog. Everything is validated against the app enums,
+#  so a typo'd muscle, equipment, movement direction, or other contract value
+#  fails loudly.
 #
 
 import csv
@@ -1269,6 +1270,8 @@ DUPLICATE_MERGES = {
     "Machine Leg Curl": "Lying Machine Leg Curl",
     "Cable Chest Fly": "Mid-Height Cable Chest Fly",
     "Incline Multipress Bench Press": "Incline Smith Machine Press",
+    "High-Incline Smith Machine Press": "Incline Smith Machine Press",
+    "Slight-Incline Smith Machine Press": "Incline Smith Machine Press",
     "45-Degree Dumbbell Lateral Raise": "Dumbbell Scaption",
     "Bent-Over Dumbbell Lateral Raise": "Seated Dumbbell Rear Delt Raise",
     "Incline Dumbbell Reverse Fly": "Chest-Supported Dumbbell Rear Delt Raise",
@@ -1280,7 +1283,11 @@ DUPLICATE_MERGES = {
     "Cable Woodchop": "Cable Front Woodchop",
     "Leg Raise": "Lying Leg Raise",
     "Straight-Arm Cable Pulldown": "Straight-Arm Cable Pulldown with Bar",
+    "Straight-Arm Cable Pulldown with Rope": "Straight-Arm Cable Pulldown with Bar",
     "Cable Triceps Pushdown": "Straight-Bar Cable Triceps Pushdown",
+    "Rope Cable Triceps Pushdown": "Straight-Bar Cable Triceps Pushdown",
+    "Floor Dip": "Chair Dip",
+    "Two-Bench Dip": "Chair Dip",
     "Legend Machine Chest Press": "Leverage Machine Chest Press",
 }
 
@@ -1288,9 +1295,9 @@ DUPLICATE_MERGES = {
 # stance/path distinguishes a variation. The old labels remain searchable.
 CANONICAL_RENAMES = {
     "Dumbbell Biceps Curl": "Standing Dumbbell Biceps Curl",
-    "Straight-Arm Cable Pulldown with Bar": "Straight-Bar Cable Pulldown",
-    "Straight-Arm Cable Pulldown with Rope": "Rope Straight-Arm Cable Pulldown",
-    "Incline Smith Machine Press": "Moderate-Incline Smith Machine Press",
+    "Chair Dip": "Bench Dip",
+    "Straight-Arm Cable Pulldown with Bar": "Straight-Arm Cable Pulldown",
+    "Straight-Bar Cable Triceps Pushdown": "Cable Triceps Pushdown",
     "Machine Chest Press": "Selectorized Machine Chest Press",
     "Leverage Machine Chest Press": "Plate-Loaded Leverage Chest Press",
     "Legend Machine Incline Chest Press": "Plate-Loaded Incline Machine Chest Press",
@@ -1404,6 +1411,109 @@ for name, aliases in ALIASES_TO_REMOVE.items():
     ]
 
 
+# Long-tail equipment variants, technique modifiers, assessment drills, and
+# combination movements live in the user-created catalog instead of shipping
+# as defaults. Keeping retirement explicit makes roster changes reviewable and
+# lets existing installs prune only the bundled stable IDs that disappeared.
+RETIRED_EXERCISES = {
+    # Band equipment.
+    "Band Pull-Apart",
+    "Banded Scapular Retraction",
+    "Band-Resisted Push-Up on Kettlebells",
+    "Banded Kneeling Pallof Isometric Hold",
+    "Banded Pallof Split Jerk",
+    "Banded Pallof Wall Isometric Hold",
+    "Banded Rotation",
+    "Banded 1.5 Squat",
+    "Banded Accentuated Countermovement Jump",
+    "Banded Ankle Dorsiflexion",
+    "Banded Ankle Plantar Flexion",
+    "Banded Clamshell",
+    "Banded Glute Kickback",
+    "Banded Lateral Walk",
+    "Banded Leg Curl",
+    "Banded Single-Leg Hip Thrust",
+    "Band Face Pull",
+    "Band Pull-Apart with External Rotation",
+    "Banded External Rotation",
+    "Prone Banded Press",
+
+    # Niche apparatus and accessory-defined variants.
+    "Single-Arm TRX Biceps Curl",
+    "TRX Biceps Curl",
+    "TRX Dip",
+    "TRX Gorilla Biceps Curl",
+    "TRX Hammer Curl",
+    "TRX Triceps Extension",
+    "TRX Row",
+    "Suspension Chest Fly",
+    "TRX Oblique Knee Tuck",
+    "TRX Rollout",
+    "20 mm Edge Fingerboard Hang",
+    "Fingerboard Sloper Hang",
+    "Fingerboard Pull-Up",
+    "Stability Ball Crunch",
+    "Stability Ball Plank Circle",
+    "Stability Ball Plank with Alternating Foot Touch",
+    "Ring Support Hold",
+    "Parallette Push-Up",
+    "Push-Up on Dumbbells",
+    "Broomstick Hip Hinge",
+    "Towel Superman",
+
+    # Tempo, pause, pin, and deliberate technique variants.
+    "3-1-1 Bodyweight Tempo Squat",
+    "2-Second Paused Leg Lower",
+    "Barbell Larsen Press",
+    "No-Leg-Drive Dumbbell Bench Press",
+    "Paused Barbell Bench Press",
+    "Pin Barbell Bench Press",
+    "Barbell Pin Overhead Press",
+    "Barbell Pin Squat",
+    "Barbell Speed Deadlift",
+    "Paused Machine Hack Squat",
+
+    # Sports assessment and stance-specific ballistic drills.
+    "Altitude Landing",
+    "Altitude Landing to Jump",
+    "Criss-Cross Jump",
+    "Dumbbell Countermovement Jump",
+    "Falling Countermovement Jump",
+    "Hands-on-Hips Countermovement Jump",
+    "High-Knee Jump",
+    "Hop and Hold",
+    "Ice Skater to Vertical Hop",
+    "Lateral Push-Off",
+    "Medicine Ball Ice Skater",
+    "Supine Medicine Ball Chest Pass",
+    "Half-Kneeling Medicine Ball Rotational Throw",
+    "Kneeling Medicine Ball Rotational Throw",
+    "Split-Stance Medicine Ball Rotational Throw",
+
+    # Multi-movement combinations better authored by the user.
+    "Dumbbell Biceps Curl to Press",
+    "Bent-Over Dumbbell Row to External Rotation",
+    "Kettlebell Row to Rotation",
+    "Single-Arm Kettlebell Plank Row",
+    "Single-Arm Dumbbell Glute Bridge Press",
+    "Dumbbell Goblet Reverse Lunge with Knee Raise",
+    "Dumbbell Goblet Squat to Press",
+    "Landmine Reverse Lunge with Knee Raise",
+    "Landmine Squat to Press",
+    "Prisoner Squat with Overhead Reach",
+    "Sit-Up with Elbow Thrust",
+    "Dumbbell Devil's Press",
+}
+
+missing_retirements = RETIRED_EXERCISES - CURATION.keys()
+if missing_retirements:
+    raise RuntimeError(
+        "Unknown retired exercise(s): " + ", ".join(sorted(missing_retirements))
+    )
+for name in RETIRED_EXERCISES:
+    CURATION.pop(name)
+
+
 # Objective corrections from the biomechanics audit. Keeping these separate
 # from the seed calls makes the audited contract easy to scan and test.
 TRANSVERSE_PLANE = {
@@ -1435,7 +1545,7 @@ GROUP_OVERRIDES = {
     "Back Bridge": "back",
     "Barbell Silverback Shrug": "back",
     "Cable Shrug-In": "back",
-    "Chair Dip": "arms",
+    "Bench Dip": "arms",
     "Close-Grip Barbell Bench Press": "arms",
     "Close-Grip Push-Up": "arms",
     "Diamond Push-Up": "arms",
@@ -1584,6 +1694,8 @@ NONCOMPARABLE_LOAD_EXERCISES = NONCOMPARABLE_BALLISTIC_EXERCISES | {
 # as aliases without retaining obsolete catalog identities.
 CANONICAL_ALIAS_ADDITIONS = {
     "Standing Dumbbell Biceps Curl": ("DB Curl",),
+    "Incline Smith Machine Press": ("Moderate-Incline Smith Machine Press",),
+    "Straight-Arm Cable Pulldown": ("Straight-Bar Cable Pulldown",),
     "Straight-Bar Cable Biceps Curl": ("Cable Curl",),
     "Standing Dumbbell Overhead Triceps Extension": ("Dumbbell Triceps Extension",),
     "Overhead Cable Triceps Extension": ("Overhead Cable Tricep Extension",),
@@ -1623,8 +1735,9 @@ CANONICAL_ALIAS_ADDITIONS = {
         "Narrow-Grip Cable Row", "Close-Grip Seated Cable Row", "Narrow-Grip Row",
     ),
     "Single-Arm Cable Triceps Pushdown": ("One Arm Triceps Extensions on Cable",),
-    "Rope Cable Triceps Pushdown": ("Tricep Pushdown on Cable",),
-    "Straight-Bar Cable Triceps Pushdown": ("Triceps Extensions on Cable",),
+    "Cable Triceps Pushdown": (
+        "Tricep Pushdown on Cable", "Triceps Extensions on Cable",
+    ),
     "EZ-Bar Skull Crusher": ("Lying Triceps Extensions",),
     "Fire Hydrant": ("Quadruped Hip Abduction",),
     "Pogo Jump": ("Fast Pogos", "Fast Ankle Hops"),

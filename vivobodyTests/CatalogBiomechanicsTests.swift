@@ -15,7 +15,11 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
-        #expect(CatalogData.records.count == 548)
+        #expect(CatalogData.records.count == 464)
+        #expect(
+            CatalogData.records.allSatisfy { $0.equipment != .band },
+            "Band variants must be created by the user rather than bundled"
+        )
         var catalogIDs: Set<String> = []
         var vocabularyOwners: [String: String] = [:]
 
@@ -232,6 +236,10 @@ struct CatalogBiomechanicsTests {
             "Lying Machine Leg Curl": "lying-leg-curl",
             "Kettlebell Forward Lunge": "single-leg-lunge-with-kettlebell",
             "Push-Up Wiper": "push-up-wipers",
+            "Bench Dip": "chair-dips",
+            "Incline Smith Machine Press": "incline-smith-press",
+            "Straight-Arm Cable Pulldown": "straight-arm-pull-down-bar-attachment",
+            "Cable Triceps Pushdown": "triceps-extensions-on-cable-with-bar",
         ]
         for (name, expectedID) in replacements {
             let record = CatalogData.record(forExerciseNamed: name)
@@ -253,7 +261,10 @@ struct CatalogBiomechanicsTests {
             ("Barbell Full Squat", "Barbell Back Squat"),
             ("Machine Leg Curl", "Lying Machine Leg Curl"),
             ("Cable Chest Fly", "Mid-Height Cable Chest Fly"),
-            ("Incline Multipress Bench Press", "Moderate-Incline Smith Machine Press"),
+            ("Incline Multipress Bench Press", "Incline Smith Machine Press"),
+            ("High-Incline Smith Machine Press", "Incline Smith Machine Press"),
+            ("Moderate-Incline Smith Machine Press", "Incline Smith Machine Press"),
+            ("Slight-Incline Smith Machine Press", "Incline Smith Machine Press"),
             ("45-Degree Dumbbell Lateral Raise", "Dumbbell Scaption"),
             ("Bent-Over Dumbbell Lateral Raise", "Seated Dumbbell Rear Delt Raise"),
             ("Incline Dumbbell Reverse Fly", "Chest-Supported Dumbbell Rear Delt Raise"),
@@ -264,8 +275,13 @@ struct CatalogBiomechanicsTests {
             ("Cross-Bench Dumbbell Pullover", "Dumbbell Pullover"),
             ("Cable Woodchop", "High-to-Low Cable Woodchop"),
             ("Leg Raise", "Lying Leg Raise"),
-            ("Straight-Arm Cable Pulldown", "Straight-Bar Cable Pulldown"),
-            ("Cable Triceps Pushdown", "Straight-Bar Cable Triceps Pushdown"),
+            ("Straight-Bar Cable Pulldown", "Straight-Arm Cable Pulldown"),
+            ("Rope Straight-Arm Cable Pulldown", "Straight-Arm Cable Pulldown"),
+            ("Straight-Bar Cable Triceps Pushdown", "Cable Triceps Pushdown"),
+            ("Rope Cable Triceps Pushdown", "Cable Triceps Pushdown"),
+            ("Chair Dip", "Bench Dip"),
+            ("Floor Dip", "Bench Dip"),
+            ("Two-Bench Dip", "Bench Dip"),
             ("Legend Machine Chest Press", "Plate-Loaded Leverage Chest Press"),
         ]
         let canonicalNames = Set(CatalogData.records.map { Self.normalized($0.name) })
@@ -318,11 +334,6 @@ struct CatalogBiomechanicsTests {
 
         let wristRoller = try #require(CatalogData.record(forExerciseNamed: "Standing Wrist Roller"))
         #expect(wristRoller.equipment == .other)
-
-        let ballPlank = try #require(
-            CatalogData.record(forExerciseNamed: "Stability Ball Plank with Alternating Foot Touch")
-        )
-        #expect(ballPlank.equipment == .other)
 
         let battleRope = try #require(
             CatalogData.record(forExerciseNamed: "Alternating Battle Rope Wave")
@@ -384,13 +395,6 @@ struct CatalogBiomechanicsTests {
                 #expect(
                     record.bodyweightFraction > 0 && record.bodyweightFraction <= 1,
                     "'\(record.name)' has no valid bodyweight coefficient"
-                )
-            }
-
-            if record.equipment == .band {
-                #expect(
-                    record.loadMode == .nonComparable,
-                    "Band movement '\(record.name)' cannot claim a comparable load"
                 )
             }
 
@@ -534,10 +538,9 @@ struct CatalogBiomechanicsTests {
             ("L-Sit Pull-Up", .back),
             ("Push-Up Rotation", .chest),
             ("Wall Push-Up", .chest),
-            ("Chair Dip", .arms),
+            ("Bench Dip", .arms),
             ("No-Push-Up Burpee", .legs),
             ("Sled Push", .legs),
-            ("Single-Arm Dumbbell Glute Bridge Press", .chest),
         ]
         for (name, expectedGroup) in groupFixtures {
             let record = CatalogData.record(forExerciseNamed: name)
@@ -567,7 +570,6 @@ struct CatalogBiomechanicsTests {
             "Dead Bug",
             "Mountain Climber",
             "Plank Shoulder Tap",
-            "TRX Oblique Knee Tuck",
             "Cable External Rotation",
         ]
         for name in unilateralFixtures {

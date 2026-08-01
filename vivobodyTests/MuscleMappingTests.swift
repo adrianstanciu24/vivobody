@@ -16,7 +16,7 @@ import Testing
 struct MuscleMappingTests {
 
     @Test func catalogDecodesFromBundle() {
-        #expect(CatalogData.records.count == 548)
+        #expect(CatalogData.records.count == 464)
         #expect(CatalogData.record(forExerciseNamed: "Barbell Bench Press") != nil)
     }
 
@@ -219,10 +219,8 @@ struct MuscleMappingTests {
 
     @Test func correctedPushPullExercisesKeepTheirCuratedDirections() {
         let verticalDips = [
-            "Two-Bench Dip",
-            "Floor Dip",
+            "Bench Dip",
             "Ring Dip",
-            "TRX Dip",
         ]
 
         for name in verticalDips {

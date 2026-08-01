@@ -1,57 +1,5 @@
 [
   {
-    "name": "20 mm Edge Fingerboard Hang",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 1.0,
-    "involvement": [
-      {
-        "muscle": "forearms",
-        "role": "primary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 10,
-    "aliases": [
-      "Hangboard 20mm Edge",
-      "Fingerboard Hang",
-      "20 mm Fingerboard Hang"
-    ],
-    "modality": "isometricStrength",
-    "loadMode": "bodyweightAdded",
-    "catalogID": "fingerboard-20-mm-edge",
-    "movementDefinition": "Grip a 20 mm fingerboard edge with both hands and hang with the shoulders engaged for the prescribed duration. Use assistance or added load only as programmed."
-  },
-  {
     "name": "Alternating Dumbbell Biceps Curl",
     "group": "arms",
     "defaultWeight": 30,
@@ -279,6 +227,60 @@
     "movementDefinition": "Flex the elbow against resistance in Bayesian Cable Curl while keeping the upper arm controlled, then return through full elbow extension."
   },
   {
+    "name": "Bench Dip",
+    "group": "arms",
+    "defaultWeight": 0,
+    "reps": 12,
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.45,
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectorals",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lats",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "traps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      }
+    ],
+    "pattern": "push",
+    "direction": "vertical",
+    "aliases": [
+      "Floor Dip",
+      "Bench Dips On Floor HD",
+      "Two-Bench Dip",
+      "Chair Dip"
+    ],
+    "modality": "dynamicStrength",
+    "loadMode": "bodyweightAdded",
+    "trackingMode": "reps",
+    "catalogID": "chair-dips",
+    "movementDefinition": "Sit at the edge of a stable bench with both hands gripping it behind the hips. Move the hips forward, bend the elbows to lower through a comfortable range, then extend the elbows to press back up without shrugging."
+  },
+  {
     "name": "Bodyweight Biceps Curl",
     "group": "arms",
     "defaultWeight": 0,
@@ -430,6 +432,46 @@
     "movementDefinition": "Grab onto the handle, and pull your elbow up and back slightly above your torso. Keep your upper arm to be parallel to the ground for the duration of the set."
   },
   {
+    "name": "Cable Triceps Pushdown",
+    "group": "arms",
+    "defaultWeight": 55,
+    "reps": 12,
+    "equipment": "cable",
+    "mechanic": "isolation",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "triceps",
+        "role": "primary"
+      },
+      {
+        "muscle": "forearms",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      }
+    ],
+    "defaultWeightKg": 25.0,
+    "aliases": [
+      "Tricep Pushdown",
+      "Pushdown",
+      "Cable Pushdown",
+      "Rope Cable Triceps Pushdown",
+      "Straight-Bar Cable Triceps Pushdown",
+      "Tricep Pushdown on Cable",
+      "Triceps Extensions on Cable"
+    ],
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "trackingMode": "reps",
+    "catalogID": "triceps-extensions-on-cable-with-bar",
+    "movementDefinition": "Stand facing a high cable with the elbows tucked beside the torso. Extend the elbows to press the selected attachment down until the arms are straight, then return under control without letting the upper arms drift."
+  },
+  {
     "name": "Cable Wrist Curl",
     "group": "arms",
     "defaultWeight": 40,
@@ -452,55 +494,6 @@
     "aliases": [],
     "catalogID": "wrist-curl-cable",
     "movementDefinition": "Extend your arm down, then slightly lift your forearm Extend your wrist in a supinated form (palm up) Adjust cable height so that the cable handle is in your supinated hand Perform the movement by curling your palms and wrists upwards (optional/variable) Pause at the top Slowly return to the starting position."
-  },
-  {
-    "name": "Chair Dip",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.45,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "vertical",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "chair-dips",
-    "movementDefinition": "Sit at the front of a stable chair with both hands gripping the edge. Move the hips forward, bend the elbows to lower through a comfortable range, then extend the elbows to press back up while keeping the chair fixed."
   },
   {
     "name": "Close-Grip Barbell Bench Press",
@@ -881,64 +874,6 @@
     "trackingMode": "reps",
     "catalogID": "diamond-push-ups",
     "movementDefinition": "Begin in a rigid plank with the hands close together beneath the chest so the thumbs and index fingers form a diamond. Lower the chest while keeping the elbows close to the torso, then press back to straight arms without letting the hips sag."
-  },
-  {
-    "name": "Dumbbell Biceps Curl to Press",
-    "group": "arms",
-    "defaultWeight": 25,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 12.5,
-    "pattern": "push",
-    "direction": "vertical",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "dumbbell-bicep-curl-to-press",
-    "movementDefinition": "Bend your elbows and lift the dumbbells to your shoulders. Push the dumbbells over your head while rotating your arms to make your palms face forward. Reverse it to lower down. Repeat the exercise."
   },
   {
     "name": "Dumbbell Cheat Curl",
@@ -1345,108 +1280,6 @@
     "trackingMode": "reps",
     "catalogID": "skullcrusher-sz-bar",
     "movementDefinition": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move."
-  },
-  {
-    "name": "Fingerboard Sloper Hang",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 1.0,
-    "involvement": [
-      {
-        "muscle": "forearms",
-        "role": "primary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 15,
-    "aliases": [
-      "Sloper Hang",
-      "Hangboard Sloper"
-    ],
-    "modality": "isometricStrength",
-    "loadMode": "bodyweightAdded",
-    "catalogID": "sloper-hanging",
-    "movementDefinition": "Hanging on sloper holds of a fingerboard for a amount of seconds."
-  },
-  {
-    "name": "Floor Dip",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.45,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "vertical",
-    "aliases": [
-      "Bench Dips On Floor HD"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "floor-dips",
-    "movementDefinition": "Sit with the hands behind the hips, fingers facing forward, and knees bent. Lift the hips, bend the elbows to lower the body toward the floor, then extend the elbows to return without shrugging."
   },
   {
     "name": "Hand Gripper Squeeze",
@@ -2027,62 +1860,6 @@
     "movementDefinition": "Support the body between two rings, lower by flexing the elbows and shoulders, and press back to straight arms while controlling ring movement."
   },
   {
-    "name": "Ring Support Hold",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 1,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.95,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "modality": "isometricStrength",
-    "loadMode": "bodyweightAdded",
-    "aliases": [],
-    "catalogID": "ring-support-hold",
-    "movementDefinition": "Hold yourself in a support position on gymnastic rings with arms straight at sides. Focus on keeping rings turned out slightly and maintaining hollow body position. This is an isometric hold for chest, shoulders, and triceps."
-  },
-  {
     "name": "Rocking Cable Triceps Pushdown",
     "group": "arms",
     "defaultWeight": 60,
@@ -2113,40 +1890,6 @@
     "aliases": [],
     "catalogID": "rocking-triceps-pushdown",
     "movementDefinition": "Set your feet below the rope and lean your upper body towards the rope. Set one foot back. Push down the rope and lean your entire body back onto the rear foot as you push down to get your hands behind your body. Don't forget to bring your chest to the front during the pushdown. As you release the rope slowly, lean your body back onto the front foot."
-  },
-  {
-    "name": "Rope Cable Triceps Pushdown",
-    "group": "arms",
-    "defaultWeight": 50,
-    "reps": 12,
-    "equipment": "cable",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 22.5,
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [
-      "Tricep Pushdown on Cable"
-    ],
-    "catalogID": "tricep-rope-pushdowns",
-    "movementDefinition": "Setup: Stand facing the cable, feet shoulder-width apart, with a slight forward lean. Grip: Hold the rope with palms facing each other and elbows tucked tight to your ribs. Execution: Push the rope down until arms are fully straight, pulling the ends apart at the bottom. Control: Keep upper arms still and return to the start with a slow, controlled motion."
   },
   {
     "name": "Seated Dumbbell Biceps Curl",
@@ -2440,41 +2183,6 @@
     "movementDefinition": "Set the pulley at the bottom of the cable machine and grab onto it without using any attachments. Extend the cable directly overhead. While keeping your back straight and upper arm stationary, lower the cable behind your head until you feel a good stretch in your triceps, and then extend it back upward until your elbow is locked out."
   },
   {
-    "name": "Single-Arm TRX Biceps Curl",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-single-arm-bicep-curl",
-    "movementDefinition": "Step 1: Stand comfortably and grasp the handles of the suspension system. Step 2: Lean back resting your weight on one arm, keepng the spine neutral. Step 3: Slowly curl to pull your body weight to the up position. Supinate the arm and squeeze as you approach the end position. Step 4: Lower yourself back down and repeat."
-  },
-  {
     "name": "Standing Dumbbell Biceps Curl",
     "group": "arms",
     "defaultWeight": 30,
@@ -2604,44 +2312,6 @@
     "movementDefinition": "Stand facing a low cable and hold the straight bar with a shoulder-width supinated grip. Keep the upper arms beside the torso, curl the bar toward the shoulders, then lower to controlled elbow extension without swinging."
   },
   {
-    "name": "Straight-Bar Cable Triceps Pushdown",
-    "group": "arms",
-    "defaultWeight": 55,
-    "reps": 12,
-    "equipment": "cable",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 25.0,
-    "aliases": [
-      "Cable Triceps Pushdown",
-      "Tricep Pushdown",
-      "Pushdown",
-      "Cable Pushdown",
-      "Triceps Extensions on Cable"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "triceps-extensions-on-cable-with-bar",
-    "movementDefinition": "Grab the bar, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don't move during the exercise. Without pause go back to the initial position."
-  },
-  {
     "name": "Torso-Away Single-Arm Dumbbell Preacher Curl",
     "group": "arms",
     "defaultWeight": 25,
@@ -2700,248 +2370,6 @@
     "trackingMode": "reps",
     "catalogID": "preacher-curl-internally-rotated",
     "movementDefinition": "Sit at a preacher bench with one upper arm supported and rotate the torso slightly toward the working arm. Curl the dumbbell without lifting the arm from the pad, then lower under control."
-  },
-  {
-    "name": "TRX Biceps Curl",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "biceps-with-trx",
-    "movementDefinition": "Grab the handles of the TRX straps, lean your body back, arms and legs extended, with your body positioned in a single straight line. (This is an arm exercise, not an abdominal one.)."
-  },
-  {
-    "name": "TRX Dip",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.9,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "vertical",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-dips",
-    "movementDefinition": "Start with the hands on the suspension trainer and feet on the ground. Your hands should be under your shoulders with the feet slightly in front. Lower yourself by bringing the hips between the handles and flexing the elbows. Extend the elbows to come back to the starting position and repeat."
-  },
-  {
-    "name": "TRX Gorilla Biceps Curl",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-gorilla-biceps-curl",
-    "movementDefinition": "Face the suspension anchor with a neutral grip and lean back in a rigid body line. Keep the elbows high and wide, flex them to bring the forehead toward the handles, then extend under control."
-  },
-  {
-    "name": "TRX Hammer Curl",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "biceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-hammer-curl",
-    "movementDefinition": "Place the grips as if they were a continuation of the straps. We will position our arms stretched forward and our body leaning back, completely straight. The biceps muscles will activate as you bend your elbows to bring your body towards the straps. The contraction movement will end with a slight outward movement of the hands, due to the grip we are using."
-  },
-  {
-    "name": "TRX Triceps Extension",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-tricep-extension",
-    "movementDefinition": "Face away from the suspension anchor with the arms extended and body inclined. Bend the elbows to bring the forehead toward the hands, then extend the elbows to return while keeping the trunk and upper arms stable."
-  },
-  {
-    "name": "Two-Bench Dip",
-    "group": "arms",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.45,
-    "involvement": [
-      {
-        "muscle": "triceps",
-        "role": "primary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "vertical",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "dips-between-two-benches",
-    "movementDefinition": "Put two benches so far appart, that you can hold onto one with your hands and are just able to reach the other with your feet. The legs stay during the exercise completely stretched. With your elbows facing back, bend them as much as you can. Push yourself up, but don't stretch out the arms."
   },
   {
     "name": "Two-Handed Kettlebell Curl",
@@ -3359,86 +2787,6 @@
     "loadMode": "bodyweightAdded",
     "catalogID": "back-lever",
     "movementDefinition": "Hanging from a pull-up bar facing downwards with your arms extended."
-  },
-  {
-    "name": "Band Pull-Apart",
-    "group": "back",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "band-pull-aparts",
-    "movementDefinition": "Hold the band with your arms extended in front of you at shoulder height. Keep your elbows slightly bent but fixed throughout the movement. Pull the band apart by spreading your arms until the band touches or comes close to your chest. Slowly bring your arms back to the starting position, controlling the tension on the band."
-  },
-  {
-    "name": "Banded Scapular Retraction",
-    "group": "back",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Banded Scap Retraction"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-scapular-retraction",
-    "movementDefinition": "Anchor a resistance band at shoulder height and hold it with the arm extended. Keep the torso still and draw the shoulder blade back toward the spine without shrugging, then let it protract under control."
   },
   {
     "name": "Barbell Bent-Over Row",
@@ -3902,58 +3250,6 @@
     "trackingMode": "reps",
     "catalogID": "bent-over-dumbbell-rows",
     "movementDefinition": "With dumbbells in hand, bend at the hip until hands hang just below the knees (similar to straight-legged-deadlift starting position). Keep upper body angle constant while contracting your lats to pull you ellbows back pinching the shoulder blades at the top. Try not to stand up with every rep, check hands go below knees on every rep."
-  },
-  {
-    "name": "Bent-Over Dumbbell Row to External Rotation",
-    "group": "back",
-    "defaultWeight": 15,
-    "reps": 12,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 7.5,
-    "pattern": "pull",
-    "direction": "horizontal",
-    "aliases": [
-      "Row to External Rotation"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "bent-over-row-to-external-rotation",
-    "movementDefinition": "Hinge with the trunk supported or braced and raise the elbows to shoulder height. With the elbows bent about 90 degrees, rotate the forearms upward, reverse the rotation, and lower the arms under control."
   },
   {
     "name": "Bent-Over Dumbbell Straight-Arm Pullback",
@@ -4641,69 +3937,6 @@
     "movementDefinition": "This exercise involves holding a dumbbell in each hand and shrugging your shoulders up towards your ears, then lowering them back down. It primarily targets the trapezius muscles in the upper back and can help improve posture and shoulder stability."
   },
   {
-    "name": "Fingerboard Pull-Up",
-    "group": "back",
-    "defaultWeight": 0,
-    "reps": 5,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 1.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "role": "primary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "primary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "pull",
-    "direction": "vertical",
-    "aliases": [
-      "Hangboard Pull-up"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "pullup-on-fingerboard",
-    "movementDefinition": "Pullup on a choosen edge of a fingerboard / hangboard."
-  },
-  {
     "name": "Front Lever Pull-Up",
     "group": "back",
     "defaultWeight": 0,
@@ -5237,79 +4470,6 @@
     "loadMode": "bodyweightAdded",
     "catalogID": "pull-up-isometric-hold",
     "movementDefinition": "Pull until the chin clears the bar and hold that flexed-arm position for the prescribed duration. Keep the shoulders controlled and lower safely when the hold ends."
-  },
-  {
-    "name": "Kettlebell Row to Rotation",
-    "group": "back",
-    "defaultWeight": 35,
-    "reps": 10,
-    "equipment": "kettlebell",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "role": "primary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 15.0,
-    "pattern": "pull",
-    "direction": "horizontal",
-    "aliases": [
-      "KB Row and Rotate",
-      "Row to Rotation"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "kettlebell-row-and-rotate",
-    "movementDefinition": "Row one kettlebell toward the torso, rotate the trunk under control, and reverse the sequence to return."
   },
   {
     "name": "Kettlebell Sumo High Pull",
@@ -6534,57 +5694,6 @@
     "movementDefinition": "Lay flat on your stomach with your arms extended in front of you on the ground as your legs are lying flat. Lift both your arms and move them to your side slowly. Then, move them back."
   },
   {
-    "name": "Rope Straight-Arm Cable Pulldown",
-    "group": "back",
-    "defaultWeight": 45,
-    "reps": 15,
-    "equipment": "cable",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "role": "primary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 20.0,
-    "aliases": [
-      "Straight-Arm Pulldown (Rope)",
-      "Straight-Arm Cable Pulldown with Rope"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "straight-arm-pull-down-rope-attachment",
-    "movementDefinition": "Face a high cable and hold the rope ends with the arms extended and elbows softly bent. Sweep the rope toward the hips while separating its ends slightly, then return under control without shrugging."
-  },
-  {
     "name": "Scapular Pull-Up",
     "group": "back",
     "defaultWeight": 0,
@@ -7188,78 +6297,6 @@
     "movementDefinition": "Pull the load toward the torso in Single-Arm Dumbbell Row by driving the elbow back and controlling the shoulder blade, then extend the arm."
   },
   {
-    "name": "Single-Arm Kettlebell Plank Row",
-    "group": "back",
-    "defaultWeight": 35,
-    "reps": 10,
-    "equipment": "kettlebell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "role": "primary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 15.0,
-    "pattern": "pull",
-    "direction": "horizontal",
-    "aliases": [
-      "Plank to Row"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "single-arm-plank-to-row",
-    "movementDefinition": "Start position as row, extend to plank and back. Finish with row and repeat."
-  },
-  {
     "name": "Single-Arm Straight-Arm Cable Pulldown",
     "group": "back",
     "defaultWeight": 30,
@@ -7343,7 +6380,7 @@
     "movementDefinition": "Elevate the shoulder blades against resistance in Smith Machine Shrug without bending the elbows, then lower under control."
   },
   {
-    "name": "Straight-Bar Cable Pulldown",
+    "name": "Straight-Arm Cable Pulldown",
     "group": "back",
     "defaultWeight": 50,
     "reps": 15,
@@ -7385,16 +6422,18 @@
     "defaultWeightKg": 22.5,
     "aliases": [
       "Straight-Arm Pulldown (Bar)",
-      "Straight-Arm Cable Pulldown",
       "Straight-Arm Pushdown",
       "Lat Pushdown",
-      "Straight-Arm Cable Pulldown with Bar"
+      "Straight-Arm Cable Pulldown with Rope",
+      "Straight-Arm Pulldown (Rope)",
+      "Straight-Arm Cable Pulldown with Bar",
+      "Straight-Bar Cable Pulldown"
     ],
     "modality": "dynamicStrength",
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "straight-arm-pull-down-bar-attachment",
-    "movementDefinition": "Face a high cable and hold the straight bar with a pronated grip and softly bent elbows. Sweep the bar from shoulder height toward the thighs without bending the elbows further, then return under control without shrugging."
+    "movementDefinition": "Face a high cable and hold the selected attachment with the arms extended and elbows softly bent. Sweep the attachment toward the thighs without bending the elbows further, then return under control without shrugging."
   },
   {
     "name": "Superman",
@@ -7507,59 +6546,6 @@
     "movementDefinition": "Hinge over a T-bar or landmine handle with the trunk braced and spine neutral. Row the load toward the lower chest, bringing the shoulder blades together, then lower until the arms are extended."
   },
   {
-    "name": "Towel Superman",
-    "group": "back",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.4,
-    "involvement": [
-      {
-        "muscle": "lowerBack",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Superman with Towel"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "towel-superman",
-    "movementDefinition": "In this exercise, you lie flat on your stomach, hold a towel with your arms extended in front of you, and pull it apart to create tension. Then, you move it forward and back under your stomach. This exercise targets the back and shoulder muscles as well as core stability."
-  },
-  {
     "name": "Trap-3 Raise",
     "group": "back",
     "defaultWeight": 10,
@@ -7601,83 +6587,6 @@
     "trackingMode": "reps",
     "catalogID": "trap-3-raise",
     "movementDefinition": "Hinge forwards and bend your knees slightly. Depress and retract the shoulder you will use. Rest the other hand on your knee. Raise your hand about 15 degrees overhead, maintaining the position of your shoulder."
-  },
-  {
-    "name": "TRX Row",
-    "group": "back",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "lats",
-        "role": "primary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "teresMajor",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "pull",
-    "direction": "horizontal",
-    "aliases": [
-      "TRX Inverted Row",
-      "Rowing with TRX band",
-      "Suspension Row"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "trx-rows",
-    "movementDefinition": "Pull the load toward the torso in TRX Row by driving the elbow back and controlling the shoulder blade, then extend the arm."
   },
   {
     "name": "Tuck Front Lever",
@@ -8230,71 +7139,6 @@
     "movementDefinition": "Execution Pulling phase (concentric): Drive your elbows down and slightly back , pulling your chest toward the bar . Focus on leading with your chest , not your chin. Keep your shoulders depressed (avoid shrugging). Top position: Chin should clear the bar (or at least reach bar level). Pause for a brief squeeze in your lats ."
   },
   {
-    "name": "Band-Resisted Push-Up on Kettlebells",
-    "group": "chest",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Banded Push-Up",
-      "Band-Resisted Push-Up",
-      "Banded Kettlebell Push-Up"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "kb-press-ups-with-bands",
-    "movementDefinition": "Loop a resistance band across the upper back and secure its ends beneath the hands while gripping two stable, flat-based kettlebell handles. Lower the chest in a rigid plank, then press to straight arms against the band without letting the kettlebells tip."
-  },
-  {
     "name": "Barbell Bench Press",
     "group": "chest",
     "defaultWeight": 135,
@@ -8335,44 +7179,6 @@
     "trackingMode": "reps",
     "catalogID": "bench-press",
     "movementDefinition": "Lie on the bench with the feet planted and shoulder blades set. Lower the bar to the mid-to-lower chest with the forearms controlled, then press it back over the shoulders; use safeties or a spotter for heavy attempts."
-  },
-  {
-    "name": "Barbell Larsen Press",
-    "group": "chest",
-    "defaultWeight": 135,
-    "reps": 8,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 60.0,
-    "pattern": "push",
-    "direction": "horizontal",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "larsen-press",
-    "movementDefinition": "Put your legs up on a separate Bench and press with no leg drive."
   },
   {
     "name": "Bent-Over Cable Fly",
@@ -9083,48 +7889,6 @@
     "movementDefinition": "Begin in a plank on the fingertips and thumbs with the hands under the shoulders. Lower through a shallow controlled push-up and press back up while distributing pressure evenly; use the knees or reduced range as needed."
   },
   {
-    "name": "High-Incline Smith Machine Press",
-    "group": "chest",
-    "defaultWeight": 85,
-    "reps": 8,
-    "equipment": "machine",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 37.5,
-    "pattern": "push",
-    "direction": "horizontal",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "high-incline-smith-machine-press",
-    "movementDefinition": "Set the bench to a 45-60° incline. Touch the upper chest with the bar."
-  },
-  {
     "name": "High-to-Low Cable Chest Fly",
     "group": "chest",
     "defaultWeight": 25,
@@ -9437,6 +8201,53 @@
     "movementDefinition": "Place your hands on the bench in a press up position Push your chest away from the bench to separate your shoulder blades Keeping your elbows straight , lower your chest towards the bench so your shoulder blades move closer together Push your chest away from the bench again."
   },
   {
+    "name": "Incline Smith Machine Press",
+    "group": "chest",
+    "defaultWeight": 95,
+    "reps": 8,
+    "equipment": "machine",
+    "mechanic": "compound",
+    "plane": "sagittal",
+    "laterality": "bilateral",
+    "bodyweightFraction": 0.0,
+    "involvement": [
+      {
+        "muscle": "pectorals",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoids",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "biceps",
+        "role": "stabilizer"
+      }
+    ],
+    "defaultWeightKg": 42.5,
+    "pattern": "push",
+    "direction": "horizontal",
+    "aliases": [
+      "Incline Multipress Bench Press",
+      "High-Incline Smith Machine Press",
+      "Slight-Incline Smith Machine Press",
+      "Moderate-Incline Smith Machine Press"
+    ],
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "trackingMode": "reps",
+    "catalogID": "incline-smith-press",
+    "movementDefinition": "Set an adjustable bench to an incline beneath the Smith-machine bar. Lower the bar toward the upper chest with the forearms aligned, then press it upward along the guide rails without bouncing."
+  },
+  {
     "name": "Isometric Wall Press",
     "group": "chest",
     "defaultWeight": 0,
@@ -9666,89 +8477,6 @@
     "movementDefinition": "Set both cables near chest height and stand centered with soft elbows. Draw the handles together in front of the chest without turning the movement into a press, then open the arms under control."
   },
   {
-    "name": "Moderate-Incline Smith Machine Press",
-    "group": "chest",
-    "defaultWeight": 95,
-    "reps": 8,
-    "equipment": "machine",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 42.5,
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Incline Smith Machine Press",
-      "Incline Multipress Bench Press"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "incline-smith-press",
-    "movementDefinition": "Set a bench to a moderate 30–40 degree incline beneath the Smith bar. Lower the bar toward the upper chest with the forearms aligned, then press it upward along the guide rails without bouncing."
-  },
-  {
-    "name": "No-Leg-Drive Dumbbell Bench Press",
-    "group": "chest",
-    "defaultWeight": 45,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 20.0,
-    "pattern": "push",
-    "direction": "horizontal",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "no-leg-drive-dumbbell-chest-press",
-    "movementDefinition": "Set up for a normal Dumbbell chest press but lift your leg ups straight or put them on another bench to remove the leg drive."
-  },
-  {
     "name": "Omni Cable Crossover",
     "group": "chest",
     "defaultWeight": 25,
@@ -9787,146 +8515,6 @@
     "aliases": [],
     "catalogID": "omni-cable-cross-over",
     "movementDefinition": "Set the two cable handles at different heights and stand centered between them. With soft elbows, draw the hands across the body along the chosen diagonal, then return under control and repeat with the opposite setup."
-  },
-  {
-    "name": "Parallette Push-Up",
-    "group": "chest",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.64,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Deep Push-Up"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "push-ups-parallettes",
-    "movementDefinition": "Hold the parallettes in a rigid plank position. Lower the chest between the handles through a controlled comfortable depth, then press back to straight arms without letting the hips sag."
-  },
-  {
-    "name": "Paused Barbell Bench Press",
-    "group": "chest",
-    "defaultWeight": 135,
-    "reps": 5,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 60.0,
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Paused Bench Press"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "pause-bench",
-    "movementDefinition": "Lie on a flat bench and lower the bar to the chest under control. Hold it motionless without relaxing for the prescribed pause, then press until the elbows extend and repeat with the same deliberate stop."
-  },
-  {
-    "name": "Pin Barbell Bench Press",
-    "group": "chest",
-    "defaultWeight": 135,
-    "reps": 6,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 60.0,
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Pin Press",
-      "Dead Bench Press"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "pin-bench-press-bb",
-    "movementDefinition": "Set security pins to about the height of your sticking point Lower the bar, rest on the pins for 1s while holding tension Move bar up with maximum force."
   },
   {
     "name": "Plate-Loaded Decline Machine Chest Press",
@@ -10123,69 +8711,6 @@
     "trackingMode": "reps",
     "catalogID": "push-up",
     "movementDefinition": "Begin in a rigid plank with the hands about shoulder-width apart. Lower the chest while keeping the elbows controlled and body aligned, then press back to straight arms."
-  },
-  {
-    "name": "Push-Up on Dumbbells",
-    "group": "chest",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.64,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Dumbbell Push-Up"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "dumbbell-push-up",
-    "movementDefinition": "Grip two stable dumbbells beneath the shoulders and hold a rigid plank. Lower the chest between the handles through a controlled comfortable range, then press back to straight arms without letting the dumbbells move."
   },
   {
     "name": "Push-Up Rotation",
@@ -10580,67 +9105,6 @@
     "movementDefinition": "Single arm chest press done with the cable machine. Use the other arm to brace bodyweight to focus on strength of the press, rather than balancing of the body. Start with the hand as close to the chest as possible, and then press against the cable at a slight decline and aiming towards the center of your chest."
   },
   {
-    "name": "Single-Arm Dumbbell Glute Bridge Press",
-    "group": "chest",
-    "defaultWeight": 35,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 15.0,
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Glute Bridge Floor Press",
-      "Single-Arm Bridge Press"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "glute-bridge-single-arm-press",
-    "movementDefinition": "With one dumbbell in hand, perform a glute bridge. Now hold the dumbbell above your chest, this is the rep starting position. Lower the dumbbell so that your elbow touches the floor or is roughly 45 degrees below your shoulder if using a bench. Push the dumbbell back into the starting position."
-  },
-  {
     "name": "Single-Arm Incline Cable Chest Press",
     "group": "chest",
     "defaultWeight": 60,
@@ -10742,48 +9206,6 @@
     "movementDefinition": "Perform push-ups with one hand, alternating the sides."
   },
   {
-    "name": "Slight-Incline Smith Machine Press",
-    "group": "chest",
-    "defaultWeight": 95,
-    "reps": 8,
-    "equipment": "machine",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 42.5,
-    "pattern": "push",
-    "direction": "horizontal",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "smith-machine-slight-incline-press",
-    "movementDefinition": "On a slightly inclined bench, lower the Smith-machine bar toward the upper chest and press it vertically along the guide rails."
-  },
-  {
     "name": "Supine Dumbbell Serratus Punch",
     "group": "chest",
     "defaultWeight": 15,
@@ -10817,100 +9239,6 @@
     "trackingMode": "reps",
     "catalogID": "supine-serratus-punch",
     "movementDefinition": "Lie supine with a dumbbell over each shoulder and protract the shoulder blades, reaching the weights upward without bending the elbows."
-  },
-  {
-    "name": "Supine Medicine Ball Chest Pass",
-    "group": "chest",
-    "defaultWeight": 8,
-    "reps": 12,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 2.5,
-    "pattern": "push",
-    "direction": "horizontal",
-    "aliases": [
-      "Lying Med Ball Chest Pass"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "supine-med-ball-chest-pass",
-    "movementDefinition": "From supine, explosively pass the medicine ball vertically from the chest and receive it with bent elbows."
-  },
-  {
-    "name": "Suspension Chest Fly",
-    "group": "chest",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "pectorals",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "TRX Chest Fly",
-      "Suspended Crossover"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "suspended-crossess",
-    "movementDefinition": "Sweep the arms through the horizontal shoulder motion named by Suspension Chest Fly while keeping the elbow angle nearly fixed."
   },
   {
     "name": "Underhand-Grip Dumbbell Bench Press",
@@ -11053,40 +9381,6 @@
     "movementDefinition": "Set up in a rigid plank with the hands wider than shoulder width. Lower the chest between the hands while keeping the elbows controlled, then press back to straight arms without letting the hips sag."
   },
   {
-    "name": "2-Second Paused Leg Lower",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      }
-    ],
-    "aliases": [
-      "Tempo Leg Lowers",
-      "Paused Leg Lowers"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "leg-lowers-with-2-sec-pause",
-    "movementDefinition": "From supine, lower the straight legs in 2-Second Paused Leg Lower while keeping the lumbar spine controlled, then raise them again."
-  },
-  {
     "name": "Ab Wheel Rollout",
     "group": "core",
     "defaultWeight": 0,
@@ -11225,198 +9519,6 @@
     "aliases": [],
     "catalogID": "battle-ropes",
     "movementDefinition": "Hold the ends of the rope at arm's length in front of your hips with your hands shoulder-width apart. Brace your core and begin alternately raising and lowering each arm explosively. Keep alternating arms for three to four sets of 1 to 2 minutes."
-  },
-  {
-    "name": "Banded Kneeling Pallof Isometric Hold",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 1,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "core",
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "aliases": [
-      "Kneeling Pallof Hold"
-    ],
-    "modality": "isometricStrength",
-    "loadMode": "nonComparable",
-    "catalogID": "kneeling-pallof-iso-holds",
-    "movementDefinition": "Hold or press the resistance away from the chest in Banded Kneeling Pallof Isometric Hold while resisting trunk rotation."
-  },
-  {
-    "name": "Banded Pallof Split Jerk",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "core",
-    "aliases": [
-      "Pallof Split Jerk",
-      "Banded Pallof Jerk"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-pallof-split-jerks",
-    "movementDefinition": "Hold or press the resistance away from the chest in Banded Pallof Split Jerk while resisting trunk rotation."
-  },
-  {
-    "name": "Banded Pallof Wall Isometric Hold",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 1,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "core",
-    "trackingMode": "duration",
-    "defaultDuration": 30,
-    "aliases": [
-      "Pallof Iso Hold",
-      "Wall Pallof Hold",
-      "Pallof Max Effort Iso Holds",
-      "Pallof Max Effort Iso Holds (3-Secs)",
-      "Palloff Iso Holds (20s E.S.)"
-    ],
-    "modality": "isometricStrength",
-    "loadMode": "nonComparable",
-    "catalogID": "pallof-wall-iso-holds",
-    "movementDefinition": "Hold or press the resistance away from the chest in Banded Pallof Wall Isometric Hold while resisting trunk rotation."
-  },
-  {
-    "name": "Banded Rotation",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "core",
-    "aliases": [
-      "Banded Trunk Rotation",
-      "Band Woodchop"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-rotations",
-    "movementDefinition": "Rotate the trunk and shoulders through the path named by Banded Rotation while controlling the pelvis, then return under control."
   },
   {
     "name": "Barbell Ab Rollout",
@@ -12305,61 +10407,6 @@
     "movementDefinition": "Begin in a bear or high-plank position. Rotate the trunk and thread one leg under the body into a sit-out while the opposite hand leaves the floor, then return to center and alternate sides."
   },
   {
-    "name": "Half-Kneeling Medicine Ball Rotational Throw",
-    "group": "core",
-    "defaultWeight": 8,
-    "reps": 10,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 2.5,
-    "pattern": "core",
-    "aliases": [
-      "Half-Kneeling Rotational Med Ball Throw"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "half-kneeling-rotational-med-ball-throws",
-    "movementDefinition": "Half-kneel side-on to a wall with the inside knee down, load a medicine ball near the outside hip, then rotate the trunk and throw the ball horizontally into the wall."
-  },
-  {
     "name": "Hanging Knee Raise",
     "group": "core",
     "defaultWeight": 0,
@@ -12690,61 +10737,6 @@
     "aliases": [],
     "catalogID": "kettlebell-suitcase-hold-with-march",
     "movementDefinition": "Hold one kettlebell at the side and march in place without leaning or letting the pelvis drop."
-  },
-  {
-    "name": "Kneeling Medicine Ball Rotational Throw",
-    "group": "core",
-    "defaultWeight": 8,
-    "reps": 10,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 2.5,
-    "pattern": "core",
-    "aliases": [
-      "Kneeling Rotational Med Ball Throw"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "kneeling-rotational-throws",
-    "movementDefinition": "Kneel side-on to a wall holding a medicine ball near the outside hip, rotate the trunk toward the wall, and release the ball horizontally before resetting under control."
   },
   {
     "name": "L-Sit",
@@ -14129,37 +12121,6 @@
     "movementDefinition": "Sit on a mat, your calves are resting on a bench, the knees make a right angle. Hold your hands behind your neck. Go now up with a rolling movement of your back, you should feel how the individual vertebrae lose contact with the mat. At the highest point, contract your abs as much as you can and hold there for 2 sec. Go now down, unrolling your back."
   },
   {
-    "name": "Sit-Up with Elbow Thrust",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "bodyweight",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "sit-up-elbow-thrust",
-    "movementDefinition": "This is a top down rotation movement, and it’s a bit more explosive, too. Lying with knees bent and feet on the floor, sit up and then drive your left elbow across your entire body toward the right, then come back to center and then finally lower yourself down. Then hit the other side."
-  },
-  {
     "name": "Splinter Sit-Up",
     "group": "core",
     "defaultWeight": 0,
@@ -14189,196 +12150,6 @@
     "aliases": [],
     "catalogID": "splinter-sit-ups",
     "movementDefinition": "Lie on your back with your legs straight and arms at your sides, keeping your elbows bent at 90 degrees. As you sit up, twist your upper body to the left and bring your left knee toward your right elbow while you swing your left arm back. Lower your body to the starting position, and repeat to your right. That's 1 rep."
-  },
-  {
-    "name": "Split-Stance Medicine Ball Rotational Throw",
-    "group": "core",
-    "defaultWeight": 8,
-    "reps": 10,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "obliques",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 2.5,
-    "pattern": "core",
-    "aliases": [
-      "Split Stance Med Ball Throw",
-      "Rotational Med Ball Throw"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "split-stance-rotational-throws",
-    "movementDefinition": "Stand side-on in a split stance with a medicine ball near the rear hip, rotate the hips and trunk toward the wall, and release the ball horizontally without losing the stance."
-  },
-  {
-    "name": "Stability Ball Crunch",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "other",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "ball-crunches",
-    "movementDefinition": "Lie with the lumbar spine supported on a stability ball and curl the rib cage toward the pelvis without pulling on the neck."
-  },
-  {
-    "name": "Stability Ball Plank Circle",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "other",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Stability Ball Plank Circles",
-      "Swiss Ball Stir-the-Pot"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "swiss-ball-plank-circles",
-    "movementDefinition": "Complete the limb movement named by Stability Ball Plank Circle from a braced plank without losing trunk or pelvic alignment."
-  },
-  {
-    "name": "Stability Ball Plank with Alternating Foot Touch",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 16,
-    "equipment": "other",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Incline Plank with Alternating Floor Touch"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "incline-plank-with-alternate-floor-touch",
-    "movementDefinition": "Hold a high plank with both feet supported on a stability ball. Keeping the shoulders and pelvis level, move one foot off the ball to touch the floor, return it to the ball, and alternate feet."
   },
   {
     "name": "Standing Plate Rotation",
@@ -14682,92 +12453,6 @@
     "movementDefinition": "Stand tall with the pelvis facing forward and rotate the rib cage from side to side through a comfortable range. Keep the motion controlled and avoid forcing the lower back."
   },
   {
-    "name": "TRX Oblique Knee Tuck",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "other",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "trx-obliques",
-    "movementDefinition": "Place your feet in the stirrups and assume a high plank with your hands directly beneath your shoulders. Pull your knees to your right elbow, then push them back out and to the centre."
-  },
-  {
-    "name": "TRX Rollout",
-    "group": "core",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "abs",
-        "role": "primary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Suspension Rollout",
-      "TRX Ab Rollout"
-    ],
-    "pattern": "core",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "trx-rollouts",
-    "movementDefinition": "Lean forward from the suspension straps as the arms travel overhead, then brace the trunk to return."
-  },
-  {
     "name": "Tuck L-Sit",
     "group": "core",
     "defaultWeight": 0,
@@ -14922,529 +12607,6 @@
     "aliases": [],
     "catalogID": "windshield-wipers",
     "movementDefinition": "Hang from a pull-up bar, raise your legs to the ceiling. Move lower body from left to right with straight legs like a windshield wiper."
-  },
-  {
-    "name": "3-1-1 Bodyweight Tempo Squat",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.6,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Slow Squat"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "catalogID": "slow-squat",
-    "movementDefinition": "Stand in a comfortable squat stance with no external load. Descend for three seconds, pause at the bottom for one second, then stand in one second while keeping the knees aligned and trunk braced."
-  },
-  {
-    "name": "Altitude Landing",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Drop Landing",
-      "Depth Drop"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "altitude-landings",
-    "movementDefinition": "Step from a low raised surface, land on both feet, and absorb the impact through the hips, knees, and ankles. Stabilize and hold the landing; do not add a jump."
-  },
-  {
-    "name": "Altitude Landing to Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Depth Jump",
-      "Drop Jump"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "altitude-landings-to-jump",
-    "movementDefinition": "Step from a low raised surface, absorb the two-foot landing, and immediately rebound into a vertical jump. Land the jump softly and regain balance before resetting."
-  },
-  {
-    "name": "Banded 1.5 Squat",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "banded-1-5-squats",
-    "movementDefinition": "Descend into a band-resisted squat, rise halfway, descend again, and then stand fully for one repetition."
-  },
-  {
-    "name": "Banded Accentuated Countermovement Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 8,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Banded Countermovement Jump"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-accentuated-cmj",
-    "movementDefinition": "Rapidly dip through the hips and knees in Banded Accentuated Countermovement Jump and immediately jump vertically using the named load or arm position."
-  },
-  {
-    "name": "Banded Ankle Dorsiflexion",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "shins",
-        "role": "primary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "exercise-band-dorsiflexion",
-    "movementDefinition": "This exercise uses an exercise band. It targets the Soleus and Tibialis anterior."
-  },
-  {
-    "name": "Banded Ankle Plantar Flexion",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "calves",
-        "role": "primary"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "exercise-band-plantarflexion",
-    "movementDefinition": "Banded plantarflexion is a great way to bridge the gap between plantarflexion range of motion and the more strenuous calf raises in weight bearing. This can help strengthen the calf muscles, load the Achilles tendon, and improve plantarflexion range of motion."
-  },
-  {
-    "name": "Banded Clamshell",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "frontal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMed",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-side-clams",
-    "movementDefinition": "Lie on the side with the hips and knees bent and a band above the knees. Keep the feet together and pelvis stacked while lifting the top knee, then lower it under control without rolling backward."
-  },
-  {
-    "name": "Banded Glute Kickback",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMax",
-        "role": "primary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "rubber-band-glute-kickback",
-    "movementDefinition": "A Banded Glute Kickback is an exercise performed on hands and knees, where you anchor a resistance band to your foot and kick your heel back and up, squeezing your glute at the top of the movement, while maintaining a stable core and flat back to target and strengthen the gluteal muscles."
-  },
-  {
-    "name": "Banded Lateral Walk",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "frontal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMed",
-        "role": "primary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      }
-    ],
-    "aliases": [
-      "Lateral Walk",
-      "Monster Walk"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "banded-side-walks",
-    "movementDefinition": "Lateral walks, also known as side steps or squat walks, are a type of exercise where you move sideways in a squatting position. They can be performed with or without resistance bands. These exercises strengthen the hip abductors, glutes, and other stabilizing muscles."
-  },
-  {
-    "name": "Banded Leg Curl",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "role": "primary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "leg-curl-with-elastic",
-    "movementDefinition": "Standing position: Place the band under your feet in the middle of your foot and grasp it with a hammer grip."
-  },
-  {
-    "name": "Banded Single-Leg Hip Thrust",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMax",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "adductors",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "hinge",
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "banded-single-leg-hip-thrusts",
-    "movementDefinition": "Extend the hip in Banded Single-Leg Hip Thrust to raise the pelvis while keeping the ribs controlled, then lower under tension."
   },
   {
     "name": "Barbell Back Squat",
@@ -16024,63 +13186,6 @@
     "movementDefinition": "The barbell is held overhead in a wide-arm snatch grip; however, it is also possible to use a closer grip if balance allows."
   },
   {
-    "name": "Barbell Pin Squat",
-    "group": "legs",
-    "defaultWeight": 155,
-    "reps": 5,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 70.0,
-    "pattern": "squat",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "pin-squat",
-    "movementDefinition": "Set security pins to about the height of your sticking point Lower the bar, rest on the pins for 2s keeping tension Stand up with maximum force."
-  },
-  {
     "name": "Barbell Power Clean",
     "group": "legs",
     "defaultWeight": 135,
@@ -16285,75 +13390,6 @@
     "trackingMode": "reps",
     "catalogID": "snatch-ol",
     "movementDefinition": "Olympic lift snatch Pull barbell from ground to overhead lockout using a wide grip and overhead squat. Move bar slowly until cleared knees then explosively extend hips, pull bar up and dive under the bar Catch bar overhead with straight arms Push head forward during lockout."
-  },
-  {
-    "name": "Barbell Speed Deadlift",
-    "group": "legs",
-    "defaultWeight": 185,
-    "reps": 3,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMax",
-        "role": "primary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "primary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lats",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 85.0,
-    "pattern": "hinge",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "speed-deadlift",
-    "movementDefinition": "Set up for a conventional deadlift and accelerate a submaximal bar from the floor while maintaining a braced spine, then return it under control for crisp repetitions."
   },
   {
     "name": "Barbell Step-Back Lunge",
@@ -17149,50 +14185,6 @@
     "movementDefinition": "Jump from a standing position onto the box, stretch your body, then step down again (do not jump)."
   },
   {
-    "name": "Broomstick Hip Hinge",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.3,
-    "involvement": [
-      {
-        "muscle": "hamstrings",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "hinge",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "hinge-with-broomstick",
-    "movementDefinition": "Hinge at the hips with a braced spine in Broomstick Hip Hinge, then extend the hips to return to standing."
-  },
-  {
     "name": "Burpee",
     "group": "legs",
     "defaultWeight": 0,
@@ -17425,65 +14417,6 @@
     "movementDefinition": "The Cossack Squat is a multi-joint exercise that works mainly on the legs and buttocks, but also involves stabilizing muscles. It is an excellent exercise for improving strength, mobility and stability in a functional way."
   },
   {
-    "name": "Criss-Cross Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "frontal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Crossover Jacks",
-      "Cross Jacks"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "criss-cross-jump",
-    "movementDefinition": "Jump the feet apart, then jump them back together with one foot crossing in front of the other; alternate the leading cross while landing softly with the knees aligned."
-  },
-  {
     "name": "Double-Kettlebell Front Squat",
     "group": "legs",
     "defaultWeight": 70,
@@ -17701,63 +14634,6 @@
     "trackingMode": "reps",
     "catalogID": "bulgarian-squat-with-dumbbells",
     "movementDefinition": "The Bulgarian split squat consists of performing a squat on one leg with the rear foot resting on a raised platform. Elevating your back leg on a bench creates instability and increases the range of motion of the exercise."
-  },
-  {
-    "name": "Dumbbell Countermovement Jump",
-    "group": "legs",
-    "defaultWeight": 5,
-    "reps": 8,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 2.5,
-    "pattern": "squat",
-    "aliases": [
-      "Loaded CMJ",
-      "Dumbbell CMJ",
-      "2 kg Dumbbell Countermovement Jump"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "dumbbell-cmj-2-kg-each-hand",
-    "movementDefinition": "Stand with a light dumbbell in each hand at the sides. Dip rapidly through the hips and knees, immediately jump vertically, and land softly with the weights controlled before resetting."
   },
   {
     "name": "Dumbbell Deadlift",
@@ -18061,75 +14937,6 @@
     "movementDefinition": "Step in the direction named by Dumbbell Goblet Reverse Lunge, lower through the stance hip and knee, and drive back while maintaining knee alignment."
   },
   {
-    "name": "Dumbbell Goblet Reverse Lunge with Knee Raise",
-    "group": "legs",
-    "defaultWeight": 30,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 12.5,
-    "pattern": "lunge",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "goblet-reverse-lunge-with-knee-raise",
-    "movementDefinition": "Step in the direction named by Dumbbell Goblet Reverse Lunge with Knee Raise, lower through the stance hip and knee, and drive back while maintaining knee alignment."
-  },
-  {
     "name": "Dumbbell Goblet Split Squat",
     "group": "legs",
     "defaultWeight": 35,
@@ -18252,81 +15059,6 @@
     "trackingMode": "reps",
     "catalogID": "dumbbell-goblet-squat",
     "movementDefinition": "Hold one dumbbell vertically at the chest. Sit the hips down between the feet while keeping the trunk braced and knees aligned with the toes, then drive through the feet to stand."
-  },
-  {
-    "name": "Dumbbell Goblet Squat to Press",
-    "group": "legs",
-    "defaultWeight": 40,
-    "reps": 10,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 17.5,
-    "pattern": "squat",
-    "aliases": [
-      "Goblet Thruster"
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "catalogID": "goblet-squat-to-press",
-    "movementDefinition": "Hold the weight at the chest, squat to depth, then stand and press it overhead in one continuous repetition."
   },
   {
     "name": "Dumbbell Hang Power Clean",
@@ -19068,58 +15800,6 @@
     "movementDefinition": "Stand tall and swing one straight leg forward through a comfortable range as a dynamic hamstring mobility drill. Lower it without forcing the end range and alternate legs while keeping the trunk controlled."
   },
   {
-    "name": "Falling Countermovement Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 8,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "falling-cmj",
-    "movementDefinition": "Rapidly dip through the hips and knees in Falling Countermovement Jump and immediately jump vertically using the named load or arm position."
-  },
-  {
     "name": "Fire Hydrant",
     "group": "legs",
     "defaultWeight": 0,
@@ -19228,61 +15908,6 @@
     "movementDefinition": "Lower the hack-squat carriage by flexing the hips and knees, then press through the feet to extend both legs."
   },
   {
-    "name": "Hands-on-Hips Countermovement Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 8,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Countermovement Jump",
-      "Vertical Jump"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "cmj-with-hands-on-hips",
-    "movementDefinition": "Rapidly dip through the hips and knees in Hands-on-Hips Countermovement Jump and immediately jump vertically using the named load or arm position."
-  },
-  {
     "name": "High Knees",
     "group": "legs",
     "defaultWeight": 0,
@@ -19328,50 +15953,6 @@
     "loadMode": "nonComparable",
     "catalogID": "high-knees",
     "movementDefinition": "Starting positionStand straight. Steps: Run in place, putting knees as high up as is comfortable and switching legs at a quick pace."
-  },
-  {
-    "name": "High-Knee Jump",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 8,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "hipFlexors",
-        "role": "primary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "high-knee-jumps",
-    "movementDefinition": "Dip into a shallow squat and jump vertically, drawing both knees toward the chest near the top. Extend for a soft two-foot landing, absorb the impact, and reset before repeating."
   },
   {
     "name": "High-Knee Skip",
@@ -19529,69 +16110,6 @@
     "movementDefinition": "Stand with softly bent knees and brace the trunk. Push the hips backward while keeping the spine neutral until tension develops in the posterior thighs, then extend the hips to return upright."
   },
   {
-    "name": "Hop and Hold",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 10,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "secondary"
-      }
-    ],
-    "pattern": "squat",
-    "aliases": [
-      "Stick the Landing",
-      "Jump and Stick"
-    ],
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "hop-hold",
-    "movementDefinition": "Jump in the direction named by Hop and Hold, absorb the landing on a controlled hip and knee, and stabilize before continuing."
-  },
-  {
     "name": "Horse Stance Hold",
     "group": "legs",
     "defaultWeight": 0,
@@ -19712,66 +16230,6 @@
     "trackingMode": "reps",
     "catalogID": "ice-skaters",
     "movementDefinition": "Jump in the direction named by Ice Skater, absorb the landing on a controlled hip and knee, and stabilize before continuing."
-  },
-  {
-    "name": "Ice Skater to Vertical Hop",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 16,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "frontal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMed",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "lunge",
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "ice-skaters-to-vertical-hop",
-    "movementDefinition": "Jump in the direction named by Ice Skater to Vertical Hop, absorb the landing on a controlled hip and knee, and stabilize before continuing."
   },
   {
     "name": "Isometric Squat to Failure",
@@ -20195,79 +16653,6 @@
     "movementDefinition": "Starting position: Get down on all fours. Steps: Push one foot back until fully extended, concentrating on the gluteus muscles. Stay for one second, then return to the initial position. Repeat, alternating feet."
   },
   {
-    "name": "Landmine Reverse Lunge with Knee Raise",
-    "group": "legs",
-    "defaultWeight": 50,
-    "reps": 10,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "gluteMed",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 22.5,
-    "pattern": "lunge",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "landmine-reverse-lunge-with-knee-raise",
-    "movementDefinition": "Step in the direction named by Landmine Reverse Lunge with Knee Raise, lower through the stance hip and knee, and drive back while maintaining knee alignment."
-  },
-  {
     "name": "Landmine Squat",
     "group": "legs",
     "defaultWeight": 70,
@@ -20327,139 +16712,6 @@
     "aliases": [],
     "catalogID": "landmine-squat",
     "movementDefinition": "Flex the hips and knees to descend in Landmine Squat with the feet planted, then drive through the feet to stand."
-  },
-  {
-    "name": "Landmine Squat to Press",
-    "group": "legs",
-    "defaultWeight": 65,
-    "reps": 10,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 30.0,
-    "pattern": "squat",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "landmine-squat-to-press",
-    "movementDefinition": "Hold the end of a landmine at chest height, squat while keeping the trunk braced, then stand and press the bar upward and forward. Return it to the chest before the next repetition."
-  },
-  {
-    "name": "Lateral Push-Off",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "frontal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMed",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "lunge",
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "lateral-push-off",
-    "movementDefinition": "Push off the ground and land on one leg and regain balance before jumping to the other leg."
   },
   {
     "name": "Leg Press Calf Raise",
@@ -20936,71 +17188,6 @@
     "movementDefinition": "March in place, lifting one knee toward hip height while the opposite arm swings forward. Keep the trunk tall, place the foot softly, and alternate at the prescribed rhythm."
   },
   {
-    "name": "Medicine Ball Ice Skater",
-    "group": "legs",
-    "defaultWeight": 10,
-    "reps": 16,
-    "equipment": "other",
-    "mechanic": "compound",
-    "plane": "frontal",
-    "laterality": "unilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "gluteMed",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 5.0,
-    "pattern": "lunge",
-    "modality": "power",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "ice-skaters-with-medicine-ball",
-    "movementDefinition": "Jump in the direction named by Medicine Ball Ice Skater, absorb the landing on a controlled hip and knee, and stabilize before continuing."
-  },
-  {
     "name": "Narrow-Stance Machine Leg Press",
     "group": "legs",
     "defaultWeight": 270,
@@ -21143,51 +17330,6 @@
     "aliases": [],
     "catalogID": "nordic-curl",
     "movementDefinition": "The Nordic hamstring curl is one of the best lower-body exercises to build posterior leg strength, improve knee health, and prevent injury."
-  },
-  {
-    "name": "Paused Machine Hack Squat",
-    "group": "legs",
-    "defaultWeight": 160,
-    "reps": 10,
-    "equipment": "machine",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "secondary"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 72.5,
-    "pattern": "squat",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "pause-hack-squats",
-    "movementDefinition": "Hack Squats but with a 1-2s pause at the bottom of the movement. This makes sure that there is no more elastic energy stored in the muscles."
   },
   {
     "name": "Pistol Squat",
@@ -21416,74 +17558,6 @@
     "aliases": [],
     "catalogID": "prisoner-squat",
     "movementDefinition": "Stand with the feet about shoulder-width and place the hands lightly behind the head. Sit the hips down between the feet while the knees track with the toes, then drive through the feet to stand."
-  },
-  {
-    "name": "Prisoner Squat with Overhead Reach",
-    "group": "legs",
-    "defaultWeight": 0,
-    "reps": 12,
-    "equipment": "bodyweight",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.5,
-    "involvement": [
-      {
-        "muscle": "quads",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "adductors",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "shins",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "serratus",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "squat",
-    "modality": "dynamicStrength",
-    "loadMode": "bodyweightAdded",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "prisoner-squats-with-overhead-reach",
-    "movementDefinition": "Perform a bodyweight squat, then reach both arms overhead at the top while keeping the ribs controlled."
   },
   {
     "name": "Quadruped Hip Extension",
@@ -23340,129 +19414,6 @@
     "movementDefinition": "Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees. Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid."
   },
   {
-    "name": "Band Face Pull",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "reps": 20,
-    "equipment": "band",
-    "mechanic": "compound",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "pattern": "pull",
-    "direction": "horizontal",
-    "aliases": [],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "face-pulls-with-yellow-green-band",
-    "movementDefinition": "Face pulls with band – standing horizontal pull. Grab the band at face height, pull elbows high and wide towards your face while squeezing shoulder blades together. Trains upper back, rear shoulders and improves posture."
-  },
-  {
-    "name": "Band Pull-Apart with External Rotation",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "externalRotators",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "band-pull-apart-with-external-rotation",
-    "movementDefinition": "Hold a band at shoulder height, pull the hands apart by retracting the shoulder blades, and finish with the forearms rotating outward. Reverse the motion under control without shrugging."
-  },
-  {
-    "name": "Banded External Rotation",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "transverse",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "externalRotators",
-        "role": "primary"
-      },
-      {
-        "muscle": "deltoids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "traps",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "banded-external-rotations",
-    "movementDefinition": "Hold a resistance band with the elbows bent to 90 degrees and fixed beside the torso, rotate the forearms outward without arching or turning the trunk, and return slowly."
-  },
-  {
     "name": "Barbell Clean and Jerk",
     "group": "shoulders",
     "defaultWeight": 135,
@@ -23816,52 +19767,6 @@
     "trackingMode": "reps",
     "catalogID": "overhead-barbell-press",
     "movementDefinition": "Setup: Stand with feet together and grip the bar slightly wider than shoulders. Position: Rest the bar on your upper chest. Press: Brace your core and push the bar straight up until your arms lock out. Finish: Control the bar back down to your chest."
-  },
-  {
-    "name": "Barbell Pin Overhead Press",
-    "group": "shoulders",
-    "defaultWeight": 95,
-    "reps": 5,
-    "equipment": "barbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 42.5,
-    "pattern": "push",
-    "direction": "vertical",
-    "modality": "dynamicStrength",
-    "loadMode": "external",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "pin-ohp",
-    "movementDefinition": "Set security pins to the height of your lower chin Rest bar on pins keeping tension Raise bar over head."
   },
   {
     "name": "Barbell Push Press",
@@ -24688,83 +20593,6 @@
     "trackingMode": "reps",
     "catalogID": "kreis-press-db",
     "movementDefinition": "Sit against a moderately inclined bench with dumbbells overhead. Lower them beside the shoulders, rotate the palms upward as the arms sweep forward to meet in front of the chest, then reverse the circular path back overhead."
-  },
-  {
-    "name": "Dumbbell Devil's Press",
-    "group": "shoulders",
-    "defaultWeight": 35,
-    "reps": 8,
-    "equipment": "dumbbell",
-    "mechanic": "compound",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "gluteMax",
-        "role": "secondary"
-      },
-      {
-        "muscle": "hamstrings",
-        "role": "secondary"
-      },
-      {
-        "muscle": "lowerBack",
-        "role": "secondary"
-      },
-      {
-        "muscle": "pectorals",
-        "role": "secondary"
-      },
-      {
-        "muscle": "triceps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "quads",
-        "role": "secondary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "secondary"
-      },
-      {
-        "muscle": "serratus",
-        "role": "secondary"
-      },
-      {
-        "muscle": "abs",
-        "role": "secondary"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "calves",
-        "role": "stabilizer"
-      }
-    ],
-    "defaultWeightKg": 15.0,
-    "pattern": "push",
-    "direction": "vertical",
-    "aliases": [
-      "Devils Press",
-      "Devil Press"
-    ],
-    "modality": "conditioning",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "catalogID": "devils-press",
-    "movementDefinition": "Hold two dumbbells, perform a controlled burpee with the hands on the handles, then jump or step the feet forward and drive both dumbbells overhead in one fluid swing. Lower them safely before the next repetition."
   },
   {
     "name": "Dumbbell Diagonal Shoulder Press",
@@ -25932,45 +21760,6 @@
     "trackingMode": "reps",
     "catalogID": "front-plate-raise",
     "movementDefinition": "Stand holding a weight plate at its sides with the elbows softly bent. Raise the plate forward to about shoulder height without leaning back, then lower it under control."
-  },
-  {
-    "name": "Prone Banded Press",
-    "group": "shoulders",
-    "defaultWeight": 0,
-    "reps": 15,
-    "equipment": "band",
-    "mechanic": "isolation",
-    "plane": "sagittal",
-    "laterality": "bilateral",
-    "bodyweightFraction": 0.0,
-    "involvement": [
-      {
-        "muscle": "deltoids",
-        "role": "primary"
-      },
-      {
-        "muscle": "traps",
-        "role": "secondary"
-      },
-      {
-        "muscle": "rhomboids",
-        "role": "secondary"
-      },
-      {
-        "muscle": "forearms",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "biceps",
-        "role": "stabilizer"
-      }
-    ],
-    "modality": "dynamicStrength",
-    "loadMode": "nonComparable",
-    "trackingMode": "reps",
-    "aliases": [],
-    "catalogID": "prone-banded-press",
-    "movementDefinition": "Lie prone, maintain band tension, and press the arms overhead without shrugging or extending the lower back."
   },
   {
     "name": "Pseudo Planche Push-Up",

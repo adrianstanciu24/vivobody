@@ -127,10 +127,12 @@ working sets; exercise names never infer set intent.
   isometric may still compare duration within its own duration-only series.
 
 `bodyweightFraction` is a coefficient used only by the two bodyweight load
-modes. It is zero for `external` and `nonComparable`. Band resistance is always
-`nonComparable` in the current contract: a color, nominal stack value, or band
-label does not define its changing force through the range of motion. A future
-model would need an explicit calibrated force curve before that can change.
+modes. It is zero for `external` and `nonComparable`. Band variants are not
+bundled catalog records; users create them as custom exercises when needed.
+Their resistance is always `nonComparable`: a color, nominal stack value, or
+band label does not define its changing force through the range of motion. A
+future model would need an explicit calibrated force curve before that can
+change.
 
 The session snapshots the latest measured body weight at start. A persisted
 `bodyweightAtStart` value of `0` means unknown; it is a sentinel, not a
@@ -204,6 +206,7 @@ The bundled catalog must satisfy all of the following before shipping:
 - Every strength and power exercise has a primary muscle.
 - Push/pull direction, isolation/pattern, modality/tracking, and load-mode
   invariants hold.
-- Every band exercise is explicitly `nonComparable`.
+- No bundled exercise uses band equipment; custom band exercises are forced to
+  `nonComparable` load semantics by the editor.
 - Explicit regression fixtures cover corrected high-risk records and the
   independent glute-max/glute-med mappings.

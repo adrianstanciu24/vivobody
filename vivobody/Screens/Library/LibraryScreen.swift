@@ -4,7 +4,7 @@
 //
 //  Two-segment browser for everything reusable in the app:
 //    • Templates — the user's saved workout plans
-//    • Exercises — the full exercise catalog (90 stock + customs)
+//    • Exercises — the bundled exercise catalog plus user-created entries
 //
 //  Why a segmented control instead of a tab: both surfaces serve
 //  the same mental model ("reusable workout content") and live at

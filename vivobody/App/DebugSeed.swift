@@ -141,8 +141,8 @@ enum UITestSupport {
         try? context.save()
     }
 
-    /// Completed non-comparable resistance fixture for verifying that
-    /// workout receipts report the raw band volume the user logged.
+    /// Completed custom, non-comparable resistance fixture for verifying
+    /// that workout receipts report the raw band volume the user logged.
     private static func seedActiveBand(in context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
             predicate: #Predicate { $0.completedAt == nil }
@@ -150,12 +150,24 @@ enum UITestSupport {
         guard existing.isEmpty else { return }
 
         let exercise = Exercise(
-            name: "Band-Resisted Push-Up on Kettlebells",
-            catalogID: "kb-press-ups-with-bands",
+            name: "My Band-Resisted Push-Up",
             group: .chest,
             plannedSets: 3,
             plannedReps: 10,
             plannedWeight: 30 * WeightUnit.lbPerKg,
+            muscleInvolvement: Muscle.Involvement(contributions: [
+                .init(muscle: .pectorals, role: .primary),
+                .init(muscle: .triceps, role: .secondary),
+                .init(muscle: .deltoids, role: .secondary),
+            ]),
+            classification: ExerciseClassification(
+                equipment: .band,
+                mechanic: .compound,
+                pattern: .push,
+                direction: .horizontal,
+                plane: .sagittal,
+                laterality: .bilateral
+            ),
             modality: .dynamicStrength,
             loadMode: .nonComparable,
             sortOrder: 0
@@ -377,7 +389,7 @@ enum HistorySeeder {
         // Plateau: identical load for fourteen sessions ⇒ developed but
         // no longer climbing — a steady mid-orange.
         block([("Barbell Biceps Curl", .arms, 65),
-               ("Straight-Bar Cable Triceps Pushdown", .arms, 55)],
+               ("Cable Triceps Pushdown", .arms, 55)],
               startDaysAgo: 60, endDaysAgo: 6, count: 14, overload: 0, sets: 3, reps: 10)
 
         // Fading: trained hard early, abandoned four weeks ago.
