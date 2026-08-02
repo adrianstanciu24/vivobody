@@ -6,6 +6,7 @@
 //    • Your journey — one carded hero: the engraved lifetime odometer
 //      with its kicker inside, spec line, and training-age rail (the
 //      same physical-object shape as History's week hero).
+//    • Insights — a bold portal into the personal analytics layer.
 //    • Milestones — the closest threshold leads a horizontal rail.
 //    • Personal records — top standing records, full wall on tap.
 //    • Body weight — latest entry + sparkline, linking to detail.
@@ -86,21 +87,25 @@ struct MeScreen: View {
                         .settleIn(0)
 
                     GroupSeparator(verticalPadding: Space.lg)
-                    milestonesSection
+                    insightsPortal
                         .settleIn(1)
+
+                    GroupSeparator(verticalPadding: Space.lg)
+                    milestonesSection
+                        .settleIn(2)
 
                     if hasStandingRecords {
                         GroupSeparator(verticalPadding: Space.lg)
                         personalRecordsSection
-                            .settleIn(2)
+                            .settleIn(3)
                     }
 
                     GroupSeparator(verticalPadding: Space.lg)
                     bodyWeightSection
-                        .settleIn(hasStandingRecords ? 3 : 2)
+                        .settleIn(hasStandingRecords ? 4 : 3)
                     GroupSeparator(verticalPadding: Space.lg)
                     monthlyRecapSection
-                        .settleIn(hasStandingRecords ? 4 : 3)
+                        .settleIn(hasStandingRecords ? 5 : 4)
                 }
                 .padding(.top, Space.sm)
                 // Extra tail so the last row clears the floating tab bar
@@ -257,6 +262,53 @@ struct MeScreen: View {
     }()
 
     // MARK: - Stats
+
+    /// A graphic shortcut to the dedicated Insights tab. It keeps the
+    /// relationship between personal totals and deeper analytics clear
+    /// without making the tab itself harder to discover.
+    private var insightsPortal: some View {
+        Button {
+            appState.presentInsights()
+        } label: {
+            HStack(spacing: Space.lg) {
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    HStack(spacing: Space.sm) {
+                        Text("INSIGHTS")
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Tint.primary)
+                            .tracking(1.2)
+                        Capsule()
+                            .fill(Tint.primary)
+                            .frame(width: 22, height: 3)
+                            .shadow(color: Tint.primary.opacity(0.55), radius: 5)
+                    }
+
+                    Text("Read your training")
+                        .font(Typography.title)
+                        .foregroundStyle(Ink.primary)
+                        .multilineTextAlignment(.leading)
+
+                    Text("Load, strength, rhythm, and balance — one layer deeper.")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
+
+                InsightPortalMark()
+                    .frame(width: 94, height: 104)
+                    .accessibilityHidden(true)
+            }
+            .padding(Space.xl)
+            .contentCard()
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Insights")
+        .accessibilityHint("Opens analysis of your training load, strength, rhythm, and balance")
+    }
 
     /// Lifetime totals as an *odometer*: one engraved volume numeral is
     /// the whole story, with workouts / sets / PRs trailing as a quiet
@@ -546,6 +598,87 @@ struct MeScreen: View {
             )
         case .unavailable:
             return Stat(value: "—", label: "volume unavailable")
+        }
+    }
+}
+
+/// Compact oscilloscope-like mark for the Insights portal. Three live
+/// signals cross a glowing core so the destination reads as analysis,
+/// not as another settings/list row.
+private struct InsightPortalMark: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            Tint.primary.opacity(0.25),
+                            Tint.primary.opacity(0.06),
+                            .clear,
+                        ],
+                        center: .center,
+                        startRadius: 1,
+                        endRadius: 48
+                    )
+                )
+
+            Canvas { context, size in
+                let rows: [[CGPoint]] = [
+                    [
+                        CGPoint(x: 0, y: size.height * 0.67),
+                        CGPoint(x: size.width * 0.24, y: size.height * 0.52),
+                        CGPoint(x: size.width * 0.45, y: size.height * 0.59),
+                        CGPoint(x: size.width * 0.67, y: size.height * 0.29),
+                        CGPoint(x: size.width, y: size.height * 0.36),
+                    ],
+                    [
+                        CGPoint(x: 0, y: size.height * 0.34),
+                        CGPoint(x: size.width * 0.25, y: size.height * 0.41),
+                        CGPoint(x: size.width * 0.50, y: size.height * 0.30),
+                        CGPoint(x: size.width * 0.73, y: size.height * 0.56),
+                        CGPoint(x: size.width, y: size.height * 0.48),
+                    ],
+                    [
+                        CGPoint(x: 0, y: size.height * 0.76),
+                        CGPoint(x: size.width * 0.30, y: size.height * 0.70),
+                        CGPoint(x: size.width * 0.53, y: size.height * 0.76),
+                        CGPoint(x: size.width * 0.78, y: size.height * 0.64),
+                        CGPoint(x: size.width, y: size.height * 0.68),
+                    ],
+                ]
+                let colors: [Color] = [
+                    Tint.primary,
+                    Ink.primary.opacity(0.60),
+                    Ink.primary.opacity(0.24),
+                ]
+
+                for (index, points) in rows.enumerated() {
+                    var path = Path()
+                    guard let first = points.first else { continue }
+                    path.move(to: first)
+                    for point in points.dropFirst() {
+                        path.addLine(to: point)
+                    }
+                    context.stroke(
+                        path,
+                        with: .color(colors[index]),
+                        style: StrokeStyle(
+                            lineWidth: index == 0 ? 2.5 : 1.2,
+                            lineCap: .round,
+                            lineJoin: .round
+                        )
+                    )
+                }
+            }
+            .padding(.vertical, Space.md)
+
+            Circle()
+                .stroke(Tint.primary.opacity(0.36), lineWidth: 1)
+                .frame(width: 42, height: 42)
+            Circle()
+                .fill(Tint.primary)
+                .frame(width: 7, height: 7)
+                .shadow(color: Tint.primary.opacity(0.8), radius: 7)
         }
     }
 }

@@ -2,9 +2,9 @@
 //  IntensityMixTests.swift
 //  vivobodyTests
 //
-//  Guards the rep-range distribution: zone bucketing (1–5 / 6–12 /
-//  13+), the 4-week window, exclusion of holds and unlogged sets, and
-//  the dominant-zone read.
+//  Guards the rep-range distribution: plain low / moderate / high-rep
+//  bucketing, the 28-day mix, an exact 12-calendar-week chart window,
+//  future-date exclusion, sparse-sample state, and the dominant read.
 //
 
 import Foundation
@@ -104,10 +104,10 @@ struct IntensityMixTests {
         #expect(mix.enduranceSets == 0)
 
         let week = archive.weeklyIntensity(now: now)
-        #expect(week.count == 1)
-        #expect(week[0].strengthSets == 1)
-        #expect(week[0].hypertrophySets == 1)
-        #expect(week[0].enduranceSets == 0)
+        #expect(week.count == 12)
+        #expect(week.last?.strengthSets == 1)
+        #expect(week.last?.hypertrophySets == 1)
+        #expect(week.last?.enduranceSets == 0)
     }
 
     @Test func respectsTheWindow() {
@@ -117,6 +117,35 @@ struct IntensityMixTests {
         #expect(mix.total == 1)
         #expect(mix.hypertrophySets == 1)
         #expect(mix.strengthSets == 0)
+    }
+
+    @Test func futureSessionsAreExcluded() {
+        let future = session(daysAgo: -1, [lift([(3, true), (8, true), (20, true)])])
+        let mix = [future].intensityMix(now: now)
+        let weeks = [future].weeklyIntensity(now: now)
+
+        #expect(mix.total == 0)
+        #expect(weeks.count == 12)
+        #expect(weeks.allSatisfy { $0.total == 0 })
+    }
+
+    @Test func sparseSamplesAreLabelledUntilSixSets() {
+        let sparse = [session(daysAgo: 1, [lift([(8, true)])])].intensityMix(now: now)
+        let clearSets: [(reps: Int, completed: Bool)] = Array(
+            repeating: (reps: 8, completed: true),
+            count: 6
+        )
+        let clear = [session(daysAgo: 1, [lift(clearSets)])]
+            .intensityMix(now: now)
+
+        #expect(sparse.hasSparseSample)
+        #expect(!clear.hasSparseSample)
+    }
+
+    @Test func zonesUseDescriptiveRepLabels() {
+        #expect(IntensityZone.strength.label == "Low reps")
+        #expect(IntensityZone.hypertrophy.label == "Moderate reps")
+        #expect(IntensityZone.endurance.label == "High reps")
     }
 
     // MARK: - Dominant + shares
@@ -147,37 +176,44 @@ struct IntensityMixTests {
         let thisWeek = session(daysAgo: 0, [lift([(3, true), (8, true)])])
         let lastWeek = session(daysAgo: 7, [lift([(15, true)])])
         let weeks = [thisWeek, lastWeek].weeklyIntensity(now: now)
+        let active = weeks.filter { $0.total > 0 }
 
-        #expect(weeks.count == 2)
+        #expect(weeks.count == 12)
+        #expect(active.count == 2)
         // Chronological ascending: older week first.
-        #expect(weeks[0].weekStart < weeks[1].weekStart)
-        #expect(weeks[0].enduranceSets == 1)
-        #expect(weeks[0].total == 1)
-        #expect(!weeks[0].isCurrentWeek)
-        #expect(weeks[1].strengthSets == 1)
-        #expect(weeks[1].hypertrophySets == 1)
-        #expect(weeks[1].total == 2)
-        #expect(weeks[1].isCurrentWeek)
+        #expect(active[0].weekStart < active[1].weekStart)
+        #expect(active[0].enduranceSets == 1)
+        #expect(active[0].total == 1)
+        #expect(!active[0].isCurrentWeek)
+        #expect(active[1].strengthSets == 1)
+        #expect(active[1].hypertrophySets == 1)
+        #expect(active[1].total == 2)
+        #expect(active[1].isCurrentWeek)
     }
 
     @Test func weeklyRespectsTheWindow() {
         let recent = session(daysAgo: 3, [lift([(8, true)])])
         let ancient = session(daysAgo: 100, [lift([(3, true)])])
         let weeks = [recent, ancient].weeklyIntensity(weeks: 12, now: now)
-        #expect(weeks.count == 1)
-        #expect(weeks[0].hypertrophySets == 1)
+        #expect(weeks.count == 12)
+        #expect(weeks.reduce(0) { $0 + $1.hypertrophySets } == 1)
+        #expect(weeks.reduce(0) { $0 + $1.strengthSets } == 0)
     }
 
-    @Test func weeklyOmitsEmptyWeeksAndHolds() {
+    @Test func weeklyPreservesEmptyWeeksAndIgnoresHolds() {
         let holdsOnly = session(daysAgo: 7, [hold(seconds: [60])])
         let repsWeek = session(daysAgo: 0, [lift([(10, true)])])
         let weeks = [holdsOnly, repsWeek].weeklyIntensity(now: now)
-        #expect(weeks.count == 1)
-        #expect(weeks[0].hypertrophySets == 1)
+        #expect(weeks.count == 12)
+        #expect(weeks.filter { $0.total > 0 }.count == 1)
+        #expect(weeks.last?.hypertrophySets == 1)
     }
 
-    @Test func weeklyEmptyHistoryIsEmpty() {
-        #expect([WorkoutSession]().weeklyIntensity(now: now).isEmpty)
+    @Test func weeklyEmptyHistoryStillReturnsTheExactWindow() {
+        let weeks = [WorkoutSession]().weeklyIntensity(now: now)
+        #expect(weeks.count == 12)
+        #expect(weeks.allSatisfy { $0.total == 0 })
+        #expect(weeks.last?.isCurrentWeek == true)
     }
 
     @Test func weeklyMarksOnlyTheCurrentCalendarWeek() {
@@ -188,8 +224,19 @@ struct IntensityMixTests {
         ]
         let weeks = sessions.weeklyIntensity(now: now)
 
-        #expect(weeks.count == 3)
+        #expect(weeks.count == 12)
+        #expect(weeks.filter { $0.total > 0 }.count == 3)
         #expect(weeks.filter(\.isCurrentWeek).count == 1)
         #expect(weeks.last?.isCurrentWeek == true)
+    }
+
+    @Test func requestedWindowHasExactlyConsecutiveCalendarWeeks() {
+        let calendar = Calendar.current
+        let weeks = [WorkoutSession]().weeklyIntensity(weeks: 12, now: now)
+
+        #expect(weeks.count == 12)
+        for pair in zip(weeks, weeks.dropFirst()) {
+            #expect(calendar.date(byAdding: .weekOfYear, value: 1, to: pair.0.weekStart) == pair.1.weekStart)
+        }
     }
 }

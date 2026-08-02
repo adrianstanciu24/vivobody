@@ -82,14 +82,20 @@ nonisolated enum VolumeZone: Hashable, Sendable {
 
 // MARK: - Per-muscle stat
 
-/// One muscle's weekly volume picture: how many effective sets it
-/// received in the window, when it was last trained (over the whole
-/// archive, not just the window), and the landmark it's judged
+/// One muscle's volume picture: how many effective sets it received
+/// in the caller's window, its all-time allocation for the Training
+/// Signature, when it was last trained (over the whole archive, not
+/// just the current window), and the weekly landmark it's judged
 /// against.
 nonisolated struct MuscleVolumeStat: Identifiable, Hashable, Sendable {
     var id: Muscle { muscle }
     let muscle: Muscle
+    /// Effective sets in the caller-selected window (normally 7 days).
     let effectiveSets: Double
+    /// Effective sets across the complete archive. Kept separate from
+    /// `effectiveSets` so weekly volume surfaces and the lifetime
+    /// Training Signature never silently share different timeframes.
+    let allTimeEffectiveSets: Double
     /// Whole days since the muscle last received any completed work.
     /// `nil` means it's never been trained.
     let daysSinceLastTrained: Int?
@@ -141,12 +147,16 @@ nonisolated extension AnalyticsAccumulator {
         isCancelled: @Sendable () -> Bool = { false }
     ) -> [MuscleVolumeStat] {
         let cutoff = now.addingTimeInterval(-window)
-
         var effective: [Muscle: Double] = [:]
+        var allTimeEffective: [Muscle: Double] = [:]
         var lastTrained: [Muscle: Date] = [:]
 
         sessionReplay: for session in sessions {
             guard !isCancelled() else { return [] }
+            // Reports are snapshots "as of" `now`; scheduled or
+            // accidentally future-dated sessions cannot count as work
+            // already performed or produce negative recency.
+            guard session.date <= now else { continue }
             for exercise in session.exercises {
                 guard !isCancelled() else { break sessionReplay }
                 let credit = exercise.byMuscle
@@ -165,6 +175,7 @@ nonisolated extension AnalyticsAccumulator {
                     if inWindow {
                         effective[muscle, default: 0] += sets
                     }
+                    allTimeEffective[muscle, default: 0] += sets
                 }
             }
         }
@@ -187,6 +198,7 @@ nonisolated extension AnalyticsAccumulator {
             result.append(MuscleVolumeStat(
                 muscle: muscle,
                 effectiveSets: effective[muscle] ?? 0,
+                allTimeEffectiveSets: allTimeEffective[muscle] ?? 0,
                 daysSinceLastTrained: days,
                 landmark: VolumeLandmark.landmark(for: muscle)
             ))

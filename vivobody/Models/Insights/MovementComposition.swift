@@ -29,7 +29,20 @@ nonisolated struct CompositionSplit: Hashable, Sendable {
     let unclassifiedSets: Int
 
     var classifiedTotal: Int { compoundSets + isolationSets }
+    var totalSets: Int { classifiedTotal + unclassifiedSets }
     var hasData: Bool { classifiedTotal > 0 }
+
+    /// How much of the eligible strength work can support the visible
+    /// compound/isolation read. Keeping this separate from the split
+    /// prevents a tiny classified minority from presenting as a
+    /// confident 100% verdict.
+    var classificationCoverage: Double {
+        totalSets > 0 ? Double(classifiedTotal) / Double(totalSets) : 0
+    }
+
+    /// A handful of sets can hint at allocation, but should not wear
+    /// the same certainty as a settled four-week block.
+    var isEarlyRead: Bool { totalSets > 0 && totalSets < 6 }
 
     /// Count of completed sets for a mechanic (compound/isolation).
     /// Unclassified is not a `Mechanic` case and is read directly off

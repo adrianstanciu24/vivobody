@@ -5,8 +5,9 @@
 //  Builds the shared per-exercise history index used by live PR
 //  detection and workout-start prefill. One archive pass retains the
 //  standing record, latest logged prescription, distinct session
-//  count, and latest performance date so hot paths never query and
-//  rescan every historical Exercise independently.
+//  count, estimated-strength readiness dates, and latest performance
+//  date so hot paths never query and rescan every historical Exercise
+//  independently.
 //
 
 import Foundation
@@ -49,6 +50,10 @@ nonisolated struct ExerciseHistorySummary: Hashable, Sendable {
     let mostRecentInstance: ExerciseHistoryInstance
     let sessionCount: Int
     let latestPerformanceDate: Date
+    /// One date per workout that supplied a confidence-eligible e1RM
+    /// sample. Exercise Detail uses this even when only one sample exists;
+    /// the chart-oriented `ExerciseProgress` collection starts at two.
+    let estimatedOneRepMaxDates: [Date]
 
     private let allTimeBests: [PerformanceSemanticKind: StrengthPerformance]
     private let mostRecentInstancesBySignature:
@@ -98,6 +103,7 @@ nonisolated struct ExerciseHistorySummary: Hashable, Sendable {
         mostRecentInstance: ExerciseHistoryInstance,
         sessionCount: Int,
         latestPerformanceDate: Date,
+        estimatedOneRepMaxDates: [Date],
         allTimeBests: [PerformanceSemanticKind: StrengthPerformance],
         mostRecentInstancesBySignature:
             [ExercisePerformanceSignature: ExerciseHistoryInstance]
@@ -105,6 +111,7 @@ nonisolated struct ExerciseHistorySummary: Hashable, Sendable {
         self.mostRecentInstance = mostRecentInstance
         self.sessionCount = sessionCount
         self.latestPerformanceDate = latestPerformanceDate
+        self.estimatedOneRepMaxDates = estimatedOneRepMaxDates
         self.allTimeBests = allTimeBests
         self.mostRecentInstancesBySignature = mostRecentInstancesBySignature
     }
@@ -117,12 +124,17 @@ private nonisolated struct ExerciseHistoryBuilder {
     var mostRecentInstancesBySignature:
         [ExercisePerformanceSignature: ExerciseHistoryInstance] = [:]
     var sessionIDs: Set<UUID> = []
+    var estimatedOneRepMaxDatesBySessionID: [UUID: Date] = [:]
 
     mutating func add(
         _ instance: ExerciseHistoryInstance,
-        sessionID: UUID
+        sessionID: UUID,
+        hasEstimatedOneRepMax: Bool
     ) {
         sessionIDs.insert(sessionID)
+        if hasEstimatedOneRepMax {
+            estimatedOneRepMaxDatesBySessionID[sessionID] = instance.date
+        }
         if instance.date > latestPerformanceDate {
             latestPerformanceDate = instance.date
         }
@@ -156,6 +168,8 @@ private nonisolated struct ExerciseHistoryBuilder {
             mostRecentInstance: mostRecentInstance,
             sessionCount: sessionIDs.count,
             latestPerformanceDate: latestPerformanceDate,
+            estimatedOneRepMaxDates:
+                estimatedOneRepMaxDatesBySessionID.values.sorted(),
             allTimeBests: allTimeBests,
             mostRecentInstancesBySignature: mostRecentInstancesBySignature
         )
@@ -207,7 +221,12 @@ nonisolated extension AnalyticsAccumulator {
                             : nil
                 )
                 builders[exercise.historyKey, default: ExerciseHistoryBuilder()]
-                    .add(instance, sessionID: replay.session.id)
+                    .add(
+                        instance,
+                        sessionID: replay.session.id,
+                        hasEstimatedOneRepMax:
+                            exercise.bestEstimatedOneRepMaxSample != nil
+                    )
             }
         }
 

@@ -53,6 +53,9 @@ enum UITestSupport {
         if CommandLine.arguments.contains("--ui-test-single-exercise-history") {
             seedSingleExerciseHistory(in: context)
         }
+        if CommandLine.arguments.contains("--ui-test-insights-empty-instruments") {
+            seedInsightsEmptyInstruments(in: context)
+        }
         if CommandLine.arguments.contains("--ui-test-scheduled-template") {
             seedScheduledTemplate(in: context)
         }
@@ -205,6 +208,40 @@ enum UITestSupport {
             exercises: [exercise],
             restDuration: 90,
             startedAt: completedAt.addingTimeInterval(-35 * 60)
+        )
+        session.completedAt = completedAt
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// One archived conditioning workout for the Insights screen's
+    /// per-instrument empty states. Consistency has a factual calendar
+    /// mark, while strength-only signals remain deliberately unqualified.
+    private static func seedInsightsEmptyInstruments(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let exercise = Exercise(
+            name: "Incline Walk",
+            group: .legs,
+            plannedSets: 1,
+            plannedReps: 0,
+            plannedWeight: 0,
+            trackingMode: .duration,
+            modality: .conditioning,
+            loadMode: .nonComparable,
+            plannedDuration: 20 * 60,
+            sortOrder: 0
+        )
+        exercise.sets.first?.isCompleted = true
+
+        let completedAt = Date().addingTimeInterval(-15 * 60)
+        let session = WorkoutSession(
+            exercises: [exercise],
+            restDuration: 90,
+            startedAt: completedAt.addingTimeInterval(-25 * 60)
         )
         session.completedAt = completedAt
         context.insert(session)

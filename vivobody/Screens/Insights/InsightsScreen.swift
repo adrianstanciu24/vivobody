@@ -2,71 +2,35 @@
 //  InsightsScreen.swift
 //  vivobody
 //
-//  The Insights tab, structured as a sequence of movements rather
-//  than a wall of lookalike bars:
+//  Personal analytics tab. The detailed visual instruments begin
+//  immediately in decision order: signature, load, composition,
+//  rep ranges, consistency, and training balance. Per-exercise strength
+//  curves live with their exercise in Library.
 //
-//    1. Signature — the generative hero: one mark for the whole shape
-//       of your training (no body here; the 3D figure is Today's).
-//    2. Strength — an estimated-1RM line chart per lift, a record line
-//       to chase (Swift Charts, not bars).
-//    3. Composition — recent working-set allocation by exercise,
-//       paired with a compound/isolation exercise-type split.
-//    4. Intensity — 12 weeks of working sets stacked per week by
-//       rep-range zone: the mix and its drift in one chart.
-//    5. Rhythm — the consistency heatmap plus a weekly-volume curve.
-//    6. Load — rolling hard-set equivalents against the user's
-//       personal productive range, with the work that drove it.
-//    7. Symmetry — the antagonist butterfly bars as the coda.
-//
-//  Every section is chart-first: the graphic leads at full size, one
-//  caption line reads it, and the numbers ride the chart instead of
-//  repeating it. This screen fetches the data, runs the value-type
-//  models, and lays the movements out with a hairline between each.
-//  Each analytic instrument rests on a contentCard (header on the
-//  canvas, chart in the card, chip footnotes between); only the
-//  signature hero stays frameless so its glow bleeds into the black,
-//  mirroring Today's edge-to-edge figure. Visual language follows the
-//  rest of the app: black, type-forward, the single orange accent for
-//  "on target," danger-red only where something's slipping.
-//
-//  Free-tier users see this exact same sequence and spacing, frozen
-//  beneath one frameless frosted layer per major section. No paywall
-//  cards or labels alter the content layout; a single persistent
-//  unlock control carries the purchase action.
+//  Free-tier users see the same sequence and spacing, frozen beneath
+//  a frameless blur. No replacement paywall card alters the content;
+//  one persistent bottom control carries the purchase action.
 //
 
 import VivoKit
 import SwiftUI
-import SwiftData
 
 struct InsightsScreen: View {
     @Bindable var appState: AppState
 
-    /// One-row probe: does any archived session exist? Only the empty
-    /// state hangs off this. The reports themselves are requested by
-    /// the shared AnalyticsFeeder (which builds the Insights-only tier
-    /// while this tab is selected), so this screen holds no
-    /// complete-archive query of its own.
-    @Query private var latestSessions: [WorkoutSession]
-
-    private var hasHistory: Bool { latestSessions.first != nil }
-
     init(appState: AppState) {
         self.appState = appState
-        var latest = FetchDescriptor<WorkoutSession>(
-            predicate: #Predicate { $0.completedAt != nil },
-            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-        )
-        latest.fetchLimit = 1
-        _latestSessions = Query(latest)
     }
 
     var body: some View {
         Group {
-            if !hasHistory {
-                emptyState
+            if !appState.analyticsArchiveHasSessions,
+               appState.analytics.hasCoreReports {
+                emptyState(hasArchivedWorkout: false)
             } else if let reports = appState.analytics.insightsReports {
-                if appState.pro.isUnlocked {
+                if !hasQualifyingData(reports) {
+                    emptyState(hasArchivedWorkout: true)
+                } else if appState.pro.isUnlocked {
                     loadedContent(reports)
                 } else {
                     lockedContent(reports)
@@ -78,22 +42,103 @@ struct InsightsScreen: View {
         .screenBackground()
     }
 
-    // MARK: - Locked state (free tier)
+    // MARK: - Loaded state
 
-    /// The user's real insights, each frozen beneath its own frosted
-    /// cover. Its layout is identical to the unlocked screen: no
-    /// inserted introduction, padding, card shape, or Pro labels.
-    /// Every frozen section opens the shared purchase sheet, and one
-    /// persistent control carries the only explicit CTA. Never shown
-    /// before the first workout (the empty state wins), and never as
-    /// a popup anywhere else.
+    private func loadedContent(
+        _ reports: SessionAnalytics.InsightsReports
+    ) -> some View {
+        let signature = TrainingSignature(
+            volume: reports.core.volume,
+            cadence: reports.core.overview.averageWorkoutsPerWeek
+        )
+
+        return ScrollView(.vertical) {
+            LazyVStack(alignment: .leading, spacing: 0) {
+                insightSections(
+                    reports: reports,
+                    signature: signature,
+                    locked: false
+                )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, Space.sm)
+            .padding(.bottom, Space.xxl)
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+    }
+
+    @ViewBuilder
+    private func insightSections(
+        reports: SessionAnalytics.InsightsReports,
+        signature: TrainingSignature,
+        locked: Bool
+    ) -> some View {
+        let core = reports.core
+        let deep = reports.deep
+
+        insightSection(title: "Your signature", index: 0, locked: locked) {
+            SignatureSection(signature: signature)
+        }
+        insightSection(title: "Training load", index: 1, locked: locked) {
+            TrainingLoadSection(report: core.load)
+        }
+        insightSection(title: "Strength composition", index: 2, locked: locked) {
+            ExerciseDominanceSection(board: deep.dominance, split: deep.composition)
+        }
+        insightSection(title: "Rep ranges", index: 3, locked: locked) {
+            IntensityMixSection(
+                mix: deep.intensity,
+                weeks: deep.intensityWeeks,
+                migration: deep.migration
+            )
+        }
+        insightSection(title: "Consistency", index: 4, locked: locked) {
+            ConsistencySection(report: deep.consistency)
+        }
+        insightSection(
+            title: "Training balance",
+            index: 5,
+            locked: locked,
+            isLast: true
+        ) {
+            SymmetrySection(board: deep.symmetry)
+        }
+    }
+
+    @ViewBuilder
+    private func insightSection<Content: View>(
+        title: String,
+        index: Int,
+        locked: Bool,
+        isLast: Bool = false,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        if locked {
+            LockedInsightPreview(
+                title: title,
+                action: requestUnlock,
+                content: content
+            )
+        } else {
+            content()
+                .settleIn(index)
+        }
+
+        if !isLast {
+            GroupSeparator()
+        }
+    }
+
+    // MARK: - Locked state
+
     private func lockedContent(
         _ reports: SessionAnalytics.InsightsReports
     ) -> some View {
         let signature = TrainingSignature(
             volume: reports.core.volume,
-            development: reports.core.development.intensities,
-            consistency: reports.deep.consistency
+            cadence: reports.core.overview.averageWorkoutsPerWeek
         )
 
         return ScrollView(.vertical) {
@@ -131,10 +176,10 @@ struct InsightsScreen: View {
                         .lineLimit(1)
                 }
             }
-            .font(Typography.headline)
+            .font(Typography.title)
             .foregroundStyle(Tint.onAccent)
-            .frame(minHeight: Space.tapMin)
-            .padding(.horizontal, Space.xl)
+            .frame(minHeight: Space.rowMin)
+            .padding(.horizontal, Space.xxl)
             .coloredGlassControl(cornerRadius: Radius.pill, fill: Tint.primary)
             .softElevation(radius: 14, y: 7, opacity: 0.42)
         }
@@ -154,122 +199,76 @@ struct InsightsScreen: View {
         appState.pro.requestUnlock()
     }
 
-    private func loadedContent(
+    // MARK: - Qualification and first use
+
+    private func hasQualifyingData(
         _ reports: SessionAnalytics.InsightsReports
-    ) -> some View {
-        let signature = TrainingSignature(
-            volume: reports.core.volume,
-            development: reports.core.development.intensities,
-            consistency: reports.deep.consistency
-        )
+    ) -> Bool {
+        reports.deep.consistency.hasActivity
+            || reports.deep.dominance.hasAny
+            || reports.deep.composition.totalSets > 0
+            || reports.core.volume.contains { $0.allTimeEffectiveSets > 0 }
+            || reports.core.load.currentLoad > 0
+    }
 
-        return ScrollView(.vertical) {
-            LazyVStack(alignment: .leading, spacing: 0) {
-                insightSections(
-                    reports: reports,
-                    signature: signature,
-                    locked: false
+    private func emptyState(hasArchivedWorkout: Bool) -> some View {
+        VStack(spacing: Space.xl) {
+            Spacer(minLength: Space.xxl)
+
+            InsightEmptyMark()
+                .frame(width: 190, height: 150)
+                .accessibilityHidden(true)
+
+            VStack(spacing: Space.sm) {
+                Text(hasArchivedWorkout ? "Nothing to read yet" : "No training logged yet")
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.primary)
+                    .multilineTextAlignment(.center)
+
+                Text(
+                    hasArchivedWorkout
+                        ? "Complete working sets in a new workout. Recent history with enough comparable work will bring the first signals into view."
+                        : "Complete a workout and Insights will read back your load, rhythm, and training shape."
                 )
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, Space.sm)
-            .padding(.bottom, Space.xxl)
-        }
-        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-        .scrollEdgeEffectStyle(.soft, for: .bottom)
-    }
 
-    /// The one canonical section order for both entitlement states.
-    /// Keeping the sequence shared means a future insight cannot be
-    /// added to the unlocked screen while silently missing its Pro
-    /// preview (or vice versa).
-    @ViewBuilder
-    private func insightSections(
-        reports: SessionAnalytics.InsightsReports,
-        signature: TrainingSignature,
-        locked: Bool
-    ) -> some View {
-        let core = reports.core
-        let deep = reports.deep
-        insightSection(title: "Your signature", index: 0, locked: locked) {
-            SignatureSection(signature: signature, report: deep.consistency)
-        }
-        insightSection(title: "Strength", index: 1, locked: locked) {
-            StrengthTrajectorySection(board: core.strength, progress: core.progress)
-        }
-        insightSection(title: "Composition", index: 2, locked: locked) {
-            ExerciseDominanceSection(board: deep.dominance, split: deep.composition)
-        }
-        insightSection(title: "Intensity", index: 3, locked: locked) {
-            IntensityMixSection(
-                mix: deep.intensity,
-                weeks: deep.intensityWeeks,
-                migration: deep.migration
-            )
-        }
-        insightSection(title: "Consistency", index: 4, locked: locked) {
-            ConsistencySection(report: deep.consistency)
-        }
-        insightSection(title: "Training load", index: 5, locked: locked) {
-            TrainingLoadSection(report: core.load)
-        }
-        insightSection(title: "Symmetry", index: 6, locked: locked, isLast: true) {
-            SymmetrySection(board: deep.symmetry)
-        }
-    }
-
-    @ViewBuilder
-    private func insightSection<Content: View>(
-        title: String,
-        index: Int,
-        locked: Bool,
-        isLast: Bool = false,
-        @ViewBuilder content: @escaping () -> Content
-    ) -> some View {
-        if locked {
-            LockedInsightPreview(
-                title: title,
-                action: requestUnlock,
-                content: content
-            )
-            if !isLast {
-                GroupSeparator()
+            PrimaryActionButton(
+                title: "Go to Today",
+                subtitle: "Your next workout is one tap away",
+                icon: "arrow.right"
+            ) {
+                appState.selectedTab = .today
             }
-        } else {
-            content()
-                .settleIn(index)
-            if !isLast {
-                GroupSeparator()
-            }
+
+            Spacer(minLength: Space.xxl)
         }
-    }
-
-    // MARK: - Empty state
-
-    private var emptyState: some View {
-        ContentUnavailableView(
-            "No training logged yet",
-            systemImage: "chart.xyaxis.line",
-            description: Text("Once you complete a few workouts, this tab reads back the shape of your training, what to train next, and where your strength is heading.")
-        )
+        .padding(.horizontal, Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var loadingState: some View {
-        ProgressView("Building insights")
-            .controlSize(.large)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .accessibilityHint("Your training history is being analyzed")
+        VStack(spacing: Space.lg) {
+            InsightEmptyMark(isLoading: true)
+                .frame(width: 150, height: 118)
+                .accessibilityHidden(true)
+            ProgressView("Building your training signals")
+                .controlSize(.large)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityHint("Your training history is being analyzed")
     }
+
 }
 
 // MARK: - Locked preview
 
-/// One full Insights movement frozen in place beneath an interactive,
-/// frameless frosted treatment. It adds no padding, shape, border, or
-/// separate labels: the original header, timeframe, chart, and values
-/// all receive the same blur and dimming. Accessibility sees only the
-/// locked section, never the analytics hidden beneath it.
+/// A full insight frozen in place beneath the old frameless frosted
+/// treatment. The real section keeps its exact layout and spacing;
+/// accessibility exposes only the purchase target, not hidden data.
 private struct LockedInsightPreview<Content: View>: View {
     let title: String
     let action: () -> Void
@@ -291,6 +290,41 @@ private struct LockedInsightPreview<Content: View>: View {
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel("\(title), locked")
         .accessibilityHint("Unlocks with Vivobody Pro")
+    }
+}
+
+private struct InsightEmptyMark: View {
+    var isLoading = false
+
+    var body: some View {
+        ZStack {
+            RadialGradient(
+                colors: [Tint.primary.opacity(isLoading ? 0.20 : 0.13), .clear],
+                center: .center,
+                startRadius: 1,
+                endRadius: 90
+            )
+
+            ForEach(0..<3, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .stroke(
+                        index == 1
+                            ? Tint.primary.opacity(isLoading ? 0.62 : 0.38)
+                            : Ink.primary.opacity(0.13),
+                        lineWidth: index == 1 ? 1.5 : 1
+                    )
+                    .frame(
+                        width: 54 + CGFloat(index) * 34,
+                        height: 112 - CGFloat(index) * 22
+                    )
+                    .rotationEffect(.degrees(Double(index - 1) * 31))
+            }
+
+            Circle()
+                .fill(Tint.primary)
+                .frame(width: 8, height: 8)
+                .shadow(color: Tint.primary.opacity(0.78), radius: 9)
+        }
     }
 }
 

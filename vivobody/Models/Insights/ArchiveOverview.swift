@@ -24,6 +24,9 @@ nonisolated struct ArchiveOverview: Sendable {
     let lifetimeTonnage: ComparableTonnageSummary
     /// Earliest completion — the first day of logged training.
     let trainingSince: Date?
+    /// Lifetime workout cadence, averaged from the first logged day
+    /// through `now` with a one-week minimum observation span.
+    let averageWorkoutsPerWeek: Double
     /// Weeks-in-a-row consistency (current + longest).
     let streak: WorkoutStreak
     /// The current calendar month's recap.
@@ -186,11 +189,31 @@ nonisolated extension AnalyticsAccumulator {
         let monthFormatter = DateFormatter()
         monthFormatter.dateFormat = "LLLL"
 
+        // A first workout should read as 1.0/week, not an extrapolated
+        // 7.0/week. After the first seven days the denominator expands
+        // continuously through `now`, so this remains a true lifetime
+        // rate and naturally reflects inactive stretches.
+        let cadenceDates = dates.filter { $0 <= now }
+        let averageWorkoutsPerWeek: Double
+        if let first = cadenceDates.min() {
+            let daySpan = calendar.dateComponents(
+                [.day],
+                from: calendar.startOfDay(for: first),
+                to: calendar.startOfDay(for: now)
+            ).day ?? 0
+            let observedDays = max(7, daySpan + 1)
+            averageWorkoutsPerWeek = Double(cadenceDates.count) * 7.0
+                / Double(observedDays)
+        } else {
+            averageWorkoutsPerWeek = 0
+        }
+
         return ArchiveOverview(
             totalWorkouts: completed.count,
             totalSets: totalSets,
             lifetimeTonnage: lifetimeTonnage,
             trainingSince: trainingSince,
+            averageWorkoutsPerWeek: averageWorkoutsPerWeek,
             streak: WorkoutStreak.compute(dates: dates, now: now, calendar: calendar),
             monthlyRecap: MonthlyRecap(
                 monthLabel: monthFormatter.string(from: now),

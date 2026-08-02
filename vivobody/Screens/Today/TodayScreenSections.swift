@@ -31,7 +31,7 @@ extension TodayScreen {
         )
             .padding(.horizontal, -Space.gutter)
             .accessibilityElement()
-            .accessibilityLabel("Training development body model")
+            .accessibilityLabel("Current training development body model")
             .accessibilityValue("Muscle colour reflects your recent training development")
             .accessibilityHint("Opens a text summary for each muscle group")
             .accessibilityAction {
@@ -99,7 +99,7 @@ extension TodayScreen {
         } label: {
             VStack(spacing: Space.sm) {
                 developmentLegendBands
-                Text("Training development · tap for details")
+                Text("Current training development · tap for details")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.secondary)
             }
@@ -110,7 +110,7 @@ extension TodayScreen {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Training development legend")
+        .accessibilityLabel("Current training development legend")
         .accessibilityHint("Opens muscle details")
     }
 

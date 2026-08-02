@@ -100,11 +100,12 @@ extension ExerciseDetailScreen {
         }
     }
 
-    /// True when the hero has a plateau or readiness pill to show —
-    /// gates the conditional include so the VStack spacing doesn't
-    /// leave a gap when neither fires.
+    /// True when the hero has a plateau or readiness pill to show.
+    /// Comparable dynamic lifts leave direction to the e1RM trend card,
+    /// avoiding a raw-record "stalled" pill that could contradict it.
     var hasStatusPill: Bool {
-        plateauStatus != nil || readinessAction != nil
+        (!supportsEstimatedOneRepMax && plateauStatus != nil)
+            || readinessAction != nil
     }
 
     /// Resistance progression follows the exercise's load polarity.
@@ -117,7 +118,7 @@ extension ExerciseDetailScreen {
     /// the more urgent signal. Renders nothing when neither applies.
     @ViewBuilder
     var statusPill: some View {
-        if let plateau = plateauStatus {
+        if !supportsEstimatedOneRepMax, let plateau = plateauStatus {
             pill(text: "Stalled · \(plateau.sessions) sessions", accent: false)
         } else if let readinessAction {
             pill(text: "Ready to \(readinessAction)", accent: true)
@@ -328,15 +329,11 @@ extension ExerciseDetailScreen {
 
     // MARK: - One-rep max
 
-    /// Dedicated, tappable 1RM row. Shows a user-measured max (the
-    /// precise, hand-entered value) when set; otherwise the estimated
-    /// e1RM from logged sets; otherwise an empty "tap to add" prompt
-    /// when there's nothing to show yet. Tapping opens the scrubber
-    /// editor. Dynamic-strength e1RM semantics only — power and holds
-    /// never surface this row.
+    /// Dedicated, tappable tested-1RM row. Estimated strength is owned
+    /// by the trend card below, so this remains an unambiguous manual
+    /// measurement instead of repeating the chart's all-time high.
     var oneRepMaxRow: some View {
         let measured = item.oneRepMax
-        let value = measured ?? estimatedOneRepMax
         return Button {
             Haptics.soft()
             isEditingOneRepMax = true
@@ -352,8 +349,8 @@ extension ExerciseDetailScreen {
 
                 Spacer(minLength: Space.sm)
 
-                if let value {
-                    Text(WeightFormatter.string(value, unit: unit))
+                if let measured {
+                    Text(WeightFormatter.string(measured, unit: unit))
                         .font(Typography.statValue)
                         .foregroundStyle(Ink.primary)
                         .monospacedDigit()
@@ -377,25 +374,20 @@ extension ExerciseDetailScreen {
         .accessibilityLabel("One-rep max")
     }
 
-    /// Sub-label under the "1RM" caption: distinguishes a precise
-    /// measured value from the estimate (with the date the estimate
-    /// peaked), or invites the user to add one.
+    /// Sub-label under the "1RM" caption: this row is deliberately a
+    /// tested value, while logged-set estimates remain in Strength trend.
     func oneRepMaxSubLabel(measured: Double?) -> String {
-        if measured != nil { return "Measured" }
-        guard estimatedOneRepMax != nil else {
-            return "Tap to enter your tested max"
-        }
-        if let date = estimatedOneRepMaxDate {
-            return "Estimated · \(RelativeDate.short(date))"
-        }
-        return "Estimated"
+        measured == nil ? "Tap to enter your tested max" : "Tested"
     }
 
     // MARK: - Chart section
 
     var chartSection: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            Text("Progress")
+        let prog = progress
+        let isStrengthTrend = effectiveChartMetric == .e1rm
+
+        return VStack(alignment: .leading, spacing: Space.lg) {
+            Text(isStrengthTrend ? "Strength trend" : "Progress")
                 .sectionLabelStyle(Opacity.medium)
 
             if item.trackingMode == .reps {
@@ -408,12 +400,26 @@ extension ExerciseDetailScreen {
                 }
             }
 
-            chart
+            if isStrengthTrend {
+                ExerciseStrengthTrendCard(
+                    exerciseName: item.name,
+                    progress: prog,
+                    stat: strengthTrendStat,
+                    readinessDates: strengthTrendReadinessDates,
+                    visiblePoints: visiblePoints(from: prog),
+                    rangeLabel: range == .all ? "All-time" : range.label,
+                    unit: unit
+                )
+            } else {
+                chart
+            }
 
-            GlassEffectContainer(spacing: 8) {
-                HStack(spacing: 8) {
-                    ForEach(TimeRange.allCases) { r in
-                        rangeChip(r)
+            if !isStrengthTrend || strengthTrendStat != nil {
+                GlassEffectContainer(spacing: 8) {
+                    HStack(spacing: 8) {
+                        ForEach(TimeRange.allCases) { r in
+                            rangeChip(r)
+                        }
                     }
                 }
             }
@@ -1118,21 +1124,6 @@ extension ExerciseDetailScreen {
         return nil
     }
 
-    /// When the estimated 1RM peaked — surfaced as the row's "Estimated
-    /// · 7d ago" sub-label.
-    var estimatedOneRepMaxDate: Date? {
-        guard item.modality == .dynamicStrength,
-              item.loadMode.supportsLoadComparison,
-              item.trackingMode == .reps else { return nil }
-        if let prog = progress, let point = prog.bestE1RMPoint {
-            return point.date
-        }
-        if let last = lastInstance, last.topReps > 0 {
-            return last.sessionDate
-        }
-        return nil
-    }
-
     /// Value the editor opens on: the measured max if set, else the
     /// estimate, else the greatest logged effective load or catalog
     /// default. Unknown bodyweight deliberately remains a neutral zero.
@@ -1173,7 +1164,8 @@ extension ExerciseDetailScreen {
     /// `progress` mints fresh point UUIDs on every access.
     func visiblePoints(from prog: ExerciseProgress?) -> [ExerciseProgressPoint] {
         guard let prog else { return [] }
-        var points = prog.points
+        let now = Date()
+        var points = prog.points.filter { $0.date <= now }
         if let cutoff = range.cutoff {
             points = points.filter { $0.date >= cutoff }
         }
@@ -1263,5 +1255,26 @@ extension ExerciseDetailScreen {
             for: item.trackingMode,
             loadMode: item.loadMode
         )
+    }
+
+    /// Cached confidence-gated estimated-strength direction for this
+    /// exercise. The detail uses the exact board already built for Today
+    /// and the widget; no analytics are recomputed during rendering.
+    var strengthTrendStat: StrengthOutlookStat? {
+        guard supportsEstimatedOneRepMax else { return nil }
+        return sessionAnalytics?.strength.stat(forHistoryKey: historyKey)
+            ?? sessionAnalytics?.strength.stat(forHistoryKey: legacyHistoryKey)
+    }
+
+    /// Confidence-eligible workout dates from the cached history index.
+    /// Unlike `ExerciseProgress`, this index retains the first point, so
+    /// the build-up card can honestly advance from 0/4 to 1/4.
+    var strengthTrendReadinessDates: [Date] {
+        guard supportsEstimatedOneRepMax else { return [] }
+        return sessionAnalytics?.exerciseHistorySummaries[historyKey]?
+            .estimatedOneRepMaxDates
+            ?? sessionAnalytics?.exerciseHistorySummaries[legacyHistoryKey]?
+                .estimatedOneRepMaxDates
+            ?? []
     }
 }

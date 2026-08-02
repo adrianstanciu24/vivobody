@@ -4,7 +4,8 @@
 //
 //  Guards personal rolling training load on a virtual clock: estimated
 //  hard-set equivalents, seven-day calendar windows, four prior-week
-//  baseline, status bands, drivers, and the 12-week trend.
+//  baseline, recent-range bands, concrete baseline progress, drivers,
+//  and the 12-week trend.
 //
 
 import Foundation
@@ -75,6 +76,10 @@ struct TrainingLoadTests {
         #expect(report.hasEnoughHistory == false)
         #expect(abs((report.provisionalRatio ?? 0) - 1) < 0.001)
         #expect(report.gaugeRatio == report.provisionalRatio)
+        #expect(report.activeBaselineWeeks == 1)
+        #expect(report.baselineWeeksRemaining == 2)
+        #expect(report.baselineDaysRemaining == 20)
+        #expect(report.observedBaselineDays == 8)
     }
 
     @Test func sparseBaselineStaysInsufficient() {
@@ -87,6 +92,10 @@ struct TrainingLoadTests {
         #expect(report.daysLogged >= 28)
         #expect(report.verdict == .insufficient)
         #expect(report.usualLoad == nil)
+        #expect(report.activeBaselineWeeks == 2)
+        #expect(report.baselineWeeksRemaining == 1)
+        #expect(report.baselineDaysRemaining == 0)
+        #expect(report.observedBaselineDays == TrainingLoadReport.baselineMinimumDays)
     }
 
     @Test func emptyHistoryIsInsufficient() {
@@ -96,11 +105,14 @@ struct TrainingLoadTests {
         #expect(report.points.isEmpty)
         #expect(report.provisionalRatio == nil)
         #expect(report.gaugeRatio == nil)
+        #expect(report.activeBaselineWeeks == 0)
+        #expect(report.baselineWeeksRemaining == TrainingLoadReport.requiredActiveBaselineWeeks)
+        #expect(report.baselineDaysRemaining == TrainingLoadReport.baselineMinimumDays)
     }
 
     // MARK: - Personal range
 
-    @Test func steadyLoadReadsProductive() {
+    @Test func steadyLoadReadsWithinRecentRange() {
         var sessions = steadyBaseline()
         sessions.append(session(daysAgo: 2, sets: 3))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
@@ -110,11 +122,12 @@ struct TrainingLoadTests {
         #expect(report.provisionalRatio == nil)
         #expect(report.gaugeRatio == report.ratio)
         #expect(report.verdict == .productive)
-        #expect(abs((report.productiveRange?.lowerBound ?? 0) - 2.4) < 0.001)
-        #expect(abs((report.productiveRange?.upperBound ?? 0) - 3.9) < 0.001)
+        #expect(report.activeBaselineWeeks == 4)
+        #expect(abs((report.recentRange?.lowerBound ?? 0) - 2.4) < 0.001)
+        #expect(abs((report.recentRange?.upperBound ?? 0) - 3.9) < 0.001)
     }
 
-    @Test func loadAboveRangeReadsHigh() {
+    @Test func loadReadsAboveRecentRange() {
         var sessions = steadyBaseline(sets: 2)
         sessions.append(session(daysAgo: 2, sets: 4))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
@@ -122,7 +135,7 @@ struct TrainingLoadTests {
         #expect(report.verdict == .high)
     }
 
-    @Test func loadBelowRangeReadsLow() {
+    @Test func loadReadsBelowRecentRange() {
         var sessions = steadyBaseline(sets: 4)
         sessions.append(session(daysAgo: 2, sets: 2))
         let report = sessions.trainingLoad(now: now, calendar: calendar)
@@ -130,7 +143,7 @@ struct TrainingLoadTests {
         #expect(report.verdict == .low)
     }
 
-    @Test func statusBoundariesAreInclusiveOfProductiveRange() {
+    @Test func statusBoundariesAreInclusiveOfRecentRange() {
         #expect(LoadVerdict.from(ratio: 0.799) == .low)
         #expect(LoadVerdict.from(ratio: 0.8) == .productive)
         #expect(LoadVerdict.from(ratio: 1.3) == .productive)
@@ -323,7 +336,7 @@ struct TrainingLoadTests {
         let report = sessions.trainingLoad(now: now, calendar: calendar)
         let latest = report.points.last
         #expect(latest?.load == 12)
-        #expect(abs((latest?.productiveLower ?? 0) - 2.4) < 0.001)
-        #expect(abs((latest?.productiveUpper ?? 0) - 3.9) < 0.001)
+        #expect(abs((latest?.rangeLower ?? 0) - 2.4) < 0.001)
+        #expect(abs((latest?.rangeUpper ?? 0) - 3.9) < 0.001)
     }
 }

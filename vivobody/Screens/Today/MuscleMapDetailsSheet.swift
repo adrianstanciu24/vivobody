@@ -30,7 +30,7 @@ struct MuscleMapDetailsSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("An estimate from completed strength sets, muscle roles, effort, and recency. Power work does not add development credit.")
+                    Text("A current estimate from completed strength sets, muscle roles, effort, and recency. Colour builds with repeated work and fades as training recedes. Power work does not add development credit.")
                         .font(Typography.body)
                         .foregroundStyle(Ink.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -45,7 +45,7 @@ struct MuscleMapDetailsSheet: View {
                 .padding(.vertical, Space.lg)
             }
             .screenBackground()
-            .navigationTitle("Muscle development")
+            .navigationTitle("Current development")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

@@ -80,6 +80,29 @@ struct AntagonistBalanceTests {
         // Just inside the ±10% tolerance band still reads balanced.
         let edge = AntagonistPair(id: "x", leftLabel: "A", rightLabel: "B", leftSets: 11, rightSets: 9)
         #expect(edge.verdict == .balanced)
+
+        let tiny = AntagonistPair(id: "x", leftLabel: "A", rightLabel: "B", leftSets: 1, rightSets: 1)
+        #expect(tiny.verdict == .noData)
+
+        let oneWorkout = AntagonistPair(
+            id: "x",
+            leftLabel: "A",
+            rightLabel: "B",
+            leftSets: 10,
+            rightSets: 10,
+            sampleSessions: 1
+        )
+        #expect(oneWorkout.verdict == .noData)
+
+        let descriptive = AntagonistPair(
+            id: "style",
+            leftLabel: "A",
+            rightLabel: "B",
+            leftSets: 10,
+            rightSets: 10,
+            comparisonKind: .distribution
+        )
+        #expect(descriptive.isDescriptive)
     }
 
     // MARK: - Press-only flags the pull side
@@ -149,6 +172,13 @@ struct AntagonistBalanceTests {
         let vertical = board.pair("vertical-push-pull")
         expectEqual(vertical?.leftSets, 4)
         expectEqual(vertical?.rightSets, 5)
+
+        // The broad comparison now uses the same whole-exercise
+        // currency instead of summing a different number of muscles
+        // on each side.
+        let broad = board.pair("push-pull")
+        expectEqual(broad?.leftSets, 6)
+        expectEqual(broad?.rightSets, 8)
     }
 
     @Test func directionsDoNotLeakIntoEachOther() {

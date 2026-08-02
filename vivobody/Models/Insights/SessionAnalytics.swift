@@ -510,8 +510,7 @@ final class SessionAnalytics {
 
         let signature = TrainingSignature(
             volume: core.volume,
-            development: core.development.intensities,
-            consistency: consistency
+            cadence: core.overview.averageWorkoutsPerWeek
         )
         let signatureSnapshot: SignatureSnapshot
         if signature.hasSignature {
@@ -519,17 +518,14 @@ final class SessionAnalytics {
                 petals: signature.petals.map {
                     SignaturePetalSnapshot(
                         group: $0.group.displayName,
-                        volumeShare: $0.volumeShare,
-                        development: $0.development
+                        volumeShare: $0.volumeShare
                     )
                 },
-                intensity: signature.intensity,
                 cadence: signature.cadence,
                 balance: signature.balance,
                 dominantGroup: signature.dominantGroup?.displayName,
                 hasSignature: true,
-                verdictLine: signatureVerdict(signature),
-                weekStreak: consistency.weekStreak
+                verdictLine: signatureVerdict(signature)
             )
         } else {
             signatureSnapshot = .empty
@@ -604,18 +600,7 @@ final class SessionAnalytics {
     private nonisolated static func signatureVerdict(
         _ signature: TrainingSignature
     ) -> String {
-        let focus = signature.dominantGroup.map {
-            "\($0.displayName)-led"
-        } ?? "Balanced across every region"
-        let effort: String
-        if signature.intensity >= 0.6 {
-            effort = "Trained close to failure"
-        } else if signature.intensity >= 0.4 {
-            effort = "Pushed at a steady clip"
-        } else {
-            effort = "Plenty left in the tank"
-        }
-        return "\(focus). \(effort), \(InsightsFormat.perWeekLabel(signature.cadence))x a week."
+        "\(signature.identityLine). \(InsightsFormat.perWeekLabel(signature.cadence))x/week all-time average."
     }
 }
 

@@ -42,7 +42,8 @@ enum IncomingActionParser {
 
     // MARK: URL scheme
 
-    /// `vivobody://today`, `vivobody://insights`, `vivobody://workout`
+    /// `vivobody://today`, `vivobody://library`, `vivobody://insights`,
+    /// `vivobody://workout`
     static func from(url: URL) -> IncomingAction? {
         guard url.scheme == "vivobody" else { return nil }
         let route = [url.host, url.path]
@@ -53,6 +54,8 @@ enum IncomingActionParser {
             return .openTab(.today)
         case "insights", "insights/", "insights/consistency":
             return .openTab(.insights)
+        case "library", "library/":
+            return .openTab(.library)
         case "workout":
             return .resumeWorkout
         case "pro":

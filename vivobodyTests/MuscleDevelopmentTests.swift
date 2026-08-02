@@ -275,6 +275,17 @@ struct MuscleDevelopmentTests {
         #expect(MuscleDevelopment.nodeIntensities(from: []).isEmpty)
     }
 
+    @Test func futureSessionsDoNotAffectDevelopment() {
+        let future = session(
+            at: day(2),
+            [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)]
+        )
+        let state = MuscleDevelopment.simulate(from: [future], now: day(0))
+
+        #expect(state.fibers.isEmpty)
+        #expect(state.intensities.isEmpty)
+    }
+
     /// Node-keyed output paints both sides of a worked muscle and
     /// leaves untrained meshes out.
     @Test func nodeIntensitiesPaintBothSides() {
@@ -382,9 +393,33 @@ struct MuscleDevelopmentTests {
 
     /// A completed lift: every planned set marked done.
     private func lift(_ name: String, _ group: MuscleGroup, sets: Int, reps: Int, weight: Double) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: reps, plannedWeight: weight)
+        let catalogInvolvement = Muscle.involvement(forExerciseNamed: name)
+        let involvement = catalogInvolvement.isEmpty
+            ? Muscle.Involvement(contributions: [
+                .init(muscle: primaryMuscle(for: group), role: .primary),
+            ])
+            : catalogInvolvement
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: sets,
+            plannedReps: reps,
+            plannedWeight: weight,
+            muscleInvolvement: involvement
+        )
         ex.sets.forEach { $0.isCompleted = true; $0.repsInReserve = 2 }
         return ex
+    }
+
+    private func primaryMuscle(for group: MuscleGroup) -> Muscle {
+        switch group {
+        case .chest: return .pectorals
+        case .back: return .lats
+        case .shoulders: return .deltoids
+        case .legs: return .quads
+        case .arms: return .biceps
+        case .core: return .abs
+        }
     }
 
     /// A bench-press program: `sessions` workouts spaced `everyDays`

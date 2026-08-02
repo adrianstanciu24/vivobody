@@ -142,6 +142,8 @@ struct MovementCompositionTests {
         #expect(split.isolationSets == 0)
         #expect(split.unclassifiedSets == 2)
         #expect(split.classifiedTotal == 1)
+        #expect(split.totalSets == 3)
+        #expect(abs(split.classificationCoverage - (1.0 / 3.0)) < 0.001)
         #expect(abs(split.share(.compound) - 1.0) < 0.001)
         #expect(abs(split.share(.isolation) - 0.0) < 0.001)
     }
@@ -173,5 +175,7 @@ struct MovementCompositionTests {
         let split = [WorkoutSession]().compoundIsolationSplit(now: now)
         #expect(split.dominant == nil)
         #expect(split.hasData == false)
+        #expect(split.totalSets == 0)
+        #expect(split.classificationCoverage == 0)
     }
 }

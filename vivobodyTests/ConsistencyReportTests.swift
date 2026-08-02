@@ -5,9 +5,9 @@
 //  Guards the Insights "Consistency" board. The heatmap grid is fixed
 //  in shape (26 weeks × 7 days) and shaded by a pure set-count bucket
 //  (tested directly); the rollups are tested on a virtual clock —
-//  sessions-per-week averages the recent window, RIR averages only
-//  logged reps-sets, and the week streak counts consecutive trained
-//  weeks while tolerating a not-yet-started current week.
+//  sessions-per-week uses an exact half-open 28-calendar-day window,
+//  RIR reports both its rated average and coverage, and the unbounded
+//  week streak tolerates a not-yet-started current week on every day.
 //
 
 import Foundation
@@ -31,6 +31,15 @@ struct ConsistencyReportTests {
         let base = day(n)
         let weekday = cal.component(.weekday, from: base)   // 1 = Sun … 7 = Sat
         return cal.date(byAdding: .day, value: 4 - weekday, to: base) ?? base
+    }
+
+    private func finalMomentOfWeek(_ n: Double) -> Date {
+        let calendar = Calendar.current
+        let base = day(n)
+        guard let interval = calendar.dateInterval(of: .weekOfYear, for: base) else {
+            return base
+        }
+        return interval.end.addingTimeInterval(-1)
     }
 
     // MARK: - Helpers
@@ -128,6 +137,25 @@ struct ConsistencyReportTests {
         #expect(abs(report.sessionsPerWeek - 2.0) < 1e-9)   // 8 / 4 weeks
     }
 
+    @Test func recentWindowIsExactlyTwentyEightCalendarDaysAndExcludesFuture() {
+        let now = day(100)
+        let sessions = [
+            session(at: now, [lift()]),
+            session(at: day(73), [lift()]),       // Day 27: included.
+            session(at: day(72), [lift()]),       // Day 28: excluded.
+            session(at: now.addingTimeInterval(60), [lift()]), // Future today.
+            session(at: day(101), [lift()]),      // Future day.
+        ]
+
+        let report = sessions.consistency(now: now)
+
+        #expect(report.recentSessions == 2)
+        #expect(abs(report.sessionsPerWeek - 0.5) < 1e-9)
+        // The day-28 workout remains valid six-month calendar history;
+        // only the two future sessions disappear from every rollup.
+        #expect(report.daysTrainedInWindow == 3)
+    }
+
     // MARK: - RIR averages only logged reps-sets
 
     @Test func averageRIRReadsLoggedEffort() {
@@ -135,6 +163,9 @@ struct ConsistencyReportTests {
         let report = [session(at: now, [lift(sets: 4, rir: 1)])].consistency(now: now)
         #expect(report.averageRIR != nil)
         #expect(abs((report.averageRIR ?? 0) - 1.0) < 1e-9)
+        #expect(report.rirEligibleSets == 4)
+        #expect(report.rirLoggedSets == 4)
+        #expect(abs(report.rirCoverage - 1) < 1e-9)
     }
 
     @Test func defaultRIRValueWithoutExplicitLogIsIgnored() {
@@ -142,7 +173,11 @@ struct ConsistencyReportTests {
         let unrated = lift(sets: 2)
 
         #expect(unrated.sets.allSatisfy { $0.repsInReserve == 2 && !$0.rirLogged })
-        #expect([session(at: now, [unrated])].consistency(now: now).averageRIR == nil)
+        let report = [session(at: now, [unrated])].consistency(now: now)
+        #expect(report.averageRIR == nil)
+        #expect(report.rirEligibleSets == 2)
+        #expect(report.rirLoggedSets == 0)
+        #expect(report.rirCoverage == 0)
     }
 
     @Test func effortExcludesEmptyIncompleteAndNonStrengthSets() {
@@ -165,6 +200,9 @@ struct ConsistencyReportTests {
             .consistency(now: now)
 
         #expect(abs((report.averageRIR ?? -1) - 1) < 1e-9)
+        #expect(report.rirEligibleSets == 2)
+        #expect(report.rirLoggedSets == 1)
+        #expect(abs(report.rirCoverage - 0.5) < 1e-9)
     }
 
     @Test func isometricRepsMismatchDoesNotContributeRIR() {
@@ -192,6 +230,8 @@ struct ConsistencyReportTests {
         #expect(report.hasActivity)
         #expect(report.daysTrainedInWindow == 1)
         #expect(report.averageRIR == nil)
+        #expect(report.rirEligibleSets == 0)
+        #expect(report.rirLoggedSets == 0)
     }
 
     // MARK: - Week streak
@@ -225,6 +265,34 @@ struct ConsistencyReportTests {
         #expect(sessions.consistency(now: now).weekStreak == 2)
     }
 
+    @Test func weekStreakToleratesUnstartedCurrentWeekOnFinalWeekday() {
+        let now = finalMomentOfWeek(300)
+        let calendar = Calendar.current
+        let sessions = [7, 14].map { offset in
+            session(
+                at: calendar.date(byAdding: .day, value: -offset, to: now) ?? now,
+                [lift()]
+            )
+        }
+
+        #expect(sessions.consistency(now: now).weekStreak == 2)
+    }
+
+    @Test func weekStreakIsNotCappedByHeatmapWindow() {
+        let now = wednesday(500)
+        let calendar = Calendar.current
+        let sessions = (0..<30).map { week in
+            session(
+                at: calendar.date(byAdding: .day, value: -(week * 7), to: now) ?? now,
+                [lift(sets: 1)]
+            )
+        }
+
+        let report = sessions.consistency(now: now)
+        #expect(report.weeks.count == ConsistencyReport.windowWeeks)
+        #expect(report.weekStreak == 30)
+    }
+
     // MARK: - Empty
 
     @Test func emptyArchiveHasNoActivity() {
@@ -232,6 +300,9 @@ struct ConsistencyReportTests {
         #expect(!report.hasActivity)
         #expect(report.weekStreak == 0)
         #expect(report.averageRIR == nil)
+        #expect(report.rirEligibleSets == 0)
+        #expect(report.rirLoggedSets == 0)
+        #expect(report.rirCoverage == 0)
         #expect(report.recentSessions == 0)
         #expect(report.daysTrainedInWindow == 0)
         #expect(report.weeks.count == ConsistencyReport.windowWeeks)

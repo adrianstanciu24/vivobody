@@ -3,17 +3,18 @@
 //  vivobody
 //
 //  The Insights hero — the screen opens on a portrait, not a table.
-//  A single generative emblem fuses the whole picture into a mark
-//  you'd recognise as *yours*: six petals (one per muscle group)
-//  whose reach is how developed the region is and whose width is how
-//  much of your volume it carries, burning brighter the harder you
-//  train. A numeral at each axis states the volume split outright,
-//  and a single satellite orbits the ring for life.
+//  A single generative emblem compresses lifetime allocation into a
+//  mark you'd recognise as *yours*: six petals (one per muscle group)
+//  whose complete silhouette is driven by how much of your lifetime
+//  volume that region carries. A numeral at each axis states the split
+//  outright, an equal-share ghost gives it context, and a single
+//  satellite orbits the ring for life.
 //
 //  It deliberately carries the group-balance read the old tab spread
 //  across a separate roster — so this one mark answers "what's the
-//  shape of my training?" — anchored by three plain numbers (cadence,
-//  streak, balance) and a concise visual legend.
+//  shape of my training?" — anchored by cadence, all-six balance,
+//  coverage, and a concise visual legend. Every data-bearing channel
+//  is all-time; light and motion are material, not hidden metrics.
 //
 //  No anatomical body here on purpose: the rotatable 3D figure is
 //  Today's hero. Insights is the analytical counterpart, and the
@@ -23,45 +24,170 @@
 import VivoKit
 import SwiftUI
 
+private func signatureShareLabel(_ share: Double) -> String {
+    guard share > 0 else { return "0%" }
+    let percentage = share * 100
+    return percentage < 1 ? "<1%" : "\(Int(percentage.rounded()))%"
+}
+
+private func signatureShareSpokenLabel(_ share: Double) -> String {
+    guard share > 0 else { return "0 percent" }
+    let percentage = share * 100
+    return percentage < 1
+        ? "less than 1 percent"
+        : "\(Int(percentage.rounded())) percent"
+}
+
 struct SignatureSection: View {
     let signature: TrainingSignature
-    let report: ConsistencyReport
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             VStack(alignment: .leading, spacing: Space.xs) {
-                SectionHeader(title: "Your signature")
+                SectionHeader(
+                    title: "Your signature",
+                    trailing: signature.hasSignature ? "All time" : "first signal",
+                    trailingIsInProgress: !signature.hasSignature
+                )
                 Text("the shape of your training")
                     .panelLegend()
             }
 
-            if !signature.hasSignature {
-                Text("Your signature takes shape once you've logged some training — a living portrait of how you train, all of it in one mark.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            if dynamicTypeSize.isAccessibilitySize {
+                SignatureAccessibilitySpectrum(signature: signature)
             } else {
                 TrainingSignatureView(signature: signature)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Space.sm)
+            }
+
+            if !signature.hasSignature {
+                InsightBuildingCard(
+                    title: "Your signature starts here",
+                    detail: "Complete a strength set on an exercise with muscle targets. The six regions will take shape as you train.",
+                    progress: 0,
+                    progressLabel: "FIRST MUSCLE-MAPPED SET",
+                    accessibilityProgress: "Waiting for the first muscle-mapped strength set"
+                )
+            } else {
+                Text(signature.identityLine.uppercased())
+                    .font(Typography.metricInline)
+                    .foregroundStyle(Tint.primary)
+                    .tracking(1.4)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
 
                 StatStrip(
                     stats: [
-                        Stat(value: InsightsFormat.perWeekLabel(signature.cadence), label: "Per week", accent: signature.cadence >= 2),
-                        Stat(value: "\(report.weekStreak)", label: "Week streak"),
-                        Stat(value: "\(Int((signature.balance * 100).rounded()))", unit: "%", label: "Balance"),
+                        Stat(
+                            value: InsightsFormat.perWeekLabel(signature.cadence),
+                            label: "Workouts / week"
+                        ),
+                        Stat(
+                            value: signature.hasVolume
+                                ? "\(Int((signature.balance * 100).rounded()))"
+                                : "—",
+                            unit: signature.hasVolume ? "%" : nil,
+                            label: "Evenness"
+                        ),
+                        Stat(
+                            value: "\(signature.trainedGroupCount)/6",
+                            label: "Regions trained"
+                        ),
                     ],
                     valueFont: Typography.statValue
                 )
                 .padding(.vertical, Space.xs)
 
-                Text("Each petal is a muscle group — its reach is how developed it is, its width and the numeral at its axis how much of your volume it takes. The dashed ghost is the bloom fully grown; the brighter the burn, the harder the training.")
+                Text("Larger petals mean more of your completed strength-set work went to that region. Axis percentages give the exact all-time split; the dashed bloom is an even six-way split.")
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, Space.lg)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+}
+
+/// The bloom's accessibility-text counterpart. It keeps the visual
+/// signal strong — six luminous lifetime-share rails — while
+/// moving every label out of fixed Canvas coordinates so large type can
+/// wrap at its natural size.
+private struct SignatureAccessibilitySpectrum: View {
+    let signature: TrainingSignature
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.lg) {
+            ForEach(signature.petals) { petal in
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+                        Text(petal.group.displayName)
+                            .font(Typography.sectionHeading)
+                            .foregroundStyle(
+                                petal.group == signature.dominantGroup
+                                    ? Tint.primary
+                                    : Ink.primary
+                            )
+                        Spacer(minLength: Space.sm)
+                        Text(signatureShareLabel(petal.volumeShare))
+                            .font(Typography.metricInline)
+                            .foregroundStyle(Ink.primary)
+                            .monospacedDigit()
+                    }
+
+                    GeometryReader { proxy in
+                        let scaleMaximum = 0.5
+                        let fill = max(0, min(1, petal.volumeShare / scaleMaximum))
+                        let marker = SignatureEmblemTuning.equalShare / scaleMaximum
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Surface.cardTint)
+                            Capsule()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Tint.primary, Tint.primary.opacity(0.36)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .frame(
+                                    width: petal.volumeShare > 0
+                                        ? max(3, proxy.size.width * CGFloat(fill))
+                                        : 0
+                                )
+                                .shadow(color: Tint.primary.opacity(0.34), radius: 6)
+                            Path { path in
+                                let x = proxy.size.width * CGFloat(marker)
+                                path.move(to: CGPoint(x: x, y: 0))
+                                path.addLine(to: CGPoint(x: x, y: 12))
+                            }
+                            .stroke(
+                                Ink.primary.opacity(0.42),
+                                style: StrokeStyle(lineWidth: 1, dash: [2, 2])
+                            )
+                        }
+                    }
+                    .frame(height: 12)
+                    .accessibilityHidden(true)
+
+                    Text("\(signatureShareLabel(petal.volumeShare)) of all completed strength work")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .accessibilityElement(children: .combine)
+            }
+
+            Text("The dashed marker is an even six-way share.")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+        }
+        .padding(Space.xl)
+        .contentCard()
     }
 
 }
@@ -70,22 +196,20 @@ struct SignatureSection: View {
 
 /// The signature bloom. Six petals radiate from a core — one per
 /// muscle group, fixed at the wheel position its order assigns — each
-/// reaching out by how developed the region is and fattened by how
-/// much of your volume it carries, with the split stated outright by
-/// a numeral at each axis. A faint ring frames it, a dashed ghost
-/// outlines the bloom fully grown, a lone satellite orbits the rim,
-/// and the whole emblem burns brighter the harder the training. Every
-/// load-bearing number comes from VivoKit's `SignatureEmblemTuning`
+/// growing in both reach and width from its all-time volume share,
+/// with the split stated outright by a numeral at each axis. A faint
+/// ring frames it, a dashed ghost shows an even six-way split, a lone
+/// satellite orbits the rim, and the whole emblem keeps a stable burn.
+/// Every load-bearing number comes from VivoKit's `SignatureEmblemTuning`
 /// so the widget draws the identical shape. Drawn in a single Canvas:
 /// a restrained bloom pass glows beneath crisp orange-gradient petals,
 /// brightest at the core and cooling toward the tips.
 ///
-/// The mark is quietly alive: the core breathes — swelling harder the
-/// more intense the training — the bloom's glow dims and swells in
-/// step with it, and the satellite laps the rim like a watch
+/// The mark is quietly alive: the core breathes, the bloom's glow dims
+/// and swells with it, and the satellite laps the rim like a watch
 /// movement. Petal geometry and material never move; the shape is the
-/// data, only its light breathes. Holds perfectly still under Reduce
-/// Motion.
+/// data, while the light is ambient. Holds perfectly still under
+/// Reduce Motion.
 private struct TrainingSignatureView: View {
     let signature: TrainingSignature
 
@@ -100,12 +224,8 @@ private struct TrainingSignatureView: View {
         /// One core breath (swell and relax) takes this long.
         static let breathSeconds: Double = 4
 
-        /// How much the breath registers at all — scaled by training
-        /// intensity so a hard block beats visibly and a light week
-        /// barely stirs, but the heart never fully stops.
-        static func breathStrength(for intensity: Double) -> Double {
-            0.2 + 0.8 * intensity
-        }
+        /// Stable ambient breath. It carries no training data.
+        static let breathStrength: Double = 0.72
 
         /// Core radius gain at the top of a full-strength breath.
         static let coreSwell: Double = 0.3
@@ -173,7 +293,7 @@ private struct TrainingSignatureView: View {
         context.fill(
             Path(ellipseIn: rect),
             with: .radialGradient(
-                SignatureEmblemTuning.atmosphereGradient(intensity: signature.intensity),
+                SignatureEmblemTuning.atmosphereGradient(),
                 center: center,
                 startRadius: 0,
                 endRadius: r
@@ -228,16 +348,19 @@ private struct TrainingSignatureView: View {
         context.fill(Path(ellipseIn: dot), with: .color(Tint.primary.opacity(0.3)))
     }
 
-    /// The ghost bloom: every petal outlined at full development and
-    /// full width, the silhouette the live petals grow into. Six
-    /// identical dashed leaves, faint enough to read as aspiration
-    /// rather than data — the gap between ghost and fill is the
-    /// "how much further can this grow" answer at a glance.
+    /// The equal-share bloom: six identical dashed leaves showing the
+    /// silhouette of a perfectly even 1/6 allocation. Live petals
+    /// outside or inside it make the lifetime bias visible at a glance.
     private func drawGhostBloom(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
         let count = signature.petals.count
         guard count > 0 else { return }
-        let length = radius * SignatureEmblemTuning.reachFraction(development: 1)
-        let halfWidth = SignatureEmblemTuning.halfWidth(shareNorm: 1, length: length, radius: radius)
+        let share = SignatureEmblemTuning.equalShare
+        let length = radius * SignatureEmblemTuning.reachFraction(volumeShare: share)
+        let halfWidth = SignatureEmblemTuning.halfWidth(
+            volumeShare: share,
+            length: length,
+            radius: radius
+        )
         let leaf = SignatureEmblemTuning.petalPath(length: length, halfWidth: halfWidth)
 
         for i in 0..<count {
@@ -266,14 +389,16 @@ private struct TrainingSignatureView: View {
     private func petalLayouts(radius: CGFloat) -> [PetalLayout] {
         let petals = signature.petals
         let count = petals.count
-        let maxShare = petals.map(\.volumeShare).max() ?? 0
         return petals.enumerated().map { i, petal in
             let angle = (Double(i) / Double(count)) * 2 * .pi - .pi / 2
-            // Reach to near the label ring at full development so a
-            // strong region visibly touches its axis.
-            let length = radius * SignatureEmblemTuning.reachFraction(development: petal.development)
-            let shareNorm = maxShare > 0 ? petal.volumeShare / maxShare : 0
-            let halfWidth = SignatureEmblemTuning.halfWidth(shareNorm: shareNorm, length: length, radius: radius)
+            let length = radius * SignatureEmblemTuning.reachFraction(
+                volumeShare: petal.volumeShare
+            )
+            let halfWidth = SignatureEmblemTuning.halfWidth(
+                volumeShare: petal.volumeShare,
+                length: length,
+                radius: radius
+            )
             let shape = SignatureEmblemTuning.petalShape(
                 length: length,
                 halfWidth: halfWidth
@@ -281,8 +406,7 @@ private struct TrainingSignatureView: View {
             let hotScale = CGAffineTransform(scaleX: 0.42, y: 0.5)
             let isDominant = petal.group == signature.dominantGroup
             let opacity = SignatureEmblemTuning.petalOpacity(
-                development: petal.development,
-                intensity: signature.intensity,
+                volumeShare: petal.volumeShare,
                 isDominant: isDominant
             )
             return PetalLayout(
@@ -315,17 +439,17 @@ private struct TrainingSignatureView: View {
         // swells with the core's beat while the petal material — the
         // data — holds perfectly still.
         let glowBreath = 1 - Motion.glowBreathDepth
-            * Motion.breathStrength(for: signature.intensity) * (1 - breath)
+            * Motion.breathStrength * (1 - breath)
 
         // Ambient ember — the emblem's presence on the black canvas,
-        // warming with training intensity.
+        // providing stable material warmth.
         let emberR = radius * 1.04
         let emberRect = CGRect(x: center.x - emberR, y: center.y - emberR, width: emberR * 2, height: emberR * 2)
         context.fill(
             Path(ellipseIn: emberRect),
             with: .radialGradient(
                 Gradient(colors: [
-                    Tint.primary.opacity(SignatureEmblemTuning.ambientOpacity(intensity: signature.intensity)),
+                    Tint.primary.opacity(SignatureEmblemTuning.ambientOpacity),
                     .clear,
                 ]),
                 center: center,
@@ -473,7 +597,7 @@ private struct TrainingSignatureView: View {
             }
             spill.clip(to: bodies)
             let spillR = radius * SignatureEmblemTuning.coreSpillFraction
-            let strength = (0.42 + 0.18 * signature.intensity) * glowBreath
+            let strength = 0.55 * glowBreath
             spill.fill(
                 Path(ellipseIn: CGRect(
                     x: center.x - spillR,
@@ -570,7 +694,7 @@ private struct TrainingSignatureView: View {
     ) {
         var sparks = context
         sparks.blendMode = .plusLighter
-        let burn = 0.12 + 0.3 * signature.intensity
+        let burn = 0.28
         for index in 0..<6 {
             let seed = Double(index)
             let drift = animated ? time * (0.010 + seed * 0.002) : 0
@@ -631,7 +755,7 @@ private struct TrainingSignatureView: View {
             context.draw(name, at: CGPoint(x: labelPoint.x, y: labelPoint.y - 7), anchor: .center)
 
             guard petal.volumeShare > 0 else { continue }
-            let numeral = Text("\(Int((petal.volumeShare * 100).rounded()))%")
+            let numeral = Text(signatureShareLabel(petal.volumeShare))
                 .font(Typography.micro.monospacedDigit())
                 .foregroundStyle(isDominant ? Tint.primary.opacity(0.75) : Ink.secondary)
             context.draw(numeral, at: CGPoint(x: labelPoint.x, y: labelPoint.y + 7), anchor: .center)
@@ -639,7 +763,7 @@ private struct TrainingSignatureView: View {
     }
 
     private func drawCore(in context: inout GraphicsContext, center: CGPoint, radius: CGFloat, breath: Double) {
-        let strength = Motion.breathStrength(for: signature.intensity) * breath
+        let strength = Motion.breathStrength * breath
         let r = radius * 0.05 * (1 + CGFloat(Motion.coreSwell * strength))
 
         // Contact shadow tucks every petal root beneath the bead. The
@@ -752,11 +876,18 @@ private struct TrainingSignatureView: View {
 
     private var accessibilityText: String {
         let cadence = String(format: "%.1f", signature.cadence)
-        let lead = signature.dominantGroup.map { "\($0.displayName)-led. " } ?? ""
         let split = signature.petals
             .filter { $0.volumeShare > 0 }
-            .map { "\($0.group.displayName) \(Int(($0.volumeShare * 100).rounded())) percent" }
+            .map { "\($0.group.displayName) \(signatureShareSpokenLabel($0.volumeShare))" }
             .joined(separator: ", ")
-        return "Training signature. \(lead)Volume split: \(split). \(cadence) sessions per week. Dashed outlines show each region fully developed."
+        let volume: String
+        if !signature.hasSignature {
+            volume = "No signature data yet. Complete a strength set on an exercise with muscle targets to begin."
+        } else if signature.hasVolume {
+            volume = "All-time volume split: \(split). Balance \(Int((signature.balance * 100).rounded())) percent, with \(signature.trainedGroupCount) of 6 regions represented."
+        } else {
+            volume = "No completed muscle-targeted strength work yet."
+        }
+        return "Training signature. \(volume) \(signature.identityLine). All-time average \(cadence) sessions per week. Dashed outlines show an even six-way split."
     }
 }

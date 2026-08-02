@@ -2,7 +2,7 @@
 //  StrengthWidget.swift
 //  vivobodyWidgets
 //
-//  The "Strength" widget — large family only. The Insights strength
+//  The "Strength" widget — large family only. The per-exercise strength
 //  instrument distilled: climbing/stalled/slipping counts, the lead
 //  lift's estimated-1RM curve with the all-time best drawn as a
 //  record line and PR sessions dotted, and the current/best/trend
@@ -51,7 +51,7 @@ struct StrengthWidgetView: View {
                 large.padding()
             }
         }
-        .widgetURL(URL(string: isPro ? "vivobody://insights" : "vivobody://pro"))
+        .widgetURL(URL(string: isPro ? "vivobody://library" : "vivobody://pro"))
         .containerBackground(.black, for: .widget)
     }
 

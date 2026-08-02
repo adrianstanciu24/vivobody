@@ -3,7 +3,7 @@
 //  vivobodyWidgets
 //
 //  The "Your Signature" widget — small family only. Renders the
-//  training-signal petal emblem with a one-line verdict.
+//  all-time training-identity bloom with a one-line verdict.
 //
 
 import VivoKit
@@ -24,7 +24,7 @@ struct SignatureWidget: Widget {
             SignatureWidgetView(snapshot: entry.snapshot)
         }
         .configurationDisplayName("Your Signature")
-        .description("The shape of your training in one mark.")
+        .description("Your all-time training distribution in one mark.")
         .supportedFamilies([.systemSmall])
     }
 }
@@ -96,8 +96,6 @@ struct SignatureEmblem: View {
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             let radius = min(size.width, size.height) / 2
             let count = snapshot.petals.count
-            let maxShare = snapshot.petals.map(\.volumeShare).max() ?? 0
-
             // The warm air behind the bloom — skipped in vibrant
             // rendering, where the system material owns the canvas.
             if renderingMode != .vibrant {
@@ -105,7 +103,7 @@ struct SignatureEmblem: View {
                 context.fill(
                     Path(ellipseIn: CGRect(x: center.x - atmoR, y: center.y - atmoR, width: atmoR * 2, height: atmoR * 2)),
                     with: .radialGradient(
-                        SignatureEmblemTuning.atmosphereGradient(intensity: snapshot.intensity),
+                        SignatureEmblemTuning.atmosphereGradient(),
                         center: center,
                         startRadius: 0,
                         endRadius: atmoR
@@ -131,10 +129,16 @@ struct SignatureEmblem: View {
                 context.stroke(spoke, with: .color(spokeColor(isDominant: dominant)), lineWidth: 1)
             }
 
-            // The ghost bloom: every petal outlined at full size, the
-            // silhouette the live petals grow into.
-            let ghostLength = radius * SignatureEmblemTuning.reachFraction(development: 1)
-            let ghostHalfWidth = SignatureEmblemTuning.halfWidth(shareNorm: 1, length: ghostLength, radius: radius)
+            // The dashed reference is a perfectly even six-way split.
+            let equalShare = SignatureEmblemTuning.equalShare
+            let ghostLength = radius * SignatureEmblemTuning.reachFraction(
+                volumeShare: equalShare
+            )
+            let ghostHalfWidth = SignatureEmblemTuning.halfWidth(
+                volumeShare: equalShare,
+                length: ghostLength,
+                radius: radius
+            )
             let ghostLeaf = SignatureEmblemTuning.petalPath(length: ghostLength, halfWidth: ghostHalfWidth)
             for index in snapshot.petals.indices {
                 let angle = (Double(index) / Double(count)) * 2 * .pi - .pi / 2
@@ -160,7 +164,7 @@ struct SignatureEmblem: View {
                     Path(ellipseIn: CGRect(x: center.x - emberR, y: center.y - emberR, width: emberR * 2, height: emberR * 2)),
                     with: .radialGradient(
                         Gradient(colors: [
-                            Tint.primary.opacity(SignatureEmblemTuning.ambientOpacity(intensity: snapshot.intensity)),
+                            Tint.primary.opacity(SignatureEmblemTuning.ambientOpacity),
                             .clear,
                         ]),
                         center: center,
@@ -172,11 +176,19 @@ struct SignatureEmblem: View {
 
             let placed: [PlacedPetal] = snapshot.petals.enumerated().map { index, petal in
                 let angle = (Double(index) / Double(count)) * 2 * .pi - .pi / 2
-                let length = radius * SignatureEmblemTuning.reachFraction(development: petal.development)
-                let share = maxShare > 0 ? petal.volumeShare / maxShare : 0
-                let halfWidth = SignatureEmblemTuning.halfWidth(shareNorm: share, length: length, radius: radius)
+                let length = radius * SignatureEmblemTuning.reachFraction(
+                    volumeShare: petal.volumeShare
+                )
+                let halfWidth = SignatureEmblemTuning.halfWidth(
+                    volumeShare: petal.volumeShare,
+                    length: length,
+                    radius: radius
+                )
                 let dominant = petal.group == snapshot.dominantGroup
-                let opacity = SignatureEmblemTuning.petalOpacity(development: petal.development, intensity: snapshot.intensity, isDominant: dominant)
+                let opacity = SignatureEmblemTuning.petalOpacity(
+                    volumeShare: petal.volumeShare,
+                    isDominant: dominant
+                )
                 let shape = SignatureEmblemTuning.petalShape(length: length, halfWidth: halfWidth)
                 var transform = CGAffineTransform(translationX: center.x, y: center.y)
                 transform = transform.rotated(by: angle)
@@ -322,7 +334,7 @@ struct SignatureEmblem: View {
                     )),
                     with: .radialGradient(
                         SignatureEmblemTuning.coreSpillGradient(
-                            strength: 0.42 + 0.18 * snapshot.intensity
+                            strength: 0.55
                         ),
                         center: center,
                         startRadius: 0,

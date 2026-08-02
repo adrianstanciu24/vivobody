@@ -33,11 +33,17 @@ already solves the default-RIR-2 masquerade). Epley e1RM math already exists
 
 Decision (2026-07-11): upgrade the **shared** currency, not just the body
 model. `MuscleVolume` (weekly bars, neglect list, antagonist balance) and
-`MuscleDevelopment` (3D body, signature) keep agreeing by construction — the
+`MuscleDevelopment` (3D body) keep agreeing by construction — the
 invariant both file headers promise. This is also semantically correct: the
 volume-landmark literature the bars are calibrated against counts **hard
 sets** (sets near failure at meaningful load), which is exactly what the new
 currency measures.
+
+Follow-up (2026-08-01): the Signature now consumes `MuscleVolume`'s all-time
+allocation only, while the 3D body exclusively owns current, decaying
+`MuscleDevelopment`. They still agree on what a hard set is worth without
+repeating the same development signal. The widget snapshot contract moved to
+v3 when the development and recent-effort channels were removed.
 
 ## What stays (deliberately)
 

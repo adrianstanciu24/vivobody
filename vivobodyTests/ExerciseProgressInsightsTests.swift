@@ -3,8 +3,9 @@
 //  vivobodyTests
 //
 //  Covers the two derived reads the Exercise detail screen layers on
-//  top of the progress series: the best estimated-1RM headline (Epley
-//  over every logged set) and the plateau detector (consecutive
+//  top of the progress series: the best confidence-eligible estimated-1RM
+//  headline (Epley over each session's strongest 1–12 rep set) and the
+//  plateau detector (consecutive
 //  sessions since the last all-time high on the primary metric).
 //
 
@@ -83,6 +84,72 @@ struct ExerciseProgressInsightsTests {
         // The PR point is the 130×3 session (the last one).
         #expect(prog?.bestE1RMPoint?.topWeight == 130)
         #expect(prog?.bestE1RMPoint?.topReps == 3)
+    }
+
+    @Test func sessionE1RMUsesStrongestEstimateNotRepresentativeRecordSet() {
+        let mixed = Exercise(
+            name: "Mixed Bench Fixture",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0
+        )
+        mixed.sets.append(
+            WorkoutSet(weight: 225, reps: 5, isCompleted: true, sortOrder: 0)
+        )
+        mixed.sets.append(
+            WorkoutSet(weight: 200, reps: 12, isCompleted: true, sortOrder: 1)
+        )
+        let sessions = [
+            session(at: day(0), [mixed]),
+            session(at: day(7), [lift("Mixed Bench Fixture", weight: 230, reps: 5)]),
+        ]
+
+        let prog = progress(sessions, "Mixed Bench Fixture")
+        let first = prog?.points.first
+
+        // Ordinary record history remains load-first at 225×5, while the
+        // session's e1RM correctly comes from 200×12 (280 vs 262.5).
+        #expect(first?.topWeight == 225)
+        #expect(first?.topReps == 5)
+        #expect(first?.estimatedOneRepMaxSample?.effectiveLoad == 200)
+        #expect(first?.estimatedOneRepMaxSample?.reps == 12)
+        #expect(abs((first?.estimated1RM ?? 0) - 280) < 0.01)
+    }
+
+    @Test func highRepSetRemainsHistoryButCannotDriveE1RM() {
+        let highRep = Exercise(
+            name: "High-Rep Bench Fixture",
+            group: .chest,
+            plannedSets: 0,
+            plannedWeight: 0
+        )
+        highRep.sets.append(
+            WorkoutSet(weight: 100, reps: 20, isCompleted: true, sortOrder: 0)
+        )
+        highRep.sets.append(
+            WorkoutSet(weight: 90, reps: 10, isCompleted: true, sortOrder: 1)
+        )
+        let sessions = [
+            session(at: day(0), [highRep]),
+            session(at: day(7), [lift("High-Rep Bench Fixture", weight: 95, reps: 10)]),
+        ]
+
+        let first = progress(sessions, "High-Rep Bench Fixture")?.points.first
+
+        #expect(first?.topWeight == 100)
+        #expect(first?.topReps == 20)
+        #expect(first?.estimatedOneRepMaxSample?.effectiveLoad == 90)
+        #expect(first?.estimatedOneRepMaxSample?.reps == 10)
+        #expect(abs((first?.estimated1RM ?? 0) - 120) < 0.01)
+    }
+
+    @Test func estimated1RMEligibilityEndsAtTwelveReps() {
+        let twelveRepEstimate = EstimatedOneRepMaxPolicy.estimate(
+            effectiveLoad: 100,
+            reps: 12
+        )
+        #expect(abs((twelveRepEstimate ?? 0) - 140) < 0.001)
+        #expect(EstimatedOneRepMaxPolicy.estimate(effectiveLoad: 100, reps: 13) == nil)
     }
 
     @Test func conditioningKeepsHistoryButCannotCreateStrengthRecords() {

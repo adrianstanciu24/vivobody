@@ -2,10 +2,11 @@
 //  TrainingLoadSection.swift
 //  vivobody
 //
-//  The personal workload lens. A plain-language Low / Productive /
-//  High status leads, followed by the user's position against their
-//  own range, a Swift Charts rolling seven-day trend, and the work
-//  that drove it.
+//  The personal workload lens. A plain-language Below / Within / Above
+//  recent-range status leads, followed by the user's position against
+//  the median of their previous four weeks, a Swift Charts rolling
+//  seven-day trend, and the strength work that drove it. Early reads
+//  keep the same bold hierarchy while stating baseline progress.
 //
 
 import VivoKit
@@ -17,17 +18,28 @@ struct TrainingLoadSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Training load", trailing: "Rolling 7 days")
+            SectionHeader(
+                title: "Training load",
+                trailing: report.hasEnoughHistory ? "rolling 7 days" : "baseline building",
+                trailingIsInProgress: !report.hasEnoughHistory
+            )
 
             if report.points.isEmpty {
-                Text("Complete a workout to start reading your training load.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
+                InsightBuildingCard(
+                    title: "Your load range starts here",
+                    detail: "Complete working sets to begin the rolling seven-day line. The comparison settles after 28 days and 3 active baseline weeks.",
+                    progress: baselineProgressFraction,
+                    progressLabel: baselineProgressLabel,
+                    accessibilityProgress: baselineProgressAccessibilityLabel
+                )
             } else {
                 VStack(alignment: .leading, spacing: Space.lg) {
                     status
-                    if report.hasEnoughHistory {
+                    if report.gaugeMarkerPosition != nil {
                         rangeIndicator
+                    }
+                    if !report.hasEnoughHistory {
+                        baselineProgress
                     }
                     chart
                 }
@@ -43,20 +55,39 @@ struct TrainingLoadSection: View {
     // MARK: - Status
 
     private var status: some View {
-        Text(statusTitle)
-            .font(Typography.display)
-            .foregroundStyle(statusColor)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text(statusTitle)
+                .font(Typography.display)
+                .foregroundStyle(statusColor)
+                .lineLimit(2)
+                .minimumScaleFactor(0.78)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(statusContext)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     private var statusTitle: String {
         switch report.verdict {
         case .insufficient: return "Building your range"
-        case .low:          return "Low load"
-        case .productive:   return "Productive load"
-        case .high:         return "High load"
+        case .low:          return "Below recent range"
+        case .productive:   return "Within recent range"
+        case .high:         return "Above recent range"
         }
+    }
+
+    private var statusContext: String {
+        if report.hasEnoughHistory {
+            return "Your last 7 days compared with the median of the previous 4 weeks."
+        }
+        if report.activeBaselineWeeks > 0 {
+            let count = report.activeBaselineWeeks
+            return "Early read from \(count) prior active \(count == 1 ? "week" : "weeks"). Your range settles after 28 days and 3 active baseline weeks."
+        }
+        return "Your range settles after 28 days and 3 active baseline weeks."
     }
 
     // MARK: - Personal range
@@ -67,27 +98,109 @@ struct TrainingLoadSection: View {
                 if abs(position - gaugePosition) < 0.025 {
                     return statusColor
                 }
-                if TrainingLoadReport.gaugeProductiveBand.contains(position) {
+                if TrainingLoadReport.gaugeRecentBand.contains(position) {
                     return Tint.primary.opacity(0.28)
                 }
                 return Surface.edge
             }
 
             HStack {
-                Text("Low")
+                Text("Below")
                 Spacer()
-                Text("Productive")
+                Text("Within")
                 Spacer()
-                Text("High")
+                Text("Above")
             }
             .panelLegend()
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(statusTitle), positioned against your personal productive range")
+        .accessibilityLabel(rangeAccessibilityLabel)
     }
 
     private var gaugePosition: Double {
-        TrainingLoadReport.gaugePosition(forRatio: report.ratio)
+        report.gaugeMarkerPosition ?? 0
+    }
+
+    private var rangeAccessibilityLabel: String {
+        let qualifier = report.hasEnoughHistory ? "recent range" : "early recent-range estimate"
+        return "\(statusTitle), positioned against your \(qualifier)"
+    }
+
+    private var baselineProgress: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            HStack(spacing: Space.sm) {
+                BuildingSignalDot()
+                Text("Baseline progress")
+                    .panelLegendType()
+                    .foregroundStyle(Tint.inProgress)
+            }
+
+            StatStrip(
+                stats: [
+                    Stat(
+                        value: "\(report.activeBaselineWeeks)/\(TrainingLoadReport.requiredActiveBaselineWeeks)",
+                        label: "Prior active weeks"
+                    ),
+                    Stat(
+                        value: "\(report.observedBaselineDays)/\(TrainingLoadReport.baselineMinimumDays)",
+                        label: "Days elapsed"
+                    ),
+                ],
+                valueFont: Typography.statValueCompact,
+                edgeAligned: true
+            )
+
+            SegmentLadder(
+                fraction: baselineProgressFraction,
+                segments: 24,
+                tint: Tint.inProgress,
+                height: 5,
+                spacing: 3
+            )
+
+            Text(baselineProgressText)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(Space.lg)
+        .contentChip(tint: Tint.inProgress.opacity(0.07))
+        .padding(.horizontal, -Space.lg)
+    }
+
+    private var baselineProgressFraction: Double {
+        let dayProgress = Double(report.observedBaselineDays)
+            / Double(TrainingLoadReport.baselineMinimumDays)
+        let weekProgress = Double(report.activeBaselineWeeks)
+            / Double(TrainingLoadReport.requiredActiveBaselineWeeks)
+        return min(1, max(0, min(dayProgress, weekProgress)))
+    }
+
+    private var baselineProgressLabel: String {
+        let days = min(report.observedBaselineDays, TrainingLoadReport.baselineMinimumDays)
+        let weeks = min(report.activeBaselineWeeks, TrainingLoadReport.requiredActiveBaselineWeeks)
+        return "\(days)/\(TrainingLoadReport.baselineMinimumDays) DAYS · \(weeks)/\(TrainingLoadReport.requiredActiveBaselineWeeks) ACTIVE WEEKS"
+    }
+
+    private var baselineProgressAccessibilityLabel: String {
+        let days = min(report.observedBaselineDays, TrainingLoadReport.baselineMinimumDays)
+        let weeks = min(report.activeBaselineWeeks, TrainingLoadReport.requiredActiveBaselineWeeks)
+        return "\(days) of \(TrainingLoadReport.baselineMinimumDays) days and \(weeks) of \(TrainingLoadReport.requiredActiveBaselineWeeks) active weeks"
+    }
+
+    private var baselineProgressText: String {
+        let days = report.baselineDaysRemaining
+        let weeks = report.baselineWeeksRemaining
+        if days > 0, weeks > 0 {
+            return "Needs \(days) more \(days == 1 ? "day" : "days") and \(weeks) more active \(weeks == 1 ? "week" : "weeks") before the comparison settles."
+        }
+        if days > 0 {
+            return "Needs \(days) more \(days == 1 ? "day" : "days") before the comparison settles."
+        }
+        if weeks > 0 {
+            return "Needs \(weeks) more active \(weeks == 1 ? "week" : "weeks") before the comparison settles."
+        }
+        return "Your recent range is ready to settle."
     }
 
     // MARK: - Trend
@@ -97,14 +210,14 @@ struct TrainingLoadSection: View {
             HStack(spacing: Space.lg) {
                 legend(color: Tint.primary, label: "7-day load")
                 if report.hasEnoughHistory {
-                    legend(color: Tint.primary.opacity(0.22), label: "Productive range")
+                    legend(color: Tint.primary.opacity(0.22), label: "Recent range")
                 }
             }
 
             Chart {
                 ForEach(report.points) { point in
-                    if let lower = point.productiveLower,
-                       let upper = point.productiveUpper {
+                    if let lower = point.rangeLower,
+                       let upper = point.rangeUpper {
                         AreaMark(
                             x: .value("Date", point.date),
                             yStart: .value("Range lower", lower),
@@ -131,11 +244,15 @@ struct TrainingLoadSection: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                AxisMarks(values: .automatic(desiredCount: 4)) { value in
                     AxisGridLine().foregroundStyle(Surface.edge)
-                    AxisValueLabel(format: .dateTime.month(.abbreviated))
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.tertiary)
+                    AxisValueLabel {
+                        if let date = value.as(Date.self) {
+                            Text(chartDateLabel(date))
+                                .font(Typography.metricMicro)
+                                .foregroundStyle(Ink.tertiary)
+                        }
+                    }
                 }
             }
             .chartYAxis {
@@ -164,7 +281,22 @@ struct TrainingLoadSection: View {
             return "No training load data"
         }
         let date = latest.date.formatted(date: .abbreviated, time: .omitted)
-        return "\(report.points.count) daily values. Latest, \(format(latest.load)) estimated hard sets on \(date)."
+        let count = report.points.count
+        return "\(count) daily \(count == 1 ? "value" : "values"). Latest, \(format(latest.load)) estimated hard sets on \(date)."
+    }
+
+    private var usesDetailedChartDates: Bool {
+        guard let first = report.points.first?.date,
+              let last = report.points.last?.date else { return true }
+        let days = Calendar.current.dateComponents([.day], from: first, to: last).day ?? 0
+        return days < 45
+    }
+
+    private func chartDateLabel(_ date: Date) -> String {
+        if usesDetailedChartDates {
+            return date.formatted(.dateTime.month(.abbreviated).day())
+        }
+        return date.formatted(.dateTime.month(.abbreviated))
     }
 
     private func legend(color: Color, label: String) -> some View {
@@ -184,7 +316,7 @@ struct TrainingLoadSection: View {
         VStack(spacing: 0) {
             driverRow("Estimated hard sets", driver: report.drivers.hardSets)
             divider
-            driverRow("Sessions", driver: report.drivers.sessions, wholeNumber: true)
+            driverRow("Strength sessions", driver: report.drivers.sessions, wholeNumber: true)
             divider
             driverRow("1–5 rep sets", driver: report.drivers.heavySets, wholeNumber: true)
         }
@@ -227,10 +359,10 @@ struct TrainingLoadSection: View {
     private func comparison(current: Double, usual: Double) -> String {
         let delta = current - usual
         if abs(delta) < 0.05 {
-            return "usual"
+            return "matches recent"
         }
         let sign = delta > 0 ? "+" : "−"
-        return "\(sign)\(format(abs(delta))) vs usual"
+        return "\(sign)\(format(abs(delta))) vs recent"
     }
 
     // MARK: - Formatting
@@ -245,7 +377,7 @@ struct TrainingLoadSection: View {
     private var statusColor: Color {
         switch report.verdict {
         case .productive:   return Tint.primary
-        case .high:         return Tint.danger
+        case .high:         return Ink.primary
         case .low:          return Ink.secondary
         case .insufficient: return Ink.primary
         }

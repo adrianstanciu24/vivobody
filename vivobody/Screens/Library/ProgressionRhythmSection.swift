@@ -2,12 +2,12 @@
 //  ProgressionRhythmSection.swift
 //  vivobody
 //
-//  "Progression rhythm" section for ExerciseDetailScreen: the median
-//  time between load increases (running-max step-ups from
-//  ProgressionCadence), a live "day N of your cycle" read, and a
-//  proportional staircase that makes both the timing and the rising
-//  load visible. The card closes with the actual increase count and
-//  load range instead of a legend the user has to decode.
+//  "Load cadence" section for ExerciseDetailScreen: the median time
+//  between load increases (running-max step-ups from
+//  ProgressionCadence), a plain-language read of where the current gap
+//  sits against that pattern, and a proportional staircase that makes
+//  both timing and rising load visible. Low-sample estimates remain
+//  explicitly labeled as early reads.
 //
 //  Pro-gated with the same frameless frosted treatment as the
 //  Insights tab: the real card frozen beneath a blur, tap opens the
@@ -46,7 +46,7 @@ extension ExerciseDetailScreen {
 
     func rhythmSectionContent(_ cadence: ProgressionCadence) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            Text("Progression rhythm")
+            Text("Load cadence")
                 .sectionLabelStyle(Opacity.medium)
             ProgressionRhythmCard(cadence: cadence, unit: unit)
         }
@@ -76,7 +76,7 @@ private struct ProgressionRhythmCard: View {
 
             VStack(alignment: .leading, spacing: Space.sm) {
                 HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                    Text("Load progression")
+                    Text(isShowingRecentSubset ? "Recent load bests" : "Load bests")
                         .panelLegend()
 
                     Spacer(minLength: Space.sm)
@@ -87,7 +87,7 @@ private struct ProgressionRhythmCard: View {
                         .monospacedDigit()
                 }
 
-                ProgressionStaircase(events: cadence.events, tailTint: statusTint)
+                ProgressionStaircase(events: displayedEvents, tailTint: statusTint)
 
                 HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
                     Text(increaseCountLabel)
@@ -110,7 +110,7 @@ private struct ProgressionRhythmCard: View {
 
     private var paceReadout: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
-            Text("Usual interval")
+            Text("Usual pace")
                 .panelLegend()
 
             HStack(alignment: .lastTextBaseline, spacing: 6) {
@@ -131,7 +131,7 @@ private struct ProgressionRhythmCard: View {
     /// current cycle from collapsing into one ambiguous sentence.
     private var currentReadout: some View {
         VStack(alignment: .trailing, spacing: Space.xs) {
-            Text("Current")
+            Text("Current gap")
                 .panelLegend()
 
             HStack(spacing: Space.sm) {
@@ -158,16 +158,25 @@ private struct ProgressionRhythmCard: View {
         if cadence.daysSinceLastIncrease == 0 {
             return "Today"
         }
-        return "Day \(cadence.daysSinceLastIncrease)"
+
+        let days = cadence.daysSinceLastIncrease
+        return "\(days) \(days == 1 ? "day" : "days")"
     }
 
     private var currentDetail: String {
         if cadence.daysSinceLastIncrease == 0 {
-            return "Load increased"
+            return "New load best"
         }
-        return cadence.isPastUsualRhythm
-            ? "Past your usual interval"
-            : "of ~\(cadence.medianGapDays)"
+
+        if cadence.daysSinceLastIncrease < cadence.medianGapDays {
+            return "Within your usual interval"
+        }
+        if cadence.daysSinceLastIncrease == cadence.medianGapDays {
+            return "At your usual interval"
+        }
+
+        let beyond = cadence.daysSinceLastIncrease - cadence.medianGapDays
+        return "\(beyond) \(beyond == 1 ? "day" : "days") longer than usual"
     }
 
     private var statusTint: Color {
@@ -178,17 +187,27 @@ private struct ProgressionRhythmCard: View {
 
     private var increaseCountLabel: String {
         let count = cadence.increases.count
-        return "\(count) load \(count == 1 ? "increase" : "increases")"
+        let noun = count == 1 ? "increase" : "increases"
+        let evidence = "Based on \(count) \(noun)"
+        return cadence.isEarlyRead ? "\(evidence) · early read" : evidence
+    }
+
+    private var displayedEvents: [ProgressionCadence.Event] {
+        Array(cadence.events.suffix(ProgressionStaircase.maxEvents))
+    }
+
+    private var isShowingRecentSubset: Bool {
+        cadence.events.count > ProgressionStaircase.maxEvents
     }
 
     private var loadRange: String {
         let first = WeightFormatter.string(
-            cadence.baseline.load,
+            displayedEvents.first?.load ?? cadence.baseline.load,
             unit: unit,
             includeUnit: false
         )
         let latest = WeightFormatter.string(
-            cadence.increases.last?.load ?? cadence.baseline.load,
+            displayedEvents.last?.load ?? cadence.baseline.load,
             unit: unit,
             includeUnit: false
         )
@@ -197,12 +216,23 @@ private struct ProgressionRhythmCard: View {
 
     private var accessibilitySummary: String {
         let dayUnit = cadence.medianGapDays == 1 ? "day" : "days"
-        let first = WeightFormatter.string(cadence.baseline.load, unit: unit)
-        let latest = WeightFormatter.string(
-            cadence.increases.last?.load ?? cadence.baseline.load,
+        let first = WeightFormatter.string(
+            displayedEvents.first?.load ?? cadence.baseline.load,
             unit: unit
         )
-        return "Progression rhythm. You typically add load every \(cadence.medianGapDays) \(dayUnit). \(currentHeadline), \(currentDetail). \(increaseCountLabel), from \(first) to \(latest)."
+        let latest = WeightFormatter.string(
+            displayedEvents.last?.load ?? cadence.baseline.load,
+            unit: unit
+        )
+        let currentGap: String
+        if cadence.daysSinceLastIncrease == 0 {
+            currentGap = "The latest increase was today"
+        } else {
+            let currentDayUnit = cadence.daysSinceLastIncrease == 1 ? "day" : "days"
+            currentGap = "It has been \(cadence.daysSinceLastIncrease) \(currentDayUnit) since the last increase"
+        }
+        let rangeContext = isShowingRecentSubset ? "Recent visible load bests" : "Visible load bests"
+        return "Load cadence. New load bests are about \(cadence.medianGapDays) \(dayUnit) apart. \(currentGap), \(currentDetail). \(increaseCountLabel). \(rangeContext) run from \(first) to \(latest)."
     }
 }
 
@@ -230,15 +260,11 @@ private struct ProgressionStaircase: View {
 
     /// Keep enough turns to read as a rhythm without producing a
     /// dense sparkline on long-lived exercises.
-    private static let maxEvents = 7
+    fileprivate static let maxEvents = 7
     private static let inset: CGFloat = 7
 
-    private var visibleEvents: [ProgressionCadence.Event] {
-        Array(events.suffix(Self.maxEvents))
-    }
-
     var body: some View {
-        let units = Self.unitPoints(for: visibleEvents, now: now)
+        let units = Self.unitPoints(for: events, now: now)
         GeometryReader { geo in
             if units.count >= 2 {
                 let points = scaledStairPoints(
@@ -458,7 +484,7 @@ private struct LockedRhythmCover<Content: View>: View {
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Progression rhythm, locked")
+        .accessibilityLabel("Load cadence, locked")
         .accessibilityHint("Unlocks with Vivobody Pro")
     }
 }
@@ -466,7 +492,7 @@ private struct LockedRhythmCover<Content: View>: View {
 // MARK: - Preview
 
 #if DEBUG
-#Preview("Progression rhythm") {
+#Preview("Load cadence") {
     let day: TimeInterval = 86_400
     let now = Date()
     let cadence = ProgressionCadence(

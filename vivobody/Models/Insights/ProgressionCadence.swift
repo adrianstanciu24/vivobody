@@ -2,7 +2,7 @@
 //  ProgressionCadence.swift
 //  vivobody
 //
-//  Personal load-progression rhythm for one exercise: how often the
+//  Personal load cadence for one exercise: how often the
 //  lifter's top effective load steps above its running max. Built as
 //  a pure walk over an exercise's chronological progress points —
 //  the baseline session establishes the starting level, every
@@ -17,7 +17,7 @@
 
 import Foundation
 
-/// The computed rhythm read for an exercise's load progression.
+/// The computed cadence read for an exercise's load progression.
 struct ProgressionCadence: Hashable {
     /// One progression event: the baseline session or a session whose
     /// top effective load exceeded everything before it.
@@ -53,6 +53,15 @@ struct ProgressionCadence: Hashable {
     /// One increase is a single data point, not a rhythm.
     static let minimumIncreases = 2
 
+    /// Four increases provide enough repeated intervals to stop
+    /// presenting the cadence as an early read. The estimate remains
+    /// available sooner, but its confidence stays explicit in the UI.
+    static let establishedIncreases = 4
+
+    var isEarlyRead: Bool {
+        increases.count < Self.establishedIncreases
+    }
+
     /// Compute the cadence from an exercise's chronological progress
     /// series. Nil when the exercise doesn't compare load, when no
     /// point has a recoverable effective load, or when there are
@@ -63,7 +72,10 @@ struct ProgressionCadence: Hashable {
         calendar: Calendar = .current
     ) -> ProgressionCadence? {
         let loaded = points
-            .filter { $0.performanceSemanticKind.comparesLoad }
+            .filter {
+                $0.date <= now
+                    && $0.performanceSemanticKind.comparesLoad
+            }
             .compactMap { point -> (date: Date, load: Double)? in
                 guard let load = point.effectiveTopLoad else { return nil }
                 return (point.date, load)

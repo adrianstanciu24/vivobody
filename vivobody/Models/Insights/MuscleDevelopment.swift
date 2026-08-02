@@ -210,6 +210,9 @@ nonisolated enum MuscleDevelopment {
 
         for session in accumulator.sessions {
             guard !isCancelled() else { return state }
+            // A report evaluated at `now` must not learn from a
+            // scheduled or accidentally future-dated session.
+            guard session.date <= now else { continue }
             advance(&state, to: session.date)
             var stimulus: [Muscle: Double] = [:]
             for exercise in session.exercises {

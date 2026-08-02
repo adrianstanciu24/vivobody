@@ -431,7 +431,11 @@ final class WorkoutSessionController {
     func handle(_ action: IncomingAction) {
         switch action {
         case .openTab(let tab):
-            appState?.selectedTab = tab
+            if tab == .insights {
+                appState?.presentInsights()
+            } else {
+                appState?.selectedTab = tab
+            }
 
         case .resumeWorkout:
             appState?.selectedTab = .today

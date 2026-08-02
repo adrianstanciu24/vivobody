@@ -19,14 +19,14 @@
 //                over supporting Last / Times half-cards
 //    • Load    — Bodyweight/assistance-only effective-load breakdown,
 //                using the historical workout snapshot behind the record
-//    • 1RM     — Dedicated, tappable row (dynamic strength only): a user-measured
-//                max (precise) overrides the estimated e1RM; empty
-//                until there's data. Tap opens the scrubber editor.
+//    • 1RM     — Dedicated, tappable tested-max row (dynamic strength
+//                only). Estimated strength belongs to the trend curve;
+//                this row stays an explicit user-entered measurement.
 //    • Rhythm  — median time between load increases + rhythm strip
 //                (Pro, comparable-load lifts with ≥2 increases)
-//    • Chart   — carded SwiftUI Charts line with an accent area
-//                gradient, PR dots, and an endpoint value readout,
-//                plus a Load | e1RM | Volume toggle and range chips
+//    • Chart   — a bold estimated-strength trend instrument (including
+//                its four-workout build-up state), plus Load / Volume
+//                history modes, range chips, PR dots, and endpoint values
 //    • Effort  — average RIR + progression verdict (dynamic strength
 //                only, gated on having ≥3 logged RIR readings)
 //    • Recents — Last 5 sessions, top set + date + PR flag
@@ -35,9 +35,9 @@
 //                while any Pro-gated section above is frozen
 //
 //  Empty-state behavior: when the user has never logged this
-//  exercise, the stats row shows em-dashes and history sections stay
-//  hidden. With history but fewer than two plottable points, Progress
-//  keeps its chart footprint and explains what is needed for a trend.
+//  exercise, the stats row shows em-dashes while an eligible strength
+//  exercise still shows the dormant trend card so the user can see what
+//  their next workouts will unlock. Other history sections stay hidden.
 //  The rest of the screen still functions (CTA, edit/delete).
 //
 
@@ -183,14 +183,14 @@ struct ExerciseDetailScreen: View {
                 if showsPerformanceRows {
                     performanceRows
                 }
-                progressionRhythmSection
-                if hasHistory {
-                    if pro?.isUnlocked == true {
+                if hasHistory || supportsEstimatedOneRepMax {
+                    if pro?.isUnlocked ?? true {
                         chartSection
                     } else {
                         lockedChartSection
                     }
                 }
+                progressionRhythmSection
                 effortSection
                 if hasHistory {
                     recentSessionsSection

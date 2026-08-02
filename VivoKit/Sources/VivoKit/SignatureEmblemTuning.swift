@@ -5,8 +5,9 @@
 //  The single source of truth for the signature bloom's geometry and
 //  colour, so the app's animated emblem and the static widget cannot
 //  drift. Its swept, folded leaf echoes the Vivo mark while preserving
-//  the data mapping: development controls reach, volume controls width,
-//  and effort controls luminance.
+//  the data mapping: lifetime regional share controls the complete
+//  petal silhouette. Light and motion stay ambient, never a second
+//  hidden timeframe.
 //
 
 import CoreGraphics
@@ -152,7 +153,7 @@ public enum SignatureEmblemTuning {
         )
     }
 
-    /// Compatibility surface used by the full-growth ghost.
+    /// Outline-only surface used by the equal-share reference bloom.
     public static func petalPath(length: CGFloat, halfWidth: CGFloat) -> Path {
         petalShape(length: length, halfWidth: halfWidth).outline
     }
@@ -196,13 +197,13 @@ public enum SignatureEmblemTuning {
 
     /// The night behind the bloom — a barely-lit pocket of warm air
     /// instead of dead flat black, so the emblem sits in an
-    /// atmosphere. Deepens with training intensity.
+    /// atmosphere. Its strength is deliberately stable: geometry is
+    /// the data, while light is material.
     public static let atmosphereFraction: CGFloat = 0.86
-    public static func atmosphereGradient(intensity: Double) -> Gradient {
-        let a = 0.6 + 0.4 * min(1, max(0, intensity))
+    public static func atmosphereGradient() -> Gradient {
         return Gradient(stops: [
-            .init(color: Color(red: 0.24, green: 0.08, blue: 0.0).opacity(0.22 * a), location: 0),
-            .init(color: Color(red: 0.10, green: 0.025, blue: 0.0).opacity(0.10 * a), location: 0.55),
+            .init(color: Color(red: 0.24, green: 0.08, blue: 0.0).opacity(0.18), location: 0),
+            .init(color: Color(red: 0.10, green: 0.025, blue: 0.0).opacity(0.08), location: 0.55),
             .init(color: .clear, location: 1),
         ])
     }
@@ -230,51 +231,52 @@ public enum SignatureEmblemTuning {
         ])
     }
 
-    /// The ambient ember behind the whole bloom — a broad, soft
-    /// warmth on the black canvas that scales with training
-    /// intensity, giving the emblem the presence the logo has.
-    public static func ambientOpacity(intensity: Double) -> Double {
-        0.03 + 0.04 * min(1, max(0, intensity))
-    }
+    /// The ambient ember behind the whole bloom — a broad, stable
+    /// warmth on the black canvas that gives the emblem presence.
+    public static let ambientOpacity: Double = 0.055
 
-    /// The ghost bloom — a dashed white outline of every petal at
-    /// full development and full width, the silhouette the live
-    /// petals grow into. White on black carries further than the
-    /// tint at the same opacity; kept dashed so it still reads as
-    /// aspiration, not data.
+    /// The dashed bloom is the six-way-even reference. The live
+    /// silhouette crossing or falling inside it makes the lifetime
+    /// distribution readable without adding another metric.
     public static let ghostOpacity: Double = 0.14
     public static let ghostLineWidth: CGFloat = 0.75
     public static let ghostDash: [CGFloat] = [2.5, 3.5]
 
-    /// Development (0…1) → petal reach as a fraction of the emblem
-    /// radius. Development is normalised against the top of each
-    /// muscle's productive band, so real training lives at 0.2…0.5
-    /// for months; pow(·, 0.8) gently lifts that band so the bloom
-    /// fills its frame, while 0 and 1 stay honest.
-    public static func reachFraction(development: Double) -> CGFloat {
-        let d = min(1, max(0, development))
-        return 0.26 + 0.58 * CGFloat(pow(d, 0.8))
+    /// The equal allocation for one of the six fixed regions.
+    public static let equalShare = 1.0 / 6.0
+
+    /// Absolute lifetime share → perceptual magnitude relative to an
+    /// even six-way split. Square root keeps small but real regions
+    /// visible; the cap stops one dominant region colliding with its
+    /// label. Unlike max-share normalisation, this scale has the same
+    /// meaning in every signature.
+    public static func volumeMagnitude(volumeShare: Double) -> Double {
+        min(1.75, sqrt(max(0, volumeShare) / equalShare))
     }
 
-    /// Volume share (normalised to the largest petal, 0…1) → petal
-    /// half-width, clamped so a short petal can never grow wider than
-    /// it is long: stubby regions stay petals, not blobs. Kept
-    /// slender — the logo's leaves are slim, and slim petals read as
-    /// a bloom rather than a starfish.
-    public static func halfWidth(shareNorm: Double, length: CGFloat, radius: CGFloat) -> CGFloat {
-        let s = min(1, max(0, shareNorm))
-        return min(radius * (0.045 + 0.2 * s), length * 0.52)
+    /// Lifetime share → petal reach as a fraction of the emblem
+    /// radius. A dominant region can cross the ring without entering
+    /// the label band; the six-way-even shape sits near the middle of
+    /// the instrument.
+    public static func reachFraction(volumeShare: Double) -> CGFloat {
+        let magnitude = volumeMagnitude(volumeShare: volumeShare)
+        return min(0.84, 0.24 + 0.38 * CGFloat(magnitude))
     }
 
-    /// Development × effort → petal burn. The floor keeps even a weak
-    /// region a deliberate shape on black; the dominant region burns a
-    /// touch brighter. Renderers use this for both crisp material and
-    /// additive light passes.
-    public static func petalOpacity(development: Double, intensity: Double, isDominant: Bool) -> Double {
-        let d = min(1, max(0, development))
-        let i = min(1, max(0, intensity))
-        let base = (0.42 + 0.46 * d) * (0.6 + 0.4 * i)
-        return min(1, base + (isDominant ? 0.2 : 0))
+    /// The same absolute lifetime share controls half-width, clamped
+    /// so short petals remain swept leaves rather than blobs.
+    public static func halfWidth(volumeShare: Double, length: CGFloat, radius: CGFloat) -> CGFloat {
+        let magnitude = volumeMagnitude(volumeShare: volumeShare)
+        return min(radius * (0.04 + 0.12 * magnitude), length * 0.52)
+    }
+
+    /// Lifetime share → petal material strength. Zero stays absent;
+    /// every real region remains legible, with a modest lead-region
+    /// lift that reinforces the exact percentages.
+    public static func petalOpacity(volumeShare: Double, isDominant: Bool) -> Double {
+        guard volumeShare > 0 else { return 0 }
+        let relativeToEven = min(1, volumeShare / equalShare)
+        return min(1, 0.86 + 0.04 * relativeToEven + (isDominant ? 0.10 : 0))
     }
 
     private static func interpolatedColor(

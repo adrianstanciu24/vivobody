@@ -2,12 +2,11 @@
 //  RepRangeMigrationTests.swift
 //
 //  Guards the rep-range drift engine behind the Insights "Rep trend"
-//  section. It buckets completed reps-mode sets by ISO week, averages
+//  section. It buckets completed reps-mode sets by calendar week, averages
 //  reps per set per week, and fits a least-squares line to the weekly
-//  points, so it's tested on a virtual clock: a descending reps
-//  series drifts toward strength, an ascending one toward endurance,
-//  a flat one holds stable, and too-thin / out-of-window / non-reps
-//  data is excluded.
+//  points with completed-set weighting, so it's tested on a virtual
+//  clock: directional and flat series, evidence tiers, sparse-week
+//  outliers, exact calendar bounds, and future / non-reps exclusions.
 //
 
 import Foundation
@@ -20,7 +19,7 @@ struct RepRangeMigrationTests {
     // MARK: - Virtual clock
 
     /// Tuesday, 14 Nov 2023 — picked so 7-day-spaced sessions land in
-    /// distinct ISO weeks under both Mon-start and Sun-start calendars.
+    /// distinct weeks under both Mon-start and Sun-start calendars.
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     // MARK: - Helpers
@@ -51,9 +50,13 @@ struct RepRangeMigrationTests {
         return ex
     }
 
-    /// Convenience: one completed reps set at `reps`.
-    private func lift(_ reps: Int) -> Exercise {
-        lift([(reps, true)])
+    /// Convenience: repeated completed reps sets at `reps`.
+    private func lift(_ reps: Int, count: Int = 1) -> Exercise {
+        let sets: [(reps: Int, completed: Bool)] = Array(
+            repeating: (reps: reps, completed: true),
+            count: count
+        )
+        return lift(sets)
     }
 
     /// Timed-hold exercise (`.duration`) with completed sets.
@@ -76,7 +79,7 @@ struct RepRangeMigrationTests {
 
     @Test func sessionsInSameWeekAggregateIntoOnePoint() {
         // daysAgo 0 (Tue Nov 14) and daysAgo 1 (Mon Nov 13) share an
-        // ISO week under both Mon-start and Sun-start calendars.
+        // week under both Mon-start and Sun-start calendars.
         let s1 = session(daysAgo: 0, [lift(8)])
         let s2 = session(daysAgo: 1, [lift(10)])
         let report = [s1, s2].repRangeMigration(now: now)
@@ -102,15 +105,17 @@ struct RepRangeMigrationTests {
     @Test func descendingRepsDriftTowardStrength() {
         // Earliest week → latest week: 12, 10, 8, 6, 4 reps/set.
         let sessions: [WorkoutSession] = [
-            session(daysAgo: 28, [lift(12)]),
-            session(daysAgo: 21, [lift(10)]),
-            session(daysAgo: 14, [lift(8)]),
-            session(daysAgo: 7,  [lift(6)]),
-            session(daysAgo: 0,  [lift(4)]),
+            session(daysAgo: 28, [lift(12, count: 4)]),
+            session(daysAgo: 21, [lift(10, count: 4)]),
+            session(daysAgo: 14, [lift(8, count: 4)]),
+            session(daysAgo: 7,  [lift(6, count: 4)]),
+            session(daysAgo: 0,  [lift(4, count: 4)]),
         ]
         let report = sessions.repRangeMigration(now: now)
 
         #expect(report.hasTrend)
+        #expect(report.confidence == .emerging)
+        #expect(report.totalSets == 20)
         #expect(report.verdict == .towardStrength)
         #expect(report.slopePerWeek < 0)
         #expect(abs(report.earlierAverage - 12.0) < 0.001)
@@ -120,11 +125,11 @@ struct RepRangeMigrationTests {
     @Test func ascendingRepsDriftTowardEndurance() {
         // Earliest week → latest week: 4, 6, 8, 10, 12 reps/set.
         let sessions: [WorkoutSession] = [
-            session(daysAgo: 28, [lift(4)]),
-            session(daysAgo: 21, [lift(6)]),
-            session(daysAgo: 14, [lift(8)]),
-            session(daysAgo: 7,  [lift(10)]),
-            session(daysAgo: 0,  [lift(12)]),
+            session(daysAgo: 28, [lift(4, count: 4)]),
+            session(daysAgo: 21, [lift(6, count: 4)]),
+            session(daysAgo: 14, [lift(8, count: 4)]),
+            session(daysAgo: 7,  [lift(10, count: 4)]),
+            session(daysAgo: 0,  [lift(12, count: 4)]),
         ]
         let report = sessions.repRangeMigration(now: now)
 
@@ -138,17 +143,45 @@ struct RepRangeMigrationTests {
     @Test func flatRepsHoldStable() {
         // Five weeks, every set at 8 reps — slope ≈ 0.
         let sessions: [WorkoutSession] = [
-            session(daysAgo: 28, [lift(8)]),
-            session(daysAgo: 21, [lift(8)]),
-            session(daysAgo: 14, [lift(8)]),
-            session(daysAgo: 7,  [lift(8)]),
-            session(daysAgo: 0,  [lift(8)]),
+            session(daysAgo: 28, [lift(8, count: 4)]),
+            session(daysAgo: 21, [lift(8, count: 4)]),
+            session(daysAgo: 14, [lift(8, count: 4)]),
+            session(daysAgo: 7,  [lift(8, count: 4)]),
+            session(daysAgo: 0,  [lift(8, count: 4)]),
         ]
         let report = sessions.repRangeMigration(now: now)
 
         #expect(report.hasTrend)
         #expect(report.verdict == .stable)
         #expect(abs(report.slopePerWeek) < 0.1)
+    }
+
+    @Test func sixWellPopulatedWeeksEstablishTheTrend() {
+        let sessions = (0..<6).map { index in
+            session(daysAgo: Double((5 - index) * 7), [lift(5 + index, count: 5)])
+        }
+        let report = sessions.repRangeMigration(now: now)
+
+        #expect(report.hasTrend)
+        #expect(report.confidence == .established)
+        #expect(report.totalSets == 30)
+        #expect(report.verdict == .towardEndurance)
+    }
+
+    @Test func sparseOutlierCannotOutvotePopulatedWeeks() {
+        let sessions = [
+            session(daysAgo: 14, [lift(8, count: 50)]),
+            session(daysAgo: 7, [lift(8, count: 50)]),
+            session(daysAgo: 0, [lift(9)]),
+        ]
+        let report = sessions.repRangeMigration(now: now)
+
+        #expect(report.hasTrend)
+        #expect(report.confidence == .emerging)
+        #expect(report.totalSets == 101)
+        #expect(report.slopePerWeek > 0)
+        #expect(report.slopePerWeek < 0.1)
+        #expect(report.verdict == .stable)
     }
 
     // MARK: - Exclusions
@@ -192,6 +225,15 @@ struct RepRangeMigrationTests {
         #expect(abs((report.points.first?.averageReps ?? -1) - 8.0) < 0.001)
     }
 
+    @Test func futureSessionsAreExcluded() {
+        let report = [session(daysAgo: -1, [lift(20, count: 20)])]
+            .repRangeMigration(now: now)
+
+        #expect(report.points.isEmpty)
+        #expect(report.totalSets == 0)
+        #expect(report.confidence == .insufficient)
+    }
+
     // MARK: - Trend floor
 
     @Test func fewerThanThreeWeeksHasNoTrend() {
@@ -204,6 +246,8 @@ struct RepRangeMigrationTests {
 
         #expect(report.points.count == 2)
         #expect(!report.hasTrend)
+        #expect(report.confidence == .insufficient)
+        #expect(report.totalSets == 2)
         #expect(report.verdict == .stable)
         #expect(report.slopePerWeek == 0)
     }
@@ -211,8 +255,8 @@ struct RepRangeMigrationTests {
     // MARK: - Window
 
     @Test func windowRespected() {
-        // 12-week default window (84 days). A session 100 days ago is
-        // outside; the in-window session at daysAgo 1 stands alone.
+        // The exact 12-calendar-week window excludes a session 100
+        // days ago; the in-window session at daysAgo 1 stands alone.
         let recent = session(daysAgo: 1, [lift(8)])
         let old = session(daysAgo: 100, [lift(3)])
         let report = [recent, old].repRangeMigration(now: now)
@@ -223,10 +267,26 @@ struct RepRangeMigrationTests {
         #expect(!report.hasTrend)
     }
 
+    @Test func reportNeverCreatesAThirteenthCalendarBucket() {
+        let sessions = (0..<14).map { index in
+            session(daysAgo: Double(index * 7), [lift(8)])
+        }
+        let report = sessions.repRangeMigration(weeks: 12, now: now)
+        let validStarts = Set(
+            RepRangeWeekWindow.make(weeks: 12, now: now)?.weekStarts ?? []
+        )
+
+        #expect(validStarts.count == 12)
+        #expect(report.points.count <= 12)
+        #expect(report.points.allSatisfy { validStarts.contains($0.weekStart) })
+    }
+
     @Test func emptyArchiveHasNoData() {
         let report = [WorkoutSession]().repRangeMigration(now: now)
         #expect(report.points.isEmpty)
         #expect(!report.hasTrend)
+        #expect(report.confidence == .insufficient)
+        #expect(report.totalSets == 0)
         #expect(report.verdict == .stable)
         #expect(report.currentAverage == 0)
         #expect(report.earlierAverage == 0)

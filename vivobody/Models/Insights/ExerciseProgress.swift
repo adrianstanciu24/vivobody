@@ -17,6 +17,35 @@
 
 import Foundation
 
+// MARK: - Estimated 1RM policy
+
+/// Confidence boundary for session-level estimated-one-rep-max points.
+/// Epley estimates from very high-rep sets are deliberately left out of
+/// the Strength curve: they remain ordinary workout history, but cannot
+/// dominate a load-oriented outlook with endurance work.
+nonisolated enum EstimatedOneRepMaxPolicy {
+    static let eligibleReps = 1...12
+
+    static func estimate(effectiveLoad: Double, reps: Int) -> Double? {
+        guard effectiveLoad.isFinite,
+              effectiveLoad > 0,
+              eligibleReps.contains(reps) else {
+            return nil
+        }
+        return effectiveLoad * (1.0 + Double(reps) / 30.0)
+    }
+}
+
+/// The strongest eligible e1RM estimate inside one exercise/session.
+/// It is kept separate from the representative top set because normal
+/// history records intentionally compare actual load first, while an
+/// e1RM curve must choose the set with the greatest estimate.
+nonisolated struct EstimatedOneRepMaxSample: Hashable, Sendable {
+    let value: Double
+    let effectiveLoad: Double
+    let reps: Int
+}
+
 /// One data point in an exercise's progress series — the best set
 /// completed in a given session, plus that session's total volume
 /// for the exercise.
@@ -25,6 +54,11 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
     let date: Date
     let topWeight: Double
     let topReps: Int
+
+    /// Strongest eligible estimated-1RM set in this session. This may be
+    /// different from `topWeight` / `topReps`, whose representative-set
+    /// semantics preserve the app's transparent load-then-reps records.
+    var estimatedOneRepMaxSample: EstimatedOneRepMaxSample? = nil
 
     /// Duration of the representative completed timed set. Loaded
     /// isometrics choose effective load first and duration second;
@@ -119,12 +153,18 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
     /// the user varies reps across sessions and the top-load
     /// curve oscillates more than the underlying strength trend.
     var estimated1RM: Double {
+        if let estimatedOneRepMaxSample {
+            return estimatedOneRepMaxSample.value
+        }
         guard modality.supportsEstimatedOneRepMax(
             for: trackingMode,
             loadMode: loadMode
-        ), topReps > 0 else { return 0 }
+        ) else { return 0 }
         guard let effectiveLoad = effectiveTopLoad, effectiveLoad > 0 else { return 0 }
-        return effectiveLoad * (1.0 + Double(topReps) / 30.0)
+        return EstimatedOneRepMaxPolicy.estimate(
+            effectiveLoad: effectiveLoad,
+            reps: topReps
+        ) ?? 0
     }
 }
 
@@ -474,6 +514,7 @@ nonisolated extension AnalyticsAccumulator {
                     date: date,
                     topWeight: top.weight,
                     topReps: top.reps,
+                    estimatedOneRepMaxSample: exercise.bestEstimatedOneRepMaxSample,
                     topDuration: top.duration,
                     trackingMode: exercise.trackingMode,
                     modality: exercise.modality,

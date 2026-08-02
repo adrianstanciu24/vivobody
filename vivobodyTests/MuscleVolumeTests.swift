@@ -45,19 +45,37 @@ struct MuscleVolumeTests {
         completed: Int? = nil,
         involvement: Muscle.Involvement? = nil
     ) -> Exercise {
+        let catalogInvolvement = Muscle.involvement(forExerciseNamed: name)
+        let resolvedInvolvement = involvement
+            ?? (catalogInvolvement.isEmpty
+                ? Muscle.Involvement(contributions: [
+                    .init(muscle: primaryMuscle(for: group), role: .primary),
+                ])
+                : catalogInvolvement)
         let ex = Exercise(
             name: name,
             group: group,
             plannedSets: sets,
             plannedReps: 8,
             plannedWeight: 100,
-            muscleInvolvement: involvement
+            muscleInvolvement: resolvedInvolvement
         )
         let doneCount = completed ?? sets
         for (i, set) in ex.orderedSets.enumerated() {
             set.isCompleted = i < doneCount
         }
         return ex
+    }
+
+    private func primaryMuscle(for group: MuscleGroup) -> Muscle {
+        switch group {
+        case .chest: return .pectorals
+        case .back: return .lats
+        case .shoulders: return .deltoids
+        case .legs: return .quads
+        case .arms: return .biceps
+        case .core: return .abs
+        }
     }
 
     private func stat(_ muscle: Muscle, in stats: [MuscleVolumeStat]) -> MuscleVolumeStat {
@@ -106,12 +124,14 @@ struct MuscleVolumeTests {
 
     @Test func workOutsideWindowStopsCountingButKeepsRecency() {
         // Trained 9 days ago, evaluated today with the default 7-day
-        // window: no volume credit, but recency still reflects it.
+        // window: no weekly credit, but the lifetime signature channel
+        // and recency still reflect it.
         let old = session(at: day(1), [lift("Bench Press", .chest, sets: 5)])
         let stats = [old].muscleVolume(now: day(10))
 
         let chest = stat(.pectorals, in: stats)
         #expect(chest.effectiveSets == 0)
+        #expect(chest.allTimeEffectiveSets == 5)
         #expect(chest.zone == .untrained)
         #expect(chest.daysSinceLastTrained == 9)
     }
@@ -120,7 +140,36 @@ struct MuscleVolumeTests {
         let recent = session(at: day(8), [lift("Bench Press", .chest, sets: 5)])
         let stats = [recent].muscleVolume(now: day(10))
         #expect(abs(stat(.pectorals, in: stats).effectiveSets - 5.0) < 1e-9)
+        #expect(abs(stat(.pectorals, in: stats).allTimeEffectiveSets - 5.0) < 1e-9)
         #expect(stat(.pectorals, in: stats).daysSinceLastTrained == 2)
+    }
+
+    @Test func lifetimeVolumeDoesNotExpire() {
+        let old = session(at: day(0), [lift("Bench Press", .chest, sets: 5)])
+        let stats = [old].muscleVolume(now: day(35))
+        let chest = stat(.pectorals, in: stats)
+
+        #expect(chest.effectiveSets == 0)
+        #expect(chest.allTimeEffectiveSets == 5)
+        #expect(chest.daysSinceLastTrained == 35)
+    }
+
+    @Test func lifetimeVolumeSumsAcrossTheArchive() {
+        let first = session(at: day(0), [lift("Bench Press", .chest, sets: 2)])
+        let second = session(at: day(40), [lift("Bench Press", .chest, sets: 3)])
+        let stats = [first, second].muscleVolume(now: day(50))
+
+        #expect(stat(.pectorals, in: stats).allTimeEffectiveSets == 5)
+    }
+
+    @Test func futureSessionsDoNotCountOrSetRecency() {
+        let future = session(at: day(12), [lift("Bench Press", .chest, sets: 5)])
+        let stats = [future].muscleVolume(now: day(10))
+        let chest = stat(.pectorals, in: stats)
+
+        #expect(chest.effectiveSets == 0)
+        #expect(chest.allTimeEffectiveSets == 0)
+        #expect(chest.daysSinceLastTrained == nil)
     }
 
     // MARK: - Zones

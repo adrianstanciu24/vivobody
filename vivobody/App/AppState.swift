@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Shell-only concerns:
-//    • which tab is selected
+//    • which of the five tabs is selected
 //    • Spotlight-driven exercise detail presentation
 //
 //  Workout lifecycle (start / discard / dismiss / restore / minimize
@@ -46,6 +46,11 @@ final class AppState {
     /// Which tab is selected.
     var selectedTab: AppTab = .today
 
+    /// Lightweight archive presence published by the one canonical
+    /// AnalyticsFeeder query. Insights uses this instead of mounting a
+    /// second SwiftData query at the top of a pushed destination.
+    var analyticsArchiveHasSessions = false
+
     /// Catalog item surfaced by a Spotlight search-result tap,
     /// presented as a detail sheet from the app shell. Nil when no
     /// Spotlight-driven detail is pending; the sheet binding clears
@@ -82,5 +87,9 @@ final class AppState {
     /// lifecycle.
     func presentSpotlightExercise(_ item: ExerciseCatalogItem) {
         pendingSpotlightExercise = item
+    }
+
+    func presentInsights() {
+        selectedTab = .insights
     }
 }

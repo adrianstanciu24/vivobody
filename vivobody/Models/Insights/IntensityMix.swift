@@ -2,16 +2,15 @@
 //  IntensityMix.swift
 //  vivobody
 //
-//  How your working sets split across rep ranges — the "what kind of
-//  training is this, really?" lens. Strength counts e1RM; volume
-//  landmarks count sets; this asks at what INTENSITY those sets were
-//  done:
-//    • strength    — 1–5 reps (heavy, neural)
-//    • hypertrophy — 6–12 reps (the growth zone)
-//    • endurance   — 13+ reps (metabolic / conditioning)
+//  How completed, rep-tracked strength sets split across three plain
+//  rep ranges. The buckets describe what was logged without claiming
+//  a training adaptation from rep count alone:
+//    • low reps      — 1–5
+//    • moderate reps — 6–12
+//    • high reps     — 13+
 //
 //  Counts completed dynamic-strength `.reps` sets over a rolling
-//  window (4 weeks by default, to read CURRENT emphasis). Timed holds,
+//  window (28 days by default, to read current emphasis). Timed holds,
 //  conditioning reps, and mobility drills are excluded. Pure value-
 //  type computation on injected dates (see `IntensityMixTests`).
 //
@@ -37,9 +36,9 @@ nonisolated enum IntensityZone: Hashable, CaseIterable, Sendable {
 
     var label: String {
         switch self {
-        case .strength:    return "Strength"
-        case .hypertrophy: return "Hypertrophy"
-        case .endurance:   return "Endurance"
+        case .strength:    return "Low reps"
+        case .hypertrophy: return "Moderate reps"
+        case .endurance:   return "High reps"
         }
     }
 
@@ -55,12 +54,17 @@ nonisolated enum IntensityZone: Hashable, CaseIterable, Sendable {
 // MARK: - Mix
 
 nonisolated struct IntensityMix: Hashable, Sendable {
+    /// Below this sample size the UI labels the distribution as an
+    /// early read instead of presenting a tiny sample as settled.
+    static let minimumClearSampleSets = 6
+
     let strengthSets: Int
     let hypertrophySets: Int
     let enduranceSets: Int
 
     var total: Int { strengthSets + hypertrophySets + enduranceSets }
     var hasData: Bool { total > 0 }
+    var hasSparseSample: Bool { hasData && total < Self.minimumClearSampleSets }
 
     func count(_ zone: IntensityZone) -> Int {
         switch zone {
@@ -70,7 +74,7 @@ nonisolated struct IntensityMix: Hashable, Sendable {
         }
     }
 
-    /// Fraction (0…1) of working sets in a zone.
+    /// Fraction (0…1) of eligible completed sets in a zone.
     func share(_ zone: IntensityZone) -> Double {
         total > 0 ? Double(count(zone)) / Double(total) : 0
     }
@@ -86,11 +90,10 @@ nonisolated struct IntensityMix: Hashable, Sendable {
 
 // MARK: - Weekly breakdown
 
-/// One calendar week's zone counts — the bars of the Insights
-/// intensity chart. Weeks with no completed `.reps` sets are omitted
-/// by the aggregator, so a gap in training reads as a gap. The current
-/// calendar week is marked so the chart can present it as incomplete
-/// rather than implying a finished-week drop.
+/// One calendar week's rep-range counts. The aggregator returns every
+/// week in the requested window, including zero-set weeks, so gaps are
+/// explicit and the horizontal scale never stretches sparse data. The
+/// current calendar week is marked as partial.
 nonisolated struct IntensityWeek: Identifiable, Hashable, Sendable {
     var id: Date { weekStart }
     let weekStart: Date
@@ -110,12 +113,53 @@ nonisolated struct IntensityWeek: Identifiable, Hashable, Sendable {
     }
 }
 
+// MARK: - Shared calendar window
+
+/// The exact locale-aware calendar-week window shared by the stacked
+/// chart and regression. A 12-week request always means the current
+/// partial week plus the previous 11 calendar weeks — never 13 buckets
+/// caused by rounding an 84-day instant cutoff back to a week start.
+nonisolated struct RepRangeWeekWindow: Sendable {
+    let weekStarts: [Date]
+    let start: Date
+    let currentWeekStart: Date
+
+    static func make(
+        weeks: Int,
+        now: Date,
+        calendar: Calendar = .current
+    ) -> RepRangeWeekWindow? {
+        guard weeks > 0,
+              let currentWeekStart = calendar.dateInterval(
+                  of: .weekOfYear,
+                  for: now
+              )?.start,
+              let start = calendar.date(
+                  byAdding: .weekOfYear,
+                  value: -(weeks - 1),
+                  to: currentWeekStart
+              ) else {
+            return nil
+        }
+
+        let starts = (0..<weeks).compactMap {
+            calendar.date(byAdding: .weekOfYear, value: $0, to: start)
+        }
+        guard starts.count == weeks else { return nil }
+        return RepRangeWeekWindow(
+            weekStarts: starts,
+            start: start,
+            currentWeekStart: currentWeekStart
+        )
+    }
+}
+
 // MARK: - Aggregation
 
 @MainActor
 extension Array where Element == WorkoutSession {
     /// Rep-range distribution of completed `.reps` sets over the
-    /// trailing `window` (default 4 weeks) as of `now`.
+    /// trailing `window` (default 28 days) as of `now`.
     func intensityMix(
         window: TimeInterval = 28 * 86_400,
         now: Date = Date()
@@ -125,8 +169,8 @@ extension Array where Element == WorkoutSession {
         ).intensityMix(window: window, now: now)
     }
 
-    /// Zone counts per calendar week over the trailing `weeks`
-    /// (default 12) as of `now`, chronological ascending.
+    /// Zone counts for exactly `weeks` calendar weeks (default 12),
+    /// including the current partial week, chronological ascending.
     func weeklyIntensity(weeks: Int = 12, now: Date = Date()) -> [IntensityWeek] {
         AnalyticsAccumulator.history(
             AnalyticsSnapshot(sessions: self)
@@ -155,7 +199,7 @@ nonisolated extension AnalyticsAccumulator {
         for session in sessions {
             guard !isCancelled() else { return cancelled }
             let date = session.date
-            guard date > cutoff else { continue }
+            guard date >= cutoff, date <= now else { continue }
             for replay in session.exercises {
                 guard !isCancelled() else { return cancelled }
                 guard replay.exercise.modality == .dynamicStrength,
@@ -194,20 +238,24 @@ nonisolated extension AnalyticsAccumulator {
         guard !isCancelled() else { return [] }
 
         let calendar = Calendar.current
-        let cutoff = now.addingTimeInterval(-Double(weeks) * 7 * 86_400)
-        let currentWeekStart = calendar.date(
-            from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
-        )
+        guard let window = RepRangeWeekWindow.make(
+            weeks: weeks,
+            now: now,
+            calendar: calendar
+        ) else { return [] }
+        let validWeekStarts = Set(window.weekStarts)
 
         var byWeek: [Date: (strength: Int, hypertrophy: Int, endurance: Int)] = [:]
 
         for session in sessions {
             guard !isCancelled() else { return [] }
             let date = session.date
-            guard date >= cutoff else { continue }
-            guard let weekStart = calendar.date(
-                from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-            ) else { continue }
+            guard date >= window.start, date <= now else { continue }
+            guard let weekStart = calendar.dateInterval(
+                of: .weekOfYear,
+                for: date
+            )?.start,
+                  validWeekStarts.contains(weekStart) else { continue }
 
             for replay in session.exercises {
                 guard !isCancelled() else { return [] }
@@ -232,10 +280,9 @@ nonisolated extension AnalyticsAccumulator {
         }
 
         guard !isCancelled() else { return [] }
-        let orderedWeeks = byWeek.keys.sorted()
         var result: [IntensityWeek] = []
-        result.reserveCapacity(orderedWeeks.count)
-        for weekStart in orderedWeeks {
+        result.reserveCapacity(window.weekStarts.count)
+        for weekStart in window.weekStarts {
             guard !isCancelled() else { return [] }
             let bucket = byWeek[weekStart] ?? (0, 0, 0)
             result.append(IntensityWeek(
@@ -243,7 +290,7 @@ nonisolated extension AnalyticsAccumulator {
                 strengthSets: bucket.strength,
                 hypertrophySets: bucket.hypertrophy,
                 enduranceSets: bucket.endurance,
-                isCurrentWeek: weekStart == currentWeekStart
+                isCurrentWeek: weekStart == window.currentWeekStart
             ))
         }
         return result

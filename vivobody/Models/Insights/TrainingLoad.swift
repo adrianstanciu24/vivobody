@@ -9,13 +9,13 @@
 //
 //  The headline compares the rolling last seven calendar days with
 //  the median of the four non-overlapping weeks immediately before
-//  them. A personal productive range of 0.8...1.3 times that usual
-//  load gives the status context without presenting a clinical
-//  recovery or injury-risk claim.
+//  them. A personal recent range of 0.8...1.3 times that median gives
+//  relative context; it is not a clinical recovery, productivity, or
+//  injury-risk claim.
 //
 //  The trend contains up to 84 daily points. Every point uses the
 //  trailing seven days and, where enough prior history exists, its
-//  own historical productive range. Pure value-type computation on
+//  own historical recent range. Pure value-type computation on
 //  injected dates and calendars (see `TrainingLoadTests`).
 //
 
@@ -25,20 +25,27 @@ import Foundation
 
 nonisolated enum LoadVerdict: Hashable, Sendable {
     case insufficient
+    /// Below the user's recent four-week range.
     case low
+    /// Within the user's recent four-week range. The case name remains
+    /// stable for source compatibility; UI copy calls this "within."
     case productive
+    /// Above the user's recent four-week range.
     case high
 
-    /// The productive band for current ÷ usual load. Single source of
-    /// truth — the report's absolute range and every gauge derive from
-    /// these bounds.
-    static let productiveRatioBand: ClosedRange<Double> = 0.8...1.3
+    /// Recent-range band for current ÷ four-week median load. Single
+    /// source of truth — the report's absolute range and every gauge
+    /// derive from these bounds.
+    static let recentRatioBand: ClosedRange<Double> = 0.8...1.3
+
+    /// Compatibility spelling for existing non-Insights consumers.
+    static var productiveRatioBand: ClosedRange<Double> { recentRatioBand }
 
     static func from(ratio: Double) -> LoadVerdict {
         switch ratio {
-        case ..<productiveRatioBand.lowerBound: return .low
-        case ...productiveRatioBand.upperBound: return .productive
-        default:                                return .high
+        case ..<recentRatioBand.lowerBound: return .low
+        case ...recentRatioBand.upperBound: return .productive
+        default:                            return .high
         }
     }
 }
@@ -52,6 +59,11 @@ nonisolated struct LoadPoint: Identifiable, Hashable, Sendable {
     let load: Double
     let productiveLower: Double?
     let productiveUpper: Double?
+
+    /// Recent-range spellings used by current UI. Stored-property names
+    /// remain stable for snapshots and existing callers.
+    var rangeLower: Double? { productiveLower }
+    var rangeUpper: Double? { productiveUpper }
 }
 
 /// Estimated hard-set equivalents completed on one calendar day —
@@ -92,6 +104,11 @@ nonisolated struct TrainingLoadDrivers: Hashable, Sendable {
 // MARK: - Report
 
 nonisolated struct TrainingLoadReport: Hashable, Sendable {
+    /// Minimum observation span before the four-week comparison settles.
+    static let baselineMinimumDays = 28
+    /// At least three of the four prior weeks must contain qualifying work.
+    static let requiredActiveBaselineWeeks = 3
+
     /// Estimated hard-set equivalents in the rolling last seven days.
     let currentLoad: Double
     /// Median weekly load across the four preceding weeks.
@@ -106,12 +123,40 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
     let verdict: LoadVerdict
     /// Whole calendar days from first completed work to `now`.
     let daysLogged: Int
+    /// Prior non-overlapping weeks containing qualifying strength work.
+    let activeBaselineWeeks: Int
     /// Rolling seven-day load over at most the trailing 12 weeks.
     let points: [LoadPoint]
     /// Per-day loads for the trailing seven calendar days, oldest
     /// first and ending today. Untrained days appear with zero load.
     let recentDays: [DayLoad]
     let drivers: TrainingLoadDrivers
+
+    /// Explicit initializer keeps existing fixtures source-compatible
+    /// while allowing analytics to expose concrete baseline progress.
+    init(
+        currentLoad: Double,
+        usualLoad: Double?,
+        ratio: Double,
+        provisionalRatio: Double?,
+        verdict: LoadVerdict,
+        daysLogged: Int,
+        activeBaselineWeeks: Int = 0,
+        points: [LoadPoint],
+        recentDays: [DayLoad],
+        drivers: TrainingLoadDrivers
+    ) {
+        self.currentLoad = currentLoad
+        self.usualLoad = usualLoad
+        self.ratio = ratio
+        self.provisionalRatio = provisionalRatio
+        self.verdict = verdict
+        self.daysLogged = daysLogged
+        self.activeBaselineWeeks = activeBaselineWeeks
+        self.points = points
+        self.recentDays = recentDays
+        self.drivers = drivers
+    }
 
     var hasEnoughHistory: Bool { verdict != .insufficient }
 
@@ -120,10 +165,25 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
         hasEnoughHistory ? ratio : provisionalRatio
     }
 
-    var productiveRange: ClosedRange<Double>? {
+    var recentRange: ClosedRange<Double>? {
         guard let usualLoad else { return nil }
-        let band = LoadVerdict.productiveRatioBand
+        let band = LoadVerdict.recentRatioBand
         return (usualLoad * band.lowerBound)...(usualLoad * band.upperBound)
+    }
+
+    /// Compatibility spelling for existing non-Insights consumers.
+    var productiveRange: ClosedRange<Double>? { recentRange }
+
+    var observedBaselineDays: Int {
+        min(Self.baselineMinimumDays, max(0, daysLogged))
+    }
+
+    var baselineDaysRemaining: Int {
+        max(0, Self.baselineMinimumDays - daysLogged)
+    }
+
+    var baselineWeeksRemaining: Int {
+        max(0, Self.requiredActiveBaselineWeeks - activeBaselineWeeks)
     }
 
     var changeFromUsual: Double? {
@@ -141,11 +201,14 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
         min(1, max(0, ratio / gaugeRatioSpan))
     }
 
-    /// The productive band mapped onto the gauge track.
-    static var gaugeProductiveBand: ClosedRange<Double> {
-        let band = LoadVerdict.productiveRatioBand
+    /// The recent band mapped onto the gauge track.
+    static var gaugeRecentBand: ClosedRange<Double> {
+        let band = LoadVerdict.recentRatioBand
         return gaugePosition(forRatio: band.lowerBound)...gaugePosition(forRatio: band.upperBound)
     }
+
+    /// Compatibility spelling for existing non-Insights consumers.
+    static var gaugeProductiveBand: ClosedRange<Double> { gaugeRecentBand }
 
     /// Marker position for the best available ratio; nil while no
     /// comparison exists at all.
@@ -230,7 +293,8 @@ nonisolated extension AnalyticsAccumulator {
         )
         guard !isCancelled() else { return Self.emptyReport() }
         let activeBaseline = previous.filter { $0.load > 0 }
-        let usual = daysLogged >= 28 && activeBaseline.count >= 3
+        let usual = daysLogged >= TrainingLoadReport.baselineMinimumDays
+            && activeBaseline.count >= TrainingLoadReport.requiredActiveBaselineWeeks
             ? Self.median(previous.map(\.load))
             : nil
         let ratio = usual.flatMap { $0 > 0 ? current.load / $0 : nil } ?? 0
@@ -262,6 +326,7 @@ nonisolated extension AnalyticsAccumulator {
             provisionalRatio: provisionalRatio,
             verdict: verdict,
             daysLogged: daysLogged,
+            activeBaselineWeeks: activeBaseline.count,
             points: points,
             recentDays: recentDays,
             drivers: TrainingLoadDrivers(
@@ -365,14 +430,16 @@ nonisolated extension AnalyticsAccumulator {
             )
             guard !isCancelled() else { return [] }
             let age = calendar.dateComponents([.day], from: firstDay, to: day).day ?? 0
-            let usual = age >= 28 && previous.filter({ $0.load > 0 }).count >= 3
+            let usual = age >= TrainingLoadReport.baselineMinimumDays
+                && previous.filter({ $0.load > 0 }).count
+                    >= TrainingLoadReport.requiredActiveBaselineWeeks
                 ? median(previous.map(\.load))
                 : nil
             result.append(LoadPoint(
                 date: day,
                 load: current.load,
-                productiveLower: usual.map { $0 * LoadVerdict.productiveRatioBand.lowerBound },
-                productiveUpper: usual.map { $0 * LoadVerdict.productiveRatioBand.upperBound }
+                productiveLower: usual.map { $0 * LoadVerdict.recentRatioBand.lowerBound },
+                productiveUpper: usual.map { $0 * LoadVerdict.recentRatioBand.upperBound }
             ))
         }
         return result

@@ -47,7 +47,7 @@ struct SectionHeader: View {
                 Spacer(minLength: Space.sm)
                 HStack(spacing: Space.sm) {
                     if trailingIsInProgress {
-                        InProgressDot()
+                        BuildingSignalDot()
                     }
                     Text(trailing)
                         .panelLegend()
@@ -61,27 +61,48 @@ struct SectionHeader: View {
 /// A quiet live-state cue used beside a section header's trailing
 /// status. It breathes while work is still forming and freezes to a
 /// steady orange dot when Reduce Motion is enabled.
-private struct InProgressDot: View {
+struct BuildingSignalDot: View {
+    var size: CGFloat = 8
+
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isBright = false
+    @State private var animationTask: Task<Void, Never>?
 
     var body: some View {
         Circle()
             .fill(Tint.inProgress)
-            .frame(width: 8, height: 8)
+            .frame(width: size, height: size)
             .opacity(reduceMotion || isBright ? 1.0 : 0.62)
             .scaleEffect(reduceMotion || isBright ? 1.0 : 0.82)
             .shadow(
                 color: Tint.inProgress.opacity(reduceMotion || isBright ? 0.45 : 0.12),
-                radius: reduceMotion || isBright ? 4 : 2
+                radius: reduceMotion || isBright ? size * 0.5 : size * 0.25
             )
             .accessibilityHidden(true)
-            .onAppear {
-                guard !reduceMotion else { return }
-                withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                    isBright = true
-                }
+            .onAppear { startBreathing() }
+            .onDisappear {
+                animationTask?.cancel()
+                animationTask = nil
+                isBright = false
             }
+            .onChange(of: reduceMotion) { _, _ in startBreathing() }
+    }
+
+    private func startBreathing() {
+        animationTask?.cancel()
+        isBright = reduceMotion
+        guard !reduceMotion else { return }
+
+        // Mount-time repeating animations can be swallowed by the same
+        // transaction that inserts a section. One run-loop hop makes the
+        // breathing cue reliable when a long screen scrolls it into view.
+        animationTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(16))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                isBright = true
+            }
+        }
     }
 }
 
@@ -143,7 +164,9 @@ struct Stat: Identifiable {
 
 /// A row of stats separated by hairline dividers. The single source
 /// of truth for the "time · volume · sets" pattern that previously
-/// existed in three slightly-different copies.
+/// existed in three slightly-different copies. At accessibility text
+/// sizes it becomes a vertical set of full-width rows so values never
+/// have to collapse to an unreadable fraction of their intended size.
 struct StatStrip: View {
     let stats: [Stat]
     var valueFont: Font = Typography.statValue
@@ -154,19 +177,37 @@ struct StatStrip: View {
     /// Default stays fully centred so existing strips are unchanged.
     var edgeAligned: Bool = false
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    @ViewBuilder
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
-                cell(stat, alignment: alignment(for: index))
-                if index < stats.count - 1 {
-                    Rectangle()
-                        .fill(Surface.edge)
-                        .frame(width: 0.5)
-                        .frame(minHeight: 34)
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(spacing: 0) {
+                ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
+                    accessibleCell(stat)
+                    if index < stats.count - 1 {
+                        Rectangle()
+                            .fill(Surface.edge)
+                            .frame(height: 0.5)
+                            .padding(.vertical, Space.sm)
+                    }
                 }
             }
+            .frame(maxWidth: .infinity)
+        } else {
+            HStack(spacing: 0) {
+                ForEach(Array(stats.enumerated()), id: \.element.id) { index, stat in
+                    cell(stat, alignment: alignment(for: index))
+                    if index < stats.count - 1 {
+                        Rectangle()
+                            .fill(Surface.edge)
+                            .frame(width: 0.5)
+                            .frame(minHeight: 34)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 
     private func alignment(for index: Int) -> HorizontalAlignment {
@@ -197,6 +238,43 @@ struct StatStrip: View {
         .frame(maxWidth: .infinity, alignment: Alignment(horizontal: alignment, vertical: .center))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
+    }
+
+    private func accessibleCell(_ stat: Stat) -> some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline, spacing: Space.lg) {
+                Text(stat.label)
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                Spacer(minLength: Space.sm)
+                accessibleValue(stat)
+            }
+
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text(stat.label)
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                accessibleValue(stat)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(stat.value)\(stat.unit.map { " \($0)" } ?? "") \(stat.label)")
+    }
+
+    private func accessibleValue(_ stat: Stat) -> some View {
+        HStack(alignment: .lastTextBaseline, spacing: 3) {
+            Text(stat.value)
+                .font(valueFont)
+                .foregroundStyle(stat.accent ? Tint.primary : Ink.primary)
+                .monospacedDigit()
+            if let unit = stat.unit {
+                Text(unit)
+                    .font(Typography.metricUnit)
+                    .foregroundStyle(Ink.tertiary)
+            }
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 

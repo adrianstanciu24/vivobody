@@ -6,7 +6,7 @@
 //  presentation) and wires together three native iOS 26 chrome
 //  elements:
 //
-//    1. TabView with Tab(…) — Liquid Glass floating tab bar, large
+//    1. Five-tab TabView with Tab(…) — Liquid Glass floating tab bar, large
 //       per-tab nav titles, minimize-on-scroll behavior.
 //    2. .tabViewBottomAccessory — the MiniBar pill that sits above
 //       the tab bar whenever a workout is running. Tapping it expands
@@ -108,14 +108,14 @@ struct AppRoot: View {
                     workout.modelContext = modelContext
                 }
 #if DEBUG
-                if let requestedTab = UITestSupport.requestedTab() {
-                    appState.selectedTab = requestedTab
-                }
                 UITestSupport.resetIfRequested(in: modelContext)
 #endif
                 ExerciseCatalogItem.seedIfEmpty(in: modelContext)
 #if DEBUG
                 UITestSupport.seedIfRequested(in: modelContext)
+                if let requestedTab = UITestSupport.requestedTab() {
+                    appState.selectedTab = requestedTab
+                }
 #endif
                 workout.restoreActiveWorkoutIfNeeded()
                 consumeIncomingActions()

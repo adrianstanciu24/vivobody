@@ -53,11 +53,11 @@ public struct VersionedSnapshot<T: Codable>: Codable {
     }
 }
 
-/// Current snapshot schema version. Bump when any snapshot type's
-/// fields change so the reader can reject stale data instead of
-/// decoding garbage.
+/// Current snapshot contract version. Bump when a snapshot's fields or
+/// their meaning changes so the reader can reject stale data instead
+/// of presenting an obsolete interpretation.
 public nonisolated enum WidgetSnapshotVersion {
-    public static let current = 1
+    public static let current = 3
 }
 
 /// Encode/decode helpers that wrap payloads in a `VersionedSnapshot`
@@ -231,61 +231,51 @@ public struct ConsistencyDaySnapshot: Codable, Hashable, Identifiable, Sendable 
 
 public struct SignatureSnapshot: Codable, Hashable, Sendable {
     public var petals: [SignaturePetalSnapshot]
-    public var intensity: Double
     public var cadence: Double
     public var balance: Double
     public var dominantGroup: String?
     public var hasSignature: Bool
     public var verdictLine: String
-    public var weekStreak: Int
 
     public init(
         petals: [SignaturePetalSnapshot],
-        intensity: Double,
         cadence: Double,
         balance: Double,
         dominantGroup: String?,
         hasSignature: Bool,
-        verdictLine: String,
-        weekStreak: Int
+        verdictLine: String
     ) {
         self.petals = petals
-        self.intensity = intensity
         self.cadence = cadence
         self.balance = balance
         self.dominantGroup = dominantGroup
         self.hasSignature = hasSignature
         self.verdictLine = verdictLine
-        self.weekStreak = weekStreak
     }
 
     public static let placeholder = SignatureSnapshot(
         petals: [
-            SignaturePetalSnapshot(group: "Chest", volumeShare: 0.24, development: 0.72),
-            SignaturePetalSnapshot(group: "Back", volumeShare: 0.31, development: 0.86),
-            SignaturePetalSnapshot(group: "Shoulders", volumeShare: 0.13, development: 0.58),
-            SignaturePetalSnapshot(group: "Legs", volumeShare: 0.18, development: 0.62),
-            SignaturePetalSnapshot(group: "Arms", volumeShare: 0.09, development: 0.45),
-            SignaturePetalSnapshot(group: "Core", volumeShare: 0.05, development: 0.28),
+            SignaturePetalSnapshot(group: "Chest", volumeShare: 0.24),
+            SignaturePetalSnapshot(group: "Back", volumeShare: 0.31),
+            SignaturePetalSnapshot(group: "Shoulders", volumeShare: 0.13),
+            SignaturePetalSnapshot(group: "Legs", volumeShare: 0.18),
+            SignaturePetalSnapshot(group: "Arms", volumeShare: 0.09),
+            SignaturePetalSnapshot(group: "Core", volumeShare: 0.05),
         ],
-        intensity: 0.68,
         cadence: 2.5,
         balance: 0.78,
         dominantGroup: "Back",
         hasSignature: true,
-        verdictLine: "Back-led. Trained close to failure, 2.5x a week.",
-        weekStreak: 3
+        verdictLine: "Back-led · all 6 regions. 2.5x/week all-time average."
     )
 
     public static let empty = SignatureSnapshot(
         petals: [],
-        intensity: 0.5,
         cadence: 0,
         balance: 0,
         dominantGroup: nil,
         hasSignature: false,
-        verdictLine: "Log training to see your signature",
-        weekStreak: 0
+        verdictLine: "Log training to see your signature"
     )
 }
 
@@ -293,12 +283,10 @@ public struct SignaturePetalSnapshot: Codable, Hashable, Identifiable, Sendable 
     public var id: String { group }
     public var group: String
     public var volumeShare: Double
-    public var development: Double
 
-    public init(group: String, volumeShare: Double, development: Double) {
+    public init(group: String, volumeShare: Double) {
         self.group = group
         self.volumeShare = volumeShare
-        self.development = development
     }
 }
 

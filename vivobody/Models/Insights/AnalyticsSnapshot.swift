@@ -194,6 +194,43 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
             }
     }
 
+    /// Strongest confidence-eligible Epley estimate in this session.
+    /// This is intentionally independent of `representativeTopSet`:
+    /// record/history selection compares actual load then reps, whereas
+    /// an estimated-1RM curve must maximize the estimate itself.
+    nonisolated var bestEstimatedOneRepMaxSample: EstimatedOneRepMaxSample? {
+        guard modality.supportsEstimatedOneRepMax(
+            for: trackingMode,
+            loadMode: loadMode
+        ) else { return nil }
+
+        var best: EstimatedOneRepMaxSample?
+        for set in sets where set.isAnalyticsEligible {
+            guard let effectiveLoad = effectiveLoad(loggedWeight: set.weight),
+                  let value = EstimatedOneRepMaxPolicy.estimate(
+                    effectiveLoad: effectiveLoad,
+                    reps: set.reps
+                  ) else {
+                continue
+            }
+            let candidate = EstimatedOneRepMaxSample(
+                value: value,
+                effectiveLoad: effectiveLoad,
+                reps: set.reps
+            )
+            guard let standing = best else {
+                best = candidate
+                continue
+            }
+            if candidate.value > standing.value + 1e-9
+                || (abs(candidate.value - standing.value) <= 1e-9
+                    && candidate.reps < standing.reps) {
+                best = candidate
+            }
+        }
+        return best
+    }
+
     /// The same modality/load-aware representative used by history and
     /// progress before the model graph is discarded.
     nonisolated var representativeTopSet: AnalyticsSetSnapshot? {

@@ -2,16 +2,17 @@
 //  TrainingSignatureTests.swift
 //  vivobodyTests
 //
-//  Guards the Insights "Training DNA" emblem. The signature is a pure
-//  fusion of the balance, development, and consistency models, so the
-//  mapping is checked on a virtual clock: six petals always, shares
-//  that sum to one, a lopsided block surfacing its lead region, a
-//  fuller spread reading more balanced, effort tracking reps-in-
-//  reserve, and an empty archive drawing nothing.
+//  Guards the Insights lifetime-training emblem. The signature is a
+//  pure reduction of all-time hard-set allocation plus archive cadence,
+//  so the mapping is checked on a virtual clock: six petals always,
+//  shares that sum to one, a lopsided archive surfacing its lead region,
+//  stable lifetime allocation, the even-share guide, and honest empty
+//  states.
 //
 
 import Foundation
 import Testing
+import VivoKit
 @testable import vivobody
 
 @MainActor
@@ -31,13 +32,37 @@ struct TrainingSignatureTests {
     }
 
     private func lift(_ name: String, _ group: MuscleGroup, sets: Int = 3, rir: Int = 2) -> Exercise {
-        let ex = Exercise(name: name, group: group, plannedSets: sets, plannedReps: 8, plannedWeight: 100)
+        let catalogInvolvement = Muscle.involvement(forExerciseNamed: name)
+        let involvement = catalogInvolvement.isEmpty
+            ? Muscle.Involvement(contributions: [
+                .init(muscle: primaryMuscle(for: group), role: .primary),
+            ])
+            : catalogInvolvement
+        let ex = Exercise(
+            name: name,
+            group: group,
+            plannedSets: sets,
+            plannedReps: 8,
+            plannedWeight: 100,
+            muscleInvolvement: involvement
+        )
         ex.sets.forEach {
             $0.isCompleted = true
             $0.repsInReserve = rir
             $0.rirLogged = true
         }
         return ex
+    }
+
+    private func primaryMuscle(for group: MuscleGroup) -> Muscle {
+        switch group {
+        case .chest: return .pectorals
+        case .back: return .lats
+        case .shoulders: return .deltoids
+        case .legs: return .quads
+        case .arms: return .biceps
+        case .core: return .abs
+        }
     }
 
     private func fullBody(at date: Date) -> WorkoutSession {
@@ -51,6 +76,20 @@ struct TrainingSignatureTests {
         ])
     }
 
+    private func volumeStats(
+        allTime: [Muscle: Double] = [:]
+    ) -> [MuscleVolumeStat] {
+        Muscle.allCases.map { muscle in
+            MuscleVolumeStat(
+                muscle: muscle,
+                effectiveSets: 0,
+                allTimeEffectiveSets: allTime[muscle] ?? 0,
+                daysSinceLastTrained: allTime[muscle, default: 0] > 0 ? 1 : nil,
+                landmark: VolumeLandmark.landmark(for: muscle)
+            )
+        }
+    }
+
     // MARK: - Always six regions
 
     @Test func signatureCoversEverySixRegions() {
@@ -58,6 +97,9 @@ struct TrainingSignatureTests {
         #expect(sig.petals.count == 6)
         #expect(sig.petals.map(\.group) == MuscleGroup.allCases)
         #expect(sig.hasSignature)
+        #expect(sig.hasVolume)
+        #expect(sig.trainedGroupCount == 6)
+        #expect(abs(sig.coverage - 1) < 1e-9)
     }
 
     // MARK: - Shares sum to one
@@ -89,26 +131,132 @@ struct TrainingSignatureTests {
         #expect(mixed.balance > narrow.balance)
     }
 
-    // MARK: - Effort tracks reps-in-reserve
+    @Test func balanceIsNormalisedAgainstAllSixRegions() {
+        let sig = TrainingSignature(
+            volume: volumeStats(
+                allTime: [.pectorals: 4, .lats: 4]
+            ),
+            cadence: 0
+        )
+        let expected = Foundation.log(2) / Foundation.log(6)
 
-    @Test func intensityReflectsEffort() {
-        let allOut = [session(at: day(100), [lift("Bench Press", .chest, rir: 0)])]
-            .trainingSignature(now: day(100))
-        #expect(abs(allOut.intensity - 1.0) < 1e-9)        // 0 in reserve → full intensity
-
-        let easy = [session(at: day(100), [lift("Bench Press", .chest, rir: 5)])]
-            .trainingSignature(now: day(100))
-        #expect(abs(easy.intensity - 0.0) < 1e-9)          // 5 in reserve → none
+        #expect(sig.trainedGroupCount == 2)
+        #expect(abs(sig.coverage - (2.0 / 6.0)) < 1e-9)
+        #expect(abs(sig.balance - expected) < 1e-9)
+        #expect(sig.dominantGroup == nil) // equal leaders are not chosen arbitrarily
+        #expect(sig.identityLine == "No single lead · 2 regions")
     }
 
-    @Test func intensityIsNeutralWithoutLoggedReps() {
-        // A timed-hold-only day carries no reps-in-reserve.
+    @Test func equalAllSixCoverageReachesFullBalance() {
+        let sig = TrainingSignature(
+            volume: volumeStats(
+                allTime: [
+                    .pectorals: 4,
+                    .lats: 4,
+                    .deltoids: 4,
+                    .quads: 4,
+                    .biceps: 4,
+                    .abs: 4,
+                ]
+            ),
+            cadence: 0
+        )
+
+        #expect(sig.trainedGroupCount == 6)
+        #expect(abs(sig.coverage - 1) < 1e-9)
+        #expect(abs(sig.balance - 1) < 1e-9)
+        #expect(sig.dominantGroup == nil)
+        #expect(sig.identityLine == "Evenly spread · all 6 regions")
+    }
+
+    // MARK: - All-time allocation
+
+    @Test func lifetimeWidthDoesNotExpireWhenWeeklyVolumeIsZero() {
+        let old = session(at: day(20), [lift("Bench Press", .chest)])
+        let sig = [old].trainingSignature(now: day(100))
+
+        #expect(sig.hasSignature)
+        #expect(sig.hasVolume)
+        #expect((sig.petals.first { $0.group == .chest }?.volumeShare ?? 0) > 0)
+    }
+
+    @Test func inactiveHistoryKeepsLifetimeIdentity() {
+        let old = session(at: day(65), [lift("Bench Press", .chest)])
+        let sig = [old].trainingSignature(now: day(100))
+
+        #expect(sig.hasSignature)
+        #expect(sig.hasVolume)
+        #expect(sig.trainedGroupCount > 0)
+        #expect((sig.petals.first { $0.group == .chest }?.volumeShare ?? 0) > 0)
+    }
+
+    @Test func oldAndRecentWorkBothContributeToLifetimeSplit() {
+        let old = session(at: day(10), [lift("Bench Press", .chest)])
+        let recent = session(at: day(100), [lift("Back Squat", .legs)])
+        let sig = [old, recent].trainingSignature(now: day(100))
+
+        #expect((sig.petals.first { $0.group == .chest }?.volumeShare ?? 0) > 0)
+        #expect((sig.petals.first { $0.group == .legs }?.volumeShare ?? 0) > 0)
+    }
+
+    @Test func lifetimeAllocationDoesNotChangeAsClockAdvances() {
+        let archive = [
+            session(at: day(10), [lift("Bench Press", .chest)]),
+            session(at: day(20), [lift("Back Squat", .legs)]),
+        ]
+        let first = archive.trainingSignature(now: day(30))
+        let later = archive.trainingSignature(now: day(300))
+
+        #expect(first.petals.map(\.volumeShare) == later.petals.map(\.volumeShare))
+        #expect(first.balance == later.balance)
+        #expect(first.coverage == later.coverage)
+    }
+
+    @Test func cadenceUsesTheFullArchiveSpan() {
+        let archive = [
+            session(at: day(0), [lift("Bench Press", .chest)]),
+            session(at: day(100), [lift("Back Squat", .legs)]),
+        ]
+        let sig = archive.trainingSignature(now: day(100))
+
+        #expect(abs(sig.cadence - (14.0 / 101.0)) < 1e-9)
+    }
+
+    @Test func firstWorkoutReadsAsOnePerWeekWithoutExtrapolation() {
+        let sig = [session(at: day(100), [lift("Bench Press", .chest)])]
+            .trainingSignature(now: day(100))
+
+        #expect(sig.cadence == 1)
+    }
+
+    @Test func lifetimeCadenceReflectsInactiveTime() {
+        let archive = [
+            session(at: day(0), [lift("Bench Press", .chest)]),
+            session(at: day(7), [lift("Back Squat", .legs)]),
+        ]
+        let early = archive.trainingSignature(now: day(7))
+        let later = archive.trainingSignature(now: day(100))
+
+        #expect(later.cadence < early.cadence)
+    }
+
+    @Test func futureWorkoutDoesNotEnterLifetimeCadence() {
+        let future = session(at: day(110), [lift("Bench Press", .chest)])
+        let sig = [future].trainingSignature(now: day(100))
+
+        #expect(sig.cadence == 0)
+    }
+
+    @Test func timedStrengthCanShapeTheLifetimeSignature() {
         let plank = Exercise(
             name: "Plank",
             group: .core,
             plannedSets: 3,
             plannedReps: 0,
             plannedWeight: 0,
+            muscleInvolvement: Muscle.Involvement(contributions: [
+                .init(muscle: .abs, role: .primary),
+            ]),
             trackingMode: .duration,
             modality: .isometricStrength,
             plannedDuration: 45
@@ -116,7 +264,36 @@ struct TrainingSignatureTests {
         plank.sets.forEach { $0.isCompleted = true }
         let sig = [session(at: day(100), [plank])].trainingSignature(now: day(100))
         #expect(sig.hasSignature)
-        #expect(abs(sig.intensity - 0.5) < 1e-9)
+        #expect((sig.petals.first { $0.group == .core }?.volumeShare ?? 0) > 0)
+    }
+
+    // MARK: - Lifetime geometry
+
+    @Test func equalShareGuideSitsBetweenMinorAndLeadRegions() {
+        let minor = SignatureEmblemTuning.reachFraction(volumeShare: 0.07)
+        let even = SignatureEmblemTuning.reachFraction(
+            volumeShare: SignatureEmblemTuning.equalShare
+        )
+        let lead = SignatureEmblemTuning.reachFraction(volumeShare: 0.42)
+
+        #expect(minor > 0.24)
+        #expect(minor < even)
+        #expect(even < lead)
+    }
+
+    @Test func zeroShareIsInvisibleAndTinyShareRemainsLegible() {
+        #expect(
+            SignatureEmblemTuning.petalOpacity(
+                volumeShare: 0,
+                isDominant: false
+            ) == 0
+        )
+        #expect(
+            SignatureEmblemTuning.petalOpacity(
+                volumeShare: 0.01,
+                isDominant: false
+            ) > 0.8
+        )
     }
 
     // MARK: - Empty
@@ -124,8 +301,12 @@ struct TrainingSignatureTests {
     @Test func emptyArchiveHasNoSignature() {
         let sig = [WorkoutSession]().trainingSignature(now: day(100))
         #expect(!sig.hasSignature)
+        #expect(!sig.hasVolume)
+        #expect(sig.cadence == 0)
+        #expect(sig.trainedGroupCount == 0)
+        #expect(sig.coverage == 0)
         #expect(sig.petals.count == 6)
-        #expect(sig.petals.allSatisfy { $0.volumeShare == 0 && $0.development == 0 })
+        #expect(sig.petals.allSatisfy { $0.volumeShare == 0 })
         #expect(sig.dominantGroup == nil)
         #expect(sig.balance == 0)
     }

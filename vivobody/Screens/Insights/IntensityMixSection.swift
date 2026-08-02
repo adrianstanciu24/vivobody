@@ -1,41 +1,62 @@
 //
 //  IntensityMixSection.swift
 //
-//  How training is distributed across rep ranges over time. A
-//  dominant-zone hero and four-week mix lead, followed by 12 weeks of
-//  completed sets stacked into strength (1–5), hypertrophy (6–12),
-//  and endurance (13+) zones. The current partial week keeps full
-//  colour — dimming shifted the accent toward brown and read as a
-//  separate category — and is marked by the "Now" annotation alone.
-//  The closing instrument condenses average-rep drift.
-//
-//  Hypertrophy wears the accent as the productive default zone; the
-//  heavy and high-rep ends sit in grayscale luminance — one accent,
-//  hierarchy by brightness, like the rest of the app.
+//  How completed, rep-tracked strength sets are distributed across
+//  low (1–5), moderate (6–12), and high (13+) rep ranges. A concise
+//  28-day mix leads; the closing instrument carries the longer-term,
+//  set-weighted slope and its evidence tier. The old 12-week bar chart
+//  duplicated those reads while consuming most of the screen, so the
+//  section now stays focused on mix and direction.
 //
 
 import VivoKit
 import SwiftUI
-import Charts
 
 struct IntensityMixSection: View {
     let mix: IntensityMix
     let weeks: [IntensityWeek]
     let migration: RepRangeMigrationReport
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var hasWeeklyData: Bool {
+        weeks.contains { $0.total > 0 }
+    }
+
+    /// Recent data leads when available; otherwise the range carrying
+    /// the most sets across the 12-week trend window owns the accent.
+    private var accentZone: IntensityZone? {
+        if let recent = mix.dominant { return recent }
+        let totals = Dictionary(
+            uniqueKeysWithValues: IntensityZone.allCases.map { zone in
+                (zone, weeks.reduce(0) { $0 + $1.count(zone) })
+            }
+        )
+        guard totals.values.reduce(0, +) > 0 else { return nil }
+        return IntensityZone.allCases.max {
+            totals[$0, default: 0] < totals[$1, default: 0]
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            SectionHeader(title: "Intensity")
+            SectionHeader(
+                title: "Rep ranges",
+                trailing: repRangesBuildingLabel,
+                trailingIsInProgress: repRangesAreBuilding
+            )
 
-            if weeks.isEmpty {
-                Text("As you log weighted sets, this stacks each week's work across strength, hypertrophy, and endurance rep ranges so you can see what your training emphasizes and where it is drifting.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            if !hasWeeklyData {
+                InsightBuildingCard(
+                    title: "Your rep-range picture starts here",
+                    detail: "Log completed strength sets with reps to reveal low, moderate, and high-rep work. A clear current mix forms after six sets.",
+                    progress: 0,
+                    progressLabel: "0/\(IntensityMix.minimumClearSampleSets) REP-TRACKED SETS",
+                    accessibilityProgress: "0 of \(IntensityMix.minimumClearSampleSets) rep-tracked sets"
+                )
             } else {
                 VStack(alignment: .leading, spacing: Space.lg) {
                     currentMixHero
-                    chartBlock
                     zoneLegend
                 }
                 .padding(Space.xl)
@@ -47,51 +68,87 @@ struct IntensityMixSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    private var repRangesAreBuilding: Bool {
+        !hasWeeklyData || !migration.hasTrend || mix.hasSparseSample
+    }
+
+    private var repRangesBuildingLabel: String? {
+        if !hasWeeklyData { return "waiting for rep sets" }
+        if !migration.hasTrend { return "trend building" }
+        if mix.hasSparseSample { return "mix taking shape" }
+        return nil
+    }
+
     // MARK: - Current mix
 
     @ViewBuilder
     private var currentMixHero: some View {
         if let dominant = mix.dominant {
             VStack(alignment: .leading, spacing: Space.sm) {
-                HStack(alignment: .lastTextBaseline, spacing: Space.md) {
-                    Text("\(percentage(for: dominant))%")
-                        .font(Typography.metricHero)
-                        .foregroundStyle(dominant == .hypertrophy ? Tint.primary : Ink.primary)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-
-                    VStack(alignment: .leading, spacing: Space.xs) {
-                        Text(dominant.label)
-                            .font(Typography.title)
-                            .foregroundStyle(Ink.primary)
-                            .lineLimit(1)
-                        Text("\(dominant.repRange) reps")
-                            .panelLegend()
-                    }
-                    .padding(.bottom, Space.xs)
-
-                    Spacer(minLength: 0)
-                }
+                dominantHeading(dominant)
 
                 currentMixBar
 
-                Text("of completed working sets in the last 4 weeks")
+                Text(currentSampleCopy)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.secondary)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(dominant.label), \(percentage(for: dominant)) percent of completed working sets in the last 4 weeks, \(dominant.repRange) reps")
+            .accessibilityLabel("\(dominant.label), \(percentage(for: dominant)) percent. \(currentSampleCopy). \(dominant.repRange) reps")
         } else {
             VStack(alignment: .leading, spacing: Space.xs) {
-                Text("No recent sets")
+                Text("No sets in the last 28 days")
                     .font(Typography.display)
                     .foregroundStyle(Ink.primary)
-                Text("Your earlier rep-range history is still shown below.")
+                Text("Earlier rep-tracked strength sets still contribute to the trend below.")
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
             }
         }
+    }
+
+    @ViewBuilder
+    private func dominantHeading(_ dominant: IntensityZone) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                dominantPercentage(dominant)
+                Text(dominant.label)
+                    .font(Typography.title)
+                    .foregroundStyle(Ink.primary)
+                Text("\(dominant.repRange) reps")
+                    .panelLegend()
+            }
+        } else {
+            HStack(alignment: .lastTextBaseline, spacing: Space.md) {
+                dominantPercentage(dominant)
+
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text(dominant.label)
+                        .font(Typography.title)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(1)
+                    Text("\(dominant.repRange) reps")
+                        .panelLegend()
+                }
+                .padding(.bottom, Space.xs)
+
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func dominantPercentage(_ dominant: IntensityZone) -> some View {
+        Text("\(percentage(for: dominant))%")
+            .font(Typography.metricHero)
+            .foregroundStyle(dominant == accentZone ? Tint.primary : Ink.primary)
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+    }
+
+    private var currentSampleCopy: String {
+        let sample = "\(setLabel(mix.total)) from rep-tracked strength work in the last 28 days"
+        return mix.hasSparseSample ? "Early read · \(sample)" : "Based on \(sample)"
     }
 
     private var currentMixBar: some View {
@@ -114,155 +171,63 @@ struct IntensityMixSection: View {
         .accessibilityHidden(true)
     }
 
-    // MARK: - Weekly chart
-
-    private var chartBlock: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Weekly sets by rep range")
-                    .panelLegend()
-                Spacer(minLength: Space.sm)
-                Text("12 weeks")
-                    .panelLegend()
-            }
-
-            Chart {
-                ForEach(weeks) { week in
-                    ForEach(IntensityZone.allCases.reversed(), id: \.self) { zone in
-                        if week.count(zone) > 0 {
-                            BarMark(
-                                x: .value("Week", week.weekStart, unit: .weekOfYear),
-                                y: .value("Sets", week.count(zone)),
-                                width: .ratio(0.68)
-                            )
-                            .foregroundStyle(by: .value("Zone", zone.label))
-                            .cornerRadius(3)
-                        }
-                    }
-                }
-
-                if let latestCompleteWeek {
-                    PointMark(
-                        x: .value("Latest full week", latestCompleteWeek.weekStart, unit: .weekOfYear),
-                        y: .value("Latest full week sets", latestCompleteWeek.total)
-                    )
-                    .foregroundStyle(Color.clear)
-                    .annotation(position: .top, spacing: Space.xs) {
-                        Text("\(latestCompleteWeek.total)")
-                            .font(Typography.metricMicro)
-                            .foregroundStyle(Ink.secondary)
-                            .monospacedDigit()
-                    }
-                }
-
-                if let currentWeek {
-                    PointMark(
-                        x: .value("Current week", currentWeek.weekStart, unit: .weekOfYear),
-                        y: .value("Current week sets", currentWeek.total)
-                    )
-                    .foregroundStyle(Color.clear)
-                    .annotation(position: .top, spacing: Space.xs) {
-                        Text("Now")
-                            .panelLegend()
-                    }
-                }
-            }
-            .chartForegroundStyleScale(
-                domain: IntensityZone.allCases.map(\.label),
-                range: IntensityZone.allCases.map { color($0) }
-            )
-            .chartLegend(.hidden)
-            .chartXScale(domain: chartDomain)
-            .chartXAxis {
-                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                    AxisGridLine().foregroundStyle(Surface.edge)
-                    AxisValueLabel(format: .dateTime.month(.abbreviated))
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.tertiary)
-                }
-            }
-            .chartYAxis {
-                AxisMarks(values: .automatic(desiredCount: 3)) { _ in
-                    AxisGridLine().foregroundStyle(Surface.edge)
-                    AxisValueLabel()
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.tertiary)
-                }
-            }
-            .frame(height: 200)
-            // Leave the generated bar-series semantics intact so every week
-            // and zone remains explorable with VoiceOver and Audio Graphs.
-            .accessibilityLabel("Weekly completed sets by rep range")
-            .accessibilityValue(chartAccessibilitySummary)
-        }
-    }
-
-    /// The chart always frames the full 12-week window — like the
-    /// consistency heatmap draws its whole six months — so sparse
-    /// history reads as a few true-width bars entering a constant
-    /// instrument, not giant bars stretched across an elastic one.
-    /// The start widens only if an aggregated week bucket falls just
-    /// before the window (a session near the cutoff can round back
-    /// to an earlier locale week start).
-    private var chartDomain: ClosedRange<Date> {
-        let calendar = Calendar.current
-        let currentWeekStart = calendar.date(
-            from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
-        ) ?? Date()
-        let end = calendar.date(byAdding: .weekOfYear, value: 1, to: currentWeekStart)
-            ?? currentWeekStart
-        let windowStart = calendar.date(byAdding: .weekOfYear, value: -11, to: currentWeekStart)
-            ?? currentWeekStart
-        let start = min(weeks.first?.weekStart ?? windowStart, windowStart)
-        return start ... end
-    }
-
-    private var latestCompleteWeek: IntensityWeek? {
-        weeks.last { !$0.isCurrentWeek }
-    }
-
-    private var currentWeek: IntensityWeek? {
-        weeks.last { $0.isCurrentWeek }
-    }
-
-    private var chartAccessibilitySummary: String {
-        var label = "\(weeks.count) weeks shown."
-        if let latestCompleteWeek {
-            label += " The latest full week had \(setLabel(latestCompleteWeek.total))."
-        }
-        if let currentWeek {
-            label += " The current partial week has \(setLabel(currentWeek.total))."
-        }
-        return label
-    }
-
     // MARK: - Zone legend
 
     private var zoneLegend: some View {
-        HStack(alignment: .top, spacing: Space.sm) {
-            ForEach(IntensityZone.allCases, id: \.self) { zone in
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    HStack(spacing: Space.xs) {
-                        Circle()
-                            .fill(color(zone))
-                            .frame(width: 8, height: 8)
-                            .accessibilityHidden(true)
-                        Text(zone.label)
-                            .font(Typography.caption)
-                            .foregroundStyle(zone == mix.dominant ? Ink.primary : Ink.secondary)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Space.md) {
+                    ForEach(IntensityZone.allCases, id: \.self) { zone in
+                        legendRow(for: zone)
                     }
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-
-                    Text(legendDetail(for: zone))
-                        .font(Typography.metricMicro)
-                        .foregroundStyle(Ink.tertiary)
-                        .monospacedDigit()
-                        .lineLimit(1)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityElement(children: .combine)
+            } else {
+                HStack(alignment: .top, spacing: Space.sm) {
+                    ForEach(IntensityZone.allCases, id: \.self) { zone in
+                        legendColumn(for: zone)
+                    }
+                }
             }
+        }
+    }
+
+    private func legendColumn(for zone: IntensityZone) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            legendName(for: zone)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+            Text(legendDetail(for: zone))
+                .font(Typography.metricMicro)
+                .foregroundStyle(Ink.tertiary)
+                .monospacedDigit()
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func legendRow(for zone: IntensityZone) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+            legendName(for: zone)
+            Spacer(minLength: Space.sm)
+            Text(legendDetail(for: zone))
+                .font(Typography.caption)
+                .foregroundStyle(Ink.secondary)
+                .monospacedDigit()
+        }
+        .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func legendName(for zone: IntensityZone) -> some View {
+        HStack(spacing: Space.xs) {
+            Circle()
+                .fill(color(zone))
+                .frame(width: 8, height: 8)
+                .accessibilityHidden(true)
+            Text(zone.label)
+                .font(Typography.caption)
+                .foregroundStyle(zone == accentZone ? Ink.primary : Ink.secondary)
         }
     }
 
@@ -276,40 +241,29 @@ struct IntensityMixSection: View {
     @ViewBuilder
     private var trendSummary: some View {
         if migration.hasData {
-            HStack(alignment: .center, spacing: Space.md) {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("Average reps / set")
-                        .panelLegend()
-
-                    HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                        if migration.hasTrend {
-                            Text(format(migration.earlierAverage))
-                                .font(Typography.metricLg)
-                                .foregroundStyle(Ink.secondary)
-                            Text("→")
-                                .font(Typography.metricInline)
-                                .foregroundStyle(Ink.tertiary)
-                        }
+            VStack(alignment: .leading, spacing: Space.md) {
+                HStack(alignment: .top, spacing: Space.lg) {
+                    VStack(alignment: .leading, spacing: Space.xs) {
+                        Text("Latest active week")
+                            .panelLegend()
                         Text(format(migration.currentAverage))
                             .font(Typography.metricLg)
                             .foregroundStyle(Ink.primary)
+                            .monospacedDigit()
+                        Text("avg reps / set")
+                            .panelLegend()
                     }
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.72)
+
+                    Spacer(minLength: 0)
+
+                    trendMetric
                 }
 
-                Spacer(minLength: 0)
-
-                Text(trendLabel)
-                    .panelLegendType()
-                    .foregroundStyle(trendColor)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-                    .padding(.horizontal, Space.sm)
-                    .padding(.vertical, Space.xs + 2)
-                    .contentChip(tint: trendColor.opacity(0.10))
+                if migration.hasTrend {
+                    qualifiedTrendFooter
+                } else {
+                    buildingTrendFooter
+                }
             }
             .padding(.horizontal, Space.lg)
             .padding(.vertical, Space.md)
@@ -317,6 +271,87 @@ struct IntensityMixSection: View {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(trendAccessibilityLabel)
         }
+    }
+
+    private var trendMetric: some View {
+        VStack(alignment: .trailing, spacing: Space.xs) {
+            Text(migration.hasTrend ? "Weekly trend" : "Trend progress")
+                .panelLegend()
+            Text(migration.hasTrend ? signedSlope : trendWeekProgress)
+                .font(Typography.metricLg)
+                .foregroundStyle(migration.hasTrend ? trendColor : Tint.inProgress)
+                .monospacedDigit()
+            Text(migration.hasTrend ? "reps / week" : "active weeks")
+                .panelLegend()
+        }
+    }
+
+    private var qualifiedTrendFooter: some View {
+        HStack(alignment: .center, spacing: Space.sm) {
+            Text(trendLabel)
+                .panelLegendType()
+                .foregroundStyle(trendColor)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+                .padding(.horizontal, Space.sm)
+                .padding(.vertical, Space.xs + 2)
+                .contentChip(tint: trendColor.opacity(0.10))
+
+            Spacer(minLength: Space.sm)
+
+            Text(trendSampleLabel)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.secondary)
+                .multilineTextAlignment(.trailing)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var buildingTrendFooter: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .center, spacing: Space.sm) {
+                    buildingTrendLabel
+                    Spacer(minLength: Space.sm)
+                    setReadinessLabel
+                }
+
+                VStack(alignment: .leading, spacing: Space.sm) {
+                    buildingTrendLabel
+                    setReadinessLabel
+                }
+            }
+
+            SegmentLadder(
+                fraction: trendBuildingProgress,
+                segments: 24,
+                tint: Tint.inProgress,
+                height: 5,
+                spacing: 3
+            )
+
+            Text(trendRequirementText)
+                .font(Typography.caption)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var buildingTrendLabel: some View {
+        HStack(spacing: Space.sm) {
+            BuildingSignalDot()
+            Text("Building rep trend")
+                .panelLegendType()
+                .foregroundStyle(Tint.inProgress)
+        }
+    }
+
+    private var setReadinessLabel: some View {
+        Text(trendSetProgressLabel)
+            .panelLegend()
+            .foregroundStyle(Ink.secondary)
+            .monospacedDigit()
     }
 
     private var trendLabel: String {
@@ -330,13 +365,78 @@ struct IntensityMixSection: View {
 
     private var trendAccessibilityLabel: String {
         guard migration.hasTrend else {
-            return "Average reps per set, \(format(migration.currentAverage)). Building a trend."
+            return "Latest active week averaged \(format(migration.currentAverage)) reps per set. Rep trend building. \(trendSetAccessibilityLabel). \(trendWeekAccessibilityLabel). \(trendRequirementText)"
         }
-        return "Average reps per set changed from \(format(migration.earlierAverage)) to \(format(migration.currentAverage)). \(trendLabel)."
+        return "Latest active week averaged \(format(migration.currentAverage)) reps per set. Weighted trend \(signedSlope) reps per week. \(trendLabel). \(trendSampleLabel)."
     }
 
     private var trendColor: Color {
-        migration.hasTrend && migration.verdict != .stable ? Tint.primary : Ink.secondary
+        guard migration.hasTrend else { return Tint.inProgress }
+        return migration.verdict != .stable ? Tint.primary : Ink.secondary
+    }
+
+    private var signedSlope: String {
+        String(format: "%+.2f", migration.slopePerWeek)
+    }
+
+    private var trendWeekProgress: String {
+        let weeks = min(migration.points.count, RepRangeMigrationReport.minimumTrendWeeks)
+        return "\(weeks)/\(RepRangeMigrationReport.minimumTrendWeeks)"
+    }
+
+    private var trendSetProgressLabel: String {
+        let remaining = max(0, RepRangeMigrationReport.minimumTrendSets - migration.totalSets)
+        if remaining == 0 {
+            return "Enough sets logged"
+        }
+        return "\(remaining) \(remaining == 1 ? "set" : "sets") to go"
+    }
+
+    private var trendSetAccessibilityLabel: String {
+        let sets = min(migration.totalSets, RepRangeMigrationReport.minimumTrendSets)
+        return "Set requirement: \(sets) of \(RepRangeMigrationReport.minimumTrendSets) sets"
+    }
+
+    private var trendWeekAccessibilityLabel: String {
+        let weeks = min(migration.points.count, RepRangeMigrationReport.minimumTrendWeeks)
+        return "Week requirement: \(weeks) of \(RepRangeMigrationReport.minimumTrendWeeks) active weeks"
+    }
+
+    private var trendRequirementText: String {
+        let sets = max(0, RepRangeMigrationReport.minimumTrendSets - migration.totalSets)
+        let weeks = max(0, RepRangeMigrationReport.minimumTrendWeeks - migration.points.count)
+
+        if sets > 0, weeks > 0 {
+            return "Add \(sets) more rep-tracked \(sets == 1 ? "set" : "sets") across \(weeks) more \(weeks == 1 ? "week" : "weeks") to reveal the weekly direction."
+        }
+        if sets > 0 {
+            return "Add \(sets) more rep-tracked \(sets == 1 ? "set" : "sets") to reveal the weekly direction."
+        }
+        if weeks > 0 {
+            return "Add rep-tracked sets in \(weeks) more \(weeks == 1 ? "week" : "weeks") to reveal the weekly direction."
+        }
+        return "Your weekly direction is ready."
+    }
+
+    private var trendSampleLabel: String {
+        switch migration.confidence {
+        case .established:
+            return "Established · \(setLabel(migration.totalSets)) across \(weekLabel(migration.points.count))"
+        case .emerging:
+            return "Emerging · \(setLabel(migration.totalSets)) across \(weekLabel(migration.points.count))"
+        case .insufficient:
+            let sets = min(migration.totalSets, RepRangeMigrationReport.minimumTrendSets)
+            let weeks = min(migration.points.count, RepRangeMigrationReport.minimumTrendWeeks)
+            return "\(sets)/\(RepRangeMigrationReport.minimumTrendSets) sets · \(weeks)/\(RepRangeMigrationReport.minimumTrendWeeks) active weeks"
+        }
+    }
+
+    private var trendBuildingProgress: Double {
+        let setProgress = Double(migration.totalSets)
+            / Double(RepRangeMigrationReport.minimumTrendSets)
+        let weekProgress = Double(migration.points.count)
+            / Double(RepRangeMigrationReport.minimumTrendWeeks)
+        return min(1, max(0, min(setProgress, weekProgress)))
     }
 
     // MARK: - Formatting
@@ -349,6 +449,10 @@ struct IntensityMixSection: View {
         "\(count) set\(count == 1 ? "" : "s")"
     }
 
+    private func weekLabel(_ count: Int) -> String {
+        "\(count) active week\(count == 1 ? "" : "s")"
+    }
+
     private func format(_ value: Double) -> String {
         String(format: "%.1f", value)
     }
@@ -356,9 +460,10 @@ struct IntensityMixSection: View {
     // MARK: - Colors
 
     private func color(_ zone: IntensityZone) -> Color {
+        if zone == accentZone { return Tint.primary }
         switch zone {
         case .strength:    return Ink.secondary
-        case .hypertrophy: return Tint.primary
+        case .hypertrophy: return Ink.tertiary
         case .endurance:   return Ink.quaternary
         }
     }

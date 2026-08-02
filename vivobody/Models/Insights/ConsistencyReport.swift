@@ -7,11 +7,11 @@
 //  the training is actually HAPPENING — and how hard. It folds three
 //  consistency signals into one view:
 //
-//    • Rhythm — sessions per week over the recent weeks, and the run
-//      of consecutive weeks trained (the streak that survives a
-//      not-yet-started current week).
-//    • Effort — average reps-in-reserve across logged sets: are they
-//      being pushed close enough to failure to drive adaptation?
+//    • Rhythm — sessions per week over an exact trailing 28-calendar-
+//      day window, and the unbounded run of consecutive weeks trained
+//      (the streak survives a not-yet-started current week).
+//    • Effort — average reps-in-reserve across logged sets, accompanied
+//      by coverage so a sparse handful of ratings never looks complete.
 //    • A contribution heatmap — six months of days as a GitHub-style
 //      grid, each cell shaded by that day's set volume, so a glance
 //      reads the whole arc of work.
@@ -48,17 +48,26 @@ nonisolated struct ConsistencyReport: Sendable {
     static let targetRIRLow = 1.0
     static let targetRIRHigh = 3.0
 
-    /// Heatmap columns, oldest → newest; each column is 7 days
-    /// (Sunday … Saturday).
+    /// Heatmap columns, oldest → newest; each column is seven days
+    /// beginning on the current calendar's locale-aware week boundary.
     let weeks: [[ConsistencyDay]]
     let sessionsPerWeek: Double
     let weekStreak: Int
     /// Mean reps-in-reserve over recent reps-sets; `nil` if none logged.
     let averageRIR: Double?
+    /// Recent dynamic-strength reps sets eligible to carry an RIR value.
+    let rirEligibleSets: Int
+    /// Eligible recent sets on which RIR was explicitly logged.
+    let rirLoggedSets: Int
     let recentSessions: Int
     let daysTrainedInWindow: Int
 
     var hasActivity: Bool { daysTrainedInWindow > 0 }
+    var hasRecentActivity: Bool { recentSessions > 0 }
+    var rirCoverage: Double {
+        guard rirEligibleSets > 0 else { return 0 }
+        return Double(rirLoggedSets) / Double(rirEligibleSets)
+    }
 
     /// Shade bucket for a day's set count. Internal so tests can pin
     /// the thresholds directly.
@@ -97,7 +106,7 @@ nonisolated extension AnalyticsAccumulator {
         completed.reserveCapacity(sessions.count)
         for session in sessions {
             guard !isCancelled() else { break }
-            if session.session.completedAt != nil {
+            if session.session.completedAt != nil, session.date <= now {
                 completed.append(session)
             }
         }
@@ -147,68 +156,99 @@ nonisolated extension AnalyticsAccumulator {
             weeks.append(column)
         }
 
-        // Recent rhythm + effort.
-        let recentCutoff = calendar.date(
+        // Recent rhythm + effort. This is exactly 28 calendar days:
+        // the day 27 days ago through tomorrow's boundary, half-open.
+        // The explicit `date <= now` guard below prevents a future-dated
+        // session later today from leaking into the current read.
+        let recentStart = calendar.date(
             byAdding: .day,
-            value: -ConsistencyReport.recentDays,
+            value: -(ConsistencyReport.recentDays - 1),
             to: today
         ) ?? today
+        let recentEnd = calendar.date(byAdding: .day, value: 1, to: today) ?? now
         var recentSessions = 0
         var rirSum = 0
-        var rirCount = 0
+        var rirEligibleSets = 0
+        var rirLoggedSets = 0
         recentSessionLoop: for session in completed {
             guard !isCancelled() else { break }
             let snapshot = session.session
-            let day = calendar.startOfDay(
-                for: snapshot.completedAt ?? snapshot.startedAt
-            )
-            guard day >= recentCutoff else { continue }
+            let date = snapshot.completedAt ?? snapshot.startedAt
+            guard date >= recentStart, date < recentEnd, date <= now else { continue }
             recentSessions += 1
             for replay in session.exercises
             where replay.exercise.modality == .dynamicStrength
                 && replay.exercise.trackingMode == .reps {
                 guard !isCancelled() else { break recentSessionLoop }
                 for set in replay.exercise.sets
-                where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
+                where set.isAnalyticsEligible && set.reps > 0 {
                     guard !isCancelled() else { break recentSessionLoop }
-                    rirSum += set.repsInReserve
-                    rirCount += 1
+                    rirEligibleSets += 1
+                    if set.rirLogged {
+                        rirSum += set.repsInReserve
+                        rirLoggedSets += 1
+                    }
                 }
             }
         }
         let weeksElapsed = Double(ConsistencyReport.recentDays) / 7.0
         let sessionsPerWeek = Double(recentSessions) / weeksElapsed
-        let averageRIR = rirCount > 0 ? Double(rirSum) / Double(rirCount) : nil
+        let averageRIR = rirLoggedSets > 0
+            ? Double(rirSum) / Double(rirLoggedSets)
+            : nil
 
-        let weekStreak = Self.weekStreak(in: weeks)
+        let trainedWeekStarts: Set<Date> = Set<Date>(setsByDay.compactMap { entry in
+            let (day, sets) = entry
+            guard sets > 0, day <= today else { return nil }
+            return calendar.dateInterval(of: .weekOfYear, for: day)?.start
+        })
+        let weekStreak = Self.weekStreak(
+            trainedWeekStarts: trainedWeekStarts,
+            currentWeekStart: currentWeekStart,
+            calendar: calendar
+        )
 
         return ConsistencyReport(
             weeks: weeks,
             sessionsPerWeek: sessionsPerWeek,
             weekStreak: weekStreak,
             averageRIR: averageRIR,
+            rirEligibleSets: rirEligibleSets,
+            rirLoggedSets: rirLoggedSets,
             recentSessions: recentSessions,
             daysTrainedInWindow: daysTrained
         )
     }
 
     /// Consecutive weeks with at least one trained day, counting back
-    /// from the current week. A current week that hasn't been started
-    /// yet doesn't break the prior run.
-    private static func weekStreak(in weeks: [[ConsistencyDay]]) -> Int {
+    /// from the current week. A current week that has not been started
+    /// yet does not break the prior run — including on its final day.
+    /// This reads the full archive's week keys rather than the heatmap,
+    /// so a streak is not capped by the 26-week presentation window.
+    private static func weekStreak(
+        trainedWeekStarts: Set<Date>,
+        currentWeekStart: Date,
+        calendar: Calendar
+    ) -> Int {
+        var week = currentWeekStart
+        if !trainedWeekStarts.contains(week) {
+            guard let previous = calendar.date(
+                byAdding: .weekOfYear,
+                value: -1,
+                to: week
+            ) else { return 0 }
+            week = previous
+        }
+
         var streak = 0
-        var started = false
-        for column in weeks.reversed() {
-            let trained = column.contains { $0.isInRange && $0.sets > 0 }
-            let isCurrentWeek = column.contains { !$0.isInRange }
-            if trained {
-                streak += 1
-                started = true
-            } else if isCurrentWeek && !started {
-                continue          // not started this week yet — keep looking
-            } else {
-                break
-            }
+        while trainedWeekStarts.contains(week) {
+            streak += 1
+            guard let previous = calendar.date(
+                byAdding: .weekOfYear,
+                value: -1,
+                to: week
+            ) else { break }
+            week = previous
         }
         return streak
     }
