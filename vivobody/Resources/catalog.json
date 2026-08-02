@@ -86,7 +86,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "biceps-curls-with-barbell",
-    "movementDefinition": "Stand holding a barbell with a shoulder-width supinated grip. Keep the elbows near the torso, curl the bar toward the shoulders without swinging, then lower it under control."
+    "movementDefinition": "Stand holding a barbell with a shoulder-width supinated grip. Keep the elbows near the torso, curl the bar toward the shoulders without swinging, then lower it under control.",
+    "searchPriority": 90
   },
   {
     "name": "Barbell Floor Skull Crusher",
@@ -469,7 +470,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "triceps-extensions-on-cable-with-bar",
-    "movementDefinition": "Stand facing a high cable with the elbows tucked beside the torso. Extend the elbows to press the selected attachment down until the arms are straight, then return under control without letting the upper arms drift."
+    "movementDefinition": "Stand facing a high cable with the elbows tucked beside the torso. Extend the elbows to press the selected attachment down until the arms are straight, then return under control without letting the upper arms drift.",
+    "searchPriority": 90
   },
   {
     "name": "Cable Wrist Curl",
@@ -1279,7 +1281,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "skullcrusher-sz-bar",
-    "movementDefinition": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move."
+    "movementDefinition": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+    "searchPriority": 90
   },
   {
     "name": "Hand Gripper Squeeze",
@@ -2211,7 +2214,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "biceps-curls-with-dumbbell",
-    "movementDefinition": "Stand with a dumbbell in each hand and the elbows close to the torso. Curl both dumbbells toward the shoulders, supinating the forearms as needed, then lower them under control without swinging."
+    "movementDefinition": "Stand with a dumbbell in each hand and the elbows close to the torso. Curl both dumbbells toward the shoulders, supinating the forearms as needed, then lower them under control without swinging.",
+    "searchPriority": 90
   },
   {
     "name": "Standing Dumbbell Overhead Triceps Extension",
@@ -2879,7 +2883,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "bent-over-rowing",
-    "movementDefinition": "Hinge over a barbell with a neutral spine and knees softly bent. Row the bar toward the lower ribs while holding the torso angle, then lower it until the arms are extended."
+    "movementDefinition": "Hinge over a barbell with a neutral spine and knees softly bent. Row the bar toward the lower ribs while holding the torso angle, then lower it until the arms are extended.",
+    "searchPriority": 100
   },
   {
     "name": "Barbell Deadlift",
@@ -2952,7 +2957,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "deadlifts",
-    "movementDefinition": "Stand with the bar over midfoot, hinge to grip it, and brace the trunk with the spine neutral. Push through the floor and extend the knees and hips to stand tall without leaning back, then return the bar by hinging under control."
+    "movementDefinition": "Stand with the bar over midfoot, hinge to grip it, and brace the trunk with the spine neutral. Push through the floor and extend the knees and hips to stand tall without leaning back, then return the bar by hinging under control.",
+    "searchPriority": 100
   },
   {
     "name": "Barbell Deficit Deadlift",
@@ -3125,7 +3131,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "shrugs-barbells",
-    "movementDefinition": "Take a barbell and stand with a straight body, the arms are hanging freely in front of you. Lift from this position the shoulders as high as you can, but don't bend the arms during the movement. On the highest point, make a short pause of 1 or 2 seconds before returning slowly to the initial position. When training with a higher weight, make sure that you still do the whole movement!"
+    "movementDefinition": "Take a barbell and stand with a straight body, the arms are hanging freely in front of you. Lift from this position the shoulders as high as you can, but don't bend the arms during the movement. On the highest point, make a short pause of 1 or 2 seconds before returning slowly to the initial position. When training with a higher weight, make sure that you still do the whole movement!",
+    "searchPriority": 90
   },
   {
     "name": "Barbell Silverback Shrug",
@@ -3598,7 +3605,8 @@
     "loadMode": "bodyweightAdded",
     "trackingMode": "reps",
     "catalogID": "chin-ups",
-    "movementDefinition": "Hang from a bar with a shoulder-width supinated grip. Pull until the chin clears the bar while keeping the shoulders controlled, then lower to a full hang without swinging."
+    "movementDefinition": "Hang from a bar with a shoulder-width supinated grip. Pull until the chin clears the bar while keeping the shoulders controlled, then lower to a full hang without swinging.",
+    "searchPriority": 95
   },
   {
     "name": "Close-Grip Lat Pulldown",
@@ -4754,7 +4762,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "lat-pull-down",
-    "movementDefinition": "The lat pull down is an exercise used to build the muscles of the back. While the exercise will primarily target the lats, you will also notice a fair amount of bicep and middle back activation."
+    "movementDefinition": "The lat pull down is an exercise used to build the muscles of the back. While the exercise will primarily target the lats, you will also notice a fair amount of bicep and middle back activation.",
+    "searchPriority": 95
   },
   {
     "name": "Leaning-Back Lat Pulldown",
@@ -5521,7 +5530,8 @@
     "loadMode": "bodyweightAdded",
     "trackingMode": "reps",
     "catalogID": "pull-ups",
-    "movementDefinition": "Hang from a bar with a shoulder-width pronated grip. Pull until the chin clears the bar while keeping the shoulders controlled and trunk braced, then lower to a full hang without swinging."
+    "movementDefinition": "Hang from a bar with a shoulder-width pronated grip. Pull until the chin clears the bar while keeping the shoulders controlled and trunk braced, then lower to a full hang without swinging.",
+    "searchPriority": 100
   },
   {
     "name": "Renegade Row",
@@ -5857,7 +5867,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "seated-cable-rows",
-    "movementDefinition": "Sit at a cable row with the trunk tall and arms extended. Pull the handle toward the lower ribs while bringing the shoulder blades together, then return under control without rocking the torso."
+    "movementDefinition": "Sit at a cable row with the trunk tall and arms extended. Pull the handle toward the lower ribs while bringing the shoulder blades together, then return under control without rocking the torso.",
+    "searchPriority": 95
   },
   {
     "name": "Seated Machine Row",
@@ -7178,7 +7189,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "bench-press",
-    "movementDefinition": "Lie on the bench with the feet planted and shoulder blades set. Lower the bar to the mid-to-lower chest with the forearms controlled, then press it back over the shoulders; use safeties or a spotter for heavy attempts."
+    "movementDefinition": "Lie on the bench with the feet planted and shoulder blades set. Lower the bar to the mid-to-lower chest with the forearms controlled, then press it back over the shoulders; use safeties or a spotter for heavy attempts.",
+    "searchPriority": 100
   },
   {
     "name": "Bent-Over Cable Fly",
@@ -7319,7 +7331,8 @@
     "loadMode": "bodyweightAdded",
     "trackingMode": "reps",
     "catalogID": "dips",
-    "movementDefinition": "Support the body on parallel bars with the elbows extended. Lower by bending the elbows and shoulders through a comfortable range, then press back to support without bouncing."
+    "movementDefinition": "Support the body on parallel bars with the elbows extended. Lower by bending the elbows and shoulders through a comfortable range, then press back to support without bouncing.",
+    "searchPriority": 90
   },
   {
     "name": "Clap Push-Up",
@@ -7661,7 +7674,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "benchpress-dumbbells",
-    "movementDefinition": "The movement is very similar to benchpressing with a barbell, however, the weight is brought down to the chest at a lower point. Hold two dumbbells and lay down on a bench. Hold the weights next to the chest, at the height of your nipples and press them up till the arms are stretched. Let the weight slowly and controlled down."
+    "movementDefinition": "The movement is very similar to benchpressing with a barbell, however, the weight is brought down to the chest at a lower point. Hold two dumbbells and lay down on a bench. Hold the weights next to the chest, at the height of your nipples and press them up till the arms are stretched. Let the weight slowly and controlled down.",
+    "searchPriority": 95
   },
   {
     "name": "Dumbbell Chest Fly",
@@ -8710,7 +8724,8 @@
     "loadMode": "bodyweightAdded",
     "trackingMode": "reps",
     "catalogID": "push-up",
-    "movementDefinition": "Begin in a rigid plank with the hands about shoulder-width apart. Lower the chest while keeping the elbows controlled and body aligned, then press back to straight arms."
+    "movementDefinition": "Begin in a rigid plank with the hands about shoulder-width apart. Lower the chest while keeping the elbows controlled and body aligned, then press back to straight arms.",
+    "searchPriority": 100
   },
   {
     "name": "Push-Up Rotation",
@@ -11334,7 +11349,8 @@
     "modality": "isometricStrength",
     "loadMode": "bodyweightAdded",
     "catalogID": "plank",
-    "movementDefinition": "Support the body on the forearms and toes in a straight line. Brace the abdomen and glutes, keep the pelvis level, and hold for the prescribed duration without letting the lower back sag."
+    "movementDefinition": "Support the body on the forearms and toes in a straight line. Brace the abdomen and glutes, keep the pelvis level, and hold for the prescribed duration without letting the lower back sag.",
+    "searchPriority": 95
   },
   {
     "name": "Plank In-and-Out Jump",
@@ -12668,7 +12684,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "squats",
-    "movementDefinition": "Secure the bar across the upper back, brace the trunk, and bend the hips and knees while the knees track with the toes. Reach a controlled depth, then drive through the feet to stand."
+    "movementDefinition": "Secure the bar across the upper back, brace the trunk, and bend the hips and knees while the knees track with the toes. Reach a controlled depth, then drive through the feet to stand.",
+    "searchPriority": 100
   },
   {
     "name": "Barbell Box Squat",
@@ -12934,7 +12951,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "front-squats",
-    "movementDefinition": "This variation of the squat trains the hamstrings and gluteus maximus. It also works the back extensors and abductors."
+    "movementDefinition": "This variation of the squat trains the hamstrings and gluteus maximus. It also works the back extensors and abductors.",
+    "searchPriority": 95
   },
   {
     "name": "Barbell Glute Bridge",
@@ -13114,7 +13132,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "barbell-hip-thrust",
-    "movementDefinition": "Brace the upper back on a bench with a barbell across the hips, drive through the feet to extend the hips until the torso and thighs align, then lower under control."
+    "movementDefinition": "Brace the upper back on a bench with a barbell across the hips, drive through the feet to extend the hips until the torso and thighs align, then lower under control.",
+    "searchPriority": 95
   },
   {
     "name": "Barbell Overhead Squat",
@@ -13313,7 +13332,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "barbell-romanian-deadlift-rdl",
-    "movementDefinition": "Hold the bar against the thighs with soft knees, push the hips back to lower it along the legs with a neutral spine, and extend the hips to stand."
+    "movementDefinition": "Hold the bar against the thighs with soft knees, push the hips back to lower it along the legs with a neutral spine, and extend the hips to stand.",
+    "searchPriority": 95
   },
   {
     "name": "Barbell Snatch",
@@ -14074,7 +14094,8 @@
     "trackingMode": "reps",
     "aliases": [],
     "catalogID": "bodyweight-squat-hd",
-    "movementDefinition": "Stand with the feet about shoulder-width and no external load. Bend the hips and knees while keeping the knees aligned with the toes, reach a controlled depth, then drive through the feet to stand."
+    "movementDefinition": "Stand with the feet about shoulder-width and no external load. Bend the hips and knees while keeping the knees aligned with the toes, reach a controlled depth, then drive through the feet to stand.",
+    "searchPriority": 95
   },
   {
     "name": "Bodyweight Sumo Squat",
@@ -15058,7 +15079,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "dumbbell-goblet-squat",
-    "movementDefinition": "Hold one dumbbell vertically at the chest. Sit the hips down between the feet while keeping the trunk braced and knees aligned with the toes, then drive through the feet to stand."
+    "movementDefinition": "Hold one dumbbell vertically at the chest. Sit the hips down between the feet while keeping the trunk braced and knees aligned with the toes, then drive through the feet to stand.",
+    "searchPriority": 90
   },
   {
     "name": "Dumbbell Hang Power Clean",
@@ -15411,7 +15433,8 @@
     "trackingMode": "reps",
     "aliases": [],
     "catalogID": "dumbbell-romanian-deadlift",
-    "movementDefinition": "This exercise involves holding a dumbbell in each hand and bending forward at the hips while keeping the back straight, then returning to a standing position. It primarily targets the hamstrings and glutes."
+    "movementDefinition": "This exercise involves holding a dumbbell in each hand and bending forward at the hips while keeping the back straight, then returning to a standing position. It primarily targets the hamstrings and glutes.",
+    "searchPriority": 90
   },
   {
     "name": "Dumbbell Snatch",
@@ -16615,7 +16638,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "kettlebell-swings",
-    "movementDefinition": "Hike the kettlebell between the thighs from a braced hip hinge, then snap the hips forward to float it to about chest height. Let it return into the next hinge without squatting or lifting with the arms."
+    "movementDefinition": "Hike the kettlebell between the thighs from a braced hip hinge, then snap the hips forward to float it to about chest height. Let it return into the next hinge without squatting or lifting with the arms.",
+    "searchPriority": 90
   },
   {
     "name": "Kneeling Glute Kickback",
@@ -16777,7 +16801,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "lying-leg-curl",
-    "movementDefinition": "Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs."
+    "movementDefinition": "Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.",
+    "searchPriority": 90
   },
   {
     "name": "Machine Glute Drive",
@@ -16901,7 +16926,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "hack-squats",
-    "movementDefinition": "Set the shoulders and back against the hack-squat pads with the feet on the platform. Bend the hips and knees to a controlled depth while the knees track with the toes, then press the platform away to stand without locking abruptly."
+    "movementDefinition": "Set the shoulders and back against the hack-squat pads with the feet on the platform. Bend the hips and knees to a controlled depth while the knees track with the toes, then press the platform away to stand without locking abruptly.",
+    "searchPriority": 90
   },
   {
     "name": "Machine Hip Abduction",
@@ -17002,7 +17028,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "leg-extension",
-    "movementDefinition": "Sit with the knee aligned to the machine pivot and the pad above the ankles. Extend the knees to raise the pad without lifting the hips, then lower it under control."
+    "movementDefinition": "Sit with the knee aligned to the machine pivot and the pad above the ankles. Extend the knees to raise the pad without lifting the hips, then lower it under control.",
+    "searchPriority": 90
   },
   {
     "name": "Machine Leg Press",
@@ -17047,7 +17074,8 @@
     "trackingMode": "reps",
     "aliases": [],
     "catalogID": "leg-press",
-    "movementDefinition": "The leg press is a weight training exercise in which the individual pushes a weight or resistance away from them using their legs."
+    "movementDefinition": "The leg press is a weight training exercise in which the individual pushes a weight or resistance away from them using their legs.",
+    "searchPriority": 95
   },
   {
     "name": "Machine Pendulum Squat",
@@ -18778,7 +18806,8 @@
     "trackingMode": "reps",
     "aliases": [],
     "catalogID": "standing-calf-raises",
-    "movementDefinition": "Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don't make a hollow back and don't bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down."
+    "movementDefinition": "Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don't make a hollow back and don't bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down.",
+    "searchPriority": 90
   },
   {
     "name": "Standing Machine Leg Curl",
@@ -19766,7 +19795,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "overhead-barbell-press",
-    "movementDefinition": "Setup: Stand with feet together and grip the bar slightly wider than shoulders. Position: Rest the bar on your upper chest. Press: Brace your core and push the bar straight up until your arms lock out. Finish: Control the bar back down to your chest."
+    "movementDefinition": "Setup: Stand with feet together and grip the bar slightly wider than shoulders. Position: Rest the bar on your upper chest. Press: Brace your core and push the bar straight up until your arms lock out. Finish: Control the bar back down to your chest.",
+    "searchPriority": 100
   },
   {
     "name": "Barbell Push Press",
@@ -20741,7 +20771,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "lateral-raises",
-    "movementDefinition": "Stand with a dumbbell in each hand and elbows softly bent. Raise the arms out to the sides to about shoulder height without shrugging or leaning, then lower under control."
+    "movementDefinition": "Stand with a dumbbell in each hand and elbows softly bent. Raise the arms out to the sides to about shoulder height without shrugging or leaning, then lower under control.",
+    "searchPriority": 90
   },
   {
     "name": "Dumbbell Rear Delt Row",
@@ -20895,7 +20926,8 @@
     "loadMode": "external",
     "trackingMode": "reps",
     "catalogID": "shoulder-press-dumbbells",
-    "movementDefinition": "Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat."
+    "movementDefinition": "Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat.",
+    "searchPriority": 95
   },
   {
     "name": "Dumbbell Turkish Get-Up",

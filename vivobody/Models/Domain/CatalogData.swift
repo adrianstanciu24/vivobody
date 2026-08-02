@@ -36,6 +36,10 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let plane: MovementPlane
     let laterality: Laterality
     let aliases: [String]
+    /// Sparse editorial prior for broad in-app and Spotlight searches.
+    /// Nil means no catalog-authored boost; text relevance and user
+    /// signals still decide whether and where the item appears.
+    let searchPriority: Int?
     let bodyweightFraction: Double
     let modality: ExerciseModality
     let loadMode: ExerciseLoadMode
@@ -56,6 +60,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     var planeValue: MovementPlane { plane }
     var lateralityValue: Laterality { laterality }
     var aliasesValue: [String] { aliases }
+    var searchPriorityValue: Int { searchPriority ?? 0 }
     var bodyweightFractionValue: Double { bodyweightFraction }
 
     var muscleInvolvement: Muscle.Involvement {
@@ -169,6 +174,9 @@ nonisolated enum CatalogData {
             }
             guard record.defaultWeight >= 0, record.reps > 0 else {
                 throw ValidationError.invalidDefaults(record.catalogID)
+            }
+            guard (0...100).contains(record.searchPriorityValue) else {
+                throw ValidationError.invalidSearchPriority(record.catalogID)
             }
             guard (0...1).contains(record.bodyweightFraction) else {
                 throw ValidationError.invalidBodyweightFraction(record.catalogID)
@@ -297,6 +305,7 @@ nonisolated enum CatalogData {
         case emptyMovementDefinition(String)
         case invalidMovementDefinition(String)
         case invalidDefaults(String)
+        case invalidSearchPriority(String)
         case invalidBodyweightFraction(String)
         case invalidKilogramDefault(String)
         case missingDuration(String)
@@ -322,6 +331,7 @@ nonisolated enum CatalogData {
             case .emptyMovementDefinition(let id): return "record '\(id)' has no movement definition"
             case .invalidMovementDefinition(let id): return "record '\(id)' has a malformed movement definition"
             case .invalidDefaults(let id): return "record '\(id)' has invalid weight/reps defaults"
+            case .invalidSearchPriority(let id): return "record '\(id)' has an invalid search priority"
             case .invalidBodyweightFraction(let id): return "record '\(id)' has an invalid bodyweight fraction"
             case .invalidKilogramDefault(let id): return "record '\(id)' has an invalid kilogram default"
             case .missingDuration(let id): return "duration record '\(id)' has no positive default duration"

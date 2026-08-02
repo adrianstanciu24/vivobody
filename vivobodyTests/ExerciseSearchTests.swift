@@ -2,11 +2,11 @@
 //  ExerciseSearchTests.swift
 //  vivobodyTests
 //
-//  Guards the ExerciseSearch ranker: tier ordering (exact > prefix >
-//  word-exact > word-prefix > substring, name > alias), multi-token
-//  AND semantics, the tracked-exercise tiebreak boost, and case
-//  insensitivity. The canonical case is "pull" surfacing "Pull-Up"
-//  before "Lat Pulldown" / "Cable Pull-Through".
+//  Guards the ExerciseSearch ranker: lexical tiers, singular/plural
+//  equivalence, multi-token AND semantics, favorite/history signals,
+//  and the bundled editorial prior. Canonical cases are "pull"
+//  surfacing Pull-Up and both "squat" / "squats" surfacing Barbell
+//  Back Squat ahead of long-tail variations.
 //
 
 import Foundation
@@ -40,6 +40,15 @@ struct ExerciseSearchTests {
         items.map(\.name)
     }
 
+    private func bundledCatalog() -> [ExerciseCatalogItem] {
+        CatalogData.records.enumerated().map { index, record in
+            ExerciseCatalogItem(
+                record: record,
+                createdAt: now.addingTimeInterval(Double(index))
+            )
+        }
+    }
+
     // MARK: - The canonical case
 
     @Test func pullSurfacesPullUpsFirst() {
@@ -57,12 +66,31 @@ struct ExerciseSearchTests {
         #expect(ranked.first?.name == "Pull-Up")
     }
 
+    @Test func singularSquatSurfacesCanonicalBackSquatFirst() {
+        let ranked = ExerciseSearch.rank(items: bundledCatalog(), query: "squat")
+        #expect(ranked.first?.name == "Barbell Back Squat")
+    }
+
+    @Test func pluralSquatsMatchesAndSurfacesCanonicalBackSquatFirst() {
+        let ranked = ExerciseSearch.rank(items: bundledCatalog(), query: "squats")
+        #expect(ranked.first?.name == "Barbell Back Squat")
+    }
+
+    @Test func exactCustomNameStillBeatsEditorialPriority() throws {
+        let canonicalRecord = try #require(CatalogData.record(forCatalogID: "squats"))
+        let canonical = ExerciseCatalogItem(record: canonicalRecord, createdAt: now)
+        let custom = item("Squat", group: .legs)
+
+        let ranked = ExerciseSearch.rank(items: [canonical, custom], query: "squat")
+        #expect(ranked.first?.name == "Squat")
+    }
+
     // MARK: - Tier ordering
 
-    @Test func prefixBeatsWordExact() {
+    @Test func strongPrefixUsesDeterministicTiebreakAgainstWordExact() {
         let catalog = [
-            item("Lat Pulldown"),   // word-exact "pull"
-            item("Pull-Up"),        // prefix "pull"
+            item("Lat Pulldown"),   // word-prefix "pull"
+            item("Pull-Up"),        // phrase-prefix / word-exact "pull"
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "pull")
         #expect(ranked.first?.name == "Pull-Up")
@@ -113,14 +141,14 @@ struct ExerciseSearchTests {
     }
 
     @Test func multiTokenRanksByWorstTokenScore() {
-        // "Lat Pulldown": "lat" prefix (tier 1), "pull" word-exact (tier 2) -> worst 2.
-        // "Lat Pulldown":  "lat" prefix (tier 1), "pull" word-prefix (tier 3) -> worst 3.
+        // "Lat Pull Down" has two strong token matches; "Lat Pulldown"
+        // only has a weaker word-prefix match for "pull".
         let catalog = [
             item("Lat Pulldown"),
-            item("Lat Pulldown"),
+            item("Lat Pull Down"),
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "lat pull")
-        #expect(ranked.first?.name == "Lat Pulldown")
+        #expect(ranked.first?.name == "Lat Pull Down")
     }
 
     // MARK: - Tracked boost + relevance priority
@@ -171,5 +199,14 @@ struct ExerciseSearchTests {
         let catalog = [item("Pull-Up"), item("Pull-downs", aliases: ["Pulldown"])]
         let ranked = ExerciseSearch.rank(items: catalog, query: "ups")
         #expect(ranked.first?.name == "Pull-Up")
+    }
+
+    @Test func shortPluralStemDoesNotBroadenIntoAnotherWord() {
+        let catalog = [
+            item("Abs Crunch", group: .core),
+            item("Machine Hip Abduction", group: .legs),
+        ]
+        let ranked = ExerciseSearch.rank(items: catalog, query: "abs")
+        #expect(names(ranked) == ["Abs Crunch"])
     }
 }

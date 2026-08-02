@@ -153,6 +153,9 @@ enum SpotlightIndexer {
             keywords.append(direction.displayName)
         }
         attributes.keywords = keywords
+        if item.searchPriority > 0 {
+            attributes.rankingHint = NSNumber(value: item.searchPriority)
+        }
         return CSSearchableItem(
             uniqueIdentifier: exerciseIdentifier(item.id),
             domainIdentifier: exerciseDomain,

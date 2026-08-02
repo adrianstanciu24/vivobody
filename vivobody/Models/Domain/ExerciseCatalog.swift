@@ -385,6 +385,15 @@ final class ExerciseCatalogItem: Identifiable {
         return pattern.displayName
     }
 
+    /// Bundled discovery prior, resolved by stable ID instead of copied
+    /// into SwiftData. Catalog updates therefore improve search ordering
+    /// on existing installs without overwriting user edits or migrating
+    /// the persistent store. User-created exercises have no default boost.
+    var searchPriority: Int {
+        guard let catalogID else { return 0 }
+        return CatalogData.record(forCatalogID: catalogID)?.searchPriorityValue ?? 0
+    }
+
     var plane: MovementPlane {
         get { MovementPlane(rawValue: planeRaw) ?? .sagittal }
         set { planeRaw = newValue.rawValue }

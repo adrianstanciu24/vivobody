@@ -25,6 +25,10 @@ struct CatalogBiomechanicsTests {
 
         for record in CatalogData.records {
             #expect(
+                (0...100).contains(record.searchPriorityValue),
+                "'\(record.name)' has an invalid search priority"
+            )
+            #expect(
                 Self.isStableCatalogID(record.catalogID),
                 "'\(record.name)' has an invalid stable ID: '\(record.catalogID)'"
             )

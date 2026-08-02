@@ -8,12 +8,14 @@
 //  catalog items + query + the user's tracked-exercise keys — no
 //  SwiftData, no UI — so it is unit-tested directly.
 //
-//  Ranking tiers (best -> worst), evaluated per whitespace token.
+//  Ranking tiers (best -> worst), evaluated per query token.
 //  An item matches only if EVERY token matches at least at the
 //  substring tier; the item's score is the worst (highest) token
 //  score, so "lat pull" ranks "Lat Pulldown" above single-token
-//  noise. Within a tier, exercises the user has actually logged
-//  sort first (tracked boost), then shorter names, then alphabetical.
+//  noise. Conservative singular/plural stemming makes "squats" match
+//  "Squat" without fuzzy typo matching. Within a tier: favorites,
+//  the bundled editorial prior, tracked exercises, shorter names,
+//  then alphabetical order.
 //
 
 import Foundation
@@ -29,11 +31,7 @@ enum ExerciseSearch {
         query: String,
         trackedKeys: Set<String> = []
     ) -> [ExerciseCatalogItem] {
-        let tokens = query
-            .trimmingCharacters(in: .whitespaces)
-            .lowercased()
-            .split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
-            .map(String.init)
+        let tokens = words(of: normalized(query))
 
         guard !tokens.isEmpty else { return items }
 
@@ -41,7 +39,13 @@ enum ExerciseSearch {
             guard let score = combinedScore(item: item, tokens: tokens) else { return nil }
             let tracked = trackedKeys.contains(item.historyKey)
                 || trackedKeys.contains(item.legacyHistoryKey)
-            return Scored(item: item, score: score, isTracked: tracked)
+            return Scored(
+                item: item,
+                score: score,
+                isFavorite: item.isFavorite,
+                searchPriority: item.searchPriority,
+                isTracked: tracked
+            )
         }
 
         return scored.sorted().map(\.item)
@@ -65,24 +69,69 @@ enum ExerciseSearch {
     /// (source weight 0 vs 1). Returns `nil` if the token matches
     /// neither name nor any alias.
     private static func tokenScore(item: ExerciseCatalogItem, token: String) -> Int? {
-        let nameScore = stringTier(item.name.lowercased(), token: token).map { $0 * 2 + 0 }
+        let nameScore = stringTier(item.name, token: token).map { $0 * 2 + 0 }
         let aliasScore = item.aliases
-            .compactMap { stringTier($0.lowercased(), token: token).map { $0 * 2 + 1 } }
+            .compactMap { stringTier($0, token: token).map { $0 * 2 + 1 } }
             .min()
         return [nameScore, aliasScore].compactMap({ $0 }).min()
     }
 
-    /// Tier (0-4) for one lowercased candidate string vs a token.
-    /// 0 exact · 1 prefix · 2 word-exact · 3 word-prefix · 4 substring.
+    /// Tier (0-3) for one candidate string vs a normalized token.
+    /// 0 exact · 1 phrase-prefix/word-exact · 2 word-prefix · 3 substring.
+    /// Prefix and word-exact intentionally share a tier: for a broad
+    /// movement query, "Squat Jump" isn't inherently a better answer
+    /// than "Barbell Back Squat" just because its name starts with the
+    /// token. The editorial and personal signals resolve that ambiguity.
     /// `nil` when the token doesn't appear at all.
-    private static func stringTier(_ s: String, token: String) -> Int? {
+    private static func stringTier(_ value: String, token: String) -> Int? {
+        let s = normalized(value)
         if s == token { return 0 }
-        if s.hasPrefix(token) { return 1 }
         let words = words(of: s)
-        if words.contains(token) { return 2 }
-        if words.contains(where: { $0.hasPrefix(token) }) { return 3 }
-        if s.contains(token) { return 4 }
+        if s.hasPrefix(token) || words.contains(token) { return 1 }
+        if words.contains(where: { $0.hasPrefix(token) }) { return 2 }
+
+        // Match only ordinary English inflections, not arbitrary edit
+        // distance. This covers squat/squats, lunge/lunges,
+        // press/presses, curl/curls, and fly/flies without letting a
+        // typo silently select an unrelated exercise.
+        let stemmedToken = singularStem(token)
+        let stemmedWords = words.map(singularStem)
+        if stemmedWords.contains(stemmedToken) { return 1 }
+
+        if s.contains(token) { return 3 }
         return nil
+    }
+
+    private static func normalized(_ value: String) -> String {
+        value
+            .folding(
+                options: [.diacriticInsensitive, .widthInsensitive],
+                locale: Locale(identifier: "en_US_POSIX")
+            )
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Small, deterministic English inflector for exercise vocabulary.
+    /// Search only needs singular equivalence; it doesn't attempt full
+    /// natural-language stemming (which would turn "press" into "pres").
+    private static func singularStem(_ word: String) -> String {
+        guard word.count > 2 else { return word }
+
+        if word.hasSuffix("ies"), word.count > 3 {
+            return String(word.dropLast(3)) + "y"
+        }
+
+        let esSuffixes = ["sses", "shes", "ches", "xes", "zes"]
+        if esSuffixes.contains(where: word.hasSuffix) {
+            return String(word.dropLast(2))
+        }
+
+        if word.hasSuffix("s"), !word.hasSuffix("ss") {
+            return String(word.dropLast())
+        }
+
+        return word
     }
 
     /// Split on any non-alphanumeric boundary so "Pull-Up" and
@@ -95,14 +144,21 @@ enum ExerciseSearch {
     // MARK: - Sort wrapper
 
     /// Comparable envelope so `sorted()` applies the full tiebreak
-    /// chain: relevance score, tracked boost, shorter name, alpha.
+    /// chain. Exact/stronger text still always wins; explicit favorites
+    /// then beat the default catalog prior, followed by workout history.
     private struct Scored: Comparable {
         let item: ExerciseCatalogItem
         let score: Int
+        let isFavorite: Bool
+        let searchPriority: Int
         let isTracked: Bool
 
         static func < (lhs: Scored, rhs: Scored) -> Bool {
             if lhs.score != rhs.score { return lhs.score < rhs.score }
+            if lhs.isFavorite != rhs.isFavorite { return lhs.isFavorite }
+            if lhs.searchPriority != rhs.searchPriority {
+                return lhs.searchPriority > rhs.searchPriority
+            }
             if lhs.isTracked != rhs.isTracked { return lhs.isTracked }
             if lhs.item.name.count != rhs.item.name.count {
                 return lhs.item.name.count < rhs.item.name.count

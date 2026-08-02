@@ -1514,6 +1514,60 @@ for name in RETIRED_EXERCISES:
     CURATION.pop(name)
 
 
+# Editorial prior for broad, ambiguous searches. This is deliberately sparse:
+# text relevance still decides whether an exercise matches, while these values
+# only order similarly relevant results (for example, "squat" should surface
+# Barbell Back Squat before Squat Jump). It is not a claim of measured global
+# popularity; it is the default discovery order before the user's favorites
+# and workout history personalize the result.
+SEARCH_PRIORITIES = {
+    # Canonical movement vocabulary.
+    "Barbell Back Squat": 100,
+    "Barbell Bench Press": 100,
+    "Barbell Bent-Over Row": 100,
+    "Barbell Deadlift": 100,
+    "Barbell Overhead Press": 100,
+    "Pull-Up": 100,
+    "Push-Up": 100,
+
+    # Common alternatives and foundational accessories.
+    "Barbell Front Squat": 95,
+    "Barbell Hip Thrust": 95,
+    "Barbell Romanian Deadlift": 95,
+    "Bodyweight Squat": 95,
+    "Chin-Up": 95,
+    "Dumbbell Bench Press": 95,
+    "Dumbbell Shoulder Press": 95,
+    "Lat Pulldown": 95,
+    "Machine Leg Press": 95,
+    "Plank": 95,
+    "Seated Cable Row": 95,
+
+    # Familiar gym staples that should lead their long-tail variations.
+    "Barbell Biceps Curl": 90,
+    "Barbell Shrug": 90,
+    "Cable Triceps Pushdown": 90,
+    "Chest Dip": 90,
+    "Dumbbell Goblet Squat": 90,
+    "Dumbbell Lateral Raise": 90,
+    "Dumbbell Romanian Deadlift": 90,
+    "EZ-Bar Skull Crusher": 90,
+    "Kettlebell Swing": 90,
+    "Lying Machine Leg Curl": 90,
+    "Machine Hack Squat": 90,
+    "Machine Leg Extension": 90,
+    "Standing Dumbbell Biceps Curl": 90,
+    "Standing Machine Calf Raise": 90,
+}
+
+unknown_priority_names = SEARCH_PRIORITIES.keys() - CURATION.keys()
+if unknown_priority_names:
+    raise RuntimeError(
+        "Unknown search-priority exercise(s): "
+        + ", ".join(sorted(unknown_priority_names))
+    )
+
+
 # Objective corrections from the biomechanics audit. Keeping these separate
 # from the seed calls makes the audited contract easy to scan and test.
 TRANSVERSE_PLANE = {
@@ -2169,6 +2223,12 @@ def validate(name, body):
     if body.get("modality") == "isometricStrength" and body.get("trackingMode") != "duration":
         errs.append("isometric strength must track duration")
     if not isinstance(body.get("aliases"), list): errs.append("aliases")
+    if "searchPriority" in body and (
+        isinstance(body["searchPriority"], bool)
+        or not isinstance(body["searchPriority"], int)
+        or not 0 <= body["searchPriority"] <= 100
+    ):
+        errs.append(f"searchPriority '{body['searchPriority']}'")
     if not isinstance(body.get("movementDefinition"), str) or not body["movementDefinition"].strip():
         errs.append("movementDefinition")
     else:
@@ -2207,6 +2267,8 @@ def main():
         body["involvement"] = reviewed_involvement[name]
         apply_biomechanics_corrections(name, body)
         body.update(catalog_metadata[name])
+        if name in SEARCH_PRIORITIES:
+            body["searchPriority"] = SEARCH_PRIORITIES[name]
 
     # Build every shipped record fresh from the tracked authored sources so no
     # stale fields or deleted records can survive from a prior catalog.
