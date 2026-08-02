@@ -59,6 +59,10 @@ nonisolated enum SettingsKey {
     /// resolves. A render hint only — `Transaction.currentEntitlements`
     /// remains the source of truth and overwrites this on every launch.
     static let proUnlockedCache = "settings.proUnlockedCache"
+    /// Stores `BodyDriftSpeed.rawValue`. Read via @AppStorage inside
+    /// `RotatableBodyModel`, so changing it retargets the idle
+    /// turntable everywhere the figure is on screen.
+    static let bodyDriftSpeed = "settings.bodyDriftSpeed"
     /// Monotonic revision for data consumed by the full widget
     /// snapshot set. Relevant mutation paths advance it only after
     /// their SwiftData save succeeds.
@@ -79,6 +83,38 @@ nonisolated enum SettingsDefaults {
     static let onboardingCompleted = false
     static let hasScrubbedNumber = false
     static let proUnlockedCache = false
+    static let bodyDriftSpeed = BodyDriftSpeed.low.rawValue
+}
+
+/// How fast the 3D body model idles on its turntable. `low` is the
+/// default — one revolution in fifteen seconds, so every side comes
+/// around without the user dragging. Each step up doubles it.
+nonisolated enum BodyDriftSpeed: String, CaseIterable, Identifiable {
+    case low
+    case medium
+    case high
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .low:    return "Low"
+        case .medium: return "Medium"
+        case .high:   return "High"
+        }
+    }
+
+    /// One full idle revolution takes this long.
+    var secondsPerRevolution: Double {
+        switch self {
+        case .low:    return 15
+        case .medium: return 7.5
+        case .high:   return 3.75
+        }
+    }
+
+    /// Idle angular speed in radians/second, derived from the above.
+    var radiansPerSecond: Float { Float(2 * Double.pi / secondsPerRevolution) }
 }
 
 /// The user's colour-scheme preference. `system` follows the OS;

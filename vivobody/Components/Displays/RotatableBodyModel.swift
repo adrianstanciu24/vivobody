@@ -7,12 +7,14 @@
 //  through) and adds a horizontal drag-to-rotate gesture that spins
 //  only the "bodyPivot" node about its vertical axis.
 //
-//  At rest the figure idles on its turntable — a very slow constant
-//  drift so the hero never reads as a screenshot. The finger always
-//  wins: touching stops the drift dead, a flick coasts and bleeds off
-//  into the drift speed, and parking the model holds still for a
-//  grace period before the drift eases back in. All tuning lives in
-//  the `Drift` enum. Honors Reduce Motion by never self-moving.
+//  At rest the figure idles on its turntable — a slow constant drift
+//  so the hero never reads as a screenshot. How fast it drifts is a
+//  user preference (`BodyDriftSpeed`, set in Settings, Low by
+//  default); the rest of the tuning lives in the `Drift` enum. The
+//  finger always wins: touching stops the drift dead, a flick coasts
+//  and bleeds off into the drift speed, and parking the model holds
+//  still for a grace period before the drift eases back in. Honors
+//  Reduce Motion by never self-moving.
 //
 //  The pan recogniser is deliberately direction-locked to horizontal:
 //  a mostly-vertical drag fails the gesture so the enclosing
@@ -52,16 +54,10 @@ struct RotatableBodyModel: UIViewRepresentable {
     static let sensitivity: Float = 0.008
     private static let viewTag = 999
 
-    /// Self-motion tuning — every number that shapes how the figure
-    /// moves on its own. `secondsPerRevolution` is the one to play
-    /// with when judging how alive the turntable should feel.
+    /// Self-motion tuning — the fixed numbers that shape how the
+    /// figure moves on its own. The idle speed itself is not here:
+    /// it comes from the user's `BodyDriftSpeed` preference.
     enum Drift {
-        /// One full idle revolution takes this long.
-        static let secondsPerRevolution: Double = 90
-
-        /// Idle angular speed (radians/second), derived from the above.
-        static var speed: Float { Float(2 * Double.pi / secondsPerRevolution) }
-
         /// How long the model holds still after the user parks it
         /// before the drift eases back in — releasing must never feel
         /// like the model snatches control back.
@@ -80,7 +76,11 @@ struct RotatableBodyModel: UIViewRepresentable {
 
         /// Quadrant detent haptics fire only above this speed — the
         /// felt part of a user's spin, never the ambient drift.
-        static let hapticFloor: Float = 0.12
+        /// Measured against the current idle speed rather than an
+        /// absolute floor, since the fast presets idle well above any
+        /// fixed threshold; a coast therefore ticks until it settles
+        /// back into the drift, which stays silent at every preset.
+        static let hapticMargin: Float = 1.15
     }
 
     /// Height, in points, the SCNView is pinned to via an explicit
@@ -104,6 +104,16 @@ struct RotatableBodyModel: UIViewRepresentable {
     /// frame rate while the model is in motion; keep the observer
     /// small.
     var onRotation: ((Double) -> Void)? = nil
+
+    /// The user's idle-turntable speed. Read here rather than passed
+    /// in so every site that shows the figure picks the preference up
+    /// for free.
+    @AppStorage(SettingsKey.bodyDriftSpeed)
+    private var driftSpeedRaw: String = SettingsDefaults.bodyDriftSpeed
+
+    private var driftSpeed: BodyDriftSpeed {
+        BodyDriftSpeed(rawValue: driftSpeedRaw) ?? .low
+    }
 
     /// The resolved scheme the scene renders for — materials and light
     /// rig are all themed (see `BodyModelScene`).
@@ -149,6 +159,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         )
         container.addGestureRecognizer(pan)
         context.coordinator.onRotation = onRotation
+        context.coordinator.driftSpeed = driftSpeed
         context.coordinator.scnView = scnView
         context.coordinator.pivot = scnView.scene?.rootNode.childNode(
             withName: "bodyPivot",
@@ -162,6 +173,7 @@ struct RotatableBodyModel: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {
         context.coordinator.heightConstraint?.constant = renderHeight
         context.coordinator.onRotation = onRotation
+        context.coordinator.setDriftSpeed(driftSpeed)
 
         // Re-tint in place when the development map changes (e.g. a
         // workout was just archived) or the resolved colour scheme
@@ -192,6 +204,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         var appliedChannels: [String: MuscleMapChannels] = [:]
         var appliedTheme: BodyModelTheme = .dark
         var onRotation: ((Double) -> Void)?
+        var driftSpeed: BodyDriftSpeed = .low
         weak var scnView: SCNView?
         weak var pivot: SCNNode?
         private var lastX: CGFloat = 0
@@ -246,8 +259,20 @@ struct RotatableBodyModel: UIViewRepresentable {
         /// moving on its own.
         func beginIdleDrift() {
             guard !UIAccessibility.isReduceMotionEnabled else { return }
-            targetVelocity = Drift.speed * driftDirection
+            targetVelocity = driftSpeed.radiansPerSecond * driftDirection
             startMotionLink()
+        }
+
+        /// Adopt a new preference. The new speed is eased into through
+        /// the same approach curve as everything else, and only while
+        /// the turntable is already the thing moving — changing the
+        /// setting must never take the model back from a finger that
+        /// is holding it, or cut short a park's grace period.
+        func setDriftSpeed(_ speed: BodyDriftSpeed) {
+            guard speed != driftSpeed else { return }
+            driftSpeed = speed
+            guard motionLink != nil else { return }
+            beginIdleDrift()
         }
 
         /// The user let go: a flick coasts into the drift, a park
@@ -294,7 +319,8 @@ struct RotatableBodyModel: UIViewRepresentable {
             let dt = Float(link.targetTimestamp - link.timestamp)
             velocity = targetVelocity + (velocity - targetVelocity) * exp(-Drift.approachRate * dt)
             pivot.eulerAngles.y += velocity * dt
-            report(pivot, withHaptics: abs(velocity) > Drift.hapticFloor)
+            let detentFloor = driftSpeed.radiansPerSecond * Drift.hapticMargin
+            report(pivot, withHaptics: abs(velocity) > detentFloor)
         }
 
         func stopMotion() {

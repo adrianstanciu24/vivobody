@@ -4,9 +4,10 @@
 //
 //  App configuration, pushed from the gear button on Me. Carries the
 //  preference rows that used to live inline on MeScreen — appearance,
-//  weight unit, default rest, haptics — plus the destructive Reset
-//  Exercise Catalog action, the About links (privacy policy and
-//  support, required for App Store distribution), and the app footer.
+//  model rotation, weight unit, default rest, haptics — plus the
+//  destructive Reset Exercise Catalog action, the About links
+//  (privacy policy and support, required for App Store
+//  distribution), and the app footer.
 //
 //  Sections render as ledger blocks, matching History and Library:
 //  the SectionHeader stays on black and the section's rows sit
@@ -72,6 +73,13 @@ struct SettingsScreen: View {
 
     @AppStorage(SettingsKey.healthKitEnabled)
     private var healthKitEnabled: Bool = SettingsDefaults.healthKitEnabled
+
+    @AppStorage(SettingsKey.bodyDriftSpeed)
+    private var bodyDriftSpeedRaw: String = SettingsDefaults.bodyDriftSpeed
+
+    private var bodyDriftSpeed: BodyDriftSpeed {
+        BodyDriftSpeed(rawValue: bodyDriftSpeedRaw) ?? .low
+    }
 
     /// Controls the destructive-confirmation alert for "Reset
     /// Exercise Catalog." Bound to the alert's `isPresented`.
@@ -186,6 +194,8 @@ struct SettingsScreen: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 appearanceRow
+                rowDivider
+                bodyDriftSpeedRow
                 rowDivider
                 weightUnitRow
                 rowDivider
@@ -308,6 +318,56 @@ struct SettingsScreen: View {
                 playsSound: true
             )
             appearanceRaw = option.rawValue
+        } label: {
+            Text(option.label)
+                .font(Typography.sectionLabel)
+                .foregroundStyle(isSelected ? Tint.onAccent : Ink.secondary)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .coloredGlassControl(cornerRadius: Radius.chip, fill: isSelected ? Tint.inProgress : nil)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(option.label)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    /// Idle rotation speed of the 3D figure on Today. Same chip
+    /// vocabulary as Appearance — all three options visible, so the
+    /// highlighted chip is the only readout needed.
+    private var bodyDriftSpeedRow: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                Text("Model Rotation")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(Ink.primary)
+                Text("How fast the body model turns on its own")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.tertiary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            GlassEffectContainer(spacing: Space.sm) {
+                HStack(spacing: Space.sm) {
+                    ForEach(BodyDriftSpeed.allCases) { option in
+                        bodyDriftSpeedChip(option)
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, Space.lg)
+        .padding(.vertical, Space.md)
+    }
+
+    private func bodyDriftSpeedChip(_ option: BodyDriftSpeed) -> some View {
+        let isSelected = option == bodyDriftSpeed
+        return Button {
+            Haptics.selection(
+                pitch: Haptics.optionPitch(
+                    index: BodyDriftSpeed.allCases.firstIndex(of: option) ?? 0,
+                    count: BodyDriftSpeed.allCases.count
+                ),
+                playsSound: true
+            )
+            bodyDriftSpeedRaw = option.rawValue
         } label: {
             Text(option.label)
                 .font(Typography.sectionLabel)
