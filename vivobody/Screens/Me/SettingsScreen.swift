@@ -29,11 +29,15 @@ import SwiftUI
 import SwiftData
 
 /// Public-facing URLs surfaced from Settings. Hosted via GitHub
-/// Pages from the repo's docs/ folder; these same URLs go in the
-/// App Store Connect metadata fields.
+/// Pages from the repo's docs/ folder; this URL also fills the App
+/// Store Connect privacy metadata field.
+///
+/// The sibling support.html page still backs the Support URL field
+/// in App Store Connect, but is deliberately not linked from here —
+/// the Contact & Support row opens a prefilled email instead, which
+/// is what someone tapping it actually wants.
 private enum SupportLinks {
     static let privacyPolicy = URL(string: "https://adrianstanciu24.github.io/vivobody/privacy.html")!
-    static let support = URL(string: "https://adrianstanciu24.github.io/vivobody/support.html")!
 }
 
 struct SettingsScreen: View {
@@ -89,6 +93,18 @@ struct SettingsScreen: View {
     /// authorization prompt. Driven by the HealthKit toggle.
     @State private var showHealthKitPriming: Bool = false
 
+    /// The About page currently open in the in-app browser. Non-nil
+    /// presents the Safari sheet; Done clears it.
+    @State private var activePage: WebPage?
+
+    /// Presents the prefilled support email. Only ever set when the
+    /// device can actually send mail.
+    @State private var isComposingSupportMail: Bool = false
+
+    /// Escape hatch for URLs the in-app surfaces cannot handle — a
+    /// non-http page, or `mailto:` on a device without the composer.
+    @Environment(\.openURL) private var openURL
+
     /// Common rest values that cover the bulk of strength-training
     /// programs. Surfaced as a horizontal chip selector — picking a
     /// value is a single tap with no keyboard or sheet round-trip.
@@ -120,6 +136,18 @@ struct SettingsScreen: View {
         .screenBackground()
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $activePage) { page in
+            SafariView(url: page.url)
+                .ignoresSafeArea()
+        }
+        .sheet(isPresented: $isComposingSupportMail) {
+            MailComposeView(
+                recipient: SupportMail.recipient,
+                subject: SupportMail.subject,
+                body: SupportMail.body
+            )
+            .ignoresSafeArea()
+        }
     }
 
     // MARK: - Vivobody Pro
@@ -651,31 +679,67 @@ struct SettingsScreen: View {
 
     // MARK: - About
 
-    /// External links App Review expects to find in-app: the privacy
-    /// policy (required for HealthKit apps) and a support contact.
+    /// The two contact points App Review expects to find in-app: the
+    /// privacy policy (required for HealthKit apps) and a support
+    /// channel. Neither ejects the user — the policy renders in an
+    /// in-app Safari sheet (`SafariView`) and support opens a
+    /// prefilled composer (`MailComposeView`).
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "About")
 
             VStack(alignment: .leading, spacing: 0) {
-                linkRow(
+                aboutRow(
                     title: "Privacy Policy",
                     subtitle: "Everything stays on your device",
-                    url: SupportLinks.privacyPolicy
-                )
+                    icon: "arrow.up.right",
+                    hint: "Opens in this app"
+                ) {
+                    open(SupportLinks.privacyPolicy)
+                }
                 rowDivider
-                linkRow(
+                aboutRow(
                     title: "Contact & Support",
                     subtitle: "Questions, bugs, feature requests",
-                    url: SupportLinks.support
-                )
+                    icon: "envelope",
+                    hint: "Opens a new email"
+                ) {
+                    composeSupportMail()
+                }
             }
             .contentCard()
         }
     }
 
-    private func linkRow(title: String, subtitle: String, url: URL) -> some View {
-        Link(destination: url) {
+    /// Opens a web page in the in-app browser, handing anything it
+    /// cannot render (non-http schemes) to the system instead.
+    private func open(_ url: URL) {
+        if let page = WebPage(url) {
+            activePage = page
+        } else {
+            openURL(url)
+        }
+    }
+
+    /// Prefers the in-app composer. Devices with no mail account fall
+    /// back to a `mailto:` URL so the row still does something rather
+    /// than dead-ending on a tap.
+    private func composeSupportMail() {
+        if MailComposeView.canSend {
+            isComposingSupportMail = true
+        } else if let url = SupportMail.mailtoURL {
+            openURL(url)
+        }
+    }
+
+    private func aboutRow(
+        title: String,
+        subtitle: String,
+        icon: String,
+        hint: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
             HStack {
                 VStack(alignment: .leading, spacing: Space.xs) {
                     Text(title)
@@ -686,7 +750,7 @@ struct SettingsScreen: View {
                         .foregroundStyle(Ink.tertiary)
                 }
                 Spacer()
-                Image(systemName: "arrow.up.right")
+                Image(systemName: icon)
                     .font(Typography.sectionLabel)
                     .foregroundStyle(Ink.tertiary)
                     .accessibilityHidden(true)
@@ -697,7 +761,7 @@ struct SettingsScreen: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityHint("Opens in your browser")
+        .accessibilityHint(hint)
     }
 
     // MARK: - Footer
