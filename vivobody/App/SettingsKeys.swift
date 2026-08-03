@@ -63,6 +63,10 @@ nonisolated enum SettingsKey {
     /// `RotatableBodyModel`, so changing it retargets the idle
     /// turntable everywhere the figure is on screen.
     static let bodyDriftSpeed = "settings.bodyDriftSpeed"
+    /// Bool — whether the App Store review prompt has ever been
+    /// requested. Gates ReviewRequestController: the system prompt is
+    /// requested at most once, after the 20th archived workout.
+    static let hasRequestedAppReview = "settings.hasRequestedAppReview"
     /// Monotonic revision for data consumed by the full widget
     /// snapshot set. Relevant mutation paths advance it only after
     /// their SwiftData save succeeds.
