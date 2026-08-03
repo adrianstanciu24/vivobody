@@ -343,6 +343,7 @@ struct BiomechanicsDomainTests {
             plane: .sagittal,
             laterality: .bilateral,
             aliases: aliases,
+            searchPriority: nil,
             bodyweightFraction: bodyweightFraction,
             modality: modality,
             loadMode: loadMode,

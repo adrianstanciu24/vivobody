@@ -138,7 +138,7 @@ struct TrainingSignatureTests {
             ),
             cadence: 0
         )
-        let expected = Foundation.log(2) / Foundation.log(6)
+        let expected: Double = Foundation.log(2) / Foundation.log(6)
 
         #expect(sig.trainedGroupCount == 2)
         #expect(abs(sig.coverage - (2.0 / 6.0)) < 1e-9)
