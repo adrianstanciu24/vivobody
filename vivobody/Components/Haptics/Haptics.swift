@@ -8,11 +8,19 @@
 //    • UIFeedbackGenerator — sub-frame latency atoms (tick, thunk, slam).
 //    • CHHapticEngine     — custom patterns (crescendo, breath, swell).
 //
-//  Sound is opt-in for ordinary atoms and always present only for
-//  signature patterns / notifications. Navigation and routine taps
-//  stay haptic-only; scrub mechanisms, value-choice selections, and
-//  meaningful state changes carry audio. Sound calls sit before the
-//  haptics guard so the two Me-tab toggles remain independent.
+//  Every atom carries sound by default, and it is always the same
+//  sound: the app's single button click (`Sounds.playButton()`).
+//  Which atom a caller picks chooses the *feel* of the tap, not its
+//  voice — one click means "a control responded," everywhere.
+//
+//  Callers pass `playsSound: false` for feedback that isn't a tap:
+//  scrub detents and drag thresholds, page swipes, rotation
+//  quadrants, async system callbacks. Those would machine-gun the
+//  click or fire it with nothing pressed.
+//
+//  Signature patterns and notifications keep their own synthesized
+//  voices. Sound calls sit before the haptics guard so the two
+//  Me-tab toggles remain independent.
 //
 
 import CoreHaptics
@@ -100,7 +108,7 @@ enum Haptics {
 
     // MARK: - Atoms
 
-    /// Which voice a tick speaks in. `.standard` is the light
+    /// Which voice a scrub detent speaks in. `.standard` is the light
     /// encoder blip (reps, sets, durations); `.deep` is an octave
     /// lower with more body, reserved for load — a heavy thing
     /// moving should sound like one. The haptic is identical.
@@ -109,20 +117,9 @@ enum Haptics {
         case deep
     }
 
-    /// Light tick — scrubber increments, hover transitions.
-    ///
-    /// `pitch` (-1…1, default 0) shifts the tick's sound up or down
-    /// about half an octave. Scrubbers pass their step delta so ticks
-    /// rise while the value climbs and fall while it drops, OP-1
-    /// encoder style. The haptic itself is pitch-agnostic.
-    static func tick(
-        pitch: Double = 0,
-        tone: TickTone = .standard,
-        playsSound: Bool = false
-    ) {
-        if playsSound {
-            Sounds.play(tone == .deep ? .tickDeep : .tick, pitch: pitch)
-        }
+    /// Light tick — stepper increments, hover transitions.
+    static func tick(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
         guard isEnabled else { return }
         lightImpact.impactOccurred(intensity: 0.6)
         lightImpact.prepare()
@@ -138,10 +135,8 @@ enum Haptics {
     }
 
     /// Medium thunk — the workhorse. Set complete, primary action.
-    /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
-    /// the haptic is pitch-agnostic.
-    static func thunk(pitch: Double = 0, playsSound: Bool = false) {
-        if playsSound { Sounds.play(.thunk, pitch: pitch) }
+    static func thunk(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
         guard isEnabled else { return }
         mediumImpact.impactOccurred()
         mediumImpact.prepare()
@@ -155,50 +150,40 @@ enum Haptics {
         heavyImpact.prepare()
     }
 
-    /// Raised voice for the top-of-range wall. Scrubbers pass this
-    /// when the value slams into its MAXIMUM so "can't go higher"
-    /// reads differently from "can't go lower" (which keeps the
-    /// default 0) — same sound, two heights. One shared constant so
-    /// load, reps, and every other scrubber hit the same two notes.
-    static let ceilingPitch: Double = 0.5
-
     /// Rigid tap — hard edges (can't decrement below zero, end of list).
-    /// `pitch` (-1…1, default 0) shifts the sound up or down; pass
-    /// `ceilingPitch` at a range's top wall. The haptic is
-    /// pitch-agnostic.
-    static func rigid(pitch: Double = 0, playsSound: Bool = false) {
-        if playsSound { Sounds.play(.rigid, pitch: pitch) }
+    static func rigid(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
         guard isEnabled else { return }
         rigidImpact.impactOccurred()
         rigidImpact.prepare()
     }
 
     /// Soft tap — subtle transitions, ambient confirmation.
-    static func soft(playsSound: Bool = false) {
-        if playsSound { Sounds.play(.soft) }
+    static func soft(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
+        guard isEnabled else { return }
+        softImpact.impactOccurred()
+        softImpact.prepare()
+    }
+
+    /// Caution — the tap that raises a destructive prompt, like the
+    /// active workout's X. Its own voice instead of the ordinary
+    /// click, so "this one asks a question" is audible before the
+    /// sheet even appears. The feel stays soft: the tap itself
+    /// destroys nothing.
+    static func caution() {
+        Sounds.play(.alert)
         guard isEnabled else { return }
         softImpact.impactOccurred()
         softImpact.prepare()
     }
 
     /// Selection change — for pickers, segmented controls, wheel rolls.
-    /// `pitch` (-1…1, default 0) deepens or lightens the sound only;
-    /// the haptic is pitch-agnostic.
-    static func selection(pitch: Double = 0, playsSound: Bool = false) {
-        if playsSound { Sounds.play(.selection, pitch: pitch) }
+    static func selection(playsSound: Bool = true) {
+        if playsSound { Sounds.playButton() }
         guard isEnabled else { return }
         selectionGen.selectionChanged()
         selectionGen.prepare()
-    }
-
-    /// Normalized pitch for an ordered option set: the first option
-    /// sits at the bottom of the span, the last at the top, so
-    /// stepping across a value-choice segment bar walks up the scale
-    /// like flicking a parameter switch. Feed the result to
-    /// `selection(pitch:playsSound:)`.
-    static func optionPitch(index: Int, count: Int) -> Double {
-        guard count > 1 else { return 0 }
-        return Double(index) / Double(count - 1) - 0.5
     }
 
     /// RIR selection — feedback graded by the effort the number
@@ -246,8 +231,11 @@ enum Haptics {
     /// The signature "set complete" feel: three distinct, escalating taps.
     /// Spacing ≥ ~90ms so each is perceived as its own event, not smeared into one.
     /// Sharpness rises alongside intensity, so each tap also feels firmer.
-    static func crescendo() {
-        Sounds.play(.crescendo)
+    ///
+    /// `sound` swaps the voice while keeping the escalating taps —
+    /// the deliberate-commit buttons pass `.commit`.
+    static func crescendo(sound: Sounds.Effect = .crescendo) {
+        Sounds.play(sound)
         guard isEnabled else { return }
         play(events: [
             transient(intensity: 0.40, sharpness: 0.35, at: 0.00),
@@ -271,8 +259,12 @@ enum Haptics {
     ///
     /// `hapticIntensityControl` is a scalar multiplier on the event's
     /// base intensity, so the base must be > 0 for the curve to do anything.
-    static func swell() {
-        Sounds.play(.swell)
+    ///
+    /// `sound` swaps the voice while keeping the rumble — the last
+    /// set of an exercise sounds like every other completed set, and
+    /// only feels heavier.
+    static func swell(sound: Sounds.Effect = .swell) {
+        Sounds.play(sound)
         guard isEnabled else { return }
         let continuous = CHHapticEvent(
             eventType: .hapticContinuous,

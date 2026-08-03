@@ -338,7 +338,7 @@ struct RotatableBodyModel: UIViewRepresentable {
             onRotation?(angle)
             let quadrant = Int((angle / (.pi / 2)).rounded(.down))
             if withHaptics, let last = lastQuadrant, quadrant != last {
-                Haptics.tick()
+                Haptics.tick(playsSound: false)
             }
             lastQuadrant = quadrant
         }

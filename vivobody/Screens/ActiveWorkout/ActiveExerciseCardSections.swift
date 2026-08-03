@@ -564,10 +564,7 @@ extension ActiveExerciseCard {
         return Button {
             let idx = options.firstIndex(of: weightStep) ?? 0
             let next = options[(idx + 1) % options.count]
-            Haptics.selection(
-                pitch: Haptics.optionPitch(index: idx, count: options.count),
-                playsSound: true
-            )
+            Haptics.selection()
             setWeightStep(next)
         } label: {
             Text(label)

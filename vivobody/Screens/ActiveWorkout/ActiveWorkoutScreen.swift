@@ -296,7 +296,7 @@ struct ActiveWorkoutScreen: View {
 
     private var discardButton: some View {
         Button {
-            Haptics.soft()
+            Haptics.caution()
             showDiscardConfirm = true
         } label: {
             Image(systemName: "xmark")

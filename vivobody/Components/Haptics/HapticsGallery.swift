@@ -17,13 +17,18 @@ struct HapticsGallery: View {
             VStack(alignment: .leading, spacing: Space.section) {
                 header
 
+                // Every atom speaks the same click; the rows differ
+                // in feel, which only a device can show.
                 section(title: "ATOMS") {
-                    HapticRow(label: "tick",      subtitle: "scrubber increments")    { Haptics.tick(playsSound: true) }
-                    HapticRow(label: "thunk",     subtitle: "set complete")           { Haptics.thunk(playsSound: true) }
+                    HapticRow(label: "tick",      subtitle: "stepper increments")     { Haptics.tick() }
+                    HapticRow(label: "thunk",     subtitle: "set complete")           { Haptics.thunk() }
                     HapticRow(label: "slam",      subtitle: "PR, final set")          { Haptics.slam() }
-                    HapticRow(label: "rigid",     subtitle: "hard stops")             { Haptics.rigid(playsSound: true) }
-                    HapticRow(label: "soft",      subtitle: "subtle transitions")     { Haptics.soft(playsSound: true) }
-                    HapticRow(label: "selection", subtitle: "picker, segments")       { Haptics.selection(playsSound: true) }
+                    HapticRow(label: "rigid",     subtitle: "hard stops")             { Haptics.rigid() }
+                    HapticRow(label: "soft",      subtitle: "subtle transitions")     { Haptics.soft() }
+                    HapticRow(label: "selection", subtitle: "picker, segments")       { Haptics.selection() }
+                    HapticRow(label: "silent tick", subtitle: "gesture detent, no click") {
+                        Haptics.tick(playsSound: false)
+                    }
                 }
 
                 section(title: "RIR SCALE") {

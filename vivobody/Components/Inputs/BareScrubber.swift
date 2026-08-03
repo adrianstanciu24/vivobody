@@ -531,14 +531,14 @@ struct BareScrubber: View {
                 if proposedValue < range.lowerBound {
                     rubberOffset = rubberband(pointsOver)
                     if !didHitMin {
-                        Haptics.rigid()
+                        Haptics.rigid(playsSound: false)
                         fireWallFlash(.bottom)
                         didHitMin = true
                     }
                 } else if proposedValue > range.upperBound {
                     rubberOffset = -rubberband(pointsOver)
                     if !didHitMax {
-                        Haptics.rigid(pitch: Haptics.ceilingPitch)
+                        Haptics.rigid(playsSound: false)
                         fireWallFlash(.top)
                         didHitMax = true
                     }
@@ -636,7 +636,7 @@ struct BareScrubber: View {
                 let next = value + direction * step
                 let clamped = min(max(next, range.lowerBound), range.upperBound)
                 guard clamped != value else {
-                    Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
+                    Haptics.rigid()
                     fireWallFlash(direction > 0 ? .top : .bottom)
                     bumpRubber(direction: direction)
                     return
@@ -734,7 +734,7 @@ struct BareScrubber: View {
             }
             onScrubEnded()
         } else {
-            Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
+            Haptics.rigid()
             fireWallFlash(direction > 0 ? .top : .bottom)
         }
     }

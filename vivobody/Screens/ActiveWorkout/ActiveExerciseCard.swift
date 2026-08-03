@@ -241,7 +241,7 @@ struct ActiveExerciseCard: View {
         exercise.plannedSets = exercise.sets.count
         session.completedAt = nil
         saveActiveSessionChanges()
-        Haptics.tick(pitch: 0.3, playsSound: true)
+        Haptics.tick()
     }
 
     /// Remove a still-pending set (the count went too high). Never
@@ -259,7 +259,7 @@ struct ActiveExerciseCard: View {
         exercise.plannedSets = exercise.sets.count
         session.completedAt = nil
         saveActiveSessionChanges()
-        Haptics.tick(pitch: -0.3, playsSound: true)
+        Haptics.tick()
     }
 
     /// Remove a completed set from this exercise. The remaining sets'

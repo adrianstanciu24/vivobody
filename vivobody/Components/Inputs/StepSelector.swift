@@ -65,11 +65,7 @@ struct StepSelector<T: Hashable>: View {
             if let feedback {
                 feedback(option)
             } else {
-                let index = options.firstIndex(of: option) ?? 0
-                Haptics.selection(
-                    pitch: Haptics.optionPitch(index: index, count: options.count),
-                    playsSound: true
-                )
+                Haptics.selection()
             }
             if option != selection {
                 selection = option

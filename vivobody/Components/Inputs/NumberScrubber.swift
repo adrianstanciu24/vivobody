@@ -225,13 +225,13 @@ struct NumberScrubber: View {
                 if proposedValue < range.lowerBound {
                     rubberOffset = rubberband(pointsOver)
                     if !didHitMin {
-                        Haptics.rigid()
+                        Haptics.rigid(playsSound: false)
                         didHitMin = true
                     }
                 } else if proposedValue > range.upperBound {
                     rubberOffset = -rubberband(pointsOver)
                     if !didHitMax {
-                        Haptics.rigid(pitch: Haptics.ceilingPitch)
+                        Haptics.rigid(playsSound: false)
                         didHitMax = true
                     }
                 } else {
@@ -284,7 +284,7 @@ struct NumberScrubber: View {
             Haptics.scrubTick(tone: tickTone)
             onScrubEnded()
         } else {
-            Haptics.rigid(pitch: direction > 0 ? Haptics.ceilingPitch : 0)
+            Haptics.rigid()
         }
     }
 

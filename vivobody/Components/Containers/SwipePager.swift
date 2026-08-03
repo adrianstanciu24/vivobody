@@ -140,7 +140,7 @@ struct SwipePager<Content: View>: View {
                 let atEdge = isAtLeftEdge || isAtRightEdge
 
                 if atEdge && abs(raw) > 28 && !didEdgeHaptic {
-                    Haptics.rigid()
+                    Haptics.rigid(playsSound: false)
                     didEdgeHaptic = true
                 } else if !atEdge {
                     didEdgeHaptic = false
@@ -150,7 +150,7 @@ struct SwipePager<Content: View>: View {
                 let effective = Double(selection) - Double(damped) / Double(stride)
                 let frame = Int(effective.rounded())
                 if frame != lastCrossedIndex && frame >= 0 && frame < count {
-                    Haptics.tick()
+                    Haptics.tick(playsSound: false)
                     lastCrossedIndex = frame
                 }
             }
@@ -179,7 +179,7 @@ struct SwipePager<Content: View>: View {
                     }
                 }
                 if landed {
-                    Haptics.soft()
+                    Haptics.soft(playsSound: false)
                 }
                 lastCrossedIndex = target
                 didEdgeHaptic = false
@@ -265,7 +265,7 @@ struct PageDots: View {
     private func moveSelection(by delta: Int) {
         let next = min(max(selection + delta, 0), max(0, count - 1))
         guard next != selection else {
-            Haptics.rigid(pitch: delta > 0 ? Haptics.ceilingPitch : 0)
+            Haptics.rigid()
             return
         }
         selection = next

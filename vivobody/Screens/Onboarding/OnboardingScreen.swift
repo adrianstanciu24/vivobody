@@ -216,10 +216,7 @@ struct OnboardingScreen: View {
         return Button {
             let index = options.firstIndex(of: bodyWeightStep) ?? 0
             let next = options[(index + 1) % options.count]
-            Haptics.selection(
-                pitch: Haptics.optionPitch(index: index, count: options.count),
-                playsSound: true
-            )
+            Haptics.selection()
             bodyWeightStep = next
             snapBodyWeight(to: next, unit: weightUnit)
         } label: {

@@ -12,7 +12,8 @@
 //
 //  Behavior:
 //    • Crescendo haptic fires on tap (same beat as SetCompleteButton's
-//      "this is a deliberate action" feedback).
+//      "this is a deliberate action" feedback). `sound` swaps the voice
+//      that rides along — Today's START WORKOUT uses its own.
 //    • The tinted Liquid Glass surface, padding, shadows, and press-scale
 //      feedback all come from `PrimaryButtonStyle` — this view just supplies
 //      the label content and the accent color.
@@ -32,6 +33,7 @@ struct PrimaryActionButton: View {
     /// importance (first = primary). Lets a user say "Start" instead
     /// of the full "Start Workout" to activate this button.
     var inputLabels: [String]? = nil
+    var sound: Sounds.Effect = .crescendo
     let action: () -> Void
 
     private static let labelSpacing: CGFloat = 3
@@ -44,7 +46,7 @@ struct PrimaryActionButton: View {
 
     var body: some View {
         Button {
-            Haptics.crescendo()
+            Haptics.crescendo(sound: sound)
             action()
         } label: {
             HStack(spacing: 12) {

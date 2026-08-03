@@ -338,13 +338,7 @@ struct SettingsScreen: View {
     private func appearanceChip(_ option: AppAppearance) -> some View {
         let isSelected = option == appearance
         return Button {
-            Haptics.selection(
-                pitch: Haptics.optionPitch(
-                    index: AppAppearance.allCases.firstIndex(of: option) ?? 0,
-                    count: AppAppearance.allCases.count
-                ),
-                playsSound: true
-            )
+            Haptics.selection()
             appearanceRaw = option.rawValue
         } label: {
             Text(option.label)
@@ -388,13 +382,7 @@ struct SettingsScreen: View {
     private func bodyDriftSpeedChip(_ option: BodyDriftSpeed) -> some View {
         let isSelected = option == bodyDriftSpeed
         return Button {
-            Haptics.selection(
-                pitch: Haptics.optionPitch(
-                    index: BodyDriftSpeed.allCases.firstIndex(of: option) ?? 0,
-                    count: BodyDriftSpeed.allCases.count
-                ),
-                playsSound: true
-            )
+            Haptics.selection()
             bodyDriftSpeedRaw = option.rawValue
         } label: {
             Text(option.label)
@@ -437,13 +425,7 @@ struct SettingsScreen: View {
     private func weightUnitChip(_ unit: WeightUnit) -> some View {
         let isSelected = unit == weightUnit
         return Button {
-            Haptics.selection(
-                pitch: Haptics.optionPitch(
-                    index: WeightUnit.allCases.firstIndex(of: unit) ?? 0,
-                    count: WeightUnit.allCases.count
-                ),
-                playsSound: true
-            )
+            Haptics.selection()
             weightUnitRaw = unit.rawValue
         } label: {
             VStack(spacing: 2) {
@@ -499,13 +481,7 @@ struct SettingsScreen: View {
     private func restChip(seconds: Int) -> some View {
         let isSelected = defaultRestSeconds == seconds
         return Button {
-            Haptics.selection(
-                pitch: Haptics.optionPitch(
-                    index: restOptions.firstIndex(of: seconds) ?? 0,
-                    count: restOptions.count
-                ),
-                playsSound: true
-            )
+            Haptics.selection()
             defaultRestSeconds = seconds
         } label: {
             Text("\(seconds)s")
@@ -569,9 +545,9 @@ struct SettingsScreen: View {
                     soundsEnabled = newValue
                     if newValue {
                         // Same trick as the haptics row: the write is
-                        // synchronous, so this blip plays as audible
+                        // synchronous, so this click plays as audible
                         // confirmation that sounds just came back on.
-                        Sounds.play(.soft)
+                        Sounds.playButton()
                     }
                 }
             ))
@@ -663,7 +639,9 @@ struct SettingsScreen: View {
     private func requestHealthKitAuthorization() async {
         let granted = await HealthKitWorkoutService.requestAuthorization()
         healthKitEnabled = granted
-        if granted { Haptics.soft() }
+        // Lands after the system prompt, with nothing pressed — the
+        // grant deserves a nudge, not the button click.
+        if granted { Haptics.soft(playsSound: false) }
     }
 
     /// In-card hairline between rows, inset so it never runs into

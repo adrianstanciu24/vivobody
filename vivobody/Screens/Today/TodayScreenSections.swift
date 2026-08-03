@@ -636,7 +636,12 @@ extension TodayScreen {
     /// way to begin: Repeat / Fresh / a saved template. A neutral soft
     /// elevation lifts it off the black as the screen's clear anchor.
     var startCTA: some View {
-        PrimaryActionButton(title: "Start Workout", icon: "chevron.up", inputLabels: ["Start Workout", "Start", "Begin"]) {
+        PrimaryActionButton(
+            title: "Start Workout",
+            icon: "chevron.up",
+            inputLabels: ["Start Workout", "Start", "Begin"],
+            sound: .commit
+        ) {
             showStartSheet = true
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)

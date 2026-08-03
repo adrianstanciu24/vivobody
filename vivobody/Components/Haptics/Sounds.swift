@@ -3,11 +3,32 @@
 //  vivobody
 //
 //  The audio twin of Haptics. Every haptic atom and pattern has a
-//  matching synthesized UI sound, baked as .caf files in
-//  Resources/Sounds by Scripts/generate_sounds.py. The palette mimics
-//  a Teenage Engineering OP-1: warm detuned FM notes, marimba and
+//  matching UI sound baked as a .caf file in Resources/Sounds. The
+//  synthesized palette (Scripts/generate_sounds.py) mimics a Teenage
+//  Engineering OP-1: warm detuned FM notes, marimba and
 //  electric-piano registers, rounded kicks, and a light tape-ish
 //  crush. Scrub detents share the same warm voice as tick/tick-deep.
+//
+//  Four sounds are recordings instead, bundled exactly as delivered
+//  (.wav, stereo, 48 kHz, untouched level):
+//    • sfx-click — every tappable control in the app speaks with this
+//      one voice (see playButton), so a tap sounds identical everywhere.
+//    • sfx-commit — the deliberate-commit buttons (Today's START
+//      WORKOUT, COMPLETE SET), the ones allowed to sound like more
+//      than a tap.
+//    • sfx-finish-exercise — the last set of an exercise, where the
+//      button reads FINISH EXERCISE and the thing being closed out is
+//      bigger than one set.
+//    • sfx-alert — the caution before a destructive prompt (see
+//      Haptics.caution): today, the active workout's X.
+//
+//  They cannot ride the synth pool: that pool is wired at one shared
+//  mono 44.1k format, and its round-robin would let a scrub storm
+//  recycle a voice out from under a second-long recording. Each
+//  recording gets its own player, connected at the file's own format
+//  and running straight into the mixer — no varispeed, no jitter, no
+//  resampling of our own. They are the reference level for the app;
+//  the synthesized palette sits below them.
 //
 //  One-shots go through an AVAudioEngine with a round-robin voice pool
 //  (player -> varispeed -> mixer), so rapid ticks overlap. Scrubbers
@@ -41,6 +62,8 @@ import AVFoundation
 enum Sounds {
 
     enum Effect: String, CaseIterable {
+        case click, commit, alert
+        case finishExercise = "finish-exercise"
         case tick, thunk, slam, rigid, soft, selection
         case tickDeep = "tick-deep"
         case success, warning, failure
@@ -49,6 +72,15 @@ enum Sounds {
         case rir3 = "rir-3", rir4 = "rir-4", rir5 = "rir-5"
 
         var resourceName: String { "sfx-\(rawValue)" }
+
+        /// Recordings play verbatim through their own player; the rest
+        /// are synthesized .caf files sharing the round-robin pool.
+        var isRecorded: Bool {
+            switch self {
+            case .click, .commit, .alert, .finishExercise: true
+            default: false
+            }
+        }
     }
 
     // MARK: - State
@@ -62,6 +94,8 @@ enum Sounds {
     private static var voices: [Voice] = []
     private static var nextVoice = 0
     private static var buffers: [Effect: AVAudioPCMBuffer] = [:]
+    private static var recordedBuffers: [Effect: AVAudioPCMBuffer] = [:]
+    private static var recordedPlayers: [Effect: AVAudioPlayerNode] = [:]
     private static var standardScrubBuffers: [AVAudioPCMBuffer] = []
     private static var deepScrubBuffers: [AVAudioPCMBuffer] = []
     private static var nextStandardScrubVariant = 0
@@ -103,17 +137,16 @@ enum Sounds {
     private static func loadBuffers() {
         for effect in Effect.allCases {
             guard
-                let url = Bundle.main.url(
-                    forResource: effect.resourceName, withExtension: "caf"
-                ),
-                let file = try? AVAudioFile(forReading: url),
-                let buffer = AVAudioPCMBuffer(
-                    pcmFormat: file.processingFormat,
-                    frameCapacity: AVAudioFrameCount(file.length)
-                ),
-                (try? file.read(into: buffer)) != nil
+                let buffer = loadBuffer(
+                    named: effect.resourceName,
+                    extension: effect.isRecorded ? "wav" : "caf"
+                )
             else { continue }
-            buffers[effect] = buffer
+            if effect.isRecorded {
+                recordedBuffers[effect] = buffer
+            } else {
+                buffers[effect] = buffer
+            }
         }
     }
 
@@ -124,20 +157,24 @@ enum Sounds {
 
     private static func loadScrubBuffers(prefix: String) -> [AVAudioPCMBuffer] {
         (1...6).compactMap { variant in
-            guard
-                let url = Bundle.main.url(
-                    forResource: "\(prefix)-\(variant)",
-                    withExtension: "caf"
-                ),
-                let file = try? AVAudioFile(forReading: url),
-                let buffer = AVAudioPCMBuffer(
-                    pcmFormat: file.processingFormat,
-                    frameCapacity: AVAudioFrameCount(file.length)
-                ),
-                (try? file.read(into: buffer)) != nil
-            else { return nil }
-            return buffer
+            loadBuffer(named: "\(prefix)-\(variant)", extension: "caf")
         }
+    }
+
+    private static func loadBuffer(
+        named name: String,
+        extension ext: String
+    ) -> AVAudioPCMBuffer? {
+        guard
+            let url = Bundle.main.url(forResource: name, withExtension: ext),
+            let file = try? AVAudioFile(forReading: url),
+            let buffer = AVAudioPCMBuffer(
+                pcmFormat: file.processingFormat,
+                frameCapacity: AVAudioFrameCount(file.length)
+            ),
+            (try? file.read(into: buffer)) != nil
+        else { return nil }
+        return buffer
     }
 
     private static func startEngineIfNeeded() {
@@ -159,6 +196,15 @@ enum Sounds {
                 e.connect(voice.player, to: voice.varispeed, format: format)
                 e.connect(voice.varispeed, to: e.mainMixerNode, format: format)
             }
+
+            // Each recording keeps its own player wired at its own
+            // format, straight into the mixer: the file plays as
+            // delivered, and nothing else can take the node mid-sound.
+            recordedPlayers = recordedBuffers.mapValues { _ in AVAudioPlayerNode() }
+            for (effect, player) in recordedPlayers {
+                e.attach(player)
+                e.connect(player, to: e.mainMixerNode, format: recordedBuffers[effect]?.format)
+            }
             engine = e
         }
 
@@ -169,15 +215,30 @@ enum Sounds {
         for voice in voices where !voice.player.isPlaying {
             voice.player.play()
         }
+        for player in recordedPlayers.values where !player.isPlaying {
+            player.play()
+        }
     }
 
     // MARK: - Emission
 
+    /// The app's one button voice.
+    static func playButton() {
+        play(.click)
+    }
+
     /// Play an effect. `pitch` is normalized -1…1 and maps to about
     /// ∓600 cents; scrubbers feed their step delta through it so a
-    /// climbing value climbs in pitch too.
-    static func play(_ effect: Effect, pitch: Double = 0) {
-        guard isEnabled, let buffer = buffers[effect] else { return }
+    /// climbing value climbs in pitch too. `humanize` adds the
+    /// synth palette's small pitch/level jitter. Recordings ignore
+    /// both — they play exactly as delivered.
+    static func play(_ effect: Effect, pitch: Double = 0, humanize: Bool = true) {
+        guard isEnabled else { return }
+        if effect.isRecorded {
+            playRecorded(effect)
+            return
+        }
+        guard let buffer = buffers[effect] else { return }
 
         let now = ProcessInfo.processInfo.systemUptime
         if let last = lastEmission[effect], now - last < minInterval { return }
@@ -196,12 +257,35 @@ enum Sounds {
         let voice = voices[nextVoice]
         nextVoice = (nextVoice + 1) % voices.count
 
-        let cents = Float(max(-1, min(1, pitch))) * 600 + Float.random(in: -20...20)
+        let cents = Float(max(-1, min(1, pitch))) * 600
+            + (humanize ? Float.random(in: -20...20) : 0)
         voice.varispeed.rate = powf(2, cents / 1200)
-        voice.player.volume = powf(10, Float.random(in: -1...1) / 20)
+        voice.player.volume = humanize ? powf(10, Float.random(in: -1...1) / 20) : 1
 
         voice.player.scheduleBuffer(buffer, at: nil, options: .interrupts)
         if !voice.player.isPlaying { voice.player.play() }
+    }
+
+    /// Play a recording on its dedicated player: original channels,
+    /// original sample rate, original level. `.interrupts` only ever
+    /// restarts the same sound — a tap landing on top of itself, which
+    /// should sound like a new tap, not two smeared together.
+    private static func playRecorded(_ effect: Effect) {
+        guard
+            let buffer = recordedBuffers[effect],
+            let player = recordedPlayers[effect]
+        else { return }
+
+        let now = ProcessInfo.processInfo.systemUptime
+        if let last = lastEmission[effect], now - last < minInterval { return }
+        lastEmission[effect] = now
+
+        if engine?.isRunning != true { startEngineIfNeeded() }
+        guard let engine, engine.isRunning else { return }
+        engine.mainMixerNode.outputVolume = duckLevel(now: now)
+
+        player.scheduleBuffer(buffer, at: nil, options: .interrupts)
+        if !player.isPlaying { player.play() }
     }
 
     /// The RIR selector's effort scale: one warm note per value,
