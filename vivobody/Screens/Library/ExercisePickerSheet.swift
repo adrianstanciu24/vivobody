@@ -240,6 +240,12 @@ struct ExercisePickerSheet: View {
                 // strip can scroll edge-to-edge.
                 .padding(.horizontal, 2)
             }
+            // The strip hugs the chips exactly, so the default scroll
+            // clip slices off the glass material's soft light-mode
+            // shadows — the cropped remainder reads as a hard-edged
+            // gray slab behind the chips. The strip is full-bleed, so
+            // unclipped overflow just falls off-screen.
+            .scrollClipDisabled()
             // Counter the LazyVStack's padding so the chips align
             // with the screen edges, not the content insets.
             .padding(.horizontal, -Space.gutter)

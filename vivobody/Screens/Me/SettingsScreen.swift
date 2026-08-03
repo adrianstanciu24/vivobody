@@ -470,7 +470,15 @@ struct SettingsScreen: View {
                         }
                     }
                 }
+                // The scroll clip must stay (scrolled-away chips may
+                // not draw past the card), but a zero-height clip
+                // slices off the glass material's soft light-mode
+                // shadows into a hard-edged slab. Grow the clip
+                // vertically so the shadows fade inside it, then pull
+                // the layout back so the row's height doesn't change.
+                .padding(.vertical, Space.md)
             }
+            .padding(.vertical, -Space.md)
             // Chips inset like the other rows at rest, but scroll all
             // the way to the card's edges once the strip moves.
             .contentMargins(.horizontal, Space.lg, for: .scrollContent)
