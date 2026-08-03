@@ -12,18 +12,17 @@ import SwiftUI
 import UIKit
 
 public enum Tint {
-    // Bright orange stays unchanged on the dark canvas. Light mode uses
-    // a deeper brand orange so accent-colored text still clears 4.5:1;
-    // `onAccent` flips with it to keep filled-control labels legible.
+    // The brand orange stays consistent across appearances. Black
+    // foreground content remains legible on the bright filled controls.
     public static let primary = adaptiveColor(
         dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 1.0),
-        light: UIColor(red: 0.65, green: 0.25, blue: 0.0, alpha: 1.0),
+        light: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 1.0),
         highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 1.0),
         highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 1.0)
     )
     public static let primaryDim = adaptiveColor(
         dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.35),
-        light: UIColor(red: 0.65, green: 0.25, blue: 0.0, alpha: 0.35),
+        light: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.35),
         highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 0.55),
         highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 0.55)
     )
@@ -41,7 +40,7 @@ public enum Tint {
     public static let completeDim = primaryDim
     public static let onAccent = adaptiveColor(
         dark: .black,
-        light: .white,
+        light: .black,
         highContrastDark: .black,
         highContrastLight: .white
     )
