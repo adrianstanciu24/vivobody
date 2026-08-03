@@ -105,21 +105,24 @@ final class WorkoutSession: Identifiable {
     var summaryAnimatedVolume: Double = 0
     var summaryDidCelebrate: Bool = false
 
-    /// The hero number for the PRCelebration overlay — e.g. "150"
-    /// for the weight just hit. When non-nil (paired with
-    /// `pendingPRDetail`), the celebration overlay renders on the
-    /// active workout screen. Cleared to nil on tap-to-dismiss.
+    /// The hero number for the PRCelebration overlay — the load just
+    /// hit ("150") for a weight PR, the rep count ("9") for a rep PR.
+    /// When non-nil (paired with `pendingPRDetail`), the celebration
+    /// overlay renders on the active workout screen. Cleared to nil
+    /// on tap-to-dismiss.
     var pendingPRValue: String? = nil
 
     /// The context line for the PRCelebration — e.g.
-    /// "BENCH PRESS · 8 REPS". Set together with `pendingPRValue`
+    /// "BENCH PRESS · NEW MAX" for a weight PR, "BENCH PRESS ·
+    /// AT 225 LB" for a rep PR. Set together with `pendingPRValue`
     /// when a PR is detected; cleared together on dismiss.
     var pendingPRDetail: String? = nil
 
     /// Unit suffix for the celebration hero — the weight symbol
-    /// ("lb"/"kg") for strength PRs, nil for timed-hold PRs (whose
-    /// value is already a self-describing "m:ss"). Additive defaulted
-    /// field. Set together with `pendingPRValue`.
+    /// ("lb"/"kg") for weight PRs, "reps" for rep PRs, nil for
+    /// timed-hold PRs (whose value is already a self-describing
+    /// "m:ss"). Additive defaulted field. Set together with
+    /// `pendingPRValue`.
     var pendingPRUnit: String? = nil
 
     /// UUID of the `HKWorkout` saved to HealthKit for this session,

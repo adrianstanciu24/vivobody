@@ -49,10 +49,10 @@ struct PRCelebrationGallery: View {
 
             PRCelebration(
                 isPresented: $showRepsPR,
-                title: "Rep record",
+                title: "Personal record",
                 value: "12",
                 unit: "reps",
-                detail: "Back squat · 185 lb"
+                detail: "Back squat · at 185 lb"
             )
 
             PRCelebration(

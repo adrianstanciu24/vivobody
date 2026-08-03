@@ -342,7 +342,7 @@ struct ActiveExerciseCard: View {
             if let prKind {
                 let payload: (value: String, unit: String?)?
                 switch prKind {
-                case .weight, .reps:
+                case .weight:
                     let effectiveLoad = ExerciseLoadProfile(
                         mode: loadMode,
                         bodyweightFraction: bodyweightFraction
@@ -357,6 +357,11 @@ struct ActiveExerciseCard: View {
                             unit.symbol
                         )
                     }
+                case .reps:
+                    // A rep PR advances on the rep count, so the count
+                    // is the hero — the load it happened at moves down
+                    // to the detail line.
+                    payload = ("\(reps)", reps == 1 ? "rep" : "reps")
                 case .duration:
                     payload = (DurationFormatter.string(duration), nil)
                 }
@@ -365,10 +370,11 @@ struct ActiveExerciseCard: View {
                     session.pendingPRUnit = payload.unit
                     session.pendingPRDetail = detailLine(
                         exerciseName: exerciseName,
-                        reps: reps,
+                        weight: weight,
                         kind: prKind,
                         loadMode: loadMode,
-                        modality: modality
+                        modality: modality,
+                        unit: unit
                     )
                     saveActiveSessionChanges()
                 }
@@ -486,12 +492,17 @@ struct ActiveExerciseCard: View {
         }
     }
 
+    /// Context line under the celebration hero. Weight PRs name the
+    /// achievement ("New max"); rep PRs anchor the load the reps were
+    /// performed at, in the same logged-load vocabulary the exercise
+    /// picker uses, since the hero already claims the rep count.
     private func detailLine(
         exerciseName: String,
-        reps: Int,
+        weight: Double,
         kind: PRKind,
         loadMode: ExerciseLoadMode,
-        modality: ExerciseModality
+        modality: ExerciseModality,
+        unit: WeightUnit
     ) -> String {
         switch kind {
         case .weight:
@@ -499,7 +510,12 @@ struct ActiveExerciseCard: View {
                 ? "\(exerciseName) · New max"
                 : "\(exerciseName) · New effective load"
         case .reps:
-            return "\(exerciseName) · \(reps) reps"
+            guard let load = loadMode.loggedLoadLabel(
+                weight,
+                unit: unit,
+                includeUnit: true
+            ) else { return exerciseName }
+            return "\(exerciseName) · at \(load)"
         case .duration:
             return "\(exerciseName) · \(loadMode.durationRecordDetail(modality: modality))"
         }
