@@ -6,7 +6,9 @@
 //  a row in the ExercisePickerSheet — replaces the previous "tap =
 //  immediate pick" behavior with "tap = explore, then commit via
 //  CTA at the bottom." Long-press on the picker row preserves the
-//  quick Edit / Delete context menu.
+//  quick Edit / Duplicate / Delete context menu. The toolbar menu
+//  here offers the same actions, with "Duplicate as Custom" limited
+//  to bundled exercises (a custom entry is already fully editable).
 //
 //  Surfaces (when data exists):
 //    • Hero    — muscle group accent + exercise name + metadata line,
@@ -38,7 +40,7 @@
 //  exercise, the stats row shows em-dashes while an eligible strength
 //  exercise still shows the dormant trend card so the user can see what
 //  their next workouts will unlock. Other history sections stay hidden.
-//  The rest of the screen still functions (CTA, edit/delete).
+//  The rest of the screen still functions (CTA, edit/duplicate/delete).
 //
 
 import VivoKit
@@ -91,6 +93,12 @@ struct ExerciseDetailScreen: View {
     var currentBodyweight: Double {
         bodyWeightEntries.first?.weight
             ?? ExerciseLoad.unknownBodyweight
+    }
+
+    /// Only bundled exercises offer duplication — a custom entry is
+    /// already fully editable in place.
+    private var canDuplicateAsCustom: Bool {
+        item.catalogID != nil && !item.isUserCreated
     }
 
     init(
@@ -248,6 +256,13 @@ struct ExerciseDetailScreen: View {
                         editorTarget = .edit(item)
                     } label: {
                         Label("Edit", systemImage: "pencil")
+                    }
+                    if canDuplicateAsCustom {
+                        Button {
+                            editorTarget = .duplicate(item)
+                        } label: {
+                            Label("Duplicate as Custom", systemImage: "plus.square.on.square")
+                        }
                     }
                     Button(role: .destructive) {
                         isConfirmingDelete = true

@@ -350,8 +350,8 @@ struct ExercisePickerSheet: View {
                 .buttonStyle(.plain)
             }
         }
-        // Long-press still surfaces Favorite / Edit / Delete in both
-        // modes — that gesture is unchanged.
+        // Long-press still surfaces Favorite / Edit / Duplicate /
+        // Delete in both modes — that gesture is unchanged.
         .contextMenu {
             Button {
                 toggleFavorite(item)
@@ -366,6 +366,14 @@ struct ExercisePickerSheet: View {
                 editorTarget = .edit(item)
             } label: {
                 Label("Edit", systemImage: "pencil")
+            }
+
+            if item.catalogID != nil && !item.isUserCreated {
+                Button {
+                    editorTarget = .duplicate(item)
+                } label: {
+                    Label("Duplicate as Custom", systemImage: "plus.square.on.square")
+                }
             }
 
             Button(role: .destructive) {

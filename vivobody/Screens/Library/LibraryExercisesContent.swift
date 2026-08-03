@@ -357,6 +357,13 @@ struct LibraryExercisesContent: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
+            if item.catalogID != nil && !item.isUserCreated {
+                Button {
+                    customExerciseTarget = .duplicate(item)
+                } label: {
+                    Label("Duplicate as Custom", systemImage: "plus.square.on.square")
+                }
+            }
             Button(role: .destructive) {
                 pendingDeleteItem = item
             } label: {

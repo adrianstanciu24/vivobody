@@ -2,11 +2,16 @@
 //  CustomExerciseEditorSheet.swift
 //  vivobody
 //
-//  Create-or-edit sheet for a catalog entry. Used in both modes:
-//    • Create — `target = .create`, builds a new ExerciseCatalogItem
+//  Create-or-edit sheet for a catalog entry. Used in three modes:
+//    • Create    — `target = .create`, builds a new ExerciseCatalogItem
 //      and inserts it into the context on Save.
-//    • Edit   — `target = .edit(item)`, mutates the existing entry's
-//      properties in place.
+//    • Edit      — `target = .edit(item)`, mutates the existing entry's
+//      properties in place. Bundled entries get a restricted
+//      defaults-only form so their history identity stays stable.
+//    • Duplicate — `target = .duplicate(item)`, create mode prefilled
+//      from a bundled entry: the copy keeps the source's semantics but
+//      gets a fresh identity (nil catalogID) and starts its own
+//      history, which the sheet says out loud.
 //
 //  Value-type draft buffer (CatalogDraft) — the @Model is only
 //  touched on Save, so the editor can be dismissed without polluting
@@ -20,11 +25,16 @@ import SwiftData
 enum CatalogEditorTarget: Identifiable {
     case create
     case edit(ExerciseCatalogItem)
+    /// Fork a bundled exercise into a fully editable user-created
+    /// copy. The copy keeps the source's semantics but gets a fresh
+    /// identity, so logged history stays with the bundled original.
+    case duplicate(ExerciseCatalogItem)
 
     var id: String {
         switch self {
-        case .create:           return "create"
-        case .edit(let item):   return "edit-\(item.id)"
+        case .create:               return "create"
+        case .edit(let item):       return "edit-\(item.id)"
+        case .duplicate(let item):  return "duplicate-\(item.id)"
         }
     }
 }
@@ -66,6 +76,10 @@ struct CustomExerciseEditorSheet: View {
     @State private var isMuscleEditorPresented = false
     @State private var activePicker: CatalogPicker? = nil
     @State private var showsValidationErrors = false
+    /// One-shot guard for the duplicate name prefill — onAppear fires
+    /// again when child sheets dismiss, and the user's typed name
+    /// must never be overwritten after the first resolution.
+    @State private var didResolveDuplicateName = false
 
     @FocusState private var nameFieldFocused: Bool
 
@@ -81,6 +95,11 @@ struct CustomExerciseEditorSheet: View {
             _draft = State(initialValue: CatalogDraft.empty)
         case .edit(let item):
             _draft = State(initialValue: CatalogDraft(from: item))
+        case .duplicate(let item):
+            _draft = State(initialValue: CatalogDraft(
+                duplicating: item,
+                defaultWeight: item.defaultWeightSeed
+            ))
         }
     }
 
@@ -96,6 +115,22 @@ struct CustomExerciseEditorSheet: View {
     private var isBundledEdit: Bool {
         guard case .edit(let item) = target else { return false }
         return item.catalogID != nil && !item.isUserCreated
+    }
+
+    /// The bundled exercise a duplicate draft was prefilled from.
+    /// Drives the history-split note and the unique-name prefill.
+    private var duplicateSource: ExerciseCatalogItem? {
+        guard case .duplicate(let item) = target else { return nil }
+        return item
+    }
+
+    private var editorTitle: String {
+        if isBundledEdit { return "Exercise Defaults" }
+        switch target {
+        case .create:    return "New Exercise"
+        case .edit:      return "Edit Exercise"
+        case .duplicate: return "Duplicate Exercise"
+        }
     }
 
     private var canSave: Bool {
@@ -155,22 +190,15 @@ struct CustomExerciseEditorSheet: View {
 
     private var hasUniqueSearchTerms: Bool {
         let ownTerms = [draft.name] + draft.parsedAliases
-        let normalizedOwn = ownTerms.map(Self.normalizedSearchTerm)
+        let normalizedOwn = ownTerms.map(\.catalogSearchTermKey)
         guard normalizedOwn.allSatisfy({ !$0.isEmpty }),
               Set(normalizedOwn).count == normalizedOwn.count else { return false }
 
         let occupied = Set(catalogItems
             .filter { $0.id != editedItemID }
             .flatMap { [$0.name] + $0.aliases }
-            .map(Self.normalizedSearchTerm))
+            .map(\.catalogSearchTermKey))
         return occupied.isDisjoint(with: normalizedOwn)
-    }
-
-    private static func normalizedSearchTerm(_ value: String) -> String {
-        value
-            .split(whereSeparator: \.isWhitespace)
-            .joined(separator: " ")
-            .lowercased()
     }
 
     var body: some View {
@@ -182,6 +210,9 @@ struct CustomExerciseEditorSheet: View {
                             bundledIdentitySummary
                             defaultsRow
                         } else {
+                            if let source = duplicateSource {
+                                duplicateOriginNote(source: source)
+                            }
                             editorFields
                         }
                     }
@@ -193,7 +224,7 @@ struct CustomExerciseEditorSheet: View {
                 .scrollBounceBehavior(.basedOnSize, axes: .vertical)
                 .scrollDismissesKeyboard(.interactively)
                 .screenBackground()
-                .navigationTitle(isBundledEdit ? "Exercise Defaults" : (isEditMode ? "Edit Exercise" : "New Exercise"))
+                .navigationTitle(editorTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -210,6 +241,18 @@ struct CustomExerciseEditorSheet: View {
                     if !isBundledEdit, draft.equipment == .band {
                         draft.loadMode = .nonComparable
                         draft.bodyweightFraction = 0
+                    }
+                    if let source = duplicateSource, !didResolveDuplicateName {
+                        didResolveDuplicateName = true
+                        // One-shot prefill: resolve the "(Custom)" name
+                        // against the live catalog. A direct fetch, not
+                        // the @Query, which may not have delivered on
+                        // first appear.
+                        let catalog = (try? modelContext.fetch(
+                            FetchDescriptor<ExerciseCatalogItem>()
+                        )) ?? []
+                        let taken = Set(catalog.flatMap { [$0.name] + $0.aliases })
+                        draft.name = CatalogDraft.duplicateName(base: source.name, taken: taken)
                     }
                     if !isEditMode {
                         // Focus the name field for create-mode; the
@@ -321,6 +364,16 @@ struct CustomExerciseEditorSheet: View {
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
         }
+    }
+
+    /// The one consequence of duplicating the form can't show: the
+    /// copy gets a fresh identity, so logged history stays with the
+    /// bundled original.
+    private func duplicateOriginNote(source: ExerciseCatalogItem) -> some View {
+        Text("Starts its own history. Past workouts stay with \(source.name).")
+            .font(Typography.caption)
+            .foregroundStyle(Ink.quaternary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var nameField: some View {
@@ -900,11 +953,20 @@ struct CustomExerciseEditorSheet: View {
         var savedItem: ExerciseCatalogItem?
 
         switch target {
-        case .create:
+        case .create, .duplicate:
+            // A duplicate inherits the source's rep default — the
+            // draft has no reps field, so the create flow's 8/12
+            // heuristic would otherwise silently reset, say, a 5-rep
+            // deadlift default.
+            var sourceDefaultReps: Int? = nil
+            if case .duplicate(let source) = target {
+                sourceDefaultReps = source.defaultReps
+            }
             let item = ExerciseCatalogItem(
                 name: trimmedName,
                 group: draft.group,
                 defaultWeight: draft.defaultWeight,
+                defaultReps: sourceDefaultReps,
                 trackingMode: draft.trackingMode,
                 modality: draft.modality,
                 loadMode: draft.loadMode,
@@ -1263,6 +1325,38 @@ struct CatalogDraft {
         self.aliasesInput = item.aliases.joined(separator: ", ")
     }
 
+    /// Draft prefilled to fork an existing catalog item into a
+    /// user-created copy: identical semantics, anatomy, and defaults,
+    /// under a fresh identity. Aliases are cleared because the source
+    /// owns them in the shared name/alias namespace. `defaultWeight`
+    /// comes from the caller so the seed can resolve against the
+    /// user's unit — a kg user keeps the source's clean kg-grid
+    /// default instead of the off-grid lb conversion. The editor
+    /// refines the provisional "(Custom)" name against the live
+    /// catalog on appear (see `duplicateName(base:taken:)`).
+    init(duplicating item: ExerciseCatalogItem, defaultWeight: Double) {
+        self.init(from: item)
+        name = "\(item.name) (Custom)"
+        aliasesInput = ""
+        self.defaultWeight = defaultWeight
+    }
+
+    /// Suggested name for a user-created copy of an exercise named
+    /// `base`: "X (Custom)", incrementing to "X (Custom 2)" and so on
+    /// until it clears the taken name/alias set. Comparison uses the
+    /// same normalization as the editor's uniqueness validation, so
+    /// the suggestion always saves cleanly.
+    static func duplicateName(base: String, taken: Set<String>) -> String {
+        let takenKeys = Set(taken.map(\.catalogSearchTermKey))
+        let first = "\(base) (Custom)"
+        guard takenKeys.contains(first.catalogSearchTermKey) else { return first }
+        var suffix = 2
+        while takenKeys.contains("\(base) (Custom \(suffix))".catalogSearchTermKey) {
+            suffix += 1
+        }
+        return "\(base) (Custom \(suffix))"
+    }
+
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
@@ -1302,5 +1396,17 @@ struct CatalogDraft {
             }
         }
         return result
+    }
+}
+
+extension String {
+    /// Whitespace-collapsed, lowercased comparison key shared by the
+    /// editor's global name/alias uniqueness check and the duplicate
+    /// name prefill, so a suggested "(Custom)" name is guaranteed to
+    /// satisfy validation.
+    fileprivate var catalogSearchTermKey: String {
+        split(whereSeparator: \.isWhitespace)
+            .joined(separator: " ")
+            .lowercased()
     }
 }
