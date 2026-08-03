@@ -327,16 +327,19 @@ enum WidgetSnapshotWriter {
         let exercises = session.orderedExercises
         let safeIndex = min(max(session.activeExerciseIndex, 0), max(exercises.count - 1, 0))
         let exercise = exercises.indices.contains(safeIndex) ? exercises[safeIndex] : exercises.first
-        let activeSetIndex = exercise.flatMap { session.activeSetIndex(for: $0) } ?? 0
-        let activeSet = exercise.flatMap { session.activeSet(for: $0) }
+        let sets = exercise?.orderedSets ?? []
+        let activeSetIndex = exercise.flatMap { session.activeSetIndex(for: $0) }
+        // A fully logged exercise holds on its final set; falling back to
+        // index 0 would fabricate a phantom "Set 1" on completed work.
+        let activeSet = activeSetIndex.map { sets[$0] } ?? sets.last
 
         return ActiveWorkoutSnapshot(
             isActive: true,
             exerciseName: exercise?.name,
             exerciseIndex: safeIndex,
             totalExercises: exercises.count,
-            setNumber: activeSetIndex + 1,
-            plannedSets: exercise?.orderedSets.count ?? 0,
+            setNumber: (activeSetIndex ?? max(sets.count - 1, 0)) + 1,
+            plannedSets: sets.count,
             setSpec: activeSet.map { setSpec(for: $0, exercise: exercise, unit: unit) },
             isResting: session.isResting,
             restEndsAt: session.restEndsAt,

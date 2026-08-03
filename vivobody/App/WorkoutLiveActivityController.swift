@@ -216,20 +216,27 @@ enum WorkoutLiveActivityController {
         let exercises = session.orderedExercises
         let safeIndex = min(max(session.activeExerciseIndex, 0), max(exercises.count - 1, 0))
         let exercise = exercises.indices.contains(safeIndex) ? exercises[safeIndex] : nil
-        let activeIndex = exercise.flatMap { session.activeSetIndex(for: $0) } ?? 0
-        let set = exercise.flatMap { session.activeSet(for: $0) }
+        let sets = exercise?.orderedSets ?? []
+        let activeIndex = exercise.flatMap { session.activeSetIndex(for: $0) }
+        // The pager can rest on a fully logged exercise (clamped down
+        // from the summary card, or swiped back to). Reporting the first
+        // incomplete set there would fabricate a phantom "Set 1", so
+        // hold on the final set and flag the exercise as complete.
+        let isExerciseComplete = exercise != nil && !sets.isEmpty && activeIndex == nil
+        let set = activeIndex.map { sets[$0] } ?? sets.last
 
         return WorkoutActivityAttributes.ContentState(
             exerciseName: exercise?.name ?? "Workout",
             exerciseIndex: safeIndex,
-            setNumber: activeIndex + 1,
-            plannedSets: exercise?.orderedSets.count ?? 0,
+            setNumber: (activeIndex ?? max(sets.count - 1, 0)) + 1,
+            plannedSets: sets.count,
             setSpec: set.map { setSpec(for: $0, exercise: exercise) } ?? "",
             isResting: session.isResting,
             restEndsAt: session.restEndsAt,
             restDuration: session.restDuration,
             totalVolume: session.totalVolume,
-            totalSetsCompleted: session.totalSets
+            totalSetsCompleted: session.totalSets,
+            isExerciseComplete: isExerciseComplete
         )
     }
 
@@ -244,7 +251,8 @@ enum WorkoutLiveActivityController {
             restEndsAt: nil,
             restDuration: 0,
             totalVolume: 0,
-            totalSetsCompleted: 0
+            totalSetsCompleted: 0,
+            isExerciseComplete: false
         )
     }
 

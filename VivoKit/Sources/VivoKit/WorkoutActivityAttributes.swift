@@ -21,8 +21,12 @@ public struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
         public var restDuration: TimeInterval
         public var totalVolume: Double
         public var totalSetsCompleted: Int
+        /// True when every set of the displayed exercise is logged. The
+        /// widget swaps its Complete button for a Done state instead of
+        /// offering a tap that can no-op.
+        public var isExerciseComplete: Bool
 
-        public init(exerciseName: String, exerciseIndex: Int, setNumber: Int, plannedSets: Int, setSpec: String, isResting: Bool, restEndsAt: Date?, restDuration: TimeInterval, totalVolume: Double, totalSetsCompleted: Int) {
+        public init(exerciseName: String, exerciseIndex: Int, setNumber: Int, plannedSets: Int, setSpec: String, isResting: Bool, restEndsAt: Date?, restDuration: TimeInterval, totalVolume: Double, totalSetsCompleted: Int, isExerciseComplete: Bool) {
             self.exerciseName = exerciseName
             self.exerciseIndex = exerciseIndex
             self.setNumber = setNumber
@@ -33,6 +37,7 @@ public struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
             self.restDuration = restDuration
             self.totalVolume = totalVolume
             self.totalSetsCompleted = totalSetsCompleted
+            self.isExerciseComplete = isExerciseComplete
         }
     }
 

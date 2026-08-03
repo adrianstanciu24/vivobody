@@ -47,7 +47,8 @@ import WidgetKit
             restEndsAt: Date().addingTimeInterval(83),
             restDuration: 120,
             totalVolume: 8_420,
-            totalSetsCompleted: 12
+            totalSetsCompleted: 12,
+            isExerciseComplete: false
         )
     )
     .background(Color.black)
@@ -65,7 +66,27 @@ import WidgetKit
             restEndsAt: nil,
             restDuration: 120,
             totalVolume: 8_420,
-            totalSetsCompleted: 12
+            totalSetsCompleted: 12,
+            isExerciseComplete: false
+        )
+    )
+    .background(Color.black)
+}
+
+#Preview("Live Activity Complete") {
+    ActiveWorkoutActivityView(
+        state: WorkoutActivityAttributes.ContentState(
+            exerciseName: "Side Plank",
+            exerciseIndex: 2,
+            setNumber: 3,
+            plannedSets: 3,
+            setSpec: "45s",
+            isResting: false,
+            restEndsAt: nil,
+            restDuration: 120,
+            totalVolume: 3_414,
+            totalSetsCompleted: 10,
+            isExerciseComplete: true
         )
     )
     .background(Color.black)

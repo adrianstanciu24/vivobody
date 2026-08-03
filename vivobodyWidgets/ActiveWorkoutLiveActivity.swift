@@ -45,12 +45,18 @@ struct ActiveWorkoutLiveActivity: Widget {
                             .font(Typography.metricUnit)
                             .foregroundStyle(Ink.secondary)
                         if !context.state.isResting {
-                            Button(intent: CompleteActiveSetIntent()) {
-                                Text("Complete")
+                            if context.state.isExerciseComplete {
+                                Label("Done", systemImage: "checkmark")
                                     .font(Typography.caption)
+                                    .foregroundStyle(Tint.complete)
+                            } else {
+                                Button(intent: CompleteActiveSetIntent()) {
+                                    Text("Complete")
+                                        .font(Typography.caption)
+                                }
+                                .buttonStyle(.glass)
+                                .tint(Tint.primary)
                             }
-                            .buttonStyle(.glass)
-                            .tint(Tint.primary)
                         }
                     }
                 }
@@ -156,13 +162,20 @@ struct ActiveWorkoutActivityView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
                     Spacer(minLength: Space.sm)
-                    Button(intent: CompleteActiveSetIntent()) {
-                        Text("Complete")
+                    if state.isExerciseComplete {
+                        Label("Done", systemImage: "checkmark")
                             .font(Typography.headline)
+                            .foregroundStyle(Tint.complete)
                             .frame(minHeight: 36)
+                    } else {
+                        Button(intent: CompleteActiveSetIntent()) {
+                            Text("Complete")
+                                .font(Typography.headline)
+                                .frame(minHeight: 36)
+                        }
+                        .buttonStyle(.glassProminent)
+                        .tint(Tint.primary)
                     }
-                    .buttonStyle(.glassProminent)
-                    .tint(Tint.primary)
                 }
             }
         }
