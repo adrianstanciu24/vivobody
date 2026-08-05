@@ -8,12 +8,15 @@
 //
 //  First-principles layout (top → bottom):
 //    • Exercise name (the page's identity).
-//    • Set segments — done / active / pending capsules, glanceable
-//      at a flick and never mistakable for the pager's page dots.
+//    • Set segments — done / active / pending lamps, glanceable at a
+//      flick and never mistakable for the pager's page dots. The
+//      newest completed lamp stretches into a readout capsule
+//      carrying its "60 × 8" (tap any lit lamp to edit, long-press
+//      for delete) — the set timeline and the old "Last …" caption
+//      merged into one strip.
 //    • The HERO: the working weight as a huge monospaced odometer
 //      you scrub with a vertical drag, with reps beneath it. The
 //      numbers are the interface; there is no chip around them.
-//    • A tiny "Last 135 × 8" line (long-press to edit/delete).
 //    • The single biggest target on screen: a full-width verb
 //      button — "Complete set" / "Finish exercise" — wearing a dim
 //      volt tint so the live action is the panel's loudest surface.
@@ -78,7 +81,8 @@ struct ActiveExerciseCard: View {
     @State var acceptsScrubInput: Bool = true
 
     /// When non-nil, presents the EditSetSheet for that completed
-    /// set. Driven by the last-set caption's long-press menu.
+    /// set. Driven by tapping a completed set pip (its long-press
+    /// menu adds delete).
     @State var editingSet: WorkoutSet? = nil
 
     /// When non-nil, the destructive-confirmation alert is shown for
@@ -164,7 +168,6 @@ struct ActiveExerciseCard: View {
 
             rirControl
                 .powerOn(3)
-            lastSetCaption
             actionArea
                 .padding(.top, Space.md)
                 .powerOn(4)

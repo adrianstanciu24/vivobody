@@ -16,7 +16,9 @@
 //      dim ring, armed glows and breathes at standby, lit overdrives
 //      past resting brightness then settles with an afterglow. A
 //      segment (capsule) shape serves set pips so progress reads as
-//      filling segments, never as the pager's page dots.
+//      filling segments, never as the pager's page dots. A lit lamp
+//      can carry a `reading` — it stretches into a readout capsule
+//      displaying its value (the newest completed set's "60 x 8").
 //    • SegmentLadder — a discrete segment bar. Devices count in
 //      steps; a ladder fills click-by-click instead of smearing.
 //    • SegmentReadout + SegmentDisplay.ghost — LCD-style numeric
@@ -76,6 +78,11 @@ struct LEDLamp: View {
     let state: LEDLampState
     var size: CGFloat = 18
     var shape: LEDLampShape = .circle
+    /// Optional readout carried by a lit lamp: the lamp stretches into
+    /// a capsule displaying this value, Dynamic-Island style. Ignored
+    /// unless the lamp is lit, so a dot and its reading stay one view
+    /// whose width morphs instead of cross-fading.
+    var reading: String? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
@@ -99,16 +106,8 @@ struct LEDLamp: View {
                     .opacity(breathDim ? 0.42 : 1.0)
                     .scaleEffect(breathDim ? 0.86 : 1.06)
                     .shadow(color: Tint.inProgress.opacity(breathDim ? 0.05 : 0.45), radius: breathDim ? 2 : 7)
-            case (.circle, .lit):
-                Circle()
-                    .fill(Tint.complete)
-                    .frame(width: size, height: size)
-                    .brightness(overdrive ? 0.32 : 0)
-                    .scaleEffect(overdrive ? 1.22 : 1.0)
-                    .shadow(
-                        color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
-                        radius: overdrive ? 9 : 3
-                    )
+            case (_, .lit):
+                litLamp
             case (.segment, .off):
                 Capsule(style: .continuous)
                     .strokeBorder(Ink.quaternary, lineWidth: 1.5)
@@ -119,16 +118,6 @@ struct LEDLamp: View {
                     .frame(width: 28, height: 9)
                     .opacity(breathDim ? 0.68 : 1.0)
                     .shadow(color: Tint.inProgress.opacity(breathDim ? 0.10 : 0.30), radius: 4)
-            case (.segment, .lit):
-                Capsule(style: .continuous)
-                    .fill(Tint.complete)
-                    .frame(width: 26, height: 9)
-                    .brightness(overdrive ? 0.32 : 0)
-                    .scaleEffect(overdrive ? 1.22 : 1.0)
-                    .shadow(
-                        color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
-                        radius: overdrive ? 9 : 3
-                    )
             }
 
             if differentiateWithoutColor {
@@ -143,9 +132,13 @@ struct LEDLamp: View {
                         .frame(width: 6, height: 6)
                         .rotationEffect(.degrees(45))
                 case (.circle, .lit):
-                    Image(systemName: "checkmark")
-                        .font(.system(size: max(7, size * 0.48), weight: .black))
-                        .foregroundStyle(Color.black)
+                    // A readout capsule's dark-on-gold text already
+                    // differentiates it without color.
+                    if activeReading == nil {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: max(7, size * 0.48), weight: .black))
+                            .foregroundStyle(Color.black)
+                    }
                 case (.segment, .armed):
                     // Filled vs outline already separates lit from the
                     // rest without colour; only armed — also an
@@ -159,7 +152,7 @@ struct LEDLamp: View {
             }
         }
         .frame(
-            width: shape == .segment ? 34 : size + 6,
+            width: activeReading == nil ? (shape == .segment ? 34 : size + 6) : nil,
             height: size + 6
         )
         .onChange(of: state) { old, new in
@@ -175,6 +168,42 @@ struct LEDLamp: View {
             overdriveTask?.cancel()
             breathTask?.cancel()
         }
+    }
+
+    /// A reading only exists on a lit lamp; armed and off lamps have
+    /// nothing to report.
+    private var activeReading: String? {
+        state == .lit ? reading : nil
+    }
+
+    private var litDotSize: CGSize {
+        shape == .segment
+            ? CGSize(width: 26, height: 9)
+            : CGSize(width: size, height: size)
+    }
+
+    /// Lit rendering — one capsule serves both the plain dot and the
+    /// readout, so the newest lamp stretching open (and collapsing
+    /// once the next set lands) animates as a width change on a
+    /// single view rather than a cross-fade between two.
+    private var litLamp: some View {
+        Text(activeReading ?? "")
+            .font(Typography.metricUnit)
+            .monospacedDigit()
+            .lineLimit(1)
+            .foregroundStyle(Color.black)
+            .padding(.horizontal, activeReading == nil ? 0 : 10)
+            .frame(
+                width: activeReading == nil ? litDotSize.width : nil,
+                height: activeReading == nil ? litDotSize.height : size + 6
+            )
+            .background(Capsule(style: .continuous).fill(Tint.complete))
+            .brightness(overdrive ? 0.32 : 0)
+            .scaleEffect(overdrive ? (activeReading == nil ? 1.22 : 1.06) : 1.0)
+            .shadow(
+                color: Tint.complete.opacity(overdrive ? 0.85 : 0.30),
+                radius: overdrive ? 9 : 3
+            )
     }
 
     private func fireOverdrive() {
@@ -319,6 +348,7 @@ struct SegmentReadout: View {
                     Text("Set 2 of 4").panelLegend()
                     HStack(spacing: Space.md) {
                         LEDLamp(state: .lit)
+                        LEDLamp(state: .lit, reading: "135 x 8")
                         LEDLamp(state: lamp)
                         LEDLamp(state: .off)
                     }

@@ -27,23 +27,40 @@ extension ActiveExerciseCard {
     }
 
     var setPips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        // The newest completed lamp carries its reading, merging the
+        // old "Last 135 x 8" caption into the timeline itself: past
+        // compressed to dots, the freshest set vivid, the current one
+        // breathing, the rest unlit.
+        let lastCompletedID = sets.last(where: { $0.isCompleted })?.id
+        return ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Space.md) {
                 ForEach(Array(sets.enumerated()), id: \.element.id) { idx, set in
                     let isActiveSet = idx == activeIndex
-                    let pipView = pip(isCompleted: set.isCompleted, isActive: isActiveSet)
+                    let pipView = pip(
+                        isCompleted: set.isCompleted,
+                        isActive: isActiveSet,
+                        reading: set.id == lastCompletedID
+                            ? exercise.setLabel(set, unit: unit)
+                            : nil
+                    )
                         .frame(minWidth: 44, minHeight: 44)
                         .contentShape(Rectangle())
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel("Set \(idx + 1)")
                         .accessibilityValue(
-                            set.isCompleted ? "Completed" : (isActiveSet ? "Current" : "Pending")
+                            set.isCompleted
+                                ? "Completed, \(exercise.setLabel(set, unit: unit))"
+                                : (isActiveSet ? "Current" : "Pending")
                         )
                         .accessibilityAddTraits(isActiveSet ? .isSelected : [])
-                    // Completed sets edit/delete; pending sets can be
-                    // removed when more than one exists.
+                    // Completed sets tap to edit (long-press adds delete);
+                    // pending sets can be removed when more than one exists.
                     if set.isCompleted {
                         pipView
+                            .onTapGesture {
+                                Haptics.selection()
+                                editingSet = set
+                            }
                             .contextMenu { pipMenu(for: set) }
                             .accessibilityAction { editingSet = set }
                             .accessibilityAction(named: "Edit set") { editingSet = set }
@@ -156,9 +173,13 @@ extension ActiveExerciseCard {
     /// set is armed (standby breathe), a completed set fills —
     /// completing one overdrives the lamp past resting brightness
     /// before it settles with an afterglow, in the same frame as the
-    /// crescendo.
-    func pip(isCompleted: Bool, isActive: Bool) -> some View {
-        LEDLamp(state: isCompleted ? .lit : (isActive ? .armed : .off))
+    /// crescendo. The newest completed lamp stretches into a readout
+    /// capsule carrying its logged value.
+    func pip(isCompleted: Bool, isActive: Bool, reading: String? = nil) -> some View {
+        LEDLamp(
+            state: isCompleted ? .lit : (isActive ? .armed : .off),
+            reading: reading
+        )
     }
 
     // MARK: - Hero
@@ -592,49 +613,7 @@ extension ActiveExerciseCard {
         )
     }
 
-    /// Echoes the previously-logged set's RIR in the "Last …" caption.
-    /// Dynamic-strength reps only; omit untouched default values.
-    func lastSetRIRSuffix(_ set: WorkoutSet) -> String {
-        guard exercise.modality == .dynamicStrength,
-              exercise.trackingMode == .reps,
-              set.rirLogged else { return "" }
-        return "  ·  \(RIRSelector.displayLabel(set.repsInReserve)) RIR"
-    }
-
-    // MARK: - Last set + action
-
-    @ViewBuilder
-    var lastSetCaption: some View {
-        if activeIndex != nil, sets.last(where: { $0.isCompleted }) == nil {
-            // No set logged yet: reserve the caption's line so the
-            // first completion lights the label without shoving the
-            // action button down — fixed panel, arriving light.
-            Text(" ")
-                .font(Typography.metricUnit)
-                .padding(.bottom, Space.sm)
-                .accessibilityHidden(true)
-        }
-        if activeIndex != nil, let last = sets.last(where: { $0.isCompleted }) {
-            Text("Last  \(exercise.setLabel(last, unit: unit))\(lastSetRIRSuffix(last))")
-                .font(Typography.metricUnit)
-                .foregroundStyle(Ink.tertiary)
-                .padding(.bottom, Space.sm)
-                .contextMenu {
-                    Button {
-                        editingSet = last
-                    } label: {
-                        Label("Edit last set", systemImage: "pencil")
-                    }
-                    Button(role: .destructive) {
-                        deletingSet = last
-                    } label: {
-                        Label("Delete last set", systemImage: "trash")
-                    }
-                }
-                .accessibilityAction(named: "Edit set") { editingSet = last }
-                .accessibilityAction(named: "Delete set") { deletingSet = last }
-        }
-    }
+    // MARK: - Action
 
     @ViewBuilder
     var actionArea: some View {
