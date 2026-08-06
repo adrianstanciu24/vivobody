@@ -416,7 +416,17 @@ final class WorkoutSessionController {
         let exercises = session.orderedExercises
         guard exercises.indices.contains(session.activeExerciseIndex) else { return }
         let exercise = exercises[session.activeExerciseIndex]
-        session.completeActiveSet(for: exercise)
+        let outcome = session.completeActiveSet(for: exercise)
+        // Mirror the in-app superset choreography so the sheet opens
+        // on the right station (no animation — this runs pre-present).
+        switch outcome {
+        case .supersetPartner(let target), .supersetRoundRest(resume: let target):
+            if let idx = exercises.firstIndex(where: { $0.id == target.id }) {
+                session.activeExerciseIndex = idx
+            }
+        case .rest, .exerciseComplete, .none:
+            break
+        }
         if saveActiveSessionChanges() {
             appState?.selectedTab = .today
             isWorkoutExpanded = true

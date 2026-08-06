@@ -17,13 +17,92 @@ extension ActiveExerciseCard {
     // MARK: - Name + pips
 
     var nameRow: some View {
-        Text(exercise.name)
-            .font(Typography.display)
-            .foregroundStyle(Ink.primary)
-            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
-            .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
-            .fixedSize(horizontal: false, vertical: true)
-            .accessibilityAddTraits(.isHeader)
+        HStack(alignment: .top, spacing: Space.sm) {
+            VStack(alignment: .leading, spacing: Space.xs) {
+                // The shared ribbon that couples linked cards: same volt
+                // tag ("Superset · A1" / "· A2") on every member, using
+                // the lifter-standard notation.
+                if let tag = session.supersetTag(for: exercise) {
+                    Text("Superset · \(tag)")
+                        .panelLegendType()
+                        .foregroundStyle(Tint.inProgress)
+                        .accessibilityLabel("Superset, position \(tag)")
+                }
+                Text(exercise.name)
+                    .font(Typography.display)
+                    .foregroundStyle(Ink.primary)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
+                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            // Long-press on the identity is the power-user shortcut to
+            // the same menu the chain glyph anchors visibly.
+            .contextMenu { supersetMenu }
+
+            supersetMenuButton
+        }
+    }
+
+    /// The visible anchor for superset management — a chain glyph at
+    /// the card's top-trailing corner, one tap pops the menu. Dim when
+    /// unlinked (an invitation), volt when linked (matches the ribbon).
+    /// Hidden on the last card when unlinked: nothing to link with.
+    @ViewBuilder
+    var supersetMenuButton: some View {
+        let linked = session.isInSuperset(exercise)
+        if linked || exerciseIndex + 1 < session.orderedExercises.count {
+            Menu {
+                supersetMenu
+            } label: {
+                Image(systemName: "link")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(linked ? Tint.inProgress : Ink.quaternary)
+                    .frame(width: Space.tapMin, height: Space.tapMin)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(linked ? "Superset options" : "Link as superset")
+        }
+    }
+
+    /// Long-press menu on the exercise name — mid-workout superset
+    /// management. Linking with the next exercise creates (or extends)
+    /// a group; a grouped exercise can step back out.
+    @ViewBuilder
+    var supersetMenu: some View {
+        let exercises = session.orderedExercises
+        let idx = exerciseIndex
+        if idx + 1 < exercises.count,
+           !SupersetGrouping.isSeamLinked(at: idx, in: exercises) {
+            Button {
+                linkWithNextExercise()
+            } label: {
+                Label("Superset with \(exercises[idx + 1].name)", systemImage: "link")
+            }
+        }
+        if session.isInSuperset(exercise) {
+            Button {
+                unlinkFromSuperset()
+            } label: {
+                Label("Remove from superset", systemImage: "minus.circle")
+            }
+        }
+    }
+
+    func linkWithNextExercise() {
+        let exercises = session.orderedExercises
+        guard exerciseIndex + 1 < exercises.count else { return }
+        SupersetGrouping.linkSeam(at: exerciseIndex, in: exercises)
+        saveActiveSessionChanges()
+        Haptics.soft()
+    }
+
+    func unlinkFromSuperset() {
+        SupersetGrouping.unlink(exercise, in: session.orderedExercises)
+        saveActiveSessionChanges()
+        Haptics.soft()
     }
 
     var setPips: some View {
@@ -553,15 +632,18 @@ extension ActiveExerciseCard {
 
     // MARK: - RIR
 
-    /// Reps-in-reserve pill — dynamic-strength reps only. Panel
-    /// discipline: when the exercise finishes the
-    /// control goes dark but HOLDS ITS PLACE, like a hardware control
-    /// whose lamp went out — the panel never reflows between states.
+    /// Reps-in-reserve pill — lit for dynamic-strength reps only, but
+    /// the slot exists for EVERY reps-mode exercise. Panel discipline:
+    /// the control goes dark but HOLDS ITS PLACE, like a hardware
+    /// control whose lamp went out — the panel never reflows between
+    /// states, and never between exercises either, so swiping from a
+    /// strength card to a power card (plyometrics log no RIR) keeps
+    /// the hero cluster exactly where the thumb expects it.
     @ViewBuilder
     var rirControl: some View {
-        if exercise.modality == .dynamicStrength,
-           exercise.trackingMode == .reps {
-            let isLive = session.activeSet(for: exercise) != nil
+        if exercise.trackingMode == .reps {
+            let isLive = exercise.modality == .dynamicStrength
+                && session.activeSet(for: exercise) != nil
             RIRSelector(value: rirBinding)
                 .padding(.bottom, Space.md)
                 .opacity(isLive ? 1 : 0)

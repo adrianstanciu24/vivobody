@@ -182,12 +182,13 @@ struct SessionDetailScreen: View {
         return VStack(alignment: .leading, spacing: Space.sm) {
             SectionHeader(title: "Exercises", trailing: exercisesSubtitle)
 
-            VStack(alignment: .leading, spacing: Space.md) {
+            VStack(alignment: .leading, spacing: Space.xxl) {
                 ForEach(session.orderedExercises, id: \.id) { exercise in
                     ExerciseDetailRow(
                         exercise: exercise,
                         unit: unit,
                         isPR: prExerciseIDs.contains(exercise.id),
+                        supersetTag: session.supersetTag(for: exercise),
                         contribution: breakdown[exercise.id],
                         adherence: session.adherence(for: exercise),
                         showsContributionBar: session.orderedExercises.count > 1
@@ -289,6 +290,7 @@ private struct ExerciseDetailRow: View {
     let exercise: Exercise
     let unit: WeightUnit
     let isPR: Bool
+    var supersetTag: String? = nil
     var contribution: SessionContribution? = nil
     var adherence: ExerciseAdherence? = nil
     var showsContributionBar: Bool = false
@@ -339,6 +341,7 @@ private struct ExerciseDetailRow: View {
                         .font(Typography.caption)
                         .foregroundStyle(Ink.tertiary)
                     if isPR { PRTag() }
+                    if let supersetTag { SupersetTag(tag: supersetTag) }
                 }
 
                 Spacer(minLength: Space.sm)

@@ -273,6 +273,30 @@ struct PRTag: View {
     }
 }
 
+// MARK: - Superset tag
+
+/// PRTag's sibling for superset membership: the same outlined capsule
+/// carrying the chain glyph and the member's "A1"-style position tag,
+/// so a linked exercise reads identically on the receipt, the cards,
+/// and the history ledger.
+struct SupersetTag: View {
+    let tag: String
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Image(systemName: "link")
+            Text(tag)
+                .monospacedDigit()
+        }
+        .font(Typography.micro)
+        .foregroundStyle(Tint.primary)
+        .padding(.horizontal, Space.sm)
+        .padding(.vertical, 1)
+        .overlay(Capsule().stroke(Tint.primaryDim, lineWidth: 1))
+        .accessibilityLabel("Superset position \(tag)")
+    }
+}
+
 // MARK: - Session row
 
 /// One archived session as a row inside a date-group card. The left

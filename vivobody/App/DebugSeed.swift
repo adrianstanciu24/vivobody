@@ -50,6 +50,15 @@ enum UITestSupport {
         if CommandLine.arguments.contains("--ui-test-active-band") {
             seedActiveBand(in: context)
         }
+        if CommandLine.arguments.contains("--ui-test-superset") {
+            seedActiveSuperset(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-superset-history") {
+            seedSupersetHistory(in: context)
+        }
+        if CommandLine.arguments.contains("--ui-test-superset-power") {
+            seedActiveSupersetPower(in: context)
+        }
         if CommandLine.arguments.contains("--ui-test-single-exercise-history") {
             seedSingleExerciseHistory(in: context)
         }
@@ -179,6 +188,141 @@ enum UITestSupport {
             set.isCompleted = true
         }
         let session = WorkoutSession(exercises: [exercise], restDuration: 90)
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// Active workout with the first two exercises linked as a
+    /// superset (plus one straight-sets exercise after), for verifying
+    /// the card ribbon, the merged page dots, the partner hand-off,
+    /// and the round-aware rest label.
+    private static func seedActiveSuperset(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let bench = Exercise(
+            name: "Barbell Bench Press",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 135,
+            sortOrder: 0
+        )
+        let row = Exercise(
+            name: "Barbell Bent-Over Row",
+            group: .back,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 115,
+            sortOrder: 1
+        )
+        let pairID = UUID()
+        bench.supersetID = pairID
+        row.supersetID = pairID
+
+        let curl = Exercise(
+            name: "Barbell Biceps Curl",
+            group: .arms,
+            plannedSets: 3,
+            plannedReps: 10,
+            plannedWeight: 65,
+            sortOrder: 2
+        )
+        let session = WorkoutSession(
+            exercises: [bench, row, curl],
+            restDuration: 90
+        )
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// Active superset pairing a strength exercise with a power one —
+    /// the partner logs reps but no RIR, so its card must hold the
+    /// same panel geometry with the RIR slot dark.
+    private static func seedActiveSupersetPower(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt == nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let pressAround = Exercise(
+            name: "Cable Press-Around",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 12,
+            plannedWeight: 30 * WeightUnit.lbPerKg,
+            sortOrder: 0
+        )
+        let clapPushUp = Exercise(
+            name: "Clap Push-Up",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 10,
+            plannedWeight: 25 * WeightUnit.lbPerKg,
+            modality: .power,
+            sortOrder: 1
+        )
+        let pairID = UUID()
+        pressAround.supersetID = pairID
+        clapPushUp.supersetID = pairID
+
+        let session = WorkoutSession(
+            exercises: [pressAround, clapPushUp],
+            restDuration: 90
+        )
+        context.insert(session)
+        try? context.save()
+    }
+
+    /// One archived session with a linked pair + one straight exercise,
+    /// for verifying superset marks on the History detail ledger.
+    private static func seedSupersetHistory(in context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
+            predicate: #Predicate { $0.completedAt != nil }
+        ))) ?? []
+        guard existing.isEmpty else { return }
+
+        let bench = Exercise(
+            name: "Barbell Bench Press",
+            group: .chest,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 135,
+            sortOrder: 0
+        )
+        let row = Exercise(
+            name: "Barbell Bent-Over Row",
+            group: .back,
+            plannedSets: 3,
+            plannedReps: 8,
+            plannedWeight: 115,
+            sortOrder: 1
+        )
+        let pairID = UUID()
+        bench.supersetID = pairID
+        row.supersetID = pairID
+
+        let curl = Exercise(
+            name: "Barbell Biceps Curl",
+            group: .arms,
+            plannedSets: 3,
+            plannedReps: 10,
+            plannedWeight: 65,
+            sortOrder: 2
+        )
+        for exercise in [bench, row, curl] {
+            for set in exercise.sets { set.isCompleted = true }
+        }
+
+        let completedAt = Date().addingTimeInterval(-15 * 60)
+        let session = WorkoutSession(
+            exercises: [bench, row, curl],
+            restDuration: 90,
+            startedAt: completedAt.addingTimeInterval(-35 * 60)
+        )
+        session.completedAt = completedAt
         context.insert(session)
         try? context.save()
     }
@@ -519,9 +663,16 @@ enum HistorySeeder {
 
         let upper = WorkoutTemplate(name: "Upper Day A", sortOrder: 1)
         upper.scheduledWeekdays = [plusDays(2), plusDays(5)].sorted()
+        let upperBench = TemplateExercise(name: "Barbell Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0)
+        let upperRow = TemplateExercise(name: "Barbell Bent-Over Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1)
+        // Bench + Row paired as a superset so the template seam and
+        // the A1/A2 tags have a live example in the seeded library.
+        let upperPair = UUID()
+        upperBench.supersetID = upperPair
+        upperRow.supersetID = upperPair
         upper.exercises = [
-            TemplateExercise(name: "Barbell Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0),
-            TemplateExercise(name: "Barbell Bent-Over Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1),
+            upperBench,
+            upperRow,
             TemplateExercise(name: "Dumbbell Shoulder Press", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
             TemplateExercise(name: "Barbell Biceps Curl", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
         ]

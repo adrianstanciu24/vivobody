@@ -165,7 +165,7 @@ WIDGET_IMPLEMENTATION_NOTES.md # App Group / entitlements / provisioning notes
 - **NavigationLink: use closure-based form** `NavigationLink { destination } label: { content }`. The value-based form (`NavigationLink(value:)` + `.navigationDestination(for:)`) is finicky with SwiftData `@Model` objects and only works reliably when registered at the NavigationStack root.
 - **`.navigationTitle($binding)` + `.toolbarTitleMenu { RenameButton() }`** is the system-native rename pattern for collection titles. No custom pencil icons needed.
 - **`EditButton()`** is the only way to reach drag-to-reorder in standard SwiftUI Lists — but if reorder isn't needed, swipe-to-delete via `.swipeActions` is sufficient and Edit can be omitted.
-- **`TemplateEditorScreen.swift` is orphaned** — currently unreachable from any UI surface. Library uses `TemplateDetailScreen` for both creation and editing. Safe to delete in a future cleanup pass.
+- **`TemplateDetailScreen.swift` is orphaned** — currently unreachable from any UI surface. Library creates AND edits templates through the `TemplateEditorScreen` sheet (value-type `TemplateDraft` buffer). Safe to delete in a future cleanup pass.
 - **Always test scrubber-style components inside a `ScrollView`** — they use `DragGesture(minimumDistance: 0)` and can compete with scroll gestures if mis-nested.
 - **Bundle ID is `astanciu.vivobody.app`** — required for `xcrun simctl launch`. The output bundle filename `vivobody.app` is a different concept (the `.app` is the bundle extension, not part of the ID).
 - **Widget snapshots are versioned** — bump the snapshot version in VivoKit when changing payload shape; widgets must render a sane fallback for missing/old snapshots, never a blank tile.

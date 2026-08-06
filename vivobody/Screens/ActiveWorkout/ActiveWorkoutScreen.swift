@@ -352,7 +352,8 @@ struct ActiveWorkoutScreen: View {
     private var bottomBar: some View {
         PageDots(
             count: session.orderedExercises.count + 1,
-            selection: $session.activeExerciseIndex
+            selection: $session.activeExerciseIndex,
+            linkedRuns: SupersetGrouping.linkedRuns(in: session.orderedExercises)
         )
         .padding(.bottom, 4)
     }

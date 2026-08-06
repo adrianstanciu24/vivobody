@@ -122,6 +122,13 @@ final class Exercise: Identifiable {
     /// relationships don't guarantee array order on their own.
     var sortOrder: Int = 0
 
+    /// Superset membership. Adjacent exercises sharing the same ID
+    /// form one group and alternate round-by-round during the active
+    /// workout (see Superset.swift for the choreography). Nil = a
+    /// normal straight-sets exercise. Additive defaulted field — no
+    /// migration.
+    var supersetID: UUID? = nil
+
     /// Back-pointer to the owning session. Auto-managed by the
     /// inverse relationship declared on `WorkoutSession.exercises`.
     var session: WorkoutSession?
@@ -455,6 +462,7 @@ extension Exercise {
             plannedDuration: firstSet?.duration ?? source.plannedDuration,
             sortOrder: source.sortOrder
         )
+        copy.supersetID = source.supersetID
         for (i, sourceSet) in sourceSets.enumerated() {
             copy.sets.append(
                 WorkoutSet(

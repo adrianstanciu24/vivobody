@@ -76,6 +76,19 @@ struct RestTimerOverlay: View {
         let exercises = session.orderedExercises
         guard session.activeExerciseIndex < exercises.count else { return nil }
         let exercise = exercises[session.activeExerciseIndex]
+
+        // Supersets count in rounds, not sets — the completion flow
+        // parks the pager on the next round's first station before
+        // this overlay's label is read.
+        let members = session.supersetMembers(of: exercise)
+        if members.count >= 2 {
+            guard let nextIndex = session.activeSetIndex(for: exercise) else {
+                return "Superset complete"
+            }
+            let names = members.map(\.name).joined(separator: " + ")
+            return "Round \(nextIndex + 1) of \(session.supersetRoundCount(of: exercise)) · \(names)"
+        }
+
         guard let nextIndex = session.activeSetIndex(for: exercise) else {
             return "Exercise complete"
         }

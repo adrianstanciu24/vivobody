@@ -198,14 +198,20 @@ struct WorkoutSummaryCard: View {
         return VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
                 if idx > 0 {
+                    // A linked seam wears the superset accent so the
+                    // pair reads as one bracket on the receipt.
                     Rectangle()
-                        .fill(Surface.edge)
+                        .fill(isLinkedSeam(before: idx) ? Tint.inProgress.opacity(0.35) : Surface.edge)
                         .frame(height: 1)
                         .accessibilityHidden(true)
                 }
                 exerciseRow(for: exercise)
             }
         }
+    }
+
+    private func isLinkedSeam(before index: Int) -> Bool {
+        SupersetGrouping.isSeamLinked(at: index - 1, in: session.orderedExercises)
     }
 
     private func exerciseRow(for exercise: Exercise) -> some View {
@@ -217,11 +223,27 @@ struct WorkoutSummaryCard: View {
                 Text(exercise.group.displayName)
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
-                Text(exercise.name)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: Space.xs) {
+                    // The same chain glyph + A1 tag the cards and the
+                    // template editor use — superset membership is part
+                    // of the record, so the receipt shows it too.
+                    if let tag = session.supersetTag(for: exercise) {
+                        Image(systemName: "link")
+                            .font(Typography.caption)
+                            .foregroundStyle(Tint.inProgress)
+                            .accessibilityHidden(true)
+                        Text(tag)
+                            .font(Typography.caption)
+                            .monospacedDigit()
+                            .foregroundStyle(Tint.inProgress)
+                            .accessibilityLabel("Superset position \(tag)")
+                    }
+                    Text(exercise.name)
+                        .font(Typography.sectionHeading)
+                        .foregroundStyle(Ink.primary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             .layoutPriority(1)
 

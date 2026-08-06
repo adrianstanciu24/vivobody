@@ -335,7 +335,7 @@ struct ActiveExerciseCard: View {
                 duration: duration
             )
 
-            withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
+            let outcome = withAnimation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.85)) {
                 session.completeActiveSet(for: exercise)
             }
             acceptsScrubInput = true
@@ -383,13 +383,55 @@ struct ActiveExerciseCard: View {
                 }
             }
 
-            let exerciseNowDone = exercise.orderedSets.allSatisfy(\.isCompleted)
-            if exerciseNowDone {
+            switch outcome {
+            case .supersetPartner(let partner):
+                // Carry the user to the partner station — the app
+                // performs the swipe the superset asks for, with the
+                // same spring the pager uses, so the pairing teaches
+                // itself the first time it happens.
+                guard let partnerIdx = session.orderedExercises
+                    .firstIndex(where: { $0.id == partner.id })
+                else { break }
+                let indexBeforeBeat = session.activeExerciseIndex
+                do {
+                    try await Task.sleep(for: .milliseconds(300))
+                } catch { return }
+                // If the user swiped somewhere themselves during the
+                // acknowledgement beat, their move wins — yanking the
+                // pager after a manual swipe reads as a glitch.
+                guard session.activeExerciseIndex == indexBeforeBeat,
+                      session.activeExerciseIndex != partnerIdx
+                else { break }
+                withAnimation(reduceMotion ? nil : .spring(response: 0.55, dampingFraction: 0.85)) {
+                    session.activeExerciseIndex = partnerIdx
+                }
+                Haptics.soft(playsSound: false)
+
+            case .supersetRoundRest(let resume):
+                // Reposition behind the rest overlay so its label and
+                // the card underneath already show the next round's
+                // station when the overlay lifts.
+                if let resumeIdx = session.orderedExercises
+                    .firstIndex(where: { $0.id == resume.id }),
+                   resumeIdx != session.activeExerciseIndex {
+                    session.activeExerciseIndex = resumeIdx
+                }
+
+            case .exerciseComplete:
                 let exercises = session.orderedExercises
                 let currentIdx = exercises.firstIndex { $0.id == exercise.id } ?? 0
-                let nextIdx = currentIdx + 1
+                // A superset can finish mid-group (unequal set counts);
+                // land past the group's already-finished partners.
+                var nextIdx = currentIdx + 1
+                while nextIdx < exercises.count,
+                      exercise.supersetID != nil,
+                      exercises[nextIdx].supersetID == exercise.supersetID,
+                      exercises[nextIdx].orderedSets.allSatisfy(\.isCompleted) {
+                    nextIdx += 1
+                }
                 let cardCount = exercises.count + 1
                 if nextIdx < cardCount {
+                    let indexBeforeBeat = session.activeExerciseIndex
                     // Keep the short acknowledgement between exercise
                     // cards, but show the final summary immediately.
                     if !session.isAllComplete {
@@ -397,10 +439,18 @@ struct ActiveExerciseCard: View {
                             try await Task.sleep(for: .milliseconds(300))
                         } catch { return }
                     }
+                    // A manual swipe during the beat outranks the
+                    // scripted advance.
+                    guard session.activeExerciseIndex == indexBeforeBeat,
+                          session.activeExerciseIndex != nextIdx
+                    else { break }
                     withAnimation(reduceMotion ? nil : .spring(response: 0.55, dampingFraction: 0.85)) {
                         session.activeExerciseIndex = nextIdx
                     }
                 }
+
+            case .rest, .none:
+                break
             }
         }
     }

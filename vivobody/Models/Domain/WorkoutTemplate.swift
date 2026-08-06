@@ -157,6 +157,12 @@ final class TemplateExercise: Identifiable {
     /// Stable position within the parent template.
     var sortOrder: Int = 0
 
+    /// Superset membership. Adjacent template exercises sharing the
+    /// same ID spawn as one alternating group when a workout starts
+    /// from this template. Nil = straight sets. Additive defaulted
+    /// field — no migration.
+    var supersetID: UUID? = nil
+
     /// Back-pointer to the owning template. Auto-managed by the
     /// inverse relationship declared on `WorkoutTemplate.exercises`.
     var template: WorkoutTemplate?
@@ -395,6 +401,7 @@ extension Exercise {
                 sortOrder: templateExercise.sortOrder
             )
         }
+        self.supersetID = templateExercise.supersetID
     }
 
     /// Create a fresh Exercise from a catalog pick. Used when the

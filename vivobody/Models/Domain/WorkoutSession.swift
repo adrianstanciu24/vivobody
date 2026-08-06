@@ -172,9 +172,14 @@ final class WorkoutSession: Identifiable {
 
     // MARK: - Mutations
 
-    func completeActiveSet(for exercise: Exercise) {
+    /// Complete the next pending set and decide what happens next.
+    /// The returned outcome is the single source of truth the view
+    /// layer choreographs the pager from — rest already started (or
+    /// deliberately didn't) by the time this returns.
+    @discardableResult
+    func completeActiveSet(for exercise: Exercise) -> SetCompletionOutcome {
         let ordered = exercise.orderedSets
-        guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return }
+        guard let index = ordered.firstIndex(where: { !$0.isCompleted }) else { return .none }
         let completed = ordered[index]
         completed.isCompleted = true
 
@@ -190,6 +195,24 @@ final class WorkoutSession: Identifiable {
             pending.duration = completed.duration
         }
 
+        // completedAt is stamped only on archive. Active drafts stay
+        // out of History until the user explicitly saves the workout.
+
+        // Superset choreography: within a round the walk to the
+        // partner station replaces rest; the timer only runs between
+        // rounds (see Superset.swift).
+        if let step = supersetStep(after: exercise) {
+            switch step {
+            case .partner(let partner):
+                return .supersetPartner(partner)
+            case .roundComplete(let resume):
+                beginRest()
+                return .supersetRoundRest(resume: resume)
+            case .groupComplete:
+                return .exerciseComplete
+            }
+        }
+
         // Only start a rest interval if there are more sets to do on
         // THIS exercise. The view layer auto-advances the pager when
         // the exercise's last set lands — that transition (and the
@@ -198,14 +221,17 @@ final class WorkoutSession: Identifiable {
         // the next exercise's card is more disorienting than helpful.
         let exerciseNowDone = ordered.allSatisfy(\.isCompleted)
         if !exerciseNowDone {
-            let started = Date()
-            isResting = true
-            restStartedAt = started
-            restEndsAt = started.addingTimeInterval(restDuration)
+            beginRest()
+            return .rest
         }
+        return .exerciseComplete
+    }
 
-        // completedAt is stamped only on archive. Active drafts stay
-        // out of History until the user explicitly saves the workout.
+    private func beginRest() {
+        let started = Date()
+        isResting = true
+        restStartedAt = started
+        restEndsAt = started.addingTimeInterval(restDuration)
     }
 
     func updateActiveWeight(for exercise: Exercise, weight: Double) {

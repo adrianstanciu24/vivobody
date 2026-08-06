@@ -65,6 +65,11 @@ struct ExerciseDraft: Identifiable, Hashable {
     /// Planned hold length (seconds) for `.duration` exercises.
     var plannedDuration: TimeInterval
 
+    /// Superset membership carried through the value draft — adjacent
+    /// rows sharing an ID form one alternating group. The editor's
+    /// seam control writes it; Save copies it onto the TemplateExercise.
+    var supersetID: UUID?
+
     /// True when explicit per-set rows are the source of truth for
     /// this exercise. False = uniform.
     var isPerSet: Bool
@@ -90,6 +95,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         loadMode: ExerciseLoadMode = .external,
         bodyweightFraction: Double = 0,
         plannedDuration: TimeInterval = 0,
+        supersetID: UUID? = nil,
         isPerSet: Bool = false,
         sets: [SetDraft] = []
     ) {
@@ -108,6 +114,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.loadMode = loadMode
         self.bodyweightFraction = max(0, min(bodyweightFraction, 1))
         self.plannedDuration = plannedDuration
+        self.supersetID = supersetID
         self.isPerSet = isPerSet
         self.sets = sets
     }
@@ -182,6 +189,7 @@ extension ExerciseDraft {
                 loadMode: templateExercise.loadMode,
                 bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: templateExercise.plannedDuration,
+                supersetID: templateExercise.supersetID,
                 isPerSet: true,
                 sets: orderedTemplateSets.map {
                     SetDraft(weight: $0.weight, reps: $0.reps, duration: $0.duration)
@@ -203,6 +211,7 @@ extension ExerciseDraft {
                 loadMode: templateExercise.loadMode,
                 bodyweightFraction: templateExercise.bodyweightFraction,
                 plannedDuration: templateExercise.plannedDuration,
+                supersetID: templateExercise.supersetID,
                 isPerSet: false,
                 sets: []
             )
@@ -235,6 +244,7 @@ extension ExerciseDraft {
             plannedDuration: fallbackDuration,
             sortOrder: sortOrder
         )
+        exercise.supersetID = supersetID
 
         if isPerSet {
             for (index, set) in sets.enumerated() {

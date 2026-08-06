@@ -33,6 +33,12 @@ struct SwipePager<Content: View>: View {
     @State private var didEdgeHaptic: Bool = false
     @State private var isDragging: Bool = false
 
+    /// Compensation applied when `selection` is written externally
+    /// mid-drag (the superset auto-advance): the base shifts by one
+    /// stride so the content keeps tracking the finger instead of
+    /// teleporting, and the release projection stays honest.
+    @State private var dragBase: CGFloat = 0
+
     /// Axis-claim for the current drag.
     ///   nil   — drag just started, not enough movement to decide
     ///   true  — horizontally dominant; SwipePager owns the gesture
@@ -81,6 +87,17 @@ struct SwipePager<Content: View>: View {
             // dominant drags — vertical scrubs pass through cleanly.
             .simultaneousGesture(dragGesture(stride: stride))
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.82), value: selection)
+            // A programmatic page change while the user's finger is
+            // down would otherwise yank the content out from under the
+            // drag (offset is a function of `selection`). Re-baseline
+            // so the visual position is unchanged and the drag keeps
+            // tracking 1:1; the gesture's own settle logic then wins.
+            .onChange(of: selection) { oldValue, newValue in
+                guard isDragging else { return }
+                let shift = CGFloat(newValue - oldValue) * stride
+                dragBase += shift
+                dragOffset += shift
+            }
         }
     }
 
@@ -130,7 +147,7 @@ struct SwipePager<Content: View>: View {
                     isDragging = true
                     lastCrossedIndex = selection
                 }
-                let raw = tw
+                let raw = dragBase + tw
                 let damped = applyEdgeRubberBand(raw, stride: stride)
                 dragOffset = damped
 
@@ -164,11 +181,23 @@ struct SwipePager<Content: View>: View {
                 // nothing to settle. dragOffset was never touched.
                 guard wasHorizontal else { return }
 
-                let predicted = value.predictedEndTranslation.width
-                let projected = Double(selection) - Double(predicted) / Double(stride)
-                let target = max(0, min(count - 1, Int(projected.rounded())))
+                let translated = Double(dragBase) + Double(value.translation.width)
+                let predicted = Double(dragBase) + Double(value.predictedEndTranslation.width)
+                let actual = Double(selection) - translated / Double(stride)
+                let projected = Double(selection) - predicted / Double(stride)
+
+                // Native paging physics: a deliberate drag can travel
+                // any number of pages, but momentum carries at most
+                // one page past where the finger actually released.
+                // Unclamped, a brisk flick projects 2+ strides and
+                // skips the neighboring card entirely.
+                let anchor = Int(actual.rounded())
+                let momentumTarget = Int(projected.rounded())
+                let railed = max(anchor - 1, min(anchor + 1, momentumTarget))
+                let target = max(0, min(count - 1, railed))
 
                 let landed = target != selection
+                dragBase = 0
                 if reduceMotion {
                     selection = target
                     dragOffset = 0
@@ -223,15 +252,28 @@ struct PageDots: View {
     let count: Int
     @Binding var selection: Int
 
+    /// Index ranges whose pages form one superset group. Their dots
+    /// render inside a single outlined capsule so the linked pages
+    /// read as one station with segments, not separate exercises.
+    var linkedRuns: [ClosedRange<Int>] = []
+
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         HStack(spacing: Space.sm) {
-            ForEach(0..<count, id: \.self) { i in
-                Capsule()
-                    .fill(i == selection ? Ink.primary : Ink.quaternary)
-                    .frame(width: i == selection ? 22 : 6, height: 6)
-                    .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.78), value: selection)
+            ForEach(clusters, id: \.self) { cluster in
+                if cluster.count == 1 {
+                    dot(cluster[0])
+                } else {
+                    HStack(spacing: 4) {
+                        ForEach(cluster, id: \.self) { dot($0) }
+                    }
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 3)
+                    .overlay(
+                        Capsule().strokeBorder(Ink.quaternary, lineWidth: 1)
+                    )
+                }
             }
         }
         // The visible page indicator doubles as the semantic page control.
@@ -270,5 +312,30 @@ struct PageDots: View {
         }
         selection = next
         Haptics.soft()
+    }
+
+    /// Page indices grouped for rendering: linked runs collapse into
+    /// one multi-dot cluster, everything else stands alone.
+    private var clusters: [[Int]] {
+        var result: [[Int]] = []
+        var i = 0
+        while i < count {
+            if let run = linkedRuns.first(where: { $0.lowerBound == i }),
+               run.upperBound < count {
+                result.append(Array(run))
+                i = run.upperBound + 1
+            } else {
+                result.append([i])
+                i += 1
+            }
+        }
+        return result
+    }
+
+    private func dot(_ i: Int) -> some View {
+        Capsule()
+            .fill(i == selection ? Ink.primary : Ink.quaternary)
+            .frame(width: i == selection ? 22 : 6, height: 6)
+            .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.78), value: selection)
     }
 }

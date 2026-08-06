@@ -238,12 +238,70 @@ struct TemplateEditorScreen: View {
             } else {
                 VStack(spacing: 0) {
                     ForEach(Array(draft.exercises.enumerated()), id: \.element.id) { idx, exercise in
-                        if idx > 0 { SectionDivider() }
+                        if idx > 0 { seamControl(before: idx) }
                         exerciseRow(exercise)
                     }
                 }
             }
         }
+    }
+
+    // MARK: - Superset seam
+
+    /// The tappable gap between two adjacent exercises — where the
+    /// superset relationship lives. Unlinked it reads as the section
+    /// divider carrying a quiet chain glyph; linked it becomes a volt
+    /// bracket labelled SUPERSET. One tap links, one tap reverses.
+    private func seamControl(before index: Int) -> some View {
+        let seam = index - 1
+        let ids = draft.exercises.map(\.supersetID)
+        let linked = SupersetGrouping.isSeamLinked(at: seam, inIDs: ids)
+        let letter = SupersetGrouping.groupLetter(at: seam, inIDs: ids)
+        return Button {
+            toggleSeam(at: seam)
+        } label: {
+            HStack(spacing: Space.sm) {
+                seamLine(linked: linked)
+                Image(systemName: "link")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(linked ? Tint.inProgress : Ink.quaternary)
+                if linked, let letter {
+                    // The group letter makes boundaries legible: two
+                    // seams reading "Superset A" are one group; "A" then
+                    // "B" means two separate supersets.
+                    Text("Superset \(letter)")
+                        .panelLegendType()
+                        .foregroundStyle(Tint.inProgress)
+                }
+                seamLine(linked: linked)
+            }
+            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(
+            linked
+                ? "Unlink superset \(letter ?? "") between \(draft.exercises[seam].name) and \(draft.exercises[index].name)"
+                : "Link \(draft.exercises[seam].name) and \(draft.exercises[index].name) as a superset"
+        )
+    }
+
+    private func seamLine(linked: Bool) -> some View {
+        Rectangle()
+            .fill(linked ? Tint.inProgress.opacity(0.35) : Surface.edge)
+            .frame(height: 1)
+            .frame(maxWidth: .infinity)
+    }
+
+    private func toggleSeam(at seam: Int) {
+        let ids = draft.exercises.map(\.supersetID)
+        let updated = SupersetGrouping.isSeamLinked(at: seam, inIDs: ids)
+            ? SupersetGrouping.unlinkingSeam(at: seam, inIDs: ids)
+            : SupersetGrouping.linkingSeam(at: seam, inIDs: ids)
+        for (i, id) in updated.enumerated() {
+            draft.exercises[i].supersetID = id
+        }
+        Haptics.soft()
     }
 
     private var emptyPrompt: some View {
@@ -269,11 +327,20 @@ struct TemplateEditorScreen: View {
         } label: {
             HStack(spacing: Space.md) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(exercise.name)
-                        .font(Typography.title)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                    HStack(spacing: Space.sm) {
+                        if let tag = supersetTag(for: exercise) {
+                            Text(tag)
+                                .font(Typography.caption)
+                                .monospacedDigit()
+                                .foregroundStyle(Tint.inProgress)
+                                .accessibilityLabel("Superset position \(tag)")
+                        }
+                        Text(exercise.name)
+                            .font(Typography.title)
+                            .foregroundStyle(Ink.primary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
                     Text(exercise.summary(unit: unit))
                         .font(Typography.metricUnit)
                         .foregroundStyle(Ink.tertiary)
@@ -349,6 +416,10 @@ struct TemplateEditorScreen: View {
         }
 
         if let idx = draft.exercises.firstIndex(where: { $0.id == classified.id }) {
+            // The superset link belongs to the row's position in the
+            // list, not to the configure sheet — carry it across the
+            // round-trip.
+            classified.supersetID = draft.exercises[idx].supersetID
             draft.exercises[idx] = classified
         } else {
             draft.exercises.append(classified)
@@ -364,7 +435,21 @@ struct TemplateEditorScreen: View {
                 draft.exercises.removeAll { $0.id == id }
             }
         }
+        // A group whose member was removed may be down to one exercise
+        // — dissolve it back to straight sets.
+        let normalized = SupersetGrouping.normalizing(draft.exercises.map(\.supersetID))
+        for (i, groupID) in normalized.enumerated() {
+            draft.exercises[i].supersetID = groupID
+        }
         Haptics.soft()
+    }
+
+    /// "A1"-style tag for a draft row, derived from the current list.
+    private func supersetTag(for exercise: ExerciseDraft) -> String? {
+        guard let index = draft.exercises.firstIndex(where: { $0.id == exercise.id }) else {
+            return nil
+        }
+        return SupersetGrouping.tag(at: index, inIDs: draft.exercises.map(\.supersetID))
     }
 
     // MARK: - Save
