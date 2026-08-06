@@ -1,6 +1,9 @@
 # Build artifacts
 build/
 DerivedData/
+website/node_modules/
+website/dist/
+website/.astro/
 
 # Verification artifacts (Scripts/verify.sh output)
 .verify/

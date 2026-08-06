@@ -1,0 +1,24 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  className?: string;
+  eager?: boolean;
+}
+
+const { src, alt, className = "", eager = false } = Astro.props;
+---
+
+<figure class:list={["phone-frame", className]}>
+  <div class="phone-shell">
+    <img
+      src={src}
+      alt={alt}
+      width="1206"
+      height="2622"
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : "auto"}
+      decoding="async"
+    />
+  </div>
+</figure>

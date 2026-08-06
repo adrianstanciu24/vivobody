@@ -1,0 +1,136 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Privacy Policy — Vivobody";
+const description =
+  "Vivobody stores your training data on your device and collects no personal data.";
+---
+
+<BaseLayout title={title} description={description} currentPath="/privacy/" bodyClass="legal-page">
+  <article class="legal-article page-width">
+    <header class="legal-hero">
+      <p class="eyebrow"><span></span> Privacy, plainly</p>
+      <h1>Your training stays<br /><em>on your iPhone.</em></h1>
+      <p class="legal-meta">Vivobody privacy policy · Effective July 27, 2026</p>
+    </header>
+
+    <section class="legal-summary" aria-label="Privacy summary">
+      <p>
+        <strong>The short version:</strong> Vivobody stores everything on your
+        device. There are no accounts, no servers, no analytics, no ads, and no
+        tracking. Your data never leaves your iPhone unless you explicitly save
+        workouts to Apple Health.
+      </p>
+      <ul>
+        <li><strong>0</strong><span>accounts</span></li>
+        <li><strong>0</strong><span>trackers</span></li>
+        <li><strong>0</strong><span>data collected</span></li>
+      </ul>
+    </section>
+
+    <div class="legal-content">
+      <section>
+        <h2>Data we collect</h2>
+        <p>
+          None. Vivobody has no backend and collects no data. We cannot see your
+          workouts, your body weight, or anything else you enter in the app.
+        </p>
+      </section>
+
+      <section>
+        <h2>Where your data lives</h2>
+        <p>
+          Workouts, templates, exercise catalog edits, body weight entries, and
+          settings are stored locally on your device in the app’s private
+          database. Widget data is a small local snapshot shared between the app
+          and its widgets through Apple’s App Group container, also entirely on
+          your device. If you use iCloud device backups, your Vivobody data is
+          included in your own encrypted backup, which we have no access to.
+        </p>
+      </section>
+
+      <section>
+        <h2>Apple Health</h2>
+        <p>
+          Saving workouts to Apple Health is optional and off by default. If you
+          turn it on, Vivobody asks for <em>write-only</em> permission and saves
+          each finished workout to the Health app. Vivobody never reads any data
+          from Apple Health, and your health data is never transmitted anywhere
+          by Vivobody. You can revoke access at any time in Settings &gt; Privacy
+          &amp; Security &gt; Health, and manage or delete saved workouts in the
+          Health app.
+        </p>
+      </section>
+
+      <section>
+        <h2>Purchases</h2>
+        <p>
+          Vivobody Pro is a one-time purchase processed entirely by Apple
+          through the App Store. We never see your payment details. Purchase
+          verification happens on your device using Apple’s StoreKit; no
+          purchase information is sent to us.
+        </p>
+      </section>
+
+      <section>
+        <h2>Notifications</h2>
+        <p>
+          Rest timer alerts use local notifications scheduled on your device. No
+          push notification service is used.
+        </p>
+      </section>
+
+      <section>
+        <h2>Siri, Spotlight, and widgets</h2>
+        <p>
+          Shortcuts, Spotlight search entries, and widget content are generated
+          and stored on your device by Apple’s system frameworks. They are not
+          shared with us or any third party.
+        </p>
+      </section>
+
+      <section>
+        <h2>Third parties</h2>
+        <p>
+          Vivobody contains no third-party SDKs, no analytics frameworks, and no
+          advertising. The only parties involved are you and Apple’s operating
+          system.
+        </p>
+      </section>
+
+      <section>
+        <h2>Deleting your data</h2>
+        <p>
+          Deleting the app deletes all Vivobody data from your device. Workouts
+          previously saved to Apple Health remain in the Health app until you
+          remove them there.
+        </p>
+      </section>
+
+      <section>
+        <h2>Children</h2>
+        <p>
+          Vivobody is not directed at children under 13 and collects no data from
+          anyone, including children.
+        </p>
+      </section>
+
+      <section>
+        <h2>Changes to this policy</h2>
+        <p>
+          If this policy changes, the updated version will be posted at this
+          address with a new effective date. Since the app collects no data,
+          changes are expected to be rare.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>
+          Questions about privacy? Email
+          {" "}<a href="mailto:vivobodyapp@gmail.com">vivobodyapp@gmail.com</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>

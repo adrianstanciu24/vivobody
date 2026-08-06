@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Support — Vivobody";
+const description =
+  "Get direct help with Vivobody, restore your purchase, or learn how your workout data is stored.";
+---
+
+<BaseLayout title={title} description={description} currentPath="/support/" bodyClass="support-page">
+  <article class="support-article page-width">
+    <header class="support-hero">
+      <div>
+        <p class="eyebrow"><span></span> Direct from the developer</p>
+        <h1>How can I help?</h1>
+        <p>
+          Found a bug, have a question, or want to suggest something? You will
+          hear back from the person building Vivobody.
+        </p>
+      </div>
+
+      <a class="support-contact-card" href="mailto:vivobodyapp@gmail.com">
+        <span>Email support</span>
+        <strong>vivobodyapp@gmail.com</strong>
+        <small>Open your email app <span aria-hidden="true">↗</span></small>
+      </a>
+    </header>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="faq-heading">
+        <p class="section-kicker">Frequently asked</p>
+        <h2 id="faq-title">The useful answers.</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>How do I restore my Vivobody Pro purchase?</summary>
+          <p>
+            Open Settings in the app, tap Unlock Vivobody Pro, then tap Restore
+            Purchases. Make sure you’re signed in with the same Apple Account
+            that made the original purchase.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I save workouts to Apple Health?</summary>
+          <p>
+            Apple Health saving is part of Vivobody Pro. Turn it on in Settings
+            &gt; Apple Health, then grant write permission when iOS asks. Finished
+            workouts appear in the Health app automatically. Vivobody never
+            reads your Health data.
+          </p>
+        </details>
+
+        <details>
+          <summary>Where is my data stored?</summary>
+          <p>
+            Everything stays on your device. There are no accounts and no
+            Vivobody servers. See the <a href="/privacy/">privacy policy</a> for
+            the full details.
+          </p>
+        </details>
+
+        <details>
+          <summary>I deleted the app. Can I get my workouts back?</summary>
+          <p>
+            If you restore your iPhone from a backup made while the app was
+            installed, your data comes back with it. Otherwise deleted data
+            cannot be recovered, since it only ever existed on your device.
+          </p>
+        </details>
+
+        <details>
+          <summary>Does Vivobody require a subscription?</summary>
+          <p>
+            No. Vivobody is free to start. Vivobody Pro is a single lifetime
+            purchase with no recurring subscription.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="support-footnote">
+      <p>Still need a hand?</p>
+      <a class="button button-primary" href="mailto:vivobodyapp@gmail.com">Email Vivobody Support</a>
+    </section>
+  </article>
+</BaseLayout>
