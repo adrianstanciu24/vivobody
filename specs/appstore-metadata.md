@@ -136,8 +136,7 @@ reviewed together.
 5. Fill App Information, Pricing (Free), App Privacy (Data Not
    Collected), Age Rating.
 6. Verify `https://vivobody.app/`, `/privacy/`, and `/support/` all
-   resolve before submitting. Keep the `docs/` redirects in place so
-   links from older test builds continue to work.
+   resolve before submitting.
 7. Upload the build: Xcode > Product > Archive > Distribute App >
    App Store Connect (or `xcodebuild -exportArchive`).
 8. Add screenshots (6.9" required; candidates in .verify/ or shoot via
