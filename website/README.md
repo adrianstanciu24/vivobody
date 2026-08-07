@@ -47,10 +47,8 @@ Connect the existing `vivobody` GitHub repository with these settings:
 Set the build watch include path to `website/*` so iOS-only commits do not
 trigger website deployments.
 
-After the permanent Pages or custom-domain URL is known, add a build variable
-named `PUBLIC_SITE_URL` containing the origin without a trailing slash, for
-example `https://vivobody.example`. This makes canonical and social-preview
-URLs absolute.
+The production site URL is configured in `astro.config.mjs`. Astro uses it to
+generate absolute canonical and social-preview URLs for every page.
 
 The current App Store call to action deliberately says “Soon” until a live
 product-page URL exists.
