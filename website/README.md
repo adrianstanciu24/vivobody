@@ -1,7 +1,8 @@
 # Vivobody website
 
 Static Astro marketing site for Vivobody. It has no backend, analytics,
-cookies, or runtime JavaScript.
+or cookies. A small inline script keeps the landing video's four chapters in
+sync with the surrounding typography and chapter controls.
 
 ## Local development
 
@@ -15,6 +16,22 @@ Create the production output with:
 ```bash
 npm run build
 ```
+
+## Refreshing the simulator demo
+
+The landing video is generated from deterministic app fixtures rather than
+edited by hand. With an iPhone 17 Pro simulator booted, install a current debug
+build and run the recorder from the repository root:
+
+```bash
+Scripts/verify.sh
+Scripts/record-landing-demo.sh
+```
+
+The recorder uses Baguette for gestures and FFmpeg/FFprobe from Homebrew. It
+captures the Start, Log, Rest, and See beats, then writes the optimized H.264
+loop and poster to `website/public/video/`. Raw captures stay under the ignored
+`.verify/landing-video/` directory.
 
 ## Cloudflare Pages
 

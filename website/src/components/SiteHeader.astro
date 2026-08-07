@@ -2,7 +2,7 @@
 const { currentPath = "/" } = Astro.props;
 
 const links = [
-  { href: "/#features", label: "Features", match: "/" },
+  { href: "/", label: "Home", match: "/" },
   { href: "/privacy/", label: "Privacy", match: "/privacy/" },
   { href: "/support/", label: "Support", match: "/support/" },
 ];
@@ -28,9 +28,18 @@ const links = [
       }
     </nav>
 
-    <a class="header-cta" href="/#download">
-      <span>App Store</span>
-      <span class="header-cta-status">Soon</span>
-    </a>
+    {
+      currentPath === "/" ? (
+        <span class="header-cta header-cta-static" aria-label="App Store, coming soon">
+          <span>App Store</span>
+          <span class="header-cta-status">Soon</span>
+        </span>
+      ) : (
+        <a class="header-cta" href="/">
+          <span>App Store</span>
+          <span class="header-cta-status">Soon</span>
+        </a>
+      )
+    }
   </div>
 </header>

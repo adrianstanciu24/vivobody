@@ -2,231 +2,242 @@
 import PhoneFrame from "../components/PhoneFrame.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const title = "Vivobody — Focused workout tracking";
+const title = "Vivobody — Your workout. Nothing else.";
 const description =
-  "A focused iPhone workout tracker with one-thumb logging, a first-class rest timer, meaningful training insights, and no accounts or tracking.";
+  "Focused iPhone workout tracking for starting, logging, resting, and understanding your training—all on-device.";
+
+const moments = [
+  {
+    key: "start",
+    label: "Start",
+    word: "START",
+    description: "See what is ready and begin without hunting through menus.",
+  },
+  {
+    key: "log",
+    label: "Log",
+    word: "LOG",
+    description: "Adjust weight and reps, then finish a set with one tap.",
+  },
+  {
+    key: "rest",
+    label: "Rest",
+    word: "REST",
+    description: "Let the next set come to you while the timer takes over.",
+  },
+  {
+    key: "see",
+    label: "See",
+    word: "SEE",
+    description: "Read the shape, balance, and meaning of your training.",
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} currentPath="/">
-  <section class="hero page-width" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="eyebrow"><span></span> Focused workout tracking</p>
-      <h1 id="hero-title">Your workout.<br /><em>One tap ahead.</em></h1>
-      <p class="hero-lede">
-        Huge readable numbers, one-thumb logging, and a rest timer that is
-        always exactly where you need it.
-      </p>
+<BaseLayout
+  title={title}
+  description={description}
+  currentPath="/"
+  bodyClass="home-minimal"
+>
+  <section
+    class="landing-story"
+    data-story-root
+    data-phase="start"
+    aria-labelledby="landing-title"
+  >
+    <h1 id="landing-title" class="visually-hidden">
+      Focused workout tracking for iPhone
+    </h1>
 
-      <div class="hero-actions">
-        <a class="button button-primary" href="#features">See Vivobody</a>
-        <a class="text-link" href="/privacy/">
-          Privacy by design <span aria-hidden="true">↗</span>
-        </a>
-      </div>
+    <div class="story-aura" aria-hidden="true"></div>
 
-      <ul class="quiet-proof" aria-label="Vivobody privacy highlights">
-        <li>No account</li>
-        <li>No cloud</li>
-        <li>No ads</li>
-      </ul>
+    <div class="story-words" aria-hidden="true">
+      {
+        moments.map((moment, index) => (
+          <span
+            class:list={["story-word", { "is-active": index === 0 }]}
+            data-story-word={index}
+          >
+            {moment.word}
+          </span>
+        ))
+      }
     </div>
 
-    <div class="product-stage" aria-label="Vivobody running on iPhone">
-      <div class="stage-glow" aria-hidden="true"></div>
-      <PhoneFrame
-        src="/screens/body-status.jpg"
-        alt="Vivobody Today screen showing a 3D body with recently trained muscles highlighted"
-        className="hero-phone-back"
-        eager={true}
-      />
-      <PhoneFrame
-        src="/screens/active-workout.jpg"
-        alt="Vivobody active workout screen showing a 135 pound bench press set"
-        className="hero-phone-front"
-        eager={true}
-      />
+    <div class="story-visual" aria-hidden="true">
+      <PhoneFrame className="story-phone" eager={true}>
+        <div slot="screen" class="story-media">
+          <video
+            class="story-video"
+            data-story-video
+            poster="/video/vivobody-demo-poster.jpg"
+            autoplay
+            muted
+            playsinline
+            loop
+            preload="auto"
+            disablepictureinpicture
+          >
+            <source src="/video/vivobody-demo.mp4" type="video/mp4" />
+            <img
+              class="story-fallback"
+              src="/screens/body-status.jpg"
+              alt=""
+              width="1206"
+              height="2622"
+            />
+          </video>
+        </div>
+      </PhoneFrame>
+    </div>
 
-      <div class="floating-readout floating-readout-top" aria-hidden="true">
-        <span>Set 2 of 3</span>
-        <strong>135 <small>lb</small></strong>
+    <div class="story-interface" id="app-store">
+      <p class="story-positioning">Your workout. <em>Nothing else.</em></p>
+
+      <div class="story-controls" role="group" aria-label="Preview Vivobody moments">
+        {
+          moments.map((moment, index) => (
+            <button
+              class:list={["story-control", { "is-active": index === 0 }]}
+              type="button"
+              data-story-control={index}
+              aria-pressed={index === 0 ? "true" : "false"}
+              aria-label={`${moment.label}: ${moment.description}`}
+            >
+              <span>{moment.label}</span>
+            </button>
+          ))
+        }
       </div>
-      <div class="floating-readout floating-readout-bottom" aria-hidden="true">
-        <span class="status-dot"></span>
-        Every change saved
+
+      <div class="story-meta">
+        <p>No account <span aria-hidden="true">·</span> On-device</p>
+        <nav aria-label="Information">
+          <a href="/privacy/">Privacy</a>
+          <a href="/support/">Support</a>
+        </nav>
       </div>
     </div>
-  </section>
 
-  <section class="privacy-strip" aria-label="Product principles">
-    <div class="page-width privacy-strip-inner">
-      <div>
-        <strong>0</strong>
-        <span>accounts</span>
-      </div>
-      <div>
-        <strong>0</strong>
-        <span>trackers</span>
-      </div>
-      <div>
-        <strong>0</strong>
-        <span>subscriptions</span>
-      </div>
-      <p>Your training data stays on your iPhone.</p>
-    </div>
-  </section>
-
-  <section class="section-intro page-width" id="features">
-    <p class="section-kicker">The workout, in three moments</p>
-    <h2>The app gets out of the way.</h2>
-    <p>
-      Vivobody is shaped around what you need during a real session—not around
-      forms, feeds, or another dashboard asking for attention.
+    <p class="visually-hidden" aria-live="polite" data-story-announcer>
+      {moments[0].label}. {moments[0].description}
     </p>
   </section>
 
-  <section class="product-chapter page-width" id="during" aria-labelledby="during-title">
-    <div class="chapter-visual instrument-stage">
-      <div class="instrument-glow" aria-hidden="true"></div>
-      <PhoneFrame
-        src="/screens/active-workout.jpg"
-        alt="Active workout screen with large weight and rep controls"
-        className="chapter-phone"
-      />
-      <div class="metric-echo" aria-hidden="true">
-        <span>Weight</span>
-        <strong>135</strong>
-        <small>lb</small>
-      </div>
-    </div>
+  <script>
+    const storyRoot = document.querySelector("[data-story-root]");
 
-    <div class="chapter-copy">
-      <p class="chapter-number">01 / During the set</p>
-      <h2 id="during-title">Log without stopping.</h2>
-      <p>
-        Complete a set with one decisive tap. Drag to adjust weight or reps.
-        Everything is large enough to read at arm’s length, even when you are
-        breathing hard.
-      </p>
-      <ul class="feature-list">
-        <li><span>01</span> Huge, stable numerals</li>
-        <li><span>02</span> Gesture-first adjustments</li>
-        <li><span>03</span> Saved after every interaction</li>
-      </ul>
-    </div>
-  </section>
+    if (storyRoot) {
+      const video = storyRoot.querySelector("[data-story-video]");
+      const words = Array.from(storyRoot.querySelectorAll("[data-story-word]"));
+      const controls = Array.from(storyRoot.querySelectorAll("[data-story-control]"));
+      const announcer = storyRoot.querySelector("[data-story-announcer]");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const storyMoments = [
+        ["start", "Start. See what is ready and begin without hunting through menus."],
+        ["log", "Log. Adjust weight and reps, then finish a set with one tap."],
+        ["rest", "Rest. Let the next set come to you while the timer takes over."],
+        ["see", "See. Read the shape, balance, and meaning of your training."],
+      ];
+      const chapterDuration = 4.2;
+      let currentMoment = -1;
+      let animationFrame = 0;
 
-  <section class="product-chapter product-chapter-reversed page-width" aria-labelledby="rest-title">
-    <div class="chapter-copy">
-      <p class="chapter-number">02 / Between sets</p>
-      <h2 id="rest-title">Rest is part of the workout.</h2>
-      <p>
-        The timer takes over when it should and tells you what comes next.
-        Extend or skip with a gesture, then follow the countdown from your Lock
-        Screen or Dynamic Island.
-      </p>
-      <ul class="feature-list">
-        <li><span>01</span> Calm, full-screen countdown</li>
-        <li><span>02</span> Next set always visible</li>
-        <li><span>03</span> Live Activity outside the app</li>
-      </ul>
-    </div>
+      const showMoment = (index, announce = false) => {
+        if (index === currentMoment && !announce) return;
+        currentMoment = index;
+        storyRoot.dataset.phase = storyMoments[index][0];
 
-    <div class="chapter-visual rest-stage">
-      <div class="rest-rings" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
-      <PhoneFrame
-        src="/screens/rest-timer.jpg"
-        alt="Vivobody rest timer showing 59 seconds and the next exercise"
-        className="chapter-phone"
-      />
-      <div class="timer-echo" aria-hidden="true">
-        <span>Rest</span>
-        <strong>0:59</strong>
-        <small>Next · Bench Press</small>
-      </div>
-    </div>
-  </section>
+        words.forEach((word, wordIndex) => {
+          word.classList.toggle("is-active", wordIndex === index);
+        });
+        controls.forEach((control, controlIndex) => {
+          control.classList.remove("is-active");
+          control.setAttribute("aria-pressed", controlIndex === index ? "true" : "false");
+        });
 
-  <section class="product-chapter page-width" aria-labelledby="after-title">
-    <div class="chapter-visual insight-stage">
-      <PhoneFrame
-        src="/screens/body-status.jpg"
-        alt="Today screen with a 3D body highlighting trained muscle groups"
-        className="insight-phone-back"
-      />
-      <PhoneFrame
-        src="/screens/training-insights.jpg"
-        alt="Insights screen visualizing the shape and balance of recent training"
-        className="insight-phone-front"
-      />
-    </div>
+        void storyRoot.offsetWidth;
+        controls[index].classList.add("is-active");
 
-    <div class="chapter-copy">
-      <p class="chapter-number">03 / After the workout</p>
-      <h2 id="after-title">See what your training means.</h2>
-      <p>
-        Your body, training load, consistency, intensity, and balance become
-        useful signals—not judgment. Vivobody reads the work back clearly, then
-        lets you decide what comes next.
-      </p>
-      <ul class="feature-list">
-        <li><span>01</span> Rotatable 3D muscle model</li>
-        <li><span>02</span> Personal load and readiness</li>
-        <li><span>03</span> Honest progress, without streak-shaming</li>
-      </ul>
-    </div>
-  </section>
+        if (announce && announcer) {
+          announcer.textContent = storyMoments[index][1];
+        }
+      };
 
-  <section class="native-section page-width" aria-labelledby="native-title">
-    <div class="native-heading">
-      <p class="section-kicker">At home on iPhone</p>
-      <h2 id="native-title">Native all the way down.</h2>
-      <p>
-        No account layer between you and the workout. Vivobody uses the parts
-        of iOS that help you train and leaves the rest alone.
-      </p>
-    </div>
+      const syncStory = () => {
+        if (!(video instanceof HTMLVideoElement)) return;
 
-    <ul class="native-grid">
-      <li><strong>Live Activity</strong><span>Rest from the Lock Screen</span></li>
-      <li><strong>Dynamic Island</strong><span>Your timer at a glance</span></li>
-      <li><strong>Widgets</strong><span>Next workout and consistency</span></li>
-      <li><strong>Siri & Spotlight</strong><span>Start without hunting</span></li>
-      <li><strong>Apple Health</strong><span>Optional, write-only saving</span></li>
-      <li><strong>Control Center</strong><span>One control away</span></li>
-    </ul>
-  </section>
+        const time = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+        const index = Math.min(
+          storyMoments.length - 1,
+          Math.floor(time / chapterDuration),
+        );
+        const progress = (time - index * chapterDuration) / chapterDuration;
 
-  <section class="privacy-manifesto page-width" aria-labelledby="privacy-title">
-    <div class="privacy-mark" aria-hidden="true">
-      <img src="/logo-mark.svg" alt="" width="160" height="152" loading="lazy" />
-    </div>
-    <div class="privacy-copy">
-      <p class="section-kicker">Private by construction</p>
-      <h2 id="privacy-title">Your workout is not our data.</h2>
-      <p>
-        Workouts, body weight, templates, and insights live in the app’s private
-        database on your iPhone. Vivobody has no backend, no analytics SDK, no
-        advertising, and nothing to sell about you.
-      </p>
-      <a class="text-link" href="/privacy/">
-        Read the plain-language privacy policy <span aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+        showMoment(index);
+        storyRoot.style.setProperty(
+          "--story-progress",
+          String(Math.min(1, Math.max(0, progress))),
+        );
+      };
 
-  <section class="download-section" id="download" aria-labelledby="download-title">
-    <div class="download-glow" aria-hidden="true"></div>
-    <div class="page-width download-inner">
-      <img src="/logo-mark.svg" alt="" width="74" height="70" loading="lazy" />
-      <p class="section-kicker">Coming to the App Store</p>
-      <h2 id="download-title">Put the work first.</h2>
-      <p>
-        Vivobody is being prepared for iPhone. Free to start, with one lifetime
-        Pro unlock. Never a subscription.
-      </p>
-      <span class="button button-primary button-static">App Store · Soon</span>
-    </div>
-  </section>
+      const animateStory = () => {
+        if (!(video instanceof HTMLVideoElement)) return;
+
+        if (!video.paused && !document.hidden) {
+          syncStory();
+          animationFrame = window.requestAnimationFrame(animateStory);
+        }
+      };
+
+      const stopStorySync = () => {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      };
+
+      const startStorySync = () => {
+        stopStorySync();
+        syncStory();
+        animateStory();
+      };
+
+      const applyMotionPreference = () => {
+        if (!(video instanceof HTMLVideoElement)) return;
+
+        stopStorySync();
+        if (reduceMotion.matches || document.hidden) {
+          video.pause();
+          syncStory();
+          return;
+        }
+
+        video.play().catch(syncStory);
+      };
+
+      controls.forEach((control, index) => {
+        control.addEventListener("click", () => {
+          if (video instanceof HTMLVideoElement) {
+            video.currentTime = index * chapterDuration + 0.02;
+          }
+          showMoment(index, true);
+          storyRoot.style.setProperty("--story-progress", "0");
+          applyMotionPreference();
+        });
+      });
+
+      if (video instanceof HTMLVideoElement) {
+        video.addEventListener("loadedmetadata", syncStory);
+        video.addEventListener("play", startStorySync);
+        video.addEventListener("pause", stopStorySync);
+        video.addEventListener("seeked", syncStory);
+        video.addEventListener("timeupdate", syncStory);
+      }
+
+      document.addEventListener("visibilitychange", applyMotionPreference);
+      reduceMotion.addEventListener("change", applyMotionPreference);
+      showMoment(0);
+      applyMotionPreference();
+    }
+  </script>
 </BaseLayout>
