@@ -40,10 +40,10 @@ extension ExerciseDetailScreen {
 
     /// The staged anatomy model, promoted from the old mid-screen
     /// "Exercise anatomy" section into the hero so the screen opens
-    /// with a visual instead of a wall of type. Same temporary
-    /// role-based map as before (primary 1 / secondary 0.5 /
-    /// stabilizer 0.2), framed as a card with its legend printed
-    /// underneath. Hidden for custom exercises the map doesn't know.
+    /// with a visual instead of a wall of type. All authored anatomy
+    /// roles are visible (primary 1 / secondary 0.5 / stabilizer 0.2),
+    /// while hard-set development remains a separate calculation.
+    /// Hidden for custom exercises the map doesn't know.
     @ViewBuilder
     var heroFigureSection: some View {
         let involvement = item.muscleInvolvement
@@ -56,7 +56,7 @@ extension ExerciseDetailScreen {
                 )
                 .frame(height: 240)
                 .accessibilityElement()
-                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint.")
+                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint. Stabilizer color shows involvement, not development credit.")
 
                 VStack(alignment: .leading, spacing: Space.sm) {
                     anatomyRoleRow(role: .primary, muscles: involvement.primary)
@@ -77,7 +77,7 @@ extension ExerciseDetailScreen {
     func anatomyRoleRow(role: MuscleRole, muscles: [Muscle]) -> some View {
         if !muscles.isEmpty {
             let rgb = MuscleColor.rgb(
-                for: MuscleMapChannels(intensity: role.visualIntensity),
+                for: role.anatomyMapChannels,
                 theme: colorScheme == .dark ? .dark : .light
             )
             HStack(alignment: .firstTextBaseline, spacing: Space.md) {

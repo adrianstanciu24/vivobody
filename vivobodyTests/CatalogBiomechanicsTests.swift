@@ -417,14 +417,18 @@ struct CatalogBiomechanicsTests {
         }
     }
 
-    @Test func gluteMaxAndGluteMedStayAnatomicallySeparate() throws {
+    @Test func gluteMaxGluteMedAndTFLStayAnatomicallySeparate() throws {
         let hipThrust = try #require(CatalogData.record(forExerciseNamed: "Barbell Hip Thrust"))
         #expect(hipThrust.muscleInvolvement.role(for: .gluteMax) == .primary)
         #expect(hipThrust.muscleInvolvement.role(for: .gluteMed) == nil)
 
         let hipAbduction = try #require(CatalogData.record(forExerciseNamed: "Machine Hip Abduction"))
         #expect(hipAbduction.muscleInvolvement.role(for: .gluteMed) == .primary)
+        #expect(hipAbduction.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
         #expect(hipAbduction.muscleInvolvement.role(for: .gluteMax) == nil)
+        #expect(hipAbduction.muscleInvolvement.role(for: .abs) == nil)
+        #expect(hipAbduction.muscleInvolvement.role(for: .obliques) == nil)
+        #expect(hipAbduction.muscleInvolvement.role(for: .hipFlexors) == nil)
 
         let clamshell = try #require(CatalogData.record(forExerciseNamed: "Clamshell"))
         #expect(clamshell.muscleInvolvement.role(for: .gluteMed) == .primary)

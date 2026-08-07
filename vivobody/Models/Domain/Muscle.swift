@@ -5,15 +5,22 @@
 //  The trainable-muscle taxonomy bridging exercise programming,
 //  muscle-volume analytics, and the individually named anatomical
 //  meshes in BodyModel.scn. It also defines categorical exercise roles
-//  so visual emphasis and hard-set credit remain separate concepts.
+//  so snapshot encoding, anatomy emphasis, and hard-set credit remain
+//  separate concepts.
 //
 //    1. `Muscle.nodeNames` — which model meshes each region paints.
 //    2. `MuscleRole` / `Muscle.Involvement` — primary, secondary, and
-//       stabilizer roles, each with independent visual and volume values.
+//       stabilizer roles, with separate snapshot, anatomy, and volume
+//       projections.
 //    3. `Muscle.involvement(forExerciseNamed:)` — a bundled-catalog
 //       lookup used when constructing a snapshot directly by canonical
 //       name. Catalog picks persist the authored roles; custom exercises
 //       must author their own rather than inheriting a browse-group guess.
+//    4. `Muscle.resolvedInvolvement(...)` — compatibility for persisted
+//       bundled snapshots from older taxonomies. Valid pick-time roles
+//       remain immutable except for exact, known catalog-role upgrades;
+//       undecodable legacy keys/weights also recover from the
+//       current canonical catalog.
 //
 //  The model node names are exact strings baked into BodyModel.scn,
 //  including its spelling quirks (`Adductor_Mangus`, `Biceps_femoris`).
@@ -54,6 +61,7 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
     case hamstrings
     case gluteMax
     case gluteMed
+    case tensorFasciaeLatae
     case calves
     case adductors
     case hipFlexors
@@ -80,6 +88,7 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .hamstrings: return "Hamstrings"
         case .gluteMax:   return "Glute Max"
         case .gluteMed:   return "Glute Med"
+        case .tensorFasciaeLatae: return "TFL"
         case .calves:     return "Calves"
         case .adductors:  return "Adductors"
         case .hipFlexors: return "Hip Flexors"
@@ -99,7 +108,8 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .deltoids, .externalRotators, .subscapularis: return .shoulders
         case .biceps, .triceps, .forearms:                return .arms
         case .abs, .obliques:                             return .core
-        case .quads, .hamstrings, .gluteMax, .gluteMed, .calves,
+        case .quads, .hamstrings, .gluteMax, .gluteMed,
+             .tensorFasciaeLatae, .calves,
              .adductors, .hipFlexors, .shins:             return .legs
         }
     }
@@ -116,7 +126,7 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .lats:
             return ["Latissimus_Dorsi"]
         case .traps:
-            return ["Trapezius"]
+            return ["Trapezius", "Levator_Scapulaes"]
         case .rhomboids:
             return ["Rhomboideus_Major", "Rhomboideus_Minor"]
         case .externalRotators:
@@ -156,14 +166,20 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
             return ["Gluteus_Maximus"]
         case .gluteMed:
             return ["Gluteus_Medius"]
+        case .tensorFasciaeLatae:
+            return ["Tensor_Fascia_Latae"]
         case .calves:
-            return ["Gastrocnemius", "Soleus"]
+            return ["Gastrocnemius", "Soleus", "Flexor_Hallucis_Longus"]
         case .adductors:
             return ["Adductor_Brevis", "Adductor_Longus", "Adductor_Mangus", "Gracilis", "Pectineus"]
         case .hipFlexors:
-            return ["Psoas_Major", "Iliacus", "Tensor_Fascia_Latae", "Sartorius"]
+            return ["Psoas_Major", "Iliacus", "Sartorius"]
         case .shins:
-            return ["Tibialis_Anterior", "Peroneus_Longus", "Peroneus_Brevis", "Peroneus_Tertius"]
+            return [
+                "Tibialis_Anterior",
+                "Peroneus_Longus", "Peroneus_Brevis", "Peroneus_Tertius",
+                "Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"
+            ]
         }
     }
 
@@ -182,8 +198,8 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
 // MARK: - Muscle role
 
 /// A muscle's categorical contribution to an exercise. Role is the
-/// authored fact; visual intensity and hard-set volume credit are two
-/// deliberately independent projections of that role.
+/// authored fact; its anatomy emphasis and hard-set volume credit are
+/// deliberately independent projections.
 nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
     case primary
     case secondary
@@ -197,9 +213,20 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
         }
     }
 
-    /// Body-model emphasis. This is also the compact value persisted in
-    /// SwiftData snapshots, but must not be interpreted as set volume.
-    nonisolated var visualIntensity: Double {
+    /// Compact value persisted in SwiftData snapshots. It identifies
+    /// the role inside the existing `[String: Double]` schema; it must
+    /// not be consumed as development credit.
+    nonisolated var snapshotValue: Double {
+        switch self {
+        case .primary: return 1
+        case .secondary: return 0.5
+        case .stabilizer: return 0.2
+        }
+    }
+
+    /// Temporary emphasis on the Exercise Anatomy model. This shows
+    /// that a stabilizer participates without claiming hard-set volume.
+    nonisolated var anatomyIntensity: Double {
         switch self {
         case .primary: return 1
         case .secondary: return 0.5
@@ -208,7 +235,7 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
     }
 
     /// Fractional hard-set credit used by muscle-volume analytics.
-    /// Stabilization alone is visible but earns no hypertrophy volume.
+    /// Stabilization alone stays listed but earns no hypertrophy volume.
     nonisolated var volumeCredit: Double {
         switch self {
         case .primary: return 1
@@ -217,12 +244,18 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
         }
     }
 
+    /// Exercise-detail body-map channels. This anatomy-only projection
+    /// is intentionally independent from `volumeCredit`.
+    nonisolated var anatomyMapChannels: MuscleMapChannels {
+        MuscleMapChannels(intensity: anatomyIntensity)
+    }
+
     /// Decodes the compact SwiftData representation. Only the three
-    /// canonical values are valid; old effort tiers are intentionally
-    /// unsupported because the app is starting from a clean store.
-    nonisolated init?(visualIntensity: Double) {
+    /// canonical values are valid here; persisted legacy snapshots are
+    /// recovered against the bundled catalog by `resolvedInvolvement`.
+    nonisolated init?(snapshotValue: Double) {
         guard let role = Self.allCases.first(where: {
-            abs($0.visualIntensity - visualIntensity) < 0.000_001
+            abs($0.snapshotValue - snapshotValue) < 0.000_001
         }) else {
             return nil
         }
@@ -244,7 +277,8 @@ nonisolated extension Muscle {
                 self.role = role
             }
 
-            nonisolated var visualIntensity: Double { role.visualIntensity }
+            nonisolated var snapshotValue: Double { role.snapshotValue }
+            nonisolated var anatomyIntensity: Double { role.anatomyIntensity }
             nonisolated var volumeCredit: Double { role.volumeCredit }
         }
 
@@ -261,7 +295,7 @@ nonisolated extension Muscle {
                     authoredOrder.append(contribution.muscle)
                 }
                 let existing = strongestRoleByMuscle[contribution.muscle]
-                if existing.map({ contribution.role.visualIntensity > $0.visualIntensity }) ?? true {
+                if existing.map({ contribution.role.snapshotValue > $0.snapshotValue }) ?? true {
                     strongestRoleByMuscle[contribution.muscle] = contribution.role
                 }
             }
@@ -275,7 +309,7 @@ nonisolated extension Muscle {
             self.contributions = Muscle.allCases.compactMap { muscle in
                 guard
                     let value = snapshot[muscle.rawValue],
-                    let role = MuscleRole(visualIntensity: value)
+                    let role = MuscleRole(snapshotValue: value)
                 else {
                     return nil
                 }
@@ -283,9 +317,20 @@ nonisolated extension Muscle {
             }
         }
 
+        /// Whether every persisted entry belongs to the current muscle
+        /// taxonomy and encodes one of the three canonical roles. Older
+        /// stores can contain removed keys such as `glutes` / `teres` or
+        /// pre-role graded weights such as 0.4 / 0.7.
+        static func isCanonicalSnapshot(_ snapshot: [String: Double]) -> Bool {
+            !snapshot.isEmpty && snapshot.allSatisfy { rawMuscle, value in
+                Muscle(rawValue: rawMuscle) != nil
+                    && MuscleRole(snapshotValue: value) != nil
+            }
+        }
+
         var snapshot: [String: Double] {
             Dictionary(
-                contributions.map { ($0.muscle.rawValue, $0.visualIntensity) },
+                contributions.map { ($0.muscle.rawValue, $0.snapshotValue) },
                 uniquingKeysWith: max
             )
         }
@@ -294,20 +339,13 @@ nonisolated extension Muscle {
             Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.role) })
         }
 
-        /// Body-model weights. These values intentionally differ from
-        /// hard-set volume for stabilizers.
-        var visualWeights: [Muscle: Double] {
-            Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.visualIntensity) })
-        }
-
         /// Temporary Exercise Anatomy colours keyed by exact SceneKit
-        /// mesh name. Unlike chronic development this projection shows
-        /// stabilizers at 0.2 and applies to every modality, including
-        /// power, because it describes anatomy rather than hypertrophy.
+        /// mesh name. Stabilizers remain faintly visible here while
+        /// retaining zero hard-set credit in volume analytics.
         var anatomyNodeChannels: [String: MuscleMapChannels] {
             var result: [String: MuscleMapChannels] = [:]
             for contribution in contributions {
-                let channels = MuscleMapChannels(intensity: contribution.visualIntensity)
+                let channels = contribution.role.anatomyMapChannels
                 for node in contribution.muscle.nodeNames {
                     result[node] = channels
                 }
@@ -321,7 +359,6 @@ nonisolated extension Muscle {
         }
 
         func role(for muscle: Muscle) -> MuscleRole? { roles[muscle] }
-        func visualIntensity(for muscle: Muscle) -> Double { visualWeights[muscle] ?? 0 }
         func volumeCredit(for muscle: Muscle) -> Double { volumeCredits[muscle] ?? 0 }
 
         var primary: [Muscle] {
@@ -345,5 +382,64 @@ nonisolated extension Muscle {
     /// their roles explicitly in the editor.
     static func involvement(forExerciseNamed name: String) -> Involvement {
         CatalogData.record(forExerciseNamed: name)?.muscleInvolvement ?? .empty
+    }
+
+    /// Resolve a persisted pick-time snapshot without broadly rewriting
+    /// valid history. Legacy bundled snapshots that no longer decode
+    /// cleanly, plus exact earlier Hip Abduction snapshots, recover from
+    /// the current catalog by stable ID, then by canonical name for rows
+    /// saved before catalog IDs existed. Unknown custom exercises keep
+    /// only the roles that can still be decoded; anatomy is never
+    /// invented from their broad browse group.
+    static func resolvedInvolvement(
+        from snapshot: [String: Double],
+        catalogID: String?,
+        exerciseName: String,
+        allowsCatalogNameLookup: Bool = true
+    ) -> Involvement {
+        let stored = Involvement(snapshot: snapshot)
+        let isCanonical = Involvement.isCanonicalSnapshot(snapshot)
+        let isBundledMachineHipAbduction = catalogID == "machine-hip-abduction"
+            || (
+                catalogID == nil
+                    && allowsCatalogNameLookup
+                    && exerciseName.caseInsensitiveCompare("Machine Hip Abduction") == .orderedSame
+            )
+        let historicalHipAbductionStabilizers = [
+            Muscle.Involvement.Contribution(muscle: .abs, role: .stabilizer),
+            Muscle.Involvement.Contribution(muscle: .obliques, role: .stabilizer),
+            Muscle.Involvement.Contribution(muscle: .hipFlexors, role: .stabilizer),
+        ]
+        let preTFLHipAbductionSnapshot = Involvement(contributions: [
+            .init(muscle: .gluteMed, role: .primary),
+        ] + historicalHipAbductionStabilizers).snapshot
+        let preCoreRemovalHipAbductionSnapshot = Involvement(contributions: [
+            .init(muscle: .gluteMed, role: .primary),
+            .init(muscle: .tensorFasciaeLatae, role: .secondary),
+        ] + historicalHipAbductionStabilizers).snapshot
+        let isKnownHipAbductionSnapshot = isBundledMachineHipAbduction
+            && (
+                snapshot == preTFLHipAbductionSnapshot
+                    || snapshot == preCoreRemovalHipAbductionSnapshot
+            )
+        if isCanonical, stored.hasPrimary, !isKnownHipAbductionSnapshot { return stored }
+
+        let recordByID = catalogID.flatMap { CatalogData.record(forCatalogID: $0) }
+        let recordByName = allowsCatalogNameLookup
+            ? CatalogData.record(forExerciseNamed: exerciseName)
+            : nil
+        if let record = recordByID ?? recordByName {
+            // A strength/power catalog snapshot containing only
+            // secondary/stabilizer roles is another legacy signature:
+            // an obsolete primary key was decoded away, then the
+            // remaining valid entries were re-saved.
+            if !isCanonical
+                || (record.modality.requiresPrimaryMuscle && !stored.hasPrimary)
+                || isKnownHipAbductionSnapshot {
+                return record.muscleInvolvement
+            }
+        }
+
+        return stored
     }
 }

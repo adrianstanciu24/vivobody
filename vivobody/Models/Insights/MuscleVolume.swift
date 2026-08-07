@@ -56,7 +56,7 @@ nonisolated struct VolumeLandmark: Hashable, Sendable {
             return VolumeLandmark(mev: 8, optimalHigh: 22)
         case .lowerBack, .hipFlexors, .shins, .serratus,
              .externalRotators, .teresMajor, .subscapularis,
-             .rhomboids, .adductors, .gluteMed:
+             .rhomboids, .adductors, .gluteMed, .tensorFasciaeLatae:
             return VolumeLandmark(mev: 5, optimalHigh: 14)
         case .pectorals, .lats, .traps, .quads, .hamstrings, .gluteMax:
             return VolumeLandmark(mev: 8, optimalHigh: 20)

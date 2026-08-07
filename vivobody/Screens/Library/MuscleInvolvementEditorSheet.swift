@@ -4,7 +4,7 @@
 //
 //  Focused editor for the categorical muscle roles stored on a
 //  catalog exercise. Primary and secondary roles drive hard-set
-//  analytics; stabilizers remain visual context only. Changes apply
+//  analytics; stabilizers remain visible anatomy context only. Changes apply
 //  only when Done is tapped.
 //
 
@@ -181,7 +181,7 @@ struct MuscleInvolvementEditorSheet: View {
 
     private func setRole(_ role: MuscleRole?, for muscle: Muscle) {
         if let role {
-            snapshot[muscle.rawValue] = role.visualIntensity
+            snapshot[muscle.rawValue] = role.snapshotValue
         } else {
             snapshot.removeValue(forKey: muscle.rawValue)
         }

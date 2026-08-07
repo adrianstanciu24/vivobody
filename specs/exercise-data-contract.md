@@ -40,36 +40,47 @@ Each listed muscle has one categorical role:
 - `stabilizer`: contributes to position or joint control but receives no
   hard-set-volume credit.
 
-Roles serve two separate consumers:
+Roles are encoded in the existing SwiftData snapshot shape, projected onto the
+temporary Exercise Anatomy model, and projected into training credit separately:
 
-| Role | Exercise Anatomy intensity | Training Development hard-set credit |
-|---|---:|---:|
-| Primary | 1.0 | 1.0 |
-| Secondary | 0.5 | 0.5 |
-| Stabilizer | 0.2 | 0.0 |
+| Role | Snapshot value | Exercise Anatomy intensity | Training Development hard-set credit |
+|---|---:|---:|---:|
+| Primary | 1.0 | 1.0 | 1.0 |
+| Secondary | 0.5 | 0.5 | 0.5 |
+| Stabilizer | 0.2 | 0.2 | 0.0 |
 
-These values are deliberate product heuristics, not measurements of EMG,
-hypertrophy, force, or energy expenditure. Strength and power exercises must
-have at least one primary muscle. Conditioning and mobility movements may use
-an explicit no-primary exception.
+The snapshot values distinguish categorical roles in the existing
+`[String: Double]` persistence schema. Stabilizer `0.2` also gives it faint
+temporary emphasis on Exercise Detail, but is not a claim of 20% development.
+The values are product heuristics, not measurements of EMG, hypertrophy, force,
+or energy expenditure.
+Strength and power exercises must have at least one primary muscle.
+Conditioning and mobility movements may use an explicit no-primary exception.
 
 The hard-set column applies only after a valid dynamic-strength repetition set
 or isometric-strength duration set passes the modality/tracking gate. Power
-movements retain anatomy roles for the temporary Exercise Anatomy map, but
-those roles never enter Today's chronic Training Development map or earn
-hypertrophy hard-set credit.
+movements retain anatomy roles as text context, but those roles never enter
+Today's chronic Training Development map or earn hypertrophy hard-set credit.
 
 The two 3D modes are intentionally distinct:
 
 - **Training Development (Today):** chronic, decayed hard-set estimate;
   primary 1.0, secondary 0.5, stabilizer 0.0.
 - **Exercise Anatomy (Exercise Detail):** temporary movement-role overlay;
-  primary 1.0, secondary 0.5, stabilizer 0.2, for every modality.
+  primary 1.0, secondary 0.5, stabilizer 0.2, for every modality. It describes
+  involvement only and never feeds Training Development calculations.
 
 Gluteus maximus and gluteus medius are independent regions. Hip extension does
 not imply glute-med credit; hip abduction does not imply glute-max credit.
 Unilateral lower-body work may train both when pelvic control is a meaningful
 loaded demand.
+
+Tensor fasciae latae (`tensorFasciaeLatae`) is also independent from both
+gluteus medius and the broader hip-flexor region. Exercises author its role
+explicitly; Machine Hip Abduction treats Glute Med as primary and TFL as a
+secondary hip-abduction synergist, so their development values can diverge.
+Incidental abs, oblique, and remaining hip-flexor bracing is omitted for this
+supported isolation exercise rather than implying meaningful core training.
 
 The rotator-cuff taxonomy is also explicit:
 

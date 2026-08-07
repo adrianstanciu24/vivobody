@@ -491,8 +491,10 @@ enum HistorySeeder {
     /// region — the fastest way to eyeball the full colour palette.
     /// Drive it with `--seed-showcase`.
     ///
-    ///   • Quads / glutes — heavy, progressive squats right up to a few
-    ///     days ago ⇒ a deep, vivid orange (well developed).
+    ///   • Quads / glute max — heavy, progressive squats right up to a
+    ///     few days ago ⇒ a deep, vivid orange (well developed).
+    ///   • Glute med / TFL — recent hip-abduction work ⇒ visibly
+    ///     distinct primary/secondary lateral-hip development.
     ///   • Chest / front delts — a progressive press block ⇒ developed
     ///     orange.
     ///   • Calves — a lighter raise block ⇒ a moderate orange.
@@ -556,6 +558,12 @@ enum HistorySeeder {
         // keeping overload alive long enough to reach ceiling.
         block([("Barbell Back Squat", .legs, 185)],
               startDaysAgo: 120, endDaysAgo: 1, count: 55, overload: 555, sets: 6, reps: 6)
+
+        // Keep the independently modeled hip-abductor regions visible.
+        // This catches regressions where the large TFL surface is left
+        // gray or incorrectly shares Glute Med's primary intensity.
+        block([("Machine Hip Abduction", .legs, 90)],
+              startDaysAgo: 30, endDaysAgo: 2, count: 6, overload: 20, sets: 3, reps: 15)
 
         // Developed: a progressive press block.
         block([("Barbell Bench Press", .chest, 135),

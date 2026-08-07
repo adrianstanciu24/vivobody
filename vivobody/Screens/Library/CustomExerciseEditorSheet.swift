@@ -1318,7 +1318,7 @@ struct CatalogDraft {
         self.direction = item.direction
         self.plane = item.plane
         self.laterality = item.laterality
-        self.muscleInvolvementSnapshot = item.muscleInvolvementSnapshot
+        self.muscleInvolvementSnapshot = item.muscleInvolvement.snapshot
         // Rebuild the comma-separated string so the editor's text
         // field reflects the stored list. Two-space readability for
         // long lists, but the parser tolerates either.
@@ -1373,7 +1373,7 @@ struct CatalogDraft {
             let visual = (involvement.secondary + involvement.stabilizers)
                 .map(\.displayName)
                 .joined(separator: " · ")
-            return visual.isEmpty ? "No muscles selected" : "\(visual) · Visual roles only"
+            return visual.isEmpty ? "No muscles selected" : "\(visual) · Anatomy context only"
         }
         guard supportingCount > 0 else { return "\(primary) · Primary" }
         let suffix = supportingCount == 1 ? "1 supporting muscle" : "\(supportingCount) supporting muscles"

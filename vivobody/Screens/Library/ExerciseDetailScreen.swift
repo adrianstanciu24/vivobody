@@ -14,9 +14,9 @@
 //    • Hero    — muscle group accent + exercise name + metadata line,
 //                plus a plateau / load-mode-aware readiness status pill;
 //                the inline nav title stays hidden until this scrolls off
-//    • Figure  — the staged anatomy model (primary/secondary/stabilizer
-//                channels) in a card under the hero text, with a keyed
-//                legend row per role naming the muscles it lights up
+//    • Figure  — the staged anatomy model in a card under the hero text;
+//                primary/secondary/stabilizer roles use distinct visual
+//                intensities without changing development calculations
 //    • Stats   — a focal Best-set card (huge monospaced record numeral)
 //                over supporting Last / Times half-cards
 //    • Load    — Bodyweight/assistance-only effective-load breakdown,

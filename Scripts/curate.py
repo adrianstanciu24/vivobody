@@ -51,7 +51,8 @@ MUSCLES = {
     "pectorals", "serratus", "lats", "traps", "rhomboids", "teresMajor",
     "externalRotators", "subscapularis", "lowerBack",
     "deltoids", "biceps", "triceps", "forearms", "abs", "obliques", "quads",
-    "hamstrings", "gluteMax", "gluteMed", "calves", "adductors", "hipFlexors", "shins",
+    "hamstrings", "gluteMax", "gluteMed", "tensorFasciaeLatae", "calves",
+    "adductors", "hipFlexors", "shins",
 }
 MUSCLE_GROUPS = {
     "pectorals": "chest", "serratus": "chest",
@@ -62,8 +63,8 @@ MUSCLE_GROUPS = {
     "biceps": "arms", "triceps": "arms", "forearms": "arms",
     "abs": "core", "obliques": "core",
     "quads": "legs", "hamstrings": "legs", "gluteMax": "legs",
-    "gluteMed": "legs", "calves": "legs", "adductors": "legs",
-    "hipFlexors": "legs", "shins": "legs",
+    "gluteMed": "legs", "tensorFasciaeLatae": "legs", "calves": "legs",
+    "adductors": "legs", "hipFlexors": "legs", "shins": "legs",
 }
 
 # Historical seed tiers. They remain shorthand in the large curation roster,
@@ -302,7 +303,7 @@ CURATION = {
     "Machine Hip Adduction": ex("legs", "machine", "isolation", None, weight=90, reps=15,
                                prime=["adductors"], aliases=["Hip Adduction", "Adductor Machine"]),
     "Machine Hip Abduction": ex("legs", "machine", "isolation", None, weight=90, reps=15,
-                                prime=["gluteMax"],
+                                prime=["gluteMed"], major=["tensorFasciaeLatae"],
                                 aliases=["Hip Abduction", "Abductor Machine", "Seated Hip Abduction"]),
 
     # ---- Back ----

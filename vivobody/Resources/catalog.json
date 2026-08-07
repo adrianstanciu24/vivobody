@@ -16945,16 +16945,8 @@
         "role": "primary"
       },
       {
-        "muscle": "abs",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "obliques",
-        "role": "stabilizer"
-      },
-      {
-        "muscle": "hipFlexors",
-        "role": "stabilizer"
+        "muscle": "tensorFasciaeLatae",
+        "role": "secondary"
       }
     ],
     "defaultWeightKg": 40.0,

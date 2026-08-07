@@ -296,7 +296,7 @@ struct MuscleDevelopmentTests {
         #expect(nodes["Vastus_Lateralis_L"] == nil)
     }
 
-    @Test func gluteMaxAndMedPaintIndependently() {
+    @Test func gluteMaxGluteMedAndTFLPaintIndependently() {
         let extensionSession = session(
             at: day(0),
             [lift("Barbell Hip Thrust", .legs, sets: 3, reps: 10, weight: 185)]
@@ -310,8 +310,65 @@ struct MuscleDevelopmentTests {
             [lift("Machine Hip Abduction", .legs, sets: 3, reps: 15, weight: 90)]
         )
         let abductionNodes = MuscleDevelopment.nodeIntensities(from: [abductionSession], now: day(0))
-        #expect((abductionNodes["Gluteus_Medius_L"] ?? 0) > 0)
+        let gluteMedDevelopment = abductionNodes["Gluteus_Medius_L"] ?? 0
+        let tflDevelopment = abductionNodes["Tensor_Fascia_Latae_L"] ?? 0
+        #expect(gluteMedDevelopment > 0)
+        #expect(tflDevelopment > 0)
+        #expect(tflDevelopment < gluteMedDevelopment)
         #expect(abductionNodes["Gluteus_Maximus_L"] == nil)
+    }
+
+    @Test func legacyHipAbductionHistoryStillDevelopsGluteMed() {
+        let exercise = lift(
+            "Machine Hip Abduction",
+            .legs,
+            sets: 3,
+            reps: 15,
+            weight: 90
+        )
+        exercise.catalogID = nil
+        exercise.muscleInvolvementSnapshot = [
+            "glutes": MuscleRole.primary.snapshotValue,
+            "abs": MuscleRole.stabilizer.snapshotValue,
+            "obliques": MuscleRole.stabilizer.snapshotValue,
+            "hipFlexors": MuscleRole.stabilizer.snapshotValue,
+        ]
+
+        let history = session(at: day(0), [exercise])
+        let nodes = MuscleDevelopment.nodeIntensities(from: [history], now: day(0))
+
+        #expect((nodes["Gluteus_Medius_L"] ?? 0) > 0)
+        #expect((nodes["Gluteus_Medius_R"] ?? 0) > 0)
+        #expect((nodes["Tensor_Fascia_Latae_L"] ?? 0) > 0)
+        #expect((nodes["Tensor_Fascia_Latae_R"] ?? 0) > 0)
+        #expect((nodes["Tensor_Fascia_Latae_L"] ?? 0) < (nodes["Gluteus_Medius_L"] ?? 0))
+        #expect(nodes["Gluteus_Maximus_L"] == nil)
+    }
+
+    @Test func preTFLHipAbductionHistoryRecoversSecondaryTFL() {
+        let exercise = lift(
+            "Machine Hip Abduction",
+            .legs,
+            sets: 3,
+            reps: 15,
+            weight: 90
+        )
+        exercise.catalogID = "machine-hip-abduction"
+        exercise.muscleInvolvementSnapshot = [
+            "gluteMed": MuscleRole.primary.snapshotValue,
+            "abs": MuscleRole.stabilizer.snapshotValue,
+            "obliques": MuscleRole.stabilizer.snapshotValue,
+            "hipFlexors": MuscleRole.stabilizer.snapshotValue,
+        ]
+
+        let history = session(at: day(0), [exercise])
+        let nodes = MuscleDevelopment.nodeIntensities(from: [history], now: day(0))
+        let gluteMedDevelopment = nodes["Gluteus_Medius_L"] ?? 0
+        let tflDevelopment = nodes["Tensor_Fascia_Latae_L"] ?? 0
+
+        #expect(gluteMedDevelopment > 0)
+        #expect(tflDevelopment > 0)
+        #expect(tflDevelopment < gluteMedDevelopment)
     }
 
     // MARK: - Colour mapping

@@ -9,8 +9,8 @@
 //  The encoding
 //  ------------
 //  Colour carries one continuous intensity. The owning surface gives
-//  that intensity its meaning: chronic development on Today, or an
-//  exercise's primary / secondary / stabilizer anatomy on Detail.
+//  it meaning: chronic development on Today, or categorical muscle
+//  involvement on Exercise Detail. Those values never cross domains.
 //
 //    • adaptation → a TINT RAMP of the app's accent orange. A fully
 //      developed muscle wears a vivid, saturated ORANGE; as
@@ -52,7 +52,7 @@ nonisolated enum MuscleMapBaseline: Equatable, Sendable {
 }
 
 /// Renderer input shared by the chronic development and temporary
-/// exercise-anatomy maps. `intensity` is always continuous in 0...1;
+/// exercise-anatomy maps. `intensity` is continuous in 0...1;
 /// labels and confidence are deliberately kept outside the colour.
 nonisolated struct MuscleMapChannels: Equatable, Sendable {
     var intensity: Double

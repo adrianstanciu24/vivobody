@@ -201,6 +201,18 @@ final class TemplateExercise: Identifiable {
         ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
     }
 
+    /// Valid pick-time roles remain frozen with the template. Bundled
+    /// snapshots from the former graded/combined taxonomy recover from
+    /// catalog.json so starting an old template cannot keep propagating
+    /// an exercise with no primary muscle.
+    var muscleInvolvement: Muscle.Involvement {
+        Muscle.resolvedInvolvement(
+            from: muscleInvolvementSnapshot,
+            catalogID: catalogID,
+            exerciseName: name
+        )
+    }
+
     /// Snapshotted movement metadata wins; templates without a snapshot
     /// retain the bundled-name fallback used before classification was
     /// persisted.
@@ -360,7 +372,7 @@ extension Exercise {
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
                 plannedWeight: orderedSets.first?.weight ?? templateExercise.plannedWeight,
-                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 modality: templateExercise.modality,
@@ -391,7 +403,7 @@ extension Exercise {
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
                 plannedWeight: templateExercise.plannedWeight,
-                muscleInvolvement: Muscle.Involvement(snapshot: templateExercise.muscleInvolvementSnapshot),
+                muscleInvolvement: templateExercise.muscleInvolvement,
                 classification: templateExercise.classification,
                 trackingMode: templateExercise.trackingMode,
                 modality: templateExercise.modality,

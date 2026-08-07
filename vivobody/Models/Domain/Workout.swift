@@ -87,7 +87,8 @@ final class Exercise: Identifiable {
     /// Snapshot of the catalog item's categorical muscle roles at
     /// pick-time. This keeps custom/renamed/deleted catalog exercises
     /// contributing to analytics even when their display name changes
-    /// later. Empty custom rows fall back to the coarse muscle group.
+    /// later. Legacy bundled snapshots recover only when their removed
+    /// keys or graded weights no longer decode under the current taxonomy.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Pick-time movement classification. All raw fields are optional
@@ -167,13 +168,14 @@ final class Exercise: Identifiable {
     }
 
     /// Muscles worked by categorical role. Rows read their pick-time
-    /// snapshot; unknown empty rows remain empty rather than acquiring
-    /// invented anatomy from a coarse browse group.
+    /// snapshot. Valid history remains immutable; legacy bundled rows
+    /// recover through their stable ID or canonical pre-ID name.
     var muscleInvolvement: Muscle.Involvement {
-        if !muscleInvolvementSnapshot.isEmpty {
-            return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
-        }
-        return Muscle.involvement(forExerciseNamed: name)
+        Muscle.resolvedInvolvement(
+            from: muscleInvolvementSnapshot,
+            catalogID: catalogID,
+            exerciseName: name
+        )
     }
 
     /// Snapshotted movement metadata wins over name lookup so custom

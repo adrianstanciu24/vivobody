@@ -271,8 +271,8 @@ final class ExerciseCatalogItem: Identifiable {
     var movementDefinition: String = ""
 
     /// Explicit categorical muscle roles authored for this item. The
-    /// compact Double values encode visual intensity only; analytics
-    /// recover roles and use their separate volume credits.
+    /// compact Double values encode role identity for snapshot
+    /// compatibility; analytics and rendering derive their own credit.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Stamped at creation. Used as a sort tiebreaker after
@@ -419,13 +419,16 @@ final class ExerciseCatalogItem: Identifiable {
     }
 
     /// Muscles worked by categorical role. Bundled and user-created
-    /// items persist explicit roles; an unknown empty item stays empty
-    /// rather than fabricating anatomy from its browse group.
+    /// items persist explicit roles. Undecodable legacy bundled roles
+    /// recover from catalog.json; custom items stay explicit and never
+    /// fabricate anatomy from a matching bundled name or browse group.
     var muscleInvolvement: Muscle.Involvement {
-        if !muscleInvolvementSnapshot.isEmpty {
-            return Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
-        }
-        return Muscle.involvement(forExerciseNamed: name)
+        Muscle.resolvedInvolvement(
+            from: muscleInvolvementSnapshot,
+            catalogID: catalogID,
+            exerciseName: name,
+            allowsCatalogNameLookup: !isUserCreated
+        )
     }
 
     init(
