@@ -27,10 +27,9 @@ enum SupportMail {
     static let subject = "Vivobody Support"
 
     /// Leading blank lines park the cursor above a one-line
-    /// environment footer. The footer is plain text in a draft the
-    /// user reads and can delete before sending — nothing is
-    /// gathered or transmitted on its own, which keeps this
-    /// consistent with the privacy policy's no-collection promise.
+    /// environment footer. The footer is created on-device as plain
+    /// text in a draft the user can edit or delete. No support message
+    /// or diagnostic information is sent unless the user taps Send.
     static var body: String {
         "\n\n—\nVivobody \(appVersion) (\(buildNumber)) · iOS \(systemVersion) · \(deviceIdentifier)"
     }

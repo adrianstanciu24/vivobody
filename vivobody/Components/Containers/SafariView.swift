@@ -2,9 +2,9 @@
 //  vivobody
 //
 //  In-app browser for the handful of public web pages the app links
-//  to — currently the privacy policy and the support page reached
-//  from Settings > About. Wraps `SFSafariViewController` so tapping
-//  one of those rows presents a modal sheet over the app instead of
+//  to — currently the privacy policy reached from Settings > About.
+//  Wraps `SFSafariViewController` so tapping the row presents a modal
+//  sheet over the app instead of
 //  ejecting the user into Safari.
 //
 //  That matters more here than in most apps: every other surface in

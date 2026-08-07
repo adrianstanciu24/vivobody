@@ -19,8 +19,8 @@ struct SafariViewGallery: View {
     @State private var activePage: WebPage?
     @State private var rejected: String?
 
-    private let privacy = URL(string: "https://adrianstanciu24.github.io/vivobody/privacy.html")!
-    private let support = URL(string: "https://adrianstanciu24.github.io/vivobody/support.html")!
+    private let privacy = PublicLinks.privacyPolicy
+    private let support = PublicLinks.support
     private let mail = URL(string: "mailto:vivobodyapp@gmail.com")!
 
     var body: some View {

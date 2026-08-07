@@ -7,7 +7,7 @@
 //  model rotation, weight unit, default rest, haptics — plus the
 //  destructive Reset Exercise Catalog action, the About links
 //  (privacy policy and support, required for App Store
-//  distribution, plus the voluntary Rate row), and the app footer.
+//  distribution), and the app footer.
 //
 //  Sections render as ledger blocks, matching History and Library:
 //  the SectionHeader stays on black and the section's rows sit
@@ -27,31 +27,6 @@
 import VivoKit
 import SwiftUI
 import SwiftData
-
-/// Public-facing URLs surfaced from Settings. Hosted via GitHub
-/// Pages from the repo's docs/ folder; this URL also fills the App
-/// Store Connect privacy metadata field.
-///
-/// The sibling support.html page still backs the Support URL field
-/// in App Store Connect, but is deliberately not linked from here —
-/// the Contact & Support row opens a prefilled email instead, which
-/// is what someone tapping it actually wants.
-private enum SupportLinks {
-    static let privacyPolicy = URL(string: "https://adrianstanciu24.github.io/vivobody/privacy.html")!
-}
-
-/// App Store product-page links. The write-review URL is the manual
-/// counterpart to ReviewRequestController's one-shot prompt: it
-/// always opens the review composer, regardless of the system
-/// prompt quota, so it is the only correct target for a
-/// user-initiated Rate row.
-private enum StoreLinks {
-    // TODO: Replace with the real numeric App Store ID once the
-    // App Store Connect record exists (App Information → Apple ID).
-    static let appStoreID = "0000000000"
-
-    static let writeReview = URL(string: "https://apps.apple.com/app/id\(appStoreID)?action=write-review")!
-}
 
 struct SettingsScreen: View {
     /// SwiftData context — needed for the Reset Catalog action,
@@ -680,8 +655,7 @@ struct SettingsScreen: View {
 
     /// The two contact points App Review expects to find in-app — the
     /// privacy policy (required for HealthKit apps) and a support
-    /// channel — plus the voluntary Rate row, the always-available
-    /// counterpart to ReviewRequestController's one-shot prompt.
+    /// channel.
     /// Neither contact point ejects the user: the policy renders in
     /// an in-app Safari sheet (`SafariView`) and support opens a
     /// prefilled composer (`MailComposeView`).
@@ -691,25 +665,12 @@ struct SettingsScreen: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 aboutRow(
-                    title: "Rate vivobody",
-                    subtitle: "Leave a review on the App Store",
-                    icon: "star",
-                    hint: "Opens the App Store"
-                ) {
-                    // Straight to the system, not the in-app Safari
-                    // sheet: the universal link routes into the App
-                    // Store app's review composer, while the sheet
-                    // would only show the web product page.
-                    openURL(StoreLinks.writeReview)
-                }
-                rowDivider
-                aboutRow(
                     title: "Privacy Policy",
                     subtitle: "Everything stays on your device",
                     icon: "arrow.up.right",
                     hint: "Opens in this app"
                 ) {
-                    open(SupportLinks.privacyPolicy)
+                    open(PublicLinks.privacyPolicy)
                 }
                 rowDivider
                 aboutRow(

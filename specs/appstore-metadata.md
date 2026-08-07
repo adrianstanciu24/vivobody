@@ -15,10 +15,15 @@ limits by character count are annotated; all drafts fit their limits.
 | Primary category | Health & Fitness |
 | Secondary category | (none, or Lifestyle) |
 | Price | Free (Pro is a $24.99 in-app purchase) |
-| Privacy policy URL | https://adrianstanciu24.github.io/vivobody/privacy.html |
-| Support URL | https://adrianstanciu24.github.io/vivobody/support.html |
-| Marketing URL (optional) | https://adrianstanciu24.github.io/vivobody/ |
+| Privacy policy URL | https://vivobody.app/privacy/ |
+| Support URL | https://vivobody.app/support/ |
+| Marketing URL (optional) | https://vivobody.app/ |
 | Copyright | 2026 Adrian Stanciu |
+
+The Settings screen intentionally omits a Rate Vivobody row until the
+App Store record has a public numeric Apple ID. Add the review link in a
+later app update once the product page is live; do not ship a placeholder
+App Store URL.
 
 ## Promotional text (170 chars max)
 
@@ -130,9 +135,9 @@ reviewed together.
 4. Create the in-app purchase (table above) + its review screenshot.
 5. Fill App Information, Pricing (Free), App Privacy (Data Not
    Collected), Age Rating.
-6. Enable GitHub Pages (repo Settings > Pages > Deploy from branch >
-   main, /docs) so the privacy/support URLs above resolve BEFORE
-   submitting.
+6. Verify `https://vivobody.app/`, `/privacy/`, and `/support/` all
+   resolve before submitting. Keep the `docs/` redirects in place so
+   links from older test builds continue to work.
 7. Upload the build: Xcode > Product > Archive > Distribute App >
    App Store Connect (or `xcodebuild -exportArchive`).
 8. Add screenshots (6.9" required; candidates in .verify/ or shoot via
