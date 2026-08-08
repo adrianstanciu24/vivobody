@@ -5,8 +5,9 @@
 //  Guards the categorical exercise → muscle taxonomy shared by body
 //  visualization and volume analytics: catalog roles decode strictly,
 //  anatomy intensity differs from volume credit, glute regions remain
-//  independent, legacy bundled snapshots recover without contaminating
-//  custom exercises, and every visual muscle maps to real model nodes.
+//  independent, the one-time InvolvementSnapshotRepair rewrites legacy
+//  bundled snapshots without contaminating custom exercises, and every
+//  visual muscle maps to real model nodes.
 //
 
 import Foundation
@@ -117,8 +118,7 @@ struct MuscleMappingTests {
             modality: .power
         )
         exercise.sets.forEach { $0.isCompleted = true }
-        var calculator = SetStimulus.Calculator()
-        #expect(calculator.credit(for: exercise, at: Date()).isEmpty)
+        #expect(SetStimulus.credit(for: exercise).isEmpty)
     }
 
     @Test func gluteExercisesKeepMaxAndMedSeparate() {
@@ -146,59 +146,84 @@ struct MuscleMappingTests {
         #expect(involvement.isEmpty)
     }
 
-    @Test @MainActor func legacyBundledGlutesSnapshotRecoversCanonicalHipAbduction() {
+    /// The one-time repair pass rewrites undecodable legacy bundled
+    /// snapshots (and the two known Hip Abduction upgrades) from the
+    /// catalog, after which the pure snapshot decode is canonical.
+    @Test func repairRewritesLegacyBundledSnapshotsFromTheCatalog() throws {
         let legacySnapshot = [
             "glutes": MuscleRole.primary.snapshotValue,
             "abs": MuscleRole.stabilizer.snapshotValue,
             "obliques": MuscleRole.stabilizer.snapshotValue,
             "hipFlexors": MuscleRole.stabilizer.snapshotValue,
         ]
-        let item = ExerciseCatalogItem(
-            name: "Machine Hip Abduction",
-            group: .legs,
-            defaultWeight: 90,
-            isUserCreated: false
-        )
-        item.muscleInvolvementSnapshot = legacySnapshot
+        let repaired = try #require(InvolvementSnapshotRepair.repairedSnapshot(
+            from: legacySnapshot,
+            catalogID: nil,
+            exerciseName: "Machine Hip Abduction"
+        ))
+        let involvement = Muscle.Involvement(snapshot: repaired)
+        #expect(involvement.role(for: .gluteMed) == .primary)
+        #expect(involvement.role(for: .tensorFasciaeLatae) == .secondary)
+        #expect(involvement.role(for: .gluteMax) == nil)
+        #expect(involvement.stabilizers.isEmpty)
 
-        #expect(item.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(item.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(item.muscleInvolvement.role(for: .gluteMax) == nil)
-        #expect(item.muscleInvolvement.stabilizers.isEmpty)
+        // Once repaired, the snapshot is canonical and never rewritten
+        // again.
+        #expect(Muscle.Involvement.isCanonicalSnapshot(repaired))
+        #expect(InvolvementSnapshotRepair.repairedSnapshot(
+            from: repaired,
+            catalogID: "machine-hip-abduction",
+            exerciseName: "Machine Hip Abduction"
+        ) == nil)
+    }
 
-        item.muscleInvolvementSnapshot.removeValue(forKey: "glutes")
-        #expect(Muscle.Involvement.isCanonicalSnapshot(item.muscleInvolvementSnapshot))
-        #expect(item.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(item.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(item.muscleInvolvement.stabilizers.isEmpty)
-
-        item.muscleInvolvementSnapshot = [
+    /// The two exact historical Hip Abduction snapshots earn the
+    /// known catalog-role upgrade even though they are canonical and
+    /// carry a primary.
+    @Test func repairUpgradesKnownHistoricalHipAbductionSnapshots() throws {
+        let preTFL = [
             "gluteMed": MuscleRole.primary.snapshotValue,
             "abs": MuscleRole.stabilizer.snapshotValue,
             "obliques": MuscleRole.stabilizer.snapshotValue,
             "hipFlexors": MuscleRole.stabilizer.snapshotValue,
         ]
-        #expect(Muscle.Involvement.isCanonicalSnapshot(item.muscleInvolvementSnapshot))
-        #expect(item.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(item.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(item.muscleInvolvement.stabilizers.isEmpty)
+        let repaired = try #require(InvolvementSnapshotRepair.repairedSnapshot(
+            from: preTFL,
+            catalogID: "machine-hip-abduction",
+            exerciseName: "Machine Hip Abduction"
+        ))
+        let involvement = Muscle.Involvement(snapshot: repaired)
+        #expect(involvement.role(for: .gluteMed) == .primary)
+        #expect(involvement.role(for: .tensorFasciaeLatae) == .secondary)
+        #expect(involvement.stabilizers.isEmpty)
 
-        item.muscleInvolvementSnapshot[Muscle.tensorFasciaeLatae.rawValue] = MuscleRole.secondary.snapshotValue
-        #expect(item.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(item.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(item.muscleInvolvement.stabilizers.isEmpty)
-
-        let templateExercise = TemplateExercise(
-            name: item.name,
-            group: .legs,
-            plannedWeight: 90
+        let preCoreRemoval = preTFL.merging(
+            [Muscle.tensorFasciaeLatae.rawValue: MuscleRole.secondary.snapshotValue],
+            uniquingKeysWith: { _, new in new }
         )
-        templateExercise.muscleInvolvementSnapshot = legacySnapshot
-        let spawnedExercise = Exercise(from: templateExercise)
-        #expect(spawnedExercise.muscleInvolvement.role(for: .gluteMed) == .primary)
-        #expect(spawnedExercise.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(spawnedExercise.muscleInvolvement.role(for: .gluteMax) == nil)
-        #expect(spawnedExercise.muscleInvolvement.stabilizers.isEmpty)
+        let repairedCore = try #require(InvolvementSnapshotRepair.repairedSnapshot(
+            from: preCoreRemoval,
+            catalogID: nil,
+            exerciseName: "Machine Hip Abduction"
+        ))
+        let coreInvolvement = Muscle.Involvement(snapshot: repairedCore)
+        #expect(coreInvolvement.role(for: .gluteMed) == .primary)
+        #expect(coreInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
+        #expect(coreInvolvement.stabilizers.isEmpty)
+    }
+
+    /// A valid pick-time snapshot with a primary is immutable — the
+    /// repair must not rewrite honest authored history.
+    @Test func repairLeavesCanonicalSnapshotsUntouched() {
+        let authored = Muscle.Involvement(contributions: [
+            .init(muscle: .quads, role: .primary),
+            .init(muscle: .gluteMax, role: .secondary),
+        ]).snapshot
+        #expect(InvolvementSnapshotRepair.repairedSnapshot(
+            from: authored,
+            catalogID: "bench-press",
+            exerciseName: "Barbell Bench Press"
+        ) == nil)
     }
 
     @Test @MainActor func invalidCustomSnapshotDoesNotBorrowBundledAnatomyByName() {
@@ -212,7 +237,17 @@ struct MuscleMappingTests {
             "glutes": MuscleRole.primary.snapshotValue,
         ]
 
+        // The pure decode drops the undecodable key…
         #expect(custom.muscleInvolvement.isEmpty)
+        // …and the repair drops it from storage without borrowing the
+        // bundled record's anatomy by name.
+        let repaired = InvolvementSnapshotRepair.repairedSnapshot(
+            from: custom.muscleInvolvementSnapshot,
+            catalogID: nil,
+            exerciseName: custom.name,
+            allowsCatalogNameLookup: false
+        )
+        #expect(repaired?.isEmpty == true)
     }
 
     @Test func snapshotsRoundTripOnlyCanonicalRoles() {
@@ -352,6 +387,23 @@ struct MuscleMappingTests {
         #expect(Muscle.teresMajor.nodeNames == ["Teres_Major_L", "Teres_Major_R"])
         #expect(Muscle.subscapularis.nodeNames.isEmpty)
         #expect(!Muscle.subscapularis.isVisualized)
+    }
+
+    @Test func deltoidRegionMapsToIndependentHeads() {
+        #expect(Muscle.deltoids.nodeNames == [
+            "Deltoid_Anterior_L", "Deltoid_Anterior_R",
+            "Deltoid_Lateral_L", "Deltoid_Lateral_R",
+            "Deltoid_Posterior_L", "Deltoid_Posterior_R",
+        ])
+    }
+
+    @Test func trapeziusRegionMapsToIndependentFiberGroups() {
+        #expect(Muscle.traps.nodeNames == [
+            "Trapezius_Upper_L", "Trapezius_Upper_R",
+            "Trapezius_Middle_L", "Trapezius_Middle_R",
+            "Trapezius_Lower_L", "Trapezius_Lower_R",
+            "Levator_Scapulaes_L", "Levator_Scapulaes_R",
+        ])
     }
 
     @Test func lateralHipRegionsMapToIndependentMeshes() {

@@ -1,6 +1,10 @@
 # Spec: Hard-set-equivalent work currency (load / reps / RIR awareness)
 
-Status: implemented; modality/load semantics hardened (2026-07-19)
+Status: SUPERSEDED (2026-08) by `muscle-attention-simplification.md` — the
+load-reference tables, rep/hold length ramps, and stimulus floor described
+here were removed; only the RIR discount survived. Kept for the rationale
+record.
+Previous status: implemented; modality/load semantics hardened (2026-07-19)
 Date: 2026-07-11 (updated 2026-07-19)
 Scope: new `Models/Insights/SetStimulus.swift`, `MuscleVolume` (currency +
 session ordering), `MuscleDevelopment` (currency, header), consumers unchanged

@@ -602,11 +602,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -781,11 +781,11 @@
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -843,11 +843,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -984,23 +984,23 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -1458,11 +1458,11 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -2488,7 +2488,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -2496,11 +2496,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -2577,7 +2577,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -2585,11 +2585,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -2657,19 +2657,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -2714,7 +2714,7 @@
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -2759,7 +2759,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -2771,7 +2771,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -2821,7 +2821,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -2829,11 +2829,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -2919,23 +2919,23 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -2993,23 +2993,23 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -3056,7 +3056,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -3064,11 +3064,11 @@
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -3112,7 +3112,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -3151,7 +3151,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -3199,7 +3199,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -3207,11 +3207,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -3279,7 +3279,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -3321,7 +3321,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -3329,19 +3329,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -3425,15 +3425,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -3466,7 +3466,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -3514,7 +3514,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -3522,7 +3522,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -3564,7 +3564,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -3580,11 +3580,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -3637,15 +3637,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -3701,19 +3701,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -3756,11 +3756,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -3798,31 +3798,31 @@
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -3875,7 +3875,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -3921,7 +3921,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -3961,7 +3961,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -3969,11 +3969,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -3985,15 +3985,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4042,7 +4042,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4050,7 +4050,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4100,15 +4100,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -4164,7 +4164,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4172,7 +4172,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4230,7 +4230,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4238,11 +4238,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -4308,7 +4308,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4316,7 +4316,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4369,7 +4369,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4377,11 +4377,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -4437,7 +4437,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -4453,11 +4453,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4504,7 +4504,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -4512,23 +4512,23 @@
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -4576,7 +4576,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4584,11 +4584,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4652,11 +4652,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hipFlexors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -4668,7 +4668,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -4676,11 +4676,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4729,15 +4729,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -4794,15 +4794,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -4856,7 +4856,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -4864,11 +4864,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -4924,7 +4924,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -4970,7 +4970,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5028,7 +5028,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5036,11 +5036,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5116,27 +5116,27 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -5183,15 +5183,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -5242,7 +5242,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -5258,11 +5258,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5313,7 +5313,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5321,11 +5321,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5393,11 +5393,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -5430,7 +5430,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -5446,11 +5446,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -5495,19 +5495,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5562,7 +5562,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5570,15 +5570,15 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -5630,11 +5630,11 @@
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -5683,15 +5683,15 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -5728,7 +5728,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -5736,7 +5736,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -5773,7 +5773,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -5821,7 +5821,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5829,11 +5829,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5899,7 +5899,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5907,11 +5907,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -5975,7 +5975,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -5983,11 +5983,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6056,7 +6056,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6064,15 +6064,15 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -6128,7 +6128,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6136,11 +6136,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6206,15 +6206,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -6271,7 +6271,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6279,7 +6279,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6328,7 +6328,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -6371,7 +6371,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -6415,7 +6415,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -6471,15 +6471,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -6525,7 +6525,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6533,7 +6533,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6577,11 +6577,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -6620,7 +6620,7 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -6632,7 +6632,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -6682,19 +6682,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6743,7 +6743,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6751,11 +6751,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6834,7 +6834,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -6842,11 +6842,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -6924,11 +6924,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -6989,15 +6989,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -7053,15 +7053,15 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -7115,19 +7115,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -7209,7 +7209,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -7257,7 +7257,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -7363,7 +7363,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -7491,7 +7491,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -7546,7 +7546,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -7606,7 +7606,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -7694,7 +7694,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -7866,7 +7866,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -7874,7 +7874,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -7919,7 +7919,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8053,7 +8053,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8188,7 +8188,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -8286,7 +8286,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -8375,7 +8375,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8420,7 +8420,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8463,7 +8463,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8507,7 +8507,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8690,7 +8690,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -8756,11 +8756,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -8813,11 +8813,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8893,7 +8893,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -8994,11 +8994,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -9051,11 +9051,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -9184,11 +9184,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -9367,7 +9367,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -9416,7 +9416,7 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
@@ -9424,11 +9424,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -9507,15 +9507,15 @@
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -9556,7 +9556,7 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
@@ -9564,11 +9564,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -9604,7 +9604,7 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -9612,11 +9612,11 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -9684,7 +9684,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -9734,11 +9734,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -9769,7 +9769,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -9824,15 +9824,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -9872,7 +9872,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -9899,11 +9899,11 @@
       },
       {
         "muscle": "hipFlexors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -9934,7 +9934,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -9961,11 +9961,11 @@
       },
       {
         "muscle": "hipFlexors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -9999,19 +9999,19 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -10076,11 +10076,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 15.0,
@@ -10110,7 +10110,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -10122,11 +10122,11 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -10167,19 +10167,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -10222,7 +10222,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -10255,11 +10255,11 @@
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -10299,15 +10299,15 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
@@ -10343,15 +10343,15 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -10395,19 +10395,19 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -10442,7 +10442,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -10475,15 +10475,15 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -10547,19 +10547,19 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -10599,11 +10599,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -10647,19 +10647,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -10724,15 +10724,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -10774,11 +10774,11 @@
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -10814,15 +10814,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -10864,7 +10864,7 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -10876,11 +10876,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -10951,7 +10951,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -11010,11 +11010,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 32.5,
@@ -11042,15 +11042,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11088,15 +11088,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11132,7 +11132,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
@@ -11144,7 +11144,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -11187,7 +11187,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 5.0,
@@ -11223,19 +11223,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11270,11 +11270,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -11318,19 +11318,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11377,15 +11377,15 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "pattern": "core",
@@ -11413,11 +11413,11 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
@@ -11429,11 +11429,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11473,19 +11473,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11526,19 +11526,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11573,11 +11573,11 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
@@ -11589,11 +11589,11 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11633,19 +11633,19 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -11684,11 +11684,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11783,11 +11783,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11826,15 +11826,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11872,15 +11872,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -11919,7 +11919,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -11946,7 +11946,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -11973,7 +11973,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -12026,19 +12026,19 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -12074,11 +12074,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -12126,7 +12126,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [],
@@ -12157,7 +12157,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -12184,15 +12184,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -12229,7 +12229,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -12260,11 +12260,11 @@
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -12304,7 +12304,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "aliases": [
@@ -12338,7 +12338,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 2.5,
@@ -12372,7 +12372,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "modality": "dynamicStrength",
@@ -12403,15 +12403,15 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -12442,15 +12442,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -12489,11 +12489,11 @@
       },
       {
         "muscle": "triceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -12533,7 +12533,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 5.0,
@@ -12568,7 +12568,7 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 5.0,
@@ -12602,11 +12602,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -12649,15 +12649,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -12712,15 +12712,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -12775,11 +12775,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -12787,11 +12787,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -12832,7 +12832,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -12840,15 +12840,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -12903,19 +12903,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -12971,7 +12971,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -13016,7 +13016,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13067,11 +13067,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -13108,7 +13108,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -13160,19 +13160,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13180,15 +13180,15 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -13233,11 +13233,11 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -13245,11 +13245,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13294,11 +13294,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13368,27 +13368,27 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13432,7 +13432,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -13440,15 +13440,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13501,11 +13501,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13566,7 +13566,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -13574,19 +13574,19 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13637,23 +13637,23 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13698,7 +13698,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
@@ -13706,15 +13706,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -13759,11 +13759,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -13804,7 +13804,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -13840,7 +13840,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -13891,7 +13891,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
@@ -13935,7 +13935,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -13943,11 +13943,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -13999,7 +13999,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14007,11 +14007,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -14065,11 +14065,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14122,11 +14122,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14178,15 +14178,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14238,11 +14238,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -14287,15 +14287,15 @@
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14406,19 +14406,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14462,11 +14462,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14474,7 +14474,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14549,7 +14549,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14557,19 +14557,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14577,7 +14577,7 @@
       },
       {
         "muscle": "shins",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "pattern": "squat",
@@ -14609,7 +14609,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14617,19 +14617,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14685,19 +14685,19 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14742,7 +14742,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14750,15 +14750,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14805,7 +14805,7 @@
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -14852,11 +14852,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -14864,7 +14864,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14913,7 +14913,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14921,15 +14921,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -14978,7 +14978,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -14986,19 +14986,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -15047,11 +15047,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -15059,7 +15059,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15111,23 +15111,23 @@
       },
       {
         "muscle": "deltoids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15163,7 +15163,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -15208,7 +15208,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -15216,23 +15216,23 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 20.0,
@@ -15273,19 +15273,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -15330,7 +15330,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -15338,15 +15338,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15399,11 +15399,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15453,7 +15453,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -15469,27 +15469,27 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -15534,7 +15534,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -15542,19 +15542,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -15599,7 +15599,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -15607,11 +15607,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -15680,7 +15680,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -15688,11 +15688,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15745,23 +15745,23 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -15806,7 +15806,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
@@ -15910,11 +15910,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -15947,7 +15947,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -15959,7 +15959,7 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16002,15 +16002,15 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16057,11 +16057,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -16157,11 +16157,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -16220,19 +16220,19 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -16279,11 +16279,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -16340,11 +16340,11 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -16401,19 +16401,19 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16460,7 +16460,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -16468,15 +16468,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16536,7 +16536,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -16544,11 +16544,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16597,15 +16597,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
@@ -16658,7 +16658,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -16701,11 +16701,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -16713,7 +16713,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -16784,7 +16784,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
@@ -16821,7 +16821,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -16862,7 +16862,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -16910,7 +16910,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -17048,11 +17048,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -17094,11 +17094,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -17179,15 +17179,15 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -17232,7 +17232,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -17277,15 +17277,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -17333,7 +17333,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMax",
@@ -17372,7 +17372,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -17380,23 +17380,23 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -17440,11 +17440,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -17495,15 +17495,15 @@
       },
       {
         "muscle": "gluteMax",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -17548,11 +17548,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -17596,7 +17596,7 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -17631,7 +17631,7 @@
       },
       {
         "muscle": "hipFlexors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -17716,7 +17716,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 37.5,
@@ -17750,7 +17750,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -17758,19 +17758,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -17778,7 +17778,7 @@
       },
       {
         "muscle": "shins",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "pattern": "squat",
@@ -17845,7 +17845,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -17853,11 +17853,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -17908,7 +17908,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -17916,19 +17916,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -17936,7 +17936,7 @@
       },
       {
         "muscle": "shins",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "pattern": "squat",
@@ -18031,7 +18031,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18039,23 +18039,23 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 15.0,
@@ -18084,19 +18084,19 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -18136,19 +18136,19 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
@@ -18196,7 +18196,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18204,23 +18204,23 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 15.0,
@@ -18253,7 +18253,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18261,23 +18261,23 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "defaultWeightKg": 22.5,
@@ -18334,7 +18334,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18342,19 +18342,19 @@
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       }
     ],
     "pattern": "hinge",
@@ -18386,11 +18386,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -18398,7 +18398,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -18448,19 +18448,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18500,7 +18500,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -18508,19 +18508,19 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18569,11 +18569,11 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -18629,15 +18629,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -18677,19 +18677,19 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -18818,7 +18818,7 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "gluteMed",
@@ -18858,15 +18858,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -18976,23 +18976,23 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19035,11 +19035,11 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -19047,19 +19047,19 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19100,7 +19100,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -19108,15 +19108,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19165,7 +19165,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
@@ -19173,15 +19173,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19241,23 +19241,23 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19306,7 +19306,7 @@
       },
       {
         "muscle": "adductors",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
@@ -19357,15 +19357,15 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
@@ -19414,11 +19414,11 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "shins",
@@ -19463,31 +19463,31 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19541,35 +19541,35 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19623,19 +19623,19 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -19685,23 +19685,23 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19747,7 +19747,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -19759,7 +19759,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19819,23 +19819,23 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -19883,7 +19883,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -19986,19 +19986,19 @@
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -20122,7 +20122,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20170,11 +20170,11 @@
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -20212,11 +20212,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "externalRotators",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -20259,11 +20259,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "externalRotators",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -20334,7 +20334,7 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -20386,35 +20386,35 @@
       },
       {
         "muscle": "hamstrings",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "calves",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20456,7 +20456,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20468,7 +20468,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20516,7 +20516,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20528,7 +20528,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20576,7 +20576,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20588,7 +20588,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20637,7 +20637,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20649,7 +20649,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20691,7 +20691,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20741,7 +20741,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -20835,7 +20835,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -20880,7 +20880,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -20892,7 +20892,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20942,7 +20942,7 @@
       },
       {
         "muscle": "gluteMed",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -20950,11 +20950,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "quads",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "triceps",
@@ -20962,11 +20962,11 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "hamstrings",
@@ -21007,7 +21007,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -21053,7 +21053,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -21095,7 +21095,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -21135,7 +21135,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21147,11 +21147,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -21203,11 +21203,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21253,7 +21253,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21265,7 +21265,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -21321,7 +21321,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -21368,7 +21368,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21380,7 +21380,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -21426,7 +21426,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -21477,11 +21477,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21529,7 +21529,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -21569,11 +21569,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "externalRotators",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -21617,7 +21617,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21663,7 +21663,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21675,7 +21675,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
@@ -21712,7 +21712,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21756,7 +21756,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -21814,15 +21814,15 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -21865,7 +21865,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -21905,11 +21905,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "externalRotators",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -21995,11 +21995,11 @@
       },
       {
         "muscle": "lats",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "deltoids",
@@ -22037,7 +22037,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -22081,11 +22081,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "externalRotators",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -22121,11 +22121,11 @@
       },
       {
         "muscle": "traps",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "teresMajor",
@@ -22169,7 +22169,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -22181,11 +22181,11 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",
@@ -22233,7 +22233,7 @@
       },
       {
         "muscle": "teresMajor",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "biceps",
@@ -22241,7 +22241,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lats",
@@ -22279,7 +22279,7 @@
       },
       {
         "muscle": "pectorals",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -22332,7 +22332,7 @@
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "rhomboids",
@@ -22382,11 +22382,11 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
@@ -22430,7 +22430,7 @@
       },
       {
         "muscle": "serratus",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "traps",
@@ -22476,7 +22476,7 @@
       },
       {
         "muscle": "abs",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "serratus",
@@ -22492,11 +22492,11 @@
       },
       {
         "muscle": "obliques",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "forearms",
-        "role": "secondary"
+        "role": "stabilizer"
       },
       {
         "muscle": "lowerBack",

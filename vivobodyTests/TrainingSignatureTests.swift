@@ -85,7 +85,7 @@ struct TrainingSignatureTests {
                 effectiveSets: 0,
                 allTimeEffectiveSets: allTime[muscle] ?? 0,
                 daysSinceLastTrained: allTime[muscle, default: 0] > 0 ? 1 : nil,
-                landmark: VolumeLandmark.landmark(for: muscle)
+                landmark: .default
             )
         }
     }

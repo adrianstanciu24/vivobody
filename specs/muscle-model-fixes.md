@@ -28,7 +28,9 @@ Verified findings (issue numbers referenced throughout):
    involvement weight, no load/reps/RIR term. Deliberate, documented.
    **Defer; document as a known limitation.** — Fixed 2026-07-11 by the
    hard-set-equivalent currency (`SetStimulus`), see
-   `specs/hard-set-currency.md`.
+   `specs/hard-set-currency.md`. Re-accepted 2026-08: the load/rep factors
+   were removed again (only the logged-RIR discount kept), see
+   `specs/muscle-attention-simplification.md`.
 3. **Very slow convergence** — weekly optimal training reaches only ≈ 0.874 at
    one year; 0.99 needs ≈ 2.7 years; 1×/week never reaches exactly 1.0.
    **Fix (folded into the rework).**

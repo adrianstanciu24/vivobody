@@ -418,17 +418,13 @@ final class ExerciseCatalogItem: Identifiable {
         )
     }
 
-    /// Muscles worked by categorical role. Bundled and user-created
-    /// items persist explicit roles. Undecodable legacy bundled roles
-    /// recover from catalog.json; custom items stay explicit and never
-    /// fabricate anatomy from a matching bundled name or browse group.
+    /// Muscles worked by categorical role — a pure decode of the
+    /// authored snapshot. Undecodable legacy snapshots are rewritten
+    /// once at launch by `InvolvementSnapshotRepair`; custom items stay
+    /// explicit and never fabricate anatomy from a bundled name or
+    /// browse group.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.resolvedInvolvement(
-            from: muscleInvolvementSnapshot,
-            catalogID: catalogID,
-            exerciseName: name,
-            allowsCatalogNameLookup: !isUserCreated
-        )
+        Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
 
     init(

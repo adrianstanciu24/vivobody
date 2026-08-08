@@ -3,9 +3,9 @@
 //  vivobody
 //
 //  The personal workload lens for Insights. Load is expressed in
-//  estimated hard-set equivalents, the same currency used by muscle
-//  volume, so bodyweight work and timed holds count while warm-ups,
-//  easy sets, and heavy singles are weighted honestly.
+//  completed hard sets (see `SetStimulus`), the same currency used by
+//  muscle volume, so bodyweight work and timed holds count while sets
+//  the user logged as far from failure are discounted.
 //
 //  The headline compares the rolling last seven calendar days with
 //  the median of the four non-overlapping weeks immediately before
@@ -66,8 +66,8 @@ nonisolated struct LoadPoint: Identifiable, Hashable, Sendable {
     var rangeUpper: Double? { productiveUpper }
 }
 
-/// Estimated hard-set equivalents completed on one calendar day —
-/// the per-day (not rolling) sample behind the Today readiness strip.
+/// Estimated hard sets completed on one calendar day — the per-day
+/// (not rolling) sample behind the Today readiness strip.
 nonisolated struct DayLoad: Identifiable, Hashable, Sendable {
     var id: Date { date }
     let date: Date
@@ -109,7 +109,7 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
     /// At least three of the four prior weeks must contain qualifying work.
     static let requiredActiveBaselineWeeks = 3
 
-    /// Estimated hard-set equivalents in the rolling last seven days.
+    /// Estimated hard sets in the rolling last seven days.
     let currentLoad: Double
     /// Median weekly load across the four preceding weeks.
     let usualLoad: Double?

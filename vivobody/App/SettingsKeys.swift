@@ -54,6 +54,10 @@ nonisolated enum SettingsKey {
     /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
     /// delete-all + reindex runs once per app version, not every launch.
     static let spotlightReindexedVersion = "settings.spotlightReindexedVersion"
+    /// Int — the last `InvolvementSnapshotRepair.generation` that
+    /// completed. Gates the one-time legacy muscle-snapshot rewrite so
+    /// a normal launch pays only this read.
+    static let involvementRepairGeneration = "settings.involvementRepairGeneration"
     /// Bool — last known Pro entitlement, mirrored by ProStore so the
     /// UI doesn't flash locked on a cold offline launch while StoreKit
     /// resolves. A render hint only — `Transaction.currentEntitlements`

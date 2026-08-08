@@ -12,7 +12,7 @@
 //    • Completion gate — only completed sets count.
 //    • Rolling window — work outside the 7-day window stops counting
 //      toward volume but still updates recency.
-//    • Zones — under / optimal / high against per-muscle landmarks.
+//    • Zones — under / optimal / high against the shared landmark band.
 //    • Recency — days-since for trained muscles, nil for never-trained.
 //    • Summary — neglect ranking puts rested muscles ahead of under ones.
 //
@@ -175,7 +175,7 @@ struct MuscleVolumeTests {
     // MARK: - Zones
 
     @Test func zonesTrackLandmarks() {
-        // Pectorals landmark: mev 8, optimalHigh 20.
+        // Shared landmark: mev 8, optimalHigh 18.
         func chestZone(sets: Int) -> VolumeZone {
             let s = session(at: day(0), [lift("Bench Press", .chest, sets: sets)])
             return stat(.pectorals, in: [s].muscleVolume(now: day(0))).zone

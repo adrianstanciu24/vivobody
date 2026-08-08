@@ -1,6 +1,9 @@
 # Spec: Simplify the muscle development model
 
-Status: implemented (2026-06-12), with exercise semantics updated by
+Status: implemented (2026-06-12); further simplified by
+`muscle-attention-simplification.md` (2026-08): the γ=0.5 concave map and the
+per-muscle landmark table described here are gone (linear map against one
+shared landmark). With exercise semantics updated by
 `exercise-data-contract.md` (2026-07-19). Notes:
 `MuscleForecastBoard.fadeThreshold` recalibrated 0.92 → 0.95 for the
 γ-softened decay curve. `ExerciseLoad` now owns comparable resistance

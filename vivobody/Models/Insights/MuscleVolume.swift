@@ -2,25 +2,22 @@
 //  MuscleVolume.swift
 //  vivobody
 //
-//  Weekly HARD-SET EQUIVALENTS per muscle — the evidence-based volume
-//  landmark serious lifters track by hand (≈ 10–20 hard sets per
-//  muscle per week). It answers the two questions the coarse
-//  chest/back/legs rollup can't: which muscles are getting enough
-//  work, and which are quietly being neglected.
+//  Weekly HARD SETS per muscle — the evidence-based volume landmark
+//  serious lifters track by hand (≈ 10–20 hard sets per muscle per
+//  week). It answers the two questions the coarse chest/back/legs
+//  rollup can't: which muscles are getting enough work, and which are
+//  quietly being neglected.
 //
 //  Two ideas make the count honest. First, the role-based involvement
 //  map (`Muscle.involvement`): primary muscles receive one set,
 //  secondary muscles receive half a set, and stabilizers receive no
 //  hypertrophy-volume credit. Stabilizers remain available to the body
 //  visualization without inflating training volume. Second, the shared
-//  `SetStimulus` currency: each completed
-//  set is priced as a hard-set equivalent — full credit for a real
-//  working set, demoted for warm-up loads, token weights, heavy
-//  singles, and sets stopped far from failure (RIR). A logged plank
-//  hold prices on its length the same way. `MuscleDevelopment` (the
-//  3D body) consumes the identical calculator, so the bars, the
-//  neglect list, and the body can never drift onto different
-//  definitions of "a set of work."
+//  `SetStimulus` currency: each completed set counts 1.0, discounted
+//  only when the user's own logged RIR says it was stopped far from
+//  failure. `MuscleDevelopment` (the 3D body) consumes the identical
+//  pricing, so the bars, the neglect list, and the body can never
+//  drift onto different definitions of "a set of work."
 //
 //  Only COMPLETED sets count. Everything is a PURE value-type
 //  computation driven by injected dates, so it's fully testable
@@ -31,37 +28,24 @@ import Foundation
 
 // MARK: - Volume landmark
 
-/// The productive weekly set range for a muscle, in effective sets.
-/// Below `mev` (minimum effective volume) a muscle is under-stimulated;
-/// inside the band it's progressing; above `optimalHigh` the extra
-/// work trades into recovery debt / junk volume.
+/// The productive weekly set range, in hard sets. Below `mev`
+/// (minimum effective volume) a muscle is under-stimulated; inside
+/// the band it's progressing; above `optimalHigh` the extra work
+/// trades into recovery debt / junk volume.
 ///
-/// Values are deliberately a touch higher than textbook "direct set"
-/// landmarks because our effective-set count folds in synergist
-/// credit (a muscle accrues fractional sets from compounds it only
-/// assists on). They're directional guidance, not gospel — kept in
-/// one place so they can be calibrated without touching the UI.
+/// ONE band for every muscle, on purpose. The counts it judges are
+/// estimates built from authored catalog roles — a per-muscle
+/// landmark table implied physiological precision the input data
+/// cannot back (and made spillover-fed regions outrank directly
+/// trained ones). Directional guidance, not gospel; values are a
+/// touch higher than textbook "direct set" landmarks because the
+/// count folds in synergist credit. Kept in one place so they can be
+/// calibrated without touching the UI.
 nonisolated struct VolumeLandmark: Hashable, Sendable {
     var mev: Double
     var optimalHigh: Double
 
     static let `default` = VolumeLandmark(mev: 8, optimalHigh: 18)
-
-    /// Per-muscle range. Small / high-traffic muscles tolerate more
-    /// volume; fatigue-prone stabilisers and indirectly-worked
-    /// regions plateau earlier.
-    static func landmark(for muscle: Muscle) -> VolumeLandmark {
-        switch muscle {
-        case .deltoids, .calves, .abs, .obliques, .biceps, .triceps, .forearms:
-            return VolumeLandmark(mev: 8, optimalHigh: 22)
-        case .lowerBack, .hipFlexors, .shins, .serratus,
-             .externalRotators, .teresMajor, .subscapularis,
-             .rhomboids, .adductors, .gluteMed, .tensorFasciaeLatae:
-            return VolumeLandmark(mev: 5, optimalHigh: 14)
-        case .pectorals, .lats, .traps, .quads, .hamstrings, .gluteMax:
-            return VolumeLandmark(mev: 8, optimalHigh: 20)
-        }
-    }
 }
 
 // MARK: - Zone
@@ -113,14 +97,12 @@ nonisolated struct MuscleVolumeStat: Identifiable, Hashable, Sendable {
 
 @MainActor
 extension Array where Element == WorkoutSession {
-    /// Hard-set equivalents per muscle over a rolling `window` ending
-    /// at `now` (default: the last 7 days). Every trainable muscle is
+    /// Hard sets per muscle over a rolling `window` ending at `now`
+    /// (default: the last 7 days). Every trainable muscle is
     /// returned — including ones with zero work, so neglect is
     /// visible rather than missing. Recency (`daysSinceLastTrained`)
-    /// scans the full archive so a muscle untouched this week still
-    /// reports how long it's been. The whole archive is replayed
-    /// chronologically (not just the window) so the `SetStimulus`
-    /// load references are causal.
+    /// and the all-time totals scan the full archive, so a muscle
+    /// untouched this week still reports how long it's been.
     func muscleVolume(
         window: TimeInterval = 7 * 86_400,
         now: Date = Date(),
@@ -140,7 +122,7 @@ extension Array where Element == WorkoutSession {
 nonisolated extension AnalyticsAccumulator {
     /// Build weekly volume from the shared hard-set replay. This path is
     /// used by SessionAnalytics so development, load, and map reports do
-    /// not each rerun SetStimulus.Calculator.
+    /// not each reprice the archive.
     func muscleVolume(
         window: TimeInterval = 7 * 86_400,
         now: Date = Date(),
@@ -200,7 +182,7 @@ nonisolated extension AnalyticsAccumulator {
                 effectiveSets: effective[muscle] ?? 0,
                 allTimeEffectiveSets: allTimeEffective[muscle] ?? 0,
                 daysSinceLastTrained: days,
-                landmark: VolumeLandmark.landmark(for: muscle)
+                landmark: .default
             ))
         }
         return result

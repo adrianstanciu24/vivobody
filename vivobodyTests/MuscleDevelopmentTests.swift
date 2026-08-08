@@ -12,10 +12,10 @@
 //  The suites:
 //    • Build      — colour accrues gradually, never maxes in one go,
 //                   and scales with set volume.
-//    • Detraining — holds through a ~1-week grace, then fades, deeper
-//                   the longer the layoff.
+//    • Detraining — holds most of its colour through a week, then
+//                   fades, deeper the longer the layoff.
 //    • Convergence— consistent training shows diminishing returns and
-//                   fills in over months at the landmark band.
+//                   fills in over months at the landmark target.
 //    • Frequency  — the same weekly volume develops the same, however
 //                   it is split across sessions.
 //    • Currency   — effective sets match `MuscleVolume`'s crediting,
@@ -47,8 +47,8 @@ struct MuscleDevelopmentTests {
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let state = MuscleDevelopment.simulate(from: [s], now: day(0))
         let chest = state.adaptation(.pectorals)
-        #expect(chest > 0.03)        // it did register
-        #expect(chest < 0.3)         // but nowhere near full
+        #expect(chest > 0.01)        // it did register
+        #expect(chest < 0.1)         // but nowhere near full
     }
 
     /// Under a steady training cadence, development rises at every
@@ -98,11 +98,11 @@ struct MuscleDevelopmentTests {
         let threeWeeks = chest(daysAfterLast: 21)
         let twoMonths = chest(daysAfterLast: 60)
 
-        // Grace: holds most of its colour through the first ~week.
-        #expect(week > 0.95 * fresh)
-        // Then a clear decline that deepens with time.
-        #expect(threeWeeks < 0.92 * fresh)
-        #expect(twoMonths < 0.70 * fresh)
+        // τ ≈ 65 d holds ~92% of the colour through the first ~week…
+        #expect(week > 0.90 * fresh)
+        // …then a clear decline that deepens with time.
+        #expect(threeWeeks < 0.80 * fresh)
+        #expect(twoMonths < 0.45 * fresh)
         #expect(week > threeWeeks)
         #expect(threeWeeks > twoMonths)
     }
@@ -122,11 +122,12 @@ struct MuscleDevelopmentTests {
         #expect(lateDelta < 0.02)
     }
 
-    /// The landmark normalisation: training a muscle at the TOP of its
-    /// productive weekly band, week in week out for a year, converges
-    /// toward full development — and never overshoots the clamp.
+    /// The landmark normalisation: training a muscle at the TOP of the
+    /// shared productive weekly band, week in week out for a year,
+    /// converges toward full development — and never overshoots the
+    /// clamp.
     @Test func consistentOptimalVolumeConvergesTowardFull() {
-        let weeklySets = Int(VolumeLandmark.landmark(for: .pectorals).optimalHigh)
+        let weeklySets = Int(VolumeLandmark.default.optimalHigh)
         let program = (0..<52).map { i in
             session(at: day(Double(i) * 7),
                     [lift("Bench Press", .chest, sets: weeklySets, reps: 8, weight: 135)])
@@ -136,11 +137,11 @@ struct MuscleDevelopmentTests {
         #expect(chest <= 1.0)
     }
 
-    /// Recalibrated convergence (#3): training at the top of the
-    /// productive band fills in over MONTHS, not years — clearly
-    /// developed by ~3 months, near-full by ~6.
+    /// Convergence pace: training at the top of the productive band
+    /// fills in over MONTHS, not years — clearly developed by
+    /// ~3 months, near-full by ~6.
     @Test func optimalTrainingDevelopsWithinMonths() {
-        let weekly = Int(VolumeLandmark.landmark(for: .pectorals).optimalHigh)
+        let weekly = Int(VolumeLandmark.default.optimalHigh)
         func chest(afterWeeks weeks: Int) -> Double {
             let program = (0..<weeks).map { i in
                 session(at: day(Double(i) * 7),
@@ -149,8 +150,8 @@ struct MuscleDevelopmentTests {
             return MuscleDevelopment.simulate(from: program, now: program.last!.completedAt!)
                 .adaptation(.pectorals)
         }
-        #expect(chest(afterWeeks: 6) > 0.6)    // ~0.71
-        #expect(chest(afterWeeks: 13) > 0.8)   // ~0.89 by 3 months
+        #expect(chest(afterWeeks: 6) > 0.45)   // ~0.50
+        #expect(chest(afterWeeks: 13) > 0.75)  // ~0.79 by 3 months
         #expect(chest(afterWeeks: 26) > 0.95)  // ~0.99 by 6 months
     }
 
@@ -318,7 +319,9 @@ struct MuscleDevelopmentTests {
         #expect(abductionNodes["Gluteus_Maximus_L"] == nil)
     }
 
-    @Test func legacyHipAbductionHistoryStillDevelopsGluteMed() {
+    /// Legacy Hip Abduction rows develop the modern regions once the
+    /// one-time repair pass has rewritten their snapshots.
+    @Test func repairedLegacyHipAbductionHistoryDevelopsGluteMed() {
         let exercise = lift(
             "Machine Hip Abduction",
             .legs,
@@ -333,6 +336,13 @@ struct MuscleDevelopmentTests {
             "obliques": MuscleRole.stabilizer.snapshotValue,
             "hipFlexors": MuscleRole.stabilizer.snapshotValue,
         ]
+        if let repaired = InvolvementSnapshotRepair.repairedSnapshot(
+            from: exercise.muscleInvolvementSnapshot,
+            catalogID: exercise.catalogID,
+            exerciseName: exercise.name
+        ) {
+            exercise.muscleInvolvementSnapshot = repaired
+        }
 
         let history = session(at: day(0), [exercise])
         let nodes = MuscleDevelopment.nodeIntensities(from: [history], now: day(0))
@@ -343,32 +353,6 @@ struct MuscleDevelopmentTests {
         #expect((nodes["Tensor_Fascia_Latae_R"] ?? 0) > 0)
         #expect((nodes["Tensor_Fascia_Latae_L"] ?? 0) < (nodes["Gluteus_Medius_L"] ?? 0))
         #expect(nodes["Gluteus_Maximus_L"] == nil)
-    }
-
-    @Test func preTFLHipAbductionHistoryRecoversSecondaryTFL() {
-        let exercise = lift(
-            "Machine Hip Abduction",
-            .legs,
-            sets: 3,
-            reps: 15,
-            weight: 90
-        )
-        exercise.catalogID = "machine-hip-abduction"
-        exercise.muscleInvolvementSnapshot = [
-            "gluteMed": MuscleRole.primary.snapshotValue,
-            "abs": MuscleRole.stabilizer.snapshotValue,
-            "obliques": MuscleRole.stabilizer.snapshotValue,
-            "hipFlexors": MuscleRole.stabilizer.snapshotValue,
-        ]
-
-        let history = session(at: day(0), [exercise])
-        let nodes = MuscleDevelopment.nodeIntensities(from: [history], now: day(0))
-        let gluteMedDevelopment = nodes["Gluteus_Medius_L"] ?? 0
-        let tflDevelopment = nodes["Tensor_Fascia_Latae_L"] ?? 0
-
-        #expect(gluteMedDevelopment > 0)
-        #expect(tflDevelopment > 0)
-        #expect(tflDevelopment < gluteMedDevelopment)
     }
 
     // MARK: - Colour mapping

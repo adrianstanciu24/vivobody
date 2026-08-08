@@ -84,6 +84,7 @@ vivobody/                      # app target
 │   ├── IncomingAction.swift   # every external entry point (URL, Handoff, Spotlight, widget/Siri mailboxes)
 │   │                          #   parses into one enum, dispatched through one handle(_:) site
 │   ├── SchemaVersioning.swift # SchemaV1/V2 + migration plan + StorageHealth in-memory-fallback flag
+│   ├── InvolvementSnapshotRepair.swift # one-time, generation-gated launch rewrite of legacy muscle snapshots
 │   ├── WidgetSnapshotWriter.swift      # SwiftData → App Group Codable snapshots for widgets
 │   ├── WorkoutLiveActivityController.swift, RestNotificationController.swift,
 │   ├── SpotlightIndexer.swift, AppShortcuts.swift, UserActivity.swift,

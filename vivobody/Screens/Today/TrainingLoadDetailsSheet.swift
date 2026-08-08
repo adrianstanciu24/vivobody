@@ -130,7 +130,7 @@ struct TrainingLoadDetailsSheet: View {
         explainerSection(number: "01", title: "Count the last 7 days") {
             VStack(alignment: .leading, spacing: Space.lg) {
                 dayBars
-                Text("Each bar is one calendar day. Together they total \(format(report.currentLoad)) estimated hard-set equivalents. Tomorrow, the oldest day rolls out and the newest rolls in.")
+                Text("Each bar is one calendar day. Together they total \(format(report.currentLoad)) estimated hard sets. Tomorrow, the oldest day rolls out and the newest rolls in.")
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)

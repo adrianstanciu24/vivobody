@@ -3,13 +3,16 @@
 //  vivobody
 //
 //  Shared chronological replay for analytics that use hard-set
-//  equivalents. It sorts history once and runs SetStimulus.Calculator
-//  once, retaining immutable per-session/per-exercise results for
-//  volume, development, training load, the muscle map, and symmetry.
-//  It accepts only AnalyticsSnapshot values, so sorting, stimulus
-//  pricing, and every report derived from the replay can run away from
-//  the main actor. A MainActor model adapter exists only for legacy
-//  report APIs and tests.
+//  credit. It sorts history once and prices every exercise once via
+//  the stateless `SetStimulus` pricing, retaining immutable
+//  per-session/per-exercise results for volume, development, training
+//  load, the muscle map, and symmetry. The chronological sort exists
+//  for consumers that integrate over time (the development decay
+//  model, weekly load windows) — pricing itself carries no
+//  cross-session state. It accepts only AnalyticsSnapshot values, so
+//  sorting, pricing, and every report derived from the replay can run
+//  away from the main actor. A MainActor model adapter exists only for
+//  legacy report APIs and tests.
 //
 
 import Foundation
@@ -30,8 +33,7 @@ nonisolated struct AnalyticsExerciseMetadata: Sendable {
     let group: MuscleGroup
 }
 
-/// A single exercise after hard-set pricing has advanced the shared
-/// causal load reference exactly once.
+/// A single exercise with its hard-set pricing computed exactly once.
 nonisolated struct AnalyticsExerciseReplay: Sendable {
     let exercise: AnalyticsExerciseSnapshot
     let setEquivalent: Double
@@ -114,7 +116,6 @@ nonisolated struct AnalyticsAccumulator: Sendable {
                 exerciseMetadata: [:]
             )
         }
-        var calculator = SetStimulus.Calculator(parameters: stimulusParameters)
         var quality: [Muscle: AnalyticsMuscleQuality] = [:]
         var metadata: [String: AnalyticsExerciseMetadata] = [:]
         var replayed: [AnalyticsSessionReplay] = []
@@ -136,7 +137,6 @@ nonisolated struct AnalyticsAccumulator: Sendable {
 
         for session in ordered {
             guard !isCancelled() else { break }
-            let date = session.date
             var exerciseEvents: [AnalyticsExerciseReplay] = []
             exerciseEvents.reserveCapacity(session.exercises.count)
             var sessionTotal = 0.0
@@ -145,8 +145,8 @@ nonisolated struct AnalyticsAccumulator: Sendable {
             for exercise in session.exercises {
                 guard !isCancelled() else { break }
                 let priced = pricesStimulus
-                    ? calculator.price(for: exercise, at: date)
-                    : SetStimulus.Calculator.ExerciseCredit(
+                    ? SetStimulus.price(for: exercise, parameters: stimulusParameters)
+                    : SetStimulus.ExerciseCredit(
                         setEquivalent: 0,
                         byMuscle: [:]
                     )

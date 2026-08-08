@@ -7,11 +7,10 @@
 //  directional push/pull, lower-body muscle pairs, squat/hinge,
 //  biceps/triceps, and bilateral/unilateral work.
 //
-//  All nine comparisons share the `SetStimulus` hard-set-equivalent
-//  currency over a 4-week window. Muscle comparisons retain role-based
+//  All nine comparisons share the `SetStimulus` hard-set currency
+//  over a 4-week window. Muscle comparisons retain role-based
 //  involvement credit; movement comparisons count each exercise's
-//  whole stimulus once. The archive is replayed chronologically so
-//  load references stay causal.
+//  whole stimulus once.
 //
 //  All pairs remain present so the UI can preview every comparison;
 //  pairs need six effective sets across at least two workouts before

@@ -16,11 +16,10 @@
 //       lookup used when constructing a snapshot directly by canonical
 //       name. Catalog picks persist the authored roles; custom exercises
 //       must author their own rather than inheriting a browse-group guess.
-//    4. `Muscle.resolvedInvolvement(...)` — compatibility for persisted
-//       bundled snapshots from older taxonomies. Valid pick-time roles
-//       remain immutable except for exact, known catalog-role upgrades;
-//       undecodable legacy keys/weights also recover from the
-//       current canonical catalog.
+//
+//  Persisted snapshots decode directly via `Involvement(snapshot:)`.
+//  Snapshots from older taxonomies are rewritten once at launch by
+//  `InvolvementSnapshotRepair` (App/), not recovered on every access.
 //
 //  The model node names are exact strings baked into BodyModel.scn,
 //  including its spelling quirks (`Adductor_Mangus`, `Biceps_femoris`).
@@ -126,7 +125,10 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .lats:
             return ["Latissimus_Dorsi"]
         case .traps:
-            return ["Trapezius", "Levator_Scapulaes"]
+            return [
+                "Trapezius_Upper", "Trapezius_Middle", "Trapezius_Lower",
+                "Levator_Scapulaes",
+            ]
         case .rhomboids:
             return ["Rhomboideus_Major", "Rhomboideus_Minor"]
         case .externalRotators:
@@ -141,7 +143,7 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .lowerBack:
             return ["Quadratus_Lumborum", "Serratus_Posterior_Inferior", "Serratus_Posterior_Superior"]
         case .deltoids:
-            return ["Deltoid"]
+            return ["Deltoid_Anterior", "Deltoid_Lateral", "Deltoid_Posterior"]
         case .biceps:
             return ["Biceps", "Brachialis"]
         case .triceps:
@@ -252,7 +254,7 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
 
     /// Decodes the compact SwiftData representation. Only the three
     /// canonical values are valid here; persisted legacy snapshots are
-    /// recovered against the bundled catalog by `resolvedInvolvement`.
+    /// rewritten once at launch by `InvolvementSnapshotRepair`.
     nonisolated init?(snapshotValue: Double) {
         guard let role = Self.allCases.first(where: {
             abs($0.snapshotValue - snapshotValue) < 0.000_001
@@ -382,64 +384,5 @@ nonisolated extension Muscle {
     /// their roles explicitly in the editor.
     static func involvement(forExerciseNamed name: String) -> Involvement {
         CatalogData.record(forExerciseNamed: name)?.muscleInvolvement ?? .empty
-    }
-
-    /// Resolve a persisted pick-time snapshot without broadly rewriting
-    /// valid history. Legacy bundled snapshots that no longer decode
-    /// cleanly, plus exact earlier Hip Abduction snapshots, recover from
-    /// the current catalog by stable ID, then by canonical name for rows
-    /// saved before catalog IDs existed. Unknown custom exercises keep
-    /// only the roles that can still be decoded; anatomy is never
-    /// invented from their broad browse group.
-    static func resolvedInvolvement(
-        from snapshot: [String: Double],
-        catalogID: String?,
-        exerciseName: String,
-        allowsCatalogNameLookup: Bool = true
-    ) -> Involvement {
-        let stored = Involvement(snapshot: snapshot)
-        let isCanonical = Involvement.isCanonicalSnapshot(snapshot)
-        let isBundledMachineHipAbduction = catalogID == "machine-hip-abduction"
-            || (
-                catalogID == nil
-                    && allowsCatalogNameLookup
-                    && exerciseName.caseInsensitiveCompare("Machine Hip Abduction") == .orderedSame
-            )
-        let historicalHipAbductionStabilizers = [
-            Muscle.Involvement.Contribution(muscle: .abs, role: .stabilizer),
-            Muscle.Involvement.Contribution(muscle: .obliques, role: .stabilizer),
-            Muscle.Involvement.Contribution(muscle: .hipFlexors, role: .stabilizer),
-        ]
-        let preTFLHipAbductionSnapshot = Involvement(contributions: [
-            .init(muscle: .gluteMed, role: .primary),
-        ] + historicalHipAbductionStabilizers).snapshot
-        let preCoreRemovalHipAbductionSnapshot = Involvement(contributions: [
-            .init(muscle: .gluteMed, role: .primary),
-            .init(muscle: .tensorFasciaeLatae, role: .secondary),
-        ] + historicalHipAbductionStabilizers).snapshot
-        let isKnownHipAbductionSnapshot = isBundledMachineHipAbduction
-            && (
-                snapshot == preTFLHipAbductionSnapshot
-                    || snapshot == preCoreRemovalHipAbductionSnapshot
-            )
-        if isCanonical, stored.hasPrimary, !isKnownHipAbductionSnapshot { return stored }
-
-        let recordByID = catalogID.flatMap { CatalogData.record(forCatalogID: $0) }
-        let recordByName = allowsCatalogNameLookup
-            ? CatalogData.record(forExerciseNamed: exerciseName)
-            : nil
-        if let record = recordByID ?? recordByName {
-            // A strength/power catalog snapshot containing only
-            // secondary/stabilizer roles is another legacy signature:
-            // an obsolete primary key was decoded away, then the
-            // remaining valid entries were re-saved.
-            if !isCanonical
-                || (record.modality.requiresPrimaryMuscle && !stored.hasPrimary)
-                || isKnownHipAbductionSnapshot {
-                return record.muscleInvolvement
-            }
-        }
-
-        return stored
     }
 }

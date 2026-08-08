@@ -87,8 +87,8 @@ final class Exercise: Identifiable {
     /// Snapshot of the catalog item's categorical muscle roles at
     /// pick-time. This keeps custom/renamed/deleted catalog exercises
     /// contributing to analytics even when their display name changes
-    /// later. Legacy bundled snapshots recover only when their removed
-    /// keys or graded weights no longer decode under the current taxonomy.
+    /// later. Legacy snapshots are rewritten once at launch by
+    /// `InvolvementSnapshotRepair`.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Pick-time movement classification. All raw fields are optional
@@ -167,15 +167,11 @@ final class Exercise: Identifiable {
         ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
     }
 
-    /// Muscles worked by categorical role. Rows read their pick-time
-    /// snapshot. Valid history remains immutable; legacy bundled rows
-    /// recover through their stable ID or canonical pre-ID name.
+    /// Muscles worked by categorical role — a pure decode of the
+    /// pick-time snapshot. Legacy snapshots are rewritten once at
+    /// launch by `InvolvementSnapshotRepair`, never per access.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.resolvedInvolvement(
-            from: muscleInvolvementSnapshot,
-            catalogID: catalogID,
-            exerciseName: name
-        )
+        Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
 
     /// Snapshotted movement metadata wins over name lookup so custom

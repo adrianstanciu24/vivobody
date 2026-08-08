@@ -201,16 +201,11 @@ final class TemplateExercise: Identifiable {
         ExerciseLoadProfile(mode: loadMode, bodyweightFraction: bodyweightFraction)
     }
 
-    /// Valid pick-time roles remain frozen with the template. Bundled
-    /// snapshots from the former graded/combined taxonomy recover from
-    /// catalog.json so starting an old template cannot keep propagating
-    /// an exercise with no primary muscle.
+    /// Valid pick-time roles remain frozen with the template — a pure
+    /// decode of the snapshot. Legacy snapshots are rewritten once at
+    /// launch by `InvolvementSnapshotRepair`, never per access.
     var muscleInvolvement: Muscle.Involvement {
-        Muscle.resolvedInvolvement(
-            from: muscleInvolvementSnapshot,
-            catalogID: catalogID,
-            exerciseName: name
-        )
+        Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
 
     /// Snapshotted movement metadata wins; templates without a snapshot

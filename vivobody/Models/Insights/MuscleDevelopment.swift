@@ -2,45 +2,41 @@
 //  MuscleDevelopment.swift
 //  vivobody
 //
-//  The per-muscle development model that colours the 3D body. It
-//  answers "how DEVELOPED is each muscle?" — the thing a real body
-//  shows over months, not the pump from one session.
+//  The per-muscle training-attention model that colours the 3D body.
+//  It answers "how consistently has this muscle been trained lately?"
+//  — a summary of the user's logged behaviour, not a claim about
+//  their physiology.
 //
 //  The model is one well-understood primitive: a FREQUENCY-INVARIANT
 //  estimate of recent weekly training volume, normalised against the
-//  muscle's productive weekly set range. It shares its work currency
-//  with `MuscleVolume` (each completed set is priced in HARD-SET
-//  EQUIVALENTS — load, reps, and RIR aware — then credited to each
-//  primary or secondary muscle by its volume-bearing role; see
-//  `SetStimulus`), so the body, the volume bars, and the neglect
-//  list agree by construction.
+//  shared productive weekly set target. It shares its work currency
+//  with `MuscleVolume` (each completed set counts 1.0, discounted only
+//  by logged RIR, then credited to each primary or secondary muscle by
+//  its volume-bearing role; see `SetStimulus`), so the body, the
+//  volume bars, and the neglect list agree by construction.
 //
 //    • Each muscle carries `weeklyVolume` W — a smoothed estimate of
-//      its hard-set equivalents per 7 days, kept as a constant-rate
-//      leaky integrator:
-//          on a session of s hard-set equivalents:  W += s · (7 / τ)
-//          over an interval of Δt days:        W *= exp(−Δt / τ)
+//      its hard sets per 7 days, kept as a constant-rate leaky
+//      integrator:
+//          on a session of s hard sets:  W += s · (7 / τ)
+//          over an interval of Δt days:  W *= exp(−Δt / τ)
 //      Under any training cadence the steady state depends only on the
 //      AVERAGE weekly rate, not on how the volume is chunked into
 //      sessions: 20 sets once a week and 10 sets twice a week converge
-//      to (essentially) the same W. The residual spread across
-//      frequencies is ~3%, versus the ~67% of the old grace-gated
-//      accumulator that rewarded frequency for its own sake.
+//      to (essentially) the same W.
 //    • Decay is a plain exponential with time-constant τ (≈ 65 d, a
 //      ~45-day half-life). It is exact and order-independent — the
 //      semigroup exp(−(a+b)/τ) = exp(−a/τ)·exp(−b/τ) — so the model is
 //      independent of how finely time is sliced, and it holds most of
 //      a muscle's colour through a week of neglect, then fades.
-//    • Development = min(1, (W / V_opt)^γ), where `V_opt` is the
-//      muscle's `VolumeLandmark.optimalHigh` (the top of its
-//      productive weekly band). Train at the top of the band and the
-//      muscle converges to full vivid orange in months; train at half
-//      the band and it plateaus around √½ of the way there. γ < 1
-//      keeps early sessions visibly rewarded while vivid still takes
-//      months.
+//    • Intensity = min(1, W / V_opt), where `V_opt` is
+//      `VolumeLandmark.default.optimalHigh` — one shared target for
+//      every muscle. Linear on purpose: 0.5 means literally "half the
+//      productive weekly target", and the `MuscleDevelopmentBand`
+//      labels quarter it into Low / Building / Consistent / High.
 //
 //  The one-sentence read: colour = your estimated recent weekly
-//  hard sets, versus your productive target.
+//  hard sets, versus the productive target.
 //
 //  One channel comes out, ready for the body-model colour map (see
 //  `MuscleColor` / `BodyModelScene`):
@@ -69,21 +65,16 @@ nonisolated enum MuscleDevelopment {
 
     /// Every rate and time-constant in one struct so the model can be
     /// calibrated (and swept in tests) without touching the math.
-    /// Days are the time unit throughout; work is in effective sets.
+    /// Days are the time unit throughout; work is in hard sets.
     struct Parameters: Sendable {
-        /// Concavity of the weekly-volume → development map. < 1
-        /// rewards early sessions visibly (newbie gains) while keeping
-        /// full vivid orange a months-long arc.
-        var developmentGamma: Double = 0.5
-
         /// Relaxation time-constant (days) of the weekly-volume
-        /// estimate. Governs how fast development tracks a change in
+        /// estimate. Governs how fast the colour tracks a change in
         /// training volume and how gently it fades on a layoff.
         /// ≈ 65 d is a ~45-day half-life (τ = halfLife / ln 2).
         var tau: Double = 65.0
 
-        /// Knobs of the per-set hard-set-equivalent pricing (RIR,
-        /// rep, and relative-load curves) — see `SetStimulus`.
+        /// The one knob of per-set pricing (the RIR discount) —
+        /// see `SetStimulus`.
         var stimulus: SetStimulus.Parameters = .default
 
         static let `default` = Parameters()
@@ -124,14 +115,12 @@ nonisolated enum MuscleDevelopment {
             self.parameters = parameters
         }
 
-        /// Development for a weekly-volume estimate, `0...1`. The
-        /// estimate is normalised against the top of the muscle's
-        /// productive weekly band, so "consistently optimal" reads as
-        /// fully developed.
+        /// Intensity for a weekly-volume estimate, `0...1` — the
+        /// estimate as a plain fraction of the shared productive
+        /// weekly target, so "consistently at target" reads as 1.0.
         private func development(weeklyVolume: Double, for muscle: Muscle) -> Double {
             guard weeklyVolume > 0 else { return 0 }
-            let ratio = weeklyVolume / VolumeLandmark.landmark(for: muscle).optimalHigh
-            return Swift.min(1, pow(ratio, parameters.developmentGamma))
+            return Swift.min(1, weeklyVolume / VolumeLandmark.default.optimalHigh)
         }
 
         /// Development (adaptation) per muscle, `0...1`.
@@ -303,39 +292,24 @@ nonisolated enum MuscleDevelopment {
 
     // MARK: - Stimulus from a session
 
-    /// Per-muscle growth stimulus (hard-set equivalents) for one
-    /// session, priced by the replay's `calculator` so the load
-    /// references stay causal across the history. This is the same
-    /// per-set credit `MuscleVolume` accrues — the weekly-rate scaling
-    /// happens in `applyStimulus`, so the two surfaces share one
-    /// definition of "a set of work."
-    @MainActor
-    static func sessionStimulus(
-        _ session: WorkoutSession,
-        at date: Date,
-        calculator: inout SetStimulus.Calculator
-    ) -> [Muscle: Double] {
-        var stimulus: [Muscle: Double] = [:]
-        for exercise in session.orderedExercises {
-            for (muscle, sets) in calculator.credit(for: exercise, at: date) {
-                stimulus[muscle, default: 0] += sets
-            }
-        }
-        return stimulus
-    }
-
-    /// One-shot convenience for a standalone session, priced against
-    /// a fresh calculator (every lift reads as its first instance).
+    /// Per-muscle stimulus (hard sets) for one session. This is the
+    /// same per-set credit `MuscleVolume` accrues — the weekly-rate
+    /// scaling happens in `applyStimulus`, so the two surfaces share
+    /// one definition of "a set of work."
     @MainActor
     static func sessionStimulus(
         _ session: WorkoutSession,
         parameters: Parameters = .default
     ) -> [Muscle: Double] {
-        var calculator = SetStimulus.Calculator(parameters: parameters.stimulus)
-        return sessionStimulus(
-            session,
-            at: session.completedAt ?? session.startedAt,
-            calculator: &calculator
-        )
+        var stimulus: [Muscle: Double] = [:]
+        for exercise in session.orderedExercises {
+            for (muscle, sets) in SetStimulus.credit(
+                for: exercise,
+                parameters: parameters.stimulus
+            ) {
+                stimulus[muscle, default: 0] += sets
+            }
+        }
+        return stimulus
     }
 }
