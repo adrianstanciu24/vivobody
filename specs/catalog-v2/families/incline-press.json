@@ -1,0 +1,572 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "incline-press",
+  "name": "Incline Press",
+  "definition": "A chest-oriented compound press whose resistance path is directed 15 to 45 degrees superior to a horizontal press relative to the torso. The concentric phase combines shoulder horizontal adduction and shoulder flexion with elbow extension. Flat, declined, greater-than-45-degree shoulder-dominant, fly, landmine, and unsupported overhead presses belong to other families. The current authored scope is bilateral and supported; cable, unilateral, and bodyweight variants are deferred. A feet-elevated push-up is owned by this family when closed-chain bodyweight variants are reviewed.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "borges-2019-bench-machine-scapula",
+    "boroto-2018-scapular-stabilizers-press",
+    "cabral-2022-pectoralis-regions",
+    "coratella-2020-bench-press-variations",
+    "lee-2019-pectoralis-force-direction",
+    "lauver-2016-bench-angle",
+    "rodriguez-ridao-2020-bench-inclinations"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "transverse",
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction",
+      "shoulder.flexion"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAdduction",
+      "shoulder.flexion",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorClavicular"
+      ],
+      "secondary": [
+        "pectoralisMajorSternocostal",
+        "deltoidAnterior",
+        "triceps"
+      ],
+      "stabilizer": [
+        "serratus",
+        "trapeziusMiddle",
+        "externalRotators"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The support that fixes the torso at the authored incline.",
+      "allowedValues": [
+        "bench",
+        "machinePad"
+      ]
+    },
+    {
+      "id": "scapularFreedom",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the scapula can translate freely or is constrained by torso support.",
+      "allowedValues": [
+        "constrained"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral"
+      ]
+    },
+    {
+      "id": "inclineAngleDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Upward inclination of the pressing path relative to a horizontal press; for free weights this is the bench backrest inclination.",
+      "minimum": 15,
+      "maximum": 45
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "smith",
+        "convergingChestPress"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "machine-requires-fixed-path-and-type",
+      "description": "Machine incline presses use a constrained load path and declare the machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Barbell and dumbbell incline presses keep a free load path and do not declare a machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "barbell-requires-bench",
+      "description": "A free barbell incline press uses an inclined bench for torso support.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-requires-bench",
+      "description": "A dumbbell incline press uses an inclined bench for torso support.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "smith-uses-bench",
+      "description": "A Smith incline press uses an inclined bench and a pronated grip beneath the rails.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "chest-press-machine-uses-pad",
+      "description": "A converging incline chest-press machine supports the torso against its pad and uses the canonical neutral handles.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "convergingChestPress"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "constrained-scapula-requires-stabilizer-pair",
+      "description": "A torso-supported press with constrained scapular translation records both serratus and middle trapezius as stabilizers; support type does not select one of them.",
+      "when": {
+        "field": "variant.scapularFreedom",
+        "operator": "equals",
+        "value": "constrained"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "incline-barbell-bench-press",
+      "name": "Incline Barbell Bench Press",
+      "aliases": [
+        "Barbell Incline Bench Press",
+        "Incline Bench Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "inclineAngleDegrees": 30,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "cabral-2022-pectoralis-regions",
+        "lauver-2016-bench-angle",
+        "rodriguez-ridao-2020-bench-inclinations"
+      ],
+      "movementDefinition": "Set the bench backrest to 30 degrees and lie with the feet planted and eyes below the racked bar. Lower the bar under control toward the upper chest, then press upward through shoulder flexion, horizontal adduction, and elbow extension without lifting the shoulders from the bench."
+    },
+    {
+      "catalogID": "incline-dumbbell-bench-press",
+      "name": "Incline Dumbbell Bench Press",
+      "aliases": [
+        "Dumbbell Incline Bench Press",
+        "Incline Dumbbell Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "inclineAngleDegrees": 30,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions",
+        "rodriguez-ridao-2020-bench-inclinations"
+      ],
+      "movementDefinition": "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower under control without letting the upper arms drift into a vertical shoulder-press path."
+    },
+    {
+      "catalogID": "incline-smith-machine-bench-press",
+      "name": "Incline Smith Machine Bench Press",
+      "aliases": [
+        "Smith Machine Incline Bench Press",
+        "Incline Smith Press"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "inclineAngleDegrees": 30,
+        "fixedPath": true,
+        "machineType": "smith"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "schick-2010-smith-bench-press",
+        "cabral-2022-pectoralis-regions",
+        "rodriguez-ridao-2020-bench-inclinations"
+      ],
+      "movementDefinition": "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported."
+    },
+    {
+      "catalogID": "incline-machine-chest-press",
+      "name": "Incline Machine Chest Press",
+      "aliases": [
+        "Machine Incline Chest Press",
+        "Incline Chest Press Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 87,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "machinePad",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "inclineAngleDegrees": 30,
+        "fixedPath": true,
+        "machineType": "convergingChestPress"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2020-bench-press-variations",
+        "cabral-2022-pectoralis-regions",
+        "rodriguez-ridao-2020-bench-inclinations"
+      ],
+      "movementDefinition": "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and upward to elbow extension, then return under control."
+    }
+  ]
+}

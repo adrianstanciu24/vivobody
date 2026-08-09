@@ -1,0 +1,1177 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "horizontal-press",
+  "name": "Horizontal Press",
+  "definition": "A compound press whose concentric phase combines shoulder horizontal adduction with elbow extension in either an open or closed kinetic chain. The resistance path is approximately perpendicular to the torso's longitudinal axis; inclined, declined, vertical, and elbow-isolation presses belong to other families. Grip-width variants remain horizontal presses but are deferred until a hand-spacing axis is reviewed. Feet-elevated and hands-elevated push-ups are future incline-press and decline-press variants respectively, once those contracts admit closed-chain bodyweight exercises.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "borges-2019-bench-machine-scapula",
+    "boroto-2018-scapular-stabilizers-press",
+    "cabral-2022-pectoralis-regions",
+    "coratella-2020-bench-press-variations",
+    "van-den-tillaar-2019-pushup-bench"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "cable",
+      "machine",
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "bodyweightAdded"
+    ],
+    "lateralities": [
+      "bilateral",
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAdduction",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "deltoidAnterior",
+        "triceps",
+        "serratus"
+      ],
+      "stabilizer": [
+        "serratus",
+        "trapeziusMiddle",
+        "externalRotators",
+        "abs",
+        "obliques"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open",
+        "closed"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the press.",
+      "allowedValues": [
+        "bench",
+        "floor",
+        "machinePad",
+        "none"
+      ]
+    },
+    {
+      "id": "scapularFreedom",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the scapula can translate normally or is constrained against torso support.",
+      "allowedValues": [
+        "free",
+        "constrained"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral",
+        "rotating"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the canonical lowering phase is unrestricted or stopped when the upper arm contacts the floor.",
+      "allowedValues": [
+        "full",
+        "floorLimited"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "smith",
+        "convergingChestPress"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": false,
+      "description": "The lower-body contact point used to set bodyweight pressing leverage.",
+      "allowedValues": [
+        "feet",
+        "knees"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-closed-chain",
+      "description": "Bodyweight horizontal presses use a closed kinetic chain, bodyweight-derived loading, free scapular movement, and an explicit lower-body support point.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "bodyweightAdded"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularFreedom",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [
+        "variant.lowerBodySupport"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "external-implement-open-chain",
+      "description": "Non-bodyweight horizontal presses use external resistance in an open kinetic chain and do not declare a push-up leverage point.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.lowerBodySupport"
+      ]
+    },
+    {
+      "id": "machine-requires-fixed-path-and-type",
+      "description": "Machine horizontal presses use a constrained load path and declare the machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Non-machine horizontal presses are not constrained by machine rails or levers and do not declare a machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "smith-uses-bench",
+      "description": "A Smith horizontal press uses a bench and a pronated grip beneath the rails.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "chest-press-machine-uses-pad",
+      "description": "A converging horizontal chest-press machine supports the torso against its pad and uses the canonical neutral handles.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "convergingChestPress"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "unsupported-torso-free-scapula",
+      "description": "Without direct torso support, the scapula remains free to translate during the press.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "variant.scapularFreedom",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "supported-torso-constrained-scapula",
+      "description": "A bench, floor, or machine pad constrains scapular translation against the support surface.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "notEquals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "variant.scapularFreedom",
+          "value": "constrained"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "floor-support-limits-range",
+      "description": "Floor-supported presses stop when the upper arm contacts the floor.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "floor"
+      },
+      "then": [
+        {
+          "field": "variant.rangeOfMotion",
+          "value": "floorLimited"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "floor-limited-range-requires-floor",
+      "description": "Only a floor-supported press may use the floor-limited range marker.",
+      "when": {
+        "field": "variant.rangeOfMotion",
+        "operator": "equals",
+        "value": "floorLimited"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "floor"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "constrained-scapula-requires-stabilizer-pair",
+      "description": "A torso-supported press with constrained scapular translation records both serratus and middle trapezius as stabilizers; support type does not select one of them.",
+      "when": {
+        "field": "variant.scapularFreedom",
+        "operator": "equals",
+        "value": "constrained"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "barbell-bench-press",
+      "name": "Barbell Bench Press",
+      "aliases": [
+        "Bench Press",
+        "Flat Bench Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 100,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "cabral-2022-pectoralis-regions",
+        "coratella-2020-bench-press-variations"
+      ],
+      "movementDefinition": "Lie on a flat bench with the eyes beneath the racked bar and the feet planted. Lower the bar under control toward the lower chest, then press it upward through shoulder horizontal adduction and elbow extension."
+    },
+    {
+      "catalogID": "dumbbell-bench-press",
+      "name": "Dumbbell Bench Press",
+      "aliases": [
+        "Flat Dumbbell Bench Press",
+        "Dumbbell Chest Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions"
+      ],
+      "movementDefinition": "Lie on a flat bench with one dumbbell beside each side of the chest. Press both dumbbells upward until the elbows are extended, then lower them under control while keeping the forearms beneath the loads."
+    },
+    {
+      "catalogID": "neutral-grip-dumbbell-bench-press",
+      "name": "Neutral-Grip Dumbbell Bench Press",
+      "aliases": [
+        "Dumbbell Neutral-Grip Bench Press",
+        "Neutral Dumbbell Bench Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions"
+      ],
+      "movementDefinition": "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other. Keep the elbows closer to the torso, press to elbow extension, and lower under control without changing the neutral grip."
+    },
+    {
+      "catalogID": "smith-machine-bench-press",
+      "name": "Smith Machine Bench Press",
+      "aliases": [
+        "Smith Bench Press",
+        "Flat Smith Machine Press"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "full",
+        "fixedPath": true,
+        "machineType": "smith"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "schick-2010-smith-bench-press",
+        "cabral-2022-pectoralis-regions"
+      ],
+      "movementDefinition": "Position a flat bench so the Smith bar descends toward the lower chest. Unrack the bar, lower it under control along the rails, then press to elbow extension without allowing the shoulders to lift from the bench."
+    },
+    {
+      "catalogID": "machine-chest-press",
+      "name": "Machine Chest Press",
+      "aliases": [
+        "Seated Chest Press",
+        "Chest Press Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "machinePad",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "full",
+        "fixedPath": true,
+        "machineType": "convergingChestPress"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2020-bench-press-variations"
+      ],
+      "movementDefinition": "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path. Keep the torso against the pad, press the handles forward and slightly inward along the converging lever path to elbow extension, then return under control."
+    },
+    {
+      "catalogID": "standing-cable-chest-press",
+      "name": "Standing Cable Chest Press",
+      "aliases": [
+        "Cable Chest Press",
+        "Bilateral Cable Press"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "none",
+        "scapularFreedom": "free",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [
+        "scapula.protraction"
+      ],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "seth-2019-shoulder-work"
+      ],
+      "movementDefinition": "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward. Press both handles forward while allowing controlled scapular protraction, then return until the elbows pass slightly behind the torso without rotating the trunk."
+    },
+    {
+      "catalogID": "single-arm-cable-chest-press",
+      "name": "Single-Arm Cable Chest Press",
+      "aliases": [
+        "One-Arm Cable Chest Press",
+        "Unilateral Cable Chest Press"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 70,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "none",
+        "scapularFreedom": "free",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [
+        "scapula.protraction"
+      ],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "seth-2019-shoulder-work"
+      ],
+      "movementDefinition": "Stand with one chest-height cable handle beside the working-side chest and the palm facing inward. Brace against cable-driven trunk rotation, press through elbow extension and scapular protraction, then return under control before changing sides."
+    },
+    {
+      "catalogID": "single-arm-dumbbell-bench-press",
+      "name": "Single-Arm Dumbbell Bench Press",
+      "aliases": [
+        "One-Arm Dumbbell Bench Press",
+        "Unilateral Dumbbell Bench Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 72,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "full",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions",
+        "wattanaprakornkul-2011-rotator-cuff-bench-press"
+      ],
+      "movementDefinition": "Lie on a flat bench with one dumbbell beside the working-side chest in a neutral grip. Keep the torso square against the unilateral load, press to elbow extension, and lower under control before changing sides."
+    },
+    {
+      "catalogID": "push-up",
+      "name": "Push-Up",
+      "aliases": [
+        "Pushup",
+        "Press-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 0.64,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 98,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "torsoSupport": "none",
+        "scapularFreedom": "free",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "full",
+        "fixedPath": false,
+        "lowerBodySupport": "feet"
+      },
+      "additionalPrimeActions": [
+        "scapula.protraction"
+      ],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "van-den-tillaar-2019-pushup-bench",
+        "suprak-2013-pushup-scapula",
+        "ebben-2011-pushup-load"
+      ],
+      "movementDefinition": "Begin in a straight-body plank with the hands slightly wider than the shoulders. Lower the chest toward the floor, then press the body away while extending the elbows and allowing the shoulder blades to protract without losing trunk position."
+    },
+    {
+      "catalogID": "knee-push-up",
+      "name": "Knee Push-Up",
+      "aliases": [
+        "Kneeling Push-Up",
+        "Modified Push-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 0.49,
+      "defaultWeight": 0,
+      "reps": 12,
+      "searchPriority": 65,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "torsoSupport": "none",
+        "scapularFreedom": "free",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "full",
+        "fixedPath": false,
+        "lowerBodySupport": "knees"
+      },
+      "additionalPrimeActions": [
+        "scapula.protraction"
+      ],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "suprak-2013-pushup-scapula",
+        "ebben-2011-pushup-load"
+      ],
+      "movementDefinition": "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders. Lower the chest toward the floor, then press away through elbow extension and controlled scapular protraction."
+    },
+    {
+      "catalogID": "barbell-floor-press",
+      "name": "Barbell Floor Press",
+      "aliases": [
+        "Floor Press",
+        "Barbell Supine Floor Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 78,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "floor",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "floorLimited",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions"
+      ],
+      "movementDefinition": "Lie on the floor beneath a safely positioned bar with the knees bent. Lower the bar until the upper arms contact the floor without bouncing, pause briefly, then press upward to elbow extension."
+    },
+    {
+      "catalogID": "dumbbell-floor-press",
+      "name": "Dumbbell Floor Press",
+      "aliases": [
+        "Dumbbell Supine Floor Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 76,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "floor",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "rangeOfMotion": "floorLimited",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "cabral-2022-pectoralis-regions"
+      ],
+      "movementDefinition": "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent. Lower until the upper arms contact the floor without bouncing, then press both dumbbells upward to elbow extension."
+    }
+  ]
+}

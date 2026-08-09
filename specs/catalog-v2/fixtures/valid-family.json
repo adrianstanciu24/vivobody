@@ -1,0 +1,178 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "fixture-horizontal-press",
+  "name": "Fixture Horizontal Press",
+  "definition": "Synthetic fixture for validating the family-first catalog contract; it is never emitted into the app catalog.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "horizontal",
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "cable",
+      "machine",
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "bodyweightAdded"
+    ],
+    "lateralities": [
+      "bilateral",
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAdduction",
+      "elbow.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular",
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorClavicular",
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "pectoralisMajorSternocostal",
+        "deltoidAnterior",
+        "triceps",
+        "serratus"
+      ],
+      "stabilizer": [
+        "pectoralisMinor",
+        "serratus",
+        "biceps",
+        "externalRotators"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open",
+        "closed"
+      ]
+    },
+    {
+      "id": "support",
+      "valueType": "enum",
+      "required": true,
+      "description": "Primary external support used during canonical execution.",
+      "allowedValues": [
+        "bench",
+        "floor",
+        "standing"
+      ]
+    },
+    {
+      "id": "benchAngleDegrees",
+      "valueType": "number",
+      "required": false,
+      "description": "Bench inclination when the exercise uses a bench.",
+      "minimum": 0,
+      "maximum": 60
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "fixture-barbell-horizontal-press",
+      "name": "Fixture Barbell Horizontal Press",
+      "aliases": [],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 0,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "support": "bench",
+        "benchAngleDegrees": 0
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms"
+      ],
+      "movementDefinition": "Press a supported bar away from the torso through shoulder horizontal adduction and elbow extension."
+    }
+  ]
+}

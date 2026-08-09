@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "description": "Canonical muscle taxonomy for the clean-slate family-first catalog. Mesh base names preserve the exact spelling in BodyModel.scn and expand to _L and _R nodes.",
+  "groups": [
+    "chest",
+    "back",
+    "shoulders",
+    "arms",
+    "core",
+    "legs"
+  ],
+  "muscles": [
+    {
+      "id": "pectoralisMajorClavicular",
+      "displayName": "Upper Chest",
+      "anatomicalName": "Pectoralis Major — Clavicular Head",
+      "group": "chest",
+      "meshBaseNames": [
+        "Pectoralis_Major_Clavicular"
+      ]
+    },
+    {
+      "id": "pectoralisMajorSternocostal",
+      "displayName": "Mid / Lower Chest",
+      "anatomicalName": "Pectoralis Major — Sternocostal Head",
+      "group": "chest",
+      "meshBaseNames": [
+        "Pectoralis_Major_Sternocostal"
+      ]
+    },
+    {
+      "id": "pectoralisMinor",
+      "displayName": "Pectoralis Minor",
+      "anatomicalName": "Pectoralis Minor",
+      "group": "chest",
+      "meshBaseNames": [
+        "Pectoralis_Minor"
+      ]
+    },
+    {
+      "id": "serratus",
+      "displayName": "Serratus",
+      "anatomicalName": "Serratus Anterior",
+      "group": "chest",
+      "meshBaseNames": [
+        "Serratus_Anterior"
+      ]
+    },
+    {
+      "id": "lats",
+      "displayName": "Lats",
+      "anatomicalName": "Latissimus Dorsi",
+      "group": "back",
+      "meshBaseNames": [
+        "Latissimus_Dorsi"
+      ]
+    },
+    {
+      "id": "trapeziusUpper",
+      "displayName": "Upper Traps",
+      "anatomicalName": "Trapezius — Upper Fibers",
+      "group": "back",
+      "meshBaseNames": [
+        "Trapezius_Upper"
+      ]
+    },
+    {
+      "id": "trapeziusMiddle",
+      "displayName": "Middle Traps",
+      "anatomicalName": "Trapezius — Middle Fibers",
+      "group": "back",
+      "meshBaseNames": [
+        "Trapezius_Middle"
+      ]
+    },
+    {
+      "id": "trapeziusLower",
+      "displayName": "Lower Traps",
+      "anatomicalName": "Trapezius — Lower Fibers",
+      "group": "back",
+      "meshBaseNames": [
+        "Trapezius_Lower"
+      ]
+    },
+    {
+      "id": "levatorScapulae",
+      "displayName": "Levator Scapulae",
+      "anatomicalName": "Levator Scapulae",
+      "group": "back",
+      "meshBaseNames": [
+        "Levator_Scapulaes"
+      ]
+    },
+    {
+      "id": "rhomboids",
+      "displayName": "Rhomboids",
+      "anatomicalName": "Rhomboid Major and Minor",
+      "group": "back",
+      "meshBaseNames": [
+        "Rhomboideus_Major",
+        "Rhomboideus_Minor"
+      ]
+    },
+    {
+      "id": "teresMajor",
+      "displayName": "Teres Major",
+      "anatomicalName": "Teres Major",
+      "group": "back",
+      "meshBaseNames": [
+        "Teres_Major"
+      ]
+    },
+    {
+      "id": "lowerBack",
+      "displayName": "Lower Back",
+      "anatomicalName": "Lumbar Extensors",
+      "group": "back",
+      "meshBaseNames": [
+        "Quadratus_Lumborum",
+        "Serratus_Posterior_Inferior",
+        "Serratus_Posterior_Superior"
+      ]
+    },
+    {
+      "id": "deltoidAnterior",
+      "displayName": "Front Delts",
+      "anatomicalName": "Deltoid — Anterior Head",
+      "group": "shoulders",
+      "meshBaseNames": [
+        "Deltoid_Anterior"
+      ]
+    },
+    {
+      "id": "deltoidLateral",
+      "displayName": "Side Delts",
+      "anatomicalName": "Deltoid — Lateral Head",
+      "group": "shoulders",
+      "meshBaseNames": [
+        "Deltoid_Lateral"
+      ]
+    },
+    {
+      "id": "deltoidPosterior",
+      "displayName": "Rear Delts",
+      "anatomicalName": "Deltoid — Posterior Head",
+      "group": "shoulders",
+      "meshBaseNames": [
+        "Deltoid_Posterior"
+      ]
+    },
+    {
+      "id": "externalRotators",
+      "displayName": "External Rotators",
+      "anatomicalName": "Infraspinatus and Teres Minor",
+      "group": "shoulders",
+      "meshBaseNames": [
+        "Teres_Minor",
+        "Infraspinatus"
+      ]
+    },
+    {
+      "id": "subscapularis",
+      "displayName": "Subscapularis",
+      "anatomicalName": "Subscapularis",
+      "group": "shoulders",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no subscapularis surface mesh."
+    },
+    {
+      "id": "biceps",
+      "displayName": "Biceps",
+      "anatomicalName": "Biceps Brachii and Brachialis",
+      "group": "arms",
+      "meshBaseNames": [
+        "Biceps",
+        "Brachialis"
+      ]
+    },
+    {
+      "id": "triceps",
+      "displayName": "Triceps",
+      "anatomicalName": "Triceps Brachii",
+      "group": "arms",
+      "meshBaseNames": [
+        "Triceps"
+      ]
+    },
+    {
+      "id": "forearms",
+      "displayName": "Forearms",
+      "anatomicalName": "Forearm Flexors and Extensors",
+      "group": "arms",
+      "meshBaseNames": [
+        "Brachioradialis",
+        "Flexor_Carpi_Radialis",
+        "Flexor_Carpi_Ulnaris",
+        "Extensor_Carpi_Radialis_Longus",
+        "Extensor_Carpi_Radialis_Brevis",
+        "Extensor_Carpi_Ulnaris",
+        "Flexor_Digitorum_Superficialis",
+        "Extensor_Digitorum_Communis"
+      ]
+    },
+    {
+      "id": "abs",
+      "displayName": "Abs",
+      "anatomicalName": "Rectus Abdominis",
+      "group": "core",
+      "meshBaseNames": [
+        "Rectus_Abdomini"
+      ]
+    },
+    {
+      "id": "obliques",
+      "displayName": "Obliques",
+      "anatomicalName": "Internal and External Obliques",
+      "group": "core",
+      "meshBaseNames": [
+        "External_Oblique",
+        "Internal_Oblique"
+      ]
+    },
+    {
+      "id": "quads",
+      "displayName": "Quads",
+      "anatomicalName": "Quadriceps",
+      "group": "legs",
+      "meshBaseNames": [
+        "Rectus_Femoris",
+        "Vastus_Lateralis",
+        "Vastus_Medialis",
+        "Vastus_Intermedius"
+      ]
+    },
+    {
+      "id": "hamstrings",
+      "displayName": "Hamstrings",
+      "anatomicalName": "Hamstrings",
+      "group": "legs",
+      "meshBaseNames": [
+        "Biceps_femoris",
+        "Semitendinosus",
+        "Semimembranosus"
+      ]
+    },
+    {
+      "id": "gluteMax",
+      "displayName": "Glute Max",
+      "anatomicalName": "Gluteus Maximus",
+      "group": "legs",
+      "meshBaseNames": [
+        "Gluteus_Maximus"
+      ]
+    },
+    {
+      "id": "gluteMed",
+      "displayName": "Glute Med",
+      "anatomicalName": "Gluteus Medius",
+      "group": "legs",
+      "meshBaseNames": [
+        "Gluteus_Medius"
+      ]
+    },
+    {
+      "id": "tensorFasciaeLatae",
+      "displayName": "TFL",
+      "anatomicalName": "Tensor Fasciae Latae",
+      "group": "legs",
+      "meshBaseNames": [
+        "Tensor_Fascia_Latae"
+      ]
+    },
+    {
+      "id": "calves",
+      "displayName": "Calves",
+      "anatomicalName": "Calf Complex",
+      "group": "legs",
+      "meshBaseNames": [
+        "Gastrocnemius",
+        "Soleus",
+        "Flexor_Hallucis_Longus"
+      ]
+    },
+    {
+      "id": "adductors",
+      "displayName": "Adductors",
+      "anatomicalName": "Hip Adductors",
+      "group": "legs",
+      "meshBaseNames": [
+        "Adductor_Brevis",
+        "Adductor_Longus",
+        "Adductor_Mangus",
+        "Gracilis",
+        "Pectineus"
+      ]
+    },
+    {
+      "id": "hipFlexors",
+      "displayName": "Hip Flexors",
+      "anatomicalName": "Iliopsoas and Sartorius",
+      "group": "legs",
+      "meshBaseNames": [
+        "Psoas_Major",
+        "Iliacus",
+        "Sartorius"
+      ]
+    },
+    {
+      "id": "shins",
+      "displayName": "Shins",
+      "anatomicalName": "Anterior and Lateral Lower Leg",
+      "group": "legs",
+      "meshBaseNames": [
+        "Tibialis_Anterior",
+        "Peroneus_Longus",
+        "Peroneus_Brevis",
+        "Peroneus_Tertius",
+        "Extensor_Digitorum_Longus",
+        "Extensor_Hallucis_Longus"
+      ]
+    }
+  ]
+}

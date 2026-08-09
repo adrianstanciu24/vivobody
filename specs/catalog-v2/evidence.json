@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "description": "Tracked primary sources supporting the catalog-v2 anatomical capability model. A reference documents support; it is not a numeric muscle-contribution oracle.",
+  "sources": [
+    {
+      "id": "holzbaur-2005-upper-extremity",
+      "sourceType": "peerReviewedMusculoskeletalModel",
+      "title": "A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control",
+      "authors": [
+        "Katherine R. S. Holzbaur",
+        "Wendy M. Murray",
+        "Scott L. Delp"
+      ],
+      "year": 2005,
+      "doi": "10.1007/s10439-005-3320-7",
+      "pmid": "16078622",
+      "url": "https://doi.org/10.1007/s10439-005-3320-7",
+      "scope": "Upper-extremity musculotendon geometry and joint-crossing function."
+    },
+    {
+      "id": "ackland-2008-shoulder-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Moment arms of the muscles crossing the anatomical shoulder",
+      "authors": [
+        "David C. Ackland",
+        "Pakorn Pak",
+        "Martin Richardson",
+        "Marcus G. Pandy"
+      ],
+      "year": 2008,
+      "doi": "10.1111/j.1469-7580.2008.00965.x",
+      "pmid": "18691376",
+      "url": "https://doi.org/10.1111/j.1469-7580.2008.00965.x",
+      "scope": "Distinct moment arms for pectoralis-major, deltoid, rotator-cuff, latissimus-dorsi, and teres-major subregions."
+    },
+    {
+      "id": "seth-2019-shoulder-work",
+      "sourceType": "peerReviewedMusculoskeletalModel",
+      "title": "Muscle Contributions to Upper-Extremity Movement and Work From a Musculoskeletal Model of the Human Shoulder",
+      "authors": [
+        "Ajay Seth",
+        "Meilin Dong",
+        "Ricardo Matias",
+        "Scott L. Delp"
+      ],
+      "year": 2019,
+      "doi": "10.3389/fnbot.2019.00090",
+      "pmid": "31780916",
+      "url": "https://doi.org/10.3389/fnbot.2019.00090",
+      "scope": "Independent scapular mechanics and contributions from trapezius, serratus anterior, deltoids, and pectoralis major."
+    },
+    {
+      "id": "gaffney-2014-trapezius-subdivisions",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Associations between cervical and scapular posture and the spatial distribution of trapezius muscle activity",
+      "authors": [
+        "Brecca M. Gaffney",
+        "Katrina S. Maluf",
+        "Douglas Curran-Everett",
+        "Bradley S. Davidson"
+      ],
+      "year": 2014,
+      "doi": "10.1016/j.jelekin.2014.04.008",
+      "pmid": "24875461",
+      "url": "https://doi.org/10.1016/j.jelekin.2014.04.008",
+      "scope": "Functional recruitment differences across upper, middle, and lower trapezius subdivisions."
+    },
+    {
+      "id": "werthel-2019-trapezius-transfer",
+      "sourceType": "biomechanicalCadaverStudy",
+      "title": "Tendon Transfer Options for Trapezius Paralysis: A Biomechanical Study",
+      "authors": [
+        "Jean-David Werthel",
+        "Eric R. Wagner",
+        "John W. Sperling",
+        "Bassem Elhassan"
+      ],
+      "year": 2019,
+      "doi": "10.5435/JAAOS-D-16-00731",
+      "pmid": "30216241",
+      "url": "https://doi.org/10.5435/JAAOS-D-16-00731",
+      "scope": "Scapular rotation contributions involving trapezius, levator scapulae, and rhomboids."
+    },
+    {
+      "id": "arnold-2010-lower-limb",
+      "sourceType": "peerReviewedMusculoskeletalModel",
+      "title": "A model of the lower limb for analysis of human movement",
+      "authors": [
+        "Edith M. Arnold",
+        "Samuel R. Ward",
+        "Richard L. Lieber",
+        "Scott L. Delp"
+      ],
+      "year": 2010,
+      "doi": "10.1007/s10439-009-9852-5",
+      "pmid": "19957039",
+      "url": "https://doi.org/10.1007/s10439-009-9852-5",
+      "scope": "Lower-limb musculotendon geometry and force-generating function across the hip, knee, and ankle."
+    },
+    {
+      "id": "christophy-2012-lumbar-spine",
+      "sourceType": "peerReviewedMusculoskeletalModel",
+      "title": "A musculoskeletal model for the lumbar spine",
+      "authors": [
+        "Miguel Christophy",
+        "Nur Faruk Senan",
+        "Jeffrey C. Lotz",
+        "Oliver M. O'Reilly"
+      ],
+      "year": 2012,
+      "doi": "10.1007/s10237-011-0290-6",
+      "url": "https://doi.org/10.1007/s10237-011-0290-6",
+      "scope": "Lumbar muscle geometry, moment arms, and three-axis spinal motion."
+    },
+    {
+      "id": "cabral-2022-pectoralis-regions",
+      "sourceType": "highDensityEMGStudy",
+      "title": "Non-uniform excitation of the pectoralis major muscle during flat and inclined bench press exercises",
+      "authors": [
+        "Hélio V. Cabral",
+        "Leonardo M. L. de Souza",
+        "Liliam F. de Oliveira",
+        "Taian M. Vieira"
+      ],
+      "year": 2022,
+      "doi": "10.1111/sms.14082",
+      "pmid": "34644424",
+      "url": "https://doi.org/10.1111/sms.14082",
+      "scope": "Regional pectoralis-major excitation during flat and 45-degree inclined barbell bench press, with the greatest flat-press amplitudes concentrated sternocostally."
+    },
+    {
+      "id": "coratella-2020-bench-press-variations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Specific prime movers' excitation during free-weight bench press variations and chest press machine in competitive bodybuilders",
+      "authors": [
+        "Giuseppe Coratella",
+        "Gianpaolo Tornatore",
+        "Stefano Longo",
+        "Fabio Esposito",
+        "Emiliano Cè"
+      ],
+      "year": 2020,
+      "doi": "10.1080/17461391.2019.1655101",
+      "pmid": "31397215",
+      "url": "https://doi.org/10.1080/17461391.2019.1655101",
+      "scope": "Clavicular and sternocostal pectoralis-major, triceps, and deltoid excitation during horizontal, inclined, and declined free-weight bench presses and a chest-press machine."
+    },
+    {
+      "id": "schick-2010-smith-bench-press",
+      "sourceType": "experimentalEMGStudy",
+      "title": "A comparison of muscle activation between a Smith machine and free weight bench press",
+      "authors": [
+        "Evan E. Schick",
+        "Jared W. Coburn",
+        "Lee E. Brown",
+        "Daniel A. Judelson",
+        "Andy V. Khamoui",
+        "Tai T. Tran",
+        "Brandon P. Uribe"
+      ],
+      "year": 2010,
+      "doi": "10.1519/JSC.0b013e3181cc2237",
+      "pmid": "20093960",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181cc2237",
+      "scope": "Pectoralis-major and deltoid excitation during free-weight and Smith-machine bench pressing at two relative loads."
+    },
+    {
+      "id": "van-den-tillaar-2019-pushup-bench",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Comparison of Kinematics and Muscle Activation between Push-up and Bench Press",
+      "authors": [
+        "Roland van den Tillaar"
+      ],
+      "year": 2019,
+      "doi": "10.1055/a-1001-2526",
+      "url": "https://doi.org/10.1055/a-1001-2526",
+      "scope": "Kinematic and muscle-excitation comparison of loaded push-ups and bench presses across matched relative loads."
+    },
+    {
+      "id": "suprak-2013-pushup-scapula",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Scapular kinematics and shoulder elevation in a traditional push-up",
+      "authors": [
+        "David N. Suprak",
+        "Jennifer Bohannon",
+        "Gabriel Morales",
+        "Joseph Stroschein",
+        "Jun G. San Juan"
+      ],
+      "year": 2013,
+      "doi": "10.4085/1062-6050-48.5.08",
+      "pmid": "23952043",
+      "url": "https://doi.org/10.4085/1062-6050-48.5.08",
+      "scope": "Three-dimensional scapular kinematics across elbow extension during traditional push-up variants."
+    },
+    {
+      "id": "ebben-2011-pushup-load",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Kinetic analysis of several variations of push-ups",
+      "authors": [
+        "William P. Ebben",
+        "Bradley Wurm",
+        "Tyler L. VanderZanden",
+        "Mark L. Spadavecchia",
+        "John J. Durocher",
+        "Curtis T. Bickham",
+        "Erich J. Petushek"
+      ],
+      "year": 2011,
+      "doi": "10.1519/JSC.0b013e31820c8587",
+      "pmid": "21873902",
+      "url": "https://doi.org/10.1519/JSC.0b013e31820c8587",
+      "scope": "Ground-reaction-force estimates for standard, knee-supported, and hand- or foot-elevated push-up loading as fractions of body mass."
+    },
+    {
+      "id": "lee-2019-pectoralis-force-direction",
+      "sourceType": "experimentalIsometricEMGStudy",
+      "title": "Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing",
+      "authors": [
+        "Hsin-Min Lee"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.jht.2017.08.007",
+      "pmid": "28943236",
+      "url": "https://doi.org/10.1016/j.jht.2017.08.007",
+      "scope": "Regional pectoralis-major contribution under horizontal and positive or negative 30-degree oblique force directions relative to the transverse plane."
+    },
+    {
+      "id": "lauver-2016-bench-angle",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Influence of bench angle on upper extremity muscular activation during bench press exercise",
+      "authors": [
+        "Jakob D. Lauver",
+        "Trent E. Cayot",
+        "Barry W. Scheuermann"
+      ],
+      "year": 2016,
+      "doi": "10.1080/17461391.2015.1022605",
+      "pmid": "25799093",
+      "url": "https://doi.org/10.1080/17461391.2015.1022605",
+      "scope": "Regional pectoralis-major, anterior-deltoid, and triceps excitation across minus-15, flat, 30-degree, and 45-degree barbell bench pressing."
+    },
+    {
+      "id": "rodriguez-ridao-2020-bench-inclinations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effect of Five Bench Inclinations on the Electromyographic Activity of the Pectoralis Major, Anterior Deltoid, and Triceps Brachii during the Bench Press Exercise",
+      "authors": [
+        "David Rodríguez-Ridao",
+        "José A. Antequera-Vique",
+        "Isabel Martín-Fuentes",
+        "José M. Muyor"
+      ],
+      "year": 2020,
+      "doi": "10.3390/ijerph17197339",
+      "pmid": "33049982",
+      "url": "https://doi.org/10.3390/ijerph17197339",
+      "scope": "Pectoralis-major regional, anterior-deltoid, and triceps excitation at 0, 15, 30, 45, and 60 degrees, including the clavicular maximum at 30 degrees and deltoid shift above 45 degrees."
+    },
+    {
+      "id": "saeterbakken-2017-bench-press-variations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Effects of Bench Press Variations in Competitive Athletes on Muscle Activity and Performance",
+      "authors": [
+        "Atle Hole Saeterbakken",
+        "Dag-André Mo",
+        "Suzanne Scott",
+        "Vidar Andersen"
+      ],
+      "year": 2017,
+      "doi": "10.1515/hukin-2017-0047",
+      "pmid": "28713459",
+      "url": "https://doi.org/10.1515/hukin-2017-0047",
+      "scope": "Clavicular and sternocostal pectoralis-major, deltoid, triceps, biceps, and latissimus-dorsi excitation during 6-RM flat, plus-25-degree incline, and minus-25-degree decline barbell bench pressing in competitive athletes."
+    },
+    {
+      "id": "wattanaprakornkul-2011-rotator-cuff-bench-press",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Direction-specific recruitment of rotator cuff muscles during bench press and row",
+      "authors": [
+        "Duangjai Wattanaprakornkul",
+        "Mark Halaki",
+        "Ian Cathers",
+        "Karen A. Ginn"
+      ],
+      "year": 2011,
+      "doi": "10.1016/j.jelekin.2011.09.002",
+      "pmid": "21978788",
+      "url": "https://doi.org/10.1016/j.jelekin.2011.09.002",
+      "scope": "Direction-specific rotator-cuff recruitment during bench pressing, including the cuff's dynamic stabilization role against anterior-posterior humeral-head translation."
+    },
+    {
+      "id": "boroto-2018-scapular-stabilizers-press",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic analysis of scapula stabilizers muscles during the push up and bench press exercises in university athletes with and without shoulder impingement syndrome",
+      "authors": [
+        "Luana Boroto",
+        "William Dhein",
+        "Marcelo La Torre"
+      ],
+      "year": 2018,
+      "doi": "10.33233/fb.v19i5.1401",
+      "url": "https://doi.org/10.33233/fb.v19i5.1401",
+      "scope": "Upper, middle, and lower trapezius and serratus-anterior excitation during push-up and flat bench-press tasks in university athletes with and without shoulder impingement syndrome."
+    },
+    {
+      "id": "borges-2019-bench-machine-scapula",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Comparative evaluation of muscular activation and scapular kinematics in a chest press lever machine and a barbell bench press",
+      "authors": [
+        "Eduardo Borges",
+        "Helena Dalla",
+        "Luciana Mastandrea",
+        "Sandra Nunes",
+        "José Santarem"
+      ],
+      "year": 2019,
+      "doi": "10.7752/jpes.2019.s3131",
+      "url": "https://doi.org/10.7752/jpes.2019.s3131",
+      "scope": "Serratus-anterior excitation and scapular-abduction excursion during flat barbell bench pressing and a chest-press lever machine at submaximal and 10-RM loading."
+    }
+  ]
+}

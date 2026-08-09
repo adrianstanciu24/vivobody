@@ -1,0 +1,751 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vivobody.local/schema/catalog-v2-family.schema.json",
+  "title": "Vivobody catalog-v2 movement family",
+  "description": "Authoring contract for one movement family and its explicitly reviewed exercises.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "definition",
+    "evidenceRefs",
+    "fixed",
+    "groupPolicy",
+    "allowed",
+    "movementSignature",
+    "musclePolicy",
+    "variantAxes",
+    "exerciseRules",
+    "exercises"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "#/$defs/stableID"
+    },
+    "name": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "definition": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "evidenceRefs": {
+      "$ref": "#/$defs/evidenceRefs"
+    },
+    "fixed": {
+      "$ref": "#/$defs/fixedClassification"
+    },
+    "groupPolicy": {
+      "$ref": "#/$defs/groupPolicy"
+    },
+    "allowed": {
+      "$ref": "#/$defs/allowedClassification"
+    },
+    "movementSignature": {
+      "$ref": "#/$defs/movementSignature"
+    },
+    "musclePolicy": {
+      "$ref": "#/$defs/musclePolicy"
+    },
+    "variantAxes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/variantAxis"
+      }
+    },
+    "exerciseRules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exerciseRule"
+      }
+    },
+    "recommended": {
+      "$ref": "#/$defs/recommendedDefaults"
+    },
+    "exercises": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/exercise"
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stableID": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "symbolID": {
+      "type": "string",
+      "pattern": "^[a-z][A-Za-z0-9]*$"
+    },
+    "actionID": {
+      "type": "string",
+      "pattern": "^[a-z][A-Za-z0-9]*\\.[a-z][A-Za-z0-9]*$"
+    },
+    "actionRequirement": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/actionID"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action",
+            "condition"
+          ],
+          "properties": {
+            "action": {
+              "$ref": "#/$defs/actionID"
+            },
+            "condition": {
+              "$ref": "#/$defs/symbolID"
+            }
+          }
+        }
+      ]
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "secondary",
+        "stabilizer"
+      ]
+    },
+    "muscleGroup": {
+      "type": "string",
+      "enum": [
+        "chest",
+        "back",
+        "shoulders",
+        "arms",
+        "core",
+        "legs"
+      ]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableID"
+      }
+    },
+    "fixedClassification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanic",
+        "pattern",
+        "direction",
+        "planes"
+      ],
+      "properties": {
+        "mechanic": {
+          "type": "string",
+          "enum": [
+            "compound",
+            "isolation"
+          ]
+        },
+        "pattern": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "push",
+            "pull",
+            "squat",
+            "hinge",
+            "lunge",
+            "carry",
+            "core",
+            "locomotion",
+            null
+          ]
+        },
+        "direction": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "horizontal",
+            "vertical",
+            "diagonal",
+            null
+          ]
+        },
+        "planes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "sagittal",
+              "frontal",
+              "transverse"
+            ]
+          }
+        }
+      }
+    },
+    "groupPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default",
+        "allowed"
+      ],
+      "properties": {
+        "default": {
+          "$ref": "#/$defs/muscleGroup"
+        },
+        "allowed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/muscleGroup"
+          }
+        }
+      }
+    },
+    "allowedClassification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equipment",
+        "modalities",
+        "trackingModes",
+        "loadModes",
+        "lateralities"
+      ],
+      "properties": {
+        "equipment": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "barbell",
+              "dumbbell",
+              "cable",
+              "machine",
+              "bodyweight",
+              "kettlebell",
+              "band",
+              "other"
+            ]
+          }
+        },
+        "modalities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "dynamicStrength",
+              "isometricStrength",
+              "power",
+              "conditioning",
+              "mobility"
+            ]
+          }
+        },
+        "trackingModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "reps",
+              "duration"
+            ]
+          }
+        },
+        "loadModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "external",
+              "bodyweightAdded",
+              "assistanceSubtracted",
+              "nonComparable"
+            ]
+          }
+        },
+        "lateralities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "bilateral",
+              "unilateral"
+            ]
+          }
+        }
+      }
+    },
+    "movementSignature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planeBasisActions",
+        "primeActions",
+        "stabilityDemands"
+      ],
+      "properties": {
+        "planeBasisActions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionID"
+          }
+        },
+        "primeActions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "forbiddenPrimeActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionID"
+          }
+        },
+        "stabilityDemands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/symbolID"
+          }
+        }
+      }
+    },
+    "muscleRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anyOf",
+        "minimumRole"
+      ],
+      "properties": {
+        "anyOf": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/symbolID"
+          }
+        },
+        "minimumRole": {
+          "$ref": "#/$defs/role"
+        }
+      }
+    },
+    "musclePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirements",
+        "allowedByRole"
+      ],
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/muscleRequirement"
+          }
+        },
+        "allowedByRole": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primary",
+            "secondary",
+            "stabilizer"
+          ],
+          "properties": {
+            "primary": {
+              "$ref": "#/$defs/muscleIDList"
+            },
+            "secondary": {
+              "$ref": "#/$defs/muscleIDList"
+            },
+            "stabilizer": {
+              "$ref": "#/$defs/muscleIDList"
+            }
+          }
+        }
+      }
+    },
+    "muscleIDList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/symbolID"
+      }
+    },
+    "variantAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "valueType",
+        "required",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/symbolID"
+        },
+        "valueType": {
+          "type": "string",
+          "enum": [
+            "enum",
+            "number",
+            "boolean",
+            "string"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "allowedValues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        }
+      }
+    },
+    "ruleFieldPath": {
+      "type": "string",
+      "pattern": "^[a-z][A-Za-z0-9]*(?:\\.[a-z][A-Za-z0-9]*)?$"
+    },
+    "rulePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "operator",
+        "value"
+      ],
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/ruleFieldPath"
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "equals",
+            "notEquals"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/variantValue"
+        }
+      }
+    },
+    "ruleAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "value"
+      ],
+      "properties": {
+        "field": {
+          "$ref": "#/$defs/ruleFieldPath"
+        },
+        "value": {
+          "$ref": "#/$defs/variantValue"
+        }
+      }
+    },
+    "exerciseRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "when",
+        "then",
+        "requirePresent",
+        "requireAbsent"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableID"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "when": {
+          "$ref": "#/$defs/rulePredicate"
+        },
+        "then": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ruleAssertion"
+          }
+        },
+        "requirePresent": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ruleFieldPath"
+          }
+        },
+        "requireAbsent": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ruleFieldPath"
+          }
+        },
+        "requireInvolvement": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/muscleAssignment"
+          }
+        }
+      }
+    },
+    "recommendedDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultReps": {
+          "$ref": "#/$defs/integerRange"
+        },
+        "defaultDuration": {
+          "$ref": "#/$defs/numberRange"
+        }
+      }
+    },
+    "integerRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "minimum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "numberRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "minimum": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maximum": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "muscleAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "muscle",
+        "role"
+      ],
+      "properties": {
+        "muscle": {
+          "$ref": "#/$defs/symbolID"
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        }
+      }
+    },
+    "variantValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    },
+    "exercise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogID",
+        "name",
+        "aliases",
+        "equipment",
+        "laterality",
+        "modality",
+        "trackingMode",
+        "loadMode",
+        "bodyweightFraction",
+        "defaultWeight",
+        "reps",
+        "involvement",
+        "variant",
+        "additionalPrimeActions",
+        "additionalStabilityDemands",
+        "evidenceRefs",
+        "movementDefinition"
+      ],
+      "properties": {
+        "catalogID": {
+          "$ref": "#/$defs/stableID"
+        },
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "groupOverride": {
+          "$ref": "#/$defs/muscleGroup"
+        },
+        "equipment": {
+          "type": "string"
+        },
+        "laterality": {
+          "type": "string"
+        },
+        "modality": {
+          "type": "string"
+        },
+        "trackingMode": {
+          "type": "string"
+        },
+        "loadMode": {
+          "type": "string"
+        },
+        "bodyweightFraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "defaultWeight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "defaultWeightKg": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "reps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "defaultDuration": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "searchPriority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "involvement": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/muscleAssignment"
+          }
+        },
+        "variant": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/variantValue"
+          }
+        },
+        "additionalPrimeActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "additionalStabilityDemands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/symbolID"
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefs"
+        },
+        "movementDefinition": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  }
+}

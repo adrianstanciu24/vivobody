@@ -1,0 +1,750 @@
+{
+  "schemaVersion": 1,
+  "description": "Independent anatomical capability map used to challenge family and exercise muscle assignments. Actions describe possible force-producing functions, not fixed contribution magnitudes; actual function varies with joint position and technique.",
+  "regions": [
+    "scapula",
+    "shoulder",
+    "elbow",
+    "forearm",
+    "wrist",
+    "hand",
+    "spine",
+    "pelvis",
+    "hip",
+    "knee",
+    "ankle",
+    "foot"
+  ],
+  "actions": [
+    {
+      "id": "scapula.elevation",
+      "region": "scapula",
+      "plane": "frontal",
+      "displayName": "Scapular elevation"
+    },
+    {
+      "id": "scapula.depression",
+      "region": "scapula",
+      "plane": "frontal",
+      "displayName": "Scapular depression"
+    },
+    {
+      "id": "scapula.protraction",
+      "region": "scapula",
+      "plane": "transverse",
+      "displayName": "Scapular protraction"
+    },
+    {
+      "id": "scapula.retraction",
+      "region": "scapula",
+      "plane": "transverse",
+      "displayName": "Scapular retraction"
+    },
+    {
+      "id": "scapula.upwardRotation",
+      "region": "scapula",
+      "plane": "frontal",
+      "displayName": "Scapular upward rotation"
+    },
+    {
+      "id": "scapula.downwardRotation",
+      "region": "scapula",
+      "plane": "frontal",
+      "displayName": "Scapular downward rotation"
+    },
+    {
+      "id": "scapula.anteriorTilt",
+      "region": "scapula",
+      "plane": "sagittal",
+      "displayName": "Scapular anterior tilt"
+    },
+    {
+      "id": "scapula.posteriorTilt",
+      "region": "scapula",
+      "plane": "sagittal",
+      "displayName": "Scapular posterior tilt"
+    },
+    {
+      "id": "shoulder.flexion",
+      "region": "shoulder",
+      "plane": "sagittal",
+      "displayName": "Shoulder flexion"
+    },
+    {
+      "id": "shoulder.extension",
+      "region": "shoulder",
+      "plane": "sagittal",
+      "displayName": "Shoulder extension"
+    },
+    {
+      "id": "shoulder.abduction",
+      "region": "shoulder",
+      "plane": "frontal",
+      "displayName": "Shoulder abduction"
+    },
+    {
+      "id": "shoulder.adduction",
+      "region": "shoulder",
+      "plane": "frontal",
+      "displayName": "Shoulder adduction"
+    },
+    {
+      "id": "shoulder.horizontalAdduction",
+      "region": "shoulder",
+      "plane": "transverse",
+      "displayName": "Shoulder horizontal adduction"
+    },
+    {
+      "id": "shoulder.horizontalAbduction",
+      "region": "shoulder",
+      "plane": "transverse",
+      "displayName": "Shoulder horizontal abduction"
+    },
+    {
+      "id": "shoulder.internalRotation",
+      "region": "shoulder",
+      "plane": "transverse",
+      "displayName": "Shoulder internal rotation"
+    },
+    {
+      "id": "shoulder.externalRotation",
+      "region": "shoulder",
+      "plane": "transverse",
+      "displayName": "Shoulder external rotation"
+    },
+    {
+      "id": "elbow.flexion",
+      "region": "elbow",
+      "plane": "sagittal",
+      "displayName": "Elbow flexion"
+    },
+    {
+      "id": "elbow.extension",
+      "region": "elbow",
+      "plane": "sagittal",
+      "displayName": "Elbow extension"
+    },
+    {
+      "id": "forearm.pronation",
+      "region": "forearm",
+      "plane": "transverse",
+      "displayName": "Forearm pronation"
+    },
+    {
+      "id": "forearm.supination",
+      "region": "forearm",
+      "plane": "transverse",
+      "displayName": "Forearm supination"
+    },
+    {
+      "id": "wrist.flexion",
+      "region": "wrist",
+      "plane": "sagittal",
+      "displayName": "Wrist flexion"
+    },
+    {
+      "id": "wrist.extension",
+      "region": "wrist",
+      "plane": "sagittal",
+      "displayName": "Wrist extension"
+    },
+    {
+      "id": "wrist.radialDeviation",
+      "region": "wrist",
+      "plane": "frontal",
+      "displayName": "Wrist radial deviation"
+    },
+    {
+      "id": "wrist.ulnarDeviation",
+      "region": "wrist",
+      "plane": "frontal",
+      "displayName": "Wrist ulnar deviation"
+    },
+    {
+      "id": "hand.grip",
+      "region": "hand",
+      "plane": "sagittal",
+      "displayName": "Grip"
+    },
+    {
+      "id": "spine.flexion",
+      "region": "spine",
+      "plane": "sagittal",
+      "displayName": "Spinal flexion"
+    },
+    {
+      "id": "spine.extension",
+      "region": "spine",
+      "plane": "sagittal",
+      "displayName": "Spinal extension"
+    },
+    {
+      "id": "spine.lateralFlexion",
+      "region": "spine",
+      "plane": "frontal",
+      "displayName": "Spinal lateral flexion"
+    },
+    {
+      "id": "spine.rotation",
+      "region": "spine",
+      "plane": "transverse",
+      "displayName": "Spinal rotation"
+    },
+    {
+      "id": "hip.flexion",
+      "region": "hip",
+      "plane": "sagittal",
+      "displayName": "Hip flexion"
+    },
+    {
+      "id": "hip.extension",
+      "region": "hip",
+      "plane": "sagittal",
+      "displayName": "Hip extension"
+    },
+    {
+      "id": "hip.abduction",
+      "region": "hip",
+      "plane": "frontal",
+      "displayName": "Hip abduction"
+    },
+    {
+      "id": "hip.adduction",
+      "region": "hip",
+      "plane": "frontal",
+      "displayName": "Hip adduction"
+    },
+    {
+      "id": "hip.internalRotation",
+      "region": "hip",
+      "plane": "transverse",
+      "displayName": "Hip internal rotation"
+    },
+    {
+      "id": "hip.externalRotation",
+      "region": "hip",
+      "plane": "transverse",
+      "displayName": "Hip external rotation"
+    },
+    {
+      "id": "knee.flexion",
+      "region": "knee",
+      "plane": "sagittal",
+      "displayName": "Knee flexion"
+    },
+    {
+      "id": "knee.extension",
+      "region": "knee",
+      "plane": "sagittal",
+      "displayName": "Knee extension"
+    },
+    {
+      "id": "ankle.plantarflexion",
+      "region": "ankle",
+      "plane": "sagittal",
+      "displayName": "Ankle plantarflexion"
+    },
+    {
+      "id": "ankle.dorsiflexion",
+      "region": "ankle",
+      "plane": "sagittal",
+      "displayName": "Ankle dorsiflexion"
+    },
+    {
+      "id": "ankle.inversion",
+      "region": "ankle",
+      "plane": "frontal",
+      "displayName": "Ankle inversion"
+    },
+    {
+      "id": "ankle.eversion",
+      "region": "ankle",
+      "plane": "frontal",
+      "displayName": "Ankle eversion"
+    },
+    {
+      "id": "foot.toeFlexion",
+      "region": "foot",
+      "plane": "sagittal",
+      "displayName": "Toe flexion"
+    },
+    {
+      "id": "foot.toeExtension",
+      "region": "foot",
+      "plane": "sagittal",
+      "displayName": "Toe extension"
+    }
+  ],
+  "actionConditions": [
+    {
+      "id": "fromFlexedPosition",
+      "displayName": "From a flexed position",
+      "definition": "The shoulder begins in flexion and extends toward anatomical neutral rather than continuing behind the torso.",
+      "appliesTo": [
+        "shoulder.extension"
+      ]
+    }
+  ],
+  "muscleProfiles": [
+    {
+      "muscleID": "pectoralisMajorClavicular",
+      "produces": [
+        "shoulder.flexion",
+        "shoulder.adduction",
+        "shoulder.horizontalAdduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "pectoralisMajorSternocostal",
+      "produces": [
+        {
+          "action": "shoulder.extension",
+          "condition": "fromFlexedPosition"
+        },
+        "shoulder.adduction",
+        "shoulder.horizontalAdduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "pectoralisMinor",
+      "produces": [
+        "scapula.depression",
+        "scapula.protraction",
+        "scapula.downwardRotation",
+        "scapula.anteriorTilt"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "seth-2019-shoulder-work"
+      ]
+    },
+    {
+      "muscleID": "serratus",
+      "produces": [
+        "scapula.protraction",
+        "scapula.upwardRotation",
+        "scapula.posteriorTilt"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "seth-2019-shoulder-work"
+      ]
+    },
+    {
+      "muscleID": "lats",
+      "produces": [
+        "shoulder.extension",
+        "shoulder.adduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder",
+        "spine"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "trapeziusUpper",
+      "produces": [
+        "scapula.elevation",
+        "scapula.upwardRotation"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "gaffney-2014-trapezius-subdivisions",
+        "seth-2019-shoulder-work"
+      ]
+    },
+    {
+      "muscleID": "trapeziusMiddle",
+      "produces": [
+        "scapula.retraction"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "gaffney-2014-trapezius-subdivisions",
+        "seth-2019-shoulder-work"
+      ]
+    },
+    {
+      "muscleID": "trapeziusLower",
+      "produces": [
+        "scapula.depression",
+        "scapula.retraction",
+        "scapula.upwardRotation",
+        "scapula.posteriorTilt"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "gaffney-2014-trapezius-subdivisions",
+        "seth-2019-shoulder-work"
+      ]
+    },
+    {
+      "muscleID": "levatorScapulae",
+      "produces": [
+        "scapula.elevation",
+        "scapula.downwardRotation"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "werthel-2019-trapezius-transfer"
+      ]
+    },
+    {
+      "muscleID": "rhomboids",
+      "produces": [
+        "scapula.elevation",
+        "scapula.retraction",
+        "scapula.downwardRotation"
+      ],
+      "stabilizes": [
+        "scapula"
+      ],
+      "evidenceRefs": [
+        "seth-2019-shoulder-work",
+        "werthel-2019-trapezius-transfer"
+      ]
+    },
+    {
+      "muscleID": "teresMajor",
+      "produces": [
+        "shoulder.extension",
+        "shoulder.adduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "lowerBack",
+      "produces": [
+        "spine.extension",
+        "spine.lateralFlexion"
+      ],
+      "stabilizes": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "christophy-2012-lumbar-spine"
+      ]
+    },
+    {
+      "muscleID": "deltoidAnterior",
+      "produces": [
+        "shoulder.flexion",
+        "shoulder.horizontalAdduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "deltoidLateral",
+      "produces": [
+        "shoulder.abduction"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "deltoidPosterior",
+      "produces": [
+        "shoulder.extension",
+        "shoulder.horizontalAbduction",
+        "shoulder.externalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "externalRotators",
+      "produces": [
+        "shoulder.horizontalAbduction",
+        "shoulder.externalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "subscapularis",
+      "produces": [
+        "shoulder.adduction",
+        "shoulder.internalRotation"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "biceps",
+      "produces": [
+        "shoulder.flexion",
+        "elbow.flexion",
+        "forearm.supination"
+      ],
+      "stabilizes": [
+        "shoulder",
+        "elbow"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "triceps",
+      "produces": [
+        "shoulder.extension",
+        "elbow.extension"
+      ],
+      "stabilizes": [
+        "elbow"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "forearms",
+      "produces": [
+        "elbow.flexion",
+        "forearm.pronation",
+        "wrist.flexion",
+        "wrist.extension",
+        "wrist.radialDeviation",
+        "wrist.ulnarDeviation",
+        "hand.grip"
+      ],
+      "stabilizes": [
+        "elbow",
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity"
+      ]
+    },
+    {
+      "muscleID": "abs",
+      "produces": [
+        "spine.flexion"
+      ],
+      "stabilizes": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "christophy-2012-lumbar-spine"
+      ]
+    },
+    {
+      "muscleID": "obliques",
+      "produces": [
+        "spine.flexion",
+        "spine.lateralFlexion",
+        "spine.rotation"
+      ],
+      "stabilizes": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "christophy-2012-lumbar-spine"
+      ]
+    },
+    {
+      "muscleID": "quads",
+      "produces": [
+        "hip.flexion",
+        "knee.extension"
+      ],
+      "stabilizes": [
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "hamstrings",
+      "produces": [
+        "hip.extension",
+        "knee.flexion"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "gluteMax",
+      "produces": [
+        "hip.extension",
+        "hip.externalRotation"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "gluteMed",
+      "produces": [
+        "hip.abduction",
+        "hip.internalRotation",
+        "hip.externalRotation"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "tensorFasciaeLatae",
+      "produces": [
+        "hip.flexion",
+        "hip.abduction",
+        "hip.internalRotation"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "calves",
+      "produces": [
+        "knee.flexion",
+        "ankle.plantarflexion",
+        "foot.toeFlexion"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "adductors",
+      "produces": [
+        "hip.flexion",
+        "hip.extension",
+        "hip.adduction"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "hipFlexors",
+      "produces": [
+        "hip.flexion",
+        "hip.externalRotation"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "shins",
+      "produces": [
+        "ankle.dorsiflexion",
+        "ankle.inversion",
+        "ankle.eversion",
+        "foot.toeExtension"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    }
+  ]
+}

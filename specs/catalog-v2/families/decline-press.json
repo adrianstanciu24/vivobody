@@ -1,0 +1,568 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "decline-press",
+  "name": "Decline Press",
+  "definition": "A supported chest-oriented compound press performed with a head-down bench or equivalent machine path declined 10 to 30 degrees from horizontal. The concentric phase combines shoulder horizontal adduction with elbow extension. The negative angle changes the external load direction and training emphasis, but does not by itself establish shoulder extension as a prime action. Sternocostal-primary and clavicular-secondary roles describe catalog emphasis rather than isolation or inactivity. Flat, inclined, dip, fly, and unsupported open-chain presses belong to other families. The current authored scope is bilateral and supported; cable, unilateral, and bodyweight variants are deferred. A hands-elevated push-up is owned by this family when closed-chain bodyweight variants are reviewed.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "borges-2019-bench-machine-scapula",
+    "boroto-2018-scapular-stabilizers-press",
+    "coratella-2020-bench-press-variations",
+    "lauver-2016-bench-angle",
+    "lee-2019-pectoralis-force-direction",
+    "saeterbakken-2017-bench-press-variations"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAdduction",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.extension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "deltoidAnterior",
+        "triceps"
+      ],
+      "stabilizer": [
+        "serratus",
+        "trapeziusMiddle",
+        "externalRotators"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The support that fixes the torso at the authored decline.",
+      "allowedValues": [
+        "bench",
+        "machinePad"
+      ]
+    },
+    {
+      "id": "scapularFreedom",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the scapula can translate freely or is constrained by torso support.",
+      "allowedValues": [
+        "constrained"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral"
+      ]
+    },
+    {
+      "id": "declineAngleDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Positive magnitude of the head-down bench angle or equivalent downward machine path; a value of 15 represents minus 15 degrees from horizontal.",
+      "minimum": 10,
+      "maximum": 30
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "smith",
+        "convergingChestPress"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "machine-requires-fixed-path-and-type",
+      "description": "Machine decline presses use a constrained load path and declare the machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Barbell and dumbbell decline presses keep a free load path and do not declare a machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "barbell-requires-bench",
+      "description": "A free barbell decline press uses a decline bench and a pronated grip.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-requires-bench",
+      "description": "A dumbbell decline press uses a decline bench.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "smith-uses-bench",
+      "description": "A Smith decline press uses a decline bench and a pronated grip beneath the rails.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "decline-chest-press-machine-uses-pad",
+      "description": "A converging decline chest-press machine supports the torso against its pad and uses the canonical neutral handles.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "convergingChestPress"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "constrained-scapula-requires-stabilizer-pair",
+      "description": "A torso-supported press with constrained scapular translation records both serratus and middle trapezius as stabilizers; support type does not select one of them.",
+      "when": {
+        "field": "variant.scapularFreedom",
+        "operator": "equals",
+        "value": "constrained"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "decline-barbell-bench-press",
+      "name": "Decline Barbell Bench Press",
+      "aliases": [
+        "Barbell Decline Bench Press",
+        "Decline Bench Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 91,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "declineAngleDegrees": 15,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2020-bench-press-variations",
+        "lauver-2016-bench-angle",
+        "saeterbakken-2017-bench-press-variations"
+      ],
+      "movementDefinition": "Secure the legs on a bench declined 15 degrees and lie with the eyes below the racked bar. Lower the bar under control toward the lower-chest line, then press through shoulder horizontal adduction and elbow extension while keeping the torso and shoulders supported."
+    },
+    {
+      "catalogID": "decline-dumbbell-bench-press",
+      "name": "Decline Dumbbell Bench Press",
+      "aliases": [
+        "Dumbbell Decline Bench Press",
+        "Decline Dumbbell Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 86,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "declineAngleDegrees": 15,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "coratella-2020-bench-press-variations",
+        "lee-2019-pectoralis-force-direction"
+      ],
+      "movementDefinition": "Secure the legs on a bench declined 15 degrees and begin with one dumbbell beside each lower-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower them under control without turning the repetition into a fly."
+    },
+    {
+      "catalogID": "decline-smith-machine-bench-press",
+      "name": "Decline Smith Machine Bench Press",
+      "aliases": [
+        "Smith Machine Decline Bench Press",
+        "Decline Smith Press"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 78,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "bench",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "pronated",
+        "declineAngleDegrees": 15,
+        "fixedPath": true,
+        "machineType": "smith"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2020-bench-press-variations",
+        "lauver-2016-bench-angle",
+        "schick-2010-smith-bench-press"
+      ],
+      "movementDefinition": "Set a decline bench to 15 degrees and position it so the Smith bar descends toward the lower chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported."
+    },
+    {
+      "catalogID": "decline-machine-chest-press",
+      "name": "Decline Machine Chest Press",
+      "aliases": [
+        "Machine Decline Chest Press",
+        "Decline Chest Press Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "torsoSupport": "machinePad",
+        "scapularFreedom": "constrained",
+        "gripOrientation": "neutral",
+        "declineAngleDegrees": 15,
+        "fixedPath": true,
+        "machineType": "convergingChestPress"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "coratella-2020-bench-press-variations",
+        "lee-2019-pectoralis-force-direction"
+      ],
+      "movementDefinition": "Adjust the seat so the handles begin beside the lower chest and follow an approximately 15-degree downward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and inward to elbow extension, then return under control."
+    }
+  ]
+}
