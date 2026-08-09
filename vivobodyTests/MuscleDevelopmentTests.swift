@@ -292,8 +292,10 @@ struct MuscleDevelopmentTests {
     @Test func nodeIntensitiesPaintBothSides() {
         let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3, reps: 10, weight: 135)])
         let nodes = MuscleDevelopment.nodeIntensities(from: [s], now: day(0))
-        #expect((nodes["Pectoralis_Major_L"] ?? 0) > 0)
-        #expect((nodes["Pectoralis_Major_R"] ?? 0) > 0)
+        #expect((nodes["Pectoralis_Major_Clavicular_L"] ?? 0) > 0)
+        #expect((nodes["Pectoralis_Major_Clavicular_R"] ?? 0) > 0)
+        #expect((nodes["Pectoralis_Major_Sternocostal_L"] ?? 0) > 0)
+        #expect((nodes["Pectoralis_Major_Sternocostal_R"] ?? 0) > 0)
         #expect(nodes["Vastus_Lateralis_L"] == nil)
     }
 

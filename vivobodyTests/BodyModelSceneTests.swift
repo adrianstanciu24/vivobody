@@ -35,14 +35,14 @@ struct BodyModelSceneTests {
     @Test(arguments: [BodyModelTheme.dark, .light])
     func developmentLivesInTheDiffuseNotAShader(theme: BodyModelTheme) throws {
         let channels: [String: MuscleDevelopment.Channels] = [
-            "Pectoralis_Major_L": .init(adaptation: 0.9),
+            "Pectoralis_Major_Clavicular_L": .init(adaptation: 0.9),
             "Gastrocnemius_L": .init(adaptation: 0.5)
         ]
         let scene = try #require(BodyModelScene.make(channels: channels, theme: theme))
 
         // A developed muscle is tinted through its diffuse, with no
         // shader modifier layered on top.
-        let developed = try #require(material(named: "Pectoralis_Major_L", in: scene))
+        let developed = try #require(material(named: "Pectoralis_Major_Clavicular_L", in: scene))
         #expect(developed.shaderModifiers?[.surface] == nil)
         #expect(developed.diffuse.contents != nil)
 

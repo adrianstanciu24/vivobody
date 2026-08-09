@@ -119,7 +119,10 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
     nonisolated private var nodeBaseNames: [String] {
         switch self {
         case .pectorals:
-            return ["Pectoralis_Major", "Pectoralis_Minor"]
+            return [
+                "Pectoralis_Major_Clavicular", "Pectoralis_Major_Sternocostal",
+                "Pectoralis_Minor",
+            ]
         case .serratus:
             return ["Serratus_Anterior"]
         case .lats:

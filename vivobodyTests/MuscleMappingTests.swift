@@ -97,7 +97,8 @@ struct MuscleMappingTests {
     @Test func anatomyProjectionShowsStabilizersWithoutVolumeCredit() {
         let bench = Muscle.involvement(forExerciseNamed: "Barbell Bench Press")
         let nodes = bench.anatomyNodeChannels
-        #expect(nodes["Pectoralis_Major_L"]?.intensity == 1)
+        #expect(nodes["Pectoralis_Major_Clavicular_L"]?.intensity == 1)
+        #expect(nodes["Pectoralis_Major_Sternocostal_L"]?.intensity == 1)
         #expect(nodes["Triceps_L"]?.intensity == 0.5)
         #expect(nodes["Biceps_L"]?.intensity == 0.2)
         #expect(nodes["Biceps_L"]?.baseline == .trained)
@@ -394,6 +395,14 @@ struct MuscleMappingTests {
             "Deltoid_Anterior_L", "Deltoid_Anterior_R",
             "Deltoid_Lateral_L", "Deltoid_Lateral_R",
             "Deltoid_Posterior_L", "Deltoid_Posterior_R",
+        ])
+    }
+
+    @Test func pectoralRegionMapsToIndependentHeads() {
+        #expect(Muscle.pectorals.nodeNames == [
+            "Pectoralis_Major_Clavicular_L", "Pectoralis_Major_Clavicular_R",
+            "Pectoralis_Major_Sternocostal_L", "Pectoralis_Major_Sternocostal_R",
+            "Pectoralis_Minor_L", "Pectoralis_Minor_R",
         ])
     }
 
