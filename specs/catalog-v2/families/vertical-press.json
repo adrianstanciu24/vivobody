@@ -1,0 +1,1431 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "vertical-press",
+  "name": "Vertical Press",
+  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. The resistance path is 75 to 90 degrees superior to horizontal, and the hips, knees, and ankles do not contribute to propulsion. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, and closed-chain bodyweight variants remain outside this family.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "balsalobre-fernandez-2018-smith-military-press",
+    "coratella-2022-overhead-press-variants",
+    "ichihashi-2014-military-press-kinematics",
+    "luczak-2013-dumbbell-press-inclinations",
+    "padovan-2024-standing-overhead-press",
+    "saeterbakken-2012-shoulder-press-core",
+    "saeterbakken-2013-shoulder-press-position",
+    "seth-2019-shoulder-work"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "kettlebell",
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral",
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion",
+      "shoulder.abduction"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.extension",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "deltoidLateral",
+        "supraspinatus",
+        "triceps",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "pectoralisMajorClavicular"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "subscapularis",
+        "trapeziusMiddle",
+        "deltoidPosterior",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the press is performed standing or seated.",
+      "allowedValues": [
+        "standing",
+        "seated"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the press.",
+      "allowedValues": [
+        "none",
+        "bench",
+        "machinePad"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify scapular rotation or tilt.",
+      "allowedValues": [
+        "free",
+        "supportConstrained"
+      ]
+    },
+    {
+      "id": "pressInclinationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Signed inclination of the canonical torso-relative press from horizontal: positive toward overhead and negative toward decline; a supported free-weight press uses backrest angle as the proxy.",
+      "minimum": 75,
+      "maximum": 90
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "smith",
+        "convergingShoulderPress"
+      ]
+    },
+    {
+      "id": "kettlebellOrientation",
+      "valueType": "enum",
+      "required": false,
+      "description": "The bell orientation used throughout a kettlebell press.",
+      "allowedValues": [
+        "standard"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric press.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "pressPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical humeral and implement path relative to the head.",
+      "allowedValues": [
+        "frontScapular"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "machine-requires-fixed-path-and-type",
+      "description": "Machine vertical presses use a constrained load path and declare the machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Non-machine vertical presses are not constrained by machine rails or levers and do not declare a machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "kettlebell-requires-standard-orientation",
+      "description": "A kettlebell vertical press uses a neutral grip and declares the standard bell-down orientation; bottom-up pressing remains outside this contract.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "kettlebell"
+      },
+      "then": [
+        {
+          "field": "variant.kettlebellOrientation",
+          "value": "standard"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-kettlebell-omits-bell-orientation",
+      "description": "Only kettlebell presses declare a bell orientation.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "kettlebell"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.kettlebellOrientation"
+      ]
+    },
+    {
+      "id": "unsupported-torso-is-upright-free-and-spine-stabilized",
+      "description": "A press without posterior torso support is upright, permits free scapular translation, and explicitly declares spinal stabilization whether standing or seated.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "variant.pressInclinationDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalStabilityDemands": [
+        "spine"
+      ]
+    },
+    {
+      "id": "supported-torso-is-seated-and-translation-constrained",
+      "description": "A bench or machine pad requires a seated press and limits scapular translation without removing upward rotation or posterior tilt.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "notEquals",
+        "value": "none"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "supportConstrained"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "standing-requires-unsupported-upright-pelvic-control",
+      "description": "A strict standing press has no posterior torso support, stays at 90 degrees, and explicitly declares spinal and pelvic stabilization.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "standing"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.pressInclinationDegrees",
+          "value": 90
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ]
+    },
+    {
+      "id": "unilateral-requires-trunk-and-pelvic-control",
+      "description": "A unilateral press explicitly declares spinal and pelvic stability demands created by the asymmetric load.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ]
+    },
+    {
+      "id": "barbell-requires-pronated-grip",
+      "description": "The currently admitted straight-bar vertical press uses a pronated grip; neutral specialty bars require a future contract review.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "barbell-requires-bilateral-setup",
+      "description": "A standard straight-bar vertical press is bilateral; unilateral bar-like implements require a different equipment type and review.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "smith-requires-pronated-grip",
+      "description": "A Smith vertical press uses a pronated grip beneath the rails but may be standing or seated.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "smith-requires-bilateral-setup",
+      "description": "The admitted Smith press uses both hands on the standard bar; an asymmetrically loaded one-arm rail press is outside this contract.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "machine-pad-requires-purpose-built-machine",
+      "description": "The machinePad support value belongs only to the purpose-built converging shoulder-press machine, not a free-weight or Smith bench setup.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "machinePad"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "machine"
+        },
+        {
+          "field": "variant.machineType",
+          "value": "convergingShoulderPress"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "shoulder-press-machine-uses-pad",
+      "description": "A converging shoulder-press machine is seated against its pad and uses its canonical neutral handles.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "convergingShoulderPress"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "standing-barbell-overhead-press",
+      "name": "Standing Barbell Overhead Press",
+      "aliases": [
+        "Barbell Overhead Press",
+        "Standing Barbell Shoulder Press",
+        "Standing Military Press",
+        "Strict Barbell Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 98,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "coratella-2022-overhead-press-variants",
+        "ichihashi-2014-military-press-kinematics",
+        "padovan-2024-standing-overhead-press",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Stand with the feet about hip-width apart and hold the bar at the upper chest with a pronated grip just outside shoulder width. Brace the trunk without leaning back, keep the hips and knees motionless, and press the bar overhead as the scapulae rotate upward. Move the head only enough to clear the bar, finish with the elbows extended and the bar balanced over the midfoot, then lower under control to the upper chest."
+    },
+    {
+      "catalogID": "standing-dumbbell-overhead-press",
+      "name": "Standing Dumbbell Overhead Press",
+      "aliases": [
+        "Dumbbell Overhead Press",
+        "Standing Dumbbell Shoulder Press",
+        "Standing Dumbbell Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "saeterbakken-2012-shoulder-press-core",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Brace the trunk and keep the hips and knees motionless. Press both dumbbells overhead along independent front-scapular paths without rotating the grips or leaning back, allowing the scapulae to rotate upward. Finish with the elbows extended and the loads balanced over the body, then lower under control to shoulder height."
+    },
+    {
+      "catalogID": "single-arm-standing-dumbbell-overhead-press",
+      "name": "Single-Arm Standing Dumbbell Overhead Press",
+      "aliases": [
+        "Single-Arm Dumbbell Overhead Press",
+        "One-Arm Standing Dumbbell Overhead Press",
+        "Single-Arm Dumbbell Shoulder Press",
+        "One-Arm Dumbbell Shoulder Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 82,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "saeterbakken-2012-shoulder-press-core",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at the working-side shoulder with the palm facing forward and the elbow slightly forward of the torso. Brace the trunk, keep the pelvis level and the torso facing forward, and keep the hips and knees motionless. Press the dumbbell overhead along a front-scapular path without rotating the grip, leaning sideways or back, or twisting the torso, allowing the working scapula to rotate upward. Finish with the elbow extended and the load balanced over the body, then lower under control before changing sides."
+    },
+    {
+      "catalogID": "seated-dumbbell-overhead-press",
+      "name": "Seated Dumbbell Overhead Press",
+      "aliases": [
+        "Dumbbell Shoulder Press",
+        "Seated Dumbbell Shoulder Press",
+        "Seated Dumbbell Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "pressInclinationDegrees": 85,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "luczak-2013-dumbbell-press-inclinations",
+        "saeterbakken-2012-shoulder-press-core",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Set the bench backrest to about 85 degrees and sit with the pelvis and upper torso supported and the feet planted. Hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Press both dumbbells overhead along independent front-scapular paths without rotating the grips, pushing through the legs, or lifting the torso from the bench. Allow the scapulae to rotate upward even though the backrest limits their translation, finish with the elbows extended, and lower under control to shoulder height."
+    },
+    {
+      "catalogID": "seated-barbell-overhead-press",
+      "name": "Seated Barbell Overhead Press",
+      "aliases": [
+        "Seated Barbell Shoulder Press",
+        "Seated Military Press",
+        "Seated Barbell Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "pressInclinationDegrees": 80,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2022-overhead-press-variants",
+        "ichihashi-2014-military-press-kinematics",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Set a bench backrest to about 80 degrees inside a rack and sit with the pelvis and upper torso supported and the feet planted. Unrack the bar at the upper chest with a pronated grip just outside shoulder width. Press the bar overhead in front of the head without pushing through the legs or lifting the torso from the bench, allowing the scapulae to rotate upward. Finish with the elbows extended, then lower the bar under control to the upper chest."
+    },
+    {
+      "catalogID": "unsupported-seated-dumbbell-overhead-press",
+      "name": "Unsupported Seated Dumbbell Overhead Press",
+      "aliases": [
+        "Unsupported Seated Dumbbell Shoulder Press",
+        "No-Backrest Dumbbell Shoulder Press",
+        "Seated Dumbbell Press Without Back Support"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 77,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine"
+      ],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "saeterbakken-2013-shoulder-press-position"
+      ],
+      "movementDefinition": "Sit upright on a flat bench without a backrest, plant the feet, and hold one dumbbell at each shoulder with the palms facing forward. Brace the trunk so the ribs stay stacked over the pelvis, then press both dumbbells overhead along independent front-scapular paths without leaning back, pushing through the legs, or rotating the grips. Finish with the elbows extended and lower under control to shoulder height."
+    },
+    {
+      "catalogID": "single-arm-seated-dumbbell-overhead-press",
+      "name": "Single-Arm Seated Dumbbell Overhead Press",
+      "aliases": [
+        "One-Arm Seated Dumbbell Overhead Press",
+        "Single-Arm Seated Dumbbell Shoulder Press",
+        "One-Arm Seated Dumbbell Shoulder Press"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 83,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "pressInclinationDegrees": 75,
+        "gripOrientation": "neutral",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "saeterbakken-2012-shoulder-press-core"
+      ],
+      "movementDefinition": "Set the bench backrest to about 75 degrees and sit with the upper torso and pelvis supported and the feet planted. Hold one dumbbell at the working-side shoulder with the palm facing inward. Press it overhead along a front-scapular path without rotating the grip, pushing through the legs, twisting, or leaning sideways, while keeping both sides of the pelvis in contact with the bench. Finish with the elbow extended, lower under control, and repeat on the other side."
+    },
+    {
+      "catalogID": "single-arm-standing-kettlebell-overhead-press",
+      "name": "Single-Arm Standing Kettlebell Overhead Press",
+      "aliases": [
+        "Single-Arm Kettlebell Overhead Press",
+        "One-Arm Standing Kettlebell Press",
+        "Kettlebell Military Press"
+      ],
+      "equipment": "kettlebell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 8,
+      "searchPriority": 89,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "neutral",
+        "fixedPath": false,
+        "kettlebellOrientation": "standard",
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ichihashi-2014-military-press-kinematics",
+        "padovan-2024-standing-overhead-press"
+      ],
+      "movementDefinition": "Stand with the feet about shoulder-width apart and rack one kettlebell at the working-side shoulder with a neutral wrist and the bell resting in the standard bell-down position against the forearm. Brace the trunk and keep the hips and knees motionless. Press the kettlebell overhead along a front-scapular path without letting it rotate bottom-up, leaning, or twisting. Finish with the elbow extended and the forearm vertical, then lower under control to the rack before changing sides."
+    },
+    {
+      "catalogID": "seated-smith-machine-overhead-press",
+      "name": "Seated Smith Machine Overhead Press",
+      "aliases": [
+        "Smith Machine Shoulder Press",
+        "Seated Smith Machine Shoulder Press",
+        "Smith Machine Military Press"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 86,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "pressInclinationDegrees": 85,
+        "gripOrientation": "pronated",
+        "fixedPath": true,
+        "machineType": "smith",
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "balsalobre-fernandez-2018-smith-military-press",
+        "ichihashi-2014-military-press-kinematics"
+      ],
+      "movementDefinition": "Place an upright bench under the Smith bar so the rails keep the bar in front of the head, set the backrest to about 85 degrees, and sit with the torso supported and feet planted. Unhook the bar at the upper chest with a pronated grip just outside shoulder width. Press along the rails without pushing through the legs or lifting from the bench, finish with the elbows extended, then lower under control and rehook securely."
+    },
+    {
+      "catalogID": "machine-shoulder-press",
+      "name": "Machine Shoulder Press",
+      "aliases": [
+        "Seated Machine Shoulder Press",
+        "Converging Shoulder Press",
+        "Shoulder Press Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 93,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "supportConstrained",
+        "pressInclinationDegrees": 80,
+        "gripOrientation": "neutral",
+        "fixedPath": true,
+        "machineType": "convergingShoulderPress",
+        "lowerBodyContribution": "none",
+        "pressPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "coratella-2022-overhead-press-variants",
+        "ichihashi-2014-military-press-kinematics"
+      ],
+      "movementDefinition": "Adjust the seat so the neutral handles begin near shoulder height and sit with the pelvis and upper torso against the machine pad and the feet planted. Press both lever arms overhead along their converging front paths without pushing through the legs or lifting from the pad. Finish with the elbows extended without forcing the shoulders forward, then return the handles under control."
+    }
+  ]
+}

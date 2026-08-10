@@ -317,6 +317,135 @@
       "doi": "10.7752/jpes.2019.s3131",
       "url": "https://doi.org/10.7752/jpes.2019.s3131",
       "scope": "Serratus-anterior excitation and scapular-abduction excursion during flat barbell bench pressing and a chest-press lever machine at submaximal and 10-RM loading."
+    },
+    {
+      "id": "blache-2017-glenohumeral-stability",
+      "sourceType": "musculoskeletalModelStudy",
+      "title": "Muscle function in glenohumeral joint stability during lifting task",
+      "authors": [
+        "Yoann Blache",
+        "Mickaël Begon",
+        "Benjamin Michaud",
+        "Landry Desmoulins",
+        "Paul Allard",
+        "Fabien Dal Maso"
+      ],
+      "year": 2017,
+      "doi": "10.1371/journal.pone.0189406",
+      "pmid": "29244838",
+      "url": "https://doi.org/10.1371/journal.pone.0189406",
+      "scope": "Stability-constrained upper-limb simulation during a bimanual hip-to-shoulder lifting task, supporting a supraspinatus contribution to glenohumeral compression and reduced shear; not direct overhead-press role evidence."
+    },
+    {
+      "id": "ichihashi-2014-military-press-kinematics",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Kinematic characteristics of the scapula and clavicle during military press exercise and shoulder flexion",
+      "authors": [
+        "Noriaki Ichihashi",
+        "Satoko Ibuki",
+        "Naoki Otsuka",
+        "Shingo Takashima",
+        "Aoi Matsumura"
+      ],
+      "year": 2014,
+      "doi": "10.1016/j.jse.2013.11.014",
+      "pmid": "24439246",
+      "url": "https://doi.org/10.1016/j.jse.2013.11.014",
+      "scope": "Scapular and clavicular kinematics in 16 healthy men during a light-load military press, including upward rotation and posterior tilt; the 2 kg load limits generalization to heavy pressing."
+    },
+    {
+      "id": "luczak-2013-dumbbell-press-inclinations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder Muscle Activation of Novice and Resistance Trained Women during Variations of Dumbbell Press Exercises",
+      "authors": [
+        "Joshua Luczak",
+        "Andy Bosak",
+        "Bryan L. Riemann"
+      ],
+      "year": 2013,
+      "doi": "10.1155/2013/612650",
+      "pmid": "26464884",
+      "url": "https://doi.org/10.1155/2013/612650",
+      "scope": "Anterior-deltoid, clavicular- and sternal-pectoralis-major, and upper-trapezius excitation during 0-, 45-, and 85-degree bilateral dumbbell presses with 4.5 kg per hand in 24 healthy college-aged women; the fixed light load limits generalization to heavy pressing."
+    },
+    {
+      "id": "saeterbakken-2012-shoulder-press-core",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Muscle activity of the core during bilateral, unilateral, seated and standing resistance exercise",
+      "authors": [
+        "Atle Hole Saeterbakken",
+        "Marius Steiro Fimland"
+      ],
+      "year": 2012,
+      "doi": "10.1007/s00421-011-2141-7",
+      "pmid": "21877146",
+      "url": "https://doi.org/10.1007/s00421-011-2141-7",
+      "scope": "Rectus-abdominis, external-oblique, and erector-spinae excitation across bilateral and unilateral neutral-grip dumbbell shoulder presses at 80% 1-RM in 15 healthy men; seated conditions used a 75-degree backrest supporting the upper torso and glutes."
+    },
+    {
+      "id": "saeterbakken-2013-shoulder-press-position",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of body position and loading modality on muscle activity and strength in shoulder presses",
+      "authors": [
+        "Atle H. Saeterbakken",
+        "Marius S. Fimland"
+      ],
+      "year": 2013,
+      "doi": "10.1519/JSC.0b013e318276b873",
+      "pmid": "23096062",
+      "url": "https://doi.org/10.1519/JSC.0b013e318276b873",
+      "scope": "Anterior, lateral, and posterior deltoid, biceps, and triceps excitation plus one-repetition maximum across seated and standing barbell and dumbbell shoulder presses in 15 healthy men."
+    },
+    {
+      "id": "coratella-2022-overhead-press-variants",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Front vs Back and Barbell vs Machine Overhead Press: An Electromyographic Analysis and Implications For Resistance Training",
+      "authors": [
+        "Giuseppe Coratella",
+        "Gianpaolo Tornatore",
+        "Stefano Longo",
+        "Fabio Esposito",
+        "Emiliano Cè"
+      ],
+      "year": 2022,
+      "doi": "10.3389/fphys.2022.825880",
+      "pmid": "35936912",
+      "url": "https://doi.org/10.3389/fphys.2022.825880",
+      "scope": "Anterior, lateral, and posterior deltoid, upper-trapezius, pectoralis-major, and triceps excitation during front and behind-neck barbell and machine overhead presses in eight competitive male bodybuilders."
+    },
+    {
+      "id": "padovan-2024-standing-overhead-press",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Surface electromyography excitation in barbell vs. kettlebell overhead press prime movers and stabilizer muscles",
+      "authors": [
+        "Riccardo Padovan",
+        "Giuseppe Marcolin",
+        "Stefano Longo",
+        "Nicholas Toninelli",
+        "Gianpaolo Tornatore",
+        "Fabio Esposito",
+        "Emiliano Cè",
+        "Antonio Paoli",
+        "Giuseppe Coratella"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s11332-024-01301-w",
+      "url": "https://doi.org/10.1007/s11332-024-01301-w",
+      "scope": "Prime-mover and stabilizer excitation during 8-RM standing barbell and single-arm standard-orientation kettlebell overhead presses in ten experienced male instructors, including deltoids, triceps, upper trapezius, rectus abdominis, external oblique, and erector spinae."
+    },
+    {
+      "id": "balsalobre-fernandez-2018-smith-military-press",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Load–velocity profiling in the military press exercise: Effects of gender and training",
+      "authors": [
+        "Carlos Balsalobre-Fernández",
+        "Amador García-Ramos",
+        "Pedro Jiménez-Reyes"
+      ],
+      "year": 2018,
+      "doi": "10.1177/1747954117738243",
+      "url": "https://doi.org/10.1177/1747954117738243",
+      "scope": "Load-velocity profiling during a seated Smith-machine military press in 26 men and 13 women, with a six-week training follow-up in 24 men. The pronated-grip upper-chest-to-full-extension protocol supports the seated fixed-path setup; it does not establish muscle-role rankings."
     }
   ]
 }

@@ -14,8 +14,9 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
 
 ## Source files
 
-- `taxonomy.json` defines exactly 31 muscle regions, their coarse app group,
-  display names, and exact `BodyModel.scn` mesh base names.
+- `taxonomy.json` defines exactly 32 muscle regions, their coarse app group,
+  display names, and exact `BodyModel.scn` mesh base names where the model has
+  a surface mesh. An unvisualized muscle must carry an explicit reason.
 - `joint-actions.json` is an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
@@ -26,6 +27,9 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
   explicitly reviewed exercises.
 - `fixtures/valid-family.json` is synthetic validator input. It is never emitted
   into the app catalog.
+- `proposals/` holds evidence-backed contract-discovery records. Each document
+  states whether its decisions are pending or already activated; proposal files
+  themselves are never validator input.
 - `families/` holds one reviewed source file per real movement family.
 
 ## Authored muscle semantics
@@ -39,12 +43,17 @@ Exercise involvement remains categorical:
 - `stabilizer`: a contributor used principally to control a declared joint or
   segment rather than produce the exercise's prime actions.
 
-For press exercises, a bench, floor, or machine pad with declared
-`scapularFreedom: constrained` does not select one scapular stabilizer over
-another. Both `serratus` and `trapeziusMiddle` are recorded as stabilizers.
-Serratus becomes a dynamic contributor only when one of its scapular actions,
-such as protraction, is explicitly declared; support type alone never implies
-that action.
+For press exercises, `scapularTranslation` describes only whether external
+posterior support limits translation along the thorax. `supportConstrained`
+does not mean the scapula is pinned and does not classify upward/downward
+rotation or anterior/posterior tilt. In the reviewed chest-press families, a
+bench, floor, or machine pad with that value does not select one scapular
+stabilizer over another: both `serratus` and `trapeziusMiddle` are recorded as
+stabilizers. That role rule is family-specific and must not be copied when a
+different family declares a scapular action as prime. Serratus becomes a
+dynamic contributor when an action it produces, such as protraction or upward
+rotation, is explicitly declared; support type alone never implies that
+action.
 
 Regional excitation differences may support a role decision, but EMG rank by
 itself does not redefine a muscle's anatomical actions. Each family must make
@@ -97,7 +106,10 @@ Each family separates:
   exercise; arbitrary name parsing is never used as biomechanics.
 - `exerciseRules`: declarative cross-field invariants. These connect equipment,
   load semantics, kinetic chain, support, and variant axes so individually
-  valid values cannot form an impossible combination.
+  valid values cannot form an impossible combination. A rule can also use
+  `requireAdditionalStabilityDemands` to require named regions in an exercise's
+  `additionalStabilityDemands`; assigning a capable stabilizing muscle remains
+  independently mandatory.
 - `recommended`: soft programming guidance. Defaults outside these ranges emit
   warnings and do not invalidate family membership.
 
@@ -107,6 +119,14 @@ the external load path; it is independent of `kineticChain`, so a closed-chain
 push-up still has `fixedPath: false`. Machine presses require `fixedPath: true`
 and a mechanism, while every non-machine press requires `fixedPath: false` and
 must omit `machineType`.
+
+They also share `pressInclinationDegrees`, a required signed axis for the
+canonical torso-relative pressing inclination. Zero is horizontal, positive
+values move toward overhead, and negative values move toward decline. A
+supported free-weight press uses its backrest angle as the practical proxy.
+The current reviewed bands are decline `-30...-10`, horizontal `0`, incline
+`15...45`, and vertical `75...90`; unclaimed intervals remain visible
+instead of being hidden behind family-specific angle names.
 
 ## Deferred press scope
 
@@ -124,7 +144,7 @@ torso rather than the conventional exercise label:
 | Hands-elevated “incline push-up” | Decline press |
 
 Neither angled family currently admits a closed kinetic chain, bodyweight load,
-free scapular movement, or a body-angle/elevated-segment axis, so these are
+free scapular translation, or a body-angle/elevated-segment axis, so these are
 ownership decisions rather than authored exercises. Standard and knee push-ups
 remain horizontal press variants.
 
@@ -152,7 +172,7 @@ python3 -m unittest discover -s Scripts/tests -p 'test_catalog_v2.py'
 
 The validator uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
-and `_R` nodes, mesh ownership is unique, the taxonomy contains exactly its 31
+and `_R` nodes, mesh ownership is unique, the taxonomy contains exactly its 32
 canonical muscles, all muscles have evidence-backed action profiles, family
 prime actions have capable movers, and stability demands have capable assigned
 muscles.

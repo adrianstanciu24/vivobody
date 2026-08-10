@@ -5,7 +5,7 @@
 #
 #  Foundation validator for the clean-slate, family-first exercise catalog.
 #  It owns no legacy compatibility and never reads curate.py, its review CSVs,
-#  or the shipped catalog.json. It validates the canonical 31-muscle taxonomy,
+#  or the shipped catalog.json. It validates the canonical 32-muscle taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
 #  references, and every reviewed movement-family contract. The atomic cutover
 #  will extend this file into the deterministic catalog compiler.
@@ -54,6 +54,7 @@ EXPECTED_MUSCLE_IDS = {
     "deltoidPosterior",
     "externalRotators",
     "subscapularis",
+    "supraspinatus",
     "biceps",
     "triceps",
     "forearms",
@@ -301,7 +302,7 @@ def validate_taxonomy(data: dict[str, Any], body_model_path: Path = BODY_MODEL_P
     require(tuple(groups) == EXPECTED_GROUPS, f"{context}.groups must match the app's six MuscleGroup raw values")
 
     muscles = require_list(data["muscles"], f"{context}.muscles")
-    require(len(muscles) == 31, f"{context} must define exactly 31 muscles, found {len(muscles)}")
+    require(len(muscles) == 32, f"{context} must define exactly 32 muscles, found {len(muscles)}")
     muscle_by_id: dict[str, dict[str, Any]] = {}
     owner_by_mesh_base: dict[str, str] = {}
 
@@ -892,7 +893,7 @@ def validate_exercise_rules(
         require_keys(
             rule,
             required={"id", "description", "when", "then", "requirePresent", "requireAbsent"},
-            optional={"requireInvolvement"},
+            optional={"requireInvolvement", "requireAdditionalStabilityDemands"},
             context=item_context,
         )
         rule_id = require_non_empty_string(rule["id"], f"{item_context}.id")
@@ -965,8 +966,39 @@ def validate_exercise_rules(
                 f"{item_context}.requireInvolvement repeats {muscle_id} as {role}",
             )
             required_assignments.add(pair)
+        required_additional_stability_demands = require_list(
+            rule.get("requireAdditionalStabilityDemands", []),
+            f"{item_context}.requireAdditionalStabilityDemands",
+            allow_empty=True,
+        )
+        require_unique(
+            required_additional_stability_demands,
+            f"{item_context}.requireAdditionalStabilityDemands",
+        )
+        for region_index, region in enumerate(
+            required_additional_stability_demands
+        ):
+            region_context = (
+                f"{item_context}.requireAdditionalStabilityDemands[{region_index}]"
+            )
+            require(
+                isinstance(region, str) and SYMBOL_ID.fullmatch(region) is not None,
+                f"{region_context} is not a stable region ID: {region!r}",
+            )
+        unknown_regions = sorted(
+            set(required_additional_stability_demands) - foundation.region_ids
+        )
         require(
-            assertions or present_paths or absent_paths or required_assignments,
+            not unknown_regions,
+            f"{item_context}.requireAdditionalStabilityDemands references unknown stability "
+            f"regions: {', '.join(unknown_regions)}",
+        )
+        require(
+            assertions
+            or present_paths
+            or absent_paths
+            or required_assignments
+            or required_additional_stability_demands,
             f"{item_context} does not enforce anything",
         )
     return rules
@@ -1024,6 +1056,15 @@ def validate_exercise_rule_matches(
                 role_by_muscle.get(muscle_id) == role,
                 f"{context} violates exercise rule {rule['id']}: "
                 f"{muscle_id} must be assigned as {role}",
+            )
+        additional_stability_demands = set(
+            exercise["additionalStabilityDemands"]
+        )
+        for region in rule.get("requireAdditionalStabilityDemands", []):
+            require(
+                region in additional_stability_demands,
+                f"{context} violates exercise rule {rule['id']}: "
+                f"{region} must be declared in additionalStabilityDemands",
             )
 
 

@@ -471,6 +471,7 @@
       "muscleID": "deltoidAnterior",
       "produces": [
         "shoulder.flexion",
+        "shoulder.abduction",
         "shoulder.horizontalAdduction",
         "shoulder.internalRotation"
       ],
@@ -537,6 +538,20 @@
         "ackland-2008-shoulder-moment-arms",
         "holzbaur-2005-upper-extremity"
       ]
+    },
+    {
+      "muscleID": "supraspinatus",
+      "produces": [
+        "shoulder.abduction"
+      ],
+      "stabilizes": [
+        "shoulder"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "blache-2017-glenohumeral-stability"
+      ],
+      "notes": "The whole-muscle profile deliberately omits shoulder flexion because the available moment-arm evidence distinguishes anterior and posterior supraspinatus subregions, while this taxonomy does not."
     },
     {
       "muscleID": "biceps",

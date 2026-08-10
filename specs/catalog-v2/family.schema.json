@@ -552,6 +552,13 @@
           "items": {
             "$ref": "#/$defs/muscleAssignment"
           }
+        },
+        "requireAdditionalStabilityDemands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/symbolID"
+          }
         }
       }
     },

@@ -126,12 +126,12 @@
       ]
     },
     {
-      "id": "scapularFreedom",
+      "id": "scapularTranslation",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the scapula can translate freely or is constrained by torso support.",
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify scapular rotation or tilt.",
       "allowedValues": [
-        "constrained"
+        "supportConstrained"
       ]
     },
     {
@@ -145,12 +145,12 @@
       ]
     },
     {
-      "id": "declineAngleDegrees",
+      "id": "pressInclinationDegrees",
       "valueType": "number",
       "required": true,
-      "description": "Positive magnitude of the head-down bench angle or equivalent downward machine path; a value of 15 represents minus 15 degrees from horizontal.",
-      "minimum": 10,
-      "maximum": 30
+      "description": "Signed inclination of the canonical torso-relative press from horizontal: positive toward overhead and negative toward decline; a supported free-weight press uses backrest angle as the proxy.",
+      "minimum": -30,
+      "maximum": -10
     },
     {
       "id": "fixedPath",
@@ -289,12 +289,12 @@
       "requireAbsent": []
     },
     {
-      "id": "constrained-scapula-requires-stabilizer-pair",
-      "description": "A torso-supported press with constrained scapular translation records both serratus and middle trapezius as stabilizers; support type does not select one of them.",
+      "id": "support-constrained-translation-requires-stabilizer-pair",
+      "description": "A torso-supported press with support-constrained scapular translation records both serratus and middle trapezius as stabilizers; support type does not select one of them.",
       "when": {
-        "field": "variant.scapularFreedom",
+        "field": "variant.scapularTranslation",
         "operator": "equals",
-        "value": "constrained"
+        "value": "supportConstrained"
       },
       "then": [],
       "requirePresent": [],
@@ -364,9 +364,9 @@
       "variant": {
         "kineticChain": "open",
         "torsoSupport": "bench",
-        "scapularFreedom": "constrained",
+        "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
-        "declineAngleDegrees": 15,
+        "pressInclinationDegrees": -15,
         "fixedPath": false
       },
       "additionalPrimeActions": [],
@@ -428,9 +428,9 @@
       "variant": {
         "kineticChain": "open",
         "torsoSupport": "bench",
-        "scapularFreedom": "constrained",
+        "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
-        "declineAngleDegrees": 15,
+        "pressInclinationDegrees": -15,
         "fixedPath": false
       },
       "additionalPrimeActions": [],
@@ -488,9 +488,9 @@
       "variant": {
         "kineticChain": "open",
         "torsoSupport": "bench",
-        "scapularFreedom": "constrained",
+        "scapularTranslation": "supportConstrained",
         "gripOrientation": "pronated",
-        "declineAngleDegrees": 15,
+        "pressInclinationDegrees": -15,
         "fixedPath": true,
         "machineType": "smith"
       },
@@ -549,9 +549,9 @@
       "variant": {
         "kineticChain": "open",
         "torsoSupport": "machinePad",
-        "scapularFreedom": "constrained",
+        "scapularTranslation": "supportConstrained",
         "gripOrientation": "neutral",
-        "declineAngleDegrees": 15,
+        "pressInclinationDegrees": -15,
         "fixedPath": true,
         "machineType": "convergingChestPress"
       },

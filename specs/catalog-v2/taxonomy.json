@@ -167,6 +167,14 @@
       "unvisualizedReason": "BodyModel.scn has no subscapularis surface mesh."
     },
     {
+      "id": "supraspinatus",
+      "displayName": "Supraspinatus",
+      "anatomicalName": "Supraspinatus",
+      "group": "shoulders",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no supraspinatus surface mesh."
+    },
+    {
       "id": "biceps",
       "displayName": "Biceps",
       "anatomicalName": "Biceps Brachii and Brachialis",
