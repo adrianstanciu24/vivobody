@@ -173,10 +173,7 @@ struct WeekCadenceStrip: View {
 
     func cell(for day: Date) -> some View {
         let start = calendar.startOfDay(for: day)
-        let today = calendar.startOfDay(for: Date())
         let isWorkout = workoutDays.contains(start)
-        let isToday = calendar.isDateInToday(day)
-        let isPast = start < today
         let isPR = prDays.contains(start)
 
         return VStack(spacing: Space.sm) {
@@ -185,8 +182,6 @@ struct WeekCadenceStrip: View {
                 .foregroundStyle(isWorkout ? Ink.secondary : Ink.primary.opacity(Opacity.soft))
             CadenceDot(
                 isWorkout: isWorkout,
-                isToday: isToday,
-                isPast: isPast,
                 isPR: isPR
             )
         }

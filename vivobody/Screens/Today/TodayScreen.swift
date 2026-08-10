@@ -5,8 +5,8 @@
 //  The app's home tab. Quiet, scannable, anchored by the big
 //  "Start Workout" call-to-action. Composes previously-built
 //  atoms into their first real screen home:
-//    • ConsistencyStrip — the rolling two weeks of workout embers, sized
-//      by each day's tonnage, with the PR pulse on record days
+//    • ConsistencyStrip — the rolling two weeks of workout embers,
+//      the glow ring pulsing on PR days
 //    • PrimaryActionButton — the START WORKOUT call-to-action, which
 //      becomes the resume/finish control while a workout is running
 //    • DigitTicker — used inside the LastWorkout stats strip

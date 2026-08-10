@@ -595,10 +595,8 @@ extension TodayScreen {
             // Two weeks, not a month: at typical training density a
             // month grid is mostly empty cells, and the streak reads
             // the same off the rolling strip. The month itself is one
-            // tap away below. Ember size carries the day's tonnage, so
-            // the strip doubles as an effort landscape rather than
-            // repeating History's binary week at twice the width.
-            ConsistencyStrip(workoutDates: workoutDates, prDates: prDates, effortByDay: workoutVolumeByDay)
+            // tap away below.
+            ConsistencyStrip(workoutDates: workoutDates, prDates: prDates)
                 .padding(Space.xl)
                 .contentCard()
             NavigationLink {

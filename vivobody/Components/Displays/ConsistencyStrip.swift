@@ -14,17 +14,18 @@
 //  both weeks) and leaves the dot at full CadenceDot size instead of
 //  shrinking it to fit fourteen columns across a phone.
 //
-//  Attendance is only the first dimension. `effortByDay` carries raw
-//  per-day tonnage, normalized here against the heaviest day shown
-//  (sqrt curve, so one monster session can't shrink the rest to
-//  pips), and each trained ember's size follows it — the strip reads
-//  as a landscape of effort, not a row of identical discs.
-//  No effort data, no change: every trained day renders full size.
+//  Every day renders the same full-size ember: orange when trained,
+//  gray when not, the glow ring pulsing on PR days. Attendance is
+//  the only dimension — effort once sized the embers, but three
+//  honest states read faster than a landscape of sizes.
+//
+//  Each cell hands its chronological position to CadenceDot as
+//  `ignitionOrder`, so on appear the embers light oldest-first —
+//  the two weeks catch fire left to right, today last.
 //
 //  Use:
 //      ConsistencyStrip(workoutDates: dates)
 //      ConsistencyStrip(workoutDates: dates, prDates: prs, weeks: 2)
-//      ConsistencyStrip(workoutDates: dates, effortByDay: tonnage)
 //
 
 import VivoKit
@@ -33,11 +34,6 @@ import SwiftUI
 struct ConsistencyStrip: View {
     let workoutDates: Set<Date>
     var prDates: Set<Date> = []
-    /// Raw effort per day (tonnage in canonical lb), normalized
-    /// internally over the visible window. Days with a session but no
-    /// known effort render at a floor so missing data never reads as
-    /// a weak day.
-    var effortByDay: [Date: Double] = [:]
     /// How many trailing weeks the strip covers, the current one last.
     var weeks: Int = 2
     var today: Date = Date()
@@ -68,20 +64,6 @@ struct ConsistencyStrip: View {
         Set(prDates.map { calendar.startOfDay(for: $0) })
     }
 
-    /// Effort normalized to 0...1 over the days actually on screen.
-    /// sqrt compresses outliers so a single huge session can't dwarf
-    /// the rest; days at or below zero (session logged, tonnage
-    /// unknown) get a mid floor rather than the minimum. Empty when
-    /// no effort data was supplied at all, which renders every ember
-    /// at full size.
-    private var normalizedEffort: [Date: Double] {
-        guard !effortByDay.isEmpty else { return [:] }
-        let shownDays = Set(rows.flatMap { $0 })
-        let shown = effortByDay.filter { shownDays.contains($0.key) }
-        guard let peak = shown.values.max(), peak > 0 else { return [:] }
-        return shown.mapValues { $0 > 0 ? sqrt($0 / peak) : 0.6 }
-    }
-
     private var sessionCount: Int {
         rows.flatMap { $0 }.filter { workoutDays.contains($0) }.count
     }
@@ -90,8 +72,13 @@ struct ConsistencyStrip: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             VStack(spacing: Space.sm) {
                 weekdayHeader
-                ForEach(Array(rows.enumerated()), id: \.offset) { _, week in
-                    weekRow(week)
+                // Rows sit wider apart than the header: each ring
+                // draws 3.5pt past its row's frame, so Space.lg here
+                // leaves a clear vertical gap between the rings.
+                VStack(spacing: Space.lg) {
+                    ForEach(Array(rows.enumerated()), id: \.offset) { rowIndex, week in
+                        weekRow(week, rowIndex: rowIndex)
+                    }
                 }
             }
             metadata
@@ -115,41 +102,31 @@ struct ConsistencyStrip: View {
         .accessibilityHidden(true)
     }
 
-    private func weekRow(_ week: [Date]) -> some View {
+    private func weekRow(_ week: [Date], rowIndex: Int) -> some View {
         HStack(spacing: 0) {
-            ForEach(week, id: \.self) { day in
-                cell(day)
+            ForEach(Array(week.enumerated()), id: \.element) { columnIndex, day in
+                cell(day, ignitionOrder: rowIndex * 7 + columnIndex)
                     .frame(maxWidth: .infinity)
             }
         }
     }
 
-    private func cell(_ day: Date) -> some View {
+    private func cell(_ day: Date, ignitionOrder: Int) -> some View {
         let trained = workoutDays.contains(day)
         let isPR = prDays.contains(day)
         let isToday = day == todayStart
         return CadenceDot(
             isWorkout: trained,
-            isToday: isToday,
-            isPast: day < todayStart,
             isPR: isPR,
-            effort: normalizedEffort[day] ?? 1.0
+            ignitionOrder: ignitionOrder
         )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(dayLabel(day, isToday: isToday))
-        .accessibilityValue(trained ? trainedValue(day, isPR: isPR) : "Rest")
+        .accessibilityValue(trained ? trainedValue(isPR: isPR) : "Rest")
     }
 
-    /// VoiceOver mirror of the ember's visual weight: the heavy/light
-    /// qualifier only exists when effort data drives the sizing.
-    private func trainedValue(_ day: Date, isPR: Bool) -> String {
-        var parts = ["Trained"]
-        if !normalizedEffort.isEmpty, let effort = normalizedEffort[day] {
-            if effort >= 0.8 { parts.append("heavy day") }
-            else if effort <= 0.45 { parts.append("light day") }
-        }
-        if isPR { parts.append("personal record") }
-        return parts.joined(separator: ", ")
+    private func trainedValue(isPR: Bool) -> String {
+        isPR ? "Trained, personal record" : "Trained"
     }
 
     private var metadata: some View {
@@ -192,31 +169,16 @@ struct ConsistencyStrip: View {
     let trained = [0, 1, 3, 5, 6, 9, 12].compactMap {
         calendar.date(byAdding: .day, value: -$0, to: today)
     }
-    let tonnage: [Double] = [8_000, 4_200, 12_500, 6_800, 9_400, 5_100, 11_000]
-    let effort = Dictionary(uniqueKeysWithValues: zip(trained, tonnage))
-    ConsistencyStripPreviewContent(trained: trained, effort: effort)
-}
-
-/// Preview content lifted out of the `#Preview` builder so the varied
-/// tonnage fixtures can be `let`-bound without tripping the result
-/// builder's no-`return` rule.
-private struct ConsistencyStripPreviewContent: View {
-    let trained: [Date]
-    let effort: [Date: Double]
-
-    var body: some View {
-        VStack {
-            ConsistencyStrip(
-                workoutDates: Set(trained),
-                prDates: Set(trained.prefix(1)),
-                effortByDay: effort
-            )
-            .padding(Space.xl)
-            .contentCard()
-        }
-        .padding(Space.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black)
-        .preferredColorScheme(.dark)
+    VStack {
+        ConsistencyStrip(
+            workoutDates: Set(trained),
+            prDates: Set(trained.prefix(1))
+        )
+        .padding(Space.xl)
+        .contentCard()
     }
+    .padding(Space.gutter)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color.black)
+    .preferredColorScheme(.dark)
 }

@@ -15,7 +15,6 @@ struct ConsistencyStripGallery: View {
     /// Trained days out of the last 14, spread evenly across them.
     @State private var trainedDays: Int = 6
     @State private var showsRecords: Bool = true
-    @State private var scalesEffort: Bool = true
 
     private static let today = Calendar.current.startOfDay(for: Date())
 
@@ -33,18 +32,6 @@ struct ConsistencyStripGallery: View {
         })
     }
 
-    /// Deterministic pseudo-varied tonnage per offset, so toggling
-    /// density or records doesn't reshuffle the ember sizes.
-    private var effortByDay: [Date: Double] {
-        guard scalesEffort else { return [:] }
-        var map: [Date: Double] = [:]
-        for offset in offsets {
-            guard let day = Calendar.current.date(byAdding: .day, value: -offset, to: Self.today) else { continue }
-            map[day] = 3_500 + Double((offset * 37) % 10) * 1_100
-        }
-        return map
-    }
-
     private var prDates: Set<Date> {
         guard showsRecords else { return [] }
         return Set(workoutDates.sorted().suffix(2))
@@ -54,18 +41,13 @@ struct ConsistencyStripGallery: View {
         VStack(alignment: .leading, spacing: Space.xxl) {
             header
 
-            ConsistencyStrip(workoutDates: workoutDates, prDates: prDates, effortByDay: effortByDay)
+            ConsistencyStrip(workoutDates: workoutDates, prDates: prDates)
                 .padding(Space.xl)
                 .contentCard()
 
             densityBar
 
             Toggle("Records", isOn: $showsRecords)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.secondary)
-                .tint(Tint.primary)
-
-            Toggle("Effort-scaled embers", isOn: $scalesEffort)
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
                 .tint(Tint.primary)
@@ -86,7 +68,7 @@ struct ConsistencyStripGallery: View {
                 .font(Typography.metricMicro)
                 .tracking(2)
                 .foregroundStyle(.white.opacity(0.45))
-            Text("Two weeks, one ember per day, sized by the day's effort")
+            Text("Two weeks, one ember per day — trained, record, or rest")
                 .font(Typography.body)
                 .foregroundStyle(Ink.tertiary)
         }

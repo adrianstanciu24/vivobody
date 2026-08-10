@@ -8,90 +8,120 @@
 //  it lives here rather than beside either screen because both own it.
 //
 //  Use:
-//      CadenceDot(isWorkout: true, isToday: false, isPast: true, isPR: false)
+//      CadenceDot(isWorkout: true, isPR: false)
+//      CadenceDot(isWorkout: true, isPR: true, ignitionOrder: 9)
 //
 
 import VivoKit
 import SwiftUI
 
-/// A single cadence dot, drawn flat like StreakCalendar's DayDot: a
-/// trained day is a solid ember disc, a past rest day a full-size
-/// gray disc, a future rest day only a faint ring. Today always
-/// wears a ring — orange while it's still open, a quiet bright rim
-/// once trained. PR days gently pulsate on top, a scale breath plus
-/// a brightening glow, matching the forge's living-motion vocabulary.
-/// `effort` (0...1, default 1) scales the trained disc's diameter so
-/// a heavy day burns bigger than a light one; callers without effort
-/// data leave it at 1 and every trained day renders full size. The
-/// fixed frame never moves, so mixed sizes don't jitter the row.
-/// Reduce Motion users see a static dot.
+/// A single cadence dot, in one of three states and no more:
+///
+///   • done — a flat orange disc wearing a thin orange ring, a soft
+///     orange glow behind it.
+///   • done with PR — the same disc, its ring slowly pulsing.
+///   • not done — a quiet dark gray coal wearing a faint gray ring,
+///     full size like the rest: a missed day is part of the record,
+///     not a hole in it.
+///
+/// Every disc renders at the same full size and every day wears the
+/// outer ring; only the colors and the PR pulse change. Today and
+/// future days get no special treatment — a day is done or it isn't.
+///
+/// Ignition: when `ignitionOrder` is set (the two-week strip passes
+/// it, oldest = 0), a trained ember's light arrives oldest-first
+/// with a brightness overshoot that decays to rest — LivingMotion's
+/// power-on vocabulary at dot scale. Not-done discs render
+/// immediately; only the fire arrives staggered. A nil order renders
+/// the ember already lit (History's week cadence). Reduce Motion
+/// users see a static dot throughout.
 struct CadenceDot: View {
     let isWorkout: Bool
-    let isToday: Bool
-    let isPast: Bool
     let isPR: Bool
-    var effort: Double = 1.0
+    /// Position in the strip's ignition sequence, oldest = 0. nil
+    /// renders the ember already lit.
+    var ignitionOrder: Int? = nil
 
-    static let size: CGFloat = 34
+    /// Small enough that seven columns breathe inside the card; the
+    /// ring rides 7pt beyond the disc.
+    static let size: CGFloat = 26
 
-    /// Effort clamped to the unit interval.
-    private var t: Double { min(max(effort, 0), 1) }
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Ember diameter for the day's effort: the lightest trained day
-    /// still renders at 62% so the ember never reads as unlit.
-    private var emberDiameter: CGFloat {
-        Self.size * (0.62 + 0.38 * t)
+    /// Ignition entrance: the ember's light has arrived.
+    @State private var ignited = false
+    /// Brightness overshoot decaying after ignition.
+    @State private var flash = false
+    /// The PR glow ring's slow pulse.
+    @State private var pulsing = false
+
+    private var shouldIgnite: Bool {
+        isWorkout && ignitionOrder != nil && !reduceMotion
     }
 
-    @Environment(\.accessibilityReduceMotion) var reduceMotion
-    @State var pulse = false
+    private var shouldPulse: Bool {
+        isWorkout && isPR && !reduceMotion
+    }
 
-    var shouldPulse: Bool { isPR && !reduceMotion }
+    private var fill: Color {
+        isWorkout ? Tint.primary : Surface.edge.opacity(0.6)
+    }
+
+    /// The soft halo behind trained embers; unlit coals go without.
+    private var glowColor: Color {
+        isWorkout ? Tint.primary.opacity(0.45) : .clear
+    }
+
+    private var glowRadius: CGFloat {
+        isWorkout ? 6 : 0
+    }
+
+    /// The outer ring every day wears: orange around embers, a quiet
+    /// gray around unlit coals.
+    private var ringColor: Color {
+        isWorkout ? Tint.primary : Surface.edgeBright
+    }
 
     var body: some View {
         ZStack {
-            if isWorkout {
-                Circle()
-                    .fill(Tint.primary)
-                    .frame(width: emberDiameter, height: emberDiameter)
-            } else if isPast {
-                // Full grid size: a missed day is part of the record,
-                // not a hole in it — it holds the same circle a trained
-                // day would, just unlit.
-                Circle()
-                    .fill(Surface.edge)
-            }
-            if showsRing {
-                Circle()
-                    .stroke(ringColor, lineWidth: isToday ? 1.5 : 1)
-            }
+            Circle()
+                .fill(fill)
+                .frame(width: Self.size, height: Self.size)
+                .shadow(color: glowColor, radius: glowRadius)
+            Circle()
+                .stroke(ringColor, lineWidth: 1.5)
+                .frame(width: Self.size + 7, height: Self.size + 7)
+                .scaleEffect(shouldPulse && pulsing ? 1.08 : 1)
+                .opacity(shouldPulse && pulsing ? 0.55 : 1)
         }
+        // Fixed layout frame: the ring draws past it without moving
+        // the row.
         .frame(width: Self.size, height: Self.size)
-        .scaleEffect(shouldPulse ? (pulse ? 1.06 : 1.0) : 1.0)
-        .shadow(
-            color: shouldPulse ? Tint.primary.opacity(pulse ? 0.35 : 0) : .clear,
-            radius: pulse ? 8 : 0
-        )
-        .onAppear {
-            guard shouldPulse else { return }
+        .opacity(ignited ? 1 : 0)
+        .brightness(flash ? 0.3 : 0)
+        .onAppear(perform: appear)
+    }
+
+    private func appear() {
+        if shouldPulse, !pulsing {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                pulse = true
+                pulsing = true
             }
         }
-    }
-
-    /// Rings mark days that are still open: today always wears one,
-    /// future rest days keep a faint one. Trained days (gradient does
-    /// the work) and past rest days (the pip) go ringless.
-    var showsRing: Bool {
-        isToday || (!isWorkout && !isPast)
-    }
-
-    /// An empty today wears the in-progress orange ring; a trained
-    /// today gets a quiet bright rim; future rest days stay faint.
-    var ringColor: Color {
-        if isToday && !isWorkout { return Tint.inProgress }
-        if isToday { return Ink.primary.opacity(Opacity.medium) }
-        return Surface.edge.opacity(0.5)
+        guard !ignited else { return }
+        guard shouldIgnite else {
+            ignited = true
+            return
+        }
+        // Oldest ember first: the strip catches fire left to right,
+        // top row to bottom, today last.
+        let delay = 0.1 + Double(ignitionOrder ?? 0) * 0.045
+        withAnimation(.easeOut(duration: 0.18).delay(delay)) {
+            ignited = true
+            flash = true
+        }
+        withAnimation(.easeOut(duration: 0.45).delay(delay + 0.18)) {
+            flash = false
+        }
     }
 }
