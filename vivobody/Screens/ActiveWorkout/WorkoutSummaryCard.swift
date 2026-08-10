@@ -12,7 +12,10 @@
 //    • The HERO: known comparable volume as a huge monospaced numeral,
 //      with partial/unavailable state kept explicit and shown
 //      immediately at its final value.
-//    • A small mono support line for the rest (duration, sets, reps).
+//    • A StatStrip for the core counts (duration, sets, reps, timed) —
+//      the same grammar as the History receipt, ruled top and bottom
+//      into a band — with the intensity line (density, hard sets) as
+//      a dim footer note beneath.
 //    • The exercise list as type rows divided by hairlines, each with
 //      its total volume and the same gold/dim set pips used on the pages.
 //    • Words for verbs: "Add exercise" and a gold "Done" verb
@@ -79,18 +82,18 @@ struct WorkoutSummaryCard: View {
                         .padding(.top, Space.xl)
                         .powerOn(1)
 
-                    supportLine
-                        .padding(.top, Space.lg)
+                    statBand
+                        .padding(.top, Space.md)
                         .powerOn(2)
 
                     if SessionIntensityLine.hasContent(session) {
                         SessionIntensityLine(session: session, unit: unit)
-                            .padding(.top, Space.xs)
+                            .padding(.top, Space.md)
                             .powerOn(2)
                     }
 
                     exerciseList
-                        .padding(.top, Space.xl + Space.sm)
+                        .padding(.top, Space.xl)
                         .powerOn(3)
 
                     Spacer(minLength: Space.xl)
@@ -171,25 +174,52 @@ struct WorkoutSummaryCard: View {
         }
     }
 
-    private var supportLine: some View {
-        Text(supportText)
-            .font(Typography.metricUnit)
-            .foregroundStyle(Ink.tertiary)
+    /// The stat strip bracketed by hairlines — a ruled band on the
+    /// receipt. The rules are the same weight as the exercise seams
+    /// below, so the column reads as one continuous ledger instead of
+    /// the strip floating in whitespace.
+    private var statBand: some View {
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 1)
+                .accessibilityHidden(true)
+            StatStrip(stats: summaryStats, edgeAligned: true)
+                // The strip's vertical dividers are height-flexible
+                // Rectangles; in this screen-height VStack they soak up
+                // spare space and inflate the band. Pin the strip to
+                // its content height so only the Spacer below expands.
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.vertical, Space.md)
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 1)
+                .accessibilityHidden(true)
+        }
     }
 
-    private var supportText: String {
-        let mins = Int(displayMinutes.rounded())
-        let setsPart = session.totalPlannedSets != session.totalSets
-            ? "\(session.totalSets) of \(session.totalPlannedSets) sets"
-            : "\(session.totalSets) sets"
-        var parts = ["\(mins) min", setsPart]
+    /// The core counts as a StatStrip — the same value-over-label
+    /// grammar the History receipt uses, so the live summary and the
+    /// record agree. Duration keeps its entrance count-up through
+    /// `displayMinutes`; a partial session reads "12/15" over SETS.
+    private var summaryStats: [Stat] {
+        var stats = [
+            Stat(value: "\(Int(displayMinutes.rounded()))", unit: "min", label: "Duration"),
+            Stat(value: setsValue, label: "Sets"),
+        ]
         if session.totalReps > 0 {
-            parts.append("\(session.totalReps) reps")
+            stats.append(Stat(value: "\(session.totalReps)", label: "Reps"))
         }
         if session.totalTimedWork > 0 {
-            parts.append("\(DurationFormatter.compact(session.totalTimedWork)) timed")
+            stats.append(Stat(value: DurationFormatter.compact(session.totalTimedWork), label: "Timed"))
         }
-        return parts.joined(separator: "   ·   ")
+        return stats
+    }
+
+    private var setsValue: String {
+        session.totalPlannedSets != session.totalSets
+            ? "\(session.totalSets)/\(session.totalPlannedSets)"
+            : "\(session.totalSets)"
     }
 
     // MARK: - Exercise list
