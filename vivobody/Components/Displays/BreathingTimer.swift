@@ -50,6 +50,11 @@ struct BreathingTimer: View {
     @State private var pastSkipThreshold: Bool = false
     @State private var pastExtendThreshold: Bool = false
 
+    /// Drives the idle drift on the swipe affordances — the Skip chevron
+    /// floats down, the +30s chevron floats up, on a slow repeat loop so
+    /// the gestures advertise themselves without shouting.
+    @State private var affordanceNudge = false
+
     private let threshold: CGFloat = 90
     private let maxDrag: CGFloat = 140
 
@@ -93,7 +98,13 @@ struct BreathingTimer: View {
                 }
             }
         }
-        .onAppear { Haptics.prepare() }
+        .onAppear {
+            Haptics.prepare()
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                affordanceNudge = true
+            }
+        }
         .onChange(of: secondsRemaining) { _, new in handleSecondTick(new) }
         .task(id: endTime) {
             while !Task.isCancelled {
@@ -149,7 +160,7 @@ struct BreathingTimer: View {
         .accessibilityLabel("Rest timer")
         .accessibilityValue(accessibilityValue)
         .accessibilityAddTraits(.updatesFrequently)
-        .accessibilityAction(named: "Skip rest") { skipNow() }
+        .accessibilityAction(named: hasFinished ? "Return to workout" : "Skip rest") { skipNow() }
         .accessibilityAction(named: "Add 30 seconds") { extend(by: 30) }
         .focusable()
         .accessibilityRespondsToUserInteraction(true)
@@ -217,7 +228,7 @@ struct BreathingTimer: View {
     /// in the normal content flow; VoiceOver receives named actions instead.
     private var accessibilityGestureHints: some View {
         HStack {
-            Label("Skip", systemImage: "chevron.down")
+            Label(hasFinished ? "Go" : "Skip", systemImage: "chevron.down")
             Spacer()
             Label("+30s", systemImage: "chevron.up")
         }
@@ -263,21 +274,28 @@ struct BreathingTimer: View {
 
     /// Two always-visible swipe affordances at the top and bottom
     /// edges, brightening (and flipping to Volt) as the user crosses
-    /// each commit threshold. Words, not buttons — the chevron just
-    /// teaches the swipe direction.
+    /// each commit threshold. Words, not buttons — the chevron sits on
+    /// the gesture side of the word (below Skip/Go, above +30s) and
+    /// drifts gently that way at idle on a slow loop. The pull-down word
+    /// follows the two-beat skip: "Skip" cuts the timer to zero, then
+    /// "Go" (mirroring the kicker) dismisses back to the exercise card.
     private var swipeAffordances: some View {
         VStack {
             affordanceChip(
                 symbol: "chevron.compact.down",
-                label: "Skip",
-                visibility: hintVisibility(dragOffset, direction: .down)
+                label: hasFinished ? "Go" : "Skip",
+                visibility: hintVisibility(dragOffset, direction: .down),
+                drift: 5,
+                iconFirst: false
             )
             .padding(.top, 120)
             Spacer()
             affordanceChip(
                 symbol: "chevron.compact.up",
                 label: "+30s",
-                visibility: hintVisibility(dragOffset, direction: .up)
+                visibility: hintVisibility(dragOffset, direction: .up),
+                drift: -5,
+                iconFirst: true
             )
             .padding(.bottom, 130)
         }
@@ -290,20 +308,34 @@ struct BreathingTimer: View {
         .accessibilityHidden(true)
     }
 
-    private func affordanceChip(symbol: String, label: String, visibility: Double) -> some View {
-        let restingOpacity = 0.22
+    private func affordanceChip(symbol: String, label: String, visibility: Double, drift: CGFloat, iconFirst: Bool) -> some View {
+        let restingOpacity = 0.45
         let activeOpacity = 0.95
         let opacity = restingOpacity + (activeOpacity - restingOpacity) * visibility
         let committed = visibility >= 1
-        return VStack(spacing: 2) {
-            Image(systemName: symbol)
-                .font(Typography.title)
-            Text(label)
-                .font(Typography.metricMicro)
-                .tracking(0.5)
+        return VStack(spacing: 4) {
+            if iconFirst {
+                affordanceChevron(symbol: symbol, drift: drift)
+                affordanceLabel(label)
+            } else {
+                affordanceLabel(label)
+                affordanceChevron(symbol: symbol, drift: drift)
+            }
         }
         .foregroundStyle(committed ? Tint.inProgress : Ink.primary.opacity(opacity))
         .scaleEffect(reduceMotion ? 1.0 : 0.96 + 0.06 * visibility)
+    }
+
+    private func affordanceChevron(symbol: String, drift: CGFloat) -> some View {
+        Image(systemName: symbol)
+            .font(.system(.title, weight: .semibold))
+            .offset(y: reduceMotion ? 0 : (affordanceNudge ? drift : 0))
+    }
+
+    private func affordanceLabel(_ label: String) -> some View {
+        Text(label)
+            .font(Typography.metricUnit)
+            .tracking(0.5)
     }
 
     // MARK: - Gesture
