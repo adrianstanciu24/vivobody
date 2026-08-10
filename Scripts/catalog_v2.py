@@ -104,6 +104,9 @@ RULE_FIELD_DOMAINS = {
     "trackingMode": TRACKING_MODES,
     "loadMode": LOAD_MODES,
 }
+RULE_NUMERIC_FIELDS = {
+    "bodyweightFraction": (0, 1),
+}
 
 ActionRequirement = tuple[str, str | None]
 
@@ -840,7 +843,7 @@ def validate_rule_field_path(
         require(axis_id in axes, f"{context} references undeclared variant axis {axis_id}")
     else:
         require(
-            field_path in RULE_FIELD_DOMAINS,
+            field_path in RULE_FIELD_DOMAINS or field_path in RULE_NUMERIC_FIELDS,
             f"{context} references unsupported exercise field {field_path}",
         )
     return field_path
@@ -855,6 +858,14 @@ def validate_rule_expected_value(
     if field_path in RULE_FIELD_DOMAINS:
         require(
             isinstance(value, str) and value in RULE_FIELD_DOMAINS[field_path],
+            f"{context} has invalid value {value!r} for {field_path}",
+        )
+        return
+
+    if field_path in RULE_NUMERIC_FIELDS:
+        minimum, maximum = RULE_NUMERIC_FIELDS[field_path]
+        require(
+            type(value) in {int, float} and minimum <= value <= maximum,
             f"{context} has invalid value {value!r} for {field_path}",
         )
         return
@@ -914,11 +925,44 @@ def validate_exercise_rules(
         for assertion_index, assertion in enumerate(assertions):
             assertion_context = f"{item_context}.then[{assertion_index}]"
             require(isinstance(assertion, dict), f"{assertion_context} must be an object")
-            require_keys(assertion, required={"field", "value"}, context=assertion_context)
+            require_keys(
+                assertion,
+                required={"field"},
+                optional={"value", "allowedValues"},
+                context=assertion_context,
+            )
+            has_value = "value" in assertion
+            has_allowed_values = "allowedValues" in assertion
+            require(
+                has_value != has_allowed_values,
+                f"{assertion_context} must declare exactly one of value or allowedValues",
+            )
             assertion_path = validate_rule_field_path(assertion["field"], axes, f"{assertion_context}.field")
             require(assertion_path not in asserted_paths, f"{item_context}.then asserts {assertion_path} more than once")
             asserted_paths.add(assertion_path)
-            validate_rule_expected_value(assertion_path, assertion["value"], axes, f"{assertion_context}.value")
+            if has_value:
+                validate_rule_expected_value(
+                    assertion_path,
+                    assertion["value"],
+                    axes,
+                    f"{assertion_context}.value",
+                )
+            else:
+                allowed_values = require_list(
+                    assertion["allowedValues"],
+                    f"{assertion_context}.allowedValues",
+                )
+                require_unique(
+                    allowed_values,
+                    f"{assertion_context}.allowedValues",
+                )
+                for allowed_index, allowed_value in enumerate(allowed_values):
+                    validate_rule_expected_value(
+                        assertion_path,
+                        allowed_value,
+                        axes,
+                        f"{assertion_context}.allowedValues[{allowed_index}]",
+                    )
 
         require_present = require_list(rule["requirePresent"], f"{item_context}.requirePresent", allow_empty=True)
         require_absent = require_list(rule["requireAbsent"], f"{item_context}.requireAbsent", allow_empty=True)
@@ -1034,11 +1078,21 @@ def validate_exercise_rule_matches(
 
         for assertion in rule["then"]:
             asserted_value = exercise_rule_field(exercise, assertion["field"])
-            require(
-                asserted_value is not MISSING and asserted_value == assertion["value"],
-                f"{context} violates exercise rule {rule['id']}: "
-                f"{assertion['field']} must equal {assertion['value']!r}",
-            )
+            if "value" in assertion:
+                require(
+                    asserted_value is not MISSING
+                    and asserted_value == assertion["value"],
+                    f"{context} violates exercise rule {rule['id']}: "
+                    f"{assertion['field']} must equal {assertion['value']!r}",
+                )
+            else:
+                allowed_values = assertion["allowedValues"]
+                require(
+                    asserted_value is not MISSING
+                    and asserted_value in allowed_values,
+                    f"{context} violates exercise rule {rule['id']}: "
+                    f"{assertion['field']} must be one of {allowed_values!r}",
+                )
         for field_path in rule["requirePresent"]:
             require(
                 exercise_rule_field(exercise, field_path) is not MISSING,

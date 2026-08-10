@@ -446,6 +446,163 @@
       "doi": "10.1177/1747954117738243",
       "url": "https://doi.org/10.1177/1747954117738243",
       "scope": "Load-velocity profiling during a seated Smith-machine military press in 26 men and 13 women, with a six-week training follow-up in 24 men. The pronated-grip upper-chest-to-full-extension protocol supports the seated fixed-path setup; it does not establish muscle-role rankings."
+    },
+    {
+      "id": "youdas-2010-pullup-chinup",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or Perfect-Pullup rotational exercise",
+      "authors": [
+        "John W. Youdas",
+        "Christine L. Amundson",
+        "Kendra S. Cicero",
+        "Jessica J. Hahn",
+        "Dustin T. Harezlak",
+        "John H. Hollman"
+      ],
+      "year": 2010,
+      "doi": "10.1519/JSC.0b013e3181f1598c",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181f1598c",
+      "scope": "Surface-EMG and elbow-motion comparison of pull-ups, chin-ups, and a rotating-handle pull-up in 25 participants. It supports the pull-up/chin-up role envelope and grip-dependent differences, not continuous muscle weights."
+    },
+    {
+      "id": "doma-2013-chinup-lat-pulldown",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Kinematic and electromyographic comparisons between chin-ups and lat-pull down exercises",
+      "authors": [
+        "Kenji Doma",
+        "Glen B. Deakin",
+        "Kevin F. Ness"
+      ],
+      "year": 2013,
+      "doi": "10.1080/14763141.2012.760204",
+      "url": "https://doi.org/10.1080/14763141.2012.760204",
+      "scope": "Direct kinematic and surface-EMG comparison of closed-chain chin-ups and open-chain lat pulldowns, supporting their shared movement family while preserving chain and body-position differences."
+    },
+    {
+      "id": "lusk-2010-lat-pulldown-grip",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Grip Width and Forearm Orientation Effects on Muscle Activity During the Lat Pull-Down",
+      "authors": [
+        "Stephen J. Lusk",
+        "Bruce D. Hale",
+        "Daniel M. Russell"
+      ],
+      "year": 2010,
+      "doi": "10.1519/JSC.0b013e3181ddb0ab",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181ddb0ab",
+      "scope": "Latissimus-dorsi and elbow-flexor surface EMG during anterior lat pulldowns using pronated and supinated orientations and different grip widths in 12 trained men at 70% one-repetition maximum."
+    },
+    {
+      "id": "andersen-2014-lat-pulldown-width",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of Grip Width on Muscle Strength and Activation in the Lat Pull-Down",
+      "authors": [
+        "Vidar Andersen",
+        "Marius Steiro Fimland",
+        "Espen Wiik",
+        "Anders Skoglund",
+        "Atle Hole Sæterbakken"
+      ],
+      "year": 2014,
+      "doi": "10.1097/JSC.0000000000000232",
+      "url": "https://doi.org/10.1097/JSC.0000000000000232",
+      "scope": "Six-repetition-maximum strength and surface EMG during pronated lat pulldowns at 1.0, 1.5, and 2.0 times biacromial grip width in 15 men; the widths are authoring anchors rather than biological thresholds."
+    },
+    {
+      "id": "prinold-2016-pullup-scapular-kinematics",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Scapula kinematics of pull-up techniques: Avoiding impingement risk with training changes",
+      "authors": [
+        "Joe A. I. Prinold",
+        "Anthony M. J. Bull"
+      ],
+      "year": 2016,
+      "doi": "10.1016/j.jsams.2015.08.002",
+      "pmid": "26383875",
+      "url": "https://doi.org/10.1016/j.jsams.2015.08.002",
+      "scope": "Humerothoracic, glenohumeral, and scapulothoracic kinematics across three pull-up techniques in 11 trained participants. It supports explicit grip and scapular-motion modeling; its injury-risk interpretation is not used as a catalog prohibition."
+    },
+    {
+      "id": "padovan-2024-lat-pulldown-front-back",
+      "sourceType": "highDensityEMGStudy",
+      "title": "High-Density Electromyography Excitation in Front vs. Back Lat Pull-Down Prime Movers",
+      "authors": [
+        "Riccardo Padovan",
+        "Nicholas Toninelli",
+        "Stefano Longo",
+        "Gianpaolo Tornatore",
+        "Fabio Esposito",
+        "Emiliano Cè",
+        "Giuseppe Coratella"
+      ],
+      "year": 2024,
+      "doi": "10.5114/jhk/185211",
+      "url": "https://doi.org/10.5114/jhk/185211",
+      "scope": "High-density EMG comparison of front and behind-neck lat pulldowns at an eight-repetition-maximum load in 14 resistance-trained men. It supports the visible front-path boundary and exercise-specific secondary roles without making a universal safety claim."
+    },
+    {
+      "id": "lee-2025-scapular-load-direction",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Scapular kinematics and task specificity: The effect of load direction",
+      "authors": [
+        "Erin C. S. Lee",
+        "Nathan M. Young",
+        "Rebekah L. Lawrence",
+        "Michael J. Rainbow"
+      ],
+      "year": 2025,
+      "doi": "10.1016/j.jbiomech.2025.112932",
+      "url": "https://doi.org/10.1016/j.jbiomech.2025.112932",
+      "scope": "Biplanar-videoradiography comparison of loaded shoulder adduction and abduction in 10 healthy adults. Orientation differences and participant variability caution against inferring scapular rotation direction from arm travel alone."
+    },
+    {
+      "id": "buonsenso-2025-lat-pulldown-grips",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic Analysis of Back Muscle Activation During Lat Pulldown Exercise: Effects of Grip Variations and Forearm Orientation",
+      "authors": [
+        "Andrea Buonsenso",
+        "Domenico Di Fonza",
+        "Gloria Di Claudio",
+        "Massimiliano Carangelo",
+        "Marco Centorbi",
+        "Alessandra di Cagno",
+        "Giuseppe Calcagno",
+        "Giovanni Fiorilli"
+      ],
+      "year": 2025,
+      "doi": "10.3390/jfmk10030345",
+      "url": "https://doi.org/10.3390/jfmk10030345",
+      "scope": "Surface EMG of latissimus dorsi, posterior deltoid, biceps, middle and lower trapezius, and infraspinatus across seven bilateral front-pulldown grip, width, and torso-angle conditions in 40 trained men; no unilateral condition was tested."
+    },
+    {
+      "id": "dinunzio-2019-strict-kipping-pullup",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Alterations in kinematics and muscle activation patterns with the addition of a kipping action during a pull-up activity",
+      "authors": [
+        "Christopher Dinunzio",
+        "Nathaniel Porter",
+        "John Van Scoy",
+        "Derrick Cordice",
+        "Ryan S. McCulloch"
+      ],
+      "year": 2019,
+      "doi": "10.1080/14763141.2018.1452971",
+      "url": "https://doi.org/10.1080/14763141.2018.1452971",
+      "scope": "Kinematics and surface EMG during strict and kipping pull-ups in 11 athletes. The substantially greater hip, knee, trunk, and lower-body contribution supports keeping kipping outside the strict vertical-pull contract."
+    },
+    {
+      "id": "hewit-2018-pullup-alternatives",
+      "sourceType": "experimentalEMGStudy",
+      "title": "A Comparison of Muscle Activation during the Pull-up and Three Alternative Pulling Exercises",
+      "authors": [
+        "Jennifer K. Hewit",
+        "Daniel A. Jaffe",
+        "Todd Crowder"
+      ],
+      "year": 2018,
+      "doi": "10.19080/JPFMTS.2018.05.555669",
+      "url": "https://doi.org/10.19080/JPFMTS.2018.05.555669",
+      "scope": "Surface-EMG comparison of bodyweight pull-ups, seated and kneeling lat pulldowns, and an assisted pull-up condition. It supports assisted-machine coverage but does not isolate a supinated assisted chin-up."
     }
   ]
 }

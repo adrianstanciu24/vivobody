@@ -493,8 +493,29 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "field",
-        "value"
+        "field"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "value"
+          ],
+          "not": {
+            "required": [
+              "allowedValues"
+            ]
+          }
+        },
+        {
+          "required": [
+            "allowedValues"
+          ],
+          "not": {
+            "required": [
+              "value"
+            ]
+          }
+        }
       ],
       "properties": {
         "field": {
@@ -502,6 +523,14 @@
         },
         "value": {
           "$ref": "#/$defs/variantValue"
+        },
+        "allowedValues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/variantValue"
+          }
         }
       }
     },

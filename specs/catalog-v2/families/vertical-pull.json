@@ -1,0 +1,1184 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "vertical-pull",
+  "name": "Vertical Pull",
+  "definition": "A strict compound pull in which the humerus travels down from an overhead position through shoulder adduction with a sagittal extension component, the scapula retracts, and the elbow flexes. The family covers front/scapular-path pull-ups, assisted pull-ups, cable pulldowns, and lever pulldowns without deliberate trunk or lower-body propulsion. Straight-arm pulldowns, scapular pull-ups, high rows, behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, band-assisted pull-ups, and one-arm bodyweight pull-ups remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "andersen-2014-lat-pulldown-width",
+    "buonsenso-2025-lat-pulldown-grips",
+    "dinunzio-2019-strict-kipping-pullup",
+    "doma-2013-chinup-lat-pulldown",
+    "hewit-2018-pullup-alternatives",
+    "lee-2025-scapular-load-direction",
+    "lusk-2010-lat-pulldown-grip",
+    "padovan-2024-lat-pulldown-front-back",
+    "prinold-2016-pullup-scapular-kinematics",
+    "youdas-2010-pullup-chinup"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight",
+      "cable",
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "bodyweightAdded",
+      "assistanceSubtracted"
+    ],
+    "lateralities": [
+      "bilateral",
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension",
+      "shoulder.adduction"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "shoulder.adduction",
+      "scapula.retraction",
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "elbow.extension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "spine",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "teresMajor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "biceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle",
+          "trapeziusLower",
+          "rhomboids"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "forearms"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs",
+          "obliques",
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats"
+      ],
+      "secondary": [
+        "teresMajor",
+        "biceps",
+        "trapeziusMiddle",
+        "trapeziusLower",
+        "rhomboids",
+        "pectoralisMajorSternocostal",
+        "deltoidPosterior"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack",
+        "subscapularis",
+        "serratus",
+        "trapeziusUpper",
+        "pectoralisMinor"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open",
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the torso is seated below a moving implement or suspended below fixed hands.",
+      "allowedValues": [
+        "seated",
+        "suspended"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower-body contact or support that materially changes effective bodyweight loading; none when no such contact participates.",
+      "allowedValues": [
+        "none",
+        "thighPad",
+        "assistancePlatform"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the pull.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify scapular rotation or tilt.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral",
+        "supinated"
+      ]
+    },
+    {
+      "id": "relativeGripWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "Categorical bilateral hand spacing relative to shoulder breadth; it is absent for unilateral exercises.",
+      "allowedValues": [
+        "shoulderWidth",
+        "medium",
+        "wide"
+      ]
+    },
+    {
+      "id": "pathConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the implement or body path is unconstrained, lever-guided, or guided by an assistance platform.",
+      "allowedValues": [
+        "free",
+        "leverGuided",
+        "assistancePlatformGuided"
+      ]
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "leverPulldown",
+        "assistedPullUp"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric pull.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "pullPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical humeral and implement path relative to the head and torso.",
+      "allowedValues": [
+        "frontScapular"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-is-strict-closed-chain",
+      "description": "A bodyweight vertical pull suspends the full body below fixed hands without lower-body support or assistance.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "bodyweightAdded"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "suspended"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "cable-is-seated-free-path",
+      "description": "A cable pulldown is an externally loaded open-chain pull performed seated beneath a thigh pad with a free handle or bar path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "thighPad"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "machine-requires-type",
+      "description": "Machine vertical pulls declare whether resistance comes from a lever pulldown or an assisted pull-up platform.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-omits-machine-type",
+      "description": "Bodyweight and cable exercises do not declare machine mechanism metadata.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "lever-pulldown-is-seated-guided-external",
+      "description": "A lever pulldown is an externally loaded open-chain machine pull performed seated beneath a thigh pad on a lever-guided path.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "leverPulldown"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "machine"
+        },
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 0
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "open"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "thighPad"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "leverGuided"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "assisted-pullup-is-guided-subtractive",
+      "description": "An assisted pull-up machine suspends the full body below fixed hands while a guided platform subtracts a declared external assistance load.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "assistedPullUp"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "machine"
+        },
+        {
+          "field": "loadMode",
+          "value": "assistanceSubtracted"
+        },
+        {
+          "field": "bodyweightFraction",
+          "value": 1
+        },
+        {
+          "field": "laterality",
+          "value": "bilateral"
+        },
+        {
+          "field": "variant.kineticChain",
+          "value": "closed"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "suspended"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "assistancePlatform"
+        },
+        {
+          "field": "variant.pathConstraint",
+          "value": "assistancePlatformGuided"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bilateral-requires-grip-width",
+      "description": "A bilateral vertical pull declares categorical hand spacing.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.relativeGripWidth"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "unilateral-is-supported-cable-or-lever",
+      "description": "A unilateral vertical pull is limited to a seated cable or lever machine, omits bilateral grip width, and declares asymmetric pelvic control.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "allowedValues": [
+            "cable",
+            "machine"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.relativeGripWidth"
+      ],
+      "requireAdditionalStabilityDemands": [
+        "pelvis"
+      ]
+    },
+    {
+      "id": "suspended-requires-pelvic-control",
+      "description": "A suspended strict pull explicitly declares pelvic stability even when an assistance platform guides the body path.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "suspended"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireAdditionalStabilityDemands": [
+        "pelvis"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "pull-up",
+      "name": "Pull-Up",
+      "aliases": [
+        "Pullup",
+        "Pronated Pull-Up",
+        "Overhand Pull-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 100,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "doma-2013-chinup-lat-pulldown",
+        "prinold-2016-pullup-scapular-kinematics",
+        "youdas-2010-pullup-chinup"
+      ],
+      "movementDefinition": "Hang from a fixed bar with a pronated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs, then lower under control to a full hang."
+    },
+    {
+      "catalogID": "chin-up",
+      "name": "Chin-Up",
+      "aliases": [
+        "Chinup",
+        "Supinated Pull-Up",
+        "Underhand Pull-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 99,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "supinated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "doma-2013-chinup-lat-pulldown",
+        "youdas-2010-pullup-chinup"
+      ],
+      "movementDefinition": "Hang from a fixed bar with a supinated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive, then return under control to a full hang."
+    },
+    {
+      "catalogID": "neutral-grip-pull-up",
+      "name": "Neutral-Grip Pull-Up",
+      "aliases": [
+        "Parallel-Grip Pull-Up",
+        "Hammer-Grip Pull-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 94,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "doma-2013-chinup-lat-pulldown",
+        "youdas-2010-pullup-chinup"
+      ],
+      "movementDefinition": "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced. Pull the body upward by driving the elbows down until the chin clears the handles, keep the lower body motionless, and lower under control to a full hang."
+    },
+    {
+      "catalogID": "wide-grip-pull-up",
+      "name": "Wide-Grip Pull-Up",
+      "aliases": [
+        "Wide Pull-Up",
+        "Wide-Grip Pullup"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 91,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "wide",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "prinold-2016-pullup-scapular-kinematics",
+        "youdas-2010-pullup-chinup"
+      ],
+      "movementDefinition": "Hang from a fixed bar with a pronated grip wider than the shoulders, straight elbows, and a braced trunk. Pull in the front/scapular path until the chin clears the bar without swinging or lower-body drive, then lower under control to a full hang."
+    },
+    {
+      "catalogID": "assisted-pull-up-machine",
+      "name": "Assisted Pull-Up Machine",
+      "aliases": [
+        "Machine-Assisted Pull-Up",
+        "Assisted Pullup"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "assistanceSubtracted",
+      "bodyweightFraction": 1,
+      "defaultWeight": 50,
+      "defaultWeightKg": 22.5,
+      "reps": 8,
+      "searchPriority": 92,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "assistancePlatform",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "assistancePlatformGuided",
+        "machineType": "assistedPullUp",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "hewit-2018-pullup-alternatives"
+      ],
+      "movementDefinition": "Set the assistance load, kneel or stand on the machine platform, and take a pronated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control while the platform guides the body vertically."
+    },
+    {
+      "catalogID": "assisted-chin-up-machine",
+      "name": "Assisted Chin-Up Machine",
+      "aliases": [
+        "Machine-Assisted Chin-Up",
+        "Assisted Chinup"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "assistanceSubtracted",
+      "bodyweightFraction": 1,
+      "defaultWeight": 50,
+      "defaultWeightKg": 22.5,
+      "reps": 8,
+      "searchPriority": 88,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "lowerBodySupport": "assistancePlatform",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "supinated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "assistancePlatformGuided",
+        "machineType": "assistedPullUp",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "hewit-2018-pullup-alternatives",
+        "youdas-2010-pullup-chinup"
+      ],
+      "movementDefinition": "Set the assistance load, kneel or stand on the guided platform, and take a supinated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control to the starting position."
+    },
+    {
+      "catalogID": "cable-lat-pulldown",
+      "name": "Cable Lat Pulldown",
+      "aliases": [
+        "Lat Pulldown",
+        "Front Lat Pulldown",
+        "Cable Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 80,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 100,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "medium",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "andersen-2014-lat-pulldown-width",
+        "buonsenso-2025-lat-pulldown-grips",
+        "doma-2013-chinup-lat-pulldown",
+        "lusk-2010-lat-pulldown-grip",
+        "padovan-2024-lat-pulldown-front-back"
+      ],
+      "movementDefinition": "Sit at a cable pulldown station with the thighs secured beneath the pad and take a medium pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head toward the upper chest by driving the elbows down, then return overhead under control."
+    },
+    {
+      "catalogID": "close-grip-neutral-lat-pulldown",
+      "name": "Close-Grip Neutral Lat Pulldown",
+      "aliases": [
+        "Close-Grip Lat Pulldown",
+        "Neutral-Grip Lat Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 75,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 91,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "buonsenso-2025-lat-pulldown-grips",
+        "lusk-2010-lat-pulldown-grip"
+      ],
+      "movementDefinition": "Sit with the thighs secured beneath the pad and hold a close parallel-grip attachment with the palms facing each other. Keep the torso braced, drive the elbows down as the handle travels in front of the head toward the upper chest, and return overhead under control."
+    },
+    {
+      "catalogID": "underhand-lat-pulldown",
+      "name": "Underhand Lat Pulldown",
+      "aliases": [
+        "Reverse-Grip Lat Pulldown",
+        "Supinated Lat Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 75,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 90,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "supinated",
+        "relativeGripWidth": "shoulderWidth",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lusk-2010-lat-pulldown-grip",
+        "padovan-2024-lat-pulldown-front-back"
+      ],
+      "movementDefinition": "Sit with the thighs secured beneath the pad and take a shoulder-width supinated grip on the bar. Hold the trunk nearly upright, drive the elbows down and back as the bar travels in front of the head toward the upper chest, then return overhead under control."
+    },
+    {
+      "catalogID": "wide-grip-lat-pulldown",
+      "name": "Wide-Grip Lat Pulldown",
+      "aliases": [
+        "Wide Lat Pulldown",
+        "Wide-Grip Cable Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 75,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 93,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "wide",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "andersen-2014-lat-pulldown-width",
+        "buonsenso-2025-lat-pulldown-grips",
+        "lusk-2010-lat-pulldown-grip",
+        "padovan-2024-lat-pulldown-front-back"
+      ],
+      "movementDefinition": "Sit with the thighs secured beneath the pad and take a wide pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest, then return overhead under control."
+    },
+    {
+      "catalogID": "single-arm-cable-lat-pulldown",
+      "name": "Single-Arm Cable Lat Pulldown",
+      "aliases": [
+        "One-Arm Cable Lat Pulldown",
+        "Unilateral Cable Lat Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 88,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "buonsenso-2025-lat-pulldown-grips"
+      ],
+      "movementDefinition": "Sit with the thighs secured beneath the pad and hold one high-cable handle in a neutral grip. Keep the shoulders and pelvis square, drive the working elbow down beside the ribs without rotating or leaning, then return the arm overhead under control."
+    },
+    {
+      "catalogID": "machine-lat-pulldown",
+      "name": "Machine Lat Pulldown",
+      "aliases": [
+        "Lever Lat Pulldown",
+        "Plate-Loaded Lat Pulldown"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 80,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 91,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "medium",
+        "pathConstraint": "leverGuided",
+        "machineType": "leverPulldown",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "padovan-2024-lat-pulldown-front-back"
+      ],
+      "movementDefinition": "Sit in the lever pulldown machine with the thighs secured beneath the pad and take the neutral handles overhead. Keep the torso braced, drive both elbows down as the levers follow their guided path, and return to full overhead reach under control."
+    },
+    {
+      "catalogID": "single-arm-machine-lat-pulldown",
+      "name": "Single-Arm Machine Lat Pulldown",
+      "aliases": [
+        "One-Arm Machine Lat Pulldown",
+        "Unilateral Machine Lat Pulldown"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 40,
+      "defaultWeightKg": 17.5,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "thighPad",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "pathConstraint": "leverGuided",
+        "machineType": "leverPulldown",
+        "lowerBodyContribution": "none",
+        "pullPath": "frontScapular"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "buonsenso-2025-lat-pulldown-grips"
+      ],
+      "movementDefinition": "Sit in the independent-arm lever pulldown machine with the thighs secured and hold one neutral handle overhead. Keep the torso and pelvis square, drive the working elbow down without rotating or leaning, and return the lever overhead under control."
+    }
+  ]
+}

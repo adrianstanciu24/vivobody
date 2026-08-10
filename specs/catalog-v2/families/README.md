@@ -18,6 +18,13 @@ translation rather than rotation or tilt, and signed `pressInclinationDegrees`
 uses horizontal as zero. Family-specific synonyms for these axes are not
 allowed.
 
+`lowerBodySupport` has one cross-family meaning: the lower-body contact or
+support that materially changes effective bodyweight loading. A family that
+declares this axis makes it required and includes an explicit `none` value when
+no such contact participates. Family-specific non-`none` values describe the
+actual mechanism: horizontal press uses `feet|knees`, while vertical pull uses
+`thighPad|assistancePlatform`.
+
 When a variant axis implies extra trunk or segment control, an exercise rule
 uses `requireAdditionalStabilityDemands` to require the region explicitly in
 `additionalStabilityDemands`. The normal anatomy validation separately proves

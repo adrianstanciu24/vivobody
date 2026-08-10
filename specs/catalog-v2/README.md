@@ -120,6 +120,13 @@ push-up still has `fixedPath: false`. Machine presses require `fixedPath: true`
 and a mechanism, while every non-machine press requires `fixedPath: false` and
 must omit `machineType`.
 
+Vertical pull deliberately does not reuse `fixedPath`: an assisted pull-up has
+no external load path for its guided platform to constrain. Its required
+`pathConstraint` axis instead distinguishes `free`, `leverGuided`, and
+`assistancePlatformGuided`, keeping guided external resistance separate from a
+guided body path. `kineticChain` independently records whether the hands or the
+implement move.
+
 They also share `pressInclinationDegrees`, a required signed axis for the
 canonical torso-relative pressing inclination. Zero is horizontal, positive
 values move toward overhead, and negative values move toward decline. A

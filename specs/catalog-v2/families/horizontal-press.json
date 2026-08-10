@@ -187,9 +187,10 @@
     {
       "id": "lowerBodySupport",
       "valueType": "enum",
-      "required": false,
-      "description": "The lower-body contact point used to set bodyweight pressing leverage.",
+      "required": true,
+      "description": "The lower-body contact or support that materially changes effective bodyweight loading; none when no such contact participates.",
       "allowedValues": [
+        "none",
         "feet",
         "knees"
       ]
@@ -220,16 +221,21 @@
         {
           "field": "variant.scapularTranslation",
           "value": "free"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "allowedValues": [
+            "feet",
+            "knees"
+          ]
         }
       ],
-      "requirePresent": [
-        "variant.lowerBodySupport"
-      ],
+      "requirePresent": [],
       "requireAbsent": []
     },
     {
       "id": "external-implement-open-chain",
-      "description": "Non-bodyweight horizontal presses use external resistance in an open kinetic chain and do not declare a push-up leverage point.",
+      "description": "Non-bodyweight horizontal presses use external resistance in an open kinetic chain and explicitly declare that no lower-body contact changes effective bodyweight loading.",
       "when": {
         "field": "equipment",
         "operator": "notEquals",
@@ -243,12 +249,14 @@
         {
           "field": "variant.kineticChain",
           "value": "open"
+        },
+        {
+          "field": "variant.lowerBodySupport",
+          "value": "none"
         }
       ],
       "requirePresent": [],
-      "requireAbsent": [
-        "variant.lowerBodySupport"
-      ]
+      "requireAbsent": []
     },
     {
       "id": "machine-requires-fixed-path-and-type",
@@ -478,7 +486,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "pronated",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -542,7 +551,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "pronated",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -606,7 +616,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "neutral",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -667,7 +678,8 @@
         "gripOrientation": "pronated",
         "rangeOfMotion": "full",
         "fixedPath": true,
-        "machineType": "smith"
+        "machineType": "smith",
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -728,7 +740,8 @@
         "gripOrientation": "neutral",
         "rangeOfMotion": "full",
         "fixedPath": true,
-        "machineType": "convergingChestPress"
+        "machineType": "convergingChestPress",
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -787,7 +800,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "neutral",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [
         "scapula.protraction"
@@ -852,7 +866,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "neutral",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [
         "scapula.protraction"
@@ -925,7 +940,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "neutral",
         "rangeOfMotion": "full",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [
@@ -1120,7 +1136,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "pronated",
         "rangeOfMotion": "floorLimited",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
@@ -1183,7 +1200,8 @@
         "pressInclinationDegrees": 0,
         "gripOrientation": "neutral",
         "rangeOfMotion": "floorLimited",
-        "fixedPath": false
+        "fixedPath": false,
+        "lowerBodySupport": "none"
       },
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],

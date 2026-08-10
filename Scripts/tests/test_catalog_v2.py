@@ -7,8 +7,9 @@
 #  They prove the validator rejects unknown muscles, invalid mesh ownership,
 #  anatomically incapable movers, uncovered stability demands, undeclared
 #  variant axes, forbidden prime actions, mismatched position conditions,
-#  conditional muscle-role and variant-specific stability requirements, and
-#  numeric involvement weights while keeping recommendations non-fatal.
+#  conditional muscle-role, allowed-set and variant-specific stability
+#  requirements, and numeric involvement weights while keeping recommendations
+#  non-fatal.
 #
 
 from __future__ import annotations
@@ -42,6 +43,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
         cls.vertical_press = catalog_v2.load_json(
             catalog_v2.FAMILIES_ROOT / "vertical-press.json"
         )
+        cls.vertical_pull = catalog_v2.load_json(
+            catalog_v2.FAMILIES_ROOT / "vertical-pull.json"
+        )
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -57,6 +61,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
     def vertical_press_copy(self) -> dict:
         return copy.deepcopy(self.vertical_press)
+
+    def vertical_pull_copy(self) -> dict:
+        return copy.deepcopy(self.vertical_pull)
 
     def additional_stability_demand_rule(self, demands: list[str]) -> dict:
         return {
@@ -121,6 +128,14 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 family,
                 self.foundation,
                 "mutated vertical press",
+            )
+
+    def assert_vertical_pull_fails(self, family: dict, message: str) -> None:
+        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "mutated vertical pull",
             )
 
     def test_taxonomy_is_the_locked_32_muscle_clean_slate(self) -> None:
@@ -278,6 +293,86 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "type": "array",
                 "uniqueItems": True,
                 "items": {"$ref": "#/$defs/symbolID"},
+            },
+        )
+
+    def test_rule_assertion_can_require_one_of_several_values(self) -> None:
+        family = self.family_copy()
+        family["exerciseRules"] = [
+            {
+                "id": "support-must-be-bench-or-floor",
+                "description": "The fixture admits two reviewed support values.",
+                "when": {
+                    "field": "equipment",
+                    "operator": "equals",
+                    "value": "barbell",
+                },
+                "then": [
+                    {
+                        "field": "variant.support",
+                        "allowedValues": ["bench", "floor"],
+                    }
+                ],
+                "requirePresent": [],
+                "requireAbsent": [],
+            }
+        ]
+        self.assertEqual(
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "allowed-set fixture",
+            ),
+            [],
+        )
+
+        family["exercises"][0]["variant"]["support"] = "standing"
+        self.assert_family_fails(
+            family,
+            "violates exercise rule support-must-be-bench-or-floor: "
+            r"variant.support must be one of \['bench', 'floor'\]",
+        )
+
+    def test_rule_assertion_requires_exactly_one_expected_value_shape(self) -> None:
+        for assertion in (
+            {"field": "variant.support"},
+            {
+                "field": "variant.support",
+                "value": "upright",
+                "allowedValues": ["upright"],
+            },
+        ):
+            with self.subTest(assertion=assertion):
+                family = self.family_copy()
+                family["exerciseRules"] = [
+                    {
+                        "id": "invalid-assertion-shape",
+                        "description": "The assertion shape is deliberately invalid.",
+                        "when": {
+                            "field": "equipment",
+                            "operator": "equals",
+                            "value": "barbell",
+                        },
+                        "then": [assertion],
+                        "requirePresent": [],
+                        "requireAbsent": [],
+                    }
+                ]
+                self.assert_family_fails(
+                    family,
+                    "must declare exactly one of value or allowedValues",
+                )
+
+    def test_family_schema_declares_allowed_set_rule_assertions(self) -> None:
+        assertion_schema = self.foundation.family_schema["$defs"]["ruleAssertion"]
+        self.assertEqual(assertion_schema["required"], ["field"])
+        self.assertEqual(
+            assertion_schema["properties"]["allowedValues"],
+            {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": True,
+                "items": {"$ref": "#/$defs/variantValue"},
             },
         )
 
@@ -1153,6 +1248,430 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 exercise["variant"]["pressInclinationDegrees"] = angle
                 self.assert_vertical_press_fails(family, message)
 
+    def test_real_vertical_pull_family_is_multi_plane_and_strict(self) -> None:
+        warnings = catalog_v2.validate_family(
+            self.vertical_pull_copy(),
+            self.foundation,
+            "vertical pull",
+        )
+        self.assertEqual(warnings, [])
+        self.assertEqual(self.vertical_pull["fixed"]["direction"], "vertical")
+        self.assertEqual(
+            set(self.vertical_pull["fixed"]["planes"]),
+            {"sagittal", "frontal"},
+        )
+        self.assertEqual(
+            self.vertical_pull["movementSignature"]["planeBasisActions"],
+            ["shoulder.extension", "shoulder.adduction"],
+        )
+        self.assertIn(
+            {
+                "action": "shoulder.extension",
+                "condition": "fromFlexedPosition",
+            },
+            self.vertical_pull["movementSignature"]["primeActions"],
+        )
+        self.assertIn(
+            "scapula.retraction",
+            self.vertical_pull["movementSignature"]["primeActions"],
+        )
+        self.assertEqual(
+            self.foundation.plane_by_action["scapula.retraction"],
+            "transverse",
+        )
+        self.assertNotIn("transverse", self.vertical_pull["fixed"]["planes"])
+        axis_ids = {
+            axis["id"] for axis in self.vertical_pull["variantAxes"]
+        }
+        self.assertIn("pathConstraint", axis_ids)
+        self.assertNotIn("fixedPath", axis_ids)
+        self.assertEqual(
+            [
+                exercise["catalogID"]
+                for exercise in self.vertical_pull["exercises"]
+            ],
+            [
+                "pull-up",
+                "chin-up",
+                "neutral-grip-pull-up",
+                "wide-grip-pull-up",
+                "assisted-pull-up-machine",
+                "assisted-chin-up-machine",
+                "cable-lat-pulldown",
+                "close-grip-neutral-lat-pulldown",
+                "underhand-lat-pulldown",
+                "wide-grip-lat-pulldown",
+                "single-arm-cable-lat-pulldown",
+                "machine-lat-pulldown",
+                "single-arm-machine-lat-pulldown",
+            ],
+        )
+
+    def test_vertical_pull_roster_is_the_reviewed_coverage_matrix(self) -> None:
+        actual = {}
+        for exercise in self.vertical_pull["exercises"]:
+            variant = exercise["variant"]
+            actual[exercise["catalogID"]] = (
+                exercise["equipment"],
+                exercise["laterality"],
+                exercise["loadMode"],
+                exercise["bodyweightFraction"],
+                variant["kineticChain"],
+                variant["bodyPosition"],
+                variant["lowerBodySupport"],
+                variant["gripOrientation"],
+                variant.get("relativeGripWidth"),
+                variant["pathConstraint"],
+                variant.get("machineType"),
+                tuple(exercise["additionalStabilityDemands"]),
+            )
+
+        self.assertEqual(
+            actual,
+            {
+                "pull-up": (
+                    "bodyweight", "bilateral", "bodyweightAdded", 1,
+                    "closed", "suspended", "none", "pronated",
+                    "shoulderWidth", "free", None, ("pelvis",),
+                ),
+                "chin-up": (
+                    "bodyweight", "bilateral", "bodyweightAdded", 1,
+                    "closed", "suspended", "none", "supinated",
+                    "shoulderWidth", "free", None, ("pelvis",),
+                ),
+                "neutral-grip-pull-up": (
+                    "bodyweight", "bilateral", "bodyweightAdded", 1,
+                    "closed", "suspended", "none", "neutral",
+                    "shoulderWidth", "free", None, ("pelvis",),
+                ),
+                "wide-grip-pull-up": (
+                    "bodyweight", "bilateral", "bodyweightAdded", 1,
+                    "closed", "suspended", "none", "pronated", "wide",
+                    "free", None, ("pelvis",),
+                ),
+                "assisted-pull-up-machine": (
+                    "machine", "bilateral", "assistanceSubtracted", 1,
+                    "closed", "suspended", "assistancePlatform", "pronated",
+                    "shoulderWidth", "assistancePlatformGuided",
+                    "assistedPullUp", ("pelvis",),
+                ),
+                "assisted-chin-up-machine": (
+                    "machine", "bilateral", "assistanceSubtracted", 1,
+                    "closed", "suspended", "assistancePlatform", "supinated",
+                    "shoulderWidth", "assistancePlatformGuided",
+                    "assistedPullUp", ("pelvis",),
+                ),
+                "cable-lat-pulldown": (
+                    "cable", "bilateral", "external", 0, "open", "seated",
+                    "thighPad", "pronated", "medium", "free", None, (),
+                ),
+                "close-grip-neutral-lat-pulldown": (
+                    "cable", "bilateral", "external", 0, "open", "seated",
+                    "thighPad", "neutral", "shoulderWidth", "free", None,
+                    (),
+                ),
+                "underhand-lat-pulldown": (
+                    "cable", "bilateral", "external", 0, "open", "seated",
+                    "thighPad", "supinated", "shoulderWidth", "free", None,
+                    (),
+                ),
+                "wide-grip-lat-pulldown": (
+                    "cable", "bilateral", "external", 0, "open", "seated",
+                    "thighPad", "pronated", "wide", "free", None, (),
+                ),
+                "single-arm-cable-lat-pulldown": (
+                    "cable", "unilateral", "external", 0, "open", "seated",
+                    "thighPad", "neutral", None, "free", None,
+                    ("pelvis",),
+                ),
+                "machine-lat-pulldown": (
+                    "machine", "bilateral", "external", 0, "open", "seated",
+                    "thighPad", "neutral", "medium", "leverGuided",
+                    "leverPulldown", (),
+                ),
+                "single-arm-machine-lat-pulldown": (
+                    "machine", "unilateral", "external", 0, "open", "seated",
+                    "thighPad", "neutral", None, "leverGuided",
+                    "leverPulldown", ("pelvis",),
+                ),
+            },
+        )
+
+    def test_vertical_pull_roster_covers_every_admitted_axis_value(self) -> None:
+        exercises = self.vertical_pull["exercises"]
+        top_level_fields = {
+            "equipment": "equipment",
+            "modalities": "modality",
+            "trackingModes": "trackingMode",
+            "loadModes": "loadMode",
+            "lateralities": "laterality",
+        }
+        for allowed_key, exercise_key in top_level_fields.items():
+            with self.subTest(field=allowed_key):
+                self.assertEqual(
+                    {exercise[exercise_key] for exercise in exercises},
+                    set(self.vertical_pull["allowed"][allowed_key]),
+                )
+
+        for axis in self.vertical_pull["variantAxes"]:
+            observed = {
+                exercise["variant"][axis["id"]]
+                for exercise in exercises
+                if axis["id"] in exercise["variant"]
+            }
+            with self.subTest(axis=axis["id"]):
+                self.assertEqual(observed, set(axis["allowedValues"]))
+
+    def test_every_vertical_pull_rule_matches_a_real_roster_branch(self) -> None:
+        exercises = self.vertical_pull["exercises"]
+
+        def field_value(exercise: dict, path: str):
+            if path.startswith("variant."):
+                return exercise["variant"].get(path.removeprefix("variant."))
+            return exercise.get(path)
+
+        for rule in self.vertical_pull["exerciseRules"]:
+            predicate = rule["when"]
+            values = [
+                field_value(exercise, predicate["field"])
+                for exercise in exercises
+            ]
+            if predicate["operator"] == "equals":
+                matches = [value == predicate["value"] for value in values]
+            else:
+                matches = [value != predicate["value"] for value in values]
+            with self.subTest(rule=rule["id"]):
+                self.assertTrue(any(matches), "rule has no real matching exercise")
+                self.assertTrue(
+                    any(not match for match in matches),
+                    "rule has no contrasting real exercise",
+                )
+
+    def test_vertical_pull_requires_the_reviewed_role_contract(self) -> None:
+        retractors = {"trapeziusMiddle", "trapeziusLower", "rhomboids"}
+        trunk_stabilizers = {"abs", "obliques", "lowerBack"}
+        for exercise in self.vertical_pull["exercises"]:
+            roles = {
+                assignment["muscle"]: assignment["role"]
+                for assignment in exercise["involvement"]
+            }
+            with self.subTest(exercise=exercise["catalogID"]):
+                self.assertEqual(roles["lats"], "primary")
+                self.assertEqual(roles["teresMajor"], "secondary")
+                self.assertEqual(roles["biceps"], "secondary")
+                self.assertTrue(
+                    any(roles.get(muscle) == "secondary" for muscle in retractors)
+                )
+                self.assertEqual(roles["externalRotators"], "stabilizer")
+                self.assertEqual(roles["forearms"], "stabilizer")
+                self.assertTrue(
+                    any(
+                        roles.get(muscle) == "stabilizer"
+                        for muscle in trunk_stabilizers
+                    )
+                )
+
+    def test_vertical_pull_requires_full_bodyweight_fraction(self) -> None:
+        cases = (
+            (
+                "pull-up",
+                "bodyweight-is-strict-closed-chain",
+            ),
+            (
+                "assisted-pull-up-machine",
+                "assisted-pullup-is-guided-subtractive",
+            ),
+        )
+        for catalog_id, rule_id in cases:
+            with self.subTest(exercise=catalog_id):
+                family = self.vertical_pull_copy()
+                exercise = next(
+                    exercise
+                    for exercise in family["exercises"]
+                    if exercise["catalogID"] == catalog_id
+                )
+                exercise["bodyweightFraction"] = 0.8
+                self.assert_vertical_pull_fails(
+                    family,
+                    f"violates exercise rule {rule_id}: "
+                    "bodyweightFraction must equal 1",
+                )
+
+    def test_vertical_pull_rejects_one_arm_bodyweight_pullup(self) -> None:
+        family = self.vertical_pull_copy()
+        pull_up = family["exercises"][0]
+        pull_up["laterality"] = "unilateral"
+        pull_up["variant"].pop("relativeGripWidth")
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule bodyweight-is-strict-closed-chain: "
+            "laterality must equal 'bilateral'",
+        )
+
+    def test_vertical_pull_machine_type_is_explicitly_scoped(self) -> None:
+        family = self.vertical_pull_copy()
+        assisted = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "assisted-pull-up-machine"
+        )
+        assisted["variant"].pop("machineType")
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule machine-requires-type: "
+            "variant.machineType must be present",
+        )
+
+        family = self.vertical_pull_copy()
+        cable = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "cable-lat-pulldown"
+        )
+        cable["variant"]["machineType"] = "leverPulldown"
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule non-machine-omits-machine-type: "
+            "variant.machineType must be absent",
+        )
+
+    def test_vertical_pull_path_constraints_cannot_be_interchanged(self) -> None:
+        cases = (
+            (
+                "cable-lat-pulldown",
+                "leverGuided",
+                "cable-is-seated-free-path",
+                "free",
+            ),
+            (
+                "machine-lat-pulldown",
+                "free",
+                "lever-pulldown-is-seated-guided-external",
+                "leverGuided",
+            ),
+            (
+                "assisted-pull-up-machine",
+                "free",
+                "assisted-pullup-is-guided-subtractive",
+                "assistancePlatformGuided",
+            ),
+        )
+        for catalog_id, invalid_path, rule_id, expected_path in cases:
+            with self.subTest(exercise=catalog_id):
+                family = self.vertical_pull_copy()
+                exercise = next(
+                    exercise
+                    for exercise in family["exercises"]
+                    if exercise["catalogID"] == catalog_id
+                )
+                exercise["variant"]["pathConstraint"] = invalid_path
+                self.assert_vertical_pull_fails(
+                    family,
+                    f"violates exercise rule {rule_id}: "
+                    f"variant.pathConstraint must equal '{expected_path}'",
+                )
+
+    def test_vertical_pull_grip_width_tracks_laterality(self) -> None:
+        family = self.vertical_pull_copy()
+        bilateral = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "cable-lat-pulldown"
+        )
+        bilateral["variant"].pop("relativeGripWidth")
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule bilateral-requires-grip-width: "
+            "variant.relativeGripWidth must be present",
+        )
+
+        family = self.vertical_pull_copy()
+        unilateral = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "single-arm-cable-lat-pulldown"
+        )
+        unilateral["variant"]["relativeGripWidth"] = "shoulderWidth"
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule unilateral-is-supported-cable-or-lever: "
+            "variant.relativeGripWidth must be absent",
+        )
+
+    def test_unilateral_vertical_pull_requires_pelvic_control(self) -> None:
+        family = self.vertical_pull_copy()
+        unilateral = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "single-arm-cable-lat-pulldown"
+        )
+        unilateral["additionalStabilityDemands"] = []
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule unilateral-is-supported-cable-or-lever: "
+            "pelvis must be declared in additionalStabilityDemands",
+        )
+
+    def test_suspended_vertical_pull_requires_pelvic_control(self) -> None:
+        family = self.vertical_pull_copy()
+        assisted = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "assisted-pull-up-machine"
+        )
+        assisted["additionalStabilityDemands"] = []
+        self.assert_vertical_pull_fails(
+            family,
+            "violates exercise rule suspended-requires-pelvic-control: "
+            "pelvis must be declared in additionalStabilityDemands",
+        )
+
+    def test_vertical_pull_rejects_propulsion_and_opposing_prime_actions(
+        self,
+    ) -> None:
+        for action in (
+            "shoulder.flexion",
+            "elbow.extension",
+            "spine.rotation",
+            "hip.flexion",
+            "hip.extension",
+            "knee.flexion",
+        ):
+            with self.subTest(action=action):
+                family = self.vertical_pull_copy()
+                family["exercises"][0]["additionalPrimeActions"] = [action]
+                self.assert_vertical_pull_fails(
+                    family,
+                    f"declares forbidden prime action {action}",
+                )
+
+    def test_vertical_pull_evidence_discloses_mechanics_derived_branches(
+        self,
+    ) -> None:
+        source_by_id = {
+            source["id"]: source for source in self.foundation.evidence["sources"]
+        }
+        self.assertIn(
+            "no unilateral condition was tested",
+            source_by_id["buonsenso-2025-lat-pulldown-grips"]["scope"],
+        )
+        exercise_by_id = {
+            exercise["catalogID"]: exercise
+            for exercise in self.vertical_pull["exercises"]
+        }
+        for catalog_id in (
+            "single-arm-cable-lat-pulldown",
+            "single-arm-machine-lat-pulldown",
+        ):
+            self.assertIn(
+                "buonsenso-2025-lat-pulldown-grips",
+                exercise_by_id[catalog_id]["evidenceRefs"],
+            )
+        self.assertEqual(
+            set(exercise_by_id["assisted-chin-up-machine"]["evidenceRefs"]),
+            {"hewit-2018-pullup-alternatives", "youdas-2010-pullup-chinup"},
+        )
+
     def test_horizontal_press_rejects_nonzero_inclination(self) -> None:
         family = self.horizontal_press_copy()
         family["exercises"][0]["variant"]["pressInclinationDegrees"] = 1
@@ -1201,15 +1720,51 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     f"contains undeclared axes: {axis}",
                 )
 
-    def test_horizontal_pushup_support_scope_is_feet_or_knees(self) -> None:
+    def test_horizontal_lower_body_support_is_required_and_explicit(self) -> None:
         lower_body_support = next(
             axis
             for axis in self.horizontal_press["variantAxes"]
             if axis["id"] == "lowerBodySupport"
         )
+        self.assertIs(lower_body_support["required"], True)
         self.assertEqual(
             set(lower_body_support["allowedValues"]),
-            {"feet", "knees"},
+            {"none", "feet", "knees"},
+        )
+        for exercise in self.horizontal_press["exercises"]:
+            with self.subTest(exercise=exercise["catalogID"]):
+                support = exercise["variant"]["lowerBodySupport"]
+                if exercise["equipment"] == "bodyweight":
+                    self.assertIn(support, {"feet", "knees"})
+                else:
+                    self.assertEqual(support, "none")
+
+    def test_bodyweight_press_rejects_no_lower_body_support(self) -> None:
+        family = self.horizontal_press_copy()
+        push_up = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "push-up"
+        )
+        push_up["variant"]["lowerBodySupport"] = "none"
+        self.assert_horizontal_press_fails(
+            family,
+            "violates exercise rule bodyweight-closed-chain: "
+            r"variant.lowerBodySupport must be one of \['feet', 'knees'\]",
+        )
+
+    def test_external_press_rejects_bodyweight_leverage_support(self) -> None:
+        family = self.horizontal_press_copy()
+        bench_press = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "barbell-bench-press"
+        )
+        bench_press["variant"]["lowerBodySupport"] = "feet"
+        self.assert_horizontal_press_fails(
+            family,
+            "violates exercise rule external-implement-open-chain: "
+            "variant.lowerBodySupport must equal 'none'",
         )
 
     def test_horizontal_machine_press_requires_a_fixed_path(self) -> None:
@@ -1554,6 +2109,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.incline_press,
                 self.decline_press,
                 self.vertical_press,
+                self.vertical_pull,
             ],
         )
 
@@ -1564,6 +2120,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.incline_press,
                 self.decline_press,
                 self.vertical_press,
+                self.vertical_pull,
             ]
         )
 
