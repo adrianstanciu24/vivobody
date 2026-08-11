@@ -747,24 +747,18 @@ def validate_variant_axes(value: Any, context: str) -> dict[str, dict[str, Any]]
     return axis_by_id
 
 
-def validate_role_policy(value: Any, foundation: Foundation, context: str) -> tuple[list[dict[str, Any]], dict[str, set[str]]]:
-    require(isinstance(value, dict), f"{context} must be an object")
-    require_keys(value, required={"requirements", "allowedByRole"}, context=context)
-    allowed_raw = value["allowedByRole"]
-    require(isinstance(allowed_raw, dict), f"{context}.allowedByRole must be an object")
-    require_keys(allowed_raw, required=ROLES, context=f"{context}.allowedByRole")
-
-    allowed_by_role: dict[str, set[str]] = {}
-    for role in sorted(ROLES):
-        values = require_list(allowed_raw[role], f"{context}.allowedByRole.{role}", allow_empty=True)
-        require_unique(values, f"{context}.allowedByRole.{role}")
-        unknown = sorted(set(values) - foundation.muscle_by_id.keys())
-        require(not unknown, f"{context}.allowedByRole.{role} references unknown muscles: {', '.join(unknown)}")
-        allowed_by_role[role] = set(values)
-
-    requirements = require_list(value["requirements"], f"{context}.requirements", allow_empty=True)
+def validate_muscle_requirements(
+    value: Any,
+    foundation: Foundation,
+    allowed_by_role: dict[str, set[str]],
+    context: str,
+    *,
+    allow_empty: bool,
+) -> list[dict[str, Any]]:
+    requirements = require_list(value, context, allow_empty=allow_empty)
+    normalized_requirements: set[tuple[tuple[str, ...], str]] = set()
     for index, requirement in enumerate(requirements):
-        item_context = f"{context}.requirements[{index}]"
+        item_context = f"{context}[{index}]"
         require(isinstance(requirement, dict), f"{item_context} must be an object")
         require_keys(requirement, required={"anyOf", "minimumRole"}, context=item_context)
         candidates = require_list(requirement["anyOf"], f"{item_context}.anyOf")
@@ -780,6 +774,38 @@ def validate_role_policy(value: Any, foundation: Foundation, context: str) -> tu
             if ROLE_RANK[role] >= ROLE_RANK[minimum_role]
         )
         require(candidate_is_permitted, f"{item_context} cannot be satisfied by the family's allowed role matrix")
+        normalized = (tuple(sorted(candidates)), minimum_role)
+        require(
+            normalized not in normalized_requirements,
+            f"{context} contains equivalent muscle requirements",
+        )
+        normalized_requirements.add(normalized)
+
+    return requirements
+
+
+def validate_role_policy(value: Any, foundation: Foundation, context: str) -> tuple[list[dict[str, Any]], dict[str, set[str]]]:
+    require(isinstance(value, dict), f"{context} must be an object")
+    require_keys(value, required={"requirements", "allowedByRole"}, context=context)
+    allowed_raw = value["allowedByRole"]
+    require(isinstance(allowed_raw, dict), f"{context}.allowedByRole must be an object")
+    require_keys(allowed_raw, required=ROLES, context=f"{context}.allowedByRole")
+
+    allowed_by_role: dict[str, set[str]] = {}
+    for role in sorted(ROLES):
+        values = require_list(allowed_raw[role], f"{context}.allowedByRole.{role}", allow_empty=True)
+        require_unique(values, f"{context}.allowedByRole.{role}")
+        unknown = sorted(set(values) - foundation.muscle_by_id.keys())
+        require(not unknown, f"{context}.allowedByRole.{role} references unknown muscles: {', '.join(unknown)}")
+        allowed_by_role[role] = set(values)
+
+    requirements = validate_muscle_requirements(
+        value["requirements"],
+        foundation,
+        allowed_by_role,
+        f"{context}.requirements",
+        allow_empty=True,
+    )
 
     return requirements, allowed_by_role
 
@@ -904,7 +930,11 @@ def validate_exercise_rules(
         require_keys(
             rule,
             required={"id", "description", "when", "then", "requirePresent", "requireAbsent"},
-            optional={"requireInvolvement", "requireAdditionalStabilityDemands"},
+            optional={
+                "requireInvolvement",
+                "requireMuscleRequirements",
+                "requireAdditionalStabilityDemands",
+            },
             context=item_context,
         )
         rule_id = require_non_empty_string(rule["id"], f"{item_context}.id")
@@ -1010,6 +1040,13 @@ def validate_exercise_rules(
                 f"{item_context}.requireInvolvement repeats {muscle_id} as {role}",
             )
             required_assignments.add(pair)
+        required_muscle_requirements = validate_muscle_requirements(
+            rule.get("requireMuscleRequirements", []),
+            foundation,
+            allowed_by_role,
+            f"{item_context}.requireMuscleRequirements",
+            allow_empty=True,
+        )
         required_additional_stability_demands = require_list(
             rule.get("requireAdditionalStabilityDemands", []),
             f"{item_context}.requireAdditionalStabilityDemands",
@@ -1042,6 +1079,7 @@ def validate_exercise_rules(
             or present_paths
             or absent_paths
             or required_assignments
+            or required_muscle_requirements
             or required_additional_stability_demands,
             f"{item_context} does not enforce anything",
         )
@@ -1110,6 +1148,20 @@ def validate_exercise_rule_matches(
                 role_by_muscle.get(muscle_id) == role,
                 f"{context} violates exercise rule {rule['id']}: "
                 f"{muscle_id} must be assigned as {role}",
+            )
+        for requirement in rule.get("requireMuscleRequirements", []):
+            minimum_role = requirement["minimumRole"]
+            minimum_rank = ROLE_RANK[minimum_role]
+            candidates = requirement["anyOf"]
+            satisfied = any(
+                candidate in role_by_muscle
+                and ROLE_RANK[role_by_muscle[candidate]] >= minimum_rank
+                for candidate in candidates
+            )
+            require(
+                satisfied,
+                f"{context} violates exercise rule {rule['id']}: "
+                f"one of {candidates!r} must be assigned as {minimum_role} or higher",
             )
         additional_stability_demands = set(
             exercise["additionalStabilityDemands"]

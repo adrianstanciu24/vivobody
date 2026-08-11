@@ -273,7 +273,7 @@
       "scope": "Clavicular and sternocostal pectoralis-major, deltoid, triceps, biceps, and latissimus-dorsi excitation during 6-RM flat, plus-25-degree incline, and minus-25-degree decline barbell bench pressing in competitive athletes."
     },
     {
-      "id": "wattanaprakornkul-2011-rotator-cuff-bench-press",
+      "id": "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row",
       "sourceType": "experimentalEMGStudy",
       "title": "Direction-specific recruitment of rotator cuff muscles during bench press and row",
       "authors": [
@@ -286,7 +286,7 @@
       "doi": "10.1016/j.jelekin.2011.09.002",
       "pmid": "21978788",
       "url": "https://doi.org/10.1016/j.jelekin.2011.09.002",
-      "scope": "Direction-specific rotator-cuff recruitment during bench pressing, including the cuff's dynamic stabilization role against anterior-posterior humeral-head translation."
+      "scope": "Direction-specific rotator-cuff recruitment during bench pressing and rowing, including dynamic stabilization against anterior-posterior humeral-head translation and the row-specific subscapularis finding."
     },
     {
       "id": "boroto-2018-scapular-stabilizers-press",
@@ -603,6 +603,178 @@
       "doi": "10.19080/JPFMTS.2018.05.555669",
       "url": "https://doi.org/10.19080/JPFMTS.2018.05.555669",
       "scope": "Surface-EMG comparison of bodyweight pull-ups, seated and kneeling lat pulldowns, and an assisted pull-up condition. It supports assisted-machine coverage but does not isolate a supinated assisted chin-up."
+    },
+    {
+      "id": "lehman-2004-seated-row-activation",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Variations in muscle activation levels during traditional latissimus dorsi weight training exercises: An experimental study",
+      "authors": [
+        "Gregory J. Lehman",
+        "Day Deans Buchan",
+        "Angela Lundy",
+        "Nicole Myers",
+        "Andrea Nalborczyk"
+      ],
+      "year": 2004,
+      "doi": "10.1186/1476-5918-3-4",
+      "pmid": "15228624",
+      "url": "https://doi.org/10.1186/1476-5918-3-4",
+      "scope": "Surface EMG during traditional latissimus-dorsi exercises in 12 trained participants, including seated rows with latissimus dorsi, biceps, and a combined middle-trapezius/rhomboid electrode site. The combined site cannot apportion the two retractors independently."
+    },
+    {
+      "id": "fenwick-2009-row-trunk-loading",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Comparison of Different Rowing Exercises: Trunk Muscle Activation and Lumbar Spine Motion, Load, and Stiffness",
+      "authors": [
+        "Chad M. J. Fenwick",
+        "Stephen H. M. Brown",
+        "Stuart M. McGill"
+      ],
+      "year": 2009,
+      "doi": "10.1519/JSC.0b013e3181942019",
+      "pmid": "19197209",
+      "url": "https://doi.org/10.1519/JSC.0b013e3181942019",
+      "scope": "Trunk EMG, lumbar motion, load, and stiffness in seven men during inverted, bent-over, and one-arm cable rows. It supports explicit position-specific spinal demands rather than one universal row-stability assignment."
+    },
+    {
+      "id": "saeterbakken-2015-unilateral-row-core",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Effect of Performing Bi- and Unilateral Row Exercises on Core Muscle Activation",
+      "authors": [
+        "A. Saeterbakken",
+        "V. Andersen",
+        "A. Brudeseth",
+        "H. Lund",
+        "M. S. Fimland"
+      ],
+      "year": 2015,
+      "doi": "10.1055/s-0034-1398646",
+      "pmid": "26134664",
+      "url": "https://doi.org/10.1055/s-0034-1398646",
+      "scope": "Surface EMG in 15 resistance-trained men during bilateral and unilateral free-weight bent-over, seated cable, and machine rows. Unilateral conditions increased external-oblique excitation, while trunk-extensor demand varied by equipment and laterality."
+    },
+    {
+      "id": "youdas-2016-inverted-row",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Activation of Spinal Stabilizers and Shoulder Complex Muscles During an Inverted Row Using a Portable Pull-up Device and Body Weight Resistance",
+      "authors": [
+        "James W. Youdas",
+        "Julianne M. Keith",
+        "Danielle E. Nonn",
+        "Adam C. Squires",
+        "John H. Hollman"
+      ],
+      "year": 2016,
+      "doi": "10.1519/JSC.0000000000001210",
+      "pmid": "26422610",
+      "url": "https://doi.org/10.1519/JSC.0000000000001210",
+      "scope": "Shoulder-complex and spinal-stabilizer surface EMG during a bodyweight inverted row in 26 participants. It supports the admitted inverted-row muscle envelope without establishing one universal effective-bodyweight fraction."
+    },
+    {
+      "id": "youdas-2021-suspension-row",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Recruitment of Shoulder Complex and Torso Stabilizer Muscles With Rowing Exercises Using a Suspension Strap Training System",
+      "authors": [
+        "James W. Youdas",
+        "Mary Kleis",
+        "Erik T. Krueger",
+        "Stephen Thompson",
+        "Whitney A. Walker",
+        "John H. Hollman"
+      ],
+      "year": 2021,
+      "doi": "10.1177/1941738120945986",
+      "pmid": "32940548",
+      "url": "https://doi.org/10.1177/1941738120945986",
+      "scope": "Surface EMG in 28 participants across low, high, and horizontal-abduction suspension rows. Distinct excitation profiles support separating shoulder-extension rows from flared horizontal-abduction rows; the article appeared online in 2020 and in the 2021 journal issue."
+    },
+    {
+      "id": "fennell-2016-shoulder-retractor-row",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder Retractor Strengthening Exercise to Minimize Rhomboid Muscle Activity and Subacromial Impingement",
+      "authors": [
+        "Jeremy Fennell",
+        "Chetan P. Phadke",
+        "George Mochizuki",
+        "Farooq Ismail",
+        "Chris Boulias"
+      ],
+      "year": 2016,
+      "doi": "10.3138/ptc.2014-83",
+      "pmid": "27504044",
+      "url": "https://doi.org/10.3138/ptc.2014-83",
+      "scope": "Fine-wire EMG in 12 participants confirms middle-trapezius and rhomboid coactivation in a rowing position. The tested 90-degree shoulder-abduction posture is outside the admitted narrow/tucked row path and is not condition-matched evidence for every variant."
+    },
+    {
+      "id": "vural-2023-suspension-row-loading",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Can different variations of suspension exercises provide adequate loads and muscle activations for upper body training?",
+      "authors": [
+        "Faik Vural",
+        "Berkant Erman",
+        "Igor Ranisavljev",
+        "Yasin Yuzbasioglu",
+        "Nemanja Ćopić",
+        "Tolga Aksit",
+        "Milivoj Dopsaj",
+        "Mehmet Zeki Ozkol"
+      ],
+      "year": 2023,
+      "doi": "10.1371/journal.pone.0291608",
+      "pmid": "37738266",
+      "url": "https://doi.org/10.1371/journal.pone.0291608",
+      "scope": "Applied strap forces and surface EMG across suspension-exercise setups in 12 male athletes. Setup- and phase-dependent loading supports a pinned inverted-row geometry and cautions against one bodyweight fraction for every inclination."
+    },
+    {
+      "id": "padovan-2025-seated-row-grip-width",
+      "sourceType": "highDensityEMGStudy",
+      "title": "High-Density Surface Electromyography Excitation of Prime Movers in the Narrow vs. Wide Grip Seated Row Exercise",
+      "authors": [
+        "Riccardo Padovan",
+        "Emiliano Cè",
+        "Stefano Longo",
+        "Gianpaolo Tornatore",
+        "Camilla Trentin",
+        "Fabio Esposito",
+        "Giuseppe Coratella"
+      ],
+      "year": 2025,
+      "doi": "10.5114/jhk/209550",
+      "url": "https://doi.org/10.5114/jhk/209550",
+      "scope": "High-density surface EMG in 14 trained men comparing narrow and wide seated rows. The different latissimus, trapezius, and deltoid excitation profiles support the narrow/tucked ownership boundary without treating grip width as a biological switch."
+    },
+    {
+      "id": "padovan-2026-seated-row-scapular-position",
+      "sourceType": "highDensityEMGStudy",
+      "title": "High-Density Surface Electromyography Excitation of Prime Movers Across Scapular Positions in the Seated Row",
+      "authors": [
+        "Riccardo Padovan",
+        "Emiliano Cè",
+        "Stefano Longo",
+        "Gianpaolo Tornatore",
+        "Fabio Esposito",
+        "Giuseppe Coratella"
+      ],
+      "year": 2026,
+      "doi": "10.3390/jfmk11010006",
+      "pmid": "41562724",
+      "url": "https://doi.org/10.3390/jfmk11010006",
+      "scope": "High-density surface EMG in 14 trained men comparing deliberately fixed and free scapular seated-row techniques at 8-RM. It supports a visible technique boundary but does not make an anterior chest pad equivalent to fixed scapular translation; the article appeared online in December 2025 and in the 2026 issue."
+    },
+    {
+      "id": "garcia-jaen-2021-bent-over-row-posture",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographical responses of the lumbar, dorsal and shoulder musculature during the bent-over row exercise: a comparison between standing and bench postures (a preliminary study)",
+      "authors": [
+        "Miguel García-Jaén",
+        "Gema Sanchis-Soler",
+        "Aitor Carrión-Adán",
+        "Juan Manuel Cortell-Tormo"
+      ],
+      "year": 2021,
+      "doi": "10.7752/jpes.2021.04236",
+      "url": "https://doi.org/10.7752/jpes.2021.04236",
+      "scope": "Preliminary surface-EMG comparison of standing and inclined-bench bent-over rows with adducted and 90-degree-abducted upper-arm paths in only three participants. It informs posture and support vocabulary but is not load-bearing evidence for a muscle-role change."
     }
   ]
 }

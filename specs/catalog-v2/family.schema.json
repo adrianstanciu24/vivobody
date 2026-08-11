@@ -582,6 +582,13 @@
             "$ref": "#/$defs/muscleAssignment"
           }
         },
+        "requireMuscleRequirements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/muscleRequirement"
+          }
+        },
         "requireAdditionalStabilityDemands": {
           "type": "array",
           "uniqueItems": true,

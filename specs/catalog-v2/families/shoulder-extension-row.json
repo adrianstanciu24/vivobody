@@ -1,0 +1,1401 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-extension-row",
+  "name": "Horizontal Row",
+  "definition": "A strict compound horizontal pull whose concentric phase combines shoulder extension from a flexed start, scapular retraction, and elbow flexion while the torso and lower body resist rather than propel the load. The admitted upper-arm path remains tucked or within a modest scapular corridor. Wide or deliberately flared horizontal-abduction rows, diagonal high-row machines, face pulls, momentum rows, renegade rows, and unreviewed bodyweight inclinations or apparatuses remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "fennell-2016-shoulder-retractor-row",
+    "fenwick-2009-row-trunk-loading",
+    "garcia-jaen-2021-bent-over-row-posture",
+    "lehman-2004-seated-row-activation",
+    "padovan-2025-seated-row-grip-width",
+    "padovan-2026-seated-row-scapular-position",
+    "saeterbakken-2015-unilateral-row-core",
+    "vural-2023-suspension-row-loading",
+    "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row",
+    "youdas-2016-inverted-row",
+    "youdas-2021-suspension-row"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "horizontal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "dumbbell",
+      "cable",
+      "machine",
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "bodyweightAdded"
+    ],
+    "lateralities": [
+      "bilateral",
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "scapula.retraction",
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.externalRotation",
+      "scapula.protraction",
+      "elbow.extension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "teresMajor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "biceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "rhomboids"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "forearms"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats"
+      ],
+      "secondary": [
+        "teresMajor",
+        "deltoidPosterior",
+        "biceps",
+        "trapeziusMiddle",
+        "rhomboids",
+        "trapeziusLower",
+        "pectoralisMajorSternocostal"
+      ],
+      "stabilizer": [
+        "subscapularis",
+        "forearms",
+        "externalRotators",
+        "supraspinatus",
+        "trapeziusUpper",
+        "serratus",
+        "pectoralisMinor",
+        "abs",
+        "obliques",
+        "lowerBack",
+        "gluteMax",
+        "gluteMed",
+        "hamstrings"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open",
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso and setup relationship during the row.",
+      "allowedValues": [
+        "hipHinged",
+        "seated",
+        "prone",
+        "supineSuspended"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower-body contact that materially changes effective bodyweight loading; none when no such contact participates.",
+      "allowedValues": [
+        "none",
+        "feet"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the anterior torso during the row.",
+      "allowedValues": [
+        "none",
+        "bench",
+        "machinePad"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external support limits scapular translation along the thorax; this does not classify rotation or tilt.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated",
+        "neutral",
+        "supinated"
+      ]
+    },
+    {
+      "id": "relativeGripWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "Categorical bilateral hand spacing on the shared narrow-to-wide scale; absent for unilateral exercises.",
+      "allowedValues": [
+        "narrow",
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "upperArmPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the upper arm remains tucked near the torso or travels through a modest scapular corridor without becoming flared.",
+      "allowedValues": [
+        "tucked",
+        "scapular"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path; distal hand fixation remains kineticChain."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "leverRow",
+        "smith"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric pull.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the external load remains unsupported or resets on the floor between repetitions.",
+      "allowedValues": [
+        "none",
+        "floor"
+      ]
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the opposite hand and knee support the body without directly supporting the torso.",
+      "allowedValues": [
+        "none",
+        "handAndKneeOnBench"
+      ]
+    },
+    {
+      "id": "bodyweightApparatus",
+      "valueType": "enum",
+      "required": false,
+      "description": "The fixed apparatus held during a bodyweight row.",
+      "allowedValues": [
+        "fixedBar"
+      ]
+    },
+    {
+      "id": "bodyLeverage",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed body geometry used to anchor effective bodyweight loading.",
+      "allowedValues": [
+        "parallelFeetFloor"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "bodyweight-uses-closed-chain-load-semantics",
+      "description": "Bodyweight rows use a closed chain, feet-supported suspended body, and explicit apparatus and leverage without pinning grip or upper-arm path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        { "field": "loadMode", "value": "bodyweightAdded" },
+        { "field": "variant.kineticChain", "value": "closed" },
+        { "field": "variant.bodyPosition", "value": "supineSuspended" },
+        { "field": "variant.lowerBodySupport", "value": "feet" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.fixedPath", "value": false },
+        { "field": "variant.interRepSupport", "value": "none" },
+        { "field": "variant.contralateralSupport", "value": "none" }
+      ],
+      "requirePresent": [
+        "variant.bodyweightApparatus",
+        "variant.bodyLeverage"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "parallel-feet-floor-pins-bodyweight-load",
+      "description": "The reviewed parallel feet-on-floor leverage pins body position, support, equipment, and the 0.73 effective-bodyweight anchor.",
+      "when": {
+        "field": "variant.bodyLeverage",
+        "operator": "equals",
+        "value": "parallelFeetFloor"
+      },
+      "then": [
+        { "field": "equipment", "value": "bodyweight" },
+        { "field": "bodyweightFraction", "value": 0.73 },
+        { "field": "variant.bodyPosition", "value": "supineSuspended" },
+        { "field": "variant.lowerBodySupport", "value": "feet" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "fixed-bar-apparatus-requires-bodyweight",
+      "description": "A straight fixed bar belongs to a bodyweight row and admits pronated or supinated rather than neutral grip.",
+      "when": {
+        "field": "variant.bodyweightApparatus",
+        "operator": "equals",
+        "value": "fixedBar"
+      },
+      "then": [
+        { "field": "equipment", "value": "bodyweight" },
+        { "field": "variant.gripOrientation", "allowedValues": ["pronated", "supinated"] }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-bodyweight-uses-open-chain-external-load",
+      "description": "Every externally loaded row is open chain, has no bodyweight leverage support, and uses zero bodyweight fraction.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "bodyweight"
+      },
+      "then": [
+        { "field": "loadMode", "value": "external" },
+        { "field": "bodyweightFraction", "value": 0 },
+        { "field": "variant.kineticChain", "value": "open" },
+        { "field": "variant.lowerBodySupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.bodyweightApparatus",
+        "variant.bodyLeverage"
+      ]
+    },
+    {
+      "id": "machine-requires-fixed-path-and-type",
+      "description": "Machine rows declare a constrained external path and their reviewed mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        { "field": "variant.fixedPath", "value": true }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Non-machine rows use an unconstrained external-load path and omit machine mechanism metadata.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "lever-row-is-supported-seated",
+      "description": "A lever row is a seated, machine-pad-supported machine using neutral or pronated grip without contralateral support.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "leverRow"
+      },
+      "then": [
+        { "field": "equipment", "value": "machine" },
+        { "field": "variant.bodyPosition", "value": "seated" },
+        { "field": "variant.torsoSupport", "value": "machinePad" },
+        { "field": "variant.gripOrientation", "allowedValues": ["neutral", "pronated"] },
+        { "field": "variant.contralateralSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "smith-row-is-hip-hinged",
+      "description": "A Smith row is a bilateral pronated hip-hinged machine row without torso or contralateral support.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "smith"
+      },
+      "then": [
+        { "field": "equipment", "value": "machine" },
+        { "field": "variant.bodyPosition", "value": "hipHinged" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "variant.gripOrientation", "value": "pronated" },
+        { "field": "variant.contralateralSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "barbell-is-unsupported-hip-hinged",
+      "description": "A barbell row is an unsupported hip-hinged free-path pull using pronated or supinated grip.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        { "field": "variant.bodyPosition", "value": "hipHinged" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.fixedPath", "value": false },
+        { "field": "variant.gripOrientation", "allowedValues": ["pronated", "supinated"] }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-is-neutral-free-path",
+      "description": "Dumbbell rows use neutral grip and a free path in a hip-hinged or prone position.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        { "field": "variant.bodyPosition", "allowedValues": ["hipHinged", "prone"] },
+        { "field": "variant.gripOrientation", "value": "neutral" },
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "prone-row-is-supported-bilateral-dumbbell",
+      "description": "A prone row is the bilateral chest-supported dumbbell branch.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "prone"
+      },
+      "then": [
+        { "field": "equipment", "value": "dumbbell" },
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "variant.torsoSupport", "value": "bench" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "cable-is-unsupported-seated-free-path",
+      "description": "A cable row is seated without torso support, uses neutral or pronated grip, and never resets between repetitions.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        { "field": "variant.bodyPosition", "value": "seated" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.gripOrientation", "allowedValues": ["neutral", "pronated"] },
+        { "field": "variant.fixedPath", "value": false },
+        { "field": "variant.interRepSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bench-support-requires-prone-dumbbell",
+      "description": "Bench torso support belongs only to a bilateral prone dumbbell row.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "bench"
+      },
+      "then": [
+        { "field": "equipment", "value": "dumbbell" },
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "variant.bodyPosition", "value": "prone" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "machine-pad-requires-lever-row",
+      "description": "Machine-pad torso support belongs to a seated lever-row machine.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "machinePad"
+      },
+      "then": [
+        { "field": "equipment", "value": "machine" },
+        { "field": "variant.bodyPosition", "value": "seated" },
+        { "field": "variant.machineType", "value": "leverRow" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "hand-and-knee-support-is-unilateral-dumbbell",
+      "description": "Hand-and-knee contralateral support belongs to an unsupported unilateral hip-hinged dumbbell row.",
+      "when": {
+        "field": "variant.contralateralSupport",
+        "operator": "equals",
+        "value": "handAndKneeOnBench"
+      },
+      "then": [
+        { "field": "equipment", "value": "dumbbell" },
+        { "field": "laterality", "value": "unilateral" },
+        { "field": "variant.bodyPosition", "value": "hipHinged" },
+        { "field": "variant.torsoSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bilateral-has-no-contralateral-support",
+      "description": "Bilateral rows do not declare one-sided hand-and-knee support.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [
+        { "field": "variant.contralateralSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "bilateral-requires-grip-width",
+      "description": "A bilateral row declares categorical hand spacing.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "bilateral"
+      },
+      "then": [],
+      "requirePresent": [
+        "variant.relativeGripWidth"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "unilateral-requires-asymmetric-control",
+      "description": "A unilateral row is limited to dumbbell, cable, or machine equipment, omits bilateral width, and declares pelvic and oblique control.",
+      "when": {
+        "field": "laterality",
+        "operator": "equals",
+        "value": "unilateral"
+      },
+      "then": [
+        { "field": "equipment", "allowedValues": ["dumbbell", "cable", "machine"] }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.relativeGripWidth"
+      ],
+      "requireInvolvement": [
+        { "muscle": "obliques", "role": "stabilizer" }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "pelvis"
+      ]
+    },
+    {
+      "id": "hip-hinged-requires-posterior-chain-stability",
+      "description": "Hip-hinged rows declare spinal, pelvic, and hip stability with lower-back and gluteal stabilizers.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "hipHinged"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ]
+    },
+    {
+      "id": "suspended-requires-straight-body-stability",
+      "description": "A suspended inverted row declares spinal, pelvic, and hip stability with abdominal, lower-back, and gluteal stabilizers.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "supineSuspended"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ]
+    },
+    {
+      "id": "unsupported-requires-trunk-stability",
+      "description": "A row without direct torso support declares spinal stability and at least one reviewed trunk stabilizer.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "none"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "abs",
+            "obliques",
+            "lowerBack"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine"
+      ]
+    },
+    {
+      "id": "floor-reset-is-strict-pronated-barbell",
+      "description": "A floor-reset row is a strict bilateral pronated barbell row in an unsupported hip hinge without lower-body drive.",
+      "when": {
+        "field": "variant.interRepSupport",
+        "operator": "equals",
+        "value": "floor"
+      },
+      "then": [
+        { "field": "equipment", "value": "barbell" },
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "variant.gripOrientation", "value": "pronated" },
+        { "field": "variant.bodyPosition", "value": "hipHinged" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.lowerBodyContribution", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "narrow-grip-requires-tucked-path",
+      "description": "A narrow bilateral grip remains in the tucked shoulder-extension corridor.",
+      "when": {
+        "field": "variant.relativeGripWidth",
+        "operator": "equals",
+        "value": "narrow"
+      },
+      "then": [
+        { "field": "variant.upperArmPath", "value": "tucked" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "supinated-grip-requires-tucked-path",
+      "description": "A supinated grip remains in the tucked shoulder-extension corridor.",
+      "when": {
+        "field": "variant.gripOrientation",
+        "operator": "equals",
+        "value": "supinated"
+      },
+      "then": [
+        { "field": "variant.upperArmPath", "value": "tucked" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "barbell-bent-over-row",
+      "name": "Barbell Bent-Over Row",
+      "aliases": [
+        "Barbell Row",
+        "Bent-Over Barbell Row"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 8,
+      "searchPriority": 98,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "fenwick-2009-row-trunk-loading",
+        "garcia-jaen-2021-bent-over-row-posture",
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Stand holding a barbell with a shoulder-width pronated grip, hinge at the hips until the torso is inclined, and brace without changing the torso angle. Pull the bar toward the lower ribs while the elbows travel back near the torso, then lower it under control."
+    },
+    {
+      "catalogID": "underhand-barbell-row",
+      "name": "Underhand Barbell Row",
+      "aliases": [
+        "Supinated Barbell Row",
+        "Reverse-Grip Barbell Row"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 85,
+      "defaultWeightKg": 40,
+      "reps": 8,
+      "searchPriority": 90,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "supinated",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "lehman-2004-seated-row-activation"
+      ],
+      "movementDefinition": "Hold a barbell with a shoulder-width supinated grip and maintain a strict hip hinge with the trunk braced. Keep the elbows tucked, pull the bar toward the lower torso without standing up, and lower it under control."
+    },
+    {
+      "catalogID": "pendlay-row",
+      "name": "Pendlay Row",
+      "aliases": [
+        "Dead-Stop Barbell Row"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 6,
+      "searchPriority": 91,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "floor",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "fenwick-2009-row-trunk-loading"
+      ],
+      "movementDefinition": "Set a barbell on the floor and take a shoulder-width pronated grip while holding a strict hip hinge. Pull the bar toward the lower ribs without extending the hips or spine, lower it to a complete floor reset, and rebrace before the next repetition."
+    },
+    {
+      "catalogID": "dumbbell-bent-over-row",
+      "name": "Dumbbell Bent-Over Row",
+      "aliases": [
+        "Two-Arm Dumbbell Row",
+        "Bent-Over Dumbbell Row"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 92,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Hold a dumbbell in each hand with the palms facing inward and establish a strict hip hinge. Pull both dumbbells toward the sides of the lower torso while keeping the elbows close, then lower them without changing the trunk angle."
+    },
+    {
+      "catalogID": "one-arm-dumbbell-row",
+      "name": "One-Arm Dumbbell Row",
+      "aliases": [
+        "Single-Arm Dumbbell Row",
+        "One-Arm DB Row"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 97,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "handAndKneeOnBench"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "fenwick-2009-row-trunk-loading",
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Place the opposite hand and knee on a bench while the working-side foot stays planted, then hold one dumbbell with a neutral grip. Keep the pelvis square, pull the elbow toward the hip without rotating the torso, and lower under control."
+    },
+    {
+      "catalogID": "chest-supported-dumbbell-row",
+      "name": "Chest-Supported Dumbbell Row",
+      "aliases": [
+        "Incline Dumbbell Row",
+        "Chest-Supported DB Row"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 25,
+      "defaultWeightKg": 12.5,
+      "reps": 10,
+      "searchPriority": 93,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "prone",
+        "lowerBodySupport": "none",
+        "torsoSupport": "bench",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "garcia-jaen-2021-bent-over-row-posture",
+        "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row"
+      ],
+      "movementDefinition": "Lie prone with the chest supported on an incline bench and hold two dumbbells with neutral grips. Let the shoulder blades move around the rib cage, pull the elbows toward the lower torso, and lower the dumbbells under control."
+    },
+    {
+      "catalogID": "seated-cable-row",
+      "name": "Seated Cable Row",
+      "aliases": [
+        "Cable Row",
+        "Low Cable Row"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 75,
+      "defaultWeightKg": 35,
+      "reps": 10,
+      "searchPriority": 96,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "narrow",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine"
+      ],
+      "evidenceRefs": [
+        "lehman-2004-seated-row-activation",
+        "padovan-2025-seated-row-grip-width",
+        "padovan-2026-seated-row-scapular-position",
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Sit upright at a low cable station holding a narrow neutral attachment, with the torso unsupported and braced. Pull the handle toward the lower ribs while keeping the elbows tucked, then return until the shoulder blades move forward under control."
+    },
+    {
+      "catalogID": "single-arm-seated-cable-row",
+      "name": "Single-Arm Seated Cable Row",
+      "aliases": [
+        "Single-Arm Cable Row",
+        "One-Arm Cable Row"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 89,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "upperArmPath": "tucked",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "fenwick-2009-row-trunk-loading",
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Sit upright at a low cable station and hold one handle with a neutral grip. Brace the trunk and keep the pelvis square as the working elbow travels toward the hip, then return the arm forward without rotating the torso."
+    },
+    {
+      "catalogID": "chest-supported-machine-row",
+      "name": "Chest-Supported Machine Row",
+      "aliases": [
+        "Machine Row",
+        "Seated Machine Row"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 70,
+      "defaultWeightKg": 30,
+      "reps": 10,
+      "searchPriority": 94,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "none",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": true,
+        "machineType": "leverRow",
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "padovan-2026-seated-row-scapular-position",
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Sit at a lever-row machine with the chest against the pad and hold the handles with neutral grips. Allow normal scapular motion, drive the elbows toward the lower torso without lifting the chest from the pad, and return under control."
+    },
+    {
+      "catalogID": "single-arm-chest-supported-machine-row",
+      "name": "Single-Arm Chest-Supported Machine Row",
+      "aliases": [
+        "Single-Arm Machine Row",
+        "One-Arm Machine Row"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 87,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "lowerBodySupport": "none",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "upperArmPath": "tucked",
+        "fixedPath": true,
+        "machineType": "leverRow",
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "saeterbakken-2015-unilateral-row-core"
+      ],
+      "movementDefinition": "Sit against the chest pad of a lever-row machine and hold one handle with a neutral grip. Keep the pelvis and chest square, pull the working elbow toward the lower torso, and return the lever without twisting away from the pad."
+    },
+    {
+      "catalogID": "smith-machine-bent-over-row",
+      "name": "Smith Machine Bent-Over Row",
+      "aliases": [
+        "Smith Machine Row",
+        "Smith Bent-Over Row"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 8,
+      "searchPriority": 84,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "hipHinged",
+        "lowerBodySupport": "none",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "tucked",
+        "fixedPath": true,
+        "machineType": "smith",
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "fenwick-2009-row-trunk-loading"
+      ],
+      "movementDefinition": "Set the Smith bar near knee height, take a shoulder-width pronated grip, and establish a strict hip hinge beneath the rail path. Pull the bar toward the lower ribs without changing the torso angle, then lower it along the rails under control."
+    },
+    {
+      "catalogID": "inverted-row",
+      "name": "Inverted Row",
+      "aliases": [
+        "Bodyweight Row",
+        "Australian Pull-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 0.73,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 95,
+      "involvement": [
+        { "muscle": "lats", "role": "primary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "trapeziusMiddle", "role": "secondary" },
+        { "muscle": "rhomboids", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "supineSuspended",
+        "lowerBodySupport": "feet",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "upperArmPath": "scapular",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "interRepSupport": "none",
+        "contralateralSupport": "none",
+        "bodyweightApparatus": "fixedBar",
+        "bodyLeverage": "parallelFeetFloor"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "vural-2023-suspension-row-loading",
+        "youdas-2016-inverted-row",
+        "youdas-2021-suspension-row"
+      ],
+      "movementDefinition": "Lie beneath a fixed straight bar with a shoulder-width pronated grip, feet on the floor, and the body held approximately parallel to the floor. Keep a straight line from shoulders through heels, pull the chest toward the bar through a modest scapular upper-arm path, and lower under control."
+    }
+  ]
+}

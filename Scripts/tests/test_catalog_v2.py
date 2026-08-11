@@ -46,6 +46,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
         cls.vertical_pull = catalog_v2.load_json(
             catalog_v2.FAMILIES_ROOT / "vertical-pull.json"
         )
+        cls.shoulder_extension_row = catalog_v2.load_json(
+            catalog_v2.FAMILIES_ROOT / "shoulder-extension-row.json"
+        )
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -65,6 +68,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def vertical_pull_copy(self) -> dict:
         return copy.deepcopy(self.vertical_pull)
 
+    def shoulder_extension_row_copy(self) -> dict:
+        return copy.deepcopy(self.shoulder_extension_row)
+
     def additional_stability_demand_rule(self, demands: list[str]) -> dict:
         return {
             "id": "standing-requires-stability-demands",
@@ -81,6 +87,24 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "requirePresent": [],
             "requireAbsent": [],
             "requireAdditionalStabilityDemands": demands,
+        }
+
+    def conditional_muscle_rule(self, requirements: list[dict]) -> dict:
+        return {
+            "id": "standing-requires-trunk-muscle",
+            "description": (
+                "Standing variants require one reviewed trunk muscle without "
+                "forcing one exact assignment."
+            ),
+            "when": {
+                "field": "variant.support",
+                "operator": "equals",
+                "value": "standing",
+            },
+            "then": [],
+            "requirePresent": [],
+            "requireAbsent": [],
+            "requireMuscleRequirements": requirements,
         }
 
     def sternocostal_extension_family(self, action_requirement: object) -> dict:
@@ -136,6 +160,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 family,
                 self.foundation,
                 "mutated vertical pull",
+            )
+
+    def assert_shoulder_extension_row_fails(
+        self,
+        family: dict,
+        message: str,
+    ) -> None:
+        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "mutated shoulder extension row",
             )
 
     def test_taxonomy_is_the_locked_32_muscle_clean_slate(self) -> None:
@@ -294,6 +330,141 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "uniqueItems": True,
                 "items": {"$ref": "#/$defs/symbolID"},
             },
+        )
+
+    def test_family_schema_declares_conditional_muscle_requirement_shape(
+        self,
+    ) -> None:
+        property_schema = self.foundation.family_schema["$defs"]["exerciseRule"][
+            "properties"
+        ]["requireMuscleRequirements"]
+        self.assertEqual(
+            property_schema,
+            {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {"$ref": "#/$defs/muscleRequirement"},
+            },
+        )
+
+    def test_conditional_muscle_requirement_rejects_missing_any_of_set(
+        self,
+    ) -> None:
+        family = self.family_copy()
+        family["musclePolicy"]["allowedByRole"]["stabilizer"].extend(
+            ["abs", "obliques", "lowerBack"]
+        )
+        family["exerciseRules"] = [
+            self.conditional_muscle_rule(
+                [
+                    {
+                        "anyOf": ["abs", "obliques", "lowerBack"],
+                        "minimumRole": "stabilizer",
+                    }
+                ]
+            )
+        ]
+        family["exercises"][0]["variant"]["support"] = "standing"
+        self.assert_family_fails(
+            family,
+            "violates exercise rule standing-requires-trunk-muscle: "
+            r"one of \['abs', 'obliques', 'lowerBack'\] must be assigned as "
+            "stabilizer or higher",
+        )
+
+    def test_conditional_muscle_requirement_accepts_any_reviewed_candidate(
+        self,
+    ) -> None:
+        family = self.family_copy()
+        family["musclePolicy"]["allowedByRole"]["stabilizer"].extend(
+            ["abs", "obliques", "lowerBack"]
+        )
+        family["exerciseRules"] = [
+            self.conditional_muscle_rule(
+                [
+                    {
+                        "anyOf": ["abs", "obliques", "lowerBack"],
+                        "minimumRole": "stabilizer",
+                    }
+                ]
+            )
+        ]
+        exercise = family["exercises"][0]
+        exercise["variant"]["support"] = "standing"
+        exercise["additionalStabilityDemands"] = ["spine"]
+        exercise["involvement"].append(
+            {"muscle": "obliques", "role": "stabilizer"}
+        )
+        self.assertEqual(
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "conditional-muscle fixture",
+            ),
+            [],
+        )
+
+    def test_conditional_muscle_requirement_rejects_unknown_muscle(self) -> None:
+        family = self.family_copy()
+        family["exerciseRules"] = [
+            self.conditional_muscle_rule(
+                [
+                    {
+                        "anyOf": ["inventedMuscle"],
+                        "minimumRole": "stabilizer",
+                    }
+                ]
+            )
+        ]
+        self.assert_family_fails(
+            family,
+            r"requireMuscleRequirements\[0\].anyOf references unknown muscles: "
+            "inventedMuscle",
+        )
+
+    def test_conditional_muscle_requirement_enforces_minimum_role(self) -> None:
+        family = self.family_copy()
+        family["exerciseRules"] = [
+            self.conditional_muscle_rule(
+                [
+                    {
+                        "anyOf": ["serratus"],
+                        "minimumRole": "secondary",
+                    }
+                ]
+            )
+        ]
+        family["exercises"][0]["variant"]["support"] = "standing"
+        self.assert_family_fails(
+            family,
+            "violates exercise rule standing-requires-trunk-muscle: "
+            r"one of \['serratus'\] must be assigned as secondary or higher",
+        )
+
+    def test_conditional_muscle_requirement_rejects_equivalent_groups(
+        self,
+    ) -> None:
+        family = self.family_copy()
+        family["musclePolicy"]["allowedByRole"]["stabilizer"].extend(
+            ["abs", "obliques"]
+        )
+        family["exerciseRules"] = [
+            self.conditional_muscle_rule(
+                [
+                    {
+                        "anyOf": ["abs", "obliques"],
+                        "minimumRole": "stabilizer",
+                    },
+                    {
+                        "anyOf": ["obliques", "abs"],
+                        "minimumRole": "stabilizer",
+                    },
+                ]
+            )
+        ]
+        self.assert_family_fails(
+            family,
+            "requireMuscleRequirements contains equivalent muscle requirements",
         )
 
     def test_rule_assertion_can_require_one_of_several_values(self) -> None:
@@ -1367,7 +1538,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ),
                 "close-grip-neutral-lat-pulldown": (
                     "cable", "bilateral", "external", 0, "open", "seated",
-                    "thighPad", "neutral", "shoulderWidth", "free", None,
+                    "thighPad", "neutral", "narrow", "free", None,
                     (),
                 ),
                 "underhand-lat-pulldown": (
@@ -1671,6 +1842,567 @@ class CatalogV2FoundationTests(unittest.TestCase):
             set(exercise_by_id["assisted-chin-up-machine"]["evidenceRefs"]),
             {"hewit-2018-pullup-alternatives", "youdas-2010-pullup-chinup"},
         )
+
+    def test_real_shoulder_extension_row_family_is_strict(self) -> None:
+        warnings = catalog_v2.validate_family(
+            self.shoulder_extension_row_copy(),
+            self.foundation,
+            "shoulder extension row",
+        )
+        self.assertEqual(warnings, [])
+        self.assertEqual(
+            self.shoulder_extension_row["fixed"],
+            {
+                "mechanic": "compound",
+                "pattern": "pull",
+                "direction": "horizontal",
+                "planes": ["sagittal"],
+            },
+        )
+        self.assertEqual(
+            self.shoulder_extension_row["movementSignature"][
+                "planeBasisActions"
+            ],
+            ["shoulder.extension"],
+        )
+        self.assertIn(
+            {
+                "action": "shoulder.extension",
+                "condition": "fromFlexedPosition",
+            },
+            self.shoulder_extension_row["movementSignature"]["primeActions"],
+        )
+        self.assertIn(
+            "scapula.retraction",
+            self.shoulder_extension_row["movementSignature"]["primeActions"],
+        )
+        self.assertEqual(
+            self.foundation.plane_by_action["scapula.retraction"],
+            "transverse",
+        )
+        self.assertNotIn(
+            "transverse",
+            self.shoulder_extension_row["fixed"]["planes"],
+        )
+        self.assertIn(
+            "Wide or deliberately flared horizontal-abduction rows",
+            self.shoulder_extension_row["definition"],
+        )
+        self.assertIn(
+            "diagonal high-row machines",
+            self.shoulder_extension_row["definition"],
+        )
+
+    def test_shoulder_extension_row_roster_is_the_reviewed_coverage_matrix(
+        self,
+    ) -> None:
+        actual = {}
+        for exercise in self.shoulder_extension_row["exercises"]:
+            variant = exercise["variant"]
+            actual[exercise["catalogID"]] = (
+                exercise["equipment"],
+                exercise["laterality"],
+                exercise["loadMode"],
+                exercise["bodyweightFraction"],
+                variant["kineticChain"],
+                variant["bodyPosition"],
+                variant["lowerBodySupport"],
+                variant["torsoSupport"],
+                variant["scapularTranslation"],
+                variant["gripOrientation"],
+                variant.get("relativeGripWidth"),
+                variant["upperArmPath"],
+                variant["fixedPath"],
+                variant.get("machineType"),
+                variant["interRepSupport"],
+                variant["contralateralSupport"],
+                variant.get("bodyweightApparatus"),
+                variant.get("bodyLeverage"),
+                tuple(exercise["additionalStabilityDemands"]),
+            )
+
+        self.assertEqual(
+            actual,
+            {
+                "barbell-bent-over-row": (
+                    "barbell", "bilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "pronated",
+                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "underhand-barbell-row": (
+                    "barbell", "bilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "supinated",
+                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "pendlay-row": (
+                    "barbell", "bilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "pronated",
+                    "shoulderWidth", "tucked", False, None, "floor", "none",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "dumbbell-bent-over-row": (
+                    "dumbbell", "bilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "neutral",
+                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "one-arm-dumbbell-row": (
+                    "dumbbell", "unilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "neutral", None,
+                    "tucked", False, None, "none", "handAndKneeOnBench",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "chest-supported-dumbbell-row": (
+                    "dumbbell", "bilateral", "external", 0, "open", "prone",
+                    "none", "bench", "free", "neutral", "shoulderWidth",
+                    "tucked", False, None, "none", "none", None, None, (),
+                ),
+                "seated-cable-row": (
+                    "cable", "bilateral", "external", 0, "open", "seated",
+                    "none", "none", "free", "neutral", "narrow", "tucked",
+                    False, None, "none", "none", None, None, ("spine",),
+                ),
+                "single-arm-seated-cable-row": (
+                    "cable", "unilateral", "external", 0, "open", "seated",
+                    "none", "none", "free", "neutral", None, "tucked",
+                    False, None, "none", "none", None, None,
+                    ("spine", "pelvis"),
+                ),
+                "chest-supported-machine-row": (
+                    "machine", "bilateral", "external", 0, "open", "seated",
+                    "none", "machinePad", "free", "neutral",
+                    "shoulderWidth", "tucked", True, "leverRow", "none",
+                    "none", None, None, (),
+                ),
+                "single-arm-chest-supported-machine-row": (
+                    "machine", "unilateral", "external", 0, "open", "seated",
+                    "none", "machinePad", "free", "neutral", None, "tucked",
+                    True, "leverRow", "none", "none", None, None,
+                    ("pelvis",),
+                ),
+                "smith-machine-bent-over-row": (
+                    "machine", "bilateral", "external", 0, "open",
+                    "hipHinged", "none", "none", "free", "pronated",
+                    "shoulderWidth", "tucked", True, "smith", "none", "none",
+                    None, None, ("spine", "pelvis", "hip"),
+                ),
+                "inverted-row": (
+                    "bodyweight", "bilateral", "bodyweightAdded", 0.73,
+                    "closed", "supineSuspended", "feet", "none", "free",
+                    "pronated", "shoulderWidth", "scapular", False, None,
+                    "none", "none", "fixedBar", "parallelFeetFloor",
+                    ("spine", "pelvis", "hip"),
+                ),
+            },
+        )
+
+    def test_shoulder_extension_row_roster_covers_every_admitted_axis_value(
+        self,
+    ) -> None:
+        exercises = self.shoulder_extension_row["exercises"]
+        top_level_fields = {
+            "equipment": "equipment",
+            "modalities": "modality",
+            "trackingModes": "trackingMode",
+            "loadModes": "loadMode",
+            "lateralities": "laterality",
+        }
+        for allowed_key, exercise_key in top_level_fields.items():
+            with self.subTest(field=allowed_key):
+                self.assertEqual(
+                    {exercise[exercise_key] for exercise in exercises},
+                    set(self.shoulder_extension_row["allowed"][allowed_key]),
+                )
+
+        for axis in self.shoulder_extension_row["variantAxes"]:
+            observed = {
+                exercise["variant"][axis["id"]]
+                for exercise in exercises
+                if axis["id"] in exercise["variant"]
+            }
+            with self.subTest(axis=axis["id"]):
+                if axis["valueType"] == "enum":
+                    self.assertEqual(observed, set(axis["allowedValues"]))
+                elif axis["valueType"] == "boolean":
+                    self.assertEqual(observed, {False, True})
+                elif axis["valueType"] == "number":
+                    self.assertIn(axis["minimum"], observed)
+                    self.assertIn(axis["maximum"], observed)
+
+    def test_shoulder_extension_row_has_the_reviewed_rule_set(self) -> None:
+        self.assertEqual(
+            [
+                rule["id"]
+                for rule in self.shoulder_extension_row["exerciseRules"]
+            ],
+            [
+                "bodyweight-uses-closed-chain-load-semantics",
+                "parallel-feet-floor-pins-bodyweight-load",
+                "fixed-bar-apparatus-requires-bodyweight",
+                "non-bodyweight-uses-open-chain-external-load",
+                "machine-requires-fixed-path-and-type",
+                "non-machine-requires-free-path",
+                "lever-row-is-supported-seated",
+                "smith-row-is-hip-hinged",
+                "barbell-is-unsupported-hip-hinged",
+                "dumbbell-is-neutral-free-path",
+                "prone-row-is-supported-bilateral-dumbbell",
+                "cable-is-unsupported-seated-free-path",
+                "bench-support-requires-prone-dumbbell",
+                "machine-pad-requires-lever-row",
+                "hand-and-knee-support-is-unilateral-dumbbell",
+                "bilateral-has-no-contralateral-support",
+                "bilateral-requires-grip-width",
+                "unilateral-requires-asymmetric-control",
+                "hip-hinged-requires-posterior-chain-stability",
+                "suspended-requires-straight-body-stability",
+                "unsupported-requires-trunk-stability",
+                "floor-reset-is-strict-pronated-barbell",
+                "narrow-grip-requires-tucked-path",
+                "supinated-grip-requires-tucked-path",
+            ],
+        )
+
+    def test_every_shoulder_extension_row_rule_has_roster_contrast(
+        self,
+    ) -> None:
+        exercises = self.shoulder_extension_row["exercises"]
+        for rule in self.shoulder_extension_row["exerciseRules"]:
+            predicate = rule["when"]
+            values = [
+                catalog_v2.exercise_rule_field(
+                    exercise,
+                    predicate["field"],
+                )
+                for exercise in exercises
+            ]
+            if predicate["operator"] == "equals":
+                matches = [value == predicate["value"] for value in values]
+            else:
+                matches = [
+                    value is not catalog_v2.MISSING
+                    and value != predicate["value"]
+                    for value in values
+                ]
+            with self.subTest(rule=rule["id"]):
+                self.assertTrue(any(matches), "rule has no real matching exercise")
+                self.assertTrue(
+                    any(not match for match in matches),
+                    "rule has no contrasting real exercise",
+                )
+
+    def test_shoulder_extension_row_requires_the_reviewed_role_contract(
+        self,
+    ) -> None:
+        required_roles = {
+            "lats": "primary",
+            "teresMajor": "secondary",
+            "deltoidPosterior": "secondary",
+            "biceps": "secondary",
+            "trapeziusMiddle": "secondary",
+            "rhomboids": "secondary",
+            "subscapularis": "stabilizer",
+            "forearms": "stabilizer",
+        }
+        for exercise in self.shoulder_extension_row["exercises"]:
+            roles = {
+                assignment["muscle"]: assignment["role"]
+                for assignment in exercise["involvement"]
+            }
+            with self.subTest(exercise=exercise["catalogID"]):
+                for muscle_id, role in required_roles.items():
+                    self.assertEqual(roles[muscle_id], role)
+                if exercise["variant"]["bodyPosition"] == "hipHinged":
+                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["gluteMax"], "stabilizer")
+                if exercise["laterality"] == "unilateral":
+                    self.assertEqual(roles["obliques"], "stabilizer")
+                if exercise["variant"]["bodyPosition"] == "supineSuspended":
+                    self.assertEqual(roles["abs"], "stabilizer")
+                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["gluteMax"], "stabilizer")
+
+    def test_every_shoulder_extension_row_rule_consequence_rejects_a_mutation(
+        self,
+    ) -> None:
+        axes = {
+            axis["id"]: axis
+            for axis in self.shoulder_extension_row["variantAxes"]
+        }
+
+        def matches(exercise: dict, rule: dict) -> bool:
+            predicate = rule["when"]
+            actual = catalog_v2.exercise_rule_field(
+                exercise,
+                predicate["field"],
+            )
+            if actual is catalog_v2.MISSING:
+                return False
+            if predicate["operator"] == "equals":
+                return actual == predicate["value"]
+            return actual != predicate["value"]
+
+        def set_field(exercise: dict, path: str, value: object) -> None:
+            if path.startswith("variant."):
+                exercise["variant"][path.removeprefix("variant.")] = value
+            else:
+                exercise[path] = value
+
+        def delete_field(exercise: dict, path: str) -> None:
+            if path.startswith("variant."):
+                exercise["variant"].pop(
+                    path.removeprefix("variant."),
+                    None,
+                )
+            else:
+                exercise.pop(path, None)
+
+        def allowed_candidates(path: str) -> list[object]:
+            if path in catalog_v2.RULE_FIELD_DOMAINS:
+                return sorted(catalog_v2.RULE_FIELD_DOMAINS[path])
+            if path in catalog_v2.RULE_NUMERIC_FIELDS:
+                minimum, maximum = catalog_v2.RULE_NUMERIC_FIELDS[path]
+                return [minimum, maximum]
+            axis = axes[path.removeprefix("variant.")]
+            if axis["valueType"] == "enum":
+                return list(axis["allowedValues"])
+            if axis["valueType"] == "boolean":
+                return [False, True]
+            if axis["valueType"] == "number":
+                return [axis["minimum"], axis["maximum"]]
+            return ["mutated"]
+
+        mutated_consequences = 0
+        for rule in self.shoulder_extension_row["exerciseRules"]:
+            matching = next(
+                exercise
+                for exercise in self.shoulder_extension_row["exercises"]
+                if matches(exercise, rule)
+            )
+
+            for assertion in rule["then"]:
+                path = assertion["field"]
+                forbidden = (
+                    {assertion["value"]}
+                    if "value" in assertion
+                    else set(assertion["allowedValues"])
+                )
+                alternative = next(
+                    (
+                        candidate
+                        for candidate in allowed_candidates(path)
+                        if candidate not in forbidden
+                    ),
+                    catalog_v2.MISSING,
+                )
+                mutated = copy.deepcopy(matching)
+                if alternative is catalog_v2.MISSING:
+                    delete_field(mutated, path)
+                else:
+                    set_field(mutated, path, alternative)
+                with self.subTest(rule=rule["id"], assertion=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+            for path in rule["requirePresent"]:
+                mutated = copy.deepcopy(matching)
+                delete_field(mutated, path)
+                with self.subTest(rule=rule["id"], missing=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+            for path in rule["requireAbsent"]:
+                mutated = copy.deepcopy(matching)
+                set_field(mutated, path, allowed_candidates(path)[0])
+                with self.subTest(rule=rule["id"], unexpected=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+            for assignment in rule.get("requireInvolvement", []):
+                mutated = copy.deepcopy(matching)
+                mutated["involvement"] = [
+                    existing
+                    for existing in mutated["involvement"]
+                    if existing["muscle"] != assignment["muscle"]
+                ]
+                with self.subTest(
+                    rule=rule["id"],
+                    muscle=assignment["muscle"],
+                ):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+            for requirement in rule.get("requireMuscleRequirements", []):
+                candidates = set(requirement["anyOf"])
+                mutated = copy.deepcopy(matching)
+                mutated["involvement"] = [
+                    existing
+                    for existing in mutated["involvement"]
+                    if existing["muscle"] not in candidates
+                ]
+                with self.subTest(rule=rule["id"], any_of=tuple(candidates)):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+            for region in rule.get("requireAdditionalStabilityDemands", []):
+                mutated = copy.deepcopy(matching)
+                mutated["additionalStabilityDemands"] = [
+                    demand
+                    for demand in mutated["additionalStabilityDemands"]
+                    if demand != region
+                ]
+                with self.subTest(rule=rule["id"], stability=region):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated row",
+                        )
+                mutated_consequences += 1
+
+        self.assertEqual(mutated_consequences, 89)
+
+    def test_unilateral_smith_row_stays_blocked_by_smith_setup_rule(self) -> None:
+        family = self.shoulder_extension_row_copy()
+        exercise = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"]
+            == "single-arm-chest-supported-machine-row"
+        )
+        exercise["variant"]["machineType"] = "smith"
+        self.assert_shoulder_extension_row_fails(
+            family,
+            "violates exercise rule smith-row-is-hip-hinged: "
+            "variant.bodyPosition must equal 'hipHinged'",
+        )
+
+    def test_unsupported_trunk_rule_is_pinned_to_seated_cable_row(self) -> None:
+        family = self.shoulder_extension_row_copy()
+        exercise = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"] == "seated-cable-row"
+        )
+        exercise["involvement"] = [
+            assignment
+            for assignment in exercise["involvement"]
+            if assignment["muscle"] != "abs"
+        ]
+        self.assert_shoulder_extension_row_fails(
+            family,
+            "violates exercise rule unsupported-requires-trunk-stability: "
+            "one of .* must be assigned as stabilizer or higher",
+        )
+
+    def test_shoulder_extension_row_evidence_discloses_interpolations(
+        self,
+    ) -> None:
+        source_by_id = {
+            source["id"]: source
+            for source in self.foundation.evidence["sources"]
+        }
+        self.assertIn(
+            "only three participants",
+            source_by_id["garcia-jaen-2021-bent-over-row-posture"]["scope"],
+        )
+        self.assertIn(
+            "not load-bearing evidence",
+            source_by_id["garcia-jaen-2021-bent-over-row-posture"]["scope"],
+        )
+        self.assertIn(
+            "article appeared online in December 2025",
+            source_by_id[
+                "padovan-2026-seated-row-scapular-position"
+            ]["scope"],
+        )
+        self.assertEqual(
+            source_by_id["padovan-2026-seated-row-scapular-position"]["year"],
+            2026,
+        )
+        exercise_by_id = {
+            exercise["catalogID"]: exercise
+            for exercise in self.shoulder_extension_row["exercises"]
+        }
+        self.assertIn(
+            "garcia-jaen-2021-bent-over-row-posture",
+            exercise_by_id["chest-supported-dumbbell-row"]["evidenceRefs"],
+        )
+        self.assertIn(
+            "saeterbakken-2015-unilateral-row-core",
+            exercise_by_id["single-arm-seated-cable-row"]["evidenceRefs"],
+        )
+        self.assertIn(
+            "saeterbakken-2015-unilateral-row-core",
+            exercise_by_id[
+                "single-arm-chest-supported-machine-row"
+            ]["evidenceRefs"],
+        )
+
+    def test_shoulder_extension_row_rejects_opposing_and_propulsive_actions(
+        self,
+    ) -> None:
+        for action in (
+            "shoulder.flexion",
+            "shoulder.horizontalAbduction",
+            "scapula.protraction",
+            "elbow.extension",
+            "spine.extension",
+            "hip.extension",
+            "knee.extension",
+        ):
+            with self.subTest(action=action):
+                family = self.shoulder_extension_row_copy()
+                family["exercises"][0]["additionalPrimeActions"] = [action]
+                self.assert_shoulder_extension_row_fails(
+                    family,
+                    f"declares forbidden prime action {action}",
+                )
 
     def test_horizontal_press_rejects_nonzero_inclination(self) -> None:
         family = self.horizontal_press_copy()
@@ -2110,6 +2842,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.decline_press,
                 self.vertical_press,
                 self.vertical_pull,
+                self.shoulder_extension_row,
             ],
         )
 
@@ -2121,6 +2854,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.decline_press,
                 self.vertical_press,
                 self.vertical_pull,
+                self.shoulder_extension_row,
             ]
         )
 

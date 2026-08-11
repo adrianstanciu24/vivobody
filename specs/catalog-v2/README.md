@@ -108,10 +108,20 @@ Each family separates:
   load semantics, kinetic chain, support, and variant axes so individually
   valid values cannot form an impossible combination. A rule can also use
   `requireAdditionalStabilityDemands` to require named regions in an exercise's
-  `additionalStabilityDemands`; assigning a capable stabilizing muscle remains
-  independently mandatory.
+  `additionalStabilityDemands`, or `requireMuscleRequirements` to conditionally
+  require one of several muscles at a minimum role. Assigning a capable
+  stabilizing muscle remains independently mandatory for every declared
+  stability region.
 - `recommended`: soft programming guidance. Defaults outside these ranges emit
   warnings and do not invalidate family membership.
+
+Family IDs name the feature that distinguishes neighboring contracts. Use the
+movement direction or inclination when that separates the family, as in
+`horizontal-press`, `incline-press`, or `vertical-pull`. When multiple families
+share the same direction, use the distinguishing humeral action, as in
+`shoulder-extension-row` versus `shoulder-horizontal-abduction-row`. The
+app-facing `name` may remain conventional—“Horizontal Row”—while the stable ID
+keeps the biomechanical boundary explicit.
 
 The reviewed chest-press families share `fixedPath` and `machineType` with the
 same meaning. `fixedPath` answers only whether machine rails or a lever constrain
@@ -126,6 +136,19 @@ no external load path for its guided platform to constrain. Its required
 `assistancePlatformGuided`, keeping guided external resistance separate from a
 guided body path. `kineticChain` independently records whether the hands or the
 implement move.
+
+Shoulder-extension row reuses the external-load meaning of `fixedPath` for
+Smith rails and lever-row machines while keeping a fixed-bar inverted row
+`fixedPath: false`; distal hand fixation is still expressed by
+`kineticChain: closed`. Its family plane remains sagittal because
+`shoulder.extension` is the shoulder basis action. The transverse
+`scapula.retraction` prime action occurs at a different joint and does not add
+a transverse shoulder plane.
+
+Families that declare `relativeGripWidth` share one ordinal vocabulary:
+`narrow|shoulderWidth|medium|wide`. A family may admit only a subset, but it
+must not redefine one value to mean another; in particular, a close-grip
+attachment is `narrow`, not `shoulderWidth`.
 
 They also share `pressInclinationDegrees`, a required signed axis for the
 canonical torso-relative pressing inclination. Zero is horizontal, positive
@@ -155,7 +178,8 @@ free scapular translation, or a body-angle/elevated-segment axis, so these are
 ownership decisions rather than authored exercises. Standard and knee push-ups
 remain horizontal press variants.
 
-Narrow-, standard-, and wide-grip presses remain horizontal-press mechanics.
+`narrow`, `shoulderWidth`, and `wide` grip variants remain horizontal-press
+mechanics.
 They are deferred until a hand-spacing axis and its thresholds are reviewed;
 no grip width may be inferred from aliases. A close-grip press becomes a
 separate triceps-emphasis family only if a later evidence review deliberately

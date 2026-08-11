@@ -14,10 +14,13 @@ scapula retracts without deliberate trunk or lower-body propulsion.
 
 The family should cover front/scapular-path variants using pronated, neutral,
 or supinated grips. It should not absorb every exercise that begins with the
-hands overhead. Straight-arm pulldowns, scapular pull-ups, high rows,
-behind-neck pulldowns, kipping or butterfly pull-ups, muscle-ups, and
-band-assisted pull-ups cross a joint-action, path, propulsion, transition, or
-load-semantics boundary.
+hands overhead. Straight-arm pulldowns, scapular pull-ups, flared
+horizontal-abduction high rows, diagonal high-row machines, behind-neck
+pulldowns, kipping or butterfly pull-ups, muscle-ups, and band-assisted
+pull-ups cross a joint-action, path, propulsion, transition, or load-semantics
+boundary. Flared high rows hand off to a future
+`shoulder-horizontal-abduction-row`; lat-dominant diagonal high-row machines
+require a separate `diagonal-pull` ownership review.
 
 `vertical` remains the app-facing principal resistance/body-travel direction;
 it is not an anatomical plane. The accepted front/scapular corridor combines
@@ -197,8 +200,10 @@ an anatomy-map contradiction.
 - `scapularTranslation`: required and initially limited to `free`. A thigh pad
   or assistance platform does not pin the scapula to a posterior surface.
 - `gripOrientation`: required `pronated|neutral|supinated`.
-- `relativeGripWidth`: optional `shoulderWidth|medium|wide`; required for a
-  bilateral record and absent for a unilateral record.
+- `relativeGripWidth`: optional `narrow|shoulderWidth|medium|wide`; required for
+  a bilateral record and absent for a unilateral record. This is the shared
+  cross-family width scale; `narrow` is distinct from shoulder-width rather
+  than a family-local synonym for it.
 - `pathConstraint`: required
   `free|leverGuided|assistancePlatformGuided`. This family-specific axis
   distinguishes an unconstrained implement/body path, a lever-guided
@@ -265,7 +270,8 @@ separate in `kineticChain`.
 | Assisted pull-up/chin-up machine | Own | Closed-chain signature with explicit subtractive assistance. |
 | Seated cable pulldown variants | Own | Open-chain version of the same accepted front/scapular signature. |
 | Bilateral or unilateral lever pulldown | Own | Same signature with a guided resistance path. |
-| High row | Exclude | The substantially horizontal/diagonal humeral and resistance path belongs to a row or diagonal-pull contract. |
+| Flared high row to the upper chest | Exclude | Shoulder horizontal abduction dominates; ownership belongs to a future `shoulder-horizontal-abduction-row`. |
+| Lat-dominant diagonal high-row machine | Defer | The adduction/extension blend and diagonal resistance path require an explicit `diagonal-pull` contract review. |
 | Half-kneeling or tall-kneeling cable pulldown | Defer | Adds support, pelvis, and possible unilateral trunk-control combinations not covered by the initial seated rule. |
 | Behind-neck pulldown | Defer | Distinct humeral path and mobility demand; front-only is a scope boundary, not a claim that the exercise is universally unsafe. |
 | Straight-arm pulldown or machine pullover | Exclude | No elbow-flexion signature; belongs to a shoulder-extension isolation family. |
@@ -290,7 +296,7 @@ Cartesian product.
 | Assisted Pull-Up Machine | Guided subtractive-assistance branch. |
 | Assisted Chin-Up Machine | Supinated interaction with subtractive assistance. |
 | Cable Lat Pulldown | Open-chain, pronated, medium-width cable baseline. |
-| Close-Grip Neutral Lat Pulldown | Neutral shoulder-width cable branch. |
+| Close-Grip Neutral Lat Pulldown | Neutral narrow-width cable branch. |
 | Underhand Lat Pulldown | Supinated cable branch. |
 | Wide-Grip Lat Pulldown | Wide pronated cable branch without inventing a new primary-muscle policy. |
 | Single-Arm Cable Lat Pulldown | Unilateral free-handle branch and pelvic-stability rule. |
