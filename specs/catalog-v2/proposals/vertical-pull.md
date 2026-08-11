@@ -19,8 +19,10 @@ horizontal-abduction high rows, diagonal high-row machines, behind-neck
 pulldowns, kipping or butterfly pull-ups, muscle-ups, and band-assisted
 pull-ups cross a joint-action, path, propulsion, transition, or load-semantics
 boundary. Flared high rows hand off to the active
-`shoulder-horizontal-abduction-row`; lat-dominant diagonal high-row machines
-require a separate `diagonal-pull` ownership review.
+`shoulder-horizontal-abduction-row`. The overhead-start lever-high-row
+candidate is reviewed in `proposals/diagonal-pull.md`; it remains unactivated
+until torso-relative path geometry can distinguish it from this family without
+relying on its product name.
 
 `vertical` remains the app-facing principal resistance/body-travel direction;
 it is not an anatomical plane. The accepted front/scapular corridor combines
@@ -271,7 +273,7 @@ separate in `kineticChain`.
 | Seated cable pulldown variants | Own | Open-chain version of the same accepted front/scapular signature. |
 | Bilateral or unilateral lever pulldown | Own | Same signature with a guided resistance path. |
 | Flared high row to the upper chest | Exclude | Shoulder horizontal abduction dominates; ownership belongs to the active `shoulder-horizontal-abduction-row`. |
-| Lat-dominant diagonal high-row machine | Defer | The adduction/extension blend and diagonal resistance path require an explicit `diagonal-pull` contract review. |
+| Overhead-start lever high-row machine | Defer | `proposals/diagonal-pull.md` must establish a distinct torso-relative path and humeral actions; the product name does not prove diagonal ownership. |
 | Half-kneeling or tall-kneeling cable pulldown | Defer | Adds support, pelvis, and possible unilateral trunk-control combinations not covered by the initial seated rule. |
 | Behind-neck pulldown | Defer | Distinct humeral path and mobility demand; front-only is a scope boundary, not a claim that the exercise is universally unsafe. |
 | Straight-arm pulldown or machine pullover | Exclude | No elbow-flexion signature; belongs to a shoulder-extension isolation family. |

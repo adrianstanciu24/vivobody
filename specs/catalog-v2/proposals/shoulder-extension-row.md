@@ -22,11 +22,13 @@ Do **not** use one universal row contract. A deliberately flared row to the
 upper chest is not merely a grip variant: its defining humeral action shifts
 toward shoulder horizontal abduction and its muscular emphasis shifts toward
 the trapezius and deltoid. It belongs to the active
-`shoulder-horizontal-abduction-row`. A lat-dominant machine commonly marketed
-as a “high row” can instead use a diagonal adduction/extension path and needs a
-separate `diagonal-pull` ownership review. Exercise names cannot decide between
-those signatures. Face pulls cross another boundary by adding deliberate
-shoulder external rotation.
+`shoulder-horizontal-abduction-row`. An overhead-start lever machine commonly
+marketed as a “high row” is a possible diagonal candidate, but its
+torso-relative path and humeral actions remain unresolved. It may still belong
+to a horizontal row family. `proposals/diagonal-pull.md` records that candidate
+and its activation blockers. Exercise names cannot decide between those
+signatures. Face pulls cross another boundary by adding deliberate shoulder
+external rotation.
 
 This split is supported by two direct comparisons. Suspension low rows produced
 a different excitation profile from high and horizontal-abduction rows, and a
@@ -406,7 +408,7 @@ exercise-array order.
 | Supinated fixed-bar inverted row | Admit vocabulary; defer record | A straight fixed bar supports an underhand grip within the same mechanics; add a catalog item only if it is a useful searchable variant. |
 | Neutral-grip inverted row | Defer | Requires a reviewed `parallelHandles` apparatus value; neutral grip is not representable by the initial straight `fixedBar`. |
 | Wide-grip or deliberately flared high row to the upper chest | Exclude | Horizontal-abduction/trapezius-emphasis boundary; active `shoulder-horizontal-abduction-row`. |
-| Lat-dominant diagonal high-row machine | Defer | Adduction/extension blend and diagonal resistance path require a future `diagonal-pull` ownership review. |
+| Overhead-start lever high-row machine | Defer | `proposals/diagonal-pull.md` records the candidate, evidence limits, and unresolved path/humeral-action boundary. |
 | Face pull | Exclude | Adds deliberate shoulder external rotation and a higher pull target. |
 | Rear-delt fly | Exclude | Omits elbow flexion and belongs to a shoulder-horizontal-abduction isolation family. |
 | Upright row | Exclude | Shoulder elevation/abduction signature rather than horizontal shoulder extension. |
@@ -603,8 +605,9 @@ its 12-exercise coverage roster, and its evidence records are now active
 validator input:
 
 1. The explicit `shoulder-extension-row` boundary is active; flared rows now
-   route to the active shoulder-horizontal-abduction sibling, while diagonal
-   high-row machines retain their named future owner — done.
+   route to the active shoulder-horizontal-abduction sibling, while
+   overhead-start high-row machines remain a named geometry-review deferral —
+   done.
 2. Direction is torso-relative, the shoulder basis plane is sagittal, and
    transverse scapular retraction does not create a false shoulder plane —
    done.
