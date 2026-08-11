@@ -145,6 +145,17 @@ Smith rails and lever-row machines while keeping a fixed-bar inverted row
 `scapula.retraction` prime action occurs at a different joint and does not add
 a transverse shoulder plane.
 
+Shoulder-horizontal-abduction row owns the strict flared shoulder-height row:
+its transverse family plane comes from the shoulder basis action
+`shoulder.horizontalAbduction`, while scapular retraction and elbow flexion are
+required actions at other joints. It pins `upperArmElevationDegrees` to 90 as
+an auditable canonical-position convention. A 60-degree row remains deferred
+because the reviewed studies do not provide the three-dimensional action
+decomposition needed to place that mixed path honestly in either row family.
+Lever-row machine records in both row families declare
+`leverArmConfiguration`; linked levers are bilateral and unilateral variants
+use independent arms. Smith rails are not lever arms and omit the axis.
+
 Families that declare `relativeGripWidth` share one ordinal vocabulary:
 `narrow|shoulderWidth|medium|wide`. A family may admit only a subset, but it
 must not redefine one value to mean another; in particular, a close-grip

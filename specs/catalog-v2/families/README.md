@@ -2,13 +2,16 @@
 
 This directory contains one reviewed JSON source file per movement family.
 `horizontal-press.json`, `incline-press.json`, `decline-press.json`,
-`vertical-press.json`, `vertical-pull.json`, and
-`shoulder-extension-row.json` are the currently reviewed real families. Each
-uses a coverage batch whose exercises collectively exercise every admitted
-axis value without generating the Cartesian product. Shoulder-extension row
-uses 12 reviewed exercises to cover five equipment classes, open and closed
-chains, supported and unsupported torsos, unilateral control, free and fixed
-external paths, and its pinned bodyweight setup.
+`vertical-press.json`, `vertical-pull.json`, `shoulder-extension-row.json`, and
+`shoulder-horizontal-abduction-row.json` are the currently reviewed real
+families. Each uses a coverage batch whose exercises collectively exercise
+every admitted axis value without generating the Cartesian product.
+Shoulder-extension row uses 12 reviewed exercises to cover five equipment
+classes, open and closed chains, supported and unsupported torsos, unilateral
+control, free and fixed external paths, and its pinned bodyweight setup.
+Shoulder-horizontal-abduction row uses six reviewed exercises to cover four
+equipment classes, three torso relationships, bilateral and unilateral
+control, free and fixed paths, and linked versus independent machine levers.
 
 Files here must never be derived from, compared with, or merged with the legacy
 exercise roster. `Scripts/catalog_v2.py --check` discovers and validates every
@@ -40,8 +43,22 @@ shape (`anyOf` plus `minimumRole`) without forcing an arbitrary muscle.
 `narrow|shoulderWidth|medium|wide`. Families may select a reviewed subset, but
 the same value cannot change meaning between families.
 
+Row families share `upperArmPath` vocabulary `tucked|scapular|flared` while
+admitting only their reviewed subsets. Shoulder-extension row admits
+`tucked|scapular`; shoulder-horizontal-abduction row admits only `flared` and
+pairs it with an exact `upperArmElevationDegrees: 90` authoring convention.
+That numeric value describes canonical position, not a dynamic
+shoulder-abduction action or laboratory precision on every repetition.
+
+Row families also share `leverArmConfiguration: linked|independent` for
+`machineType: leverRow`. Linked left/right levers are bilateral; every
+unilateral lever-row record must use independent arms. Smith rails are not
+lever arms and omit the axis.
+
 Family planes are determined only by the declared shoulder basis actions.
 Shoulder-extension row is therefore sagittal because its basis action is
 `shoulder.extension`; its transverse `scapula.retraction` prime action occurs
 at a different joint and must not be used to add a false transverse shoulder
-plane.
+plane. Shoulder-horizontal-abduction row is transverse because its basis action
+is `shoulder.horizontalAbduction`; scapular retraction and elbow flexion remain
+required actions without contributing their joint planes to the family plane.

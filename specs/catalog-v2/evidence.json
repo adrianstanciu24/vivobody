@@ -703,7 +703,7 @@
       "doi": "10.3138/ptc.2014-83",
       "pmid": "27504044",
       "url": "https://doi.org/10.3138/ptc.2014-83",
-      "scope": "Fine-wire EMG in 12 participants confirms middle-trapezius and rhomboid coactivation in a rowing position. The tested 90-degree shoulder-abduction posture is outside the admitted narrow/tucked row path and is not condition-matched evidence for every variant."
+      "scope": "Fine-wire EMG recruited 12 participants and reports analyzable data from 8, confirming middle-trapezius and rhomboid coactivation in a 90-degree-abducted, elbow-flexed rowing position. The static rehabilitation task is directly relevant to the shoulder-height-row family but does not establish dynamic loaded roles across its roster or the narrow/tucked shoulder-extension-row variants."
     },
     {
       "id": "vural-2023-suspension-row-loading",
@@ -741,7 +741,7 @@
       "year": 2025,
       "doi": "10.5114/jhk/209550",
       "url": "https://doi.org/10.5114/jhk/209550",
-      "scope": "High-density surface EMG in 14 trained men comparing narrow and wide seated rows. The different latissimus, trapezius, and deltoid excitation profiles support the narrow/tucked ownership boundary without treating grip width as a biological switch."
+      "scope": "High-density surface EMG in 14 trained men comparing narrow and wide seated rows. The wide setup increased trapezius and lateral-deltoid excitation while the narrow setup increased latissimus excitation, supporting an upper-arm-path boundary without establishing a 90-degree shoulder-height row; grip width, pull target, and humeral path covaried."
     },
     {
       "id": "padovan-2026-seated-row-scapular-position",
@@ -775,6 +775,57 @@
       "doi": "10.7752/jpes.2021.04236",
       "url": "https://doi.org/10.7752/jpes.2021.04236",
       "scope": "Preliminary surface-EMG comparison of standing and inclined-bench bent-over rows with adducted and 90-degree-abducted upper-arm paths in only three participants. It informs posture and support vocabulary but is not load-bearing evidence for a muscle-role change."
+    },
+    {
+      "id": "vasconcelos-2023-seated-row-abduction-angle",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Effect Of Different Grip Position And Shoulder-Abduction Angle On Muscle Strength And Activation During The Seated Cable Row",
+      "authors": [
+        "Christine Megumi Wakuda de Abreu Vasconcelos",
+        "Charles Ricardo Lopes",
+        "Vinícius Martins Almeida",
+        "Walter Krause Neto",
+        "Enrico Gori Soares"
+      ],
+      "year": 2023,
+      "doi": "10.47206/ijsc.v3i1.190",
+      "url": "https://doi.org/10.47206/ijsc.v3i1.190",
+      "scope": "Peak cable force and surface EMG in 21 recreationally trained adults across pronated, supinated, and neutral grip conditions described as nearer 0 degrees, plus separately named 30-, 60-, and 90-degree shoulder-abduction conditions. Greater abduction shifted excitation toward upper and middle trapezius and posterior deltoid and away from upper and lower latissimus while reducing peak force; grip setup and humeral path covaried, and the dynamic load was derived from the pronated condition."
+    },
+    {
+      "id": "kara-2021-scapular-retraction-abduction-angle",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder-Abduction Angle and Trapezius Muscle Activity During Scapular-Retraction Exercise",
+      "authors": [
+        "Dilara Kara",
+        "Gulcan Harput",
+        "Irem Duzgun"
+      ],
+      "year": 2021,
+      "doi": "10.4085/1062-6050-0053.21",
+      "pmid": "34911072",
+      "url": "https://doi.org/10.4085/1062-6050-0053.21",
+      "scope": "Surface EMG in 35 asymptomatic participants during elastic-resistance scapular retraction at 0, 45, 90, and 120 degrees of shoulder abduction; only the isometric phase was analyzed. The 90-degree condition produced the highest overall trapezius excitation, but lower-trapezius activity remained below upper and middle trapezius and did not differ significantly between 0 and 90 degrees; the rehabilitation load and diagonal 120-degree condition are not condition-matched heavy-row evidence."
+    },
+    {
+      "id": "sakaki-2013-shoulder-movement-direction-emg",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of different movement directions on electromyography recorded from the shoulder muscles while passing the target positions",
+      "authors": [
+        "Yoshinari Sakaki",
+        "Fuminari Kaneko",
+        "Kota Watanabe",
+        "Takuma Kobayashi",
+        "Masaki Katayose",
+        "Nobuhiro Aoki",
+        "Eriko Shibata",
+        "Toshihiko Yamashita"
+      ],
+      "year": 2013,
+      "doi": "10.1016/j.jelekin.2013.08.010",
+      "pmid": "24113424",
+      "url": "https://doi.org/10.1016/j.jelekin.2013.08.010",
+      "scope": "Fine-wire supraspinatus and surface infraspinatus and deltoid EMG in 15 healthy untrained men during controlled elevation, depression, horizontal adduction, and horizontal abduction through matched target positions. It supports direction-sensitive cuff and deltoid recruitment during horizontal abduction, not a mandatory cuff role in a loaded compound row."
     }
   ]
 }

@@ -272,6 +272,16 @@
       ]
     },
     {
+      "id": "leverArmConfiguration",
+      "valueType": "enum",
+      "required": false,
+      "description": "Whether a lever-row machine's left and right arms are mechanically linked or can move independently; absent for Smith rails and non-lever equipment.",
+      "allowedValues": [
+        "linked",
+        "independent"
+      ]
+    },
+    {
       "id": "lowerBodyContribution",
       "valueType": "enum",
       "required": true,
@@ -425,7 +435,8 @@
       ],
       "requirePresent": [],
       "requireAbsent": [
-        "variant.machineType"
+        "variant.machineType",
+        "variant.leverArmConfiguration"
       ]
     },
     {
@@ -443,7 +454,9 @@
         { "field": "variant.gripOrientation", "allowedValues": ["neutral", "pronated"] },
         { "field": "variant.contralateralSupport", "value": "none" }
       ],
-      "requirePresent": [],
+      "requirePresent": [
+        "variant.leverArmConfiguration"
+      ],
       "requireAbsent": []
     },
     {
@@ -461,6 +474,23 @@
         { "field": "laterality", "value": "bilateral" },
         { "field": "variant.gripOrientation", "value": "pronated" },
         { "field": "variant.contralateralSupport", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.leverArmConfiguration"
+      ]
+    },
+    {
+      "id": "linked-lever-arms-are-bilateral",
+      "description": "A lever-row machine with mechanically linked left and right arms is authored only as a bilateral exercise.",
+      "when": {
+        "field": "variant.leverArmConfiguration",
+        "operator": "equals",
+        "value": "linked"
+      },
+      "then": [
+        { "field": "variant.machineType", "value": "leverRow" },
+        { "field": "laterality", "value": "bilateral" }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -1220,6 +1250,7 @@
         "upperArmPath": "tucked",
         "fixedPath": true,
         "machineType": "leverRow",
+        "leverArmConfiguration": "linked",
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
         "contralateralSupport": "none"
@@ -1230,7 +1261,7 @@
         "padovan-2026-seated-row-scapular-position",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit at a lever-row machine with the chest against the pad and hold the handles with neutral grips. Allow normal scapular motion, drive the elbows toward the lower torso without lifting the chest from the pad, and return under control."
+      "movementDefinition": "Sit at a linked-arm lever-row machine with the chest against the pad and hold the handles with neutral grips. Allow normal scapular motion, drive the elbows toward the lower torso without lifting the chest from the pad, and return the linked lever under control."
     },
     {
       "catalogID": "single-arm-chest-supported-machine-row",
@@ -1270,6 +1301,7 @@
         "upperArmPath": "tucked",
         "fixedPath": true,
         "machineType": "leverRow",
+        "leverArmConfiguration": "independent",
         "lowerBodyContribution": "none",
         "interRepSupport": "none",
         "contralateralSupport": "none"
@@ -1281,7 +1313,7 @@
       "evidenceRefs": [
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit against the chest pad of a lever-row machine and hold one handle with a neutral grip. Keep the pelvis and chest square, pull the working elbow toward the lower torso, and return the lever without twisting away from the pad."
+      "movementDefinition": "Sit against the chest pad of an independent-arm lever-row machine and hold one handle with a neutral grip. Keep the pelvis and chest square, pull the working elbow toward the lower torso, and return the lever without twisting away from the pad."
     },
     {
       "catalogID": "smith-machine-bent-over-row",

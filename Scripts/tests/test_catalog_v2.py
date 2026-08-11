@@ -49,6 +49,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         cls.shoulder_extension_row = catalog_v2.load_json(
             catalog_v2.FAMILIES_ROOT / "shoulder-extension-row.json"
         )
+        cls.shoulder_horizontal_abduction_row = catalog_v2.load_json(
+            catalog_v2.FAMILIES_ROOT
+            / "shoulder-horizontal-abduction-row.json"
+        )
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -70,6 +74,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
     def shoulder_extension_row_copy(self) -> dict:
         return copy.deepcopy(self.shoulder_extension_row)
+
+    def shoulder_horizontal_abduction_row_copy(self) -> dict:
+        return copy.deepcopy(self.shoulder_horizontal_abduction_row)
 
     def additional_stability_demand_rule(self, demands: list[str]) -> dict:
         return {
@@ -172,6 +179,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 family,
                 self.foundation,
                 "mutated shoulder extension row",
+            )
+
+    def assert_shoulder_horizontal_abduction_row_fails(
+        self,
+        family: dict,
+        message: str,
+    ) -> None:
+        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "mutated shoulder horizontal abduction row",
             )
 
     def test_taxonomy_is_the_locked_32_muscle_clean_slate(self) -> None:
@@ -1914,6 +1933,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 variant["upperArmPath"],
                 variant["fixedPath"],
                 variant.get("machineType"),
+                variant.get("leverArmConfiguration"),
                 variant["interRepSupport"],
                 variant["contralateralSupport"],
                 variant.get("bodyweightApparatus"),
@@ -1927,71 +1947,71 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "barbell-bent-over-row": (
                     "barbell", "bilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "pronated",
-                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    "shoulderWidth", "tucked", False, None, None, "none", "none",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "underhand-barbell-row": (
                     "barbell", "bilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "supinated",
-                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    "shoulderWidth", "tucked", False, None, None, "none", "none",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "pendlay-row": (
                     "barbell", "bilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "pronated",
-                    "shoulderWidth", "tucked", False, None, "floor", "none",
+                    "shoulderWidth", "tucked", False, None, None, "floor", "none",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "dumbbell-bent-over-row": (
                     "dumbbell", "bilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "neutral",
-                    "shoulderWidth", "tucked", False, None, "none", "none",
+                    "shoulderWidth", "tucked", False, None, None, "none", "none",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "one-arm-dumbbell-row": (
                     "dumbbell", "unilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "neutral", None,
-                    "tucked", False, None, "none", "handAndKneeOnBench",
+                    "tucked", False, None, None, "none", "handAndKneeOnBench",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "chest-supported-dumbbell-row": (
                     "dumbbell", "bilateral", "external", 0, "open", "prone",
                     "none", "bench", "free", "neutral", "shoulderWidth",
-                    "tucked", False, None, "none", "none", None, None, (),
+                    "tucked", False, None, None, "none", "none", None, None, (),
                 ),
                 "seated-cable-row": (
                     "cable", "bilateral", "external", 0, "open", "seated",
                     "none", "none", "free", "neutral", "narrow", "tucked",
-                    False, None, "none", "none", None, None, ("spine",),
+                    False, None, None, "none", "none", None, None, ("spine",),
                 ),
                 "single-arm-seated-cable-row": (
                     "cable", "unilateral", "external", 0, "open", "seated",
                     "none", "none", "free", "neutral", None, "tucked",
-                    False, None, "none", "none", None, None,
+                    False, None, None, "none", "none", None, None,
                     ("spine", "pelvis"),
                 ),
                 "chest-supported-machine-row": (
                     "machine", "bilateral", "external", 0, "open", "seated",
                     "none", "machinePad", "free", "neutral",
-                    "shoulderWidth", "tucked", True, "leverRow", "none",
+                    "shoulderWidth", "tucked", True, "leverRow", "linked", "none",
                     "none", None, None, (),
                 ),
                 "single-arm-chest-supported-machine-row": (
                     "machine", "unilateral", "external", 0, "open", "seated",
                     "none", "machinePad", "free", "neutral", None, "tucked",
-                    True, "leverRow", "none", "none", None, None,
+                    True, "leverRow", "independent", "none", "none", None, None,
                     ("pelvis",),
                 ),
                 "smith-machine-bent-over-row": (
                     "machine", "bilateral", "external", 0, "open",
                     "hipHinged", "none", "none", "free", "pronated",
-                    "shoulderWidth", "tucked", True, "smith", "none", "none",
+                    "shoulderWidth", "tucked", True, "smith", None, "none", "none",
                     None, None, ("spine", "pelvis", "hip"),
                 ),
                 "inverted-row": (
                     "bodyweight", "bilateral", "bodyweightAdded", 0.73,
                     "closed", "supineSuspended", "feet", "none", "free",
-                    "pronated", "shoulderWidth", "scapular", False, None,
+                    "pronated", "shoulderWidth", "scapular", False, None, None,
                     "none", "none", "fixedBar", "parallelFeetFloor",
                     ("spine", "pelvis", "hip"),
                 ),
@@ -2046,6 +2066,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "non-machine-requires-free-path",
                 "lever-row-is-supported-seated",
                 "smith-row-is-hip-hinged",
+                "linked-lever-arms-are-bilateral",
                 "barbell-is-unsupported-hip-hinged",
                 "dumbbell-is-neutral-free-path",
                 "prone-row-is-supported-bilateral-dumbbell",
@@ -2305,7 +2326,62 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         )
                 mutated_consequences += 1
 
-        self.assertEqual(mutated_consequences, 89)
+        self.assertEqual(mutated_consequences, 94)
+
+    def test_row_families_share_lever_arm_configuration_vocabulary(self) -> None:
+        extension_axes = {
+            axis["id"]: axis
+            for axis in self.shoulder_extension_row["variantAxes"]
+        }
+        shoulder_height_axes = {
+            axis["id"]: axis
+            for axis in self.shoulder_horizontal_abduction_row["variantAxes"]
+        }
+        expected = ["linked", "independent"]
+        self.assertEqual(
+            extension_axes["leverArmConfiguration"]["allowedValues"],
+            expected,
+        )
+        self.assertEqual(
+            shoulder_height_axes["leverArmConfiguration"]["allowedValues"],
+            expected,
+        )
+
+        for family in (
+            self.shoulder_extension_row,
+            self.shoulder_horizontal_abduction_row,
+        ):
+            for exercise in family["exercises"]:
+                machine_type = exercise["variant"].get("machineType")
+                configuration = exercise["variant"].get(
+                    "leverArmConfiguration"
+                )
+                with self.subTest(
+                    family=family["id"],
+                    exercise=exercise["catalogID"],
+                ):
+                    if machine_type == "leverRow":
+                        self.assertIn(configuration, expected)
+                        if exercise["laterality"] == "unilateral":
+                            self.assertEqual(configuration, "independent")
+                    else:
+                        self.assertIsNone(configuration)
+
+    def test_extension_row_unilateral_machine_requires_independent_levers(
+        self,
+    ) -> None:
+        family = self.shoulder_extension_row_copy()
+        exercise = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"]
+            == "single-arm-chest-supported-machine-row"
+        )
+        exercise["variant"]["leverArmConfiguration"] = "linked"
+        self.assert_shoulder_extension_row_fails(
+            family,
+            "violates exercise rule linked-lever-arms-are-bilateral",
+        )
 
     def test_unilateral_smith_row_stays_blocked_by_smith_setup_rule(self) -> None:
         family = self.shoulder_extension_row_copy()
@@ -2403,6 +2479,631 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     family,
                     f"declares forbidden prime action {action}",
                 )
+
+    def test_real_shoulder_horizontal_abduction_row_family_is_strict(
+        self,
+    ) -> None:
+        warnings = catalog_v2.validate_family(
+            self.shoulder_horizontal_abduction_row_copy(),
+            self.foundation,
+            "shoulder horizontal abduction row",
+        )
+        self.assertEqual(warnings, [])
+        self.assertEqual(
+            self.shoulder_horizontal_abduction_row["fixed"],
+            {
+                "mechanic": "compound",
+                "pattern": "pull",
+                "direction": "horizontal",
+                "planes": ["transverse"],
+            },
+        )
+        self.assertEqual(
+            self.shoulder_horizontal_abduction_row["groupPolicy"],
+            {"default": "shoulders", "allowed": ["shoulders"]},
+        )
+        self.assertEqual(
+            self.shoulder_horizontal_abduction_row["movementSignature"][
+                "planeBasisActions"
+            ],
+            ["shoulder.horizontalAbduction"],
+        )
+        self.assertEqual(
+            self.shoulder_horizontal_abduction_row["movementSignature"][
+                "primeActions"
+            ],
+            [
+                "shoulder.horizontalAbduction",
+                "scapula.retraction",
+                "elbow.flexion",
+            ],
+        )
+        forbidden = set(
+            self.shoulder_horizontal_abduction_row["movementSignature"][
+                "forbiddenPrimeActions"
+            ]
+        )
+        self.assertTrue(
+            {
+                "shoulder.extension",
+                "shoulder.externalRotation",
+                "scapula.depression",
+            }.issubset(forbidden)
+        )
+
+    def test_shoulder_horizontal_abduction_row_roster_is_reviewed_matrix(
+        self,
+    ) -> None:
+        actual = {}
+        for exercise in self.shoulder_horizontal_abduction_row["exercises"]:
+            variant = exercise["variant"]
+            actual[exercise["catalogID"]] = (
+                exercise["equipment"],
+                exercise["laterality"],
+                variant["bodyPosition"],
+                variant["torsoSupport"],
+                variant["gripOrientation"],
+                variant.get("relativeGripWidth"),
+                variant["fixedPath"],
+                variant.get("machineType"),
+                variant.get("leverArmConfiguration"),
+                variant["upperArmElevationDegrees"],
+            )
+        self.assertEqual(
+            actual,
+            {
+                "wide-grip-barbell-rear-delt-row": (
+                    "barbell",
+                    "bilateral",
+                    "hipHinged",
+                    "none",
+                    "pronated",
+                    "wide",
+                    False,
+                    None,
+                    None,
+                    90,
+                ),
+                "chest-supported-dumbbell-rear-delt-row": (
+                    "dumbbell",
+                    "bilateral",
+                    "prone",
+                    "bench",
+                    "neutral",
+                    "wide",
+                    False,
+                    None,
+                    None,
+                    90,
+                ),
+                "wide-grip-seated-cable-rear-delt-row": (
+                    "cable",
+                    "bilateral",
+                    "seated",
+                    "none",
+                    "pronated",
+                    "wide",
+                    False,
+                    None,
+                    None,
+                    90,
+                ),
+                "single-arm-seated-cable-rear-delt-row": (
+                    "cable",
+                    "unilateral",
+                    "seated",
+                    "none",
+                    "neutral",
+                    None,
+                    False,
+                    None,
+                    None,
+                    90,
+                ),
+                "chest-supported-machine-rear-delt-row": (
+                    "machine",
+                    "bilateral",
+                    "seated",
+                    "machinePad",
+                    "pronated",
+                    "wide",
+                    True,
+                    "leverRow",
+                    "linked",
+                    90,
+                ),
+                "single-arm-chest-supported-machine-rear-delt-row": (
+                    "machine",
+                    "unilateral",
+                    "seated",
+                    "machinePad",
+                    "neutral",
+                    None,
+                    True,
+                    "leverRow",
+                    "independent",
+                    90,
+                ),
+            },
+        )
+
+    def test_shoulder_horizontal_abduction_row_covers_every_axis_value(
+        self,
+    ) -> None:
+        family = self.shoulder_horizontal_abduction_row
+        exercises = family["exercises"]
+        top_level_fields = {
+            "equipment": "equipment",
+            "modalities": "modality",
+            "trackingModes": "trackingMode",
+            "loadModes": "loadMode",
+            "lateralities": "laterality",
+        }
+        for allowed_key, exercise_key in top_level_fields.items():
+            with self.subTest(field=allowed_key):
+                self.assertEqual(
+                    {exercise[exercise_key] for exercise in exercises},
+                    set(family["allowed"][allowed_key]),
+                )
+
+        for axis in family["variantAxes"]:
+            observed = {
+                exercise["variant"][axis["id"]]
+                for exercise in exercises
+                if axis["id"] in exercise["variant"]
+            }
+            with self.subTest(axis=axis["id"]):
+                if axis["valueType"] == "enum":
+                    self.assertEqual(observed, set(axis["allowedValues"]))
+                elif axis["valueType"] == "boolean":
+                    self.assertEqual(observed, {False, True})
+                elif axis["valueType"] == "number":
+                    self.assertIn(axis["minimum"], observed)
+                    self.assertIn(axis["maximum"], observed)
+
+    def test_shoulder_horizontal_abduction_row_has_reviewed_rule_set(
+        self,
+    ) -> None:
+        self.assertEqual(
+            [
+                rule["id"]
+                for rule in self.shoulder_horizontal_abduction_row[
+                    "exerciseRules"
+                ]
+            ],
+            [
+                "machine-requires-fixed-path-and-type",
+                "non-machine-requires-free-path",
+                "lever-row-is-supported-seated",
+                "barbell-is-bilateral-unsupported-hip-hinged",
+                "dumbbell-is-bilateral-prone-bench-supported",
+                "cable-is-unsupported-seated-free-path",
+                "prone-is-supported-bilateral-dumbbell",
+                "bench-support-requires-prone-dumbbell",
+                "machine-pad-requires-lever-row",
+                "bilateral-requires-grip-width",
+                "unilateral-requires-asymmetric-control",
+                "hip-hinged-requires-posterior-chain-stability",
+                "unsupported-requires-trunk-stability",
+                "linked-lever-arms-are-bilateral",
+            ],
+        )
+
+    def test_every_shoulder_horizontal_abduction_row_rule_has_contrast(
+        self,
+    ) -> None:
+        exercises = self.shoulder_horizontal_abduction_row["exercises"]
+        for rule in self.shoulder_horizontal_abduction_row["exerciseRules"]:
+            predicate = rule["when"]
+            values = [
+                catalog_v2.exercise_rule_field(
+                    exercise,
+                    predicate["field"],
+                )
+                for exercise in exercises
+            ]
+            if predicate["operator"] == "equals":
+                matches = [value == predicate["value"] for value in values]
+            else:
+                matches = [
+                    value is not catalog_v2.MISSING
+                    and value != predicate["value"]
+                    for value in values
+                ]
+            with self.subTest(rule=rule["id"]):
+                self.assertTrue(any(matches), "rule has no real matching exercise")
+                self.assertTrue(
+                    any(not match for match in matches),
+                    "rule has no contrasting real exercise",
+                )
+
+    def test_shoulder_horizontal_abduction_row_requires_role_contract(
+        self,
+    ) -> None:
+        required_roles = {
+            "deltoidPosterior": "primary",
+            "trapeziusMiddle": "primary",
+            "trapeziusLower": "secondary",
+            "rhomboids": "secondary",
+            "biceps": "secondary",
+            "trapeziusUpper": "stabilizer",
+            "forearms": "stabilizer",
+        }
+        for exercise in self.shoulder_horizontal_abduction_row["exercises"]:
+            roles = {
+                assignment["muscle"]: assignment["role"]
+                for assignment in exercise["involvement"]
+            }
+            with self.subTest(exercise=exercise["catalogID"]):
+                for muscle_id, role in required_roles.items():
+                    self.assertEqual(roles[muscle_id], role)
+                self.assertNotIn("lats", roles)
+                self.assertNotIn("teresMajor", roles)
+                if exercise["variant"]["bodyPosition"] == "hipHinged":
+                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["gluteMax"], "stabilizer")
+                if exercise["laterality"] == "unilateral":
+                    self.assertEqual(roles["obliques"], "stabilizer")
+
+    def test_every_shoulder_horizontal_abduction_rule_consequence_mutates(
+        self,
+    ) -> None:
+        family = self.shoulder_horizontal_abduction_row
+        axes = {axis["id"]: axis for axis in family["variantAxes"]}
+
+        def matches(exercise: dict, rule: dict) -> bool:
+            predicate = rule["when"]
+            actual = catalog_v2.exercise_rule_field(
+                exercise,
+                predicate["field"],
+            )
+            if actual is catalog_v2.MISSING:
+                return False
+            if predicate["operator"] == "equals":
+                return actual == predicate["value"]
+            return actual != predicate["value"]
+
+        def set_field(exercise: dict, path: str, value: object) -> None:
+            if path.startswith("variant."):
+                exercise["variant"][path.removeprefix("variant.")] = value
+            else:
+                exercise[path] = value
+
+        def delete_field(exercise: dict, path: str) -> None:
+            if path.startswith("variant."):
+                exercise["variant"].pop(
+                    path.removeprefix("variant."),
+                    None,
+                )
+            else:
+                exercise.pop(path, None)
+
+        def allowed_candidates(path: str) -> list[object]:
+            if path in catalog_v2.RULE_FIELD_DOMAINS:
+                return sorted(catalog_v2.RULE_FIELD_DOMAINS[path])
+            if path in catalog_v2.RULE_NUMERIC_FIELDS:
+                minimum, maximum = catalog_v2.RULE_NUMERIC_FIELDS[path]
+                return [minimum, maximum]
+            axis = axes[path.removeprefix("variant.")]
+            if axis["valueType"] == "enum":
+                return list(axis["allowedValues"])
+            if axis["valueType"] == "boolean":
+                return [False, True]
+            if axis["valueType"] == "number":
+                return [axis["minimum"], axis["maximum"]]
+            return ["mutated"]
+
+        mutated_consequences = 0
+        for rule in family["exerciseRules"]:
+            matching = next(
+                exercise
+                for exercise in family["exercises"]
+                if matches(exercise, rule)
+            )
+
+            for assertion in rule["then"]:
+                path = assertion["field"]
+                forbidden = (
+                    {assertion["value"]}
+                    if "value" in assertion
+                    else set(assertion["allowedValues"])
+                )
+                alternative = next(
+                    (
+                        candidate
+                        for candidate in allowed_candidates(path)
+                        if candidate not in forbidden
+                    ),
+                    catalog_v2.MISSING,
+                )
+                mutated = copy.deepcopy(matching)
+                if alternative is catalog_v2.MISSING:
+                    delete_field(mutated, path)
+                else:
+                    set_field(mutated, path, alternative)
+                with self.subTest(rule=rule["id"], assertion=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+            for path in rule["requirePresent"]:
+                mutated = copy.deepcopy(matching)
+                delete_field(mutated, path)
+                with self.subTest(rule=rule["id"], missing=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+            for path in rule["requireAbsent"]:
+                mutated = copy.deepcopy(matching)
+                set_field(mutated, path, allowed_candidates(path)[0])
+                with self.subTest(rule=rule["id"], unexpected=path):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+            for assignment in rule.get("requireInvolvement", []):
+                mutated = copy.deepcopy(matching)
+                mutated["involvement"] = [
+                    existing
+                    for existing in mutated["involvement"]
+                    if existing["muscle"] != assignment["muscle"]
+                ]
+                with self.subTest(
+                    rule=rule["id"],
+                    muscle=assignment["muscle"],
+                ):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+            for requirement in rule.get("requireMuscleRequirements", []):
+                candidates = set(requirement["anyOf"])
+                mutated = copy.deepcopy(matching)
+                mutated["involvement"] = [
+                    existing
+                    for existing in mutated["involvement"]
+                    if existing["muscle"] not in candidates
+                ]
+                with self.subTest(rule=rule["id"], any_of=tuple(candidates)):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+            for region in rule.get("requireAdditionalStabilityDemands", []):
+                mutated = copy.deepcopy(matching)
+                mutated["additionalStabilityDemands"] = [
+                    demand
+                    for demand in mutated["additionalStabilityDemands"]
+                    if demand != region
+                ]
+                with self.subTest(rule=rule["id"], stability=region):
+                    with self.assertRaisesRegex(
+                        catalog_v2.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog_v2.validate_exercise_rule_matches(
+                            mutated,
+                            [rule],
+                            "mutated shoulder-height row",
+                        )
+                mutated_consequences += 1
+
+        self.assertEqual(mutated_consequences, 49)
+
+    def test_shoulder_height_row_unsupported_rule_is_pinned_to_cable(self) -> None:
+        family = self.shoulder_horizontal_abduction_row
+        exercise = next(
+            copy.deepcopy(exercise)
+            for exercise in family["exercises"]
+            if exercise["catalogID"]
+            == "wide-grip-seated-cable-rear-delt-row"
+        )
+        exercise["involvement"] = [
+            assignment
+            for assignment in exercise["involvement"]
+            if assignment["muscle"] != "abs"
+        ]
+        rule = next(
+            rule
+            for rule in family["exerciseRules"]
+            if rule["id"] == "unsupported-requires-trunk-stability"
+        )
+        with self.assertRaisesRegex(
+            catalog_v2.ValidationFailure,
+            "violates exercise rule unsupported-requires-trunk-stability",
+        ):
+            catalog_v2.validate_exercise_rule_matches(
+                exercise,
+                [rule],
+                "mutated shoulder-height cable row",
+            )
+
+    def test_unilateral_machine_requires_independent_lever_arms(self) -> None:
+        family = self.shoulder_horizontal_abduction_row_copy()
+        exercise = next(
+            exercise
+            for exercise in family["exercises"]
+            if exercise["catalogID"]
+            == "single-arm-chest-supported-machine-rear-delt-row"
+        )
+        exercise["variant"]["leverArmConfiguration"] = "linked"
+        self.assert_shoulder_horizontal_abduction_row_fails(
+            family,
+            "violates exercise rule linked-lever-arms-are-bilateral",
+        )
+
+    def test_shoulder_height_row_rejects_60_degree_mixed_path(self) -> None:
+        family = self.shoulder_horizontal_abduction_row_copy()
+        family["exercises"][0]["variant"]["upperArmElevationDegrees"] = 60
+        self.assert_shoulder_horizontal_abduction_row_fails(
+            family,
+            "upperArmElevationDegrees is below 90",
+        )
+
+    def test_shoulder_height_row_requires_dynamic_elbow_flexion(self) -> None:
+        family = self.shoulder_horizontal_abduction_row_copy()
+        family["movementSignature"]["primeActions"].remove("elbow.flexion")
+        self.assert_shoulder_horizontal_abduction_row_fails(
+            family,
+            "biceps cannot produce any declared prime action",
+        )
+
+    def test_shoulder_height_row_rejects_neighboring_prime_actions(self) -> None:
+        for action in (
+            "shoulder.extension",
+            "shoulder.externalRotation",
+            "scapula.depression",
+        ):
+            with self.subTest(action=action):
+                family = self.shoulder_horizontal_abduction_row_copy()
+                family["exercises"][0]["additionalPrimeActions"] = [action]
+                self.assert_shoulder_horizontal_abduction_row_fails(
+                    family,
+                    f"declares forbidden prime action {action}",
+                )
+
+    def test_shoulder_height_row_rejects_lats_and_teres_in_every_role(
+        self,
+    ) -> None:
+        for muscle in ("lats", "teresMajor"):
+            for role in ("primary", "secondary", "stabilizer"):
+                with self.subTest(muscle=muscle, role=role):
+                    family = self.shoulder_horizontal_abduction_row_copy()
+                    family["exercises"][0]["involvement"].append(
+                        {"muscle": muscle, "role": role}
+                    )
+                    self.assert_shoulder_horizontal_abduction_row_fails(
+                        family,
+                        f"does not allow {muscle} as {role}",
+                    )
+
+    def test_shoulder_height_row_rejects_constrained_scapula_and_bodyweight(
+        self,
+    ) -> None:
+        family = self.shoulder_horizontal_abduction_row_copy()
+        family["exercises"][1]["variant"]["scapularTranslation"] = "constrained"
+        self.assert_shoulder_horizontal_abduction_row_fails(
+            family,
+            "scapularTranslation has disallowed value 'constrained'",
+        )
+
+        family = self.shoulder_horizontal_abduction_row_copy()
+        exercise = family["exercises"][0]
+        exercise["equipment"] = "bodyweight"
+        exercise["loadMode"] = "bodyweightAdded"
+        exercise["bodyweightFraction"] = 0.73
+        self.assert_shoulder_horizontal_abduction_row_fails(
+            family,
+            "selects disallowed equipment: bodyweight",
+        )
+
+    def test_shoulder_height_row_aliases_and_global_identity_are_locked(
+        self,
+    ) -> None:
+        aliases = {
+            exercise["catalogID"]: exercise["aliases"]
+            for exercise in self.shoulder_horizontal_abduction_row["exercises"]
+        }
+        self.assertEqual(
+            aliases,
+            {
+                "wide-grip-barbell-rear-delt-row": [
+                    "Barbell Rear-Delt Row",
+                    "Wide-Grip Barbell High Row",
+                ],
+                "chest-supported-dumbbell-rear-delt-row": [
+                    "Dumbbell Rear-Delt Row",
+                    "Chest-Supported Dumbbell High Row",
+                ],
+                "wide-grip-seated-cable-rear-delt-row": [
+                    "Cable Rear-Delt Row",
+                    "Wide-Grip Cable High Row",
+                ],
+                "single-arm-seated-cable-rear-delt-row": [
+                    "Single-Arm Cable Rear-Delt Row",
+                    "One-Arm Cable Rear-Delt Row",
+                ],
+                "chest-supported-machine-rear-delt-row": [
+                    "Machine Rear-Delt Row",
+                    "Chest-Supported Machine High Row",
+                ],
+                "single-arm-chest-supported-machine-rear-delt-row": [
+                    "Single-Arm Machine Rear-Delt Row",
+                    "One-Arm Machine Rear-Delt Row",
+                ],
+            },
+        )
+
+        mutated = self.shoulder_horizontal_abduction_row_copy()
+        mutated["exercises"][2]["aliases"].append("Cable Row")
+        with self.assertRaises(catalog_v2.ValidationFailure):
+            catalog_v2.validate_family_set(
+                [self.shoulder_extension_row, mutated]
+            )
+
+    def test_shoulder_height_row_evidence_discloses_limits(self) -> None:
+        source_by_id = {
+            source["id"]: source
+            for source in self.foundation.evidence["sources"]
+        }
+        self.assertIn(
+            "nearer 0 degrees, plus separately named 30-, 60-, and 90-degree",
+            source_by_id[
+                "vasconcelos-2023-seated-row-abduction-angle"
+            ]["scope"],
+        )
+        self.assertIn(
+            "only the isometric phase was analyzed",
+            source_by_id[
+                "kara-2021-scapular-retraction-abduction-angle"
+            ]["scope"],
+        )
+        self.assertIn(
+            "not a mandatory cuff role",
+            source_by_id[
+                "sakaki-2013-shoulder-movement-direction-emg"
+            ]["scope"],
+        )
+        self.assertIn(
+            "directly relevant to the shoulder-height-row family",
+            source_by_id["fennell-2016-shoulder-retractor-row"]["scope"],
+        )
 
     def test_horizontal_press_rejects_nonzero_inclination(self) -> None:
         family = self.horizontal_press_copy()
@@ -2843,6 +3544,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.vertical_press,
                 self.vertical_pull,
                 self.shoulder_extension_row,
+                self.shoulder_horizontal_abduction_row,
             ],
         )
 
@@ -2855,6 +3557,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.vertical_press,
                 self.vertical_pull,
                 self.shoulder_extension_row,
+                self.shoulder_horizontal_abduction_row,
             ]
         )
 

@@ -21,7 +21,7 @@ corridor. The canonical concentric signature is:
 Do **not** use one universal row contract. A deliberately flared row to the
 upper chest is not merely a grip variant: its defining humeral action shifts
 toward shoulder horizontal abduction and its muscular emphasis shifts toward
-the trapezius and deltoid. It belongs to a future
+the trapezius and deltoid. It belongs to the active
 `shoulder-horizontal-abduction-row`. A lat-dominant machine commonly marketed
 as a “high row” can instead use a diagonal adduction/extension path and needs a
 separate `diagonal-pull` ownership review. Exercise names cannot decide between
@@ -245,6 +245,10 @@ misleading.
 - `machineType`: optional `leverRow|smith`, present only for machine equipment.
   The names describe mechanisms without embedding exercise angle or family
   name.
+- `leverArmConfiguration`: optional `linked|independent`, required for
+  `leverRow` and absent for Smith rails or non-machine equipment. It uses the
+  same vocabulary as the shoulder-height-row sibling; a linked lever cannot be
+  authored unilaterally.
 - `lowerBodyContribution`: required and initially limited to `none`.
 - `interRepSupport`: required `none|floor`. `floor` represents a strict
   floor-reset row such as a Pendlay row; it does not permit hip or spinal drive.
@@ -292,58 +296,64 @@ contrasting roster branch.
 5. `machine-requires-fixed-path-and-type`: machine equipment requires
    `fixedPath: true` plus `machineType`.
 6. `non-machine-requires-free-path`: every non-machine record requires
-   `fixedPath: false` and omits `machineType`.
+   `fixedPath: false` and omits both machine-only axes.
 7. `lever-row-is-supported-seated`: `machineType: leverRow` requires `seated`,
-   `machinePad`, `neutral|pronated` grip, and no contralateral support.
+   `machinePad`, `neutral|pronated` grip, no contralateral support, and a
+   declared `leverArmConfiguration`.
 8. `smith-row-is-hip-hinged`: `machineType: smith` requires `hipHinged`, no
    torso support, bilateral laterality, pronated grip, and no contralateral
-   support.
-9. `barbell-is-unsupported-hip-hinged`: barbell equipment requires
+   support, and omits `leverArmConfiguration` because Smith rails are not lever
+   arms.
+9. `linked-lever-arms-are-bilateral`: a linked left/right lever requires
+   `machineType: leverRow` and bilateral laterality.
+10. `barbell-is-unsupported-hip-hinged`: barbell equipment requires
    `hipHinged`, no torso support, and `fixedPath: false`; supinated and pronated
    grips are admitted while neutral is not.
-10. `dumbbell-is-neutral-free-path`: dumbbell equipment is limited to
+11. `dumbbell-is-neutral-free-path`: dumbbell equipment is limited to
     `hipHinged|prone`, neutral grip, and a non-fixed path.
-11. `prone-row-is-supported-bilateral-dumbbell`: `bodyPosition: prone`
+12. `prone-row-is-supported-bilateral-dumbbell`: `bodyPosition: prone`
     requires bilateral dumbbell equipment and `torsoSupport: bench`.
-12. `cable-is-unsupported-seated-free-path`: cable equipment requires
+13. `cable-is-unsupported-seated-free-path`: cable equipment requires
     `seated`, no torso support, `neutral|pronated` grip, a free external path,
     and `interRepSupport: none`.
-13. `bench-support-requires-prone-dumbbell`: `torsoSupport: bench` requires
+14. `bench-support-requires-prone-dumbbell`: `torsoSupport: bench` requires
     bilateral dumbbell equipment and `prone`.
-14. `machine-pad-requires-lever-row`: `torsoSupport: machinePad` requires
+15. `machine-pad-requires-lever-row`: `torsoSupport: machinePad` requires
     `machineType: leverRow` and `seated`.
-15. `hand-and-knee-support-is-unilateral-dumbbell`:
+16. `hand-and-knee-support-is-unilateral-dumbbell`:
     `contralateralSupport: handAndKneeOnBench` requires unilateral dumbbell
     equipment, `hipHinged`, and no torso support.
-16. `bilateral-has-no-contralateral-support`: bilateral records require
+17. `bilateral-has-no-contralateral-support`: bilateral records require
     `contralateralSupport: none`.
-17. `bilateral-requires-grip-width`: bilateral records require
+18. `bilateral-requires-grip-width`: bilateral records require
     `relativeGripWidth`.
-18. `unilateral-requires-asymmetric-control`: unilateral records are limited to
+19. `unilateral-requires-asymmetric-control`: unilateral records are limited to
     dumbbell, cable, or machine equipment, omit `relativeGripWidth`, add a
     `pelvis` stability demand, and assign `obliques` as a stabilizer. The rule
     language cannot express “lever-row machine” with its single predicate.
     Rule `machine-requires-fixed-path-and-type` requires a machine type, while
     `smith-row-is-hip-hinged` requires bilateral laterality, so those rules
-    jointly leave `leverRow` as the only unilateral machine branch. The
-    unilateral-Smith mutation must assert the
+    jointly leave `leverRow` as the only unilateral machine branch.
+    `lever-row-is-supported-seated` then requires a configuration, and
+    `linked-lever-arms-are-bilateral` forces the unilateral branch to
+    `independent`. The unilateral-Smith mutation must assert the
     `smith-row-is-hip-hinged` failure message so that dependency cannot be
     loosened silently. One-arm inverted rows remain out.
-19. `hip-hinged-requires-posterior-chain-stability`:
+20. `hip-hinged-requires-posterior-chain-stability`:
     `bodyPosition: hipHinged` adds `spine`, `pelvis`, and `hip` stability
     demands and assigns both `lowerBack` and `gluteMax` as stabilizers.
-20. `suspended-requires-straight-body-stability`:
+21. `suspended-requires-straight-body-stability`:
     `bodyPosition: supineSuspended` adds `spine`, `pelvis`, and `hip` stability
     demands and assigns `abs`, `lowerBack`, and `gluteMax` as stabilizers.
-21. `unsupported-requires-trunk-stability`: `torsoSupport: none` adds a `spine`
+22. `unsupported-requires-trunk-stability`: `torsoSupport: none` adds a `spine`
     stability demand and assigns at least one of `abs`, `obliques`, or
     `lowerBack` as a stabilizer.
-22. `floor-reset-is-strict-pronated-barbell`: `interRepSupport: floor` requires
+23. `floor-reset-is-strict-pronated-barbell`: `interRepSupport: floor` requires
     bilateral pronated barbell equipment, `hipHinged`, no torso support, and no
     lower-body contribution.
-23. `narrow-grip-requires-tucked-path`: `relativeGripWidth: narrow` requires
+24. `narrow-grip-requires-tucked-path`: `relativeGripWidth: narrow` requires
     `upperArmPath: tucked`.
-24. `supinated-grip-requires-tucked-path`: a supinated grip requires
+25. `supinated-grip-requires-tucked-path`: a supinated grip requires
     `upperArmPath: tucked` in the initial contract.
 
 `scapularTranslation` and `lowerBodyContribution` are required single-value
@@ -395,7 +405,7 @@ exercise-array order.
 | Fixed-bar inverted row | Own only with canonical leverage pinned | Closed-chain version; variable inclinations must not silently reuse one bodyweight fraction. |
 | Supinated fixed-bar inverted row | Admit vocabulary; defer record | A straight fixed bar supports an underhand grip within the same mechanics; add a catalog item only if it is a useful searchable variant. |
 | Neutral-grip inverted row | Defer | Requires a reviewed `parallelHandles` apparatus value; neutral grip is not representable by the initial straight `fixedBar`. |
-| Wide-grip or deliberately flared high row to the upper chest | Exclude | Horizontal-abduction/trapezius-emphasis boundary; future `shoulder-horizontal-abduction-row`. |
+| Wide-grip or deliberately flared high row to the upper chest | Exclude | Horizontal-abduction/trapezius-emphasis boundary; active `shoulder-horizontal-abduction-row`. |
 | Lat-dominant diagonal high-row machine | Defer | Adduction/extension blend and diagonal resistance path require a future `diagonal-pull` ownership review. |
 | Face pull | Exclude | Adds deliberate shoulder external rotation and a higher pull target. |
 | Rear-delt fly | Exclude | Omits elbow flexion and belongs to a shoulder-horizontal-abduction isolation family. |
@@ -412,8 +422,8 @@ exercise-array order.
 The exclusion of a wide row is not a safety judgment. It is a family-ownership
 decision grounded in a different humeral action and emphasis profile.
 “High row” remains too ambiguous to route by name: the humeral action and
-resistance path decide between the future horizontal-abduction and diagonal
-contracts.
+resistance path decide between the active horizontal-abduction contract and a
+future diagonal contract.
 
 Pronated cable bars and pronated machine handles are admitted vocabulary, not
 silent deferrals. The initial coverage matrix does not add duplicate records
@@ -434,14 +444,15 @@ These 12 records form a coverage matrix, not a Cartesian product:
 | Chest-Supported Dumbbell Row | Prone bench support while scapular translation remains free. |
 | Seated Cable Row | Bilateral narrow neutral cable baseline. |
 | Single-Arm Seated Cable Row | Unilateral unsupported seated cable branch. |
-| Chest-Supported Machine Row | Bilateral lever-guided machine-pad branch. |
-| Single-Arm Chest-Supported Machine Row | Unilateral interaction with the lever and pad branches. |
+| Chest-Supported Machine Row | Bilateral linked-lever, machine-pad branch. |
+| Single-Arm Chest-Supported Machine Row | Unilateral independent-lever interaction with the pad branch. |
 | Smith Machine Bent-Over Row | Rail-guided machine plus hip-hinged stability branch. |
 | Inverted Row | Closed-chain, shoulder-width pronated, scapular-path fixed-bar bodyweight branch with pinned leverage. |
 
 Together they cover all admitted equipment, lateralities, grip orientations,
 relative grip widths, upper-arm paths, body positions, torso supports, chain
-values, fixed-path values, machine types, inter-repetition support values, and
+values, fixed-path values, machine types, lever-arm configurations,
+inter-repetition support values, and
 contralateral-support values. They do not generate every grip/equipment
 permutation.
 
@@ -555,10 +566,12 @@ otherwise it must not be registered because unused evidence fails validation.
   directly supporting the activated family split.
 - [Fennell et al. (2016), *Shoulder Retractor Strengthening Exercise to
   Minimize Rhomboid Muscle Activity and Subacromial
-  Impingement*](https://doi.org/10.3138/ptc.2014-83): fine-wire EMG in twelve
-  participants confirmed middle-trapezius/rhomboid coactivation in a rowing
-  position, but that position used 90-degree shoulder abduction and is not
-  condition-matched evidence for this narrow/tucked family.
+  Impingement*](https://doi.org/10.3138/ptc.2014-83): the study recruited
+  twelve participants but reports analyzable fine-wire EMG from eight. It
+  confirmed middle-trapezius/rhomboid coactivation in a 90-degree-abducted,
+  elbow-flexed rowing position. That posture directly supports the active
+  shoulder-height sibling while remaining mismatched to this narrow/tucked
+  extension-row family.
 - [Vural et al. (2023), *Can different variations of suspension exercises
   provide adequate loads and muscle activations for upper body
   training?*](https://doi.org/10.1371/journal.pone.0291608): twelve male
@@ -589,8 +602,9 @@ All 12 discovery decisions were reviewed and accepted. The family contract,
 its 12-exercise coverage roster, and its evidence records are now active
 validator input:
 
-1. The explicit `shoulder-extension-row` boundary is active; flared rows and
-   diagonal high-row machines retain their named future owners — done.
+1. The explicit `shoulder-extension-row` boundary is active; flared rows now
+   route to the active shoulder-horizontal-abduction sibling, while diagonal
+   high-row machines retain their named future owner — done.
 2. Direction is torso-relative, the shoulder basis plane is sagittal, and
    transverse scapular retraction does not create a false shoulder plane —
    done.
@@ -605,8 +619,9 @@ validator input:
 6. Bench and machine-pad support reduce trunk demand while leaving
    `scapularTranslation: free` — done.
 7. Five equipment classes plus `leverRow|smith` machine mechanisms are active;
-   T-bar/landmine, kettlebell, band, and suspension-handle rows remain out —
-   done.
+   lever rows declare shared `linked|independent` arm configuration while Smith
+   rails omit it. T-bar/landmine, kettlebell, band, and suspension-handle rows
+   remain out — done.
 8. `lowerBodyContribution: none` is enforced; momentum and renegade rows do
    not enter as ordinary variants — done.
 9. The fixed-bar inverted row is pinned to `parallelFeetFloor` and a disclosed
