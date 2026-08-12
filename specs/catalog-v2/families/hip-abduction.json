@@ -1,0 +1,378 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-abduction",
+  "name": "Hip Abduction",
+  "definition": "A strict unilateral open-chain hip isolation performed side-lying on a treatment table, with a cuff weight just above the ankle, the lower support leg flexed, the working hip held in neutral sagittal and axial posture, and the straight working leg moving to 35 degrees of frontal-plane abduction while the toes remain forward. The directly reviewed fixture uses a pressure-biofeedback unit beneath the trunk to hold 35 to 45 mmHg and a horizontal contact band to mark the endpoint; both are part of the initial contract because every analyzed repetition used them. McBeth identifies the feedback as a substitution-control technique and cites prior work for its effect on gluteus-medius recruitment; McBeth did not itself compare feedback with no feedback. Gluteus medius is the sole primary and tensor fasciae latae is secondary. The body model has no gluteus-minimus region, and the unsplit gluteus-maximus profile conservatively omits superior-fiber abduction; those structures receive no proxy assignment, so the current 3D highlight and volume credit deliberately understate the complete abductor system. Standing, band, cable, machine, bodyweight-only, seated, internally or externally rotated, clamshell, lateral-walk, closed-chain, and multi-joint variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "mcbeth-2012-side-lying-hip-abduction"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "other"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.abduction"
+    ],
+    "primeActions": [
+      "hip.abduction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMed"
+      ],
+      "secondary": [
+        "tensorFasciaeLatae"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the working lower limb moves freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "sideLying"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface supporting the side of the torso during the repetition.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface supporting the dependent side of the pelvis while pelvic position is held.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "supportLegPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed posture of the lower leg used to stabilize the side-lying setup.",
+      "allowedValues": [
+        "flexedForStability"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action producing the concentric repetition.",
+      "allowedValues": [
+        "abducts"
+      ]
+    },
+    {
+      "id": "hipSagittalPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed neutral flexion-extension posture held while the thigh abducts.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "hipStartAbductionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed anatomical-neutral starting angle.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "hipEndAbductionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed frontal-plane abduction endpoint standardized by a contact reference.",
+      "minimum": 35,
+      "maximum": 35
+    },
+    {
+      "id": "hipRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The maintained hip-rotation posture; toes remain forward rather than turning toward the ceiling.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "trunkPositionFeedback",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed pressure-feedback setup beneath the trunk used to limit substitution and pelvic rolling.",
+      "allowedValues": [
+        "pressureBiofeedback35To45MmHg"
+      ]
+    },
+    {
+      "id": "abductionEndpointReference",
+      "valueType": "enum",
+      "required": true,
+      "description": "The physical reference contacted by the working leg at the reviewed 35-degree endpoint.",
+      "allowedValues": [
+        "horizontalContactBand"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether dynamic knee motion contributes to the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight working-knee posture maintained under the distal cuff load.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The segment whose pelvis-relative movement defines the repetition.",
+      "allowedValues": [
+        "thigh"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the reviewed external cuff weight contacts the working limb.",
+      "allowedValues": [
+        "cuffJustAboveAnkle"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "How gravity acting on the distal cuff weight opposes hip abduction.",
+      "allowedValues": [
+        "gravityLoadedAnkleCuff"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; a cuff weight follows the freely moving limb."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the isolated hip action.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 10,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "pressure-biofeedback-side-lying-hip-abduction",
+      "name": "Pressure-Biofeedback Side-Lying Hip Abduction",
+      "aliases": [
+        "PBU Side-Lying Hip Abduction",
+        "Pressure-Biofeedback Cuff-Weight Hip Abduction"
+      ],
+      "equipment": "other",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "sideLying",
+        "torsoSupport": "table",
+        "pelvisSupport": "table",
+        "supportLegPosture": "flexedForStability",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "abducts",
+        "hipSagittalPosture": "neutral",
+        "hipStartAbductionDegrees": 0,
+        "hipEndAbductionDegrees": 35,
+        "hipRotation": "neutral",
+        "trunkPositionFeedback": "pressureBiofeedback35To45MmHg",
+        "abductionEndpointReference": "horizontalContactBand",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "cuffJustAboveAnkle",
+        "resistanceGeometry": "gravityLoadedAnkleCuff",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mcbeth-2012-side-lying-hip-abduction"
+      ],
+      "movementDefinition": "Lie on one side on a treatment table with the working leg on top, the hip neutral in flexion-extension and axial rotation, the lower leg flexed for stability, and a cuff weight secured just above the working ankle. Place a pressure-biofeedback unit beneath the trunk, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal contact band marks 35 degrees of abduction. Keep the pelvis and spine still, the working knee straight, and the toes pointing forward. Raise the straight top leg in the frontal plane until it contacts the endpoint band, then lower it under control without rolling the pelvis or turning the toes upward."
+    }
+  ]
+}

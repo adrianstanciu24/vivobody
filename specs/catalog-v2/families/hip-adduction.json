@@ -1,0 +1,386 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-adduction",
+  "name": "Hip Adduction",
+  "definition": "A strict unilateral open-chain hip isolation performed standing with both hands on stable external support and an elastic band cuffed at the working ankle. The straight working leg begins in maximal comfortable abduction and moves medially while a slight posterior hip posture is held, finishing one foot-width lateral to the stance foot. The sources report an approximately half-foot-length posterior endpoint but do not quantify the three-dimensional start path; the active record therefore standardizes that posterior posture throughout as a disclosed mechanics-derived adaptation so hip extension does not become an undeclared prime action. The visible adductor-longus/brevis region is primary because the exercise study measured adductor longus; the combined body-model region cannot display the two muscles separately. Gracilis is a mechanics-derived secondary because it produces hip adduction while also controlling the straight loaded knee. Gluteus medius is a directly measured hip-and-pelvis stabilizer. Rectus abdominis and the combined obliques region stabilize the trunk; only external oblique was measured, so internal-oblique credit is an explicit taxonomy aggregation rather than direct evidence. Adductor magnus, pectineus, and other capable regions remain unassigned rather than receiving volume from anatomy capability alone. Side-lying, Copenhagen, ball-squeeze, cable, machine, bodyweight, internally or externally rotated, closed-chain, and multi-joint variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "serner-2014-hip-adduction-exercises",
+    "jensen-2014-elastic-hip-adduction-training"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.adduction"
+    ],
+    "primeActions": [
+      "hip.adduction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "adductorLongusBrevis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gracilis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "adductorLongusBrevis"
+      ],
+      "secondary": [
+        "gracilis"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques",
+        "gluteMed"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the working lower limb moves freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether a surface directly supports the torso.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "handSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral stable hand support used by the reviewed training fixture; the EMG source reports stable support without specifying hand laterality.",
+      "allowedValues": [
+        "bothHandsOnStableExternalSupport"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action producing the concentric repetition.",
+      "allowedValues": [
+        "adducts"
+      ]
+    },
+    {
+      "id": "hipStartPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The participant-specific start used by the reviewed full-range band exercise.",
+      "allowedValues": [
+        "maximalComfortableAbduction"
+      ]
+    },
+    {
+      "id": "frontalEndDistance",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed medial endpoint relative to the stance foot in the frontal plane.",
+      "allowedValues": [
+        "oneFootWidthFromStanceFoot"
+      ]
+    },
+    {
+      "id": "hipSagittalPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog-standardized slight extension posture held throughout; it preserves the source-reported posterior endpoint without admitting dynamic hip extension.",
+      "allowedValues": [
+        "slightExtensionHeld"
+      ]
+    },
+    {
+      "id": "hipRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The maintained axial posture indicated by toes pointing forward.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether dynamic knee motion contributes to the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight working-knee posture maintained under the distal band load.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The segment whose pelvis-relative movement defines the repetition.",
+      "allowedValues": [
+        "thigh"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the elastic resistance attaches to the working limb.",
+      "allowedValues": [
+        "bandCuffAtAnkle"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lateral band anchor opposing the medial motion from the abducted start.",
+      "allowedValues": [
+        "lateralBandAnchor"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; an ankle-cuffed elastic band does not."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the isolated hip action.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "supported-standing-band-hip-adduction",
+      "name": "Supported Standing Band Hip Adduction",
+      "aliases": [
+        "Standing Band Hip Adduction",
+        "Band Hip Adduction"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "adductorLongusBrevis",
+          "role": "primary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "handSupport": "bothHandsOnStableExternalSupport",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "adducts",
+        "hipStartPosition": "maximalComfortableAbduction",
+        "frontalEndDistance": "oneFootWidthFromStanceFoot",
+        "hipSagittalPosture": "slightExtensionHeld",
+        "hipRotation": "neutral",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "bandCuffAtAnkle",
+        "resistanceGeometry": "lateralBandAnchor",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "serner-2014-hip-adduction-exercises",
+        "jensen-2014-elastic-hip-adduction-training"
+      ],
+      "movementDefinition": "Stand upright on the support leg while holding a stable external support with both hands and secure an elastic band around the working ankle from the side. Place the straight working leg in maximal comfortable abduction with tension already in the band and hold it at the same slight posterior hip posture used at the endpoint. Keep the pelvis still, the working knee straight, and both sets of toes pointing forward as you draw the working thigh medially without swinging it farther backward, finishing one foot-width lateral to and about half a foot-length behind the stance foot. Return under control along the same strictly frontal path, then repeat before changing sides."
+    }
+  ]
+}

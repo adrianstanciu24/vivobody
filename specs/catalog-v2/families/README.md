@@ -1,11 +1,12 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Thirty-four reviewed family files are currently active: the three chest
+Thirty-seven reviewed family files are currently active: the three chest
 presses, vertical press and pull, both compound row families, nine narrow
 shoulder or scapular-action families, dip, push press, eight narrow
 elbow/forearm/wrist families, four lower-body isolation families, and four
-lower-body compound families. Each uses a coverage batch whose exercises
+lower-body compound families, plus three Batch-6 lower-body isolations. Each
+uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -56,6 +57,18 @@ cannot satisfy the shared `positionHeld` boundary. Narrowing the old
 forward/reverse step-and-return tasks need reviewed impact, deceleration,
 support-transition, and return semantics, while walking lunges may ultimately
 belong to locomotion.
+
+Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`, and
+`ankle-dorsiflexion`. The hip families admit only their reviewed side-lying
+pressure-biofeedback abduction and supported standing-band adduction fixtures;
+the dorsiflexion family admits only unilateral seated band
+dorsiflexion against a foot-board anchor and an individualized physical stop.
+Hip internal and external rotation remain held: muscle rotation direction is
+position-dependent, the visible taxonomy omits load-bearing deep rotators,
+and the reviewed exercise evidence cannot yet support a truthful dynamic role
+policy. The active families do not use a visible muscle as a proxy for an
+absent region and do not turn anatomy-level capability into unmeasured
+exercise volume.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -329,3 +342,56 @@ region, not every incidental contact. In hip thrust and glute bridge the feet
 materially anchor the task, so ankle and foot demands require soleus control.
 The pelvis bears the padded barbell; the supinated hands only steady it, so
 their contact does not invent wrist, hand, or loaded-grip demands.
+
+Batch-6 lower-body isolations retain the same motion/support distinction. The
+side-lying abduction treatment table, both-hands standing-adduction support,
+and seated dorsiflexion seat and foot board describe setup and control; none
+creates an extra prime action. `hipRotation: neutral`, toes-forward
+instructions, and position-held pelvis, spine, and knee axes exclude combined
+rotation or trunk-driven repetitions. Each family has one prime action and
+forbids the exact 43-action complement.
+
+The pressure-biofeedback abduction record uses `equipment: other`, external
+load, and a reviewed 5 lb / 2.5 kg seed. Its 35-to-45-mmHg trunk feedback and
+horizontal contact band are part of the condition-matched fixture, not
+incidental laboratory metadata. The canonical name and aliases therefore state
+the PBU condition; a generic no-feedback side-lying abduction is not silently
+routed to this more specific record. The two elastic-band records use
+`loadMode: nonComparable`, zero load seeds, and no metric seed; their different
+`loadInterface` and `resistanceGeometry` values preserve the ankle-cuffed
+lateral anchor versus the board-affixed foot band rather than treating all
+bands as one mechanism. All three fixtures pin `fixedPath: false` because no
+rail or lever constrains the external load.
+
+Numeric hip-abduction endpoints encode the directly reviewed zero-to-35-degree
+fixture, and `hipSagittalPosture: neutral` keeps flexion or extension from
+leaking into it. Dorsiflexion instead uses an individualized physical stop and
+a self-selected knee posture: a reported cohort mean or per-participant
+laboratory measurement is not converted into a universal exercise angle.
+Bottom-only sole contact with the board does not make the moving foot closed-
+chain.
+
+The adduction sources report the posterior endpoint but not the sagittal
+coordinate of the abducted start or its three-dimensional path. The active
+record discloses one catalog-authored adaptation: establish that slight
+posterior posture before the repetition and hold it while moving strictly in
+the frontal plane. `hipSagittalPosture: slightExtensionHeld` prevents an
+unmeasured dynamic hip-extension action; it does not claim the source directly
+tested the adapted path. `handSupport: bothHandsOnStableExternalSupport`
+preserves Jensen's directly reported bilateral setup without over-reading the
+less-specific EMG fixture.
+
+Exercise credit remains intentionally narrower than anatomy capability.
+Gluteus minimus has no taxonomy region or body-model surface, so the abduction
+record undercredits the complete abductor system instead of assigning a proxy.
+The adduction record does not infer adductor-magnus or pectineus volume from
+capability alone. Gracilis is secondary because it can produce the named hip
+action while controlling the held knee. Gluteus medius receives stabilizer
+credit from its directly measured 18-percent-MVC bilateral excitation and its
+hip/pelvis control capability. Serner measured external oblique only, so
+assigning the combined `obliques` region explicitly includes an unmeasured
+internal-oblique portion of the body-model aggregation. Dorsiflexion does not
+infer fibularis-tertius or toe-extensor volume from their shared action. Hip
+rotation remains held until
+posture-conditioned capabilities and the unvisualized deep-rotator policy can
+be resolved atomically.

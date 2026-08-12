@@ -1726,6 +1726,75 @@
       "pmid": "12620784",
       "url": "https://doi.org/10.1016/S0268-0033(02)00204-8",
       "scope": "Twenty-one community-dwelling older adults performed bodyweight forward and lateral step-ups onto a 21-centimeter platform with three-dimensional motion analysis and inverse-dynamics estimates of lower-extremity joint angles, moments, impulse, work, and power. The forward condition directly anchors the active platform height, brief bilateral top support, trail-foot return followed by lead-foot return to the lower floor, prohibition on trail-leg push-off or hopping, and hip-, knee-, and ankle-extension task; the older cohort and absence of muscle EMG or external load prevent generalization to arbitrary heights, loaded variants, continuous lead-foot-on-platform repetitions, or a muscle-magnitude ranking."
+    },
+    {
+      "id": "kjeldsen-2019-dorsiflexor-training",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Neuromuscular effects of dorsiflexor training with and without blood flow restriction",
+      "authors": [
+        "Simon Svanborg Kjeldsen",
+        "Erhard Trillingsgaard Næss-Schmidt",
+        "Gunhild Mo Hansen",
+        "Jørgen Feldbæk Nielsen",
+        "Peter William Stubbs"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.heliyon.2019.e02341",
+      "pmid": "31467996",
+      "url": "https://doi.org/10.1016/j.heliyon.2019.e02341",
+      "scope": "Seventeen healthy adults performed unilateral seated concentric-eccentric ankle dorsiflexion against a blue elastic band affixed to a foot board, both without and with thigh-cuff blood-flow restriction. The directly reported self-selected resting board position, individualized comfortable dorsiflexion stop, return until sole contact, and tibialis-anterior EMG anchor the non-occluded band exercise. The source does not establish fibularis-tertius or toe-extensor roles, a universal knee or ankle angle, comparable band load, a fixed external path, or a separate blood-flow-restriction exercise."
+    },
+    {
+      "id": "mcbeth-2012-side-lying-hip-abduction",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Hip muscle activity during 3 side-lying hip-strengthening exercises in distance runners",
+      "authors": [
+        "Joseph M. McBeth",
+        "Jennifer E. Earl-Boehm",
+        "Stephen C. Cobb",
+        "Wendy E. Huddleston"
+      ],
+      "year": 2012,
+      "doi": "10.4085/1062-6050-47.1.15",
+      "pmid": "22488226",
+      "url": "https://doi.org/10.4085/1062-6050-47.1.15",
+      "scope": "Twenty healthy distance runners performed neutral side-lying hip abduction, side-lying abduction with external rotation, and clamshell exercise while gluteus medius, tensor fasciae latae, anterior hip flexors, and gluteus maximus surface EMG were recorded. The active neutral-abduction condition used a treatment table, a cuff weight equal to five percent of body mass just above the ankle, a flexed lower support leg, neutral sagittal hip posture, toes forward, a horizontal contact band at 35 degrees, and pressure biofeedback beneath the trunk inflated to 40 mmHg and maintained between 35 and 45 mmHg. Every analyzed repetition used that feedback; McBeth describes it as substitution control and cites prior work for its effect on gluteus-medius recruitment, but did not compare feedback with no feedback. The source does not support a no-feedback adaptation, one universal cuff load, gluteus-minimus credit, hypertrophy magnitude, or standing, machine, band, bodyweight-only, or rotated variants."
+    },
+    {
+      "id": "serner-2014-hip-adduction-exercises",
+      "sourceType": "experimentalEMGStudy",
+      "title": "EMG evaluation of hip adduction exercises for soccer players: implications for exercise selection in prevention and treatment of groin injuries",
+      "authors": [
+        "Andreas Serner",
+        "Markus Due Jakobsen",
+        "Lars Louis Andersen",
+        "Per Hölmich",
+        "Emil Sundstrup",
+        "Kristian Thorborg"
+      ],
+      "year": 2014,
+      "doi": "10.1136/bjsports-2012-091746",
+      "pmid": "23511698",
+      "url": "https://doi.org/10.1136/bjsports-2012-091746",
+      "scope": "Forty healthy elite male soccer players performed eight hip-adduction exercises while bilateral adductor-longus plus gluteus-medius, rectus-abdominis, and external-oblique surface EMG were recorded. The reviewed elastic-band condition was a supported upright standing exercise with the band cuffed at the ankle, a straight working knee, toes forward, a maximal-abduction start, and the reported foot-relative medial endpoint. Gluteus medius reached 18 percent MVC on both measured sides in this condition and supports categorical hip-and-pelvis stabilization credit. The sagittal coordinate of the abducted start and the three-dimensional path were not reported; the posterior endpoint neither establishes a separate hip-extension prime action nor directly supports the catalog's mechanics-derived held-posterior adaptation. The source supports the topology, adductor-longus role, gluteus-medius stabilization, and rectus-abdominis/external-oblique trunk control, not internal-oblique measurement, gracilis ranking, comparable band load, or another support, posture, or resistance topology."
+    },
+    {
+      "id": "jensen-2014-elastic-hip-adduction-training",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Eccentric strengthening effect of hip-adductor training with elastic bands in soccer players: a randomised controlled trial",
+      "authors": [
+        "Jesper Jensen",
+        "Per Hölmich",
+        "Thomas Bandholm",
+        "Mette K. Zebis",
+        "Lars L. Andersen",
+        "Kristian Thorborg"
+      ],
+      "year": 2014,
+      "doi": "10.1136/bjsports-2012-091095",
+      "pmid": "22763117",
+      "url": "https://doi.org/10.1136/bjsports-2012-091095",
+      "scope": "Thirty-four healthy sub-elite male soccer players were randomized to control or eight weeks of supervised full-range standing hip-adduction training with elastic bands while the upper body was fixed to a stationary object with both hands. Training progressed from three sets of fifteen-repetition maximum to three sets of ten and then eight, and produced a larger eccentric-strength increase than control. The sagittal coordinate of the abducted start and the three-dimensional path were not reported, so the study does not establish a separate hip-extension prime action or directly support the catalog's mechanics-derived held-posterior adaptation. It supports the bilateral stable-hand setup, a trainable dynamic band topology, and the eight-to-fifteen repetition range, not muscle-specific roles, a comparable external load, another band geometry, or a different posture."
     }
   ]
 }

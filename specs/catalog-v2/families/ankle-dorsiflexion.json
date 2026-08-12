@@ -1,0 +1,297 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "ankle-dorsiflexion",
+  "name": "Ankle Dorsiflexion",
+  "definition": "A strict unilateral open-chain ankle isolation in which a seated athlete lifts the foot toward the shin against an elastic band affixed to a foot board, reaches an individualized comfortable dorsiflexion stop, and returns until the sole contacts the board. The initial roster contains only the directly reviewed non-occluded training condition. Tibialis anterior is the sole authored primary because it was the explicitly trained and measured muscle; fibularis tertius and the long toe extensors remain unassigned despite their anatomy-level dorsiflexion capability because the exercise study did not measure them. Inversion, eversion, and deliberate toe extension are excluded as prime actions rather than inferred from those muscles' coupled capabilities. Blood-flow-restricted, bilateral, standing heel-supported tibialis raises, wall-supported raises, cable, machine, plate-loaded, manual-resistance, isometric, walking, balance, frontal-plane ankle, and deliberate toe-extension variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "kjeldsen-2019-dorsiflexor-training"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "ankle.dorsiflexion"
+    ],
+    "primeActions": [
+      "ankle.dorsiflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "tibialisAnterior"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "tibialisAnterior"
+      ],
+      "secondary": [],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the moving foot is free rather than fixed to the environment throughout the repetition.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The seat supporting the athlete while the foot moves against the band.",
+      "allowedValues": [
+        "seat"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether knee motion creates the repetition; the study measured each participant's selected knee angle to reproduce the same posture between sessions but did not report one universal angle.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The self-selected held knee posture; no canonical degree value is invented from an unreported cohort result.",
+      "allowedValues": [
+        "selfSelected"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic ankle action creating the concentric repetition.",
+      "allowedValues": [
+        "dorsiflexes"
+      ]
+    },
+    {
+      "id": "ankleStartPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The individualized resting position on the board; the study reported a cohort mean ankle angle of 130 plus or minus 7 degrees without making that mean a universal prescription.",
+      "allowedValues": [
+        "selfSelectedRestingPosition"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The individualized endpoint established with a physical stop before training.",
+      "allowedValues": [
+        "toComfortableDorsiflexionStop"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The segment whose lower-leg-relative motion defines the repetition.",
+      "allowedValues": [
+        "foot"
+      ]
+    },
+    {
+      "id": "footBoardContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study-defined bottom condition: the foot returns until the sole contacts the board before the next concentric phase.",
+      "allowedValues": [
+        "soleAtBottom"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reported relationship between the foot and elastic resistance without inventing a more precise band landmark.",
+      "allowedValues": [
+        "footUnderBand"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the directly reviewed elastic resistance is anchored.",
+      "allowedValues": [
+        "bandAffixedToFootBoard"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; a band affixed to a board does not create a fixed path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the named isolated ankle action.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 15,
+      "maximum": 30
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-band-ankle-dorsiflexion",
+      "name": "Seated Band Ankle Dorsiflexion",
+      "aliases": [
+        "Band Ankle Dorsiflexion",
+        "Seated Band Dorsiflexion",
+        "Resistance Band Dorsiflexion"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 72,
+      "involvement": [
+        {
+          "muscle": "tibialisAnterior",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "pelvisSupport": "seat",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "selfSelected",
+        "ankleMotion": "dorsiflexes",
+        "ankleStartPosition": "selfSelectedRestingPosition",
+        "rangeOfMotion": "toComfortableDorsiflexionStop",
+        "movingSegment": "foot",
+        "footBoardContact": "soleAtBottom",
+        "loadInterface": "footUnderBand",
+        "resistanceGeometry": "bandAffixedToFootBoard",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kjeldsen-2019-dorsiflexor-training"
+      ],
+      "movementDefinition": "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board. Set a physical stop at the working ankle's comfortable dorsiflexion limit. Begin from the self-selected resting position with the sole on the board and hold the selected knee posture still. Dorsiflex the ankle to lift the foot toward the shin until reaching the stop, without deliberately turning the foot inward or outward or extending the toes to create the repetition. Return under control until the sole touches the board, then repeat before changing sides."
+    }
+  ]
+}
