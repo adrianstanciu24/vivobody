@@ -193,10 +193,10 @@ final class ExerciseCatalogItem: Identifiable {
     /// Native kg starting weight (a multiple of 2.5 kg) for kg users,
     /// so a kg scrubber seeds on a clean detent instead of an off-grid
     /// conversion of the lb default (135 lb → 61.2 kg). Nil for
-    /// bodyweight / duration lifts and user-created customs, which
-    /// fall back to the single lb default. Resolved to canonical lb at
-    /// the seed/display boundary; additive defaulted field, so no
-    /// migration for existing catalogs.
+    /// zero-weight or otherwise unloaded bodyweight/duration lifts and
+    /// user-created customs, which fall back to the single lb default.
+    /// Resolved to canonical lb at the seed/display boundary; additive
+    /// defaulted field, so no migration for existing catalogs.
     var defaultWeightKg: Double? = nil
 
     /// How this exercise is measured — reps or a timed hold. Stored

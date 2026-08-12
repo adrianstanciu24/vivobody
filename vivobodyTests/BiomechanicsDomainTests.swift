@@ -291,6 +291,20 @@ struct BiomechanicsDomainTests {
             .invalidKilogramDefault("test"),
             records: [record(defaultWeightKg: 11)]
         )
+        expectValidationError(
+            .missingKilogramDefault("test"),
+            records: [record(defaultWeightKg: nil)]
+        )
+    }
+
+    @Test func strictCatalogAllowsZeroWeightWithoutMetricSeed() {
+        do {
+            try CatalogData.validate([
+                record(defaultWeight: 0, defaultWeightKg: nil)
+            ])
+        } catch {
+            Issue.record("Expected zero-weight seed to allow no kilogram default: \(error)")
+        }
     }
 
     @Test func strictCatalogRejectsIdentityAndAliasCollisions() {
@@ -312,6 +326,7 @@ struct BiomechanicsDomainTests {
     private func record(
         catalogID: String = "test",
         name: String = "Test Exercise",
+        defaultWeight: Double = 20,
         defaultWeightKg: Double? = 10,
         trackingMode: TrackingMode = .reps,
         defaultDuration: TimeInterval? = nil,
@@ -331,7 +346,7 @@ struct BiomechanicsDomainTests {
             catalogID: catalogID,
             name: name,
             group: .chest,
-            defaultWeight: 20,
+            defaultWeight: defaultWeight,
             defaultWeightKg: defaultWeightKg,
             reps: 8,
             trackingMode: trackingMode,

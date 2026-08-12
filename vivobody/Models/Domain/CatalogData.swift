@@ -175,6 +175,9 @@ nonisolated enum CatalogData {
             guard record.defaultWeight >= 0, record.reps > 0 else {
                 throw ValidationError.invalidDefaults(record.catalogID)
             }
+            guard record.defaultWeight == 0 || record.defaultWeightKg != nil else {
+                throw ValidationError.missingKilogramDefault(record.catalogID)
+            }
             guard (0...100).contains(record.searchPriorityValue) else {
                 throw ValidationError.invalidSearchPriority(record.catalogID)
             }
@@ -307,6 +310,7 @@ nonisolated enum CatalogData {
         case invalidDefaults(String)
         case invalidSearchPriority(String)
         case invalidBodyweightFraction(String)
+        case missingKilogramDefault(String)
         case invalidKilogramDefault(String)
         case missingDuration(String)
         case invalidModalityTracking(String)
@@ -333,6 +337,7 @@ nonisolated enum CatalogData {
             case .invalidDefaults(let id): return "record '\(id)' has invalid weight/reps defaults"
             case .invalidSearchPriority(let id): return "record '\(id)' has an invalid search priority"
             case .invalidBodyweightFraction(let id): return "record '\(id)' has an invalid bodyweight fraction"
+            case .missingKilogramDefault(let id): return "record '\(id)' has a positive weight but no kilogram default"
             case .invalidKilogramDefault(let id): return "record '\(id)' has an invalid kilogram default"
             case .missingDuration(let id): return "duration record '\(id)' has no positive default duration"
             case .invalidModalityTracking(let id): return "record '\(id)' has modality-incompatible tracking"

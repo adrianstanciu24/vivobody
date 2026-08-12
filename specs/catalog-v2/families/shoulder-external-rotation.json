@@ -1,0 +1,428 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-external-rotation",
+  "name": "Shoulder External Rotation",
+  "definition": "A strict unilateral isolation whose concentric phase externally rotates the humerus at the glenohumeral joint while the upper arm remains beside the torso, the elbow angle remains fixed, and the scapula and torso do not create the repetition. The initial contract admits standing cable and elastic resistance plus a side-lying dumbbell setup because those dynamic tasks have direct exercise-specific evidence. Externally rotating face pulls, Cuban presses, reverse flies, prone 90-degree-abduction rotations, throwing motions, isometric holds, and exercises that add shoulder elevation, horizontal abduction, scapular retraction, or elbow movement remain outside this narrow contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "dark-2007-shoulder-rotation-recruitment",
+    "hintermeister-1998-elastic-shoulder-rehabilitation",
+    "holzbaur-2005-upper-extremity",
+    "reinold-2004-shoulder-external-rotation"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell",
+      "cable",
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.externalRotation"
+    ],
+    "primeActions": [
+      "shoulder.externalRotation"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "externalRotators"
+      ],
+      "secondary": [
+        "deltoidPosterior"
+      ],
+      "stabilizer": [
+        "subscapularis",
+        "trapeziusMiddle"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the distal segment moves freely or remains fixed."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing",
+        "sideLying"
+      ],
+      "description": "The torso orientation used to align the resistance with glenohumeral rotation."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "bench"
+      ],
+      "description": "The external surface supporting the torso; a side-lying bench supports the lateral torso without defining scapular translation."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "free"
+      ],
+      "description": "Whether external posterior support limits scapular translation along the thorax; lateral bench contact does not by itself constrain the posterior scapula."
+    },
+    {
+      "id": "humerothoracicElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 0,
+      "description": "Canonical thorax-relative upper-arm elevation held throughout the repetition; zero means the upper arm remains beside the torso and does not declare an elevation action."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic flexion or extension."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexed"
+      ],
+      "description": "The canonical fixed elbow posture, approximately 90 degrees of flexion in the admitted rotation setups."
+    },
+    {
+      "id": "upperArmSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "towelRoll"
+      ],
+      "description": "Whether a towel roll supports or spaces the proximal upper arm without moving the humerus or supporting the torso."
+    },
+    {
+      "id": "rotationResistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "medialAnchor",
+        "gravity"
+      ],
+      "description": "The source geometry that creates an internal-rotation external torque for the working arm to overcome: an anchor medial to the working shoulder or gravity in side lying."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric rotation."
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "cable-external-rotation-uses-standing-medial-anchor",
+      "description": "The reviewed cable setup is a free-path external load anchored medial to a standing working shoulder.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        { "field": "loadMode", "value": "external" },
+        { "field": "variant.bodyPosition", "value": "standing" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.upperArmSupport", "value": "none" },
+        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" },
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "band-external-rotation-uses-standing-medial-anchor",
+      "description": "The reviewed elastic setup uses non-comparable resistance, a towel roll, and an anchor medial to a standing working shoulder.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        { "field": "variant.bodyPosition", "value": "standing" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.upperArmSupport", "value": "towelRoll" },
+        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" },
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-external-rotation-uses-side-lying-gravity",
+      "description": "The reviewed dumbbell setup uses gravity while the lateral torso rests on a bench and the upper arm is spaced by a towel roll.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        { "field": "loadMode", "value": "external" },
+        { "field": "variant.bodyPosition", "value": "sideLying" },
+        { "field": "variant.torsoSupport", "value": "bench" },
+        { "field": "variant.upperArmSupport", "value": "towelRoll" },
+        { "field": "variant.rotationResistanceGeometry", "value": "gravity" },
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-cable-shoulder-external-rotation",
+      "name": "Standing Cable External Rotation",
+      "aliases": [
+        "Cable Shoulder External Rotation",
+        "Cable Rotator-Cuff External Rotation"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 84,
+      "involvement": [
+        { "muscle": "externalRotators", "role": "primary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 0,
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "upperArmSupport": "none",
+        "rotationResistanceGeometry": "medialAnchor",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "dark-2007-shoulder-rotation-recruitment",
+        "reinold-2004-shoulder-external-rotation"
+      ],
+      "movementDefinition": "Stand side-on with the cable anchored across the body, hold the working upper arm beside the torso with the elbow flexed about 90 degrees, and rotate the forearm away from the abdomen. Return under control without moving the elbow, retracting the shoulder blade, or turning the torso."
+    },
+    {
+      "catalogID": "standing-band-shoulder-external-rotation",
+      "name": "Standing Band External Rotation",
+      "aliases": [
+        "Band Shoulder External Rotation",
+        "Resistance-Band External Rotation"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 82,
+      "involvement": [
+        { "muscle": "externalRotators", "role": "primary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 0,
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "upperArmSupport": "towelRoll",
+        "rotationResistanceGeometry": "medialAnchor",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "hintermeister-1998-elastic-shoulder-rehabilitation"
+      ],
+      "movementDefinition": "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm away from the abdomen against the band, and return without moving the elbow, shoulder blade, or torso."
+    },
+    {
+      "catalogID": "side-lying-dumbbell-shoulder-external-rotation",
+      "name": "Side-Lying Dumbbell External Rotation",
+      "aliases": [
+        "Side-Lying External Rotation",
+        "Dumbbell Rotator-Cuff External Rotation"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 86,
+      "involvement": [
+        { "muscle": "externalRotators", "role": "primary" },
+        { "muscle": "deltoidPosterior", "role": "secondary" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "sideLying",
+        "torsoSupport": "bench",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 0,
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "upperArmSupport": "towelRoll",
+        "rotationResistanceGeometry": "gravity",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "reinold-2004-shoulder-external-rotation"
+      ],
+      "movementDefinition": "Lie on the nonworking side on a flat bench with a towel roll between the working upper arm and torso, the elbow flexed about 90 degrees, and a dumbbell held above the abdomen. Rotate the forearm toward the ceiling and lower it under control without lifting the upper arm, rolling the torso, or retracting the shoulder blade."
+    }
+  ]
+}

@@ -1234,6 +1234,11 @@ def validate_exercise(
 
     load_mode = exercise["loadMode"]
     bodyweight_fraction = exercise["bodyweightFraction"]
+    if exercise["defaultWeight"] > 0:
+        require(
+            "defaultWeightKg" in exercise,
+            f"{context} positive defaultWeight requires defaultWeightKg",
+        )
     if load_mode in {"external", "nonComparable"}:
         require(bodyweight_fraction == 0, f"{context} {load_mode} load must use zero bodyweightFraction")
     else:

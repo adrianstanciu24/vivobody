@@ -1,0 +1,377 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-flexion-raise",
+  "name": "Front Raise",
+  "definition": "A strict single-joint raise in which an open-chain upper arm flexes from the side to shoulder height in the sagittal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not merely a stabilizer: a loaded arm-elevation model validated against EMG places superior trapezius among the greatest activity and positive-work contributors during flexion, and a small unweighted held-position study observed its activity increasing gradually in both flexion and abduction. Those sources support a categorical dynamic role without claiming equal magnitude or target emphasis across paths. The initial single-arm standing setup is a deliberately disclosed mechanics-derived application of direct dumbbell-flexion evidence: the reviewed study anchors the implement, action, and shoulder-height position but does not make that exact posture and laterality an experimentally compared result.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "ludewig-2009-multiplanar-humeral-elevation",
+    "morihara-2011-scapular-muscles-flexion-abduction",
+    "parry-2012-dumbbell-shoulder-elevation",
+    "hecker-2021-deltoid-flexion-abduction"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "elbow.flexion",
+      "elbow.extension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "forearms"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "biceps"
+      ],
+      "stabilizer": [
+        "supraspinatus",
+        "externalRotators",
+        "subscapularis",
+        "trapeziusMiddle",
+        "deltoidLateral",
+        "triceps",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used during the strict raise.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify rotation or tilt.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "elevationPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso-relative corridor followed by the upper arm during elevation.",
+      "allowedValues": [
+        "sagittal"
+      ]
+    },
+    {
+      "id": "humerothoracicStartElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Torso-relative total upper-arm elevation at the canonical start; this is not a glenohumeral-only angle.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "humerothoracicEndElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Torso-relative total upper-arm elevation at the canonical endpoint; this is not a glenohumeral-only angle.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the elbow angle is held nearly extended or changes materially during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The glenohumeral axial-rotation posture held through the raise, authored independently of hand or forearm orientation.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric raise.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the non-working side braces against an external support during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "single-arm-dumbbell-front-raise",
+      "name": "Single-Arm Dumbbell Front Raise",
+      "aliases": [
+        "One-Arm Dumbbell Front Raise"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 82,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "elevationPath": "sagittal",
+        "humerothoracicStartElevationDegrees": 0,
+        "humerothoracicEndElevationDegrees": 90,
+        "elbowMotion": "angleHeld",
+        "humeralRotation": "neutral",
+        "lowerBodyContribution": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ludewig-2009-multiplanar-humeral-elevation",
+        "morihara-2011-scapular-muscles-flexion-abduction",
+        "parry-2012-dumbbell-shoulder-elevation",
+        "hecker-2021-deltoid-flexion-abduction"
+      ],
+      "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly forward from the side to shoulder height without bending the elbow, shrugging, leaning, or using lower-body drive, then lower it under control."
+    }
+  ]
+}

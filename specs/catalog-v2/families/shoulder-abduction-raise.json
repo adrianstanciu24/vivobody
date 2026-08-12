@@ -1,0 +1,500 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-abduction-raise",
+  "name": "Lateral Raise",
+  "definition": "A strict single-joint raise in which an open-chain upper arm abducts from the side to shoulder height in the frontal plane while the elbow angle, neutral humeral rotation, torso, and lower body remain controlled. Scapular upward rotation and posterior tilt are normal coupled elevation actions, not fixed-ratio claims. Upper trapezius is a secondary dynamic contributor to the declared upward rotation, not the exercise's primary shoulder target: loaded arm-elevation modeling supports positive scapular work, and a direct small unweighted held-position comparison observed its activity increasing gradually in both abduction and flexion. The categorical role does not assert equal magnitude to lateral deltoid or equal recruitment across elevation paths. The initial roster represents the strict frontal-path subset prescribed in the direct cable-versus-dumbbell trial; symptom-driven intermediate frontal-to-scapular accommodations reported for some participants do not admit scaption into this family.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "ludewig-2009-multiplanar-humeral-elevation",
+    "morihara-2011-scapular-muscles-flexion-abduction",
+    "parry-2012-dumbbell-shoulder-elevation",
+    "hecker-2021-deltoid-flexion-abduction",
+    "larsen-2025-cable-dumbbell-lateral-raise"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell",
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.abduction"
+    ],
+    "primeActions": [
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "elbow.flexion",
+      "elbow.extension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "forearms"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidLateral"
+      ],
+      "secondary": [
+        "deltoidAnterior",
+        "supraspinatus",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "subscapularis",
+        "deltoidPosterior",
+        "trapeziusMiddle",
+        "triceps",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used during the strict raise.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify rotation or tilt.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "elevationPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso-relative corridor followed by the upper arm during elevation.",
+      "allowedValues": [
+        "frontal"
+      ]
+    },
+    {
+      "id": "humerothoracicStartElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Torso-relative total upper-arm elevation at the canonical start; this is not a glenohumeral-only angle.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "humerothoracicEndElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Torso-relative total upper-arm elevation at the canonical endpoint; this is not a glenohumeral-only angle.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the elbow angle is held nearly extended or changes materially during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The glenohumeral axial-rotation posture held through the raise, authored independently of hand or forearm orientation.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric raise.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the non-working side braces against an external support during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "cablePulleyAlignmentAtStart",
+      "valueType": "enum",
+      "required": false,
+      "description": "The pulley height relative to the working hand in the arm-at-side starting position; present only for the reviewed cable setup.",
+      "allowedValues": [
+        "handHeight"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "cable-requires-reviewed-pulley-alignment",
+      "description": "The admitted cable lateral raise uses the directly reviewed pulley alignment at approximately working-hand height in the arm-at-side start.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "variant.cablePulleyAlignmentAtStart",
+          "value": "handHeight"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-cable-omits-pulley-alignment",
+      "description": "A free dumbbell raise has no cable-pulley alignment metadata.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "cable"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.cablePulleyAlignmentAtStart"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "single-arm-dumbbell-lateral-raise",
+      "name": "Single-Arm Dumbbell Lateral Raise",
+      "aliases": [
+        "One-Arm Dumbbell Lateral Raise"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 86,
+      "involvement": [
+        {
+          "muscle": "deltoidLateral",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "elevationPath": "frontal",
+        "humerothoracicStartElevationDegrees": 0,
+        "humerothoracicEndElevationDegrees": 90,
+        "elbowMotion": "angleHeld",
+        "humeralRotation": "neutral",
+        "lowerBodyContribution": "none",
+        "contralateralSupport": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ludewig-2009-multiplanar-humeral-elevation",
+        "morihara-2011-scapular-muscles-flexion-abduction",
+        "parry-2012-dumbbell-shoulder-elevation",
+        "hecker-2021-deltoid-flexion-abduction",
+        "larsen-2025-cable-dumbbell-lateral-raise"
+      ],
+      "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly out to the side in the frontal plane from the side to shoulder height without shrugging, leaning, or using lower-body drive, then lower it under control."
+    },
+    {
+      "catalogID": "single-arm-cable-lateral-raise",
+      "name": "Single-Arm Cable Lateral Raise",
+      "aliases": [
+        "One-Arm Cable Lateral Raise"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "deltoidLateral",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "elevationPath": "frontal",
+        "humerothoracicStartElevationDegrees": 0,
+        "humerothoracicEndElevationDegrees": 90,
+        "elbowMotion": "angleHeld",
+        "humeralRotation": "neutral",
+        "lowerBodyContribution": "none",
+        "contralateralSupport": "none",
+        "cablePulleyAlignmentAtStart": "handHeight"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ludewig-2009-multiplanar-humeral-elevation",
+        "morihara-2011-scapular-muscles-flexion-abduction",
+        "hecker-2021-deltoid-flexion-abduction",
+        "larsen-2025-cable-dumbbell-lateral-raise"
+      ],
+      "movementDefinition": "Stand upright holding one cable handle with the pulley aligned approximately with the working hand in the arm-at-side start. Keep the humerus neutrally rotated and the elbow nearly extended while raising the upper arm directly out to the side in the frontal plane to shoulder height, then lower it without shrugging, leaning, or using lower-body drive."
+    }
+  ]
+}

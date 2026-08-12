@@ -47,7 +47,7 @@
       "doi": "10.3389/fnbot.2019.00090",
       "pmid": "31780916",
       "url": "https://doi.org/10.3389/fnbot.2019.00090",
-      "scope": "Independent scapular mechanics and contributions from trapezius, serratus anterior, deltoids, and pectoralis major."
+      "scope": "Scapulothoracic musculoskeletal model tested against kinematics and surface EMG during shrugging plus unloaded and 2 kg loaded flexion and abduction in one healthy adult. Superior trapezius, serratus anterior, and deltoids showed the greatest activity and positive work during both loaded elevation paths; the single-subject model supports a categorical dynamic role, not population-level magnitude rankings."
     },
     {
       "id": "gaffney-2014-trapezius-subdivisions",
@@ -826,6 +826,246 @@
       "pmid": "24113424",
       "url": "https://doi.org/10.1016/j.jelekin.2013.08.010",
       "scope": "Fine-wire supraspinatus and surface infraspinatus and deltoid EMG in 15 healthy untrained men during controlled elevation, depression, horizontal adduction, and horizontal abduction through matched target positions. It supports direction-sensitive cuff and deltoid recruitment during horizontal abduction, not a mandatory cuff role in a loaded compound row."
+    },
+    {
+      "id": "marchetti-2011-barbell-pullover",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effects of the pullover exercise on the pectoralis major and latissimus dorsi muscles as evaluated by EMG",
+      "authors": [
+        "Paulo H. Marchetti",
+        "Marco C. Uchida"
+      ],
+      "year": 2011,
+      "doi": "10.1123/jab.27.4.380",
+      "pmid": "21975179",
+      "url": "https://doi.org/10.1123/jab.27.4.380",
+      "scope": "Surface EMG in eight healthy men during loaded barbell pullovers. Pectoralis-major excitation exceeded latissimus-dorsi excitation in this free-weight setup; the result is exercise- and resistance-profile-specific rather than a universal pullover hierarchy."
+    },
+    {
+      "id": "muyor-2022-pullover-straight-arm-pulldown",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Comparison of Electromyographic Activity during Barbell Pullover and Straight Arm Pulldown Exercises",
+      "authors": [
+        "Jose M. Muyor",
+        "Pedro A. Lopez-Minarro",
+        "Fernando Alacid"
+      ],
+      "year": 2022,
+      "doi": "10.3390/app122111138",
+      "url": "https://doi.org/10.3390/app122111138",
+      "scope": "Surface-EMG comparison of a barbell pullover at 100% biacromial hand spacing with straight-arm cable pulldowns at 100% and 150% biacromial spacing. It supports treating free-weight pullovers and cable straight-arm pulldowns as distinct resistance-profile branches while retaining a common shoulder-extension action."
+    },
+    {
+      "id": "bergquist-2018-band-free-weight-fly",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Muscle Activity in Upper-Body Single-Joint Resistance Exercises with Elastic Resistance Bands vs. Free Weights",
+      "authors": [
+        "Ronny Bergquist",
+        "Vegard Moe Iversen",
+        "Paul J. Mork",
+        "Marius Steiro Fimland"
+      ],
+      "year": 2018,
+      "doi": "10.1515/hukin-2017-0137",
+      "pmid": "29599855",
+      "url": "https://doi.org/10.1515/hukin-2017-0137",
+      "scope": "Matched 10-RM surface-EMG comparison of elastic-band and dumbbell flyes and reverse flyes in 29 adults. It supports both implements as reviewed single-joint variants while documenting phase- and implement-dependent excitation rather than interchangeable muscle magnitudes."
+    },
+    {
+      "id": "welsch-2005-dumbbell-fly",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic Activity of the Pectoralis Major and Anterior Deltoid Muscles During Three Upper-Body Lifts",
+      "authors": [
+        "Elizabeth A. Welsch",
+        "Michael Bird",
+        "Jerry L. Mayhew"
+      ],
+      "year": 2005,
+      "doi": "10.1519/14513.1",
+      "pmid": "15903389",
+      "url": "https://doi.org/10.1519/14513.1",
+      "scope": "Pectoralis-major and anterior-deltoid surface EMG during the concentric phase of 6-RM barbell bench press, dumbbell bench press, and dumbbell fly in 12 adults. It directly anchors the dumbbell-fly roster but does not resolve regional pectoralis-major excitation."
+    },
+    {
+      "id": "schoenfeld-2013-reverse-fly-hand-position",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effect of Hand Position on EMG Activity of the Posterior Shoulder Musculature During a Horizontal Abduction Exercise",
+      "authors": [
+        "Brad Schoenfeld",
+        "R. Gul Tiryaki Sonmez",
+        "Morey J. Kolber",
+        "Bret Contreras",
+        "Robert Harris",
+        "Serife Ozen"
+      ],
+      "year": 2013,
+      "doi": "10.1519/JSC.0b013e318281e1e9",
+      "pmid": "23302754",
+      "url": "https://doi.org/10.1519/JSC.0b013e318281e1e9",
+      "scope": "Posterior-deltoid and infraspinatus surface EMG during reverse-fly-machine horizontal abduction with neutral and pronated hand positions. It supports both reviewed grip fixtures and their posterior-shoulder role envelope, not a separate external-rotation prime action."
+    },
+    {
+      "id": "ludewig-2009-multiplanar-humeral-elevation",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Motion of the Shoulder Complex During Multiplanar Humeral Elevation",
+      "authors": [
+        "Paula M. Ludewig",
+        "Vandana Phadke",
+        "Jonathan P. Braman",
+        "Daniel R. Hassett",
+        "Cort J. Cieminski",
+        "Robert F. LaPrade"
+      ],
+      "year": 2009,
+      "doi": "10.2106/JBJS.G.01483",
+      "pmid": "19181982",
+      "url": "https://doi.org/10.2106/JBJS.G.01483",
+      "scope": "Bone-pin three-dimensional shoulder-complex kinematics in 12 healthy adults during sagittal flexion, scapular-plane elevation, and coronal abduction. It supports coupled scapular upward rotation and posterior tilt during elevation without assigning fixed magnitudes to loaded raises."
+    },
+    {
+      "id": "morihara-2011-scapular-muscles-flexion-abduction",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Muscle Functions Around the Scapula During Clavicle-Glenohumeral Rhythm in the Motion of Shoulder Flexion and Abduction",
+      "authors": [
+        "Toru Morihara",
+        "Akiko Ogura",
+        "Hisakazu Tachiiri",
+        "Toshikazu Kubo",
+        "Masao Kurokawa",
+        "Yuichiro Miura",
+        "Hideaki Fukushima"
+      ],
+      "year": 2011,
+      "doi": "10.11296/katakansetsu.35.715",
+      "url": "https://doi.org/10.11296/katakansetsu.35.715",
+      "scope": "Upper-, middle-, and lower-trapezius plus serratus-anterior surface EMG at six static positions (0, 30, 60, 90, 120, and 150 degrees) during unweighted flexion and abduction in six healthy volunteers. Upper-trapezius activity increased gradually in both paths; the reported early path differences instead involved greater serratus-anterior and lower-trapezius activity in flexion and greater middle-trapezius activity in abduction. The small held-position study supports common upper-trapezius recruitment, not an exact loaded-role ranking or equal magnitude between raise families."
+    },
+    {
+      "id": "parry-2012-dumbbell-shoulder-elevation",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder- and Back-Muscle Activation During Shoulder Abduction and Flexion Using a Bodyblade Pro Versus Dumbbells",
+      "authors": [
+        "Joseph S. Parry",
+        "Rachel Straub",
+        "Daniel J. Cipriani"
+      ],
+      "year": 2012,
+      "doi": "10.1123/jsr.21.3.266",
+      "pmid": "22713233",
+      "url": "https://doi.org/10.1123/jsr.21.3.266",
+      "scope": "Deltoid, pectoralis-major, infraspinatus, serratus-anterior, and erector-spinae surface EMG near 90 degrees during dumbbell shoulder flexion and abduction at three light loads in 11 healthy men. It anchors dumbbell raise fixtures but not an exact muscle-role ranking across the full range."
+    },
+    {
+      "id": "hecker-2021-deltoid-flexion-abduction",
+      "sourceType": "experimentalStrengthStudy",
+      "title": "Deltoid muscle contribution to shoulder flexion and abduction strength: an experimental approach",
+      "authors": [
+        "Andreas Hecker",
+        "Jose Aguirre",
+        "Urs Eichenberger",
+        "Jan Rosner",
+        "Martin Schubert",
+        "Reto Sutter",
+        "Karl Wieser",
+        "Samy Bouaicha"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jse.2020.05.023",
+      "pmid": "32540315",
+      "url": "https://doi.org/10.1016/j.jse.2020.05.023",
+      "scope": "Shoulder flexion and abduction strength before and after axillary-nerve block in 12 healthy adults. It establishes a substantial deltoid contribution that increases with elevation, while whole-deltoid measurement requires moment-arm evidence for subregion-specific family roles."
+    },
+    {
+      "id": "larsen-2025-cable-dumbbell-lateral-raise",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Dumbbell versus cable lateral raises for lateral deltoid hypertrophy: an experimental study",
+      "authors": [
+        "Stian Larsen",
+        "Milo Wolf",
+        "Brad J. Schoenfeld",
+        "Nordis O. Sandberg",
+        "Andrea B. Fredriksen",
+        "Benjamin S. Kristiansen",
+        "Roland van den Tillaar",
+        "Paul A. Swinton",
+        "Hallvard N. Falch"
+      ],
+      "year": 2025,
+      "doi": "10.3389/fphys.2025.1611468",
+      "pmid": "40692697",
+      "url": "https://doi.org/10.3389/fphys.2025.1611468",
+      "scope": "Within-person training comparison of unilateral dumbbell and cable lateral raises from the arm-at-side start to 90 degrees with an extended elbow. The prescribed path was frontal except for consistent symptom-driven scapular-plane accommodations in some participants; those accommodations do not admit scaption into the strict family."
+    },
+    {
+      "id": "dark-2007-shoulder-rotation-recruitment",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Shoulder Muscle Recruitment Patterns During Commonly Used Rotator Cuff Exercises: An Electromyographic Study",
+      "authors": [
+        "Alanna Dark",
+        "Karen A. Ginn",
+        "Mark Halaki"
+      ],
+      "year": 2007,
+      "doi": "10.2522/ptj.20060068",
+      "pmid": "17578940",
+      "url": "https://doi.org/10.2522/ptj.20060068",
+      "scope": "Fine-wire and surface EMG in 15 healthy adults during low-, medium-, and high-intensity pulley-resisted internal and external rotation with the arm by the side. It directly anchors dynamic at-side cable fixtures and shows graded recruitment across torque-capable muscles rather than one muscle acting alone."
+    },
+    {
+      "id": "reinold-2004-shoulder-external-rotation",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Electromyographic Analysis of the Rotator Cuff and Deltoid Musculature During Common Shoulder External Rotation Exercises",
+      "authors": [
+        "Michael M. Reinold",
+        "Kevin E. Wilk",
+        "Glenn S. Fleisig",
+        "Nigel Zheng",
+        "Steven W. Barrentine",
+        "Terri Chmielewski",
+        "Rayden C. Cody",
+        "Gene G. Jameson",
+        "James R. Andrews"
+      ],
+      "year": 2004,
+      "doi": "10.2519/jospt.2004.34.7.385",
+      "pmid": "15296366",
+      "url": "https://doi.org/10.2519/jospt.2004.34.7.385",
+      "scope": "Intramuscular rotator-cuff and deltoid EMG in 10 healthy adults across seven external-rotation exercise positions, including standing and side-lying at zero abduction and prone or standing at 90 degrees. It supports the reviewed external-rotation positions while leaving load-path and support mechanics explicit in the roster."
+    },
+    {
+      "id": "ginn-2017-subscapularis-internal-rotation",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Is subscapularis recruited in a similar manner during shoulder internal rotation exercises and belly press and lift off tests?",
+      "authors": [
+        "Karen A. Ginn",
+        "Darren Reed",
+        "Chelsea Jones",
+        "Anthony Downes",
+        "Ian Cathers",
+        "Mark Halaki"
+      ],
+      "year": 2017,
+      "doi": "10.1016/j.jsams.2016.10.018",
+      "pmid": "27889273",
+      "url": "https://doi.org/10.1016/j.jsams.2016.10.018",
+      "scope": "Intramuscular subscapularis EMG during maximal isometric internal-rotation tasks at zero and 90 degrees of abduction and during clinical test positions. It supports subscapularis capability and position review but is not direct evidence for a dynamic cable or band trajectory."
+    },
+    {
+      "id": "hintermeister-1998-elastic-shoulder-rehabilitation",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Electromyographic Activity and Applied Load During Shoulder Rehabilitation Exercises Using Elastic Resistance",
+      "authors": [
+        "Robert A. Hintermeister",
+        "Gregory W. Lange",
+        "Jeanne M. Schultheis",
+        "Michael J. Bey",
+        "Richard J. Hawkins"
+      ],
+      "year": 1998,
+      "doi": "10.1177/03635465980260021001",
+      "pmid": "9548114",
+      "url": "https://doi.org/10.1177/03635465980260021001",
+      "scope": "Fine-wire and surface EMG with applied-load measurement in 19 healthy men during controlled elastic-resistance shoulder exercises, including dynamic internal and external rotation. It directly anchors low-load band fixtures without implying equivalence to cable resistance."
     }
   ]
 }

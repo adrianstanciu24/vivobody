@@ -1,0 +1,554 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-extension-isolation",
+  "name": "Shoulder Extension Isolation",
+  "definition": "An open-chain isolation movement whose concentric phase extends the shoulder from a flexed overhead start while the elbow angle remains fixed. The admitted roster is limited to the directly reviewed barbell pullover and bilateral straight-arm cable pulldown; dumbbell, band, machine, unilateral, bodyweight, bent-arm, and rowing variants remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "marchetti-2011-barbell-pullover",
+    "muyor-2022-pullover-straight-arm-pulldown"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back",
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell",
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lats",
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats",
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "lats",
+        "pectoralisMajorSternocostal",
+        "teresMajor",
+        "deltoidPosterior"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "serratus",
+        "trapeziusMiddle",
+        "triceps",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed body position used for the movement.",
+      "allowedValues": [
+        "supine",
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso.",
+      "allowedValues": [
+        "bench",
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether posterior support limits scapular translation along the thorax.",
+      "allowedValues": [
+        "supportConstrained",
+        "free"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "relativeGripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hand spacing relative to shoulder width on the reviewed straight bar.",
+      "allowedValues": [
+        "shoulderWidth",
+        "wide"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether elbow angle intentionally changes during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The maintained elbow posture through the working range.",
+      "allowedValues": [
+        "nearExtended"
+      ]
+    },
+    {
+      "id": "startArmZone",
+      "valueType": "enum",
+      "required": true,
+      "description": "The categorical shoulder position at the start of the concentric phase.",
+      "allowedValues": [
+        "overheadEarlobe"
+      ]
+    },
+    {
+      "id": "concentricEndZone",
+      "valueType": "enum",
+      "required": true,
+      "description": "The categorical hand and load endpoint of the concentric phase.",
+      "allowedValues": [
+        "overChest",
+        "thighs"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric shoulder extension.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "barbell-pullover-uses-supported-over-chest-path",
+      "description": "The reviewed barbell pullover is supine on a bench, starts overhead, and ends over the chest with sternocostal pectoralis major primary.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "barbell"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "supine"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "supportConstrained"
+        },
+        {
+          "field": "variant.relativeGripWidth",
+          "value": "shoulderWidth"
+        },
+        {
+          "field": "variant.concentricEndZone",
+          "value": "overChest"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "lats",
+          "role": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "cable-pulldown-uses-standing-to-thighs-path",
+      "description": "The reviewed straight-arm cable pulldown is standing and unsupported, permits free scapular translation, and ends at the thighs with latissimus dorsi primary.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.concentricEndZone",
+          "value": "thighs"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "barbell-pullover",
+      "name": "Barbell Pullover",
+      "aliases": [],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 82,
+      "groupOverride": "chest",
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "lats",
+          "role": "secondary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "startArmZone": "overheadEarlobe",
+        "concentricEndZone": "overChest",
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "marchetti-2011-barbell-pullover",
+        "muyor-2022-pullover-straight-arm-pulldown"
+      ],
+      "movementDefinition": "Lie supine along a flat bench and hold a straight bar over the chest with a shoulder-width pronated grip and nearly extended elbows. Keeping the elbow angle fixed, lower the bar behind the head until the upper arms reach the reviewed overhead zone, then extend the shoulders to return the bar over the chest without turning the repetition into an elbow-extension movement."
+    },
+    {
+      "catalogID": "shoulder-width-straight-arm-cable-pulldown",
+      "name": "Shoulder-Width Straight-Arm Cable Pulldown",
+      "aliases": [],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "shoulderWidth",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "startArmZone": "overheadEarlobe",
+        "concentricEndZone": "thighs",
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "muyor-2022-pullover-straight-arm-pulldown"
+      ],
+      "movementDefinition": "Stand facing a high cable and hold a straight bar at shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows."
+    },
+    {
+      "catalogID": "wide-grip-straight-arm-cable-pulldown",
+      "name": "Wide-Grip Straight-Arm Cable Pulldown",
+      "aliases": [],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 10,
+      "searchPriority": 68,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "secondary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "wide",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "startArmZone": "overheadEarlobe",
+        "concentricEndZone": "thighs",
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "muyor-2022-pullover-straight-arm-pulldown"
+      ],
+      "movementDefinition": "Stand facing a high cable and hold a straight bar wider than shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows."
+    }
+  ]
+}

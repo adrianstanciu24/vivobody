@@ -1,0 +1,366 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "shoulder-internal-rotation",
+  "name": "Shoulder Internal Rotation",
+  "definition": "A strict unilateral isolation whose concentric phase internally rotates the humerus at the glenohumeral joint while the upper arm remains beside the torso, the elbow angle remains fixed, and the scapula and torso do not create the repetition. The initial roster is deliberately limited to the directly studied dynamic cable and elastic-resistance geometry at zero humerothoracic elevation. The subscapularis is the training emphasis, while the larger internal rotators remain real synergists rather than being erased by the family label. Belly-press and lift-off tests, 90-degree-abduction and overhead throwing positions, diagonal patterns, presses, flies, pullovers, and exercises that add shoulder adduction, extension, horizontal adduction, scapular motion, or elbow movement remain outside this contract. Exercise studies report whole-pectoralis recruitment; assignment of both Vivobody pectoralis-major regions as secondary combines that evidence with their independently reviewed internal-rotation capability rather than claiming head-resolved exercise EMG.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "dark-2007-shoulder-rotation-recruitment",
+    "ginn-2017-subscapularis-internal-rotation",
+    "hintermeister-1998-elastic-shoulder-rehabilitation",
+    "holzbaur-2005-upper-extremity"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable",
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.internalRotation"
+    ],
+    "primeActions": [
+      "shoulder.internalRotation"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.externalRotation",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular",
+          "pectoralisMajorSternocostal",
+          "lats",
+          "teresMajor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "subscapularis"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "pectoralisMajorSternocostal",
+        "lats",
+        "teresMajor"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "trapeziusMiddle"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the distal segment moves freely or remains fixed."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The torso orientation used to align the resistance with glenohumeral rotation."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "The external surface supporting the torso; none in the admitted standing setups."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "free"
+      ],
+      "description": "Whether external posterior support limits scapular translation along the thorax; the admitted unsupported setup remains free while the scapula is actively controlled."
+    },
+    {
+      "id": "humerothoracicElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 0,
+      "description": "Canonical thorax-relative upper-arm elevation held throughout the repetition; zero means the upper arm remains beside the torso and does not declare an elevation action."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic flexion or extension."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexed"
+      ],
+      "description": "The canonical fixed elbow posture, approximately 90 degrees of flexion in the admitted rotation setups."
+    },
+    {
+      "id": "upperArmSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "towelRoll"
+      ],
+      "description": "Whether a towel roll supports or spaces the proximal upper arm without moving the humerus or supporting the torso."
+    },
+    {
+      "id": "rotationResistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "lateralAnchor"
+      ],
+      "description": "The source geometry that creates an external-rotation external torque for the working arm to overcome; the admitted anchor lies lateral to the working shoulder."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric rotation."
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "cable-internal-rotation-uses-external-load",
+      "description": "The reviewed cable setup records an external, freely moving resistance.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        { "field": "loadMode", "value": "external" },
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "band-internal-rotation-uses-noncomparable-load",
+      "description": "The reviewed elastic setup records non-comparable resistance and remains free path.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        { "field": "variant.fixedPath", "value": false }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-cable-shoulder-internal-rotation",
+      "name": "Standing Cable Internal Rotation",
+      "aliases": [
+        "Cable Shoulder Internal Rotation",
+        "Cable Rotator-Cuff Internal Rotation"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 12,
+      "searchPriority": 80,
+      "involvement": [
+        { "muscle": "subscapularis", "role": "primary" },
+        { "muscle": "pectoralisMajorClavicular", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "lats", "role": "secondary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 0,
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "upperArmSupport": "towelRoll",
+        "rotationResistanceGeometry": "lateralAnchor",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "dark-2007-shoulder-rotation-recruitment",
+        "ginn-2017-subscapularis-internal-rotation"
+      ],
+      "movementDefinition": "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen, and return under control without moving the elbow, protracting the shoulder blade, or turning the torso."
+    },
+    {
+      "catalogID": "standing-band-shoulder-internal-rotation",
+      "name": "Standing Band Internal Rotation",
+      "aliases": [
+        "Band Shoulder Internal Rotation",
+        "Resistance-Band Internal Rotation"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 78,
+      "involvement": [
+        { "muscle": "subscapularis", "role": "primary" },
+        { "muscle": "pectoralisMajorClavicular", "role": "secondary" },
+        { "muscle": "pectoralisMajorSternocostal", "role": "secondary" },
+        { "muscle": "lats", "role": "secondary" },
+        { "muscle": "teresMajor", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "trapeziusMiddle", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 0,
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "upperArmSupport": "towelRoll",
+        "rotationResistanceGeometry": "lateralAnchor",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ginn-2017-subscapularis-internal-rotation",
+        "hintermeister-1998-elastic-shoulder-rehabilitation"
+      ],
+      "movementDefinition": "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen against the band, and return without moving the elbow, protracting the shoulder blade, or turning the torso."
+    }
+  ]
+}

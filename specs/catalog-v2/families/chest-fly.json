@@ -1,0 +1,443 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "chest-fly",
+  "name": "Chest Fly",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally adducts the upper arms with a fixed, nearly extended elbow posture. The admitted roster is limited to the directly reviewed flat dumbbell and standing elastic-band variants; cable, machine, unilateral, bodyweight, pressing, and elbow-extension variants remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "bergquist-2018-band-free-weight-fly",
+    "welsch-2005-dumbbell-fly"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell",
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAdduction"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorSternocostal"
+      ],
+      "secondary": [
+        "pectoralisMajorClavicular",
+        "deltoidAnterior"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "serratus",
+        "trapeziusMiddle",
+        "triceps",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether lower-body motion materially contributes to producing the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed body position used for the fly.",
+      "allowedValues": [
+        "supine",
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso.",
+      "allowedValues": [
+        "bench",
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether posterior support limits scapular translation along the thorax.",
+      "allowedValues": [
+        "supportConstrained",
+        "free"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether elbow angle intentionally changes during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The maintained elbow posture through the working range.",
+      "allowedValues": [
+        "nearExtended"
+      ]
+    },
+    {
+      "id": "upperArmPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed upper-arm path relative to the torso.",
+      "allowedValues": [
+        "flared"
+      ]
+    },
+    {
+      "id": "upperArmElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed upper-arm elevation relative to the torso; this is a setup descriptor, not an added abduction action.",
+      "minimum": 90,
+      "maximum": 90
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "dumbbell-fly-uses-supported-external-load",
+      "description": "The reviewed dumbbell fly is supine on a bench with posterior support limiting scapular translation and uses comparable external load.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "supine"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "supportConstrained"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "band-fly-uses-standing-free-scapula-semantics",
+      "description": "The reviewed band fly is standing and unsupported, permits free scapular translation, uses non-comparable resistance, and explicitly declares spinal stabilization.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "abs",
+            "obliques",
+            "lowerBack"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "flat-dumbbell-fly",
+      "name": "Flat Dumbbell Fly",
+      "aliases": [],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 86,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "bergquist-2018-band-free-weight-fly",
+        "welsch-2005-dumbbell-fly"
+      ],
+      "movementDefinition": "Lie supine on a flat bench with one dumbbell over each shoulder, palms facing each other, and the elbows held in a fixed slight bend. Lower the upper arms outward at shoulder height, then horizontally adduct them to bring the dumbbells back over the chest without pressing, bending the elbows, or deliberately protracting the scapulae."
+    },
+    {
+      "catalogID": "standing-band-fly",
+      "name": "Standing Band Fly",
+      "aliases": [],
+      "equipment": "band",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 72,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "bergquist-2018-band-free-weight-fly"
+      ],
+      "movementDefinition": "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, palms facing inward, and the elbows in a fixed slight bend. Brace the trunk and horizontally adduct the upper arms until the hands meet in front of the chest, then return under control without pressing, bending the elbows, or turning scapular protraction into the prime action."
+    }
+  ]
+}

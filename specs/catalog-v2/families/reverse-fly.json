@@ -1,0 +1,662 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "reverse-fly",
+  "name": "Reverse Fly",
+  "definition": "An open-chain shoulder-isolation movement whose concentric phase horizontally abducts the upper arms at shoulder height with a fixed, nearly extended elbow posture and no deliberate scapular-retraction prime action. The admitted roster is limited to directly reviewed dumbbell, elastic-band, and reverse-fly-machine variants; cable, suspension, bodyweight, rowing, external-rotation, and bent-arm variants remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "bergquist-2018-band-free-weight-fly",
+    "schoenfeld-2013-reverse-fly-hand-position"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell",
+      "band",
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external",
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.horizontalAbduction"
+    ],
+    "primeActions": [
+      "shoulder.horizontalAbduction"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle",
+          "rhomboids"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidPosterior"
+      ],
+      "secondary": [
+        "externalRotators"
+      ],
+      "stabilizer": [
+        "deltoidLateral",
+        "lats",
+        "trapeziusUpper",
+        "trapeziusMiddle",
+        "trapeziusLower",
+        "rhomboids",
+        "serratus",
+        "subscapularis",
+        "supraspinatus",
+        "biceps",
+        "triceps",
+        "forearms",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether lower-body motion materially contributes to producing the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed body position used for the reverse fly.",
+      "allowedValues": [
+        "prone",
+        "standing",
+        "seated"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the anterior torso.",
+      "allowedValues": [
+        "bench",
+        "none",
+        "machinePad"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external support pins posterior scapular translation; anterior bench or machine-pad support does not do so.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "scapularStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed technique keeps the scapulae controlled without making retraction the prime action.",
+      "allowedValues": [
+        "neutralControlled"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical forearm and hand orientation through the working range.",
+      "allowedValues": [
+        "neutral",
+        "pronated"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether elbow angle intentionally changes during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The maintained elbow posture through the working range.",
+      "allowedValues": [
+        "nearExtended"
+      ]
+    },
+    {
+      "id": "upperArmPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed upper-arm path relative to the torso.",
+      "allowedValues": [
+        "flared"
+      ]
+    },
+    {
+      "id": "upperArmElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed upper-arm elevation relative to the torso; this is a setup descriptor, not an added abduction action.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": false,
+      "description": "The machine mechanism when equipment is machine.",
+      "allowedValues": [
+        "reverseFly"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 10,
+      "maximum": 20
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "machine-requires-seated-pad-and-fixed-path",
+      "description": "The reverse-fly machine is seated against its anterior pad, uses comparable external load, follows a constrained lever path, and declares its mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "machinePad"
+        },
+        {
+          "field": "variant.fixedPath",
+          "value": true
+        },
+        {
+          "field": "variant.machineType",
+          "value": "reverseFly"
+        }
+      ],
+      "requirePresent": [
+        "variant.machineType"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-machine-requires-free-path",
+      "description": "Dumbbell and band reverse flies use unconstrained load paths and do not declare a machine mechanism.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "machine"
+      },
+      "then": [
+        {
+          "field": "variant.fixedPath",
+          "value": false
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.machineType"
+      ]
+    },
+    {
+      "id": "dumbbell-reverse-fly-uses-prone-supported-setup",
+      "description": "The reviewed dumbbell reverse fly is prone on a bench with a neutral grip and comparable external load.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "loadMode",
+          "value": "external"
+        },
+        {
+          "field": "variant.bodyPosition",
+          "value": "prone"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "band-reverse-fly-uses-standing-free-load-semantics",
+      "description": "The reviewed band reverse fly is standing and unsupported with a neutral grip, uses non-comparable resistance, and explicitly declares spinal stabilization.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "band"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.gripOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "abs",
+            "obliques",
+            "lowerBack"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "prone-dumbbell-reverse-fly",
+      "name": "Prone Dumbbell Reverse Fly",
+      "aliases": [],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "biceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "prone",
+        "torsoSupport": "bench",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "bergquist-2018-band-free-weight-fly"
+      ],
+      "movementDefinition": "Lie prone on a bench with one dumbbell in each hand, palms facing inward, and the elbows held in a fixed slight bend. Horizontally abduct the upper arms at shoulder height until they align with the torso, keeping the scapulae controlled rather than deliberately retracting them, then lower under control without rowing, bending the elbows, or rotating the shoulders."
+    },
+    {
+      "catalogID": "standing-band-reverse-fly",
+      "name": "Standing Band Reverse Fly",
+      "aliases": [],
+      "equipment": "band",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 15,
+      "searchPriority": 72,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "biceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine"
+      ],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "bergquist-2018-band-free-weight-fly"
+      ],
+      "movementDefinition": "Stand upright holding an elastic band in front of the chest with the palms facing inward and the elbows in a fixed slight bend. Brace the trunk and horizontally abduct the upper arms at shoulder height to stretch the band, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or rotating the shoulders."
+    },
+    {
+      "catalogID": "neutral-grip-machine-reverse-fly",
+      "name": "Neutral-Grip Machine Reverse Fly",
+      "aliases": [],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 12,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "biceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": true,
+        "machineType": "reverseFly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "schoenfeld-2013-reverse-fly-hand-position"
+      ],
+      "movementDefinition": "Sit facing the reverse-fly machine pad and hold the handles with the palms facing each other, upper arms at shoulder height, and elbows in a fixed slight bend. Follow the lever path to horizontally abduct the shoulders, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or adding shoulder rotation."
+    },
+    {
+      "catalogID": "pronated-grip-machine-reverse-fly",
+      "name": "Pronated-Grip Machine Reverse Fly",
+      "aliases": [],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 12,
+      "searchPriority": 74,
+      "involvement": [
+        {
+          "muscle": "deltoidPosterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "biceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "forearms",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "lowerBodyContribution": "none",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "scapularTranslation": "free",
+        "scapularStrategy": "neutralControlled",
+        "gripOrientation": "pronated",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "nearExtended",
+        "upperArmPath": "flared",
+        "upperArmElevationDegrees": 90,
+        "fixedPath": true,
+        "machineType": "reverseFly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ackland-2008-shoulder-moment-arms",
+        "holzbaur-2005-upper-extremity",
+        "schoenfeld-2013-reverse-fly-hand-position"
+      ],
+      "movementDefinition": "Sit facing the reverse-fly machine pad and hold the horizontal handles with the palms facing down, upper arms at shoulder height, and elbows in a fixed slight bend. Follow the lever path to horizontally abduct the shoulders, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or deliberately externally rotating the shoulders."
+    }
+  ]
+}
