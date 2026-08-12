@@ -794,9 +794,22 @@
       ]
     },
     {
-      "muscleID": "quads",
+      "muscleID": "rectusFemoris",
       "produces": [
         "hip.flexion",
+        "knee.extension"
+      ],
+      "stabilizes": [
+        "hip",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "vasti",
+      "produces": [
         "knee.extension"
       ],
       "stabilizes": [
@@ -807,13 +820,27 @@
       ]
     },
     {
-      "muscleID": "hamstrings",
+      "muscleID": "bicepsFemoris",
+      "produces": [
+        "knee.flexion"
+      ],
+      "stabilizes": [
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ],
+      "notes": "The BodyModel.scn mesh does not distinguish the biarticular long head from the monoarticular short head. The shared visible region therefore receives only their common knee-flexion capability; it deliberately does not inherit hip extension from the long head."
+    },
+    {
+      "muscleID": "medialHamstrings",
       "produces": [
         "hip.extension",
         "knee.flexion"
       ],
       "stabilizes": [
         "pelvis",
+        "hip",
         "knee"
       ],
       "evidenceRefs": [
@@ -832,14 +859,13 @@
       ],
       "evidenceRefs": [
         "arnold-2010-lower-limb"
-      ]
+      ],
+      "notes": "The pre-existing whole-region external-rotation capability requires a position-specific fiber review before the hip-external-rotation family activates; some modeled anterior fibers can change rotational moment direction in deep flexion. Batch 4 relies only on this region's hip-extension capability."
     },
     {
       "muscleID": "gluteMed",
       "produces": [
-        "hip.abduction",
-        "hip.internalRotation",
-        "hip.externalRotation"
+        "hip.abduction"
       ],
       "stabilizes": [
         "pelvis",
@@ -847,7 +873,8 @@
       ],
       "evidenceRefs": [
         "arnold-2010-lower-limb"
-      ]
+      ],
+      "notes": "The scene has one gluteus-medius mesh while the modeled anterior, middle, and posterior paths have different rotational moment directions. The aggregate retains their shared abduction capability and does not advertise internal or external rotation."
     },
     {
       "muscleID": "tensorFasciaeLatae",
@@ -863,14 +890,28 @@
       ],
       "evidenceRefs": [
         "arnold-2010-lower-limb"
+      ],
+      "notes": "Tensor fasciae latae is the foundation's only currently authored unconditional hip-internal-rotation producer after the unsplit gluteus-medius region was conservatively limited to abduction. That is not permission to make TFL the sole primary: Batch 6 must pin hip position, re-review TFL capability for that range, and decide whether a position-conditioned unvisualized gluteus-minimus region is warranted before an internal-rotation family activates."
+    },
+    {
+      "muscleID": "gastrocnemius",
+      "produces": [
+        "knee.flexion",
+        "ankle.plantarflexion"
+      ],
+      "stabilizes": [
+        "knee",
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
       ]
     },
     {
-      "muscleID": "calves",
+      "muscleID": "soleus",
       "produces": [
-        "knee.flexion",
-        "ankle.plantarflexion",
-        "foot.toeFlexion"
+        "ankle.plantarflexion"
       ],
       "stabilizes": [
         "ankle",
@@ -881,10 +922,23 @@
       ]
     },
     {
-      "muscleID": "adductors",
+      "muscleID": "flexorHallucisLongus",
       "produces": [
-        "hip.flexion",
-        "hip.extension",
+        "ankle.plantarflexion",
+        "foot.toeFlexion"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ],
+      "notes": "This is the only currently authored toe-flexion producer, not the only representable one. BodyModel.scn also contains intrinsic flexor hallucis brevis, flexor digitorum brevis, and flexor digiti minimi brevis surfaces. Keep the generic foot.toeFlexion action, but audit and add the relevant intrinsic regions before any toe-flexion family or exercise role activates."
+    },
+    {
+      "muscleID": "adductorMagnus",
+      "produces": [
         "hip.adduction"
       ],
       "stabilizes": [
@@ -893,13 +947,56 @@
       ],
       "evidenceRefs": [
         "arnold-2010-lower-limb"
+      ],
+      "notes": "The scene has one adductor-magnus mesh while its modeled subdivisions have different sagittal-plane moment directions. The aggregate retains their shared adduction capability and does not advertise hip flexion or extension."
+    },
+    {
+      "muscleID": "adductorLongusBrevis",
+      "produces": [
+        "hip.adduction"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ],
+      "notes": "The modeled adductor-longus and adductor-brevis paths can reverse their sagittal moment direction as hip flexion deepens. Until the action vocabulary has a reviewed hip-position condition, the visible combined region retains only their unambiguous hip-adduction capability and deliberately under-credits shallow-angle flexion."
+    },
+    {
+      "muscleID": "gracilis",
+      "produces": [
+        "hip.adduction",
+        "knee.flexion"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
       ]
     },
     {
-      "muscleID": "hipFlexors",
+      "muscleID": "pectineus",
       "produces": [
-        "hip.flexion",
-        "hip.externalRotation"
+        "hip.adduction"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ],
+      "notes": "The modeled pectineus sagittal moment approaches or crosses zero near deep hip flexion. Until the action vocabulary has a reviewed hip-position condition, this region retains only hip adduction and deliberately under-credits its flexion contribution at shallower angles."
+    },
+    {
+      "muscleID": "iliopsoas",
+      "produces": [
+        "hip.flexion"
       ],
       "stabilizes": [
         "pelvis",
@@ -910,11 +1007,68 @@
       ]
     },
     {
-      "muscleID": "shins",
+      "muscleID": "sartorius",
+      "produces": [
+        "hip.flexion",
+        "hip.abduction",
+        "hip.externalRotation",
+        "knee.flexion"
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip",
+        "knee"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "tibialisAnterior",
       "produces": [
         "ankle.dorsiflexion",
-        "ankle.inversion",
-        "ankle.eversion",
+        "ankle.inversion"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "fibularisLongusBrevis",
+      "produces": [
+        "ankle.plantarflexion",
+        "ankle.eversion"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "fibularisTertius",
+      "produces": [
+        "ankle.dorsiflexion",
+        "ankle.eversion"
+      ],
+      "stabilizes": [
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb"
+      ]
+    },
+    {
+      "muscleID": "toeExtensors",
+      "produces": [
+        "ankle.dorsiflexion",
         "foot.toeExtension"
       ],
       "stabilizes": [

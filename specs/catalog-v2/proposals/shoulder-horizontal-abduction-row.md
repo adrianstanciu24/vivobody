@@ -212,7 +212,7 @@ a dynamic retractor into a stabilizer.
 | Required stabilizer | `trapeziusUpper`, `fingerFlexors`, and `extensorCarpiRadialis` | Scapular control at shoulder height plus explicit hand and wrist control. |
 | Optional shoulder stabilizers | `externalRotators`, `supraspinatus`, `subscapularis`, `deltoidLateral` | Direction-, load-, and setup-dependent glenohumeral control; current row evidence does not justify forcing one cuff assignment onto every record. |
 | Optional scapular stabilizers | `serratus`, `pectoralisMinor` | Exercise-specific scapular control without declaring protraction, rotation, or tilt as a universal prime action. |
-| Conditional trunk/hip stabilizers | `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `hamstrings` | Required selectively by unsupported, unilateral, and hip-hinged rules. |
+| Conditional trunk/hip stabilizers | `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Required selectively by unsupported, unilateral, and hip-hinged rules. The split hamstring regions preserve hip-versus-knee capability boundaries rather than recreating the retired aggregate. |
 
 Activated required policy shape:
 
@@ -287,7 +287,8 @@ Activated required policy shape:
       "lowerBack",
       "gluteMax",
       "gluteMed",
-      "hamstrings"
+      "medialHamstrings",
+      "bicepsFemoris"
     ]
   }
 }

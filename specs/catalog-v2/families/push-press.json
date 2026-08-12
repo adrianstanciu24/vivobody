@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "push-press",
   "name": "Push Press",
-  "definition": "A standing whole-body power press performed from a front rack. A preparatory push-press countermovement precedes rapid hip extension, knee extension, and ankle plantarflexion that propel the bar upward while the shoulder flexes and abducts in a front-scapular path, the scapula rotates upward and tilts posteriorly, and the elbow extends. The athlete keeps the feet in contact with the floor and finishes standing without a second receiving dip. Strict overhead presses, behind-neck presses, thrusters, push jerks, split jerks, landmine presses, and unreviewed dumbbell, kettlebell, log, or Viking-press variants remain outside this family.",
+  "definition": "A standing whole-body power press performed from a front rack. A preparatory push-press countermovement precedes rapid hip extension, knee extension, and ankle plantarflexion that propel the bar upward while the shoulder flexes and abducts in a front-scapular path, the scapula rotates upward and tilts posteriorly, and the elbow extends. After the lower-body taxonomy split, vasti remain the primary knee-extension region while rectus femoris receives conservative secondary credit; gastrocnemius and soleus are independently required secondaries for the declared plantarflexion action. Those individual lower-body roles combine joint-level push-press kinetics with the anatomy capability map rather than claiming exercise-specific muscle ranking. The athlete keeps the feet in contact with the floor and finishes standing without a second receiving dip. Strict overhead presses, behind-neck presses, thrusters, push jerks, split jerks, landmine presses, and unreviewed dumbbell, kettlebell, log, or Viking-press variants remain outside this family.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "arnold-2010-lower-limb",
@@ -121,7 +121,7 @@
       },
       {
         "anyOf": [
-          "quads"
+          "vasti"
         ],
         "minimumRole": "primary"
       },
@@ -169,7 +169,19 @@
       },
       {
         "anyOf": [
-          "calves"
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
         ],
         "minimumRole": "secondary"
       },
@@ -219,7 +231,7 @@
     "allowedByRole": {
       "primary": [
         "deltoidAnterior",
-        "quads",
+        "vasti",
         "gluteMax"
       ],
       "secondary": [
@@ -229,7 +241,9 @@
         "serratus",
         "trapeziusUpper",
         "trapeziusLower",
-        "calves"
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
       ],
       "stabilizer": [
         "extensorCarpiRadialis",
@@ -380,7 +394,7 @@
           "role": "primary"
         },
         {
-          "muscle": "quads",
+          "muscle": "vasti",
           "role": "primary"
         },
         {
@@ -412,7 +426,15 @@
           "role": "secondary"
         },
         {
-          "muscle": "calves",
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "soleus",
           "role": "secondary"
         },
         {

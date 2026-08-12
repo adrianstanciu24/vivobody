@@ -302,24 +302,40 @@
       ]
     },
     {
-      "id": "quads",
-      "displayName": "Quads",
-      "anatomicalName": "Quadriceps",
+      "id": "rectusFemoris",
+      "displayName": "Rectus Femoris",
+      "anatomicalName": "Rectus Femoris",
       "group": "legs",
       "meshBaseNames": [
-        "Rectus_Femoris",
+        "Rectus_Femoris"
+      ]
+    },
+    {
+      "id": "vasti",
+      "displayName": "Vasti",
+      "anatomicalName": "Vastus Lateralis, Medialis, and Intermedius",
+      "group": "legs",
+      "meshBaseNames": [
         "Vastus_Lateralis",
         "Vastus_Medialis",
         "Vastus_Intermedius"
       ]
     },
     {
-      "id": "hamstrings",
-      "displayName": "Hamstrings",
-      "anatomicalName": "Hamstrings",
+      "id": "bicepsFemoris",
+      "displayName": "Biceps Femoris",
+      "anatomicalName": "Biceps Femoris",
       "group": "legs",
       "meshBaseNames": [
-        "Biceps_femoris",
+        "Biceps_femoris"
+      ]
+    },
+    {
+      "id": "medialHamstrings",
+      "displayName": "Medial Hamstrings",
+      "anatomicalName": "Semitendinosus and Semimembranosus",
+      "group": "legs",
+      "meshBaseNames": [
         "Semitendinosus",
         "Semimembranosus"
       ]
@@ -352,50 +368,122 @@
       ]
     },
     {
-      "id": "calves",
-      "displayName": "Calves",
-      "anatomicalName": "Calf Complex",
+      "id": "gastrocnemius",
+      "displayName": "Gastrocnemius",
+      "anatomicalName": "Gastrocnemius",
       "group": "legs",
       "meshBaseNames": [
-        "Gastrocnemius",
-        "Soleus",
+        "Gastrocnemius"
+      ]
+    },
+    {
+      "id": "soleus",
+      "displayName": "Soleus",
+      "anatomicalName": "Soleus",
+      "group": "legs",
+      "meshBaseNames": [
+        "Soleus"
+      ]
+    },
+    {
+      "id": "flexorHallucisLongus",
+      "displayName": "Big-Toe Flexor",
+      "anatomicalName": "Flexor Hallucis Longus",
+      "group": "legs",
+      "meshBaseNames": [
         "Flexor_Hallucis_Longus"
       ]
     },
     {
-      "id": "adductors",
-      "displayName": "Adductors",
-      "anatomicalName": "Hip Adductors",
+      "id": "adductorMagnus",
+      "displayName": "Adductor Magnus",
+      "anatomicalName": "Adductor Magnus",
       "group": "legs",
       "meshBaseNames": [
-        "Adductor_Brevis",
+        "Adductor_Mangus"
+      ]
+    },
+    {
+      "id": "adductorLongusBrevis",
+      "displayName": "Adductor Longus / Brevis",
+      "anatomicalName": "Adductor Longus and Adductor Brevis",
+      "group": "legs",
+      "meshBaseNames": [
         "Adductor_Longus",
-        "Adductor_Mangus",
-        "Gracilis",
+        "Adductor_Brevis"
+      ]
+    },
+    {
+      "id": "gracilis",
+      "displayName": "Gracilis",
+      "anatomicalName": "Gracilis",
+      "group": "legs",
+      "meshBaseNames": [
+        "Gracilis"
+      ]
+    },
+    {
+      "id": "pectineus",
+      "displayName": "Pectineus",
+      "anatomicalName": "Pectineus",
+      "group": "legs",
+      "meshBaseNames": [
         "Pectineus"
       ]
     },
     {
-      "id": "hipFlexors",
-      "displayName": "Hip Flexors",
-      "anatomicalName": "Iliopsoas and Sartorius",
+      "id": "iliopsoas",
+      "displayName": "Iliopsoas",
+      "anatomicalName": "Psoas Major and Iliacus",
       "group": "legs",
       "meshBaseNames": [
         "Psoas_Major",
-        "Iliacus",
+        "Iliacus"
+      ]
+    },
+    {
+      "id": "sartorius",
+      "displayName": "Sartorius",
+      "anatomicalName": "Sartorius",
+      "group": "legs",
+      "meshBaseNames": [
         "Sartorius"
       ]
     },
     {
-      "id": "shins",
-      "displayName": "Shins",
-      "anatomicalName": "Anterior and Lateral Lower Leg",
+      "id": "tibialisAnterior",
+      "displayName": "Tibialis Anterior",
+      "anatomicalName": "Tibialis Anterior",
       "group": "legs",
       "meshBaseNames": [
-        "Tibialis_Anterior",
+        "Tibialis_Anterior"
+      ]
+    },
+    {
+      "id": "fibularisLongusBrevis",
+      "displayName": "Fibularis Longus / Brevis",
+      "anatomicalName": "Fibularis Longus and Fibularis Brevis",
+      "group": "legs",
+      "meshBaseNames": [
         "Peroneus_Longus",
-        "Peroneus_Brevis",
-        "Peroneus_Tertius",
+        "Peroneus_Brevis"
+      ]
+    },
+    {
+      "id": "fibularisTertius",
+      "displayName": "Fibularis Tertius",
+      "anatomicalName": "Fibularis Tertius",
+      "group": "legs",
+      "meshBaseNames": [
+        "Peroneus_Tertius"
+      ]
+    },
+    {
+      "id": "toeExtensors",
+      "displayName": "Toe Extensors",
+      "anatomicalName": "Extensor Digitorum Longus and Extensor Hallucis Longus",
+      "group": "legs",
+      "meshBaseNames": [
         "Extensor_Digitorum_Longus",
         "Extensor_Hallucis_Longus"
       ]

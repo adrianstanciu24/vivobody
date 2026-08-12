@@ -1,0 +1,513 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "knee-flexion",
+  "name": "Knee Flexion",
+  "definition": "A strict open-chain lever-machine isolation in which the lower leg flexes at the knee while the hip, pelvis, spine, ankle, and foot remain held. The initial roster contains only the directly trained unilateral seated and prone conditions at approximately 90 and 30 degrees of hip flexion with the pelvis restrained. Both migrated hamstring regions remain primary in both postures; sartorius and gracilis are directly measured secondaries. Gastrocnemius is deliberately absent because the training source did not report ankle posture or measure calf involvement, while separate maximal isokinetic evidence shows that its knee-flexion contribution changes with ankle position. Bilateral or standing curls, cable or band curls, Nordics, razor curls, glute-ham raises, sliding or ball curls, hip-extension tasks, and ankle-posture variants remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "maeo-2021-seated-prone-leg-curl",
+    "gallucci-2002-gastrocnemius-leg-curl"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "knee.flexion"
+    ],
+    "primeActions": [
+      "knee.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "pelvis",
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "sartorius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gracilis"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "medialHamstrings",
+        "bicepsFemoris"
+      ],
+      "secondary": [
+        "sartorius",
+        "gracilis"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the distal lower leg moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "seated",
+        "prone"
+      ],
+      "description": "The directly reviewed torso relationship used to hold the authored hip-flexion posture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "machinePad"
+      ],
+      "description": "The machine surface supporting the posterior or anterior torso."
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "machinePadAndStrap"
+      ],
+      "description": "The machine surface and directly reported adjustable straps restraining the pelvis."
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether the pelvis remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether spinal position remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether hip angle remains held rather than contributing a dynamic hip action."
+    },
+    {
+      "id": "hipFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 30,
+      "maximum": 90,
+      "description": "Held hip flexion from anatomical neutral; only the rule-pinned 30- and 90-degree research fixtures are admitted."
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexes"
+      ],
+      "description": "The dynamic knee motion that creates the concentric repetition."
+    },
+    {
+      "id": "kneeStartFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 0,
+      "description": "Canonical knee flexion at the directly reviewed start; zero represents full extension."
+    },
+    {
+      "id": "kneeEndFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 90,
+      "maximum": 90,
+      "description": "Canonical knee flexion at the concentric endpoint of the directly reviewed repetition."
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether ankle position is maintained rather than adding a dynamic ankle action."
+    },
+    {
+      "id": "anklePosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "unreported"
+      ],
+      "description": "The held ankle posture; the direct seated/prone training source did not report it, so no gastrocnemius role is inferred."
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether foot and toe position remain held rather than creating the repetition."
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "lowerLeg"
+      ],
+      "description": "The segment whose knee-relative motion defines the repetition."
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "distalShinPad"
+      ],
+      "description": "The machine pad applies resistance to the distal posterior lower leg."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "leverLegCurl"
+      ],
+      "description": "The reviewed leg-curl machine mechanism."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "Whether a machine lever constrains the external-load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "isolatedJointMotion"
+      ],
+      "description": "Whether the named knee action alone creates the repetition rather than propulsion from another lower-body joint."
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "seated-leg-curl-uses-reviewed-hip-angle",
+      "description": "The seated source fixture holds the hip near 90 degrees of flexion.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "seated"
+      },
+      "then": [
+        {
+          "field": "variant.hipFlexionDegrees",
+          "value": 90
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "ninety-degree-leg-curl-is-seated",
+      "description": "The reviewed 90-degree hip-flexion fixture is the seated condition.",
+      "when": {
+        "field": "variant.hipFlexionDegrees",
+        "operator": "equals",
+        "value": 90
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "prone-leg-curl-uses-reviewed-hip-angle",
+      "description": "The prone source fixture holds the hip near 30 degrees of flexion.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "prone"
+      },
+      "then": [
+        {
+          "field": "variant.hipFlexionDegrees",
+          "value": 30
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "thirty-degree-leg-curl-is-prone",
+      "description": "The reviewed 30-degree hip-flexion fixture is the prone condition.",
+      "when": {
+        "field": "variant.hipFlexionDegrees",
+        "operator": "equals",
+        "value": 30
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "prone"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-unilateral-machine-leg-curl",
+      "name": "Seated Unilateral Machine Leg Curl",
+      "aliases": [
+        "Seated Single-Leg Curl",
+        "Unilateral Seated Leg Curl"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "primary"
+        },
+        {
+          "muscle": "sartorius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "pelvisSupport": "machinePadAndStrap",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "hipFlexionDegrees": 90,
+        "kneeMotion": "flexes",
+        "kneeStartFlexionDegrees": 0,
+        "kneeEndFlexionDegrees": 90,
+        "ankleMotion": "positionHeld",
+        "anklePosture": "unreported",
+        "footMotion": "positionHeld",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "distalShinPad",
+        "machineType": "leverLegCurl",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "maeo-2021-seated-prone-leg-curl"
+      ],
+      "movementDefinition": "Sit in a unilateral leg-curl machine with the hip held near 90 degrees of flexion, the pelvis secured to the pad, the knee aligned to the lever axis, and the distal lower leg against the pad. Keep the pelvis, spine, hip, ankle, and foot still; flex the knee from full extension to approximately 90 degrees, then return under control."
+    },
+    {
+      "catalogID": "prone-unilateral-machine-leg-curl",
+      "name": "Prone Unilateral Machine Leg Curl",
+      "aliases": [
+        "Lying Single-Leg Curl",
+        "Unilateral Prone Leg Curl"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "primary"
+        },
+        {
+          "muscle": "sartorius",
+          "role": "secondary"
+        },
+        {
+          "muscle": "gracilis",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "prone",
+        "torsoSupport": "machinePad",
+        "pelvisSupport": "machinePadAndStrap",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "hipFlexionDegrees": 30,
+        "kneeMotion": "flexes",
+        "kneeStartFlexionDegrees": 0,
+        "kneeEndFlexionDegrees": 90,
+        "ankleMotion": "positionHeld",
+        "anklePosture": "unreported",
+        "footMotion": "positionHeld",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "distalShinPad",
+        "machineType": "leverLegCurl",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "maeo-2021-seated-prone-leg-curl"
+      ],
+      "movementDefinition": "Lie prone in a unilateral leg-curl machine with the hip held near 30 degrees of flexion, the pelvis secured to the pad, the knee aligned to the lever axis, and the distal lower leg against the pad. Keep the pelvis, spine, hip, ankle, and foot still; flex the knee from full extension to approximately 90 degrees, then return under control."
+    }
+  ]
+}

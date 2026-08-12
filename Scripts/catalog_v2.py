@@ -5,10 +5,12 @@
 #
 #  Foundation validator for the clean-slate, family-first exercise catalog.
 #  It owns no legacy compatibility and never reads curate.py, its review CSVs,
-#  or the shipped catalog.json. It validates the canonical 41-muscle taxonomy,
+#  or the shipped catalog.json. It validates the canonical 52-region taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
-#  references, and every reviewed movement-family contract. The atomic cutover
-#  will extend this file into the deterministic catalog compiler.
+#  references, and every reviewed movement-family contract. The 52-region
+#  taxonomy keeps action-divergent lower-body muscles separate wherever the
+#  scene can represent the distinction. The atomic cutover will extend this
+#  file into the deterministic catalog compiler.
 #
 
 from __future__ import annotations
@@ -71,15 +73,26 @@ EXPECTED_MUSCLE_IDS = {
     "triceps",
     "abs",
     "obliques",
-    "quads",
-    "hamstrings",
+    "rectusFemoris",
+    "vasti",
+    "bicepsFemoris",
+    "medialHamstrings",
     "gluteMax",
     "gluteMed",
     "tensorFasciaeLatae",
-    "calves",
-    "adductors",
-    "hipFlexors",
-    "shins",
+    "gastrocnemius",
+    "soleus",
+    "flexorHallucisLongus",
+    "adductorMagnus",
+    "adductorLongusBrevis",
+    "gracilis",
+    "pectineus",
+    "iliopsoas",
+    "sartorius",
+    "tibialisAnterior",
+    "fibularisLongusBrevis",
+    "fibularisTertius",
+    "toeExtensors",
 }
 EXPECTED_MUSCLE_COUNT = len(EXPECTED_MUSCLE_IDS)
 EXPECTED_SPLIT_MESHES = {
@@ -108,6 +121,24 @@ EXPECTED_SPLIT_MESHES = {
         "Flexor_Digitorum_Profundus",
     ],
     "fingerExtensors": ["Extensor_Digitorum_Communis"],
+    "rectusFemoris": ["Rectus_Femoris"],
+    "vasti": ["Vastus_Lateralis", "Vastus_Medialis", "Vastus_Intermedius"],
+    "bicepsFemoris": ["Biceps_femoris"],
+    "medialHamstrings": ["Semitendinosus", "Semimembranosus"],
+    "gluteMed": ["Gluteus_Medius"],
+    "gastrocnemius": ["Gastrocnemius"],
+    "soleus": ["Soleus"],
+    "flexorHallucisLongus": ["Flexor_Hallucis_Longus"],
+    "adductorMagnus": ["Adductor_Mangus"],
+    "adductorLongusBrevis": ["Adductor_Longus", "Adductor_Brevis"],
+    "gracilis": ["Gracilis"],
+    "pectineus": ["Pectineus"],
+    "iliopsoas": ["Psoas_Major", "Iliacus"],
+    "sartorius": ["Sartorius"],
+    "tibialisAnterior": ["Tibialis_Anterior"],
+    "fibularisLongusBrevis": ["Peroneus_Longus", "Peroneus_Brevis"],
+    "fibularisTertius": ["Peroneus_Tertius"],
+    "toeExtensors": ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"],
 }
 
 EQUIPMENT = {
@@ -1442,6 +1473,8 @@ def validate_exercise(
     unknown_regions = sorted(set(additional_stability) - foundation.region_ids)
     require(not unknown_regions, f"{context} references unknown stability regions: {', '.join(unknown_regions)}")
     stability_demands = set(family["movementSignature"]["stabilityDemands"]) | set(additional_stability)
+    # Stability coverage is intentionally role-agnostic: a prime mover may
+    # also control a declared joint without being duplicated as a stabilizer.
     for region in sorted(stability_demands):
         capable = [
             muscle_id

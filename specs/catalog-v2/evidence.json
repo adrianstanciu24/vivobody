@@ -95,7 +95,7 @@
       "doi": "10.1007/s10439-009-9852-5",
       "pmid": "19957039",
       "url": "https://doi.org/10.1007/s10439-009-9852-5",
-      "scope": "Lower-limb musculotendon geometry and force-generating function across the hip, knee, and ankle."
+      "scope": "A 44-compartment lower-limb musculoskeletal model based principally on architecture measured in 21 cadavers, with distinct paths and moment-generating functions for the rectus femoris and vasti; long- and short-head biceps femoris, medial hamstrings, gastrocnemii and soleus; iliacus, psoas, sartorius, adductors; and anterior, lateral, and deep lower-leg muscles across hip, knee, ankle, and foot position. It supports possible action capabilities, position-dependent moment-direction review, and the need to avoid false aggregate unions. It does not establish exercise-specific categorical roles; a whole-surface SceneKit mesh still cannot visualize modeled fiber or head subdivisions; and unconditioned profiles deliberately omit sagittal actions whose modeled direction changes across the admitted hip range."
     },
     {
       "id": "christophy-2012-lumbar-spine",
@@ -1409,6 +1409,71 @@
       "pmid": "39072653",
       "url": "https://doi.org/10.1519/JSC.0000000000004810",
       "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support continuous foot contact, a single countermovement-propulsion phase, and standing lockout without a receiving dip as the push-press boundary; the study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy."
+    },
+    {
+      "id": "larsen-2025-leg-extension-hip-flexion",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "The effects of hip flexion angle on quadriceps femoris muscle hypertrophy in the leg extension exercise",
+      "authors": ["Stian Larsen", "Benjamin Sandvik Kristiansen", "Paul Alan Swinton", "Milo Wolf", "Andrea Bao Fredriksen", "Hallvard Nygaard Falch", "Roland van den Tillaar", "Nordis Østerås Sandberg"],
+      "year": 2025,
+      "doi": "10.1080/02640414.2024.2444713",
+      "pmid": "39699974",
+      "url": "https://doi.org/10.1080/02640414.2024.2444713",
+      "scope": "Direct unilateral 40- versus 90-degree hip-flexion leg-extension training with region-specific quadriceps hypertrophy outcomes. It supports the two fixture geometries and posture-sensitive rectus-femoris credit, not unmeasured vasti-head ranking, intermediate hip angles, bilateral variants, or universal machine-stack seeds. The 2025 issue article was published online on 2024-12-19."
+    },
+    {
+      "id": "mitsuya-2023-leg-extension-hip-flexion",
+      "sourceType": "experimentalImagingStudy",
+      "title": "Hip flexion angle affects longitudinal muscle activity of the rectus femoris in leg extension exercise",
+      "authors": ["Hiroku Mitsuya", "Koichi Nakazato", "Takayoshi Hakkaku", "Takashi Okada"],
+      "year": 2023,
+      "doi": "10.1007/s00421-023-05156-w",
+      "pmid": "36795130",
+      "url": "https://doi.org/10.1007/s00421-023-05156-w",
+      "scope": "Acute four-set isotonic machine leg extension at 70 percent one-repetition maximum with MRI T2 assessment at 0, 40, and 80 degrees of hip flexion. It supports longitudinal rectus-femoris hip-angle sensitivity, not long-term hypertrophy, other quadriceps-head roles, or permission for an 80-degree catalog fixture."
+    },
+    {
+      "id": "maeo-2021-seated-prone-leg-curl",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths",
+      "authors": ["Sumiaki Maeo", "Meng Huang", "Yuhang Wu", "Hikaru Sakurai", "Yuki Kusagawa", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "year": 2021,
+      "doi": "10.1249/MSS.0000000000002523",
+      "pmid": "33009197",
+      "url": "https://doi.org/10.1249/MSS.0000000000002523",
+      "scope": "Direct unilateral seated 90-degree versus prone 30-degree hip-flexion leg-curl training through 0 to 90 degrees of knee motion with pelvis straps and individual hamstring, sartorius, and gracilis MRI volumes. It supports the two fixtures and their categorical knee-flexor roles; ankle posture was not reported and calf involvement was not measured."
+    },
+    {
+      "id": "gallucci-2002-gastrocnemius-leg-curl",
+      "sourceType": "biomechanicalModelStudy",
+      "title": "Examining the Role of the Gastrocnemius during the Leg Curl Exercise",
+      "authors": ["Jason G. Gallucci", "John H. Challis"],
+      "year": 2002,
+      "doi": "10.1123/jab.18.1.15",
+      "url": "https://doi.org/10.1123/jab.18.1.15",
+      "scope": "Maximal isokinetic knee flexions with the ankle braced in full dorsiflexion or plantarflexion plus a gastrocnemius model. It establishes that ankle posture is load-bearing for gastrocnemius contribution to knee flexion, not a categorical gastrocnemius role on the ankle-unreported Maeo weight-stack fixtures."
+    },
+    {
+      "id": "kinoshita-2023-standing-seated-calf-raise",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training",
+      "authors": ["Momoka Kinoshita", "Sumiaki Maeo", "Yuuto Kobayashi", "Yuuri Eihara", "Munetaka Ono", "Mauto Sato", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "year": 2023,
+      "doi": "10.3389/fphys.2023.1272106",
+      "pmid": "38156065",
+      "url": "https://doi.org/10.3389/fphys.2023.1272106",
+      "scope": "Direct unilateral machine standing knee-extended versus seated knee-90-degree calf-raise training with neutral feet and individual gastrocnemius and soleus MRI volumes. It supports posture-dependent categorical credit, not a universal machine-stack seed or exact user range-of-motion endpoints."
+    },
+    {
+      "id": "jeon-2016-prone-table-hip-extension",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Comparison of gluteus maximus and hamstring electromyographic activity and lumbopelvic motion during three different prone hip extension exercises in healthy volunteers",
+      "authors": ["In-Cheol Jeon", "Ui-Jae Hwang", "Sung-Hoon Jung", "Oh-Yun Kwon"],
+      "year": 2016,
+      "doi": "10.1016/j.ptsp.2016.03.004",
+      "pmid": "27583647",
+      "url": "https://doi.org/10.1016/j.ptsp.2016.03.004",
+      "scope": "Sixteen healthy men performed conventional prone, prone-table, and 90-degree-knee-flexed prone-table hip extension. Surface EMG measured gluteus maximus, biceps femoris, semitendinosus, and erector spinae while electromagnetic tracking measured pelvic rotation and anterior tilt. It supports the one reviewed bent-knee fixture and conservative categorical roles, not other apparatus, external loading, bilateral variants, or a zero-pelvic-motion claim."
     }
   ]
 }

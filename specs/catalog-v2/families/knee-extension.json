@@ -1,0 +1,486 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "knee-extension",
+  "name": "Knee Extension",
+  "definition": "A strict open-chain machine isolation in which the lower leg extends at the knee while the hip, pelvis, spine, ankle, and foot remain held. The initial roster contains only the directly trained unilateral lever-machine conditions at approximately 40 and 90 degrees of hip flexion. Vasti remain primary in both; rectus femoris is primary in the reclined 40-degree condition and secondary in the upright 90-degree condition because the directly reviewed intervention found substantially greater rectus-femoris hypertrophy with reduced hip flexion but did not make it cease contributing upright. Bilateral machines, cables, bands, reverse Nordics, sissy squats, rehabilitation terminal extensions, partial ranges, and compound knee-extension tasks remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "larsen-2025-leg-extension-hip-flexion",
+    "mitsuya-2023-leg-extension-hip-flexion"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "knee.extension"
+    ],
+    "primeActions": [
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "knee"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "rectusFemoris"
+      ],
+      "secondary": [
+        "rectusFemoris"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the distal lower leg moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "reclined",
+        "seated"
+      ],
+      "description": "The directly reviewed torso relationship used to hold the authored hip-flexion posture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "machinePad"
+      ],
+      "description": "The machine back pad supporting the torso during the repetition."
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "machineSeat"
+      ],
+      "description": "The machine seat supporting the pelvis while hip position remains held."
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether the pelvis remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether spinal position remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether hip angle remains held rather than contributing a dynamic hip action."
+    },
+    {
+      "id": "hipFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 40,
+      "maximum": 90,
+      "description": "Held hip flexion from anatomical neutral; only the rule-pinned 40- and 90-degree research fixtures are admitted."
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extends"
+      ],
+      "description": "The dynamic knee motion that creates the concentric repetition."
+    },
+    {
+      "id": "kneeStartFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 110,
+      "maximum": 110,
+      "description": "Canonical knee flexion at the start of the directly reviewed repetition."
+    },
+    {
+      "id": "kneeEndFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 0,
+      "description": "Canonical knee flexion at the concentric endpoint; zero represents full extension."
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether ankle position remains held rather than adding a dynamic ankle action."
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether foot and toe position remain held rather than creating the repetition."
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "lowerLeg"
+      ],
+      "description": "The segment whose knee-relative motion defines the repetition."
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "distalShinPad"
+      ],
+      "description": "The machine pad applies resistance to the distal anterior lower leg."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "leverKneeExtension"
+      ],
+      "description": "The reviewed knee-extension machine mechanism."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "Whether a machine lever constrains the external-load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "isolatedJointMotion"
+      ],
+      "description": "Whether the named knee action alone creates the repetition rather than propulsion from another lower-body joint."
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "reclined-leg-extension-uses-reviewed-hip-angle",
+      "description": "The reclined fixture uses the reviewed 40-degree hip-flexion target and promotes rectus femoris to primary.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "reclined"
+      },
+      "then": [
+        {
+          "field": "variant.hipFlexionDegrees",
+          "value": 40
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "rectusFemoris",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "forty-degree-leg-extension-is-reclined",
+      "description": "The reviewed 40-degree hip-flexion fixture is the reclined condition.",
+      "when": {
+        "field": "variant.hipFlexionDegrees",
+        "operator": "equals",
+        "value": 40
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "reclined"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "seated-leg-extension-uses-reviewed-hip-angle",
+      "description": "The upright seated fixture uses 90 degrees of hip flexion and keeps rectus femoris secondary.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "seated"
+      },
+      "then": [
+        {
+          "field": "variant.hipFlexionDegrees",
+          "value": 90
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "ninety-degree-leg-extension-is-seated",
+      "description": "The reviewed 90-degree hip-flexion fixture is the upright seated condition.",
+      "when": {
+        "field": "variant.hipFlexionDegrees",
+        "operator": "equals",
+        "value": 90
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "reclined-unilateral-machine-leg-extension",
+      "name": "Reclined Unilateral Machine Leg Extension",
+      "aliases": [
+        "40-Degree Single-Leg Extension",
+        "Reclined Single-Leg Extension"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 12,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "reclined",
+        "torsoSupport": "machinePad",
+        "pelvisSupport": "machineSeat",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "hipFlexionDegrees": 40,
+        "kneeMotion": "extends",
+        "kneeStartFlexionDegrees": 110,
+        "kneeEndFlexionDegrees": 0,
+        "ankleMotion": "positionHeld",
+        "footMotion": "positionHeld",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "distalShinPad",
+        "machineType": "leverKneeExtension",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "larsen-2025-leg-extension-hip-flexion",
+        "mitsuya-2023-leg-extension-hip-flexion"
+      ],
+      "movementDefinition": "Sit in a unilateral knee-extension machine with the backrest reclined so the hip is held near 40 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control."
+    },
+    {
+      "catalogID": "upright-unilateral-machine-leg-extension",
+      "name": "Upright Unilateral Machine Leg Extension",
+      "aliases": [
+        "90-Degree Single-Leg Extension",
+        "Upright Single-Leg Extension"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 12,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "vasti",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "machinePad",
+        "pelvisSupport": "machineSeat",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "hipFlexionDegrees": 90,
+        "kneeMotion": "extends",
+        "kneeStartFlexionDegrees": 110,
+        "kneeEndFlexionDegrees": 0,
+        "ankleMotion": "positionHeld",
+        "footMotion": "positionHeld",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "distalShinPad",
+        "machineType": "leverKneeExtension",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "larsen-2025-leg-extension-hip-flexion",
+        "mitsuya-2023-leg-extension-hip-flexion"
+      ],
+      "movementDefinition": "Sit upright in a unilateral knee-extension machine with the hip held near 90 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control."
+    }
+  ]
+}

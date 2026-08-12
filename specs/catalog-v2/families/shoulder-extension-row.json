@@ -188,7 +188,8 @@
         "lowerBack",
         "gluteMax",
         "gluteMed",
-        "hamstrings"
+        "medialHamstrings",
+        "bicepsFemoris"
       ]
     }
   },

@@ -14,7 +14,7 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
 
 ## Source files
 
-- `taxonomy.json` defines exactly 41 muscle regions, their coarse app group,
+- `taxonomy.json` defines exactly 52 muscle regions, their coarse app group,
   display names, and exactly 62 uniquely owned `BodyModel.scn` mesh base names
   where the model has a surface mesh. An unvisualized muscle must carry an
   explicit reason.
@@ -33,6 +33,31 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
   states whether its decisions are pending or already activated; proposal files
   themselves are never validator input.
 - `families/` holds one reviewed source file per real movement family.
+
+## Taxonomy naming and product display
+
+`id`, `displayName`, `anatomicalName`, and `group` serve different layers:
+
+- `id` is the stable compiler and analytics identity;
+- `displayName` is the concise exact-region label for anatomy views, exercise
+  detail, editors, and other surfaces where the specific credited region
+  matters;
+- `anatomicalName` names the anatomical structure or genuine subdivision. It
+  must not carry asset or capability caveats. Capability or aggregation limits
+  belong in the matching `joint-actions.json` profile `notes`; absence of a
+  scene surface belongs in the taxonomy record's `unvisualizedReason`; and
+- `group` is the glanceable roll-up for summaries, history, library grouping,
+  and training-signature presentation.
+
+The lower-body migration intentionally creates more exact, sometimes clinical
+region labels such as `Vasti`, `Pectineus`, and `Fibularis Tertius`. The app
+must not flatten those back into false `Quads`, `Calves`, or `Hip Flexors`
+region identities. At atomic compiler cutover, migrate all 52 stable IDs,
+display names, groups, and mesh owners together; use the six existing groups
+where a coarse glanceable label is appropriate; and extend
+`MuscleMappingTests` to pin the generated/runtime mapping. Product copy may
+provide contextual descriptions, but it must not create a second anatomical
+taxonomy.
 
 ## Authored muscle semantics
 
@@ -60,6 +85,18 @@ action.
 Regional excitation differences may support a role decision, but EMG rank by
 itself does not redefine a muscle's anatomical actions. Each family must make
 the practical training-emphasis judgment explicit and evidence-backed.
+
+`movementSignature.stabilityDemands` describes every joint or segment that
+must be controlled; it does not require a separate `role: stabilizer` entry
+for each one. Validation is intentionally role-agnostic at this step: any
+assigned primary, secondary, or stabilizer whose anatomy profile can stabilize
+the region may cover the demand. `allowedByRole.stabilizer` is therefore a
+whitelist for contributors whose principal exercise role is control rather
+than prime-action production—not a list of every muscle allowed to help hold a
+joint. A family authors an explicit stabilizer only when the reviewed setup
+needs a distinct contributor or its existing movers leave a demand uncovered.
+External support may reduce the required roster, but it never satisfies an
+internal demand by itself.
 
 Continuous `0...1` involvement weights are not accepted. Visualization
 intensity, volume credit, and test comparison ranks remain separate derived
@@ -101,6 +138,50 @@ different condition). Additional prime actions are strictly additional joint
 actions; changing the semantics of a family action requires editing and
 reviewing the family contract itself.
 
+## Lower-body region boundaries
+
+The lower-body foundation does not let a visually convenient aggregate grant
+every constituent the union of its actions. The SceneKit asset has distinct
+bilateral meshes for rectus femoris versus the three vasti, gastrocnemius
+versus soleus versus flexor hallucis longus, iliopsoas versus sartorius, the
+individual adductor surfaces, and the anterior/lateral lower-leg surfaces.
+Accordingly, the old `quads`, `calves`, `hipFlexors`, `adductors`, and `shins`
+regions are replaced by action-compatible owners of those exact meshes.
+
+The former `hamstrings` region is also narrowed. `medialHamstrings` owns
+semitendinosus and semimembranosus and may produce both hip extension and knee
+flexion. The SceneKit node named `Biceps_femoris` does not identify long and
+short heads, so `bicepsFemoris` receives only their shared knee-flexion
+capability. It deliberately does not inherit hip extension from the long head.
+This avoids false credit to the short head, at the cost of under-crediting the
+unseparated long head during hip-extension exercises.
+
+Several other visible regions are deliberately conservative. The single
+gluteus-medius mesh retains the fiber regions' shared hip-abduction capability
+but not the opposing internal/external-rotation capabilities of its modeled
+paths. The single adductor-magnus mesh retains hip adduction but not the
+different sagittal-plane directions of its subdivisions. The combined
+adductor-longus/brevis region and pectineus also retain only hip adduction:
+their modeled sagittal moment direction changes or approaches zero as hip
+flexion deepens, and the current action vocabulary has no reviewed
+hip-position condition with which to bound flexion credit. These omissions are
+explicit representational or condition-model limits, not claims that the
+omitted anatomical contributors are inactive.
+
+The lower-body split changes neither the 44-action vocabulary nor the 62 owned
+mesh bases. Arnold et al.'s lower-limb model is the capability source: it
+represents the relevant muscles as distinct paths and reports moment-generating
+behavior over joint position. A model capability permits a categorical role;
+it does not determine that role in any exercise without family-specific
+evidence and review.
+
+`foot.toeFlexion` intentionally remains a generic anatomical action. Flexor
+hallucis longus is its only authored producer today, but the body asset also
+contains unowned intrinsic great- and lesser-toe flexor surfaces. Narrowing the
+action to the great toe would make the ontology reflect an incomplete roster,
+not anatomy. Any future toe-flexion family must first audit and assign the
+relevant intrinsic meshes; current coverage is explicitly incomplete.
+
 ## Family contract
 
 Each family separates:
@@ -133,8 +214,9 @@ Each family separates:
   `requireAdditionalStabilityDemands` to require named regions in an exercise's
   `additionalStabilityDemands`, or `requireMuscleRequirements` to conditionally
   require one of several muscles at a minimum role. Assigning a capable
-  stabilizing muscle remains independently mandatory for every declared
-  stability region.
+  muscle remains independently mandatory for every declared stability region;
+  that provider may be authored at any role when its central profile lists the
+  region under `stabilizes`.
 - `recommended`: soft programming guidance. Defaults outside these ranges emit
   warnings and do not invalidate family membership.
 
@@ -238,7 +320,7 @@ python3 -m unittest discover -s Scripts/tests -p 'test_catalog_v2.py'
 The validator uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
 and `_R` nodes, all 62 mesh-base owners are unique, the taxonomy contains
-exactly its 41 canonical muscles, the capability map contains exactly 44 joint
-actions, all muscles have evidence-backed action profiles, family
-prime actions have capable movers, and stability demands have capable assigned
-muscles.
+exactly its 52 canonical muscle regions, the capability map contains exactly
+44 joint actions, all muscles have evidence-backed action profiles, family
+prime actions have capable movers, and stability demands have capable
+assigned muscles.

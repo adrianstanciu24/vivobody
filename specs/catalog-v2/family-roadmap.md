@@ -5,21 +5,23 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 26 reviewed families are active, containing 97 exercises.
+- 30 reviewed families are active, containing 104 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
   task-definition hold.
 - Batch 3 resolved nine candidates into four active families, four standalone
   evidence holds, and one deferred branch of an existing family.
-- 23 not-yet-reviewed candidates remain in Batches 4–7.
-- 33 work items remain unresolved: 32 family or branch items—the 23 candidates;
+- Batch 4 resolved five candidates into four active families and one explicit
+  evidence hold.
+- 18 not-yet-reviewed candidates remain in Batches 5–7.
+- 29 work items remain unresolved: 28 family or branch items—the 18 candidates;
   the deferred `diagonal-pull`, `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
   `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
   `landmine-press` holds; and the deferred closed-chain branch of
-  `vertical-press`—plus the cross-family sternocostal shoulder-flexion
-  capability hold described below.
+  `vertical-press`; and the Batch-4 `hip-flexion` hold—plus the cross-family
+  sternocostal shoulder-flexion capability hold described below.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -57,7 +59,11 @@ batch siblings.
 | `scapular-elevation` | 1 |
 | `dip` | 2 |
 | `push-press` | 1 |
-| **Total** | **97** |
+| `knee-extension` | 2 |
+| `knee-flexion` | 2 |
+| `hip-extension` | 1 |
+| `ankle-plantarflexion` | 2 |
+| **Total** | **104** |
 
 ## Foundation gates
 
@@ -83,9 +89,10 @@ Batch 2 retired the aggregate `biceps|forearms` regions and added eleven exact
 distal regions: biceps brachii, brachialis, brachioradialis, grouped pronators,
 supinator, four carpal groups, finger flexors, and finger extensors. It also
 replaced the task-level `hand.grip` action with dynamic finger flexion and
-extension. The resulting foundation is pinned at 41 muscles, 62 mesh bases,
-and 44 actions; every previously active family was migrated atomically rather
-than inheriting anatomy from either retired aggregate.
+extension. That migration established 41 regions; Batch 4's later lower-body
+split brings the current foundation to 52 regions while preserving 62 mesh
+bases and 44 actions. Every affected active family was migrated atomically
+rather than inheriting anatomy from a retired aggregate.
 
 ### Sternocostal flexion from an extended start — evidence hold
 
@@ -113,20 +120,30 @@ expectations, and catalog tests atomically. Merely adding the condition label,
 copying the clavicular EMG site, or making shoulder flexion unconditional does
 not resolve the hold.
 
-### Lower-body taxonomy and axes
+### Lower-body taxonomy and axes — complete for Batch 4
 
-Before Batch 4, audit the aggregate `quads`, `calves`, `shins`, `hipFlexors`,
-and `gluteMed` capability profiles. They currently assign whole-region actions
-that may belong only to one constituent muscle or fiber region. Any split must
-be approved explicitly, remain compatible with the body-model meshes, and
-update the exact taxonomy count, capability evidence, README, validator, and
-tests atomically.
+Batch 4 replaced the action-leaking `quads`, `hamstrings`, `calves`,
+`adductors`, `hipFlexors`, and `shins` aggregates with exact lower-body regions
+that preserve ownership of the same body-model meshes. The foundation is now
+pinned at 52 muscle regions, 62 mesh bases, and 44 joint actions. Every active
+family was migrated atomically. Conservative regions such as
+`bicepsFemoris`, `gluteMed`, `adductorMagnus`, `adductorLongusBrevis`, and
+`pectineus` retain only capabilities that their visible mesh and current
+unconditioned action vocabulary can represent truthfully. In particular, the
+two latter regions do not receive unbounded hip-flexion credit when their
+modeled sagittal moment direction changes or approaches zero in deeper
+flexion.
 
-Also standardize lower-body support, posture, path, stance, load-placement,
-range-of-motion, and inter-repetition-support axes before family-local spellings
-drift. The squat/lunge/step-up group must make one shared decision about whether
-ankle plantarflexion is an authored prime angular action; a net ankle moment is
-not automatically proof of that action.
+The first lower-body isolation contracts standardize kinetic chain, body
+position, torso and pelvis support, position-held segment motion, joint-angle,
+moving-segment, load-interface, machine-type, fixed-path, and
+isolated-joint-contribution spellings. `resistanceGeometry` is retained only
+when it adds a fact not already encoded by a purpose-built machine type, as in
+the gravity-loaded hip-extension fixture. Batch 5 must extend this vocabulary
+for stance, load placement, range of motion, and inter-repetition support rather
+than create family-local synonyms. The squat/lunge/step-up group still needs
+one shared decision about whether ankle plantarflexion is an authored prime
+angular action; a net ankle moment is not automatically proof of that action.
 
 ### Resisted-action semantics
 
@@ -235,17 +252,31 @@ bodyweight fixtures. Neither hold pre-approves new shared axis values.
 
 ## Batch 4 — Lower-body sagittal primitives (5)
 
+Status: complete. Four one-action isolation families activated after the
+52-region lower-body taxonomy migration; `hip-flexion` remains a direct-evidence
+hold.
+
 1. `knee-extension`
 2. `knee-flexion`
 3. `hip-extension`
-4. `hip-flexion`
+4. `hip-flexion` — deferred
 5. `ankle-plantarflexion`
 
-These one-prime-action contracts establish shared posture, support, and path
-semantics before compound lower-body work. Knee/hip posture is load-bearing for
-biarticular contributors. Straight- and bent-knee plantarflexion must not be
-given identical anatomy by convenience; split the relevant taxonomy or narrow
-the admitted scope.
+The seven active records are deliberately narrow: two unilateral machine leg
+extensions at reviewed 40- and 90-degree hip-flexion postures, two unilateral
+machine leg curls at reviewed 90- and 30-degree postures, one unsupported-limb
+prone-table bent-knee hip extension, and standing/seated unilateral machine calf
+raises at zero and 90 degrees of knee flexion. Posture-conditioned rules make
+rectus femoris primary only in the reclined leg extension and gastrocnemius
+primary only in the knee-extended calf raise. The ankle-unreported leg-curl
+fixtures do not fabricate gastrocnemius credit.
+
+`hip-flexion` remains deferred because the reviewed sources establish muscle
+activity and load sensitivity but do not prove the intended dynamic
+femur-relative-to-position-held-pelvis isolation contract. Sit-ups, hanging
+knee raises, and similar multi-segment tasks cannot fill that evidence gap by
+name. Resume only with condition-matched dynamic motion evidence and a reviewed
+external-load or limb-load model.
 
 ## Batch 5 — Lower-body compound sagittal patterns (5)
 
@@ -269,10 +300,37 @@ discovery decisions rather than automatic variants.
 4. `hip-internal-rotation`
 5. `hip-external-rotation`
 
-Dorsiflexion is grouped here because the current aggregate `shins` profile is
-the same type of anatomy blocker as the hip-rotation profiles. Internal and
-external rotation remain separate candidates because their fixed actions and
-muscle contracts differ; do not hide them behind a direction axis.
+Dorsiflexion remains grouped here because the Batch-4 foundation migration
+already replaced the old aggregate `shins` profile with exact anterior and
+lateral lower-leg regions, while the hip-rotation candidates still need a
+truthful policy for the unsplit gluteus-medius mesh and deep rotators. Internal
+and external rotation remain separate candidates because their fixed actions
+and muscle contracts differ; do not hide them behind a direction axis. Before
+`hip-internal-rotation` activates, resolve the fact that
+`tensorFasciaeLatae` is the only currently authored producer: the single
+gluteus-medius mesh cannot truthfully inherit its anterior fibers' rotation
+without also crediting oppositely acting fibers, and gluteus minimus has no
+scene mesh. Pin the family's hip-flexion range, re-review TFL for that posture,
+and decide whether a position-conditioned explicitly unvisualized
+gluteus-minimus region is warranted. Do not add a blanket `deepRotators`
+internal-rotation aggregate: those muscles do not share one direction across
+hip position. Do not let the validator's one-producer minimum force TFL to
+become the sole primary by default. Before
+`hip-external-rotation` activates, re-review the pre-existing whole-region
+`gluteMax -> hip.externalRotation` capability against hip position: modeled
+anterior fibers can change rotational direction in deep flexion, so the
+current unconditional spelling must not be copied into a family role without
+that positional audit. Both gates belong to their already-counted family
+candidates rather than adding roadmap items.
+
+Generic `foot.toeFlexion` remains a valid action rather than being narrowed to
+great-toe flexion merely because flexor hallucis longus is its only currently
+authored producer. The body asset also contains intrinsic flexor-hallucis-
+brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
+Before any toe-flexion family or exercise role activates, audit those meshes,
+add the truthful intrinsic regions, and decide the required joint/segment
+granularity. This is a foundation gate for a non-roadmapped candidate, not a
+new item in the current 29-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -307,6 +365,12 @@ Generic `grip` is a resolved Batch-2 hold. The taxonomy now distinguishes
 dynamic finger flexion/extension from a static implement hold, but the product
 still needs separate decisions for crush, pinch, support, hanging, and dynamic
 closing tasks before any one of them becomes a family.
+
+Batch 4 leaves one evidence hold: `hip-flexion`. Available studies do not yet
+establish the proposed dynamic femur-relative-to-position-held-pelvis action
+boundary in a condition-matched isolation fixture. It must not be activated by
+borrowing sit-up or hanging-knee-raise evidence, which moves other segments and
+adds other prime actions.
 
 Batch 3 leaves four standalone evidence holds: `scapular-depression`,
 `scapular-upward-rotation`, `scapular-downward-rotation`, and

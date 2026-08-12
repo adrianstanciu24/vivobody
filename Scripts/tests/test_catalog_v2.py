@@ -100,6 +100,17 @@ class CatalogV2FoundationTests(unittest.TestCase):
             for family in cls.real_families
             if family["id"] in batch3_ids
         }
+        batch4_ids = {
+            "knee-extension",
+            "knee-flexion",
+            "hip-extension",
+            "ankle-plantarflexion",
+        }
+        cls.batch4_families = {
+            family["id"]: family
+            for family in cls.real_families
+            if family["id"] in batch4_ids
+        }
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -153,6 +164,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
             )
 
     def assert_batch3_family_fails(
+        self,
+        family: dict,
+        message: str,
+    ) -> None:
+        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                f"mutated {family['id']}",
+            )
+
+    def assert_batch4_family_fails(
         self,
         family: dict,
         message: str,
@@ -349,7 +372,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "mutated shoulder horizontal abduction row",
             )
 
-    def test_taxonomy_is_the_locked_41_muscle_clean_slate(self) -> None:
+    def test_taxonomy_is_the_locked_52_region_clean_slate(self) -> None:
+        self.assertEqual(catalog_v2.EXPECTED_MUSCLE_COUNT, 52)
         self.assertEqual(set(self.foundation.muscle_by_id), catalog_v2.EXPECTED_MUSCLE_IDS)
         self.assertEqual(
             len(self.foundation.muscle_by_id),
@@ -378,6 +402,138 @@ class CatalogV2FoundationTests(unittest.TestCase):
         self.assertTrue(
             {"biceps", "forearms"}.isdisjoint(self.foundation.muscle_by_id)
         )
+
+    def test_lower_body_taxonomy_replaces_six_false_action_unions_exactly(self) -> None:
+        expected_meshes = {
+            "rectusFemoris": ["Rectus_Femoris"],
+            "vasti": [
+                "Vastus_Lateralis",
+                "Vastus_Medialis",
+                "Vastus_Intermedius",
+            ],
+            "bicepsFemoris": ["Biceps_femoris"],
+            "medialHamstrings": ["Semitendinosus", "Semimembranosus"],
+            "gastrocnemius": ["Gastrocnemius"],
+            "soleus": ["Soleus"],
+            "flexorHallucisLongus": ["Flexor_Hallucis_Longus"],
+            "adductorMagnus": ["Adductor_Mangus"],
+            "adductorLongusBrevis": ["Adductor_Longus", "Adductor_Brevis"],
+            "gracilis": ["Gracilis"],
+            "pectineus": ["Pectineus"],
+            "iliopsoas": ["Psoas_Major", "Iliacus"],
+            "sartorius": ["Sartorius"],
+            "tibialisAnterior": ["Tibialis_Anterior"],
+            "fibularisLongusBrevis": ["Peroneus_Longus", "Peroneus_Brevis"],
+            "fibularisTertius": ["Peroneus_Tertius"],
+            "toeExtensors": [
+                "Extensor_Digitorum_Longus",
+                "Extensor_Hallucis_Longus",
+            ],
+        }
+        for muscle_id, meshes in expected_meshes.items():
+            with self.subTest(muscle=muscle_id):
+                self.assertEqual(
+                    self.foundation.muscle_by_id[muscle_id]["meshBaseNames"],
+                    meshes,
+                )
+
+        retired = {
+            "quads",
+            "hamstrings",
+            "calves",
+            "adductors",
+            "hipFlexors",
+            "shins",
+        }
+        self.assertTrue(retired.isdisjoint(self.foundation.muscle_by_id))
+
+        expected_plain_anatomical_names = {
+            "bicepsFemoris": "Biceps Femoris",
+            "gluteMed": "Gluteus Medius",
+            "adductorMagnus": "Adductor Magnus",
+        }
+        for muscle_id, expected_name in expected_plain_anatomical_names.items():
+            with self.subTest(anatomical_name=muscle_id):
+                self.assertEqual(
+                    self.foundation.muscle_by_id[muscle_id]["anatomicalName"],
+                    expected_name,
+                )
+
+    def test_lower_body_capabilities_do_not_leak_between_split_regions(self) -> None:
+        capabilities = self.foundation.capabilities_by_muscle
+        expected = {
+            "rectusFemoris": {"hip.flexion", "knee.extension"},
+            "vasti": {"knee.extension"},
+            "bicepsFemoris": {"knee.flexion"},
+            "medialHamstrings": {"hip.extension", "knee.flexion"},
+            "gastrocnemius": {"knee.flexion", "ankle.plantarflexion"},
+            "soleus": {"ankle.plantarflexion"},
+            "flexorHallucisLongus": {
+                "ankle.plantarflexion",
+                "foot.toeFlexion",
+            },
+            "adductorMagnus": {"hip.adduction"},
+            "adductorLongusBrevis": {"hip.adduction"},
+            "gracilis": {"hip.adduction", "knee.flexion"},
+            "pectineus": {"hip.adduction"},
+            "iliopsoas": {"hip.flexion"},
+            "sartorius": {
+                "hip.flexion",
+                "hip.abduction",
+                "hip.externalRotation",
+                "knee.flexion",
+            },
+            "tibialisAnterior": {"ankle.dorsiflexion", "ankle.inversion"},
+            "fibularisLongusBrevis": {
+                "ankle.plantarflexion",
+                "ankle.eversion",
+            },
+            "fibularisTertius": {"ankle.dorsiflexion", "ankle.eversion"},
+            "toeExtensors": {"ankle.dorsiflexion", "foot.toeExtension"},
+        }
+        for muscle_id, actions in expected.items():
+            with self.subTest(muscle=muscle_id):
+                self.assertEqual(
+                    capabilities[muscle_id],
+                    frozenset((action, None) for action in actions),
+                )
+
+        self.assertEqual(
+            capabilities["gluteMed"],
+            frozenset({("hip.abduction", None)}),
+        )
+        for muscle_id in ("adductorLongusBrevis", "pectineus"):
+            with self.subTest(position_condition=muscle_id):
+                self.assertIn(
+                    "hip-position condition",
+                    self.foundation.profile_by_muscle[muscle_id]["notes"],
+                )
+
+        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            "re-review the pre-existing whole-region\n"
+            "`gluteMax -> hip.externalRotation` capability against hip position",
+            roadmap,
+        )
+        self.assertIn(
+            "position-specific fiber review",
+            self.foundation.profile_by_muscle["gluteMax"]["notes"],
+        )
+        self.assertIn(
+            "only currently authored",
+            self.foundation.profile_by_muscle[
+                "tensorFasciaeLatae"
+            ]["notes"],
+        )
+        self.assertIn(
+            "only currently authored toe-flexion producer",
+            self.foundation.profile_by_muscle[
+                "flexorHallucisLongus"
+            ]["notes"],
+        )
+        self.assertIn("Generic `foot.toeFlexion` remains", roadmap)
 
     def test_distal_unvisualized_regions_carry_exact_scene_reasons(self) -> None:
         expected_reasons = {
@@ -4363,6 +4519,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "scapular-elevation",
             "dip",
             "push-press",
+            "knee-extension",
+            "knee-flexion",
+            "hip-extension",
+            "ankle-plantarflexion",
         }
         self.assertEqual(
             {family["id"] for family in self.real_families},
@@ -4370,7 +4530,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            97,
+            104,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -5229,12 +5389,16 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "scapular-elevation",
             "scapular-protraction",
             "push-press",
+            "hip-extension",
         }
         actual_family_ids = set()
         for original in self.real_families:
             axes = {axis["id"]: axis for axis in original["variantAxes"]}
             fixed_path = axes.get("fixedPath")
-            if fixed_path is None or "fixedValue" not in fixed_path:
+            if (
+                fixed_path is None
+                or fixed_path.get("fixedValue") is not False
+            ):
                 continue
             actual_family_ids.add(original["id"])
             with self.subTest(family=original["id"]):
@@ -5753,7 +5917,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     "knee.extension",
                     "ankle.plantarflexion",
                 ],
-                "primary": ["deltoidAnterior", "quads", "gluteMax"],
+                "primary": ["deltoidAnterior", "vasti", "gluteMax"],
                 "group": {
                     "default": "shoulders",
                     "allowed": ["shoulders"],
@@ -5854,7 +6018,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             },
             "barbell-push-press": {
                 "deltoidAnterior": "primary",
-                "quads": "primary",
+                "vasti": "primary",
                 "gluteMax": "primary",
                 "deltoidLateral": "secondary",
                 "supraspinatus": "secondary",
@@ -5862,7 +6026,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "serratus": "secondary",
                 "trapeziusUpper": "secondary",
                 "trapeziusLower": "secondary",
-                "calves": "secondary",
+                "rectusFemoris": "secondary",
+                "gastrocnemius": "secondary",
+                "soleus": "secondary",
                 "extensorCarpiRadialis": "stabilizer",
                 "fingerFlexors": "stabilizer",
                 "externalRotators": "stabilizer",
@@ -5940,7 +6106,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             catalog_v2.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
         self.assertIn(
-            "33 work items remain unresolved: 32 family or branch items",
+            "29 work items remain unresolved: 28 family or branch items",
             roadmap,
         )
         self.assertIn(
@@ -6294,7 +6460,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 49)
+        self.assertEqual(mutation_count, 51)
 
     def test_batch3_cross_family_press_and_scapular_boundaries_are_pinned(
         self,
@@ -6607,6 +6773,854 @@ class CatalogV2FoundationTests(unittest.TestCase):
         }
         self.assertNotIn("zhao-2026-landmine-press-kinematics", evidence_ids)
 
+    def test_batch4_activates_exactly_four_lower_body_isolation_families(
+        self,
+    ) -> None:
+        expected = {
+            "knee-extension": {
+                "name": "Knee Extension",
+                "basis": ["knee.extension"],
+                "demands": ["hip", "knee"],
+                "primary": ["vasti", "rectusFemoris"],
+                "reps": {"minimum": 8, "maximum": 15},
+                "evidence": [
+                    "arnold-2010-lower-limb",
+                    "larsen-2025-leg-extension-hip-flexion",
+                    "mitsuya-2023-leg-extension-hip-flexion",
+                ],
+                "roster": [
+                    "reclined-unilateral-machine-leg-extension",
+                    "upright-unilateral-machine-leg-extension",
+                ],
+            },
+            "knee-flexion": {
+                "name": "Knee Flexion",
+                "basis": ["knee.flexion"],
+                "demands": ["pelvis", "hip", "knee"],
+                "primary": ["medialHamstrings", "bicepsFemoris"],
+                "reps": {"minimum": 8, "maximum": 15},
+                "evidence": [
+                    "arnold-2010-lower-limb",
+                    "maeo-2021-seated-prone-leg-curl",
+                    "gallucci-2002-gastrocnemius-leg-curl",
+                ],
+                "roster": [
+                    "seated-unilateral-machine-leg-curl",
+                    "prone-unilateral-machine-leg-curl",
+                ],
+            },
+            "hip-extension": {
+                "name": "Hip Extension Isolation",
+                "basis": ["hip.extension"],
+                "demands": ["hip", "pelvis", "knee", "spine"],
+                "primary": ["gluteMax"],
+                "reps": {"minimum": 8, "maximum": 15},
+                "evidence": [
+                    "arnold-2010-lower-limb",
+                    "jeon-2016-prone-table-hip-extension",
+                ],
+                "roster": ["prone-table-bent-knee-hip-extension"],
+            },
+            "ankle-plantarflexion": {
+                "name": "Ankle Plantarflexion",
+                "basis": ["ankle.plantarflexion"],
+                "demands": ["knee", "ankle", "foot"],
+                "primary": ["soleus", "gastrocnemius"],
+                "reps": {"minimum": 8, "maximum": 20},
+                "evidence": [
+                    "arnold-2010-lower-limb",
+                    "kinoshita-2023-standing-seated-calf-raise",
+                ],
+                "roster": [
+                    "standing-unilateral-machine-calf-raise",
+                    "seated-unilateral-machine-calf-raise",
+                ],
+            },
+        }
+        self.assertEqual(set(self.batch4_families), set(expected))
+        for family_id, contract in expected.items():
+            with self.subTest(family=family_id):
+                family = self.batch4_families[family_id]
+                self.assertEqual(
+                    family["fixed"],
+                    {
+                        "mechanic": "isolation",
+                        "pattern": None,
+                        "direction": None,
+                        "planes": ["sagittal"],
+                    },
+                )
+                self.assertEqual(family["name"], contract["name"])
+                self.assertEqual(
+                    family["movementSignature"]["planeBasisActions"],
+                    contract["basis"],
+                )
+                self.assertEqual(
+                    family["movementSignature"]["primeActions"],
+                    contract["basis"],
+                )
+                self.assertEqual(
+                    family["movementSignature"]["stabilityDemands"],
+                    contract["demands"],
+                )
+                self.assertEqual(
+                    family["musclePolicy"]["allowedByRole"]["primary"],
+                    contract["primary"],
+                )
+                self.assertEqual(
+                    family["groupPolicy"],
+                    {"default": "legs", "allowed": ["legs"]},
+                )
+                self.assertEqual(
+                    family["recommended"]["defaultReps"],
+                    contract["reps"],
+                )
+                self.assertEqual(family["evidenceRefs"], contract["evidence"])
+                self.assertEqual(
+                    [exercise["catalogID"] for exercise in family["exercises"]],
+                    contract["roster"],
+                )
+
+    def test_batch4_exact_exercise_surface_and_involvement_are_pinned(
+        self,
+    ) -> None:
+        expected = {
+            "reclined-unilateral-machine-leg-extension": {
+                "name": "Reclined Unilateral Machine Leg Extension",
+                "aliases": [
+                    "40-Degree Single-Leg Extension",
+                    "Reclined Single-Leg Extension",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 12),
+                "roles": {"vasti": "primary", "rectusFemoris": "primary"},
+                "evidence": [
+                    "larsen-2025-leg-extension-hip-flexion",
+                    "mitsuya-2023-leg-extension-hip-flexion",
+                ],
+            },
+            "upright-unilateral-machine-leg-extension": {
+                "name": "Upright Unilateral Machine Leg Extension",
+                "aliases": [
+                    "90-Degree Single-Leg Extension",
+                    "Upright Single-Leg Extension",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 12),
+                "roles": {"vasti": "primary", "rectusFemoris": "secondary"},
+                "evidence": [
+                    "larsen-2025-leg-extension-hip-flexion",
+                    "mitsuya-2023-leg-extension-hip-flexion",
+                ],
+            },
+            "seated-unilateral-machine-leg-curl": {
+                "name": "Seated Unilateral Machine Leg Curl",
+                "aliases": [
+                    "Seated Single-Leg Curl",
+                    "Unilateral Seated Leg Curl",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 10),
+                "roles": {
+                    "medialHamstrings": "primary",
+                    "bicepsFemoris": "primary",
+                    "sartorius": "secondary",
+                    "gracilis": "secondary",
+                },
+                "evidence": ["maeo-2021-seated-prone-leg-curl"],
+            },
+            "prone-unilateral-machine-leg-curl": {
+                "name": "Prone Unilateral Machine Leg Curl",
+                "aliases": [
+                    "Lying Single-Leg Curl",
+                    "Unilateral Prone Leg Curl",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 10),
+                "roles": {
+                    "medialHamstrings": "primary",
+                    "bicepsFemoris": "primary",
+                    "sartorius": "secondary",
+                    "gracilis": "secondary",
+                },
+                "evidence": ["maeo-2021-seated-prone-leg-curl"],
+            },
+            "prone-table-bent-knee-hip-extension": {
+                "name": "Prone Table Bent-Knee Hip Extension",
+                "aliases": [
+                    "Prone Table Hip Extension",
+                    "Bent-Knee Prone Hip Extension",
+                ],
+                "setup": ("bodyweight", "unilateral", "nonComparable", 0, None, 10),
+                "roles": {
+                    "gluteMax": "primary",
+                    "medialHamstrings": "secondary",
+                    "bicepsFemoris": "stabilizer",
+                    "lowerBack": "stabilizer",
+                },
+                "evidence": [
+                    "arnold-2010-lower-limb",
+                    "jeon-2016-prone-table-hip-extension",
+                ],
+            },
+            "standing-unilateral-machine-calf-raise": {
+                "name": "Standing Unilateral Machine Calf Raise",
+                "aliases": [
+                    "Single-Leg Standing Calf Raise",
+                    "Single-Leg Standing Calf Raise Machine",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 10),
+                "roles": {"gastrocnemius": "primary", "soleus": "primary"},
+                "evidence": ["kinoshita-2023-standing-seated-calf-raise"],
+            },
+            "seated-unilateral-machine-calf-raise": {
+                "name": "Seated Unilateral Machine Calf Raise",
+                "aliases": [
+                    "Single-Leg Seated Calf Raise",
+                    "Single-Leg Seated Calf Raise Machine",
+                ],
+                "setup": ("machine", "unilateral", "external", 20, 10, 10),
+                "roles": {"soleus": "primary", "gastrocnemius": "secondary"},
+                "evidence": ["kinoshita-2023-standing-seated-calf-raise"],
+            },
+        }
+        actual = {}
+        for family in self.batch4_families.values():
+            for exercise in family["exercises"]:
+                actual[exercise["catalogID"]] = {
+                    "name": exercise["name"],
+                    "aliases": exercise["aliases"],
+                    "setup": (
+                        exercise["equipment"],
+                        exercise["laterality"],
+                        exercise["loadMode"],
+                        exercise["defaultWeight"],
+                        exercise.get("defaultWeightKg"),
+                        exercise["reps"],
+                    ),
+                    "roles": {
+                        item["muscle"]: item["role"]
+                        for item in exercise["involvement"]
+                    },
+                    "evidence": exercise["evidenceRefs"],
+                }
+                self.assertEqual(exercise["additionalPrimeActions"], [])
+                self.assertEqual(exercise["additionalStabilityDemands"], [])
+                self.assertTrue(exercise["movementDefinition"])
+        self.assertEqual(actual, expected)
+
+    def test_batch4_variant_axis_contracts_are_exact_and_fully_covered(
+        self,
+    ) -> None:
+        def enum(*values: object) -> tuple[str, tuple[object, ...]]:
+            return ("enum", values)
+
+        def number(
+            minimum: int,
+            maximum: int,
+        ) -> tuple[str, int, int]:
+            return ("number", minimum, maximum)
+        expected = {
+            "knee-extension": {
+                "kineticChain": enum("open"),
+                "bodyPosition": enum("reclined", "seated"),
+                "torsoSupport": enum("machinePad"),
+                "pelvisSupport": enum("machineSeat"),
+                "pelvisMotion": enum("positionHeld"),
+                "spineMotion": enum("positionHeld"),
+                "hipMotion": enum("positionHeld"),
+                "hipFlexionDegrees": number(40, 90),
+                "kneeMotion": enum("extends"),
+                "kneeStartFlexionDegrees": number(110, 110),
+                "kneeEndFlexionDegrees": number(0, 0),
+                "ankleMotion": enum("positionHeld"),
+                "footMotion": enum("positionHeld"),
+                "movingSegment": enum("lowerLeg"),
+                "loadInterface": enum("distalShinPad"),
+                "machineType": enum("leverKneeExtension"),
+                "fixedPath": ("boolean", True),
+                "lowerBodyContribution": enum("isolatedJointMotion"),
+            },
+            "knee-flexion": {
+                "kineticChain": enum("open"),
+                "bodyPosition": enum("seated", "prone"),
+                "torsoSupport": enum("machinePad"),
+                "pelvisSupport": enum("machinePadAndStrap"),
+                "pelvisMotion": enum("positionHeld"),
+                "spineMotion": enum("positionHeld"),
+                "hipMotion": enum("positionHeld"),
+                "hipFlexionDegrees": number(30, 90),
+                "kneeMotion": enum("flexes"),
+                "kneeStartFlexionDegrees": number(0, 0),
+                "kneeEndFlexionDegrees": number(90, 90),
+                "ankleMotion": enum("positionHeld"),
+                "anklePosture": enum("unreported"),
+                "footMotion": enum("positionHeld"),
+                "movingSegment": enum("lowerLeg"),
+                "loadInterface": enum("distalShinPad"),
+                "machineType": enum("leverLegCurl"),
+                "fixedPath": ("boolean", True),
+                "lowerBodyContribution": enum("isolatedJointMotion"),
+            },
+            "hip-extension": {
+                "kineticChain": enum("open"),
+                "bodyPosition": enum("prone"),
+                "torsoSupport": enum("table"),
+                "pelvisSupport": enum("table"),
+                "pelvisMotion": enum("positionHeld"),
+                "spineMotion": enum("positionHeld"),
+                "hipMotion": enum("extends"),
+                "hipStartFlexionDegrees": number(30, 30),
+                "hipEndExtensionDegrees": number(5, 5),
+                "kneeMotion": enum("positionHeld"),
+                "kneeFlexionDegrees": number(90, 90),
+                "movingSegment": enum("thigh"),
+                "loadInterface": enum("none"),
+                "resistanceGeometry": enum("limbSegmentGravity"),
+                "fixedPath": ("boolean", False),
+                "lowerBodyContribution": enum("isolatedJointMotion"),
+            },
+            "ankle-plantarflexion": {
+                "kineticChain": enum("closed"),
+                "bodyPosition": enum("standing", "seated"),
+                "torsoSupport": enum("none"),
+                "pelvisSupport": enum("none", "machineSeat"),
+                "pelvisMotion": enum("positionHeld"),
+                "spineMotion": enum("positionHeld"),
+                "hipMotion": enum("positionHeld"),
+                "kneeMotion": enum("positionHeld"),
+                "kneeFlexionDegrees": number(0, 90),
+                "ankleMotion": enum("plantarflexes"),
+                "footMotion": enum("positionHeld"),
+                "footOrientation": enum("neutral"),
+                "movingSegment": enum("foot"),
+                "forefootSupport": enum("machinePlatform"),
+                "heelSupport": enum("none"),
+                "loadInterface": enum("shoulderPad", "distalThighPad"),
+                "machineType": enum(
+                    "standingCalfRaise", "seatedCalfRaise"
+                ),
+                "fixedPath": ("boolean", True),
+                "lowerBodyContribution": enum("isolatedJointMotion"),
+            },
+        }
+        for family_id, family in self.batch4_families.items():
+            actual = {}
+            for axis in family["variantAxes"]:
+                self.assertTrue(axis["required"])
+                if axis["valueType"] == "enum":
+                    actual[axis["id"]] = (
+                        "enum",
+                        tuple(axis["allowedValues"]),
+                    )
+                    observed = {
+                        exercise["variant"][axis["id"]]
+                        for exercise in family["exercises"]
+                    }
+                    self.assertEqual(observed, set(axis["allowedValues"]))
+                elif axis["valueType"] == "number":
+                    actual[axis["id"]] = (
+                        "number",
+                        axis["minimum"],
+                        axis["maximum"],
+                    )
+                    observed = {
+                        exercise["variant"][axis["id"]]
+                        for exercise in family["exercises"]
+                    }
+                    self.assertEqual(
+                        observed,
+                        {axis["minimum"], axis["maximum"]},
+                    )
+                elif axis["valueType"] == "boolean":
+                    actual[axis["id"]] = (
+                        "boolean",
+                        axis["fixedValue"],
+                    )
+                    self.assertEqual(
+                        {
+                            exercise["variant"][axis["id"]]
+                            for exercise in family["exercises"]
+                        },
+                        {axis["fixedValue"]},
+                    )
+                else:
+                    self.fail(
+                        f"unexpected Batch-4 axis type {axis['valueType']}"
+                    )
+            with self.subTest(family=family_id):
+                self.assertEqual(actual, expected[family_id])
+
+    def test_batch4_machine_and_resistance_axes_are_nonredundant(self) -> None:
+        machine_family_ids = {
+            "knee-extension",
+            "knee-flexion",
+            "ankle-plantarflexion",
+        }
+        for family_id in machine_family_ids:
+            axes = {
+                axis["id"]
+                for axis in self.batch4_families[family_id]["variantAxes"]
+            }
+            with self.subTest(machine_family=family_id):
+                self.assertIn("machineType", axes)
+                self.assertNotIn("resistanceGeometry", axes)
+                for exercise in self.batch4_families[family_id]["exercises"]:
+                    self.assertIn("machineType", exercise["variant"])
+                    self.assertNotIn(
+                        "resistanceGeometry", exercise["variant"]
+                    )
+
+        hip_extension = self.batch4_families["hip-extension"]
+        hip_axes = {axis["id"] for axis in hip_extension["variantAxes"]}
+        self.assertIn("resistanceGeometry", hip_axes)
+        self.assertNotIn("machineType", hip_axes)
+        self.assertEqual(
+            hip_extension["exercises"][0]["variant"]["resistanceGeometry"],
+            "limbSegmentGravity",
+        )
+
+    def test_batch4_stability_demands_have_exact_role_agnostic_providers(
+        self,
+    ) -> None:
+        expected = {
+            "knee-extension": {
+                "hip": {"rectusFemoris"},
+                "knee": {"vasti", "rectusFemoris"},
+            },
+            "knee-flexion": {
+                "pelvis": {"medialHamstrings", "sartorius", "gracilis"},
+                "hip": {"medialHamstrings", "sartorius", "gracilis"},
+                "knee": {
+                    "medialHamstrings",
+                    "bicepsFemoris",
+                    "sartorius",
+                    "gracilis",
+                },
+            },
+            "ankle-plantarflexion": {
+                "knee": {"gastrocnemius"},
+                "ankle": {"gastrocnemius", "soleus"},
+                "foot": {"gastrocnemius", "soleus"},
+            },
+            "hip-extension": {
+                "hip": {"gluteMax", "medialHamstrings"},
+                "pelvis": {"gluteMax", "medialHamstrings", "lowerBack"},
+                "knee": {"medialHamstrings", "bicepsFemoris"},
+                "spine": {"lowerBack"},
+            },
+        }
+        for family_id, family in self.batch4_families.items():
+            for exercise in family["exercises"]:
+                assigned = {
+                    item["muscle"] for item in exercise["involvement"]
+                }
+                actual = {
+                    region: {
+                        muscle_id
+                        for muscle_id in assigned
+                        if region
+                        in self.foundation.profile_by_muscle[muscle_id][
+                            "stabilizes"
+                        ]
+                    }
+                    for region in family["movementSignature"][
+                        "stabilityDemands"
+                    ]
+                }
+                with self.subTest(
+                    family=family_id,
+                    exercise=exercise["catalogID"],
+                ):
+                    self.assertEqual(actual, expected[family_id])
+
+        for family_id in {
+            "knee-extension",
+            "knee-flexion",
+            "ankle-plantarflexion",
+        }:
+            self.assertEqual(
+                self.batch4_families[family_id]["musclePolicy"][
+                    "allowedByRole"
+                ]["stabilizer"],
+                [],
+            )
+        self.assertEqual(
+            self.batch4_families["hip-extension"]["musclePolicy"][
+                "allowedByRole"
+            ]["stabilizer"],
+            ["bicepsFemoris", "lowerBack"],
+        )
+
+    def test_batch4_forbids_every_other_known_prime_action(self) -> None:
+        for family_id, original in self.batch4_families.items():
+            own_action_ids = set(
+                original["movementSignature"]["primeActions"]
+            )
+            expected = set(self.foundation.action_ids) - own_action_ids
+            self.assertEqual(
+                set(
+                    original["movementSignature"]["forbiddenPrimeActions"]
+                ),
+                expected,
+            )
+            for action in expected:
+                with self.subTest(family=family_id, action=action):
+                    family = copy.deepcopy(original)
+                    family["exercises"][0]["additionalPrimeActions"] = [
+                        action
+                    ]
+                    self.assert_batch4_family_fails(
+                        family,
+                        f"declares forbidden prime action {re.escape(action)}",
+                    )
+
+    def test_batch4_boolean_fixed_path_invariants_are_directly_mutated(
+        self,
+    ) -> None:
+        expected = {
+            "knee-extension": True,
+            "knee-flexion": True,
+            "hip-extension": False,
+            "ankle-plantarflexion": True,
+        }
+        for family_id, fixed_value in expected.items():
+            original = self.batch4_families[family_id]
+            axis = next(
+                axis
+                for axis in original["variantAxes"]
+                if axis["id"] == "fixedPath"
+            )
+            self.assertEqual(
+                axis,
+                {
+                    "id": "fixedPath",
+                    "valueType": "boolean",
+                    "required": True,
+                    "fixedValue": fixed_value,
+                    "description": axis["description"],
+                },
+            )
+            for exercise_index, exercise in enumerate(original["exercises"]):
+                family = copy.deepcopy(original)
+                family["exercises"][exercise_index]["variant"][
+                    "fixedPath"
+                ] = not fixed_value
+                with self.subTest(
+                    family=family_id,
+                    exercise=exercise["catalogID"],
+                ):
+                    self.assert_batch4_family_fails(
+                        family,
+                        (
+                            r"variant\.fixedPath must equal fixed value "
+                            f"{fixed_value}"
+                        ),
+                    )
+
+    def test_batch4_hip_extension_setup_boundaries_are_directly_mutated(
+        self,
+    ) -> None:
+        original = self.batch4_families["hip-extension"]
+        mutations = (
+            ("variant.pelvisMotion", "moves"),
+            ("variant.spineMotion", "extends"),
+            ("variant.kneeMotion", "flexes"),
+            ("variant.kneeFlexionDegrees", 0),
+            ("variant.torsoSupport", "none"),
+            ("variant.pelvisSupport", "none"),
+            ("variant.resistanceGeometry", "externalLoad"),
+            ("variant.loadInterface", "ankleCuff"),
+            ("laterality", "bilateral"),
+            ("loadMode", "external"),
+            ("equipment", "cable"),
+        )
+        for field, value in mutations:
+            family = copy.deepcopy(original)
+            self.set_rule_field(family["exercises"][0], field, value)
+            expected_message = {
+                "laterality": "lateralities",
+                "loadMode": "loadModes",
+                "equipment": "equipment",
+            }.get(field, field.split(".")[-1])
+            with self.subTest(field=field):
+                self.assert_batch4_family_fails(
+                    family,
+                    re.escape(expected_message),
+                )
+
+        promoted = copy.deepcopy(original)
+        exercise = promoted["exercises"][0]
+        next(
+            item
+            for item in exercise["involvement"]
+            if item["muscle"] == "bicepsFemoris"
+        )["role"] = "secondary"
+        promoted["musclePolicy"]["allowedByRole"]["secondary"].append(
+            "bicepsFemoris"
+        )
+        promoted["musclePolicy"]["allowedByRole"]["stabilizer"].remove(
+            "bicepsFemoris"
+        )
+        self.assert_batch4_family_fails(
+            promoted,
+            (
+                "secondary muscle bicepsFemoris cannot produce any declared "
+                "prime action"
+            ),
+        )
+
+    def test_every_batch4_rule_has_a_match_and_a_contrast(self) -> None:
+        expected_rule_ids = {
+            "knee-extension": [
+                "reclined-leg-extension-uses-reviewed-hip-angle",
+                "forty-degree-leg-extension-is-reclined",
+                "seated-leg-extension-uses-reviewed-hip-angle",
+                "ninety-degree-leg-extension-is-seated",
+            ],
+            "knee-flexion": [
+                "seated-leg-curl-uses-reviewed-hip-angle",
+                "ninety-degree-leg-curl-is-seated",
+                "prone-leg-curl-uses-reviewed-hip-angle",
+                "thirty-degree-leg-curl-is-prone",
+            ],
+            "hip-extension": [],
+            "ankle-plantarflexion": [
+                "standing-calf-raise-uses-extended-knee-setup",
+                "standing-calf-machine-requires-standing-setup",
+                "seated-calf-raise-uses-flexed-knee-setup",
+                "seated-calf-machine-requires-seated-setup",
+            ],
+        }
+        for family_id, family in self.batch4_families.items():
+            self.assertEqual(
+                [rule["id"] for rule in family["exerciseRules"]],
+                expected_rule_ids[family_id],
+            )
+            for rule in family["exerciseRules"]:
+                matches = [
+                    self.rule_matches_exercise(rule, exercise)
+                    for exercise in family["exercises"]
+                ]
+                with self.subTest(family=family_id, rule=rule["id"]):
+                    self.assertEqual(matches.count(True), 1)
+                    self.assertEqual(matches.count(False), 1)
+
+    def test_every_batch4_rule_assertion_has_a_direct_mutation(self) -> None:
+        mutation_count = 0
+        for family_id, family in self.batch4_families.items():
+            for rule in family["exerciseRules"]:
+                matching = next(
+                    exercise
+                    for exercise in family["exercises"]
+                    if self.rule_matches_exercise(rule, exercise)
+                )
+                expected_message = "violates exercise rule " + re.escape(
+                    rule["id"]
+                )
+                for assertion in rule["then"]:
+                    mutated = copy.deepcopy(matching)
+                    self.set_rule_field(
+                        mutated,
+                        assertion["field"],
+                        "mutated",
+                    )
+                    with self.subTest(
+                        family=family_id,
+                        rule=rule["id"],
+                        field=assertion["field"],
+                    ):
+                        with self.assertRaisesRegex(
+                            catalog_v2.ValidationFailure,
+                            expected_message,
+                        ):
+                            catalog_v2.validate_exercise_rule_matches(
+                                mutated,
+                                [rule],
+                                "mutated Batch-4 rule assertion",
+                            )
+                    mutation_count += 1
+                for assignment in rule.get("requireInvolvement", []):
+                    mutated = copy.deepcopy(matching)
+                    mutated["involvement"] = [
+                        item
+                        for item in mutated["involvement"]
+                        if item["muscle"] != assignment["muscle"]
+                    ]
+                    with self.subTest(
+                        family=family_id,
+                        rule=rule["id"],
+                        muscle=assignment["muscle"],
+                    ):
+                        with self.assertRaisesRegex(
+                            catalog_v2.ValidationFailure,
+                            expected_message,
+                        ):
+                            catalog_v2.validate_exercise_rule_matches(
+                                mutated,
+                                [rule],
+                                "mutated Batch-4 role assertion",
+                            )
+                    mutation_count += 1
+        self.assertEqual(mutation_count, 28)
+
+    def test_batch4_required_muscles_and_posture_roles_are_mutation_gated(
+        self,
+    ) -> None:
+        mutation_count = 0
+        for family_id, original in self.batch4_families.items():
+            for exercise_index, exercise in enumerate(original["exercises"]):
+                for requirement_index, requirement in enumerate(
+                    original["musclePolicy"]["requirements"]
+                ):
+                    family = copy.deepcopy(original)
+                    family["exercises"][exercise_index]["involvement"] = [
+                        assignment
+                        for assignment in family["exercises"][exercise_index][
+                            "involvement"
+                        ]
+                        if assignment["muscle"] not in requirement["anyOf"]
+                    ]
+                    with self.subTest(
+                        family=family_id,
+                        exercise=exercise["catalogID"],
+                        requirement=requirement_index,
+                    ):
+                        self.assert_batch4_family_fails(
+                            family,
+                            (
+                                "fails muscle requirement "
+                                f"{requirement_index}"
+                                "|requires at least one primary muscle"
+                                "|group .* has no matching primary muscle"
+                                "|no assigned muscle capable of stabilizing"
+                            ),
+                        )
+                    mutation_count += 1
+        self.assertEqual(mutation_count, 20)
+
+        knee_extension = self.batch4_families["knee-extension"]
+        ext_by_position = {
+            exercise["variant"]["bodyPosition"]: {
+                item["muscle"]: item["role"]
+                for item in exercise["involvement"]
+            }
+            for exercise in knee_extension["exercises"]
+        }
+        self.assertEqual(ext_by_position["reclined"]["rectusFemoris"], "primary")
+        self.assertEqual(ext_by_position["seated"]["rectusFemoris"], "secondary")
+
+        plantarflexion = self.batch4_families["ankle-plantarflexion"]
+        calf_by_position = {
+            exercise["variant"]["bodyPosition"]: {
+                item["muscle"]: item["role"]
+                for item in exercise["involvement"]
+            }
+            for exercise in plantarflexion["exercises"]
+        }
+        self.assertEqual(calf_by_position["standing"]["gastrocnemius"], "primary")
+        self.assertEqual(calf_by_position["seated"]["gastrocnemius"], "secondary")
+
+    def test_batch4_taxonomy_boundaries_are_preserved_in_every_family(self) -> None:
+        retired = {
+            "quads",
+            "hamstrings",
+            "calves",
+            "adductors",
+            "hipFlexors",
+            "shins",
+        }
+        for family in self.real_families:
+            declared = set()
+            for values in family["musclePolicy"]["allowedByRole"].values():
+                declared.update(values)
+            for requirement in family["musclePolicy"]["requirements"]:
+                declared.update(requirement["anyOf"])
+            for exercise in family["exercises"]:
+                declared.update(
+                    item["muscle"] for item in exercise["involvement"]
+                )
+            with self.subTest(family=family["id"]):
+                self.assertTrue(retired.isdisjoint(declared))
+
+        hip_extension = self.batch4_families["hip-extension"]
+        roles = {
+            item["muscle"]: item["role"]
+            for item in hip_extension["exercises"][0]["involvement"]
+        }
+        self.assertNotIn(
+            ("hip.extension", None),
+            self.foundation.capabilities_by_muscle["bicepsFemoris"],
+        )
+        self.assertEqual(roles["bicepsFemoris"], "stabilizer")
+        self.assertEqual(roles["medialHamstrings"], "secondary")
+
+        knee_flexion = self.batch4_families["knee-flexion"]
+        self.assertEqual(
+            next(
+                axis["allowedValues"]
+                for axis in knee_flexion["variantAxes"]
+                if axis["id"] == "anklePosture"
+            ),
+            ["unreported"],
+        )
+        self.assertNotIn(
+            "gastrocnemius",
+            {
+                item["muscle"]
+                for exercise in knee_flexion["exercises"]
+                for item in exercise["involvement"]
+            },
+        )
+
+    def test_batch4_evidence_scopes_preserve_material_limitations(self) -> None:
+        source_by_id = {
+            source["id"]: source
+            for source in self.foundation.evidence["sources"]
+        }
+        expected_scope_phrases = {
+            "larsen-2025-leg-extension-hip-flexion": (
+                "not unmeasured vasti-head ranking, intermediate hip angles"
+            ),
+            "mitsuya-2023-leg-extension-hip-flexion": (
+                "not long-term hypertrophy, other quadriceps-head roles"
+            ),
+            "maeo-2021-seated-prone-leg-curl": (
+                "ankle posture was not reported and calf involvement was not measured"
+            ),
+            "gallucci-2002-gastrocnemius-leg-curl": (
+                "not a categorical gastrocnemius role on the ankle-unreported"
+            ),
+            "kinoshita-2023-standing-seated-calf-raise": (
+                "not a universal machine-stack seed or exact user range-of-motion"
+            ),
+            "jeon-2016-prone-table-hip-extension": (
+                "not other apparatus, external loading, bilateral variants"
+            ),
+        }
+        for source_id, phrase in expected_scope_phrases.items():
+            with self.subTest(source=source_id):
+                self.assertIn(phrase, source_by_id[source_id]["scope"])
+
+    def test_batch4_hip_flexion_remains_an_explicit_evidence_hold(self) -> None:
+        active_ids = {family["id"] for family in self.real_families}
+        self.assertNotIn("hip-flexion", active_ids)
+        self.assertFalse(
+            (catalog_v2.FAMILIES_ROOT / "hip-flexion.json").exists()
+        )
+
+        proposal = (
+            catalog_v2.SPEC_ROOT
+            / "proposals"
+            / "batch-4-hip-isolations.md"
+        ).read_text(encoding="utf-8")
+        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("`hip-flexion` | Defer | 0", proposal)
+        self.assertIn(
+            "no reviewed condition-matched source proves the proposed dynamic",
+            proposal,
+        )
+        self.assertIn("`hip-flexion` — deferred", roadmap)
+        self.assertIn("29 work items remain unresolved", roadmap)
+
     def test_generic_grip_is_not_an_active_family(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
         self.assertTrue(
@@ -6818,13 +7832,15 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
     def test_secondary_must_produce_a_declared_prime_action(self) -> None:
         family = self.family_copy()
-        family["musclePolicy"]["allowedByRole"]["secondary"].append("hamstrings")
+        family["musclePolicy"]["allowedByRole"]["secondary"].append(
+            "medialHamstrings"
+        )
         family["exercises"][0]["involvement"].append(
-            {"muscle": "hamstrings", "role": "secondary"}
+            {"muscle": "medialHamstrings", "role": "secondary"}
         )
         self.assert_family_fails(
             family,
-            "secondary muscle hamstrings cannot produce any declared prime action",
+            "secondary muscle medialHamstrings cannot produce any declared prime action",
         )
 
     def test_primary_must_produce_a_declared_prime_action(self) -> None:
@@ -6851,15 +7867,45 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "no assigned muscle capable of stabilizing scapula",
         )
 
+    def test_mover_may_cover_a_stability_demand_without_role_duplication(
+        self,
+    ) -> None:
+        family = copy.deepcopy(self.batch4_families["knee-extension"])
+        self.assertEqual(
+            family["musclePolicy"]["allowedByRole"]["stabilizer"],
+            [],
+        )
+        for exercise in family["exercises"]:
+            self.assertTrue(
+                all(
+                    assignment["role"] in {"primary", "secondary"}
+                    for assignment in exercise["involvement"]
+                )
+            )
+        self.assertEqual(
+            catalog_v2.validate_family(
+                family,
+                self.foundation,
+                "mover-covered stability fixture",
+            ),
+            [],
+        )
+
+        family["movementSignature"]["stabilityDemands"].append("spine")
+        self.assert_batch4_family_fails(
+            family,
+            "no assigned muscle capable of stabilizing spine",
+        )
+
     def test_stabilizer_must_match_a_declared_stability_demand(self) -> None:
         family = self.family_copy()
-        family["musclePolicy"]["allowedByRole"]["stabilizer"].append("calves")
+        family["musclePolicy"]["allowedByRole"]["stabilizer"].append("soleus")
         family["exercises"][0]["involvement"].append(
-            {"muscle": "calves", "role": "stabilizer"}
+            {"muscle": "soleus", "role": "stabilizer"}
         )
         self.assert_family_fails(
             family,
-            "stabilizer muscle calves cannot stabilize any declared demand",
+            "stabilizer muscle soleus cannot stabilize any declared demand",
         )
 
     def test_undeclared_variant_axis_is_rejected(self) -> None:

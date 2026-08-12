@@ -173,7 +173,7 @@ posterior thorax and can translate during a chest-supported row. Therefore:
 | Conditional suspended stabilizers | `abs`, `lowerBack`, and `gluteMax` | The inverted-row branch maintains a straight body against gravity. |
 | Conditional unilateral stabilizer | `obliques` | Every unilateral record resists asymmetric pelvic and trunk motion. |
 | Conditional trunk stabilizer | At least one of `abs`, `obliques`, or `lowerBack` when `torsoSupport: none` | Unsupported torso control without falsely forcing the same demand onto a chest-pad row. |
-| Other allowed stabilizers | `externalRotators`, `supraspinatus`, `trapeziusUpper`, `serratus`, `pectoralisMinor`, `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `hamstrings` | Exercise-specific shoulder, scapular, spinal, pelvic, and hip control; the conditional rows above still make some assignments mandatory in matching setups. |
+| Other allowed stabilizers | `externalRotators`, `supraspinatus`, `trapeziusUpper`, `serratus`, `pectoralisMinor`, `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Exercise-specific shoulder, scapular, spinal, pelvic, hip, and knee control; the conditional rows above still make some assignments mandatory in matching setups. The two hamstring regions replace the retired aggregate without granting the unsplit biceps-femoris mesh hip-extension capability. |
 
 The activated `allowedByRole` lists do not duplicate a muscle across roles.
 Middle trapezius and rhomboids are secondaries rather than stabilizers because

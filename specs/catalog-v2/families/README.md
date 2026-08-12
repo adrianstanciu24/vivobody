@@ -1,10 +1,11 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Twenty-six reviewed family files are currently active: the three chest presses,
+Thirty reviewed family files are currently active: the three chest presses,
 vertical press and pull, both compound row families, nine narrow shoulder or
 scapular-action families, dip, push press, and eight narrow
-elbow/forearm/wrist families. Each uses a coverage batch whose exercises
+elbow/forearm/wrist families, plus four lower-body isolation families. Each uses
+a coverage batch whose exercises
 collectively exercise every admitted discrete
 axis value without generating the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -35,6 +36,14 @@ angle alone, supports a contract. Closed-chain vertical press belongs as a
 future branch of `vertical-press`, but that branch remains deferred until
 direct dynamic evidence supports its bodyweight-loading and action contract.
 
+Batch 4 adds seven exercises across `knee-extension`, `knee-flexion`,
+`hip-extension`, and `ankle-plantarflexion`. The rosters preserve the exact
+reviewed posture contrasts: reclined versus upright leg extension, seated
+versus prone leg curl, bent-knee prone-table hip extension, and straight- versus
+bent-knee machine calf raise. `hip-flexion` remains deferred because the
+available evidence does not establish the proposed dynamic
+femur-relative-to-position-held-pelvis isolation contract.
+
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
 detent, not a raw conversion from pounds. Zero-weight bodyweight, duration, and
@@ -61,10 +70,29 @@ its pinned bodyweight branch.
 When a variant axis implies extra trunk or segment control, an exercise rule
 uses `requireAdditionalStabilityDemands` to require the region explicitly in
 `additionalStabilityDemands`. The normal anatomy validation separately proves
-that an assigned muscle can stabilize every declared region. When the setup
+that an assigned muscle at any role can stabilize every declared region.
+Primary and secondary movers can simultaneously control a joint; they are not
+duplicated as `role: stabilizer`. `allowedByRole.stabilizer` only admits
+muscles whose principal authored role is control rather than prime-action
+production, so an empty list is valid when the reviewed movers cover every
+demand. When the setup
 requires one member of a biomechanically valid muscle set rather than one exact
 assignment, `requireMuscleRequirements` reuses the family muscle-requirement
 shape (`anyOf` plus `minimumRole`) without forcing an arbitrary muscle.
+
+Batch 4 exercises make that convention concrete:
+
+| Family | Demand coverage in the active roster |
+|---|---|
+| `knee-extension` | Hip: rectus femoris; knee: rectus femoris and vasti. All are movers, so no separate stabilizer role is authored. |
+| `knee-flexion` | Pelvis/hip: medial hamstrings, sartorius, and gracilis; knee: all four assigned movers. |
+| `ankle-plantarflexion` | Knee: gastrocnemius; ankle/foot: gastrocnemius and soleus. |
+| `hip-extension` | Hip: glute max and medial hamstrings; pelvis: both movers plus lower back; knee: medial hamstrings plus the explicitly reviewed biceps-femoris stabilizer; spine: the explicitly measured lower-back stabilizer. |
+
+Hip extension's two explicit stabilizers are exercise-evidence decisions, not
+objects added merely to make validation pass: Jeon measured biceps femoris and
+erector spinae in the exact fixture, while the conservative biceps-femoris
+profile permits only held-knee credit.
 
 A `spine|pelvis` demand does not by itself prescribe a universal number of
 trunk-muscle assignments; the reviewed setup does. Unsupported exercises in
@@ -200,3 +228,37 @@ implements, receiving strategies, and foot behaviors require their own review.
 The record still declares wrist and hand stability and uses the shared loaded-
 grip `extensorCarpiRadialis` plus `fingerFlexors` assignments; whole-body power
 does not waive the static bar-control contract.
+
+Batch-4 lower-body isolations share one mechanical vocabulary rather than
+family-local synonyms. `bodyPosition` names gross posture; `torsoSupport` and
+`pelvisSupport` name actual external contact or restraint; and
+`pelvisMotion|spineMotion|hipMotion|kneeMotion|ankleMotion|footMotion` say
+whether a segment is position-held or supplies the dynamic action. External
+support never proves a position-held motion axis by itself. `movingSegment`
+identifies the segment whose joint-relative excursion defines the repetition.
+`loadInterface` names where resistance contacts the athlete, and `machineType`
+names a purpose-built mechanism rather than duplicating the equipment label.
+The knee-extension, leg-curl, and calf-raise contracts omit
+`resistanceGeometry` because it would be in strict one-to-one correspondence
+with their machine type and load interface. Hip extension retains
+`resistanceGeometry: limbSegmentGravity`: it has no machine type, and the
+unsupported moving segment is the observable source of resistance.
+`lowerBodyContribution: isolatedJointMotion` excludes propulsion by another
+lower-body joint.
+
+Numeric joint-position axes store canonical reviewed setup targets, not
+laboratory precision on every user repetition. When a family has two reviewed
+targets, such as 40/90 degrees of hip flexion or 0/90 degrees of knee flexion,
+the numeric minimum and maximum do not admit intermediate values by themselves:
+reciprocal exercise rules bind each target to its reviewed body position and
+mechanism. Knee posture is anatomy-bearing. Rectus femoris changes categorical
+role across the two leg-extension fixtures, gastrocnemius changes role across
+the two calf-raise fixtures, and the ankle-unreported leg-curl evidence does not
+permit gastrocnemius involvement to be invented.
+
+`fixedPath` keeps its established external-load meaning. Lever leg-extension,
+leg-curl, and calf-raise machines pin it `true`; the gravity-loaded moving limb
+in prone-table hip extension pins it `false`. `kineticChain` remains separate:
+leg extensions, leg curls, and hip extension are open chain, while calf raises
+are closed chain because the forefoot stays supported as the heel and body
+segment move.

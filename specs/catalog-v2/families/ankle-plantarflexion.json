@@ -1,0 +1,548 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "ankle-plantarflexion",
+  "name": "Ankle Plantarflexion",
+  "definition": "A strict closed-chain machine calf raise in which the heel rises through ankle plantarflexion while the forefoot remains supported and the knee, hip, pelvis, spine, and foot orientation remain held. The initial roster contains only the directly trained unilateral standing and seated machine conditions at 0 and 90 degrees of knee flexion. Soleus is primary in both; gastrocnemius is primary with the knee extended and secondary with the knee flexed, reflecting direct individual-muscle hypertrophy rather than assigning both postures identical anatomy. Flexor hallucis longus is anatomy-permitted but not authored because the source did not measure it and deliberate toe flexion is excluded. Bilateral, free-weight, Smith, leg-press, donkey, bodyweight, balance, jumping, partial-range, rotated-foot, and toe-flexion variants remain outside this family.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "kinoshita-2023-standing-seated-calf-raise"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "ankle.plantarflexion"
+    ],
+    "primeActions": [
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "soleus",
+        "gastrocnemius"
+      ],
+      "secondary": [
+        "gastrocnemius"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "closed"
+      ],
+      "description": "Whether the forefoot remains supported against the environment while the heel and body segment move."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing",
+        "seated"
+      ],
+      "description": "The directly reviewed whole-body posture paired with the held knee angle."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface directly supports the torso; neither reviewed fixture does."
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "machineSeat"
+      ],
+      "description": "The external surface supporting the pelvis; present only in the seated fixture."
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether the pelvis remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether spinal position remains held rather than moving to create the repetition."
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether hip position remains held rather than contributing a dynamic hip action."
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether knee angle remains held rather than contributing flexion or extension."
+    },
+    {
+      "id": "kneeFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 90,
+      "description": "Held knee flexion; only the rule-pinned 0- and 90-degree research fixtures are admitted."
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "plantarflexes"
+      ],
+      "description": "The dynamic ankle motion that raises the heel in the concentric repetition."
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeld"
+      ],
+      "description": "Whether toe and frontal-plane foot positions remain held rather than creating the repetition."
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The directly instructed neutral foot orientation; toe-in and toe-out are not admitted."
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "foot"
+      ],
+      "description": "The segment whose ankle-relative motion defines the repetition."
+    },
+    {
+      "id": "forefootSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "machinePlatform"
+      ],
+      "description": "The machine platform supporting the forefoot throughout the calf raise."
+    },
+    {
+      "id": "heelSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface supports the heel during the plantarflexion excursion."
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "shoulderPad",
+        "distalThighPad"
+      ],
+      "description": "Where the reviewed machine applies its external load to the athlete."
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standingCalfRaise",
+        "seatedCalfRaise"
+      ],
+      "description": "The reviewed calf-raise machine mechanism."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "Whether a machine lever constrains the external-load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "isolatedJointMotion"
+      ],
+      "description": "Whether ankle plantarflexion alone creates the repetition rather than propulsion from the hip or knee."
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "standing-calf-raise-uses-extended-knee-setup",
+      "description": "The standing condition uses an extended knee, no pelvis support, shoulder-pad load, and the standing calf machine while gastrocnemius is primary.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "standing"
+      },
+      "then": [
+        {
+          "field": "variant.kneeFlexionDegrees",
+          "value": 0
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "shoulderPad"
+        },
+        {
+          "field": "variant.machineType",
+          "value": "standingCalfRaise"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "standing-calf-machine-requires-standing-setup",
+      "description": "The standing calf-raise machine cannot be paired with the seated fixture vocabulary.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "standingCalfRaise"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "variant.kneeFlexionDegrees",
+          "value": 0
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "shoulderPad"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "seated-calf-raise-uses-flexed-knee-setup",
+      "description": "The seated condition uses a 90-degree knee, machine-seat pelvis support, thigh-pad load, and the seated calf machine while gastrocnemius remains secondary.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "seated"
+      },
+      "then": [
+        {
+          "field": "variant.kneeFlexionDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "machineSeat"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "distalThighPad"
+        },
+        {
+          "field": "variant.machineType",
+          "value": "seatedCalfRaise"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "seated-calf-machine-requires-seated-setup",
+      "description": "The seated calf-raise machine cannot be paired with the standing fixture vocabulary.",
+      "when": {
+        "field": "variant.machineType",
+        "operator": "equals",
+        "value": "seatedCalfRaise"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "seated"
+        },
+        {
+          "field": "variant.kneeFlexionDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.pelvisSupport",
+          "value": "machineSeat"
+        },
+        {
+          "field": "variant.loadInterface",
+          "value": "distalThighPad"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-unilateral-machine-calf-raise",
+      "name": "Standing Unilateral Machine Calf Raise",
+      "aliases": [
+        "Single-Leg Standing Calf Raise",
+        "Single-Leg Standing Calf Raise Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "gastrocnemius",
+          "role": "primary"
+        },
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "pelvisSupport": "none",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "kneeFlexionDegrees": 0,
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footOrientation": "neutral",
+        "movingSegment": "foot",
+        "forefootSupport": "machinePlatform",
+        "heelSupport": "none",
+        "loadInterface": "shoulderPad",
+        "machineType": "standingCalfRaise",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kinoshita-2023-standing-seated-calf-raise"
+      ],
+      "movementDefinition": "Stand in a unilateral calf-raise machine with the working forefoot neutral on the platform, the shoulder beneath the load pad, and the knee held extended. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without bending the knee or curling the toes."
+    },
+    {
+      "catalogID": "seated-unilateral-machine-calf-raise",
+      "name": "Seated Unilateral Machine Calf Raise",
+      "aliases": [
+        "Single-Leg Seated Calf Raise",
+        "Single-Leg Seated Calf Raise Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "soleus",
+          "role": "primary"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "pelvisSupport": "machineSeat",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "kneeFlexionDegrees": 90,
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footOrientation": "neutral",
+        "movingSegment": "foot",
+        "forefootSupport": "machinePlatform",
+        "heelSupport": "none",
+        "loadInterface": "distalThighPad",
+        "machineType": "seatedCalfRaise",
+        "fixedPath": true,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kinoshita-2023-standing-seated-calf-raise"
+      ],
+      "movementDefinition": "Sit in a unilateral calf-raise machine with the working forefoot neutral on the platform, the distal thigh beneath the load pad, and the knee held near 90 degrees of flexion. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without extending the knee or curling the toes."
+    }
+  ]
+}

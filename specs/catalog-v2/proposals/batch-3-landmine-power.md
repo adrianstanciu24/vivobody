@@ -162,8 +162,12 @@ joint-kinetics analysis directly reports push-press impulse requirements at the
 knee, hip, and ankle and identifies knee-extensor, hip-extensor, and ankle-
 plantarflexor demand. This is the joint-resolved load-bearing source for the
 three lower-body prime actions. It does not establish a categorical muscle
-ranking: the `quads`, `gluteMax`, and `calves` assignments still combine those
-joint results with the independently reviewed capability map.
+ranking: the `vasti`, `gluteMax`, `rectusFemoris`, `gastrocnemius`, and
+`soleus` assignments combine those joint results with the independently
+reviewed capability map. The taxonomy split makes an old ambiguity visible:
+the joint-kinetics evidence does not justify calling the task vasti-only, so
+rectus femoris receives conservative secondary knee-extension credit rather
+than being silently dropped or promoted to primary.
 
 Lake et al. 2014 tested 17 resistance-trained men across 10–90% of push-press
 1RM on a force platform. The paper describes a front-rack start, a lower-body
@@ -255,16 +259,17 @@ The initial categorical envelope should be narrow and explicit:
 
 | Role | Muscles | Rationale |
 |---|---|---|
-| Primary | `deltoidAnterior`, `quads`, `gluteMax` | Shoulder-oriented catalog emphasis plus the directly established knee/hip propulsion chain. Multiple primaries acknowledge a whole-body power task; they do not claim equal magnitude. |
-| Required secondary | `deltoidLateral`, `supraspinatus`, `triceps`, `serratus`, `trapeziusUpper`, `trapeziusLower`, `calves` | Same front-overhead humeral/scapular/elbow functions as the strict family, plus plantarflexion in the directly described triple-extension drive. |
+| Primary | `deltoidAnterior`, `vasti`, `gluteMax` | Shoulder-oriented catalog emphasis plus the directly established knee/hip propulsion chain. Multiple primaries acknowledge a whole-body power task; they do not claim equal magnitude. |
+| Required secondary | `deltoidLateral`, `supraspinatus`, `triceps`, `serratus`, `trapeziusUpper`, `trapeziusLower`, `rectusFemoris`, `gastrocnemius`, `soleus` | Same front-overhead humeral/scapular/elbow functions as the strict family, conservative rectus-femoris knee-extension credit after the quadriceps split, plus both separately represented plantarflexors in the directly described triple-extension drive. The lower-body sources establish joint demand, not individual-muscle rank. |
 | Stabilizer | `extensorCarpiRadialis`, `fingerFlexors`, `externalRotators`, `subscapularis`, `abs`, `obliques`, `lowerBack` | Static bar control at the wrist/hand, shoulder control, and force transfer through a torso that is not a dynamic prime mover. |
 
-The initial record should assign only the three primaries, seven required
+The initial record should assign only the three primaries, nine required
 secondaries, the shared loaded-grip wrist/hand stabilizers, both cuff
 stabilizers, and the three trunk stabilizers. The movement signature therefore
 declares both wrist and hand stability demands; holding the front-rack bar is
 not exempt from the convention used by the other loaded Batch-3 fixtures. In
-particular, clavicular pectoralis, hamstrings, and adductors are not admitted
+particular, clavicular pectoralis, either hamstring region, and the adductor
+regions are not admitted
 merely because their independent anatomy profiles make a contribution
 possible. Adding any of them later requires an exercise-specific role review;
 the initial contract should not create permissive surface that its only record
@@ -360,8 +365,8 @@ In addition to the generic family/schema/roster tests, activation should pin:
    `footContact`
    are required one-value axes and every roster record uses the exact value;
 6. `fixedPath` rejects `true` through its axis-level fixed value;
-7. removing `quads`, `gluteMax`, or `calves` fails the matching prime-action or
-   muscle requirement;
+7. removing `vasti`, `gluteMax`, `rectusFemoris`, `gastrocnemius`, or `soleus`
+   fails the matching prime-action or muscle requirement;
 8. removing one upper-body dynamic contributor or either required loaded-grip
    stabilizer fails the family requirement;
 9. a mutation that changes `receivingStrategy` or `footContact` is rejected at
