@@ -1474,6 +1474,258 @@
       "pmid": "27583647",
       "url": "https://doi.org/10.1016/j.ptsp.2016.03.004",
       "scope": "Sixteen healthy men performed conventional prone, prone-table, and 90-degree-knee-flexed prone-table hip extension. Surface EMG measured gluteus maximus, biceps femoris, semitendinosus, and erector spinae while electromagnetic tracking measured pelvic rotation and anterior tilt. It supports the one reviewed bent-knee fixture and conservative categorical roles, not other apparatus, external loading, bilateral variants, or a zero-pelvic-motion claim."
+    },
+    {
+      "id": "armstrong-2022-squat-movement-dynamics",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "An investigation of movement dynamics and muscle activity during traditional and accentuated-eccentric squatting",
+      "authors": [
+        "Richard Armstrong",
+        "Vasilios Baltzopoulos",
+        "Carl Langan-Evans",
+        "Dave Clark",
+        "Jonathan Jarvis",
+        "Claire Stewart",
+        "Thomas O'Brien"
+      ],
+      "year": 2022,
+      "doi": "10.1371/journal.pone.0276096",
+      "pmid": "36318527",
+      "url": "https://doi.org/10.1371/journal.pone.0276096",
+      "scope": "The primary cohort comprised nine trained men performing motorized-cable traditional and accentuated-eccentric squats, while a secondary cohort directly compared barbell back, barbell front, and Kineo squats at 50, 85, and 100 percent body mass with lower-limb kinematics and gluteus-maximus and vastus-lateralis EMG. It supports front/back ankle-range transfer; it does not provide a complete muscle-policy ranking, a precise back-bar placement, or permission to activate the Kineo fixture."
+    },
+    {
+      "id": "gorsic-2024-squat-load-placement",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Biomechanical comparisons of back and front squats with a straight bar and four squats with a transformer bar",
+      "authors": [
+        "Maja Goršič",
+        "LuAnna E. Rochelle",
+        "Jacob S. Layer",
+        "Derek T. Smith",
+        "Domen Novak",
+        "Boyi Dai"
+      ],
+      "year": 2024,
+      "doi": "10.1080/14763141.2020.1832563",
+      "pmid": "33161870",
+      "url": "https://doi.org/10.1080/14763141.2020.1832563",
+      "scope": "Eighteen trained adults performed hip-width straight-bar front and back squats plus four transformer-bar conditions at 70 percent of straight-bar front-squat one-repetition maximum. Estimated parallel-position trunk, pelvis, hip, knee, and ankle kinematics and kinetics directly support the two reviewed load placements; the study contains no exercise EMG and does not establish a fixed universal muscle-role ranking. The 2024 issue article was published online in 2020."
+    },
+    {
+      "id": "joseph-2020-back-belt-squat",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Activity of Trunk and Lower Extremity Musculature: Comparison Between Parallel Back Squats and Belt Squats",
+      "authors": [
+        "Lori Joseph",
+        "Josh Reilly",
+        "Kristine Sweezey",
+        "Robyn Waugh",
+        "Lara A. Carlson",
+        "Michael A. Lawrence"
+      ],
+      "year": 2020,
+      "doi": "10.2478/hukin-2019-0126",
+      "pmid": "32269663",
+      "url": "https://doi.org/10.2478/hukin-2019-0126",
+      "scope": "Ten experienced participants performed three sets of five parallel back squats and belt squats with an external load equal to body mass while trunk and lower-extremity surface EMG was recorded. It directly supports the reviewed back-squat muscle panel and supplies an adverse belt-squat comparison; it contains no front-squat condition or kinematic equivalence analysis and cannot activate a belt-loaded branch."
+    },
+    {
+      "id": "kubo-2019-squat-depth-hypertrophy",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Effects of squat training with different depths on lower limb muscle volumes",
+      "authors": [
+        "Keitaro Kubo",
+        "Toshihiro Ikebukuro",
+        "Hideaki Yata"
+      ],
+      "year": 2019,
+      "doi": "10.1007/s00421-019-04181-y",
+      "pmid": "31230110",
+      "url": "https://doi.org/10.1007/s00421-019-04181-y",
+      "scope": "A ten-week MRI intervention compared full- and half-squat training effects on lower-limb muscle volumes. It supports practical squat training-emphasis decisions and establishes depth sensitivity; group-level adductor findings cannot override the visible-region action model, prove equal compartment contributions, or activate an additional range-of-motion value."
+    },
+    {
+      "id": "mccormick-2023-front-back-squat-bracing",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "The Effect of Volitional Preemptive Abdominal Contraction on Biomechanical Measures During A Front Versus Back Loaded Barbell Squat",
+      "authors": [
+        "Joseph B. McCormick",
+        "Alexander S. Drusch",
+        "Darragh J. Lynch",
+        "Gesine H. Seeber",
+        "Katherine F. Wilford",
+        "Troy L. Hooper",
+        "Brad S. Allen",
+        "Dennis G. O'Connell",
+        "Maria J. Mena-Iturriaga",
+        "Kinyata J. Cooper",
+        "Phillip S. Sizer"
+      ],
+      "year": 2023,
+      "doi": "10.26603/001c.84306",
+      "pmid": "37547830",
+      "url": "https://doi.org/10.26603/001c.84306",
+      "scope": "Twenty-six men performed loaded hip-width back and front squats to near-parallel depth with lumbar and lower-limb kinematics plus trunk and lower-limb surface EMG. It supports explicit trunk bracing and the two reviewed load placements; the deliberately lower front-squat load prevents a numeric cross-variant muscle ranking."
+    },
+    {
+      "id": "purzel-2026-powerlifting-squat-joint-moments",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Differences in hip, knee, and ankle joint moments during squats across load intensities, gender classes, and performance level in elite powerlifters",
+      "authors": [
+        "Alexander Pürzel",
+        "Paul Kaufmann",
+        "Willi Koller",
+        "David Deimel",
+        "Arnold Baca",
+        "Hans Kainz"
+      ],
+      "year": 2026,
+      "doi": "10.1038/s41598-026-43999-3",
+      "pmid": "41826687",
+      "url": "https://doi.org/10.1038/s41598-026-43999-3",
+      "scope": "Twenty-nine elite powerlifters performed IPF-style low-bar squats at 70, 80, and 90 percent of estimated one-repetition maximum. Separate ankle-angle and joint-moment waveforms and the reported concentric plantarflexion support only the cross-squat ankle-action gate; the source does not activate a distinct low-bar record or define roles for the canonical back- and front-squat fixtures."
+    },
+    {
+      "id": "sinclair-2022-back-squat-foot-angle",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Two-Experiment Examination of Habitual and Manipulated Foot Placement Angles on the Kinetics, Kinematics, and Muscle Forces of the Barbell Back Squat in Male Lifters",
+      "authors": [
+        "Jonathan Sinclair",
+        "Paul John Taylor",
+        "Gareth Shadwell",
+        "Mark Stone",
+        "Nicole Booth",
+        "Bryan Jones",
+        "Sam Finlay",
+        "Ashraf Mohamed Ali",
+        "Bobbie Butters",
+        "Ian Bentley",
+        "Christopher James Edmundson"
+      ],
+      "year": 2022,
+      "doi": "10.3390/s22186999",
+      "pmid": "36146352",
+      "url": "https://doi.org/10.3390/s22186999",
+      "scope": "Two barbell-back-squat experiments examined habitual and manipulated foot-placement angles in male lifters at 70 percent one-repetition maximum using three-dimensional kinematics, kinetics, and modeled muscle forces. Gastrocnemius and soleus force estimates support plantarflexor contribution and show that foot angle is anatomy-bearing; the source does not pre-authorize a foot-orientation axis in the narrow roster."
+    },
+    {
+      "id": "yavuz-2015-front-back-squat-emg",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Kinematic and EMG activities during front and back squat variations in maximum loads",
+      "authors": [
+        "Hasan Ulas Yavuz",
+        "Deniz Erdağ",
+        "Arif Mithat Amca",
+        "Serdar Aritan"
+      ],
+      "year": 2015,
+      "doi": "10.1080/02640414.2014.984240",
+      "pmid": "25630691",
+      "url": "https://doi.org/10.1080/02640414.2014.984240",
+      "scope": "Twelve trained participants performed maximal front and back squats while knee kinematics and surface EMG of the vasti, rectus femoris, semitendinosus, biceps femoris, gluteus maximus, and erector spinae were recorded. It directly supports the medial-hamstring excitation contrast; surface EMG cannot establish net hip-extension contribution, so the active contract credits stabilization rather than dynamic work."
+    },
+    {
+      "id": "brazil-2021-barbell-hip-thrust",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "A comprehensive biomechanical analysis of the barbell hip thrust",
+      "authors": [
+        "Adam Brazil",
+        "Laurie Needham",
+        "Jac L. Palmer",
+        "Ian N. Bezodis"
+      ],
+      "year": 2021,
+      "doi": "10.1371/journal.pone.0249307",
+      "pmid": "33780488",
+      "url": "https://doi.org/10.1371/journal.pone.0249307",
+      "scope": "Nineteen resistance-trained men performed three barbell hip-thrust repetitions at 70 percent one-repetition maximum with three-dimensional kinematics and force plates under both feet and the thorax support. It supports hip and knee extension, dominant hip-extensor demand, free bar path, observed but nonstandardized ankle motion, and variable pelvic-trunk excursion; it supplies no muscle-specific EMG, bridge fixture, or zero-motion spine or ankle claim."
+    },
+    {
+      "id": "kennedy-2024-hip-thrust-glute-bridge",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge",
+      "authors": [
+        "D. Kennedy",
+        "J. B. Casebolt",
+        "G. L. Farren",
+        "V. Fiaud",
+        "M. Bartlett",
+        "L. Strong"
+      ],
+      "year": 2024,
+      "doi": "10.1080/14763141.2022.2074875",
+      "pmid": "35586943",
+      "url": "https://doi.org/10.1080/14763141.2022.2074875",
+      "scope": "Ten trained men performed five-repetition-maximum barbell hip thrusts and glute bridges with standardized shoulder-width feet, a 35.5-centimeter thrust bench, 90-degree thrust endpoint, 135-degree bridge starting knee angle, approximately 115-degree bridge endpoint knee flexion, floor-versus-bench torso anchors, padded pelvic bar placement, supinated stabilizing grip, and hip-neutral endpoint. Knee angles use the study's flexion convention. Upper and lower gluteus-maximus, gluteus medius, biceps femoris, and vastus-lateralis EMG support the two fixtures and their categorical roles, not bodyweight, unilateral, machine, or band variants or precise spinal kinematics. The 2024 issue article was published online in 2022."
+    },
+    {
+      "id": "song-2023-split-squat-step-length",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Effects of step lengths on biomechanical characteristics of lower extremity during split squat movement",
+      "authors": [
+        "Qingquan Song",
+        "Mujia Ma",
+        "Hui Liu",
+        "Xiaobin Wei",
+        "Xiaoping Chen"
+      ],
+      "year": 2023,
+      "doi": "10.3389/fbioe.2023.1277493",
+      "pmid": "38026855",
+      "url": "https://doi.org/10.3389/fbioe.2023.1277493",
+      "scope": "Twenty male college students performed barbell split squats at 50, 70, 100, and 120 percent of greater-trochanter-to-lateral-malleolus leg length while lead-limb kinematics, kinetics, and eight-muscle surface EMG were collected. The instructed erect torso, approximately parallel lead thigh, fixed split stance, and 100-percent condition anchor the reviewed motion and its lead-limb role envelope; posterior-limb loading was not collected, so the source establishes neither zero rear contribution nor a lead-dominant or percentage load split. The method also does not textually specify a stance landmark, bar site, or grip or activate other stance lengths, dynamic lunges, elevated feet, or other equipment."
+    },
+    {
+      "id": "stastny-2015-split-squat-dumbbell-position",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Does the Dumbbell-Carrying Position Change the Muscle Activity in Split Squats and Walking Lunges?",
+      "authors": [
+        "Petr Stastny",
+        "Michal Lehnert",
+        "Amr M. Z. Zaatar",
+        "Zdenek Svoboda",
+        "Zuzana Xaverova"
+      ],
+      "year": 2015,
+      "doi": "10.1519/JSC.0000000000000976",
+      "pmid": "25968228",
+      "url": "https://doi.org/10.1519/JSC.0000000000000976",
+      "scope": "Fourteen resistance-trained and fourteen non-resistance-trained participants performed five-repetition-maximum split squats and forward walking lunges with ipsilateral or contralateral dumbbell carrying. Hip and knee range of motion plus gluteus-medius, vastus-medialis, vastus-lateralis, and biceps-femoris surface EMG support the stationary split-squat versus walking-lunge boundary and unilateral stabilization context; the source does not test the active straight-bar placement or prove equivalent roles across implements."
+    },
+    {
+      "id": "simenz-2012-loaded-step-up-variations",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Electromyographical Analysis of Lower Extremity Muscle Activation During Variations of the Loaded Step-Up Exercise",
+      "authors": [
+        "Christopher J. Simenz",
+        "Luke R. Garceau",
+        "Brittney N. Lutsch",
+        "Timothy J. Suchomel",
+        "William P. Ebben"
+      ],
+      "year": 2012,
+      "doi": "10.1519/JSC.0b013e3182472fad",
+      "pmid": "22237139",
+      "url": "https://doi.org/10.1519/JSC.0b013e3182472fad",
+      "scope": "Fifteen resistance-trained women performed loaded forward, crossover, diagonal, and lateral step-ups at six-repetition-maximum loads on a 45.72-centimeter box while seven lower-extremity muscles were measured with surface EMG. It supports forward step-up action and muscle-role context and establishes that directional variants are not automatic synonyms; the publication does not report an external-load implement or placement and cannot anchor the active 21-centimeter bodyweight fixture, its load semantics, or its exact geometry."
+    },
+    {
+      "id": "wang-2003-forward-lateral-step-up-biomechanics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Lower-extremity biomechanics during forward and lateral stepping activities in older adults",
+      "authors": [
+        "Man-Ying Wang",
+        "Sean Flanagan",
+        "Joo-Eun Song",
+        "Gail A. Greendale",
+        "George J. Salem"
+      ],
+      "year": 2003,
+      "doi": "10.1016/S0268-0033(02)00204-8",
+      "pmid": "12620784",
+      "url": "https://doi.org/10.1016/S0268-0033(02)00204-8",
+      "scope": "Twenty-one community-dwelling older adults performed bodyweight forward and lateral step-ups onto a 21-centimeter platform with three-dimensional motion analysis and inverse-dynamics estimates of lower-extremity joint angles, moments, impulse, work, and power. The forward condition directly anchors the active platform height, brief bilateral top support, trail-foot return followed by lead-foot return to the lower floor, prohibition on trail-leg push-off or hopping, and hip-, knee-, and ankle-extension task; the older cohort and absence of muscle EMG or external load prevent generalization to arbitrary heights, loaded variants, continuous lead-foot-on-platform repetitions, or a muscle-magnitude ranking."
     }
   ]
 }

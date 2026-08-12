@@ -1,0 +1,635 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-thrust-bridge",
+  "name": "Hip Thrust and Bridge",
+  "definition": "A bilateral externally loaded closed-chain compound movement in which the feet remain planted, a padded barbell loads the pelvis, and the pelvis rises until the hips reach neutral. The reviewed barbell hip thrust uses an elevated upper-back anchor and ends near 90 degrees of knee flexion; the reviewed barbell glute bridge anchors the upper torso on the floor and ends near 115 degrees. Both involve hip extension and some knee extension, so this is not an isolated hip-extension family. Gluteus maximus is primary and the vasti are secondary; gluteus medius controls the pelvis, the visible unsplit biceps-femoris region receives only knee-control credit, and soleus is a conservative mechanics-derived ankle-and-foot stabilizer. Measured pelvic-trunk and ankle motion did not support position-held claims, so both are nonstandardized without promoting variable excursion or net joint moments to deliberate prime actions. Bodyweight, band, dumbbell, Smith, machine, unilateral, feet-elevated, frog-pump, abduction, and articulated-spine variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "brazil-2021-barbell-hip-thrust",
+    "kennedy-2024-hip-thrust-glute-bridge"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMax"
+      ],
+      "secondary": [
+        "vasti"
+      ],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "lowerBack",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the planted feet remain fixed while the pelvis and proximal segments move.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross torso relationship that distinguishes the reviewed thrust and bridge fixtures.",
+      "allowedValues": [
+        "supineShouldersElevated",
+        "supineFloor"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface anchoring the upper torso while the pelvis rises.",
+      "allowedValues": [
+        "bench",
+        "floor"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface supports the pelvis during the lifting phase.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the externally loaded pelvis moves during the concentric phase.",
+      "allowedValues": [
+        "elevates"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The status of pelvic-trunk angular motion in the reviewed evidence; it was variable rather than proven position-held or a deliberate prime action.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action that creates the concentric repetition.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "hipEndPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed terminal hip position without deliberate hyperextension.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly observed knee action during the concentric phase.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeEndFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed approximate knee-flexion target at the top of each fixture.",
+      "minimum": 90,
+      "maximum": 115
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The status of ankle motion in the reviewed evidence; dorsiflexion predominated but varied across participants, while negligible kinetics do not make that excursion a training-defining prime action.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate foot motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether both feet remain continuously planted throughout the repetition.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed foot orientation, which permitted straight feet or a small toe-out angle.",
+      "allowedValues": [
+        "straightOrSlightToeOut"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the reviewed stance distributes the task symmetrically across both planted legs.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed foot spacing standardized to shoulder span.",
+      "allowedValues": [
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The externally loaded proximal segment whose rise relative to the planted lower limbs defines both fixtures.",
+      "allowedValues": [
+        "pelvis"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the external load is carried relative to the body.",
+      "allowedValues": [
+        "acrossPelvis"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the external resistance implement contacts the athlete.",
+      "allowedValues": [
+        "paddedBarbellAcrossPelvis"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed hand orientation used only to stabilize the bar across the pelvis.",
+      "allowedValues": [
+        "supinated"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed full repetition from floor-supported barbell plates to a neutral hip endpoint.",
+      "allowedValues": [
+        "floorToHipNeutral"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external load path; both reviewed barbell fixtures follow free paths."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface that supports the barbell at the bottom of each reviewed full-range repetition.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "benchHeightCm",
+      "valueType": "number",
+      "required": false,
+      "description": "The fixed upper-back bench height used by the directly reviewed hip-thrust fixture; it is absent for the floor bridge.",
+      "minimum": 35.5,
+      "maximum": 35.5
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed multi-joint lower-body contribution that separates this contract from isolated hip extension.",
+      "allowedValues": [
+        "combinedHipAndKneeExtension"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "bench-supported-fixture-is-hip-thrust",
+      "description": "The elevated-bench fixture is the reviewed 35.5-centimeter hip thrust ending near 90 degrees of knee flexion.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "bench"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "supineShouldersElevated"
+        },
+        {
+          "field": "variant.kneeEndFlexionDegrees",
+          "value": 90
+        },
+        {
+          "field": "variant.benchHeightCm",
+          "value": 35.5
+        }
+      ],
+      "requirePresent": [
+        "variant.benchHeightCm"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "hip-thrust-position-requires-bench",
+      "description": "A shoulders-elevated hip-thrust position requires the reviewed bench-supported setup.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "supineShouldersElevated"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        }
+      ],
+      "requirePresent": [
+        "variant.benchHeightCm"
+      ],
+      "requireAbsent": []
+    },
+    {
+      "id": "floor-supported-fixture-is-glute-bridge",
+      "description": "The floor-anchored fixture is the reviewed glute bridge ending near 115 degrees of knee flexion and has no bench-height field.",
+      "when": {
+        "field": "variant.torsoSupport",
+        "operator": "equals",
+        "value": "floor"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "supineFloor"
+        },
+        {
+          "field": "variant.kneeEndFlexionDegrees",
+          "value": 115
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.benchHeightCm"
+      ]
+    },
+    {
+      "id": "glute-bridge-position-requires-floor",
+      "description": "A floor-supine bridge position requires the reviewed floor torso anchor.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "supineFloor"
+      },
+      "then": [
+        {
+          "field": "variant.torsoSupport",
+          "value": "floor"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.benchHeightCm"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "barbell-hip-thrust",
+      "name": "Barbell Hip Thrust",
+      "aliases": [
+        "Hip Thrust",
+        "BHT"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 8,
+      "searchPriority": 91,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "supineShouldersElevated",
+        "torsoSupport": "bench",
+        "pelvisSupport": "none",
+        "pelvisMotion": "elevates",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "hipEndPosition": "neutral",
+        "kneeMotion": "extends",
+        "kneeEndFlexionDegrees": 90,
+        "ankleMotion": "nonstandardized",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "footOrientation": "straightOrSlightToeOut",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth",
+        "movingSegment": "pelvis",
+        "loadPlacement": "acrossPelvis",
+        "loadInterface": "paddedBarbellAcrossPelvis",
+        "gripOrientation": "supinated",
+        "rangeOfMotion": "floorToHipNeutral",
+        "fixedPath": false,
+        "interRepSupport": "floor",
+        "benchHeightCm": 35.5,
+        "lowerBodyContribution": "combinedHipAndKneeExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "brazil-2021-barbell-hip-thrust",
+        "kennedy-2024-hip-thrust-glute-bridge"
+      ],
+      "movementDefinition": "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis. Plant the feet at shoulder width so the knees finish near 90 degrees, steady the bar with a supinated grip, and raise the pelvis until the hips reach neutral. Lower until the plates return to the floor without adding deliberate spinal extension or abduction."
+    },
+    {
+      "catalogID": "barbell-glute-bridge",
+      "name": "Barbell Glute Bridge",
+      "aliases": [
+        "Weighted Glute Bridge",
+        "BGB"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 95,
+      "defaultWeightKg": 42.5,
+      "reps": 10,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "vasti",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "supineFloor",
+        "torsoSupport": "floor",
+        "pelvisSupport": "none",
+        "pelvisMotion": "elevates",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "hipEndPosition": "neutral",
+        "kneeMotion": "extends",
+        "kneeEndFlexionDegrees": 115,
+        "ankleMotion": "nonstandardized",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "footOrientation": "straightOrSlightToeOut",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth",
+        "movingSegment": "pelvis",
+        "loadPlacement": "acrossPelvis",
+        "loadInterface": "paddedBarbellAcrossPelvis",
+        "gripOrientation": "supinated",
+        "rangeOfMotion": "floorToHipNeutral",
+        "fixedPath": false,
+        "interRepSupport": "floor",
+        "lowerBodyContribution": "combinedHipAndKneeExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "kennedy-2024-hip-thrust-glute-bridge"
+      ],
+      "movementDefinition": "Lie with the upper torso anchored on the floor, a padded barbell across the pelvis, and the feet shoulder-width apart with the reviewed flexed-knee setup. Steady the bar with a supinated grip and raise the pelvis until the hips reach neutral and the knees finish near 115 degrees of flexion. Lower until the plates return to the floor without shifting the upper torso or adding deliberate spinal extension or abduction."
+    }
+  ]
+}

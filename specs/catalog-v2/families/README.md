@@ -1,13 +1,13 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Thirty reviewed family files are currently active: the three chest presses,
-vertical press and pull, both compound row families, nine narrow shoulder or
-scapular-action families, dip, push press, and eight narrow
-elbow/forearm/wrist families, plus four lower-body isolation families. Each uses
-a coverage batch whose exercises
-collectively exercise every admitted discrete
-axis value without generating the Cartesian product. A continuous numeric
+Thirty-four reviewed family files are currently active: the three chest
+presses, vertical press and pull, both compound row families, nine narrow
+shoulder or scapular-action families, dip, push press, eight narrow
+elbow/forearm/wrist families, four lower-body isolation families, and four
+lower-body compound families. Each uses a coverage batch whose exercises
+collectively exercise every admitted discrete axis value without generating
+the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
 records are never assigned artificial endpoints merely to cover a range.
 Shoulder-extension row uses 12 reviewed exercises to cover five equipment
@@ -43,6 +43,19 @@ versus prone leg curl, bent-knee prone-table hip extension, and straight- versus
 bent-knee machine calf raise. `hip-flexion` remains deferred because the
 available evidence does not establish the proposed dynamic
 femur-relative-to-position-held-pelvis isolation contract.
+
+Batch 5 adds six exercises across `bilateral-squat`, `hip-thrust-bridge`,
+`split-stance-squat`, and `step-up`. The active rosters are limited to two
+parallel straight-bar squats, two padded-barbell thrust/bridge fixtures, one
+stationary approximately-leg-length barbell split squat using the study's
+100-percent condition, and one complete 21-cm
+bodyweight forward stepping sequence. `hip-hinge` remains deferred because the
+reviewed Romanian-deadlift fixtures show material knee excursion and therefore
+cannot satisfy the shared `positionHeld` boundary. Narrowing the old
+`split-stance-lunge` discovery handle also leaves `dynamic-lunge` unresolved:
+forward/reverse step-and-return tasks need reviewed impact, deceleration,
+support-transition, and return semantics, while walking lunges may ultimately
+belong to locomotion.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -262,3 +275,57 @@ in prone-table hip extension pins it `false`. `kineticChain` remains separate:
 leg extensions, leg curls, and hip extension are open chain, while calf raises
 are closed chain because the forefoot stays supported as the heel and body
 segment move.
+
+Batch-5 lower-body compounds reuse `stanceConfiguration`, `loadPlacement`,
+`rangeOfMotion`, `footContact`, `interRepSupport`, and
+`lowerBodyContribution` only where the underlying fact is shared. Values stay
+family-reviewed: `symmetricBilateral`, `splitSagittal`, and
+`leadFootRaisedStart` are different support topologies, while
+`thighParallel`, `leadThighParallel`, and the full raised-platform sequence are
+different endpoint conventions. The squat and stationary split-squat use the
+same `upperBackBarbell` load-placement value. The split-squat source names a
+barbell but not a high/low site or hand orientation, so its upper-back placement
+and pronated control grip are bounded figure- and mechanics-derived encodings,
+not textual-method precision.
+
+`fixedPath` remains an external-load question in Batch 5. Squat,
+hip-thrust/bridge, and stationary split-squat require the boolean and pin it
+`false`. The bodyweight-only step-up deliberately omits the axis because no
+external load path exists; omission must not be interpreted as an unreviewed
+machine or rail-guided branch.
+
+The one-record split-squat and step-up contracts keep their boundaries in
+required single-value axes rather than always-true exercise rules. Every such
+axis is mutation-tested directly. Step-up records Wang et al.'s complete task:
+the trail foot returns from platform to floor, the lead foot follows, and the
+same lead foot is replaced on the platform before the next repetition. That is
+not the continuous gym repetition in which the lead foot stays elevated.
+
+Gross torso instruction and segmental spinal motion remain separate. The
+split-squat's `trunkOrientation: erect` records Song et al.'s instructed and
+video-checked cue, while `spineMotion: nonstandardized` avoids claiming
+unmeasured lumbar immobility. Bilateral squat uses the same spine-motion value
+because the reviewed studies measured load- and bracing-sensitive lumbar
+alignment rather than one fixed path. Both families still forbid every spinal
+prime action: nonstandardized observed motion is not deliberate spinal work.
+
+Squat, stationary split-squat, and step-up author
+`ankle.plantarflexion` only because reviewed angular data establish motion from
+bottom-position dorsiflexion toward the standing angle. An extensor moment or
+calf excitation alone is insufficient. Hip-thrust/bridge instead declares
+`ankleMotion: nonstandardized` and forbids ankle prime actions because its
+observed motion and negligible variable kinetics do not establish one common
+training-defining ankle action. Its pelvic-trunk motion receives the same
+honest `nonstandardized` spelling rather than a fabricated position-held claim.
+
+The back- and front-squat rules require the reviewed setup-specific shoulder
+control assignment as a minimum: upper-back/pronated requires external
+rotators, while anterior clean grip requires anterior deltoid. Exact roster
+tests keep the current records from receiving both assignments, but the rule
+schema does not claim that the other stabilizer is anatomically forbidden.
+
+Stability demands cover every materially load-bearing or control-defining
+region, not every incidental contact. In hip thrust and glute bridge the feet
+materially anchor the task, so ankle and foot demands require soleus control.
+The pelvis bears the padded barbell; the supinated hands only steady it, so
+their contact does not invent wrist, hand, or loaded-grip demands.

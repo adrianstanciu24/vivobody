@@ -1,0 +1,599 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "bilateral-squat",
+  "name": "Bilateral Squat",
+  "definition": "A bilateral closed-chain compound squat in which both feet remain planted while the hips and knees flex to a reviewed thigh-parallel bottom position, then the athlete returns to standing through hip extension, knee extension, and ankle plantarflexion. The initial roster is limited to hip-width straight-bar back and canonical clean-grip front squats with no external support, no machine guidance, and no floor reset; clean grip is a figure- and mechanics-derived product setup rather than a controlled study factor. The reviewed back-squat sources do not consistently report a high- versus low-bar site, so the canonical back-squat record does not invent that distinction. Vasti and gluteus maximus are the principal training emphases; rectus femoris, gastrocnemius, and soleus remain meaningful dynamic contributors, while the visible medial-hamstring region controls the hip, pelvis, and knee rather than receiving dynamic squat credit from excitation alone. The trunk, loaded grip, shoulder girdle, pelvis, and feet control the free bar and body segments. Hip hinges, floor pulls, hip thrusts and bridges, unilateral or split-stance squats, lunges, step-ups, leg presses, hack and pendulum squats, belt squats, Smith squats, safety-bar and transformer-bar variants, box squats, heel-elevated squats, partial or full-depth squats, overhead squats, squat jumps, and thrusters remain outside this first contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "armstrong-2022-squat-movement-dynamics",
+    "gorsic-2024-squat-load-placement",
+    "joseph-2020-back-belt-squat",
+    "kubo-2019-squat-depth-hypertrophy",
+    "mccormick-2023-front-back-squat-bracing",
+    "purzel-2026-powerlifting-squat-joint-moments",
+    "sinclair-2022-back-squat-foot-angle",
+    "yavuz-2015-front-back-squat-emg"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "squat",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior",
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "deltoidAnterior",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether both distal feet remain fixed against the floor while the body moves.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross whole-body posture at the start and end of each repetition.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface supports the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral relationship of the two feet; both reviewed fixtures use a symmetric, non-split stance.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed heel-to-heel stance width relative to the athlete's hips.",
+      "allowedValues": [
+        "hipWidth"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the straight barbell is supported on the athlete during the squat.",
+      "allowedValues": [
+        "upperBackBarbell",
+        "anteriorDeltoidClavicleBarbell"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical bilateral hand orientation used to control the straight barbell.",
+      "allowedValues": [
+        "pronated",
+        "cleanGrip"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed depth class; the upper thighs reach approximately parallel to the floor before the ascent.",
+      "allowedValues": [
+        "thighParallel"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed studies measured load- and bracing-sensitive lumbar alignment rather than a literally fixed spinal angle; deliberate spinal motion is not a prime action, but the exact path is not standardized.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric hip motion that returns the athlete to standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric knee motion that returns the athlete to standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric ankle motion from bottom-position dorsiflexion toward the standing position.",
+      "allowedValues": [
+        "plantarflexes"
+      ]
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate toe motion creates the repetition; the reviewed squat keeps the foot planted and position-held.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether both feet retain continuous floor contact through descent, ascent, and standing lockout.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external support receives the body or load between repetitions.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the barbell path; both reviewed straight-bar fixtures are free weight."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Which lower-body joint motions deliberately create the concentric repetition.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 12
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "upper-back-load-uses-back-squat-setup",
+      "description": "An upper-back straight bar is the reviewed free-weight back-squat setup; this value does not fabricate an unreported high- versus low-bar site.",
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "upperBackBarbell"
+      },
+      "then": [
+        {
+          "field": "variant.gripOrientation",
+          "value": "pronated"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "pronated-grip-is-back-squat",
+      "description": "The reviewed pronated bar-control setup belongs to the upper-back barbell back squat.",
+      "when": {
+        "field": "variant.gripOrientation",
+        "operator": "equals",
+        "value": "pronated"
+      },
+      "then": [
+        {
+          "field": "variant.loadPlacement",
+          "value": "upperBackBarbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "anterior-load-uses-clean-grip",
+      "description": "An anterior-deltoid and clavicle bar position uses the canonical clean-grip front-rack setup; the grip is figure- and mechanics-derived rather than a controlled study factor.",
+      "when": {
+        "field": "variant.loadPlacement",
+        "operator": "equals",
+        "value": "anteriorDeltoidClavicleBarbell"
+      },
+      "then": [
+        {
+          "field": "variant.gripOrientation",
+          "value": "cleanGrip"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "clean-grip-is-front-rack-squat",
+      "description": "The canonical clean-grip setup belongs to the anterior-deltoid and clavicle front squat; this rule bounds a mechanics-derived product choice.",
+      "when": {
+        "field": "variant.gripOrientation",
+        "operator": "equals",
+        "value": "cleanGrip"
+      },
+      "then": [
+        {
+          "field": "variant.loadPlacement",
+          "value": "anteriorDeltoidClavicleBarbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "barbell-back-squat",
+      "name": "Barbell Back Squat",
+      "aliases": [
+        "Back Squat",
+        "Straight-Bar Back Squat"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 96,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "brachialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipWidth",
+        "loadPlacement": "upperBackBarbell",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "thighParallel",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "armstrong-2022-squat-movement-dynamics",
+        "gorsic-2024-squat-load-placement",
+        "joseph-2020-back-belt-squat",
+        "mccormick-2023-front-back-squat-bracing",
+        "purzel-2026-powerlifting-squat-joint-moments",
+        "sinclair-2022-back-squat-foot-angle",
+        "yavuz-2015-front-back-squat-emg"
+      ],
+      "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell resting securely across the upper back. Hold the bar with both hands in a pronated grip, brace the trunk, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a box, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while maintaining control of the free bar; the exact lumbar path is not standardized."
+    },
+    {
+      "catalogID": "barbell-front-squat",
+      "name": "Barbell Front Squat",
+      "aliases": [
+        "Front Squat",
+        "Clean-Grip Front Squat"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 94,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "deltoidAnterior", "role": "stabilizer" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "brachialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "hipWidth",
+        "loadPlacement": "anteriorDeltoidClavicleBarbell",
+        "gripOrientation": "cleanGrip",
+        "rangeOfMotion": "thighParallel",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "armstrong-2022-squat-movement-dynamics",
+        "gorsic-2024-squat-load-placement",
+        "mccormick-2023-front-back-squat-bracing",
+        "yavuz-2015-front-back-squat-emg"
+      ],
+      "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell supported across the anterior deltoids and clavicles in a clean grip. Brace the trunk, keep the elbows lifted, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a support, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while keeping the free bar balanced on the front rack; the exact lumbar path is not standardized."
+    }
+  ]
+}

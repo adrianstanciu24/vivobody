@@ -86,9 +86,11 @@ Regional excitation differences may support a role decision, but EMG rank by
 itself does not redefine a muscle's anatomical actions. Each family must make
 the practical training-emphasis judgment explicit and evidence-backed.
 
-`movementSignature.stabilityDemands` describes every joint or segment that
-must be controlled; it does not require a separate `role: stabilizer` entry
-for each one. Validation is intentionally role-agnostic at this step: any
+`movementSignature.stabilityDemands` describes every materially load-bearing
+or control-defining joint or segment. Incidental implement contact alone does
+not create a demand. The field does not require a separate `role: stabilizer`
+entry for each region: validation is intentionally role-agnostic at this step,
+so any
 assigned primary, secondary, or stabilizer whose anatomy profile can stabilize
 the region may cover the demand. `allowedByRole.stabilizer` is therefore a
 whitelist for contributors whose principal exercise role is control rather

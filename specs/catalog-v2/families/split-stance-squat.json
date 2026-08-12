@@ -1,0 +1,495 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "split-stance-squat",
+  "name": "Stationary Split Squat",
+  "definition": "A stationary unilateral-emphasis compound exercise performed from a fixed sagittal split stance. Both feet retain their reviewed floor contacts while the athlete lowers until the lead thigh is parallel to the floor, then returns to split standing through lead-side hip extension, knee extension, and ankle plantarflexion. The initial roster owns only an erect-torso barbell split squat at a stance length equal to the athlete's leg length. It does not treat a forward, reverse, or walking lunge's step, impact, deceleration, and changing support phases as variant axes. The family ID names the stationary geometry; the fixed lunge pattern is Vivobody's broader app-level classification for asymmetric split-stance lower-body compounds. Rear-foot-elevated, front-foot-elevated, supported, Smith, dumbbell, kettlebell, bodyweight, deficit, short-stance, long-stance, dynamic-lunge, and walking-lunge branches remain outside this first contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "song-2023-split-squat-step-length",
+    "stastny-2015-split-squat-dumbbell-position"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "gluteMed",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal foot contacts remain fixed while the body moves; both feet retain their reviewed contacts in this stationary branch.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross whole-body posture at the start and end of every repetition.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface supports the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The asymmetric front-to-back relationship of the feet; this reviewed branch remains in one sagittal split stance.",
+      "allowedValues": [
+        "splitSagittal"
+      ]
+    },
+    {
+      "id": "stanceLength",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed long split stance, approximately equal to greater-trochanter-to-lateral-malleolus leg length. Song et al. taped a 100-percent condition but did not report the exact foot landmark, so the contract does not encode a false numeric ratio.",
+      "allowedValues": [
+        "approximatelyLegLength"
+      ]
+    },
+    {
+      "id": "leadFootSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lead-foot contact retained throughout the repetition.",
+      "allowedValues": [
+        "fullFootFloor"
+      ]
+    },
+    {
+      "id": "trailFootSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trail-foot contact retained throughout the repetition; the reviewed split stance uses the forefoot rather than an elevated rear support.",
+      "allowedValues": [
+        "forefootFloor"
+      ]
+    },
+    {
+      "id": "interRepFootTransition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether either foot steps between repetitions; the stationary split-squat branch keeps both contacts fixed.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the barbell is supported; the source figure supports posterior upper-back placement but does not establish a precise high- versus low-bar site.",
+      "allowedValues": [
+        "upperBackBarbell"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral hand orientation used to control the upper-back barbell; pronation is figure- and mechanics-derived rather than stated in the textual methods.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed bottom-position criterion for the lead limb; the lead thigh reaches approximately parallel to the floor.",
+      "allowedValues": [
+        "leadThighParallel"
+      ]
+    },
+    {
+      "id": "trunkOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The instructed and video-checked sagittal trunk orientation.",
+      "allowedValues": [
+        "erect"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source instructed and video-checked an erect gross torso but did not measure segmental spinal motion; deliberate spinal motion is not a prime action, while the exact lumbar path remains unstandardized.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric lead-hip action that returns the athlete to split standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric lead-knee action that returns the athlete to split standing.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric lead-ankle motion from bottom-position dorsiflexion toward the split-standing angle.",
+      "allowedValues": [
+        "plantarflexes"
+      ]
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate toe motion, inversion, or eversion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the lead full-foot and trail forefoot contacts remain on the floor through descent, ascent, and lockout.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external support receives the body or load between repetitions.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the barbell path; the reviewed straight-bar fixture is free weight."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Which lower-body joint motions deliberately create the concentric repetition.",
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barbell-split-squat",
+      "name": "Barbell Split Squat",
+      "aliases": [
+        "Stationary Barbell Split Squat"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 8,
+      "searchPriority": 86,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "bicepsFemoris", "role": "stabilizer" },
+        { "muscle": "gluteMed", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "brachialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lowerBack", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "splitSagittal",
+        "stanceLength": "approximatelyLegLength",
+        "leadFootSupport": "fullFootFloor",
+        "trailFootSupport": "forefootFloor",
+        "interRepFootTransition": "none",
+        "loadPlacement": "upperBackBarbell",
+        "gripOrientation": "pronated",
+        "rangeOfMotion": "leadThighParallel",
+        "trunkOrientation": "erect",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeld",
+        "footContact": "continuous",
+        "interRepSupport": "none",
+        "fixedPath": false,
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "song-2023-split-squat-step-length"
+      ],
+      "movementDefinition": "Place a barbell securely across the upper back and hold it with both hands in a pronated grip. Take a fixed sagittal split stance approximately equal to your greater-trochanter-to-lateral-malleolus leg length, with the lead foot flat and the trail forefoot on the floor; the reviewed study did not report a precise foot landmark for this taped condition. Keep the torso erect and both foot contacts fixed. Lower until the lead thigh is approximately parallel to the floor, then extend the lead hip and knee and move the lead ankle from its bottom-position dorsiflexion toward the split-standing angle. Finish in the same split stance without stepping between repetitions."
+    }
+  ]
+}

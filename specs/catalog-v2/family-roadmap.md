@@ -5,7 +5,7 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 30 reviewed families are active, containing 104 exercises.
+- 34 reviewed families are active, containing 110 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
@@ -14,14 +14,17 @@ are discovery handles, not guaranteed final family IDs.
   evidence holds, and one deferred branch of an existing family.
 - Batch 4 resolved five candidates into four active families and one explicit
   evidence hold.
-- 18 not-yet-reviewed candidates remain in Batches 5–7.
-- 29 work items remain unresolved: 28 family or branch items—the 18 candidates;
+- Batch 5 resolved five discovery candidates into four active families and two
+  holds after splitting stationary split squats from dynamic lunges.
+- 13 not-yet-reviewed candidates remain in Batches 6–7.
+- 26 work items remain unresolved: 25 family or branch items—the 13 candidates;
   the deferred `diagonal-pull`, `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
   `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
   `landmine-press` holds; and the deferred closed-chain branch of
-  `vertical-press`; and the Batch-4 `hip-flexion` hold—plus the cross-family
-  sternocostal shoulder-flexion capability hold described below.
+  `vertical-press`; the Batch-4 `hip-flexion` hold; and the Batch-5
+  `hip-hinge` hold; and the new `dynamic-lunge` discovery hold—plus the
+  cross-family sternocostal shoulder-flexion capability hold described below.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -63,7 +66,11 @@ batch siblings.
 | `knee-flexion` | 2 |
 | `hip-extension` | 1 |
 | `ankle-plantarflexion` | 2 |
-| **Total** | **104** |
+| `bilateral-squat` | 2 |
+| `hip-thrust-bridge` | 2 |
+| `split-stance-squat` | 1 |
+| `step-up` | 1 |
+| **Total** | **110** |
 
 ## Foundation gates
 
@@ -120,7 +127,7 @@ expectations, and catalog tests atomically. Merely adding the condition label,
 copying the clavicular EMG site, or making shoulder flexion unconditional does
 not resolve the hold.
 
-### Lower-body taxonomy and axes — complete for Batch 4
+### Lower-body taxonomy and axes — complete through Batch 5
 
 Batch 4 replaced the action-leaking `quads`, `hamstrings`, `calves`,
 `adductors`, `hipFlexors`, and `shins` aggregates with exact lower-body regions
@@ -134,16 +141,22 @@ two latter regions do not receive unbounded hip-flexion credit when their
 modeled sagittal moment direction changes or approaches zero in deeper
 flexion.
 
-The first lower-body isolation contracts standardize kinetic chain, body
+The first lower-body isolation contracts standardized kinetic chain, body
 position, torso and pelvis support, position-held segment motion, joint-angle,
 moving-segment, load-interface, machine-type, fixed-path, and
 isolated-joint-contribution spellings. `resistanceGeometry` is retained only
 when it adds a fact not already encoded by a purpose-built machine type, as in
-the gravity-loaded hip-extension fixture. Batch 5 must extend this vocabulary
-for stance, load placement, range of motion, and inter-repetition support rather
-than create family-local synonyms. The squat/lunge/step-up group still needs
-one shared decision about whether ankle plantarflexion is an authored prime
-angular action; a net ankle moment is not automatically proof of that action.
+the gravity-loaded hip-extension fixture. Batch 5 extended that vocabulary with
+shared stance-configuration, load-placement, range-of-motion, foot-contact,
+and inter-repetition-support axes while keeping family-specific values tied to
+their reviewed topology.
+
+The squat, stationary split-squat, and step-up contracts author ankle
+plantarflexion only after their kinematic records establish angular motion from
+bottom-position dorsiflexion toward the standing angle. The decision is not
+inferred from an ankle moment or calf excitation alone. Hip thrust/bridge
+instead uses `ankleMotion: nonstandardized`: its observed ankle excursion and
+variable negligible kinetics do not establish one universal prime action.
 
 ### Resisted-action semantics
 
@@ -280,17 +293,40 @@ external-load or limb-load model.
 
 ## Batch 5 — Lower-body compound sagittal patterns (5)
 
-1. `hip-hinge`
+Status: complete. Four candidates activated as narrow families. `hip-hinge`
+remains an explicit motion-evidence hold, while the former
+`split-stance-lunge` discovery handle split into active stationary
+`split-stance-squat` and an unresolved `dynamic-lunge` discovery hold.
+
+1. `hip-hinge` — deferred
 2. `hip-thrust-bridge`
 3. `bilateral-squat`
-4. `split-stance-lunge`
+4. `split-stance-squat` — renamed from the discovery handle
+   `split-stance-lunge`
 5. `step-up`
 
-The boundary matrix must prove hinge versus squat, isolated hip extension
-versus thrust/bridge, and lunge versus step-up. The initial hinge should defer
-knee-extension-heavy floor pulls unless a reviewed branch represents them.
-Leg press, walking lunges, and lateral/crossover step-ups remain explicit
-discovery decisions rather than automatic variants.
+The six active records are deliberately narrow: parallel straight-bar back and
+front squats; barbell hip thrust and floor glute bridge; one stationary
+approximately-leg-length barbell split squat using the study's 100-percent
+condition; and one exact 21-cm bodyweight forward
+stepping sequence. The latter includes the studied trail-foot return followed
+by lead-foot return and requires the same lead foot to be replaced before the
+next repetition. `split-stance-squat` keeps the coarse app-level `lunge`
+pattern, but its family ID names the stationary fixed-foot geometry and does
+not pre-authorize a dynamic lunge.
+
+`dynamic-lunge` remains unresolved for forward and reverse step-and-return
+tasks, whose impact, deceleration, changing support, and return transitions are
+not stationary split-squat axes. Walking lunges may ultimately belong to a
+separate locomotion family; this hold does not decide that ownership.
+
+`hip-hinge` did not activate. Reviewed Romanian-deadlift fixtures showed
+material knee excursion, so they cannot satisfy the shared
+`kneeMotion: positionHeld` meaning. Adding knee extension merely to force a
+record through would erase the intended hinge boundary. Leg press, walking
+lunges, knee-extension-heavy floor pulls, generic-height step-ups, and
+lateral/crossover step-ups remain explicit future decisions rather than
+automatic variants.
 
 ## Batch 6 — Lower-body taxonomy-sensitive isolation (5)
 
@@ -330,7 +366,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current 29-item count.
+new item in the current 26-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -371,6 +407,20 @@ establish the proposed dynamic femur-relative-to-position-held-pelvis action
 boundary in a condition-matched isolation fixture. It must not be activated by
 borrowing sit-up or hanging-knee-raise evidence, which moves other segments and
 adds other prime actions.
+
+Batch 5 leaves one evidence hold: `hip-hinge`. The reviewed Romanian-deadlift
+fixtures show material knee excursion, so training intent cannot substitute
+for the shared no-material-excursion meaning of `positionHeld`. Resume only
+with a condition-matched no-floor-reset fixture that directly establishes a
+materially held knee, or with a reviewed small-knee-extension branch whose
+quantitative motion band and muscle policy preserve the squat/floor-pull
+boundary.
+
+Batch 5 also leaves `dynamic-lunge` as a discovery hold created when the old
+`split-stance-lunge` candidate was narrowed to stationary
+`split-stance-squat`. Forward and reverse step-and-return lunges require a
+reviewed transition, impact, deceleration, and support-phase contract. Walking
+lunges may instead belong to locomotion and remain intentionally undecided.
 
 Batch 3 leaves four standalone evidence holds: `scapular-depression`,
 `scapular-upward-rotation`, `scapular-downward-rotation`, and
