@@ -1,0 +1,473 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "push-press",
+  "name": "Push Press",
+  "definition": "A standing whole-body power press performed from a front rack. A preparatory push-press countermovement precedes rapid hip extension, knee extension, and ankle plantarflexion that propel the bar upward while the shoulder flexes and abducts in a front-scapular path, the scapula rotates upward and tilts posteriorly, and the elbow extends. The athlete keeps the feet in contact with the floor and finishes standing without a second receiving dip. Strict overhead presses, behind-neck presses, thrusters, push jerks, split jerks, landmine presses, and unreviewed dumbbell, kettlebell, log, or Viking-press variants remain outside this family.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "chiu-2006-push-press-joint-kinetics",
+    "coratella-2022-overhead-press-variants",
+    "ichihashi-2014-military-press-kinematics",
+    "lake-2014-push-press-power",
+    "seth-2019-shoulder-work",
+    "soriano-2024-push-press-jerk"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion",
+      "shoulder.abduction"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt",
+      "elbow.extension",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "knee",
+      "ankle"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "quads"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "calves"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior",
+        "quads",
+        "gluteMax"
+      ],
+      "secondary": [
+        "deltoidLateral",
+        "supraspinatus",
+        "triceps",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "calves"
+      ],
+      "stabilizer": [
+        "extensorCarpiRadialis",
+        "fingerFlexors",
+        "externalRotators",
+        "subscapularis",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the loaded hands and bar move freely or remain fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "Gross body position used by the reviewed push-press task.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso during the press.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not classify scapular rotation or tilt.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "pressInclinationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "Signed inclination of the canonical torso-relative overhead press from horizontal; the preparatory lower-body dip does not change this path classification.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Canonical forearm and hand orientation on the straight front-rack barbell.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "Whether rails or a lever constrain the external load path.",
+      "fixedValue": false
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle motion deliberately contributes to propelling the load during the concentric repetition.",
+      "allowedValues": [
+        "countermovementPropulsion"
+      ]
+    },
+    {
+      "id": "pressPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The canonical humeral and implement path relative to the head.",
+      "allowedValues": [
+        "frontScapular"
+      ]
+    },
+    {
+      "id": "legDriveDipStyle",
+      "valueType": "enum",
+      "required": true,
+      "description": "The preparatory lower-body countermovement that precedes upward propulsion; this class excludes a full front-squat repetition.",
+      "allowedValues": [
+        "pushPressCountermovement"
+      ]
+    },
+    {
+      "id": "receivingStrategy",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the athlete receives the bar after propulsion and arm extension.",
+      "allowedValues": [
+        "standingNoRedip"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the feet retain floor contact through propulsion and lockout; this axis does not classify foot position.",
+      "allowedValues": [
+        "continuous"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 1,
+      "maximum": 6
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "barbell-push-press",
+      "name": "Barbell Push Press",
+      "aliases": [
+        "Push Press",
+        "Front-Rack Push Press"
+      ],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 5,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "deltoidAnterior",
+          "role": "primary"
+        },
+        {
+          "muscle": "quads",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "calves",
+          "role": "secondary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "countermovementPropulsion",
+        "pressPath": "frontScapular",
+        "legDriveDipStyle": "pushPressCountermovement",
+        "receivingStrategy": "standingNoRedip",
+        "footContact": "continuous"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "chiu-2006-push-press-joint-kinetics",
+        "coratella-2022-overhead-press-variants",
+        "ichihashi-2014-military-press-kinematics",
+        "lake-2014-push-press-power",
+        "soriano-2024-push-press-jerk"
+      ],
+      "movementDefinition": "Stand with the feet about hip-width apart and hold a straight barbell in the front rack with a pronated grip just outside shoulder width. Brace the trunk and make an upright push-press countermovement by flexing the hips and knees while keeping both feet in contact with the floor. Immediately extend the hips, knees, and ankles to propel the bar upward, then press it in front of the head to overhead lockout as the scapulae rotate upward. Finish standing with the elbows extended without dipping under the bar, then lower the bar under control to the front rack."
+    }
+  ]
+}

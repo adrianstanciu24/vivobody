@@ -1,0 +1,412 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "scapular-elevation",
+  "name": "Scapular Elevation",
+  "definition": "A strict open-chain scapular isolation whose concentric phase elevates one scapula while the humerus remains beside the torso and the elbow remains extended. The initial contract admits only the directly measured single-arm dumbbell shoulder shrug. It models the observed upward rotation as a coupled prime action instead of pretending that a loaded shrug is pure vertical translation: levator scapulae and upper trapezius elevate the scapula, while upper trapezius and serratus contribute to upward rotation. The same one-subject trace showed smaller changes in the model-specific abduction/adduction and winging coordinates. Those are disclosed kinematic couplings, not additional training-defining prime actions: the authors did not attribute them as positive-work targets, and winging is a distinct internal/external-rotation coordinate that this taxonomy must not relabel as protraction/retraction or anterior/posterior tilt. Rolling shrugs, overhead shrugs, trap-bar and barbell variants, machine shrugs, carries, upright rows, neck motion, and leg-driven pulls remain outside this narrow contract.",
+  "evidenceRefs": [
+    "castelein-2016-scapular-muscles-shrug",
+    "seth-2019-shoulder-work",
+    "werthel-2019-trapezius-transfer"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "scapula.elevation"
+    ],
+    "primeActions": [
+      "scapula.elevation",
+      "scapula.upwardRotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "levatorScapulae"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "levatorScapulae",
+        "trapeziusUpper"
+      ],
+      "secondary": [
+        "serratus"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "triceps",
+        "extensorCarpiRadialis",
+        "fingerFlexors",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the dumbbell-bearing hand moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The gross body position used by the measured shoulder-shrug fixture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface supports the torso during the repetition."
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether the non-working side braces against an external support during the unilateral repetition."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "free"
+      ],
+      "description": "Whether external posterior support limits scapular translation along the thorax."
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "atSide"
+      ],
+      "description": "The maintained humerothoracic position, with the upper arm beside the torso rather than dynamically elevating."
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The maintained axial humeral orientation during the reviewed shrug."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic motion."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extended"
+      ],
+      "description": "The extended elbow posture held throughout the scapular excursion."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar orientation remains fixed or contributes dynamic rotation."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The thumb-forward forearm posture held while the scapula elevates."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the dumbbell without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "gravityLoadedDumbbell"
+      ],
+      "description": "A dumbbell held beside the torso supplies a downward external load opposed by scapular elevation."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    },
+    {
+      "id": "neckContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether deliberate cervical motion contributes to the repetition. This review axis records a fixed technique boundary because the current anatomical foundation has no cervical joint-action region."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "single-arm-dumbbell-shrug",
+      "name": "Single-Arm Dumbbell Shrug",
+      "aliases": [
+        "One-Arm Dumbbell Shrug"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "levatorScapulae",
+          "role": "primary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "primary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "contralateralSupport": "none",
+        "scapularTranslation": "free",
+        "upperArmPosition": "atSide",
+        "humeralRotation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "neckContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "castelein-2016-scapular-muscles-shrug",
+        "seth-2019-shoulder-work"
+      ],
+      "movementDefinition": "Stand tall holding one dumbbell beside the torso with the elbow extended and the thumb pointing forward. Elevate the working scapula toward the ear while keeping the humerus at the side and allowing its measured upward rotation, then lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+    }
+  ]
+}

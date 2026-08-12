@@ -1,10 +1,11 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Twenty-two reviewed family files are currently active: the three chest presses,
-vertical press and pull, both compound row families, the seven narrow
-shoulder-action families, and eight narrow elbow/forearm/wrist families. Each uses a
-coverage batch whose exercises collectively exercise every admitted discrete
+Twenty-six reviewed family files are currently active: the three chest presses,
+vertical press and pull, both compound row families, nine narrow shoulder or
+scapular-action families, dip, push press, and eight narrow
+elbow/forearm/wrist families. Each uses a coverage batch whose exercises
+collectively exercise every admitted discrete
 axis value without generating the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
 records are never assigned artificial endpoints merely to cover a range.
@@ -24,6 +25,15 @@ conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist
 actions. Generic `grip` remains deferred: dynamic finger closing, isometric
 support, hanging, and pinch are different biomechanical tasks, not variants of
 one cardinal joint action.
+
+Batch 3 adds five exercises across `scapular-protraction`,
+`scapular-elevation`, `dip`, and `push-press`. Scapular depression and
+standalone upward/downward rotation remain evidence holds rather than being
+inferred from muscle activity or copied out of a coupled movement. Landmine
+press remains deferred until human-relative joint geometry, rather than bar
+angle alone, supports a contract. Closed-chain vertical press belongs as a
+future branch of `vertical-press`, but that branch remains deferred until
+direct dynamic evidence supports its bodyweight-loading and action contract.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -55,6 +65,16 @@ that an assigned muscle can stabilize every declared region. When the setup
 requires one member of a biomechanically valid muscle set rather than one exact
 assignment, `requireMuscleRequirements` reuses the family muscle-requirement
 shape (`anyOf` plus `minimumRole`) without forcing an arbitrary muscle.
+
+A `spine|pelvis` demand does not by itself prescribe a universal number of
+trunk-muscle assignments; the reviewed setup does. Unsupported exercises in
+which the full body is suspended from the hands use the complete categorical
+trunk set (`abs`, `obliques`, and `lowerBack`) to represent anterior,
+lateral/rotational, and posterior control. This is the shared pull-up/dip
+convention. A supported or segmentally braced fixture may require only the
+reviewed subset, and asymmetric free-load setups make their anti-rotation or
+anti-lateral-flexion requirement explicit rather than inheriting the suspended
+rule.
 
 `relativeGripWidth` has the shared ordered vocabulary
 `narrow|shoulderWidth|medium|wide`. Families may select a reviewed subset, but
@@ -143,3 +163,40 @@ proving protraction or retraction. Likewise, anterior or lateral torso contact
 does not automatically pin posterior scapular translation. A scapular action
 is authored as prime only when motion evidence or a deliberately constrained
 technique supports it; EMG magnitude alone cannot create an action.
+
+Batch-3 scapular isolations apply that evidence rule literally. The reviewed
+supine scapular punch admits protraction because the technique prescribes the
+loaded scapular excursion while dynamic shoulder and elbow actions are
+forbidden. The reviewed single-arm shrug admits elevation plus its measured
+coupled upward rotation; it is not rewritten as pure elevation merely to make
+the family name simpler. The same one-subject trace contains smaller
+model-specific scapular abduction/adduction and winging coordinates. Those are
+recorded as three-dimensional coupling, not relabeled as shoulder abduction,
+protraction/retraction, or tilt and not promoted to prime actions without a
+matching taxonomy action and work attribution. Neither contract pre-approves
+depression, standalone rotation, push-up-plus, overhead shrug, or another
+apparatus or posture.
+
+Support and path axes name different mechanical facts. `bodyweightApparatus`
+identifies the reviewed hand-support apparatus and `handSupportConstraint`
+distinguishes fixed dip bars from independently moving rings. For a suspended
+bodyweight exercise, `pathConstraint` describes whether an external mechanism
+guides the athlete's body path. `fixedPath` retains its existing external-load
+meaning for dumbbells, barbells, rails, and lever machines, so it is used by
+the scapular isolations and push press but not overloaded to describe a dip's
+body path. These Batch-3 values cover only the activated fixtures; they are not
+pre-approved vocabulary for assisted dips, machines, or the deferred
+closed-chain vertical-press branch.
+
+`push-press` makes lower-body propulsion explicit rather than hiding it inside
+a vertical-press name. `lowerBodyContribution: countermovementPropulsion`
+states that the legs deliberately propel the bar; `legDriveDipStyle:
+pushPressCountermovement` names the preparatory leg countermovement and is
+unrelated to the separate `dip` family. `receivingStrategy:
+standingNoRedip` excludes a push-jerk catch, while `footContact: continuous`
+records contact through propulsion and lockout without defining stance. These
+single admitted values belong only to the reviewed barbell push press; other
+implements, receiving strategies, and foot behaviors require their own review.
+The record still declares wrist and hand stability and uses the shared loaded-
+grip `extensorCarpiRadialis` plus `fingerFlexors` assignments; whole-body power
+does not waive the static bar-control contract.

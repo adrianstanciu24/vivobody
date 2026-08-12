@@ -85,6 +85,15 @@ either form. In particular, brachioradialis returning a pronated or supinated
 forearm toward neutral cannot satisfy an unconditional forearm-pronation or
 forearm-supination requirement.
 
+Position conditions are added only with reviewed action-capability evidence;
+symmetry of naming is not evidence of symmetry of function. The proposed
+`fromExtendedPosition` condition for sternocostal pectoralis-major shoulder
+flexion toward neutral remains a tracked foundation hold. It is deliberately
+absent from `joint-actions.json`, so the active dip records do not assign that
+region or grant it body-highlight and training-volume credit prematurely. The
+resolution gate and user-visible consequence are recorded in
+`family-roadmap.md` and the Batch-3 dip proposal.
+
 An exercise also cannot repeat a family prime action in
 `additionalPrimeActions`. That would let a conditioned family silently broaden
 its contract by redeclaring the same action without the condition (or under a

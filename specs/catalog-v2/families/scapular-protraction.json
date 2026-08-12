@@ -1,0 +1,359 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "scapular-protraction",
+  "name": "Scapular Protraction",
+  "definition": "A strict open-chain scapular isolation whose concentric phase moves one scapula anterolaterally around the thorax while the humerus remains held at 90 degrees of forward elevation and the elbow remains extended. The initial contract admits only the directly reviewed supine dumbbell scapular punch. It does not infer a pure translation from serratus-anterior EMG: the source prescribes full available protraction through a loaded range, while the family forbids dynamic shoulder and elbow motion. Push-up-plus, dynamic-hug, cable-punch, wall-slide, bodyweight, bilateral, standing, and overhead variants remain outside this narrow contract until their coupled glenohumeral and scapular rotations are reviewed directly.",
+  "evidenceRefs": [
+    "castelein-2016-serratus-pectoralis-minor-protraction",
+    "intelangelo-2022-supine-scapular-punch",
+    "seth-2019-shoulder-work"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "scapula.protraction"
+    ],
+    "primeActions": [
+      "scapula.protraction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMinor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "serratus"
+      ],
+      "secondary": [
+        "pectoralisMinor"
+      ],
+      "stabilizer": [
+        "externalRotators",
+        "triceps",
+        "extensorCarpiRadialis",
+        "fingerFlexors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the dumbbell-bearing hand moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "supine"
+      ],
+      "description": "The gross body position used by the reviewed scapular-punch fixture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "bench"
+      ],
+      "description": "The posterior surface supporting the torso during the reviewed supine fixture."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "supportConstrained"
+      ],
+      "description": "Whether posterior support limits scapular translation along the thorax. Support-constrained does not mean motionless: protraction is the deliberately trained excursion while the scapula remains in contact with the support."
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexed90"
+      ],
+      "description": "The held humerothoracic position: 90 degrees of forward elevation without dynamic shoulder flexion."
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The held axial humeral orientation during the reviewed punch."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic motion."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extended"
+      ],
+      "description": "The extended elbow posture held throughout the scapular excursion."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar orientation remains fixed or contributes dynamic rotation."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The thumb-forward forearm posture held while the scapula protracts."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the dumbbell without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "gravityLoadedDumbbell"
+      ],
+      "description": "A dumbbell held vertically above the shoulder supplies the reviewed external load as the scapula moves around the thorax."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "supine-dumbbell-scapular-punch",
+      "name": "Supine Dumbbell Scapular Punch",
+      "aliases": [
+        "Dumbbell Serratus Punch",
+        "Supine Serratus Punch"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 12,
+      "searchPriority": 76,
+      "involvement": [
+        {
+          "muscle": "serratus",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMinor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "upperArmPosition": "flexed90",
+        "humeralRotation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "castelein-2016-serratus-pectoralis-minor-protraction",
+        "intelangelo-2022-supine-scapular-punch"
+      ],
+      "movementDefinition": "Lie supine with one dumbbell held vertically above the shoulder, the upper arm fixed at 90 degrees of forward elevation, and the elbow extended. Without bending the elbow or flexing the shoulder, reach the load toward the ceiling by moving the scapula anterolaterally around the thorax, then return under control without adding a press."
+    }
+  ]
+}

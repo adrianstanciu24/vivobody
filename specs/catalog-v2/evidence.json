@@ -1321,6 +1321,94 @@
       "doi": "10.47206/ijsc.v4i1.250",
       "url": "https://doi.org/10.47206/ijsc.v4i1.250",
       "scope": "Twenty-two adults performed single-arm pronated and supinated pushdowns with a handle or padded strap. It supports those reviewed variants and observed radial wrist-flexor/extensor stabilization; the same-absolute-load maximal-repetition design and attachment mechanics limit triceps ranking and provide no longitudinal outcome."
+    },
+    {
+      "id": "castelein-2016-serratus-pectoralis-minor-protraction",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Serratus anterior or pectoralis minor: Which muscle has the upper hand during protraction exercises?",
+      "authors": ["Birgit Castelein", "Barbara Cagnie", "Thierry Parlevliet", "Ann Cools"],
+      "year": 2016,
+      "doi": "10.1016/j.math.2015.12.002",
+      "pmid": "26749459",
+      "url": "https://doi.org/10.1016/j.math.2015.12.002",
+      "scope": "Twenty-six participants performed a serratus punch plus wall and floor modified push-up-plus conditions while serratus anterior surface EMG and pectoralis-minor fine-wire EMG were recorded. Serratus activity was significantly greater than pectoralis-minor activity during the punch; the study supports their categorical roles in a protraction task, not numeric contribution weights or unmeasured scapular rotations and tilts."
+    },
+    {
+      "id": "intelangelo-2022-supine-scapular-punch",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Supine scapular punch: An exercise for early phases of shoulder rehabilitation?",
+      "authors": ["Leonardo Intelangelo", "Lassaga Ignacio", "Cristian Mendoza", "Diego Bordachar", "Daniel Jerez-Mayorga", "Alexandre Carvalho Barbosa"],
+      "year": 2022,
+      "doi": "10.1016/j.clinbiomech.2022.105583",
+      "pmid": "35124534",
+      "url": "https://doi.org/10.1016/j.clinbiomech.2022.105583",
+      "scope": "Supine scapular-punch surface EMG in healthy volunteers and participants with unilateral shoulder pain found moderate-to-high serratus-anterior activity with very low upper-trapezius and infraspinatus activity. It directly anchors the exercise setup and conservative target emphasis, but it does not supply three-dimensional scapular kinematics or justify a numeric role hierarchy."
+    },
+    {
+      "id": "castelein-2016-scapular-muscles-shrug",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Modifying the shoulder joint position during shrugging and retraction exercises alters the activation of the medial scapular muscles",
+      "authors": ["Birgit Castelein", "Ann Cools", "Thierry Parlevliet", "Barbara Cagnie"],
+      "year": 2016,
+      "doi": "10.1016/j.math.2015.09.005",
+      "pmid": "26409441",
+      "url": "https://doi.org/10.1016/j.math.2015.09.005",
+      "scope": "Surface and fine-wire EMG compared upper trapezius, levator scapulae, middle and lower trapezius, and rhomboid major across loaded shrug and retraction positions. It supports a narrow loaded shrug role envelope and position sensitivity; it did not measure scapular kinematics, so the coupled upward-rotation action comes from the separately cited shrug model rather than this EMG study."
+    },
+    {
+      "id": "mckenzie-2022-dip-variations",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?",
+      "authors": ["Alec McKenzie", "Zachary Crowley-McHattan", "Rudi Meir", "John Whitting", "Wynand Volschenk"],
+      "year": 2022,
+      "doi": "10.3390/ijerph192013211",
+      "pmid": "36293792",
+      "url": "https://doi.org/10.3390/ijerph192013211",
+      "scope": "Thirteen experienced men performed bench, parallel-bar, and ring dips with three-dimensional kinematics and a nine-muscle surface-EMG panel. It directly anchors the two admitted suspended fixtures, shoulder-extension bottom position, concentric shoulder-flexion and elbow-extension boundary, and apparatus-conditioned activity; raw within-muscle EMG cannot rank different muscles, and scapular kinematics were not measured."
+    },
+    {
+      "id": "mckenzie-2022-bar-dip-fatigue",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Fatigue Increases Muscle Activations but Does Not Change Maximal Joint Angles during the Bar Dip",
+      "authors": ["Alec McKenzie", "Zachary Crowley-McHattan", "Rudi Meir", "John Whitting", "Wynand Volschenk"],
+      "year": 2022,
+      "doi": "10.3390/ijerph192114390",
+      "pmid": "36361276",
+      "url": "https://doi.org/10.3390/ijerph192114390",
+      "scope": "Fifteen experienced men performed a parallel-bar dip set to exhaustion with three-dimensional kinematics and nine-muscle surface EMG. It confirms the shoulder-extended bottom and target-muscle activity across fatigue while explicitly leaving scapular kinematics unmeasured; it does not establish a whole-pectoralis or between-muscle force ranking."
+    },
+    {
+      "id": "chiu-2006-push-press-joint-kinetics",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Comparison of Joint Kinetics during Free Weight and Flywheel Resistance Exercise",
+      "authors": ["Loren Z. F. Chiu", "George J. Salem"],
+      "year": 2006,
+      "doi": "10.1519/R-18245.1",
+      "pmid": "16937968",
+      "url": "https://doi.org/10.1519/R-18245.1",
+      "scope": "Eleven trained men and women performed instrumented free-weight and flywheel front squats, lunges, and push presses. Joint-resolved impulse findings directly support knee-extension, hip-extension, and ankle-plantarflexion demands in the push press; they do not establish a categorical individual-muscle hierarchy or scapular actions."
+    },
+    {
+      "id": "lake-2014-push-press-power",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Power and Impulse Applied During Push Press Exercise",
+      "authors": ["Jason P. Lake", "Peter D. Mundy", "Paul Comfort"],
+      "year": 2014,
+      "doi": "10.1519/JSC.0000000000000438",
+      "pmid": "24584046",
+      "url": "https://doi.org/10.1519/JSC.0000000000000438",
+      "scope": "Seventeen resistance-trained men performed barbell push presses across 10 to 90 percent of one-repetition maximum on a force platform. It supports the front-rack task, lower-body countermovement and propulsion, overhead lockout, power modality, and low-repetition programming; it does not provide joint-resolved moments, scapular kinematics, or a complete muscle-role panel."
+    },
+    {
+      "id": "soriano-2024-push-press-jerk",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Kinetics and Kinematics of the Push Press, Push Jerk, and Split Jerk",
+      "authors": ["Marcos A. Soriano", "Ester Jiménez-Ormeño", "Jason P. Lake", "John J. McMahon", "César Gallo-Salazar", "Peter Mundy", "Paul Comfort"],
+      "year": 2024,
+      "doi": "10.1519/JSC.0000000000004810",
+      "pmid": "39072653",
+      "url": "https://doi.org/10.1519/JSC.0000000000004810",
+      "scope": "Eighteen resistance-trained men performed push presses, push jerks, and split jerks at 60, 75, and 90 percent of exercise one-repetition maximum. Force-time and task data support continuous foot contact, a single countermovement-propulsion phase, and standing lockout without a receiving dip as the push-press boundary; the study does not provide joint-resolved lower-limb moments, scapular kinematics, or a muscle-role hierarchy."
     }
   ]
 }

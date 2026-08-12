@@ -5,15 +5,21 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 22 reviewed families are active, containing 92 exercises.
+- 26 reviewed families are active, containing 97 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
   task-definition hold.
-- 32 not-yet-reviewed candidates remain in Batches 3–7.
-- 36 items remain to resolve: those 32 candidates plus the deferred
-  `diagonal-pull`, `scapular-retraction`, `upright-row`, and generic `grip`
-  candidates.
+- Batch 3 resolved nine candidates into four active families, four standalone
+  evidence holds, and one deferred branch of an existing family.
+- 23 not-yet-reviewed candidates remain in Batches 4–7.
+- 33 work items remain unresolved: 32 family or branch items—the 23 candidates;
+  the deferred `diagonal-pull`, `scapular-retraction`, `upright-row`, and
+  generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
+  `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
+  `landmine-press` holds; and the deferred closed-chain branch of
+  `vertical-press`—plus the cross-family sternocostal shoulder-flexion
+  capability hold described below.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -47,7 +53,11 @@ batch siblings.
 | `wrist-extension` | 1 |
 | `wrist-radial-deviation` | 1 |
 | `wrist-ulnar-deviation` | 1 |
-| **Total** | **92** |
+| `scapular-protraction` | 1 |
+| `scapular-elevation` | 1 |
+| `dip` | 2 |
+| `push-press` | 1 |
+| **Total** | **97** |
 
 ## Foundation gates
 
@@ -76,6 +86,32 @@ replaced the task-level `hand.grip` action with dynamic finger flexion and
 extension. The resulting foundation is pinned at 41 muscles, 62 mesh bases,
 and 44 actions; every previously active family was migrated atomically rather
 than inheriting anatomy from either retired aggregate.
+
+### Sternocostal flexion from an extended start — evidence hold
+
+The foundation currently gives `pectoralisMajorSternocostal` conditioned
+`shoulder.extension` capability when returning from a flexed position, but it
+does not declare the mirror capability for shoulder flexion from an extended
+start toward neutral. `fromExtendedPosition` is only a proposed condition name;
+it is not active vocabulary in `joint-actions.json`.
+
+The dip family exposes the user-visible consequence. Its concentric action is
+shoulder flexion from an extended bottom, yet the reviewed dip experiments
+measured only the clavicular pectoral site and do not establish a regional
+sternocostal role. The active records therefore assign no sternocostal
+involvement rather than fabricating a capability. Until this hold is resolved,
+the eventual 3D body highlight and MuscleVolume/Development credit for dips
+will omit the sternocostal region. The same gap must be checked before any
+future family treats flexion from extension as a training-defining action.
+
+Resolution requires a direct review of action-capability evidence across the
+relevant extended-to-neutral range and exercise-specific evidence sufficient
+to choose a categorical dip role. If both gates pass, add the central
+condition, update the sternocostal muscle profile, re-review every affected
+family, and update the dip contract, body-highlight expectations, volume-credit
+expectations, and catalog tests atomically. Merely adding the condition label,
+copying the clavicular EMG site, or making shoulder flexion unconditional does
+not resolve the hold.
 
 ### Lower-body taxonomy and axes
 
@@ -163,25 +199,39 @@ task and its measurable contract; do not recreate the retired catch-all
 
 ## Batch 3 — Scapular/press frontier (9)
 
+Status: complete. Four candidates activated as narrow families, four remain
+evidence holds, and closed-chain vertical press was assigned to a deferred
+branch of the existing `vertical-press` family.
+
 1. `scapular-protraction`
 2. `scapular-elevation`
-3. `scapular-depression`
-4. `scapular-upward-rotation`
-5. `scapular-downward-rotation`
+3. `scapular-depression` — deferred
+4. `scapular-upward-rotation` — deferred as a standalone family
+5. `scapular-downward-rotation` — deferred as a standalone family
 6. `dip`
-7. `landmine-press`
-8. `closed-chain-vertical-press`
-9. `leg-driven-overhead-press`
+7. `landmine-press` — deferred
+8. `closed-chain-vertical-press` — merged into `vertical-press`; branch deferred
+9. `leg-driven-overhead-press` — activated as `push-press`
 
-Upward- and downward-rotation candidates must earn standalone status; they may
-be better represented as coupled actions inside an active press, raise, shrug,
-or depression family. Review depression with dips, because a scapular-only
-exercise is not the same contract as dynamic shoulder extension plus elbow
-extension. `closed-chain-vertical-press` may become a branch of
-`vertical-press`. `landmine-press` requires human-relative geometry rather than
-classification from the bar angle. Lower-body propulsion keeps the final
-candidate outside the strict vertical-press contract even if its eventual name
-or modality changes.
+The activated scapular contracts are deliberately narrow: one reviewed supine
+dumbbell punch for protraction and one reviewed single-arm dumbbell shrug for
+elevation with coupled upward rotation. EMG alone did not create scapular prime
+actions. Depression lacks direct loaded dynamic evidence, and neither rotation
+candidate yet has a clean standalone fixture rather than a coupled arm or shrug
+task.
+
+Dip activated only for parallel bars and rings. Its concentric signature is
+shoulder flexion from the extended bottom plus elbow extension; unmeasured
+scapular motion was not promoted into the contract. `push-press` activated as a
+one-exercise barbell power family whose leg countermovement, triple extension,
+continuous foot contact, and no-redip standing reception distinguish it from
+strict press, thruster, push jerk, and split jerk.
+
+Landmine press remains blocked because implement travel does not establish the
+athlete-relative shoulder and scapular geometry. Closed-chain vertical press
+belongs conceptually inside `vertical-press`, but the branch remains blocked by
+the absence of direct dynamic action and loading evidence for its proposed
+bodyweight fixtures. Neither hold pre-approves new shared axis values.
 
 ## Batch 4 — Lower-body sagittal primitives (5)
 
@@ -257,6 +307,19 @@ Generic `grip` is a resolved Batch-2 hold. The taxonomy now distinguishes
 dynamic finger flexion/extension from a static implement hold, but the product
 still needs separate decisions for crush, pinch, support, hanging, and dynamic
 closing tasks before any one of them becomes a family.
+
+Batch 3 leaves four standalone evidence holds: `scapular-depression`,
+`scapular-upward-rotation`, `scapular-downward-rotation`, and
+`landmine-press`. The first three require direct loaded motion evidence for a
+truthful standalone action rather than EMG or a coupled-task inference.
+Landmine press requires athlete-relative joint geometry and a defensible
+loading model rather than classification from the implement angle.
+
+Closed-chain vertical press is not a fifth standalone hold. The candidate was
+merged into the scope of `vertical-press`, where its bodyweight branch remains
+deferred until direct dynamic evidence supports the proposed action, scapular,
+and loading contract. Resuming it means reviewing that branch of the active
+family, not creating a parallel family ID.
 
 ## Multi-agent batch workflow
 

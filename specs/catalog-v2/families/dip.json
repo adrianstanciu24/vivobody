@@ -1,0 +1,464 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "dip",
+  "name": "Dip",
+  "definition": "A strict bilateral closed-chain compound push performed while the body is supported above fixed parallel bars or independent rings. From a self-selected bottom position with the shoulders extended behind the torso and the elbows flexed, the concentric phase returns the shoulders toward neutral through shoulder flexion while extending the elbows. Scapular motion was not measured in the reviewed dip trials, so depression, protraction, and every other scapular action remain outside the prime-action signature. Bench-supported, assisted-machine, band-assisted, standing-assisted, weighted-belt-as-a-separate-exercise, Russian, Korean, straight-bar, kipping, and muscle-up transition variants remain outside this initial contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "mckenzie-2022-dip-variations",
+    "mckenzie-2022-bar-dip-fatigue"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "chest",
+    "allowed": [
+      "chest"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "bodyweightAdded"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "pectoralisMajorClavicular",
+        "triceps"
+      ],
+      "secondary": [
+        "deltoidAnterior"
+      ],
+      "stabilizer": [
+        "serratus",
+        "externalRotators",
+        "lats",
+        "bicepsBrachii",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "abs",
+        "obliques",
+        "lowerBack"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal segment moves freely or remains fixed.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The body relationship to the fixed hand support.",
+      "allowedValues": [
+        "suspended"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface supporting the torso; none for the reviewed unsupported dip setups.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower-body contact or support that materially changes effective bodyweight loading; none for a fully suspended dip.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not declare a scapular prime action.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "pathConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external mechanism guides the body path; both reviewed supports leave it free.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "bodyweightApparatus",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed hand-support apparatus carrying bodyweight during the dip.",
+      "allowedValues": [
+        "fixedDipBars",
+        "rings"
+      ]
+    },
+    {
+      "id": "handSupportConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the two hand supports are fixed to the frame or move independently.",
+      "allowedValues": [
+        "fixed",
+        "independentUnstable"
+      ]
+    }
+  ],
+  "exerciseRules": [
+    {
+      "id": "dip-bars-use-fixed-support",
+      "description": "The reviewed bar-dip apparatus is fixed to the frame rather than moving independently.",
+      "when": {
+        "field": "variant.bodyweightApparatus",
+        "operator": "equals",
+        "value": "fixedDipBars"
+      },
+      "then": [
+        {
+          "field": "variant.handSupportConstraint",
+          "value": "fixed"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "rings-use-independent-unstable-support",
+      "description": "Ring dips use independently moving supports and retain the directly observed extra biceps and latissimus stabilization assignments.",
+      "when": {
+        "field": "variant.bodyweightApparatus",
+        "operator": "equals",
+        "value": "rings"
+      },
+      "then": [
+        {
+          "field": "variant.handSupportConstraint",
+          "value": "independentUnstable"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "lats",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "stabilizer"
+        }
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "bar-dip",
+      "name": "Bar Dip",
+      "aliases": [
+        "Dip",
+        "Parallel Bar Dip",
+        "Bodyweight Dip"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 97,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "torsoSupport": "none",
+        "lowerBodySupport": "none",
+        "scapularTranslation": "free",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "bodyweightApparatus": "fixedDipBars",
+        "handSupportConstraint": "fixed"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mckenzie-2022-dip-variations",
+        "mckenzie-2022-bar-dip-fatigue"
+      ],
+      "movementDefinition": "Support the full body above fixed dip bars with no foot contact. Lower under control by flexing the elbows and allowing the shoulders to extend behind the torso only to a self-selected controlled depth. Press back up through shoulder flexion toward neutral and elbow extension without swinging, kicking, or forcing a scapular action that the reviewed trials did not measure."
+    },
+    {
+      "catalogID": "ring-dip",
+      "name": "Ring Dip",
+      "aliases": [
+        "Gymnastic Ring Dip",
+        "Bodyweight Ring Dip"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "bodyweightAdded",
+      "bodyweightFraction": 1,
+      "defaultWeight": 0,
+      "reps": 8,
+      "searchPriority": 78,
+      "involvement": [
+        {
+          "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lats",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "suspended",
+        "torsoSupport": "none",
+        "lowerBodySupport": "none",
+        "scapularTranslation": "free",
+        "pathConstraint": "free",
+        "lowerBodyContribution": "none",
+        "bodyweightApparatus": "rings",
+        "handSupportConstraint": "independentUnstable"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mckenzie-2022-dip-variations"
+      ],
+      "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion and elbow extension without kipping or using the legs."
+    }
+  ]
+}
