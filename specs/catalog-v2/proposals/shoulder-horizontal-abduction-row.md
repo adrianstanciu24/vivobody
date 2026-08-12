@@ -208,8 +208,8 @@ a dynamic retractor into a stabilizer.
 | Role | Activated muscles | Contract meaning |
 |---|---|---|
 | Required primary | `deltoidPosterior` and `trapeziusMiddle` | The family principally emphasizes both defining components: humeral horizontal abduction and scapular retraction. |
-| Required secondary | `trapeziusLower`, `rhomboids`, and `biceps` | Meaningful dynamic retraction/force-couple and elbow-flexion contributors without making all prime-action producers primary. |
-| Required stabilizer | `trapeziusUpper` and `forearms` | Scapular control at shoulder height plus grip/wrist control. |
+| Required secondary | `trapeziusLower`, `rhomboids`, `bicepsBrachii`, `brachialis`, and `brachioradialis` | Meaningful dynamic retraction/force-couple and explicit elbow-flexion contributors without making all prime-action producers primary. |
+| Required stabilizer | `trapeziusUpper`, `fingerFlexors`, and `extensorCarpiRadialis` | Scapular control at shoulder height plus explicit hand and wrist control. |
 | Optional shoulder stabilizers | `externalRotators`, `supraspinatus`, `subscapularis`, `deltoidLateral` | Direction-, load-, and setup-dependent glenohumeral control; current row evidence does not justify forcing one cuff assignment onto every record. |
 | Optional scapular stabilizers | `serratus`, `pectoralisMinor` | Exercise-specific scapular control without declaring protraction, rotation, or tilt as a universal prime action. |
 | Conditional trunk/hip stabilizers | `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `hamstrings` | Required selectively by unsupported, unilateral, and hip-hinged rules. |
@@ -236,7 +236,15 @@ Activated required policy shape:
       "minimumRole": "secondary"
     },
     {
-      "anyOf": ["biceps"],
+      "anyOf": ["bicepsBrachii"],
+      "minimumRole": "secondary"
+    },
+    {
+      "anyOf": ["brachialis"],
+      "minimumRole": "secondary"
+    },
+    {
+      "anyOf": ["brachioradialis"],
       "minimumRole": "secondary"
     },
     {
@@ -244,7 +252,11 @@ Activated required policy shape:
       "minimumRole": "stabilizer"
     },
     {
-      "anyOf": ["forearms"],
+      "anyOf": ["fingerFlexors"],
+      "minimumRole": "stabilizer"
+    },
+    {
+      "anyOf": ["extensorCarpiRadialis"],
       "minimumRole": "stabilizer"
     }
   ],
@@ -256,11 +268,14 @@ Activated required policy shape:
     "secondary": [
       "trapeziusLower",
       "rhomboids",
-      "biceps"
+      "bicepsBrachii",
+      "brachialis",
+      "brachioradialis"
     ],
     "stabilizer": [
       "trapeziusUpper",
-      "forearms",
+      "fingerFlexors",
+      "extensorCarpiRadialis",
       "externalRotators",
       "supraspinatus",
       "subscapularis",
@@ -514,7 +529,7 @@ setup. A missing load estimate is a reason to defer the record, not to guess.
   muscle.
 - Youdas found substantial upper-thoracic erector excitation. Vivobody’s
   `lowerBack` is the lumbar-extensor region, so that result must not be relabeled
-  as `lowerBack`. The current 32-muscle taxonomy cannot represent thoracic
+  as `lowerBack`. The current 41-muscle taxonomy still cannot represent thoracic
   erectors separately. This is disclosed rather than hidden by a false mapping.
 - Fennell recruited twelve people but reports complete, usable data from only
   eight. Its fine-wire row position supports rhomboid/middle-trapezius

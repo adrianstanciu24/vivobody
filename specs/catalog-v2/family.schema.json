@@ -426,6 +426,25 @@
         "required",
         "description"
       ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "fixedValue"
+            ]
+          },
+          "then": {
+            "properties": {
+              "valueType": {
+                "const": "boolean"
+              },
+              "required": {
+                "const": true
+              }
+            }
+          }
+        }
+      ],
       "properties": {
         "id": {
           "$ref": "#/$defs/symbolID"
@@ -458,6 +477,9 @@
         },
         "maximum": {
           "type": "number"
+        },
+        "fixedValue": {
+          "type": "boolean"
         }
       }
     },

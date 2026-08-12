@@ -1,0 +1,374 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "wrist-flexion",
+  "name": "Wrist Flexion",
+  "definition": "A strict open-chain isolation whose concentric phase flexes both wrists while the forearms remain supinated and supported, the elbow angles remain fixed, and the fingers maintain a static implement hold. The initial contract admits only the reviewed seated bilateral straight-bar wrist curl. Dumbbell, cable, behind-the-back, finger-curl, wrist-roller, unsupported, and combined wrist-motion variants remain outside this narrow contract.",
+  "evidenceRefs": [
+    "an-1983-index-finger-moment-arms",
+    "forman-2020-dynamic-wrist-flexion-extension",
+    "garland-2018-wrist-tendon-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "nichols-2015-wrist-muscle-moment-arms",
+    "szymanski-2004-wrist-forearm-training"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "wrist.flexion"
+    ],
+    "primeActions": [
+      "wrist.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "flexorCarpiUlnaris"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiUlnaris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "flexorCarpiRadialis",
+        "flexorCarpiUlnaris"
+      ],
+      "secondary": [
+        "fingerFlexors"
+      ],
+      "stabilizer": [
+        "extensorCarpiRadialis",
+        "extensorCarpiUlnaris",
+        "fingerExtensors",
+        "brachioradialis",
+        "externalRotators",
+        "trapeziusMiddle"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the implement-bearing hands move freely or remain fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "seated"
+      ],
+      "description": "The gross body position used by the reviewed wrist-curl fixture."
+    },
+    {
+      "id": "forearmSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "bench"
+      ],
+      "description": "The external surface supporting both forearms while allowing the wrists to move beyond its edge."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angles remain materially unchanged or contribute dynamic motion."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexed"
+      ],
+      "description": "The canonical flexed elbow posture held while the forearms rest on the bench."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar orientation remains fixed or contributes dynamic rotation."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "supinated"
+      ],
+      "description": "The forearm posture held while the wrists flex."
+    },
+    {
+      "id": "wristMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexes"
+      ],
+      "description": "The dynamic wrist action performed during the concentric phase."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the bar without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "centeredBar"
+      ],
+      "description": "A bilateral straight bar centers the external load between the hands."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-barbell-wrist-curl",
+      "name": "Seated Barbell Wrist Curl",
+      "aliases": [],
+      "equipment": "barbell",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 88,
+      "involvement": [
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "primary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "forearmSupport": "bench",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "supinated",
+        "wristMotion": "flexes",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "centeredBar",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "forman-2020-dynamic-wrist-flexion-extension",
+        "szymanski-2004-wrist-forearm-training"
+      ],
+      "movementDefinition": "Sit astride a flat bench with both supinated forearms supported and the wrists extending just beyond the edge. Hold a straight bar without opening the fingers, flex both wrists through the controlled available range, and lower under control without rotating the forearms or moving the elbows, shoulders, or torso."
+    }
+  ]
+}

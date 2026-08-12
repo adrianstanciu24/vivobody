@@ -141,7 +141,13 @@
       },
       {
         "anyOf": [
-          "forearms"
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
         ],
         "minimumRole": "stabilizer"
       },
@@ -169,7 +175,8 @@
         "deltoidPosterior",
         "trapeziusMiddle",
         "triceps",
-        "forearms",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
         "abs",
         "obliques",
         "lowerBack"
@@ -378,7 +385,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         },
         {
@@ -464,7 +475,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         },
         {

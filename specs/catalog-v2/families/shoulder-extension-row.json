@@ -112,7 +112,19 @@
       },
       {
         "anyOf": [
-          "biceps"
+          "bicepsBrachii"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
         ],
         "minimumRole": "secondary"
       },
@@ -136,7 +148,13 @@
       },
       {
         "anyOf": [
-          "forearms"
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
         ],
         "minimumRole": "stabilizer"
       }
@@ -148,7 +166,9 @@
       "secondary": [
         "teresMajor",
         "deltoidPosterior",
-        "biceps",
+        "bicepsBrachii",
+        "brachialis",
+        "brachioradialis",
         "trapeziusMiddle",
         "rhomboids",
         "trapeziusLower",
@@ -156,7 +176,8 @@
       ],
       "stabilizer": [
         "subscapularis",
-        "forearms",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
         "externalRotators",
         "supraspinatus",
         "trapeziusUpper",
@@ -805,11 +826,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
@@ -861,11 +885,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
@@ -915,11 +942,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
@@ -969,11 +999,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
@@ -1023,11 +1056,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
@@ -1078,11 +1114,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" }
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "open",
@@ -1127,11 +1166,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" }
       ],
       "variant": {
@@ -1181,11 +1223,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" }
       ],
       "variant": {
@@ -1233,11 +1278,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" }
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "open",
@@ -1284,11 +1332,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" }
       ],
       "variant": {
@@ -1336,11 +1387,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
@@ -1391,11 +1445,14 @@
         { "muscle": "lats", "role": "primary" },
         { "muscle": "teresMajor", "role": "secondary" },
         { "muscle": "deltoidPosterior", "role": "secondary" },
-        { "muscle": "biceps", "role": "secondary" },
+        { "muscle": "bicepsBrachii", "role": "secondary" },
+        { "muscle": "brachialis", "role": "secondary" },
+        { "muscle": "brachioradialis", "role": "secondary" },
         { "muscle": "trapeziusMiddle", "role": "secondary" },
         { "muscle": "rhomboids", "role": "secondary" },
         { "muscle": "subscapularis", "role": "stabilizer" },
-        { "muscle": "forearms", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "lowerBack", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }

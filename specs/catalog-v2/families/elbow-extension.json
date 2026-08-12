@@ -1,0 +1,992 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "elbow-extension",
+  "name": "Elbow Extension",
+  "definition": "A strict open-chain isolation movement in which the elbow extends while a reviewed upper-arm and forearm posture is held and shoulder, wrist, torso, and lower-body motion do not create the repetition. Triceps is the sole primary on every initial record: the reviewed shoulder positions inform length, excitation, and adaptation differences but do not justify head-specific categorical roles or a split of the aggregate triceps mesh. The roster admits only the directly reviewed unilateral supinated and pronated cable pushdowns, standing supinated overhead cable extension, seated overhead dumbbell extension, and supine dumbbell extension. Finger flexors author the static implement hold and extensor carpi radialis supplies mechanics-derived neutral-wrist counter-control. Scapular support, held-forearm control, and stabilizer assignments are bounded mechanics applications rather than variables directly compared in the triceps trials; brachioradialis is assigned only as a forearm stabilizer, never as an elbow-extension mover. The overhead cable source does not report its attachment, pulley height, or cable angle, so that record explicitly preserves an unreported cable interface.",
+  "evidenceRefs": [
+    "holzbaur-2005-upper-extremity",
+    "alves-2018-triceps-shoulder-position",
+    "maeo-2023-overhead-neutral-elbow-extension",
+    "villalba-2024-pushdown-forearm-position"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable",
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "elbow.extension"
+    ],
+    "primeActions": [
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle",
+          "trapeziusLower"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "triceps"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "brachioradialis",
+        "fingerFlexors",
+        "flexorCarpiRadialis",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusMiddle",
+        "trapeziusLower",
+        "obliques"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the loaded hand moves freely or remains fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used by the reviewed elbow-extension fixture.",
+      "allowedValues": [
+        "standing",
+        "seated",
+        "supine"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface directly supporting the torso; a seat without back contact is not torso support.",
+      "allowedValues": [
+        "none",
+        "bench"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular translation along the thorax; this does not name a dynamic scapular action.",
+      "allowedValues": [
+        "free",
+        "supportConstrained"
+      ]
+    },
+    {
+      "id": "forearmSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external surface supporting the forearm independently of torso support.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso-relative upper-arm posture held while the elbow moves: anatomical side, 90 degrees of sagittal flexion, or 180-degree overhead flexion. A held posture does not add a shoulder prime action.",
+      "allowedValues": [
+        "atSide",
+        "flexed90",
+        "overhead"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic elbow action that creates the concentric repetition.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the radioulnar angle is held or changes deliberately during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The radioulnar posture held during elbow extension, independent of implement wording and dynamic forearm rotation.",
+      "allowedValues": [
+        "supinated",
+        "neutral",
+        "pronated"
+      ]
+    },
+    {
+      "id": "wristMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether wrist angle is held or changes deliberately during the repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "wristPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed wrist posture held during elbow extension; neutral is an authoring target rather than a zero-error measurement claim.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The task performed by the fingers while the elbow creates the repetition.",
+      "allowedValues": [
+        "staticImplementHold"
+      ]
+    },
+    {
+      "id": "handleType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed load-to-hand interface used by the cable or dumbbell fixture.",
+      "allowedValues": [
+        "singleCableHandle",
+        "unreportedCableInterface",
+        "dumbbellHandle"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the reviewed task creates elbow-extension resistance without implying a guided external path. highCablePushdown records Villalba's at-side pulley setup; overheadCableExtension identifies Maeo's 180-degree cable task but deliberately does not claim an unreported pulley height or cable angle; gravityLoadedDumbbell records the Alves fixtures.",
+      "allowedValues": [
+        "highCablePushdown",
+        "overheadCableExtension",
+        "gravityLoadedDumbbell"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path; cable direction alone is not a fixed path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to elbow extension.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "cable-extension-uses-reviewed-cable-interface",
+      "description": "A cable extension uses the directly reported single handle or preserves the overhead study's unreported interface rather than inventing a dumbbell interface.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "cable"
+      },
+      "then": [
+        {
+          "field": "variant.handleType",
+          "allowedValues": [
+            "singleCableHandle",
+            "unreportedCableInterface"
+          ]
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "allowedValues": [
+            "highCablePushdown",
+            "overheadCableExtension"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "dumbbell-extension-uses-dumbbell-handle",
+      "description": "Every reviewed dumbbell extension uses a dumbbell handle rather than a cable interface.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        {
+          "field": "variant.handleType",
+          "value": "dumbbellHandle"
+        },
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "gravityLoadedDumbbell"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "standing-extension-uses-reviewed-cable-setups",
+      "description": "The reviewed standing branch uses an unsupported free-scapula cable setup with the upper arm at the side or overhead and the forearm supinated or pronated.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "standing"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "allowedValues": [
+            "atSide",
+            "overhead"
+          ]
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "allowedValues": [
+            "supinated",
+            "pronated"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "seated-extension-is-unsupported-overhead-dumbbell",
+      "description": "The directly reviewed seated extension is an unsupported neutral-forearm overhead dumbbell fixture with free scapular translation.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "seated"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "none"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "free"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "overhead"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "supine-extension-is-supported-flexed90-dumbbell",
+      "description": "The directly reviewed lying extension is a neutral-forearm dumbbell fixture with the torso bench-supported and upper arm held at 90 degrees of shoulder flexion.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "equals",
+        "value": "supine"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "dumbbell"
+        },
+        {
+          "field": "variant.torsoSupport",
+          "value": "bench"
+        },
+        {
+          "field": "variant.scapularTranslation",
+          "value": "supportConstrained"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "flexed90"
+        },
+        {
+          "field": "variant.forearmOrientation",
+          "value": "neutral"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "pronated-extension-is-at-side-pushdown",
+      "description": "The pronated orientation is admitted only in the directly reviewed standing at-side cable pushdown.",
+      "when": {
+        "field": "variant.forearmOrientation",
+        "operator": "equals",
+        "value": "pronated"
+      },
+      "then": [
+        {
+          "field": "variant.bodyPosition",
+          "value": "standing"
+        },
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "atSide"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "overhead-extension-uses-lower-trapezius-stability",
+      "description": "The reviewed overhead setups use lower trapezius as the categorical scapular stabilizer.",
+      "when": {
+        "field": "variant.upperArmPosition",
+        "operator": "equals",
+        "value": "overhead"
+      },
+      "then": [
+        {
+          "field": "variant.resistanceGeometry",
+          "allowedValues": [
+            "overheadCableExtension",
+            "gravityLoadedDumbbell"
+          ]
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "at-side-extension-uses-high-cable-resistance",
+      "description": "Every admitted at-side extension is one of the reviewed high-cable pushdown fixtures.",
+      "when": {
+        "field": "variant.upperArmPosition",
+        "operator": "equals",
+        "value": "atSide"
+      },
+      "then": [
+        {
+          "field": "variant.resistanceGeometry",
+          "value": "highCablePushdown"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "singleCableHandle"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "overhead-cable-preserves-unreported-interface",
+      "description": "Maeo reports the overhead cable task but not its attachment, pulley height, or cable angle, so the record preserves an unreported interface rather than manufacturing one.",
+      "when": {
+        "field": "variant.resistanceGeometry",
+        "operator": "equals",
+        "value": "overheadCableExtension"
+      },
+      "then": [
+        {
+          "field": "equipment",
+          "value": "cable"
+        },
+        {
+          "field": "variant.upperArmPosition",
+          "value": "overhead"
+        },
+        {
+          "field": "variant.handleType",
+          "value": "unreportedCableInterface"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "non-overhead-extension-uses-middle-trapezius-stability",
+      "description": "The at-side and bench-supported non-overhead setups use middle trapezius as the categorical scapular stabilizer.",
+      "when": {
+        "field": "variant.upperArmPosition",
+        "operator": "notEquals",
+        "value": "overhead"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ]
+    },
+    {
+      "id": "unsupported-extension-requires-trunk-control",
+      "description": "Standing and unsupported seated extensions require explicit spine and pelvis stability with obliques assigned as a stabilizer.",
+      "when": {
+        "field": "variant.bodyPosition",
+        "operator": "notEquals",
+        "value": "supine"
+      },
+      "then": [],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireInvolvement": [
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "single-arm-supinated-cable-triceps-pushdown",
+      "name": "Single-Arm Supinated Cable Triceps Pushdown",
+      "aliases": [
+        "Underhand Cable Triceps Pushdown",
+        "Reverse-Grip Cable Triceps Pushdown"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 85,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmPosition": "atSide",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "singleCableHandle",
+        "resistanceGeometry": "highCablePushdown",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "villalba-2024-pushdown-forearm-position",
+        "maeo-2023-overhead-neutral-elbow-extension"
+      ],
+      "movementDefinition": "Stand at a high cable and hold a single handle with the working forearm supinated. Keep the upper arm alongside the torso and the wrist neutral; extend the elbow from about 90 degrees to straight, then return under control without moving the shoulder or rotating the forearm."
+    },
+    {
+      "catalogID": "single-arm-pronated-cable-triceps-pushdown",
+      "name": "Single-Arm Pronated Cable Triceps Pushdown",
+      "aliases": [
+        "Overhand Cable Triceps Pushdown",
+        "One-Arm Pronated Cable Triceps Pushdown"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 15,
+      "defaultWeightKg": 7.5,
+      "reps": 10,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmPosition": "atSide",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "pronated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "singleCableHandle",
+        "resistanceGeometry": "highCablePushdown",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "villalba-2024-pushdown-forearm-position"
+      ],
+      "movementDefinition": "Stand at a high cable and hold a single handle with the working forearm pronated. Keep the upper arm alongside the torso and the wrist neutral; extend the elbow from about 90 degrees to straight, then return under control without moving the shoulder or rotating the forearm."
+    },
+    {
+      "catalogID": "single-arm-overhead-cable-triceps-extension",
+      "name": "Single-Arm Overhead Cable Triceps Extension",
+      "aliases": [
+        "One-Arm Overhead Cable Triceps Extension",
+        "Single-Arm Cable Overhead Triceps Extension"
+      ],
+      "equipment": "cable",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "supinated",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "unreportedCableInterface",
+        "resistanceGeometry": "overheadCableExtension",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "maeo-2023-overhead-neutral-elbow-extension"
+      ],
+      "movementDefinition": "Stand with one arm held overhead and the forearm supinated while a cable opposes elbow extension. Keep the upper arm, wrist, torso, and lower body still; extend the elbow from about 90 degrees to straight, then return under control."
+    },
+    {
+      "catalogID": "seated-single-arm-overhead-dumbbell-triceps-extension",
+      "name": "Seated Single-Arm Overhead Dumbbell Triceps Extension",
+      "aliases": [
+        "Seated One-Arm Dumbbell Triceps Extension",
+        "One-Arm Overhead Dumbbell Triceps Extension"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "forearmSupport": "none",
+        "upperArmPosition": "overhead",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
+        "alves-2018-triceps-shoulder-position"
+      ],
+      "movementDefinition": "Sit upright without back support and hold one dumbbell with a neutral forearm and the upper arm overhead. Keep the upper arm and torso still; flex the elbow to lower the dumbbell, then extend through the available range without rotating the forearm."
+    },
+    {
+      "catalogID": "single-arm-lying-dumbbell-triceps-extension",
+      "name": "Single-Arm Lying Dumbbell Triceps Extension",
+      "aliases": [
+        "One-Arm Lying Dumbbell Triceps Extension",
+        "Single-Arm Dumbbell Skull Crusher"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 10,
+      "defaultWeightKg": 5,
+      "reps": 10,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "triceps",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "bench",
+        "scapularTranslation": "supportConstrained",
+        "forearmSupport": "none",
+        "upperArmPosition": "flexed90",
+        "elbowMotion": "extends",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "handleType": "dumbbellHandle",
+        "resistanceGeometry": "gravityLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "alves-2018-triceps-shoulder-position"
+      ],
+      "movementDefinition": "Lie supine on a bench with one neutral-grip dumbbell held over the chest and the upper arm at 90 degrees of shoulder flexion. Hold the upper arm still, lower the dumbbell by flexing the elbow, then extend the elbow through the available range."
+    }
+  ]
+}

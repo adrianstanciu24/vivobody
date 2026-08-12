@@ -219,6 +219,7 @@
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
+      "fixedValue": false,
       "description": "Whether rails or a lever constrain the external load path."
     },
     {
@@ -241,22 +242,7 @@
         "value": "cable"
       },
       "then": [
-        { "field": "loadMode", "value": "external" },
-        { "field": "variant.fixedPath", "value": false }
-      ],
-      "requirePresent": [],
-      "requireAbsent": []
-    },
-    {
-      "id": "band-internal-rotation-uses-noncomparable-load",
-      "description": "The reviewed elastic setup records non-comparable resistance and remains free path.",
-      "when": {
-        "field": "equipment",
-        "operator": "equals",
-        "value": "band"
-      },
-      "then": [
-        { "field": "variant.fixedPath", "value": false }
+        { "field": "loadMode", "value": "external" }
       ],
       "requirePresent": [],
       "requireAbsent": []

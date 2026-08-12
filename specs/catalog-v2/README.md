@@ -14,10 +14,12 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
 
 ## Source files
 
-- `taxonomy.json` defines exactly 32 muscle regions, their coarse app group,
-  display names, and exact `BodyModel.scn` mesh base names where the model has
-  a surface mesh. An unvisualized muscle must carry an explicit reason.
-- `joint-actions.json` is an independent anatomical capability map. It lets the
+- `taxonomy.json` defines exactly 41 muscle regions, their coarse app group,
+  display names, and exactly 62 uniquely owned `BodyModel.scn` mesh base names
+  where the model has a surface mesh. An unvisualized muscle must carry an
+  explicit reason.
+- `joint-actions.json` defines exactly 44 joint actions and is an independent
+  anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
 - `evidence.json` tracks the primary musculoskeletal sources supporting those
@@ -79,7 +81,16 @@ conditional object instead:
 Conditions are declared centrally in `joint-actions.json`. A conditional
 capability satisfies only a family action carrying the same condition; it
 cannot satisfy an unrestricted action. An unconditional capability can satisfy
-either form.
+either form. In particular, brachioradialis returning a pronated or supinated
+forearm toward neutral cannot satisfy an unconditional forearm-pronation or
+forearm-supination requirement.
+
+An exercise also cannot repeat a family prime action in
+`additionalPrimeActions`. That would let a conditioned family silently broaden
+its contract by redeclaring the same action without the condition (or under a
+different condition). Additional prime actions are strictly additional joint
+actions; changing the semantics of a family action requires editing and
+reviewing the family contract itself.
 
 ## Family contract
 
@@ -103,7 +114,10 @@ Each family separates:
   plane set. Actions at other joints retain their own normal planes.
 - `musclePolicy`: role-aware requirements and allowed muscle/role combinations.
 - `variantAxes`: typed axes declared by that family and populated by each
-  exercise; arbitrary name parsing is never used as biomechanics.
+  exercise; arbitrary name parsing is never used as biomechanics. A required
+  boolean axis may declare `fixedValue` when one truth value is a family
+  invariant. The validator enforces it directly, avoiding an always-true
+  exercise rule that could never have a contrasting roster fixture.
 - `exerciseRules`: declarative cross-field invariants. These connect equipment,
   load semantics, kinetic chain, support, and variant axes so individually
   valid values cannot form an impossible combination. A rule can also use
@@ -214,7 +228,8 @@ python3 -m unittest discover -s Scripts/tests -p 'test_catalog_v2.py'
 
 The validator uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
-and `_R` nodes, mesh ownership is unique, the taxonomy contains exactly its 32
-canonical muscles, all muscles have evidence-backed action profiles, family
+and `_R` nodes, all 62 mesh-base owners are unique, the taxonomy contains
+exactly its 41 canonical muscles, the capability map contains exactly 44 joint
+actions, all muscles have evidence-backed action profiles, family
 prime actions have capable movers, and stability demands have capable assigned
 muscles.

@@ -163,10 +163,10 @@ scapular action only with phase-specific evidence and a contract review.
 | Role | Active muscles | Contract meaning |
 |---|---|---|
 | Primary | `lats` | Sole dominant training emphasis across the admitted vertical-pull variants. |
-| Required secondary | `teresMajor`, `biceps` | Shared shoulder adduction/extension synergy and elbow flexion. |
+| Required secondary | `teresMajor`, `bicepsBrachii`, `brachialis`, `brachioradialis` | Shared shoulder adduction/extension synergy plus the three separately represented elbow flexors. |
 | Required retractor | At least one of `trapeziusMiddle`, `trapeziusLower`, or `rhomboids`, authored as secondary | Produces the declared scapular-retraction action while allowing pull-up and pulldown records to differ. |
 | Optional secondary | `pectoralisMajorSternocostal`, `deltoidPosterior`, and the remaining allowed retractors | Position-, grip-, and path-dependent dynamic contribution. |
-| Required stabilizer | `externalRotators`, `forearms`, plus at least one of `abs`, `obliques`, or `lowerBack` | Glenohumeral control, grip/wrist control, and strict trunk control. |
+| Required stabilizer | `externalRotators`, `fingerFlexors`, `extensorCarpiRadialis`, plus at least one of `abs`, `obliques`, or `lowerBack` | Glenohumeral control, explicit hand/wrist control, and strict trunk control. |
 | Optional stabilizer | `subscapularis`, `serratus`, `trapeziusUpper`, `pectoralisMinor`, and the remaining trunk stabilizers | Exercise-specific shoulder, scapular, and torso control. |
 
 The active `allowedByRole` lists do not duplicate a muscle across roles.

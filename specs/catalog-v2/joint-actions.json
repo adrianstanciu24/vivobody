@@ -161,10 +161,16 @@
       "displayName": "Wrist ulnar deviation"
     },
     {
-      "id": "hand.grip",
+      "id": "hand.fingerFlexion",
       "region": "hand",
       "plane": "sagittal",
-      "displayName": "Grip"
+      "displayName": "Finger flexion"
+    },
+    {
+      "id": "hand.fingerExtension",
+      "region": "hand",
+      "plane": "sagittal",
+      "displayName": "Finger extension"
     },
     {
       "id": "spine.flexion",
@@ -282,6 +288,22 @@
       "definition": "The shoulder begins in flexion and extends toward anatomical neutral rather than continuing behind the torso.",
       "appliesTo": [
         "shoulder.extension"
+      ]
+    },
+    {
+      "id": "fromSupinatedPosition",
+      "displayName": "From a supinated position toward neutral",
+      "definition": "The action is produced only while the forearm begins on the supinated side of neutral and rotates toward neutral.",
+      "appliesTo": [
+        "forearm.pronation"
+      ]
+    },
+    {
+      "id": "fromPronatedPosition",
+      "displayName": "From a pronated position toward neutral",
+      "definition": "The action is produced only while the forearm begins on the pronated side of neutral and rotates toward neutral.",
+      "appliesTo": [
+        "forearm.supination"
       ]
     }
   ],
@@ -554,7 +576,7 @@
       "notes": "The whole-muscle profile deliberately omits shoulder flexion because the available moment-arm evidence distinguishes anterior and posterior supraspinatus subregions, while this taxonomy does not."
     },
     {
-      "muscleID": "biceps",
+      "muscleID": "bicepsBrachii",
       "produces": [
         "shoulder.flexion",
         "elbow.flexion",
@@ -562,10 +584,172 @@
       ],
       "stabilizes": [
         "shoulder",
+        "elbow",
+        "forearm"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "murray-1995-elbow-forearm-moment-arms",
+        "bremer-2006-forearm-rotator-moment-arms",
+        "gordon-2004-forearm-rotation-emg"
+      ]
+    },
+    {
+      "muscleID": "brachialis",
+      "produces": [
+        "elbow.flexion"
+      ],
+      "stabilizes": [
         "elbow"
       ],
       "evidenceRefs": [
-        "holzbaur-2005-upper-extremity"
+        "holzbaur-2005-upper-extremity",
+        "murray-1995-elbow-forearm-moment-arms"
+      ]
+    },
+    {
+      "muscleID": "brachioradialis",
+      "produces": [
+        "elbow.flexion",
+        {
+          "action": "forearm.pronation",
+          "condition": "fromSupinatedPosition"
+        },
+        {
+          "action": "forearm.supination",
+          "condition": "fromPronatedPosition"
+        }
+      ],
+      "stabilizes": [
+        "elbow",
+        "forearm"
+      ],
+      "evidenceRefs": [
+        "murray-1995-elbow-forearm-moment-arms",
+        "bremer-2006-forearm-rotator-moment-arms",
+        "boland-2008-brachioradialis-function"
+      ]
+    },
+    {
+      "muscleID": "forearmPronators",
+      "produces": [
+        "forearm.pronation"
+      ],
+      "stabilizes": [
+        "forearm"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "bremer-2006-forearm-rotator-moment-arms",
+        "gordon-2004-forearm-rotation-emg"
+      ],
+      "notes": "This grouped profile records the shared pronation action only; it does not promote pronator-teres-specific elbow flexion or deep-pronator-quadratus-specific stabilization into a capability of the whole region."
+    },
+    {
+      "muscleID": "supinator",
+      "produces": [
+        "forearm.supination"
+      ],
+      "stabilizes": [
+        "forearm"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "bremer-2006-forearm-rotator-moment-arms",
+        "gordon-2004-forearm-rotation-emg"
+      ]
+    },
+    {
+      "muscleID": "flexorCarpiRadialis",
+      "produces": [
+        "wrist.flexion",
+        "wrist.radialDeviation"
+      ],
+      "stabilizes": [
+        "wrist"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "garland-2018-wrist-tendon-moment-arms",
+        "nichols-2015-wrist-muscle-moment-arms"
+      ]
+    },
+    {
+      "muscleID": "flexorCarpiUlnaris",
+      "produces": [
+        "wrist.flexion",
+        "wrist.ulnarDeviation"
+      ],
+      "stabilizes": [
+        "wrist"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "garland-2018-wrist-tendon-moment-arms",
+        "nichols-2015-wrist-muscle-moment-arms"
+      ]
+    },
+    {
+      "muscleID": "extensorCarpiRadialis",
+      "produces": [
+        "wrist.extension",
+        "wrist.radialDeviation"
+      ],
+      "stabilizes": [
+        "wrist"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "garland-2018-wrist-tendon-moment-arms",
+        "nichols-2015-wrist-muscle-moment-arms"
+      ],
+      "notes": "The region combines ECRL and ECRB only at their shared wrist actions; ECRL-specific elbow flexion is deliberately not assigned to the whole region."
+    },
+    {
+      "muscleID": "extensorCarpiUlnaris",
+      "produces": [
+        "wrist.extension",
+        "wrist.ulnarDeviation"
+      ],
+      "stabilizes": [
+        "wrist"
+      ],
+      "evidenceRefs": [
+        "holzbaur-2005-upper-extremity",
+        "garland-2018-wrist-tendon-moment-arms",
+        "nichols-2015-wrist-muscle-moment-arms"
+      ]
+    },
+    {
+      "muscleID": "fingerFlexors",
+      "produces": [
+        "wrist.flexion",
+        "hand.fingerFlexion"
+      ],
+      "stabilizes": [
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "an-1983-index-finger-moment-arms",
+        "mirakhorlo-2018-hand-wrist-model",
+        "ferrer-uris-2023-finger-dead-hangs"
+      ]
+    },
+    {
+      "muscleID": "fingerExtensors",
+      "produces": [
+        "wrist.extension",
+        "hand.fingerExtension"
+      ],
+      "stabilizes": [
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "an-1983-index-finger-moment-arms",
+        "mirakhorlo-2018-hand-wrist-model",
+        "ferrer-uris-2023-finger-dead-hangs"
       ]
     },
     {
@@ -576,26 +760,6 @@
       ],
       "stabilizes": [
         "elbow"
-      ],
-      "evidenceRefs": [
-        "holzbaur-2005-upper-extremity"
-      ]
-    },
-    {
-      "muscleID": "forearms",
-      "produces": [
-        "elbow.flexion",
-        "forearm.pronation",
-        "wrist.flexion",
-        "wrist.extension",
-        "wrist.radialDeviation",
-        "wrist.ulnarDeviation",
-        "hand.grip"
-      ],
-      "stabilizes": [
-        "elbow",
-        "wrist",
-        "hand"
       ],
       "evidenceRefs": [
         "holzbaur-2005-upper-extremity"

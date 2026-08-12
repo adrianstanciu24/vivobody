@@ -5,12 +5,15 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 14 reviewed families are active, containing 78 exercises.
+- 22 reviewed families are active, containing 92 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
-- 41 not-yet-reviewed candidates remain in Batches 2–7.
-- 44 items remain to resolve: those 41 candidates plus the deferred
-  `diagonal-pull`, `scapular-retraction`, and `upright-row` candidates.
+- Batch 2 resolved nine candidates into eight active families and one explicit
+  task-definition hold.
+- 32 not-yet-reviewed candidates remain in Batches 3–7.
+- 36 items remain to resolve: those 32 candidates plus the deferred
+  `diagonal-pull`, `scapular-retraction`, `upright-row`, and generic `grip`
+  candidates.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -36,7 +39,15 @@ batch siblings.
 | `shoulder-abduction-raise` | 2 |
 | `shoulder-external-rotation` | 3 |
 | `shoulder-internal-rotation` | 2 |
-| **Total** | **78** |
+| `elbow-flexion` | 3 |
+| `elbow-extension` | 5 |
+| `forearm-pronation` | 1 |
+| `forearm-supination` | 1 |
+| `wrist-flexion` | 1 |
+| `wrist-extension` | 1 |
+| `wrist-radial-deviation` | 1 |
+| `wrist-ulnar-deviation` | 1 |
+| **Total** | **92** |
 
 ## Foundation gates
 
@@ -56,14 +67,15 @@ Before the first upper-body batch, freeze these rules once:
   scapular translation, humeral path, inclination, and lower-body
   contribution.
 
-### Distal upper-body taxonomy
+### Distal upper-body taxonomy — complete
 
-Before Batch 2 depends on it, decide deliberately whether `forearms` remains a
-coarse product region or splits into functional regions. The current capability
-map gives one aggregate region pronation, every wrist action, and grip; biceps
-is the only represented supinator, while brachialis and brachioradialis are not
-represented separately. Do not let nine contracts inherit identical anatomy
-merely because the taxonomy is underspecified.
+Batch 2 retired the aggregate `biceps|forearms` regions and added eleven exact
+distal regions: biceps brachii, brachialis, brachioradialis, grouped pronators,
+supinator, four carpal groups, finger flexors, and finger extensors. It also
+replaced the task-level `hand.grip` action with dynamic finger flexion and
+extension. The resulting foundation is pinned at 41 muscles, 62 mesh bases,
+and 44 actions; every previously active family was migrated atomically rather
+than inheriting anatomy from either retired aggregate.
 
 ### Lower-body taxonomy and axes
 
@@ -129,6 +141,9 @@ signature. Their proposal files record exact unlocks and negative boundaries.
 
 ## Batch 2 — Arm and forearm actions (9)
 
+Status: complete. Eight candidates activated with narrow rosters after the
+distal taxonomy migration; generic grip remains a resolved design hold.
+
 1. `elbow-flexion`
 2. `elbow-extension`
 3. `forearm-pronation`
@@ -137,13 +152,14 @@ signature. Their proposal files record exact unlocks and negative boundaries.
 6. `wrist-extension`
 7. `wrist-radial-deviation`
 8. `wrist-ulnar-deviation`
-9. `grip`
+9. `grip` — deferred
 
-The batch shares elbow/forearm/wrist posture and implement axes. Treat `grip`
-last: crush, pinch, dynamic closing, support grip, and hanging are not assumed
-to be one family. `elbow-extension` can proceed under the current taxonomy;
-the distal contracts wait for the aggregate-forearm decision when it is
-load-bearing.
+The activated contracts share explicit elbow/forearm/wrist posture, resistance
+geometry, hand-task, support, and free-path semantics. Generic grip did not
+activate because crush, pinch, dynamic closing, support grip, and hanging are
+different biomechanical tasks. Resume it only after choosing the first exact
+task and its measurable contract; do not recreate the retired catch-all
+`hand.grip` action.
 
 ## Batch 3 — Scapular/press frontier (9)
 
@@ -236,6 +252,11 @@ do not let it trigger speculative migrations across active pull/row families.
 unreviewed future-batch candidates. Their tracked proposals define the direct
 motion or geometry evidence required to resume them. Neither hold should be
 filled by EMG-based action inference or by copying a neighboring family.
+
+Generic `grip` is a resolved Batch-2 hold. The taxonomy now distinguishes
+dynamic finger flexion/extension from a static implement hold, but the product
+still needs separate decisions for crush, pinch, support, hanging, and dynamic
+closing tasks before any one of them becomes a family.
 
 ## Multi-agent batch workflow
 

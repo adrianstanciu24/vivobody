@@ -1,10 +1,9 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Fourteen reviewed family files are currently active: the three chest presses,
-vertical press and pull, both compound row families, and the seven narrow
-shoulder-action families (`shoulder-extension-isolation`, `chest-fly`,
-`reverse-fly`, both shoulder raises, and both shoulder rotations). Each uses a
+Twenty-two reviewed family files are currently active: the three chest presses,
+vertical press and pull, both compound row families, the seven narrow
+shoulder-action families, and eight narrow elbow/forearm/wrist families. Each uses a
 coverage batch whose exercises collectively exercise every admitted discrete
 axis value without generating the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -19,6 +18,12 @@ The Batch-1 shoulder families intentionally begin much narrower: 17 exercises
 total across seven contracts. `scapular-retraction` and `upright-row` remain
 tracked proposals because their dynamic action boundaries are not grounded
 well enough for validator-loaded records.
+
+Batch 2 adds fourteen exercises across `elbow-flexion`, `elbow-extension`,
+conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist
+actions. Generic `grip` remains deferred: dynamic finger closing, isometric
+support, hanging, and pinch are different biomechanical tasks, not variants of
+one cardinal joint action.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -80,6 +85,42 @@ allows a deliberately maintained soft bend but forbids a material elbow-joint
 excursion; it is distinct from `elbowPosture`, which describes the held joint
 position. A fly or raise therefore uses `angleHeld`, while a row or future
 upright row that dynamically flexes the elbow must use `flexes`.
+
+Distal muscle roles follow the split anatomical taxonomy rather than the old
+aggregate arm regions. Reviewed rows and vertical pulls with dynamic elbow
+flexion assign `bicepsBrachii`, `brachialis`, and `brachioradialis` as separate
+secondaries. A held-elbow reverse fly uses `brachialis` as an elbow stabilizer
+without implying dynamic elbow flexion. Every currently reviewed loaded-grip
+fixture assigns `fingerFlexors` to stabilize the hand and
+`extensorCarpiRadialis` to control the wrist against the flexors' wrist moment;
+neither role is a generic `grip` action or permission to infer pinch, hanging,
+or dynamic finger closing.
+
+Batch-2 elbow and distal contracts keep joint posture separate from motion.
+`forearmOrientation` is a held radioulnar posture; dynamic rotation uses
+`forearmMotion` plus explicit start/end orientations. `wristPosture` is present
+only when `wristMotion: angleHeld`. `upperArmPosition` is a maintained posture,
+not a shoulder prime action. `forearmSupport` describes the actual supporting
+surface. The reviewed Batch-2 vocabulary is currently only
+`none|bench|table`; adding another support value requires a family-contract
+review rather than treating it as pre-approved shared vocabulary. It never
+implies torso support.
+
+`handTask: staticImplementHold` creates a hand stability demand without adding
+dynamic `hand.fingerFlexion` to the repetition. `resistanceGeometry` names the
+reviewed loading mechanism, not merely the equipment. Elbow fixtures distinguish
+`lowCableCurl`, `highCablePushdown`, `overheadCableExtension`, and
+`gravityLoadedDumbbell`. `overheadCableExtension` identifies the reviewed
+overhead task, not a reported pulley geometry, and pairs with
+`handleType: unreportedCableInterface` because the source omits the attachment,
+anchor, and cable angle. Rotation fixtures use
+`rotationalPlateLoadedDumbbell`, while radial/ulnar-deviation fixtures use
+`collarOffsetLever` with the hand positioned relative to the collar and shaft.
+A conventionally centered dumbbell hold is not interchangeable with either
+distal mechanism. Every new elbow/distal `fixedPath` boolean is required and
+declares `fixedValue: false`; this preserves the shared external-load meaning
+and makes the free-path boundary enforceable without borrowing vertical pull's
+body-path `pathConstraint` axis.
 
 `humeralRotation` describes axial rotation at the glenohumeral joint and must
 never be inferred from `gripOrientation`. Raise families use

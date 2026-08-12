@@ -1,0 +1,376 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "forearm-supination",
+  "name": "Forearm Supination",
+  "definition": "A strict open-chain isolation whose concentric phase supinates the forearm from a pronated start to neutral while the elbow angle and wrist posture remain fixed. The initial contract admits only the reviewed seated, table-supported plate-loaded dumbbell fixture. Full-range rotation, combined pronation-supination repetitions, cable, band, club, mace, and exercises that add elbow, wrist, shoulder, scapular, trunk, or lower-body motion remain outside this narrow contract.",
+  "evidenceRefs": [
+    "boland-2008-brachioradialis-function",
+    "bremer-2006-forearm-rotator-moment-arms",
+    "gordon-2004-forearm-rotation-emg",
+    "haugstvedt-2001-forearm-rotation-moment-forces",
+    "holzbaur-2005-upper-extremity",
+    "murray-1995-elbow-forearm-moment-arms",
+    "szymanski-2004-wrist-forearm-training"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "forearm.supination"
+    ],
+    "primeActions": [
+      {
+        "action": "forearm.supination",
+        "condition": "fromPronatedPosition"
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "supinator"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "bicepsBrachii"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "supinator",
+        "bicepsBrachii"
+      ],
+      "secondary": [
+        "brachioradialis"
+      ],
+      "stabilizer": [
+        "extensorCarpiRadialis",
+        "fingerFlexors",
+        "externalRotators",
+        "trapeziusMiddle"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the implement-bearing hand moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "seated"
+      ],
+      "description": "The gross body position used by the reviewed rotation fixture."
+    },
+    {
+      "id": "forearmSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "table"
+      ],
+      "description": "The external surface supporting the forearm without moving it through the repetition."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic motion."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexed"
+      ],
+      "description": "The canonical elbow posture held at approximately 90 degrees of flexion."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "supinates"
+      ],
+      "description": "The dynamic radioulnar action performed during the concentric phase."
+    },
+    {
+      "id": "forearmStartOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "pronated"
+      ],
+      "description": "The forearm orientation at the start of the concentric phase."
+    },
+    {
+      "id": "forearmEndOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The forearm orientation at the end of the concentric phase."
+    },
+    {
+      "id": "wristMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the wrist angle remains materially unchanged or contributes dynamic motion."
+    },
+    {
+      "id": "wristPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The coached neutral wrist posture held while the forearm rotates."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the implement without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "rotationalPlateLoadedDumbbell"
+      ],
+      "description": "The reviewed plate-loaded dumbbell is rotated about the forearm axis; this spelling does not infer an unreported one-ended load."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-dumbbell-forearm-supination",
+      "name": "Seated Dumbbell Forearm Supination",
+      "aliases": [],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 10,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "supinator",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "primary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "forearmSupport": "table",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "flexed",
+        "forearmMotion": "supinates",
+        "forearmStartOrientation": "pronated",
+        "forearmEndOrientation": "neutral",
+        "wristMotion": "angleHeld",
+        "wristPosture": "neutral",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "rotationalPlateLoadedDumbbell",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "haugstvedt-2001-forearm-rotation-moment-forces",
+        "murray-1995-elbow-forearm-moment-arms",
+        "szymanski-2004-wrist-forearm-training"
+      ],
+      "movementDefinition": "Sit with the working shoulder relaxed, the elbow flexed about 90 degrees, and the forearm supported on a table. Begin fully pronated while holding a plate-loaded dumbbell vertically, rotate only the forearm until the thumb points upward at neutral, and return under control without moving the wrist, elbow, shoulder, or torso."
+    }
+  ]
+}

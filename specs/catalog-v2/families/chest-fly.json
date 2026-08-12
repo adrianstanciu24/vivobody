@@ -103,6 +103,18 @@
           "deltoidAnterior"
         ],
         "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -118,7 +130,8 @@
         "serratus",
         "trapeziusMiddle",
         "triceps",
-        "forearms",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
         "abs",
         "obliques",
         "lowerBack"
@@ -339,7 +352,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         }
       ],
@@ -408,7 +425,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         },
         {

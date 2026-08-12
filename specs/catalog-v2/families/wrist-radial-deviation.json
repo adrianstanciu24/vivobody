@@ -1,0 +1,348 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "wrist-radial-deviation",
+  "name": "Wrist Radial Deviation",
+  "definition": "A strict open-chain isolation whose concentric phase deviates one wrist toward the thumb side while the arm remains beside the torso, the elbow stays extended, the forearm orientation remains neutral, and the fingers maintain a static implement hold. The initial contract admits only the reviewed standing collar-offset dumbbell fixture. Band, cable, supported, bilateral, coupled dart-thrower, forearm-rotation, elbow-flexion, and whole-body variants remain outside this narrow contract.",
+  "evidenceRefs": [
+    "forman-2020-dynamic-wrist-deviation",
+    "garland-2018-wrist-tendon-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "nichols-2015-wrist-muscle-moment-arms",
+    "szymanski-2004-wrist-forearm-training"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "wrist.radialDeviation"
+    ],
+    "primeActions": [
+      "wrist.radialDeviation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "flexorCarpiRadialis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "flexorCarpiRadialis",
+        "extensorCarpiRadialis"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "flexorCarpiUlnaris",
+        "extensorCarpiUlnaris",
+        "fingerFlexors",
+        "brachioradialis",
+        "externalRotators",
+        "trapeziusMiddle"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the implement-bearing hand moves freely or remains fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The gross body position used by the reviewed deviation fixture."
+    },
+    {
+      "id": "forearmSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "The external surface supporting the forearm; the initial product fixture is actively held beside the torso."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether the elbow angle remains materially unchanged or contributes dynamic motion."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extended"
+      ],
+      "description": "The canonical extended elbow posture held throughout the repetition."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar orientation remains fixed or contributes dynamic rotation."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The thumb-forward forearm posture held while the wrist deviates."
+    },
+    {
+      "id": "wristMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "radiallyDeviates"
+      ],
+      "description": "The dynamic thumb-side wrist action performed during the concentric phase."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the implement without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "collarOffsetLever"
+      ],
+      "description": "The hand grips below the dumbbell's bottom collar so its forward-pointing shaft creates the reviewed thumb-side lever."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever machine constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-dumbbell-wrist-radial-deviation",
+      "name": "Standing Dumbbell Radial Deviation",
+      "aliases": [],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 5,
+      "defaultWeightKg": 2.5,
+      "reps": 10,
+      "searchPriority": 75,
+      "involvement": [
+        {
+          "muscle": "flexorCarpiRadialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "primary"
+        },
+        {
+          "muscle": "flexorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiUlnaris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "forearmSupport": "none",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "wristMotion": "radiallyDeviates",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "collarOffsetLever",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "forman-2020-dynamic-wrist-deviation",
+        "szymanski-2004-wrist-forearm-training"
+      ],
+      "movementDefinition": "Stand tall with the working arm beside the torso, the elbow extended, and the thumb pointing forward. Grip below the dumbbell's bottom collar with its shaft pointing ahead, raise the thumb side of the wrist through the controlled available range, and lower without rotating the forearm or moving the elbow, shoulder, or torso."
+    }
+  ]
+}

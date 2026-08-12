@@ -1066,6 +1066,261 @@
       "pmid": "9548114",
       "url": "https://doi.org/10.1177/03635465980260021001",
       "scope": "Fine-wire and surface EMG with applied-load measurement in 19 healthy men during controlled elastic-resistance shoulder exercises, including dynamic internal and external rotation. It directly anchors low-load band fixtures without implying equivalence to cable resistance."
+    },
+    {
+      "id": "murray-1995-elbow-forearm-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Variation of muscle moment arms with elbow and forearm position",
+      "authors": [
+        "Wendy M. Murray",
+        "Scott L. Delp",
+        "Thomas S. Buchanan"
+      ],
+      "year": 1995,
+      "doi": "10.1016/0021-9290(94)00114-J",
+      "pmid": "7775488",
+      "url": "https://doi.org/10.1016/0021-9290(94)00114-J",
+      "scope": "Cadaveric tendon-excursion measurements of elbow-flexion and forearm-rotation moment arms across elbow and forearm positions. It distinguishes the mechanical capabilities of biceps brachii, brachialis, brachioradialis, pronator teres, and triceps, but does not establish exercise-level activation or training emphasis."
+    },
+    {
+      "id": "bremer-2006-forearm-rotator-moment-arms",
+      "sourceType": "biomechanicalModelStudy",
+      "title": "Moment arms of forearm rotators",
+      "authors": [
+        "Anne K. Bremer",
+        "Gontran R. Sennwald",
+        "Philippe Favre",
+        "Hilaire A. C. Jacob"
+      ],
+      "year": 2006,
+      "doi": "10.1016/j.clinbiomech.2006.03.002",
+      "pmid": "16678316",
+      "url": "https://doi.org/10.1016/j.clinbiomech.2006.03.002",
+      "scope": "Tendon excursions on an epoxy radioulnar model, verified on one fresh cadaver specimen, across the full forearm-rotation range at three elbow angles. It supports unconditional pronator and supinator moment directions and brachioradialis return toward neutral, not in-vivo exercise roles or contribution magnitudes."
+    },
+    {
+      "id": "boland-2008-brachioradialis-function",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "The function of brachioradialis",
+      "authors": [
+        "Michael R. Boland",
+        "Tracy Spigelman",
+        "Tim L. Uhl"
+      ],
+      "year": 2008,
+      "doi": "10.1016/j.jhsa.2008.07.019",
+      "pmid": "19084189",
+      "url": "https://doi.org/10.1016/j.jhsa.2008.07.019",
+      "scope": "Fine-wire EMG in ten healthy adults during loaded elbow flexion and rotation from full pronation or supination toward neutral. It supports elbow flexion as the consistent function and a secondary rotational role, not unconditional full-range pronation or supination."
+    },
+    {
+      "id": "gordon-2004-forearm-rotation-emg",
+      "sourceType": "intramuscularEMGStudy",
+      "title": "Electromyographic activity and strength during maximum isometric pronation and supination efforts in healthy adults",
+      "authors": [
+        "Karen D. Gordon",
+        "Richard D. Pardo",
+        "James A. Johnson",
+        "Graham J. W. King",
+        "Thomas A. Miller"
+      ],
+      "year": 2004,
+      "doi": "10.1016/S0736-0266(03)00115-3",
+      "pmid": "14656682",
+      "url": "https://doi.org/10.1016/S0736-0266(03)00115-3",
+      "scope": "Fine-wire EMG and torque in fourteen healthy adults during maximum isometric pronation and supination at five forearm positions without gripping. It supports pronator-teres and pronator-quadratus contribution to pronation and supinator and biceps contribution to supination, not dynamic exercise trajectories or submaximal role rankings."
+    },
+    {
+      "id": "garland-2018-wrist-tendon-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Wrist tendon moment arms: Quantification by imaging and experimental techniques",
+      "authors": [
+        "Angela K. Garland",
+        "Darshan S. Shah",
+        "Angela E. Kedgley"
+      ],
+      "year": 2018,
+      "doi": "10.1016/j.jbiomech.2017.12.024",
+      "pmid": "29306550",
+      "url": "https://doi.org/10.1016/j.jbiomech.2017.12.024",
+      "scope": "MRI-derived and tendon-excursion measurements in ten cadaveric upper limbs for FCR, FCU, ECRL, ECRB, ECU, and APL about wrist flexion-extension and radioulnar-deviation axes. Differences between methods for some tendons bound its use to categorical wrist actions rather than universal moment-arm magnitudes."
+    },
+    {
+      "id": "nichols-2015-wrist-muscle-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Wrist salvage procedures alter moment arms of the primary wrist muscles",
+      "authors": [
+        "Jennifer A. Nichols",
+        "Michael S. Bednar",
+        "Robert M. Havey",
+        "Wendy M. Murray"
+      ],
+      "year": 2015,
+      "doi": "10.1016/j.clinbiomech.2015.03.015",
+      "pmid": "25843482",
+      "url": "https://doi.org/10.1016/j.clinbiomech.2015.03.015",
+      "scope": "Tendon-excursion measurements in eight cadaveric specimens across flexion-extension and radial-ulnar deviation before and after two wrist-salvage procedures. The nonimpaired measurements independently confirm the categorical antagonist sets; the surgical comparisons do not define healthy exercise contribution magnitudes."
+    },
+    {
+      "id": "an-1983-index-finger-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Tendon excursion and moment arm of index finger muscles",
+      "authors": [
+        "K. N. An",
+        "Y. Ueba",
+        "E. Y. Chao",
+        "W. P. Cooney",
+        "R. L. Linscheid"
+      ],
+      "year": 1983,
+      "doi": "10.1016/0021-9290(83)90074-X",
+      "pmid": "6619158",
+      "url": "https://doi.org/10.1016/0021-9290(83)90074-X",
+      "scope": "Tendon-excursion measurements across individual index-finger flexion-extension and abduction-adduction ranges, with moment arms derived relative to joint centers. It supports categorical extrinsic finger-flexor and finger-extensor actions, not whole-hand grip tasks or exercise-level recruitment."
+    },
+    {
+      "id": "mirakhorlo-2018-hand-wrist-model",
+      "sourceType": "peerReviewedMusculoskeletalModel",
+      "title": "A musculoskeletal model of the hand and wrist: model definition and evaluation",
+      "authors": [
+        "M. Mirakhorlo",
+        "N. Van Beek",
+        "M. Wesseling",
+        "H. Maas",
+        "H. E. J. Veeger",
+        "I. Jonkers"
+      ],
+      "year": 2018,
+      "doi": "10.1080/10255842.2018.1490952",
+      "pmid": "30257101",
+      "url": "https://doi.org/10.1080/10255842.2018.1490952",
+      "scope": "A 43-muscle OpenSim hand-wrist model built from one cadaveric dataset and evaluated against published index-finger and wrist moment arms plus static pinch forces. It supports coherent finger-wrist capability mapping, not population-level force estimates or dynamic training roles."
+    },
+    {
+      "id": "ferrer-uris-2023-finger-dead-hangs",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Exploring forearm muscle coordination and training applications of various grip positions during maximal isometric finger dead-hangs in rock climbers",
+      "authors": [
+        "Blai Ferrer-Uris",
+        "Denisse Arias",
+        "Priscila Torrado",
+        "Michel Marina",
+        "Albert Busquets"
+      ],
+      "year": 2023,
+      "doi": "10.7717/peerj.15464",
+      "pmid": "37304875",
+      "url": "https://doi.org/10.7717/peerj.15464",
+      "scope": "Surface EMG of FDP, FDS, FCR, and EDC in twenty-five climbers during maximal isometric dead-hangs using three climbing-specific grip positions. It supports loaded finger-flexor recruitment and wrist-muscle co-contraction in static support, but does not by itself admit a dynamic gripper, pinch, or generic grip family."
+    },
+    {
+      "id": "haugstvedt-2001-forearm-rotation-moment-forces",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "A mechanical study of the moment-forces of the supinators and pronators of the forearm",
+      "authors": ["Jan-Ragnar Haugstvedt", "Richard A. Berger", "Lawrence J. Berglund"],
+      "year": 2001,
+      "doi": "10.1080/000164701317269076",
+      "pmid": "11817880",
+      "url": "https://doi.org/10.1080/000164701317269076",
+      "scope": "Cadaveric torque across forearm rotation in eight specimens with the elbow fixed at 90 degrees. It supports biceps and supinator supination, pronator-teres and pronator-quadratus pronation, and position-dependent torque; it is not exercise EMG or a product-load prescription."
+    },
+    {
+      "id": "szymanski-2004-wrist-forearm-training",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Effect of 12 Weeks of Wrist and Forearm Training on High School Baseball Players",
+      "authors": ["David J. Szymanski", "Jessica M. Szymanski", "Joseph M. Molloy", "David D. Pascoe"],
+      "year": 2004,
+      "doi": "10.1519/13703.1",
+      "pmid": "15320673",
+      "url": "https://doi.org/10.1519/13703.1",
+      "scope": "Twelve-week wrist and forearm program in male high-school baseball players using barbell wrist flexion and extension plus resisted pronation, supination, and radial-ulnar deviation. It anchors the loaded exercise directions and 8-to-12-repetition programming, not adult-generalized seed weights or individual-muscle roles; detailed testing used laboratory restraint that the catalog adapts to coached free setups."
+    },
+    {
+      "id": "fukunaga-2023-flexor-pronator-exercises",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Flexor-Pronator Mass Training Exercises Selectively Activate Forearm Musculature",
+      "authors": ["Takumi Fukunaga", "Connor Fedge", "Timothy Tyler", "Michael Mullaney", "Brandon Schmitt", "Karl Orishimo", "Malachy McHugh", "Stephen Nicholas"],
+      "year": 2023,
+      "doi": "10.26603/001c.68073",
+      "pmid": "36793573",
+      "url": "https://doi.org/10.26603/001c.68073",
+      "scope": "Dynamic elastic-band pronation and ulnar-deviation protocols in ten healthy men measured pronator teres, FDS, and FCU only. It supports a conservative role envelope but neither its full-range pronation nor shoulder-height ulnar-deviation setup is copied into the narrow offset-dumbbell roster; unmeasured muscles cannot be ranked inactive."
+    },
+    {
+      "id": "forman-2020-dynamic-wrist-flexion-extension",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Characterizing forearm muscle activity in young adults during dynamic wrist flexion-extension movement using a wrist robot",
+      "authors": ["Davis A. Forman", "Garrick N. Forman", "Edwin J. Avila-Mireles", "Maddalena Mugnosso", "Jacopo Zenzeri", "Bernadette Murphy", "Michael W. R. Holmes"],
+      "year": 2020,
+      "doi": "10.1016/j.jbiomech.2020.109908",
+      "pmid": "32636014",
+      "url": "https://doi.org/10.1016/j.jbiomech.2020.109908",
+      "scope": "Dynamic wrist flexion-extension in twelve young men across forearm orientations with an instrumented wrist robot and an eight-muscle EMG panel. It supports phase-dependent wrist-mover and co-contraction roles, not equivalence between the robot handle and the catalog's barbell fixture."
+    },
+    {
+      "id": "forman-2020-dynamic-wrist-deviation",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Characterizing forearm muscle activity in university-aged males during dynamic radial-ulnar deviation of the wrist using a wrist robot",
+      "authors": ["Davis A. Forman", "Garrick N. Forman", "Edwin J. Avila-Mireles", "Maddalena Mugnosso", "Jacopo Zenzeri", "Bernadette Murphy", "Michael W. R. Holmes"],
+      "year": 2020,
+      "doi": "10.1016/j.jbiomech.2020.109897",
+      "pmid": "32636008",
+      "url": "https://doi.org/10.1016/j.jbiomech.2020.109897",
+      "scope": "Dynamic radial-ulnar deviation in twelve university-aged men across forearm orientations with an instrumented wrist robot and surface EMG. It supports multi-muscle, direction- and phase-dependent deviation roles, not free-weight equivalence or numeric involvement weights."
+    },
+    {
+      "id": "coratella-2023-curl-handgrips",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Biceps Brachii and Brachioradialis Excitation in Biceps Curl Exercise: Different Handgrips, Different Synergy",
+      "authors": ["Giuseppe Coratella", "Gianpaolo Tornatore", "Stefano Longo", "Nicholas Toninelli", "Riccardo Padovan", "Fabio Esposito", "Emiliano Ce"],
+      "year": 2023,
+      "doi": "10.3390/sports11030064",
+      "pmid": "36976950",
+      "url": "https://doi.org/10.3390/sports11030064",
+      "scope": "Ten competitive male bodybuilders performed strict bilateral cable curls using a straight bar for supinated and pronated conditions and a rope for neutral. It directly anchors those fixtures and relative excitation, but brachialis was not measured and EMG is not a numeric contribution or hypertrophy oracle."
+    },
+    {
+      "id": "kleiber-2015-elbow-flexion-hand-position",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position",
+      "authors": ["Tim Kleiber", "Leo Kunz", "Catherine Disselhorst-Klug"],
+      "year": 2015,
+      "doi": "10.3389/fphys.2015.00215",
+      "pmid": "26300781",
+      "url": "https://doi.org/10.3389/fphys.2015.00215",
+      "scope": "Sixteen participants performed repeated controlled elbow flexion in three forearm positions at 20 degrees per second. Its pronated brachioradialis finding bounds the categorical role policy, while its loading and task differ from heavy cable curls and conflict with Coratella's orientation ordering."
+    },
+    {
+      "id": "alves-2018-triceps-shoulder-position",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Effect of shoulder position on triceps brachii heads activity in dumbbell elbow extension exercises",
+      "authors": ["Daniel Alves", "Thiago Matta", "Liliam Oliveira"],
+      "year": 2018,
+      "doi": "10.23736/S0022-4707.17.06849-9",
+      "pmid": "28677940",
+      "url": "https://doi.org/10.23736/S0022-4707.17.06849-9",
+      "scope": "Twenty-one trained men performed unilateral seated-overhead and supine-90-degree dumbbell elbow extensions at 40 percent MVIC. The study directly anchors the two postures but measured only the long and lateral triceps heads and does not establish product seed weights or a hypertrophy hierarchy."
+    },
+    {
+      "id": "maeo-2023-overhead-neutral-elbow-extension",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position",
+      "authors": ["Sumiaki Maeo", "Yuhang Wu", "Meng Huang", "Hikaru Sakurai", "Yuki Kusagawa", "Takashi Sugiyama", "Hiroaki Kanehisa", "Tadao Isaka"],
+      "year": 2023,
+      "doi": "10.1080/17461391.2022.2100279",
+      "pmid": "35819335",
+      "url": "https://doi.org/10.1080/17461391.2022.2100279",
+      "scope": "Issue-year 2023 study published online in 2022: twenty-one adults trained unilateral standing cable elbow extension for twelve weeks with the shoulder fixed at 180 versus 0 degrees and a supinated wrist. It anchors posture and aggregate adaptation, not separate app roles for triceps heads or other grips; it does not report the cable attachment, pulley height, anchor setting, or cable angle."
+    },
+    {
+      "id": "villalba-2024-pushdown-forearm-position",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Forearm Position Influences Triceps Brachii Activation During Triceps Push-Down Exercise",
+      "authors": ["Marina Mello Villalba", "Rafael Akira Fujita", "Claudinei Iossi Junior", "Matheus Machado Gomes"],
+      "year": 2024,
+      "doi": "10.47206/ijsc.v4i1.250",
+      "url": "https://doi.org/10.47206/ijsc.v4i1.250",
+      "scope": "Twenty-two adults performed single-arm pronated and supinated pushdowns with a handle or padded strap. It supports those reviewed variants and observed radial wrist-flexor/extensor stabilization; the same-absolute-load maximal-repetition design and attachment mechanics limit triceps ranking and provide no longitudinal outcome."
     }
   ]
 }

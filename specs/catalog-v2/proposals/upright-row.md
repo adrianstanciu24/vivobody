@@ -139,12 +139,12 @@ confirmed:
 | Candidate role | Muscle | Reason and limit |
 |---|---|---|
 | Primary | `deltoidLateral` | Principal shoulder-abduction training emphasis; anatomical moment arms and grip-width EMG support involvement without supplying a numeric contribution. |
-| Secondary | `biceps` | Produces the required elbow-flexion action. Grip width may change excitation, but does not remove the action. |
+| Secondary | `bicepsBrachii`, `brachialis`, `brachioradialis` | The three separately represented elbow flexors produce the required action. Grip width may change excitation, but does not remove the action. |
 | Secondary | `supraspinatus` | Anatomically capable shoulder abductor; exact angle-dependent contribution remains categorical. |
 | Optional secondary | `deltoidAnterior` | Anatomically capable of abduction, with contribution dependent on the measured elevation corridor. |
 | Stabilizer | `deltoidPosterior` | McAllister records excitation, but the current profile does not make it a shoulder abductor; do not promote EMG into a false action. |
 | Stabilizers | `externalRotators`, `subscapularis` | Glenohumeral control, not evidence of a deliberate rotation prime action. |
-| Stabilizers | `forearms` | Grip and wrist control. |
+| Stabilizers | `fingerFlexors`, `extensorCarpiRadialis` | Static implement hold plus wrist control, without recreating a generic forearm region or dynamic grip action. |
 | Stabilizers | `abs`, `obliques`, `lowerBack` | Available only with declared spinal or pelvic stability demands. |
 
 The roles of `trapeziusUpper`, `trapeziusLower`, and `serratus` remain blocked

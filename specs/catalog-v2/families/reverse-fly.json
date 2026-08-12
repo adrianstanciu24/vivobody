@@ -105,6 +105,24 @@
           "rhomboids"
         ],
         "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
       }
     ],
     "allowedByRole": {
@@ -124,9 +142,10 @@
         "serratus",
         "subscapularis",
         "supraspinatus",
-        "biceps",
+        "brachialis",
         "triceps",
-        "forearms",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
         "abs",
         "obliques",
         "lowerBack"
@@ -415,7 +434,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "biceps",
+          "muscle": "brachialis",
           "role": "stabilizer"
         },
         {
@@ -423,7 +442,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         }
       ],
@@ -481,7 +504,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "biceps",
+          "muscle": "brachialis",
           "role": "stabilizer"
         },
         {
@@ -489,7 +512,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         },
         {
@@ -554,7 +581,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "biceps",
+          "muscle": "brachialis",
           "role": "stabilizer"
         },
         {
@@ -562,7 +589,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         }
       ],
@@ -622,7 +653,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "biceps",
+          "muscle": "brachialis",
           "role": "stabilizer"
         },
         {
@@ -630,7 +661,11 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "forearms",
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
           "role": "stabilizer"
         }
       ],

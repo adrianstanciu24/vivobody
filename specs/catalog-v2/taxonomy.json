@@ -175,13 +175,102 @@
       "unvisualizedReason": "BodyModel.scn has no supraspinatus surface mesh."
     },
     {
-      "id": "biceps",
+      "id": "bicepsBrachii",
       "displayName": "Biceps",
-      "anatomicalName": "Biceps Brachii and Brachialis",
+      "anatomicalName": "Biceps Brachii",
       "group": "arms",
       "meshBaseNames": [
-        "Biceps",
+        "Biceps"
+      ]
+    },
+    {
+      "id": "brachialis",
+      "displayName": "Brachialis",
+      "anatomicalName": "Brachialis",
+      "group": "arms",
+      "meshBaseNames": [
         "Brachialis"
+      ]
+    },
+    {
+      "id": "brachioradialis",
+      "displayName": "Brachioradialis",
+      "anatomicalName": "Brachioradialis",
+      "group": "arms",
+      "meshBaseNames": [
+        "Brachioradialis"
+      ]
+    },
+    {
+      "id": "forearmPronators",
+      "displayName": "Forearm Pronators",
+      "anatomicalName": "Pronator Teres and Pronator Quadratus",
+      "group": "arms",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no pronator-teres or pronator-quadratus surface mesh."
+    },
+    {
+      "id": "supinator",
+      "displayName": "Supinator",
+      "anatomicalName": "Supinator",
+      "group": "arms",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no supinator surface mesh."
+    },
+    {
+      "id": "flexorCarpiRadialis",
+      "displayName": "Flexor Carpi Radialis",
+      "anatomicalName": "Flexor Carpi Radialis",
+      "group": "arms",
+      "meshBaseNames": [
+        "Flexor_Carpi_Radialis"
+      ]
+    },
+    {
+      "id": "flexorCarpiUlnaris",
+      "displayName": "Flexor Carpi Ulnaris",
+      "anatomicalName": "Flexor Carpi Ulnaris",
+      "group": "arms",
+      "meshBaseNames": [
+        "Flexor_Carpi_Ulnaris"
+      ]
+    },
+    {
+      "id": "extensorCarpiRadialis",
+      "displayName": "Radial Wrist Extensors",
+      "anatomicalName": "Extensor Carpi Radialis Longus and Brevis",
+      "group": "arms",
+      "meshBaseNames": [
+        "Extensor_Carpi_Radialis_Longus",
+        "Extensor_Carpi_Radialis_Brevis"
+      ]
+    },
+    {
+      "id": "extensorCarpiUlnaris",
+      "displayName": "Extensor Carpi Ulnaris",
+      "anatomicalName": "Extensor Carpi Ulnaris",
+      "group": "arms",
+      "meshBaseNames": [
+        "Extensor_Carpi_Ulnaris"
+      ]
+    },
+    {
+      "id": "fingerFlexors",
+      "displayName": "Finger Flexors",
+      "anatomicalName": "Flexor Digitorum Superficialis and Profundus",
+      "group": "arms",
+      "meshBaseNames": [
+        "Flexor_Digitorum_Superficialis",
+        "Flexor_Digitorum_Profundus"
+      ]
+    },
+    {
+      "id": "fingerExtensors",
+      "displayName": "Finger Extensors",
+      "anatomicalName": "Extensor Digitorum Communis",
+      "group": "arms",
+      "meshBaseNames": [
+        "Extensor_Digitorum_Communis"
       ]
     },
     {
@@ -191,22 +280,6 @@
       "group": "arms",
       "meshBaseNames": [
         "Triceps"
-      ]
-    },
-    {
-      "id": "forearms",
-      "displayName": "Forearms",
-      "anatomicalName": "Forearm Flexors and Extensors",
-      "group": "arms",
-      "meshBaseNames": [
-        "Brachioradialis",
-        "Flexor_Carpi_Radialis",
-        "Flexor_Carpi_Ulnaris",
-        "Extensor_Carpi_Radialis_Longus",
-        "Extensor_Carpi_Radialis_Brevis",
-        "Extensor_Carpi_Ulnaris",
-        "Flexor_Digitorum_Superficialis",
-        "Extensor_Digitorum_Communis"
       ]
     },
     {

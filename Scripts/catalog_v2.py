@@ -5,7 +5,7 @@
 #
 #  Foundation validator for the clean-slate, family-first exercise catalog.
 #  It owns no legacy compatibility and never reads curate.py, its review CSVs,
-#  or the shipped catalog.json. It validates the canonical 32-muscle taxonomy,
+#  or the shipped catalog.json. It validates the canonical 41-muscle taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
 #  references, and every reviewed movement-family contract. The atomic cutover
 #  will extend this file into the deterministic catalog compiler.
@@ -36,6 +36,8 @@ BODY_MODEL_PATH = ROOT / "vivobody" / "Resources" / "BodyModel.scn"
 
 SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
+EXPECTED_MESH_BASE_COUNT = 62
+EXPECTED_ACTION_COUNT = 44
 EXPECTED_MUSCLE_IDS = {
     "pectoralisMajorClavicular",
     "pectoralisMajorSternocostal",
@@ -55,9 +57,18 @@ EXPECTED_MUSCLE_IDS = {
     "externalRotators",
     "subscapularis",
     "supraspinatus",
-    "biceps",
+    "bicepsBrachii",
+    "brachialis",
+    "brachioradialis",
+    "forearmPronators",
+    "supinator",
+    "flexorCarpiRadialis",
+    "flexorCarpiUlnaris",
+    "extensorCarpiRadialis",
+    "extensorCarpiUlnaris",
+    "fingerFlexors",
+    "fingerExtensors",
     "triceps",
-    "forearms",
     "abs",
     "obliques",
     "quads",
@@ -70,6 +81,7 @@ EXPECTED_MUSCLE_IDS = {
     "hipFlexors",
     "shins",
 }
+EXPECTED_MUSCLE_COUNT = len(EXPECTED_MUSCLE_IDS)
 EXPECTED_SPLIT_MESHES = {
     "pectoralisMajorClavicular": ["Pectoralis_Major_Clavicular"],
     "pectoralisMajorSternocostal": ["Pectoralis_Major_Sternocostal"],
@@ -81,6 +93,21 @@ EXPECTED_SPLIT_MESHES = {
     "trapeziusMiddle": ["Trapezius_Middle"],
     "trapeziusLower": ["Trapezius_Lower"],
     "levatorScapulae": ["Levator_Scapulaes"],
+    "bicepsBrachii": ["Biceps"],
+    "brachialis": ["Brachialis"],
+    "brachioradialis": ["Brachioradialis"],
+    "flexorCarpiRadialis": ["Flexor_Carpi_Radialis"],
+    "flexorCarpiUlnaris": ["Flexor_Carpi_Ulnaris"],
+    "extensorCarpiRadialis": [
+        "Extensor_Carpi_Radialis_Longus",
+        "Extensor_Carpi_Radialis_Brevis",
+    ],
+    "extensorCarpiUlnaris": ["Extensor_Carpi_Ulnaris"],
+    "fingerFlexors": [
+        "Flexor_Digitorum_Superficialis",
+        "Flexor_Digitorum_Profundus",
+    ],
+    "fingerExtensors": ["Extensor_Digitorum_Communis"],
 }
 
 EQUIPMENT = {
@@ -305,7 +332,10 @@ def validate_taxonomy(data: dict[str, Any], body_model_path: Path = BODY_MODEL_P
     require(tuple(groups) == EXPECTED_GROUPS, f"{context}.groups must match the app's six MuscleGroup raw values")
 
     muscles = require_list(data["muscles"], f"{context}.muscles")
-    require(len(muscles) == 32, f"{context} must define exactly 32 muscles, found {len(muscles)}")
+    require(
+        len(muscles) == EXPECTED_MUSCLE_COUNT,
+        f"{context} must define exactly {EXPECTED_MUSCLE_COUNT} muscles, found {len(muscles)}",
+    )
     muscle_by_id: dict[str, dict[str, Any]] = {}
     owner_by_mesh_base: dict[str, str] = {}
 
@@ -360,6 +390,11 @@ def validate_taxonomy(data: dict[str, Any], body_model_path: Path = BODY_MODEL_P
             actual_meshes == expected_meshes,
             f"{muscle_id} must own exactly {expected_meshes}, found {actual_meshes}",
         )
+
+    require(
+        len(owner_by_mesh_base) == EXPECTED_MESH_BASE_COUNT,
+        f"{context} must own exactly {EXPECTED_MESH_BASE_COUNT} mesh bases, found {len(owner_by_mesh_base)}",
+    )
 
     model_strings = scene_strings(body_model_path)
     for mesh_base, owner in sorted(owner_by_mesh_base.items()):
@@ -450,6 +485,11 @@ def validate_joint_actions(
         require_non_empty_string(action["displayName"], f"{item_context}.displayName")
         action_ids.add(action_id)
         plane_by_action[action_id] = action["plane"]
+
+    require(
+        len(action_ids) == EXPECTED_ACTION_COUNT,
+        f"{context} must define exactly {EXPECTED_ACTION_COUNT} joint actions, found {len(action_ids)}",
+    )
 
     conditions = require_list(data["actionConditions"], f"{context}.actionConditions", allow_empty=True)
     condition_actions: dict[str, frozenset[str]] = {}
@@ -598,6 +638,25 @@ def validate_family_schema(data: dict[str, Any]) -> None:
         and plane_basis_schema.get("uniqueItems") is True,
         f"{context} planeBasisActions must require one to three unique actions",
     )
+    variant_axis = definitions.get("variantAxis", {})
+    variant_axis_properties = variant_axis.get("properties", {})
+    require(
+        variant_axis_properties.get("fixedValue") == {"type": "boolean"},
+        f"{context} variantAxis.fixedValue must be a boolean",
+    )
+    fixed_boolean_constraint = {
+        "if": {"required": ["fixedValue"]},
+        "then": {
+            "properties": {
+                "valueType": {"const": "boolean"},
+                "required": {"const": True},
+            }
+        },
+    }
+    require(
+        fixed_boolean_constraint in variant_axis.get("allOf", []),
+        f"{context} fixedValue must require a required boolean axis",
+    )
     internal_refs: set[str] = set()
 
     def collect_refs(value: Any) -> None:
@@ -714,7 +773,7 @@ def validate_variant_axes(value: Any, context: str) -> dict[str, dict[str, Any]]
         require_keys(
             axis,
             required={"id", "valueType", "required", "description"},
-            optional={"allowedValues", "minimum", "maximum"},
+            optional={"allowedValues", "minimum", "maximum", "fixedValue"},
             context=axis_context,
         )
         axis_id = require_non_empty_string(axis["id"], f"{axis_context}.id")
@@ -742,6 +801,19 @@ def validate_variant_axes(value: Any, context: str) -> dict[str, dict[str, Any]]
             require(
                 not ({"allowedValues", "minimum", "maximum"} & axis.keys()),
                 f"{axis_context} {value_type} axis cannot declare enum values or numeric bounds",
+            )
+        if "fixedValue" in axis:
+            require(
+                value_type == "boolean",
+                f"{axis_context}.fixedValue is only valid for a boolean axis",
+            )
+            require(
+                type(axis["fixedValue"]) is bool,
+                f"{axis_context}.fixedValue must be a boolean",
+            )
+            require(
+                axis["required"],
+                f"{axis_context} with fixedValue must be required",
             )
         axis_by_id[axis_id] = axis
     return axis_by_id
@@ -846,6 +918,12 @@ def validate_variant(
             require(type(axis_value) in {int, float}, f"{context}.{axis_id} must be numeric")
         elif value_type == "boolean":
             require(type(axis_value) is bool, f"{context}.{axis_id} must be a boolean")
+
+        if "fixedValue" in axis:
+            require(
+                axis_value == axis["fixedValue"],
+                f"{context}.{axis_id} must equal fixed value {axis['fixedValue']!r}",
+            )
 
         if value_type == "enum":
             require(axis_value in axis["allowedValues"], f"{context}.{axis_id} has disallowed value {axis_value!r}")
@@ -1295,7 +1373,15 @@ def validate_exercise(
         context=f"{context}.additionalPrimeActions",
         allow_empty=True,
     )
+    family_prime_action_ids = {
+        action for action, _ in family_prime_actions
+    }
     for action, _ in additional_actions:
+        require(
+            action not in family_prime_action_ids,
+            f"{context} redeclares family prime action {action} in "
+            "additionalPrimeActions",
+        )
         require(
             action not in family_forbidden_prime_actions,
             f"{context} declares forbidden prime action {action}",

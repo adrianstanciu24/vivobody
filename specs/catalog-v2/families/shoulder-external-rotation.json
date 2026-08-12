@@ -218,6 +218,7 @@
       "id": "fixedPath",
       "valueType": "boolean",
       "required": true,
+      "fixedValue": false,
       "description": "Whether rails or a lever constrain the external load path."
     },
     {
@@ -244,8 +245,7 @@
         { "field": "variant.bodyPosition", "value": "standing" },
         { "field": "variant.torsoSupport", "value": "none" },
         { "field": "variant.upperArmSupport", "value": "none" },
-        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" },
-        { "field": "variant.fixedPath", "value": false }
+        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -262,8 +262,7 @@
         { "field": "variant.bodyPosition", "value": "standing" },
         { "field": "variant.torsoSupport", "value": "none" },
         { "field": "variant.upperArmSupport", "value": "towelRoll" },
-        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" },
-        { "field": "variant.fixedPath", "value": false }
+        { "field": "variant.rotationResistanceGeometry", "value": "medialAnchor" }
       ],
       "requirePresent": [],
       "requireAbsent": []
@@ -281,8 +280,7 @@
         { "field": "variant.bodyPosition", "value": "sideLying" },
         { "field": "variant.torsoSupport", "value": "bench" },
         { "field": "variant.upperArmSupport", "value": "towelRoll" },
-        { "field": "variant.rotationResistanceGeometry", "value": "gravity" },
-        { "field": "variant.fixedPath", "value": false }
+        { "field": "variant.rotationResistanceGeometry", "value": "gravity" }
       ],
       "requirePresent": [],
       "requireAbsent": []

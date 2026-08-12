@@ -143,16 +143,20 @@ the most effective abductors in their tested configurations.
 This is a correction to the independent anatomy map, not a special exception
 for one family.
 
-### 2. Supraspinatus is muscle 32
+### 2. Supraspinatus was the 32nd muscle at activation
 
 The taxonomy separately represents infraspinatus and teres minor as
 `externalRotators`, separately represents `subscapularis`, and now represents
-`supraspinatus` directly rather than folding it into either category. Muscle 32
+`supraspinatus` directly rather than folding it into either category. At this
+family's activation it was muscle 32; the later distal taxonomy migration took
+the foundation to 41 regions without changing this shoulder decision. It
 produces `shoulder.abduction` and stabilizes `shoulder`, backed by Ackland and
 Blache respectively.
 
 It intentionally has `meshBaseNames: []` plus an `unvisualizedReason`, so the
-SceneKit mesh count remains 61. The whole-muscle profile deliberately omits
+At activation the SceneKit mesh count remained 61; Batch 2 later added the
+previously unowned FDP mesh and raised the current count to 62. The
+whole-muscle profile deliberately omits
 shoulder flexion: Ackland's flexion result distinguishes anterior and posterior
 supraspinatus subregions, but this taxonomy does not. The active vertical-press
 contract resolves its role as required secondary. The later atomic app cutover
@@ -345,7 +349,8 @@ to fill permutations:
 3. `deltoidAnterior` primary and `deltoidLateral` required secondary.
 4. Dynamic secondary roles for serratus and upper/lower trapezius.
 5. Correct anterior-deltoid capability by adding `shoulder.abduction` — done.
-6. Add supraspinatus as muscle 32 with explicit no-mesh behavior — done.
+6. Add supraspinatus as the activation-time muscle 32 with explicit no-mesh
+   behavior — done; later taxonomy additions do not change that decision.
 7. Make standing/unilateral stability demands mechanically enforceable — done.
 8. Admit standard kettlebell presses only with
    `kettlebellOrientation: standard`; `bottomUp` remains mechanically

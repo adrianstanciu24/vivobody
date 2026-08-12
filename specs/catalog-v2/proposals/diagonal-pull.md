@@ -417,11 +417,11 @@ sole-primary `lats` as the only legal answer:
 |---|---|---|
 | Required back primary | At least one of `lats`, `rhomboids`, or `trapeziusMiddle` | Keeps the product in the back group while allowing the measured humeral/scapular emphasis to decide the lead contributor. |
 | Required contributor | `lats`, at least secondary | Shoulder-adduction/extension anatomy supports involvement, but no condition-matched high-row evidence establishes sole-primary status. |
-| Required secondary | `teresMajor`, `biceps` | Adduction/extension synergy and elbow flexion. |
+| Required secondary | `teresMajor`, `bicepsBrachii`, `brachialis`, `brachioradialis` | Adduction/extension synergy plus the three separately represented elbow flexors. |
 | Required retractor | At least one of `trapeziusMiddle`, `trapeziusLower`, or `rhomboids`, at least secondary | Required only if human kinematic review retains scapular retraction. |
 | Optional co-primary or secondary | `pectoralisMajorSternocostal` | Loaded coronal adduction classifies its sternal compartments as co-prime with lat compartments; the condition-mismatched high-row path decides whether the catalog authors primary or secondary. |
 | Optional secondary | `deltoidPosterior` and remaining allowed retractors | Plausible path- and position-dependent contribution; none of these is promoted to manufacture a difference from vertical pull. |
-| Required stabilizer | `forearms` | Grip and wrist control. |
+| Required stabilizer | `fingerFlexors`, `extensorCarpiRadialis` | Explicit static hand and wrist control without recreating the retired aggregate. |
 | Optional stabilizer | `externalRotators`, `subscapularis`, `supraspinatus`, `trapeziusUpper`, `serratus`, `pectoralisMinor` | Exercise-specific shoulder/scapular control; no cuff assignment is copied automatically from a sibling family. |
 
 The initial chest-supported fixture does not require a family-level `spine`
@@ -448,7 +448,9 @@ Provisional policy shape:
     },
     {"anyOf": ["lats"], "minimumRole": "secondary"},
     {"anyOf": ["teresMajor"], "minimumRole": "secondary"},
-    {"anyOf": ["biceps"], "minimumRole": "secondary"},
+    {"anyOf": ["bicepsBrachii"], "minimumRole": "secondary"},
+    {"anyOf": ["brachialis"], "minimumRole": "secondary"},
+    {"anyOf": ["brachioradialis"], "minimumRole": "secondary"},
     {
       "anyOf": [
         "trapeziusMiddle",
@@ -457,7 +459,8 @@ Provisional policy shape:
       ],
       "minimumRole": "secondary"
     },
-    {"anyOf": ["forearms"], "minimumRole": "stabilizer"}
+    {"anyOf": ["fingerFlexors"], "minimumRole": "stabilizer"},
+    {"anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer"}
   ],
   "allowedByRole": {
     "primary": [
@@ -469,7 +472,9 @@ Provisional policy shape:
     "secondary": [
       "lats",
       "teresMajor",
-      "biceps",
+      "bicepsBrachii",
+      "brachialis",
+      "brachioradialis",
       "trapeziusMiddle",
       "trapeziusLower",
       "rhomboids",
@@ -477,7 +482,8 @@ Provisional policy shape:
       "pectoralisMajorSternocostal"
     ],
     "stabilizer": [
-      "forearms",
+      "fingerFlexors",
+      "extensorCarpiRadialis",
       "externalRotators",
       "subscapularis",
       "supraspinatus",
@@ -846,7 +852,7 @@ The family is ready for activation only after all of these are settled:
     or phase condition the schema cannot encode.
 15. **Runtime remains separate:** this discovery does not cut catalog-v2 into
     Swift. The later atomic cutover still has to replace the coarse runtime
-    muscle taxonomy with the 32-region taxonomy; add `familyID`, the `diagonal`
+    muscle taxonomy with the current 41-region taxonomy; add `familyID`, the `diagonal`
     direction, and multi-plane representation; compile/emit the family sources;
     and update persisted classification plus editor surfaces atomically.
 

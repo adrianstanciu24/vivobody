@@ -166,9 +166,9 @@ posterior thorax and can translate during a chest-supported row. Therefore:
 | Role | Activated muscles | Contract meaning |
 |---|---|---|
 | Primary | `lats` | Sole dominant training emphasis for the admitted narrow/tucked shoulder-extension row. |
-| Required secondary | `teresMajor`, `deltoidPosterior`, `biceps`, `trapeziusMiddle`, `rhomboids` | Shoulder extension, elbow flexion, and dynamic scapular retraction. |
+| Required secondary | `teresMajor`, `deltoidPosterior`, `bicepsBrachii`, `brachialis`, `brachioradialis`, `trapeziusMiddle`, `rhomboids` | Shoulder extension, the three separately represented elbow flexors, and dynamic scapular retraction. |
 | Optional secondary | `trapeziusLower`, `pectoralisMajorSternocostal` | Exercise-specific retraction contribution and position-dependent extension assistance. |
-| Required stabilizer | `subscapularis`, `forearms` | Direction-specific glenohumeral control plus grip/wrist control. |
+| Required stabilizer | `subscapularis`, `fingerFlexors`, `extensorCarpiRadialis` | Direction-specific glenohumeral control plus explicit hand/wrist control. |
 | Conditional hip-hinged stabilizers | `lowerBack` and `gluteMax` | Every unsupported hip-hinged record resists spinal and hip motion. |
 | Conditional suspended stabilizers | `abs`, `lowerBack`, and `gluteMax` | The inverted-row branch maintains a straight body against gravity. |
 | Conditional unilateral stabilizer | `obliques` | Every unilateral record resists asymmetric pelvic and trunk motion. |
