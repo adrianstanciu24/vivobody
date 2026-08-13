@@ -169,6 +169,25 @@ struct MuscleMappingTests {
         #expect(bench.volumeCredit(for: .trapeziusMiddle) == 0)
     }
 
+    @Test func canonicalDipsPaintAndCreditBothPectoralRegions() {
+        for name in ["bar dip", "ring dip"] {
+            let dip = Muscle.involvement(forExerciseNamed: name)
+            #expect(dip.role(for: .pectoralisMajorClavicular) == .primary)
+            #expect(dip.role(for: .pectoralisMajorSternocostal) == .primary)
+            #expect(
+                dip.anatomyNodeChannels[
+                    "Pectoralis_Major_Sternocostal_L"
+                ]?.intensity == 1
+            )
+            #expect(
+                dip.anatomyNodeChannels[
+                    "Pectoralis_Major_Sternocostal_R"
+                ]?.intensity == 1
+            )
+            #expect(dip.volumeCredit(for: .pectoralisMajorSternocostal) == 1)
+        }
+    }
+
     @Test func unknownAndObsoleteSnapshotKeysDoNotInventAnatomy() {
         #expect(Muscle.involvement(forExerciseNamed: "Totally Made Up Lift").isEmpty)
         #expect(Muscle.Involvement(snapshot: [

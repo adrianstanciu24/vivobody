@@ -377,6 +377,17 @@ class CatalogFoundationTests(unittest.TestCase):
         ]
         return family
 
+    def sternocostal_flexion_family(self, action_requirement: object) -> dict:
+        family = self.family_copy()
+        family["fixed"]["planes"] = ["sagittal"]
+        family["movementSignature"]["planeBasisActions"] = ["shoulder.flexion"]
+        family["movementSignature"]["primeActions"] = [action_requirement]
+        family["exercises"][0]["involvement"] = [
+            {"muscle": "pectoralisMajorSternocostal", "role": "primary"},
+            {"muscle": "serratus", "role": "stabilizer"},
+        ]
+        return family
+
     def resisted_spine_family(self) -> dict:
         family = self.family_copy()
         family["fixed"] = {
@@ -1053,7 +1064,7 @@ class CatalogFoundationTests(unittest.TestCase):
             self.assertTrue(profile["stabilizes"])
             self.assertTrue(profile["evidenceRefs"])
 
-    def test_sternocostal_extension_is_conditioned_on_a_flexed_start(self) -> None:
+    def test_sternocostal_sagittal_actions_are_position_conditioned(self) -> None:
         profile = self.foundation.profile_by_muscle["pectoralisMajorSternocostal"]
         self.assertIn(
             {
@@ -1070,6 +1081,22 @@ class CatalogFoundationTests(unittest.TestCase):
             capabilities,
         )
         self.assertNotIn(("shoulder.extension", None), capabilities)
+        self.assertEqual(
+            self.foundation.condition_actions["fromExtendedPosition"],
+            frozenset({"shoulder.flexion"}),
+        )
+        self.assertIn(
+            {
+                "action": "shoulder.flexion",
+                "condition": "fromExtendedPosition",
+            },
+            profile["produces"],
+        )
+        self.assertIn(
+            ("shoulder.flexion", "fromExtendedPosition"),
+            capabilities,
+        )
+        self.assertNotIn(("shoulder.flexion", None), capabilities)
 
     def test_valid_family_fixture_passes_without_warnings(self) -> None:
         family = self.family_copy()
@@ -6028,12 +6055,24 @@ class CatalogFoundationTests(unittest.TestCase):
                     "planes": ["sagittal"],
                 },
                 "basis": ["shoulder.flexion"],
-                "prime": ["shoulder.flexion", "elbow.extension"],
-                "primary": ["pectoralisMajorClavicular", "triceps"],
+                "prime": [
+                    {
+                        "action": "shoulder.flexion",
+                        "condition": "fromExtendedPosition",
+                    },
+                    "elbow.extension",
+                ],
+                "primary": [
+                    "pectoralisMajorClavicular",
+                    "pectoralisMajorSternocostal",
+                    "triceps",
+                ],
                 "group": {"default": "chest", "allowed": ["chest"]},
                 "reps": {"minimum": 5, "maximum": 15},
                 "evidence": [
                     "ackland-2008-shoulder-moment-arms",
+                    "cinarli-2021-parallel-bar-dip",
+                    "da-silva-2022-ring-dip-pectoralis-rupture",
                     "mckenzie-2022-dip-variations",
                     "mckenzie-2022-bar-dip-fatigue",
                 ],
@@ -6132,6 +6171,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "bar-dip": {
                 "pectoralisMajorClavicular": "primary",
+                "pectoralisMajorSternocostal": "primary",
                 "triceps": "primary",
                 "deltoidAnterior": "secondary",
                 "serratus": "stabilizer",
@@ -6144,6 +6184,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "ring-dip": {
                 "pectoralisMajorClavicular": "primary",
+                "pectoralisMajorSternocostal": "primary",
                 "triceps": "primary",
                 "deltoidAnterior": "secondary",
                 "serratus": "stabilizer",
@@ -6208,29 +6249,69 @@ class CatalogFoundationTests(unittest.TestCase):
                 with self.subTest(exercise=exercise["catalogID"]):
                     self.assertTrue(expected <= assigned)
 
-    def test_dip_sternocostal_flexion_gap_is_explicitly_held(self) -> None:
+    def test_dip_sternocostal_flexion_gap_is_closed_narrowly(self) -> None:
         capabilities = self.foundation.capabilities_by_muscle[
             "pectoralisMajorSternocostal"
         ]
-        self.assertNotIn(
-            "fromExtendedPosition",
-            self.foundation.condition_actions,
+        self.assertEqual(
+            self.foundation.condition_actions["fromExtendedPosition"],
+            {"shoulder.flexion"},
         )
         self.assertNotIn(("shoulder.flexion", None), capabilities)
-        self.assertNotIn(
+        self.assertIn(
             ("shoulder.flexion", "fromExtendedPosition"),
             capabilities,
         )
 
         dip = self.batch3_families["dip"]
+        self.assertEqual(
+            dip["movementSignature"]["primeActions"][0],
+            {
+                "action": "shoulder.flexion",
+                "condition": "fromExtendedPosition",
+            },
+        )
         for exercise in dip["exercises"]:
             with self.subTest(exercise=exercise["catalogID"]):
+                roles = {
+                    assignment["muscle"]: assignment["role"]
+                    for assignment in exercise["involvement"]
+                }
+                self.assertEqual(
+                    roles["pectoralisMajorSternocostal"],
+                    "primary",
+                )
+
+        consumers = {
+            family["id"]
+            for family in self.real_families
+            if any(
+                isinstance(requirement, dict)
+                and requirement.get("condition") == "fromExtendedPosition"
+                for requirement in (
+                    family["movementSignature"]["primeActions"]
+                    + family["movementSignature"].get("resistedActions", [])
+                )
+            )
+        }
+        self.assertEqual(consumers, {"dip"})
+        for family_id in {
+            "push-press",
+            "shoulder-flexion-raise",
+            "vertical-press",
+        }:
+            family = next(
+                family for family in self.real_families
+                if family["id"] == family_id
+            )
+            for exercise in family["exercises"]:
                 self.assertNotIn(
                     "pectoralisMajorSternocostal",
                     {
                         assignment["muscle"]
                         for assignment in exercise["involvement"]
                     },
+                    exercise["catalogID"],
                 )
 
         roadmap = (
@@ -6245,31 +6326,22 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
+        self.assertIn("16 work items remain unresolved", roadmap)
         self.assertIn(
-            "17 work items remain unresolved: 16 family or branch items",
+            "Sternocostal flexion from an extended start — complete",
             roadmap,
         )
         self.assertIn(
-            "Sternocostal flexion from an extended start — evidence hold",
-            roadmap,
-        )
-        self.assertIn(
-            "3D body highlight and MuscleVolume/Development credit",
-            roadmap,
-        )
-        self.assertIn(
-            "Tracked foundation hold: sternocostal flexion from extension",
+            "Resolved foundation condition: sternocostal flexion from extension",
             proposal,
         )
-        self.assertIn(
-            "Exercise-specific evidence must then support whether the region "
-            "is primary, secondary, or merely stabilizing",
-            normalized_proposal,
-        )
+        self.assertIn("triangulated basis", normalized_proposal)
+        self.assertIn("closing the prior user-visible zero-credit gap", normalized_proposal)
         self.assertIn(
             "symmetry of naming is not evidence of symmetry of function",
             foundation_readme,
         )
+        self.assertNotIn("tracked foundation hold", foundation_readme.lower())
 
     def test_batch3_authored_roster_surface_is_exactly_pinned(self) -> None:
         payload = []
@@ -6303,7 +6375,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "af7c1d32a86268aea0e56dd66c14bb8b611b8fc5c047b532fb99be1642c33d5c",
+            "d007abe3acbfd744083c8979e4af86b671f3b2b95b9f7b5a491bf7b64c026760",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -6568,6 +6640,49 @@ class CatalogFoundationTests(unittest.TestCase):
 
         self.assertEqual(mutation_count, 4)
 
+    def test_dip_condition_and_sternocostal_role_are_directly_mutated(
+        self,
+    ) -> None:
+        original = self.batch3_families["dip"]
+
+        family = copy.deepcopy(original)
+        family["movementSignature"]["primeActions"][0] = "shoulder.flexion"
+        self.assert_batch3_family_fails(
+            family,
+            "primary muscle pectoralisMajorSternocostal cannot produce any declared prime action",
+        )
+
+        for exercise_index, exercise in enumerate(original["exercises"]):
+            family = copy.deepcopy(original)
+            family["exercises"][exercise_index]["involvement"] = [
+                assignment
+                for assignment in family["exercises"][exercise_index][
+                    "involvement"
+                ]
+                if assignment["muscle"] != "pectoralisMajorSternocostal"
+            ]
+            with self.subTest(exercise=exercise["catalogID"], mutation="remove"):
+                self.assert_batch3_family_fails(
+                    family,
+                    "fails muscle requirement 1",
+                )
+
+            family = copy.deepcopy(original)
+            family["musclePolicy"]["allowedByRole"]["secondary"].append(
+                "pectoralisMajorSternocostal"
+            )
+            assignment = next(
+                item
+                for item in family["exercises"][exercise_index]["involvement"]
+                if item["muscle"] == "pectoralisMajorSternocostal"
+            )
+            assignment["role"] = "secondary"
+            with self.subTest(exercise=exercise["catalogID"], mutation="demote"):
+                self.assert_batch3_family_fails(
+                    family,
+                    "fails muscle requirement 1",
+                )
+
     def test_batch3_every_required_muscle_assignment_is_mutation_gated(
         self,
     ) -> None:
@@ -6600,7 +6715,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 51)
+        self.assertEqual(mutation_count, 53)
 
     def test_batch3_cross_family_press_and_scapular_boundaries_are_pinned(
         self,
@@ -6654,7 +6769,13 @@ class CatalogFoundationTests(unittest.TestCase):
         dip = self.batch3_families["dip"]
         self.assertEqual(
             dip["movementSignature"]["primeActions"],
-            ["shoulder.flexion", "elbow.extension"],
+            [
+                {
+                    "action": "shoulder.flexion",
+                    "condition": "fromExtendedPosition",
+                },
+                "elbow.extension",
+            ],
         )
         self.assertTrue(
             {
@@ -6845,6 +6966,12 @@ class CatalogFoundationTests(unittest.TestCase):
             "mckenzie-2022-bar-dip-fatigue": (
                 "does not establish a whole-pectoralis or between-muscle "
                 "force ranking"
+            ),
+            "cinarli-2021-parallel-bar-dip": (
+                "triangulated, exercise-specific basis"
+            ),
+            "da-silva-2022-ring-dip-pectoralis-rupture": (
+                "cannot establish normal concentric recruitment"
             ),
             "chiu-2006-push-press-joint-kinetics": (
                 "do not establish a categorical individual-muscle "
@@ -7759,7 +7886,7 @@ class CatalogFoundationTests(unittest.TestCase):
             proposal,
         )
         self.assertIn("`hip-flexion` — deferred", roadmap)
-        self.assertIn("17 work items remain unresolved", roadmap)
+        self.assertIn("16 work items remain unresolved", roadmap)
 
     def test_batch5_activates_exactly_four_compound_families(self) -> None:
         expected = {
@@ -8903,7 +9030,7 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "17 work items remain unresolved: 16 family or branch items",
+            "16 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("`dynamic-lunge` discovery hold", roadmap)
@@ -9651,7 +9778,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 126)
+        self.assertEqual(len(source_by_id), 128)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -9737,7 +9864,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("No `families/hip-internal-rotation.json` should exist", normalized)
         self.assertIn("No `families/hip-external-rotation.json` should exist", normalized)
-        self.assertIn("17 work items remain unresolved: 16 family or branch items", roadmap)
+        self.assertIn("16 work items remain unresolved, all family or branch items", roadmap)
         self.assertIn(
             "Batch 7 resolved eight candidates into seven active families",
             roadmap,
@@ -9789,7 +9916,7 @@ class CatalogFoundationTests(unittest.TestCase):
             7,
         )
         self.assertEqual(len(self.real_families), 44)
-        self.assertEqual(len(self.foundation.evidence_ids), 126)
+        self.assertEqual(len(self.foundation.evidence_ids), 128)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -10900,7 +11027,7 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "17 work items remain unresolved: 16 family or branch items",
+            "16 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
@@ -11565,6 +11692,44 @@ class CatalogFoundationTests(unittest.TestCase):
             "conditioned extension fixture",
         )
         self.assertEqual(warnings, [])
+
+    def test_matching_extended_start_flexion_condition_satisfies_family(
+        self,
+    ) -> None:
+        family = self.sternocostal_flexion_family(
+            {
+                "action": "shoulder.flexion",
+                "condition": "fromExtendedPosition",
+            }
+        )
+        self.assertEqual(
+            catalog.validate_family(
+                family,
+                self.foundation,
+                "conditioned flexion fixture",
+            ),
+            [],
+        )
+
+    def test_conditioned_sternocostal_flexion_cannot_satisfy_bare_flexion(
+        self,
+    ) -> None:
+        family = self.sternocostal_flexion_family("shoulder.flexion")
+        self.assert_family_fails(
+            family,
+            "no primary/secondary muscle capable of shoulder.flexion",
+        )
+
+    def test_sternocostal_flexion_capability_is_pinned_conditioned(self) -> None:
+        profile = self.foundation.profile_by_muscle[
+            "pectoralisMajorSternocostal"
+        ]
+        conditioned = {
+            "action": "shoulder.flexion",
+            "condition": "fromExtendedPosition",
+        }
+        self.assertIn(conditioned, profile["produces"])
+        self.assertNotIn("shoulder.flexion", profile["produces"])
 
     def test_family_cannot_reference_unknown_action_condition(self) -> None:
         family = self.sternocostal_extension_family(

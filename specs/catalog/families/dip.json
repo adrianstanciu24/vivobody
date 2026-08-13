@@ -3,9 +3,11 @@
   "schemaVersion": 1,
   "id": "dip",
   "name": "Dip",
-  "definition": "A strict bilateral closed-chain compound push performed while the body is supported above fixed parallel bars or independent rings. From a self-selected bottom position with the shoulders extended behind the torso and the elbows flexed, the concentric phase returns the shoulders toward neutral through shoulder flexion while extending the elbows. Scapular motion was not measured in the reviewed dip trials, so depression, protraction, and every other scapular action remain outside the prime-action signature. Bench-supported, assisted-machine, band-assisted, standing-assisted, weighted-belt-as-a-separate-exercise, Russian, Korean, straight-bar, kipping, and muscle-up transition variants remain outside this initial contract.",
+  "definition": "A strict bilateral closed-chain compound push performed while the body is supported above fixed parallel bars or independent rings. From a self-selected bottom position with the shoulders extended behind anatomical neutral and the elbows flexed, the concentric phase returns the shoulders only toward neutral through conditioned shoulder flexion while extending the elbows. Parallel-bar sternocostal-site EMG and separately measured dip kinematics jointly support sternocostal pectoralis as a categorical prime mover; the ring assignment is a disclosed mechanics transfer across the same measured action and is corroborated only as tissue loading by a clinical case, not by direct regional ring EMG. Scapular motion was not measured in the reviewed dip trials, so depression, protraction, and every other scapular action remain outside the prime-action signature. Bench-supported, assisted-machine, band-assisted, standing-assisted, weighted-belt-as-a-separate-exercise, Russian, Korean, straight-bar, kipping, and muscle-up transition variants remain outside this initial contract.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
+    "cinarli-2021-parallel-bar-dip",
+    "da-silva-2022-ring-dip-pectoralis-rupture",
     "mckenzie-2022-dip-variations",
     "mckenzie-2022-bar-dip-fatigue"
   ],
@@ -45,7 +47,10 @@
       "shoulder.flexion"
     ],
     "primeActions": [
-      "shoulder.flexion",
+      {
+        "action": "shoulder.flexion",
+        "condition": "fromExtendedPosition"
+      },
       "elbow.extension"
     ],
     "forbiddenPrimeActions": [
@@ -87,6 +92,12 @@
       {
         "anyOf": [
           "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorSternocostal"
         ],
         "minimumRole": "primary"
       },
@@ -142,6 +153,7 @@
     "allowedByRole": {
       "primary": [
         "pectoralisMajorClavicular",
+        "pectoralisMajorSternocostal",
         "triceps"
       ],
       "secondary": [
@@ -321,6 +333,10 @@
           "role": "primary"
         },
         {
+          "muscle": "pectoralisMajorSternocostal",
+          "role": "primary"
+        },
+        {
           "muscle": "triceps",
           "role": "primary"
         },
@@ -371,6 +387,7 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
+        "cinarli-2021-parallel-bar-dip",
         "mckenzie-2022-dip-variations",
         "mckenzie-2022-bar-dip-fatigue"
       ],
@@ -395,6 +412,10 @@
       "involvement": [
         {
           "muscle": "pectoralisMajorClavicular",
+          "role": "primary"
+        },
+        {
+          "muscle": "pectoralisMajorSternocostal",
           "role": "primary"
         },
         {
@@ -456,9 +477,10 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
+        "da-silva-2022-ring-dip-pectoralis-rupture",
         "mckenzie-2022-dip-variations"
       ],
-      "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion and elbow extension without kipping or using the legs."
+      "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion toward neutral and elbow extension without kipping or using the legs."
     }
   ]
 }

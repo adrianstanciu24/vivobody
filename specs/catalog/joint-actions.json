@@ -429,6 +429,14 @@
       ]
     },
     {
+      "id": "fromExtendedPosition",
+      "displayName": "From an extended position",
+      "definition": "The shoulder begins behind anatomical neutral and flexes toward anatomical neutral rather than continuing forward beyond neutral.",
+      "appliesTo": [
+        "shoulder.flexion"
+      ]
+    },
+    {
       "id": "fromSupinatedPosition",
       "displayName": "From a supinated position toward neutral",
       "definition": "The action is produced only while the forearm begins on the supinated side of neutral and rotates toward neutral.",
@@ -469,6 +477,10 @@
           "action": "shoulder.extension",
           "condition": "fromFlexedPosition"
         },
+        {
+          "action": "shoulder.flexion",
+          "condition": "fromExtendedPosition"
+        },
         "shoulder.adduction",
         "shoulder.horizontalAdduction",
         "shoulder.internalRotation"
@@ -478,7 +490,9 @@
       ],
       "evidenceRefs": [
         "ackland-2008-shoulder-moment-arms",
-        "holzbaur-2005-upper-extremity"
+        "holzbaur-2005-upper-extremity",
+        "cinarli-2021-parallel-bar-dip",
+        "mckenzie-2022-dip-variations"
       ]
     },
     {

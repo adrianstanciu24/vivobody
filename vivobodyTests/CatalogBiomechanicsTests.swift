@@ -149,6 +149,29 @@ struct CatalogBiomechanicsTests {
         #expect(bench.muscleInvolvement.role(for: .deltoidAnterior) == .secondary)
         #expect(bench.muscleInvolvement.role(for: .triceps) == .secondary)
 
+        for name in ["Bar Dip", "Ring Dip"] {
+            let dip = try #require(CatalogData.record(forExerciseNamed: name))
+            #expect(dip.muscleInvolvement.role(for: .pectoralisMajorClavicular) == .primary)
+            #expect(dip.muscleInvolvement.role(for: .pectoralisMajorSternocostal) == .primary)
+            #expect(dip.muscleInvolvement.anatomyNodeChannels[
+                "Pectoralis_Major_Sternocostal_L"
+            ]?.intensity == 1)
+            #expect(dip.muscleInvolvement.anatomyNodeChannels[
+                "Pectoralis_Major_Sternocostal_R"
+            ]?.intensity == 1)
+        }
+
+        for name in ["Single-Arm Dumbbell Front Raise", "Seated Dumbbell Overhead Press"] {
+            let neutralStartFlexion = try #require(
+                CatalogData.record(forExerciseNamed: name)
+            )
+            #expect(
+                neutralStartFlexion.muscleInvolvement.role(
+                    for: .pectoralisMajorSternocostal
+                ) == nil
+            )
+        }
+
         let hipThrust = try #require(CatalogData.record(forExerciseNamed: "Barbell Hip Thrust"))
         #expect(hipThrust.muscleInvolvement.role(for: .gluteMax) == .primary)
         #expect(hipThrust.muscleInvolvement.role(for: .gluteMed) == .stabilizer)

@@ -120,6 +120,40 @@ struct CatalogSyncTests {
         #expect(count == CatalogData.records.count)
     }
 
+    @Test func synchronizationRepairsPersistedDipAnatomyAndKeepsUserState() throws {
+        let context = try makeContext()
+        let testDefaults = try makeDefaults()
+        defer { testDefaults.defaults.removePersistentDomain(forName: testDefaults.suiteName) }
+        ExerciseCatalogItem.synchronizeBundledCatalog(
+            in: context,
+            defaults: testDefaults.defaults
+        )
+
+        let dip = try #require(
+            try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
+                .first { $0.catalogID == "bar-dip" }
+        )
+        dip.muscleInvolvementSnapshot.removeValue(
+            forKey: Muscle.pectoralisMajorSternocostal.rawValue
+        )
+        dip.defaultWeight = 45
+        dip.isFavorite = true
+        try context.save()
+
+        ExerciseCatalogItem.synchronizeBundledCatalog(
+            in: context,
+            defaults: testDefaults.defaults
+        )
+
+        #expect(
+            dip.muscleInvolvementSnapshot[
+                Muscle.pectoralisMajorSternocostal.rawValue
+            ] == MuscleRole.primary.snapshotValue
+        )
+        #expect(dip.defaultWeight == 45)
+        #expect(dip.isFavorite)
+    }
+
     @Test func explicitBundledDeletionPersistsUntilReset() throws {
         let context = try makeContext()
         let testDefaults = try makeDefaults()

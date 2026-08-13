@@ -852,6 +852,10 @@
         "role": "primary"
       },
       {
+        "muscle": "pectoralisMajorSternocostal",
+        "role": "primary"
+      },
+      {
         "muscle": "triceps",
         "role": "primary"
       },
@@ -913,10 +917,14 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion and elbow extension without kipping or using the legs.",
+    "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion toward neutral and elbow extension without kipping or using the legs.",
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
+        "role": "primary"
+      },
+      {
+        "muscle": "pectoralisMajorSternocostal",
         "role": "primary"
       },
       {

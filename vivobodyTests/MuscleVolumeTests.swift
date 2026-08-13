@@ -101,6 +101,22 @@ struct MuscleVolumeTests {
         #expect(stat(.serratus, in: stats).daysSinceLastTrained == nil)
     }
 
+    @Test func dipsCreditBothPectoralRegionsWhileNeutralStartFlexionDoesNot() {
+        for name in ["Bar Dip", "Ring Dip"] {
+            let s = session(at: day(0), [lift(name, .chest, sets: 3)])
+            let stats = [s].muscleVolume(now: day(0))
+            #expect(stat(.pectoralisMajorClavicular, in: stats).effectiveSets == 3)
+            #expect(stat(.pectoralisMajorSternocostal, in: stats).effectiveSets == 3)
+        }
+
+        let raise = session(
+            at: day(0),
+            [lift("Single-Arm Dumbbell Front Raise", .shoulders, sets: 3)]
+        )
+        let raiseStats = [raise].muscleVolume(now: day(0))
+        #expect(stat(.pectoralisMajorSternocostal, in: raiseStats).effectiveSets == 0)
+    }
+
     @Test func everyMuscleIsRepresentedEvenWhenUntrained() {
         let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 3)])
         let stats = [s].muscleVolume(now: day(0))

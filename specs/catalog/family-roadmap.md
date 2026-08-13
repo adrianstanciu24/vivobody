@@ -20,7 +20,7 @@ are discovery handles, not guaranteed final family IDs.
   families and two explicit hip-rotation foundation holds.
 - Batch 7 resolved eight candidates into seven active families and two explicit
   holds; the carry candidate split into separate farmer and suitcase families.
-- 17 work items remain unresolved: 16 family or branch items—the held
+- 16 work items remain unresolved, all family or branch items—the held
   `spine-extension` and `spine-lateral-flexion`; the deferred `diagonal-pull`,
   `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
@@ -28,8 +28,7 @@ are discovery handles, not guaranteed final family IDs.
   `landmine-press` holds; and the deferred closed-chain branch of
   `vertical-press`; the Batch-4 `hip-flexion` hold; and the Batch-5
   `hip-hinge` hold; the `dynamic-lunge` discovery hold; and the Batch-6
-  `hip-internal-rotation` and `hip-external-rotation` holds—plus the
-  cross-family sternocostal shoulder-flexion capability hold described below.
+  `hip-internal-rotation` and `hip-external-rotation` holds.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -116,31 +115,28 @@ split brings the current foundation to 52 regions while preserving 62 mesh
 bases and 44 actions. Every affected active family was migrated atomically
 rather than inheriting anatomy from a retired aggregate.
 
-### Sternocostal flexion from an extended start — evidence hold
+### Sternocostal flexion from an extended start — complete
 
-The foundation currently gives `pectoralisMajorSternocostal` conditioned
-`shoulder.extension` capability when returning from a flexed position, but it
-does not declare the mirror capability for shoulder flexion from an extended
-start toward neutral. `fromExtendedPosition` is only a proposed condition name;
-it is not active vocabulary in `joint-actions.json`.
+The foundation now admits `fromExtendedPosition` only for shoulder flexion that
+starts behind anatomical neutral and returns toward neutral. The
+`pectoralisMajorSternocostal` capability remains conditioned: it cannot satisfy
+ordinary flexion beginning at or in front of neutral. This is a bounded evidence
+synthesis rather than a direct negative-angle moment-arm result. Çınarlı et al.
+measured the sternocostal pectoral site during the concentric phase of strict
+parallel-bar dips, while McKenzie et al. separately measured the extended
+bottom and shoulder-flexion ascent on bars and rings. Ackland et al. supplies
+the adverse boundary at positive elevation, where the sternocostal subregions
+must not inherit broad clavicular flexor behavior.
 
-The dip family exposes the user-visible consequence. Its concentric action is
-shoulder flexion from an extended bottom, yet the reviewed dip experiments
-measured only the clavicular pectoral site and do not establish a regional
-sternocostal role. The active records therefore assign no sternocostal
-involvement rather than fabricating a capability. Until this hold is resolved,
-the eventual 3D body highlight and MuscleVolume/Development credit for dips
-will omit the sternocostal region. The same gap must be checked before any
-future family treats flexion from extension as a training-defining action.
-
-Resolution requires a direct review of action-capability evidence across the
-relevant extended-to-neutral range and exercise-specific evidence sufficient
-to choose a categorical dip role. If both gates pass, add the central
-condition, update the sternocostal muscle profile, re-review every affected
-family, and update the dip contract, body-highlight expectations, volume-credit
-expectations, and catalog tests atomically. Merely adding the condition label,
-copying the clavicular EMG site, or making shoulder flexion unconditional does
-not resolve the hold.
+Both active dip records therefore assign clavicular and sternocostal pectoralis
+as categorical primaries. The bar assignment has direct regional exercise EMG;
+the ring assignment is a disclosed mechanics transfer across the same measured
+action and apparatus comparison, with a clinical rupture case used only as
+corroborating tissue-loading context. The sources do not rank pectoral heads or
+make the measured EMG magnitudes interchangeable. No other active family starts
+shoulder flexion behind neutral, and any future consumer requires its own
+exercise-specific review. This closes the former zero-highlight and zero-volume
+gap without granting unconditional sternocostal shoulder flexion.
 
 ### Lower-body taxonomy and axes — complete through Batch 6
 

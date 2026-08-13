@@ -104,51 +104,52 @@ self-moderated technique. The contract therefore does not manufacture a
 `gripOrientation` value—especially for freely rotating rings. Apparatus and
 fixed-versus-independent support are reviewed axes; hand orientation is not.
 
-The family assigns pectoralis-major clavicular head and triceps as co-primary
+The family assigns both pectoralis-major regions and triceps as co-primary
 training targets, with anterior deltoid secondary. This is a categorical
 contract rather than a numeric force ranking. McKenzie measured the clavicular
-pectoral site, anterior deltoid, and triceps and repeatedly identifies
-pectoralis major and triceps as the dip's target agonists. The sternal head was
-not measured, and the current anatomy profile does not give that region an
-unconditioned shoulder-flexion capability. It is therefore not copied into the
-contract by intuition.
+pectoral site, anterior deltoid, and triceps while directly measuring the
+extended bottom and flexion ascent on bars and rings. Çınarlı measured the
+sternocostal pectoral site during strict parallel-bar dips and found more than
+38 percent MVC in every concentric condition. The two protocols jointly supply
+an exercise-specific, triangulated basis for sternocostal involvement; neither
+directly measured sternocostal shoulder-flexion torque.
 
 The role choice has two disclosed limits:
 
 - the variation comparison reports raw within-muscle EMG amplitudes, so its
   values cannot establish a pectoralis-versus-triceps magnitude ranking; and
-- surface EMG from one pectoral site cannot establish whole-pectoralis or
-  regional force contribution.
+- surface EMG from either pectoral site cannot establish whole-pectoralis,
+  between-region force contribution, or a pectoral-head hierarchy.
 
 Both target actions nevertheless need a training-defining mover, and the
 exercise-specific authors identify both tissues as intended targets. The
-contract consequently uses two categorical primaries instead of manufacturing
-a sole-primary hierarchy from incomparable amplitudes.
+contract consequently uses three categorical primaries instead of
+manufacturing a sole-primary hierarchy from incomparable amplitudes.
 
-### Tracked foundation hold: sternocostal flexion from extension
+### Resolved foundation condition: sternocostal flexion from extension
 
-This omission has a user-visible cost and is not considered finished anatomy.
-The active dip records will eventually highlight and credit only the
-clavicular pectoral region, while `pectoralisMajorSternocostal` receives no 3D
-highlight or MuscleVolume/Development credit. The gap can also affect any
-future family whose resisted shoulder flexion begins behind anatomical neutral.
+`fromExtendedPosition` now means that the shoulder starts behind anatomical
+neutral and flexes only toward neutral. The sternocostal profile receives that
+conditioned capability and still has no unconditional `shoulder.flexion`
+capability. Ackland's positive-elevation moment arms provide an adverse
+boundary: ordinary forward flexion must not inherit the clavicular region's
+unconditional behavior.
 
-The missing capability cannot be repaired by copying the measured clavicular
-site or by granting the sternocostal region unconditional shoulder flexion.
-The proposed `fromExtendedPosition` condition remains inactive until reviewed
-action-capability evidence establishes sternocostal flexion across the
-dip-relevant extended-to-neutral range. Exercise-specific evidence must then
-support whether the region is primary, secondary, or merely stabilizing in the
-dip; the present studies' clavicular surface-EMG electrode cannot answer that
-regional-role question.
+The bar record has direct sternocostal-site exercise EMG. The ring record uses
+the same conditioned action measured by McKenzie and a disclosed mechanics
+transfer of the categorical bar role; da Silva's single loaded eccentric ring
+rupture corroborates material sternal-portion tissue loading but is not used as
+a role, action, or magnitude oracle. `primary` therefore has the same
+biomechanical meaning on both records and is not being used as a confidence
+score.
 
-If those two evidence gates pass, activation must add the condition centrally,
-add the conditioned sternocostal capability, re-review every family using
-flexion from extension, and update the dip family, body-highlight expectations,
-volume-credit expectations, and tests in one change. Until then, zero authored
-sternocostal involvement is the honest temporary result, and this hold is
-counted explicitly in the family roadmap rather than disappearing behind a
-valid contract.
+No other active family begins its training-defining shoulder flexion behind
+neutral. Front raises, incline and vertical presses, and push presses retain
+their existing anatomy and cannot consume this condition. A future exercise
+must undergo its own exercise-specific review rather than inheriting the dip's
+triangulation. With both dip records now assigning a mover role, the
+sternocostal meshes receive a 3D highlight plus MuscleVolume and persistent
+development credit, closing the prior user-visible zero-credit gap.
 
 External rotators use the directly measured infraspinatus site as a shoulder
 stabilizer. The static hand/wrist and trunk entries are narrower mechanics
@@ -266,12 +267,16 @@ mechanics-derived assumption behind an apparently evidence-backed record.
 
 ## Evidence metadata and integration needs
 
-The dip activation requires these two new registry entries:
+The original dip activation registered the two McKenzie sources below. Closing
+the sternocostal condition additionally registers Çınarlı for direct regional
+bar-dip EMG and da Silva only as bounded ring tissue-loading context:
 
 | Proposed ID | Metadata | Load-bearing scope |
 |---|---|---|
 | `mckenzie-2022-dip-variations` | Alec McKenzie, Zachary Crowley-McHattan, Rudi Meir, John Whitting, Wynand Volschenk. “Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?” *International Journal of Environmental Research and Public Health* 19(20):13211. DOI `10.3390/ijerph192013211`; PMID `36293792`; published 2022-10-14. | Thirteen experienced males; direct 3D kinematics and nine-muscle sEMG for bench, parallel-bar, and ring dips. Supports the two admitted fixtures, action boundary, and apparatus-conditioned stabilization; raw EMG does not rank muscles against each other. |
 | `mckenzie-2022-bar-dip-fatigue` | Alec McKenzie, Zachary Crowley-McHattan, Rudi Meir, John Whitting, Wynand Volschenk. “Fatigue Increases Muscle Activations but Does Not Change Maximal Joint Angles during the Bar Dip.” *International Journal of Environmental Research and Public Health* 19(21):14390. DOI `10.3390/ijerph192114390`; PMID `36361276`; published 2022-11-03. | Fifteen experienced males; direct 3D kinematics and nine-muscle sEMG for a parallel-bar set to exhaustion. Confirms the extended bottom, flexion/extension reversal, pectoralis/triceps target, and explicitly unmeasured scapular kinematics. |
+| `cinarli-2021-parallel-bar-dip` | Fahri Safa Çınarlı, M. Emin Kafkas, A. Ruhi Soylu, Nurkan Yılmaz. “Effect of Elbow Angle on Triceps Brachii and Pectoralis Major Muscle Activity during Parallel Bar Dip.” *Kinesiologia Slovenica* 27(3):57–69. DOI `10.52165/kinsi.27.3.57-69`; 2021. | Ten trained men; sternocostal-site pectoral EMG exceeded 38 percent MVC in every concentric condition. Combined with McKenzie kinematics, this is a triangulated exercise-specific role basis, not direct sternocostal flexion torque or a head ranking. |
+| `da-silva-2022-ring-dip-pectoralis-rupture` | Lucas Gomes da Silva et al. “Rehabilitation After Surgical Treatment of Pectoralis Major Rupture in a CrossFit Practitioner: A Case Report.” *International Journal of Sports Physical Therapy* 17(4):724–731. DOI `10.26603/001c.35720`; PMID `35693859`; 2022. | A single complete sternal-portion rupture during the loaded eccentric phase of a +40-kilogram ring dip. It corroborates material tissue loading only and does not establish normal concentric recruitment, action, role, or magnitude. |
 
 The following reviewed sources belong in this proposal but should **not** be
 registered during this activation because the deferred branch will not cite
@@ -292,10 +297,15 @@ them and unused evidence fails validation:
   `PMC5159633`. No DOI was located, so the current evidence schema cannot
   register it without the separately tracked alternative-identifier change.
 
-No validator or schema extension is needed for the activated dip contract.
-Shared integration needs are limited to registering the two dip sources,
-adding the active-family counts and shared apparatus vocabulary to the family
-README/roadmap, and adding exact contract tests.
+No validator or schema extension is needed. The existing conditioned-action
+contract represents the resolved foundation boundary directly.
+
+Because this is a pre-production catalog, existing development data should be
+reset after this change. Launch synchronization updates bundled catalog rows
+while preserving user defaults, but deliberately does not rewrite anatomy
+snapshots already copied into templates or logged workouts. No compatibility
+repair or legacy snapshot migration is introduced for those development-only
+records.
 
 ## Test gate
 
@@ -314,6 +324,17 @@ Activation must add tests that prove:
   mutations are rejected by the fixed scope; and
 - the global catalog-ID, name, alias, evidence-use, metric-seed, and discrete
   axis-coverage tests continue to include the family automatically.
+
+The later sternocostal closure additionally pins the exact
+`fromExtendedPosition` condition, its absence as an unconditional capability,
+and `dip` as its sole active consumer across prime and resisted actions. Direct
+mutations replace the conditioned action with bare flexion and remove or
+demote the sternocostal primary in each record. Runtime tests require both dip
+records to paint the left and right sternocostal meshes and award primary
+MuscleVolume/Development credit, while neutral-start front and overhead press
+fixtures remain uncredited. Evidence-scope tests retain the EMG-plus-kinematics
+triangulation, the ring mechanics adaptation, and the clinical case's
+corroboration-only limit.
 
 The roadmap and proposal tests should separately pin the closed-chain vertical
 press decision as “merge into `vertical-press`, deferred” so a later author

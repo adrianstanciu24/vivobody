@@ -299,6 +299,39 @@ struct MuscleDevelopmentTests {
         #expect(nodes["Vastus_Lateralis_L"] == nil)
     }
 
+    @Test func dipsDevelopBothPectoralRegionsButNeutralStartFlexionDoesNot() {
+        for name in ["Bar Dip", "Ring Dip"] {
+            let s = session(
+                at: day(0),
+                [lift(name, .chest, sets: 3, reps: 8, weight: 0)]
+            )
+            let nodes = MuscleDevelopment.nodeIntensities(from: [s], now: day(0))
+            #expect((nodes["Pectoralis_Major_Clavicular_L"] ?? 0) > 0)
+            #expect((nodes["Pectoralis_Major_Clavicular_R"] ?? 0) > 0)
+            #expect((nodes["Pectoralis_Major_Sternocostal_L"] ?? 0) > 0)
+            #expect((nodes["Pectoralis_Major_Sternocostal_R"] ?? 0) > 0)
+        }
+
+        let raise = session(
+            at: day(0),
+            [
+                lift(
+                    "Single-Arm Dumbbell Front Raise",
+                    .shoulders,
+                    sets: 3,
+                    reps: 10,
+                    weight: 10
+                ),
+            ]
+        )
+        let raiseNodes = MuscleDevelopment.nodeIntensities(
+            from: [raise],
+            now: day(0)
+        )
+        #expect(raiseNodes["Pectoralis_Major_Sternocostal_L"] == nil)
+        #expect(raiseNodes["Pectoralis_Major_Sternocostal_R"] == nil)
+    }
+
     @Test func gluteMaxGluteMedAndTFLPaintOnlyWhenVolumeIsCredited() {
         let extensionSession = session(
             at: day(0),

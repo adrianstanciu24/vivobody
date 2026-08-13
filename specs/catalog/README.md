@@ -118,13 +118,20 @@ forearm toward neutral cannot satisfy an unconditional forearm-pronation or
 forearm-supination requirement.
 
 Position conditions are added only with reviewed action-capability evidence;
-symmetry of naming is not evidence of symmetry of function. The proposed
-`fromExtendedPosition` condition for sternocostal pectoralis-major shoulder
-flexion toward neutral remains a tracked foundation hold. It is deliberately
-absent from `joint-actions.json`, so the active dip records do not assign that
-region or grant it body-highlight and training-volume credit prematurely. The
-resolution gate and user-visible consequence are recorded in
-`family-roadmap.md` and the Batch-3 dip proposal.
+symmetry of naming is not evidence of symmetry of function.
+`fromExtendedPosition` is active only for shoulder flexion that starts behind
+anatomical neutral and returns toward neutral. The sternocostal pectoralis-major
+profile carries that conditioned capability but still has no unconditional
+shoulder-flexion capability. The dip is its only active family consumer.
+
+That decision is an explicitly triangulated, exercise-specific inference:
+sternocostal-site concentric EMG during parallel-bar dips is combined with
+separately measured bar-and-ring dip kinematics. It is not presented as a
+direct sternocostal flexion-torque measurement, a pectoral-head ranking, or
+permission to credit flexion that starts at or in front of neutral. The ring
+role is a mechanics transfer across the same reviewed action and apparatus
+comparison; its clinical case evidence corroborates tissue loading only. Any
+future family that wants to consume the condition needs its own exercise review.
 
 An exercise also cannot repeat a family prime action in
 `additionalPrimeActions`. That would let a conditioned family silently broaden

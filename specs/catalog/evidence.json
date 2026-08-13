@@ -1378,6 +1378,38 @@
       "scope": "Fifteen experienced men performed a parallel-bar dip set to exhaustion with three-dimensional kinematics and nine-muscle surface EMG. It confirms the shoulder-extended bottom and target-muscle activity across fatigue while explicitly leaving scapular kinematics unmeasured; it does not establish a whole-pectoralis or between-muscle force ranking."
     },
     {
+      "id": "cinarli-2021-parallel-bar-dip",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effect of Elbow Angle on Triceps Brachii and Pectoralis Major Muscle Activity during Parallel Bar Dip",
+      "authors": [
+        "Fahri Safa Cinarli",
+        "M. Emin Kafkas",
+        "A. Ruhi Soylu",
+        "Nurkan Yilmaz"
+      ],
+      "year": 2021,
+      "doi": "10.52165/kinsi.27.3.57-69",
+      "url": "https://doi.org/10.52165/kinsi.27.3.57-69",
+      "scope": "Ten exercise-trained men performed metronome-controlled parallel-bar dips to 75-, 85-, and 95-degree elbow angles while surface EMG sampled pectoralis major at the sternocostal-site placement midway from the sternal notch to the axillary fold. Pectoral excitation exceeded 38 percent MVC in every concentric condition and was greatest in the concentric phase. Combined with McKenzie's separately measured extended-bottom-to-neutral flexion path, the regional concentric signal provides a triangulated, exercise-specific basis for the catalog's narrowly conditioned capability and dip role; neither study directly measured sternocostal flexion torque. This study did not track shoulder, trunk, or scapular kinematics, distinguish sternocostal subregions, compare pectoral heads, establish a between-muscle force ranking, or directly study rings."
+    },
+    {
+      "id": "da-silva-2022-ring-dip-pectoralis-rupture",
+      "sourceType": "clinicalCaseReport",
+      "title": "Rehabilitation After Surgical Treatment of Pectoralis Major Rupture in a CrossFit Practitioner: A Case Report",
+      "authors": [
+        "Lucas Gomes da Silva",
+        "Rafael Marques Ferrer",
+        "Jose Roberto de Souza Jr.",
+        "Mauro E. C. Gracitelli",
+        "Leonardo Luiz Barretti Secchi"
+      ],
+      "year": 2022,
+      "doi": "10.26603/001c.35720",
+      "pmid": "35693859",
+      "url": "https://doi.org/10.26603/001c.35720",
+      "scope": "A single trained man sustained a complete rupture of the pectoralis-major sternal portion during the loaded eccentric phase of a ring dip performed with 40 kilograms of added load. The case corroborates material sternocostal tissue loading on rings, but it cannot establish normal concentric recruitment, a shoulder-action capability, a categorical role, a between-region hierarchy, or an unweighted exercise prescription."
+    },
+    {
       "id": "chiu-2006-push-press-joint-kinetics",
       "sourceType": "experimentalKineticsStudy",
       "title": "Comparison of Joint Kinetics during Free Weight and Flywheel Resistance Exercise",
