@@ -109,7 +109,10 @@ struct AntagonistBalanceTests {
 
     @Test func pressOnlyFlagsPull() {
         let s = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Shoulder Press, Dumbbells", .shoulders)])
+            session(at: day(Double(i) * 5), [
+                lift("Barbell Bench Press", .chest),
+                lift("Standing Dumbbell Overhead Press", .shoulders),
+            ])
         }
         let board = s.antagonistBalance(now: day(20))
 
@@ -128,10 +131,13 @@ struct AntagonistBalanceTests {
 
     @Test func addingPullsReducesSkew() {
         let pressOnly = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest)])
+            session(at: day(Double(i) * 5), [lift("Barbell Bench Press", .chest)])
         }
         let mixed = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest), lift("Bent Over Rowing", .back)])
+            session(at: day(Double(i) * 5), [
+                lift("Barbell Bench Press", .chest),
+                lift("Barbell Bent-Over Row", .back),
+            ])
         }
 
         let skewPress = pressOnly.antagonistBalance(now: day(20)).pair("push-pull")!.skew
@@ -143,7 +149,7 @@ struct AntagonistBalanceTests {
 
     @Test func squatsSkewQuadDominant() {
         let s = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Squats", .legs)])
+            session(at: day(Double(i) * 5), [lift("Barbell Back Squat", .legs)])
         }
         let board = s.antagonistBalance(now: day(20))
 
@@ -158,10 +164,10 @@ struct AntagonistBalanceTests {
     @Test func directionalPushPullPairsCountWholeExerciseStimulus() {
         let board = [
             session(at: day(1), [
-                lift("Bench Press", .chest, sets: 2),
-                lift("Bent Over Rowing", .back, sets: 3),
-                lift("Shoulder Press, Dumbbells", .shoulders, sets: 4),
-                lift("Lat Pull Down", .back, sets: 5),
+                lift("Barbell Bench Press", .chest, sets: 2),
+                lift("Barbell Bent-Over Row", .back, sets: 3),
+                lift("Standing Dumbbell Overhead Press", .shoulders, sets: 4),
+                lift("Cable Lat Pulldown", .back, sets: 5),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -184,8 +190,8 @@ struct AntagonistBalanceTests {
     @Test func directionsDoNotLeakIntoEachOther() {
         let horizontalOnly = [
             session(at: day(1), [
-                lift("Bench Press", .chest),
-                lift("Bent Over Rowing", .back),
+                lift("Barbell Bench Press", .chest),
+                lift("Barbell Bent-Over Row", .back),
             ]),
         ].antagonistBalance(now: day(2))
         #expect(horizontalOnly.pair("horizontal-push-pull") != nil)
@@ -195,8 +201,8 @@ struct AntagonistBalanceTests {
 
         let verticalOnly = [
             session(at: day(1), [
-                lift("Shoulder Press, Dumbbells", .shoulders),
-                lift("Lat Pull Down", .back),
+                lift("Standing Dumbbell Overhead Press", .shoulders),
+                lift("Cable Lat Pulldown", .back),
             ]),
         ].antagonistBalance(now: day(2))
         expectEqual(verticalOnly.pair("horizontal-push-pull")?.leftSets, 0)
@@ -205,32 +211,70 @@ struct AntagonistBalanceTests {
         #expect(verticalOnly.pair("vertical-push-pull") != nil)
     }
 
+    @Test func diagonalBenchPressesJoinHorizontalAncestry() {
+        let board = [
+            session(at: day(1), [
+                lift("Incline Barbell Bench Press", .chest, sets: 4),
+                lift("Decline Dumbbell Bench Press", .chest, sets: 3),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        expectEqual(board.pair("push-pull")?.leftSets, 7)
+        let directional = board.pair("horizontal-push-pull")
+        expectEqual(directional?.leftSets, 7)
+        #expect(directional?.leftLabel == "Horizontal + Diagonal Push")
+        expectEqual(board.pair("vertical-push-pull")?.leftSets, 0)
+    }
+
     @Test func hipAndLowerLegPairsKeepGradedMuscleCredit() {
         let board = [
             session(at: day(1), [
-                lift("Clamshell", .legs, sets: 2),
-                lift("Copenhagen Adduction Exercise", .legs, sets: 3),
-                lift("Standing Calf Raises", .legs, sets: 4),
-                lift("Tibialis raises", .legs, sets: 5),
+                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 2),
+                lift("Supported Standing Band Hip Adduction", .legs, sets: 3),
+                lift("Standing Unilateral Machine Calf Raise", .legs, sets: 4),
+                lift("Seated Band Ankle Dorsiflexion", .legs, sets: 5),
             ]),
         ].antagonistBalance(now: day(2))
 
         let hip = board.pair("hip-abductors-adductors")
         expectEqual(hip?.leftSets, 2)
         expectEqual(hip?.rightSets, 3)
+        #expect(hip?.comparisonKind == .distribution)
 
         let lowerLeg = board.pair("calves-shins")
         expectEqual(lowerLeg?.leftSets, 4)
         expectEqual(lowerLeg?.rightSets, 5)
+        #expect(lowerLeg?.comparisonKind == .distribution)
+    }
+
+    @Test func rosterLimitedPairsNeverDriveAnImbalanceVerdict() {
+        let sessions = (0..<2).map { index in
+            session(at: day(Double(index) * 5), [
+                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, sets: 3),
+                lift("Standing Unilateral Machine Calf Raise", .legs, sets: 3),
+            ])
+        }
+        let board = sessions.antagonistBalance(now: day(10))
+
+        let hip = board.pair("hip-abductors-adductors")
+        #expect(hip?.hasMeaningfulWork == true)
+        #expect(hip?.isDescriptive == true)
+
+        let lowerLeg = board.pair("calves-shins")
+        #expect(lowerLeg?.hasMeaningfulWork == true)
+        #expect(lowerLeg?.isDescriptive == true)
+
+        #expect(board.imbalancedCount == 0)
+        #expect(board.worst == nil)
     }
 
     @Test func squatHingeExcludesLungesAndOtherPatterns() {
         let board = [
             session(at: day(1), [
-                lift("Squats", .legs, sets: 2),
-                lift("Barbell Romanian Deadlift (RDL)", .legs, sets: 3),
-                lift("Dumbbell Lunges Walking", .legs, sets: 6),
-                lift("Bench Press", .chest, sets: 7),
+                lift("Barbell Back Squat", .legs, sets: 2),
+                lift("Barbell Hip Thrust", .legs, sets: 3),
+                lift("Barbell Split Squat", .legs, sets: 6),
+                lift("Barbell Bench Press", .chest, sets: 7),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -242,8 +286,8 @@ struct AntagonistBalanceTests {
     @Test func unilateralExercisesAreNotDoubled() {
         let board = [
             session(at: day(1), [
-                lift("Bench Press", .chest, sets: 2),
-                lift("One Arm Bent Row", .back, sets: 3),
+                lift("Barbell Bench Press", .chest, sets: 2),
+                lift("One-Arm Dumbbell Row", .back, sets: 3),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -269,17 +313,17 @@ struct AntagonistBalanceTests {
     @Test func displayOrderIsDeterministicAndGrouped() {
         let board = [
             session(at: day(1), [
-                lift("Bench Press", .chest),
-                lift("Bent Over Rowing", .back),
-                lift("Shoulder Press, Dumbbells", .shoulders),
-                lift("Lat Pull Down", .back),
-                lift("Squats", .legs),
-                lift("Barbell Romanian Deadlift (RDL)", .legs),
-                lift("Clamshell", .legs),
-                lift("Copenhagen Adduction Exercise", .legs),
-                lift("Standing Calf Raises", .legs),
-                lift("Tibialis raises", .legs),
-                lift("One Arm Bent Row", .back),
+                lift("Barbell Bench Press", .chest),
+                lift("Barbell Bent-Over Row", .back),
+                lift("Standing Dumbbell Overhead Press", .shoulders),
+                lift("Cable Lat Pulldown", .back),
+                lift("Barbell Back Squat", .legs),
+                lift("Barbell Hip Thrust", .legs),
+                lift("Pressure-Biofeedback Side-Lying Hip Abduction", .legs),
+                lift("Supported Standing Band Hip Adduction", .legs),
+                lift("Standing Unilateral Machine Calf Raise", .legs),
+                lift("Seated Band Ankle Dorsiflexion", .legs),
+                lift("One-Arm Dumbbell Row", .back),
             ]),
         ].antagonistBalance(now: day(2))
 
@@ -298,14 +342,14 @@ struct AntagonistBalanceTests {
 
     // MARK: - Causality and time boundaries
 
-    @Test func chronologicalReplayPricesMovementStimulusCausally() {
+    @Test func chronologicalReplayLeavesUnloggedRIRUndiscounted() {
         let heavy = session(
             at: day(0),
-            [lift("Bench Press", .chest, sets: 1, weight: 300)]
+            [lift("Barbell Bench Press", .chest, sets: 1, weight: 300)]
         )
         let light = session(
             at: day(10),
-            [lift("Bench Press", .chest, sets: 4, weight: 100)]
+            [lift("Barbell Bench Press", .chest, sets: 4, weight: 100)]
         )
 
         let chronological = [heavy, light].antagonistBalance(now: day(30))
@@ -313,29 +357,30 @@ struct AntagonistBalanceTests {
         let first = chronological.pair("horizontal-push-pull")?.leftSets
         let second = reversed.pair("horizontal-push-pull")?.leftSets
 
-        #expect(first != nil)
-        #expect((first ?? 4) < 4)
-        expectEqual(second, first ?? 0)
+        // Load alone does not discount set equivalents. Without logged
+        // RIR, all four completed sets retain full movement credit.
+        expectEqual(first, 4)
+        expectEqual(second, 4)
     }
 
     @Test func respectsWindowAndExcludesFutureSessions() {
         let old = session(
             at: day(0),
-            [lift("Bench Press", .chest, sets: 2, weight: 300)]
+            [lift("Barbell Bench Press", .chest, sets: 2, weight: 300)]
         )
         let recent = session(
             at: day(30),
-            [lift("Bench Press", .chest, sets: 4, weight: 100)]
+            [lift("Barbell Bench Press", .chest, sets: 4, weight: 100)]
         )
         let future = session(
             at: day(41),
-            [lift("Shoulder Press, Dumbbells", .shoulders, sets: 4)]
+            [lift("Standing Dumbbell Overhead Press", .shoulders, sets: 4)]
         )
         let board = [future, recent, old].antagonistBalance(now: day(40))
 
         let horizontal = board.pair("horizontal-push-pull")
         #expect(horizontal != nil)
-        #expect((horizontal?.leftSets ?? 4) < 4)
+        expectEqual(horizontal?.leftSets, 4)
         #expect(horizontal?.rightSets == 0)
         #expect(board.pair("vertical-push-pull")?.verdict == .noData)
     }
@@ -344,7 +389,7 @@ struct AntagonistBalanceTests {
         let analytics = SessionAnalytics()
         let recent = session(
             at: day(39),
-            [lift("Bench Press", .chest, sets: 2)]
+            [lift("Barbell Bench Press", .chest, sets: 2)]
         )
 
         analytics.requestInsights(for: [recent], now: day(40))
@@ -358,7 +403,7 @@ struct AntagonistBalanceTests {
     @Test func untouchedPairRemainsWithNoData() {
         // Bench works chest/tri/delts but never the legs.
         let s = (0..<4).map { i in
-            session(at: day(Double(i) * 5), [lift("Bench Press", .chest)])
+            session(at: day(Double(i) * 5), [lift("Barbell Bench Press", .chest)])
         }
         let board = s.antagonistBalance(now: day(20))
 

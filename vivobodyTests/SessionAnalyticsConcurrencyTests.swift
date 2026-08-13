@@ -30,6 +30,8 @@ struct SessionAnalyticsConcurrencyTests {
     @Test func snapshotDoesNotRetainModelValues() {
         let exercise = Exercise(
             name: "Barbell Bench Press",
+            catalogID: "barbell-bench-press",
+            familyID: "horizontal-press",
             group: .chest,
             plannedSets: 1,
             plannedReps: 8,
@@ -48,6 +50,7 @@ struct SessionAnalyticsConcurrencyTests {
 
         let captured = snapshot.sessions[0].exercises[0]
         #expect(captured.name == "Barbell Bench Press")
+        #expect(captured.catalogID == "barbell-bench-press")
         #expect(captured.sets[0].reps == 8)
     }
 

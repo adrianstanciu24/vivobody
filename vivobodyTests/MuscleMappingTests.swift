@@ -2,12 +2,9 @@
 //  MuscleMappingTests.swift
 //  vivobodyTests
 //
-//  Guards the categorical exercise → muscle taxonomy shared by body
-//  visualization and volume analytics: catalog roles decode strictly,
-//  anatomy intensity differs from volume credit, glute regions remain
-//  independent, the one-time InvolvementSnapshotRepair rewrites legacy
-//  bundled snapshots without contaminating custom exercises, and every
-//  visual muscle maps to real model nodes.
+//  Pins the complete 52-region catalog-v2 taxonomy at the runtime
+//  boundary: stable IDs, display names, browse groups, exact SceneKit
+//  mesh ownership, catalog coverage, and categorical role projections.
 //
 
 import Foundation
@@ -17,12 +14,132 @@ import Testing
 @MainActor
 struct MuscleMappingTests {
 
-    @Test func catalogDecodesFromBundle() {
-        #expect(CatalogData.records.count == 464)
-        #expect(CatalogData.record(forExerciseNamed: "Barbell Bench Press") != nil)
+    private struct TaxonomyEntry {
+        let muscle: Muscle
+        let displayName: String
+        let group: MuscleGroup
+        let meshBases: [String]
+
+        var nodeNames: [String] {
+            meshBases.flatMap { ["\($0)_L", "\($0)_R"] }
+        }
     }
 
-    @Test func involvementRolesProjectToCanonicalAnatomyAndVolumeValues() {
+    private static let taxonomy: [TaxonomyEntry] = [
+        .init(muscle: .pectoralisMajorClavicular, displayName: "Upper Chest", group: .chest, meshBases: ["Pectoralis_Major_Clavicular"]),
+        .init(muscle: .pectoralisMajorSternocostal, displayName: "Mid / Lower Chest", group: .chest, meshBases: ["Pectoralis_Major_Sternocostal"]),
+        .init(muscle: .pectoralisMinor, displayName: "Pectoralis Minor", group: .chest, meshBases: ["Pectoralis_Minor"]),
+        .init(muscle: .serratus, displayName: "Serratus", group: .chest, meshBases: ["Serratus_Anterior"]),
+
+        .init(muscle: .lats, displayName: "Lats", group: .back, meshBases: ["Latissimus_Dorsi"]),
+        .init(muscle: .trapeziusUpper, displayName: "Upper Traps", group: .back, meshBases: ["Trapezius_Upper"]),
+        .init(muscle: .trapeziusMiddle, displayName: "Middle Traps", group: .back, meshBases: ["Trapezius_Middle"]),
+        .init(muscle: .trapeziusLower, displayName: "Lower Traps", group: .back, meshBases: ["Trapezius_Lower"]),
+        .init(muscle: .levatorScapulae, displayName: "Levator Scapulae", group: .back, meshBases: ["Levator_Scapulaes"]),
+        .init(muscle: .rhomboids, displayName: "Rhomboids", group: .back, meshBases: ["Rhomboideus_Major", "Rhomboideus_Minor"]),
+        .init(muscle: .teresMajor, displayName: "Teres Major", group: .back, meshBases: ["Teres_Major"]),
+        .init(muscle: .lowerBack, displayName: "Lower Back", group: .back, meshBases: ["Quadratus_Lumborum", "Serratus_Posterior_Inferior", "Serratus_Posterior_Superior"]),
+
+        .init(muscle: .deltoidAnterior, displayName: "Front Delts", group: .shoulders, meshBases: ["Deltoid_Anterior"]),
+        .init(muscle: .deltoidLateral, displayName: "Side Delts", group: .shoulders, meshBases: ["Deltoid_Lateral"]),
+        .init(muscle: .deltoidPosterior, displayName: "Rear Delts", group: .shoulders, meshBases: ["Deltoid_Posterior"]),
+        .init(muscle: .externalRotators, displayName: "External Rotators", group: .shoulders, meshBases: ["Teres_Minor", "Infraspinatus"]),
+        .init(muscle: .subscapularis, displayName: "Subscapularis", group: .shoulders, meshBases: []),
+        .init(muscle: .supraspinatus, displayName: "Supraspinatus", group: .shoulders, meshBases: []),
+
+        .init(muscle: .bicepsBrachii, displayName: "Biceps", group: .arms, meshBases: ["Biceps"]),
+        .init(muscle: .brachialis, displayName: "Brachialis", group: .arms, meshBases: ["Brachialis"]),
+        .init(muscle: .brachioradialis, displayName: "Brachioradialis", group: .arms, meshBases: ["Brachioradialis"]),
+        .init(muscle: .forearmPronators, displayName: "Forearm Pronators", group: .arms, meshBases: []),
+        .init(muscle: .supinator, displayName: "Supinator", group: .arms, meshBases: []),
+        .init(muscle: .flexorCarpiRadialis, displayName: "Flexor Carpi Radialis", group: .arms, meshBases: ["Flexor_Carpi_Radialis"]),
+        .init(muscle: .flexorCarpiUlnaris, displayName: "Flexor Carpi Ulnaris", group: .arms, meshBases: ["Flexor_Carpi_Ulnaris"]),
+        .init(muscle: .extensorCarpiRadialis, displayName: "Radial Wrist Extensors", group: .arms, meshBases: ["Extensor_Carpi_Radialis_Longus", "Extensor_Carpi_Radialis_Brevis"]),
+        .init(muscle: .extensorCarpiUlnaris, displayName: "Extensor Carpi Ulnaris", group: .arms, meshBases: ["Extensor_Carpi_Ulnaris"]),
+        .init(muscle: .fingerFlexors, displayName: "Finger Flexors", group: .arms, meshBases: ["Flexor_Digitorum_Superficialis", "Flexor_Digitorum_Profundus"]),
+        .init(muscle: .fingerExtensors, displayName: "Finger Extensors", group: .arms, meshBases: ["Extensor_Digitorum_Communis"]),
+        .init(muscle: .triceps, displayName: "Triceps", group: .arms, meshBases: ["Triceps"]),
+
+        .init(muscle: .abs, displayName: "Abs", group: .core, meshBases: ["Rectus_Abdomini"]),
+        .init(muscle: .obliques, displayName: "Obliques", group: .core, meshBases: ["External_Oblique", "Internal_Oblique"]),
+
+        .init(muscle: .rectusFemoris, displayName: "Rectus Femoris", group: .legs, meshBases: ["Rectus_Femoris"]),
+        .init(muscle: .vasti, displayName: "Vasti", group: .legs, meshBases: ["Vastus_Lateralis", "Vastus_Medialis", "Vastus_Intermedius"]),
+        .init(muscle: .bicepsFemoris, displayName: "Biceps Femoris", group: .legs, meshBases: ["Biceps_femoris"]),
+        .init(muscle: .medialHamstrings, displayName: "Medial Hamstrings", group: .legs, meshBases: ["Semitendinosus", "Semimembranosus"]),
+        .init(muscle: .gluteMax, displayName: "Glute Max", group: .legs, meshBases: ["Gluteus_Maximus"]),
+        .init(muscle: .gluteMed, displayName: "Glute Med", group: .legs, meshBases: ["Gluteus_Medius"]),
+        .init(muscle: .tensorFasciaeLatae, displayName: "TFL", group: .legs, meshBases: ["Tensor_Fascia_Latae"]),
+        .init(muscle: .gastrocnemius, displayName: "Gastrocnemius", group: .legs, meshBases: ["Gastrocnemius"]),
+        .init(muscle: .soleus, displayName: "Soleus", group: .legs, meshBases: ["Soleus"]),
+        .init(muscle: .flexorHallucisLongus, displayName: "Big-Toe Flexor", group: .legs, meshBases: ["Flexor_Hallucis_Longus"]),
+        .init(muscle: .adductorMagnus, displayName: "Adductor Magnus", group: .legs, meshBases: ["Adductor_Mangus"]),
+        .init(muscle: .adductorLongusBrevis, displayName: "Adductor Longus / Brevis", group: .legs, meshBases: ["Adductor_Longus", "Adductor_Brevis"]),
+        .init(muscle: .gracilis, displayName: "Gracilis", group: .legs, meshBases: ["Gracilis"]),
+        .init(muscle: .pectineus, displayName: "Pectineus", group: .legs, meshBases: ["Pectineus"]),
+        .init(muscle: .iliopsoas, displayName: "Iliopsoas", group: .legs, meshBases: ["Psoas_Major", "Iliacus"]),
+        .init(muscle: .sartorius, displayName: "Sartorius", group: .legs, meshBases: ["Sartorius"]),
+        .init(muscle: .tibialisAnterior, displayName: "Tibialis Anterior", group: .legs, meshBases: ["Tibialis_Anterior"]),
+        .init(muscle: .fibularisLongusBrevis, displayName: "Fibularis Longus / Brevis", group: .legs, meshBases: ["Peroneus_Longus", "Peroneus_Brevis"]),
+        .init(muscle: .fibularisTertius, displayName: "Fibularis Tertius", group: .legs, meshBases: ["Peroneus_Tertius"]),
+        .init(muscle: .toeExtensors, displayName: "Toe Extensors", group: .legs, meshBases: ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"]),
+    ]
+
+    @Test func runtimeTaxonomyExactlyMatchesTheReviewed52Regions() {
+        let expectedIDs: Set<String> = [
+            "pectoralisMajorClavicular", "pectoralisMajorSternocostal", "pectoralisMinor",
+            "serratus", "lats", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower",
+            "levatorScapulae", "rhomboids", "teresMajor", "lowerBack", "deltoidAnterior",
+            "deltoidLateral", "deltoidPosterior", "externalRotators", "subscapularis",
+            "supraspinatus", "bicepsBrachii", "brachialis", "brachioradialis",
+            "forearmPronators", "supinator", "flexorCarpiRadialis", "flexorCarpiUlnaris",
+            "extensorCarpiRadialis", "extensorCarpiUlnaris", "fingerFlexors",
+            "fingerExtensors", "triceps", "abs", "obliques", "rectusFemoris", "vasti",
+            "bicepsFemoris", "medialHamstrings", "gluteMax", "gluteMed",
+            "tensorFasciaeLatae", "gastrocnemius", "soleus", "flexorHallucisLongus",
+            "adductorMagnus", "adductorLongusBrevis", "gracilis", "pectineus", "iliopsoas",
+            "sartorius", "tibialisAnterior", "fibularisLongusBrevis", "fibularisTertius",
+            "toeExtensors",
+        ]
+
+        #expect(Self.taxonomy.count == 52)
+        #expect(Set(Muscle.allCases.map(\.rawValue)) == expectedIDs)
+        #expect(Set(Self.taxonomy.map(\.muscle)) == Set(Muscle.allCases))
+
+        var ownedNodes: Set<String> = []
+        for entry in Self.taxonomy {
+            #expect(entry.muscle.displayName == entry.displayName)
+            #expect(entry.muscle.group == entry.group)
+            #expect(entry.muscle.nodeNames == entry.nodeNames)
+            #expect(entry.muscle.isVisualized == !entry.meshBases.isEmpty)
+
+            for node in entry.nodeNames {
+                #expect(ownedNodes.insert(node).inserted, "Mesh node '\(node)' has multiple owners")
+            }
+        }
+
+        #expect(ownedNodes.count == 124)
+        #expect(Set(Muscle.allCases.filter { !$0.isVisualized }) == Set([
+            .subscapularis, .supraspinatus, .forearmPronators, .supinator,
+        ]))
+    }
+
+    @Test func catalogCoverageLeavesOnlySevenExplicitFoundationHolds() {
+        let targeted = Set(CatalogData.records.flatMap(\.involvement).map(\.muscle))
+        let untargeted = Set(Muscle.allCases).subtracting(targeted)
+
+        #expect(untargeted == Set([
+            .adductorMagnus,
+            .fibularisLongusBrevis,
+            .fibularisTertius,
+            .flexorHallucisLongus,
+            .iliopsoas,
+            .pectineus,
+            .toeExtensors,
+        ]))
+    }
+
+    @Test func involvementRolesProjectToSeparateAnatomyAndVolumeValues() {
         for record in CatalogData.records {
             for contribution in record.muscleInvolvement.contributions {
                 #expect(contribution.snapshotValue == contribution.role.snapshotValue)
@@ -32,244 +149,67 @@ struct MuscleMappingTests {
         }
 
         #expect(MuscleRole.primary.snapshotValue == 1)
-        #expect(MuscleRole.primary.anatomyIntensity == 1)
         #expect(MuscleRole.primary.volumeCredit == 1)
         #expect(MuscleRole.secondary.snapshotValue == 0.5)
-        #expect(MuscleRole.secondary.anatomyIntensity == 0.5)
         #expect(MuscleRole.secondary.volumeCredit == 0.5)
         #expect(MuscleRole.stabilizer.snapshotValue == 0.2)
-        #expect(MuscleRole.stabilizer.anatomyIntensity == 0.2)
         #expect(MuscleRole.stabilizer.volumeCredit == 0)
     }
 
-    @Test func everyRecordHasAStableIdentityAndMovementDefinition() {
-        let ids = CatalogData.records.map(\.catalogID)
-        #expect(Set(ids).count == ids.count)
-
-        for record in CatalogData.records {
-            #expect(!record.catalogID.isEmpty)
-            #expect(!record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-        }
+    @Test func canonicalBenchRolesAndAnatomyProjectionStaySeparated() {
+        let bench = Muscle.involvement(forExerciseNamed: "barbell bench press")
+        #expect(bench.primary == [.pectoralisMajorSternocostal])
+        #expect(bench.secondary == [
+            .pectoralisMajorClavicular, .deltoidAnterior, .triceps,
+        ])
+        #expect(bench.stabilizers == [.serratus, .trapeziusMiddle])
+        #expect(bench.anatomyNodeChannels["Pectoralis_Major_Sternocostal_L"]?.intensity == 1)
+        #expect(bench.anatomyNodeChannels["Pectoralis_Major_Clavicular_L"]?.intensity == 0.5)
+        #expect(bench.anatomyNodeChannels["Trapezius_Middle_L"]?.intensity == 0.2)
+        #expect(bench.volumeCredit(for: .trapeziusMiddle) == 0)
     }
 
-    @Test func everyMuscleIsTargetedByAtLeastOneCatalogExercise() {
-        let positiveInvolvement = CatalogData.records.flatMap { record in
-            record.involvement
-        }
-        let targeted = Set(positiveInvolvement.map(\.muscle))
-        let expected = Set(Muscle.allCases)
-        let missing = expected.subtracting(targeted)
-
-        #expect(
-            targeted == expected,
-            """
-            Catalog muscle coverage does not match Muscle.allCases.
-            Missing: \(Self.muscleList(missing))
-            """
-        )
+    @Test func unknownAndObsoleteSnapshotKeysDoNotInventAnatomy() {
+        #expect(Muscle.involvement(forExerciseNamed: "Totally Made Up Lift").isEmpty)
+        #expect(Muscle.Involvement(snapshot: [
+            "pectorals": 1,
+            "quads": 1,
+            "glutes": 1,
+        ]).isEmpty)
     }
 
-    @Test func mappingIsCaseInsensitive() {
-        let lower = Muscle.involvement(forExerciseNamed: "barbell bench press")
-        #expect(lower.primary == [.pectorals])
-    }
-
-    @Test func unknownExerciseMapsToEmpty() {
-        let involvement = Muscle.involvement(forExerciseNamed: "Totally Made Up Lift")
-        #expect(involvement.isEmpty)
-        #expect(involvement.primary.isEmpty)
-        #expect(involvement.secondary.isEmpty)
-    }
-
-    @Test func benchPressRolesSeparateSynergistsFromStabilizers() {
-        let bench = Muscle.involvement(forExerciseNamed: "Barbell Bench Press")
-        #expect(bench.role(for: .pectorals) == .primary)
-        #expect(bench.role(for: .triceps) == .secondary)
-        #expect(bench.role(for: .deltoids) == .secondary)
-        #expect(bench.role(for: .biceps) == .stabilizer)
-        #expect(bench.volumeCredit(for: .biceps) == 0)
-        #expect(bench.snapshot[Muscle.biceps.rawValue] == 0.2)
-        #expect(bench.primary == [.pectorals])
-        #expect(bench.secondary == [.triceps, .deltoids])
-        #expect(bench.stabilizers == [.biceps])
-    }
-
-    @Test func anatomyProjectionShowsStabilizersWithoutVolumeCredit() {
-        let bench = Muscle.involvement(forExerciseNamed: "Barbell Bench Press")
-        let nodes = bench.anatomyNodeChannels
-        #expect(nodes["Pectoralis_Major_Clavicular_L"]?.intensity == 1)
-        #expect(nodes["Pectoralis_Major_Sternocostal_L"]?.intensity == 1)
-        #expect(nodes["Triceps_L"]?.intensity == 0.5)
-        #expect(nodes["Biceps_L"]?.intensity == 0.2)
-        #expect(nodes["Biceps_L"]?.baseline == .trained)
-        #expect(bench.volumeCredit(for: .biceps) == 0)
+    @Test func canonicalSnapshotsRoundTripCategoricalRoles() {
+        let source = Muscle.Involvement(contributions: [
+            .init(muscle: .pectoralisMajorSternocostal, role: .primary),
+            .init(muscle: .triceps, role: .secondary),
+            .init(muscle: .trapeziusMiddle, role: .stabilizer),
+        ])
+        #expect(Muscle.Involvement(snapshot: source.snapshot).roles == source.roles)
+        #expect(Muscle.Involvement(snapshot: ["pectoralisMajorSternocostal": 0.7]).isEmpty)
     }
 
     @Test func powerKeepsAnatomyButEarnsNoDevelopmentCredit() throws {
-        let power = try #require(CatalogData.record(forExerciseNamed: "Kettlebell Sumo High Pull"))
-        #expect(!power.muscleInvolvement.anatomyNodeChannels.isEmpty)
+        let record = try #require(CatalogData.record(forExerciseNamed: "Barbell Push Press"))
+        #expect(!record.muscleInvolvement.anatomyNodeChannels.isEmpty)
 
         let exercise = Exercise(
-            name: power.name,
-            group: power.group,
+            name: record.name,
+            group: record.group,
             plannedSets: 3,
             plannedReps: 5,
-            plannedWeight: 0,
-            muscleInvolvement: power.muscleInvolvement,
+            plannedWeight: 95,
+            muscleInvolvement: record.muscleInvolvement,
             modality: .power
         )
         exercise.sets.forEach { $0.isCompleted = true }
         #expect(SetStimulus.credit(for: exercise).isEmpty)
     }
 
-    @Test func gluteExercisesKeepMaxAndMedSeparate() {
-        let hipThrust = Muscle.involvement(forExerciseNamed: "Barbell Hip Thrust")
-        #expect(hipThrust.role(for: .gluteMax) == .primary)
-        #expect(hipThrust.role(for: .gluteMed) == nil)
-
-        let hipAbduction = Muscle.involvement(forExerciseNamed: "Machine Hip Abduction")
-        #expect(hipAbduction.role(for: .gluteMed) == .primary)
-        #expect(hipAbduction.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(hipAbduction.role(for: .gluteMax) == nil)
-        #expect(hipAbduction.stabilizers.isEmpty)
-
-        let nodes = hipAbduction.anatomyNodeChannels
-        #expect(nodes["Gluteus_Medius_L"]?.intensity == 1)
-        #expect(nodes["Tensor_Fascia_Latae_L"]?.intensity == 0.5)
-        #expect(nodes["Rectus_Abdomini_L"] == nil)
-    }
-
-    @Test func obsoleteMuscleSnapshotKeysAreNotDecoded() {
-        let involvement = Muscle.Involvement(snapshot: [
-            "glutes": MuscleRole.primary.snapshotValue,
-            "teres": MuscleRole.primary.snapshotValue,
-        ])
-        #expect(involvement.isEmpty)
-    }
-
-    /// The one-time repair pass rewrites undecodable legacy bundled
-    /// snapshots (and the two known Hip Abduction upgrades) from the
-    /// catalog, after which the pure snapshot decode is canonical.
-    @Test func repairRewritesLegacyBundledSnapshotsFromTheCatalog() throws {
-        let legacySnapshot = [
-            "glutes": MuscleRole.primary.snapshotValue,
-            "abs": MuscleRole.stabilizer.snapshotValue,
-            "obliques": MuscleRole.stabilizer.snapshotValue,
-            "hipFlexors": MuscleRole.stabilizer.snapshotValue,
-        ]
-        let repaired = try #require(InvolvementSnapshotRepair.repairedSnapshot(
-            from: legacySnapshot,
-            catalogID: nil,
-            exerciseName: "Machine Hip Abduction"
-        ))
-        let involvement = Muscle.Involvement(snapshot: repaired)
-        #expect(involvement.role(for: .gluteMed) == .primary)
-        #expect(involvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(involvement.role(for: .gluteMax) == nil)
-        #expect(involvement.stabilizers.isEmpty)
-
-        // Once repaired, the snapshot is canonical and never rewritten
-        // again.
-        #expect(Muscle.Involvement.isCanonicalSnapshot(repaired))
-        #expect(InvolvementSnapshotRepair.repairedSnapshot(
-            from: repaired,
-            catalogID: "machine-hip-abduction",
-            exerciseName: "Machine Hip Abduction"
-        ) == nil)
-    }
-
-    /// The two exact historical Hip Abduction snapshots earn the
-    /// known catalog-role upgrade even though they are canonical and
-    /// carry a primary.
-    @Test func repairUpgradesKnownHistoricalHipAbductionSnapshots() throws {
-        let preTFL = [
-            "gluteMed": MuscleRole.primary.snapshotValue,
-            "abs": MuscleRole.stabilizer.snapshotValue,
-            "obliques": MuscleRole.stabilizer.snapshotValue,
-            "hipFlexors": MuscleRole.stabilizer.snapshotValue,
-        ]
-        let repaired = try #require(InvolvementSnapshotRepair.repairedSnapshot(
-            from: preTFL,
-            catalogID: "machine-hip-abduction",
-            exerciseName: "Machine Hip Abduction"
-        ))
-        let involvement = Muscle.Involvement(snapshot: repaired)
-        #expect(involvement.role(for: .gluteMed) == .primary)
-        #expect(involvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(involvement.stabilizers.isEmpty)
-
-        let preCoreRemoval = preTFL.merging(
-            [Muscle.tensorFasciaeLatae.rawValue: MuscleRole.secondary.snapshotValue],
-            uniquingKeysWith: { _, new in new }
-        )
-        let repairedCore = try #require(InvolvementSnapshotRepair.repairedSnapshot(
-            from: preCoreRemoval,
-            catalogID: nil,
-            exerciseName: "Machine Hip Abduction"
-        ))
-        let coreInvolvement = Muscle.Involvement(snapshot: repairedCore)
-        #expect(coreInvolvement.role(for: .gluteMed) == .primary)
-        #expect(coreInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
-        #expect(coreInvolvement.stabilizers.isEmpty)
-    }
-
-    /// A valid pick-time snapshot with a primary is immutable — the
-    /// repair must not rewrite honest authored history.
-    @Test func repairLeavesCanonicalSnapshotsUntouched() {
-        let authored = Muscle.Involvement(contributions: [
-            .init(muscle: .quads, role: .primary),
-            .init(muscle: .gluteMax, role: .secondary),
-        ]).snapshot
-        #expect(InvolvementSnapshotRepair.repairedSnapshot(
-            from: authored,
-            catalogID: "bench-press",
-            exerciseName: "Barbell Bench Press"
-        ) == nil)
-    }
-
-    @Test @MainActor func invalidCustomSnapshotDoesNotBorrowBundledAnatomyByName() {
-        let custom = ExerciseCatalogItem(
-            name: "Machine Hip Abduction",
-            group: .legs,
-            defaultWeight: 90,
-            isUserCreated: true
-        )
-        custom.muscleInvolvementSnapshot = [
-            "glutes": MuscleRole.primary.snapshotValue,
-        ]
-
-        // The pure decode drops the undecodable key…
-        #expect(custom.muscleInvolvement.isEmpty)
-        // …and the repair drops it from storage without borrowing the
-        // bundled record's anatomy by name.
-        let repaired = InvolvementSnapshotRepair.repairedSnapshot(
-            from: custom.muscleInvolvementSnapshot,
-            catalogID: nil,
-            exerciseName: custom.name,
-            allowsCatalogNameLookup: false
-        )
-        #expect(repaired?.isEmpty == true)
-    }
-
-    @Test func snapshotsRoundTripOnlyCanonicalRoles() {
-        let source = Muscle.Involvement(contributions: [
-            .init(muscle: .pectorals, role: .primary),
-            .init(muscle: .triceps, role: .secondary),
-            .init(muscle: .biceps, role: .stabilizer),
-        ])
-        let decoded = Muscle.Involvement(snapshot: source.snapshot)
-        #expect(decoded.roles == source.roles)
-
-        let obsoleteTier = Muscle.Involvement(snapshot: ["pectorals": 0.7])
-        #expect(obsoleteTier.isEmpty)
-    }
-
-    @Test @MainActor func explicitCatalogInvolvementOverridesCuratedName() {
+    @Test func explicitCustomInvolvementOverridesABundledName() {
         let custom = Muscle.Involvement(contributions: [
-            .init(muscle: .quads, role: .primary),
+            .init(muscle: .vasti, role: .primary),
             .init(muscle: .gluteMax, role: .secondary),
-            .init(muscle: .gluteMed, role: .secondary),
-            .init(muscle: .calves, role: .stabilizer),
+            .init(muscle: .gastrocnemius, role: .stabilizer),
         ])
         let item = ExerciseCatalogItem(
             name: "Barbell Bench Press",
@@ -279,170 +219,43 @@ struct MuscleMappingTests {
             isUserCreated: true
         )
 
-        #expect(item.muscleInvolvement.snapshot == custom.snapshot)
-        #expect(item.muscleInvolvement.primary == [.quads])
-        #expect(item.muscleInvolvement.role(for: .pectorals) == nil)
+        #expect(item.muscleInvolvement.roles == custom.roles)
+        #expect(item.muscleInvolvement.role(for: .vasti) == .primary)
+        #expect(item.muscleInvolvement.role(for: .pectoralisMajorSternocostal) == nil)
     }
 
-    @Test @MainActor func unknownCustomCatalogItemDoesNotInventGroupAnatomy() {
-        let item = ExerciseCatalogItem(
-            name: "Totally Made Up Lift",
-            group: .back,
-            defaultWeight: 0,
-            isUserCreated: true
-        )
-
-        #expect(item.muscleInvolvementSnapshot.isEmpty)
-        #expect(item.muscleInvolvement.isEmpty)
-    }
-
-    @Test @MainActor func catalogDraftRequiresExplicitMuscleRoles() {
+    @Test func customDraftRequiresExplicitMuscleRoles() {
         var draft = CatalogDraft.empty
         #expect(draft.muscleInvolvement.isEmpty)
-
         draft.group = .legs
         #expect(draft.muscleInvolvement.isEmpty)
 
         draft.muscleInvolvementSnapshot = Muscle.Involvement(contributions: [
             .init(muscle: .gluteMed, role: .primary)
         ]).snapshot
-        #expect(draft.muscleInvolvement.hasPrimary)
         #expect(draft.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(draft.muscleInvolvement.role(for: .gluteMax) == nil)
     }
 
-    @Test @MainActor func classificationResolvesForKnownLift() {
-        let classification = ExerciseClassification.forExerciseNamed("Barbell Bench Press")
-        #expect(classification?.equipment == .barbell)
-        #expect(classification?.mechanic == .compound)
-        #expect(classification?.pattern == .push)
-        #expect(classification?.direction == .horizontal)
-    }
-
     @Test func everyPushPullRecordHasDirectionAndOtherPatternsDoNot() {
         for record in CatalogData.records {
-            if record.patternValue == .push || record.patternValue == .pull {
-                #expect(
-                    record.directionValue != nil,
-                    "'\(record.name)' is \(record.pattern?.rawValue ?? "push/pull") without a direction"
-                )
-            } else {
-                #expect(
-                    record.directionValue == nil,
-                    "'\(record.name)' has direction but is not push/pull"
-                )
-            }
+            let isPushPull = record.pattern == .push || record.pattern == .pull
+            #expect((record.direction != nil) == isPushPull)
         }
     }
 
-    @Test func correctedPushPullExercisesKeepTheirCuratedDirections() {
-        let verticalDips = [
-            "Bench Dip",
-            "Ring Dip",
-        ]
-
-        for name in verticalDips {
-            let record = CatalogData.record(forExerciseNamed: name)
-            #expect(record?.mechanicValue == .compound)
-            #expect(record?.patternValue == .push)
-            #expect(record?.directionValue == .vertical)
-        }
-
-        let invertedPulldown = CatalogData.record(forExerciseNamed: "Underhand Lat Pulldown")
-        #expect(invertedPulldown?.equipmentValue == .cable)
-        #expect(invertedPulldown?.patternValue == .pull)
-        #expect(invertedPulldown?.directionValue == .vertical)
-        #expect(invertedPulldown?.bodyweightFractionValue == 0)
-
-        #expect(CatalogData.record(forExerciseNamed: "Rope Pullover/row") == nil)
-    }
-
-    @Test @MainActor func catalogItemKeepsDirectionConsistentWithPattern() {
+    @Test func catalogItemKeepsDirectionConsistentWithPattern() {
         let item = ExerciseCatalogItem(
             name: "Test Press",
             group: .chest,
             defaultWeight: 0,
             pattern: .push,
-            direction: .horizontal
+            direction: .diagonal
         )
-        #expect(item.movementLabel == "Horizontal Push")
+        #expect(item.movementLabel == "Diagonal Push")
 
         item.pattern = .squat
         #expect(item.direction == nil)
         #expect(item.movementLabel == "Squat")
     }
-
-    @Test func everyMuscleExpandsToLeftRightNodes() {
-        for muscle in Muscle.allCases {
-            let nodes = muscle.nodeNames
-            #expect(nodes.isEmpty == !muscle.isVisualized)
-            #expect(nodes.allSatisfy { $0.hasSuffix("_L") || $0.hasSuffix("_R") })
-        }
-    }
-
-    @Test func rotatorCuffRegionsAreAnatomicallySeparated() {
-        #expect(Muscle.externalRotators.nodeNames == [
-            "Teres_Minor_L", "Teres_Minor_R",
-            "Infraspinatus_L", "Infraspinatus_R",
-        ])
-        #expect(Muscle.teresMajor.nodeNames == ["Teres_Major_L", "Teres_Major_R"])
-        #expect(Muscle.subscapularis.nodeNames.isEmpty)
-        #expect(!Muscle.subscapularis.isVisualized)
-    }
-
-    @Test func deltoidRegionMapsToIndependentHeads() {
-        #expect(Muscle.deltoids.nodeNames == [
-            "Deltoid_Anterior_L", "Deltoid_Anterior_R",
-            "Deltoid_Lateral_L", "Deltoid_Lateral_R",
-            "Deltoid_Posterior_L", "Deltoid_Posterior_R",
-        ])
-    }
-
-    @Test func pectoralRegionMapsToIndependentHeads() {
-        #expect(Muscle.pectorals.nodeNames == [
-            "Pectoralis_Major_Clavicular_L", "Pectoralis_Major_Clavicular_R",
-            "Pectoralis_Major_Sternocostal_L", "Pectoralis_Major_Sternocostal_R",
-            "Pectoralis_Minor_L", "Pectoralis_Minor_R",
-        ])
-    }
-
-    @Test func trapeziusRegionMapsToIndependentFiberGroups() {
-        #expect(Muscle.traps.nodeNames == [
-            "Trapezius_Upper_L", "Trapezius_Upper_R",
-            "Trapezius_Middle_L", "Trapezius_Middle_R",
-            "Trapezius_Lower_L", "Trapezius_Lower_R",
-            "Levator_Scapulaes_L", "Levator_Scapulaes_R",
-        ])
-    }
-
-    @Test func lateralHipRegionsMapToIndependentMeshes() {
-        #expect(Muscle.gluteMax.nodeNames == ["Gluteus_Maximus_L", "Gluteus_Maximus_R"])
-        #expect(Muscle.gluteMed.nodeNames == ["Gluteus_Medius_L", "Gluteus_Medius_R"])
-        #expect(Muscle.tensorFasciaeLatae.nodeNames == [
-            "Tensor_Fascia_Latae_L", "Tensor_Fascia_Latae_R",
-        ])
-        #expect(!Muscle.hipFlexors.nodeNames.contains("Tensor_Fascia_Latae_L"))
-        #expect(Set(Muscle.gluteMax.nodeNames).isDisjoint(with: Muscle.gluteMed.nodeNames))
-        #expect(Set(Muscle.gluteMed.nodeNames).isDisjoint(with: Muscle.tensorFasciaeLatae.nodeNames))
-    }
-
-    @Test func visibleAccessoryMeshesFollowTheirTrainableRegions() {
-        #expect(Muscle.traps.nodeNames.contains("Levator_Scapulaes_L"))
-        #expect(Muscle.traps.nodeNames.contains("Levator_Scapulaes_R"))
-
-        #expect(Muscle.calves.nodeNames.contains("Flexor_Hallucis_Longus_L"))
-        #expect(Muscle.calves.nodeNames.contains("Flexor_Hallucis_Longus_R"))
-
-        let shinNodes = Set(Muscle.shins.nodeNames)
-        #expect(shinNodes.contains("Extensor_Digitorum_Longus_L"))
-        #expect(shinNodes.contains("Extensor_Digitorum_Longus_R"))
-        #expect(shinNodes.contains("Extensor_Hallucis_Longus_L"))
-        #expect(shinNodes.contains("Extensor_Hallucis_Longus_R"))
-    }
-
-    private static func muscleList(_ muscles: Set<Muscle>) -> String {
-        let rawValues = muscles.map(\.rawValue).sorted()
-        return rawValues.isEmpty ? "none" : rawValues.joined(separator: ", ")
-    }
-
 }

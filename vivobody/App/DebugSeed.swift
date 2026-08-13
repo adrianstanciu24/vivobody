@@ -168,16 +168,16 @@ enum UITestSupport {
             plannedReps: 10,
             plannedWeight: 30 * WeightUnit.lbPerKg,
             muscleInvolvement: Muscle.Involvement(contributions: [
-                .init(muscle: .pectorals, role: .primary),
+                .init(muscle: .pectoralisMajorSternocostal, role: .primary),
                 .init(muscle: .triceps, role: .secondary),
-                .init(muscle: .deltoids, role: .secondary),
+                .init(muscle: .deltoidAnterior, role: .secondary),
             ]),
             classification: ExerciseClassification(
                 equipment: .band,
                 mechanic: .compound,
                 pattern: .push,
                 direction: .horizontal,
-                plane: .sagittal,
+                planes: [.sagittal],
                 laterality: .bilateral
             ),
             modality: .dynamicStrength,

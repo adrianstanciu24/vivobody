@@ -138,6 +138,7 @@ struct CustomExerciseEditorSheet: View {
             && hasValidMuscleRoles
             && (draft.mechanic != .compound || draft.pattern != nil)
             && (!draft.requiresDirection || draft.direction != nil)
+            && !draft.planes.isEmpty
             && hasValidLoadProfile
             && hasUniqueSearchTerms
     }
@@ -520,17 +521,9 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Plane (every exercise)
 
     private var planeField: some View {
-        segmentedField(
+        CatalogPlaneField(
             title: "Plane of movement",
-            selection: Binding(
-                get: { draft.plane },
-                set: { plane in
-                    Haptics.selection()
-                    draft.plane = plane
-                }
-            ),
-            options: MovementPlane.allCases,
-            label: { $0.displayName }
+            selection: $draft.planes
         )
     }
 
@@ -976,7 +969,7 @@ struct CustomExerciseEditorSheet: View {
                 mechanic: draft.mechanic,
                 pattern: draft.mechanic == .compound ? draft.pattern : nil,
                 direction: draft.requiresDirection ? draft.direction : nil,
-                plane: draft.plane,
+                planes: draft.planes,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
                 movementDefinition: draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -1028,7 +1021,7 @@ struct CustomExerciseEditorSheet: View {
             item.mechanic = draft.mechanic
             item.pattern = draft.mechanic == .compound ? draft.pattern : nil
             item.direction = draft.requiresDirection ? draft.direction : nil
-            item.plane = draft.plane
+            item.planes = draft.planes
             item.laterality = draft.laterality
             item.aliases = parsedAliases
             item.movementDefinition = draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1136,6 +1129,52 @@ private struct CatalogSegmentedField<Option: Hashable>: View {
     }
 }
 
+/// Three independent cardinal-plane toggles. At least one remains
+/// selected, while reviewed/custom multi-plane movements can retain
+/// every component instead of being flattened to a dominant plane.
+private struct CatalogPlaneField: View {
+    let title: String
+    @Binding var selection: [MovementPlane]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            Text(title)
+                .sectionLabelStyle(Opacity.medium)
+
+            HStack(spacing: Space.sm) {
+                ForEach(MovementPlane.allCases, id: \.self) { plane in
+                    let selected = selection.contains(plane)
+                    Button {
+                        var updated = Set(selection)
+                        if selected {
+                            guard updated.count > 1 else { return }
+                            updated.remove(plane)
+                        } else {
+                            updated.insert(plane)
+                        }
+                        Haptics.selection()
+                        selection = MovementPlane.allCases.filter(updated.contains)
+                    } label: {
+                        Text(plane.displayName)
+                            .font(Typography.body)
+                            .fontWeight(selected ? .semibold : .regular)
+                            .foregroundStyle(selected ? Tint.onAccent : Ink.primary)
+                            .frame(maxWidth: .infinity, minHeight: Space.tapMin)
+                            .background(
+                                Capsule().fill(selected ? Tint.inProgress : Surface.cardTintBright)
+                            )
+                            .overlay(Capsule().stroke(Surface.edge, lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(plane.displayName)
+                    .accessibilityValue(selected ? "Selected" : "Not selected")
+                    .accessibilityAddTraits(selected ? .isSelected : [])
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Choice sheet
 
 /// Focused single-choice list for the editor's longer taxonomies.
@@ -1234,7 +1273,7 @@ struct CatalogDraft {
     var mechanic: Mechanic
     var pattern: MovementPattern?
     var direction: PushPullDirection?
-    var plane: MovementPlane
+    var planes: [MovementPlane]
     var laterality: Laterality
     var muscleInvolvementSnapshot: [String: Double]
 
@@ -1258,7 +1297,7 @@ struct CatalogDraft {
         mechanic: .compound,
         pattern: .push,
         direction: .horizontal,
-        plane: .sagittal,
+        planes: [.sagittal],
         laterality: .bilateral,
         muscleInvolvementSnapshot: [:],
         aliasesInput: ""
@@ -1278,7 +1317,7 @@ struct CatalogDraft {
         mechanic: Mechanic,
         pattern: MovementPattern?,
         direction: PushPullDirection?,
-        plane: MovementPlane,
+        planes: [MovementPlane],
         laterality: Laterality,
         muscleInvolvementSnapshot: [String: Double],
         aliasesInput: String
@@ -1296,7 +1335,7 @@ struct CatalogDraft {
         self.mechanic = mechanic
         self.pattern = pattern
         self.direction = direction
-        self.plane = plane
+        self.planes = MovementPlane.canonicalized(planes)
         self.laterality = laterality
         self.muscleInvolvementSnapshot = muscleInvolvementSnapshot
         self.aliasesInput = aliasesInput
@@ -1316,7 +1355,7 @@ struct CatalogDraft {
         self.mechanic = item.mechanic
         self.pattern = item.pattern
         self.direction = item.direction
-        self.plane = item.plane
+        self.planes = item.planes
         self.laterality = item.laterality
         self.muscleInvolvementSnapshot = item.muscleInvolvement.snapshot
         // Rebuild the comma-separated string so the editor's text

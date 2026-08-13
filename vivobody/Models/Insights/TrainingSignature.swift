@@ -65,14 +65,17 @@ nonisolated struct TrainingSignature {
     let hasVolume: Bool
     init(
         volume: [MuscleVolumeStat],
+        groupVolume authoredGroupVolume: [MuscleGroup: Double]? = nil,
         cadence: Double
     ) {
         // Volume share per group across the full archive. Weekly volume
         // remains available independently on `effectiveSets` for its
         // existing consumers.
-        var groupVolume: [MuscleGroup: Double] = [:]
-        for stat in volume {
-            groupVolume[stat.muscle.group, default: 0] += stat.allTimeEffectiveSets
+        var groupVolume = authoredGroupVolume ?? [:]
+        if authoredGroupVolume == nil {
+            for stat in volume {
+                groupVolume[stat.muscle.group, default: 0] += stat.allTimeEffectiveSets
+            }
         }
         let totalVolume = groupVolume.values.reduce(0, +)
 
@@ -152,10 +155,36 @@ extension Array where Element == WorkoutSession {
         let progress = accumulator.progressByExercise
         return TrainingSignature(
             volume: accumulator.muscleVolume(now: now),
+            groupVolume: accumulator.allTimeMuscleGroupVolume(now: now),
             cadence: accumulator.archiveOverview(
                 progress: progress,
                 now: now
             ).averageWorkoutsPerWeek
         )
+    }
+}
+
+nonisolated extension AnalyticsAccumulator {
+    /// Group-level hard-set allocation prices each exercise once per
+    /// group using its strongest exact-region role. Taxonomy splits
+    /// therefore improve anatomical detail without multiplying a
+    /// group's Training Signature volume.
+    func allTimeMuscleGroupVolume(now: Date) -> [MuscleGroup: Double] {
+        var totals: [MuscleGroup: Double] = [:]
+        for session in sessions where session.date <= now {
+            for exercise in session.exercises {
+                var strongestByGroup: [MuscleGroup: Double] = [:]
+                for (muscle, credit) in exercise.byMuscle {
+                    strongestByGroup[muscle.group] = max(
+                        strongestByGroup[muscle.group] ?? 0,
+                        credit
+                    )
+                }
+                for (group, credit) in strongestByGroup {
+                    totals[group, default: 0] += credit
+                }
+            }
+        }
+        return totals
     }
 }

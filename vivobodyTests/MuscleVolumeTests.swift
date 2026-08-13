@@ -69,11 +69,11 @@ struct MuscleVolumeTests {
 
     private func primaryMuscle(for group: MuscleGroup) -> Muscle {
         switch group {
-        case .chest: return .pectorals
+        case .chest: return .pectoralisMajorSternocostal
         case .back: return .lats
-        case .shoulders: return .deltoids
-        case .legs: return .quads
-        case .arms: return .biceps
+        case .shoulders: return .deltoidAnterior
+        case .legs: return .vasti
+        case .arms: return .bicepsBrachii
         case .core: return .abs
         }
     }
@@ -86,7 +86,7 @@ struct MuscleVolumeTests {
 
     @Test func rolesCreditPrimarySecondaryAndNotStabilizer() {
         let involvement = Muscle.Involvement(contributions: [
-            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .pectoralisMajorSternocostal, role: .primary),
             .init(muscle: .triceps, role: .secondary),
             .init(muscle: .serratus, role: .stabilizer),
         ])
@@ -95,18 +95,18 @@ struct MuscleVolumeTests {
         ])
         let stats = [s].muscleVolume(now: day(0))
 
-        #expect(stat(.pectorals, in: stats).effectiveSets == 3)
+        #expect(stat(.pectoralisMajorSternocostal, in: stats).effectiveSets == 3)
         #expect(stat(.triceps, in: stats).effectiveSets == 1.5)
         #expect(stat(.serratus, in: stats).effectiveSets == 0)
         #expect(stat(.serratus, in: stats).daysSinceLastTrained == nil)
     }
 
     @Test func everyMuscleIsRepresentedEvenWhenUntrained() {
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 3)])
+        let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 3)])
         let stats = [s].muscleVolume(now: day(0))
         #expect(stats.count == Muscle.allCases.count)
         // A leg muscle untouched by bench reads zero / untrained / never.
-        let quads = stat(.quads, in: stats)
+        let quads = stat(.vasti, in: stats)
         #expect(quads.effectiveSets == 0)
         #expect(quads.zone == .untrained)
         #expect(quads.daysSinceLastTrained == nil)
@@ -115,9 +115,9 @@ struct MuscleVolumeTests {
     // MARK: - Completion gate
 
     @Test func onlyCompletedSetsCount() {
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 4, completed: 2)])
+        let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 4, completed: 2)])
         let stats = [s].muscleVolume(now: day(0))
-        #expect(abs(stat(.pectorals, in: stats).effectiveSets - 2.0) < 1e-9)
+        #expect(abs(stat(.pectoralisMajorSternocostal, in: stats).effectiveSets - 2.0) < 1e-9)
     }
 
     // MARK: - Rolling window
@@ -126,10 +126,10 @@ struct MuscleVolumeTests {
         // Trained 9 days ago, evaluated today with the default 7-day
         // window: no weekly credit, but the lifetime signature channel
         // and recency still reflect it.
-        let old = session(at: day(1), [lift("Bench Press", .chest, sets: 5)])
+        let old = session(at: day(1), [lift("Barbell Bench Press", .chest, sets: 5)])
         let stats = [old].muscleVolume(now: day(10))
 
-        let chest = stat(.pectorals, in: stats)
+        let chest = stat(.pectoralisMajorSternocostal, in: stats)
         #expect(chest.effectiveSets == 0)
         #expect(chest.allTimeEffectiveSets == 5)
         #expect(chest.zone == .untrained)
@@ -137,17 +137,17 @@ struct MuscleVolumeTests {
     }
 
     @Test func workInsideWindowCounts() {
-        let recent = session(at: day(8), [lift("Bench Press", .chest, sets: 5)])
+        let recent = session(at: day(8), [lift("Barbell Bench Press", .chest, sets: 5)])
         let stats = [recent].muscleVolume(now: day(10))
-        #expect(abs(stat(.pectorals, in: stats).effectiveSets - 5.0) < 1e-9)
-        #expect(abs(stat(.pectorals, in: stats).allTimeEffectiveSets - 5.0) < 1e-9)
-        #expect(stat(.pectorals, in: stats).daysSinceLastTrained == 2)
+        #expect(abs(stat(.pectoralisMajorSternocostal, in: stats).effectiveSets - 5.0) < 1e-9)
+        #expect(abs(stat(.pectoralisMajorSternocostal, in: stats).allTimeEffectiveSets - 5.0) < 1e-9)
+        #expect(stat(.pectoralisMajorSternocostal, in: stats).daysSinceLastTrained == 2)
     }
 
     @Test func lifetimeVolumeDoesNotExpire() {
-        let old = session(at: day(0), [lift("Bench Press", .chest, sets: 5)])
+        let old = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 5)])
         let stats = [old].muscleVolume(now: day(35))
-        let chest = stat(.pectorals, in: stats)
+        let chest = stat(.pectoralisMajorSternocostal, in: stats)
 
         #expect(chest.effectiveSets == 0)
         #expect(chest.allTimeEffectiveSets == 5)
@@ -155,17 +155,17 @@ struct MuscleVolumeTests {
     }
 
     @Test func lifetimeVolumeSumsAcrossTheArchive() {
-        let first = session(at: day(0), [lift("Bench Press", .chest, sets: 2)])
-        let second = session(at: day(40), [lift("Bench Press", .chest, sets: 3)])
+        let first = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 2)])
+        let second = session(at: day(40), [lift("Barbell Bench Press", .chest, sets: 3)])
         let stats = [first, second].muscleVolume(now: day(50))
 
-        #expect(stat(.pectorals, in: stats).allTimeEffectiveSets == 5)
+        #expect(stat(.pectoralisMajorSternocostal, in: stats).allTimeEffectiveSets == 5)
     }
 
     @Test func futureSessionsDoNotCountOrSetRecency() {
-        let future = session(at: day(12), [lift("Bench Press", .chest, sets: 5)])
+        let future = session(at: day(12), [lift("Barbell Bench Press", .chest, sets: 5)])
         let stats = [future].muscleVolume(now: day(10))
-        let chest = stat(.pectorals, in: stats)
+        let chest = stat(.pectoralisMajorSternocostal, in: stats)
 
         #expect(chest.effectiveSets == 0)
         #expect(chest.allTimeEffectiveSets == 0)
@@ -177,8 +177,8 @@ struct MuscleVolumeTests {
     @Test func zonesTrackLandmarks() {
         // Shared landmark: mev 8, optimalHigh 18.
         func chestZone(sets: Int) -> VolumeZone {
-            let s = session(at: day(0), [lift("Bench Press", .chest, sets: sets)])
-            return stat(.pectorals, in: [s].muscleVolume(now: day(0))).zone
+            let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: sets)])
+            return stat(.pectoralisMajorSternocostal, in: [s].muscleVolume(now: day(0))).zone
         }
         #expect(chestZone(sets: 6) == .under)      // below MEV
         #expect(chestZone(sets: 12) == .optimal)   // inside the band
@@ -191,7 +191,7 @@ struct MuscleVolumeTests {
         // Chest gets plenty (optimal); its synergists land under;
         // every leg muscle is untrained. Rested muscles must rank as
         // more neglected than merely-under ones.
-        let s = session(at: day(0), [lift("Bench Press", .chest, sets: 12)])
+        let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 12)])
         let stats = [s].muscleVolume(now: day(0))
         let summary = stats.summary
 

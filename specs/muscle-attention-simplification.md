@@ -1,12 +1,15 @@
 # Spec: Muscle map as training attention (simplification pass)
 
-Status: implemented (2026-08)
+Status: historical implementation record; persistence strategy superseded by
+the family-catalog runtime cutover (2026-08)
 Date: 2026-08
 Scope: `SetStimulus` (rewritten stateless), `AnalyticsAccumulator`,
 `MuscleDevelopment` (linear map, one landmark), `MuscleVolume` (one landmark),
-`Muscle` (`resolvedInvolvement` deleted), new `App/InvolvementSnapshotRepair`,
-`Workout`/`WorkoutTemplate`/`ExerciseCatalog` accessors, `TrainingLoad` copy,
-tests. No data-model migration; one launch-gated snapshot repair.
+`Muscle` (`resolvedInvolvement` deleted), the then-current one-time snapshot
+repair, `Workout`/`WorkoutTemplate`/
+`ExerciseCatalog` accessors, `TrainingLoad` copy, and tests. The later atomic
+family-catalog cutover removed the repair and opened a fresh named V5 store;
+these paragraphs describe the superseded coarse-taxonomy implementation.
 Supersedes: the pricing machinery of `hard-set-currency.md` and the γ/landmark
 table of `simplify-muscle-model.md`. Catalog data fixes (over-generous
 secondaries, unsupported micro-regions) are deliberately deferred — see
@@ -57,12 +60,11 @@ set *quality* beyond the user's own effort rating was removed.
   source of the inversion.
 - `developmentGamma` (0.5). Intensity is now linear:
   `min(1, W / optimalHigh)` — 0.5 means literally "half the weekly target".
-- `Muscle.resolvedInvolvement(...)` hot-path recovery. Replaced by
-  `App/InvolvementSnapshotRepair`, a generation-gated one-time launch pass
-  (`SettingsKey.involvementRepairGeneration`) that rewrites legacy snapshots
-  in storage — same rules, including the two exact Hip Abduction upgrades
-  and no name-borrowing for custom items. `muscleInvolvement` accessors are
-  now pure `Involvement(snapshot:)` decodes.
+- `Muscle.resolvedInvolvement(...)` hot-path recovery. At the time it was
+  replaced by a generation-gated launch repair. That temporary bridge was
+  removed at the compatibility-free V5 cutover; current
+  `muscleInvolvement` accessors are pure `Involvement(snapshot:)` decodes and
+  no legacy aggregate snapshots enter the canonical store.
 
 ### Kept (earns its keep)
 
@@ -101,11 +103,10 @@ of work" is worth by construction.
   (concepts removed); bands recalibrated; fixtures now name the real catalog
   record ("Barbell Bench Press" — the roster curation had renamed it, so the
   old fixtures silently resolved to empty involvement).
-- `MuscleDevelopmentTests` recalibrated for the linear map; legacy Hip
-  Abduction recovery tests ported to `InvolvementSnapshotRepair`.
-- `MuscleMappingTests` guard the repair rules (rewrite legacy, upgrade the
-  two known snapshots, never touch canonical history, never borrow bundled
-  anatomy for custom items).
+- `MuscleDevelopmentTests` were recalibrated for the linear map. The temporary
+  legacy-repair tests were deleted at the V5 cutover.
+- `MuscleMappingTests` now guard the exact 52-region taxonomy and SceneKit
+  ownership rather than a compatibility rewrite.
 
 ## Deferred (data fixes, separate pass)
 
@@ -113,8 +114,9 @@ of work" is worth by construction.
   direct work at the data source.~~ Done (2026-08, follow-up pass): 879
   secondary roles demoted to stabilizer (1,566 → 687, −56%; abs 143 → 4,
   calves 96 → 9, forearms 126 → 31, lower back 85 → 18), all 533 primaries
-  unchanged, every exercise now ≤ 3 secondaries, all 24 `Muscle` cases still
-  represented.
+  unchanged, every exercise then ≤ 3 secondaries, with all 24 coarse `Muscle`
+  cases represented. This roster was later superseded by the 52-region
+  family-first catalog.
 - Micro-regions the catalog cannot support (TFL still 0 primary / 1
   secondary, subscapularis 2 primaries with no mesh, teresMajor never
   primary, serratus 2 primaries): merge or give them real coverage.

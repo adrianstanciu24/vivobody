@@ -125,7 +125,7 @@ struct SessionInsightsTests {
         #expect(s.totalVolume == 2_800)
     }
 
-    @Test func totalVolumeExcludesNonStrengthAndNonComparableReps() {
+    @Test func totalVolumeExcludesNonStrengthAndIncludesLoggedNonComparableReps() {
         let conditioning = lift(
             "Burpee",
             sets: [(100, 10, nil, true)],
@@ -150,7 +150,8 @@ struct SessionInsightsTests {
         let dynamic = lift(sets: [(100, 10, nil, true)])
         let s = session(minutes: 20, [conditioning, mobility, invalidIsometricReps, banded, dynamic])
 
-        #expect(s.totalVolume == 1_000)
+        #expect(s.comparableTonnageSummary.knownSubtotal == 1_000)
+        #expect(s.totalVolume == 2_000)
     }
 
     @Test func unknownBodyweightMakesComparableTonnageUnavailable() {
@@ -197,7 +198,7 @@ struct SessionInsightsTests {
         #expect(contributions[plank.id]?.share == 1)
     }
 
-    @Test func nonComparableWorkIsExcludedWithoutMakingTonnageMissing() {
+    @Test func nonComparableWorkIsStrictlyExcludedButIncludedInReceiptVolume() {
         let bandRow = lift(
             "Band Row",
             .back,
@@ -208,8 +209,8 @@ struct SessionInsightsTests {
 
         #expect(s.comparableTonnageSummary.knownSubtotal == 0)
         #expect(s.comparableTonnageSummary.availability == .complete)
-        #expect(s.totalVolume == 0)
-        #expect(s.volumeDensity == nil)
+        #expect(s.totalVolume == 36)
+        #expect(s.volumeDensity == 1.8)
         #expect(s.contributions()[bandRow.id] == nil)
     }
 

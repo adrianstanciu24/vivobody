@@ -49,6 +49,7 @@ struct InsightsScreen: View {
     ) -> some View {
         let signature = TrainingSignature(
             volume: reports.core.volume,
+            groupVolume: reports.core.groupVolume,
             cadence: reports.core.overview.averageWorkoutsPerWeek
         )
 
@@ -138,6 +139,7 @@ struct InsightsScreen: View {
     ) -> some View {
         let signature = TrainingSignature(
             volume: reports.core.volume,
+            groupVolume: reports.core.groupVolume,
             cadence: reports.core.overview.averageWorkoutsPerWeek
         )
 

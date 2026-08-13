@@ -1,16 +1,17 @@
 # Clean-slate catalog foundation
 
-This directory is the source for Vivobody's clean-slate, family-first exercise
-catalog. It is intentionally isolated from `Scripts/curate.py`, the legacy
-review CSVs, and the currently shipped `catalog.json`. No v2 source may import,
-decode, compare against, or preserve identities from the legacy roster.
+This directory is the canonical source for Vivobody's clean-slate,
+family-first exercise catalog. It is intentionally isolated from
+`Scripts/curate.py`, the legacy review CSVs, and `Scripts/transform_wger.py`.
+No canonical source may import, decode, compare against, or preserve identities
+from the legacy roster.
 
-The foundation and reviewed family sources remain isolated while the catalog is
-rebuilt one family at a time. The app keeps using its current runtime catalog
-until a later atomic cutover.
-
-`catalog-v2` is only a temporary development namespace. At cutover this work
-becomes the canonical `catalog`, and the temporary version suffix disappears.
+The atomic runtime cutover is complete: `Scripts/catalog_v2.py` validates these
+foundations and reviewed families and is the sole writer of the bundled
+`vivobody/Resources/catalog.json`. The retired legacy writers fail immediately
+with instructions to use this compiler. The `catalog-v2` directory name is now
+a historical source-path label; no version suffix appears in runtime identity
+or data.
 
 ## Source files
 
@@ -49,15 +50,13 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
 - `group` is the glanceable roll-up for summaries, history, library grouping,
   and training-signature presentation.
 
-The lower-body migration intentionally creates more exact, sometimes clinical
+The lower-body taxonomy intentionally creates more exact, sometimes clinical
 region labels such as `Vasti`, `Pectineus`, and `Fibularis Tertius`. The app
 must not flatten those back into false `Quads`, `Calves`, or `Hip Flexors`
-region identities. At atomic compiler cutover, migrate all 52 stable IDs,
-display names, groups, and mesh owners together; use the six existing groups
-where a coarse glanceable label is appropriate; and extend
-`MuscleMappingTests` to pin the generated/runtime mapping. Product copy may
-provide contextual descriptions, but it must not create a second anatomical
-taxonomy.
+region identities. The runtime uses all 52 stable IDs, display names, groups,
+and mesh owners together; the six existing groups remain the coarse glanceable
+roll-up. `MuscleMappingTests` pins that runtime mapping. Product copy may provide
+contextual descriptions, but it must not create a second anatomical taxonomy.
 
 ## Authored muscle semantics
 
@@ -335,10 +334,10 @@ assigns triceps as primary under a different muscle contract.
 
 `diagonal` is a push/pull direction, not an anatomical plane. The clean-slate
 taxonomy retains exactly the three cardinal planes while allowing a family to
-declare more than one. These changes remain isolated from the current Swift
-runtime; the atomic catalog cutover must replace its singular stored plane with
-plane components, add the diagonal direction case, and remove the legacy rule
-that classifies every compound press as sagittal.
+declare more than one. The runtime stores those plane components in canonical
+`sagittal|frontal|transverse` order, supports diagonal direction directly, and
+does not apply the retired rule that classified every compound press as
+sagittal.
 
 ## Validation
 
@@ -346,13 +345,20 @@ Run from the repository root:
 
 ```bash
 python3 Scripts/catalog_v2.py --check
+python3 Scripts/catalog_v2.py --emit-runtime
 python3 -m unittest discover -s Scripts/tests -p 'test_catalog_v2.py'
 ```
 
-The validator uses only Python's standard library. It decodes the binary
+`--check` is non-writing and also proves that the checked-in runtime catalog is
+byte-for-byte compiler output. `--emit-runtime` performs an atomic replacement
+after full validation. Explicit `--family PATH` values are supplemental
+validation inputs only and can never enter the runtime projection.
+
+The validator/compiler uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
 and `_R` nodes, all 62 mesh-base owners are unique, the taxonomy contains
 exactly its 52 canonical muscle regions, the capability map contains exactly
 44 joint actions, all muscles have evidence-backed action profiles, family
-prime actions have capable movers, and stability demands have capable
-assigned muscles.
+prime actions have capable movers, and stability demands have capable assigned
+muscles. The runtime projection is pinned to exactly 44 active families and 120
+exercises.

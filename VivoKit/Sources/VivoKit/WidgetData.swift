@@ -57,7 +57,9 @@ public struct VersionedSnapshot<T: Codable>: Codable {
 /// their meaning changes so the reader can reject stale data instead
 /// of presenting an obsolete interpretation.
 public nonisolated enum WidgetSnapshotVersion {
-    public static let current = 3
+    /// Version 4 invalidates App Group payloads from the retired development
+    /// store when the family-first catalog opens its fresh SwiftData store.
+    public static let current = 4
 }
 
 /// Encode/decode helpers that wrap payloads in a `VersionedSnapshot`

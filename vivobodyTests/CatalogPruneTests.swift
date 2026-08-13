@@ -18,7 +18,7 @@ import Testing
 struct CatalogPruneTests {
 
     private func makeContext() throws -> ModelContext {
-        let schema = Schema(SchemaV4.models, version: SchemaV4.versionIdentifier)
+        let schema = Schema(SchemaV5.models, version: SchemaV5.versionIdentifier)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
         return ModelContext(container)

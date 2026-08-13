@@ -56,6 +56,7 @@ struct ConfigureExerciseSheet: View {
     private let name: String
     private let catalogItemID: UUID?
     private let catalogID: String?
+    private let familyID: String?
     private let group: MuscleGroup
     private let muscleInvolvement: Muscle.Involvement
     private let classification: ExerciseClassification?
@@ -75,6 +76,7 @@ struct ConfigureExerciseSheet: View {
             name = item.name
             catalogItemID = item.id
             catalogID = item.catalogID
+            familyID = item.familyID
             group = item.group
             muscleInvolvement = item.muscleInvolvement
             classification = item.classification
@@ -93,6 +95,7 @@ struct ConfigureExerciseSheet: View {
             name = draft.name
             catalogItemID = draft.catalogItemID
             catalogID = draft.catalogID
+            familyID = draft.familyID
             group = draft.group
             muscleInvolvement = Muscle.Involvement(snapshot: draft.muscleInvolvementSnapshot)
             classification = draft.classification
@@ -300,6 +303,7 @@ struct ConfigureExerciseSheet: View {
                 name: name,
                 catalogItemID: originalDraft.catalogItemID,
                 catalogID: originalDraft.catalogID,
+                familyID: originalDraft.familyID,
                 group: group,
                 plannedSets: originalDraft.plannedSets,
                 plannedReps: originalDraft.plannedReps,
@@ -321,6 +325,7 @@ struct ConfigureExerciseSheet: View {
             name: name,
             catalogItemID: catalogItemID,
             catalogID: catalogID,
+            familyID: familyID,
             group: group,
             plannedSets: sets,
             plannedReps: reps,

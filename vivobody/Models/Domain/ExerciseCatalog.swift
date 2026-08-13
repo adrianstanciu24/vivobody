@@ -107,37 +107,22 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable, Senda
 nonisolated enum PushPullDirection: String, Codable, Hashable, CaseIterable, Sendable {
     case horizontal
     case vertical
+    case diagonal
 
     nonisolated var displayName: String {
         switch self {
         case .horizontal: return "Horizontal"
         case .vertical:   return "Vertical"
+        case .diagonal:   return "Diagonal"
         }
     }
 }
 
 // MARK: - Movement plane
 
-/// The anatomical plane the lift's working limbs primarily travel
-/// through. Unlike `MovementPattern` (push/pull only) this applies to
-/// every exercise, so it's non-optional and defaults to `.sagittal` —
-/// where the overwhelming majority of barbell work lives. Drives a
-/// future "plane coverage" stat so the user can see whether they ever
-/// load the frontal/transverse planes or live entirely in the
-/// sagittal one.
-///
-/// Classification heuristic (kept deliberately simple so tagging is
-/// unambiguous and the coverage metric stays honest):
-///   • transverse — rotation or a pure horizontal arm ad/abduction:
-///     twists, Pallof, flys, pec deck, rear-delt fly, face pull.
-///   • frontal    — lateral travel / ab-adduction in the coronal
-///     plane: lateral raise, hip ab/adduction, side plank, upright row.
-///   • sagittal   — everything else (forward/back, up/down): all
-///     squats, hinges, presses, rows, vertical pulls, curls,
-///     extensions, planks, carries.
-/// Multi-joint presses stay sagittal even though the shoulder
-/// horizontally adducts — the press pattern dominates; a pure fly,
-/// whose only action is that adduction, is transverse.
+/// One cardinal anatomical plane in a family's reviewed action basis.
+/// Exercises can author multiple components; direction (including a
+/// diagonal push/pull) remains a separate classification dimension.
 nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable, Sendable {
     case sagittal
     case frontal
@@ -149,6 +134,11 @@ nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable, Sendabl
         case .frontal:    return "Frontal"
         case .transverse: return "Transverse"
         }
+    }
+
+    nonisolated static func canonicalized(_ values: [MovementPlane]) -> [MovementPlane] {
+        let selected = Set(values)
+        return allCases.filter(selected.contains)
     }
 }
 
@@ -184,6 +174,10 @@ final class ExerciseCatalogItem: Identifiable {
     /// Nil only for user-created exercises. Unlike the install-local
     /// UUID, this survives a factory reset and catalog reseed.
     var catalogID: String? = nil
+
+    /// Stable movement-family identity from the compiled catalog.
+    /// Nil only for user-created exercises.
+    var familyID: String? = nil
 
     var name: String = ""
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
@@ -249,12 +243,10 @@ final class ExerciseCatalogItem: Identifiable {
     /// value so this is an additive field for existing SwiftData stores.
     var directionRaw: String? = nil
 
-    /// Anatomical plane the lift primarily trains. Non-optional with a
-    /// `.sagittal` default — every exercise lives in some plane and
-    /// most live here. Stored as raw value so `MovementPlane` can
-    /// evolve without breaking the schema. Additive defaulted field,
-    /// so no migration for existing catalogs.
-    var planeRaw: String = MovementPlane.sagittal.rawValue
+    /// Canonical plane components. Every compiled record has one or
+    /// more values. The catalog-v2 cutover uses a fresh pre-production
+    /// store rather than preserving the retired singular representation.
+    var planeRaws: [String] = [MovementPlane.sagittal.rawValue]
 
     /// Bilateral (both sides at once) vs. unilateral (one side at a
     /// time). Non-optional with a `.bilateral` default. Additive
@@ -394,9 +386,19 @@ final class ExerciseCatalogItem: Identifiable {
         return CatalogData.record(forCatalogID: catalogID)?.searchPriorityValue ?? 0
     }
 
-    var plane: MovementPlane {
-        get { MovementPlane(rawValue: planeRaw) ?? .sagittal }
-        set { planeRaw = newValue.rawValue }
+    var planes: [MovementPlane] {
+        get {
+            let decoded = planeRaws.compactMap(MovementPlane.init(rawValue:))
+            guard !decoded.isEmpty, decoded.count == planeRaws.count else {
+                return [.sagittal]
+            }
+            return MovementPlane.canonicalized(decoded)
+        }
+        set {
+            let canonical = MovementPlane.canonicalized(newValue)
+            let resolved = canonical.isEmpty ? [.sagittal] : canonical
+            planeRaws = resolved.map(\.rawValue)
+        }
     }
 
     var laterality: Laterality {
@@ -413,16 +415,14 @@ final class ExerciseCatalogItem: Identifiable {
             mechanic: mechanic,
             pattern: pattern,
             direction: direction,
-            plane: plane,
+            planes: planes,
             laterality: laterality
         )
     }
 
     /// Muscles worked by categorical role — a pure decode of the
-    /// authored snapshot. Undecodable legacy snapshots are rewritten
-    /// once at launch by `InvolvementSnapshotRepair`; custom items stay
-    /// explicit and never fabricate anatomy from a bundled name or
-    /// browse group.
+    /// authored canonical snapshot. Custom items stay explicit and
+    /// never fabricate anatomy from a bundled name or browse group.
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
@@ -430,6 +430,7 @@ final class ExerciseCatalogItem: Identifiable {
     init(
         id: UUID = UUID(),
         catalogID: String? = nil,
+        familyID: String? = nil,
         name: String,
         group: MuscleGroup,
         defaultWeight: Double,
@@ -444,7 +445,7 @@ final class ExerciseCatalogItem: Identifiable {
         mechanic: Mechanic = .compound,
         pattern: MovementPattern? = nil,
         direction: PushPullDirection? = nil,
-        plane: MovementPlane = .sagittal,
+        planes: [MovementPlane] = [.sagittal],
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
         movementDefinition: String = "",
@@ -454,6 +455,7 @@ final class ExerciseCatalogItem: Identifiable {
     ) {
         self.id = id
         self.catalogID = catalogID
+        self.familyID = familyID
         self.name = name
         self.muscleGroupRaw = group.rawValue
         self.defaultWeight = defaultWeight
@@ -470,7 +472,9 @@ final class ExerciseCatalogItem: Identifiable {
         self.directionRaw = (mechanic == .compound && (pattern == .push || pattern == .pull))
             ? direction?.rawValue
             : nil
-        self.planeRaw = plane.rawValue
+        let canonicalPlanes = MovementPlane.canonicalized(planes)
+        let resolvedPlanes = canonicalPlanes.isEmpty ? [.sagittal] : canonicalPlanes
+        self.planeRaws = resolvedPlanes.map(\.rawValue)
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
         self.movementDefinition = movementDefinition
@@ -483,12 +487,25 @@ final class ExerciseCatalogItem: Identifiable {
 // MARK: - Seeding
 
 extension ExerciseCatalogItem {
+    private static func insertBundledCatalog(in context: ModelContext) {
+        let base = Date()
+        for (index, record) in CatalogData.records.enumerated() {
+            context.insert(
+                ExerciseCatalogItem(
+                    record: record,
+                    createdAt: base.addingTimeInterval(Double(index) * 0.001)
+                )
+            )
+        }
+    }
+
     /// Build a catalog item from a decoded `CatalogRecord`. The starter
     /// catalog ships in `catalog.json` (see `CatalogData`); seeding just
     /// mirrors each record into a `@Model` instance the user can edit.
     convenience init(record: CatalogRecord, createdAt: Date) {
         self.init(
             catalogID: record.catalogID,
+            familyID: record.familyID,
             name: record.name,
             group: record.muscleGroup,
             defaultWeight: record.defaultWeightValue,
@@ -503,7 +520,7 @@ extension ExerciseCatalogItem {
             mechanic: record.mechanicValue,
             pattern: record.patternValue,
             direction: record.directionValue,
-            plane: record.planeValue,
+            planes: record.planeValues,
             laterality: record.lateralityValue,
             aliases: record.aliasesValue,
             movementDefinition: record.movementDefinition,
@@ -526,14 +543,7 @@ extension ExerciseCatalogItem {
         // preserved when we tie-break by date — otherwise every item
         // shares the same timestamp and falls back to arbitrary
         // FetchDescriptor ordering.
-        let base = Date()
-        for (i, record) in CatalogData.records.enumerated() {
-            let item = ExerciseCatalogItem(
-                record: record,
-                createdAt: base.addingTimeInterval(Double(i) * 0.001)
-            )
-            context.insert(item)
-        }
+        insertBundledCatalog(in: context)
         try? context.saveOrRollback()
     }
 

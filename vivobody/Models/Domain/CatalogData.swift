@@ -3,10 +3,10 @@
 //  vivobody
 //
 //  Strict decoder and validator for the bundled exercise catalog.
-//  catalog.json is authored by Scripts/curate.py and is a build-time
-//  contract: malformed enums, missing required biomechanics fields,
-//  duplicate stable IDs, or ambiguous names fail loudly rather than
-//  acquiring silent defaults.
+//  catalog.json is deterministically compiled from specs/catalog-v2
+//  by Scripts/catalog_v2.py. It is a build-time contract: malformed
+//  enums, missing required biomechanics fields, duplicate stable IDs,
+//  or ambiguous names fail loudly rather than acquiring silent defaults.
 //
 
 import Foundation
@@ -21,6 +21,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
         let role: MuscleRole
     }
 
+    let familyID: String
     let catalogID: String
     let name: String
     let group: MuscleGroup
@@ -33,7 +34,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let mechanic: Mechanic
     let pattern: MovementPattern?
     let direction: PushPullDirection?
-    let plane: MovementPlane
+    let planes: [MovementPlane]
     let laterality: Laterality
     let aliases: [String]
     /// Sparse editorial prior for broad in-app and Spotlight searches.
@@ -57,7 +58,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     var mechanicValue: Mechanic { mechanic }
     var patternValue: MovementPattern? { pattern }
     var directionValue: PushPullDirection? { direction }
-    var planeValue: MovementPlane { plane }
+    var planeValues: [MovementPlane] { planes }
     var lateralityValue: Laterality { laterality }
     var aliasesValue: [String] { aliases }
     var searchPriorityValue: Int { searchPriority ?? 0 }
@@ -75,7 +76,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
             mechanic: mechanic,
             pattern: pattern,
             direction: direction,
-            plane: plane,
+            planes: planes,
             laterality: laterality
         )
     }
@@ -145,6 +146,9 @@ nonisolated enum CatalogData {
         for record in records {
             guard isStableCatalogID(record.catalogID) else {
                 throw ValidationError.invalidCatalogID(record.catalogID)
+            }
+            guard isStableCatalogID(record.familyID) else {
+                throw ValidationError.invalidFamilyID(record.familyID)
             }
             guard catalogIDs.insert(record.catalogID).inserted else {
                 throw ValidationError.duplicateCatalogID(record.catalogID)
@@ -263,6 +267,11 @@ nonisolated enum CatalogData {
             guard isPushPull == (record.direction != nil) else {
                 throw ValidationError.invalidDirection(record.catalogID)
             }
+            guard !record.planes.isEmpty,
+                  Set(record.planes).count == record.planes.count
+            else {
+                throw ValidationError.invalidPlanes(record.catalogID)
+            }
 
             for alias in record.aliases {
                 let normalizedAlias = normalized(alias)
@@ -302,6 +311,7 @@ nonisolated enum CatalogData {
     enum ValidationError: Error, Equatable, CustomStringConvertible {
         case emptyCatalog
         case invalidCatalogID(String)
+        case invalidFamilyID(String)
         case duplicateCatalogID(String)
         case emptyName(String)
         case duplicateName(String)
@@ -322,6 +332,7 @@ nonisolated enum CatalogData {
         case missingPrimary(String)
         case primaryGroupMismatch(String)
         case invalidDirection(String)
+        case invalidPlanes(String)
         case aliasConflictsWithName(String)
         case duplicateAlias(String)
 
@@ -329,6 +340,7 @@ nonisolated enum CatalogData {
             switch self {
             case .emptyCatalog: return "catalog contains no records"
             case .invalidCatalogID(let id): return "invalid catalogID '\(id)'"
+            case .invalidFamilyID(let id): return "invalid familyID '\(id)'"
             case .duplicateCatalogID(let id): return "duplicate catalogID '\(id)'"
             case .emptyName(let id): return "record '\(id)' has an empty name"
             case .duplicateName(let name): return "duplicate exercise name '\(name)'"
@@ -349,6 +361,7 @@ nonisolated enum CatalogData {
             case .missingPrimary(let id): return "strength/power record '\(id)' has no primary muscle"
             case .primaryGroupMismatch(let id): return "strength/power record '\(id)' group has no matching primary muscle"
             case .invalidDirection(let id): return "record '\(id)' has inconsistent push/pull direction"
+            case .invalidPlanes(let id): return "record '\(id)' has invalid movement planes"
             case .aliasConflictsWithName(let alias): return "alias '\(alias)' conflicts with a canonical name"
             case .duplicateAlias(let alias): return "duplicate alias '\(alias)'"
             }

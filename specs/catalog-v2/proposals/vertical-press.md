@@ -159,8 +159,8 @@ previously unowned FDP mesh and raised the current count to 62. The
 whole-muscle profile deliberately omits
 shoulder flexion: Ackland's flexion result distinguishes anterior and posterior
 supraspinatus subregions, but this taxonomy does not. The active vertical-press
-contract resolves its role as required secondary. The later atomic app cutover
-must add the matching Swift/domain case and preserve its no-mesh behavior.
+contract resolves its role as required secondary. The completed atomic app
+cutover added the matching Swift/domain case and preserves its no-mesh behavior.
 
 ## Initial scope and exclusions
 

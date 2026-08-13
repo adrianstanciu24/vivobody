@@ -89,6 +89,10 @@ nonisolated struct AnalyticsSessionSnapshot: Sendable {
 /// background work never consults the mutable catalog or model graph.
 nonisolated struct AnalyticsExerciseSnapshot: Sendable {
     let catalogID: String?
+    /// Stable family identity for future family-level reporting. Exercise
+    /// history continues to key by `catalogID` because variants within one
+    /// family are not performance-interchangeable.
+    let familyID: String?
     let catalogItemID: UUID?
     let name: String
     let group: MuscleGroup
@@ -114,6 +118,7 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
     @MainActor
     init(_ exercise: Exercise, bodyweightAtSession: Double) {
         catalogID = exercise.catalogID
+        familyID = exercise.familyID
         catalogItemID = exercise.catalogItemID
         name = exercise.name
         group = exercise.group
@@ -141,9 +146,11 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
         historyKey: String,
         classification: ExerciseClassification?,
         volumeCredits: [Muscle: Double],
-        sets: [AnalyticsSetSnapshot]
+        sets: [AnalyticsSetSnapshot],
+        familyID: String? = nil
     ) {
         self.catalogID = catalogID
+        self.familyID = familyID
         self.catalogItemID = catalogItemID
         self.name = name
         self.group = group

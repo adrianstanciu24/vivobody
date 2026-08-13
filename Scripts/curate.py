@@ -3,25 +3,9 @@
 #  curate.py
 #  vivobody
 #
-#  Self-contained compiler for the shipped exercise catalog.
-#
-#  CURATION below owns the canonical exercise roster plus classification and
-#  defaults. specs/exercise-anatomy-review.csv owns reviewed categorical muscle
-#  roles. specs/exercise-definitions.csv owns immutable IDs, exact-name movement
-#  definitions, and definition provenance. Together these tracked files are the
-#  complete source; generation never imports or decodes an external roster.
-#
-#  The pipeline is:
-#      python3 Scripts/curate.py           # rebuild catalog.json from scratch
-#      python3 Scripts/curate.py --check   # verify the checked-in output is current
-#
-#  CURATION is normalized by the explicit duplicate-merge, canonical-rename,
-#  and retirement tables below before anything ships. To add an exercise,
-#  author its final canonical name in all three tracked sources. Every output
-#  record is built fresh, so obsolete keys or deleted records cannot survive
-#  from the previous catalog. Everything is validated against the app enums,
-#  so a typo'd muscle, equipment, movement direction, or other contract value
-#  fails loudly.
+#  RETIRED: this legacy curation source is kept only as historical reference.
+#  It is hard-disabled below and cannot read, check, or write catalog.json.
+#  Use Scripts/catalog_v2.py, the sole canonical compiler.
 #
 
 import csv
@@ -2252,6 +2236,14 @@ def validate(name, body):
 
 
 def main():
+    raise SystemExit(
+        "Scripts/curate.py is retired and cannot write catalog.json; "
+        "use `python3 Scripts/catalog_v2.py --emit-runtime`."
+    )
+
+    # Historical implementation retained below for provenance only. This code
+    # is deliberately unreachable so the legacy roster cannot become runtime
+    # input again by accident.
     args = set(sys.argv[1:])
     unknown = args - {"--check"}
     if unknown:

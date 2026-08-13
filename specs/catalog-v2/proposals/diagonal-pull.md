@@ -850,11 +850,10 @@ The family is ready for activation only after all of these are settled:
 14. **Phase semantics:** assert the flat prime/forbidden action lists only as
     the canonical concentric signature; do not promise an eccentric mutation
     or phase condition the schema cannot encode.
-15. **Runtime remains separate:** this discovery does not cut catalog-v2 into
-    Swift. The later atomic cutover still has to replace the coarse runtime
-    muscle taxonomy with the current 41-region taxonomy; add `familyID`, the `diagonal`
-    direction, and multi-plane representation; compile/emit the family sources;
-    and update persisted classification plus editor surfaces atomically.
+15. **Historical runtime boundary:** this discovery itself did not cut the
+    catalog into Swift. The later atomic cutover is now complete: runtime uses
+    the final 52-region taxonomy, `familyID`, diagonal direction, multi-plane
+    snapshots, deterministic family compilation, and matching editor surfaces.
 
 The public-source geometry review is complete and failed. The correct next
 action is the tracked physical/CAD measurement protocol, not family activation.

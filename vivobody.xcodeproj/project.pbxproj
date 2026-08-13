@@ -176,6 +176,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 781FC1C62FBB8CC200EE0477 /* Build configuration list for PBXNativeTarget "vivobody" */;
 			buildPhases = (
+				C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */,
 				781FC19E2FBB8CC000EE0477 /* Sources */,
 				781FC19F2FBB8CC000EE0477 /* Frameworks */,
 				781FC1A02FBB8CC000EE0477 /* Resources */,
@@ -347,6 +348,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"$(SRCROOT)/Scripts/catalog-v2-inputs.xcfilelist",
+			);
+			inputPaths = (
+				"$(SRCROOT)/Scripts/catalog-v2-inputs.xcfilelist",
+				"$(SRCROOT)/specs/catalog-v2/families",
+			);
+			name = "Verify Canonical Catalog";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/catalog-v2-check.stamp",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n# The family directory catches roster additions/removals; the generated file\n# list gives the sandbox exact read access and is parity-checked by Python.\ncd \"$SRCROOT\"\n/usr/bin/python3 Scripts/catalog_v2.py --check\ntouch \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6B32D2D5CE894911A542B070 /* Sources */ = {

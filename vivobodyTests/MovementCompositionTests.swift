@@ -45,7 +45,7 @@ struct MovementCompositionTests {
 
     private func hold(seconds: [TimeInterval]) -> Exercise {
         let ex = Exercise(
-            name: "Plank",
+            name: "Stable Forearm Plank",
             group: .core,
             plannedSets: 0,
             plannedWeight: 0,
@@ -61,10 +61,9 @@ struct MovementCompositionTests {
     // MARK: - Classification + counting
 
     @Test func countsCompoundAndIsolationSets() {
-        // "Bench Press" = compound; "Leg Curl" = isolation (verified
-        // in the bundled catalog).
-        let bench = lift("Bench Press", .chest, [(8, true), (8, true)])
-        let curl = lift("Leg Curl", .legs, [(12, true), (12, true), (12, true)])
+        // These are canonical names in the bundled family catalog.
+        let bench = lift("Barbell Bench Press", .chest, [(8, true), (8, true)])
+        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true), (12, true), (12, true)])
         let split = [session(daysAgo: 1, [bench, curl])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 2)
         #expect(split.isolationSets == 3)
@@ -76,7 +75,7 @@ struct MovementCompositionTests {
     // MARK: - Exclusions
 
     @Test func ignoresIncompleteAndUnloggedSets() {
-        let ex = lift("Bench Press", .chest, [(8, true), (8, false), (0, true), (8, true)])
+        let ex = lift("Barbell Bench Press", .chest, [(8, true), (8, false), (0, true), (8, true)])
         let split = [session(daysAgo: 1, [ex])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 2)
         #expect(split.classifiedTotal == 2)
@@ -88,13 +87,13 @@ struct MovementCompositionTests {
         let split = [session(daysAgo: 1, [plank])].compoundIsolationSplit(now: now)
 
         #expect(split.hasData)
-        #expect(split.isolationSets == 1)
+        #expect(split.compoundSets == 1)
         #expect(split.classifiedTotal == 1)
         #expect(split.unclassifiedSets == 0)
     }
 
     @Test func ignoresConditioningAndMobilitySets() {
-        let bench = lift("Bench Press", .chest, [(8, true)])
+        let bench = lift("Barbell Bench Press", .chest, [(8, true)])
         let conditioning = lift(
             "Burpee",
             .chest,
@@ -116,16 +115,16 @@ struct MovementCompositionTests {
     }
 
     @Test func respectsTheWindow() {
-        let recent = session(daysAgo: 3, [lift("Bench Press", .chest, [(8, true)])])
-        let old = session(daysAgo: 40, [lift("Bench Press", .chest, [(8, true), (8, true)])])
+        let recent = session(daysAgo: 3, [lift("Barbell Bench Press", .chest, [(8, true)])])
+        let old = session(daysAgo: 40, [lift("Barbell Bench Press", .chest, [(8, true), (8, true)])])
         let split = [recent, old].compoundIsolationSplit(now: now) // default 28d window
         #expect(split.compoundSets == 1)
         #expect(split.isolationSets == 0)
     }
 
     @Test func ignoresFutureSessions() {
-        let recent = session(daysAgo: 1, [lift("Bench Press", .chest, [(8, true)])])
-        let future = session(daysAgo: -1, [lift("Leg Curl", .legs, [(12, true)])])
+        let recent = session(daysAgo: 1, [lift("Barbell Bench Press", .chest, [(8, true)])])
+        let future = session(daysAgo: -1, [lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])])
         let split = [recent, future].compoundIsolationSplit(now: now)
 
         #expect(split.compoundSets == 1)
@@ -135,7 +134,7 @@ struct MovementCompositionTests {
     // MARK: - Unclassified
 
     @Test func unclassifiedBucketedSeparatelyAndExcludedFromShares() {
-        let bench = lift("Bench Press", .chest, [(8, true)])              // compound, 1
+        let bench = lift("Barbell Bench Press", .chest, [(8, true)])      // compound, 1
         let custom = lift("My Weird Lift", .chest, [(8, true), (8, true)]) // unclassified, 2
         let split = [session(daysAgo: 1, [bench, custom])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 1)
@@ -151,8 +150,8 @@ struct MovementCompositionTests {
     // MARK: - Dominant + shares
 
     @Test func dominantTieResolvesTowardCompound() {
-        let bench = lift("Bench Press", .chest, [(8, true)])   // compound, 1
-        let curl = lift("Leg Curl", .legs, [(12, true)])       // isolation, 1
+        let bench = lift("Barbell Bench Press", .chest, [(8, true)])                    // compound, 1
+        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])      // isolation, 1
         let split = [session(daysAgo: 1, [bench, curl])].compoundIsolationSplit(now: now)
         #expect(split.compoundSets == 1)
         #expect(split.isolationSets == 1)
@@ -160,8 +159,8 @@ struct MovementCompositionTests {
     }
 
     @Test func sharesComputedOverClassifiedTotalOnly() {
-        let bench = lift("Bench Press", .chest, [(8, true), (8, true)])        // compound, 2
-        let curl = lift("Leg Curl", .legs, [(12, true)])                       // isolation, 1
+        let bench = lift("Barbell Bench Press", .chest, [(8, true), (8, true)])          // compound, 2
+        let curl = lift("Seated Unilateral Machine Leg Curl", .legs, [(12, true)])       // isolation, 1
         let custom = lift("My Weird Lift", .chest, [(8, true), (8, true), (8, true)]) // unclassified, 3
         let split = [session(daysAgo: 1, [bench, curl, custom])].compoundIsolationSplit(now: now)
         #expect(split.classifiedTotal == 3)

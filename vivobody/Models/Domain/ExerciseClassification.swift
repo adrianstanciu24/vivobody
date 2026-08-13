@@ -4,7 +4,7 @@
 //
 //  Movement metadata shared by catalog items, template exercises, and
 //  logged exercises: equipment, mechanic, pattern, push/pull direction,
-//  plane, and laterality. Catalog picks snapshot their classification
+//  planes, and laterality. Catalog picks snapshot their classification
 //  into templates and sessions so custom or renamed exercises remain
 //  classifiable. Rows constructed directly from a bundled canonical name
 //  can still resolve that catalog classification, while unknown names do
@@ -172,7 +172,9 @@ nonisolated struct ExerciseClassification: Hashable, Sendable {
     let pattern: MovementPattern?
     /// Optional — only push/pull patterns have a direction.
     let direction: PushPullDirection?
-    let plane: MovementPlane
+    /// One or more cardinal anatomical planes authored by the family.
+    /// Order is canonical and stable for display/snapshot equality.
+    let planes: [MovementPlane]
     let laterality: Laterality
 
     nonisolated init(
@@ -180,14 +182,14 @@ nonisolated struct ExerciseClassification: Hashable, Sendable {
         mechanic: Mechanic,
         pattern: MovementPattern?,
         direction: PushPullDirection?,
-        plane: MovementPlane,
+        planes: [MovementPlane],
         laterality: Laterality
     ) {
         self.equipment = equipment
         self.mechanic = mechanic
         self.pattern = pattern
         self.direction = direction
-        self.plane = plane
+        self.planes = MovementPlane.canonicalized(planes)
         self.laterality = laterality
     }
 }
@@ -201,7 +203,7 @@ extension ExerciseClassification {
         mechanicRaw: String?,
         patternRaw: String?,
         directionRaw: String?,
-        planeRaw: String?,
+        planeRaws: [String],
         lateralityRaw: String?
     ) {
         guard
@@ -209,8 +211,6 @@ extension ExerciseClassification {
             let equipment = Equipment(rawValue: equipmentRaw),
             let mechanicRaw,
             let mechanic = Mechanic(rawValue: mechanicRaw),
-            let planeRaw,
-            let plane = MovementPlane(rawValue: planeRaw),
             let lateralityRaw,
             let laterality = Laterality(rawValue: lateralityRaw)
         else {
@@ -233,12 +233,18 @@ extension ExerciseClassification {
             direction = nil
         }
 
+        let planes = planeRaws.compactMap(MovementPlane.init(rawValue:))
+        guard !planes.isEmpty,
+              planes.count == planeRaws.count,
+              Set(planes).count == planes.count
+        else { return nil }
+
         self.init(
             equipment: equipment,
             mechanic: mechanic,
             pattern: pattern,
             direction: direction,
-            plane: plane,
+            planes: planes,
             laterality: laterality
         )
     }

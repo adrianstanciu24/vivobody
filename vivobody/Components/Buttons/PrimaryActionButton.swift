@@ -68,7 +68,6 @@ struct PrimaryActionButton: View {
                     }
                     Text(title)
                         .font(Typography.title)
-                        .tracking(0.4)
                         .foregroundStyle(Tint.onAccent)
                 }
 

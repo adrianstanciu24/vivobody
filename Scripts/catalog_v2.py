@@ -4,13 +4,14 @@
 #  vivobody
 #
 #  Foundation validator for the clean-slate, family-first exercise catalog.
-#  It owns no legacy compatibility and never reads curate.py, its review CSVs,
-#  or the shipped catalog.json. It validates the canonical 52-region taxonomy,
+#  It owns no legacy compatibility and never reads curate.py or its review CSVs
+#  as inputs. It validates the canonical 52-region taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
 #  references, and every reviewed movement-family contract. The 52-region
 #  taxonomy keeps action-divergent lower-body muscles separate wherever the
-#  scene can represent the distinction. The atomic cutover will extend this
-#  file into the deterministic catalog compiler.
+#  scene can represent the distinction. This is the sole deterministic writer
+#  for the app's bundled runtime catalog; check mode reads that generated
+#  artifact only to prove exact compiler parity.
 #
 
 from __future__ import annotations
@@ -21,9 +22,10 @@ import json
 import plistlib
 import re
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Optional
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +37,11 @@ FAMILY_SCHEMA_PATH = SPEC_ROOT / "family.schema.json"
 FAMILY_FIXTURE_PATH = SPEC_ROOT / "fixtures" / "valid-family.json"
 FAMILIES_ROOT = SPEC_ROOT / "families"
 BODY_MODEL_PATH = ROOT / "vivobody" / "Resources" / "BodyModel.scn"
+CANONICAL_RUNTIME_CATALOG_PATH = (
+    ROOT / "vivobody" / "Resources" / "catalog.json"
+)
+RUNTIME_CATALOG_PATH = CANONICAL_RUNTIME_CATALOG_PATH
+XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-v2-inputs.xcfilelist"
 
 SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
@@ -170,7 +177,7 @@ RULE_NUMERIC_FIELDS = {
     "bodyweightFraction": (0, 1),
 }
 
-ActionRequirement = tuple[str, str | None]
+ActionRequirement = tuple[str, Optional[str]]
 
 STABLE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SYMBOL_ID = re.compile(r"^[a-z][A-Za-z0-9]*$")
@@ -211,14 +218,21 @@ def require(condition: bool, message: str) -> None:
         fail(message)
 
 
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def load_json(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        fail(f"missing JSON source: {path.relative_to(ROOT)}")
+        fail(f"missing JSON source: {display_path(path)}")
     except json.JSONDecodeError as error:
-        fail(f"invalid JSON in {path.relative_to(ROOT)}: {error}")
-    require(isinstance(value, dict), f"{path.relative_to(ROOT)} must contain a JSON object")
+        fail(f"invalid JSON in {display_path(path)}: {error}")
+    require(isinstance(value, dict), f"{display_path(path)} must contain a JSON object")
     return value
 
 
@@ -356,7 +370,7 @@ def scene_strings(path: Path) -> set[str]:
     try:
         root = plistlib.loads(path.read_bytes())
     except (FileNotFoundError, plistlib.InvalidFileException) as error:
-        fail(f"cannot decode SceneKit asset {path.relative_to(ROOT)}: {error}")
+        fail(f"cannot decode SceneKit asset {display_path(path)}: {error}")
 
     strings: set[str] = set()
 
@@ -1990,16 +2004,147 @@ def canonical_foundation_digest(foundation: Foundation) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Project validated family sources into the app's runtime catalog shape.
+
+    The compiler intentionally consumes only catalog-v2 family contracts. It
+    never reads the retired runtime catalog or any legacy curation input.
+    Family file order is deterministic and exercise order remains authored.
+    """
+    records: list[dict[str, Any]] = []
+    canonical_planes = ("sagittal", "frontal", "transverse")
+    for family in sorted(families, key=lambda value: value["id"]):
+        fixed = family["fixed"]
+        group_default = family["groupPolicy"]["default"]
+        for exercise in family["exercises"]:
+            record: dict[str, Any] = {
+                "familyID": family["id"],
+                "catalogID": exercise["catalogID"],
+                "name": exercise["name"],
+                "group": exercise.get("groupOverride", group_default),
+                "defaultWeight": exercise["defaultWeight"],
+            }
+            if "defaultWeightKg" in exercise:
+                record["defaultWeightKg"] = exercise["defaultWeightKg"]
+            record.update(
+                {
+                    "reps": exercise["reps"],
+                    "trackingMode": exercise["trackingMode"],
+                }
+            )
+            if "defaultDuration" in exercise:
+                record["defaultDuration"] = exercise["defaultDuration"]
+            record.update(
+                {
+                    "equipment": exercise["equipment"],
+                    "mechanic": fixed["mechanic"],
+                    "pattern": fixed["pattern"],
+                    "direction": fixed["direction"],
+                    "planes": [
+                        plane for plane in canonical_planes if plane in fixed["planes"]
+                    ],
+                    "laterality": exercise["laterality"],
+                    "aliases": exercise["aliases"],
+                }
+            )
+            if "searchPriority" in exercise:
+                record["searchPriority"] = exercise["searchPriority"]
+            record.update(
+                {
+                    "bodyweightFraction": exercise["bodyweightFraction"],
+                    "modality": exercise["modality"],
+                    "loadMode": exercise["loadMode"],
+                    "movementDefinition": exercise["movementDefinition"],
+                    "involvement": exercise["involvement"],
+                }
+            )
+            records.append(record)
+    return records
+
+
+def encoded_runtime_catalog(records: Iterable[dict[str, Any]]) -> str:
+    return json.dumps(
+        list(records),
+        ensure_ascii=False,
+        indent=2,
+    ) + "\n"
+
+
+def write_text_atomically(path: Path, contents: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary.write(contents)
+            temporary_path = Path(temporary.name)
+        temporary_path.chmod(0o644)
+        temporary_path.replace(path)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+
+
+def write_runtime_catalog_atomically(contents: str) -> None:
+    write_text_atomically(RUNTIME_CATALOG_PATH, contents)
+
+
 def discovered_family_paths() -> list[Path]:
     return sorted(FAMILIES_ROOT.glob("*.json"))
 
 
+def encoded_xcode_input_file_list(family_paths: Iterable[Path]) -> str:
+    paths = [
+        ROOT / "Scripts" / "catalog_v2.py",
+        TAXONOMY_PATH,
+        JOINT_ACTIONS_PATH,
+        EVIDENCE_PATH,
+        FAMILY_SCHEMA_PATH,
+        FAMILY_FIXTURE_PATH,
+        *family_paths,
+        BODY_MODEL_PATH,
+        CANONICAL_RUNTIME_CATALOG_PATH,
+    ]
+    return "".join(
+        f"$(SRCROOT)/{path.relative_to(ROOT)}\n"
+        for path in paths
+    )
+
+
+def validate_xcode_input_file_list(family_paths: Iterable[Path]) -> None:
+    require(
+        XCODE_INPUT_FILE_LIST_PATH.exists(),
+        "Xcode catalog sandbox allowlist is missing",
+    )
+    require(
+        XCODE_INPUT_FILE_LIST_PATH.read_text(encoding="utf-8")
+        == encoded_xcode_input_file_list(family_paths),
+        "Xcode catalog sandbox allowlist differs from compiler inputs; "
+        "run --emit-runtime",
+    )
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate the isolated catalog-v2 foundation and movement families.")
-    parser.add_argument(
+    parser = argparse.ArgumentParser(
+        description="Validate and compile the canonical family-first exercise catalog."
+    )
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--check",
         action="store_true",
-        help="Validate tracked sources without writing output (currently the default and only mode).",
+        help="Validate sources and fail if the bundled runtime output is stale.",
+    )
+    mode.add_argument(
+        "--emit-runtime",
+        action="store_true",
+        help="Write the deterministic app runtime catalog after validation.",
     )
     parser.add_argument(
         "--family",
@@ -2012,12 +2157,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv or sys.argv[1:])
+    args = parse_args(sys.argv[1:] if argv is None else argv)
     try:
         foundation = validate_foundation()
-        family_paths = [FAMILY_FIXTURE_PATH, *discovered_family_paths(), *args.family]
+        discovered_paths = discovered_family_paths()
+        if args.check:
+            validate_xcode_input_file_list(discovered_paths)
+        discovered_resolved = {path.resolve() for path in discovered_paths}
+        family_paths = [FAMILY_FIXTURE_PATH, *discovered_paths, *args.family]
         warnings: list[str] = []
         real_families: list[dict[str, Any]] = []
+        runtime_families: list[dict[str, Any]] = []
         validated_paths: set[Path] = set()
         for path in family_paths:
             resolved = path if path.is_absolute() else ROOT / path
@@ -2026,12 +2176,34 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             validated_paths.add(resolved)
             family = load_json(resolved)
-            warnings.extend(validate_family(family, foundation, str(resolved.relative_to(ROOT))))
+            context = display_path(resolved)
+            warnings.extend(validate_family(family, foundation, context))
             if resolved != FAMILY_FIXTURE_PATH.resolve():
                 real_families.append(family)
+            if resolved in discovered_resolved:
+                runtime_families.append(family)
 
         validate_family_set(real_families)
         validate_evidence_coverage(foundation, real_families)
+
+        runtime_catalog = encoded_runtime_catalog(
+            compile_runtime_catalog(runtime_families)
+        )
+        if args.emit_runtime:
+            write_runtime_catalog_atomically(runtime_catalog)
+            write_text_atomically(
+                XCODE_INPUT_FILE_LIST_PATH,
+                encoded_xcode_input_file_list(discovered_paths),
+            )
+        elif args.check:
+            require(
+                RUNTIME_CATALOG_PATH.exists(),
+                "bundled runtime catalog is missing",
+            )
+            require(
+                RUNTIME_CATALOG_PATH.read_text(encoding="utf-8") == runtime_catalog,
+                "bundled runtime catalog differs from catalog-v2 compiler output",
+            )
 
         digest = canonical_foundation_digest(foundation)
         print(

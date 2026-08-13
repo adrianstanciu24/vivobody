@@ -58,7 +58,6 @@ private struct PrimaryButtonContent: View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         configuration.label
             .font(compact ? Typography.headline : Typography.title)
-            .tracking(0.4)
             .foregroundStyle(Tint.onAccent)
             .padding(.horizontal, compact ? Space.xl : Space.xxl)
             .padding(.vertical, compact ? Space.md : Space.xl)

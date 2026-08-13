@@ -26,6 +26,7 @@ final class SessionAnalytics {
     /// background worker.
     nonisolated struct CoreReports: Sendable {
         let volume: [MuscleVolumeStat]
+        let groupVolume: [MuscleGroup: Double]
         let development: MuscleDevelopment.State
         let muscleMap: MuscleMapReport
         let strength: StrengthOutlookBoard
@@ -52,6 +53,7 @@ final class SessionAnalytics {
             let consistency = common.consistency(now: now)
             return CoreReports(
                 volume: volume,
+                groupVolume: common.allTimeMuscleGroupVolume(now: now),
                 development: development,
                 muscleMap: MuscleMapReport.compute(
                     accumulator: common,
@@ -510,6 +512,7 @@ final class SessionAnalytics {
 
         let signature = TrainingSignature(
             volume: core.volume,
+            groupVolume: core.groupVolume,
             cadence: core.overview.averageWorkoutsPerWeek
         )
         let signatureSnapshot: SignatureSnapshot
@@ -673,6 +676,7 @@ private actor AnalyticsWorker {
         try Task.checkCancellation()
         let reports = SessionAnalytics.CoreReports(
             volume: volume,
+            groupVolume: accumulator.allTimeMuscleGroupVolume(now: now),
             development: development,
             muscleMap: muscleMap,
             strength: strength,

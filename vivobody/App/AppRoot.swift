@@ -111,11 +111,6 @@ struct AppRoot: View {
                 UITestSupport.resetIfRequested(in: modelContext)
 #endif
                 ExerciseCatalogItem.seedIfEmpty(in: modelContext)
-                // One-time (generation-gated) legacy snapshot rewrite.
-                // Runs before the first analytics generation so the
-                // body/volume reports never price unrepaired rows;
-                // a normal launch pays a single UserDefaults read.
-                InvolvementSnapshotRepair.runIfNeeded(in: modelContext)
 #if DEBUG
                 UITestSupport.seedIfRequested(in: modelContext)
                 if let requestedTab = UITestSupport.requestedTab() {

@@ -118,6 +118,9 @@ final class TemplateExercise: Identifiable {
     /// Nil for user-created exercises.
     var catalogID: String? = nil
 
+    /// Stable compiled movement-family identity copied with the plan.
+    var familyID: String? = nil
+
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
@@ -135,7 +138,8 @@ final class TemplateExercise: Identifiable {
     var mechanicRaw: String? = nil
     var patternRaw: String? = nil
     var directionRaw: String? = nil
-    var planeRaw: String? = nil
+    /// Canonical one-or-more plane components copied at pick time.
+    var planeRaws: [String] = []
     var lateralityRaw: String? = nil
 
     /// How this exercise is measured — reps or a timed hold. Stored
@@ -202,8 +206,7 @@ final class TemplateExercise: Identifiable {
     }
 
     /// Valid pick-time roles remain frozen with the template — a pure
-    /// decode of the snapshot. Legacy snapshots are rewritten once at
-    /// launch by `InvolvementSnapshotRepair`, never per access.
+    /// decode of the canonical snapshot.
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
@@ -217,7 +220,7 @@ final class TemplateExercise: Identifiable {
             mechanicRaw: mechanicRaw,
             patternRaw: patternRaw,
             directionRaw: directionRaw,
-            planeRaw: planeRaw,
+            planeRaws: planeRaws,
             lateralityRaw: lateralityRaw
         ) ?? ExerciseClassification.forExerciseNamed(name)
     }
@@ -243,6 +246,7 @@ final class TemplateExercise: Identifiable {
         name: String,
         catalogItemID: UUID? = nil,
         catalogID: String? = nil,
+        familyID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -260,6 +264,7 @@ final class TemplateExercise: Identifiable {
         self.name = name
         self.catalogItemID = catalogItemID
         self.catalogID = catalogID
+        self.familyID = familyID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
@@ -269,7 +274,7 @@ final class TemplateExercise: Identifiable {
         self.mechanicRaw = classification?.mechanic.rawValue
         self.patternRaw = classification?.pattern?.rawValue
         self.directionRaw = classification?.direction?.rawValue
-        self.planeRaw = classification?.plane.rawValue
+        self.planeRaws = classification?.planes.map(\.rawValue) ?? []
         self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
         self.modalityRaw = modality.rawValue
@@ -286,6 +291,7 @@ final class TemplateExercise: Identifiable {
             name: item.name,
             catalogItemID: item.id,
             catalogID: item.catalogID,
+            familyID: item.familyID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
@@ -363,6 +369,7 @@ extension Exercise {
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
                 catalogID: templateExercise.catalogID,
+                familyID: templateExercise.familyID,
                 group: templateExercise.group,
                 plannedSets: 0,
                 plannedReps: orderedSets.first?.reps ?? templateExercise.plannedReps,
@@ -394,6 +401,7 @@ extension Exercise {
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
                 catalogID: templateExercise.catalogID,
+                familyID: templateExercise.familyID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -420,6 +428,7 @@ extension Exercise {
             name: item.name,
             catalogItemID: item.id,
             catalogID: item.catalogID,
+            familyID: item.familyID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,

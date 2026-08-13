@@ -77,7 +77,7 @@ struct ExerciseSearchTests {
     }
 
     @Test func exactCustomNameStillBeatsEditorialPriority() throws {
-        let canonicalRecord = try #require(CatalogData.record(forCatalogID: "squats"))
+        let canonicalRecord = try #require(CatalogData.record(forCatalogID: "barbell-back-squat"))
         let canonical = ExerciseCatalogItem(record: canonicalRecord, createdAt: now)
         let custom = item("Squat", group: .legs)
 

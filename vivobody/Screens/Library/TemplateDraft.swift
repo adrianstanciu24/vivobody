@@ -33,6 +33,7 @@ struct ExerciseDraft: Identifiable, Hashable {
     var name: String
     var catalogItemID: UUID?
     var catalogID: String?
+    var familyID: String?
     var group: MuscleGroup
 
     // Uniform fields — used when isPerSet == false. Always retained
@@ -84,6 +85,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         name: String,
         catalogItemID: UUID? = nil,
         catalogID: String? = nil,
+        familyID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -103,6 +105,7 @@ struct ExerciseDraft: Identifiable, Hashable {
         self.name = name
         self.catalogItemID = catalogItemID
         self.catalogID = catalogID
+        self.familyID = familyID
         self.group = group
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
@@ -151,6 +154,7 @@ extension ExerciseDraft {
             name: item.name,
             catalogItemID: item.id,
             catalogID: item.catalogID,
+            familyID: item.familyID,
             group: item.group,
             plannedSets: 3,
             plannedReps: item.defaultReps,
@@ -178,6 +182,7 @@ extension ExerciseDraft {
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
                 catalogID: templateExercise.catalogID,
+                familyID: templateExercise.familyID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -200,6 +205,7 @@ extension ExerciseDraft {
                 name: templateExercise.name,
                 catalogItemID: templateExercise.catalogItemID,
                 catalogID: templateExercise.catalogID,
+                familyID: templateExercise.familyID,
                 group: templateExercise.group,
                 plannedSets: templateExercise.plannedSets,
                 plannedReps: templateExercise.plannedReps,
@@ -231,6 +237,7 @@ extension ExerciseDraft {
             name: name,
             catalogItemID: catalogItemID,
             catalogID: catalogID,
+            familyID: familyID,
             group: group,
             plannedSets: fallbackCount,
             plannedReps: fallbackReps,

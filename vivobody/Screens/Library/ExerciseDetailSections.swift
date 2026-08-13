@@ -146,7 +146,7 @@ extension ExerciseDetailScreen {
             parts.append(movementLabel)
         }
         parts.append(item.mechanic.displayName)
-        parts.append(item.plane.displayName)
+        parts.append(item.planes.map(\.displayName).joined(separator: " + "))
         if item.laterality == .unilateral {
             parts.append(item.laterality.displayName)
         }

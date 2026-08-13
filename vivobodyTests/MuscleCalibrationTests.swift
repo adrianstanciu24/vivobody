@@ -91,7 +91,7 @@ struct MuscleCalibrationTests {
     }
 
     private func chest(_ sessions: [WorkoutSession], at date: Date) -> Double {
-        MuscleDevelopment.simulate(from: sessions, now: date).adaptation(.pectorals)
+        MuscleDevelopment.simulate(from: sessions, now: date).adaptation(.pectoralisMajorSternocostal)
     }
 
     // MARK: - Distinct bands
@@ -119,12 +119,12 @@ struct MuscleCalibrationTests {
         let program = benchProgram(timesPerWeek: 2, sets: 6, weeks: 12)
         let state = MuscleDevelopment.simulate(from: program, now: program.last!.completedAt!)
 
-        let chest = state.adaptation(.pectorals)
-        let delts = state.adaptation(.deltoids)
+        let chest = state.adaptation(.pectoralisMajorSternocostal)
+        let delts = state.adaptation(.deltoidAnterior)
 
         #expect(delts > 0)                    // assistor credit registers
         #expect(chest > delts + 0.1)          // ...but reads clearly dimmer
-        #expect(state.adaptation(.quads) == 0) // untouched stays dark
+        #expect(state.adaptation(.vasti) == 0) // untouched stays dark
     }
 
     // MARK: - Effort honesty (RIR, the one discount)

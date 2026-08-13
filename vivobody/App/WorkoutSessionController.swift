@@ -151,7 +151,14 @@ final class WorkoutSessionController {
             sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
         )
         descriptor.fetchLimit = 1
-        guard let session = try? context.fetch(descriptor).first else { return }
+        guard let session = try? context.fetch(descriptor).first else {
+            // A fresh canonical store must also retire any ActivityKit state
+            // left by the pre-cutover development store. This is harmless on
+            // ordinary no-session launches because `end` sees no activities.
+            WorkoutLiveActivityController.end(for: nil)
+            WidgetSnapshotWriter.writeActiveWorkout(in: context)
+            return
+        }
         activeSession = session
         isWorkoutExpanded = false
         WorkoutLiveActivityController.start(for: session)

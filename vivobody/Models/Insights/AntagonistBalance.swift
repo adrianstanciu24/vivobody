@@ -34,6 +34,31 @@ private nonisolated enum SymmetryMovementBucket: Hashable {
     case unilateral
 }
 
+/// Glanceable comparison buckets aggregate exact regions using the
+/// strongest role credit per exercise. Summing every split region would
+/// make taxonomy granularity fabricate extra hard sets.
+private nonisolated enum SymmetryMuscleBucket: Hashable {
+    case biceps, triceps, quads, hamstrings
+    case hipAbductors, hipAdductors, calves, shins
+
+    static func bucket(for muscle: Muscle) -> SymmetryMuscleBucket? {
+        switch muscle {
+        case .bicepsBrachii, .brachialis: return .biceps
+        case .triceps: return .triceps
+        case .rectusFemoris, .vasti: return .quads
+        case .bicepsFemoris, .medialHamstrings: return .hamstrings
+        case .gluteMed: return .hipAbductors
+        case .adductorMagnus, .adductorLongusBrevis, .gracilis, .pectineus:
+            return .hipAdductors
+        case .gastrocnemius, .soleus, .flexorHallucisLongus: return .calves
+        case .tibialisAnterior, .fibularisLongusBrevis, .fibularisTertius,
+             .toeExtensors:
+            return .shins
+        default: return nil
+        }
+    }
+}
+
 // MARK: - Verdict
 
 nonisolated enum SymmetryVerdict: Hashable, Sendable {
@@ -164,9 +189,9 @@ nonisolated extension AnalyticsAccumulator {
         let cutoff = now.addingTimeInterval(
             -Double(AntagonistBoard.windowDays) * 86_400
         )
-        var muscleSets: [Muscle: Double] = [:]
+        var muscleSets: [SymmetryMuscleBucket: Double] = [:]
         var movementSets: [SymmetryMovementBucket: Double] = [:]
-        var muscleSessions: [Muscle: Set<UUID>] = [:]
+        var muscleSessions: [SymmetryMuscleBucket: Set<UUID>] = [:]
         var movementSessions: [SymmetryMovementBucket: Set<UUID>] = [:]
 
         sessionLoop: for session in sessions {
@@ -178,13 +203,18 @@ nonisolated extension AnalyticsAccumulator {
                 let stimulus = exercise.setEquivalent
                 guard session.date >= cutoff, stimulus > 0 else { continue }
 
+                var strongestCreditByBucket: [SymmetryMuscleBucket: Double] = [:]
                 for (muscle, credit) in exercise.byMuscle {
                     guard !isCancelled() else { break sessionLoop }
-                    muscleSets[muscle, default: 0] += credit
-                    if credit > 0 {
-                        muscleSessions[muscle, default: []]
-                            .insert(session.session.id)
-                    }
+                    guard let bucket = SymmetryMuscleBucket.bucket(for: muscle) else { continue }
+                    strongestCreditByBucket[bucket] = max(
+                        strongestCreditByBucket[bucket] ?? 0,
+                        credit
+                    )
+                }
+                for (bucket, credit) in strongestCreditByBucket where credit > 0 {
+                    muscleSets[bucket, default: 0] += credit
+                    muscleSessions[bucket, default: []].insert(session.session.id)
                 }
 
                 guard let classification = exercise.classification else {
@@ -228,29 +258,21 @@ nonisolated extension AnalyticsAccumulator {
             }
         }
 
-        func muscleSum(_ muscles: [Muscle]) -> Double {
-            muscles.reduce(0) { $0 + (muscleSets[$1] ?? 0) }
-        }
         func musclePair(
             _ id: String,
             _ leftLabel: String,
-            _ leftMuscles: [Muscle],
+            _ left: SymmetryMuscleBucket,
             _ rightLabel: String,
-            _ rightMuscles: [Muscle]
+            _ right: SymmetryMuscleBucket
         ) -> AntagonistPair {
-            let sessions = leftMuscles.reduce(into: Set<UUID>()) {
-                $0.formUnion(muscleSessions[$1] ?? [])
-            }.union(
-                rightMuscles.reduce(into: Set<UUID>()) {
-                    $0.formUnion(muscleSessions[$1] ?? [])
-                }
-            )
+            let sessions = (muscleSessions[left] ?? [])
+                .union(muscleSessions[right] ?? [])
             return makePair(
                 id: id,
                 leftLabel: leftLabel,
-                leftSets: muscleSum(leftMuscles),
+                leftSets: muscleSets[left] ?? 0,
                 rightLabel: rightLabel,
-                rightSets: muscleSum(rightMuscles),
+                rightSets: muscleSets[right] ?? 0,
                 sampleSessions: sessions.count
             )
         }
@@ -314,23 +336,23 @@ nonisolated extension AnalyticsAccumulator {
             ),
             musclePair(
                 "bi-tri",
-                "Biceps", [.biceps],
-                "Triceps", [.triceps]
+                "Biceps", .biceps,
+                "Triceps", .triceps
             ),
             musclePair(
                 "quad-ham",
-                "Quads", [.quads],
-                "Hamstrings", [.hamstrings]
+                "Quads", .quads,
+                "Hamstrings", .hamstrings
             ),
             musclePair(
                 "hip-abductors-adductors",
-                "Hip Abductors", [.gluteMed],
-                "Hip Adductors", [.adductors]
+                "Hip Abductors", .hipAbductors,
+                "Hip Adductors", .hipAdductors
             ),
             musclePair(
                 "calves-shins",
-                "Calves", [.calves],
-                "Shins", [.shins]
+                "Calves", .calves,
+                "Shins", .shins
             ),
             movementPair(
                 "squat-hinge",

@@ -113,7 +113,7 @@ struct SetStimulusTests {
 
     @Test func muscleRolesCreditPrimarySecondaryAndNotStabilizer() {
         let involvement = Muscle.Involvement(contributions: [
-            .init(muscle: .pectorals, role: .primary),
+            .init(muscle: .pectoralisMajorSternocostal, role: .primary),
             .init(muscle: .triceps, role: .secondary),
             .init(muscle: .serratus, role: .stabilizer),
         ])
@@ -128,7 +128,7 @@ struct SetStimulusTests {
         ex.orderedSets.forEach { $0.isCompleted = true }
 
         let credit = SetStimulus.credit(for: ex)
-        #expect(credit[.pectorals] == 1)
+        #expect(credit[.pectoralisMajorSternocostal] == 1)
         #expect(credit[.triceps] == 0.5)
         #expect(credit[.serratus] == nil)
     }

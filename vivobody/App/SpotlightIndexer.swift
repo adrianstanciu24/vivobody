@@ -33,6 +33,9 @@ import UniformTypeIdentifiers
 enum SpotlightIndexer {
     static let templateDomain = "astanciu.vivobody.templates"
     static let exerciseDomain = "astanciu.vivobody.exercises"
+    /// Bump when a clean-slate catalog/store cutover invalidates every
+    /// previously indexed install-local SwiftData UUID.
+    private static let indexGeneration = 2
 
     static func templateIdentifier(_ id: UUID) -> String {
         "template:\(id.uuidString)"
@@ -83,7 +86,8 @@ enum SpotlightIndexer {
     static func reindexAllIfNeeded(templates: [WorkoutTemplate], items: [ExerciseCatalogItem]) {
         let defaults = UserDefaults.standard
         let lastVersion = defaults.string(forKey: SettingsKey.spotlightReindexedVersion)
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
+        let marketingVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
+        let currentVersion = "\(marketingVersion)|catalog-\(indexGeneration)"
         guard lastVersion != currentVersion else { return }
         reindexAll(templates: templates, items: items)
         defaults.set(currentVersion, forKey: SettingsKey.spotlightReindexedVersion)

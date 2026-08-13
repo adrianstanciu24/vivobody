@@ -72,7 +72,7 @@ struct SetCompleteButton: View {
     /// fill, the checkmark draw-on, and the haptic, not a new hue.
     private let accent = Tint.complete
     /// The live, "you're about to do this" colour worn by the idle
-    /// button's verb text and ripple.
+    /// button's surface and ripple.
     private let liveAccent = Tint.inProgress
 
     var body: some View {
@@ -124,16 +124,14 @@ struct SetCompleteButton: View {
 
     private var background: some View {
         let shape = RoundedRectangle(cornerRadius: Radius.card, style: .continuous)
-        // Idle wears a dim volt wash under NEUTRAL glass: the one live
-        // action on the panel is its warmest surface, but the glass
-        // stays untinted so the volt verb keeps its contrast. (A volt
-        // glass tint renders near-solid and swallows the verb.)
-        // Completion then earns the full accent flood — same hue,
-        // overdriven.
+        // Idle wears an opaque-enough volt wash under NEUTRAL glass so
+        // the black action verb clears contrast without depending on
+        // whatever content the material refracts. Completion adds the
+        // fully tinted glass and checkmark in the same hue.
         return shape
             .fill(reduceTransparency
-                    ? (isComplete ? accent : liveAccent.opacity(0.30))
-                    : (isComplete ? accent.opacity(0.85) : liveAccent.opacity(0.22)))
+                    ? (isComplete ? accent : liveAccent)
+                    : (isComplete ? accent.opacity(0.85) : liveAccent.opacity(0.85)))
             .glassTinted(isComplete ? accent : nil, interactive: true, in: shape)
             // The full accent bloom belongs to the completed state;
             // idle gets a quieter ember.
@@ -163,7 +161,7 @@ struct SetCompleteButton: View {
                     .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.55 : 0.7)
                     .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(isComplete ? Tint.onAccent : liveAccent)
+                    .foregroundStyle(Tint.onAccent)
                     .padding(.horizontal, Space.tapMin)
                     .frame(maxWidth: .infinity)
                 statusIndicator

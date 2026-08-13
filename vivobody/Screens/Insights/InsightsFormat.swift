@@ -12,16 +12,9 @@
 import SwiftUI
 
 enum InsightsFormat {
-    /// Row label for a muscle. Two regions share their name with their
-    /// body-part group ("Chest", "Shoulders"); sitting directly under
-    /// that group header they'd read as a duplicate, so they fall back
-    /// to their anatomical name here.
+    /// Exact-region row label beneath the glanceable group heading.
     static func rowLabel(for muscle: Muscle) -> String {
-        switch muscle {
-        case .pectorals: return "Pectorals"
-        case .deltoids:  return "Deltoids"
-        default:         return muscle.displayName
-        }
+        muscle.displayName
     }
 
     /// One decimal place for an effective-set count, with a clean "0"

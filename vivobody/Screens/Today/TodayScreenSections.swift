@@ -110,41 +110,35 @@ extension TodayScreen {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Current training development legend")
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            "Current training development legend. No history, low, building, consistent, and high"
+        )
         .accessibilityHint("Opens muscle details")
     }
 
     @ViewBuilder
     private var developmentLegendBands: some View {
-        if usesAccessibilityLayout {
-            VStack(alignment: .leading, spacing: Space.sm) {
-                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-                    HStack(spacing: Space.sm) {
-                        Circle()
-                            .fill(legendColor(for: band))
-                            .frame(width: 14, height: 14)
-                            .accessibilityHidden(true)
-                        Text(band.displayName)
-                            .font(Typography.caption)
-                            .foregroundStyle(Ink.tertiary)
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            HStack(spacing: Space.sm) {
-                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-                    VStack(spacing: 4) {
-                        Circle()
-                            .fill(legendColor(for: band))
-                            .frame(width: 14, height: 14)
-                        Text(band.displayName)
-                            .font(Typography.metricMicro)
-                            .foregroundStyle(Ink.tertiary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.65)
-                    }
-                    .frame(maxWidth: .infinity)
+        LazyVGrid(
+            columns: [
+                GridItem(
+                    .adaptive(minimum: usesAccessibilityLayout ? 140 : 54),
+                    spacing: Space.xs
+                ),
+            ],
+            spacing: Space.sm
+        ) {
+            ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                VStack(spacing: 4) {
+                    Circle()
+                        .fill(legendColor(for: band))
+                        .frame(width: 14, height: 14)
+                        .accessibilityHidden(true)
+                    Text(band.displayName)
+                        .font(usesAccessibilityLayout ? Typography.caption : Typography.micro)
+                        .foregroundStyle(Ink.tertiary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                 }
             }
         }

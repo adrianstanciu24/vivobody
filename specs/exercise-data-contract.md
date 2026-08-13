@@ -1,12 +1,18 @@
 # Exercise Data Contract
 
 This document defines the meaning of every biomechanics-sensitive field in the
-bundled exercise catalog. `Scripts/curate.py` is the classification/defaults
-authoring source; `specs/exercise-anatomy-review.csv` is the reviewed muscle-role
-source; and `specs/exercise-definitions.csv` is the tracked exact-name definition
-source. The generator validates source/catalog name-set parity and has no
-dependency on the untracked `.wger-data` directory. `vivobody/Resources/catalog.json`
-is generated output.
+bundled exercise catalog. The reviewed contracts in `specs/catalog-v2/families/`
+are the canonical exercise source. `Scripts/catalog_v2.py` validates those
+contracts against the taxonomy, joint-action, evidence, and family-schema
+foundations, then deterministically projects them into
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 44
+active families and their 120 reviewed exercises; the synthetic fixture and
+supplemental `--family` inputs are never emitted.
+
+`Scripts/curate.py`, its review CSVs, `Scripts/transform_wger.py`, and the
+untracked `.wger-data` directory are retired legacy inputs. Both former writers
+are hard-disabled. No canonical source or compiler step reads, compares
+against, or preserves identity from the legacy roster.
 
 ## Identity and movement definition
 
@@ -40,8 +46,8 @@ Each listed muscle has one categorical role:
 - `stabilizer`: contributes to position or joint control but receives no
   hard-set-volume credit.
 
-Roles are encoded in the existing SwiftData snapshot shape, projected onto the
-temporary Exercise Anatomy model, and projected into training credit separately:
+Roles are encoded in the SwiftData snapshot shape, projected onto Exercise
+Anatomy, and projected into training credit separately:
 
 | Role | Snapshot value | Exercise Anatomy intensity | Training Development hard-set credit |
 |---|---:|---:|---:|
@@ -75,12 +81,12 @@ not imply glute-med credit; hip abduction does not imply glute-max credit.
 Unilateral lower-body work may train both when pelvic control is a meaningful
 loaded demand.
 
-Tensor fasciae latae (`tensorFasciaeLatae`) is also independent from both
-gluteus medius and the broader hip-flexor region. Exercises author its role
-explicitly; Machine Hip Abduction treats Glute Med as primary and TFL as a
-secondary hip-abduction synergist, so their development values can diverge.
-Incidental abs, oblique, and remaining hip-flexor bracing is omitted for this
-supported isolation exercise rather than implying meaningful core training.
+Tensor fasciae latae (`tensorFasciaeLatae`) is also independent from gluteus
+medius and the exact hip-flexor regions. Exercises author its role explicitly;
+the reviewed side-lying cuff-weight hip-abduction record treats Glute Med as
+primary and TFL as a secondary synergist, so their development values can
+diverge. Incidental bracing is omitted rather than implying meaningful core
+training.
 
 The rotator-cuff taxonomy is also explicit:
 
@@ -89,7 +95,9 @@ The rotator-cuff taxonomy is also explicit:
 - `subscapularis`: internal-rotation target; analytics-visible but not painted
   until the body asset contains an appropriate mesh.
 
-There are no legacy combined `glutes` or `teres` catalog values.
+There are no legacy combined `glutes` or `teres` catalog values. The complete
+set of 52 exact runtime regions, including split upper-body and lower-body
+contributors, is defined only by `specs/catalog-v2/taxonomy.json`.
 
 ## Modality and tracking
 
@@ -138,12 +146,11 @@ working sets; exercise names never infer set intent.
   isometric may still compare duration within its own duration-only series.
 
 `bodyweightFraction` is a coefficient used only by the two bodyweight load
-modes. It is zero for `external` and `nonComparable`. Band variants are not
-bundled catalog records; users create them as custom exercises when needed.
-Their resistance is always `nonComparable`: a color, nominal stack value, or
-band label does not define its changing force through the range of motion. A
-future model would need an explicit calibrated force curve before that can
-change.
+modes. It is zero for `external` and `nonComparable`. Reviewed band exercises
+may be bundled, but their resistance is always `nonComparable`: a color,
+nominal stack value, or band label does not define its changing force through
+the range of motion. A future model would need an explicit calibrated force
+curve before that can change.
 
 The session snapshots the latest measured body weight at start. A persisted
 `bodyweightAtStart` value of `0` means unknown; it is a sentinel, not a
@@ -186,11 +193,12 @@ or unavailable subtotal as a complete total.
 - `mechanic` describes single- versus multi-joint movement mechanics.
 - `pattern` describes the dominant compound pattern. Locomotion has its own
   value; isolation records have no pattern.
-- `direction` exists only for push and pull patterns.
-- `plane` follows the catalog heuristic in `ExerciseCatalog.swift`: pure
-  horizontal ad/abduction and rotation are transverse; lateral travel and
-  ab/adduction are frontal; dominant forward/backward or vertical travel is
-  sagittal.
+- `direction` exists only for push and pull patterns and uses
+  `horizontal|vertical|diagonal`. Direction describes the resistance/travel
+  direction, not an anatomical plane.
+- `planes` contains one or more of the three cardinal anatomical planes in the
+  canonical order `sagittal|frontal|transverse`. A reviewed family may be
+  multiplanar; the compiler never collapses it to a legacy singular heuristic.
 - `laterality` describes how the movement is performed. Alternating or
   one-side-at-a-time movements are unilateral even when both sides comprise one
   logged set.
@@ -210,14 +218,17 @@ than inferred silently.
 
 The bundled catalog must satisfy all of the following before shipping:
 
-- Generator `--check` produces a zero diff.
+- `python3 Scripts/catalog_v2.py --check` validates every canonical source and
+  proves the bundled runtime catalog is byte-for-byte compiler output.
+- The projection contains exactly 44 family IDs and 120 exercise records; it is
+  stable under family file discovery order and excludes the synthetic fixture
+  and supplemental `--family` validation inputs.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.
 - Every muscle and role is recognized; combined legacy regions are absent.
 - Every strength and power exercise has a primary muscle.
 - Push/pull direction, isolation/pattern, modality/tracking, and load-mode
   invariants hold.
-- No bundled exercise uses band equipment; custom band exercises are forced to
-  `nonComparable` load semantics by the editor.
+- Every bundled band exercise uses `nonComparable` load semantics.
 - Explicit regression fixtures cover corrected high-risk records and the
   independent glute-max/glute-med mappings.

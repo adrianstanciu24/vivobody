@@ -50,14 +50,10 @@ nonisolated enum SettingsKey {
     /// Teaches the drag-to-adjust gesture without an onboarding
     /// wizard, which the product principles cut outright.
     static let hasScrubbedNumber = "settings.hasScrubbedNumber"
-    /// String — the last `CFBundleShortVersionString` that triggered
-    /// a full Spotlight reindex. Gates `reindexAllIfNeeded` so the
-    /// delete-all + reindex runs once per app version, not every launch.
+    /// String — the last marketing-version + catalog-generation pair that
+    /// triggered a full Spotlight reindex. The generation invalidates stale
+    /// install-local UUIDs after a clean-slate store cutover.
     static let spotlightReindexedVersion = "settings.spotlightReindexedVersion"
-    /// Int — the last `InvolvementSnapshotRepair.generation` that
-    /// completed. Gates the one-time legacy muscle-snapshot rewrite so
-    /// a normal launch pays only this read.
-    static let involvementRepairGeneration = "settings.involvementRepairGeneration"
     /// Bool — last known Pro entitlement, mirrored by ProStore so the
     /// UI doesn't flash locked on a cold offline launch while StoreKit
     /// resolves. A render hint only — `Transaction.currentEntitlements`

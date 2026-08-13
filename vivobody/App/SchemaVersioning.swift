@@ -88,7 +88,7 @@ private final class SchemaV4IndexMigrationMarker {
     init() {}
 }
 
-/// Current schema version (V4). Adds targeted WorkoutSession indexes
+/// Schema version V4. Adds targeted WorkoutSession indexes
 /// for date ranges, external UUID lookups, and active-draft ordering.
 enum SchemaV4: VersionedSchema {
     static var versionIdentifier: Schema.Version { .init(4, 0, 0) }
@@ -108,16 +108,48 @@ enum SchemaV4: VersionedSchema {
     }
 }
 
-/// Migration plan covering V1 → V2 → V3 → V4. V4 is explicit because
-/// its performance indexes alone would not change the schema checksum.
+/// Catalog-v2 runtime cutover marker. The cutover replaces coarse muscle
+/// snapshots and singular movement planes, so production opens a fresh named
+/// configuration instead of attempting to reinterpret the retired development
+/// store. This marker gives the canonical store an explicit schema identity.
+@Model
+private final class SchemaV5CatalogCutoverMarker {
+    var generation: Int = 5
+
+    init() {}
+}
+
+enum SchemaV5: VersionedSchema {
+    static var versionIdentifier: Schema.Version { .init(5, 0, 0) }
+
+    static var models: [any PersistentModel.Type] {
+        [
+            WorkoutSession.self,
+            Exercise.self,
+            WorkoutSet.self,
+            WorkoutTemplate.self,
+            TemplateExercise.self,
+            TemplateSet.self,
+            ExerciseCatalogItem.self,
+            BodyWeightEntry.self,
+            SchemaV4IndexMigrationMarker.self,
+            SchemaV5CatalogCutoverMarker.self,
+        ]
+    }
+}
+
+/// Migration-plan record through V5. The V4→V5 stage is not wired into the
+/// app: the pre-production catalog cutover opens a new named store, preserving
+/// the retired store untouched instead of fabricating legacy identity maps.
 enum VivobodyMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self]
+        [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self, SchemaV5.self]
     }
 
     static var stages: [MigrationStage] {
         [
             .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self),
+            .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self),
         ]
     }
 }

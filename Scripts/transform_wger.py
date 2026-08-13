@@ -3,24 +3,10 @@
 #  transform_wger.py
 #  vivobody
 #
-#  Phase 2 of the wger import, deliberately minimal. We take ONLY the
-#  exercise names (plus the muscle group, which wger gets right and the
-#  picker needs) from the raw snapshot in .wger-data/, and ship that as
-#  the catalog roster. All the real per-exercise data — graded muscle
-#  involvement, mechanic/pattern/plane/laterality, defaults, bodyweight
-#  fraction — is authored by us afterwards, one exercise at a time,
-#  directly in catalog.json (every other field is optional there).
-#
-#  Output:
-#      vivobody/Resources/catalog.json   – [{ "name", "group" }, …]
-#                                          the bundled roster (sorted).
-#      .wger-data/reference.json         – dev-only: wger's own raw
-#                                          muscles / equipment / aliases /
-#                                          description per exercise, kept
-#                                          as a reference while we author.
-#                                          NOT shipped.
-#
-#  Stdlib only. Re-runnable: python3 Scripts/transform_wger.py
+#  RETIRED: the one-time wger bootstrap is kept only as historical reference.
+#  It is hard-disabled below and cannot write catalog.json. The reviewed
+#  family sources under specs/catalog-v2 are now the only catalog inputs, and
+#  Scripts/catalog_v2.py is the sole canonical compiler.
 #
 
 import json
@@ -67,6 +53,13 @@ def strip_html(text):
 
 
 def main():
+    raise SystemExit(
+        "Scripts/transform_wger.py is retired and cannot write catalog.json; "
+        "use `python3 Scripts/catalog_v2.py --emit-runtime`."
+    )
+
+    # Historical implementation retained below for provenance only. This code
+    # is deliberately unreachable so raw wger data cannot become runtime input.
     if not os.path.isdir(RAW_DIR):
         raise SystemExit(f"Missing {RAW_DIR}. Run Scripts/fetch_wger.py first.")
     exercises = load("exerciseinfo.json")

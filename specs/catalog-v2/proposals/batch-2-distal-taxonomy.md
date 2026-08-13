@@ -1,10 +1,10 @@
 # Batch 2 — distal upper-body taxonomy foundation
 
-Status: integrated foundation record. The 41-muscle, 62-mesh-base, and
-44-action foundation is active in catalog-v2 together with the required
-existing-family migration. This document remains non-validator design input;
-the isolated Swift runtime intentionally stays on the shipped catalog until
-the later atomic catalog cutover.
+Status: historical integrated-foundation record. This Batch-2 step established
+41 muscles, 62 mesh bases, and 44 actions; later batches expanded the canonical
+taxonomy to 52 regions. The atomic Swift/runtime cutover is now complete, so
+future-tense runtime language below records the decision sequence rather than
+current work.
 
 ## Decision summary
 
@@ -454,12 +454,11 @@ foundation migration.
 10. Add migration tests across all eight affected families proving every
     assigned stabilizer can satisfy an actual declared hand/wrist demand and no
     removed ID survives in any allowed role, requirement, rule, or exercise.
-11. Keep the future Swift cutover explicit: replace the runtime `biceps` and
-    `forearms` cases with matching cases/display names/groups/node ownership
-    and extend mesh-mapping tests. Do not add a persistence migration or a new
-    involvement-snapshot repair for the retired raw values: the product is
-    pre-production and the store may reset at cutover. Stale raw values must
-    still be absent from bundled fixtures and deterministic debug seeds.
+11. Historical cutover gate (completed): replace runtime `biceps` and
+    `forearms` with exact cases/display names/groups/node ownership and extend
+    mesh-mapping tests. The completed V5 cutover followed the prescribed
+    pre-production reset path and added no retired-value remap; stale raw values
+    remain absent from bundled fixtures and deterministic debug seeds.
 12. Run the catalog validator, the complete catalog-v2 Python suite,
     `git diff --check`, and the generic iOS Simulator build before calling the
     activation complete. Simulator test suites remain opt-in under repository

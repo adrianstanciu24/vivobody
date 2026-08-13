@@ -83,8 +83,7 @@ vivobody/                      # app target
 │   ├── SessionSideEffects.swift        # single fan-out for session events (LiveActivity, HealthKit, widgets…)
 │   ├── IncomingAction.swift   # every external entry point (URL, Handoff, Spotlight, widget/Siri mailboxes)
 │   │                          #   parses into one enum, dispatched through one handle(_:) site
-│   ├── SchemaVersioning.swift # SchemaV1/V2 + migration plan + StorageHealth in-memory-fallback flag
-│   ├── InvolvementSnapshotRepair.swift # one-time, generation-gated launch rewrite of legacy muscle snapshots
+│   ├── SchemaVersioning.swift # SchemaV1...V5 + migration record + StorageHealth fallback flag
 │   ├── WidgetSnapshotWriter.swift      # SwiftData → App Group Codable snapshots for widgets
 │   ├── WorkoutLiveActivityController.swift, RestNotificationController.swift,
 │   ├── SpotlightIndexer.swift, AppShortcuts.swift, UserActivity.swift,
@@ -143,7 +142,7 @@ WIDGET_IMPLEMENTATION_NOTES.md # App Group / entitlements / provisioning notes
 - **Anything shared with widgets goes in VivoKit**, not in the app target (widgets cannot import the app). Design tokens, snapshot types, ActivityKit attributes, shared intents live there.
 - **One boundary per system framework.** `HealthKitWorkoutService` is the only HealthKit import; `IncomingAction`/`IncomingActionParser` is the only external-entry-point parser; `SessionSideEffects` is the only fan-out for session lifecycle events. Add subscribers/sources there, never inline in screens.
 - **Session lifetime ≠ presentation lifetime.** `WorkoutSessionController` owns start/restore/archive/discard; `activeSession != nil` drives the MiniBar, `isWorkoutExpanded` drives the sheet. A workout can minimize/expand many times before archive.
-- **Schema changes:** additive fields with defaults need nothing. Anything non-additive means a new `SchemaVN` + `MigrationStage` in `SchemaVersioning.swift` (current: V2, empty migration plan). Never crash on container failure — the in-memory fallback + `StorageHealth` + recovery view path already exists; keep it working.
+- **Schema changes:** additive fields with defaults need nothing. Anything non-additive means a new `SchemaVN` + `MigrationStage` in `SchemaVersioning.swift` (current: V5). The pre-production family-catalog cutover deliberately opens a fresh named store instead of remapping retired identities; never crash on container failure — the in-memory fallback + `StorageHealth` + recovery view path already exists.
 - **Insights are pure functions over sessions**, computed through the `SessionAnalytics` fingerprint cache (session count + newest completedAt) so nothing recomputes per render. New insight = model file in `Models/Insights/` + section in `Screens/Insights/` + a test suite.
 
 ## Conventions to match
@@ -173,7 +172,7 @@ WIDGET_IMPLEMENTATION_NOTES.md # App Group / entitlements / provisioning notes
 - **Debounce App Group writes** — `WidgetSnapshotWriter` batches; don't add per-keystroke widget reloads.
 - **HealthKit duplicates** — archive writes exactly one HKWorkout through `HealthKitWorkoutService`; route any new save through `SessionSideEffects`, never a second call site.
 - **`StorageHealth` is a `@MainActor` singleton** — check `didFallbackToInMemory` before assuming persistence works.
-- **BodyModel.scn mesh names are load-bearing** — `Muscle.swift` maps ~20 trainable regions to ~240 mesh names (`Pectoralis_Major_L`, …). Renaming meshes or enum cases breaks highlighting silently; `MuscleMappingTests` guards this.
+- **BodyModel.scn mesh names are load-bearing** — `Muscle.swift` maps 52 exact trainable regions across 124 left/right SceneKit nodes (62 mesh bases). Renaming meshes or enum cases breaks highlighting silently; `MuscleMappingTests` guards this.
 - **Launch-path work is budgeted** — backfills are gated behind one-time flags, Spotlight reindex is throttled per app version, non-critical work is deferred off first paint. Don't add eager work to app launch.
 
 ## Key components reference

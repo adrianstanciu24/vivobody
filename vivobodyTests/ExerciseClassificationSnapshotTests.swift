@@ -19,7 +19,7 @@ struct ExerciseClassificationSnapshotTests {
         mechanic: Mechanic = .compound,
         pattern: MovementPattern? = .push,
         direction: PushPullDirection? = .vertical,
-        plane: MovementPlane = .transverse,
+        planes: [MovementPlane] = [.transverse],
         laterality: Laterality = .unilateral
     ) -> ExerciseCatalogItem {
         ExerciseCatalogItem(
@@ -30,7 +30,7 @@ struct ExerciseClassificationSnapshotTests {
             mechanic: mechanic,
             pattern: pattern,
             direction: direction,
-            plane: plane,
+            planes: planes,
             laterality: laterality,
             isUserCreated: true
         )
@@ -42,7 +42,7 @@ struct ExerciseClassificationSnapshotTests {
             mechanic: .isolation,
             pattern: nil,
             direction: nil,
-            plane: .frontal,
+            planes: [.frontal],
             laterality: .unilateral
         )
 
@@ -60,6 +60,7 @@ struct ExerciseClassificationSnapshotTests {
     @Test func draftPreservesIdentityModalityAndLoadSemantics() {
         let item = ExerciseCatalogItem(
             catalogID: "plank-fixture",
+            familyID: "anti-extension",
             name: "Plank Fixture",
             group: .core,
             defaultWeight: 0,
@@ -71,7 +72,7 @@ struct ExerciseClassificationSnapshotTests {
             equipment: .bodyweight,
             mechanic: .compound,
             pattern: .core,
-            plane: .sagittal,
+            planes: [.sagittal],
             laterality: .bilateral
         )
 
@@ -80,14 +81,17 @@ struct ExerciseClassificationSnapshotTests {
         let exercise = Exercise(from: templateExercise)
 
         #expect(draft.catalogID == item.catalogID)
+        #expect(draft.familyID == item.familyID)
         #expect(draft.modality == .isometricStrength)
         #expect(draft.loadMode == .bodyweightAdded)
         #expect(draft.bodyweightFraction == 0.65)
         #expect(templateExercise.catalogID == item.catalogID)
+        #expect(templateExercise.familyID == item.familyID)
         #expect(templateExercise.modality == .isometricStrength)
         #expect(templateExercise.loadMode == .bodyweightAdded)
         #expect(templateExercise.bodyweightFraction == 0.65)
         #expect(exercise.catalogID == item.catalogID)
+        #expect(exercise.familyID == item.familyID)
         #expect(exercise.modality == .isometricStrength)
         #expect(exercise.loadMode == .bodyweightAdded)
         #expect(exercise.bodyweightFraction == 0.65)
@@ -114,7 +118,7 @@ struct ExerciseClassificationSnapshotTests {
             mechanic: .isolation,
             pattern: nil,
             direction: nil,
-            plane: .transverse,
+            planes: [.transverse],
             laterality: .unilateral
         )
         let exercise = Exercise(from: item, sortOrder: 1)
@@ -125,7 +129,7 @@ struct ExerciseClassificationSnapshotTests {
         #expect(exercise.mechanicRaw == item.mechanicRaw)
         #expect(exercise.patternRaw == item.patternRaw)
         #expect(exercise.directionRaw == item.directionRaw)
-        #expect(exercise.planeRaw == item.planeRaw)
+        #expect(exercise.planeRaws == item.planeRaws)
         #expect(exercise.lateralityRaw == item.lateralityRaw)
     }
 
@@ -140,8 +144,38 @@ struct ExerciseClassificationSnapshotTests {
         #expect(copy.mechanicRaw == source.mechanicRaw)
         #expect(copy.patternRaw == source.patternRaw)
         #expect(copy.directionRaw == source.directionRaw)
-        #expect(copy.planeRaw == source.planeRaw)
+        #expect(copy.planeRaws == source.planeRaws)
         #expect(copy.lateralityRaw == source.lateralityRaw)
+    }
+
+    @Test func diagonalMultiPlaneFamilyMetadataSnapshotsWithoutLoss() {
+        let item = ExerciseCatalogItem(
+            catalogID: "incline-press-fixture",
+            familyID: "incline-press",
+            name: "Incline Press Fixture",
+            group: .chest,
+            defaultWeight: 95,
+            equipment: .barbell,
+            mechanic: .compound,
+            pattern: .push,
+            direction: .diagonal,
+            planes: [.transverse, .sagittal],
+            laterality: .bilateral
+        )
+
+        let draft = ExerciseDraft(from: item)
+        let template = draft.makeTemplateExercise(sortOrder: 0)
+        let exercise = Exercise(from: template)
+
+        #expect(item.planes == [.sagittal, .transverse])
+        #expect(draft.familyID == "incline-press")
+        #expect(draft.classification?.direction == .diagonal)
+        #expect(draft.classification?.planes == [.sagittal, .transverse])
+        #expect(template.familyID == "incline-press")
+        #expect(template.classification?.planes == [.sagittal, .transverse])
+        #expect(exercise.familyID == "incline-press")
+        #expect(exercise.classification?.direction == .diagonal)
+        #expect(exercise.classification?.planes == [.sagittal, .transverse])
     }
 
     @Test func perSetRowsRoundTripThroughDraftTemplateAndWorkout() {

@@ -24,6 +24,7 @@ struct CatalogDuplicateTests {
     private func makePullUpItem() -> ExerciseCatalogItem {
         ExerciseCatalogItem(
             catalogID: "weighted-pull-up",
+            familyID: "vertical-pull",
             name: "Weighted Pull-Up",
             group: .back,
             defaultWeight: 45,
@@ -37,14 +38,14 @@ struct CatalogDuplicateTests {
             mechanic: .compound,
             pattern: .pull,
             direction: .vertical,
-            plane: .sagittal,
+            planes: [.sagittal, .frontal],
             laterality: .bilateral,
             aliases: ["WPU"],
             movementDefinition: "Hang from a bar with added load and pull the chin above it.",
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .lats, role: .primary),
-                .init(muscle: .biceps, role: .secondary),
-                .init(muscle: .forearms, role: .stabilizer),
+                .init(muscle: .bicepsBrachii, role: .secondary),
+                .init(muscle: .fingerFlexors, role: .stabilizer),
             ])
         )
     }
@@ -55,6 +56,7 @@ struct CatalogDuplicateTests {
     private func makePlankItem() -> ExerciseCatalogItem {
         ExerciseCatalogItem(
             catalogID: "side-plank",
+            familyID: "anti-lateral-flexion",
             name: "Side Plank",
             group: .core,
             defaultWeight: 0,
@@ -67,7 +69,7 @@ struct CatalogDuplicateTests {
             mechanic: .isolation,
             pattern: nil,
             direction: nil,
-            plane: .frontal,
+            planes: [.frontal],
             laterality: .unilateral,
             aliases: [],
             movementDefinition: "Hold a straight line balanced on one forearm and the side of one foot.",
@@ -91,7 +93,7 @@ struct CatalogDuplicateTests {
         #expect(draft.mechanic == source.mechanic)
         #expect(draft.pattern == source.pattern)
         #expect(draft.direction == source.direction)
-        #expect(draft.plane == source.plane)
+        #expect(draft.planes == source.planes)
         #expect(draft.laterality == source.laterality)
         #expect(draft.movementDefinition == source.movementDefinition)
         #expect(draft.muscleInvolvementSnapshot == source.muscleInvolvementSnapshot)
@@ -106,7 +108,7 @@ struct CatalogDuplicateTests {
         #expect(draft.mechanic == .isolation)
         #expect(draft.pattern == nil)
         #expect(draft.direction == nil)
-        #expect(draft.plane == .frontal)
+        #expect(draft.planes == [.frontal])
         #expect(draft.laterality == .unilateral)
         // 30s, not the 45s fallback `CatalogDraft.empty` would imply.
         #expect(draft.defaultDuration == 30)
@@ -176,7 +178,7 @@ struct CatalogDuplicateTests {
             mechanic: source.mechanic,
             pattern: source.pattern,
             direction: source.direction,
-            plane: source.plane,
+            planes: source.planes,
             laterality: source.laterality,
             aliases: [],
             movementDefinition: source.movementDefinition,

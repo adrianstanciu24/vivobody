@@ -21,14 +21,22 @@ struct vivobodyApp: App {
     /// change desyncs all checksums and bricks the store into the
     /// fallback. Automatic lightweight migration handles additive
     /// changes in place instead. Re-wire `VivobodyMigrationPlan`
-    /// (SchemaVersioning.swift) once real stores ship.
+    /// (SchemaVersioning.swift) once real stores ship. The family-first
+    /// catalog cutover deliberately uses a new configuration name so
+    /// obsolete identities, singular planes, and coarse muscle keys
+    /// cannot leak into the canonical store. The retired development
+    /// store remains untouched on disk.
     ///
     /// Nil only when both the on-disk store and the in-memory fallback
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
     private let container: ModelContainer? = {
-        let schema = Schema(SchemaV4.models, version: SchemaV4.versionIdentifier)
-        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let schema = Schema(SchemaV5.models, version: SchemaV5.versionIdentifier)
+        let config = ModelConfiguration(
+            "vivobody-family-catalog-v2",
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
         do {
             return try ModelContainer(
                 for: schema,
@@ -39,7 +47,11 @@ struct vivobodyApp: App {
             // Fall back to an in-memory store so the app stays usable;
             // the original store is left untouched on disk for recovery.
             StorageHealth.shared.didFallbackToInMemory = true
-            let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            let fallback = ModelConfiguration(
+                "vivobody-family-catalog-v2-fallback",
+                schema: schema,
+                isStoredInMemoryOnly: true
+            )
             if let memory = try? ModelContainer(for: schema, configurations: [fallback]) {
                 return memory
             }
@@ -114,4 +126,3 @@ private struct StorageRecoveryView: View {
         .background(Color(.systemBackground))
     }
 }
-

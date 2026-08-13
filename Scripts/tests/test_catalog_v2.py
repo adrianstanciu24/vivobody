@@ -18,9 +18,12 @@ import copy
 import hashlib
 import json
 import re
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
@@ -11711,6 +11714,279 @@ class CatalogV2FoundationTests(unittest.TestCase):
             warnings,
             ["fixture-barbell-horizontal-press: reps 30 is outside recommended 5...15"],
         )
+
+    def test_runtime_projection_is_exactly_44_families_and_120_exercises(
+        self,
+    ) -> None:
+        records = catalog_v2.compile_runtime_catalog(self.real_families)
+        self.assertEqual(len(records), 120)
+        self.assertEqual(
+            {record["familyID"] for record in records},
+            {family["id"] for family in self.real_families},
+        )
+        self.assertEqual(len({record["familyID"] for record in records}), 44)
+        self.assertEqual(
+            records,
+            catalog_v2.compile_runtime_catalog(reversed(self.real_families)),
+        )
+
+        expected_identity_order = [
+            (family["id"], exercise["catalogID"])
+            for family in sorted(self.real_families, key=lambda value: value["id"])
+            for exercise in family["exercises"]
+        ]
+        self.assertEqual(
+            [
+                (record["familyID"], record["catalogID"])
+                for record in records
+            ],
+            expected_identity_order,
+        )
+
+    def test_runtime_projection_has_one_canonical_plane_order(self) -> None:
+        fixture = self.family_copy()
+        fixture["fixed"]["planes"] = [
+            "transverse",
+            "frontal",
+            "sagittal",
+        ]
+        record = catalog_v2.compile_runtime_catalog([fixture])[0]
+        self.assertEqual(
+            record["planes"],
+            ["sagittal", "frontal", "transverse"],
+        )
+
+    def test_runtime_projection_preserves_diagonal_and_multiplane_contracts(
+        self,
+    ) -> None:
+        records = {
+            record["catalogID"]: record
+            for record in catalog_v2.compile_runtime_catalog(self.real_families)
+        }
+        for catalog_id in {
+            "incline-barbell-bench-press",
+            "incline-dumbbell-bench-press",
+            "incline-smith-machine-bench-press",
+            "incline-machine-chest-press",
+        }:
+            with self.subTest(catalog_id=catalog_id):
+                self.assertEqual(records[catalog_id]["direction"], "diagonal")
+                self.assertEqual(
+                    records[catalog_id]["planes"],
+                    ["sagittal", "transverse"],
+                )
+        self.assertEqual(
+            records["standing-barbell-overhead-press"]["planes"],
+            ["sagittal", "frontal"],
+        )
+        self.assertEqual(
+            records["decline-barbell-bench-press"]["direction"],
+            "diagonal",
+        )
+        self.assertEqual(
+            records["decline-barbell-bench-press"]["planes"],
+            ["transverse"],
+        )
+
+    def test_runtime_projection_applies_group_override_and_optionals_exactly(
+        self,
+    ) -> None:
+        records = {
+            record["catalogID"]: record
+            for record in catalog_v2.compile_runtime_catalog(self.real_families)
+        }
+        self.assertEqual(records["barbell-pullover"]["group"], "chest")
+        self.assertEqual(
+            self.batch1_families["shoulder-extension-isolation"][
+                "groupPolicy"
+            ]["default"],
+            "back",
+        )
+
+        base_keys = {
+            "familyID", "catalogID", "name", "group", "defaultWeight",
+            "reps", "trackingMode", "equipment", "mechanic", "pattern",
+            "direction", "planes", "laterality", "aliases",
+            "bodyweightFraction", "modality", "loadMode",
+            "movementDefinition", "involvement",
+        }
+        optional_keys = {"defaultWeightKg", "defaultDuration", "searchPriority"}
+        for family in self.real_families:
+            for exercise in family["exercises"]:
+                record = records[exercise["catalogID"]]
+                expected_optionals = optional_keys & exercise.keys()
+                with self.subTest(catalog_id=exercise["catalogID"]):
+                    self.assertEqual(set(record), base_keys | expected_optionals)
+                    for key in optional_keys:
+                        self.assertEqual(key in record, key in exercise)
+
+        fixture = self.family_copy()
+        fixture["exercises"][0].pop("defaultWeightKg")
+        fixture["exercises"][0].pop("searchPriority")
+        record = catalog_v2.compile_runtime_catalog([fixture])[0]
+        self.assertNotIn("defaultWeightKg", record)
+        self.assertNotIn("defaultDuration", record)
+        self.assertNotIn("searchPriority", record)
+
+    def test_bundled_runtime_is_byte_for_byte_compiler_output(self) -> None:
+        encoded = catalog_v2.encoded_runtime_catalog(
+            catalog_v2.compile_runtime_catalog(self.real_families)
+        )
+        self.assertTrue(encoded.endswith("\n"))
+        self.assertEqual(
+            catalog_v2.RUNTIME_CATALOG_PATH.read_text(encoding="utf-8"),
+            encoded,
+        )
+
+    def test_xcode_catalog_sandbox_allowlist_matches_compiler_inputs(self) -> None:
+        expected = catalog_v2.encoded_xcode_input_file_list(
+            catalog_v2.discovered_family_paths()
+        )
+        self.assertEqual(
+            catalog_v2.XCODE_INPUT_FILE_LIST_PATH.read_text(encoding="utf-8"),
+            expected,
+        )
+
+    def test_xcode_catalog_phase_is_incremental_and_family_directory_sensitive(
+        self,
+    ) -> None:
+        project = (
+            catalog_v2.ROOT / "vivobody.xcodeproj" / "project.pbxproj"
+        ).read_text(encoding="utf-8")
+        phase = project.split(
+            "C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */ = {",
+            maxsplit=1,
+        )[1].split("/* End PBXShellScriptBuildPhase section */", maxsplit=1)[0]
+        self.assertNotIn("alwaysOutOfDate = 1", phase)
+        self.assertIn(
+            '"$(SRCROOT)/specs/catalog-v2/families"',
+            phase,
+        )
+        self.assertIn(
+            '"$(DERIVED_FILE_DIR)/catalog-v2-check.stamp"',
+            phase,
+        )
+
+    def test_runtime_writer_is_atomic_and_publishes_normal_resource_mode(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "catalog.json"
+            output.write_text("old", encoding="utf-8")
+            output.chmod(0o600)
+            with mock.patch.object(
+                catalog_v2,
+                "RUNTIME_CATALOG_PATH",
+                output,
+            ):
+                catalog_v2.write_runtime_catalog_atomically("new\n")
+            self.assertEqual(output.read_text(encoding="utf-8"), "new\n")
+            self.assertEqual(output.stat().st_mode & 0o777, 0o644)
+            self.assertEqual(list(output.parent.glob(".catalog.json.*.tmp")), [])
+
+            with mock.patch.object(
+                catalog_v2,
+                "RUNTIME_CATALOG_PATH",
+                output,
+            ), mock.patch.object(
+                Path,
+                "replace",
+                side_effect=OSError("simulated replacement failure"),
+            ):
+                with self.assertRaisesRegex(
+                    OSError,
+                    "simulated replacement failure",
+                ):
+                    catalog_v2.write_runtime_catalog_atomically("broken\n")
+            self.assertEqual(output.read_text(encoding="utf-8"), "new\n")
+            self.assertEqual(list(output.parent.glob(".catalog.json.*.tmp")), [])
+
+    def test_check_is_read_only_and_emit_is_the_only_write_mode(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "catalog.json"
+            allowlist = Path(directory) / "catalog-v2-inputs.xcfilelist"
+            allowlist.write_text(
+                catalog_v2.encoded_xcode_input_file_list(
+                    catalog_v2.discovered_family_paths()
+                ),
+                encoding="utf-8",
+            )
+            output.write_text("stale\n", encoding="utf-8")
+            with mock.patch.object(
+                catalog_v2,
+                "RUNTIME_CATALOG_PATH",
+                output,
+            ), mock.patch.object(
+                catalog_v2,
+                "XCODE_INPUT_FILE_LIST_PATH",
+                allowlist,
+            ), mock.patch("builtins.print"):
+                self.assertEqual(catalog_v2.main([]), 0)
+                self.assertEqual(output.read_text(encoding="utf-8"), "stale\n")
+                self.assertEqual(catalog_v2.main(["--check"]), 1)
+                self.assertEqual(output.read_text(encoding="utf-8"), "stale\n")
+                self.assertEqual(catalog_v2.main(["--emit-runtime"]), 0)
+
+            expected = catalog_v2.encoded_runtime_catalog(
+                catalog_v2.compile_runtime_catalog(self.real_families)
+            )
+            self.assertEqual(output.read_text(encoding="utf-8"), expected)
+
+    def test_check_and_emit_modes_are_mutually_exclusive(self) -> None:
+        with mock.patch.object(sys, "stderr"), self.assertRaises(SystemExit):
+            catalog_v2.parse_args(["--check", "--emit-runtime"])
+
+    def test_supplemental_family_validation_cannot_enter_runtime_output(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary_root = Path(directory)
+            supplemental = temporary_root / "supplemental-family.json"
+            supplemental.write_text(
+                json.dumps(self.valid_family),
+                encoding="utf-8",
+            )
+            output = temporary_root / "catalog.json"
+            allowlist = temporary_root / "catalog-v2-inputs.xcfilelist"
+            with mock.patch.object(
+                catalog_v2,
+                "RUNTIME_CATALOG_PATH",
+                output,
+            ), mock.patch.object(
+                catalog_v2,
+                "XCODE_INPUT_FILE_LIST_PATH",
+                allowlist,
+            ), mock.patch("builtins.print"):
+                self.assertEqual(
+                    catalog_v2.main(
+                        ["--emit-runtime", "--family", str(supplemental)]
+                    ),
+                    0,
+                )
+            emitted = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(len(emitted), 120)
+            self.assertNotIn(
+                "fixture-horizontal-press",
+                {record["familyID"] for record in emitted},
+            )
+            self.assertEqual(
+                emitted,
+                catalog_v2.compile_runtime_catalog(self.real_families),
+            )
+
+    def test_retired_catalog_writers_fail_closed(self) -> None:
+        for script in ("curate.py", "transform_wger.py"):
+            with self.subTest(script=script):
+                result = subprocess.run(
+                    [sys.executable, str(catalog_v2.ROOT / "Scripts" / script)],
+                    cwd=catalog_v2.ROOT,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("is retired and cannot write catalog.json", result.stderr)
+                self.assertIn("Scripts/catalog_v2.py --emit-runtime", result.stderr)
 
 
 if __name__ == "__main__":

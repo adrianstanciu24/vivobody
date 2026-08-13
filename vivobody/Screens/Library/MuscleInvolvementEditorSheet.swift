@@ -32,10 +32,9 @@ struct MuscleInvolvementEditorSheet: View {
         Muscle.Involvement(snapshot: snapshot)
     }
 
-    /// An explicit empty snapshot means “use the coarse group preset”
-    /// in the persisted model. Requiring at least one selected muscle
-    /// prevents a conditioning or mobility exercise from silently
-    /// acquiring that fallback classification after Save.
+    /// Empty anatomy is not a valid authored custom exercise. Conditioning
+    /// and mobility may omit a primary, but still select the regions that
+    /// should appear in Exercise Anatomy instead of inheriting a group guess.
     private var canApply: Bool {
         !involvement.isEmpty && (!requiresPrimary || involvement.hasPrimary)
     }

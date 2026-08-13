@@ -79,6 +79,9 @@ final class Exercise: Identifiable {
     /// reference used by settings and in-place catalog edits.
     var catalogID: String? = nil
 
+    /// Stable compiled movement-family identity copied at pick time.
+    var familyID: String? = nil
+
     var muscleGroupRaw: String = MuscleGroup.chest.rawValue
     var plannedSets: Int = 3
     var plannedReps: Int = 8
@@ -86,9 +89,7 @@ final class Exercise: Identifiable {
 
     /// Snapshot of the catalog item's categorical muscle roles at
     /// pick-time. This keeps custom/renamed/deleted catalog exercises
-    /// contributing to analytics even when their display name changes
-    /// later. Legacy snapshots are rewritten once at launch by
-    /// `InvolvementSnapshotRepair`.
+    /// contributing to analytics even when their display name changes.
     var muscleInvolvementSnapshot: [String: Double] = [:]
 
     /// Pick-time movement classification. All raw fields are optional
@@ -99,7 +100,8 @@ final class Exercise: Identifiable {
     var mechanicRaw: String? = nil
     var patternRaw: String? = nil
     var directionRaw: String? = nil
-    var planeRaw: String? = nil
+    /// Canonical one-or-more plane components copied at pick time.
+    var planeRaws: [String] = []
     var lateralityRaw: String? = nil
 
     /// How this exercise is measured — reps or a timed hold. Stored
@@ -168,8 +170,7 @@ final class Exercise: Identifiable {
     }
 
     /// Muscles worked by categorical role — a pure decode of the
-    /// pick-time snapshot. Legacy snapshots are rewritten once at
-    /// launch by `InvolvementSnapshotRepair`, never per access.
+    /// canonical pick-time snapshot.
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(snapshot: muscleInvolvementSnapshot)
     }
@@ -183,7 +184,7 @@ final class Exercise: Identifiable {
             mechanicRaw: mechanicRaw,
             patternRaw: patternRaw,
             directionRaw: directionRaw,
-            planeRaw: planeRaw,
+            planeRaws: planeRaws,
             lateralityRaw: lateralityRaw
         ) ?? ExerciseClassification.forExerciseNamed(name)
     }
@@ -199,6 +200,7 @@ final class Exercise: Identifiable {
         name: String,
         catalogItemID: UUID? = nil,
         catalogID: String? = nil,
+        familyID: String? = nil,
         group: MuscleGroup,
         plannedSets: Int = 3,
         plannedReps: Int = 8,
@@ -216,6 +218,7 @@ final class Exercise: Identifiable {
         self.name = name
         self.catalogItemID = catalogItemID
         self.catalogID = catalogID
+        self.familyID = familyID
         self.muscleGroupRaw = group.rawValue
         self.plannedSets = plannedSets
         self.plannedReps = plannedReps
@@ -225,7 +228,7 @@ final class Exercise: Identifiable {
         self.mechanicRaw = classification?.mechanic.rawValue
         self.patternRaw = classification?.pattern?.rawValue
         self.directionRaw = classification?.direction?.rawValue
-        self.planeRaw = classification?.plane.rawValue
+        self.planeRaws = classification?.planes.map(\.rawValue) ?? []
         self.lateralityRaw = classification?.laterality.rawValue
         self.trackingModeRaw = trackingMode.rawValue
         self.modalityRaw = modality.rawValue
@@ -447,6 +450,7 @@ extension Exercise {
             name: source.name,
             catalogItemID: source.catalogItemID,
             catalogID: source.catalogID,
+            familyID: source.familyID,
             group: source.group,
             plannedSets: 0,
             plannedReps: firstSet?.reps ?? source.plannedReps,

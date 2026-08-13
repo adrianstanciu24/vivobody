@@ -262,10 +262,24 @@ struct BiomechanicsDomainTests {
     }
 
     @Test func strictCatalogRejectsIncompleteBiomechanics() {
+        expectValidationError(
+            .invalidFamilyID("Not A Stable ID"),
+            records: [record(familyID: "Not A Stable ID")]
+        )
+        expectValidationError(
+            .invalidPlanes("test"),
+            records: [record(planes: [])]
+        )
+        expectValidationError(
+            .invalidPlanes("test"),
+            records: [record(planes: [.sagittal, .sagittal])]
+        )
         expectValidationError(.emptyInvolvement("test"), records: [record(involvement: [])])
         expectValidationError(
             .missingPrimary("test"),
-            records: [record(involvement: [.init(muscle: .pectorals, role: .secondary)])]
+            records: [record(involvement: [
+                .init(muscle: .pectoralisMajorSternocostal, role: .secondary)
+            ])]
         )
         expectValidationError(
             .primaryGroupMismatch("test"),
@@ -324,6 +338,7 @@ struct BiomechanicsDomainTests {
     }
 
     private func record(
+        familyID: String = "test-family",
         catalogID: String = "test",
         name: String = "Test Exercise",
         defaultWeight: Double = 20,
@@ -334,15 +349,17 @@ struct BiomechanicsDomainTests {
         mechanic: Mechanic = .compound,
         pattern: MovementPattern? = .push,
         direction: PushPullDirection? = .horizontal,
+        planes: [MovementPlane] = [.sagittal],
         aliases: [String] = [],
         bodyweightFraction: Double = 0,
         modality: ExerciseModality = .dynamicStrength,
         loadMode: ExerciseLoadMode = .external,
         involvement: [CatalogRecord.MuscleAssignment] = [
-            .init(muscle: .pectorals, role: .primary)
+            .init(muscle: .pectoralisMajorSternocostal, role: .primary)
         ]
     ) -> CatalogRecord {
         CatalogRecord(
+            familyID: familyID,
             catalogID: catalogID,
             name: name,
             group: .chest,
@@ -355,7 +372,7 @@ struct BiomechanicsDomainTests {
             mechanic: mechanic,
             pattern: pattern,
             direction: direction,
-            plane: .sagittal,
+            planes: planes,
             laterality: .bilateral,
             aliases: aliases,
             searchPriority: nil,
