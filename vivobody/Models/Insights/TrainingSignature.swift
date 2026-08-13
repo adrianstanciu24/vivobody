@@ -64,19 +64,12 @@ nonisolated struct TrainingSignature {
     /// Whether the archive contains any muscle-targeted volume.
     let hasVolume: Bool
     init(
-        volume: [MuscleVolumeStat],
-        groupVolume authoredGroupVolume: [MuscleGroup: Double]? = nil,
+        groupVolume: [MuscleGroup: Double],
         cadence: Double
     ) {
         // Volume share per group across the full archive. Weekly volume
         // remains available independently on `effectiveSets` for its
         // existing consumers.
-        var groupVolume = authoredGroupVolume ?? [:]
-        if authoredGroupVolume == nil {
-            for stat in volume {
-                groupVolume[stat.muscle.group, default: 0] += stat.allTimeEffectiveSets
-            }
-        }
         let totalVolume = groupVolume.values.reduce(0, +)
 
         petals = MuscleGroup.allCases.map { group in
@@ -154,7 +147,6 @@ extension Array where Element == WorkoutSession {
         )
         let progress = accumulator.progressByExercise
         return TrainingSignature(
-            volume: accumulator.muscleVolume(now: now),
             groupVolume: accumulator.allTimeMuscleGroupVolume(now: now),
             cadence: accumulator.archiveOverview(
                 progress: progress,
@@ -169,18 +161,25 @@ nonisolated extension AnalyticsAccumulator {
     /// group using its strongest exact-region role. Taxonomy splits
     /// therefore improve anatomical detail without multiplying a
     /// group's Training Signature volume.
-    func allTimeMuscleGroupVolume(now: Date) -> [MuscleGroup: Double] {
+    func allTimeMuscleGroupVolume(
+        now: Date,
+        isCancelled: @Sendable () -> Bool = { false }
+    ) -> [MuscleGroup: Double] {
         var totals: [MuscleGroup: Double] = [:]
         for session in sessions where session.date <= now {
+            guard !isCancelled() else { return [:] }
             for exercise in session.exercises {
+                guard !isCancelled() else { return [:] }
                 var strongestByGroup: [MuscleGroup: Double] = [:]
                 for (muscle, credit) in exercise.byMuscle {
+                    guard !isCancelled() else { return [:] }
                     strongestByGroup[muscle.group] = max(
                         strongestByGroup[muscle.group] ?? 0,
                         credit
                     )
                 }
                 for (group, credit) in strongestByGroup {
+                    guard !isCancelled() else { return [:] }
                     totals[group, default: 0] += credit
                 }
             }

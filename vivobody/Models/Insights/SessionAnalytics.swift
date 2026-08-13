@@ -511,7 +511,6 @@ final class SessionAnalytics {
         )
 
         let signature = TrainingSignature(
-            volume: core.volume,
             groupVolume: core.groupVolume,
             cadence: core.overview.averageWorkoutsPerWeek
         )
@@ -674,9 +673,14 @@ private actor AnalyticsWorker {
             isCancelled: { Task.isCancelled }
         )
         try Task.checkCancellation()
+        let groupVolume = accumulator.allTimeMuscleGroupVolume(
+            now: now,
+            isCancelled: { Task.isCancelled }
+        )
+        try Task.checkCancellation()
         let reports = SessionAnalytics.CoreReports(
             volume: volume,
-            groupVolume: accumulator.allTimeMuscleGroupVolume(now: now),
+            groupVolume: groupVolume,
             development: development,
             muscleMap: muscleMap,
             strength: strength,
