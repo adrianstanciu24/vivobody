@@ -2,7 +2,7 @@
 //  MuscleMappingTests.swift
 //  vivobodyTests
 //
-//  Pins the complete 52-region catalog taxonomy at the runtime
+//  Pins the complete 53-region catalog taxonomy at the runtime
 //  boundary: stable IDs, display names, browse groups, exact SceneKit
 //  mesh ownership, catalog coverage, and categorical role projections.
 //
@@ -38,7 +38,8 @@ struct MuscleMappingTests {
         .init(muscle: .levatorScapulae, displayName: "Levator Scapulae", group: .back, meshBases: ["Levator_Scapulaes"]),
         .init(muscle: .rhomboids, displayName: "Rhomboids", group: .back, meshBases: ["Rhomboideus_Major", "Rhomboideus_Minor"]),
         .init(muscle: .teresMajor, displayName: "Teres Major", group: .back, meshBases: ["Teres_Major"]),
-        .init(muscle: .lowerBack, displayName: "Lower Back", group: .back, meshBases: ["Quadratus_Lumborum", "Serratus_Posterior_Inferior", "Serratus_Posterior_Superior"]),
+        .init(muscle: .quadratusLumborum, displayName: "Quadratus Lumborum", group: .back, meshBases: ["Quadratus_Lumborum"]),
+        .init(muscle: .lumbarExtensors, displayName: "Lumbar Extensors", group: .back, meshBases: []),
 
         .init(muscle: .deltoidAnterior, displayName: "Front Delts", group: .shoulders, meshBases: ["Deltoid_Anterior"]),
         .init(muscle: .deltoidLateral, displayName: "Side Delts", group: .shoulders, meshBases: ["Deltoid_Lateral"]),
@@ -85,11 +86,12 @@ struct MuscleMappingTests {
         .init(muscle: .toeExtensors, displayName: "Toe Extensors", group: .legs, meshBases: ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"]),
     ]
 
-    @Test func runtimeTaxonomyExactlyMatchesTheReviewed52Regions() {
+    @Test func runtimeTaxonomyExactlyMatchesTheReviewed53Regions() {
         let expectedIDs: Set<String> = [
             "pectoralisMajorClavicular", "pectoralisMajorSternocostal", "pectoralisMinor",
             "serratus", "lats", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower",
-            "levatorScapulae", "rhomboids", "teresMajor", "lowerBack", "deltoidAnterior",
+            "levatorScapulae", "rhomboids", "teresMajor", "quadratusLumborum",
+            "lumbarExtensors", "deltoidAnterior",
             "deltoidLateral", "deltoidPosterior", "externalRotators", "subscapularis",
             "supraspinatus", "bicepsBrachii", "brachialis", "brachioradialis",
             "forearmPronators", "supinator", "flexorCarpiRadialis", "flexorCarpiUlnaris",
@@ -102,7 +104,7 @@ struct MuscleMappingTests {
             "toeExtensors",
         ]
 
-        #expect(Self.taxonomy.count == 52)
+        #expect(Self.taxonomy.count == 53)
         #expect(Set(Muscle.allCases.map(\.rawValue)) == expectedIDs)
         #expect(Set(Self.taxonomy.map(\.muscle)) == Set(Muscle.allCases))
 
@@ -118,9 +120,10 @@ struct MuscleMappingTests {
             }
         }
 
-        #expect(ownedNodes.count == 124)
+        #expect(ownedNodes.count == 120)
         #expect(Set(Muscle.allCases.filter { !$0.isVisualized }) == Set([
             .subscapularis, .supraspinatus, .forearmPronators, .supinator,
+            .lumbarExtensors,
         ]))
     }
 
@@ -188,12 +191,36 @@ struct MuscleMappingTests {
         }
     }
 
+    @Test func lumbarFamiliesProjectTruthfulVisibleAndUnvisualizedRoles() {
+        let lumbarExtension = Muscle.involvement(
+            forExerciseNamed: "MedX Isolated Lumbar Extension"
+        )
+        #expect(lumbarExtension.role(for: .lumbarExtensors) == .primary)
+        #expect(lumbarExtension.role(for: .quadratusLumborum) == nil)
+        #expect(lumbarExtension.anatomyNodeChannels.isEmpty)
+        #expect(lumbarExtension.volumeCredit(for: .lumbarExtensors) == 1)
+
+        let lateral = Muscle.involvement(
+            forExerciseNamed: "Fixed-Leg Side-Lying Lateral Trunk Lift"
+        )
+        #expect(lateral.role(for: .obliques) == .primary)
+        #expect(lateral.role(for: .quadratusLumborum) == .secondary)
+        #expect(lateral.role(for: .lumbarExtensors) == .stabilizer)
+        #expect(lateral.anatomyNodeChannels["Quadratus_Lumborum_L"]?.intensity == 0.5)
+        #expect(lateral.anatomyNodeChannels["Quadratus_Lumborum_R"]?.intensity == 0.5)
+        #expect(lateral.volumeCredit(for: .quadratusLumborum) == 0.5)
+        #expect(lateral.volumeCredit(for: .lumbarExtensors) == 0)
+        #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Inferior_L") == false)
+        #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Superior_L") == false)
+    }
+
     @Test func unknownAndObsoleteSnapshotKeysDoNotInventAnatomy() {
         #expect(Muscle.involvement(forExerciseNamed: "Totally Made Up Lift").isEmpty)
         #expect(Muscle.Involvement(snapshot: [
             "pectorals": 1,
             "quads": 1,
             "glutes": 1,
+            "lowerBack": 1,
         ]).isEmpty)
     }
 

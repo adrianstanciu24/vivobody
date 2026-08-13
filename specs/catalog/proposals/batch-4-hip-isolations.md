@@ -112,12 +112,12 @@ The exact active role envelope is:
     { "anyOf": ["gluteMax"], "minimumRole": "primary" },
     { "anyOf": ["medialHamstrings"], "minimumRole": "secondary" },
     { "anyOf": ["bicepsFemoris"], "minimumRole": "stabilizer" },
-    { "anyOf": ["lowerBack"], "minimumRole": "stabilizer" }
+    { "anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer" }
   ],
   "allowedByRole": {
     "primary": ["gluteMax"],
     "secondary": ["medialHamstrings"],
-    "stabilizer": ["bicepsFemoris", "lowerBack"]
+    "stabilizer": ["bicepsFemoris", "lumbarExtensors"]
   }
 }
 ```
@@ -134,13 +134,13 @@ That stabilizer is evidence-required rather than a validator patch. The
 assigned movers already cover hip, pelvis, and knee stability; biceps femoris
 is retained because it was directly measured and the conservative visible
 region can truthfully receive held-knee control without being mislabeled as a
-dynamic hip extensor. `lowerBack` is likewise the directly measured provider
+dynamic hip extensor. `lumbarExtensors` is likewise the directly measured provider
 for the otherwise uncovered spine demand.
 
 The study measured erector spinae and used an abdominal drawing-in maneuver
 monitored through a pressure biofeedback unit, but it did not measure a
 specific abdominal muscle and acknowledged that correct abdominal activation
-was not confirmed by ultrasound. `lowerBack` therefore represents the
+was not confirmed by ultrasound. `lumbarExtensors` therefore represents the
 measured posterior spine-control role; no arbitrary `abs` or `obliques`
 assignment is fabricated from the generic cue.
 
@@ -148,7 +148,7 @@ assignment is fabricated from the generic cue.
 
 | Catalog ID | Name and aliases | Geometry | Load semantics | Roles |
 |---|---|---|---|---|
-| `prone-table-bent-knee-hip-extension` | **Prone Table Bent-Knee Hip Extension**; `Prone Table Hip Extension`, `Bent-Knee Prone Hip Extension` | prone table, unilateral, knee 90 degrees, hip 30 degrees flexion to 5 degrees extension | bodyweight equipment, `nonComparable`, zero authored fraction; 10 reps | gluteMax P, medialHamstrings S, bicepsFemoris St, lowerBack St |
+| `prone-table-bent-knee-hip-extension` | **Prone Table Bent-Knee Hip Extension**; `Prone Table Hip Extension`, `Bent-Knee Prone Hip Extension` | prone table, unilateral, knee 90 degrees, hip 30 degrees flexion to 5 degrees extension | bodyweight equipment, `nonComparable`, zero authored fraction; 10 reps | gluteMax P, medialHamstrings S, bicepsFemoris St, lumbarExtensors St |
 
 The 30-degree start and 5-degree extension endpoint are the reviewed authoring
 targets, not a promise of laboratory precision in user repetitions. The

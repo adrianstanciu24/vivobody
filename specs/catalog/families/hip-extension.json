@@ -120,7 +120,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       }
@@ -134,7 +134,7 @@
       ],
       "stabilizer": [
         "bicepsFemoris",
-        "lowerBack"
+        "lumbarExtensors"
       ]
     }
   },
@@ -317,7 +317,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         }
       ],

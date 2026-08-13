@@ -1,22 +1,23 @@
 # Batch 7 — dynamic spine decisions
 
-Status: `spine-flexion` and `spine-rotation` are active with shared evidence
-registered. `spine-extension` and `spine-lateral-flexion` remain held; no
-family JSON is authored for either one.
+Status: all four dynamic-spine candidates are active. The later lumbar-anatomy
+closure split the false surface aggregate into visible `quadratusLumborum`
+and explicitly unvisualized `lumbarExtensors` regions, then admitted canonical
+PMCID/PMID evidence when a primary paper has no DOI.
 
 ## Outcome
 
 | Family | Initial fixture | Decision |
 |---|---|---|
 | `spine-flexion` | 30-Degree Curl-Up | Activate narrowly |
-| `spine-extension` | MedX Isolated Lumbar Extension | Hold for truthful visible lumbar-extensor taxonomy |
+| `spine-extension` | MedX Isolated Lumbar Extension | Activate after lumbar taxonomy repair |
 | `spine-rotation` | Seated Machine Torso Twist | Activate narrowly |
-| `spine-lateral-flexion` | none | Hold |
+| `spine-lateral-flexion` | Fixed-Leg Side-Lying Lateral Trunk Lift | Activate after taxonomy and evidence-policy repair |
 
-The two active families each declare one unconditioned spinal prime action,
+The four active families each declare one unconditioned spinal prime action,
 its one cardinal basis plane, and the exact 43-action complement as forbidden.
-Both are isolation families with null pattern and direction and group under
-`core`.
+All are isolation families with null pattern and direction. Spine extension
+groups under `back`; the other three group under `core`.
 
 ## Spine flexion
 
@@ -54,32 +55,27 @@ range is 72 degrees of lumbar flexion to the machine's 0-degree full-extension
 reference. Repetitions take at least two seconds to extend, hold full
 extension for one second, and take at least four seconds to return.
 
-The fixture evidence is sufficient, but the current product taxonomy is not.
-`lowerBack` is named for lumbar extensors while its only visible meshes are
-quadratus lumborum and superior/inferior posterior serratus. It exposes no
-erector-spinae or multifidus surface. Assigning that region as the sole primary
-would therefore award all volume and highlight the wrong visible anatomy for a
-canonical lumbar-extension exercise. Disclosure cannot repair that user-facing
-result, so the candidate remains held and has no family JSON or registered
-evidence entry.
+The original hold was correct: the former region painted quadratus lumborum
+and posterior serratus even though the MedX fixture trains the erector-spinae
+and multifidus extensor system. The resolution does not hide that mismatch.
+`quadratusLumborum` now owns only its exact visible mesh;
+`lumbarExtensors` is an explicitly unvisualized erector-spinae/multifidus
+region; and posterior serratus is excluded from trainable ownership. The MedX
+record therefore earns truthful lumbar-extensor volume and development credit
+without painting a substitute surface.
 
-Resolve the hold atomically by introducing a truthful lumbar-extensor region
-with actual erector-spinae/multifidus meshes, or an explicitly unvisualized
-region until those assets exist; move `spine.extension` and the MedX role to
-that region; recast quadratus lumborum for its reviewed lateral-flexion and
-stability functions; stop using posterior serratus as a lumbar-extensor proxy;
-and re-review every current `lowerBack` assignment. Only then should the exact
-MedX setup, 72-to-0-degree range, 2/1/4-second cadence, and product seeds be
-activated. Unsupported hyperextensions, Roman-chair and 45-degree variants,
-reverse hypers, hinges, floor supermans, limited-range protocols, and other
-machines remain outside even that future narrow contract.
+The active family pins the exact restraint system, 72-to-0-degree machine
+range, 2/1/4-second cadence, and a conservative independent stack seed.
+Unsupported hyperextensions, Roman-chair and 45-degree variants, reverse
+hypers, hinges, floor supermans, limited-range protocols, and other machines
+remain outside the narrow contract.
 
 The reviewed hold source is Fisher et al., *Heavier- and lighter-load isolated
 lumbar extension resistance training produce similar strength increases, but
 different perceptual responses, in healthy males and females* (2018), DOI
-`10.7717/peerj.6001`, PMID `30498645`. The proposed evidence ID
-`fisher-2018-isolated-lumbar-extension` remains unregistered until a family can
-cite it without producing false visible credit.
+`10.7717/peerj.6001`, PMID `30498645`. The evidence ID
+`fisher-2018-isolated-lumbar-extension` is registered and cited by the active
+family.
 
 ## Spine rotation
 
@@ -113,9 +109,9 @@ The active record assigns only `obliques` primary. The one product region
 cannot represent the ipsilateral/contralateral or internal/external strategy,
 so the side-specific limitation is disclosed. Rectus-abdominis and
 erector-spinae signals are not automatically promoted to stabilizer credit:
-EMG presence is not a categorical volume oracle, and the existing
-`lowerBack` surface also aggregates quadratus-lumborum and posterior-serratus
-meshes rather than exposing the measured erector-spinae subdivisions.
+EMG presence is not a categorical volume oracle, so those signals do not
+automatically create stabilizer roles even though the repaired taxonomy can
+now name lumbar extensors truthfully.
 The primary oblique region already covers the declared spine and pelvis
 stability demands.
 
@@ -133,41 +129,38 @@ rotations, wood chops, Russian twists, landmine rotations, medicine-ball
 throws, alternating-direction repetitions, flexion-rotation, and anti-rotation
 work remain separate branches.
 
-## Why spine lateral flexion remains held
+## Spine lateral flexion
 
-The clean condition-matched dynamic fixture is Konrad et al.'s side-lying
-lateral trunk lift to 30 degrees (`PMID 12937449`, `PMCID PMC155519`). That
-paper has no DOI. The current evidence registry requires a non-empty DOI and
-the exact canonical `https://doi.org/{doi}` URL; inventing a DOI is not an
-option.
+Konrad et al.'s DOI-less but fully archived primary paper directly anchors the
+side-lying condition: the upper foot crosses the lower leg and is externally
+fixed while the upper body lifts 30 degrees. External oblique was the main
+measured activity; lumbar erector spinae and rectus abdominis coactivated. The
+paper did not measure quadratus lumborum, internal oblique, a fixation device,
+or arm posture, and it reports individual freedom in combined hip-joint and
+segmental-spine motion.
 
-The DOI-backed alternatives do not close the exercise-specific gap:
+The active record therefore assigns `obliques` primary, `abs` and
+`lumbarExtensors` stabilizer, and `quadratusLumborum` secondary only through an
+explicit triangulation: Andersson's ultrasound-guided fine-wire study found
+the highest observed QL activity during ipsilateral side-lying trunk flexion,
+Christophy establishes lumbar mechanics, and Konrad supplies the dynamic
+30-degree topology. Holding the pelvis and hip still and prescribing equal
+work in the opposite direction are disclosed product coaching adaptations,
+not findings attributed to Konrad.
 
-- Andersson et al., DOI `10.1016/0268-0033(96)00033-2`, tested maximal
-  **isometric** ipsilateral trunk flexion in side-lying rather than a dynamic
-  repetition.
-- Marras and Granata, DOI `10.1016/S0021-9290(97)00010-9`, studied loaded
-  industrial lateral-bending tasks at different velocities, not a narrow gym
-  fixture that can be coached and assigned without invention.
-
-The taxonomy adds a second reason not to guess. `lowerBack` combines a
-quadratus-lumborum surface with posterior-serratus surfaces, while `obliques`
-combines internal and external obliques bilaterally. Both profiles can produce
-`spine.lateralFlexion`, but the available admissible evidence does not support
-a truthful exercise-specific categorical rank across those aggregate regions.
-
-The hold can be reopened by either a directly reviewed DOI-backed dynamic
-fixture or a separately approved evidence-schema migration. A minimal
-alternate-identifier migration would require exactly one supported canonical
-identifier route: DOI plus DOI URL, or PMID/PMCID plus a canonical NCBI URL;
-the validator and mutation tests would need to reject missing, conflicting,
-or fabricated identifiers. That migration is outside this batch.
+The evidence validator now accepts one deterministic canonical route: DOI
+first, otherwise PMCID, otherwise PMID. Identifier formats and uniqueness are
+pinned, and the URL must match the highest-priority available identifier.
+This admits Konrad without inventing a DOI while preserving a strict official
+source boundary. Unfixed-leg, standing, externally loaded, side-plank,
+lateral-hip-lift, and combined-hip-motion variants remain outside the family.
 
 ## Exact evidence registration payloads
 
-The three active sources below are all referenced by an active family or
-exercise, so evidence coverage remains closed. The held extension and
-lateral-flexion sources are not registered while their families remain held.
+The sources below are referenced by active families or exercises, so evidence
+coverage remains closed. The registry also contains Fisher, Konrad, and
+Andersson with the exact metadata and limitation-rich scopes in
+`evidence.json`.
 
 ```json
 {
@@ -230,14 +223,13 @@ lateral-flexion sources are not registered while their families remain held.
 
 ## Integration tests
 
-1. Pin exactly the two active family IDs and one roster record per family;
-   assert that `spine-extension.json` and `spine-lateral-flexion.json` remain
-   absent while their holds are unresolved.
+1. Pin all four active dynamic-spine family IDs and their one-record rosters,
+   including the MedX and fixed-crossed-foot fixtures.
 2. Pin each fixed plane against its basis action and require the exact
    43-action forbidden complement; mutate every forbidden action directly.
-3. Remove and demote every required muscle independently. Assert no iliopsoas,
-   abs, or `lowerBack` proxy role is fabricated where the active contract omits
-   it.
+3. Remove and demote every required muscle independently. Assert no iliopsoas
+   role is fabricated in curl-up, and no QL role can be coordinated into MedX
+   even though QL has a modest anatomical extension capability.
 4. Pin every single-value enum, boolean, and number axis and mutate each with
    the exact validator failure. The one-record contracts use axis invariants,
    not always-true exercise rules.
@@ -246,15 +238,19 @@ lateral-flexion sources are not registered while their families remain held.
    `positionHeldCatalogAdaptation` pelvis disclosure, the
    `oneDirectionAtATime` set topology, and the one-record `bothDirections`
    training prescription.
-6. Verify stability coverage from assigned regions: flexion uses abs and
-   obliques, while rotation uses obliques. Do not add joint demands merely
-   because an external pad or restraint contacts them.
-7. Pin zero bodyweight fraction for the non-comparable curl-up and the clean
-   metric seed for the externally loaded rotation machine.
-8. Pin globally unique catalog IDs, names, and aliases, keep the three active
-   evidence sources referenced, and pin the user-visible extension hold so a
-   `lowerBack` proxy cannot silently activate later.
+6. Verify exact role-agnostic stability coverage, including QL plus
+   lumbar-extensor/abdominal stabilization in the lateral fixture.
+7. Pin zero bodyweight fractions and independent product seeds. Konrad used
+   nine repetitions; the record's 10-repetition seed and 8-to-15 recommendation
+   are product defaults, not source prescriptions.
+8. Pin globally unique catalog identities, all active evidence references,
+   canonical DOI/PMCID/PMID routes, 53 taxonomy regions, 60 trainable mesh
+   bases, and the exact two posterior-serratus non-trainable surfaces.
+9. At runtime, prove MedX earns lumbar-extensor volume/development without
+   painting QL, while the lateral lift credits visible QL and gives the
+   lumbar-extensor stabilizer zero volume. Textual UI must retain unvisualized
+   lumbar-extensor roles and development with a clear 3D-unavailable note.
 
-No family-schema, joint-action, validator, or resisted-action change is
-required for the two narrow activations. The held extension family requires
-an atomic taxonomy/body-model migration before it may activate.
+No family-schema, joint-action, or resisted-action change was required. The
+atomic taxonomy, evidence-registry, family, runtime, UI, and test changes close
+both former holds without inventing substitute anatomy.

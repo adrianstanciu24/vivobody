@@ -5,8 +5,8 @@ bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 44
-active families and their 120 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 46
+active families and their 122 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement definition
@@ -91,7 +91,8 @@ The rotator-cuff taxonomy is also explicit:
   until the body asset contains an appropriate mesh.
 
 There are no combined `glutes` or `teres` catalog values. The complete
-set of 52 exact runtime regions, including split upper-body and lower-body
+set of 53 exact runtime regions, including split upper-body, lower-body, and
+lumbar regions,
 contributors, is defined only by `specs/catalog/taxonomy.json`.
 
 ## Modality and tracking
@@ -215,7 +216,7 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 44 family IDs and 120 exercise records; it is
+- The projection contains exactly 46 family IDs and 122 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
 - Every required raw enum decodes without fallback.

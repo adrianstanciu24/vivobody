@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-rotation",
   "name": "Anti-Rotation",
-  "definition": "A strict unilateral isometric trunk family in which a horizontal band anchored to one side tends to rotate the spine and pelvis while the athlete maintains a feet-together standing posture with both arms extended at shoulder height. The initial fixture is a hold rather than a dynamic press: spine.rotation is the external tendency being resisted and no deliberate shoulder, elbow, spinal, pelvic, hip, knee, or ankle motion creates a repetition. The direct exercise study measured sacral acceleration rather than EMG and deliberately varied the lower-body base of support. Obliques are primary through the reviewed self-opposed rotation semantics and anatomy; abs, lowerBack, serratus, anterior deltoid, triceps, finger flexors, extensor carpi radialis, gluteus medius, vasti, and soleus are conservative anatomy-and-mechanics-derived stabilizers of the materially controlled upper- and lower-body chain, not study-measured Pallof roles. Extensor carpi radialis supplies neutral-wrist counter-control against the finger flexors' wrist-flexion moment during the static handle task. The visible oblique region cannot encode internal versus external or left versus right recruitment. Cable-stack, dynamic-press, kneeling, split-stance, tandem, unstable-surface, overhead, chopping, and hybrid variants remain outside this contract.",
+  "definition": "A strict unilateral isometric trunk family in which a horizontal band anchored to one side tends to rotate the spine and pelvis while the athlete maintains a feet-together standing posture with both arms extended at shoulder height. The initial fixture is a hold rather than a dynamic press: spine.rotation is the external tendency being resisted and no deliberate shoulder, elbow, spinal, pelvic, hip, knee, or ankle motion creates a repetition. The direct exercise study measured sacral acceleration rather than EMG and deliberately varied the lower-body base of support. Obliques are primary through the reviewed self-opposed rotation semantics and anatomy; abs, lumbarExtensors, serratus, anterior deltoid, triceps, finger flexors, extensor carpi radialis, gluteus medius, vasti, and soleus are conservative anatomy-and-mechanics-derived stabilizers of the materially controlled upper- and lower-body chain, not study-measured Pallof roles. Extensor carpi radialis supplies neutral-wrist counter-control against the finger flexors' wrist-flexion moment during the static handle task. The visible oblique region cannot encode internal versus external or left versus right recruitment. Cable-stack, dynamic-press, kneeling, split-stance, tandem, unstable-surface, overhead, chopping, and hybrid variants remain outside this contract.",
   "evidenceRefs": [
     "christophy-2012-lumbar-spine",
     "ackland-2008-shoulder-moment-arms",
@@ -134,7 +134,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       },
@@ -194,7 +194,7 @@
       "secondary": [],
       "stabilizer": [
         "abs",
-        "lowerBack",
+        "lumbarExtensors",
         "serratus",
         "deltoidAnterior",
         "triceps",
@@ -415,7 +415,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         },
         {

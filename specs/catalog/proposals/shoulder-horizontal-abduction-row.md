@@ -212,7 +212,7 @@ a dynamic retractor into a stabilizer.
 | Required stabilizer | `trapeziusUpper`, `fingerFlexors`, and `extensorCarpiRadialis` | Scapular control at shoulder height plus explicit hand and wrist control. |
 | Optional shoulder stabilizers | `externalRotators`, `supraspinatus`, `subscapularis`, `deltoidLateral` | Direction-, load-, and setup-dependent glenohumeral control; current row evidence does not justify forcing one cuff assignment onto every record. |
 | Optional scapular stabilizers | `serratus`, `pectoralisMinor` | Exercise-specific scapular control without declaring protraction, rotation, or tilt as a universal prime action. |
-| Conditional trunk/hip stabilizers | `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Required selectively by unsupported, unilateral, and hip-hinged rules. The split hamstring regions preserve hip-versus-knee capability boundaries rather than recreating the retired aggregate. |
+| Conditional trunk/hip stabilizers | `abs`, `obliques`, `lumbarExtensors`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Required selectively by unsupported, unilateral, and hip-hinged rules. The split hamstring regions preserve hip-versus-knee capability boundaries rather than recreating the retired aggregate. |
 
 Activated required policy shape:
 
@@ -284,7 +284,7 @@ Activated required policy shape:
       "pectoralisMinor",
       "abs",
       "obliques",
-      "lowerBack",
+      "lumbarExtensors",
       "gluteMax",
       "gluteMed",
       "medialHamstrings",
@@ -422,9 +422,9 @@ The following rule IDs are active. Each has a real branch in the roster.
     arm because rule 14 rejects linked unilateral machinery.
 12. `hip-hinged-requires-posterior-chain-stability`:
     `bodyPosition: hipHinged` adds `spine`, `pelvis`, and `hip` stability
-    demands and assigns `lowerBack` and `gluteMax` as stabilizers.
+    demands and assigns `lumbarExtensors` and `gluteMax` as stabilizers.
 13. `unsupported-requires-trunk-stability`: `torsoSupport: none` adds a `spine`
-    demand and assigns at least one of `abs`, `obliques`, or `lowerBack` as a
+    demand and assigns at least one of `abs`, `obliques`, or `lumbarExtensors` as a
     stabilizer through `requireMuscleRequirements`.
 14. `linked-lever-arms-are-bilateral`: a linked left/right machine lever
     requires machine equipment and bilateral laterality.
@@ -529,8 +529,8 @@ setup. A missing load estimate is a reason to defer the record, not to guess.
   published 13-muscle panel includes neither rhomboids nor any rotator-cuff
   muscle.
 - Youdas found substantial upper-thoracic erector excitation. Vivobody’s
-  `lowerBack` is the lumbar-extensor region, so that result must not be relabeled
-  as `lowerBack`. The current 41-muscle taxonomy still cannot represent thoracic
+  `lumbarExtensors` is the lumbar-extensor region, so that result must not be relabeled
+  as `lumbarExtensors`. The current 41-muscle taxonomy still cannot represent thoracic
   erectors separately. This is disclosed rather than hidden by a false mapping.
 - Fennell recruited twelve people but reports complete, usable data from only
   eight. Its fine-wire row position supports rhomboid/middle-trapezius

@@ -6,10 +6,11 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 
 ## Source files
 
-- `taxonomy.json` defines exactly 52 muscle regions, their coarse app group,
-  display names, and exactly 62 uniquely owned `BodyModel.scn` mesh base names
-  where the model has a surface mesh. An unvisualized muscle must carry an
-  explicit reason.
+- `taxonomy.json` defines exactly 53 muscle regions, their coarse app group,
+  display names, and exactly 60 uniquely owned trainable `BodyModel.scn` mesh
+  base names where the model has a truthful surface. The two posterior-serratus
+  mesh bases are explicitly non-trainable rather than serving as lumbar-muscle
+  proxies. An unvisualized muscle must carry an explicit reason.
 - `joint-actions.json` defines exactly 44 joint actions, their central
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
@@ -44,7 +45,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 The lower-body taxonomy intentionally creates more exact, sometimes clinical
 region labels such as `Vasti`, `Pectineus`, and `Fibularis Tertius`. The app
 must not flatten those back into false `Quads`, `Calves`, or `Hip Flexors`
-region identities. The runtime uses all 52 stable IDs, display names, groups,
+region identities. The runtime uses all 53 stable IDs, display names, groups,
 and mesh owners together; the six existing groups remain the coarse glanceable
 roll-up. `MuscleMappingTests` pins that runtime mapping. Product copy may provide
 contextual descriptions, but it must not create a second anatomical taxonomy.
@@ -196,8 +197,10 @@ hip-position condition with which to bound flexion credit. These omissions are
 explicit representational or condition-model limits, not claims that the
 omitted anatomical contributors are inactive.
 
-The lower-body split changes neither the 44-action vocabulary nor the 62 owned
-mesh bases. Arnold et al.'s lower-limb model is the capability source: it
+The lower-body split changed neither the 44-action vocabulary nor the then-62
+owned mesh bases; the later lumbar split deliberately reduced trainable
+ownership to 60 by excluding the two posterior-serratus bases. Arnold et al.'s
+lower-limb model is the capability source: it
 represents the relevant muscles as distinct paths and reports moment-generating
 behavior over joint position. A model capability permits a categorical role;
 it does not determine that role in any exercise without family-specific
@@ -354,9 +357,11 @@ validation inputs only and can never enter the runtime projection.
 
 The validator/compiler uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
-and `_R` nodes, all 62 mesh-base owners are unique, the taxonomy contains
-exactly its 52 canonical muscle regions, the capability map contains exactly
+and `_R` nodes, all 60 trainable mesh-base owners are unique, the taxonomy contains
+exactly its 53 canonical muscle regions, the capability map contains exactly
 44 joint actions, all muscles have evidence-backed action profiles, family
 prime actions have capable movers, and stability demands have capable assigned
-muscles. The runtime projection is pinned to exactly 44 active families and 120
+muscles. The two posterior-serratus mesh bases are explicitly pinned as
+non-trainable scene surfaces rather than lumbar proxies. The runtime projection
+is pinned to exactly 46 active families and 122
 exercises.

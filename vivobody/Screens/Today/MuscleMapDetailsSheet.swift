@@ -5,6 +5,8 @@
 //  Evidence behind Today's chronic 3D development colours. Bands are
 //  intentionally coarse, while weekly work and confidence stay visible
 //  as separate metadata rather than being encoded into the body colour.
+//  Regions without a scene surface remain visible as text instead of
+//  borrowing another anatomical mesh.
 //
 
 import VivoKit
@@ -17,7 +19,6 @@ struct MuscleMapDetailsSheet: View {
 
     private var entries: [MuscleMapEntry] {
         report.entries
-            .filter { $0.muscle.isVisualized }
             .sorted {
                 if $0.channels.intensity == $1.channels.intensity {
                     return $0.muscle.displayName < $1.muscle.displayName
@@ -34,6 +35,12 @@ struct MuscleMapDetailsSheet: View {
                         .font(Typography.body)
                         .foregroundStyle(Ink.secondary)
                         .fixedSize(horizontal: false, vertical: true)
+
+                    Text("Regions without a matching body-model surface remain listed and are marked 3D unavailable.")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.tertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, Space.sm)
                         .padding(.bottom, Space.lg)
 
                     ForEach(entries) { entry in
@@ -58,10 +65,17 @@ struct MuscleMapDetailsSheet: View {
 
     private func row(_ entry: MuscleMapEntry) -> some View {
         HStack(alignment: .top, spacing: Space.md) {
-            Circle()
-                .fill(color(for: entry.channels))
-                .frame(width: 16, height: 16)
-                .padding(.top, 4)
+            if entry.muscle.isVisualized {
+                Circle()
+                    .fill(color(for: entry.channels))
+                    .frame(width: 16, height: 16)
+                    .padding(.top, 4)
+            } else {
+                Circle()
+                    .strokeBorder(Ink.quaternary, lineWidth: 1)
+                    .frame(width: 16, height: 16)
+                    .padding(.top, 4)
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -78,6 +92,12 @@ struct MuscleMapDetailsSheet: View {
                     .font(Typography.caption)
                     .foregroundStyle(Ink.tertiary)
                     .fixedSize(horizontal: false, vertical: true)
+
+                if !entry.muscle.isVisualized {
+                    Text("3D view unavailable")
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                }
 
                 if !entry.topExercises.isEmpty {
                     Text(entry.topExercises.joined(separator: " · "))

@@ -165,7 +165,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       }
@@ -186,7 +186,7 @@
         "gluteMed",
         "abs",
         "obliques",
-        "lowerBack"
+        "lumbarExtensors"
       ]
     }
   },
@@ -414,7 +414,7 @@
         { "muscle": "gluteMed", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",

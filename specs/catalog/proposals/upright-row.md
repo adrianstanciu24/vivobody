@@ -145,7 +145,7 @@ confirmed:
 | Stabilizer | `deltoidPosterior` | McAllister records excitation, but the current profile does not make it a shoulder abductor; do not promote EMG into a false action. |
 | Stabilizers | `externalRotators`, `subscapularis` | Glenohumeral control, not evidence of a deliberate rotation prime action. |
 | Stabilizers | `fingerFlexors`, `extensorCarpiRadialis` | Static implement hold plus wrist control, without recreating a generic forearm region or dynamic grip action. |
-| Stabilizers | `abs`, `obliques`, `lowerBack` | Available only with declared spinal or pelvic stability demands. |
+| Stabilizers | `abs`, `obliques`, `lumbarExtensors` | Available only with declared spinal or pelvic stability demands. |
 
 The roles of `trapeziusUpper`, `trapeziusLower`, and `serratus` remain blocked
 on the scapular-action decision. If upward rotation is required, capable

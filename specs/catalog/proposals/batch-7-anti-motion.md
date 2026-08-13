@@ -72,11 +72,10 @@ EMG magnitude: mean external- and internal-oblique activity both exceeded
 rectus-abdominis activity in the stable fixture. Both visible abdominal regions
 also stabilize the declared spine and pelvis demands.
 
-The low measured erector-spinae activity is retained only as non-mapping
-context. The visible `lowerBack` region contains quadratus-lumborum and
-posterior-serratus surfaces, not the measured erector-spinae subdivisions, so
-that signal is not used to grant or withhold `lowerBack` credit. The active
-fixture assigns no `lowerBack` role.
+The low measured erector-spinae activity is retained only as context. The
+visible `quadratusLumborum` region is now QL alone, while the erector-spinae and
+multifidus `lumbarExtensors` region is explicitly unvisualized. Neither signal
+creates a role in this family.
 
 The forearm-and-foot bridge nevertheless makes its internal support chain
 material rather than incidental. `serratus`, `externalRotators`, and `triceps`
@@ -128,11 +127,9 @@ initial record therefore assigns:
 
 - `obliques` primary, directly measured and mechanically responsible for the
   named anti-lateral-flexion task;
-- `lowerBack` secondary through the quadratus-lumborum-containing region's
-  reviewed lateral-flexion capability. Its visible meshes are quadratus
-  lumborum and posterior serratus; there is no erector-spinae or generic
-  lumbar-extensor mesh. The measured erector-spinae signal is therefore
-  non-mapping context, and neither the action model nor the body mesh can
+- `quadratusLumborum` secondary through the exact visible QL region's reviewed
+  lateral-flexion capability. The measured erector-spinae signal does not
+  establish that role, and neither the action model nor the body mesh can
   encode loaded versus contralateral side;
 - `abs` stabilizer, based on directly measured rectus-abdominis activity and
   its spine/pelvis stabilization capability rather than a claim that it is a
@@ -147,7 +144,7 @@ initial record therefore assigns:
 
 `serratus`, `triceps`, and `soleus` close the materially loaded scapular,
 elbow, ankle, and foot support chain through anatomy and mechanics. They were
-not measured in the side-bridge study. The `lowerBack` assignment likewise is
+not measured in the side-bridge study. The `quadratusLumborum` assignment likewise is
 not an erector-spinae proxy: its admission is driven by quadratus-lumborum
 anatomy and it remains impossible to allocate that credit to a particular
 side.
@@ -198,7 +195,8 @@ therefore does not directly establish a muscle-role hierarchy. `obliques` is
 the sole primary through the reviewed resisted-action capability and the
 region's axial-rotation anatomy; this is a mechanics/anatomy-derived assignment
 and the aggregate cannot encode internal-versus-external or left-versus-right
-oblique recruitment. `abs` and `lowerBack` are spine/pelvis stabilizers, while
+oblique recruitment. `abs` and explicitly unvisualized `lumbarExtensors` are
+spine/pelvis stabilizers, while
 `deltoidAnterior`, `triceps`, `fingerFlexors`, and
 `extensorCarpiRadialis` are mechanics-derived stabilizers for the held
 shoulder, elbow, and two-hand handle task. Extensor carpi radialis supplies
@@ -252,8 +250,8 @@ are not silently generalized across families:
 | Family | Primary | Secondary | Stabilizers |
 |---|---|---|---|
 | `anti-extension` | `abs` | `obliques` | `serratus`, `externalRotators`, `triceps`, `gluteMax`, `vasti`, `soleus` |
-| `anti-lateral-flexion` | `obliques` | `lowerBack` | `abs`, `deltoidLateral`, `gluteMed`, `rectusFemoris`, `serratus`, `triceps`, `soleus` |
-| `anti-rotation` | `obliques` | none | `abs`, `lowerBack`, `serratus`, `deltoidAnterior`, `triceps`, `fingerFlexors`, `extensorCarpiRadialis`, `gluteMed`, `vasti`, `soleus` |
+| `anti-lateral-flexion` | `obliques` | `quadratusLumborum` | `abs`, `deltoidLateral`, `gluteMed`, `rectusFemoris`, `serratus`, `triceps`, `soleus` |
+| `anti-rotation` | `obliques` | none | `abs`, `lumbarExtensors`, `serratus`, `deltoidAnterior`, `triceps`, `fingerFlexors`, `extensorCarpiRadialis`, `gluteMed`, `vasti`, `soleus` |
 
 All 44 dynamic joint actions are forbidden as prime actions in every family.
 This full complement is intentional even when the current role list would also
@@ -386,7 +384,7 @@ The shared registry contains these four sources.
    from anatomy/mechanics-derived stabilization in tests and prose.
 9. Pin `nonComparable`, zero bodyweight fraction, and 30/30/15-second seeds;
    do not reintroduce unsupported legacy bodyweight fractions.
-10. Pin the anti-lateral-flexion `lowerBack` aggregation and side-resolution
+10. Pin the anti-lateral-flexion `quadratusLumborum` aggregation and side-resolution
     caveat, the side-bridge diagnostic limitation, the Pallof no-EMG
     limitation, and the mixed-intervention limitation.
 11. Assert that dynamic Pallof press and hybrid plank families remain absent,

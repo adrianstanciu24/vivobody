@@ -172,7 +172,7 @@
         "pectoralisMinor",
         "abs",
         "obliques",
-        "lowerBack",
+        "lumbarExtensors",
         "gluteMax",
         "gluteMed",
         "medialHamstrings",
@@ -522,7 +522,7 @@
       "requirePresent": [],
       "requireAbsent": [],
       "requireInvolvement": [
-        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
       "requireAdditionalStabilityDemands": [
@@ -547,7 +547,7 @@
           "anyOf": [
             "abs",
             "obliques",
-            "lowerBack"
+            "lumbarExtensors"
           ],
           "minimumRole": "stabilizer"
         }
@@ -607,7 +607,7 @@
         { "muscle": "trapeziusUpper", "role": "stabilizer" },
         { "muscle": "fingerFlexors", "role": "stabilizer" },
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
         { "muscle": "gluteMax", "role": "stabilizer" }
       ],
       "variant": {

@@ -104,7 +104,7 @@ of work" is worth by construction.
   old fixtures silently resolved to empty involvement).
 - `MuscleDevelopmentTests` were recalibrated for the linear map. Temporary
   repair tests were deleted with the repair.
-- `MuscleMappingTests` now guard the exact 52-region taxonomy and SceneKit
+- `MuscleMappingTests` now guard the exact 53-region taxonomy and SceneKit
   ownership rather than a compatibility rewrite.
 
 ## Deferred (data fixes, separate pass)

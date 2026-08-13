@@ -176,7 +176,7 @@ a squat even though they produce an authored action.
 | Required stabilizer | `brachialis` | Controls the maintained flexed-elbow bar position; it does not imply dynamic elbow flexion. |
 | Required stabilizer | `trapeziusUpper` | Controls the scapular/shoulder-girdle support task under either free-bar placement. |
 | Required stabilizer | one of `externalRotators` or `deltoidAnterior` | Back-squat and clean-grip front-rack shoulder demands differ. A cross-rule pins external rotators to the upper-back bar and anterior deltoid to front rack rather than assigning both universally. |
-| Required stabilizer | `abs`, `obliques`, `lowerBack` | The complete unsupported free-bar trunk set; directly measured trunk bracing is load-bearing in this family. |
+| Required stabilizer | `abs`, `obliques`, `lumbarExtensors` | The complete unsupported free-bar trunk set; directly measured trunk bracing is load-bearing in this family. |
 
 The plantarflexor pair is not inferred from capability alone. Joseph directly
 measured medial-gastrocnemius excitation in the condition-matched parallel back

@@ -4,9 +4,9 @@
 #  vivobody
 #
 #  Foundation validator and deterministic compiler for the family-first
-#  exercise catalog. It validates the canonical 52-region taxonomy,
+#  exercise catalog. It validates the canonical 53-region taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
-#  references, and every reviewed movement-family contract. The 52-region
+#  references, and every reviewed movement-family contract. The exact-region
 #  taxonomy keeps action-divergent lower-body muscles separate wherever the
 #  scene can represent the distinction. This is the sole deterministic writer
 #  for the app's bundled runtime catalog; check mode reads that generated
@@ -44,7 +44,11 @@ XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-inputs.xcfilelist"
 
 SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
-EXPECTED_MESH_BASE_COUNT = 62
+EXPECTED_MESH_BASE_COUNT = 60
+NON_TRAINABLE_MESH_BASES = {
+    "Serratus_Posterior_Inferior",
+    "Serratus_Posterior_Superior",
+}
 EXPECTED_ACTION_COUNT = 44
 DIRECTION_AGGREGATED_ACTIONS = {
     "spine.lateralFlexion",
@@ -62,7 +66,8 @@ EXPECTED_MUSCLE_IDS = {
     "levatorScapulae",
     "rhomboids",
     "teresMajor",
-    "lowerBack",
+    "quadratusLumborum",
+    "lumbarExtensors",
     "deltoidAnterior",
     "deltoidLateral",
     "deltoidPosterior",
@@ -113,6 +118,8 @@ EXPECTED_SPLIT_MESHES = {
     "deltoidLateral": ["Deltoid_Lateral"],
     "deltoidPosterior": ["Deltoid_Posterior"],
     "trapeziusUpper": ["Trapezius_Upper"],
+    "quadratusLumborum": ["Quadratus_Lumborum"],
+    "lumbarExtensors": [],
     "trapeziusMiddle": ["Trapezius_Middle"],
     "trapeziusLower": ["Trapezius_Lower"],
     "levatorScapulae": ["Levator_Scapulaes"],
@@ -474,6 +481,12 @@ def validate_taxonomy(data: dict[str, Any], body_model_path: Path = BODY_MODEL_P
             node_name = f"{mesh_base}_{suffix}"
             require(node_name in model_strings, f"{owner} references missing BodyModel.scn node {node_name}")
 
+    for mesh_base in sorted(NON_TRAINABLE_MESH_BASES):
+        require(mesh_base not in owner_by_mesh_base, f"non-trainable mesh base {mesh_base} must not be owned by a muscle region")
+        for suffix in ("L", "R"):
+            node_name = f"{mesh_base}_{suffix}"
+            require(node_name in model_strings, f"declared non-trainable BodyModel.scn node is missing: {node_name}")
+
     return muscle_by_id, len(owner_by_mesh_base)
 
 
@@ -484,14 +497,15 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
     require_non_empty_string(data["description"], f"{context}.description")
     sources = require_list(data["sources"], f"{context}.sources")
     evidence_ids: set[str] = set()
+    identifier_owners: dict[tuple[str, str], str] = {}
 
     for index, source in enumerate(sources):
         item_context = f"{context}.sources[{index}]"
         require(isinstance(source, dict), f"{item_context} must be an object")
         require_keys(
             source,
-            required={"id", "sourceType", "title", "authors", "year", "doi", "url", "scope"},
-            optional={"pmid"},
+            required={"id", "sourceType", "title", "authors", "year", "url", "scope"},
+            optional={"doi", "pmid", "pmcid"},
             context=item_context,
         )
         source_id = require_non_empty_string(source["id"], f"{item_context}.id")
@@ -505,11 +519,47 @@ def validate_evidence(data: dict[str, Any]) -> frozenset[str]:
         for author in authors:
             require_non_empty_string(author, f"{item_context}.authors entry")
         require(type(source["year"]) is int and 1900 <= source["year"] <= 2100, f"{item_context}.year is invalid")
-        doi = require_non_empty_string(source["doi"], f"{item_context}.doi")
-        require(source["url"] == f"https://doi.org/{doi}", f"{item_context}.url must be the canonical DOI URL")
         require_non_empty_string(source["scope"], f"{item_context}.scope")
+        require(
+            any(key in source for key in ("doi", "pmid", "pmcid")),
+            f"{item_context} must declare at least one canonical identifier: doi, pmid, or pmcid",
+        )
+        if "doi" in source:
+            doi = require_non_empty_string(source["doi"], f"{item_context}.doi")
+            expected_url = f"https://doi.org/{doi}"
+        elif "pmcid" in source:
+            pmcid = source["pmcid"]
+            require(
+                isinstance(pmcid, str) and re.fullmatch(r"PMC[1-9][0-9]*", pmcid) is not None,
+                f"{item_context}.pmcid must use the canonical PMC plus digits form",
+            )
+            expected_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+        else:
+            pmid = source["pmid"]
+            require(isinstance(pmid, str) and pmid.isdigit(), f"{item_context}.pmid must contain digits")
+            expected_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+        require(source["url"] == expected_url, f"{item_context}.url must match its highest-priority canonical identifier")
         if "pmid" in source:
-            require(isinstance(source["pmid"], str) and source["pmid"].isdigit(), f"{item_context}.pmid must contain digits")
+            require(
+                isinstance(source["pmid"], str) and re.fullmatch(r"[1-9][0-9]*", source["pmid"]) is not None,
+                f"{item_context}.pmid must use canonical non-zero digits",
+            )
+        if "pmcid" in source:
+            require(
+                isinstance(source["pmcid"], str) and re.fullmatch(r"PMC[1-9][0-9]*", source["pmcid"]) is not None,
+                f"{item_context}.pmcid must use the canonical PMC plus digits form",
+            )
+        for identifier_key in ("doi", "pmid", "pmcid"):
+            if identifier_key not in source:
+                continue
+            identifier = source[identifier_key]
+            owner_key = (identifier_key, identifier.casefold() if identifier_key == "doi" else identifier)
+            previous_owner = identifier_owners.get(owner_key)
+            require(
+                previous_owner is None,
+                f"{item_context}.{identifier_key} duplicates canonical identifier owned by {previous_owner}",
+            )
+            identifier_owners[owner_key] = source_id
 
     return frozenset(evidence_ids)
 

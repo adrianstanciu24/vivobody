@@ -165,7 +165,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       },
@@ -200,7 +200,7 @@
         "triceps",
         "abs",
         "obliques",
-        "lowerBack",
+        "lumbarExtensors",
         "gluteMed",
         "vasti",
         "soleus"
@@ -401,7 +401,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         },
         {

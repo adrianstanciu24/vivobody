@@ -154,7 +154,7 @@
         "anyOf": [
           "abs",
           "obliques",
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       }
@@ -180,7 +180,7 @@
         "extensorCarpiRadialis",
         "abs",
         "obliques",
-        "lowerBack",
+        "lumbarExtensors",
         "subscapularis",
         "serratus",
         "trapeziusUpper",
@@ -585,7 +585,7 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -640,7 +640,7 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -692,7 +692,7 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -746,7 +746,7 @@
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -1113,7 +1113,7 @@
         { "muscle": "fingerFlexors", "role": "stabilizer" },
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "open",
@@ -1217,7 +1217,7 @@
         { "muscle": "fingerFlexors", "role": "stabilizer" },
         { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "open",

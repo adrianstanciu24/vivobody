@@ -357,6 +357,32 @@ struct MuscleDevelopmentTests {
         #expect(abductionNodes["Gluteus_Maximus_L"] == nil)
     }
 
+    @Test func lumbarDevelopmentNeverPaintsProxyMeshes() {
+        let lumbarExtension = session(
+            at: day(0),
+            [lift("MedX Isolated Lumbar Extension", .back, sets: 3, reps: 10, weight: 70)]
+        )
+        let extensionState = MuscleDevelopment.simulate(from: [lumbarExtension], now: day(0))
+        let extensionNodes = MuscleDevelopment.nodeIntensities(from: [lumbarExtension], now: day(0))
+        #expect(extensionState.adaptation(.lumbarExtensors) > 0)
+        #expect(extensionState.adaptation(.quadratusLumborum) == 0)
+        #expect(extensionNodes["Quadratus_Lumborum_L"] == nil)
+        #expect(extensionNodes["Serratus_Posterior_Inferior_L"] == nil)
+        #expect(extensionNodes["Serratus_Posterior_Superior_L"] == nil)
+
+        let lateral = session(
+            at: day(0),
+            [lift("Fixed-Leg Side-Lying Lateral Trunk Lift", .core, sets: 4, reps: 10, weight: 0)]
+        )
+        let lateralState = MuscleDevelopment.simulate(from: [lateral], now: day(0))
+        let lateralNodes = MuscleDevelopment.nodeIntensities(from: [lateral], now: day(0))
+        #expect(lateralState.adaptation(.quadratusLumborum) > 0)
+        #expect(lateralState.adaptation(.lumbarExtensors) == 0)
+        #expect((lateralNodes["Quadratus_Lumborum_L"] ?? 0) > 0)
+        #expect(lateralNodes["Serratus_Posterior_Inferior_L"] == nil)
+        #expect(lateralNodes["Serratus_Posterior_Superior_L"] == nil)
+    }
+
     // MARK: - Colour mapping
 
     @Test(arguments: [BodyModelTheme.dark, .light])

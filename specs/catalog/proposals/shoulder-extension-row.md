@@ -169,11 +169,11 @@ posterior thorax and can translate during a chest-supported row. Therefore:
 | Required secondary | `teresMajor`, `deltoidPosterior`, `bicepsBrachii`, `brachialis`, `brachioradialis`, `trapeziusMiddle`, `rhomboids` | Shoulder extension, the three separately represented elbow flexors, and dynamic scapular retraction. |
 | Optional secondary | `trapeziusLower`, `pectoralisMajorSternocostal` | Exercise-specific retraction contribution and position-dependent extension assistance. |
 | Required stabilizer | `subscapularis`, `fingerFlexors`, `extensorCarpiRadialis` | Direction-specific glenohumeral control plus explicit hand/wrist control. |
-| Conditional hip-hinged stabilizers | `lowerBack` and `gluteMax` | Every unsupported hip-hinged record resists spinal and hip motion. |
-| Conditional suspended stabilizers | `abs`, `lowerBack`, and `gluteMax` | The inverted-row branch maintains a straight body against gravity. |
+| Conditional hip-hinged stabilizers | `lumbarExtensors` and `gluteMax` | Every unsupported hip-hinged record resists spinal and hip motion. |
+| Conditional suspended stabilizers | `abs`, `lumbarExtensors`, and `gluteMax` | The inverted-row branch maintains a straight body against gravity. |
 | Conditional unilateral stabilizer | `obliques` | Every unilateral record resists asymmetric pelvic and trunk motion. |
-| Conditional trunk stabilizer | At least one of `abs`, `obliques`, or `lowerBack` when `torsoSupport: none` | Unsupported torso control without falsely forcing the same demand onto a chest-pad row. |
-| Other allowed stabilizers | `externalRotators`, `supraspinatus`, `trapeziusUpper`, `serratus`, `pectoralisMinor`, `abs`, `obliques`, `lowerBack`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Exercise-specific shoulder, scapular, spinal, pelvic, hip, and knee control; the conditional rows above still make some assignments mandatory in matching setups. The two hamstring regions replace the retired aggregate without granting the unsplit biceps-femoris mesh hip-extension capability. |
+| Conditional trunk stabilizer | At least one of `abs`, `obliques`, or `lumbarExtensors` when `torsoSupport: none` | Unsupported torso control without falsely forcing the same demand onto a chest-pad row. |
+| Other allowed stabilizers | `externalRotators`, `supraspinatus`, `trapeziusUpper`, `serratus`, `pectoralisMinor`, `abs`, `obliques`, `lumbarExtensors`, `gluteMax`, `gluteMed`, `medialHamstrings`, `bicepsFemoris` | Exercise-specific shoulder, scapular, spinal, pelvic, hip, and knee control; the conditional rows above still make some assignments mandatory in matching setups. The two hamstring regions replace the retired aggregate without granting the unsplit biceps-femoris mesh hip-extension capability. |
 
 The activated `allowedByRole` lists do not duplicate a muscle across roles.
 Middle trapezius and rhomboids are secondaries rather than stabilizers because
@@ -343,13 +343,13 @@ contrasting roster branch.
     loosened silently. One-arm inverted rows remain out.
 20. `hip-hinged-requires-posterior-chain-stability`:
     `bodyPosition: hipHinged` adds `spine`, `pelvis`, and `hip` stability
-    demands and assigns both `lowerBack` and `gluteMax` as stabilizers.
+    demands and assigns both `lumbarExtensors` and `gluteMax` as stabilizers.
 21. `suspended-requires-straight-body-stability`:
     `bodyPosition: supineSuspended` adds `spine`, `pelvis`, and `hip` stability
-    demands and assigns `abs`, `lowerBack`, and `gluteMax` as stabilizers.
+    demands and assigns `abs`, `lumbarExtensors`, and `gluteMax` as stabilizers.
 22. `unsupported-requires-trunk-stability`: `torsoSupport: none` adds a `spine`
     stability demand and assigns at least one of `abs`, `obliques`, or
-    `lowerBack` as a stabilizer.
+    `lumbarExtensors` as a stabilizer.
 23. `floor-reset-is-strict-pronated-barbell`: `interRepSupport: floor` requires
     bilateral pronated barbell equipment, `hipHinged`, no torso support, and no
     lower-body contribution.
@@ -372,7 +372,7 @@ member of a reviewed set is truthful:
 {
   "requireMuscleRequirements": [
     {
-      "anyOf": ["abs", "obliques", "lowerBack"],
+      "anyOf": ["abs", "obliques", "lumbarExtensors"],
       "minimumRole": "stabilizer"
     }
   ]
@@ -386,7 +386,7 @@ permissive.
 
 Within the activated roster, the conditional any-of clause is load-bearing for
 exactly the bilateral Seated Cable Row. Hip-hinged and suspended records already
-receive `lowerBack` through rules 19 and 20, while every unilateral record
+receive `lumbarExtensors` through rules 19 and 20, while every unilateral record
 receives `obliques` through rule 18. The mutation test for rule 21 must therefore
 remove the trunk assignment from Seated Cable Row rather than depending on
 exercise-array order.

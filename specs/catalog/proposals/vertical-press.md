@@ -112,7 +112,7 @@ For the deliberately narrow front/scapular-path family:
 | Primary | `deltoidAnterior` | Dominant training emphasis for the accepted front press path. |
 | Required secondary | `deltoidLateral`, `supraspinatus`, `triceps`, `serratus`, `trapeziusUpper`, `trapeziusLower` | Humeral elevation, elbow extension, and dynamic scapular rotation/tilt. |
 | Optional secondary | `pectoralisMajorClavicular` | Capable shoulder flexor with meaningful but angle-dependent contribution. |
-| Stabilizer candidates | `externalRotators`, `subscapularis`, `trapeziusMiddle`, `deltoidPosterior`, `abs`, `obliques`, `lowerBack` | Shoulder, scapular, and variant-specific trunk control. |
+| Stabilizer candidates | `externalRotators`, `subscapularis`, `trapeziusMiddle`, `deltoidPosterior`, `abs`, `obliques`, `lumbarExtensors` | Shoulder, scapular, and variant-specific trunk control. |
 
 The anterior-primary/lateral-secondary split is a catalog emphasis decision,
 not a claim that lateral deltoid is unimportant. Moment-arm and exercise EMG

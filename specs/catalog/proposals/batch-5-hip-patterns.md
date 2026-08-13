@@ -90,7 +90,7 @@ The experiment measured biceps femoris, but the scene has one unsplit
 biceps-femoris mesh. The catalog cannot truthfully give the whole region the
 long head's hip-extension action because the same mesh includes the
 monoarticular short head. It therefore receives only held-knee stabilizer
-credit if a fixture later activates. `gluteMed` and `lowerBack` remain
+credit if a fixture later activates. `gluteMed` and `lumbarExtensors` remain
 candidate directly measured pelvis/hip and spine-control roles. Static bar
 control would use the established loaded-grip `fingerFlexors` and
 `extensorCarpiRadialis` convention without adding dynamic finger or wrist prime
@@ -169,7 +169,7 @@ evidence limitation, not an invitation to coach lumbar extension.
 
 | Catalog ID | Upper-torso anchor | Reviewed knee endpoint | Seed | Roles |
 |---|---|---:|---:|---|
-| `barbell-hip-thrust` | 35.5 cm bench at inferior scapular region | 90° flexion | 95 lb / 42.5 kg; 8 reps | gluteMax P; vasti S; bicepsFemoris, gluteMed, lowerBack, soleus St |
+| `barbell-hip-thrust` | 35.5 cm bench at inferior scapular region | 90° flexion | 95 lb / 42.5 kg; 8 reps | gluteMax P; vasti S; bicepsFemoris, gluteMed, lumbarExtensors, soleus St |
 | `barbell-glute-bridge` | upper torso on floor | approximately 115° flexion | 95 lb / 42.5 kg; 10 reps | same categorical envelope |
 
 The four reciprocal rules prevent the numeric range from admitting arbitrary
@@ -190,7 +190,7 @@ Kennedy measured biceps femoris, but the unsplit-region limitation again bars
 dynamic hip-extension credit. Its anatomy profile permits the conservative
 knee-control stabilizer role. Glute medius was also directly measured; its
 profile, rather than EMG magnitude alone, supplies the hip/pelvis stabilizer
-capability while no abduction prime action is claimed. `lowerBack` is the
+capability while no abduction prime action is claimed. `lumbarExtensors` is the
 conservative anatomy- and mechanics-derived spine-control provider; it was not
 measured as a muscle and is not being called a dynamic extensor from Brazil's
 net pelvic-trunk moment. The continuously planted feet materially transmit the

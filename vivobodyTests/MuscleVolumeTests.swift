@@ -117,6 +117,25 @@ struct MuscleVolumeTests {
         #expect(stat(.pectoralisMajorSternocostal, in: raiseStats).effectiveSets == 0)
     }
 
+    @Test func lumbarFamiliesCreditExactMoversWithoutProxyVolume() {
+        let lumbarExtension = session(
+            at: day(0),
+            [lift("MedX Isolated Lumbar Extension", .back, sets: 3)]
+        )
+        let extensionStats = [lumbarExtension].muscleVolume(now: day(0))
+        #expect(stat(.lumbarExtensors, in: extensionStats).effectiveSets == 3)
+        #expect(stat(.quadratusLumborum, in: extensionStats).effectiveSets == 0)
+
+        let lateral = session(
+            at: day(0),
+            [lift("Fixed-Leg Side-Lying Lateral Trunk Lift", .core, sets: 4)]
+        )
+        let lateralStats = [lateral].muscleVolume(now: day(0))
+        #expect(stat(.obliques, in: lateralStats).effectiveSets == 4)
+        #expect(stat(.quadratusLumborum, in: lateralStats).effectiveSets == 2)
+        #expect(stat(.lumbarExtensors, in: lateralStats).effectiveSets == 0)
+    }
+
     @Test func everyMuscleIsRepresentedEvenWhenUntrained() {
         let s = session(at: day(0), [lift("Barbell Bench Press", .chest, sets: 3)])
         let stats = [s].muscleVolume(now: day(0))

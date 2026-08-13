@@ -45,7 +45,8 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
     case levatorScapulae
     case rhomboids
     case teresMajor
-    case lowerBack
+    case quadratusLumborum
+    case lumbarExtensors
 
     // Shoulders
     case deltoidAnterior
@@ -108,7 +109,8 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .levatorScapulae: return "Levator Scapulae"
         case .rhomboids: return "Rhomboids"
         case .teresMajor: return "Teres Major"
-        case .lowerBack: return "Lower Back"
+        case .quadratusLumborum: return "Quadratus Lumborum"
+        case .lumbarExtensors: return "Lumbar Extensors"
         case .deltoidAnterior: return "Front Delts"
         case .deltoidLateral: return "Side Delts"
         case .deltoidPosterior: return "Rear Delts"
@@ -162,7 +164,8 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
              .pectoralisMinor, .serratus:
             return .chest
         case .lats, .trapeziusUpper, .trapeziusMiddle, .trapeziusLower,
-             .levatorScapulae, .rhomboids, .teresMajor, .lowerBack:
+             .levatorScapulae, .rhomboids, .teresMajor, .quadratusLumborum,
+             .lumbarExtensors:
             return .back
         case .deltoidAnterior, .deltoidLateral, .deltoidPosterior,
              .externalRotators, .subscapularis, .supraspinatus:
@@ -212,12 +215,10 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
             return ["Rhomboideus_Major", "Rhomboideus_Minor"]
         case .teresMajor:
             return ["Teres_Major"]
-        case .lowerBack:
-            return [
-                "Quadratus_Lumborum",
-                "Serratus_Posterior_Inferior",
-                "Serratus_Posterior_Superior",
-            ]
+        case .quadratusLumborum:
+            return ["Quadratus_Lumborum"]
+        case .lumbarExtensors:
+            return []
         case .deltoidAnterior:
             return ["Deltoid_Anterior"]
         case .deltoidLateral:

@@ -145,7 +145,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       }
@@ -168,7 +168,7 @@
         "extensorCarpiRadialis",
         "abs",
         "obliques",
-        "lowerBack"
+        "lumbarExtensors"
       ]
     }
   },
@@ -369,7 +369,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         }
       ],
@@ -459,7 +459,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         }
       ],

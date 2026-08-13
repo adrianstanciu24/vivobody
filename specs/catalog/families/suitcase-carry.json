@@ -129,9 +129,15 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "quadratusLumborum"
         ],
         "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
       },
       {
         "anyOf": [
@@ -193,7 +199,7 @@
         "obliques"
       ],
       "secondary": [
-        "lowerBack",
+        "quadratusLumborum",
         "fingerFlexors"
       ],
       "stabilizer": [
@@ -202,6 +208,7 @@
         "externalRotators",
         "triceps",
         "abs",
+        "lumbarExtensors",
         "gluteMed",
         "vasti",
         "soleus"
@@ -378,8 +385,12 @@
           "role": "primary"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "quadratusLumborum",
           "role": "secondary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
         },
         {
           "muscle": "fingerFlexors",

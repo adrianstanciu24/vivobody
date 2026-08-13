@@ -168,7 +168,7 @@
         "fingerFlexors",
         "abs",
         "obliques",
-        "lowerBack"
+        "lumbarExtensors"
       ]
     }
   },
@@ -378,7 +378,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         }
       ],

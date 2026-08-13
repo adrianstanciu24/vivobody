@@ -1,0 +1,322 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "spine-extension",
+  "name": "Spine Extension",
+  "definition": "A strict bilateral fixed-path lumbar isolation performed on the MedX lumbar-extension machine while the thighs, distal femurs, feet, and posterior pelvis are restrained so the pelvis cannot lift or rotate. The lumbar spine extends from the machine's 72-degree full-flexion reference to its 0-degree full-extension reference, holds for one second, and returns under control. Fisher directly anchors the restraint system, range, cadence, and lumbar-extensor training outcome. The sole primary is the newly truthful lumbarExtensors region representing erector spinae and multifidus. BodyModel.scn has no matching surface, so the exercise earns exact-region volume and development credit without painting quadratus lumborum or posterior serratus as substitutes. Other machines, unsupported back extensions, Roman-chair and 45-degree variants, hip-driven repetitions, reverse hypers, floor supermans, isometrics, limited ranges, and pain-treatment prescriptions remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "fisher-2018-isolated-lumbar-extension"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [
+      "spine.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lumbarExtensors"
+      ],
+      "secondary": [],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The athlete orientation in the reviewed isolated lumbar-extension machine.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic lumbar action that creates the repetition and its controlled return.",
+      "allowedValues": [
+        "extendsThenReturns"
+      ]
+    },
+    {
+      "id": "lumbarStartFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The machine-goniometer full-flexion start reference.",
+      "minimum": 72,
+      "maximum": 72
+    },
+    {
+      "id": "lumbarEndFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The machine-goniometer full-extension endpoint reference.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The pelvis is prevented from lifting or rotating by the reviewed restraint system.",
+      "allowedValues": [
+        "positionHeldByRestraints"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip motion does not create the isolated lumbar repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "thighRestraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The restraint tightened across the thighs.",
+      "allowedValues": [
+        "present"
+      ]
+    },
+    {
+      "id": "distalFemurRestraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The restraint fixed just above the patella.",
+      "allowedValues": [
+        "present"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed adjustable support driving the shanks upward and back.",
+      "allowedValues": [
+        "tightenedFootboard"
+      ]
+    },
+    {
+      "id": "posteriorPelvisContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "The rolling upper-posterior-pelvis pad used to verify pelvic restraint.",
+      "allowedValues": [
+        "rollingPad"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The external resistance contact shown in the reviewed MedX setup.",
+      "allowedValues": [
+        "posteriorUpperTorsoPad"
+      ]
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact purpose-built mechanism admitted by the first contract.",
+      "allowedValues": [
+        "medxIsolatedLumbarExtension"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "The machine lever constrains the resistance path."
+    },
+    {
+      "id": "concentricMinimumSeconds",
+      "valueType": "number",
+      "required": true,
+      "description": "The source-prescribed minimum extension time.",
+      "minimum": 2,
+      "maximum": 2
+    },
+    {
+      "id": "fullExtensionHoldSeconds",
+      "valueType": "number",
+      "required": true,
+      "description": "The source-prescribed endpoint hold.",
+      "minimum": 1,
+      "maximum": 1
+    },
+    {
+      "id": "eccentricMinimumSeconds",
+      "valueType": "number",
+      "required": true,
+      "description": "The source-prescribed minimum controlled return time.",
+      "minimum": 4,
+      "maximum": 4
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The restrained lower body does not propel the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 20
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "medx-isolated-lumbar-extension",
+      "name": "MedX Isolated Lumbar Extension",
+      "aliases": [
+        "MedX Lumbar Extension",
+        "Restrained Lumbar Extension Machine"
+      ],
+      "equipment": "machine",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 78,
+      "involvement": [
+        {
+          "muscle": "lumbarExtensors",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "seated",
+        "spineMotion": "extendsThenReturns",
+        "lumbarStartFlexionDegrees": 72,
+        "lumbarEndFlexionDegrees": 0,
+        "pelvisMotion": "positionHeldByRestraints",
+        "hipMotion": "positionHeld",
+        "thighRestraint": "present",
+        "distalFemurRestraint": "present",
+        "footSupport": "tightenedFootboard",
+        "posteriorPelvisContact": "rollingPad",
+        "loadInterface": "posteriorUpperTorsoPad",
+        "machineType": "medxIsolatedLumbarExtension",
+        "fixedPath": true,
+        "concentricMinimumSeconds": 2,
+        "fullExtensionHoldSeconds": 1,
+        "eccentricMinimumSeconds": 4,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "fisher-2018-isolated-lumbar-extension"
+      ],
+      "movementDefinition": "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. Tighten the thigh restraint, secure the distal-femur restraint just above the patella, tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. Apply extension force only to the posterior upper-torso resistance pad. From the machine's 72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree full-extension reference, hold one second, then return for at least four seconds without lifting or rotating the pelvis or driving with the hips."
+    }
+  ]
+}

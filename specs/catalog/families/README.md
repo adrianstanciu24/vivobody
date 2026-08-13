@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Forty-four reviewed family files are currently active: the three chest
+Forty-six reviewed family files are currently active: the three chest
 presses, vertical press and pull, both compound row families, nine narrow
 shoulder or scapular-action families, dip, push press, eight narrow
 elbow/forearm/wrist families, four lower-body isolation families, and four
-lower-body compound families, three Batch-6 lower-body isolations, two
+lower-body compound families, three Batch-6 lower-body isolations, four
 dynamic-spine families, three anti-movement families, and two carry families.
 Each
 uses a coverage batch whose exercises
@@ -72,18 +72,19 @@ policy. The active families do not use a visible muscle as a proxy for an
 absent region and do not turn anatomy-level capability into unmeasured
 exercise volume.
 
-Batch 7 adds seven exercises across `spine-flexion`, `spine-rotation`,
+Batch 7 adds nine exercises across `spine-flexion`, `spine-extension`,
+`spine-lateral-flexion`, `spine-rotation`,
 `anti-extension`, `anti-lateral-flexion`, `anti-rotation`, `farmer-carry`, and
 `suitcase-carry`. The dynamic families each admit one narrow fixture; the
 spine-rotation record is unilateral at the set level and prescribes both
 rotation directions. The anti-movement families each admit one isometric hold,
-and each carry family admits one reviewed load topology. `spine-extension`
-remains held because the visible `lowerBack` meshes do not include the lumbar
-extensors or multifidus that the MedX fixture trains. Dynamic
-`spine-lateral-flexion` remains held because the condition-matched Konrad
-fixture has PMID/PMCID but no DOI, while the DOI-backed alternatives reviewed
-for this batch are isometric or industrial tasks rather than the proposed
-dynamic exercise.
+and each carry family admits one reviewed load topology. MedX extension uses an
+explicitly unvisualized erector-spinae/multifidus region, while the side-lying
+lateral trunk lift assigns visible quadratus lumborum only through disclosed
+condition-matched evidence triangulation. Posterior-serratus meshes are not
+used as lumbar training proxies. `spine-extension` and
+`spine-lateral-flexion` are active, and posterior serratus is excluded from
+trainable ownership.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -138,7 +139,7 @@ profile permits only held-knee credit.
 A `spine|pelvis` demand does not by itself prescribe a universal number of
 trunk-muscle assignments; the reviewed setup does. Unsupported exercises in
 which the full body is suspended from the hands use the complete categorical
-trunk set (`abs`, `obliques`, and `lowerBack`) to represent anterior,
+trunk set (`abs`, `obliques`, and `lumbarExtensors`) to represent anterior,
 lateral/rotational, and posterior control. This is the shared pull-up/dip
 convention. A supported or segmentally braced fixture may require only the
 reviewed subset, and asymmetric free-load setups make their anti-rotation or
@@ -448,12 +449,10 @@ wrist counter-control against the finger flexors' wrist-flexion moment. The
 Pallof source measured sacral acceleration rather than muscle EMG, so its role
 hierarchy is anatomy-and-mechanics-derived and remains explicitly disclosed.
 
-The side-plank `lowerBack` secondary is driven by the visible region's
-quadratus-lumborum capability. It is not a proxy for the study's erector-spinae
-signal: the current `lowerBack` mesh set contains quadratus lumborum and
-posterior-serratus surfaces, not an erector-spinae mesh, and it cannot allocate
-loaded versus contralateral side credit. Both sides are prescribed rather than
-pretending the aggregate is side-specific.
+The side-plank `quadratusLumborum` secondary is a mechanics-derived role for
+the visible QL region; it is not a proxy for the study's erector-spinae signal.
+Both sides are prescribed rather than pretending the direction-aggregated
+action or bilateral mesh is side-specific.
 
 `farmer-carry` and `suitcase-carry` share the implement's finger-opening
 tendency: finger flexors oppose `hand.fingerExtension`. They remain separate

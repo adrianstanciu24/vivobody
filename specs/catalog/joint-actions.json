@@ -628,7 +628,7 @@
       ]
     },
     {
-      "muscleID": "lowerBack",
+      "muscleID": "quadratusLumborum",
       "produces": [
         "spine.extension",
         "spine.lateralFlexion"
@@ -638,8 +638,25 @@
         "pelvis"
       ],
       "evidenceRefs": [
+        "christophy-2012-lumbar-spine",
+        "andersson-1996-quadratus-lumborum-emg",
+        "phillips-2008-quadratus-lumborum-biomechanics"
+      ],
+      "notes": "This visible region represents quadratus lumborum alone. It has lateral-flexion and modest extension capability plus spine/pelvis control. The modest extension capability does not establish a MedX exercise role and must not substitute for the substantially larger erector-spinae and multifidus system."
+    },
+    {
+      "muscleID": "lumbarExtensors",
+      "produces": [
+        "spine.extension"
+      ],
+      "stabilizes": [
+        "spine",
+        "pelvis"
+      ],
+      "evidenceRefs": [
         "christophy-2012-lumbar-spine"
-      ]
+      ],
+      "notes": "This region represents the lumbar erector-spinae and multifidus extensor system. BodyModel.scn has no matching surface, so the region can receive truthful volume credit but cannot paint substitute quadratus-lumborum or posterior-serratus meshes."
     },
     {
       "muscleID": "deltoidAnterior",

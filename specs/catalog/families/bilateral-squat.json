@@ -195,7 +195,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       }
@@ -220,7 +220,7 @@
         "brachialis",
         "abs",
         "obliques",
-        "lowerBack"
+        "lumbarExtensors"
       ]
     }
   },
@@ -499,7 +499,7 @@
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",
@@ -564,7 +564,7 @@
         { "muscle": "brachialis", "role": "stabilizer" },
         { "muscle": "abs", "role": "stabilizer" },
         { "muscle": "obliques", "role": "stabilizer" },
-        { "muscle": "lowerBack", "role": "stabilizer" }
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
       ],
       "variant": {
         "kineticChain": "closed",

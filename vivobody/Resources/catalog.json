@@ -201,7 +201,7 @@
         "role": "primary"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "quadratusLumborum",
         "role": "secondary"
       },
       {
@@ -270,7 +270,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -387,7 +387,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -472,7 +472,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -888,7 +888,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -968,7 +968,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -1498,7 +1498,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -1743,7 +1743,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -1792,7 +1792,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -1845,7 +1845,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -2992,7 +2992,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -3295,7 +3295,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -3771,7 +3771,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -3852,7 +3852,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -3932,7 +3932,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -4013,7 +4013,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -4098,7 +4098,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -4556,7 +4556,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -4640,7 +4640,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -4927,7 +4927,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       },
       {
@@ -5407,6 +5407,39 @@
     ]
   },
   {
+    "familyID": "spine-extension",
+    "catalogID": "medx-isolated-lumbar-extension",
+    "name": "MedX Isolated Lumbar Extension",
+    "group": "back",
+    "defaultWeight": 20,
+    "defaultWeightKg": 10,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "machine",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "MedX Lumbar Extension",
+      "Restrained Lumbar Extension Machine"
+    ],
+    "searchPriority": 78,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "movementDefinition": "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. Tighten the thigh restraint, secure the distal-femur restraint just above the patella, tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. Apply extension force only to the posterior upper-torso resistance pad. From the machine's 72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree full-extension reference, hold one second, then return for at least four seconds without lifting or rotating the pelvis or driving with the hips.",
+    "involvement": [
+      {
+        "muscle": "lumbarExtensors",
+        "role": "primary"
+      }
+    ]
+  },
+  {
     "familyID": "spine-flexion",
     "catalogID": "30-degree-curl-up",
     "name": "30-Degree Curl-Up",
@@ -5439,6 +5472,50 @@
       {
         "muscle": "obliques",
         "role": "secondary"
+      }
+    ]
+  },
+  {
+    "familyID": "spine-lateral-flexion",
+    "catalogID": "fixed-leg-side-lying-lateral-trunk-lift",
+    "name": "Fixed-Leg Side-Lying Lateral Trunk Lift",
+    "group": "core",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "30-Degree Side-Lying Trunk Lift",
+      "Fixed-Leg Lateral Trunk Lift"
+    ],
+    "searchPriority": 74,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, and have the crossed upper foot fixed securely without assuming a particular device. As a catalog coaching standard beyond the measured source, hold the pelvis and hip still rather than driving the lift from the hip. Laterally flex the spine to lift the upper body to the 30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. Return to the side-lying start under control, then complete the same separately logged work in the opposite lateral-flexion direction.",
+    "involvement": [
+      {
+        "muscle": "obliques",
+        "role": "primary"
+      },
+      {
+        "muscle": "quadratusLumborum",
+        "role": "secondary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
       }
     ]
   },
@@ -5561,7 +5638,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5632,7 +5709,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5670,8 +5747,12 @@
         "role": "primary"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "quadratusLumborum",
         "role": "secondary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
       },
       {
         "muscle": "fingerFlexors",
@@ -5790,7 +5871,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5873,7 +5954,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5957,7 +6038,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6182,7 +6263,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6265,7 +6346,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6348,7 +6429,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6568,7 +6649,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6650,7 +6731,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6727,7 +6808,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -6812,7 +6893,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -7347,7 +7428,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -7503,7 +7584,7 @@
         "role": "stabilizer"
       },
       {
-        "muscle": "lowerBack",
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]

@@ -1991,6 +1991,71 @@
       "pmid": "25964819",
       "url": "https://doi.org/10.1515/hukin-2015-0016",
       "scope": "Sixteen resistance-trained men completed 8-meter dumbbell farmer-walk trials; the analyzed condition used 75 percent of each participant's six-repetition-maximum load, upright-trunk and retracted-shoulder instructions, and natural lower-limb technique. Bilateral gluteus-medius, vastus-medialis, vastus-lateralis, and biceps-femoris surface EMG plus hip-and-knee three-dimensional kinematics support the bilateral dumbbell fixture and categorical gluteus-medius and knee-control envelope. The study measured only four muscles, stratified activation by strength ratios, and does not establish suitcase roles, fixed gait technique, or catalog load and duration seeds."
+    },
+    {
+      "id": "fisher-2018-isolated-lumbar-extension",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Heavier- and lighter-load isolated lumbar extension resistance training produce similar strength increases, but different perceptual responses, in healthy males and females",
+      "authors": [
+        "James P. Fisher",
+        "Charlotte Stuart",
+        "James Steele",
+        "Paulo Gentil",
+        "Jürgen Giessing"
+      ],
+      "year": 2018,
+      "doi": "10.7717/peerj.6001",
+      "pmid": "30498645",
+      "pmcid": "PMC6252242",
+      "url": "https://doi.org/10.7717/peerj.6001",
+      "scope": "Twenty-six asymptomatic adults trained isolated dynamic lumbar extension once weekly for six weeks on the MedX lumbar-extension machine at either 80 or 50 percent maximum voluntary contraction. The directly described restraint system fixed the thighs and distal femurs, supported the feet, and used a posterior-pelvis pad to prevent pelvic lift and rotation while permitting lumbar motion from the machine's 72-degree full-flexion reference to 0-degree full extension. Repetitions used at least two seconds of extension, a one-second full-extension hold, and at least four seconds of controlled return. The study did not record EMG. It supports the exact isolated fixture and lumbar-extensor training outcome, not a visible erector-spinae or multifidus surface, muscle-subdivision ranking, a universal stack load, another machine, unsupported back extension, hip extension, or pain treatment advice."
+    },
+    {
+      "id": "konrad-2001-trunk-training",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Neuromuscular Evaluation of Trunk-Training Exercises",
+      "authors": [
+        "Peter Konrad",
+        "Klaus Schmitz",
+        "Achim Denner"
+      ],
+      "year": 2001,
+      "pmid": "12937449",
+      "pmcid": "PMC155519",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC155519/",
+      "scope": "Ten healthy exercise-familiar adults performed nine repetitions of twelve standardized trunk exercises while a trunk goniometer and surface EMG from rectus abdominis, external oblique, rectus femoris, middle trapezius, erector spinae at T12 and L3, gluteus maximus, and medial hamstrings were recorded. The active lateral-flexion condition was side-lying with the upper foot crossed over the lower leg and that crossed foot externally fixed while the upper body lifted to a 30-degree trunk-elevation endpoint. The source does not identify the fixation device, and the endpoint is not a segmental lumbar lateral-flexion angle. It directly supports that dynamic fixture, endpoint, external-oblique emphasis, and erector-spinae and rectus-abdominis coactivation context. It did not measure quadratus lumborum, internal oblique, or multifidus; directly establish position-held hip or pelvis motion; rank the catalog's combined oblique region against quadratus lumborum; or support an unfixed-leg side bend, external loading, a comparable bodyweight fraction, side-specific volume, or another lateral-flexion topology. The active record's 10-repetition seed and 8-to-15 recommendation are product defaults, not source prescriptions."
+    },
+    {
+      "id": "andersson-1996-quadratus-lumborum-emg",
+      "sourceType": "experimentalIntramuscularEMGStudy",
+      "title": "EMG activities of the quadratus lumborum and erector spinae muscles during flexion-relaxation and other motor tasks",
+      "authors": [
+        "Eva A. Andersson",
+        "Lars I. E. Oddsson",
+        "Hans Grundström",
+        "Johnny Nilsson",
+        "Alf Thorstensson"
+      ],
+      "year": 1996,
+      "doi": "10.1016/0268-0033(96)00033-2",
+      "pmid": "11415651",
+      "url": "https://doi.org/10.1016/0268-0033(96)00033-2",
+      "scope": "Seven healthy adults underwent ultrasound-guided fine-wire EMG of quadratus lumborum and deep lateral and superficial medial erector spinae during multiple motor tasks. Quadratus lumborum and deep lateral erector spinae reached their highest observed activity during maximal ipsilateral trunk flexion in side-lying with the legs supported. Combined with Konrad's dynamic fixed-leg side-lying fixture and Christophy's lumbar mechanics, this provides a triangulated, condition-matched basis for categorical quadratus-lumborum participation; it does not directly measure the active 30-degree repetitions, establish a numeric primary-secondary partition, support side-specific product credit, or generalize to standing loaded side bends."
+    },
+    {
+      "id": "phillips-2008-quadratus-lumborum-biomechanics",
+      "sourceType": "peerReviewedAnatomicalBiomechanicalModel",
+      "title": "Anatomy and biomechanics of quadratus lumborum",
+      "authors": [
+        "Simon Phillips",
+        "Susan Mercer",
+        "Nikolai Bogduk"
+      ],
+      "year": 2008,
+      "doi": "10.1243/09544119JEIM266",
+      "pmid": "18441751",
+      "url": "https://doi.org/10.1243/09544119JEIM266",
+      "scope": "Detailed fascicular dissection in six embalmed cadavers informed a quantitative force-equivalent model of quadratus lumborum. The model established possible lumbar extensor and lateral-bending moments, each no greater than ten percent of the corresponding erector-spinae and multifidus contribution. It supports both modest actions in the exact quadratus-lumborum capability profile, not an exercise role, a primary ranking, side-specific product credit, an in-vivo recruitment magnitude, or substitution for the substantially larger lumbar-extensor system."
     }
   ]
 }

@@ -429,7 +429,7 @@ demand or a trunk-stabilizer assignment. That is a setup decision, not a claim
 that the trunk is inactive. If model-specific review does not confirm the
 anterior pad, the unsupported branch must instead add `spine` and require at
 least one reviewed trunk stabilizer; only that branch may add `abs`, `obliques`,
-or `lowerBack` to `allowedByRole.stabilizer`, together with the matching
+or `lumbarExtensors` to `allowedByRole.stabilizer`, together with the matching
 exercise-level `additionalStabilityDemands`. It cannot reuse this policy
 unchanged.
 

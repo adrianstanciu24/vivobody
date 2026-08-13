@@ -172,7 +172,7 @@ WIDGET_IMPLEMENTATION_NOTES.md # App Group / entitlements / provisioning notes
 - **Debounce App Group writes** — `WidgetSnapshotWriter` batches; don't add per-keystroke widget reloads.
 - **HealthKit duplicates** — archive writes exactly one HKWorkout through `HealthKitWorkoutService`; route any new save through `SessionSideEffects`, never a second call site.
 - **`StorageHealth` is a `@MainActor` singleton** — check `didFallbackToInMemory` before assuming persistence works.
-- **BodyModel.scn mesh names are load-bearing** — `Muscle.swift` maps 52 exact trainable regions across 124 left/right SceneKit nodes (62 mesh bases). Renaming meshes or enum cases breaks highlighting silently; `MuscleMappingTests` guards this.
+- **BodyModel.scn mesh names are load-bearing** — `Muscle.swift` maps 53 exact trainable regions across 120 left/right SceneKit nodes (60 mesh bases). Two posterior-serratus mesh bases remain explicit non-trainable scene surfaces. Renaming meshes or enum cases breaks highlighting silently; `MuscleMappingTests` guards this.
 - **Launch-path work is budgeted** — backfills are gated behind one-time flags, Spotlight reindex is throttled per app version, non-critical work is deferred off first paint. Don't add eager work to app launch.
 
 ## Key components reference

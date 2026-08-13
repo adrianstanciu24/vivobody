@@ -5,7 +5,7 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 44 reviewed families are active, containing 120 exercises.
+- 46 reviewed families are active, containing 122 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
@@ -18,11 +18,12 @@ are discovery handles, not guaranteed final family IDs.
   holds after splitting stationary split squats from dynamic lunges.
 - Batch 6 resolved five taxonomy-sensitive candidates into three active
   families and two explicit hip-rotation foundation holds.
-- Batch 7 resolved eight candidates into seven active families and two explicit
-  holds; the carry candidate split into separate farmer and suitcase families.
-- 16 work items remain unresolved, all family or branch items—the held
-  `spine-extension` and `spine-lateral-flexion`; the deferred `diagonal-pull`,
-  `scapular-retraction`, `upright-row`, and
+- Batch 7 now contains nine active families. Eight discovery candidates
+  resolved through a carry split and the later lumbar closure; the carry
+  candidate split into separate farmer and suitcase families, and the two
+  lumbar holds activated after an atomic anatomy/evidence repair.
+- 14 work items remain unresolved, all family or branch items—the deferred
+  `diagonal-pull`, `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
   `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
   `landmine-press` holds; and the deferred closed-chain branch of
@@ -78,13 +79,15 @@ batch siblings.
 | `hip-adduction` | 1 |
 | `ankle-dorsiflexion` | 1 |
 | `spine-flexion` | 1 |
+| `spine-extension` | 1 |
+| `spine-lateral-flexion` | 1 |
 | `spine-rotation` | 1 |
 | `anti-extension` | 1 |
 | `anti-lateral-flexion` | 1 |
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **120** |
+| **Total** | **122** |
 
 ## Foundation gates
 
@@ -111,8 +114,9 @@ distal regions: biceps brachii, brachialis, brachioradialis, grouped pronators,
 supinator, four carpal groups, finger flexors, and finger extensors. It also
 replaced the task-level `hand.grip` action with dynamic finger flexion and
 extension. That migration established 41 regions; Batch 4's later lower-body
-split brings the current foundation to 52 regions while preserving 62 mesh
-bases and 44 actions. Every affected active family was migrated atomically
+split brought that foundation to 52 regions while preserving 62 mesh bases.
+The later lumbar repair brings the current taxonomy to 53 regions and 60
+trainable mesh bases while retaining 44 actions. Every affected active family was migrated atomically
 rather than inheriting anatomy from a retired aggregate.
 
 ### Sternocostal flexion from an extended start — complete
@@ -143,7 +147,7 @@ gap without granting unconditional sternocostal shoulder flexion.
 Batch 4 replaced the action-leaking `quads`, `hamstrings`, `calves`,
 `adductors`, `hipFlexors`, and `shins` aggregates with exact lower-body regions
 that preserve ownership of the same body-model meshes. The foundation is now
-pinned at 52 muscle regions, 62 mesh bases, and 44 joint actions. Every active
+pinned at the then-current 52 muscle regions, 62 mesh bases, and 44 joint actions. Every active
 family was migrated atomically. Conservative regions such as
 `bicepsFemoris`, `gluteMed`, `adductorMagnus`, `adductorLongusBrevis`, and
 `pectineus` retain only capabilities that their visible mesh and current
@@ -170,7 +174,7 @@ instead uses `ankleMotion: nonstandardized`: its observed ankle excursion and
 variable negligible kinetics do not establish one universal prime action.
 
 Batch 6 adds narrow hip-abduction, hip-adduction, and ankle-dorsiflexion
-isolations without changing the 52-region taxonomy or 44-action vocabulary.
+isolations without changing the then-current 52-region taxonomy or 44-action vocabulary.
 The two hip-rotation candidates remain held because muscle rotation direction
 changes with hip posture and the body model omits several load-bearing deep
 rotators. That position-sensitive gap is not solved by promoting the one
@@ -192,10 +196,10 @@ Farmer and suitcase carries use separate family-level resisted signatures:
 the suitcase contract adds lateral flexion and uses it as the frontal plane
 basis, while the farmer contract remains sagittal and grip-dominant. No
 exercise-level resisted-action exception is needed or admitted. The active
-anti-lateral-flexion and carry contracts disclose that `lowerBack` is a visible
-aggregate containing quadratus-lumborum and posterior-serratus surfaces, not
-the measured erector-spinae or multifidus subdivisions; they do not interpret
-the entire region as a clean side-specific result.
+anti-lateral-flexion and carry contracts now distinguish visible
+`quadratusLumborum` from the explicitly unvisualized erector-spinae and
+multifidus `lumbarExtensors` region. Posterior-serratus surfaces are not
+trainable lumbar proxies.
 
 ## Batch 1 — Shoulder-action boundaries (9)
 
@@ -423,13 +427,14 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current 17-item count.
+new item in the current 14-item count.
 
 ## Batch 7 — Core and carry (8)
 
-Status: complete. Eight discovery candidates resolved into seven active
-families and two explicit holds because the carry candidate split into separate
-farmer and suitcase contracts.
+Status: complete. Eight discovery candidates resolved into nine active
+families because the carry candidate split into separate farmer and suitcase
+contracts and both lumbar holds later closed through an atomic foundation
+repair.
 
 1. `spine-flexion`
 2. `spine-extension`
@@ -440,7 +445,8 @@ farmer and suitcase contracts.
 7. `anti-rotation`
 8. `loaded-carry`
 
-The batch activated two narrow dynamic fixtures: a 30-degree curl-up and a
+The batch activates four narrow dynamic fixtures: a 30-degree curl-up, a MedX
+isolated lumbar extension, a fixed-crossed-foot side-lying trunk lift, and a
 seated machine torso twist performed one rotation direction at a time. The
 torso-twist record prescribes both separately logged directions; right-to-left
 is a disclosed mirrored mechanics-and-training adaptation because the reviewed
@@ -460,18 +466,15 @@ muscle-role contract. Ordinary walking
 propulsion and nonstandardized gait-related spine motion are not promoted to
 training-defining dynamic actions.
 
-`spine-extension` remains absent even though the MedX fixture is mechanically
-well specified. The current `lowerBack` region exposes quadratus-lumborum and
-posterior-serratus surfaces, not erector-spinae or multifidus, so activation
-would highlight and credit the wrong visible anatomy. It requires an atomic
-lumbar-extensor taxonomy and body-model repair before activation.
-
-`spine-lateral-flexion` also remains absent. The reviewed condition-matched dynamic
-Konrad fixture is indexed by PMID/PMCID but has no DOI, while DOI-backed
-alternatives are isometric or industrial tasks that do not support the proposed
-dynamic family. The evidence registry still requires a DOI, so the candidate
-cannot activate truthfully without either a reviewed registry-policy change or
-a direct DOI-backed fixture.
+`spine-extension` activates only after separating visible quadratus lumborum
+from the explicitly unvisualized erector-spinae/multifidus region. The MedX
+record credits that truthful lumbar-extensor region without painting QL or
+posterior serratus as substitutes. `spine-lateral-flexion` uses Konrad's exact
+dynamic crossed-foot fixture, condition-matched QL triangulation, and a
+disclosed position-held hip/pelvis coaching adaptation. Its 30-degree value is
+an upper-body/trunk-lift endpoint, not a segmental lumbar angle. The evidence
+registry now admits canonical DOI, PMCID, or PMID routes with deterministic
+priority, strict formatting, and cross-source uniqueness.
 
 ## Evidence holds
 

@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "id": "anti-lateral-flexion",
   "name": "Anti-Lateral Flexion",
-  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The initial fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. lowerBack is secondary through the quadratus-lumborum-containing region's reviewed lateral-flexion capability, not because the directly measured erector-spinae signal maps to its visible surfaces: the current meshes contain quadratus lumborum and posterior serratus but no erector-spinae or lumbar-extensor surface. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, unstable, suspended, weighted, rowing, hip-abduction, Copenhagen, and moving side-plank variants remain outside this contract.",
+  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The initial fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. The newly exact, visibly mapped quadratusLumborum region is secondary through its reviewed lateral-flexion capability; it is not a proxy for the study's erector-spinae signal. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, unstable, suspended, weighted, rowing, hip-abduction, Copenhagen, and moving side-plank variants remain outside this contract.",
   "evidenceRefs": [
     "christophy-2012-lumbar-spine",
     "ackland-2008-shoulder-moment-arms",
@@ -126,7 +126,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "quadratusLumborum"
         ],
         "minimumRole": "secondary"
       },
@@ -178,7 +178,7 @@
         "obliques"
       ],
       "secondary": [
-        "lowerBack"
+        "quadratusLumborum"
       ],
       "stabilizer": [
         "abs",
@@ -386,7 +386,7 @@
           "role": "primary"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "quadratusLumborum",
           "role": "secondary"
         },
         {

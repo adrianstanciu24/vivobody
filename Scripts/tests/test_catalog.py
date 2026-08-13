@@ -136,6 +136,8 @@ class CatalogFoundationTests(unittest.TestCase):
         }
         batch7_ids = {
             "spine-flexion",
+            "spine-extension",
+            "spine-lateral-flexion",
             "spine-rotation",
             "anti-extension",
             "anti-lateral-flexion",
@@ -151,6 +153,37 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
+
+    @staticmethod
+    def evidence_source(
+        source_id: str,
+        *,
+        url: str,
+        doi: str | None = None,
+        pmid: str | None = None,
+        pmcid: str | None = None,
+    ) -> dict:
+        source = {
+            "id": source_id,
+            "sourceType": "experimentalStudy",
+            "title": f"Evidence fixture {source_id}",
+            "authors": ["Test Author"],
+            "year": 2026,
+            "url": url,
+            "scope": "Mutation fixture for canonical evidence identifiers.",
+        }
+        for key, value in (("doi", doi), ("pmid", pmid), ("pmcid", pmcid)):
+            if value is not None:
+                source[key] = value
+        return source
+
+    @staticmethod
+    def evidence_registry(*sources: dict) -> dict:
+        return {
+            "schemaVersion": catalog.SCHEMA_VERSION,
+            "description": "Canonical evidence identifier test registry.",
+            "sources": list(sources),
+        }
 
     def horizontal_press_copy(self) -> dict:
         return copy.deepcopy(self.horizontal_press)
@@ -492,8 +525,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "mutated shoulder horizontal abduction row",
             )
 
-    def test_taxonomy_is_the_locked_52_region_clean_slate(self) -> None:
-        self.assertEqual(catalog.EXPECTED_MUSCLE_COUNT, 52)
+    def test_taxonomy_is_the_locked_53_region_clean_slate(self) -> None:
+        self.assertEqual(catalog.EXPECTED_MUSCLE_COUNT, 53)
         self.assertEqual(set(self.foundation.muscle_by_id), catalog.EXPECTED_MUSCLE_IDS)
         self.assertEqual(
             len(self.foundation.muscle_by_id),
@@ -503,6 +536,252 @@ class CatalogFoundationTests(unittest.TestCase):
             self.foundation.mesh_base_count,
             catalog.EXPECTED_MESH_BASE_COUNT,
         )
+
+    def test_non_trainable_scene_meshes_are_exactly_pinned(self) -> None:
+        self.assertEqual(
+            catalog.NON_TRAINABLE_MESH_BASES,
+            {
+                "Serratus_Posterior_Inferior",
+                "Serratus_Posterior_Superior",
+            },
+        )
+
+    def test_posterior_serratus_cannot_become_trainable_mesh_ownership(
+        self,
+    ) -> None:
+        for mesh_base in sorted(catalog.NON_TRAINABLE_MESH_BASES):
+            taxonomy = copy.deepcopy(self.foundation.taxonomy)
+            lats = next(
+                muscle
+                for muscle in taxonomy["muscles"]
+                if muscle["id"] == "lats"
+            )
+            lats["meshBaseNames"] = [mesh_base]
+            with self.subTest(mesh_base=mesh_base), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                f"non-trainable mesh base {mesh_base} must not be owned",
+            ):
+                catalog.validate_taxonomy(taxonomy)
+
+    def test_every_declared_non_trainable_scene_node_must_exist(self) -> None:
+        actual_scene_strings = catalog.scene_strings(catalog.BODY_MODEL_PATH)
+        for mesh_base in sorted(catalog.NON_TRAINABLE_MESH_BASES):
+            for suffix in ("L", "R"):
+                missing_node = f"{mesh_base}_{suffix}"
+                mutated_scene_strings = actual_scene_strings - {missing_node}
+                with (
+                    self.subTest(node=missing_node),
+                    mock.patch.object(
+                        catalog,
+                        "scene_strings",
+                        return_value=mutated_scene_strings,
+                    ),
+                    self.assertRaisesRegex(
+                        catalog.ValidationFailure,
+                        f"declared non-trainable BodyModel.scn node is missing: "
+                        f"{missing_node}",
+                    ),
+                ):
+                    catalog.validate_taxonomy(
+                        copy.deepcopy(self.foundation.taxonomy)
+                    )
+
+    def test_evidence_canonical_identifier_routes_accept_each_supported_form(
+        self,
+    ) -> None:
+        sources = (
+            self.evidence_source(
+                "doi-source",
+                doi="10.1234/doi-source",
+                pmid="123456",
+                pmcid="PMC123456",
+                url="https://doi.org/10.1234/doi-source",
+            ),
+            self.evidence_source(
+                "pmcid-source",
+                pmid="234567",
+                pmcid="PMC234567",
+                url="https://pmc.ncbi.nlm.nih.gov/articles/PMC234567/",
+            ),
+            self.evidence_source(
+                "pmid-source",
+                pmid="345678",
+                url="https://pubmed.ncbi.nlm.nih.gov/345678/",
+            ),
+        )
+        self.assertEqual(
+            catalog.validate_evidence(self.evidence_registry(*sources)),
+            {"doi-source", "pmcid-source", "pmid-source"},
+        )
+
+    def test_konrad_pmcid_and_pmid_pass_without_a_doi(self) -> None:
+        konrad = next(
+            source
+            for source in self.foundation.evidence["sources"]
+            if source["id"] == "konrad-2001-trunk-training"
+        )
+        self.assertNotIn("doi", konrad)
+        self.assertEqual(konrad["pmid"], "12937449")
+        self.assertEqual(konrad["pmcid"], "PMC155519")
+        self.assertEqual(
+            konrad["url"],
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC155519/",
+        )
+        self.assertEqual(
+            catalog.validate_evidence(
+                self.evidence_registry(copy.deepcopy(konrad))
+            ),
+            {"konrad-2001-trunk-training"},
+        )
+
+    def test_evidence_requires_at_least_one_canonical_identifier(self) -> None:
+        source = self.evidence_source(
+            "missing-identifier",
+            url="https://example.com/no-identifier",
+        )
+        with self.assertRaisesRegex(
+            catalog.ValidationFailure,
+            "must declare at least one canonical identifier",
+        ):
+            catalog.validate_evidence(self.evidence_registry(source))
+
+    def test_evidence_identifier_formats_are_strict(self) -> None:
+        mutations = (
+            (
+                "empty-doi",
+                self.evidence_source(
+                    "empty-doi",
+                    doi="",
+                    url="https://doi.org/",
+                ),
+                r"doi must be a non-empty string",
+            ),
+            (
+                "zero-pmid",
+                self.evidence_source(
+                    "zero-pmid",
+                    pmid="0",
+                    url="https://pubmed.ncbi.nlm.nih.gov/0/",
+                ),
+                "pmid must use canonical non-zero digits",
+            ),
+            (
+                "leading-zero-pmid",
+                self.evidence_source(
+                    "leading-zero-pmid",
+                    pmid="012345",
+                    url="https://pubmed.ncbi.nlm.nih.gov/012345/",
+                ),
+                "pmid must use canonical non-zero digits",
+            ),
+            (
+                "non-ascii-pmid",
+                self.evidence_source(
+                    "non-ascii-pmid",
+                    pmid="１２３４５",
+                    url="https://pubmed.ncbi.nlm.nih.gov/１２３４５/",
+                ),
+                "pmid must use canonical non-zero digits",
+            ),
+            (
+                "zero-pmcid",
+                self.evidence_source(
+                    "zero-pmcid",
+                    pmcid="PMC0",
+                    url="https://pmc.ncbi.nlm.nih.gov/articles/PMC0/",
+                ),
+                "pmcid must use the canonical PMC plus digits form",
+            ),
+            (
+                "lowercase-pmcid",
+                self.evidence_source(
+                    "lowercase-pmcid",
+                    pmcid="pmc155519",
+                    url="https://pmc.ncbi.nlm.nih.gov/articles/pmc155519/",
+                ),
+                "pmcid must use the canonical PMC plus digits form",
+            ),
+        )
+        for label, source, message in mutations:
+            with self.subTest(mutation=label), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                message,
+            ):
+                catalog.validate_evidence(self.evidence_registry(source))
+
+    def test_evidence_url_must_match_highest_priority_identifier(self) -> None:
+        mutations = (
+            self.evidence_source(
+                "doi-priority",
+                doi="10.1234/doi-priority",
+                pmid="123456",
+                pmcid="PMC123456",
+                url="https://pmc.ncbi.nlm.nih.gov/articles/PMC123456/",
+            ),
+            self.evidence_source(
+                "pmcid-priority",
+                pmid="234567",
+                pmcid="PMC234567",
+                url="https://pubmed.ncbi.nlm.nih.gov/234567/",
+            ),
+            self.evidence_source(
+                "pmid-priority",
+                pmid="345678",
+                url="https://example.com/345678",
+            ),
+        )
+        for source in mutations:
+            with self.subTest(source=source["id"]), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                "url must match its highest-priority canonical identifier",
+            ):
+                catalog.validate_evidence(self.evidence_registry(source))
+
+    def test_evidence_rejects_duplicate_canonical_identifiers(self) -> None:
+        duplicate_sources = {
+            "doi": (
+                self.evidence_source(
+                    "first-doi",
+                    doi="10.1234/Duplicate",
+                    url="https://doi.org/10.1234/Duplicate",
+                ),
+                self.evidence_source(
+                    "second-doi",
+                    doi="10.1234/duplicate",
+                    url="https://doi.org/10.1234/duplicate",
+                ),
+            ),
+            "pmid": (
+                self.evidence_source(
+                    "first-pmid",
+                    pmid="123456",
+                    url="https://pubmed.ncbi.nlm.nih.gov/123456/",
+                ),
+                self.evidence_source(
+                    "second-pmid",
+                    pmid="123456",
+                    url="https://pubmed.ncbi.nlm.nih.gov/123456/",
+                ),
+            ),
+            "pmcid": (
+                self.evidence_source(
+                    "first-pmcid",
+                    pmcid="PMC123456",
+                    url="https://pmc.ncbi.nlm.nih.gov/articles/PMC123456/",
+                ),
+                self.evidence_source(
+                    "second-pmcid",
+                    pmcid="PMC123456",
+                    url="https://pmc.ncbi.nlm.nih.gov/articles/PMC123456/",
+                ),
+            ),
+        }
+        for identifier, sources in duplicate_sources.items():
+            with self.subTest(identifier=identifier), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                f"{identifier} duplicates canonical identifier owned by",
+            ):
+                catalog.validate_evidence(self.evidence_registry(*sources))
 
     def test_distal_taxonomy_replaces_both_aggregate_regions_exactly(self) -> None:
         distal_ids = {
@@ -1300,13 +1579,13 @@ class CatalogFoundationTests(unittest.TestCase):
     ) -> None:
         family = self.family_copy()
         family["musclePolicy"]["allowedByRole"]["stabilizer"].extend(
-            ["abs", "obliques", "lowerBack"]
+            ["abs", "obliques", "lumbarExtensors"]
         )
         family["exerciseRules"] = [
             self.conditional_muscle_rule(
                 [
                     {
-                        "anyOf": ["abs", "obliques", "lowerBack"],
+                        "anyOf": ["abs", "obliques", "lumbarExtensors"],
                         "minimumRole": "stabilizer",
                     }
                 ]
@@ -1316,7 +1595,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assert_family_fails(
             family,
             "violates exercise rule standing-requires-trunk-muscle: "
-            r"one of \['abs', 'obliques', 'lowerBack'\] must be assigned as "
+            r"one of \['abs', 'obliques', 'lumbarExtensors'\] must be assigned as "
             "stabilizer or higher",
         )
 
@@ -1325,13 +1604,13 @@ class CatalogFoundationTests(unittest.TestCase):
     ) -> None:
         family = self.family_copy()
         family["musclePolicy"]["allowedByRole"]["stabilizer"].extend(
-            ["abs", "obliques", "lowerBack"]
+            ["abs", "obliques", "lumbarExtensors"]
         )
         family["exerciseRules"] = [
             self.conditional_muscle_rule(
                 [
                     {
-                        "anyOf": ["abs", "obliques", "lowerBack"],
+                        "anyOf": ["abs", "obliques", "lumbarExtensors"],
                         "minimumRole": "stabilizer",
                     }
                 ]
@@ -2046,7 +2325,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "subscapularis": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
-                "lowerBack": "stabilizer",
+                "lumbarExtensors": "stabilizer",
             },
         )
         self.assertEqual(
@@ -2137,7 +2416,7 @@ class CatalogFoundationTests(unittest.TestCase):
             {
                 muscle: role
                 for muscle, role in standing_roles.items()
-                if muscle not in {"abs", "obliques", "lowerBack"}
+                if muscle not in {"abs", "obliques", "lumbarExtensors"}
             },
         )
         self.assertEqual(seated["additionalStabilityDemands"], [])
@@ -2307,7 +2586,7 @@ class CatalogFoundationTests(unittest.TestCase):
         exercise["involvement"] = [
             assignment
             for assignment in exercise["involvement"]
-            if assignment["muscle"] not in {"abs", "obliques", "lowerBack"}
+            if assignment["muscle"] not in {"abs", "obliques", "lumbarExtensors"}
         ]
         warnings = catalog.validate_family(
             family,
@@ -2578,7 +2857,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def test_vertical_pull_requires_the_reviewed_role_contract(self) -> None:
         retractors = {"trapeziusMiddle", "trapeziusLower", "rhomboids"}
-        trunk_stabilizers = {"abs", "obliques", "lowerBack"}
+        trunk_stabilizers = {"abs", "obliques", "lumbarExtensors"}
         for exercise in self.vertical_pull["exercises"]:
             roles = {
                 assignment["muscle"]: assignment["role"]
@@ -3084,13 +3363,13 @@ class CatalogFoundationTests(unittest.TestCase):
                 for muscle_id, role in required_roles.items():
                     self.assertEqual(roles[muscle_id], role)
                 if exercise["variant"]["bodyPosition"] == "hipHinged":
-                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["lumbarExtensors"], "stabilizer")
                     self.assertEqual(roles["gluteMax"], "stabilizer")
                 if exercise["laterality"] == "unilateral":
                     self.assertEqual(roles["obliques"], "stabilizer")
                 if exercise["variant"]["bodyPosition"] == "supineSuspended":
                     self.assertEqual(roles["abs"], "stabilizer")
-                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["lumbarExtensors"], "stabilizer")
                     self.assertEqual(roles["gluteMax"], "stabilizer")
 
     def test_every_shoulder_extension_row_rule_consequence_rejects_a_mutation(
@@ -3691,7 +3970,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 self.assertNotIn("lats", roles)
                 self.assertNotIn("teresMajor", roles)
                 if exercise["variant"]["bodyPosition"] == "hipHinged":
-                    self.assertEqual(roles["lowerBack"], "stabilizer")
+                    self.assertEqual(roles["lumbarExtensors"], "stabilizer")
                     self.assertEqual(roles["gluteMax"], "stabilizer")
                 if exercise["laterality"] == "unilateral":
                     self.assertEqual(roles["obliques"], "stabilizer")
@@ -4672,6 +4951,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-adduction",
             "ankle-dorsiflexion",
             "spine-flexion",
+            "spine-extension",
+            "spine-lateral-flexion",
             "spine-rotation",
             "anti-extension",
             "anti-lateral-flexion",
@@ -4685,7 +4966,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            120,
+            122,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -5552,6 +5833,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-adduction",
             "ankle-dorsiflexion",
             "spine-flexion",
+            "spine-lateral-flexion",
             "anti-extension",
             "anti-lateral-flexion",
             "anti-rotation",
@@ -6167,7 +6449,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "fingerFlexors": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
-                "lowerBack": "stabilizer",
+                "lumbarExtensors": "stabilizer",
             },
             "bar-dip": {
                 "pectoralisMajorClavicular": "primary",
@@ -6180,7 +6462,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "extensorCarpiRadialis": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
-                "lowerBack": "stabilizer",
+                "lumbarExtensors": "stabilizer",
             },
             "ring-dip": {
                 "pectoralisMajorClavicular": "primary",
@@ -6195,7 +6477,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "extensorCarpiRadialis": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
-                "lowerBack": "stabilizer",
+                "lumbarExtensors": "stabilizer",
             },
             "barbell-push-press": {
                 "deltoidAnterior": "primary",
@@ -6216,7 +6498,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "subscapularis": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
-                "lowerBack": "stabilizer",
+                "lumbarExtensors": "stabilizer",
             },
         }
         actual = {
@@ -6232,7 +6514,7 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_unsupported_suspended_dips_share_the_pullup_trunk_policy(
         self,
     ) -> None:
-        expected = {"abs", "obliques", "lowerBack"}
+        expected = {"abs", "obliques", "lumbarExtensors"}
         for family in (self.vertical_pull, self.batch3_families["dip"]):
             for exercise in family["exercises"]:
                 variant = exercise["variant"]
@@ -6326,7 +6608,7 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("16 work items remain unresolved", roadmap)
+        self.assertIn("14 work items remain unresolved", roadmap)
         self.assertIn(
             "Sternocostal flexion from an extended start — complete",
             roadmap,
@@ -7219,7 +7501,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "gluteMax": "primary",
                     "medialHamstrings": "secondary",
                     "bicepsFemoris": "stabilizer",
-                    "lowerBack": "stabilizer",
+                    "lumbarExtensors": "stabilizer",
                 },
                 "evidence": [
                     "arnold-2010-lower-limb",
@@ -7468,9 +7750,9 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "hip-extension": {
                 "hip": {"gluteMax", "medialHamstrings"},
-                "pelvis": {"gluteMax", "medialHamstrings", "lowerBack"},
+                "pelvis": {"gluteMax", "medialHamstrings", "lumbarExtensors"},
                 "knee": {"medialHamstrings", "bicepsFemoris"},
-                "spine": {"lowerBack"},
+                "spine": {"lumbarExtensors"},
             },
         }
         for family_id, family in self.batch4_families.items():
@@ -7512,7 +7794,7 @@ class CatalogFoundationTests(unittest.TestCase):
             self.batch4_families["hip-extension"]["musclePolicy"][
                 "allowedByRole"
             ]["stabilizer"],
-            ["bicepsFemoris", "lowerBack"],
+            ["bicepsFemoris", "lumbarExtensors"],
         )
 
     def test_batch4_forbids_every_other_known_prime_action(self) -> None:
@@ -7886,7 +8168,7 @@ class CatalogFoundationTests(unittest.TestCase):
             proposal,
         )
         self.assertIn("`hip-flexion` — deferred", roadmap)
-        self.assertIn("16 work items remain unresolved", roadmap)
+        self.assertIn("14 work items remain unresolved", roadmap)
 
     def test_batch5_activates_exactly_four_compound_families(self) -> None:
         expected = {
@@ -8076,7 +8358,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "externalRotators": "stabilizer",
                     "trapeziusUpper": "stabilizer", "brachialis": "stabilizer",
                     "abs": "stabilizer", "obliques": "stabilizer",
-                    "lowerBack": "stabilizer",
+                    "lumbarExtensors": "stabilizer",
                 },
                 "evidence": [
                     "armstrong-2022-squat-movement-dynamics",
@@ -8102,7 +8384,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "deltoidAnterior": "stabilizer",
                     "trapeziusUpper": "stabilizer", "brachialis": "stabilizer",
                     "abs": "stabilizer", "obliques": "stabilizer",
-                    "lowerBack": "stabilizer",
+                    "lumbarExtensors": "stabilizer",
                 },
                 "evidence": [
                     "armstrong-2022-squat-movement-dynamics",
@@ -8118,7 +8400,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roles": {
                     "gluteMax": "primary", "vasti": "secondary",
                     "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
-                    "lowerBack": "stabilizer", "soleus": "stabilizer",
+                    "lumbarExtensors": "stabilizer", "soleus": "stabilizer",
                 },
                 "evidence": [
                     "brazil-2021-barbell-hip-thrust",
@@ -8132,7 +8414,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roles": {
                     "gluteMax": "primary", "vasti": "secondary",
                     "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
-                    "lowerBack": "stabilizer", "soleus": "stabilizer",
+                    "lumbarExtensors": "stabilizer", "soleus": "stabilizer",
                 },
                 "evidence": ["kennedy-2024-hip-thrust-glute-bridge"],
             },
@@ -8151,7 +8433,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "externalRotators": "stabilizer",
                     "trapeziusUpper": "stabilizer", "brachialis": "stabilizer",
                     "abs": "stabilizer", "obliques": "stabilizer",
-                    "lowerBack": "stabilizer",
+                    "lumbarExtensors": "stabilizer",
                 },
                 "evidence": ["song-2023-split-squat-step-length"],
             },
@@ -8166,7 +8448,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "gastrocnemius": "secondary", "soleus": "secondary",
                     "bicepsFemoris": "stabilizer", "gluteMed": "stabilizer",
                     "abs": "stabilizer", "obliques": "stabilizer",
-                    "lowerBack": "stabilizer",
+                    "lumbarExtensors": "stabilizer",
                 },
                 "evidence": [
                     "wang-2003-forward-lateral-step-up-biomechanics"
@@ -8857,9 +9139,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "elbow": {"brachialis"},
                 "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
                 "hand": {"fingerFlexors"},
-                "spine": {"abs", "lowerBack", "obliques"},
+                "spine": {"abs", "lumbarExtensors", "obliques"},
                 "pelvis": {
-                    "abs", "gluteMax", "lowerBack", "medialHamstrings",
+                    "abs", "gluteMax", "lumbarExtensors", "medialHamstrings",
                     "obliques",
                 },
                 "hip": {"gluteMax", "medialHamstrings", "rectusFemoris"},
@@ -8872,8 +9154,8 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "barbell-front-squat": {},
             "barbell-hip-thrust": {
-                "spine": {"lowerBack"},
-                "pelvis": {"gluteMax", "gluteMed", "lowerBack"},
+                "spine": {"lumbarExtensors"},
+                "pelvis": {"gluteMax", "gluteMed", "lumbarExtensors"},
                 "hip": {"gluteMax", "gluteMed"},
                 "knee": {"bicepsFemoris", "vasti"},
                 "ankle": {"soleus"},
@@ -8886,9 +9168,9 @@ class CatalogFoundationTests(unittest.TestCase):
                 "elbow": {"brachialis"},
                 "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
                 "hand": {"fingerFlexors"},
-                "spine": {"abs", "lowerBack", "obliques"},
+                "spine": {"abs", "lumbarExtensors", "obliques"},
                 "pelvis": {
-                    "abs", "gluteMax", "gluteMed", "lowerBack",
+                    "abs", "gluteMax", "gluteMed", "lumbarExtensors",
                     "medialHamstrings", "obliques",
                 },
                 "hip": {
@@ -9026,11 +9308,11 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn("33-degree Romanian-deadlift knee range", proposal)
         self.assertIn("`positionHeld` contract", proposal)
         self.assertIn(
-            "Batch 7 resolved eight candidates into seven active families",
+            "Batch 7 now contains nine active families",
             roadmap,
         )
         self.assertIn(
-            "16 work items remain unresolved, all family or branch items",
+            "14 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("`dynamic-lunge` discovery hold", roadmap)
@@ -9778,7 +10060,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 128)
+        self.assertEqual(len(source_by_id), 132)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -9864,9 +10146,9 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertIn("No `families/hip-internal-rotation.json` should exist", normalized)
         self.assertIn("No `families/hip-external-rotation.json` should exist", normalized)
-        self.assertIn("16 work items remain unresolved, all family or branch items", roadmap)
+        self.assertIn("14 work items remain unresolved, all family or branch items", roadmap)
         self.assertIn(
-            "Batch 7 resolved eight candidates into seven active families",
+            "Batch 7 now contains nine active families",
             roadmap,
         )
 
@@ -9885,11 +10167,13 @@ class CatalogFoundationTests(unittest.TestCase):
             }.isdisjoint(registered_ids)
         )
 
-    def test_batch7_activates_exactly_seven_families_and_seven_records(
+    def test_batch7_activates_exactly_nine_families_and_nine_records(
         self,
     ) -> None:
         expected_rosters = {
             "spine-flexion": ["30-degree-curl-up"],
+            "spine-extension": ["medx-isolated-lumbar-extension"],
+            "spine-lateral-flexion": ["fixed-leg-side-lying-lateral-trunk-lift"],
             "spine-rotation": ["seated-machine-torso-twist"],
             "anti-extension": ["plank"],
             "anti-lateral-flexion": ["side-plank"],
@@ -9913,10 +10197,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 len(family["exercises"])
                 for family in self.batch7_families.values()
             ),
-            7,
+            9,
         )
-        self.assertEqual(len(self.real_families), 44)
-        self.assertEqual(len(self.foundation.evidence_ids), 128)
+        self.assertEqual(len(self.real_families), 46)
+        self.assertEqual(len(self.foundation.evidence_ids), 132)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -9934,6 +10218,39 @@ class CatalogFoundationTests(unittest.TestCase):
                     "primary": ("abs",),
                     "secondary": ("obliques",),
                     "stabilizer": (),
+                },
+            },
+            "spine-extension": {
+                "name": "Spine Extension",
+                "fixed": ("isolation", None, None, ("sagittal",)),
+                "basis": ("spine.extension",),
+                "prime": ("spine.extension",),
+                "resisted": (),
+                "demands": ("spine", "pelvis"),
+                "requirements": (("lumbarExtensors", "primary"),),
+                "roles": {
+                    "primary": ("lumbarExtensors",),
+                    "secondary": (),
+                    "stabilizer": (),
+                },
+            },
+            "spine-lateral-flexion": {
+                "name": "Spine Lateral Flexion",
+                "fixed": ("isolation", None, None, ("frontal",)),
+                "basis": ("spine.lateralFlexion",),
+                "prime": ("spine.lateralFlexion",),
+                "resisted": (),
+                "demands": ("spine", "pelvis"),
+                "requirements": (
+                    ("obliques", "primary"),
+                    ("quadratusLumborum", "secondary"),
+                    ("lumbarExtensors", "stabilizer"),
+                    ("abs", "stabilizer"),
+                ),
+                "roles": {
+                    "primary": ("obliques",),
+                    "secondary": ("quadratusLumborum",),
+                    "stabilizer": ("lumbarExtensors", "abs"),
                 },
             },
             "spine-rotation": {
@@ -9988,7 +10305,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "hip", "knee", "ankle", "foot",
                 ),
                 "requirements": (
-                    ("obliques", "primary"), ("lowerBack", "secondary"),
+                    ("obliques", "primary"), ("quadratusLumborum", "secondary"),
                     ("abs", "stabilizer"),
                     ("deltoidLateral", "stabilizer"),
                     ("gluteMed", "stabilizer"),
@@ -9999,7 +10316,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
                 "roles": {
                     "primary": ("obliques",),
-                    "secondary": ("lowerBack",),
+                    "secondary": ("quadratusLumborum",),
                     "stabilizer": (
                         "abs", "deltoidLateral", "gluteMed", "serratus",
                         "triceps", "rectusFemoris", "soleus",
@@ -10018,7 +10335,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
                 "requirements": (
                     ("obliques", "primary"), ("abs", "stabilizer"),
-                    ("lowerBack", "stabilizer"),
+                    ("lumbarExtensors", "stabilizer"),
                     ("deltoidAnterior", "stabilizer"),
                     ("triceps", "stabilizer"),
                     ("fingerFlexors", "stabilizer"),
@@ -10031,7 +10348,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "primary": ("obliques",),
                     "secondary": (),
                     "stabilizer": (
-                        "abs", "lowerBack", "serratus", "deltoidAnterior",
+                        "abs", "lumbarExtensors", "serratus", "deltoidAnterior",
                         "triceps", "fingerFlexors", "extensorCarpiRadialis",
                         "gluteMed", "vasti", "soleus",
                     ),
@@ -10054,7 +10371,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     ("externalRotators", "stabilizer"),
                     ("triceps", "stabilizer"), ("abs", "stabilizer"),
                     ("obliques", "stabilizer"),
-                    ("lowerBack", "stabilizer"),
+                    ("lumbarExtensors", "stabilizer"),
                     ("gluteMed", "stabilizer"),
                     ("vasti", "stabilizer"), ("soleus", "stabilizer"),
                 ),
@@ -10064,7 +10381,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "stabilizer": (
                         "extensorCarpiRadialis", "trapeziusUpper",
                         "externalRotators", "triceps", "abs", "obliques",
-                        "lowerBack", "gluteMed", "vasti", "soleus",
+                        "lumbarExtensors", "gluteMed", "vasti", "soleus",
                     ),
                 },
             },
@@ -10082,7 +10399,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
                 "requirements": (
                     ("obliques", "primary"),
-                    ("lowerBack", "secondary"),
+                    ("quadratusLumborum", "secondary"),
+                    ("lumbarExtensors", "stabilizer"),
                     ("fingerFlexors", "secondary"),
                     ("extensorCarpiRadialis", "stabilizer"),
                     ("trapeziusUpper", "stabilizer"),
@@ -10093,10 +10411,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 ),
                 "roles": {
                     "primary": ("obliques",),
-                    "secondary": ("lowerBack", "fingerFlexors"),
+                    "secondary": ("quadratusLumborum", "fingerFlexors"),
                     "stabilizer": (
                         "extensorCarpiRadialis", "trapeziusUpper",
-                        "externalRotators", "triceps", "abs",
+                        "externalRotators", "triceps", "abs", "lumbarExtensors",
                         "gluteMed", "vasti", "soleus",
                     ),
                 },
@@ -10150,6 +10468,36 @@ class CatalogFoundationTests(unittest.TestCase):
                 "roles": {"abs": "primary", "obliques": "secondary"},
                 "evidence": ["ha-2020-curl-up-angle"],
             },
+            "medx-isolated-lumbar-extension": {
+                "family": "spine-extension",
+                "name": "MedX Isolated Lumbar Extension",
+                "aliases": ["MedX Lumbar Extension", "Restrained Lumbar Extension Machine"],
+                "domain": ("machine", "bilateral", "dynamicStrength", "reps", "external"),
+                "seed": (20, 10, 10, None, 78),
+                "roles": {"lumbarExtensors": "primary"},
+                "evidence": ["fisher-2018-isolated-lumbar-extension"],
+            },
+            "fixed-leg-side-lying-lateral-trunk-lift": {
+                "family": "spine-lateral-flexion",
+                "name": "Fixed-Leg Side-Lying Lateral Trunk Lift",
+                "aliases": [
+                    "30-Degree Side-Lying Trunk Lift",
+                    "Fixed-Leg Lateral Trunk Lift",
+                ],
+                "domain": ("bodyweight", "unilateral", "dynamicStrength", "reps", "nonComparable"),
+                "seed": (0, None, 10, None, 74),
+                "roles": {
+                    "obliques": "primary",
+                    "quadratusLumborum": "secondary",
+                    "lumbarExtensors": "stabilizer",
+                    "abs": "stabilizer",
+                },
+                "evidence": [
+                    "konrad-2001-trunk-training",
+                    "andersson-1996-quadratus-lumborum-emg",
+                    "phillips-2008-quadratus-lumborum-biomechanics",
+                ],
+            },
             "seated-machine-torso-twist": {
                 "family": "spine-rotation",
                 "name": "Seated Machine Torso Twist",
@@ -10180,7 +10528,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "domain": ("bodyweight", "unilateral", "isometricStrength", "duration", "nonComparable"),
                 "seed": (0, None, 1, 30, 94),
                 "roles": {
-                    "obliques": "primary", "lowerBack": "secondary",
+                    "obliques": "primary", "quadratusLumborum": "secondary",
                     "abs": "stabilizer", "deltoidLateral": "stabilizer",
                     "gluteMed": "stabilizer", "serratus": "stabilizer",
                     "triceps": "stabilizer", "rectusFemoris": "stabilizer",
@@ -10196,7 +10544,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "seed": (0, None, 1, 15, 84),
                 "roles": {
                     "obliques": "primary", "abs": "stabilizer",
-                    "lowerBack": "stabilizer", "deltoidAnterior": "stabilizer",
+                    "lumbarExtensors": "stabilizer", "deltoidAnterior": "stabilizer",
                     "triceps": "stabilizer", "fingerFlexors": "stabilizer",
                     "extensorCarpiRadialis": "stabilizer",
                     "serratus": "stabilizer", "gluteMed": "stabilizer",
@@ -10217,7 +10565,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     "fingerFlexors": "primary", "extensorCarpiRadialis": "stabilizer",
                     "trapeziusUpper": "stabilizer", "externalRotators": "stabilizer",
                     "triceps": "stabilizer", "abs": "stabilizer",
-                    "obliques": "stabilizer", "lowerBack": "stabilizer",
+                    "obliques": "stabilizer", "lumbarExtensors": "stabilizer",
                     "gluteMed": "stabilizer", "vasti": "stabilizer",
                     "soleus": "stabilizer",
                 },
@@ -10237,7 +10585,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "domain": ("dumbbell", "unilateral", "isometricStrength", "duration", "external"),
                 "seed": (50, 22.5, 1, 40, 88),
                 "roles": {
-                    "obliques": "primary", "lowerBack": "secondary",
+                    "obliques": "primary", "quadratusLumborum": "secondary",
+                    "lumbarExtensors": "stabilizer",
                     "fingerFlexors": "secondary", "extensorCarpiRadialis": "stabilizer",
                     "trapeziusUpper": "stabilizer", "externalRotators": "stabilizer",
                     "triceps": "stabilizer", "abs": "stabilizer",
@@ -10294,6 +10643,41 @@ class CatalogFoundationTests(unittest.TestCase):
                 "trunkEndElevationDegrees": 30,
                 "pelvisMotion": "positionHeld",
                 "hipMotion": "positionHeld",
+                "loadInterface": "none",
+                "resistanceGeometry": "upperTrunkGravity",
+                "fixedPath": False,
+                "lowerBodyContribution": "none",
+            },
+            "medx-isolated-lumbar-extension": {
+                "bodyPosition": "seated",
+                "spineMotion": "extendsThenReturns",
+                "lumbarStartFlexionDegrees": 72,
+                "lumbarEndFlexionDegrees": 0,
+                "pelvisMotion": "positionHeldByRestraints",
+                "hipMotion": "positionHeld",
+                "thighRestraint": "present",
+                "distalFemurRestraint": "present",
+                "footSupport": "tightenedFootboard",
+                "posteriorPelvisContact": "rollingPad",
+                "loadInterface": "posteriorUpperTorsoPad",
+                "machineType": "medxIsolatedLumbarExtension",
+                "fixedPath": True,
+                "concentricMinimumSeconds": 2,
+                "fullExtensionHoldSeconds": 1,
+                "eccentricMinimumSeconds": 4,
+                "lowerBodyContribution": "none",
+            },
+            "fixed-leg-side-lying-lateral-trunk-lift": {
+                "bodyPosition": "sideLying",
+                "spineMotion": "lateralFlexesThenReturns",
+                "trunkStartElevationDegrees": 0,
+                "trunkEndElevationDegrees": 30,
+                "setDirection": "oneDirectionAtATime",
+                "trainingDirectionPrescription": "bothDirections",
+                "upperFootPosition": "crossedOverLowerLeg",
+                "legFixation": "externallyFixed",
+                "pelvisMotion": "positionHeldCatalogAdaptation",
+                "hipMotion": "positionHeldCatalogAdaptation",
                 "loadInterface": "none",
                 "resistanceGeometry": "upperTrunkGravity",
                 "fixedPath": False,
@@ -10426,7 +10810,8 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(
             set(one_record_families),
             {
-                "spine-flexion", "spine-rotation",
+                "spine-flexion", "spine-extension",
+                "spine-lateral-flexion", "spine-rotation",
                 "anti-extension", "anti-lateral-flexion", "anti-rotation",
                 "farmer-carry", "suitcase-carry",
             },
@@ -10478,7 +10863,7 @@ class CatalogFoundationTests(unittest.TestCase):
                         re.escape(f"selects disallowed {allowed_key}: {value}"),
                     )
                 mutation_count += 1
-        self.assertEqual(mutation_count, 143)
+        self.assertEqual(mutation_count, 184)
 
     def test_batch7_forbids_every_unreviewed_dynamic_prime_action(
         self,
@@ -10522,13 +10907,15 @@ class CatalogFoundationTests(unittest.TestCase):
                         expected_error,
                     )
                 mutation_count += 1
-        self.assertEqual(mutation_count, 306)
+        self.assertEqual(mutation_count, 392)
 
     def test_batch7_every_required_role_is_removed_and_demoted_directly(
         self,
     ) -> None:
         primary_substitutes = {
             "spine-flexion": "obliques",
+            "spine-extension": "quadratusLumborum",
+            "spine-lateral-flexion": "abs",
             "spine-rotation": "abs",
             "anti-extension": "obliques",
             "anti-lateral-flexion": "abs",
@@ -10619,8 +11006,8 @@ class CatalogFoundationTests(unittest.TestCase):
                         f"fails muscle requirement {requirement_index}",
                     )
                 demotion_count += 1
-        self.assertEqual(removal_count, 53)
-        self.assertEqual(demotion_count, 12)
+        self.assertEqual(removal_count, 59)
+        self.assertEqual(demotion_count, 15)
 
     def test_batch7_stability_demands_have_exact_role_agnostic_providers(
         self,
@@ -10629,6 +11016,14 @@ class CatalogFoundationTests(unittest.TestCase):
             "30-degree-curl-up": {
                 "spine": {"abs", "obliques"},
                 "pelvis": {"abs", "obliques"},
+            },
+            "medx-isolated-lumbar-extension": {
+                "spine": {"lumbarExtensors"},
+                "pelvis": {"lumbarExtensors"},
+            },
+            "fixed-leg-side-lying-lateral-trunk-lift": {
+                "spine": {"abs", "obliques", "quadratusLumborum", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "quadratusLumborum", "lumbarExtensors"},
             },
             "seated-machine-torso-twist": {
                 "spine": {"obliques"},
@@ -10647,8 +11042,8 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "side-plank": {
                 "scapula": {"serratus"},
-                "spine": {"abs", "obliques", "lowerBack"},
-                "pelvis": {"abs", "obliques", "lowerBack", "gluteMed"},
+                "spine": {"abs", "obliques", "quadratusLumborum"},
+                "pelvis": {"abs", "obliques", "quadratusLumborum", "gluteMed"},
                 "shoulder": {"deltoidLateral"},
                 "elbow": {"triceps"},
                 "hip": {"gluteMed", "rectusFemoris"},
@@ -10658,8 +11053,8 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "feet-together-band-pallof-hold": {
                 "scapula": {"serratus"},
-                "spine": {"abs", "obliques", "lowerBack"},
-                "pelvis": {"abs", "obliques", "lowerBack", "gluteMed"},
+                "spine": {"abs", "obliques", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "lumbarExtensors", "gluteMed"},
                 "shoulder": {"deltoidAnterior"},
                 "elbow": {"triceps"},
                 "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
@@ -10675,8 +11070,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "elbow": {"triceps"},
                 "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
                 "hand": {"fingerFlexors"},
-                "spine": {"abs", "obliques", "lowerBack"},
-                "pelvis": {"abs", "obliques", "lowerBack", "gluteMed"},
+                "spine": {"abs", "obliques", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "lumbarExtensors", "gluteMed"},
                 "hip": {"gluteMed"},
                 "knee": {"vasti"},
                 "ankle": {"soleus"},
@@ -10688,8 +11083,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "elbow": {"triceps"},
                 "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
                 "hand": {"fingerFlexors"},
-                "spine": {"abs", "obliques", "lowerBack"},
-                "pelvis": {"abs", "obliques", "lowerBack", "gluteMed"},
+                "spine": {"abs", "obliques", "quadratusLumborum", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "quadratusLumborum", "lumbarExtensors", "gluteMed"},
                 "hip": {"gluteMed"},
                 "knee": {"vasti"},
                 "ankle": {"soleus"},
@@ -10734,7 +11129,7 @@ class CatalogFoundationTests(unittest.TestCase):
         expected_opponents = {
             "plank": {"spine.extension": {"abs", "obliques"}},
             "side-plank": {
-                "spine.lateralFlexion": {"obliques", "lowerBack"}
+                "spine.lateralFlexion": {"obliques", "quadratusLumborum"}
             },
             "feet-together-band-pallof-hold": {
                 "spine.rotation": {"obliques"}
@@ -10744,7 +11139,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
             "single-dumbbell-suitcase-carry": {
                 "hand.fingerExtension": {"fingerFlexors"},
-                "spine.lateralFlexion": {"obliques", "lowerBack"},
+                "spine.lateralFlexion": {"obliques", "quadratusLumborum"},
             },
         }
         family_ids = (
@@ -10787,6 +11182,24 @@ class CatalogFoundationTests(unittest.TestCase):
                 "reviewed 30-degree range without using hip motion. Return to the "
                 "supine start under control without turning the repetition into a "
                 "full sit-up."
+            ),
+            "medx-isolated-lumbar-extension": (
+                "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. "
+                "Tighten the thigh restraint, secure the distal-femur restraint just above the patella, "
+                "tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. "
+                "Apply extension force only to the posterior upper-torso resistance pad. From the machine's "
+                "72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree "
+                "full-extension reference, hold one second, then return for at least four seconds without "
+                "lifting or rotating the pelvis or driving with the hips."
+            ),
+            "fixed-leg-side-lying-lateral-trunk-lift": (
+                "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, "
+                "and have the crossed upper foot fixed securely without assuming a particular device. As a "
+                "catalog coaching standard beyond the measured source, hold the pelvis and hip still rather "
+                "than driving the lift from the hip. Laterally flex the spine to lift the upper body to the "
+                "30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. "
+                "Return to the side-lying start under control, then complete the same separately logged work "
+                "in the opposite lateral-flexion direction."
             ),
             "seated-machine-torso-twist": (
                 "Sit in a horizontal torso-twist machine with the feet behind the "
@@ -10865,6 +11278,26 @@ class CatalogFoundationTests(unittest.TestCase):
                 "not establish a comparable external load, bodyweight fraction",
                 "categorical numeric role split",
             ),
+            "fisher-2018-isolated-lumbar-extension": (
+                "MedX lumbar-extension machine",
+                "at least two seconds of extension",
+                "did not record EMG",
+            ),
+            "konrad-2001-trunk-training": (
+                "upper foot crossed over the lower leg",
+                "did not measure quadratus lumborum, internal oblique, or multifidus",
+                "or support an unfixed-leg side bend",
+            ),
+            "andersson-1996-quadratus-lumborum-emg": (
+                "ultrasound-guided fine-wire EMG",
+                "ipsilateral trunk flexion in side-lying",
+                "does not directly measure the active 30-degree repetitions",
+            ),
+            "phillips-2008-quadratus-lumborum-biomechanics": (
+                "possible lumbar extensor and lateral-bending moments",
+                "no greater than ten percent",
+                "not an exercise role",
+            ),
             "vinstrup-2015-torso-twist": (
                 "hands on shoulder-height handles",
                 "photographed shoulder-pad lever interface",
@@ -10942,23 +11375,19 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized["dynamic"],
         )
         self.assertIn(
-            "The fixture evidence is sufficient, but the current product taxonomy is not",
+            "`lumbarExtensors` is an explicitly unvisualized erector-spinae/multifidus region",
             normalized["dynamic"],
         )
         self.assertIn(
-            "It exposes no erector-spinae or multifidus surface",
+            "posterior serratus is excluded from trainable ownership",
             normalized["dynamic"],
         )
         self.assertIn(
-            "candidate remains held and has no family JSON or registered evidence entry",
+            "Holding the pelvis and hip still and prescribing equal work in the opposite direction are disclosed product coaching adaptations",
             normalized["dynamic"],
         )
         self.assertIn(
-            "Konrad et al.'s side-lying lateral trunk lift to 30 degrees",
-            normalized["dynamic"],
-        )
-        self.assertIn(
-            "paper has no DOI. The current evidence registry requires a non-empty DOI",
+            "DOI first, otherwise PMCID, otherwise PMID",
             normalized["dynamic"],
         )
         self.assertIn(
@@ -10982,19 +11411,19 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized["carry"],
         )
 
-    def test_batch7_spine_holds_and_count_arithmetic_are_explicit(
+    def test_batch7_spine_closure_and_count_arithmetic_are_explicit(
         self,
     ) -> None:
         active_ids = {family["id"] for family in self.real_families}
-        held = {"spine-extension", "spine-lateral-flexion"}
-        self.assertTrue(held.isdisjoint(active_ids))
-        for family_id in held:
-            self.assertFalse(
-                (catalog.FAMILIES_ROOT / f"{family_id}.json").exists()
-            )
-        self.assertNotIn(
-            "fisher-2018-isolated-lumbar-extension",
-            self.foundation.evidence_ids,
+        closed = {"spine-extension", "spine-lateral-flexion"}
+        self.assertTrue(closed.issubset(active_ids))
+        self.assertTrue(
+            {
+                "fisher-2018-isolated-lumbar-extension",
+                "konrad-2001-trunk-training",
+                "andersson-1996-quadratus-lumborum-emg",
+                "phillips-2008-quadratus-lumborum-biomechanics",
+            }.issubset(self.foundation.evidence_ids)
         )
         self.assertFalse(
             (catalog.FAMILIES_ROOT / "loaded-carry.json").exists()
@@ -11019,27 +11448,27 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "44 reviewed families are active, containing 120 exercises",
+            "46 reviewed families are active, containing 122 exercises",
             roadmap,
         )
         self.assertIn(
-            "Batch 7 resolved eight candidates into seven active families and two explicit",
+            "Batch 7 now contains nine active families",
             roadmap,
         )
         self.assertIn(
-            "16 work items remain unresolved, all family or branch items",
+            "14 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **120** |", roadmap)
-        self.assertIn("Forty-four reviewed family files", families_readme)
-        self.assertIn("Batch 7 adds seven exercises", families_readme)
+        self.assertIn("| **Total** | **122** |", roadmap)
+        self.assertIn("Forty-six reviewed family files", families_readme)
+        self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
-            "`spine-extension` remains held", normalized_families_readme
+            "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
         )
         self.assertIn(
-            "Dynamic `spine-lateral-flexion` remains",
+            "posterior serratus is excluded from trainable ownership",
             normalized_families_readme,
         )
         self.assertIn("## Resisted-action semantics", foundation_readme)
@@ -11048,12 +11477,86 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized_foundation_readme,
         )
         self.assertIn(
-            "`spine-extension` and `spine-lateral-flexion` remain held; no family JSON is authored for either one",
+            "all four dynamic-spine candidates are active",
             normalized_proposal,
         )
         self.assertIn(
-            "The DOI-backed alternatives do not close the exercise-specific gap",
+            "DOI first, otherwise PMCID, otherwise PMID",
             normalized_proposal,
+        )
+
+    def test_lumbar_taxonomy_split_migrates_each_active_role_exactly(self) -> None:
+        actual = {
+            exercise["catalogID"]: {
+                assignment["muscle"]: assignment["role"]
+                for assignment in exercise["involvement"]
+                if assignment["muscle"] in {
+                    "quadratusLumborum", "lumbarExtensors"
+                }
+            }
+            for family in self.real_families
+            for exercise in family["exercises"]
+            if any(
+                assignment["muscle"] in {
+                    "quadratusLumborum", "lumbarExtensors"
+                }
+                for assignment in exercise["involvement"]
+            )
+        }
+        ql_secondary = {
+            "side-plank",
+            "fixed-leg-side-lying-lateral-trunk-lift",
+            "single-dumbbell-suitcase-carry",
+        }
+        self.assertEqual(
+            {
+                catalog_id
+                for catalog_id, roles in actual.items()
+                if roles.get("quadratusLumborum") == "secondary"
+            },
+            ql_secondary,
+        )
+        self.assertEqual(
+            {
+                catalog_id
+                for catalog_id, roles in actual.items()
+                if set(roles) == {"quadratusLumborum", "lumbarExtensors"}
+            },
+            {
+                "fixed-leg-side-lying-lateral-trunk-lift",
+                "single-dumbbell-suitcase-carry",
+            },
+        )
+        self.assertEqual(
+            actual["medx-isolated-lumbar-extension"],
+            {"lumbarExtensors": "primary"},
+        )
+        self.assertNotIn(
+            "quadratusLumborum",
+            self.batch7_families["spine-extension"]["musclePolicy"][
+                "allowedByRole"
+            ]["primary"],
+        )
+
+        # QL can anatomically extend, so the generic validator would accept a
+        # coordinated substitution. This exact reviewed-role tripwire keeps
+        # that capability from silently becoming a MedX exercise oracle.
+        medx = copy.deepcopy(self.batch7_families["spine-extension"])
+        medx["musclePolicy"]["requirements"][0]["anyOf"] = [
+            "quadratusLumborum"
+        ]
+        medx["musclePolicy"]["allowedByRole"]["primary"] = [
+            "quadratusLumborum"
+        ]
+        medx["exercises"][0]["involvement"] = [
+            {"muscle": "quadratusLumborum", "role": "primary"}
+        ]
+        catalog.validate_family(medx, self.foundation)
+        self.assertNotEqual(
+            medx["exercises"][0]["involvement"],
+            self.batch7_families["spine-extension"]["exercises"][0][
+                "involvement"
+            ],
         )
 
     def test_generic_grip_is_not_an_active_family(self) -> None:
@@ -11231,16 +11734,16 @@ class CatalogFoundationTests(unittest.TestCase):
         family = self.resisted_spine_family()
         family["musclePolicy"] = {
             "requirements": [
-                {"anyOf": ["lowerBack"], "minimumRole": "primary"}
+                {"anyOf": ["lumbarExtensors"], "minimumRole": "primary"}
             ],
             "allowedByRole": {
-                "primary": ["lowerBack"],
+                "primary": ["lumbarExtensors"],
                 "secondary": [],
                 "stabilizer": [],
             },
         }
         family["exercises"][0]["involvement"] = [
-            {"muscle": "lowerBack", "role": "primary"}
+            {"muscle": "lumbarExtensors", "role": "primary"}
         ]
         family["groupPolicy"]["allowed"].append("back")
         family["exercises"][0]["groupOverride"] = "back"
@@ -11879,16 +12382,16 @@ class CatalogFoundationTests(unittest.TestCase):
             ["fixture-barbell-horizontal-press: reps 30 is outside recommended 5...15"],
         )
 
-    def test_runtime_projection_is_exactly_44_families_and_120_exercises(
+    def test_runtime_projection_is_exactly_46_families_and_122_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 120)
+        self.assertEqual(len(records), 122)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 44)
+        self.assertEqual(len({record["familyID"] for record in records}), 46)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -12128,7 +12631,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 120)
+            self.assertEqual(len(emitted), 122)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

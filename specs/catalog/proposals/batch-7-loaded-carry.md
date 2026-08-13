@@ -65,7 +65,7 @@ The unilateral family fixes:
 - `group: core`.
 
 The side-held load creates a frontal-plane spinal lateral-flexion tendency.
-`obliques` is primary and `lowerBack` secondary through the current
+`obliques` is primary and `quadratusLumborum` secondary through the current
 direction-aggregated action model; the contract does not claim dynamic side
 bending or side-specific muscle credit. The same implement also resists finger
 extension, so `fingerFlexors` remains secondary.
@@ -150,28 +150,29 @@ pronator/supinator region as a categorical stabilizer.
 
 ### Farmer carry
 
-`fingerFlexors` is the sole primary. `abs`, `obliques`, and `lowerBack`
+`fingerFlexors` is the sole primary. `abs`, `obliques`, and `lumbarExtensors`
 remain stabilizers because this family declares no directional spinal resisted
 action. Ellestad directly measured rectus abdominis, external oblique,
-longissimus, and multifidus; the visible `lowerBack` region does not include
-multifidus, and its quadratus-lumborum/posterior-serratus aggregate cannot expose
-the measured muscles separately. The categorical assignment is deliberately
-coarser than the source.
+longissimus, and multifidus. The posterior stabilizer assignment is therefore
+made to the explicitly unvisualized erector-spinae/multifidus region, not to
+visible quadratus lumborum or posterior serratus.
 
 ### Suitcase carry
 
-`obliques` is primary and `lowerBack` secondary for resisted
-`spine.lateralFlexion`; `fingerFlexors` is secondary. McGill measured both
+`obliques` is primary and `quadratusLumborum` secondary for resisted
+`spine.lateralFlexion`; `fingerFlexors` is secondary and `lumbarExtensors` is
+a stabilizer. McGill measured both
 internal and external obliques plus lumbar/thoracic erector spinae and found
 greater torso activation and modeled spinal loading under asymmetric carriage.
 Ellestad found a distinct unilateral trunk-activation pattern but did not prove
 a universal loaded-side/contralateral hierarchy. Side-specific credit is
 therefore forbidden.
 
-The whole visible `obliques` region combines internal and external obliques,
-and `lowerBack` combines quadratus lumborum with other posterior surfaces
-rather than Ellestad's longissimus/multifidus panel. Those aggregation limits
-must not be recast as head- or side-specific evidence.
+The whole visible `obliques` region combines internal and external obliques.
+Visible QL credit follows the resisted lateral-flexion action; the separate
+unvisualized lumbar-extensor stabilizer is anchored by the measured posterior
+panel. Those independent rationales must not be recast as side-specific
+evidence or combined into duplicate group volume.
 
 ## Variant axes
 

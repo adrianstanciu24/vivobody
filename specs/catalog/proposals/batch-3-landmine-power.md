@@ -261,7 +261,7 @@ The initial categorical envelope should be narrow and explicit:
 |---|---|---|
 | Primary | `deltoidAnterior`, `vasti`, `gluteMax` | Shoulder-oriented catalog emphasis plus the directly established knee/hip propulsion chain. Multiple primaries acknowledge a whole-body power task; they do not claim equal magnitude. |
 | Required secondary | `deltoidLateral`, `supraspinatus`, `triceps`, `serratus`, `trapeziusUpper`, `trapeziusLower`, `rectusFemoris`, `gastrocnemius`, `soleus` | Same front-overhead humeral/scapular/elbow functions as the strict family, conservative rectus-femoris knee-extension credit after the quadriceps split, plus both separately represented plantarflexors in the directly described triple-extension drive. The lower-body sources establish joint demand, not individual-muscle rank. |
-| Stabilizer | `extensorCarpiRadialis`, `fingerFlexors`, `externalRotators`, `subscapularis`, `abs`, `obliques`, `lowerBack` | Static bar control at the wrist/hand, shoulder control, and force transfer through a torso that is not a dynamic prime mover. |
+| Stabilizer | `extensorCarpiRadialis`, `fingerFlexors`, `externalRotators`, `subscapularis`, `abs`, `obliques`, `lumbarExtensors` | Static bar control at the wrist/hand, shoulder control, and force transfer through a torso that is not a dynamic prime mover. |
 
 The initial record should assign only the three primaries, nine required
 secondaries, the shared loaded-grip wrist/hand stabilizers, both cuff

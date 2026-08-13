@@ -43,25 +43,47 @@ extension ExerciseDetailScreen {
     /// with a visual instead of a wall of type. All authored anatomy
     /// roles are visible (primary 1 / secondary 0.5 / stabilizer 0.2),
     /// while hard-set development remains a separate calculation.
-    /// Hidden for custom exercises the map doesn't know.
+    /// Hidden for custom exercises with no authored anatomy. Regions without
+    /// a scene surface retain their role text and are called out explicitly;
+    /// they never borrow another region's mesh.
     @ViewBuilder
     var heroFigureSection: some View {
         let involvement = item.muscleInvolvement
-        if !involvement.isEmpty && involvement.contributions.contains(where: { $0.muscle.isVisualized }) {
+        if !involvement.isEmpty {
+            let hasVisualizedMuscle = involvement.contributions.contains {
+                $0.muscle.isVisualized
+            }
+            let unvisualizedMuscles = involvement.contributions
+                .map(\.muscle)
+                .filter { !$0.isVisualized }
+
             VStack(spacing: Space.lg) {
-                StagedBodyModel(
-                    renderHeight: 240,
-                    channels: involvement.anatomyNodeChannels,
-                    warmth: 0.55
-                )
-                .frame(height: 240)
-                .accessibilityElement()
-                .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint. Stabilizer color shows involvement, not development credit.")
+                if hasVisualizedMuscle {
+                    StagedBodyModel(
+                        renderHeight: 240,
+                        channels: involvement.anatomyNodeChannels,
+                        warmth: 0.55
+                    )
+                    .frame(height: 240)
+                    .accessibilityElement()
+                    .accessibilityLabel("Muscles used by \(item.name). Primary muscles are most vivid, secondary muscles are medium, and stabilizers are faint. Stabilizer color shows involvement, not development credit.")
+                }
 
                 VStack(alignment: .leading, spacing: Space.sm) {
                     anatomyRoleRow(role: .primary, muscles: involvement.primary)
                     anatomyRoleRow(role: .secondary, muscles: involvement.secondary)
                     anatomyRoleRow(role: .stabilizer, muscles: involvement.stabilizers)
+
+                    if !unvisualizedMuscles.isEmpty {
+                        Text(
+                            "3D view unavailable for "
+                                + unvisualizedMuscles.map(\.displayName).joined(separator: " · ")
+                                + ". Authored roles and eligible training credit remain included."
+                        )
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.quaternary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
             .padding(Space.md)

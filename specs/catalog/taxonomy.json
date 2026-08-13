@@ -111,15 +111,21 @@
       ]
     },
     {
-      "id": "lowerBack",
-      "displayName": "Lower Back",
-      "anatomicalName": "Lumbar Extensors",
+      "id": "quadratusLumborum",
+      "displayName": "Quadratus Lumborum",
+      "anatomicalName": "Quadratus Lumborum",
       "group": "back",
       "meshBaseNames": [
-        "Quadratus_Lumborum",
-        "Serratus_Posterior_Inferior",
-        "Serratus_Posterior_Superior"
+        "Quadratus_Lumborum"
       ]
+    },
+    {
+      "id": "lumbarExtensors",
+      "displayName": "Lumbar Extensors",
+      "anatomicalName": "Erector Spinae and Multifidus",
+      "group": "back",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no erector-spinae or multifidus surface mesh."
     },
     {
       "id": "deltoidAnterior",

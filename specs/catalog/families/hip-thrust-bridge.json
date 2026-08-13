@@ -129,7 +129,7 @@
       },
       {
         "anyOf": [
-          "lowerBack"
+          "lumbarExtensors"
         ],
         "minimumRole": "stabilizer"
       },
@@ -150,7 +150,7 @@
       "stabilizer": [
         "bicepsFemoris",
         "gluteMed",
-        "lowerBack",
+        "lumbarExtensors",
         "soleus"
       ]
     }
@@ -512,7 +512,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         },
         {
@@ -590,7 +590,7 @@
           "role": "stabilizer"
         },
         {
-          "muscle": "lowerBack",
+          "muscle": "lumbarExtensors",
           "role": "stabilizer"
         },
         {

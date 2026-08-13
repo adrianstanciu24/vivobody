@@ -1,0 +1,333 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "spine-lateral-flexion",
+  "name": "Spine Lateral Flexion",
+  "definition": "A narrow unilateral bodyweight trunk isolation performed side-lying with the upper foot crossed over the lower leg and externally fixed while the upper body lifts to the directly reviewed 30-degree trunk-elevation endpoint and returns under control. That endpoint is not a segmental lumbar lateral-flexion angle. Equal work is prescribed in both directions because the product's lateral-flexion action and bilateral mesh regions do not encode side. Konrad directly anchors the dynamic fixture, endpoint, external-oblique emphasis, and lumbar-erector and rectus-abdominis coactivation context, but explicitly reports individual freedom in combined hip-joint and segmental-spine motion. Holding the pelvis and hip still is therefore a disclosed catalog coaching adaptation that narrows the product exercise; it is not attributed to the study. Obliques are primary. Quadratus lumborum is secondary through an explicit triangulation of Andersson's condition-matched fine-wire side-lying ipsilateral-flexion evidence, Christophy mechanics, and Konrad's dynamic topology; Konrad did not measure it. The lumbar-extensor aggregate receives stabilizer credit anchored by measured erector-spinae coactivation; multifidus was not separately measured. Rectus abdominis also receives stabilizer credit from measured coactivation. Unfixed legs, standing or kneeling side bends, external loading, side planks, lateral hip lifts, Copenhagen work, rotation, deliberately combined hip motion, and higher-range variants remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "konrad-2001-trunk-training",
+    "andersson-1996-quadratus-lumborum-emg",
+    "phillips-2008-quadratus-lumborum-biomechanics"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.lateralFlexion"
+    ],
+    "primeActions": [
+      "spine.lateralFlexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "quadratusLumborum"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "quadratusLumborum"
+      ],
+      "stabilizer": [
+        "lumbarExtensors",
+        "abs"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body orientation of the reviewed fixed-leg lateral trunk lift.",
+      "allowedValues": [
+        "sideLying"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic spinal action that creates the repetition and its controlled return.",
+      "allowedValues": [
+        "lateralFlexesThenReturns"
+      ]
+    },
+    {
+      "id": "trunkStartElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The side-lying trunk-on-floor start reference.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "trunkEndElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The directly reviewed upper-body lateral-lift endpoint.",
+      "minimum": 30,
+      "maximum": 30
+    },
+    {
+      "id": "setDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "One lateral-flexion direction is performed per logged set.",
+      "allowedValues": [
+        "oneDirectionAtATime"
+      ]
+    },
+    {
+      "id": "trainingDirectionPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Equal work is prescribed in both lateral-flexion directions.",
+      "allowedValues": [
+        "bothDirections"
+      ]
+    },
+    {
+      "id": "upperFootPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed upper-foot relationship.",
+      "allowedValues": [
+        "crossedOverLowerLeg"
+      ]
+    },
+    {
+      "id": "legFixation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed crossed upper foot is externally fixed relative to the lower leg; the source does not identify the fixture.",
+      "allowedValues": [
+        "externallyFixed"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Pelvic motion does not create the trunk repetition.",
+      "allowedValues": [
+        "positionHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip motion does not create the isolated spinal repetition.",
+      "allowedValues": [
+        "positionHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "No external resistance implement contacts the athlete.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "Upper-trunk gravity supplies resistance.",
+      "allowedValues": [
+        "upperTrunkGravity"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No machine constrains the upper-trunk path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The fixed crossed upper foot does not propel the repetition; the fixture for that fixation is unspecified.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "fixed-leg-side-lying-lateral-trunk-lift",
+      "name": "Fixed-Leg Side-Lying Lateral Trunk Lift",
+      "aliases": [
+        "30-Degree Side-Lying Trunk Lift",
+        "Fixed-Leg Lateral Trunk Lift"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 74,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "quadratusLumborum",
+          "role": "secondary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "sideLying",
+        "spineMotion": "lateralFlexesThenReturns",
+        "trunkStartElevationDegrees": 0,
+        "trunkEndElevationDegrees": 30,
+        "setDirection": "oneDirectionAtATime",
+        "trainingDirectionPrescription": "bothDirections",
+        "upperFootPosition": "crossedOverLowerLeg",
+        "legFixation": "externallyFixed",
+        "pelvisMotion": "positionHeldCatalogAdaptation",
+        "hipMotion": "positionHeldCatalogAdaptation",
+        "loadInterface": "none",
+        "resistanceGeometry": "upperTrunkGravity",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "konrad-2001-trunk-training",
+        "andersson-1996-quadratus-lumborum-emg",
+        "phillips-2008-quadratus-lumborum-biomechanics"
+      ],
+      "movementDefinition": "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, and have the crossed upper foot fixed securely without assuming a particular device. As a catalog coaching standard beyond the measured source, hold the pelvis and hip still rather than driving the lift from the hip. Laterally flex the spine to lift the upper body to the 30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. Return to the side-lying start under control, then complete the same separately logged work in the opposite lateral-flexion direction."
+    }
+  ]
+}
