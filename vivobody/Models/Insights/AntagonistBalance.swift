@@ -68,10 +68,10 @@ nonisolated enum SymmetryVerdict: Hashable, Sendable {
     case rightHeavy
 }
 
-/// Some comparisons have a meaningful evenness read (push/pull,
-/// opposing muscles); others simply describe how the user chose to
-/// train (squat/hinge, bilateral/unilateral) and must not imply that
-/// 50/50 is a universal target.
+/// Some comparisons have a meaningful evenness read. Others simply
+/// describe how the user chose to train: squat/hinge,
+/// bilateral/unilateral, and roster-limited lower-body region pairs.
+/// Descriptive pairs must not imply that 50/50 is a universal target.
 nonisolated enum AntagonistComparisonKind: Hashable, Sendable {
     case balance
     case distribution
@@ -235,6 +235,10 @@ nonisolated extension AnalyticsAccumulator {
                 let bucket: SymmetryMovementBucket?
                 switch (classification.pattern, classification.direction) {
                 case (.push, .horizontal): bucket = .horizontalPush
+                // Incline and decline presses retain horizontal-press
+                // ancestry even though the catalog now records their
+                // more precise diagonal direction.
+                case (.push, .diagonal): bucket = .horizontalPush
                 case (.pull, .horizontal): bucket = .horizontalPull
                 case (.push, .vertical): bucket = .verticalPush
                 case (.pull, .vertical): bucket = .verticalPull
@@ -263,7 +267,8 @@ nonisolated extension AnalyticsAccumulator {
             _ leftLabel: String,
             _ left: SymmetryMuscleBucket,
             _ rightLabel: String,
-            _ right: SymmetryMuscleBucket
+            _ right: SymmetryMuscleBucket,
+            kind: AntagonistComparisonKind = .balance
         ) -> AntagonistPair {
             let sessions = (muscleSessions[left] ?? [])
                 .union(muscleSessions[right] ?? [])
@@ -273,6 +278,7 @@ nonisolated extension AnalyticsAccumulator {
                 leftSets: muscleSets[left] ?? 0,
                 rightLabel: rightLabel,
                 rightSets: muscleSets[right] ?? 0,
+                kind: kind,
                 sampleSessions: sessions.count
             )
         }
@@ -326,7 +332,7 @@ nonisolated extension AnalyticsAccumulator {
             ),
             movementPair(
                 "horizontal-push-pull",
-                "Horizontal Push", .horizontalPush,
+                "Horizontal + Diagonal Push", .horizontalPush,
                 "Horizontal Pull", .horizontalPull
             ),
             movementPair(
@@ -347,12 +353,14 @@ nonisolated extension AnalyticsAccumulator {
             musclePair(
                 "hip-abductors-adductors",
                 "Hip Abductors", .hipAbductors,
-                "Hip Adductors", .hipAdductors
+                "Hip Adductors", .hipAdductors,
+                kind: .distribution
             ),
             musclePair(
                 "calves-shins",
                 "Calves", .calves,
-                "Shins", .shins
+                "Shins", .shins,
+                kind: .distribution
             ),
             movementPair(
                 "squat-hinge",

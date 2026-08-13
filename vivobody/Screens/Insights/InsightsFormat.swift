@@ -2,21 +2,15 @@
 //  InsightsFormat.swift
 //  vivobody
 //
-//  The small vocabulary the Insights sections share: row labels,
-//  set/frequency number formatting, and the one monospaced stat font
-//  the strips line up on. Each section component owns its own colours
-//  and copy; only the genuinely cross-section helpers live here so the
-//  sections stay independent without copy-pasting these few pieces.
+//  The small number-formatting vocabulary the Insights sections share.
+//  Each section component owns its own colours and copy; only the
+//  genuinely cross-section helpers live here so the sections stay
+//  independent without copy-pasting these few pieces.
 //
 
 import SwiftUI
 
 enum InsightsFormat {
-    /// Exact-region row label beneath the glanceable group heading.
-    static func rowLabel(for muscle: Muscle) -> String {
-        muscle.displayName
-    }
-
     /// One decimal place for an effective-set count, with a clean "0"
     /// for an untrained muscle.
     static func setsLabel(_ value: Double) -> String {

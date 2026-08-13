@@ -136,10 +136,10 @@ extension ExerciseDetailScreen {
     }
 
     /// Sentence-case classification line: equipment · pattern (when
-    /// compound) · mechanic · plane · unilateral (only when it is —
-    /// bilateral is the unremarkable default, so we omit it). Replaces
-    /// the old chip strip with plain type, same vocabulary as the
-    /// catalog row meta.
+    /// compound) · mechanic · every authored plane · unilateral (only
+    /// when it is — bilateral is the unremarkable default, so we omit
+    /// it). Replaces the old chip strip with plain type, same vocabulary
+    /// as the catalog row meta.
     var metaLine: String {
         var parts = [item.equipment.displayName]
         if item.mechanic == .compound, let movementLabel = item.movementLabel {

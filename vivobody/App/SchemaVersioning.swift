@@ -7,9 +7,11 @@
 //  vivobodyApp.swift): staged migration matches stores by checksum,
 //  and because every SchemaVN references the live model classes, any
 //  field change desyncs all declared versions and bricks the store.
-//  All changes currently ride automatic lightweight migration; the
-//  versions and plan are kept so staged migration (with frozen model
-//  copies per version) can be adopted when real stores ship.
+//  Compatible changes within a store generation ride automatic
+//  lightweight migration. The family-first V5 cutover deliberately
+//  opens a fresh named store; the versions and plan remain so staged
+//  migration (with frozen model copies per version) can be adopted
+//  when real stores ship.
 //  Also surfaces the in-memory fallback flag so AppRoot can warn
 //  the user instead of silently losing all persistence.
 //
@@ -119,6 +121,9 @@ private final class SchemaV5CatalogCutoverMarker {
     init() {}
 }
 
+/// Family-first catalog schema: exact-region anatomy, stable family identity,
+/// and plural movement planes stored across catalog, template, and workout
+/// snapshots in the fresh V5 configuration.
 enum SchemaV5: VersionedSchema {
     static var versionIdentifier: Schema.Version { .init(5, 0, 0) }
 

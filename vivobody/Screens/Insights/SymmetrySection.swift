@@ -5,9 +5,9 @@
 //  Training-balance instrument for opposing groups and movement
 //  patterns over the last four weeks. Meaningful comparisons lead as
 //  pair-relative butterfly beams; unfinished comparisons collapse into
-//  one building rail instead of a wall of empty rows. Squat/hinge and
-//  bilateral/unilateral stay descriptive — they never imply that a
-//  universal 50/50 target exists.
+//  one building rail instead of a wall of empty rows. Squat/hinge,
+//  bilateral/unilateral, and roster-limited lower-body pairs stay
+//  descriptive — they never imply that a universal 50/50 target exists.
 //
 
 import VivoKit

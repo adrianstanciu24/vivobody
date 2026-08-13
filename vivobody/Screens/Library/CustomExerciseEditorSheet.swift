@@ -1147,7 +1147,10 @@ private struct CatalogPlaneField: View {
                     Button {
                         var updated = Set(selection)
                         if selected {
-                            guard updated.count > 1 else { return }
+                            guard updated.count > 1 else {
+                                Haptics.rigid()
+                                return
+                            }
                             updated.remove(plane)
                         } else {
                             updated.insert(plane)
