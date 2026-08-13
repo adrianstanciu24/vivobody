@@ -432,7 +432,7 @@ struct ExercisePickerSheet: View {
     }
 
     private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
-        lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
+        lastInstanceLookup[item.historyKey]
     }
 
     /// Right-side rendering of a picker row. History-only: shows
@@ -519,10 +519,8 @@ struct ExercisePickerSheet: View {
     }
 
     private func delete(_ item: ExerciseCatalogItem) {
-        let id = item.id
-        modelContext.delete(item)
         do {
-            try modelContext.saveOrRollback()
+            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
             SpotlightIndexer.removeExercise(id: id)
         } catch {
             saveError = SaveErrorBox(error)

@@ -9,14 +9,12 @@
 //  categorical muscle roles + sensible defaults — and edit/delete them
 //  in place.
 //
-//  On first launch the catalog is empty; AppRoot calls `seedIfEmpty`
-//  to populate it from the bundled `catalog.json` (see `CatalogData`). After
-//  that, user adds/edits/deletes flow through SwiftData like any
-//  other model. `pruneRemovedSeeds` keeps existing installs in step
-//  when a record is retired from the bundled catalog. Templates and
-//  sessions copy stable catalog IDs plus display fields at creation
-//  time, so renaming a catalog item keeps history connected while
-//  deleting one never breaks old workouts.
+//  AppRoot reconciles bundled entries with the generated `catalog.json`
+//  (see `CatalogData`) on every launch, so ongoing exercise-authoring edits,
+//  additions, and removals reach the development store. User logging defaults,
+//  favorites, measured 1RM values, and custom entries remain untouched.
+//  Templates and sessions copy stable catalog IDs plus display fields at
+//  creation time, so deleting a catalog entry never breaks logged workouts.
 //
 
 import Foundation
@@ -243,9 +241,8 @@ final class ExerciseCatalogItem: Identifiable {
     /// value so this is an additive field for existing SwiftData stores.
     var directionRaw: String? = nil
 
-    /// Canonical plane components. Every compiled record has one or
-    /// more values. The catalog-v2 cutover uses a fresh pre-production
-    /// store rather than preserving the retired singular representation.
+    /// Canonical plane components. Every compiled record has one or more
+    /// values.
     var planeRaws: [String] = [MovementPlane.sagittal.rawValue]
 
     /// Bilateral (both sides at once) vs. unilateral (one side at a
@@ -487,18 +484,6 @@ final class ExerciseCatalogItem: Identifiable {
 // MARK: - Seeding
 
 extension ExerciseCatalogItem {
-    private static func insertBundledCatalog(in context: ModelContext) {
-        let base = Date()
-        for (index, record) in CatalogData.records.enumerated() {
-            context.insert(
-                ExerciseCatalogItem(
-                    record: record,
-                    createdAt: base.addingTimeInterval(Double(index) * 0.001)
-                )
-            )
-        }
-    }
-
     /// Build a catalog item from a decoded `CatalogRecord`. The starter
     /// catalog ships in `catalog.json` (see `CatalogData`); seeding just
     /// mirrors each record into a `@Model` instance the user can edit.
@@ -530,50 +515,59 @@ extension ExerciseCatalogItem {
         )
     }
 
-    /// Insert the starter catalog when the store is empty. Idempotent
-    /// — bails immediately if any catalog item already exists. Called
-    /// from AppRoot.onAppear so the picker is never empty even on a
-    /// brand-new install.
-    static func seedIfEmpty(in context: ModelContext) {
-        let descriptor = FetchDescriptor<ExerciseCatalogItem>()
-        let existing = (try? context.fetchCount(descriptor)) ?? 0
-        guard existing == 0 else { return }
-
-        // Stagger createdAt slightly so the catalog.json order is
-        // preserved when we tie-break by date — otherwise every item
-        // shares the same timestamp and falls back to arbitrary
-        // FetchDescriptor ordering.
-        insertBundledCatalog(in: context)
-        try? context.saveOrRollback()
-    }
-
-    /// Delete seeded items whose stable catalog ID no longer ships in
-    /// the bundled catalog. `seedIfEmpty` only runs on an empty store,
-    /// so a record removed from `catalog.json` would otherwise linger
-    /// on every existing install. User-created entries (nil catalogID)
-    /// are never touched, and templates + history are unaffected
-    /// because they copy values at pick-time. Returns the deleted
-    /// install-local IDs so the caller can deindex them from Spotlight.
+    /// Reconcile the persistent bundled rows with the generated catalog.
+    /// Canonical identity, anatomy, and movement semantics follow the source;
+    /// personal logging defaults, favorites, measured 1RM values, install-local
+    /// IDs, and user-created exercises remain untouched. Returns removed local
+    /// IDs so AppRoot can clear their Spotlight entries.
     @discardableResult
-    static func pruneRemovedSeeds(in context: ModelContext) -> [UUID] {
+    static func synchronizeBundledCatalog(
+        in context: ModelContext,
+        defaults: UserDefaults = .standard
+    ) -> [UUID] {
         let descriptor = FetchDescriptor<ExerciseCatalogItem>(
             predicate: #Predicate { !$0.isUserCreated }
         )
-        guard let seeded = try? context.fetch(descriptor), !seeded.isEmpty else { return [] }
+        guard let existing = try? context.fetch(descriptor) else { return [] }
+        let hiddenIDs = hiddenBundledIDs(in: defaults)
+        let recordsByID = Dictionary(
+            uniqueKeysWithValues: CatalogData.records.map { ($0.catalogID, $0) }
+        )
+        var retainedIDs: Set<String> = []
+        var removedIDs: [UUID] = []
 
-        let bundledIDs = Set(CatalogData.records.map(\.catalogID))
-        let stale = seeded.filter { item in
-            guard let catalogID = item.catalogID else { return false }
-            return !bundledIDs.contains(catalogID)
+        for item in existing {
+            guard
+                let catalogID = item.catalogID,
+                !hiddenIDs.contains(catalogID),
+                let record = recordsByID[catalogID],
+                retainedIDs.insert(catalogID).inserted
+            else {
+                removedIDs.append(item.id)
+                context.delete(item)
+                continue
+            }
+            item.applyCanonicalFields(from: record)
         }
-        guard !stale.isEmpty else { return [] }
 
-        let removedIDs = stale.map(\.id)
-        for item in stale {
-            context.delete(item)
+        let base = Date()
+        for (index, record) in CatalogData.records.enumerated()
+        where !retainedIDs.contains(record.catalogID)
+            && !hiddenIDs.contains(record.catalogID) {
+            context.insert(
+                ExerciseCatalogItem(
+                    record: record,
+                    createdAt: base.addingTimeInterval(Double(index) * 0.001)
+                )
+            )
         }
-        try? context.saveOrRollback()
-        return removedIDs
+
+        do {
+            try context.saveOrRollback()
+            return removedIDs
+        } catch {
+            return []
+        }
     }
 
     /// Wipe the entire catalog and re-seed from the bundled list.
@@ -591,8 +585,63 @@ extension ExerciseCatalogItem {
                 context.delete(item)
             }
         }
-        try? context.saveOrRollback()
-        seedIfEmpty(in: context)
+        do {
+            try context.saveOrRollback()
+        } catch {
+            return
+        }
+        clearBundledCatalogDeletions()
+        synchronizeBundledCatalog(in: context)
+    }
+
+    /// Delete one visible catalog row and remember explicit removals of
+    /// bundled records so launch reconciliation does not resurrect them.
+    @discardableResult
+    static func deleteFromCatalog(
+        _ item: ExerciseCatalogItem,
+        in context: ModelContext,
+        defaults: UserDefaults = .standard
+    ) throws -> UUID {
+        let id = item.id
+        let bundledID = item.isUserCreated ? nil : item.catalogID
+        context.delete(item)
+        try context.saveOrRollback()
+
+        if let bundledID {
+            var hiddenIDs = hiddenBundledIDs(in: defaults)
+            hiddenIDs.insert(bundledID)
+            defaults.set(hiddenIDs.sorted(), forKey: SettingsKey.hiddenBundledCatalogIDs)
+        }
+        return id
+    }
+
+    static func clearBundledCatalogDeletions(defaults: UserDefaults = .standard) {
+        defaults.removeObject(forKey: SettingsKey.hiddenBundledCatalogIDs)
+    }
+
+    private static func hiddenBundledIDs(in defaults: UserDefaults) -> Set<String> {
+        Set(defaults.stringArray(forKey: SettingsKey.hiddenBundledCatalogIDs) ?? [])
+    }
+
+    private func applyCanonicalFields(from record: CatalogRecord) {
+        catalogID = record.catalogID
+        familyID = record.familyID
+        name = record.name
+        group = record.group
+        defaultReps = record.reps
+        trackingMode = record.trackingMode
+        modality = record.modality
+        loadMode = record.loadMode
+        bodyweightFraction = record.bodyweightFraction
+        equipment = record.equipment
+        mechanic = record.mechanic
+        pattern = record.pattern
+        direction = record.direction
+        planes = record.planes
+        laterality = record.laterality
+        aliases = record.aliases
+        movementDefinition = record.movementDefinition
+        muscleInvolvementSnapshot = record.muscleInvolvement.snapshot
     }
 
 }
@@ -703,9 +752,6 @@ extension ExerciseCatalogItem {
         )
     }
 
-    var legacyHistoryKey: String {
-        ExerciseIdentity.nameKey(name)
-    }
 }
 
 extension Exercise {
@@ -731,10 +777,6 @@ extension Exercise {
         )
     }
 
-    var legacyHistoryKey: String {
-        ExerciseIdentity.nameKey(name)
-    }
-
     func matchesCatalogItem(_ item: ExerciseCatalogItem) -> Bool {
         if let catalogID, let itemCatalogID = item.catalogID {
             return catalogID == itemCatalogID
@@ -743,7 +785,7 @@ extension Exercise {
             return catalogItemID == item.id
                 && performanceSignature == item.performanceSignature
         }
-        return name.exerciseIdentityName == item.name.exerciseIdentityName
+        return false
     }
 }
 

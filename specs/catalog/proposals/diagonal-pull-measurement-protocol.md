@@ -163,4 +163,3 @@ Only after acceptance of the measurement artifact:
    boundary mutations; and
 6. register only the sources actually referenced by the active contracts or
    exercises.
-

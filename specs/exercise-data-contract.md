@@ -1,18 +1,13 @@
 # Exercise Data Contract
 
 This document defines the meaning of every biomechanics-sensitive field in the
-bundled exercise catalog. The reviewed contracts in `specs/catalog-v2/families/`
-are the canonical exercise source. `Scripts/catalog_v2.py` validates those
+bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
+are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
 `vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 44
 active families and their 120 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
-
-`Scripts/curate.py`, its review CSVs, `Scripts/transform_wger.py`, and the
-untracked `.wger-data` directory are retired legacy inputs. Both former writers
-are hard-disabled. No canonical source or compiler step reads, compares
-against, or preserves identity from the legacy roster.
 
 ## Identity and movement definition
 
@@ -95,9 +90,9 @@ The rotator-cuff taxonomy is also explicit:
 - `subscapularis`: internal-rotation target; analytics-visible but not painted
   until the body asset contains an appropriate mesh.
 
-There are no legacy combined `glutes` or `teres` catalog values. The complete
+There are no combined `glutes` or `teres` catalog values. The complete
 set of 52 exact runtime regions, including split upper-body and lower-body
-contributors, is defined only by `specs/catalog-v2/taxonomy.json`.
+contributors, is defined only by `specs/catalog/taxonomy.json`.
 
 ## Modality and tracking
 
@@ -198,7 +193,7 @@ or unavailable subtotal as a complete total.
   direction, not an anatomical plane.
 - `planes` contains one or more of the three cardinal anatomical planes in the
   canonical order `sagittal|frontal|transverse`. A reviewed family may be
-  multiplanar; the compiler never collapses it to a legacy singular heuristic.
+  multiplanar; the compiler never collapses it to one inferred plane.
 - `laterality` describes how the movement is performed. Alternating or
   one-side-at-a-time movements are unilateral even when both sides comprise one
   logged set.
@@ -218,14 +213,14 @@ than inferred silently.
 
 The bundled catalog must satisfy all of the following before shipping:
 
-- `python3 Scripts/catalog_v2.py --check` validates every canonical source and
+- `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
 - The projection contains exactly 44 family IDs and 120 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.
-- Every muscle and role is recognized; combined legacy regions are absent.
+- Every muscle and role is recognized; obsolete aggregate regions are absent.
 - Every strength and power exercise has a primary muscle.
 - Push/pull direction, isolation/pattern, modality/tracking, and load-mode
   invariants hold.

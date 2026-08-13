@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://vivobody.local/schema/catalog-v2-family.schema.json",
-  "title": "Vivobody catalog-v2 movement family",
+  "$id": "https://vivobody.local/schema/catalog-family.schema.json",
+  "title": "Vivobody catalog movement family",
   "description": "Authoring contract for one movement family and its explicitly reviewed exercises.",
   "type": "object",
   "additionalProperties": false,

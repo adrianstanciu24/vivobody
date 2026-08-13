@@ -607,7 +607,7 @@ families.
 12. Retain the positive-weight metric-seed invariant, exact global name/alias
     uniqueness, evidence coverage, foundation capability checks, and the
     existing hard active-family/exercise count signal as global tests evolve.
-13. Run `Scripts/catalog_v2.py --check`, the complete catalog-v2 Python suite,
+13. Run `Scripts/catalog.py --check`, the complete catalog Python suite,
     `git diff --check`, and the generic iOS Simulator build before calling the
     activation complete. Simulator test suites remain opt-in under repository
     policy.

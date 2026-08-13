@@ -429,7 +429,7 @@ foundation migration.
 3. Register all nine DOI-backed evidence IDs with exact metadata and limitation
    scopes. Every source must be cited by a profile or activated family so
    evidence-coverage validation remains meaningful.
-4. Update `Scripts/catalog_v2.py`: header, `EXPECTED_MUSCLE_IDS`, the exact
+4. Update `Scripts/catalog.py`: header, `EXPECTED_MUSCLE_IDS`, the exact
    taxonomy count, and `EXPECTED_SPLIT_MESHES`. Lock every proposed visible
    owner, including the two-mesh ECR and FDS/FDP groups; do not lock only the
    previously split shoulder/chest regions.
@@ -454,12 +454,11 @@ foundation migration.
 10. Add migration tests across all eight affected families proving every
     assigned stabilizer can satisfy an actual declared hand/wrist demand and no
     removed ID survives in any allowed role, requirement, rule, or exercise.
-11. Historical cutover gate (completed): replace runtime `biceps` and
-    `forearms` with exact cases/display names/groups/node ownership and extend
-    mesh-mapping tests. The completed V5 cutover followed the prescribed
-    pre-production reset path and added no retired-value remap; stale raw values
-    remain absent from bundled fixtures and deterministic debug seeds.
-12. Run the catalog validator, the complete catalog-v2 Python suite,
+11. Runtime gate (completed): replace `biceps` and `forearms` with exact
+    cases/display names/groups/node ownership and extend mesh-mapping tests.
+    Development data was reset; obsolete raw values remain absent from bundled
+    fixtures and deterministic debug seeds.
+12. Run the catalog validator, the complete catalog Python suite,
     `git diff --check`, and the generic iOS Simulator build before calling the
     activation complete. Simulator test suites remain opt-in under repository
     policy.

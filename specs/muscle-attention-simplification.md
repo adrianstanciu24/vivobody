@@ -1,15 +1,15 @@
 # Spec: Muscle map as training attention (simplification pass)
 
-Status: historical implementation record; persistence strategy superseded by
-the family-catalog runtime cutover (2026-08)
+Status: historical implementation record; persistence details superseded by
+the current family-first model (2026-08)
 Date: 2026-08
 Scope: `SetStimulus` (rewritten stateless), `AnalyticsAccumulator`,
 `MuscleDevelopment` (linear map, one landmark), `MuscleVolume` (one landmark),
-`Muscle` (`resolvedInvolvement` deleted), the then-current one-time snapshot
-repair, `Workout`/`WorkoutTemplate`/
-`ExerciseCatalog` accessors, `TrainingLoad` copy, and tests. The later atomic
-family-catalog cutover removed the repair and opened a fresh named V5 store;
-these paragraphs describe the superseded coarse-taxonomy implementation.
+`Muscle` (`resolvedInvolvement` deleted), a temporary snapshot repair,
+`Workout`/`WorkoutTemplate`/`ExerciseCatalog` accessors, `TrainingLoad` copy,
+and tests. The current pre-production model removed the repair and reset
+development data; these paragraphs describe the superseded coarse-taxonomy
+implementation.
 Supersedes: the pricing machinery of `hard-set-currency.md` and the γ/landmark
 table of `simplify-muscle-model.md`. Catalog data fixes (over-generous
 secondaries, unsupported micro-regions) are deliberately deferred — see
@@ -51,7 +51,7 @@ set *quality* beyond the user's own effort rating was removed.
   (dynamic e1RM refs, isometric hold refs), `loadFactor`, `repFactor`,
   `holdFactor`, and the stimulus floor. Pricing is now a pure per-set
   function: `1.0 × effortFactor(RIR)`.
-- Warm-up demotion. Schema V3 removed the warm-up set kind, and the load
+- Warm-up demotion. The stored warm-up set kind was removed, and the load
   heuristic was the only remaining demotion. Decision (user): count every
   completed set (Option A). Honest logging is the contract.
 - The per-muscle `VolumeLandmark` table (3 buckets: 20/16/12). One shared
@@ -60,11 +60,10 @@ set *quality* beyond the user's own effort rating was removed.
   source of the inversion.
 - `developmentGamma` (0.5). Intensity is now linear:
   `min(1, W / optimalHigh)` — 0.5 means literally "half the weekly target".
-- `Muscle.resolvedInvolvement(...)` hot-path recovery. At the time it was
-  replaced by a generation-gated launch repair. That temporary bridge was
-  removed at the compatibility-free V5 cutover; current
-  `muscleInvolvement` accessors are pure `Involvement(snapshot:)` decodes and
-  no legacy aggregate snapshots enter the canonical store.
+- `Muscle.resolvedInvolvement(...)` hot-path recovery. A temporary launch
+  repair replaced it during development, then was deleted when development
+  data reset. Current `muscleInvolvement` accessors are pure
+  `Involvement(snapshot:)` decodes.
 
 ### Kept (earns its keep)
 
@@ -103,8 +102,8 @@ of work" is worth by construction.
   (concepts removed); bands recalibrated; fixtures now name the real catalog
   record ("Barbell Bench Press" — the roster curation had renamed it, so the
   old fixtures silently resolved to empty involvement).
-- `MuscleDevelopmentTests` were recalibrated for the linear map. The temporary
-  legacy-repair tests were deleted at the V5 cutover.
+- `MuscleDevelopmentTests` were recalibrated for the linear map. Temporary
+  repair tests were deleted with the repair.
 - `MuscleMappingTests` now guard the exact 52-region taxonomy and SceneKit
   ownership rather than a compatibility rewrite.
 

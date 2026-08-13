@@ -652,4 +652,4 @@ All activation gates are closed:
    named deferrals or exclusions.
 6. Exact roster, axis coverage, global alias uniqueness, every rule branch,
    every rule consequence, and the important biomechanical boundary mutations
-   are enforced in `Scripts/tests/test_catalog_v2.py`.
+   are enforced in `Scripts/tests/test_catalog.py`.

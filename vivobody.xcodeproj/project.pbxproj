@@ -356,21 +356,21 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"$(SRCROOT)/Scripts/catalog-v2-inputs.xcfilelist",
+				"$(SRCROOT)/Scripts/catalog-inputs.xcfilelist",
 			);
 			inputPaths = (
-				"$(SRCROOT)/Scripts/catalog-v2-inputs.xcfilelist",
-				"$(SRCROOT)/specs/catalog-v2/families",
+				"$(SRCROOT)/Scripts/catalog-inputs.xcfilelist",
+				"$(SRCROOT)/specs/catalog/families",
 			);
 			name = "Verify Canonical Catalog";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/catalog-v2-check.stamp",
+				"$(DERIVED_FILE_DIR)/catalog-check.stamp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n# The family directory catches roster additions/removals; the generated file\n# list gives the sandbox exact read access and is parity-checked by Python.\ncd \"$SRCROOT\"\n/usr/bin/python3 Scripts/catalog_v2.py --check\ntouch \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "set -e\n# The family directory catches roster additions/removals; the generated file\n# list gives the sandbox exact read access and is parity-checked by Python.\ncd \"$SRCROOT\"\n/usr/bin/python3 Scripts/catalog.py --check\ntouch \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

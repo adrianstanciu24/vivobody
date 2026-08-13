@@ -2,7 +2,7 @@
 //  MuscleMappingTests.swift
 //  vivobodyTests
 //
-//  Pins the complete 52-region catalog-v2 taxonomy at the runtime
+//  Pins the complete 52-region catalog taxonomy at the runtime
 //  boundary: stable IDs, display names, browse groups, exact SceneKit
 //  mesh ownership, catalog coverage, and categorical role projections.
 //

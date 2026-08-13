@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#  test_catalog_v2.py
+#  test_catalog.py
 #  vivobody
 #
 #  Mutation-oriented tests for the isolated family-first catalog foundation.
@@ -18,7 +18,6 @@ import copy
 import hashlib
 import json
 import re
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -29,39 +28,39 @@ from unittest import mock
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPTS_ROOT))
 
-import catalog_v2  # noqa: E402
+import catalog  # noqa: E402
 
 
-class CatalogV2FoundationTests(unittest.TestCase):
+class CatalogFoundationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.foundation = catalog_v2.validate_foundation()
-        cls.valid_family = catalog_v2.load_json(catalog_v2.FAMILY_FIXTURE_PATH)
-        cls.horizontal_press = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "horizontal-press.json"
+        cls.foundation = catalog.validate_foundation()
+        cls.valid_family = catalog.load_json(catalog.FAMILY_FIXTURE_PATH)
+        cls.horizontal_press = catalog.load_json(
+            catalog.FAMILIES_ROOT / "horizontal-press.json"
         )
-        cls.incline_press = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "incline-press.json"
+        cls.incline_press = catalog.load_json(
+            catalog.FAMILIES_ROOT / "incline-press.json"
         )
-        cls.decline_press = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "decline-press.json"
+        cls.decline_press = catalog.load_json(
+            catalog.FAMILIES_ROOT / "decline-press.json"
         )
-        cls.vertical_press = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "vertical-press.json"
+        cls.vertical_press = catalog.load_json(
+            catalog.FAMILIES_ROOT / "vertical-press.json"
         )
-        cls.vertical_pull = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "vertical-pull.json"
+        cls.vertical_pull = catalog.load_json(
+            catalog.FAMILIES_ROOT / "vertical-pull.json"
         )
-        cls.shoulder_extension_row = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT / "shoulder-extension-row.json"
+        cls.shoulder_extension_row = catalog.load_json(
+            catalog.FAMILIES_ROOT / "shoulder-extension-row.json"
         )
-        cls.shoulder_horizontal_abduction_row = catalog_v2.load_json(
-            catalog_v2.FAMILIES_ROOT
+        cls.shoulder_horizontal_abduction_row = catalog.load_json(
+            catalog.FAMILIES_ROOT
             / "shoulder-horizontal-abduction-row.json"
         )
         cls.real_families = [
-            catalog_v2.load_json(path)
-            for path in catalog_v2.discovered_family_paths()
+            catalog.load_json(path)
+            for path in catalog.discovered_family_paths()
         ]
         batch1_ids = {
             "shoulder-extension-isolation",
@@ -182,8 +181,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -194,8 +193,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -206,8 +205,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -218,8 +217,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -230,8 +229,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -242,8 +241,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -254,8 +253,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 f"mutated {family['id']}",
@@ -263,8 +262,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
     def rule_matches_exercise(self, rule: dict, exercise: dict) -> bool:
         predicate = rule["when"]
-        actual = catalog_v2.exercise_rule_field(exercise, predicate["field"])
-        if actual is catalog_v2.MISSING:
+        actual = catalog.exercise_rule_field(exercise, predicate["field"])
+        if actual is catalog.MISSING:
             return False
         if predicate["operator"] == "equals":
             return actual == predicate["value"]
@@ -415,44 +414,44 @@ class CatalogV2FoundationTests(unittest.TestCase):
         return family
 
     def assert_family_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(family, self.foundation, "mutated fixture")
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(family, self.foundation, "mutated fixture")
 
     def assert_horizontal_press_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated horizontal press",
             )
 
     def assert_incline_press_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated incline press",
             )
 
     def assert_decline_press_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated decline press",
             )
 
     def assert_vertical_press_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated vertical press",
             )
 
     def assert_vertical_pull_fails(self, family: dict, message: str) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated vertical pull",
@@ -463,8 +462,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated shoulder extension row",
@@ -475,23 +474,23 @@ class CatalogV2FoundationTests(unittest.TestCase):
         family: dict,
         message: str,
     ) -> None:
-        with self.assertRaisesRegex(catalog_v2.ValidationFailure, message):
-            catalog_v2.validate_family(
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mutated shoulder horizontal abduction row",
             )
 
     def test_taxonomy_is_the_locked_52_region_clean_slate(self) -> None:
-        self.assertEqual(catalog_v2.EXPECTED_MUSCLE_COUNT, 52)
-        self.assertEqual(set(self.foundation.muscle_by_id), catalog_v2.EXPECTED_MUSCLE_IDS)
+        self.assertEqual(catalog.EXPECTED_MUSCLE_COUNT, 52)
+        self.assertEqual(set(self.foundation.muscle_by_id), catalog.EXPECTED_MUSCLE_IDS)
         self.assertEqual(
             len(self.foundation.muscle_by_id),
-            catalog_v2.EXPECTED_MUSCLE_COUNT,
+            catalog.EXPECTED_MUSCLE_COUNT,
         )
         self.assertEqual(
             self.foundation.mesh_base_count,
-            catalog_v2.EXPECTED_MESH_BASE_COUNT,
+            catalog.EXPECTED_MESH_BASE_COUNT,
         )
 
     def test_distal_taxonomy_replaces_both_aggregate_regions_exactly(self) -> None:
@@ -619,7 +618,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     self.foundation.profile_by_muscle[muscle_id]["notes"],
                 )
 
-        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
             encoding="utf-8"
         )
         self.assertIn(
@@ -662,7 +661,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def test_finger_actions_replace_the_generic_grip_task(self) -> None:
         self.assertEqual(
             len(self.foundation.action_ids),
-            catalog_v2.EXPECTED_ACTION_COUNT,
+            catalog.EXPECTED_ACTION_COUNT,
         )
         self.assertNotIn("hand.grip", self.foundation.action_ids)
         self.assertTrue(
@@ -778,10 +777,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 )
                 capability.pop("condition")
                 with self.assertRaisesRegex(
-                    catalog_v2.ValidationFailure,
+                    catalog.ValidationFailure,
                     "is missing keys: condition",
                 ):
-                    catalog_v2.validate_joint_actions(
+                    catalog.validate_joint_actions(
                         actions,
                         set(self.foundation.muscle_by_id),
                         self.foundation.evidence_ids,
@@ -802,10 +801,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 )
                 capability["action"] = opposite_action
                 with self.assertRaisesRegex(
-                    catalog_v2.ValidationFailure,
+                    catalog.ValidationFailure,
                     f"condition {condition} does not apply to {opposite_action}",
                 ):
-                    catalog_v2.validate_joint_actions(
+                    catalog.validate_joint_actions(
                         actions,
                         set(self.foundation.muscle_by_id),
                         self.foundation.evidence_ids,
@@ -813,13 +812,13 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
             conditional = (action, condition)
             self.assertTrue(
-                catalog_v2.capability_satisfies(
+                catalog.capability_satisfies(
                     conditional,
                     conditional,
                 )
             )
             self.assertFalse(
-                catalog_v2.capability_satisfies(
+                catalog.capability_satisfies(
                     conditional,
                     (action, None),
                 )
@@ -995,10 +994,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(family=family["id"], muscle=muscle_id):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         "fails muscle requirement",
                     ):
-                        catalog_v2.validate_family(
+                        catalog.validate_family(
                             family,
                             self.foundation,
                             f"mutated {family['id']}",
@@ -1034,7 +1033,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_split_regions_own_exact_scene_meshes(self) -> None:
-        for muscle_id, expected_meshes in catalog_v2.EXPECTED_SPLIT_MESHES.items():
+        for muscle_id, expected_meshes in catalog.EXPECTED_SPLIT_MESHES.items():
             self.assertEqual(
                 self.foundation.muscle_by_id[muscle_id]["meshBaseNames"],
                 expected_meshes,
@@ -1078,7 +1077,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "resistedActions",
             family["movementSignature"],
         )
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "valid fixture",
@@ -1111,7 +1110,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         exercise = family["exercises"][0]
         exercise["defaultWeight"] = 0
         exercise.pop("defaultWeightKg")
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "zero-weight external fixture",
@@ -1176,7 +1175,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         exercise["variant"]["support"] = "standing"
         exercise["additionalStabilityDemands"] = ["spine"]
         exercise["involvement"].append({"muscle": "abs", "role": "stabilizer"})
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "standing stability fixture",
@@ -1256,18 +1255,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
         schema = copy.deepcopy(self.foundation.family_schema)
         del schema["$defs"]["variantAxis"]["properties"]["fixedValue"]
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"variantAxis\.fixedValue must be a boolean",
         ):
-            catalog_v2.validate_family_schema(schema)
+            catalog.validate_family_schema(schema)
 
         schema = copy.deepcopy(self.foundation.family_schema)
         schema["$defs"]["variantAxis"]["allOf"] = []
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"fixedValue must require a required boolean axis",
         ):
-            catalog_v2.validate_family_schema(schema)
+            catalog.validate_family_schema(schema)
 
     def test_conditional_muscle_requirement_rejects_missing_any_of_set(
         self,
@@ -1318,7 +1317,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             {"muscle": "obliques", "role": "stabilizer"}
         )
         self.assertEqual(
-            catalog_v2.validate_family(
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "conditional-muscle fixture",
@@ -1411,7 +1410,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             }
         ]
         self.assertEqual(
-            catalog_v2.validate_family(
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "allowed-set fixture",
@@ -1470,7 +1469,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_real_horizontal_press_family_is_transverse_and_reviewed(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.horizontal_press_copy(),
             self.foundation,
             "horizontal press",
@@ -1674,10 +1673,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                             if assignment["muscle"] != muscle_id
                         ]
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             f"{muscle_id} must be assigned as stabilizer",
                         ):
-                            catalog_v2.validate_family(
+                            catalog.validate_family(
                                 family,
                                 self.foundation,
                                 f"mutated {original['id']}",
@@ -1768,7 +1767,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_real_vertical_press_family_is_multi_plane_and_strict(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.vertical_press_copy(),
             self.foundation,
             "vertical press",
@@ -2236,7 +2235,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         exercise["laterality"] = "unilateral"
         exercise["variant"]["gripOrientation"] = "neutral"
         exercise["variant"]["kettlebellOrientation"] = "standard"
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "standard kettlebell vertical-press fixture",
@@ -2283,7 +2282,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             for assignment in exercise["involvement"]
             if assignment["muscle"] not in {"abs", "obliques", "lowerBack"}
         ]
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "converging shoulder-press fixture",
@@ -2352,7 +2351,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 self.assert_vertical_press_fails(family, message)
 
     def test_real_vertical_pull_family_is_multi_plane_and_strict(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.vertical_pull_copy(),
             self.foundation,
             "vertical pull",
@@ -2782,7 +2781,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_real_shoulder_extension_row_family_is_strict(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.shoulder_extension_row_copy(),
             self.foundation,
             "shoulder extension row",
@@ -3012,7 +3011,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         for rule in self.shoulder_extension_row["exerciseRules"]:
             predicate = rule["when"]
             values = [
-                catalog_v2.exercise_rule_field(
+                catalog.exercise_rule_field(
                     exercise,
                     predicate["field"],
                 )
@@ -3022,7 +3021,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 matches = [value == predicate["value"] for value in values]
             else:
                 matches = [
-                    value is not catalog_v2.MISSING
+                    value is not catalog.MISSING
                     and value != predicate["value"]
                     for value in values
                 ]
@@ -3077,11 +3076,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
         def matches(exercise: dict, rule: dict) -> bool:
             predicate = rule["when"]
-            actual = catalog_v2.exercise_rule_field(
+            actual = catalog.exercise_rule_field(
                 exercise,
                 predicate["field"],
             )
-            if actual is catalog_v2.MISSING:
+            if actual is catalog.MISSING:
                 return False
             if predicate["operator"] == "equals":
                 return actual == predicate["value"]
@@ -3103,10 +3102,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 exercise.pop(path, None)
 
         def allowed_candidates(path: str) -> list[object]:
-            if path in catalog_v2.RULE_FIELD_DOMAINS:
-                return sorted(catalog_v2.RULE_FIELD_DOMAINS[path])
-            if path in catalog_v2.RULE_NUMERIC_FIELDS:
-                minimum, maximum = catalog_v2.RULE_NUMERIC_FIELDS[path]
+            if path in catalog.RULE_FIELD_DOMAINS:
+                return sorted(catalog.RULE_FIELD_DOMAINS[path])
+            if path in catalog.RULE_NUMERIC_FIELDS:
+                minimum, maximum = catalog.RULE_NUMERIC_FIELDS[path]
                 return [minimum, maximum]
             axis = axes[path.removeprefix("variant.")]
             if axis["valueType"] == "enum":
@@ -3138,19 +3137,19 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         for candidate in allowed_candidates(path)
                         if candidate not in forbidden
                     ),
-                    catalog_v2.MISSING,
+                    catalog.MISSING,
                 )
                 mutated = copy.deepcopy(matching)
-                if alternative is catalog_v2.MISSING:
+                if alternative is catalog.MISSING:
                     delete_field(mutated, path)
                 else:
                     set_field(mutated, path, alternative)
                 with self.subTest(rule=rule["id"], assertion=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3162,10 +3161,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 delete_field(mutated, path)
                 with self.subTest(rule=rule["id"], missing=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3177,10 +3176,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 set_field(mutated, path, allowed_candidates(path)[0])
                 with self.subTest(rule=rule["id"], unexpected=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3199,10 +3198,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     muscle=assignment["muscle"],
                 ):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3219,10 +3218,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(rule=rule["id"], any_of=tuple(candidates)):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3238,10 +3237,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(rule=rule["id"], stability=region):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated row",
@@ -3405,7 +3404,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def test_real_shoulder_horizontal_abduction_row_family_is_strict(
         self,
     ) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.shoulder_horizontal_abduction_row_copy(),
             self.foundation,
             "shoulder horizontal abduction row",
@@ -3618,7 +3617,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         for rule in self.shoulder_horizontal_abduction_row["exerciseRules"]:
             predicate = rule["when"]
             values = [
-                catalog_v2.exercise_rule_field(
+                catalog.exercise_rule_field(
                     exercise,
                     predicate["field"],
                 )
@@ -3628,7 +3627,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 matches = [value == predicate["value"] for value in values]
             else:
                 matches = [
-                    value is not catalog_v2.MISSING
+                    value is not catalog.MISSING
                     and value != predicate["value"]
                     for value in values
                 ]
@@ -3678,11 +3677,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
         def matches(exercise: dict, rule: dict) -> bool:
             predicate = rule["when"]
-            actual = catalog_v2.exercise_rule_field(
+            actual = catalog.exercise_rule_field(
                 exercise,
                 predicate["field"],
             )
-            if actual is catalog_v2.MISSING:
+            if actual is catalog.MISSING:
                 return False
             if predicate["operator"] == "equals":
                 return actual == predicate["value"]
@@ -3704,10 +3703,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 exercise.pop(path, None)
 
         def allowed_candidates(path: str) -> list[object]:
-            if path in catalog_v2.RULE_FIELD_DOMAINS:
-                return sorted(catalog_v2.RULE_FIELD_DOMAINS[path])
-            if path in catalog_v2.RULE_NUMERIC_FIELDS:
-                minimum, maximum = catalog_v2.RULE_NUMERIC_FIELDS[path]
+            if path in catalog.RULE_FIELD_DOMAINS:
+                return sorted(catalog.RULE_FIELD_DOMAINS[path])
+            if path in catalog.RULE_NUMERIC_FIELDS:
+                minimum, maximum = catalog.RULE_NUMERIC_FIELDS[path]
                 return [minimum, maximum]
             axis = axes[path.removeprefix("variant.")]
             if axis["valueType"] == "enum":
@@ -3739,19 +3738,19 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         for candidate in allowed_candidates(path)
                         if candidate not in forbidden
                     ),
-                    catalog_v2.MISSING,
+                    catalog.MISSING,
                 )
                 mutated = copy.deepcopy(matching)
-                if alternative is catalog_v2.MISSING:
+                if alternative is catalog.MISSING:
                     delete_field(mutated, path)
                 else:
                     set_field(mutated, path, alternative)
                 with self.subTest(rule=rule["id"], assertion=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3763,10 +3762,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 delete_field(mutated, path)
                 with self.subTest(rule=rule["id"], missing=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3778,10 +3777,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 set_field(mutated, path, allowed_candidates(path)[0])
                 with self.subTest(rule=rule["id"], unexpected=path):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3800,10 +3799,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     muscle=assignment["muscle"],
                 ):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3820,10 +3819,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(rule=rule["id"], any_of=tuple(candidates)):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3839,10 +3838,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 ]
                 with self.subTest(rule=rule["id"], stability=region):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         f"violates exercise rule {rule['id']}",
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated shoulder-height row",
@@ -3870,10 +3869,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
             if rule["id"] == "unsupported-requires-trunk-stability"
         )
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "violates exercise rule unsupported-requires-trunk-stability",
         ):
-            catalog_v2.validate_exercise_rule_matches(
+            catalog.validate_exercise_rule_matches(
                 exercise,
                 [rule],
                 "mutated shoulder-height cable row",
@@ -3997,8 +3996,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
         mutated = self.shoulder_horizontal_abduction_row_copy()
         mutated["exercises"][2]["aliases"].append("Cable Row")
-        with self.assertRaises(catalog_v2.ValidationFailure):
-            catalog_v2.validate_family_set(
+        with self.assertRaises(catalog.ValidationFailure):
+            catalog.validate_family_set(
                 [self.shoulder_extension_row, mutated]
             )
 
@@ -4050,10 +4049,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     family = copy.deepcopy(original)
                     family["exercises"][0][field] = value
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         message,
                     ):
-                        catalog_v2.validate_family(
+                        catalog.validate_family(
                             family,
                             self.foundation,
                             f"mutated {original['id']} scope",
@@ -4176,7 +4175,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     )
 
     def test_real_incline_press_family_is_diagonal_and_multi_plane(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.incline_press_copy(),
             self.foundation,
             "incline press",
@@ -4218,7 +4217,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_real_decline_press_family_is_diagonal_but_transverse(self) -> None:
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             self.decline_press_copy(),
             self.foundation,
             "decline press",
@@ -4334,10 +4333,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_diagonal_is_a_direction_and_never_an_anatomical_plane(self) -> None:
-        self.assertIn("diagonal", catalog_v2.DIRECTIONS)
-        self.assertNotIn("diagonal", catalog_v2.CARDINAL_PLANES)
+        self.assertIn("diagonal", catalog.DIRECTIONS)
+        self.assertNotIn("diagonal", catalog.CARDINAL_PLANES)
         self.assertEqual(
-            catalog_v2.CARDINAL_PLANES,
+            catalog.CARDINAL_PLANES,
             {"sagittal", "frontal", "transverse"},
         )
 
@@ -4668,7 +4667,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         for family in self.real_families:
             with self.subTest(family=family["id"]):
                 self.assertEqual(
-                    catalog_v2.validate_family(
+                    catalog.validate_family(
                         family,
                         self.foundation,
                         f"active family {family['id']}",
@@ -5552,10 +5551,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         "fixedPath"
                     ] = True
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         r"variant\.fixedPath must equal fixed value False",
                     ):
-                        catalog_v2.validate_family(
+                        catalog.validate_family(
                             family,
                             self.foundation,
                             f"mutated {family['id']}",
@@ -5624,7 +5623,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
                 for assertion in rule["then"]:
                     mutated = copy.deepcopy(matching)
-                    current = catalog_v2.exercise_rule_field(
+                    current = catalog.exercise_rule_field(
                         mutated,
                         assertion["field"],
                     )
@@ -5642,10 +5641,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         assertion=assertion["field"],
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-2 exercise",
@@ -5656,10 +5655,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     mutated = copy.deepcopy(matching)
                     self.delete_rule_field(mutated, field_path)
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-2 exercise",
@@ -5670,10 +5669,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     mutated = copy.deepcopy(matching)
                     self.set_rule_field(mutated, field_path, "mutated")
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-2 exercise",
@@ -5693,10 +5692,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         else "secondary"
                     )
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-2 exercise",
@@ -5713,10 +5712,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         if item["muscle"] not in requirement["anyOf"]
                     ]
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-2 exercise",
@@ -5729,10 +5728,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     mutated = copy.deepcopy(matching)
                     mutated["additionalStabilityDemands"].remove(region)
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-2 exercise",
@@ -5924,8 +5923,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 family["exercises"][exercise_index]["variant"][
                     "resistanceGeometry"
                 ] = geometry
-                with self.assertRaises(catalog_v2.ValidationFailure):
-                    catalog_v2.validate_family(
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(
                         family,
                         self.foundation,
                         f"mutated {family_id}",
@@ -6235,16 +6234,16 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 )
 
         roadmap = (
-            catalog_v2.SPEC_ROOT / "family-roadmap.md"
+            catalog.SPEC_ROOT / "family-roadmap.md"
         ).read_text(encoding="utf-8")
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-3-dip-closed-chain.md"
         ).read_text(encoding="utf-8")
         normalized_proposal = " ".join(proposal.split())
         foundation_readme = (
-            catalog_v2.SPEC_ROOT / "README.md"
+            catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
         self.assertIn(
             "17 work items remain unresolved: 16 family or branch items",
@@ -6535,10 +6534,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     assertion=assertion["field"],
                 ):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-3 dip",
@@ -6557,10 +6556,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     muscle=assignment["muscle"],
                 ):
                     with self.assertRaisesRegex(
-                        catalog_v2.ValidationFailure,
+                        catalog.ValidationFailure,
                         expected_message,
                     ):
-                        catalog_v2.validate_exercise_rule_matches(
+                        catalog.validate_exercise_rule_matches(
                             mutated,
                             [rule],
                             "mutated Batch-3 dip",
@@ -6878,7 +6877,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
         self.assertIn("push-press", active_ids)
 
-        proposals_root = catalog_v2.SPEC_ROOT / "proposals"
+        proposals_root = catalog.SPEC_ROOT / "proposals"
         scapular = (
             proposals_root / "batch-3-scapular-actions.md"
         ).read_text(encoding="utf-8")
@@ -7568,10 +7567,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         field=assertion["field"],
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-4 rule assertion",
@@ -7590,10 +7589,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         muscle=assignment["muscle"],
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-4 role assertion",
@@ -7743,15 +7742,15 @@ class CatalogV2FoundationTests(unittest.TestCase):
         active_ids = {family["id"] for family in self.real_families}
         self.assertNotIn("hip-flexion", active_ids)
         self.assertFalse(
-            (catalog_v2.FAMILIES_ROOT / "hip-flexion.json").exists()
+            (catalog.FAMILIES_ROOT / "hip-flexion.json").exists()
         )
 
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-4-hip-isolations.md"
         ).read_text(encoding="utf-8")
-        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
             encoding="utf-8"
         )
         self.assertIn("`hip-flexion` | Defer | 0", proposal)
@@ -8351,10 +8350,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         field=assertion["field"],
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-5 rule assertion",
@@ -8369,10 +8368,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         required=field_path,
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-5 presence assertion",
@@ -8387,10 +8386,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         absent=field_path,
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-5 absence assertion",
@@ -8409,10 +8408,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
                         muscle=assignment["muscle"],
                     ):
                         with self.assertRaisesRegex(
-                            catalog_v2.ValidationFailure,
+                            catalog.ValidationFailure,
                             expected_message,
                         ):
-                            catalog_v2.validate_exercise_rule_matches(
+                            catalog.validate_exercise_rule_matches(
                                 mutated,
                                 [rule],
                                 "mutated Batch-5 role assertion",
@@ -8434,7 +8433,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 }
             )
         self.assertEqual(
-            catalog_v2.validate_family(
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "squat shoulder-role non-exclusivity fixture",
@@ -8567,11 +8566,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 mutation_count += 1
 
             field_domains = {
-                "equipment": catalog_v2.EQUIPMENT,
-                "laterality": catalog_v2.LATERALITIES,
-                "modality": catalog_v2.MODALITIES,
-                "trackingMode": catalog_v2.TRACKING_MODES,
-                "loadMode": catalog_v2.LOAD_MODES,
+                "equipment": catalog.EQUIPMENT,
+                "laterality": catalog.LATERALITIES,
+                "modality": catalog.MODALITIES,
+                "trackingMode": catalog.TRACKING_MODES,
+                "loadMode": catalog.LOAD_MODES,
             }
             allowed_keys = {
                 "equipment": "equipment",
@@ -8673,7 +8672,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-5-unilateral-compounds.md"
         ).read_text(encoding="utf-8")
@@ -8883,18 +8882,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def test_batch5_holds_and_roadmap_arithmetic_are_explicit(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
         self.assertTrue({"hip-hinge", "dynamic-lunge"}.isdisjoint(active_ids))
-        self.assertFalse((catalog_v2.FAMILIES_ROOT / "hip-hinge.json").exists())
+        self.assertFalse((catalog.FAMILIES_ROOT / "hip-hinge.json").exists())
         self.assertFalse(
-            (catalog_v2.FAMILIES_ROOT / "dynamic-lunge.json").exists()
+            (catalog.FAMILIES_ROOT / "dynamic-lunge.json").exists()
         )
         proposal = (
-            catalog_v2.SPEC_ROOT / "proposals" / "batch-5-hip-patterns.md"
+            catalog.SPEC_ROOT / "proposals" / "batch-5-hip-patterns.md"
         ).read_text(encoding="utf-8")
-        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
             encoding="utf-8"
         )
         families_readme = (
-            catalog_v2.FAMILIES_ROOT / "README.md"
+            catalog.FAMILIES_ROOT / "README.md"
         ).read_text(encoding="utf-8")
         self.assertIn("`hip-hinge` | Defer", proposal)
         self.assertIn("33-degree Romanian-deadlift knee range", proposal)
@@ -9439,11 +9438,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 mutation_count += 1
 
             domains = {
-                "equipment": ("equipment", catalog_v2.EQUIPMENT),
-                "laterality": ("lateralities", catalog_v2.LATERALITIES),
-                "modality": ("modalities", catalog_v2.MODALITIES),
-                "trackingMode": ("trackingModes", catalog_v2.TRACKING_MODES),
-                "loadMode": ("loadModes", catalog_v2.LOAD_MODES),
+                "equipment": ("equipment", catalog.EQUIPMENT),
+                "laterality": ("lateralities", catalog.LATERALITIES),
+                "modality": ("modalities", catalog.MODALITIES),
+                "trackingMode": ("trackingModes", catalog.TRACKING_MODES),
+                "loadMode": ("loadModes", catalog.LOAD_MODES),
             }
             for field, (allowed_key, domain) in domains.items():
                 family = copy.deepcopy(original)
@@ -9689,7 +9688,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     self.assertIn(phrase, source_by_id[source_id]["scope"])
 
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-6-hip-abduction-adduction.md"
         ).read_text(encoding="utf-8")
@@ -9720,12 +9719,12 @@ class CatalogV2FoundationTests(unittest.TestCase):
         held = {"hip-internal-rotation", "hip-external-rotation"}
         self.assertTrue(held.isdisjoint(active_ids))
         for family_id in held:
-            self.assertFalse((catalog_v2.FAMILIES_ROOT / f"{family_id}.json").exists())
+            self.assertFalse((catalog.FAMILIES_ROOT / f"{family_id}.json").exists())
 
         proposal = (
-            catalog_v2.SPEC_ROOT / "proposals" / "batch-6-hip-rotation.md"
+            catalog.SPEC_ROOT / "proposals" / "batch-6-hip-rotation.md"
         ).read_text(encoding="utf-8")
-        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
             encoding="utf-8"
         )
         normalized = " ".join(proposal.split())
@@ -10336,11 +10335,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 mutation_count += 1
 
             domains = {
-                "equipment": ("equipment", catalog_v2.EQUIPMENT),
-                "laterality": ("lateralities", catalog_v2.LATERALITIES),
-                "modality": ("modalities", catalog_v2.MODALITIES),
-                "trackingMode": ("trackingModes", catalog_v2.TRACKING_MODES),
-                "loadMode": ("loadModes", catalog_v2.LOAD_MODES),
+                "equipment": ("equipment", catalog.EQUIPMENT),
+                "laterality": ("lateralities", catalog.LATERALITIES),
+                "modality": ("modalities", catalog.MODALITIES),
+                "trackingMode": ("trackingModes", catalog.TRACKING_MODES),
+                "loadMode": ("loadModes", catalog.LOAD_MODES),
             }
             for field, (allowed_key, domain) in domains.items():
                 family = copy.deepcopy(original)
@@ -10637,7 +10636,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     for item in exercise["involvement"]
                     if item["role"] in {"primary", "secondary"}
                     and any(
-                        catalog_v2.capability_opposes(
+                        catalog.capability_opposes(
                             capability,
                             (action_id, None),
                             oppositions,
@@ -10793,17 +10792,17 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
         proposals = {
             "dynamic": (
-                catalog_v2.SPEC_ROOT
+                catalog.SPEC_ROOT
                 / "proposals"
                 / "batch-7-dynamic-spine.md"
             ).read_text(encoding="utf-8"),
             "anti": (
-                catalog_v2.SPEC_ROOT
+                catalog.SPEC_ROOT
                 / "proposals"
                 / "batch-7-anti-motion.md"
             ).read_text(encoding="utf-8"),
             "carry": (
-                catalog_v2.SPEC_ROOT
+                catalog.SPEC_ROOT
                 / "proposals"
                 / "batch-7-loaded-carry.md"
             ).read_text(encoding="utf-8"),
@@ -10864,29 +10863,29 @@ class CatalogV2FoundationTests(unittest.TestCase):
         self.assertTrue(held.isdisjoint(active_ids))
         for family_id in held:
             self.assertFalse(
-                (catalog_v2.FAMILIES_ROOT / f"{family_id}.json").exists()
+                (catalog.FAMILIES_ROOT / f"{family_id}.json").exists()
             )
         self.assertNotIn(
             "fisher-2018-isolated-lumbar-extension",
             self.foundation.evidence_ids,
         )
         self.assertFalse(
-            (catalog_v2.FAMILIES_ROOT / "loaded-carry.json").exists()
+            (catalog.FAMILIES_ROOT / "loaded-carry.json").exists()
         )
 
-        roadmap = (catalog_v2.SPEC_ROOT / "family-roadmap.md").read_text(
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
             encoding="utf-8"
         )
         families_readme = (
-            catalog_v2.FAMILIES_ROOT / "README.md"
+            catalog.FAMILIES_ROOT / "README.md"
         ).read_text(encoding="utf-8")
         normalized_families_readme = " ".join(families_readme.split())
         foundation_readme = (
-            catalog_v2.SPEC_ROOT / "README.md"
+            catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
         normalized_foundation_readme = " ".join(foundation_readme.split())
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-7-dynamic-spine.md"
         ).read_text(encoding="utf-8")
@@ -10936,20 +10935,20 @@ class CatalogV2FoundationTests(unittest.TestCase):
             {"grip", "finger-flexion-grip"}.isdisjoint(active_ids)
         )
         proposal = (
-            catalog_v2.SPEC_ROOT
+            catalog.SPEC_ROOT
             / "proposals"
             / "batch-2-distal-actions.md"
         ).read_text(encoding="utf-8")
         self.assertIn("generic `grip` remains deferred", proposal)
 
     def test_all_evidence_is_used_by_anatomy_or_a_family(self) -> None:
-        catalog_v2.validate_evidence_coverage(
+        catalog.validate_evidence_coverage(
             self.foundation,
             self.real_families,
         )
 
     def test_real_family_set_has_no_cross_family_identity_collisions(self) -> None:
-        catalog_v2.validate_family_set(self.real_families)
+        catalog.validate_family_set(self.real_families)
 
     def test_bodyweight_press_must_obey_closed_chain_rule(self) -> None:
         family = self.horizontal_press_copy()
@@ -10983,10 +10982,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         duplicate_family = self.horizontal_press_copy()
         duplicate_family["id"] = "another-horizontal-family"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "family set duplicates catalogID barbell-bench-press",
         ):
-            catalog_v2.validate_family_set(
+            catalog.validate_family_set(
                 [self.horizontal_press, duplicate_family]
             )
 
@@ -11010,7 +11009,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
 
     def test_resisted_only_family_uses_resisted_action_as_plane_basis(self) -> None:
         family = self.resisted_spine_family()
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "resisted-only fixture",
@@ -11195,7 +11194,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             {"muscle": "deltoidAnterior", "role": "primary"}
         ]
         self.assertEqual(
-            catalog_v2.validate_family(
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "conditioned resisted-action fixture",
@@ -11260,7 +11259,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 for action, opposite in oppositions.items()
                 if action == opposite
             },
-            catalog_v2.DIRECTION_AGGREGATED_ACTIONS,
+            catalog.DIRECTION_AGGREGATED_ACTIONS,
         )
 
     def test_action_opposition_map_rejects_incomplete_coverage(self) -> None:
@@ -11272,10 +11271,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
         hand_pair["actions"].remove("hand.fingerExtension")
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "actionOppositions must cover every action exactly once",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11290,10 +11289,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
         scapular_pair["actions"][1] = "shoulder.abduction"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "must share one joint region and cardinal plane",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11303,10 +11302,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["actionOppositions"][0] = []
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[0\] must be an object",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11316,10 +11315,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["actionOppositions"][0]["note"] = "not structural data"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[0\] has unknown keys: note",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11329,10 +11328,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["actionOppositions"][0]["actions"] = "scapula.elevation"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[0\]\.actions must be an array",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11345,10 +11344,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "scapula.elevation",
         ]
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[0\]\.actions contains duplicates",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11362,10 +11361,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "scapula.protraction",
         ]
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "must contain one direction-aggregated action or one opposing pair",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11375,11 +11374,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["actionOppositions"][0]["actions"][1] = "bogus.action"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[0\]\.actions references unknown actions: "
             r"bogus\.action",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11389,11 +11388,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["actionOppositions"][1]["actions"][1] = "scapula.elevation"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             r"actionOppositions\[1\]\.actions repeats opposition members: "
             r"scapula\.elevation",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11407,10 +11406,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         actions["actionOppositions"][0]["actions"] = [first_pair[0]]
         actions["actionOppositions"].insert(1, {"actions": [first_pair[1]]})
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "singleton actions must be exactly the direction-aggregated vocabulary",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11428,9 +11427,9 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
 
     def test_foundation_digest_is_deterministic(self) -> None:
-        first = catalog_v2.canonical_foundation_digest(self.foundation)
-        second = catalog_v2.canonical_foundation_digest(
-            catalog_v2.validate_foundation()
+        first = catalog.canonical_foundation_digest(self.foundation)
+        second = catalog.canonical_foundation_digest(
+            catalog.validate_foundation()
         )
         self.assertEqual(first, second)
         self.assertEqual(len(first), 64)
@@ -11440,10 +11439,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         planes = schema["$defs"]["fixedClassification"]["properties"]["planes"]
         planes["items"]["enum"].append("oblique")
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "movement-plane enum must contain exactly the three cardinal planes",
         ):
-            catalog_v2.validate_family_schema(schema)
+            catalog.validate_family_schema(schema)
 
     def test_family_schema_must_permit_empty_unique_prime_actions(self) -> None:
         mutations = {
@@ -11460,10 +11459,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
             schema = copy.deepcopy(self.foundation.family_schema)
             mutate(schema)
             with self.subTest(mutation=label), self.assertRaisesRegex(
-                catalog_v2.ValidationFailure,
+                catalog.ValidationFailure,
                 "primeActions must permit an empty anti-motion contract",
             ):
-                catalog_v2.validate_family_schema(schema)
+                catalog.validate_family_schema(schema)
 
     def test_family_schema_resisted_actions_remain_optional_non_empty_unique(
         self,
@@ -11481,48 +11480,48 @@ class CatalogV2FoundationTests(unittest.TestCase):
             else:
                 resisted_actions[key] = value
             with self.subTest(mutation=label), self.assertRaisesRegex(
-                catalog_v2.ValidationFailure,
+                catalog.ValidationFailure,
                 "resistedActions must be an optional non-empty unique action list",
             ):
-                catalog_v2.validate_family_schema(schema)
+                catalog.validate_family_schema(schema)
 
         schema = copy.deepcopy(self.foundation.family_schema)
         schema["$defs"]["movementSignature"]["required"].append(
             "resistedActions"
         )
         with self.subTest(mutation="becomes-required"), self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "movementSignature required fields differ from validator contract",
         ):
-            catalog_v2.validate_family_schema(schema)
+            catalog.validate_family_schema(schema)
 
     def test_family_schema_requires_a_prime_or_resisted_action(self) -> None:
         schema = copy.deepcopy(self.foundation.family_schema)
         schema["$defs"]["movementSignature"].pop("anyOf")
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "movementSignature must require at least one prime or resisted action",
         ):
-            catalog_v2.validate_family_schema(schema)
+            catalog.validate_family_schema(schema)
 
     def test_duplicate_mesh_ownership_is_rejected(self) -> None:
         taxonomy = copy.deepcopy(self.foundation.taxonomy)
         by_id = {muscle["id"]: muscle for muscle in taxonomy["muscles"]}
         by_id["serratus"]["meshBaseNames"] = ["Latissimus_Dorsi"]
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "owned by both serratus and lats",
         ):
-            catalog_v2.validate_taxonomy(taxonomy)
+            catalog.validate_taxonomy(taxonomy)
 
     def test_unknown_evidence_reference_is_rejected(self) -> None:
         actions = copy.deepcopy(self.foundation.joint_actions)
         actions["muscleProfiles"][0]["evidenceRefs"] = ["invented-source"]
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "references unknown evidence",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11537,10 +11536,10 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )
         sternocostal["produces"][0]["condition"] = "inventedPosition"
         with self.assertRaisesRegex(
-            catalog_v2.ValidationFailure,
+            catalog.ValidationFailure,
             "references unknown action condition inventedPosition",
         ):
-            catalog_v2.validate_joint_actions(
+            catalog.validate_joint_actions(
                 actions,
                 set(self.foundation.muscle_by_id),
                 self.foundation.evidence_ids,
@@ -11560,7 +11559,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 "condition": "fromFlexedPosition",
             }
         )
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "conditioned extension fixture",
@@ -11672,7 +11671,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 )
             )
         self.assertEqual(
-            catalog_v2.validate_family(
+            catalog.validate_family(
                 family,
                 self.foundation,
                 "mover-covered stability fixture",
@@ -11705,7 +11704,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def test_programming_recommendation_is_a_warning_not_membership_failure(self) -> None:
         family = self.family_copy()
         family["exercises"][0]["reps"] = 30
-        warnings = catalog_v2.validate_family(
+        warnings = catalog.validate_family(
             family,
             self.foundation,
             "recommendation fixture",
@@ -11718,7 +11717,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     def test_runtime_projection_is_exactly_44_families_and_120_exercises(
         self,
     ) -> None:
-        records = catalog_v2.compile_runtime_catalog(self.real_families)
+        records = catalog.compile_runtime_catalog(self.real_families)
         self.assertEqual(len(records), 120)
         self.assertEqual(
             {record["familyID"] for record in records},
@@ -11727,7 +11726,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         self.assertEqual(len({record["familyID"] for record in records}), 44)
         self.assertEqual(
             records,
-            catalog_v2.compile_runtime_catalog(reversed(self.real_families)),
+            catalog.compile_runtime_catalog(reversed(self.real_families)),
         )
 
         expected_identity_order = [
@@ -11750,7 +11749,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
             "frontal",
             "sagittal",
         ]
-        record = catalog_v2.compile_runtime_catalog([fixture])[0]
+        record = catalog.compile_runtime_catalog([fixture])[0]
         self.assertEqual(
             record["planes"],
             ["sagittal", "frontal", "transverse"],
@@ -11761,7 +11760,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     ) -> None:
         records = {
             record["catalogID"]: record
-            for record in catalog_v2.compile_runtime_catalog(self.real_families)
+            for record in catalog.compile_runtime_catalog(self.real_families)
         }
         for catalog_id in {
             "incline-barbell-bench-press",
@@ -11793,7 +11792,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
     ) -> None:
         records = {
             record["catalogID"]: record
-            for record in catalog_v2.compile_runtime_catalog(self.real_families)
+            for record in catalog.compile_runtime_catalog(self.real_families)
         }
         self.assertEqual(records["barbell-pullover"]["group"], "chest")
         self.assertEqual(
@@ -11823,27 +11822,27 @@ class CatalogV2FoundationTests(unittest.TestCase):
         fixture = self.family_copy()
         fixture["exercises"][0].pop("defaultWeightKg")
         fixture["exercises"][0].pop("searchPriority")
-        record = catalog_v2.compile_runtime_catalog([fixture])[0]
+        record = catalog.compile_runtime_catalog([fixture])[0]
         self.assertNotIn("defaultWeightKg", record)
         self.assertNotIn("defaultDuration", record)
         self.assertNotIn("searchPriority", record)
 
     def test_bundled_runtime_is_byte_for_byte_compiler_output(self) -> None:
-        encoded = catalog_v2.encoded_runtime_catalog(
-            catalog_v2.compile_runtime_catalog(self.real_families)
+        encoded = catalog.encoded_runtime_catalog(
+            catalog.compile_runtime_catalog(self.real_families)
         )
         self.assertTrue(encoded.endswith("\n"))
         self.assertEqual(
-            catalog_v2.RUNTIME_CATALOG_PATH.read_text(encoding="utf-8"),
+            catalog.RUNTIME_CATALOG_PATH.read_text(encoding="utf-8"),
             encoded,
         )
 
     def test_xcode_catalog_sandbox_allowlist_matches_compiler_inputs(self) -> None:
-        expected = catalog_v2.encoded_xcode_input_file_list(
-            catalog_v2.discovered_family_paths()
+        expected = catalog.encoded_xcode_input_file_list(
+            catalog.discovered_family_paths()
         )
         self.assertEqual(
-            catalog_v2.XCODE_INPUT_FILE_LIST_PATH.read_text(encoding="utf-8"),
+            catalog.XCODE_INPUT_FILE_LIST_PATH.read_text(encoding="utf-8"),
             expected,
         )
 
@@ -11851,7 +11850,7 @@ class CatalogV2FoundationTests(unittest.TestCase):
         self,
     ) -> None:
         project = (
-            catalog_v2.ROOT / "vivobody.xcodeproj" / "project.pbxproj"
+            catalog.ROOT / "vivobody.xcodeproj" / "project.pbxproj"
         ).read_text(encoding="utf-8")
         phase = project.split(
             "C7A10B22D3E44F55A6677889 /* Verify Canonical Catalog */ = {",
@@ -11859,11 +11858,11 @@ class CatalogV2FoundationTests(unittest.TestCase):
         )[1].split("/* End PBXShellScriptBuildPhase section */", maxsplit=1)[0]
         self.assertNotIn("alwaysOutOfDate = 1", phase)
         self.assertIn(
-            '"$(SRCROOT)/specs/catalog-v2/families"',
+            '"$(SRCROOT)/specs/catalog/families"',
             phase,
         )
         self.assertIn(
-            '"$(DERIVED_FILE_DIR)/catalog-v2-check.stamp"',
+            '"$(DERIVED_FILE_DIR)/catalog-check.stamp"',
             phase,
         )
 
@@ -11875,17 +11874,17 @@ class CatalogV2FoundationTests(unittest.TestCase):
             output.write_text("old", encoding="utf-8")
             output.chmod(0o600)
             with mock.patch.object(
-                catalog_v2,
+                catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
             ):
-                catalog_v2.write_runtime_catalog_atomically("new\n")
+                catalog.write_runtime_catalog_atomically("new\n")
             self.assertEqual(output.read_text(encoding="utf-8"), "new\n")
             self.assertEqual(output.stat().st_mode & 0o777, 0o644)
             self.assertEqual(list(output.parent.glob(".catalog.json.*.tmp")), [])
 
             with mock.patch.object(
-                catalog_v2,
+                catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
             ), mock.patch.object(
@@ -11897,44 +11896,44 @@ class CatalogV2FoundationTests(unittest.TestCase):
                     OSError,
                     "simulated replacement failure",
                 ):
-                    catalog_v2.write_runtime_catalog_atomically("broken\n")
+                    catalog.write_runtime_catalog_atomically("broken\n")
             self.assertEqual(output.read_text(encoding="utf-8"), "new\n")
             self.assertEqual(list(output.parent.glob(".catalog.json.*.tmp")), [])
 
     def test_check_is_read_only_and_emit_is_the_only_write_mode(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "catalog.json"
-            allowlist = Path(directory) / "catalog-v2-inputs.xcfilelist"
+            allowlist = Path(directory) / "catalog-inputs.xcfilelist"
             allowlist.write_text(
-                catalog_v2.encoded_xcode_input_file_list(
-                    catalog_v2.discovered_family_paths()
+                catalog.encoded_xcode_input_file_list(
+                    catalog.discovered_family_paths()
                 ),
                 encoding="utf-8",
             )
             output.write_text("stale\n", encoding="utf-8")
             with mock.patch.object(
-                catalog_v2,
+                catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
             ), mock.patch.object(
-                catalog_v2,
+                catalog,
                 "XCODE_INPUT_FILE_LIST_PATH",
                 allowlist,
             ), mock.patch("builtins.print"):
-                self.assertEqual(catalog_v2.main([]), 0)
+                self.assertEqual(catalog.main([]), 0)
                 self.assertEqual(output.read_text(encoding="utf-8"), "stale\n")
-                self.assertEqual(catalog_v2.main(["--check"]), 1)
+                self.assertEqual(catalog.main(["--check"]), 1)
                 self.assertEqual(output.read_text(encoding="utf-8"), "stale\n")
-                self.assertEqual(catalog_v2.main(["--emit-runtime"]), 0)
+                self.assertEqual(catalog.main(["--emit-runtime"]), 0)
 
-            expected = catalog_v2.encoded_runtime_catalog(
-                catalog_v2.compile_runtime_catalog(self.real_families)
+            expected = catalog.encoded_runtime_catalog(
+                catalog.compile_runtime_catalog(self.real_families)
             )
             self.assertEqual(output.read_text(encoding="utf-8"), expected)
 
     def test_check_and_emit_modes_are_mutually_exclusive(self) -> None:
         with mock.patch.object(sys, "stderr"), self.assertRaises(SystemExit):
-            catalog_v2.parse_args(["--check", "--emit-runtime"])
+            catalog.parse_args(["--check", "--emit-runtime"])
 
     def test_supplemental_family_validation_cannot_enter_runtime_output(
         self,
@@ -11947,18 +11946,18 @@ class CatalogV2FoundationTests(unittest.TestCase):
                 encoding="utf-8",
             )
             output = temporary_root / "catalog.json"
-            allowlist = temporary_root / "catalog-v2-inputs.xcfilelist"
+            allowlist = temporary_root / "catalog-inputs.xcfilelist"
             with mock.patch.object(
-                catalog_v2,
+                catalog,
                 "RUNTIME_CATALOG_PATH",
                 output,
             ), mock.patch.object(
-                catalog_v2,
+                catalog,
                 "XCODE_INPUT_FILE_LIST_PATH",
                 allowlist,
             ), mock.patch("builtins.print"):
                 self.assertEqual(
-                    catalog_v2.main(
+                    catalog.main(
                         ["--emit-runtime", "--family", str(supplemental)]
                     ),
                     0,
@@ -11971,23 +11970,8 @@ class CatalogV2FoundationTests(unittest.TestCase):
             )
             self.assertEqual(
                 emitted,
-                catalog_v2.compile_runtime_catalog(self.real_families),
+                catalog.compile_runtime_catalog(self.real_families),
             )
-
-    def test_retired_catalog_writers_fail_closed(self) -> None:
-        for script in ("curate.py", "transform_wger.py"):
-            with self.subTest(script=script):
-                result = subprocess.run(
-                    [sys.executable, str(catalog_v2.ROOT / "Scripts" / script)],
-                    cwd=catalog_v2.ROOT,
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn("is retired and cannot write catalog.json", result.stderr)
-                self.assertIn("Scripts/catalog_v2.py --emit-runtime", result.stderr)
-
 
 if __name__ == "__main__":
     unittest.main()

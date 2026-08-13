@@ -3,8 +3,8 @@
 //  vivobody
 //
 //  Strict decoder and validator for the bundled exercise catalog.
-//  catalog.json is deterministically compiled from specs/catalog-v2
-//  by Scripts/catalog_v2.py. It is a build-time contract: malformed
+//  catalog.json is deterministically compiled from specs/catalog
+//  by Scripts/catalog.py. It is a build-time contract: malformed
 //  enums, missing required biomechanics fields, duplicate stable IDs,
 //  or ambiguous names fail loudly rather than acquiring silent defaults.
 //
@@ -47,7 +47,7 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let movementDefinition: String
     let involvement: [MuscleAssignment]
 
-    // Compatibility-free projections used by persistent seeding.
+    // Canonical projections used by persistent synchronization.
     var muscleGroup: MuscleGroup { group }
     var defaultWeightValue: Double { defaultWeight }
     var defaultRepsValue: Int { reps }
@@ -87,7 +87,22 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
 /// Loads and caches the bundled catalog once. Both indexes are safe
 /// because validation rejects duplicate normalized names and stable IDs.
 nonisolated enum CatalogData {
-    static let records: [CatalogRecord] = load()
+    private static let sourceData = loadData()
+
+    static let records: [CatalogRecord] = load(sourceData)
+
+    /// Stable FNV-1a digest of the generated resource bytes. This is not a
+    /// security primitive; it is a compact change token for local caches such
+    /// as Spotlight.
+    static let sourceFingerprint: String = {
+        var hash: UInt64 = 14_695_981_039_346_656_037
+        for byte in sourceData {
+            hash ^= UInt64(byte)
+            hash &*= 1_099_511_628_211
+        }
+        let value = String(hash, radix: 16)
+        return String(repeating: "0", count: 16 - value.count) + value
+    }()
 
     static let byName: [String: CatalogRecord] = Dictionary(
         uniqueKeysWithValues: records.map { (normalized($0.name), $0) }
@@ -113,13 +128,21 @@ nonisolated enum CatalogData {
         return records
     }
 
-    private static func load() -> [CatalogRecord] {
+    private static func loadData() -> Data {
         guard let url = Bundle.main.url(forResource: "catalog", withExtension: "json") else {
             preconditionFailure("catalog.json is missing from the app bundle")
         }
 
         do {
-            return try decode(Data(contentsOf: url))
+            return try Data(contentsOf: url)
+        } catch {
+            preconditionFailure("Unable to read bundled catalog.json: \(error)")
+        }
+    }
+
+    private static func load(_ data: Data) -> [CatalogRecord] {
+        do {
+            return try decode(data)
         } catch {
             preconditionFailure("Invalid bundled catalog.json: \(error)")
         }

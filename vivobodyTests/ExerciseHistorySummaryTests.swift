@@ -146,7 +146,7 @@ struct ExerciseHistorySummaryTests {
     }
 
     @Test func emptyArchiveBecomesKnownEmptyAfterFallbackPrime() throws {
-        let schema = Schema(SchemaV5.models, version: SchemaV5.versionIdentifier)
+        let schema = VivobodyStore.schema
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: true

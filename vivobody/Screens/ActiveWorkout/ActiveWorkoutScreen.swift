@@ -208,7 +208,6 @@ struct ActiveWorkoutScreen: View {
             in: modelContext
         )
         let summary = history?[item.historyKey]
-            ?? history?[item.legacyHistoryKey]
         return Exercise.fresh(
             from: item,
             history: summary,

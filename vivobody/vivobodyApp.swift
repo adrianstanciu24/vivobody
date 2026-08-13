@@ -14,26 +14,18 @@ struct vivobodyApp: App {
     /// schema declares all @Model classes; cascade-delete
     /// relationships keep exercises and sets bound to their session.
     ///
-    /// Pre-production, the container deliberately opens WITHOUT the
-    /// staged migration plan: staged migration matches the on-disk
-    /// store against declared schema versions by checksum, and since
-    /// every SchemaVN references the live model classes, any field
-    /// change desyncs all checksums and bricks the store into the
-    /// fallback. Automatic lightweight migration handles additive
-    /// changes in place instead. Re-wire `VivobodyMigrationPlan`
-    /// (SchemaVersioning.swift) once real stores ship. The family-first
-    /// catalog cutover deliberately uses a new configuration name so
-    /// obsolete identities, singular planes, and coarse muscle keys
-    /// cannot leak into the canonical store. The retired development
-    /// store remains untouched on disk.
+    /// The app is still pre-production, so it has one current schema and one
+    /// neutral development store. Model-breaking changes reset development
+    /// data rather than accumulating migration versions before persistence
+    /// ships as a product contract.
     ///
     /// Nil only when both the on-disk store and the in-memory fallback
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
     private let container: ModelContainer? = {
-        let schema = Schema(SchemaV5.models, version: SchemaV5.versionIdentifier)
+        let schema = VivobodyStore.schema
         let config = ModelConfiguration(
-            "vivobody-family-catalog-v2",
+            "vivobody",
             schema: schema,
             isStoredInMemoryOnly: false
         )
@@ -43,12 +35,12 @@ struct vivobodyApp: App {
                 configurations: [config]
             )
         } catch {
-            // A failed on-disk migration must not crash every launch.
+            // A failed on-disk store open must not crash every launch.
             // Fall back to an in-memory store so the app stays usable;
             // the original store is left untouched on disk for recovery.
             StorageHealth.shared.didFallbackToInMemory = true
             let fallback = ModelConfiguration(
-                "vivobody-family-catalog-v2-fallback",
+                "vivobody-fallback",
                 schema: schema,
                 isStoredInMemoryOnly: true
             )

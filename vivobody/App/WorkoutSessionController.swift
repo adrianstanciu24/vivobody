@@ -152,9 +152,9 @@ final class WorkoutSessionController {
         )
         descriptor.fetchLimit = 1
         guard let session = try? context.fetch(descriptor).first else {
-            // A fresh canonical store must also retire any ActivityKit state
-            // left by the pre-cutover development store. This is harmless on
-            // ordinary no-session launches because `end` sees no activities.
+            // No saved session means any surviving ActivityKit state is stale.
+            // This is harmless on ordinary no-session launches because `end`
+            // sees no activities.
             WorkoutLiveActivityController.end(for: nil)
             WidgetSnapshotWriter.writeActiveWorkout(in: context)
             return
@@ -225,7 +225,6 @@ final class WorkoutSessionController {
         }
         let history = resolvedExerciseHistory()
         let summary = history?[item.historyKey]
-            ?? history?[item.legacyHistoryKey]
         let firstExercise = Exercise.fresh(
             from: item,
             history: summary,

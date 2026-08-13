@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Tracked primary sources supporting the catalog-v2 anatomical capability model. A reference documents support; it is not a numeric muscle-contribution oracle.",
+  "description": "Tracked primary sources supporting the catalog anatomical capability model. A reference documents support; it is not a numeric muscle-contribution oracle.",
   "sources": [
     {
       "id": "holzbaur-2005-upper-extremity",

@@ -131,7 +131,7 @@ struct TemplatePrefillTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     private func makeContext() throws -> ModelContext {
-        let schema = Schema(SchemaV5.models, version: SchemaV5.versionIdentifier)
+        let schema = VivobodyStore.schema
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: [config])
         return ModelContext(container)

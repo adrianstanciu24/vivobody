@@ -33,10 +33,6 @@ import UniformTypeIdentifiers
 enum SpotlightIndexer {
     static let templateDomain = "astanciu.vivobody.templates"
     static let exerciseDomain = "astanciu.vivobody.exercises"
-    /// Bump when a clean-slate catalog/store cutover invalidates every
-    /// previously indexed install-local SwiftData UUID.
-    private static let indexGeneration = 2
-
     static func templateIdentifier(_ id: UUID) -> String {
         "template:\(id.uuidString)"
     }
@@ -80,17 +76,18 @@ enum SpotlightIndexer {
         }
     }
 
-    /// Version-throttled reindex: only runs the full delete + reindex
-    /// when the app's marketing version has changed since the last
-    /// pass. Prevents a wasteful wipe-and-rebuild on every launch.
+    /// Fingerprint-throttled reindex: runs when either the app version or the
+    /// generated catalog changes. That keeps additions and authored metadata
+    /// edits searchable during pre-production without rebuilding on every
+    /// launch.
     static func reindexAllIfNeeded(templates: [WorkoutTemplate], items: [ExerciseCatalogItem]) {
         let defaults = UserDefaults.standard
-        let lastVersion = defaults.string(forKey: SettingsKey.spotlightReindexedVersion)
+        let previous = defaults.string(forKey: SettingsKey.spotlightReindexFingerprint)
         let marketingVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
-        let currentVersion = "\(marketingVersion)|catalog-\(indexGeneration)"
-        guard lastVersion != currentVersion else { return }
+        let current = "\(marketingVersion)|catalog:\(CatalogData.sourceFingerprint)"
+        guard previous != current else { return }
         reindexAll(templates: templates, items: items)
-        defaults.set(currentVersion, forKey: SettingsKey.spotlightReindexedVersion)
+        defaults.set(current, forKey: SettingsKey.spotlightReindexFingerprint)
     }
 
     // MARK: - Delete

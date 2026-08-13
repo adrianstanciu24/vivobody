@@ -38,7 +38,6 @@ enum ExerciseSearch {
         let scored: [Scored] = items.compactMap { item in
             guard let score = combinedScore(item: item, tokens: tokens) else { return nil }
             let tracked = trackedKeys.contains(item.historyKey)
-                || trackedKeys.contains(item.legacyHistoryKey)
             return Scored(
                 item: item,
                 score: score,

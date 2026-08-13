@@ -14,10 +14,9 @@ names.
 | `hip-hinge` | Defer — material knee excursion conflicts with the proposed contract | 0 |
 | `hip-thrust-bridge` | Activate after shared Batch-5 integration gates pass | 2 |
 
-The active contract uses the post-Batch-4 52-region taxonomy. This review does
-not inspect the legacy catalog. Its roster is the smallest set that exercises
-the reviewed mechanical boundary without treating equipment substitutions as
-facts.
+The active contract uses the post-Batch-4 52-region taxonomy. Its roster is the
+smallest set that exercises the reviewed mechanical boundary without treating
+equipment substitutions as facts.
 
 ## Boundary matrix
 

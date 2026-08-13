@@ -905,11 +905,9 @@ extension ExerciseDetailScreen {
         }
     }
 
-    /// Stable lookup keys matching `lastInstanceByExercise()` and
-    /// `progressByExercise()`. The name key is only a fallback for
-    /// legacy history written before copied catalog IDs existed.
+    /// Stable lookup key matching `lastInstanceByExercise()` and
+    /// `progressByExercise()`.
     var historyKey: String { item.historyKey }
-    var legacyHistoryKey: String { item.legacyHistoryKey }
 
     /// All progress points for this exercise across history. Nil
     /// when the user has fewer than 2 sessions (matches the
@@ -917,11 +915,7 @@ extension ExerciseDetailScreen {
     /// at least 2 points to be more than a dot.
     var progress: ExerciseProgress? {
         let allProgress = sessionAnalytics?.progress ?? completedSessions.progressByExercise
-        // Custom exercise IDs deliberately include their performance
-        // semantics. Resolve that complete identity before consulting the
-        // name-only key used by history from before copied IDs existed.
         return allProgress.first { $0.id == historyKey }
-            ?? allProgress.first { $0.id == legacyHistoryKey }
     }
 
     /// Recent RIR read + progression verdict. Nil outside comparable
@@ -944,7 +938,7 @@ extension ExerciseDetailScreen {
     /// only serves previews.
     var lastInstance: LastExerciseInstance? {
         let lookup = sessionAnalytics?.lastInstances ?? completedSessions.lastInstanceByExercise()
-        return lookup[historyKey] ?? lookup[legacyHistoryKey]
+        return lookup[historyKey]
     }
 
     /// Standing effective-load record for bodyweight-added and assisted
@@ -1263,7 +1257,6 @@ extension ExerciseDetailScreen {
     var strengthTrendStat: StrengthOutlookStat? {
         guard supportsEstimatedOneRepMax else { return nil }
         return sessionAnalytics?.strength.stat(forHistoryKey: historyKey)
-            ?? sessionAnalytics?.strength.stat(forHistoryKey: legacyHistoryKey)
     }
 
     /// Confidence-eligible workout dates from the cached history index.
@@ -1272,9 +1265,6 @@ extension ExerciseDetailScreen {
     var strengthTrendReadinessDates: [Date] {
         guard supportsEstimatedOneRepMax else { return [] }
         return sessionAnalytics?.exerciseHistorySummaries[historyKey]?
-            .estimatedOneRepMaxDates
-            ?? sessionAnalytics?.exerciseHistorySummaries[legacyHistoryKey]?
-                .estimatedOneRepMaxDates
-            ?? []
+            .estimatedOneRepMaxDates ?? []
     }
 }

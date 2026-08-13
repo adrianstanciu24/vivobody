@@ -6,7 +6,7 @@ gesture-first, all data on-device. Single developer (astanciu), iterative work.
 
 ## Stack
 - **iOS 26.5** (Xcode 17, Swift 6) — uses iOS-26 idioms (`@Bindable`, `.toolbar`, `.searchable`, `RenameButton`, `tabBarMinimizeBehavior`, Liquid Glass via `.glassEffect()`)
-- **SwiftUI** for all UI; **SwiftData** (`@Model`, `@Query`, versioned schema) for persistence; **Charts** for progress graphs; **SceneKit** for the 3D body model
+- **SwiftUI** for all UI; **SwiftData** (`@Model`, `@Query`, one current pre-production schema) for persistence; **Charts** for progress graphs; **SceneKit** for the 3D body model
 - System frameworks in play: **WidgetKit** + **ActivityKit** (widgets, Live Activity, Control Center control), **App Intents** (Siri shortcuts, interactive widgets), **CoreSpotlight**, **HealthKit**, **UserNotifications**
 - No third-party libraries. Native everything.
 
@@ -83,7 +83,7 @@ vivobody/                      # app target
 │   ├── SessionSideEffects.swift        # single fan-out for session events (LiveActivity, HealthKit, widgets…)
 │   ├── IncomingAction.swift   # every external entry point (URL, Handoff, Spotlight, widget/Siri mailboxes)
 │   │                          #   parses into one enum, dispatched through one handle(_:) site
-│   ├── SchemaVersioning.swift # SchemaV1...V5 + migration record + StorageHealth fallback flag
+│   ├── Persistence.swift      # current pre-production schema + StorageHealth fallback flag
 │   ├── WidgetSnapshotWriter.swift      # SwiftData → App Group Codable snapshots for widgets
 │   ├── WorkoutLiveActivityController.swift, RestNotificationController.swift,
 │   ├── SpotlightIndexer.swift, AppShortcuts.swift, UserActivity.swift,
@@ -142,7 +142,7 @@ WIDGET_IMPLEMENTATION_NOTES.md # App Group / entitlements / provisioning notes
 - **Anything shared with widgets goes in VivoKit**, not in the app target (widgets cannot import the app). Design tokens, snapshot types, ActivityKit attributes, shared intents live there.
 - **One boundary per system framework.** `HealthKitWorkoutService` is the only HealthKit import; `IncomingAction`/`IncomingActionParser` is the only external-entry-point parser; `SessionSideEffects` is the only fan-out for session lifecycle events. Add subscribers/sources there, never inline in screens.
 - **Session lifetime ≠ presentation lifetime.** `WorkoutSessionController` owns start/restore/archive/discard; `activeSession != nil` drives the MiniBar, `isWorkoutExpanded` drives the sheet. A workout can minimize/expand many times before archive.
-- **Schema changes:** additive fields with defaults need nothing. Anything non-additive means a new `SchemaVN` + `MigrationStage` in `SchemaVersioning.swift` (current: V5). The pre-production family-catalog cutover deliberately opens a fresh named store instead of remapping retired identities; never crash on container failure — the in-memory fallback + `StorageHealth` + recovery view path already exists.
+- **Schema changes:** the app is pre-production and uses one current schema in `Persistence.swift`. Reset development data after model-breaking changes; introduce frozen versioned schemas and migration stages only when persistence becomes a shipped product contract. Never crash on container failure — the in-memory fallback + `StorageHealth` + recovery view path already exists.
 - **Insights are pure functions over sessions**, computed through the `SessionAnalytics` fingerprint cache (session count + newest completedAt) so nothing recomputes per render. New insight = model file in `Models/Insights/` + section in `Screens/Insights/` + a test suite.
 
 ## Conventions to match

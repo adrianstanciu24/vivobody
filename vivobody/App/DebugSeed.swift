@@ -12,6 +12,68 @@ import SwiftData
 
 #if DEBUG
 
+private func debugCatalogRecord(named name: String) -> CatalogRecord {
+    guard let record = CatalogData.record(forExerciseNamed: name) else {
+        preconditionFailure("Debug seed references unknown catalog exercise: \(name)")
+    }
+    return record
+}
+
+private func debugCatalogExercise(
+    named name: String,
+    plannedSets: Int,
+    plannedReps: Int,
+    plannedWeight: Double,
+    plannedDuration: TimeInterval? = nil,
+    sortOrder: Int
+) -> Exercise {
+    let record = debugCatalogRecord(named: name)
+    return Exercise(
+        name: record.name,
+        catalogID: record.catalogID,
+        familyID: record.familyID,
+        group: record.group,
+        plannedSets: plannedSets,
+        plannedReps: plannedReps,
+        plannedWeight: plannedWeight,
+        muscleInvolvement: record.muscleInvolvement,
+        classification: record.classification,
+        trackingMode: record.trackingMode,
+        modality: record.modality,
+        loadMode: record.loadMode,
+        bodyweightFraction: record.bodyweightFraction,
+        plannedDuration: plannedDuration ?? record.defaultDurationValue,
+        sortOrder: sortOrder
+    )
+}
+
+private func debugCatalogTemplateExercise(
+    named name: String,
+    plannedSets: Int,
+    plannedReps: Int,
+    plannedWeight: Double,
+    sortOrder: Int
+) -> TemplateExercise {
+    let record = debugCatalogRecord(named: name)
+    return TemplateExercise(
+        name: record.name,
+        catalogID: record.catalogID,
+        familyID: record.familyID,
+        group: record.group,
+        plannedSets: plannedSets,
+        plannedReps: plannedReps,
+        plannedWeight: plannedWeight,
+        muscleInvolvement: record.muscleInvolvement,
+        classification: record.classification,
+        trackingMode: record.trackingMode,
+        modality: record.modality,
+        loadMode: record.loadMode,
+        bodyweightFraction: record.bodyweightFraction,
+        plannedDuration: record.defaultDurationValue,
+        sortOrder: sortOrder
+    )
+}
+
 /// UI-test and verification helpers driven by launch arguments.
 /// Reset wipes the store for a clean test base; seeds insert focused
 /// workout states; requestedTab chooses a capture start tab.
@@ -34,6 +96,7 @@ enum UITestSupport {
         deleteAll(WorkoutTemplate.self, in: context)
         deleteAll(ExerciseCatalogItem.self, in: context)
         deleteAll(BodyWeightEntry.self, in: context)
+        ExerciseCatalogItem.clearBundledCatalogDeletions()
         try? context.save()
     }
 
@@ -76,9 +139,8 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let exercise = Exercise(
-            name: "Barbell Bench Press",
-            group: .chest,
+        let exercise = debugCatalogExercise(
+            named: "Barbell Bench Press",
             plannedSets: 2,
             plannedReps: 8,
             plannedWeight: 135,
@@ -101,15 +163,11 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let exercise = Exercise(
-            name: "Pull-Up",
-            catalogID: "pull-ups",
-            group: .back,
+        let exercise = debugCatalogExercise(
+            named: "Pull-Up",
             plannedSets: 3,
             plannedReps: 8,
             plannedWeight: 0,
-            loadMode: .bodyweightAdded,
-            bodyweightFraction: 1,
             sortOrder: 0
         )
         let session = WorkoutSession(
@@ -131,8 +189,7 @@ enum UITestSupport {
         guard existing.isEmpty else { return }
 
         let exercise = Exercise(
-            name: "Dead Hang",
-            catalogID: "deadhang",
+            name: "Weighted Hang Fixture",
             group: .arms,
             plannedSets: 3,
             plannedReps: 0,
@@ -202,17 +259,15 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let bench = Exercise(
-            name: "Barbell Bench Press",
-            group: .chest,
+        let bench = debugCatalogExercise(
+            named: "Barbell Bench Press",
             plannedSets: 3,
             plannedReps: 8,
             plannedWeight: 135,
             sortOrder: 0
         )
-        let row = Exercise(
-            name: "Barbell Bent-Over Row",
-            group: .back,
+        let row = debugCatalogExercise(
+            named: "Barbell Bent-Over Row",
             plannedSets: 3,
             plannedReps: 8,
             plannedWeight: 115,
@@ -222,9 +277,8 @@ enum UITestSupport {
         bench.supersetID = pairID
         row.supersetID = pairID
 
-        let curl = Exercise(
-            name: "Barbell Biceps Curl",
-            group: .arms,
+        let curl = debugCatalogExercise(
+            named: "Supinated Straight-Bar Cable Curl",
             plannedSets: 3,
             plannedReps: 10,
             plannedWeight: 65,
@@ -247,21 +301,18 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let pressAround = Exercise(
-            name: "Cable Press-Around",
-            group: .chest,
+        let pressAround = debugCatalogExercise(
+            named: "Flat Dumbbell Fly",
             plannedSets: 3,
             plannedReps: 12,
             plannedWeight: 30 * WeightUnit.lbPerKg,
             sortOrder: 0
         )
-        let clapPushUp = Exercise(
-            name: "Clap Push-Up",
-            group: .chest,
+        let clapPushUp = debugCatalogExercise(
+            named: "Barbell Push Press",
             plannedSets: 3,
             plannedReps: 10,
             plannedWeight: 25 * WeightUnit.lbPerKg,
-            modality: .power,
             sortOrder: 1
         )
         let pairID = UUID()
@@ -284,17 +335,15 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let bench = Exercise(
-            name: "Barbell Bench Press",
-            group: .chest,
+        let bench = debugCatalogExercise(
+            named: "Barbell Bench Press",
             plannedSets: 3,
             plannedReps: 8,
             plannedWeight: 135,
             sortOrder: 0
         )
-        let row = Exercise(
-            name: "Barbell Bent-Over Row",
-            group: .back,
+        let row = debugCatalogExercise(
+            named: "Barbell Bent-Over Row",
             plannedSets: 3,
             plannedReps: 8,
             plannedWeight: 115,
@@ -304,9 +353,8 @@ enum UITestSupport {
         bench.supersetID = pairID
         row.supersetID = pairID
 
-        let curl = Exercise(
-            name: "Barbell Biceps Curl",
-            group: .arms,
+        let curl = debugCatalogExercise(
+            named: "Supinated Straight-Bar Cable Curl",
             plannedSets: 3,
             plannedReps: 10,
             plannedWeight: 65,
@@ -336,10 +384,8 @@ enum UITestSupport {
         ))) ?? []
         guard existing.isEmpty else { return }
 
-        let exercise = Exercise(
-            name: "Bent-Over Cable Fly",
-            catalogID: "bent-over-cable-flye",
-            group: .chest,
+        let exercise = debugCatalogExercise(
+            named: "Flat Dumbbell Fly",
             plannedSets: 1,
             plannedReps: 12,
             plannedWeight: 65 * WeightUnit.lbPerKg,
@@ -399,9 +445,8 @@ enum UITestSupport {
         let template = WorkoutTemplate(
             name: "Scheduled Test",
             exercises: [
-                TemplateExercise(
-                    name: "Barbell Bench Press",
-                    group: .chest,
+                debugCatalogTemplateExercise(
+                    named: "Barbell Bench Press",
                     plannedSets: 2,
                     plannedReps: 8,
                     plannedWeight: 135,
@@ -467,9 +512,8 @@ enum HistorySeeder {
 
             let exercises: [Exercise] = plan.groups.enumerated().map { idx, group in
                 let template = templateExercise(for: group, variant: i)
-                let exercise = Exercise(
-                    name: template.name,
-                    group: group,
+                let exercise = debugCatalogExercise(
+                    named: template.name,
                     plannedSets: 3,
                     plannedReps: 8,
                     plannedWeight: template.weight + overloadStep,
@@ -533,9 +577,8 @@ enum HistorySeeder {
                 else { continue }
 
                 let exercises: [Exercise] = lifts.enumerated().map { idx, lift in
-                    let exercise = Exercise(
-                        name: lift.name,
-                        group: lift.group,
+                    let exercise = debugCatalogExercise(
+                        named: lift.name,
                         plannedSets: sets,
                         plannedReps: reps,
                         plannedWeight: lift.weight + bump,
@@ -562,23 +605,23 @@ enum HistorySeeder {
         // Keep the independently modeled hip-abductor regions visible.
         // This catches regressions where the large TFL surface is left
         // gray or incorrectly shares Glute Med's primary intensity.
-        block([("Machine Hip Abduction", .legs, 90)],
+        block([("Pressure-Biofeedback Side-Lying Hip Abduction", .legs, 90)],
               startDaysAgo: 30, endDaysAgo: 2, count: 6, overload: 20, sets: 3, reps: 15)
 
         // Developed: a progressive press block.
         block([("Barbell Bench Press", .chest, 135),
                ("Incline Barbell Bench Press", .chest, 95),
-               ("Dumbbell Shoulder Press", .shoulders, 75)],
+               ("Seated Dumbbell Overhead Press", .shoulders, 75)],
               startDaysAgo: 56, endDaysAgo: 6, count: 11, overload: 55, sets: 4, reps: 8)
 
         // Moderate development (lower body): a light, brief raise block.
-        block([("Standing Machine Calf Raise", .legs, 70)],
+        block([("Standing Unilateral Machine Calf Raise", .legs, 70)],
               startDaysAgo: 30, endDaysAgo: 9, count: 4, overload: 15, sets: 3, reps: 10)
 
         // Plateau: identical load for fourteen sessions ⇒ developed but
         // no longer climbing — a steady mid-orange.
-        block([("Barbell Biceps Curl", .arms, 65),
-               ("Cable Triceps Pushdown", .arms, 55)],
+        block([("Supinated Straight-Bar Cable Curl", .arms, 65),
+               ("Single-Arm Supinated Cable Triceps Pushdown", .arms, 55)],
               startDaysAgo: 60, endDaysAgo: 6, count: 14, overload: 0, sets: 3, reps: 10)
 
         // Fading: trained hard early, abandoned four weeks ago.
@@ -615,9 +658,8 @@ enum HistorySeeder {
                 let day = calendar.date(byAdding: .day, value: -d, to: now),
                 let started = calendar.date(byAdding: .hour, value: -1, to: day)
             else { continue }
-            let exercise = Exercise(
-                name: "Barbell Bench Press",
-                group: .chest,
+            let exercise = debugCatalogExercise(
+                named: "Barbell Bench Press",
                 plannedSets: 1,
                 plannedReps: 5,
                 plannedWeight: w,
@@ -635,9 +677,8 @@ enum HistorySeeder {
         let template = WorkoutTemplate(name: "Bench Day", sortOrder: 0)
         template.scheduledWeekdays = [todayWeekday]
         context.insert(template)
-        let templateExercise = TemplateExercise(
-            name: "Barbell Bench Press",
-            group: .chest,
+        let templateExercise = debugCatalogTemplateExercise(
+            named: "Barbell Bench Press",
             plannedSets: 5,
             plannedReps: 5,
             plannedWeight: 180,
@@ -663,16 +704,16 @@ enum HistorySeeder {
         let lower = WorkoutTemplate(name: "Lower Day B", sortOrder: 0)
         lower.scheduledWeekdays = [today, plusDays(3)].sorted()
         lower.exercises = [
-            TemplateExercise(name: "Barbell Back Squat", group: .legs, plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
-            TemplateExercise(name: "Barbell Romanian Deadlift", group: .legs, plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
-            TemplateExercise(name: "Machine Leg Press", group: .legs, plannedSets: 3, plannedReps: 10, plannedWeight: 270, sortOrder: 2),
+            debugCatalogTemplateExercise(named: "Barbell Back Squat", plannedSets: 4, plannedReps: 5, plannedWeight: 185, sortOrder: 0),
+            debugCatalogTemplateExercise(named: "Barbell Hip Thrust", plannedSets: 3, plannedReps: 8, plannedWeight: 135, sortOrder: 1),
+            debugCatalogTemplateExercise(named: "Barbell Front Squat", plannedSets: 3, plannedReps: 10, plannedWeight: 135, sortOrder: 2),
         ]
         context.insert(lower)
 
         let upper = WorkoutTemplate(name: "Upper Day A", sortOrder: 1)
         upper.scheduledWeekdays = [plusDays(2), plusDays(5)].sorted()
-        let upperBench = TemplateExercise(name: "Barbell Bench Press", group: .chest, plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0)
-        let upperRow = TemplateExercise(name: "Barbell Bent-Over Row", group: .back, plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1)
+        let upperBench = debugCatalogTemplateExercise(named: "Barbell Bench Press", plannedSets: 4, plannedReps: 6, plannedWeight: 155, sortOrder: 0)
+        let upperRow = debugCatalogTemplateExercise(named: "Barbell Bent-Over Row", plannedSets: 3, plannedReps: 8, plannedWeight: 115, sortOrder: 1)
         // Bench + Row paired as a superset so the template seam and
         // the A1/A2 tags have a live example in the seeded library.
         let upperPair = UUID()
@@ -681,14 +722,14 @@ enum HistorySeeder {
         upper.exercises = [
             upperBench,
             upperRow,
-            TemplateExercise(name: "Dumbbell Shoulder Press", group: .shoulders, plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
-            TemplateExercise(name: "Barbell Biceps Curl", group: .arms, plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
+            debugCatalogTemplateExercise(named: "Seated Dumbbell Overhead Press", plannedSets: 3, plannedReps: 8, plannedWeight: 85, sortOrder: 2),
+            debugCatalogTemplateExercise(named: "Supinated Straight-Bar Cable Curl", plannedSets: 3, plannedReps: 10, plannedWeight: 60, sortOrder: 3),
         ]
         context.insert(upper)
 
         let core = WorkoutTemplate(name: "Core A", sortOrder: 2)
         core.exercises = [
-            TemplateExercise(name: "Hanging Leg Raise", group: .core, plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
+            debugCatalogTemplateExercise(named: "30-Degree Curl-Up", plannedSets: 3, plannedReps: 12, plannedWeight: 0, sortOrder: 0),
         ]
         context.insert(core)
 
@@ -699,10 +740,10 @@ enum HistorySeeder {
         switch group {
         case .chest:     return ("Barbell Bench Press", 135)
         case .back:      return ("Barbell Bent-Over Row", 115)
-        case .shoulders: return ("Dumbbell Shoulder Press", 95)
+        case .shoulders: return ("Seated Dumbbell Overhead Press", 95)
         case .legs:      return ("Barbell Back Squat", 185)
-        case .arms:      return ("Barbell Biceps Curl", 65)
-        case .core:      return ("Hanging Leg Raise", 0)
+        case .arms:      return ("Supinated Straight-Bar Cable Curl", 65)
+        case .core:      return ("30-Degree Curl-Up", 0)
         }
     }
 }

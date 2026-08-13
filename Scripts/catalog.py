@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 #
-#  catalog_v2.py
+#  catalog.py
 #  vivobody
 #
-#  Foundation validator for the clean-slate, family-first exercise catalog.
-#  It owns no legacy compatibility and never reads curate.py or its review CSVs
-#  as inputs. It validates the canonical 52-region taxonomy,
+#  Foundation validator and deterministic compiler for the family-first
+#  exercise catalog. It validates the canonical 52-region taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
 #  references, and every reviewed movement-family contract. The 52-region
 #  taxonomy keeps action-divergent lower-body muscles separate wherever the
@@ -29,7 +28,7 @@ from typing import Any, Iterable, Optional
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC_ROOT = ROOT / "specs" / "catalog-v2"
+SPEC_ROOT = ROOT / "specs" / "catalog"
 TAXONOMY_PATH = SPEC_ROOT / "taxonomy.json"
 JOINT_ACTIONS_PATH = SPEC_ROOT / "joint-actions.json"
 EVIDENCE_PATH = SPEC_ROOT / "evidence.json"
@@ -41,7 +40,7 @@ CANONICAL_RUNTIME_CATALOG_PATH = (
     ROOT / "vivobody" / "Resources" / "catalog.json"
 )
 RUNTIME_CATALOG_PATH = CANONICAL_RUNTIME_CATALOG_PATH
-XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-v2-inputs.xcfilelist"
+XCODE_INPUT_FILE_LIST_PATH = ROOT / "Scripts" / "catalog-inputs.xcfilelist"
 
 SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
@@ -188,7 +187,7 @@ MISSING = object()
 
 
 class ValidationFailure(ValueError):
-    """One deterministic catalog-v2 contract violation."""
+    """One deterministic catalog contract violation."""
 
 
 @dataclass(frozen=True)
@@ -454,7 +453,7 @@ def validate_taxonomy(data: dict[str, Any], body_model_path: Path = BODY_MODEL_P
     unexpected_ids = sorted(actual_ids - EXPECTED_MUSCLE_IDS)
     require(
         actual_ids == EXPECTED_MUSCLE_IDS,
-        f"{context} muscle IDs differ from the locked clean-slate taxonomy; missing={missing_ids}, unexpected={unexpected_ids}",
+        f"{context} muscle IDs differ from the locked taxonomy; missing={missing_ids}, unexpected={unexpected_ids}",
     )
 
     for muscle_id, expected_meshes in EXPECTED_SPLIT_MESHES.items():
@@ -2007,8 +2006,7 @@ def canonical_foundation_digest(foundation: Foundation) -> str:
 def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     """Project validated family sources into the app's runtime catalog shape.
 
-    The compiler intentionally consumes only catalog-v2 family contracts. It
-    never reads the retired runtime catalog or any legacy curation input.
+    The compiler consumes only canonical family contracts.
     Family file order is deterministic and exercise order remains authored.
     """
     records: list[dict[str, Any]] = []
@@ -2102,7 +2100,7 @@ def discovered_family_paths() -> list[Path]:
 
 def encoded_xcode_input_file_list(family_paths: Iterable[Path]) -> str:
     paths = [
-        ROOT / "Scripts" / "catalog_v2.py",
+        ROOT / "Scripts" / "catalog.py",
         TAXONOMY_PATH,
         JOINT_ACTIONS_PATH,
         EVIDENCE_PATH,
@@ -2202,12 +2200,12 @@ def main(argv: list[str] | None = None) -> int:
             )
             require(
                 RUNTIME_CATALOG_PATH.read_text(encoding="utf-8") == runtime_catalog,
-                "bundled runtime catalog differs from catalog-v2 compiler output",
+                "bundled runtime catalog differs from catalog compiler output",
             )
 
         digest = canonical_foundation_digest(foundation)
         print(
-            "catalog-v2 foundation valid: "
+            "catalog foundation valid: "
             f"{len(foundation.muscle_by_id)} muscles, "
             f"{foundation.mesh_base_count} mesh bases, "
             f"{len(foundation.action_ids)} joint actions, "
@@ -2219,7 +2217,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"warning: {warning}")
         return 0
     except ValidationFailure as error:
-        print(f"catalog-v2 validation failed: {error}", file=sys.stderr)
+        print(f"catalog validation failed: {error}", file=sys.stderr)
         return 1
 
 

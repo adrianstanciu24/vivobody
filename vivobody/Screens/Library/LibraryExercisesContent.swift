@@ -454,7 +454,7 @@ struct LibraryExercisesContent: View {
     }
 
     private func lastInstance(for item: ExerciseCatalogItem) -> LastExerciseInstance? {
-        lastInstanceLookup[item.historyKey] ?? lastInstanceLookup[item.legacyHistoryKey]
+        lastInstanceLookup[item.historyKey]
     }
 
     /// Sentence-case meta line shared by both row tiers — same
@@ -526,10 +526,8 @@ struct LibraryExercisesContent: View {
     }
 
     private func delete(_ item: ExerciseCatalogItem) {
-        let id = item.id
-        modelContext.delete(item)
         do {
-            try modelContext.saveOrRollback()
+            let id = try ExerciseCatalogItem.deleteFromCatalog(item, in: modelContext)
             SpotlightIndexer.removeExercise(id: id)
         } catch {
             saveError = SaveErrorBox(error)

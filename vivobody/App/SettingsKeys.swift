@@ -50,10 +50,12 @@ nonisolated enum SettingsKey {
     /// Teaches the drag-to-adjust gesture without an onboarding
     /// wizard, which the product principles cut outright.
     static let hasScrubbedNumber = "settings.hasScrubbedNumber"
-    /// String — the last marketing-version + catalog-generation pair that
-    /// triggered a full Spotlight reindex. The generation invalidates stale
-    /// install-local UUIDs after a clean-slate store cutover.
-    static let spotlightReindexedVersion = "settings.spotlightReindexedVersion"
+    /// String — marketing version plus generated-catalog fingerprint from the
+    /// last full Spotlight reindex.
+    static let spotlightReindexFingerprint = "settings.spotlightReindexFingerprint"
+    /// [String] — bundled catalog IDs the user explicitly removed. Launch
+    /// reconciliation respects these until Reset Exercise Catalog clears them.
+    static let hiddenBundledCatalogIDs = "settings.hiddenBundledCatalogIDs"
     /// Bool — last known Pro entitlement, mirrored by ProStore so the
     /// UI doesn't flash locked on a cold offline launch while StoreKit
     /// resolves. A render hint only — `Transaction.currentEntitlements`

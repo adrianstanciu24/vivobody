@@ -2,7 +2,7 @@
 //  CatalogBiomechanicsTests.swift
 //  vivobodyTests
 //
-//  Guards the catalog-v2 runtime projection as one canonical data
+//  Guards the family-first runtime projection as one canonical data
 //  product: 44 reviewed families compile to 120 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
@@ -20,10 +20,6 @@ struct CatalogBiomechanicsTests {
         #expect(Set(CatalogData.records.map(\.familyID)).count == 44)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
-
-        // Clean-slate v2 IDs do not retain legacy catalog identities.
-        #expect(CatalogData.record(forCatalogID: "squats") == nil)
-        #expect(CatalogData.record(forCatalogID: "machine-hip-abduction") == nil)
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {

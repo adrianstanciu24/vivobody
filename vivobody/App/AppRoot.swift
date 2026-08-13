@@ -99,7 +99,7 @@ struct AppRoot: View {
             }
             .onAppear {
                 // Critical path — must complete before first paint:
-                // wire the model context, seed the catalog if empty,
+                // wire the model context, reconcile the bundled catalog,
                 // restore any in-flight workout (MiniBar), and drain
                 // pending deep links.
                 appState.storageFallbackActive = StorageHealth.shared.didFallbackToInMemory
@@ -110,7 +110,8 @@ struct AppRoot: View {
 #if DEBUG
                 UITestSupport.resetIfRequested(in: modelContext)
 #endif
-                ExerciseCatalogItem.seedIfEmpty(in: modelContext)
+                let removedCatalogItemIDs = ExerciseCatalogItem
+                    .synchronizeBundledCatalog(in: modelContext)
 #if DEBUG
                 UITestSupport.seedIfRequested(in: modelContext)
                 if let requestedTab = UITestSupport.requestedTab() {
@@ -122,10 +123,10 @@ struct AppRoot: View {
 
                 // Non-critical path — defer to a low-priority Task so
                 // SwiftUI's first render isn't blocked by catalog
-                // pruning, Spotlight indexing, or widget snapshot
+                // Spotlight indexing or widget snapshot
                 // writes.
                 Task(priority: .utility) { @MainActor in
-                    for id in ExerciseCatalogItem.pruneRemovedSeeds(in: modelContext) {
+                    for id in removedCatalogItemIDs {
                         SpotlightIndexer.removeExercise(id: id)
                     }
                     let templates = (try? modelContext.fetch(FetchDescriptor<WorkoutTemplate>())) ?? []

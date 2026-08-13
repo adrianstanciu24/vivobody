@@ -1,17 +1,8 @@
-# Clean-slate catalog foundation
+# Exercise catalog foundation
 
-This directory is the canonical source for Vivobody's clean-slate,
-family-first exercise catalog. It is intentionally isolated from
-`Scripts/curate.py`, the legacy review CSVs, and `Scripts/transform_wger.py`.
-No canonical source may import, decode, compare against, or preserve identities
-from the legacy roster.
-
-The atomic runtime cutover is complete: `Scripts/catalog_v2.py` validates these
-foundations and reviewed families and is the sole writer of the bundled
-`vivobody/Resources/catalog.json`. The retired legacy writers fail immediately
-with instructions to use this compiler. The `catalog-v2` directory name is now
-a historical source-path label; no version suffix appears in runtime identity
-or data.
+This directory is the canonical source for Vivobody's family-first exercise
+catalog. `Scripts/catalog.py` validates these foundations and reviewed families
+and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 
 ## Source files
 
@@ -332,7 +323,7 @@ no grip width may be inferred from aliases. A close-grip press becomes a
 separate triceps-emphasis family only if a later evidence review deliberately
 assigns triceps as primary under a different muscle contract.
 
-`diagonal` is a push/pull direction, not an anatomical plane. The clean-slate
+`diagonal` is a push/pull direction, not an anatomical plane. The family-first
 taxonomy retains exactly the three cardinal planes while allowing a family to
 declare more than one. The runtime stores those plane components in canonical
 `sagittal|frontal|transverse` order, supports diagonal direction directly, and
@@ -344,9 +335,9 @@ sagittal.
 Run from the repository root:
 
 ```bash
-python3 Scripts/catalog_v2.py --check
-python3 Scripts/catalog_v2.py --emit-runtime
-python3 -m unittest discover -s Scripts/tests -p 'test_catalog_v2.py'
+python3 Scripts/catalog.py --check
+python3 Scripts/catalog.py --emit-runtime
+python3 -m unittest discover -s Scripts/tests -p 'test_catalog.py'
 ```
 
 `--check` is non-writing and also proves that the checked-in runtime catalog is

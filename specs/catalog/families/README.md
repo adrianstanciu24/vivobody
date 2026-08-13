@@ -1,4 +1,4 @@
-# Catalog-v2 families
+# Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
 Forty-four reviewed family files are currently active: the three chest
@@ -90,8 +90,8 @@ Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 detent, not a raw conversion from pounds. Zero-weight bodyweight, duration, and
 non-comparable-resistance records may omit it.
 
-Files here must never be derived from, compared with, or merged with the legacy
-exercise roster. `Scripts/catalog_v2.py --check` discovers and validates every
+Files here are the canonical exercise roster. `Scripts/catalog.py --check`
+discovers and validates every
 `*.json` file in this directory.
 
 Press families reuse the same mechanical vocabulary. `kineticChain` describes

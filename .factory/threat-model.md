@@ -92,10 +92,11 @@ multi-tenant authorization boundary.
 
 - Malformed external identifiers could select or alter the wrong local model.
   Resolve stable IDs through bounded fetches and verify expected record type.
-- Corrupt SwiftData, catalog JSON, or legacy snapshots could distort analytics
-  or crash launch. Existing mitigations include versioned schema handling,
-  in-memory fallback, canonical decoding, generation-gated repair, and
-  save-or-rollback semantics.
+- Corrupt SwiftData, catalog JSON, or widget snapshots could distort analytics
+  or crash launch. Existing mitigations include the in-memory fallback,
+  canonical decoding, versioned widget payloads, and save-or-rollback
+  semantics. During pre-production, model-breaking SwiftData changes reset the
+  development store instead of carrying migration code.
 - Widgets must not mutate SwiftData directly. All changes route through the app
   and normal session controller.
 - Asset tools can overwrite a caller-selected path. They must use typed file
@@ -217,7 +218,7 @@ container contents.
 
 Do not add repeated whole-store fetches to SwiftUI `body`, per-row accessors, or
 ungated launch paths. Prefer fingerprinted analytics caches, bounded parsing,
-single-pass aggregation, and generation-gated repair.
+single-pass aggregation, and explicitly gated maintenance work.
 
 ### Web patterns
 
