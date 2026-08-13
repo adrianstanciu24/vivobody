@@ -1,11 +1,13 @@
 # Catalog-v2 families
 
 This directory contains one reviewed JSON source file per movement family.
-Thirty-seven reviewed family files are currently active: the three chest
+Forty-four reviewed family files are currently active: the three chest
 presses, vertical press and pull, both compound row families, nine narrow
 shoulder or scapular-action families, dip, push press, eight narrow
 elbow/forearm/wrist families, four lower-body isolation families, and four
-lower-body compound families, plus three Batch-6 lower-body isolations. Each
+lower-body compound families, three Batch-6 lower-body isolations, two
+dynamic-spine families, three anti-movement families, and two carry families.
+Each
 uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
@@ -69,6 +71,19 @@ and the reviewed exercise evidence cannot yet support a truthful dynamic role
 policy. The active families do not use a visible muscle as a proxy for an
 absent region and do not turn anatomy-level capability into unmeasured
 exercise volume.
+
+Batch 7 adds seven exercises across `spine-flexion`, `spine-rotation`,
+`anti-extension`, `anti-lateral-flexion`, `anti-rotation`, `farmer-carry`, and
+`suitcase-carry`. The dynamic families each admit one narrow fixture; the
+spine-rotation record is unilateral at the set level and prescribes both
+rotation directions. The anti-movement families each admit one isometric hold,
+and each carry family admits one reviewed load topology. `spine-extension`
+remains held because the visible `lowerBack` meshes do not include the lumbar
+extensors or multifidus that the MedX fixture trains. Dynamic
+`spine-lateral-flexion` remains held because the condition-matched Konrad
+fixture has PMID/PMCID but no DOI, while the DOI-backed alternatives reviewed
+for this batch are isometric or industrial tasks rather than the proposed
+dynamic exercise.
 
 Every positive `defaultWeight` seed must also declare `defaultWeightKg` on the
 2.5 kg grid. The metric value is an independently reviewed clean scrubber
@@ -164,11 +179,12 @@ Distal muscle roles follow the split anatomical taxonomy rather than the old
 aggregate arm regions. Reviewed rows and vertical pulls with dynamic elbow
 flexion assign `bicepsBrachii`, `brachialis`, and `brachioradialis` as separate
 secondaries. A held-elbow reverse fly uses `brachialis` as an elbow stabilizer
-without implying dynamic elbow flexion. Every currently reviewed loaded-grip
-fixture assigns `fingerFlexors` to stabilize the hand and
-`extensorCarpiRadialis` to control the wrist against the flexors' wrist moment;
-neither role is a generic `grip` action or permission to infer pinch, hanging,
-or dynamic finger closing.
+without implying dynamic elbow flexion. Incidental implement support may assign
+`fingerFlexors` as a hand stabilizer; loaded carry instead assigns them primary
+or secondary because the family explicitly resists `hand.fingerExtension`.
+`extensorCarpiRadialis` controls the wrist against the flexors' wrist moment in
+both cases. Neither policy is a generic `grip` action or permission to infer
+pinch, hanging, or dynamic finger closing.
 
 Batch-2 elbow and distal contracts keep joint posture separate from motion.
 `forearmOrientation` is a held radioulnar posture; dynamic rotation uses
@@ -395,3 +411,62 @@ infer fibularis-tertius or toe-extensor volume from their shared action. Hip
 rotation remains held until
 posture-conditioned capabilities and the unvisualized deep-rotator policy can
 be resolved atomically.
+
+Batch-7 dynamic-spine families keep direction and setup narrow. The curl-up's
+`trunkStartElevationDegrees: 0` and `trunkEndElevationDegrees: 30` are gross
+trunk elevation relative to the floor, not segmental lumbar angles. The
+torso-twist record uses separate shoulder-height hand grips and bilateral
+shoulder pads as the load interface. Its held-pelvis instruction is labeled
+`positionHeldCatalogAdaptation` because the source did not measure pelvic
+kinematics. The same record prescribes separately logged work in both rotation
+directions; right-to-left is disclosed as a mirrored mechanics-and-training
+adaptation rather than a source-measured direction. The reviewed MedX
+extension fixture remains a hold: its range and cadence do not authorize
+arbitrary back-extension machines, and the visible taxonomy cannot yet credit
+the lumbar extensors it trains.
+
+The anti-movement families make the resisted tendency explicit instead of
+inventing a dynamic repetition. Stable forearm plank resists spine extension,
+side plank resists aggregated spine lateral flexion, and the feet-together band
+Pallof hold resists aggregated spine rotation. Each has empty `primeActions`,
+uses the resisted action as its plane basis, and forbids the full 44-action
+dynamic complement. Their names and definitions preserve the directly reviewed
+support topology, side prescription, and timed hold; unstable surfaces,
+suspension, loaded planks, dynamic presses, and moving repetitions require new
+review.
+
+Their stability demands cover the complete reviewed support chain rather than
+only the trunk. Forearm plank assigns scapular, shoulder, elbow, hip, knee,
+ankle, and foot control through serratus, external rotators, triceps, gluteus
+maximus, vasti, and soleus. Side plank additionally preserves the directly
+measured unheaded deltoid signal, gluteus-medius, rectus-femoris, and
+preferred-support-side context while using serratus, triceps, and soleus for
+the contacted support chain. Pallof assigns serratus, anterior deltoid,
+triceps, finger flexors, extensor carpi radialis, gluteus medius, vasti, and
+soleus across the upper- and lower-body base. Extensor carpi radialis provides
+wrist counter-control against the finger flexors' wrist-flexion moment. The
+Pallof source measured sacral acceleration rather than muscle EMG, so its role
+hierarchy is anatomy-and-mechanics-derived and remains explicitly disclosed.
+
+The side-plank `lowerBack` secondary is driven by the visible region's
+quadratus-lumborum capability. It is not a proxy for the study's erector-spinae
+signal: the current `lowerBack` mesh set contains quadratus lumborum and
+posterior-serratus surfaces, not an erector-spinae mesh, and it cannot allocate
+loaded versus contralateral side credit. Both sides are prescribed rather than
+pretending the aggregate is side-specific.
+
+`farmer-carry` and `suitcase-carry` share the implement's finger-opening
+tendency: finger flexors oppose `hand.fingerExtension`. They remain separate
+because suitcase carry additionally resists `spine.lateralFlexion`, uses that
+frontal action as its basis, and assigns a core-dominant role policy; farmer
+carry stays sagittal and grip-dominant. Both records
+use freely held dumbbells, no straps or hooks, continuous forward walking,
+neutral forearm orientation, extended held elbows, and a 40-second product
+detent. Their 60 lb /
+27.5 kg and 50 lb / 22.5 kg seeds are product defaults, not source-derived
+universal prescriptions. `loadAccounting: perImplement` means each logged seed
+is one implement: either equal farmer-carry dumbbell rather than their combined
+pair, or the single suitcase-carry dumbbell. Ordinary gait propulsion remains
+`lowerBodyContribution: walkingPropulsion` rather than becoming a set of
+training-defining hip, knee, or ankle prime actions; gait-related spinal motion
+is honestly `nonstandardized`, not fabricated as absent.

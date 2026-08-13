@@ -1795,6 +1795,170 @@
       "pmid": "22763117",
       "url": "https://doi.org/10.1136/bjsports-2012-091095",
       "scope": "Thirty-four healthy sub-elite male soccer players were randomized to control or eight weeks of supervised full-range standing hip-adduction training with elastic bands while the upper body was fixed to a stationary object with both hands. Training progressed from three sets of fifteen-repetition maximum to three sets of ten and then eight, and produced a larger eccentric-strength increase than control. The sagittal coordinate of the abducted start and the three-dimensional path were not reported, so the study does not establish a separate hip-extension prime action or directly support the catalog's mechanics-derived held-posterior adaptation. It supports the bilateral stable-hand setup, a trainable dynamic band topology, and the eight-to-fifteen repetition range, not muscle-specific roles, a comparable external load, another band geometry, or a different posture."
+    },
+    {
+      "id": "ha-2020-curl-up-angle",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The effects of curl-up exercise in terms of posture and muscle contraction direction on muscle activity and thickness of trunk muscles",
+      "authors": [
+        "Sun-Young Ha",
+        "DooChul Shin"
+      ],
+      "year": 2020,
+      "doi": "10.3233/BMR-191558",
+      "pmid": "32144977",
+      "url": "https://doi.org/10.3233/BMR-191558",
+      "scope": "Fourteen healthy males performed concentric and eccentric curl-ups at 30, 60, and 90 degrees while rectus-abdominis, external-oblique, internal-oblique, and iliopsoas EMG plus transversus-abdominis ultrasound thickness were collected. Abdominal activity decreased as the curl-up angle increased, directly anchoring the active 30-degree dynamic range and measured abdominal participation. The study does not establish a comparable external load, bodyweight fraction, universal arm or lower-limb geometry, zero iliopsoas activity, a categorical numeric role split, full sit-ups, loaded or unstable variants, rotation, lateral flexion, or higher-angle roster records."
+    },
+    {
+      "id": "vinstrup-2015-torso-twist",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Core Muscle Activity, Exercise Preference, and Perceived Exertion during Core Exercise with Elastic Resistance versus Machine",
+      "authors": [
+        "Jonas Vinstrup",
+        "Emil Sundstrup",
+        "Mikkel Brandt",
+        "Markus D. Jakobsen",
+        "Joaquin Calatayud",
+        "Lars L. Andersen"
+      ],
+      "year": 2015,
+      "doi": "10.1155/2015/403068",
+      "pmid": "26557405",
+      "url": "https://doi.org/10.1155/2015/403068",
+      "scope": "Seventeen healthy untrained men performed three controlled left-to-right torso-twist repetitions at individually determined ten-repetition-maximum loads using elastic resistance and a horizontal seated Technogym machine. The machine condition directly anchors the left-rotated start, feet behind ankle rollers, hands on shoulder-height handles, the photographed shoulder-pad lever interface, controlled maximal rightward torso-rotation endpoint, return, and rectus-abdominis, bilateral external-oblique, and bilateral erector-spinae EMG context. Machine-condition pelvic kinematics were neither stated as stationary nor measured, so the source does not prove zero pelvic motion, internal-oblique activity, a universal range or stack load, chronic training outcomes, upper-limb roles, a mirrored record, or another topology."
+    },
+    {
+      "id": "stevens-2007-seated-axial-rotation",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The relevance of increasing resistance on trunk muscle activity during seated axial rotation",
+      "authors": [
+        "Veerle Stevens",
+        "Erik Witvrouw",
+        "Guy Vanderstraeten",
+        "Thierry Parlevliet",
+        "Katie Bouche",
+        "Nele Mahieu",
+        "Lieven Danneels"
+      ],
+      "year": 2007,
+      "doi": "10.1016/j.ptsp.2006.09.021",
+      "url": "https://doi.org/10.1016/j.ptsp.2006.09.021",
+      "scope": "Thirty healthy adults performed dynamic seated axial rotation in a Tergumed training device at 30, 50, and 70 percent of maximum mean force while fourteen abdominal and back muscle sites were measured. Internal oblique reached approximately 30 percent MVIC at the lowest load, while external oblique and the examined back muscles reached approximately 60 percent, and activity increased with resistance. The study supports dynamic internal-and-external-oblique participation in resisted seated rotation, not equivalence to the active Technogym topology, its exact contacts, a categorical numeric role partition, a universal range or load, zero pelvic motion, or chronic training outcomes."
+    },
+    {
+      "id": "lehman-2005-stable-prone-bridge",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Trunk muscle activity during bridging exercises on and off a Swiss ball",
+      "authors": [
+        "Gregory J. Lehman",
+        "Wajid Hoda",
+        "Steven Oliver"
+      ],
+      "year": 2005,
+      "doi": "10.1186/1746-1340-13-14",
+      "pmid": "16053529",
+      "url": "https://doi.org/10.1186/1746-1340-13-14",
+      "scope": "Eleven resistance-trained men performed a stable-floor prone bridge with feet and forearms contacting the floor, elbows below the shoulders, upper arms perpendicular to the floor, neutral spine-and-leg alignment, and a five-second isometric collection while rectus-abdominis, external-oblique, internal-oblique, and L3 erector-spinae surface EMG was recorded. It directly supports the stable fixture and conservative trunk-role envelope, not a universal endurance prescription, bodyweight load fraction, sex-independent magnitude, shoulder or hip role ranking, unstable or suspended variants, or hypertrophy."
+    },
+    {
+      "id": "juan-recio-2022-side-bridge-endurance",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Is the Side Bridge Test Valid and Reliable for Assessing Trunk Lateral Flexor Endurance in Recreational Female Athletes?",
+      "authors": [
+        "Casto Juan-Recio",
+        "Amaya Prat-Luri",
+        "Alberto Galindo",
+        "Agustín Manresa-Rocamora",
+        "David Barbado",
+        "Francisco J. Vera-Garcia"
+      ],
+      "year": 2022,
+      "doi": "10.3390/biology11071043",
+      "pmid": "36101422",
+      "url": "https://doi.org/10.3390/biology11071043",
+      "scope": "Recreationally active young women performed a preferred-side floor side bridge supported by the forearm, elbow, and feet with shoulder and elbow at 90 degrees, extended legs, the non-preferred foot in front, the free hand on the contralateral shoulder, straight shoulder-hip-feet alignment, and a hold to exhaustion. All eight EMG sites—rectus abdominis, external and internal oblique, rectus femoris, gluteus medius, deltoid, latissimus dorsi, and erector spinae—were recorded on the preferred support side. The source supports the exact fixture and measured regional demand, but not bilateral measurement; shoulder fatigue and anthropometry make it a multi-joint task rather than a pure or cross-user-normalized lateral-flexor test, and it does not resolve left/right credit inside bilateral mesh aggregates or directly measure quadratus lumborum."
+    },
+    {
+      "id": "juan-recio-2025-pallof-postural-challenge",
+      "sourceType": "experimentalPosturalControlStudy",
+      "title": "Effect of Body Position and Support Surface on the Postural Control Challenge During the Pallof Press Exercise: A Smartphone Accelerometer-Based Study",
+      "authors": [
+        "Casto Juan-Recio",
+        "Amaya Prat-Luri",
+        "Heidy Rondón-Espinosa",
+        "David Barbado",
+        "Francisco J. Vera-Garcia"
+      ],
+      "year": 2025,
+      "doi": "10.3390/medicina61020312",
+      "pmid": "40005429",
+      "url": "https://doi.org/10.3390/medicina61020312",
+      "scope": "Twelve physically active adults performed fifteen-second isometric Pallof conditions with both hands at shoulder height, elbows extended, arms perpendicular to the body, a horizontal elastic band attached to a side pulley, body-mass-bracketed dynamometer-standardized lateral force, and sacral smartphone acceleration. It directly supports the feet-together standing-on-floor topology and postural challenge, not muscle roles, self-selected load equivalence, a dynamic press, cable-stack load, or a hypertrophy outcome."
+    },
+    {
+      "id": "cinarli-2025-anti-movement-training",
+      "sourceType": "experimentalTrainingStudy",
+      "title": "Neuromuscular activation following anti-movement and dynamic core training: a randomized controlled comparative study",
+      "authors": [
+        "Fahri Safa Cinarli",
+        "Muhammed Emin Kafkas"
+      ],
+      "year": 2025,
+      "doi": "10.1007/s00421-025-05768-4",
+      "pmid": "40195160",
+      "url": "https://doi.org/10.1007/s00421-025-05768-4",
+      "scope": "Thirty-six recreationally trained men were randomized to anti-movement, traditional-dynamic, or control groups for two sessions weekly over six weeks. The anti-movement program used thirty-second isometric sets and included stable prone plank, lateral plank, and standing Pallof hold among several exercises and progressions. It supports trainability and the thirty-second product detent, not a per-exercise causal adaptation, muscle-role hierarchy, exact Juan-Recio Pallof geometry, or one exercise's isolated EMG response."
+    },
+    {
+      "id": "ellestad-2024-loaded-carry-muscle-activation",
+      "sourceType": "experimentalEMGStudy",
+      "title": "The Quantification of Muscle Activation During the Loaded Carry Movement Pattern",
+      "authors": [
+        "Samuel H. Ellestad",
+        "Thomas P. Holcomb",
+        "Alexis M. Swiergol",
+        "Michael E. Holmstrup",
+        "Jeremy R. Dicus"
+      ],
+      "year": 2024,
+      "doi": "10.70252/NWUE9985",
+      "pmid": "38665162",
+      "url": "https://doi.org/10.70252/NWUE9985",
+      "scope": "Healthy college-aged participants completed randomized, time- and intensity-matched plank, farmer-carry, suitcase-carry, farmer-hold, and suitcase-hold conditions. The carries covered 25 meters with two equally weighted dumbbells bilaterally or one right-hand dumbbell unilaterally; rectus abdominis, external oblique, longissimus, and multifidus surface EMG was measured bilaterally. It directly supports the carry-versus-hold boundary, paired-versus-single dumbbell topology, and categorical trunk-control envelope, but not side-specific product highlighting, lower-limb roles, a universal external-load percentage, or the catalog duration and weight seeds."
+    },
+    {
+      "id": "mcgill-2013-one-two-hand-carry",
+      "sourceType": "experimentalKinematicsEMGModelStudy",
+      "title": "Low back loads while walking and carrying: comparing the load carried in one hand or in both hands",
+      "authors": [
+        "Stuart M. McGill",
+        "Leigh Marshall",
+        "Jordan Andersen"
+      ],
+      "year": 2013,
+      "doi": "10.1080/00140139.2012.752528",
+      "pmid": "23384188",
+      "url": "https://doi.org/10.1080/00140139.2012.752528",
+      "scope": "Six healthy men with complete data walked while carrying 5-to-30-kilogram buckets either in the right hand or evenly across both hands. Bilateral rectus-abdominis, internal- and external-oblique, latissimus, thoracic-erector, and lumbar-erector EMG, full-body three-dimensional kinematics, force plates, and an anatomically detailed lumbar model directly establish the one-versus-two-hand loading distinction and greater asymmetric trunk demand. The source does not support dumbbell-specific upper-limb roles, side-specific catalog highlighting, duration seeds, or a claim that gait-related spinal motion is absent."
+    },
+    {
+      "id": "stastny-2015-farmers-walk-lower-limb",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "The Gluteus Medius Vs. Thigh Muscles Strength Ratio and Their Relation to Electromyography Amplitude During a Farmer's Walk Exercise",
+      "authors": [
+        "Petr Stastny",
+        "Michal Lehnert",
+        "Amr Zaatar",
+        "Zdenek Svoboda",
+        "Zuzana Xaverova",
+        "Przemysław Pietraszewski"
+      ],
+      "year": 2015,
+      "doi": "10.1515/hukin-2015-0016",
+      "pmid": "25964819",
+      "url": "https://doi.org/10.1515/hukin-2015-0016",
+      "scope": "Sixteen resistance-trained men completed 8-meter dumbbell farmer-walk trials; the analyzed condition used 75 percent of each participant's six-repetition-maximum load, upright-trunk and retracted-shoulder instructions, and natural lower-limb technique. Bilateral gluteus-medius, vastus-medialis, vastus-lateralis, and biceps-femoris surface EMG plus hip-and-knee three-dimensional kinematics support the bilateral dumbbell fixture and categorical gluteus-medius and knee-control envelope. The study measured only four muscles, stratified activation by strength ratios, and does not establish suitcase roles, fixed gait technique, or catalog load and duration seeds."
     }
   ]
 }

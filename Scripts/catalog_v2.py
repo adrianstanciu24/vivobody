@@ -40,6 +40,10 @@ SCHEMA_VERSION = 1
 EXPECTED_GROUPS = ("chest", "back", "shoulders", "arms", "core", "legs")
 EXPECTED_MESH_BASE_COUNT = 62
 EXPECTED_ACTION_COUNT = 44
+DIRECTION_AGGREGATED_ACTIONS = {
+    "spine.lateralFlexion",
+    "spine.rotation",
+}
 EXPECTED_MUSCLE_IDS = {
     "pectoralisMajorClavicular",
     "pectoralisMajorSternocostal",
@@ -192,6 +196,7 @@ class Foundation:
     action_ids: frozenset[str]
     plane_by_action: dict[str, str]
     condition_actions: dict[str, frozenset[str]]
+    opposing_action_by_action: dict[str, str]
     region_ids: frozenset[str]
     evidence_ids: frozenset[str]
     mesh_base_count: int
@@ -322,6 +327,29 @@ def capability_satisfies(
     if required_condition is None:
         return capability_condition is None
     return capability_condition is None or capability_condition == required_condition
+
+
+def capability_opposes(
+    capability: ActionRequirement,
+    resisted_requirement: ActionRequirement,
+    opposing_action_by_action: dict[str, str],
+) -> bool:
+    """Whether a muscle capability can oppose an externally imposed action.
+
+    `resistedActions` names the external joint-action tendency, not the muscle's
+    internal action. The muscle must therefore produce the centrally paired
+    opposite action. A position condition qualifies the external tendency only;
+    it is never translated into a different condition on the opposing action.
+    Until such a translation is reviewed explicitly, only an unconditional
+    opposing capability is accepted.
+    """
+
+    capability_action, capability_condition = capability
+    resisted_action, _ = resisted_requirement
+    return (
+        capability_action == opposing_action_by_action[resisted_action]
+        and capability_condition is None
+    )
 
 
 def scene_strings(path: Path) -> set[str]:
@@ -483,12 +511,21 @@ def validate_joint_actions(
     frozenset[str],
     dict[str, str],
     dict[str, frozenset[str]],
+    dict[str, str],
     frozenset[str],
 ]:
     context = "joint-actions.json"
     require_keys(
         data,
-        required={"schemaVersion", "description", "regions", "actions", "actionConditions", "muscleProfiles"},
+        required={
+            "schemaVersion",
+            "description",
+            "regions",
+            "actions",
+            "actionOppositions",
+            "actionConditions",
+            "muscleProfiles",
+        },
         context=context,
     )
     require_schema_version(data, context)
@@ -520,6 +557,55 @@ def validate_joint_actions(
     require(
         len(action_ids) == EXPECTED_ACTION_COUNT,
         f"{context} must define exactly {EXPECTED_ACTION_COUNT} joint actions, found {len(action_ids)}",
+    )
+
+    opposition_values = require_list(
+        data["actionOppositions"],
+        f"{context}.actionOppositions",
+    )
+    opposing_action_by_action: dict[str, str] = {}
+    singleton_actions: set[str] = set()
+    for index, opposition in enumerate(opposition_values):
+        item_context = f"{context}.actionOppositions[{index}]"
+        require(isinstance(opposition, dict), f"{item_context} must be an object")
+        require_keys(opposition, required={"actions"}, context=item_context)
+        members = require_list(opposition["actions"], f"{item_context}.actions")
+        require_unique(members, f"{item_context}.actions")
+        require(
+            len(members) in {1, 2},
+            f"{item_context}.actions must contain one direction-aggregated action or one opposing pair",
+        )
+        unknown_actions = sorted(set(members) - action_ids)
+        require(
+            not unknown_actions,
+            f"{item_context}.actions references unknown actions: {', '.join(unknown_actions)}",
+        )
+        repeated_actions = sorted(set(members) & opposing_action_by_action.keys())
+        require(
+            not repeated_actions,
+            f"{item_context}.actions repeats opposition members: {', '.join(repeated_actions)}",
+        )
+        regions = {action.split(".", 1)[0] for action in members}
+        planes = {plane_by_action[action] for action in members}
+        require(
+            len(regions) == 1 and len(planes) == 1,
+            f"{item_context}.actions must share one joint region and cardinal plane",
+        )
+        if len(members) == 1:
+            singleton_actions.add(members[0])
+            opposing_action_by_action[members[0]] = members[0]
+        else:
+            first, second = members
+            opposing_action_by_action[first] = second
+            opposing_action_by_action[second] = first
+
+    require(
+        set(opposing_action_by_action) == action_ids,
+        f"{context}.actionOppositions must cover every action exactly once",
+    )
+    require(
+        singleton_actions == DIRECTION_AGGREGATED_ACTIONS,
+        f"{context}.actionOppositions singleton actions must be exactly the direction-aggregated vocabulary",
     )
 
     conditions = require_list(data["actionConditions"], f"{context}.actionConditions", allow_empty=True)
@@ -617,6 +703,7 @@ def validate_joint_actions(
         frozenset(action_ids),
         plane_by_action,
         condition_actions,
+        opposing_action_by_action,
         region_ids,
     )
 
@@ -669,6 +756,30 @@ def validate_family_schema(data: dict[str, Any]) -> None:
         and plane_basis_schema.get("uniqueItems") is True,
         f"{context} planeBasisActions must require one to three unique actions",
     )
+    prime_actions_schema = movement_signature.get("properties", {}).get(
+        "primeActions", {}
+    )
+    resisted_actions_schema = movement_signature.get("properties", {}).get(
+        "resistedActions", {}
+    )
+    require(
+        "minItems" not in prime_actions_schema
+        and prime_actions_schema.get("uniqueItems") is True,
+        f"{context} primeActions must permit an empty anti-motion contract",
+    )
+    require(
+        resisted_actions_schema.get("minItems") == 1
+        and resisted_actions_schema.get("uniqueItems") is True,
+        f"{context} resistedActions must be an optional non-empty unique action list",
+    )
+    require(
+        movement_signature.get("anyOf")
+        == [
+            {"properties": {"primeActions": {"minItems": 1}}},
+            {"required": ["resistedActions"]},
+        ],
+        f"{context} movementSignature must require at least one prime or resisted action",
+    )
     variant_axis = definitions.get("variantAxis", {})
     variant_axis_properties = variant_axis.get("properties", {})
     require(
@@ -720,6 +831,7 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         action_ids,
         plane_by_action,
         condition_actions,
+        opposing_action_by_action,
         region_ids,
     ) = validate_joint_actions(
         joint_actions,
@@ -739,6 +851,7 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         action_ids=action_ids,
         plane_by_action=plane_by_action,
         condition_actions=condition_actions,
+        opposing_action_by_action=opposing_action_by_action,
         region_ids=region_ids,
         evidence_ids=evidence_ids,
         mesh_base_count=mesh_base_count,
@@ -1296,7 +1409,9 @@ def validate_exercise(
     axes: dict[str, dict[str, Any]],
     exercise_rules: list[dict[str, Any]],
     family_prime_actions: frozenset[ActionRequirement],
+    family_resisted_actions: frozenset[ActionRequirement],
     family_forbidden_prime_actions: frozenset[str],
+    additional_prime_actions: frozenset[ActionRequirement],
 ) -> list[str]:
     context = f"family {family['id']} exercise[{index}]"
     require(isinstance(exercise, dict), f"{context} must be an object")
@@ -1306,7 +1421,12 @@ def validate_exercise(
         "involvement", "variant", "additionalPrimeActions", "additionalStabilityDemands",
         "evidenceRefs", "movementDefinition",
     }
-    optional_keys = {"groupOverride", "defaultWeightKg", "defaultDuration", "searchPriority"}
+    optional_keys = {
+        "groupOverride",
+        "defaultWeightKg",
+        "defaultDuration",
+        "searchPriority",
+    }
     require_keys(exercise, required=required_keys, optional=optional_keys, context=context)
 
     catalog_id = require_non_empty_string(exercise["catalogID"], f"{context}.catalogID")
@@ -1397,13 +1517,7 @@ def validate_exercise(
         )
         require(satisfied, f"{context} fails muscle requirement {requirement_index}")
 
-    additional_actions = validate_action_requirements(
-        exercise["additionalPrimeActions"],
-        action_ids=foundation.action_ids,
-        condition_actions=foundation.condition_actions,
-        context=f"{context}.additionalPrimeActions",
-        allow_empty=True,
-    )
+    additional_actions = additional_prime_actions
     family_prime_action_ids = {
         action for action, _ in family_prime_actions
     }
@@ -1431,6 +1545,7 @@ def validate_exercise(
             f"{action_plane} plane at {basis_region}",
         )
     prime_actions = family_prime_actions | additional_actions
+    resisted_actions = family_resisted_actions
 
     movers = {
         muscle_id
@@ -1450,6 +1565,30 @@ def validate_exercise(
             capable,
             f"{context} has no primary/secondary muscle capable of {action_requirement_label(action_requirement)}",
         )
+    for resisted_requirement in sorted(
+        resisted_actions,
+        key=action_requirement_label,
+    ):
+        capable = [
+            muscle_id
+            for muscle_id in movers
+            if any(
+                capability_opposes(
+                    capability,
+                    resisted_requirement,
+                    foundation.opposing_action_by_action,
+                )
+                for capability in foundation.capabilities_by_muscle[muscle_id]
+            )
+        ]
+        resisted_action, _ = resisted_requirement
+        opposing_action = foundation.opposing_action_by_action[resisted_action]
+        require(
+            capable,
+            f"{context} has no primary/secondary muscle capable of opposing "
+            f"{action_requirement_label(resisted_requirement)} with "
+            f"{opposing_action}",
+        )
 
     for muscle_id, role in role_by_muscle.items():
         if role not in {"primary", "secondary"}:
@@ -1460,8 +1599,18 @@ def validate_exercise(
                 capability_satisfies(capability, action_requirement)
                 for capability in capabilities
                 for action_requirement in prime_actions
+            )
+            or any(
+                capability_opposes(
+                    capability,
+                    resisted_requirement,
+                    foundation.opposing_action_by_action,
+                )
+                for capability in capabilities
+                for resisted_requirement in resisted_actions
             ),
-            f"{context} {role} muscle {muscle_id} cannot produce any declared prime action",
+            f"{context} {role} muscle {muscle_id} cannot produce any declared "
+            "prime action or oppose any declared resisted action",
         )
 
     additional_stability = require_list(
@@ -1552,7 +1701,10 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
     require_keys(
         signature,
         required={"planeBasisActions", "primeActions", "stabilityDemands"},
-        optional={"forbiddenPrimeActions"},
+        optional={
+            "forbiddenPrimeActions",
+            "resistedActions",
+        },
         context=f"{context}.movementSignature",
     )
     prime_actions = validate_action_requirements(
@@ -1560,6 +1712,20 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
         action_ids=foundation.action_ids,
         condition_actions=foundation.condition_actions,
         context=f"{context}.movementSignature.primeActions",
+        allow_empty=True,
+    )
+    if "resistedActions" in signature:
+        resisted_actions = validate_action_requirements(
+            signature["resistedActions"],
+            action_ids=foundation.action_ids,
+            condition_actions=foundation.condition_actions,
+            context=f"{context}.movementSignature.resistedActions",
+        )
+    else:
+        resisted_actions = frozenset()
+    require(
+        prime_actions or resisted_actions,
+        f"{context}.movementSignature requires at least one prime or resisted action",
     )
     forbidden_prime_actions = require_list(
         signature.get("forbiddenPrimeActions", []),
@@ -1581,10 +1747,47 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
         )
     forbidden_prime_action_ids = frozenset(forbidden_prime_actions)
     declared_prime_action_ids = {action for action, _ in prime_actions}
+    declared_resisted_action_ids = {action for action, _ in resisted_actions}
+    action_mode_conflicts = sorted(
+        declared_prime_action_ids & declared_resisted_action_ids
+    )
+    require(
+        not action_mode_conflicts,
+        f"{context} both declares prime and resisted actions: "
+        + ", ".join(action_mode_conflicts),
+    )
     conflicts = sorted(declared_prime_action_ids & forbidden_prime_action_ids)
     require(
         not conflicts,
         f"{context} both declares and forbids prime actions: {', '.join(conflicts)}",
+    )
+    exercises = require_list(data["exercises"], f"{context}.exercises")
+    roster_additional_prime_actions: set[ActionRequirement] = set()
+    additional_prime_actions_by_exercise: list[frozenset[ActionRequirement]] = []
+    for exercise_index, exercise in enumerate(exercises):
+        exercise_context = f"family {family_id} exercise[{exercise_index}]"
+        require(isinstance(exercise, dict), f"{exercise_context} must be an object")
+        additional_prime_actions = validate_action_requirements(
+            exercise.get("additionalPrimeActions", []),
+            action_ids=foundation.action_ids,
+            condition_actions=foundation.condition_actions,
+            context=f"{exercise_context}.additionalPrimeActions",
+            allow_empty=True,
+        )
+        additional_prime_actions_by_exercise.append(additional_prime_actions)
+        roster_additional_prime_actions.update(additional_prime_actions)
+    roster_prime_actions = prime_actions | frozenset(
+        roster_additional_prime_actions
+    )
+    roster_prime_action_ids = {action for action, _ in roster_prime_actions}
+    roster_resisted_action_ids = {action for action, _ in resisted_actions}
+    roster_action_mode_conflicts = sorted(
+        roster_prime_action_ids & roster_resisted_action_ids
+    )
+    require(
+        not roster_action_mode_conflicts,
+        f"{context} family roster declares actions as both prime and resisted: "
+        + ", ".join(roster_action_mode_conflicts),
     )
     plane_basis_values = require_list(
         signature["planeBasisActions"],
@@ -1596,7 +1799,9 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
         f"{context}.movementSignature.planeBasisActions accepts at most three component actions",
     )
     plane_basis_actions: list[str] = []
-    prime_action_ids = {action for action, _ in prime_actions}
+    reviewed_family_action_ids = (
+        declared_prime_action_ids | declared_resisted_action_ids
+    )
     for index, value in enumerate(plane_basis_values):
         plane_basis_action = require_non_empty_string(
             value,
@@ -1607,8 +1812,9 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
             f"{context} references unknown plane-basis action {plane_basis_action}",
         )
         require(
-            plane_basis_action in prime_action_ids,
-            f"{context} plane-basis action {plane_basis_action} must also be a prime action",
+            plane_basis_action in reviewed_family_action_ids,
+            f"{context} plane-basis action {plane_basis_action} must also be a "
+            "family prime or resisted action",
         )
         plane_basis_actions.append(plane_basis_action)
 
@@ -1632,20 +1838,36 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
         f"plane-basis actions {basis_description} ({', '.join(sorted(basis_planes))})",
     )
     basis_region = next(iter(basis_regions))
-    for action_requirement in prime_actions:
+    for action_requirement in prime_actions | resisted_actions:
         action, _ = action_requirement
         if action.split(".", 1)[0] != basis_region:
             continue
         action_plane = foundation.plane_by_action[action]
+        action_kind = (
+            "prime action"
+            if action_requirement in prime_actions
+            else "resisted action"
+        )
         require(
             action_plane in declared_planes,
-            f"{context} prime action {action_requirement_label(action_requirement)} "
+            f"{context} {action_kind} "
+            f"{action_requirement_label(action_requirement)} "
             f"uses undeclared {action_plane} plane at {basis_region}",
         )
     stability = require_list(signature["stabilityDemands"], f"{context}.movementSignature.stabilityDemands", allow_empty=True)
     require_unique(stability, f"{context}.movementSignature.stabilityDemands")
     unknown_regions = sorted(set(stability) - foundation.region_ids)
     require(not unknown_regions, f"{context} references unknown stability regions: {', '.join(unknown_regions)}")
+    resisted_regions = {
+        action.split(".", 1)[0]
+        for action, _ in resisted_actions
+    }
+    missing_resisted_regions = sorted(resisted_regions - set(stability))
+    require(
+        not missing_resisted_regions,
+        f"{context} family resisted actions require matching stability demands: "
+        + ", ".join(missing_resisted_regions),
+    )
 
     requirements, allowed_by_role = validate_role_policy(data["musclePolicy"], foundation, f"{context}.musclePolicy")
     axes = validate_variant_axes(data["variantAxes"], f"{context}.variantAxes")
@@ -1659,7 +1881,6 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
     if "recommended" in data:
         validate_recommended(data["recommended"], f"{context}.recommended")
 
-    exercises = require_list(data["exercises"], f"{context}.exercises")
     warnings: list[str] = []
     catalog_ids: set[str] = set()
     canonical_names: set[str] = set()
@@ -1678,7 +1899,9 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
                 axes=axes,
                 exercise_rules=exercise_rules,
                 family_prime_actions=prime_actions,
+                family_resisted_actions=resisted_actions,
                 family_forbidden_prime_actions=forbidden_prime_action_ids,
+                additional_prime_actions=additional_prime_actions_by_exercise[index],
             )
         )
         catalog_id = exercise["catalogID"]

@@ -191,6 +191,7 @@
           ]
         },
         "planes": {
+          "description": "Exact family-level cardinal-plane surface reviewed through planeBasisActions. Every exercise uses every listed plane at the basis region because family prime and resisted actions are roster-wide invariants; actions at other joint regions retain their own planes.",
           "type": "array",
           "minItems": 1,
           "maxItems": 3,
@@ -312,8 +313,23 @@
       }
     },
     "movementSignature": {
+      "description": "Prime actions describe joint motion produced by the repetition. Resisted actions describe an external joint-action tendency that assigned movers oppose without producing that tendency.",
       "type": "object",
       "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "primeActions": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "resistedActions"
+          ]
+        }
+      ],
       "required": [
         "planeBasisActions",
         "primeActions",
@@ -321,6 +337,7 @@
       ],
       "properties": {
         "planeBasisActions": {
+          "description": "Family-level prime or resisted actions whose plane union exactly defines fixed.planes.",
           "type": "array",
           "minItems": 1,
           "maxItems": 3,
@@ -330,6 +347,14 @@
           }
         },
         "primeActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/actionRequirement"
+          }
+        },
+        "resistedActions": {
+          "description": "External action tendencies opposed throughout the family; the validator requires a primary or secondary muscle capable of the centrally mapped opposite action.",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,

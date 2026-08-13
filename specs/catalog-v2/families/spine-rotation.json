@@ -1,0 +1,278 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "spine-rotation",
+  "name": "Spine Rotation",
+  "definition": "A seated fixed-path trunk isolation performed one rotation direction at a time while the pelvis and lower body remain position-held. The one active record prescribes equal work in both mirrored directions so direction-aggregated oblique volume is not credited from only one rotation direction. Vinstrup directly reviewed the left-to-right direction in a horizontal seated machine: feet behind ankle rollers, hands on handles at shoulder height, a photographed shoulder-pad lever supplying the load interface, controlled left-to-right rotation, and a controlled return. The right-to-left prescription is an explicit mirrored mechanics-and-training adaptation, not a claim that Vinstrup measured that direction. The paper calls the task torso rotation but did not measure pelvis kinematics; holding the pelvis against the seat is likewise an explicit catalog coaching adaptation, not a measured zero-motion result. Obliques are the sole primary. Vinstrup directly measured external oblique, while Stevens measured both internal and external obliques during dynamic resisted seated axial rotation; Vivobody's one bilateral obliques region cannot encode their side-specific, internal-versus-external recruitment strategy. Rectus-abdominis and erector-spinae activity observed by Vinstrup is not converted into abs or lowerBack stabilizer credit because the signals do not establish categorical workout-volume roles and the lowerBack region also coarsely combines quadratus-lumborum and posterior-serratus surfaces rather than exposing measured erector-spinae subdivisions. Standing band twists, cable rotations, wood chops, Russian twists, landmine rotations, medicine-ball throws, diagonal flexion-rotation, anti-rotation holds, alternating-direction repetitions, and any repetition driven by the hips or legs remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "vinstrup-2015-torso-twist",
+    "stevens-2007-seated-axial-rotation"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "machine"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture in the torso-twist machine.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed horizontal seated ab-crunch mechanism used as a torso-twist machine.",
+      "allowedValues": [
+        "horizontalSeatedTorsoTwist"
+      ]
+    },
+    {
+      "id": "lowerBodyConstraint",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reported lower-body contact used by the seated machine fixture.",
+      "allowedValues": [
+        "feetBehindAnkleRollers"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog-authored coaching boundary holding the pelvis against the seat; Vinstrup did not measure pelvic kinematics in the machine condition.",
+      "allowedValues": [
+        "positionHeldCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate hip motion creates the repetition rather than isolated spinal rotation.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic spinal action performed one direction at a time before its controlled return.",
+      "allowedValues": [
+        "rotatesOneDirectionThenReturns"
+      ]
+    },
+    {
+      "id": "setDirection",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether one logged set performs a single rotation direction rather than alternating between directions.",
+      "allowedValues": [
+        "oneDirectionAtATime"
+      ]
+    },
+    {
+      "id": "trainingDirectionPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog instruction to train and log each unilateral rotation direction separately; right-to-left is a disclosed mirrored mechanics-and-training adaptation.",
+      "allowedValues": [
+        "bothDirections"
+      ]
+    },
+    {
+      "id": "handPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed hand contact on the machine.",
+      "allowedValues": [
+        "handlesAtShoulderHeight"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the photographed machine lever applies resistance while the hands hold separate shoulder-height handles.",
+      "allowedValues": [
+        "bilateralShoulderPads"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "Whether the machine lever constrains the external resistance path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the legs or hips propel the repetition rather than direction-specific spinal rotation.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "seated-machine-torso-twist",
+      "name": "Seated Machine Torso Twist",
+      "aliases": [
+        "Machine Axial Trunk Rotation"
+      ],
+      "equipment": "machine",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 20,
+      "defaultWeightKg": 10,
+      "reps": 10,
+      "searchPriority": 66,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "seated",
+        "machineType": "horizontalSeatedTorsoTwist",
+        "lowerBodyConstraint": "feetBehindAnkleRollers",
+        "pelvisMotion": "positionHeldCatalogAdaptation",
+        "hipMotion": "positionHeld",
+        "spineMotion": "rotatesOneDirectionThenReturns",
+        "setDirection": "oneDirectionAtATime",
+        "trainingDirectionPrescription": "bothDirections",
+        "handPosition": "handlesAtShoulderHeight",
+        "loadInterface": "bilateralShoulderPads",
+        "fixedPath": true,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "vinstrup-2015-torso-twist",
+        "stevens-2007-seated-axial-rotation"
+      ],
+      "movementDefinition": "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height. Hold the pelvis against the seat and keep the hips and legs still. For one logged direction, begin rotated left, drive the shoulder pads from left to right in a controlled motion, stop at the largest comfortable torso-rotation endpoint, and return to the left-rotated start under control. Then reset the machine and perform the same prescribed work from right to left as a separately logged direction. The right-to-left direction is a mirrored training adaptation; do not alternate directions within a repetition."
+    }
+  ]
+}

@@ -18,8 +18,8 @@ becomes the canonical `catalog`, and the temporary version suffix disappears.
   display names, and exactly 62 uniquely owned `BodyModel.scn` mesh base names
   where the model has a surface mesh. An unvisualized muscle must carry an
   explicit reason.
-- `joint-actions.json` defines exactly 44 joint actions and is an independent
-  anatomical capability map. It lets the
+- `joint-actions.json` defines exactly 44 joint actions, their central
+  opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
 - `evidence.json` tracks the primary musculoskeletal sources supporting those
@@ -63,12 +63,15 @@ taxonomy.
 
 Exercise involvement remains categorical:
 
-- `primary`: a dynamic contributor that the exercise principally emphasizes.
-- `secondary`: a meaningful dynamic agonist or synergist that is not the
-  exercise's dominant training emphasis. Secondary does not mean inactive or
-  anatomically incapable of producing the movement.
+- `primary`: a contributor that the exercise principally emphasizes, either by
+  producing a prime action or by opposing a declared resisted action.
+- `secondary`: a meaningful dynamic agonist, synergist, or resisted-action
+  opponent that is not the exercise's dominant training emphasis. Secondary
+  does not mean inactive or anatomically incapable of producing or opposing
+  the training-defining action.
 - `stabilizer`: a contributor used principally to control a declared joint or
-  segment rather than produce the exercise's prime actions.
+  segment rather than produce or oppose the exercise's training-defining
+  actions.
 
 For press exercises, `scapularTranslation` describes only whether external
 posterior support limits translation along the thorax. `supportConstrained`
@@ -140,6 +143,32 @@ different condition). Additional prime actions are strictly additional joint
 actions; changing the semantics of a family action requires editing and
 reviewing the family contract itself.
 
+## Resisted-action semantics
+
+`movementSignature.resistedActions` names an externally imposed joint-action
+tendency that the athlete opposes. It does not claim that the resisted action
+occurs, and it must not be replaced with a fabricated dynamic prime action. An
+isometric anti-extension hold therefore resists `spine.extension`; it does not
+declare dynamic `spine.flexion` merely because the abdominal wall supplies the
+opposing capacity.
+
+`joint-actions.json` pairs every action with its anatomical opposite. The map
+is total and symmetric, and validation requires at least one assigned primary
+or secondary muscle capable of producing the opposite of every resisted
+action. The direction-aggregated `spine.lateralFlexion` and `spine.rotation`
+actions are their own opposition entries because the visible regions and
+action IDs do not encode left versus right. That self-pair does not mean one
+side's fibers resist their own same-direction torque. Active unilateral
+lateral-flexion and carry records prescribe both body or load sides; the
+spine-rotation record prescribes both rotation directions. Each retains the
+aggregation limitation explicitly.
+
+A family must declare at least one prime or resisted action, and the same
+action cannot be both. `planeBasisActions` may select from their union.
+Resisted actions are family-level invariants. If two exercises resist different
+tendencies or use different basis planes, they belong in separate contracts;
+exercise-level resisted-action exceptions are deliberately unsupported.
+
 ## Lower-body region boundaries
 
 The lower-body foundation does not let a visually convenient aggregate grant
@@ -193,10 +222,11 @@ Each family separates:
   `frontal`, and `transverse`.
 - `allowed`: equipment, modality, tracking, load, and laterality choices an
   exercise may select.
-- `movementSignature`: required prime joint actions, optional
+- `movementSignature`: prime and/or resisted joint actions, optional
   `forbiddenPrimeActions`, one to three `planeBasisActions`, and stability
-  regions. A forbidden action cannot be added by an exercise variant even when
-  an assigned muscle is anatomically capable of producing it in some position.
+  regions. A forbidden prime action
+  cannot be added by an exercise variant even when an assigned muscle is
+  anatomically capable of producing it in some position.
   Basis-action cardinal planes must match the family's declared plane set
   exactly. Multiple basis actions must describe the same joint region and each
   must contribute a distinct plane. The validator therefore rejects using

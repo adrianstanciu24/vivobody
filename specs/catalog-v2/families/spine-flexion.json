@@ -1,0 +1,266 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "spine-flexion",
+  "name": "Spine Flexion",
+  "definition": "A strict bilateral bodyweight trunk isolation in which the spine dynamically flexes from a supine start to the directly reviewed 30-degree curl-up endpoint and then returns under control while the pelvis and lower body do not create the repetition. Rectus abdominis is primary and the combined internal-and-external-oblique region is secondary. Ha and Shin directly measured rectus abdominis plus both external and internal obliques during concentric and eccentric curl-ups at 30, 60, and 90 degrees; the first roster admits only the 30-degree condition. The primary-versus-secondary rank is a practical sagittal-training-emphasis judgment rather than a claim that surface EMG is a numeric contribution oracle. Vivobody cannot separate internal from external oblique or left from right, so the oblique assignment necessarily credits a combined bilateral region. The study also measured iliopsoas activity, but this contract holds hip position and does not award a hip-flexor role merely because activity was recorded. Full sit-ups, loaded crunches, cable or machine crunches, reverse crunches, leg raises, diagonal curl-ups, spinal rotation, lateral flexion, isometric holds, unstable surfaces, and curl-ups beyond 30 degrees remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "ha-2020-curl-up-angle"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.flexion"
+    ],
+    "primeActions": [
+      "spine.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs"
+      ],
+      "secondary": [
+        "obliques"
+      ],
+      "stabilizer": []
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body orientation used by the reviewed curl-up.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic spinal motion that creates the concentric repetition and its controlled return.",
+      "allowedValues": [
+        "flexesThenReturns"
+      ]
+    },
+    {
+      "id": "trunkStartElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The supine trunk-on-floor start used as the zero reference for the study-defined curl-up angle; this is not a segmental lumbar angle.",
+      "minimum": 0,
+      "maximum": 0
+    },
+    {
+      "id": "trunkEndElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The directly reviewed trunk-elevation endpoint relative to the support surface; this is not a claim of 30 degrees at each spinal segment.",
+      "minimum": 30,
+      "maximum": 30
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic movement creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate hip motion creates the repetition rather than the isolated spinal action.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where an external resistance implement contacts the athlete; the reviewed bodyweight curl-up has none.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the mass of the upper trunk supplies resistance during the curl-up.",
+      "allowedValues": [
+        "upperTrunkGravity"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain an external-load path; the bodyweight trunk follows no fixed external path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether lower-body motion propels the repetition rather than the isolated spinal action.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 20
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "30-degree-curl-up",
+      "name": "30-Degree Curl-Up",
+      "aliases": [
+        "Thirty-Degree Curl-Up",
+        "30-Degree Partial Curl-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 12,
+      "searchPriority": 82,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        }
+      ],
+      "variant": {
+        "bodyPosition": "supine",
+        "spineMotion": "flexesThenReturns",
+        "trunkStartElevationDegrees": 0,
+        "trunkEndElevationDegrees": 30,
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "loadInterface": "none",
+        "resistanceGeometry": "upperTrunkGravity",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ha-2020-curl-up-angle"
+      ],
+      "movementDefinition": "Lie supine in a stable lower-body position with the pelvis held still. Begin with the trunk resting on the floor, then flex the spine to curl the head, shoulders, and upper trunk through the reviewed 30-degree range without using hip motion. Return to the supine start under control without turning the repetition into a full sit-up."
+    }
+  ]
+}

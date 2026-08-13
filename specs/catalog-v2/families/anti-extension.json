@@ -1,0 +1,402 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "anti-extension",
+  "name": "Anti-Extension",
+  "definition": "A strict isometric trunk family in which gravity tends to extend the neutral spine while the athlete maintains a straight prone bridge between bilateral forearm and foot contacts. The initial stable-floor fixture has no deliberate spinal, pelvic, hip, knee, shoulder, or elbow repetition: spine.extension is the external tendency being resisted, not a dynamic spine.flexion action. Stable-surface EMG measured greater mean external- and internal-oblique activity than rectus-abdominis activity. The abs-primary and obliques-secondary hierarchy is therefore a practical training-emphasis judgment grounded in the authors' description of rectus abdominis as a prime mover, not an EMG-amplitude ranking. The measured erector-spinae signal is non-mapping context because the visible lowerBack region contains quadratus-lumborum and posterior-serratus surfaces rather than erector-spinae meshes; it is not used to assign lowerBack volume. Serratus, external rotators, triceps, gluteus maximus, vasti, and soleus receive conservative stabilizer credit because the forearm-and-foot bridge materially loads and controls the scapular, shoulder, elbow, hip, knee, ankle, and foot support chain. Those support roles are anatomy-and-mechanics-derived rather than Lehman EMG findings. High-plank, kneeling, unstable, suspended, weighted, long-lever, reaching, shoulder-tap, rowing, dragging, and leg-lift variants remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "lehman-2005-stable-prone-bridge",
+    "cinarli-2025-anti-movement-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.extension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "abs"
+      ],
+      "secondary": [
+        "obliques"
+      ],
+      "stabilizer": [
+        "serratus",
+        "externalRotators",
+        "triceps",
+        "gluteMax",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the distal upper- and lower-body contacts remain fixed to the floor during the hold.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed whole-body relationship to gravity.",
+      "allowedValues": [
+        "proneHorizontal"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable surface carrying both support contacts.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "upperBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral upper-body contact used by the reviewed prone bridge.",
+      "allowedValues": [
+        "bilateralForearmSupport"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower-body contact completing the bodyweight bridge.",
+      "allowedValues": [
+        "feet"
+      ]
+    },
+    {
+      "id": "elbowAlignment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed elbow position relative to the shoulders.",
+      "allowedValues": [
+        "belowShoulders"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed upper-arm relationship to the floor during the hold.",
+      "allowedValues": [
+        "perpendicularToFloor"
+      ]
+    },
+    {
+      "id": "bodyAlignment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The neutral trunk and leg alignment maintained against the extension tendency.",
+      "allowedValues": [
+        "neutralStraightLine"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal motion creates a repetition rather than the named isometric task.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate hip motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate knee motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a dynamic repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the athlete's body path; a stable floor supplies support but not a guided path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the lower body propels a repetition or supplies static support only.",
+      "allowedValues": [
+        "staticSupportOnly"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "plank",
+      "name": "Stable Forearm Plank",
+      "aliases": [
+        "Plank",
+        "Front Plank",
+        "Forearm Plank"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 98,
+      "involvement": [
+        {
+          "muscle": "abs",
+          "role": "primary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "proneHorizontal",
+        "supportSurface": "floor",
+        "upperBodySupport": "bilateralForearmSupport",
+        "lowerBodySupport": "feet",
+        "elbowAlignment": "belowShoulders",
+        "upperArmPosition": "perpendicularToFloor",
+        "bodyAlignment": "neutralStraightLine",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "kneeMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lehman-2005-stable-prone-bridge",
+        "cinarli-2025-anti-movement-training"
+      ],
+      "movementDefinition": "Set both forearms on a stable floor with the elbows below the shoulders and the upper arms perpendicular to the floor, then support the lower body on both feet. Hold the spine, pelvis, hips, and knees in one neutral straight line for the prescribed duration while resisting the tendency of the lower back to sag; do not turn the hold into a crunch, hip lift, reach, or limb movement."
+    }
+  ]
+}

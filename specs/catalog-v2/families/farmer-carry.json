@@ -1,0 +1,448 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "farmer-carry",
+  "name": "Farmer Carry",
+  "definition": "A duration-tracked bilateral dumbbell carry in which equal implements create a continuous tendency to open both hands while the athlete walks forward on a level surface with the upper arms at the sides, neutral humeral and forearm rotation, the elbows held extended, and no grip assistance. The sagittal family plane is grounded in resisted hand.fingerExtension. Ordinary gait remains the locomotor substrate rather than a set of training-defining prime actions. Ellestad, McGill, and Stastny directly support balanced bilateral carriage, the trunk-control envelope, and the reviewed lower-limb control surfaces. Loaded-grip, upper-limb, and soleus assignments not measured by those panels are explicitly anatomy-and-mechanics-derived. Holds, suitcase carriage, marching in place, backward or turning paths, uneven paired loads, straps, trap bars, rack, overhead, front-loaded, yoke, and lunge variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "gaffney-2014-trapezius-subdivisions",
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "ellestad-2024-loaded-carry-muscle-activation",
+    "mcgill-2013-one-two-hand-carry",
+    "stastny-2015-farmers-walk-lower-limb"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "carry",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 90
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hand.fingerExtension"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "hand.fingerExtension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "fingerFlexors"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "extensorCarpiRadialis",
+        "trapeziusUpper",
+        "externalRotators",
+        "triceps",
+        "abs",
+        "obliques",
+        "lowerBack",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether ground contact remains the locomotor base while the external loads move with the athlete.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used during the reviewed loaded walks.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The side-held upper-arm position that separates these carries from rack, front-loaded, and overhead topologies.",
+      "allowedValues": [
+        "atSide"
+      ]
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed neutral humeral posture, authored independently from hand or forearm orientation.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "carryPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed locomotor path rather than a hold, march, backward walk, turn, incline, or stair task.",
+      "allowedValues": [
+        "continuousForwardWalk"
+      ]
+    },
+    {
+      "id": "loadSymmetry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed equal-load distribution across both sides.",
+      "allowedValues": [
+        "balancedBilateral"
+      ]
+    },
+    {
+      "id": "gripAssistance",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether straps or hooks reduce the universal loaded-grip demand.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate elbow motion creates repetitions rather than the arm holding the load beside the torso.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The extended elbow posture held while the dumbbells remain beside the torso.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate forearm rotation creates repetitions rather than the implement remaining side held.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The neutral forearm orientation held beside the torso, independent from grip naming.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The static implement hold whose external opening tendency is modeled through the family resisted action.",
+      "allowedValues": [
+        "staticImplementHold"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the logged weight is interpreted: each dumbbell's weight is entered, not the combined bilateral total.",
+      "allowedValues": [
+        "perImplement"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk-control policy: upright carriage is instructed without falsely claiming zero three-dimensional gait-related spinal motion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower limbs provide ordinary walking propulsion without becoming training-defining carry prime actions.",
+      "allowedValues": [
+        "walkingPropulsion"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever guide the athlete or the freely held dumbbells."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "two-dumbbell-farmer-carry",
+      "name": "Two-Dumbbell Farmer Carry",
+      "aliases": [
+        "Bilateral Dumbbell Farmer Carry",
+        "Two-Dumbbell Farmer Walk"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "bilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 60,
+      "defaultWeightKg": 27.5,
+      "reps": 1,
+      "defaultDuration": 40,
+      "searchPriority": 90,
+      "involvement": [
+        {
+          "muscle": "fingerFlexors",
+          "role": "primary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "upperArmPosition": "atSide",
+        "humeralRotation": "neutral",
+        "carryPath": "continuousForwardWalk",
+        "loadSymmetry": "balancedBilateral",
+        "gripAssistance": "none",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "loadAccounting": "perImplement",
+        "spineMotion": "nonstandardized",
+        "lowerBodyContribution": "walkingPropulsion",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ellestad-2024-loaded-carry-muscle-activation",
+        "mcgill-2013-one-two-hand-carry",
+        "stastny-2015-farmers-walk-lower-limb"
+      ],
+      "movementDefinition": "Log the weight of one dumbbell, not the combined pair. Hold one equal-weight dumbbell in each hand with the upper arms at the sides, neutral humeral and forearm rotation, palms facing the thighs, no straps or hooks, and the elbows held extended beside the torso. Walk continuously forward on a level surface for the prescribed duration while keeping the shoulders controlled and the trunk upright without turning, marching in place, or converting the carry into another exercise."
+    }
+  ]
+}

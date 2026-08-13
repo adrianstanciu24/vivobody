@@ -1,0 +1,451 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "anti-lateral-flexion",
+  "name": "Anti-Lateral Flexion",
+  "definition": "A strict unilateral isometric trunk family in which gravity tends to laterally flex the spine while the athlete maintains a straight side bridge between one forearm and both feet. The initial fixture is performed one side at a time and trained on both sides; spine.lateralFlexion is the external tendency being resisted, not a dynamic repetition. Obliques are primary. lowerBack is secondary through the quadratus-lumborum-containing region's reviewed lateral-flexion capability, not because the directly measured erector-spinae signal maps to its visible surfaces: the current meshes contain quadratus lumborum and posterior serratus but no erector-spinae or lumbar-extensor surface. Neither the action vocabulary nor the body mesh can encode loaded versus contralateral side. Abs, gluteus medius, and rectus femoris are directly measured stabilizers. The study reports an unheaded deltoid signal, so deltoidLateral receives mechanics-derived shoulder-abductor stabilizer credit rather than direct head-specific attribution. Serratus, triceps, and soleus conservatively close the materially loaded scapular, elbow, ankle, and foot support chain through anatomy and mechanics. Kneeling, elevated, unstable, suspended, weighted, rowing, hip-abduction, Copenhagen, and moving side-plank variants remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "juan-recio-2022-side-bridge-endurance",
+    "cinarli-2025-anti-movement-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 60
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.lateralFlexion"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.lateralFlexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "spine",
+      "pelvis",
+      "shoulder",
+      "elbow",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "lowerBack"
+      ],
+      "stabilizer": [
+        "abs",
+        "deltoidLateral",
+        "gluteMed",
+        "serratus",
+        "triceps",
+        "rectusFemoris",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the supporting upper- and lower-body contacts remain fixed to the floor during the hold.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed whole-body relationship to gravity.",
+      "allowedValues": [
+        "sideBridge"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The stable surface carrying the forearm and foot contacts.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "supportSide",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the unilateral support task is performed on one side at a time rather than as a bilateral bridge.",
+      "allowedValues": [
+        "oneSideAtATime"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog training instruction, which avoids turning the study's preferred-side test setup into a one-sided prescription.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "upperBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The unilateral upper-body contact used by the reviewed side bridge.",
+      "allowedValues": [
+        "oneForearmAndElbow"
+      ]
+    },
+    {
+      "id": "lowerBodySupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower-body contact completing the bodyweight bridge.",
+      "allowedValues": [
+        "feet"
+      ]
+    },
+    {
+      "id": "legPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed lower-limb posture during the hold.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "footStagger",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed relationship between the two foot contacts.",
+      "allowedValues": [
+        "topFootInFront"
+      ]
+    },
+    {
+      "id": "freeArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed placement of the non-supporting arm.",
+      "allowedValues": [
+        "handOnOppositeShoulder"
+      ]
+    },
+    {
+      "id": "supportShoulderAngleDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed gross 90-degree support-shoulder angle without treating that held posture as a dynamic shoulder action.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "supportElbowFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed elbow angle held by the supporting arm.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "bodyAlignment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight segment alignment maintained against the lateral-flexion tendency.",
+      "allowedValues": [
+        "shoulderHipFeetStraight"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal motion creates a repetition rather than the named isometric task.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate hip motion creates a repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a dynamic repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the athlete's body path; a stable floor supplies support but not a guided path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the lower body propels a repetition or supplies static support only.",
+      "allowedValues": [
+        "staticSupportOnly"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "side-plank",
+      "name": "Side Plank",
+      "aliases": [
+        "Side Bridge",
+        "Side Plank Hold",
+        "Lateral Plank Hold"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 30,
+      "searchPriority": 94,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidLateral",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "sideBridge",
+        "supportSurface": "floor",
+        "supportSide": "oneSideAtATime",
+        "trainingSidePrescription": "bothSides",
+        "upperBodySupport": "oneForearmAndElbow",
+        "lowerBodySupport": "feet",
+        "legPosture": "extended",
+        "footStagger": "topFootInFront",
+        "freeArmPosition": "handOnOppositeShoulder",
+        "supportShoulderAngleDegrees": 90,
+        "supportElbowFlexionDegrees": 90,
+        "bodyAlignment": "shoulderHipFeetStraight",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "hipMotion": "positionHeld",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "juan-recio-2022-side-bridge-endurance",
+        "cinarli-2025-anti-movement-training"
+      ],
+      "movementDefinition": "Lie on one side and support the body on that forearm and elbow with the shoulder and elbow at the reviewed 90-degree angles. Extend both legs, place the top foot in front of the lower foot, place the free hand on the opposite shoulder, and lift into a straight line from shoulder through hip to feet. Hold the spine, pelvis, and hips still for the prescribed duration, then repeat on the other side without adding a hip dip, row, or leg movement."
+    }
+  ]
+}

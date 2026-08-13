@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Independent anatomical capability map used to challenge family and exercise muscle assignments. Actions describe possible force-producing functions, not fixed contribution magnitudes; actual function varies with joint position and technique.",
+  "description": "Independent anatomical capability map used to challenge family and exercise muscle assignments. Actions describe possible force-producing functions, not fixed contribution magnitudes; actual function varies with joint position and technique. Action oppositions map an externally imposed resisted action to the internal action that can oppose it. The self-paired spine axes aggregate left and right directions and therefore express axis-level opposition, not side-specific capability.",
   "regions": [
     "scapula",
     "shoulder",
@@ -279,6 +279,144 @@
       "region": "foot",
       "plane": "sagittal",
       "displayName": "Toe extension"
+    }
+  ],
+  "actionOppositions": [
+    {
+      "actions": [
+        "scapula.elevation",
+        "scapula.depression"
+      ]
+    },
+    {
+      "actions": [
+        "scapula.protraction",
+        "scapula.retraction"
+      ]
+    },
+    {
+      "actions": [
+        "scapula.upwardRotation",
+        "scapula.downwardRotation"
+      ]
+    },
+    {
+      "actions": [
+        "scapula.anteriorTilt",
+        "scapula.posteriorTilt"
+      ]
+    },
+    {
+      "actions": [
+        "shoulder.flexion",
+        "shoulder.extension"
+      ]
+    },
+    {
+      "actions": [
+        "shoulder.abduction",
+        "shoulder.adduction"
+      ]
+    },
+    {
+      "actions": [
+        "shoulder.horizontalAdduction",
+        "shoulder.horizontalAbduction"
+      ]
+    },
+    {
+      "actions": [
+        "shoulder.internalRotation",
+        "shoulder.externalRotation"
+      ]
+    },
+    {
+      "actions": [
+        "elbow.flexion",
+        "elbow.extension"
+      ]
+    },
+    {
+      "actions": [
+        "forearm.pronation",
+        "forearm.supination"
+      ]
+    },
+    {
+      "actions": [
+        "wrist.flexion",
+        "wrist.extension"
+      ]
+    },
+    {
+      "actions": [
+        "wrist.radialDeviation",
+        "wrist.ulnarDeviation"
+      ]
+    },
+    {
+      "actions": [
+        "hand.fingerFlexion",
+        "hand.fingerExtension"
+      ]
+    },
+    {
+      "actions": [
+        "spine.flexion",
+        "spine.extension"
+      ]
+    },
+    {
+      "actions": [
+        "spine.lateralFlexion"
+      ]
+    },
+    {
+      "actions": [
+        "spine.rotation"
+      ]
+    },
+    {
+      "actions": [
+        "hip.flexion",
+        "hip.extension"
+      ]
+    },
+    {
+      "actions": [
+        "hip.abduction",
+        "hip.adduction"
+      ]
+    },
+    {
+      "actions": [
+        "hip.internalRotation",
+        "hip.externalRotation"
+      ]
+    },
+    {
+      "actions": [
+        "knee.flexion",
+        "knee.extension"
+      ]
+    },
+    {
+      "actions": [
+        "ankle.plantarflexion",
+        "ankle.dorsiflexion"
+      ]
+    },
+    {
+      "actions": [
+        "ankle.inversion",
+        "ankle.eversion"
+      ]
+    },
+    {
+      "actions": [
+        "foot.toeFlexion",
+        "foot.toeExtension"
+      ]
     }
   ],
   "actionConditions": [

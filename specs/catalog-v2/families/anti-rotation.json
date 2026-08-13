@@ -1,0 +1,485 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "anti-rotation",
+  "name": "Anti-Rotation",
+  "definition": "A strict unilateral isometric trunk family in which a horizontal band anchored to one side tends to rotate the spine and pelvis while the athlete maintains a feet-together standing posture with both arms extended at shoulder height. The initial fixture is a hold rather than a dynamic press: spine.rotation is the external tendency being resisted and no deliberate shoulder, elbow, spinal, pelvic, hip, knee, or ankle motion creates a repetition. The direct exercise study measured sacral acceleration rather than EMG and deliberately varied the lower-body base of support. Obliques are primary through the reviewed self-opposed rotation semantics and anatomy; abs, lowerBack, serratus, anterior deltoid, triceps, finger flexors, extensor carpi radialis, gluteus medius, vasti, and soleus are conservative anatomy-and-mechanics-derived stabilizers of the materially controlled upper- and lower-body chain, not study-measured Pallof roles. Extensor carpi radialis supplies neutral-wrist counter-control against the finger flexors' wrist-flexion moment during the static handle task. The visible oblique region cannot encode internal versus external or left versus right recruitment. Cable-stack, dynamic-press, kneeling, split-stance, tandem, unstable-surface, overhead, chopping, and hybrid variants remain outside this contract.",
+  "evidenceRefs": [
+    "christophy-2012-lumbar-spine",
+    "ackland-2008-shoulder-moment-arms",
+    "arnold-2010-lower-limb",
+    "holzbaur-2005-upper-extremity",
+    "seth-2019-shoulder-work",
+    "juan-recio-2025-pallof-postural-challenge",
+    "cinarli-2025-anti-movement-training"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "core",
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 45
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.rotation"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "spine.rotation"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "spine",
+      "pelvis",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "abs",
+        "lowerBack",
+        "serratus",
+        "deltoidAnterior",
+        "triceps",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the feet remain fixed to the floor while the external band tendency is resisted.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "supportSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed stable standing surface.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly tested foot relationship rather than a split, tandem, or kneeling base.",
+      "allowedValues": [
+        "feetTogether"
+      ]
+    },
+    {
+      "id": "resistanceSide",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether lateral resistance is applied from one side at a time.",
+      "allowedValues": [
+        "oneSideAtATime"
+      ]
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the catalog instructs the unilateral anti-rotation hold with the anchor on both sides.",
+      "allowedValues": [
+        "bothSides"
+      ]
+    },
+    {
+      "id": "torsoOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The torso relationship to the lateral resistance anchor.",
+      "allowedValues": [
+        "sideOnToAnchor"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal rotation creates a repetition rather than being resisted.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic rotation creates a repetition rather than being resisted.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "armPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed relationship of the arms to the torso.",
+      "allowedValues": [
+        "bothPerpendicularToTorso"
+      ]
+    },
+    {
+      "id": "handHeight",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed vertical position of the two-hand hold.",
+      "allowedValues": [
+        "shoulderHeight"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether elbow motion creates a press repetition.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The deliberately held elbow posture used to avoid a dynamic press.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The static bilateral handle task rather than deliberate finger or wrist motion.",
+      "allowedValues": [
+        "staticTwoHandHandleHold"
+      ]
+    },
+    {
+      "id": "resistanceAnchor",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed lateral attachment used to establish band tension.",
+      "allowedValues": [
+        "sidePulley"
+      ]
+    },
+    {
+      "id": "resistanceTrajectory",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed direction of the elastic resistance line.",
+      "allowedValues": [
+        "horizontalLateral"
+      ]
+    },
+    {
+      "id": "resistanceSelection",
+      "valueType": "enum",
+      "required": true,
+      "description": "The catalog adaptation for products without the study's dynamometer-standardized body-mass brackets.",
+      "allowedValues": [
+        "selfSelectedWithoutVisibleRotation"
+      ]
+    },
+    {
+      "id": "holdType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The tracked task rather than a dynamic repetition count.",
+      "allowedValues": [
+        "timedIsometric"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; a band attached at the side does not create a fixed path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the lower body propels a repetition or supplies static support only.",
+      "allowedValues": [
+        "staticSupportOnly"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "feet-together-band-pallof-hold",
+      "name": "Feet-Together Band Pallof Hold",
+      "aliases": [
+        "Standing Band Pallof Hold",
+        "Band Anti-Rotation Hold"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 1,
+      "defaultDuration": 15,
+      "searchPriority": 84,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "serratus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "supportSurface": "floor",
+        "stanceConfiguration": "feetTogether",
+        "resistanceSide": "oneSideAtATime",
+        "trainingSidePrescription": "bothSides",
+        "torsoOrientation": "sideOnToAnchor",
+        "spineMotion": "positionHeld",
+        "pelvisMotion": "positionHeld",
+        "armPosition": "bothPerpendicularToTorso",
+        "handHeight": "shoulderHeight",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "handTask": "staticTwoHandHandleHold",
+        "resistanceAnchor": "sidePulley",
+        "resistanceTrajectory": "horizontalLateral",
+        "resistanceSelection": "selfSelectedWithoutVisibleRotation",
+        "holdType": "timedIsometric",
+        "fixedPath": false,
+        "lowerBodyContribution": "staticSupportOnly"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "juan-recio-2025-pallof-postural-challenge",
+        "cinarli-2025-anti-movement-training"
+      ],
+      "movementDefinition": "Attach a band to a side pulley so its line of pull is horizontal, stand side-on with the feet together on a stable floor, and hold the handle in both hands at shoulder height. Extend both elbows so the arms are perpendicular to the torso, choose a tension you can control, and hold for the prescribed duration without letting the spine or pelvis rotate. Repeat with the anchor on the other side; do not turn the hold into a repeated press."
+    }
+  ]
+}

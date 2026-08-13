@@ -499,7 +499,7 @@ The candidate should not be activated merely by renaming `hand.grip`.
 | Hand-gripper closing / crush repetitions | Dynamic multi-joint finger flexion against a closing implement | Future `finger-flexion-grip` candidate after direct fixture review |
 | Static dynamometer squeeze | Isometric assessment, normally not a catalog exercise | Exclude |
 | Plate pinch | Thumb opposition/adduction plus finger forces; not represented by the current muscle taxonomy | Defer pending intrinsic/thumb taxonomy |
-| Farmer support grip | Isometric hand demand while locomotion/carry is the exercise | Grip remains a stabilizer inside a future carry family |
+| Farmer/suitcase support grip | Isometric hand demand while locomotion/carry is the exercise | The active `farmer-carry` and `suitcase-carry` families explicitly resist `hand.fingerExtension`, so `fingerFlexors` is primary in the grip-defined bilateral family and secondary when anti-lateral-flexion defines the unilateral family |
 | Barbell/dumbbell support grip | Isometric hand demand while another joint action is the exercise | Keep `fingerFlexors` as a stabilizer in the owning family |
 | Dead hang / hangboard | Isometric finger/hand demand plus a closed-chain shoulder complex and bodyweight load | Separate hanging review; not a crush-grip variant |
 | Wrist roller | Alternating wrist motion, implement winding, and repeated hand repositioning | Separate compound/conditioning review |

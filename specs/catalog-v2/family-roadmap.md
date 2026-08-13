@@ -5,7 +5,7 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 37 reviewed families are active, containing 113 exercises.
+- 44 reviewed families are active, containing 120 exercises.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
@@ -18,9 +18,11 @@ are discovery handles, not guaranteed final family IDs.
   holds after splitting stationary split squats from dynamic lunges.
 - Batch 6 resolved five taxonomy-sensitive candidates into three active
   families and two explicit hip-rotation foundation holds.
-- 8 not-yet-reviewed candidates remain in Batch 7.
-- 23 work items remain unresolved: 22 family or branch items—the 8 candidates;
-  the deferred `diagonal-pull`, `scapular-retraction`, `upright-row`, and
+- Batch 7 resolved eight candidates into seven active families and two explicit
+  holds; the carry candidate split into separate farmer and suitcase families.
+- 17 work items remain unresolved: 16 family or branch items—the held
+  `spine-extension` and `spine-lateral-flexion`; the deferred `diagonal-pull`,
+  `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
   `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
   `landmine-press` holds; and the deferred closed-chain branch of
@@ -76,7 +78,14 @@ batch siblings.
 | `hip-abduction` | 1 |
 | `hip-adduction` | 1 |
 | `ankle-dorsiflexion` | 1 |
-| **Total** | **113** |
+| `spine-flexion` | 1 |
+| `spine-rotation` | 1 |
+| `anti-extension` | 1 |
+| `anti-lateral-flexion` | 1 |
+| `anti-rotation` | 1 |
+| `farmer-carry` | 1 |
+| `suitcase-carry` | 1 |
+| **Total** | **120** |
 
 ## Foundation gates
 
@@ -172,28 +181,25 @@ rotators. That position-sensitive gap is not solved by promoting the one
 currently visible producer or by treating surface EMG as a torque-direction
 measurement.
 
-### Resisted-action semantics
+### Resisted-action semantics — complete
 
-Before Batch 7, extend the contract model so an isometric anti-movement family
-can state the action it resists. Do not encode anti-extension as dynamic
-`spine.flexion` or invent another moving prime action merely to satisfy the
-current non-empty `primeActions`/`planeBasisActions` requirements.
+Batch 7 added `movementSignature.resistedActions` so an isometric family names
+the external joint-action tendency it opposes without inventing a dynamic prime
+action. A central, total, symmetric action-opposition map proves that an
+assigned primary or secondary muscle can produce the opposing action.
+`planeBasisActions` now draws from the union of prime and resisted actions while
+preserving its same-region, distinct-plane, and exact-plane rules. A contract
+must declare at least one prime or resisted action, and one action cannot be
+both.
 
-The minimal reviewed design should add `movementSignature.resistedActions`
-using existing action IDs and a central way to prove that a muscle can resist
-the declared action—either explicit muscle-profile `resists` capabilities or a
-validated action-opposition map. `planeBasisActions` may then use the union of
-prime and resisted actions while preserving its same-region, distinct-plane,
-and exact-plane rules. A contract must declare at least one prime or resisted
-action; the same action cannot appear in both.
-
-Loaded carries also need exercise-level `additionalResistedActions` and a rule
-assertion equivalent to `requireAdditionalStabilityDemands` if one family is to
-span bilateral farmer and unilateral suitcase variants. Otherwise those
-variants must split rather than hiding directional anti-motion behind a generic
-`spine` stability demand. Review the current `lowerBack` aggregation before
-assigning lateral-flexion roles because it combines lumbar-extensor and
-quadratus-lumborum meshes.
+Farmer and suitcase carries use separate family-level resisted signatures:
+the suitcase contract adds lateral flexion and uses it as the frontal plane
+basis, while the farmer contract remains sagittal and grip-dominant. No
+exercise-level resisted-action exception is needed or admitted. The active
+anti-lateral-flexion and carry contracts disclose that `lowerBack` is a visible
+aggregate containing quadratus-lumborum and posterior-serratus surfaces, not
+the measured erector-spinae or multifidus subdivisions; they do not interpret
+the entire region as a clean side-specific result.
 
 ## Batch 1 — Shoulder-action boundaries (9)
 
@@ -421,9 +427,13 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current 23-item count.
+new item in the current 17-item count.
 
 ## Batch 7 — Core and carry (8)
+
+Status: complete. Eight discovery candidates resolved into seven active
+families and two explicit holds because the carry candidate split into separate
+farmer and suitcase contracts.
 
 1. `spine-flexion`
 2. `spine-extension`
@@ -434,10 +444,38 @@ new item in the current 23-item count.
 7. `anti-rotation`
 8. `loaded-carry`
 
-Research this as one umbrella batch, but activate it in three internal waves:
-dynamic spine actions, resisted/anti-movement actions, then loaded carry. Carry
-must reuse the resisted-action vocabulary rather than pretending that a held
-load creates dynamic trunk motion.
+The batch activated two narrow dynamic fixtures: a 30-degree curl-up and a
+seated machine torso twist performed one rotation direction at a time. The
+torso-twist record prescribes both separately logged directions; right-to-left
+is a disclosed mirrored mechanics-and-training adaptation because the reviewed
+source measured only left-to-right. The curl-up angles describe whole-trunk
+elevation, not segmental lumbar angles. The torso-twist fixture distinguishes
+the shoulder-height hand grips from the shoulder-pad load interface and labels
+its held-pelvis instruction as a catalog adaptation because the source did not
+measure pelvic kinematics.
+
+The three anti-movement families use empty `primeActions` and name extension,
+lateral flexion, or rotation as the resisted tendency. Their rosters are a
+stable forearm plank, the exact reviewed floor side plank, and a feet-together
+band Pallof hold. The carry candidate split into `farmer-carry` and
+`suitcase-carry`: both resist finger extension, while suitcase additionally
+resists spine lateral flexion and therefore uses a different plane basis and
+muscle-role contract. Ordinary walking
+propulsion and nonstandardized gait-related spine motion are not promoted to
+training-defining dynamic actions.
+
+`spine-extension` remains absent even though the MedX fixture is mechanically
+well specified. The current `lowerBack` region exposes quadratus-lumborum and
+posterior-serratus surfaces, not erector-spinae or multifidus, so activation
+would highlight and credit the wrong visible anatomy. It requires an atomic
+lumbar-extensor taxonomy and body-model repair before activation.
+
+`spine-lateral-flexion` also remains absent. The reviewed condition-matched dynamic
+Konrad fixture is indexed by PMID/PMCID but has no DOI, while DOI-backed
+alternatives are isometric or industrial tasks that do not support the proposed
+dynamic family. The evidence registry still requires a DOI, so the candidate
+cannot activate truthfully without either a reviewed registry-policy change or
+a direct DOI-backed fixture.
 
 ## Evidence holds
 

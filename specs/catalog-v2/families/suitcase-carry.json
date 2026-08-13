@@ -1,0 +1,448 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "suitcase-carry",
+  "name": "Suitcase Carry",
+  "definition": "A duration-tracked unilateral dumbbell carry in which one side-held implement creates both a continuous tendency to open the hand and a frontal-plane spinal lateral-flexion tendency while the athlete walks forward on a level surface with the upper arm at the side, neutral humeral and forearm rotation, the elbow held extended, and no grip assistance. The frontal family plane is grounded in resisted spine.lateralFlexion; resisted hand.fingerExtension remains an additional cross-joint sagittal demand rather than the plane basis. The trunk opposes the side-bending load without the contract claiming dynamic side-bending repetitions or left-versus-right muscle credit that the taxonomy cannot represent. Ellestad and McGill directly support unilateral carriage and the asymmetric trunk-control envelope. Loaded-grip, upper-limb, lower-limb, and soleus assignments outside their measured panels are explicitly anatomy-and-mechanics-derived. Holds, farmer carriage, marching in place, backward or turning paths, straps, rack, overhead, front-loaded, yoke, and lunge variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "gaffney-2014-trapezius-subdivisions",
+    "holzbaur-2005-upper-extremity",
+    "mirakhorlo-2018-hand-wrist-model",
+    "ellestad-2024-loaded-carry-muscle-activation",
+    "mcgill-2013-one-two-hand-carry"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "carry",
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "core",
+    "allowed": [
+      "core"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "dumbbell"
+    ],
+    "modalities": [
+      "isometricStrength"
+    ],
+    "trackingModes": [
+      "duration"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "recommended": {
+    "defaultDuration": {
+      "minimum": 10,
+      "maximum": 90
+    }
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "spine.lateralFlexion"
+    ],
+    "primeActions": [],
+    "resistedActions": [
+      "hand.fingerExtension",
+      "spine.lateralFlexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lowerBack"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obliques"
+      ],
+      "secondary": [
+        "lowerBack",
+        "fingerFlexors"
+      ],
+      "stabilizer": [
+        "extensorCarpiRadialis",
+        "trapeziusUpper",
+        "externalRotators",
+        "triceps",
+        "abs",
+        "gluteMed",
+        "vasti",
+        "soleus"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether ground contact remains the locomotor base while the single external load moves with the athlete.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used during the reviewed unilateral loaded walk.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The side-held upper-arm position that separates this carry from rack, front-loaded, and overhead topologies.",
+      "allowedValues": [
+        "atSide"
+      ]
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed neutral humeral posture, authored independently from hand or forearm orientation.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "carryPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed locomotor path rather than a hold, march, backward walk, turn, incline, or stair task.",
+      "allowedValues": [
+        "continuousForwardWalk"
+      ]
+    },
+    {
+      "id": "loadSymmetry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed single-implement distribution on one side.",
+      "allowedValues": [
+        "unilateral"
+      ]
+    },
+    {
+      "id": "gripAssistance",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether straps or hooks reduce the universal loaded-grip demand.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate elbow motion creates repetitions rather than the arm holding the load beside the torso.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The extended elbow posture held while the single dumbbell remains beside the torso.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate forearm rotation creates repetitions rather than the implement remaining side held.",
+      "allowedValues": [
+        "angleHeld"
+      ]
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The neutral forearm orientation held beside the torso, independent from grip naming.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The static implement hold whose external opening tendency is modeled through the family resisted action.",
+      "allowedValues": [
+        "staticImplementHold"
+      ]
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the logged weight is interpreted: enter the single dumbbell's weight for the trained side.",
+      "allowedValues": [
+        "perImplement"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The trunk-control policy: upright carriage is instructed without falsely claiming zero three-dimensional gait-related spinal motion.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "The lower limbs provide ordinary walking propulsion without becoming training-defining carry prime actions.",
+      "allowedValues": [
+        "walkingPropulsion"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever guide the athlete or the freely held dumbbell."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "single-dumbbell-suitcase-carry",
+      "name": "Single-Dumbbell Suitcase Carry",
+      "aliases": [
+        "Unilateral Dumbbell Suitcase Carry",
+        "Single-Dumbbell Suitcase Walk"
+      ],
+      "equipment": "dumbbell",
+      "laterality": "unilateral",
+      "modality": "isometricStrength",
+      "trackingMode": "duration",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 50,
+      "defaultWeightKg": 22.5,
+      "reps": 1,
+      "defaultDuration": 40,
+      "searchPriority": 88,
+      "involvement": [
+        {
+          "muscle": "obliques",
+          "role": "primary"
+        },
+        {
+          "muscle": "lowerBack",
+          "role": "secondary"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "secondary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "triceps",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "vasti",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "upperArmPosition": "atSide",
+        "humeralRotation": "neutral",
+        "carryPath": "continuousForwardWalk",
+        "loadSymmetry": "unilateral",
+        "gripAssistance": "none",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "loadAccounting": "perImplement",
+        "spineMotion": "nonstandardized",
+        "lowerBodyContribution": "walkingPropulsion",
+        "fixedPath": false
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "ellestad-2024-loaded-carry-muscle-activation",
+        "mcgill-2013-one-two-hand-carry"
+      ],
+      "movementDefinition": "Log the weight of the single dumbbell. Hold it at one side with the upper arm at the side, neutral humeral and forearm rotation, the palm facing the thigh, no straps or hooks, and the elbow held extended beside the torso. Walk continuously forward on a level surface for the prescribed duration while resisting the dumbbell's side-bending tendency without forcing the spine motionless. Log the other side as well; do not turn, march in place, walk backward, or lean deliberately to create repetitions."
+    }
+  ]
+}
