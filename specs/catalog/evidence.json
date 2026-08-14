@@ -2206,6 +2206,107 @@
       "pmid": "32217524",
       "url": "https://doi.org/10.1136/bjsports-2019-100935",
       "scope": "A two-site randomized clinical trial assigned 218 adults with patellofemoral pain to foot orthoses or the FOHX progressive resisted hip-exercise program, confirming implementation of the four-week, twelve-session program and assessing outcomes at twelve weeks. It supports program implementation and trainability, not an isolated causal effect of the external-rotation exercise, individual-muscle recruitment, a role hierarchy, or treatment advice for the general catalog user."
+    },
+    {
+      "id": "mccabe-2007-below-90-scapular-exercises",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Surface Electromyographic Analysis of the Lower Trapezius Muscle During Exercises Performed Below Ninety Degrees of Shoulder Elevation in Healthy Subjects",
+      "authors": [
+        "Robert A. McCabe",
+        "Karl F. Orishimo",
+        "Malachy P. McHugh",
+        "Stephen J. Nicholas"
+      ],
+      "year": 2007,
+      "pmid": "21522201",
+      "pmcid": "PMC2953285",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2953285/",
+      "scope": "Fifteen healthy adults performed five repetitions each of unilateral elastic-band scapular retraction with the shoulder held at 80 degrees of flexion and unilateral overhead-band scapular depression with the arm beside the torso. The band began just taut, resistance was adjusted to a subject-reported moderate five-repetition effort, each concentric and eccentric phase lasted approximately two seconds, and repetitions were separated by five seconds. Surface EMG directly measured upper, middle, and lower trapezius plus serratus anterior participation. The study prescribed the target scapular motions but did not measure three-dimensional scapular kinematics, rhomboids, pectoralis minor, joint torque, or a cross-muscle force hierarchy."
+    },
+    {
+      "id": "cools-2004-isokinetic-scapular-rotators",
+      "sourceType": "experimentalKineticsEMGStudy",
+      "title": "Evaluation of Isokinetic Force Production and Associated Muscle Activity in the Scapular Rotators During a Protraction-Retraction Movement in Overhead Athletes With Impingement Symptoms",
+      "authors": [
+        "Ann M. Cools",
+        "Erik E. Witvrouw",
+        "Geert A. Declercq",
+        "Guy G. Vanderstraeten",
+        "Dirk C. Cambier"
+      ],
+      "year": 2004,
+      "doi": "10.1136/bjsm.2003.004952",
+      "pmid": "14751949",
+      "pmcid": "PMC1724756",
+      "url": "https://doi.org/10.1136/bjsm.2003.004952",
+      "scope": "Nineteen overhead athletes completed reciprocal maximal concentric protraction and retraction on a Biodex System 3 with the torso strapped, arm horizontal in the scapular plane, humerus neutral, and elbow extended. The study directly measured isokinetic force and upper-, middle-, and lower-trapezius plus serratus-anterior EMG, supporting middle- and lower-trapezius participation during the retraction phase. It is supplemental role evidence only: the reciprocal assessment is not the active one-way band-retraction fixture, upper-trapezius and serratus activity is co-contraction rather than proof of retraction production, and the study measured neither rhomboids nor three-dimensional scapular coupling."
+    },
+    {
+      "id": "lee-2016-stabilization-shrug-upward-rotation",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Various Shrug Exercises Can Change Scapular Kinematics and Scapular Rotator Muscle Activities in Subjects With Scapular Downward Rotation Syndrome",
+      "authors": [
+        "Ji-Hyun Lee",
+        "Heon-Seock Cynn",
+        "Woo-Jeong Choi",
+        "Hyo-Jung Jeong",
+        "Tae-Lim Yoon"
+      ],
+      "year": 2016,
+      "doi": "10.1016/j.humov.2015.11.016",
+      "pmid": "26625348",
+      "url": "https://doi.org/10.1016/j.humov.2015.11.016",
+      "scope": "Seventeen participants with scapular downward-rotation syndrome performed two bilateral shrug trials while holding 30 degrees of frontal-plane shoulder abduction, maintained the individual maximum-height target for five seconds, and then returned slowly. The stabilization condition used wrist guides, individualized target bars, inclinometer-confirmed arm position, and investigator stabilization of the chin and prominent thoracic spinous process. Surface EMG was collected during the five-second isometric phase, and digital-inclinometer scapular upward-rotation angle was measured immediately after each exercise condition rather than continuously through the repetition. The greater post-condition upward-rotation angle supports a coupled elevation-plus-upward-rotation variant in the existing scapular-elevation family, not a dynamic angle trace, a pure or separately owned upward-rotation family, or an unrestricted loaded shrug."
+    },
+    {
+      "id": "lorenzetti-2017-pulling-exercise-kinematics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Pulling Exercises for Strength Training and Rehabilitation: Movements and Loading Conditions",
+      "authors": [
+        "Silvio Lorenzetti",
+        "Romain Dayer",
+        "Michael Plüss",
+        "Renate List"
+      ],
+      "year": 2017,
+      "doi": "10.3390/jfmk2030033",
+      "url": "https://doi.org/10.3390/jfmk2030033",
+      "scope": "Fifteen healthy adults performed standing low-cable straight-bar upright rows on a Technogym Ercolina Rehab at ten and twenty-five percent of bodyweight for two sets of eight repetitions. Instructions fixed a shoulder-width stance, upright engaged torso, vertical bar path, elbows slightly above the hands, an elbows-at-shoulder-height endpoint, and controlled return. Twenty-two-camera motion capture and a cable load cell directly support the fixture, mixed sagittal-plus-frontal shoulder path, elbow flexion, and non-held spinal behavior. No scapular coordinate system or EMG was used, and the Rab XYZ shoulder decomposition becomes indeterminate near ninety degrees of abduction; the source therefore does not establish numeric humeral components, axial rotation, scapular actions, or muscle rankings."
+    },
+    {
+      "id": "mcallister-2013-upright-row-grip-width",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Effect of Grip Width on Electromyographic Activity During the Upright Row",
+      "authors": [
+        "Matthew J. McAllister",
+        "Brian K. Schilling",
+        "Kelley G. Hammond",
+        "Lawrence W. Weiss",
+        "Tyler M. Farney"
+      ],
+      "year": 2013,
+      "doi": "10.1519/JSC.0b013e31824f23ad",
+      "pmid": "22362088",
+      "url": "https://doi.org/10.1519/JSC.0b013e31824f23ad",
+      "scope": "Sixteen resistance-trained men performed two barbell upright-row repetitions at fifty, one hundred, and two hundred percent of biacromial grip breadth using one common load equal to eighty-five percent of the shoulder-width condition's one-repetition maximum. Surface EMG directly measured anterior, lateral, and posterior deltoid, upper and middle trapezius, biceps brachii, and latissimus dorsi. It supports categorical upright-row participation and within-muscle grip-width effects only; raw cross-channel amplitudes do not rank muscles, the barbell protocol does not authorize a cable grip-width claim, and EMG does not establish joint or scapular actions."
+    },
+    {
+      "id": "eldridge-2024-loaded-scapular-elevation",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "External Handheld Loads Affect Scapular Elevation and Upward Rotation During Shoulder Elevation Tasks",
+      "authors": [
+        "Alan Eldridge",
+        "Everett Lohman",
+        "Skulpan Asavasopon",
+        "Lida Gharibvand",
+        "Lori Michener"
+      ],
+      "year": 2024,
+      "doi": "10.1080/23335432.2024.2332212",
+      "pmid": "38501436",
+      "pmcid": "PMC10953777",
+      "url": "https://doi.org/10.1080/23335432.2024.2332212",
+      "scope": "Fifty healthy adults performed dumbbell elevation in the scapular plane from thirty to one hundred twenty degrees under unloaded and individualized external-load conditions while three-dimensional motion capture measured scapular elevation and upward rotation. The study supports persistence of coupled upward rotation during loaded arm elevation and reports only small load-related changes. It did not measure posterior tilt, muscle activity, or an upright-row fixture, so it cannot independently assign upright-row roles, scapular elevation, or fixed coupling magnitudes."
     }
   ]
 }

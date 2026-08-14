@@ -469,7 +469,7 @@ Use these movement definitions:
 | Candidate movement | Why it is outside these initial contracts | Owner / unlock |
 |---|---|---|
 | Row or pulldown | Adds shoulder extension/adduction and reviewed scapular actions to elbow flexion. | Existing compound row or vertical-pull family. |
-| Upright row | Adds shoulder abduction and unresolved scapular behavior to elbow flexion. | Deferred `upright-row` review. |
+| Upright row | Adds mixed shoulder flexion-abduction and reviewed coupled scapular actions to elbow flexion. | Active `upright-row` compound family. |
 | Cheat curl / clean curl | Trunk or lower-body motion creates the repetition. | Not admitted by strict elbow flexion. |
 | Rotating dumbbell curl | Dynamically supinates while flexing the elbow; held orientation cannot encode it. | Future combined-action review, not a silent curl variant. |
 | Preacher, incline, Bayesian, concentration, machine, barbell, EZ-bar, and ordinary dumbbell curls | Require reviewed support, upper-arm posture, equipment, semisupinated geometry, or path axes not present in the initial direct fixture. | Potential future `elbow-flexion` expansion. |

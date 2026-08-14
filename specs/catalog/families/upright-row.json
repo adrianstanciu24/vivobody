@@ -1,0 +1,537 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "upright-row",
+  "name": "Upright Row",
+  "definition": "A strict bilateral compound pull from a low cable in which the bar travels vertically while both elbows flex and the upper arms elevate through a catalog-authored mixture of shoulder flexion and abduction. The initial record preserves the Lorenzetti straight-bar topology and elbow-at-shoulder-height endpoint without publishing numeric shoulder angles: the study reports substantial sagittal and frontal shoulder excursion, but its Rab-style Euler decomposition becomes indeterminate near 90 degrees of abduction and therefore cannot establish unique sagittal or axial magnitudes. Scapular upward rotation and posterior tilt are bounded kinematic transfers rather than direct upright-row measurements. Ludewig directly observed both coupled actions during flexion and abduction, while loaded arm-elevation evidence supports retaining upward rotation under external resistance; neither source establishes a fixed scapulohumeral ratio for this cable fixture. McAllister supports upright-row recruitment of the anterior, lateral, and posterior deltoids, upper and middle trapezius, and biceps only. Its barbell grip-width experiment does not rank muscles against one another, determine joint actions, or transfer grip effects to this cable record. Accordingly, lateral deltoid remains the primary shoulder emphasis, posterior deltoid and middle trapezius remain stabilizers, and no shoulder axial-rotation, scapular-retraction, or scapular-elevation prime action is inferred. The source-observed spinal behavior is nonstandardized rather than position-held. Shrugs, angle-held raises, horizontal or extension rows, presses, high pulls, and any deliberately leg-driven version remain outside this contract.",
+  "evidenceRefs": [
+    "lorenzetti-2017-pulling-exercise-kinematics",
+    "mcallister-2013-upright-row-grip-width",
+    "eldridge-2024-loaded-scapular-elevation",
+    "ludewig-2009-multiplanar-humeral-elevation",
+    "seth-2019-shoulder-work"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion",
+      "shoulder.abduction"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "scapula.upwardRotation",
+      "scapula.posteriorTilt",
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "shoulder.extension",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidLateral"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "supraspinatus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsBrachii"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidLateral"
+      ],
+      "secondary": [
+        "deltoidAnterior",
+        "supraspinatus",
+        "bicepsBrachii",
+        "brachialis",
+        "brachioradialis",
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower"
+      ],
+      "stabilizer": [
+        "deltoidPosterior",
+        "trapeziusMiddle",
+        "externalRotators",
+        "subscapularis",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the hands and straight bar move freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The whole-body posture used by the directly reviewed upright-row fixture.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface directly supports the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether external posterior support limits scapular motion along the thorax.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "elevationPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bounded torso-relative upper-arm corridor. This qualitative catalog adaptation preserves the observed sagittal and frontal excursion without treating the source's near-gimbal Euler values as unique anatomical angles.",
+      "allowedValues": [
+        "mixedFlexionAbductionCatalogAdaptation"
+      ]
+    },
+    {
+      "id": "endpointCriterion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly prescribed terminal criterion without converting elbow height into an unsupported humerothoracic angle.",
+      "allowedValues": [
+        "elbowsAtShoulderHeight"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic elbow action that distinguishes the compound upright row from an angle-held raise.",
+      "allowedValues": [
+        "flexes"
+      ]
+    },
+    {
+      "id": "elbowHandRelationship",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-prescribed relationship between the elbows and hands throughout the upward pull.",
+      "allowedValues": [
+        "elbowsSlightlyAboveHands"
+      ]
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The axial humeral behavior. Nonstandardized preserves the source's Euler-decomposition limitation and does not add an internal- or external-rotation prime action.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral overhand hand orientation shown for the directly reviewed straight-bar cable fixture; it does not establish a humeral axial-rotation action.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "gripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-shown bilateral spacing without inventing a numeric or anatomical-width threshold that the cable study did not report.",
+      "allowedValues": [
+        "sourceShownNotQuantified"
+      ]
+    },
+    {
+      "id": "handleType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The rigid cable attachment used in the directly reviewed fixture.",
+      "allowedValues": [
+        "straightBar"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The static finger task used to retain the cable bar without deliberate opening or closing during each repetition.",
+      "allowedValues": [
+        "staticImplementHold"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed low-pulley cable arrangement whose bar is pulled vertically toward the elbow-height endpoint.",
+      "allowedValues": [
+        "lowCableVerticalPull"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the bar path; cable direction alone does not create a fixed path."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-observed spinal behavior. Nonstandardized avoids falsely converting an upright/core-engaged cue into a position-held measurement.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "kneeSetup",
+      "valueType": "enum",
+      "required": true,
+      "description": "The slight knee flexion used by the directly reviewed standing setup without treating the knees as dynamic prime movers.",
+      "allowedValues": [
+        "slightlyFlexed"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate hip, knee, ankle, or foot propulsion contributes to the upward pull.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-low-cable-upright-row",
+      "name": "Standing Low-Cable Upright Row",
+      "aliases": [
+        "Cable Upright Row",
+        "Standing Cable Upright Row"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 30,
+      "defaultWeightKg": 15,
+      "reps": 8,
+      "searchPriority": 80,
+      "involvement": [
+        {
+          "muscle": "deltoidLateral",
+          "role": "primary"
+        },
+        {
+          "muscle": "deltoidAnterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "supraspinatus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "serratus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidPosterior",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "subscapularis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "elevationPath": "mixedFlexionAbductionCatalogAdaptation",
+        "endpointCriterion": "elbowsAtShoulderHeight",
+        "elbowMotion": "flexes",
+        "elbowHandRelationship": "elbowsSlightlyAboveHands",
+        "humeralRotation": "nonstandardized",
+        "gripOrientation": "pronated",
+        "gripWidth": "sourceShownNotQuantified",
+        "handleType": "straightBar",
+        "handTask": "staticImplementHold",
+        "resistanceGeometry": "lowCableVerticalPull",
+        "fixedPath": false,
+        "spineMotion": "nonstandardized",
+        "kneeSetup": "slightlyFlexed",
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lorenzetti-2017-pulling-exercise-kinematics"
+      ],
+      "movementDefinition": "Stand at the reviewed low cable with the feet shoulder-width apart and the knees slightly flexed. Hold the straight bar with both hands in the source-shown overhand spacing, keep the torso upright, and engage the core. Pull the bar vertically while flexing the elbows and elevating the upper arms through the mixed flexion-abduction corridor, keeping the elbows slightly above the hands. Stop when the elbows reach shoulder height, then return slowly under control without shrugging as a separate action, retracting the scapulae, rotating the upper arms deliberately, leaning the torso, or adding lower-body drive."
+    }
+  ]
+}

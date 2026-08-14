@@ -187,6 +187,20 @@ struct AntagonistBalanceTests {
         expectEqual(broad?.rightSets, 8)
     }
 
+    @Test func uprightRowCountsAsReviewedVerticalPull() {
+        let board = [
+            session(at: day(1), [
+                lift("Standing Low-Cable Upright Row", .shoulders, sets: 3),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        expectEqual(board.pair("push-pull")?.leftSets, 0)
+        expectEqual(board.pair("push-pull")?.rightSets, 3)
+        expectEqual(board.pair("vertical-push-pull")?.leftSets, 0)
+        expectEqual(board.pair("vertical-push-pull")?.rightSets, 3)
+        expectEqual(board.pair("horizontal-push-pull")?.rightSets, 0)
+    }
+
     @Test func directionsDoNotLeakIntoEachOther() {
         let horizontalOnly = [
             session(at: day(1), [

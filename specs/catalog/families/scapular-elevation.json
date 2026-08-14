@@ -3,9 +3,10 @@
   "schemaVersion": 1,
   "id": "scapular-elevation",
   "name": "Scapular Elevation",
-  "definition": "A strict open-chain scapular isolation whose concentric phase elevates one scapula while the humerus remains beside the torso and the elbow remains extended. The initial contract admits only the directly measured single-arm dumbbell shoulder shrug. It models the observed upward rotation as a coupled prime action instead of pretending that a loaded shrug is pure vertical translation: levator scapulae and upper trapezius elevate the scapula, while upper trapezius and serratus contribute to upward rotation. The same one-subject trace showed smaller changes in the model-specific abduction/adduction and winging coordinates. Those are disclosed kinematic couplings, not additional training-defining prime actions: the authors did not attribute them as positive-work targets, and winging is a distinct internal/external-rotation coordinate that this taxonomy must not relabel as protraction/retraction or anterior/posterior tilt. Rolling shrugs, overhead shrugs, trap-bar and barbell variants, machine shrugs, carries, upright rows, neck motion, and leg-driven pulls remain outside this narrow contract.",
+  "definition": "A strict open-chain scapular isolation whose concentric phase elevates the scapulae while humeral and elbow angles remain fixed. The contract admits the directly measured single-arm dumbbell shoulder shrug and Lee et al.'s exact bilateral stabilization shrug at 30 degrees of frontal-plane abduction. Both model the observed upward rotation as a coupled prime action instead of pretending that a shrug is pure vertical translation: levator scapulae and upper trapezius elevate the scapula, while upper trapezius, serratus, and in the 30-degree fixture lower trapezius contribute to upward rotation. The dumbbell trace showed smaller model-specific abduction/adduction and winging coordinates; those remain disclosed coupling rather than incorrectly relabeled catalog actions. The stabilization fixture uses no external training load: two source trials, a five-second hold at the individual maximum-height target bars, light radial-wrist contact with frontal guides, inclinometer-maintained abduction, and investigator stabilization of the chin and thorax are pinned as laboratory topology. Lee et al. measured scapular upward-rotation angle immediately after each exercise condition rather than continuously through the shrug, so the coupled action is a condition-level finding rather than a dynamic angle trace. Rolling shrugs, overhead shrugs, trap-bar and barbell variants, machine shrugs, carries, upright rows, unsupported 30-degree shrugs, neck motion, and leg-driven pulls remain outside this narrow contract.",
   "evidenceRefs": [
     "castelein-2016-scapular-muscles-shrug",
+    "lee-2016-stabilization-shrug-upward-rotation",
     "seth-2019-shoulder-work",
     "werthel-2019-trapezius-transfer"
   ],
@@ -25,7 +26,8 @@
   },
   "allowed": {
     "equipment": [
-      "dumbbell"
+      "dumbbell",
+      "other"
     ],
     "modalities": [
       "dynamicStrength"
@@ -34,10 +36,12 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
-      "unilateral"
+      "unilateral",
+      "bilateral"
     ]
   },
   "movementSignature": {
@@ -96,8 +100,6 @@
       "scapula",
       "shoulder",
       "elbow",
-      "wrist",
-      "hand",
       "spine",
       "pelvis"
     ]
@@ -136,18 +138,6 @@
       },
       {
         "anyOf": [
-          "extensorCarpiRadialis"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
-          "fingerFlexors"
-        ],
-        "minimumRole": "stabilizer"
-      },
-      {
-        "anyOf": [
           "obliques"
         ],
         "minimumRole": "stabilizer"
@@ -159,13 +149,16 @@
         "trapeziusUpper"
       ],
       "secondary": [
-        "serratus"
+        "serratus",
+        "trapeziusLower"
       ],
       "stabilizer": [
         "externalRotators",
         "triceps",
         "extensorCarpiRadialis",
         "fingerFlexors",
+        "deltoidLateral",
+        "supraspinatus",
         "abs",
         "obliques",
         "lumbarExtensors"
@@ -223,18 +216,38 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "atSide"
+        "atSide",
+        "abducted30"
       ],
-      "description": "The maintained humerothoracic position, with the upper arm beside the torso rather than dynamically elevating."
+      "description": "The maintained humerothoracic position: beside the torso in the dumbbell fixture or abducted 30 degrees in the stabilization fixture, without dynamic humeral elevation."
+    },
+    {
+      "id": "humerothoracicElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 30,
+      "description": "The fixed thorax-relative upper-arm angle used by the reviewed fixture, not a dynamic shoulder-abduction action."
+    },
+    {
+      "id": "elevationPlane",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notApplicable",
+        "frontal"
+      ],
+      "description": "The plane of the held humeral angle; it is not applicable with the arm at the side and is frontal in the exact 30-degree stabilization shrug."
     },
     {
       "id": "humeralRotation",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "neutral"
+        "neutral",
+        "notReported"
       ],
-      "description": "The maintained axial humeral orientation during the reviewed shrug."
+      "description": "The maintained axial humeral orientation when the source reports it; Lee et al. did not report this coordinate for the stabilization shrug."
     },
     {
       "id": "elbowMotion",
@@ -268,27 +281,78 @@
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "neutral"
+        "neutral",
+        "notReported"
       ],
-      "description": "The thumb-forward forearm posture held while the scapula elevates."
+      "description": "The thumb-forward dumbbell posture or the explicitly unreported radioulnar orientation in Lee et al.'s no-implement fixture."
     },
     {
       "id": "handTask",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "staticImplementHold"
+        "staticImplementHold",
+        "none"
       ],
-      "description": "The fingers hold the dumbbell without deliberate opening or closing as the repetition."
+      "description": "Whether the hands statically hold a dumbbell or carry no training implement in the laboratory stabilization shrug."
     },
     {
       "id": "resistanceGeometry",
       "valueType": "enum",
       "required": true,
       "allowedValues": [
-        "gravityLoadedDumbbell"
+        "gravityLoadedDumbbell",
+        "armSegmentGravity"
       ],
-      "description": "A dumbbell held beside the torso supplies a downward external load opposed by scapular elevation."
+      "description": "Whether a dumbbell supplies the downward load or the laboratory task elevates only the arm segments against gravity."
+    },
+    {
+      "id": "humerothoracicAngleControl",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "digitalInclinometer"
+      ],
+      "description": "Whether the exact setup uses an inclinometer to maintain 30 degrees of shoulder abduction."
+    },
+    {
+      "id": "craniocervicothoracicStabilization",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "investigatorManual"
+      ],
+      "description": "Whether an investigator manually stabilizes the chin and the most prominent thoracic spinous process during the shrug."
+    },
+    {
+      "id": "shrugHeightTarget",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "individualMaximumTargetBars"
+      ],
+      "description": "Whether bilateral target bars are set to the participant's individual maximum shrug height."
+    },
+    {
+      "id": "topHoldSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 0,
+      "maximum": 5,
+      "description": "The source-prescribed hold at maximum shrug height: five seconds in Lee et al.'s stabilization condition and no prescribed top hold in the dumbbell fixture."
+    },
+    {
+      "id": "wristGuide",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none",
+        "radialBordersAgainstPlasticGuides"
+      ],
+      "description": "Whether light radial-wrist contact with plastic guides maintains the frontal-plane arm path."
     },
     {
       "id": "fixedPath",
@@ -316,10 +380,98 @@
       "description": "Whether deliberate cervical motion contributes to the repetition. This review axis records a fixed technique boundary because the current anatomical foundation has no cervical joint-action region."
     }
   ],
-  "exerciseRules": [],
+  "exerciseRules": [
+    {
+      "id": "dumbbell-fixture-is-arms-at-side-unilateral-shrug",
+      "description": "The reviewed external-load fixture is the unilateral arms-at-side dumbbell shrug without laboratory guides or manual stabilization.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "dumbbell"
+      },
+      "then": [
+        { "field": "laterality", "value": "unilateral" },
+        { "field": "loadMode", "value": "external" },
+        { "field": "variant.upperArmPosition", "value": "atSide" },
+        { "field": "variant.humerothoracicElevationDegrees", "value": 0 },
+        { "field": "variant.elevationPlane", "value": "notApplicable" },
+        { "field": "variant.humeralRotation", "value": "neutral" },
+        { "field": "variant.forearmOrientation", "value": "neutral" },
+        { "field": "variant.handTask", "value": "staticImplementHold" },
+        { "field": "variant.resistanceGeometry", "value": "gravityLoadedDumbbell" },
+        { "field": "variant.humerothoracicAngleControl", "value": "none" },
+        { "field": "variant.craniocervicothoracicStabilization", "value": "none" },
+        { "field": "variant.shrugHeightTarget", "value": "none" },
+        { "field": "variant.topHoldSeconds", "value": 0 },
+        { "field": "variant.wristGuide", "value": "none" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "extensorCarpiRadialis"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "fingerFlexors"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ]
+    },
+    {
+      "id": "other-fixture-is-bilateral-stabilization-shrug",
+      "description": "The only admitted other-equipment fixture is Lee et al.'s bilateral 30-degree laboratory stabilization shrug.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "other"
+      },
+      "then": [
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "loadMode", "value": "nonComparable" },
+        { "field": "variant.upperArmPosition", "value": "abducted30" },
+        { "field": "variant.humerothoracicElevationDegrees", "value": 30 },
+        { "field": "variant.elevationPlane", "value": "frontal" },
+        { "field": "variant.humeralRotation", "value": "notReported" },
+        { "field": "variant.forearmOrientation", "value": "notReported" },
+        { "field": "variant.handTask", "value": "none" },
+        { "field": "variant.resistanceGeometry", "value": "armSegmentGravity" },
+        { "field": "variant.humerothoracicAngleControl", "value": "digitalInclinometer" },
+        { "field": "variant.craniocervicothoracicStabilization", "value": "investigatorManual" },
+        { "field": "variant.shrugHeightTarget", "value": "individualMaximumTargetBars" },
+        { "field": "variant.topHoldSeconds", "value": 5 },
+        { "field": "variant.wristGuide", "value": "radialBordersAgainstPlasticGuides" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        {
+          "anyOf": [
+            "deltoidLateral"
+          ],
+          "minimumRole": "stabilizer"
+        },
+        {
+          "anyOf": [
+            "supraspinatus"
+          ],
+          "minimumRole": "stabilizer"
+        }
+      ],
+      "requireAdditionalStabilityDemands": []
+    }
+  ],
   "recommended": {
     "defaultReps": {
-      "minimum": 8,
+      "minimum": 2,
       "maximum": 15
     }
   },
@@ -389,6 +541,8 @@
         "contralateralSupport": "none",
         "scapularTranslation": "free",
         "upperArmPosition": "atSide",
+        "humerothoracicElevationDegrees": 0,
+        "elevationPlane": "notApplicable",
         "humeralRotation": "neutral",
         "elbowMotion": "angleHeld",
         "elbowPosture": "extended",
@@ -396,6 +550,76 @@
         "forearmOrientation": "neutral",
         "handTask": "staticImplementHold",
         "resistanceGeometry": "gravityLoadedDumbbell",
+        "humerothoracicAngleControl": "none",
+        "craniocervicothoracicStabilization": "none",
+        "shrugHeightTarget": "none",
+        "topHoldSeconds": 0,
+        "wristGuide": "none",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "neckContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "wrist",
+        "hand"
+      ],
+      "evidenceRefs": [
+        "castelein-2016-scapular-muscles-shrug",
+        "seth-2019-shoulder-work"
+      ],
+      "movementDefinition": "Stand tall holding one dumbbell beside the torso with the elbow extended and the thumb pointing forward. Elevate the working scapula toward the ear while keeping the humerus at the side and allowing its measured upward rotation, then lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+    },
+    {
+      "catalogID": "bilateral-30-degree-stabilization-shrug",
+      "name": "Bilateral 30-Degree Stabilization Shrug",
+      "aliases": [
+        "30-Degree Stabilization Shrug",
+        "Bilateral Stabilization Shrug"
+      ],
+      "equipment": "other",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 2,
+      "searchPriority": 68,
+      "involvement": [
+        { "muscle": "levatorScapulae", "role": "primary" },
+        { "muscle": "trapeziusUpper", "role": "primary" },
+        { "muscle": "serratus", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "triceps", "role": "stabilizer" },
+        { "muscle": "deltoidLateral", "role": "stabilizer" },
+        { "muscle": "supraspinatus", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "contralateralSupport": "none",
+        "scapularTranslation": "free",
+        "upperArmPosition": "abducted30",
+        "humerothoracicElevationDegrees": 30,
+        "elevationPlane": "frontal",
+        "humeralRotation": "notReported",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "notReported",
+        "handTask": "none",
+        "resistanceGeometry": "armSegmentGravity",
+        "humerothoracicAngleControl": "digitalInclinometer",
+        "craniocervicothoracicStabilization": "investigatorManual",
+        "shrugHeightTarget": "individualMaximumTargetBars",
+        "topHoldSeconds": 5,
+        "wristGuide": "radialBordersAgainstPlasticGuides",
         "fixedPath": false,
         "lowerBodyContribution": "none",
         "neckContribution": "none"
@@ -403,10 +627,9 @@
       "additionalPrimeActions": [],
       "additionalStabilityDemands": [],
       "evidenceRefs": [
-        "castelein-2016-scapular-muscles-shrug",
-        "seth-2019-shoulder-work"
+        "lee-2016-stabilization-shrug-upward-rotation"
       ],
-      "movementDefinition": "Stand tall holding one dumbbell beside the torso with the elbow extended and the thumb pointing forward. Elevate the working scapula toward the ear while keeping the humerus at the side and allowing its measured upward rotation, then lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+      "movementDefinition": "Stand with the feet shoulder-width apart and both arms held at 30 degrees of frontal-plane abduction. Lightly contact the radial borders of the wrists against the plastic guides, use the inclinometer to retain the arm angle, and have a partner stabilize the chin and upper thorax. Shrug both scapulae to the individual maximum-height target bars, hold the top position for five seconds, then lower slowly without bending the elbows, moving the neck or trunk, or adding external load. Perform two source-prescribed trials. The catalog's upward-rotation action reflects the greater angle measured immediately after this condition, not a continuously tracked dynamic angle."
     }
   ]
 }

@@ -3329,6 +3329,70 @@
     ]
   },
   {
+    "familyID": "scapular-depression",
+    "catalogID": "standing-band-scapular-depression",
+    "name": "Standing Band Scapular Depression",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Band Shoulder Depression",
+      "Unilateral Band Scapular Depression"
+    ],
+    "searchPriority": 72,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Stand tall holding the overhead-anchored band beside the working thigh with the elbow extended and the band just taut. Lower the shoulder girdle by depressing the scapula against the band for two seconds, then return for two seconds without bending the elbow, moving the glenohumeral joint, leaning the trunk, or moving the neck. Rest five seconds between repetitions.",
+    "involvement": [
+      {
+        "muscle": "trapeziusLower",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "scapular-elevation",
     "catalogID": "single-arm-dumbbell-shrug",
     "name": "Single-Arm Dumbbell Shrug",
@@ -3397,6 +3461,78 @@
     ]
   },
   {
+    "familyID": "scapular-elevation",
+    "catalogID": "bilateral-30-degree-stabilization-shrug",
+    "name": "Bilateral 30-Degree Stabilization Shrug",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 2,
+    "trackingMode": "reps",
+    "equipment": "other",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "30-Degree Stabilization Shrug",
+      "Bilateral Stabilization Shrug"
+    ],
+    "searchPriority": 68,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Stand with the feet shoulder-width apart and both arms held at 30 degrees of frontal-plane abduction. Lightly contact the radial borders of the wrists against the plastic guides, use the inclinometer to retain the arm angle, and have a partner stabilize the chin and upper thorax. Shrug both scapulae to the individual maximum-height target bars, hold the top position for five seconds, then lower slowly without bending the elbows, moving the neck or trunk, or adding external load. Perform two source-prescribed trials. The catalog's upward-rotation action reflects the greater angle measured immediately after this condition, not a continuously tracked dynamic angle.",
+    "involvement": [
+      {
+        "muscle": "levatorScapulae",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "primary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "scapular-protraction",
     "catalogID": "supine-dumbbell-scapular-punch",
     "name": "Supine Dumbbell Scapular Punch",
@@ -3445,6 +3581,78 @@
       },
       {
         "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "scapular-retraction",
+    "catalogID": "standing-band-scapular-retraction",
+    "name": "Standing Band Scapular Retraction",
+    "group": "back",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Band Scapular Retraction",
+      "Unilateral Band Scapular Retraction"
+    ],
+    "searchPriority": 72,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Stand facing the low anterior band anchor and hold the working arm near 80 degrees of forward flexion with the elbow extended and the band just taut. Draw the scapula posteriorly toward the spine against the band for two seconds, then return for two seconds without bending the elbow, dynamically moving the glenohumeral joint, elevating the shoulder, turning the trunk, or moving the neck. Rest five seconds between repetitions.",
+    "involvement": [
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "primary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "triceps",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]
@@ -5884,6 +6092,108 @@
       },
       {
         "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "upright-row",
+    "catalogID": "standing-low-cable-upright-row",
+    "name": "Standing Low-Cable Upright Row",
+    "group": "shoulders",
+    "defaultWeight": 30,
+    "defaultWeightKg": 15,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Cable Upright Row",
+      "Standing Cable Upright Row"
+    ],
+    "searchPriority": 80,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "movementDefinition": "Stand at the reviewed low cable with the feet shoulder-width apart and the knees slightly flexed. Hold the straight bar with both hands in the source-shown overhand spacing, keep the torso upright, and engage the core. Pull the bar vertically while flexing the elbows and elevating the upper arms through the mixed flexion-abduction corridor, keeping the elbows slightly above the hands. Stop when the elbows reach shoulder height, then return slowly under control without shrugging as a separate action, retracting the scapulae, rotating the upper arms deliberately, leaning the torso, or adding lower-body drive.",
+    "involvement": [
+      {
+        "muscle": "deltoidLateral",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidAnterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
         "role": "stabilizer"
       }
     ]

@@ -14,10 +14,11 @@ seated 90-degree flywheel fixture; `hip-external-rotation` uses the FOHX supine
 
 The resolution is intentionally narrower than the discovery labels. Neither
 family authorizes a generic seated, standing, side-lying, cable, machine,
-self-anchored-band, gait, pivoting, or combined-motion exercise. The catalog now
-contains 48 real families and 124 reviewed exercises. The foundation contains
+self-anchored-band, gait, pivoting, or combined-motion exercise. At this
+Batch-6 closure point, the catalog contained 48 real families and 124 reviewed
+exercises. The foundation contained
 58 muscle regions, 60 trainable mesh bases, and 44 joint actions, and the
-evidence registry contains 140 sources.
+evidence registry contained 140 sources.
 
 ## Why the migration had to be atomic
 
@@ -206,8 +207,8 @@ The completed tests pin the migration as one contract:
 - exact one-record family rosters, complete forbidden-action complements,
   fixed one-value or fixed-number axes, condition-matched exercise values,
   muscle-role rosters, source limitations, and direct mutation failures; and
-- runtime projection parity at 48 families and 124 exercises with all 140
-  evidence records referenced by active foundation or family claims.
+- then-current runtime projection parity at 48 families and 124 exercises with
+  all 140 evidence records referenced by active foundation or family claims.
 
 The two former Batch-6 holds are closed. Future hip-rotation fixtures require
 their own posture, topology, and role review; they do not inherit either active

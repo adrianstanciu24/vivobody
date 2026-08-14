@@ -152,6 +152,17 @@ class CatalogFoundationTests(unittest.TestCase):
             for family in cls.real_families
             if family["id"] in batch7_ids
         }
+        scapular_closure_ids = {
+            "scapular-retraction",
+            "scapular-depression",
+            "scapular-elevation",
+            "upright-row",
+        }
+        cls.scapular_closure_families = {
+            family["id"]: family
+            for family in cls.real_families
+            if family["id"] in scapular_closure_ids
+        }
 
     def family_copy(self) -> dict:
         return copy.deepcopy(self.valid_family)
@@ -284,6 +295,21 @@ class CatalogFoundationTests(unittest.TestCase):
             )
 
     def assert_batch7_family_fails(
+        self,
+        family: dict,
+        message: str,
+    ) -> None:
+        with self.assertRaisesRegex(catalog.ValidationFailure, message):
+            catalog.validate_family(
+                family,
+                self.foundation,
+                f"mutated {family['id']}",
+            )
+
+    def scapular_closure_family_copy(self, family_id: str) -> dict:
+        return copy.deepcopy(self.scapular_closure_families[family_id])
+
+    def assert_scapular_closure_family_fails(
         self,
         family: dict,
         message: str,
@@ -5273,6 +5299,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "wrist-ulnar-deviation",
             "scapular-protraction",
             "scapular-elevation",
+            "scapular-retraction",
+            "scapular-depression",
+            "upright-row",
             "dip",
             "push-press",
             "knee-extension",
@@ -5304,7 +5333,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            124,
+            128,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -5794,10 +5823,10 @@ class CatalogFoundationTests(unittest.TestCase):
             with self.subTest(source=source_id):
                 self.assertIn(phrase, source_by_id[source_id]["scope"])
 
-    def test_batch1_deferred_candidates_are_not_active_families(self) -> None:
+    def test_batch1_later_closures_are_active_families(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
         self.assertTrue(
-            {"scapular-retraction", "upright-row"}.isdisjoint(active_ids)
+            {"scapular-retraction", "upright-row"}.issubset(active_ids)
         )
 
     def test_batch2_activated_exactly_eight_narrow_families(self) -> None:
@@ -6161,6 +6190,9 @@ class CatalogFoundationTests(unittest.TestCase):
             "wrist-radial-deviation",
             "wrist-ulnar-deviation",
             "scapular-elevation",
+            "scapular-retraction",
+            "scapular-depression",
+            "upright-row",
             "scapular-protraction",
             "push-press",
             "hip-extension",
@@ -6661,13 +6693,17 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
                 "primary": ["levatorScapulae", "trapeziusUpper"],
                 "group": {"default": "back", "allowed": ["back"]},
-                "reps": {"minimum": 8, "maximum": 15},
+                "reps": {"minimum": 2, "maximum": 15},
                 "evidence": [
                     "castelein-2016-scapular-muscles-shrug",
+                    "lee-2016-stabilization-shrug-upward-rotation",
                     "seth-2019-shoulder-work",
                     "werthel-2019-trapezius-transfer",
                 ],
-                "roster": ["single-arm-dumbbell-shrug"],
+                "roster": [
+                    "single-arm-dumbbell-shrug",
+                    "bilateral-30-degree-stabilization-shrug",
+                ],
             },
             "dip": {
                 "fixed": {
@@ -6787,6 +6823,19 @@ class CatalogFoundationTests(unittest.TestCase):
                 "triceps": "stabilizer",
                 "extensorCarpiRadialis": "stabilizer",
                 "fingerFlexors": "stabilizer",
+                "abs": "stabilizer",
+                "obliques": "stabilizer",
+                "lumbarExtensors": "stabilizer",
+            },
+            "bilateral-30-degree-stabilization-shrug": {
+                "levatorScapulae": "primary",
+                "trapeziusUpper": "primary",
+                "serratus": "secondary",
+                "trapeziusLower": "secondary",
+                "externalRotators": "stabilizer",
+                "triceps": "stabilizer",
+                "deltoidLateral": "stabilizer",
+                "supraspinatus": "stabilizer",
                 "abs": "stabilizer",
                 "obliques": "stabilizer",
                 "lumbarExtensors": "stabilizer",
@@ -6948,7 +6997,7 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("12 work items remain unresolved", roadmap)
+        self.assertIn("Seven work items remain unresolved", roadmap)
         self.assertIn(
             "Sternocostal flexion from an extended start — complete",
             roadmap,
@@ -6997,7 +7046,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "d007abe3acbfd744083c8979e4af86b671f3b2b95b9f7b5a491bf7b64c026760",
+            "da07e9c428c77ed6eddd5ede6456c88120d4a0ef76211a83e28db49562a1461e",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -7032,16 +7081,42 @@ class CatalogFoundationTests(unittest.TestCase):
                 "torsoSupport": ("enum", ("none",)),
                 "contralateralSupport": ("enum", ("none",)),
                 "scapularTranslation": ("enum", ("free",)),
-                "upperArmPosition": ("enum", ("atSide",)),
-                "humeralRotation": ("enum", ("neutral",)),
+                "upperArmPosition": (
+                    "enum", ("atSide", "abducted30")
+                ),
+                "humerothoracicElevationDegrees": (
+                    "number", (0, 30)
+                ),
+                "elevationPlane": (
+                    "enum", ("notApplicable", "frontal")
+                ),
+                "humeralRotation": (
+                    "enum", ("neutral", "notReported")
+                ),
                 "elbowMotion": ("enum", ("angleHeld",)),
                 "elbowPosture": ("enum", ("extended",)),
                 "forearmMotion": ("enum", ("angleHeld",)),
-                "forearmOrientation": ("enum", ("neutral",)),
-                "handTask": ("enum", ("staticImplementHold",)),
+                "forearmOrientation": (
+                    "enum", ("neutral", "notReported")
+                ),
+                "handTask": (
+                    "enum", ("staticImplementHold", "none")
+                ),
                 "resistanceGeometry": (
-                    "enum",
-                    ("gravityLoadedDumbbell",),
+                    "enum", ("gravityLoadedDumbbell", "armSegmentGravity")
+                ),
+                "humerothoracicAngleControl": (
+                    "enum", ("none", "digitalInclinometer")
+                ),
+                "craniocervicothoracicStabilization": (
+                    "enum", ("none", "investigatorManual")
+                ),
+                "shrugHeightTarget": (
+                    "enum", ("none", "individualMaximumTargetBars")
+                ),
+                "topHoldSeconds": ("number", (0, 5)),
+                "wristGuide": (
+                    "enum", ("none", "radialBordersAgainstPlasticGuides")
                 ),
                 "fixedPath": ("boolean", False),
                 "lowerBodyContribution": ("enum", ("none",)),
@@ -7121,7 +7196,10 @@ class CatalogFoundationTests(unittest.TestCase):
                         exercise["variant"][axis["id"]]
                         for exercise in family["exercises"]
                     }
-                    self.assertEqual(observed, {90})
+                    self.assertEqual(
+                        observed,
+                        {axis["minimum"], axis["maximum"]},
+                    )
                 else:
                     self.fail(
                         f"unexpected Batch-3 axis type {axis['valueType']}"
@@ -7337,7 +7415,7 @@ class CatalogFoundationTests(unittest.TestCase):
                             ),
                         )
                     mutation_count += 1
-        self.assertEqual(mutation_count, 53)
+        self.assertEqual(mutation_count, 57)
 
     def test_batch3_cross_family_press_and_scapular_boundaries_are_pinned(
         self,
@@ -7376,13 +7454,16 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             elevation["musclePolicy"]["allowedByRole"]["secondary"],
-            ["serratus"],
+            ["serratus", "trapeziusLower"],
         )
         self.assertIn(
             "model-specific abduction/adduction",
             elevation["definition"],
         )
-        self.assertIn("winging is a distinct", elevation["definition"])
+        self.assertIn(
+            "winging coordinates; those remain disclosed coupling",
+            elevation["definition"],
+        )
         self.assertIn(
             "scapula.upwardRotation",
             protraction["movementSignature"]["forbiddenPrimeActions"],
@@ -7445,13 +7526,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 2.5,
                 12,
             ),
-            "scapular-elevation": (
-                "single-arm-dumbbell-shrug",
-                "dynamicStrength",
-                20,
-                10,
-                10,
-            ),
             "push-press": (
                 "barbell-push-press",
                 "power",
@@ -7488,11 +7562,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "scapular-protraction",
                 "variant.elbowMotion",
                 "dynamic",
-            ),
-            (
-                "scapular-elevation",
-                "variant.lowerBodyContribution",
-                "momentum",
             ),
             (
                 "push-press",
@@ -7615,8 +7684,12 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_batch3_deferred_candidates_remain_explicitly_gated(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
         self.assertTrue(
+            {"scapular-depression", "scapular-retraction"}.issubset(
+                active_ids
+            )
+        )
+        self.assertTrue(
             {
-                "scapular-depression",
                 "scapular-upward-rotation",
                 "scapular-downward-rotation",
                 "closed-chain-vertical-press",
@@ -7636,13 +7709,18 @@ class CatalogFoundationTests(unittest.TestCase):
         power = (
             proposals_root / "batch-3-landmine-power.md"
         ).read_text(encoding="utf-8")
+        self.assertIn("Three narrow contracts are active", scapular)
         self.assertIn(
-            "two narrow contracts activated; three standalone candidates "
-            "deferred",
+            "`scapular-depression` | Active | McCabe unilateral "
+            "overhead-band depression",
             scapular,
         )
         self.assertIn(
-            "`scapular-upward-rotation` | Defer as standalone",
+            "`scapular-upward-rotation` | Resolved without standalone family",
+            scapular,
+        )
+        self.assertIn(
+            "`scapular-downward-rotation` | Resolved: no standalone family",
             scapular,
         )
         self.assertIn(
@@ -8508,7 +8586,7 @@ class CatalogFoundationTests(unittest.TestCase):
             proposal,
         )
         self.assertIn("`hip-flexion` — deferred", roadmap)
-        self.assertIn("12 work items remain unresolved", roadmap)
+        self.assertIn("Seven work items remain unresolved", roadmap)
 
     def test_batch5_activates_exactly_four_compound_families(self) -> None:
         expected = {
@@ -9652,7 +9730,7 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "12 work items remain unresolved, all family or branch items",
+            "Seven work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("`dynamic-lunge` discovery hold", roadmap)
@@ -10705,7 +10783,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 140)
+        self.assertEqual(len(source_by_id), 146)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -10849,8 +10927,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 48)
-        self.assertEqual(len(self.foundation.evidence_ids), 140)
+        self.assertEqual(len(self.real_families), 51)
+        self.assertEqual(len(self.foundation.evidence_ids), 146)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -12098,7 +12176,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "48 reviewed families are active, containing 124 exercises",
+            "51 reviewed families are active, containing 128 exercises",
             roadmap,
         )
         self.assertIn(
@@ -12106,13 +12184,13 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "12 work items remain unresolved, all family or branch items",
+            "Seven work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **124** |", roadmap)
-        self.assertIn("Forty-eight reviewed family files", families_readme)
+        self.assertIn("| **Total** | **128** |", roadmap)
+        self.assertIn("Fifty-one reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -12133,6 +12211,1092 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn(
             "DOI first, otherwise PMCID, otherwise PMID",
             normalized_proposal,
+        )
+
+    def test_scapular_closure_activates_exactly_three_families_and_four_records(
+        self,
+    ) -> None:
+        expected_rosters = {
+            "scapular-retraction": ["standing-band-scapular-retraction"],
+            "scapular-depression": ["standing-band-scapular-depression"],
+            "scapular-elevation": [
+                "single-arm-dumbbell-shrug",
+                "bilateral-30-degree-stabilization-shrug",
+            ],
+            "upright-row": ["standing-low-cable-upright-row"],
+        }
+        self.assertEqual(
+            set(self.scapular_closure_families),
+            set(expected_rosters),
+        )
+        self.assertEqual(
+            {
+                family_id: [
+                    exercise["catalogID"]
+                    for exercise in self.scapular_closure_families[
+                        family_id
+                    ]["exercises"]
+                ]
+                for family_id in expected_rosters
+            },
+            expected_rosters,
+        )
+        self.assertEqual(
+            sum(
+                len(family["exercises"])
+                for family in self.scapular_closure_families.values()
+            ),
+            5,
+        )
+        preexisting = {"single-arm-dumbbell-shrug"}
+        self.assertEqual(
+            {
+                exercise["catalogID"]
+                for family in self.scapular_closure_families.values()
+                for exercise in family["exercises"]
+            }
+            - preexisting,
+            {
+                "standing-band-scapular-retraction",
+                "standing-band-scapular-depression",
+                "bilateral-30-degree-stabilization-shrug",
+                "standing-low-cable-upright-row",
+            },
+        )
+        self.assertFalse(
+            (
+                catalog.FAMILIES_ROOT / "scapular-upward-rotation.json"
+            ).exists()
+        )
+        self.assertFalse(
+            (
+                catalog.FAMILIES_ROOT / "scapular-downward-rotation.json"
+            ).exists()
+        )
+
+    def test_scapular_closure_new_family_contracts_are_exact(self) -> None:
+        expected = {
+            "scapular-retraction": {
+                "fixed": ("isolation", None, None, ("transverse",)),
+                "allowed": (
+                    ("band",), ("dynamicStrength",), ("reps",),
+                    ("nonComparable",), ("unilateral",),
+                ),
+                "basis": ("scapula.retraction",),
+                "prime": ("scapula.retraction",),
+                "demands": (
+                    "scapula", "shoulder", "elbow", "wrist", "hand",
+                    "spine", "pelvis",
+                ),
+                "requirements": (
+                    (("trapeziusMiddle",), "primary"),
+                    (("trapeziusLower",), "secondary"),
+                    (("trapeziusUpper",), "stabilizer"),
+                    (("serratus",), "stabilizer"),
+                    (("externalRotators",), "stabilizer"),
+                    (("triceps",), "stabilizer"),
+                    (("extensorCarpiRadialis",), "stabilizer"),
+                    (("fingerFlexors",), "stabilizer"),
+                    (("obliques",), "stabilizer"),
+                ),
+                "roles": {
+                    "primary": ("trapeziusMiddle",),
+                    "secondary": ("trapeziusLower",),
+                    "stabilizer": (
+                        "trapeziusUpper", "serratus", "externalRotators",
+                        "triceps", "extensorCarpiRadialis", "fingerFlexors",
+                        "abs", "obliques", "lumbarExtensors",
+                    ),
+                },
+                "familyEvidence": (
+                    "mccabe-2007-below-90-scapular-exercises",
+                    "cools-2004-isokinetic-scapular-rotators",
+                ),
+                "exerciseEvidence": (
+                    "mccabe-2007-below-90-scapular-exercises",
+                ),
+            },
+            "scapular-depression": {
+                "fixed": ("isolation", None, None, ("frontal",)),
+                "allowed": (
+                    ("band",), ("dynamicStrength",), ("reps",),
+                    ("nonComparable",), ("unilateral",),
+                ),
+                "basis": ("scapula.depression",),
+                "prime": ("scapula.depression",),
+                "demands": (
+                    "scapula", "shoulder", "elbow", "wrist", "hand",
+                    "spine", "pelvis",
+                ),
+                "requirements": (
+                    (("trapeziusLower",), "primary"),
+                    (("serratus",), "stabilizer"),
+                    (("externalRotators",), "stabilizer"),
+                    (("triceps",), "stabilizer"),
+                    (("extensorCarpiRadialis",), "stabilizer"),
+                    (("fingerFlexors",), "stabilizer"),
+                    (("obliques",), "stabilizer"),
+                ),
+                "roles": {
+                    "primary": ("trapeziusLower",),
+                    "secondary": (),
+                    "stabilizer": (
+                        "serratus", "externalRotators", "triceps",
+                        "extensorCarpiRadialis", "fingerFlexors", "abs",
+                        "obliques", "lumbarExtensors",
+                    ),
+                },
+                "familyEvidence": (
+                    "mccabe-2007-below-90-scapular-exercises",
+                ),
+                "exerciseEvidence": (
+                    "mccabe-2007-below-90-scapular-exercises",
+                ),
+            },
+            "upright-row": {
+                "fixed": (
+                    "compound", "pull", "vertical",
+                    ("sagittal", "frontal"),
+                ),
+                "allowed": (
+                    ("cable",), ("dynamicStrength",), ("reps",),
+                    ("external",), ("bilateral",),
+                ),
+                "basis": ("shoulder.flexion", "shoulder.abduction"),
+                "prime": (
+                    "shoulder.flexion", "shoulder.abduction",
+                    "scapula.upwardRotation", "scapula.posteriorTilt",
+                    "elbow.flexion",
+                ),
+                "demands": (
+                    "shoulder", "scapula", "elbow", "forearm", "wrist",
+                    "hand", "spine", "pelvis",
+                ),
+                "requirements": (
+                    (("deltoidLateral",), "primary"),
+                    (("deltoidAnterior",), "secondary"),
+                    (("supraspinatus",), "secondary"),
+                    (("bicepsBrachii",), "secondary"),
+                    (("brachialis",), "secondary"),
+                    (("brachioradialis",), "secondary"),
+                    (("serratus",), "secondary"),
+                    (("trapeziusUpper",), "secondary"),
+                    (("trapeziusLower",), "secondary"),
+                    (("deltoidPosterior",), "stabilizer"),
+                    (("trapeziusMiddle",), "stabilizer"),
+                    (("externalRotators",), "stabilizer"),
+                    (("subscapularis",), "stabilizer"),
+                    (("fingerFlexors",), "stabilizer"),
+                    (("extensorCarpiRadialis",), "stabilizer"),
+                    (("abs",), "stabilizer"),
+                    (("obliques",), "stabilizer"),
+                    (("lumbarExtensors",), "stabilizer"),
+                ),
+                "roles": {
+                    "primary": ("deltoidLateral",),
+                    "secondary": (
+                        "deltoidAnterior", "supraspinatus", "bicepsBrachii",
+                        "brachialis", "brachioradialis", "serratus",
+                        "trapeziusUpper", "trapeziusLower",
+                    ),
+                    "stabilizer": (
+                        "deltoidPosterior", "trapeziusMiddle",
+                        "externalRotators", "subscapularis", "fingerFlexors",
+                        "extensorCarpiRadialis", "abs", "obliques",
+                        "lumbarExtensors",
+                    ),
+                },
+                "familyEvidence": (
+                    "lorenzetti-2017-pulling-exercise-kinematics",
+                    "mcallister-2013-upright-row-grip-width",
+                    "eldridge-2024-loaded-scapular-elevation",
+                    "ludewig-2009-multiplanar-humeral-elevation",
+                    "seth-2019-shoulder-work",
+                ),
+                "exerciseEvidence": (
+                    "lorenzetti-2017-pulling-exercise-kinematics",
+                ),
+            },
+        }
+        new_families = {
+            family_id: self.scapular_closure_families[family_id]
+            for family_id in expected
+        }
+        self.assertEqual(set(new_families), set(expected))
+        for family_id, family in new_families.items():
+            wanted = expected[family_id]
+            fixed = family["fixed"]
+            actual_fixed = (
+                fixed["mechanic"], fixed["pattern"], fixed["direction"],
+                tuple(fixed["planes"]),
+            )
+            allowed = family["allowed"]
+            actual_allowed = (
+                tuple(allowed["equipment"]), tuple(allowed["modalities"]),
+                tuple(allowed["trackingModes"]),
+                tuple(allowed["loadModes"]),
+                tuple(allowed["lateralities"]),
+            )
+            signature = family["movementSignature"]
+            policy = family["musclePolicy"]
+            actual_requirements = tuple(
+                (tuple(item["anyOf"]), item["minimumRole"])
+                for item in policy["requirements"]
+            )
+            actual_roles = {
+                role: tuple(muscles)
+                for role, muscles in policy["allowedByRole"].items()
+            }
+            exercise = family["exercises"][0]
+            with self.subTest(family=family_id):
+                self.assertEqual(actual_fixed, wanted["fixed"])
+                self.assertEqual(actual_allowed, wanted["allowed"])
+                self.assertEqual(
+                    tuple(signature["planeBasisActions"]), wanted["basis"]
+                )
+                self.assertEqual(
+                    tuple(signature["primeActions"]), wanted["prime"]
+                )
+                self.assertEqual(
+                    tuple(signature["stabilityDemands"]), wanted["demands"]
+                )
+                self.assertEqual(actual_requirements, wanted["requirements"])
+                self.assertEqual(actual_roles, wanted["roles"])
+                self.assertEqual(
+                    tuple(family["evidenceRefs"]), wanted["familyEvidence"]
+                )
+                self.assertEqual(
+                    tuple(exercise["evidenceRefs"]),
+                    wanted["exerciseEvidence"],
+                )
+                self.assertEqual(signature.get("resistedActions", []), [])
+                self.assertEqual(exercise["additionalPrimeActions"], [])
+                self.assertEqual(exercise["additionalStabilityDemands"], [])
+                self.assertEqual(family["exerciseRules"], [])
+
+    def test_scapular_closure_new_family_variants_are_exact(self) -> None:
+        expected = {
+            "standing-band-scapular-retraction": {
+                "kineticChain": "open", "bodyPosition": "standing",
+                "torsoSupport": "none", "contralateralSupport": "none",
+                "scapularTranslation": "free",
+                "humerothoracicElevationDegrees": 80,
+                "elevationPlane": "sagittal", "humeralRotation": "neutral",
+                "elbowMotion": "angleHeld", "elbowPosture": "extended",
+                "forearmMotion": "angleHeld",
+                "forearmOrientation": "neutral",
+                "handTask": "staticImplementHold",
+                "bandAnchor": "anteriorBelowHand",
+                "bandStartTension": "justTaut",
+                "resistancePrescription": (
+                    "subjectAdjustedModerateFiveRepEffort"
+                ),
+                "resistanceGeometry": (
+                    "anteriorElasticResistanceOpposesRetraction"
+                ),
+                "concentricSeconds": 2, "eccentricSeconds": 2,
+                "interRepRestSeconds": 5, "fixedPath": False,
+                "lowerBodyContribution": "none", "neckContribution": "none",
+            },
+            "standing-band-scapular-depression": {
+                "kineticChain": "open", "bodyPosition": "standing",
+                "torsoSupport": "none", "contralateralSupport": "none",
+                "scapularTranslation": "free", "upperArmPosition": "atSide",
+                "humeralRotation": "neutral", "elbowMotion": "angleHeld",
+                "elbowPosture": "extended", "forearmMotion": "angleHeld",
+                "forearmOrientation": "neutral",
+                "handTask": "staticImplementHold", "bandAnchor": "overhead",
+                "bandStartTension": "justTaut",
+                "resistancePrescription": (
+                    "subjectAdjustedModerateFiveRepEffort"
+                ),
+                "resistanceGeometry": (
+                    "overheadElasticResistanceOpposesDepression"
+                ),
+                "concentricSeconds": 2, "eccentricSeconds": 2,
+                "interRepRestSeconds": 5, "fixedPath": False,
+                "lowerBodyContribution": "none", "neckContribution": "none",
+            },
+            "standing-low-cable-upright-row": {
+                "kineticChain": "open", "bodyPosition": "standing",
+                "torsoSupport": "none", "scapularTranslation": "free",
+                "elevationPath": "mixedFlexionAbductionCatalogAdaptation",
+                "endpointCriterion": "elbowsAtShoulderHeight",
+                "elbowMotion": "flexes",
+                "elbowHandRelationship": "elbowsSlightlyAboveHands",
+                "humeralRotation": "nonstandardized",
+                "gripOrientation": "pronated",
+                "gripWidth": "sourceShownNotQuantified",
+                "handleType": "straightBar",
+                "handTask": "staticImplementHold",
+                "resistanceGeometry": "lowCableVerticalPull",
+                "fixedPath": False, "spineMotion": "nonstandardized",
+                "kneeSetup": "slightlyFlexed",
+                "lowerBodyContribution": "none",
+            },
+        }
+        for family_id in {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }:
+            family = self.scapular_closure_families[family_id]
+            self.assertEqual(len(family["exercises"]), 1)
+            exercise = family["exercises"][0]
+            axes = {axis["id"]: axis for axis in family["variantAxes"]}
+            wanted = expected[exercise["catalogID"]]
+            with self.subTest(family=family_id):
+                self.assertEqual(exercise["variant"], wanted)
+                self.assertEqual(set(axes), set(wanted))
+            for axis_id, axis in axes.items():
+                self.assertTrue(axis["required"])
+                value = wanted[axis_id]
+                with self.subTest(family=family_id, axis=axis_id):
+                    if axis["valueType"] == "enum":
+                        self.assertEqual(axis["allowedValues"], [value])
+                    elif axis["valueType"] == "number":
+                        self.assertEqual(
+                            (axis["minimum"], axis["maximum"]),
+                            (value, value),
+                        )
+                    elif axis["valueType"] == "boolean":
+                        self.assertEqual(axis["fixedValue"], value)
+                    else:
+                        self.fail(
+                            f"unexpected scapular-closure axis type "
+                            f"{axis['valueType']}"
+                        )
+
+    def test_scapular_closure_mutates_every_new_axis_and_domain_directly(
+        self,
+    ) -> None:
+        mutation_count = 0
+        family_ids = {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }
+        domains = {
+            "equipment": ("equipment", catalog.EQUIPMENT),
+            "laterality": ("lateralities", catalog.LATERALITIES),
+            "modality": ("modalities", catalog.MODALITIES),
+            "trackingMode": ("trackingModes", catalog.TRACKING_MODES),
+            "loadMode": ("loadModes", catalog.LOAD_MODES),
+        }
+        for family_id in family_ids:
+            original = self.scapular_closure_families[family_id]
+            self.assertEqual(len(original["exercises"]), 1)
+            for axis in original["variantAxes"]:
+                family = copy.deepcopy(original)
+                axis_id = axis["id"]
+                if axis["valueType"] == "enum":
+                    family["exercises"][0]["variant"][axis_id] = "mutated"
+                    expected_error = re.escape(
+                        f"variant.{axis_id} has disallowed value 'mutated'"
+                    )
+                elif axis["valueType"] == "boolean":
+                    family["exercises"][0]["variant"][axis_id] = not axis[
+                        "fixedValue"
+                    ]
+                    expected_error = re.escape(
+                        f"variant.{axis_id} must equal fixed value "
+                        f"{axis['fixedValue']!r}"
+                    )
+                elif axis["valueType"] == "number":
+                    family["exercises"][0]["variant"][axis_id] = (
+                        axis["maximum"] + 1
+                    )
+                    expected_error = re.escape(
+                        f"variant.{axis_id} exceeds {axis['maximum']}"
+                    )
+                else:
+                    self.fail(
+                        f"unexpected scapular-closure axis type "
+                        f"{axis['valueType']}"
+                    )
+                with self.subTest(family=family_id, axis=axis_id):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        expected_error,
+                    )
+                mutation_count += 1
+
+            for field, (allowed_key, domain) in domains.items():
+                family = copy.deepcopy(original)
+                value = sorted(
+                    domain - set(family["allowed"][allowed_key])
+                )[0]
+                family["exercises"][0][field] = value
+                with self.subTest(family=family_id, field=field):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        re.escape(
+                            f"selects disallowed {allowed_key}: {value}"
+                        ),
+                    )
+                mutation_count += 1
+        self.assertEqual(mutation_count, 78)
+
+    def test_scapular_closure_forbids_every_unreviewed_prime_action(
+        self,
+    ) -> None:
+        mutation_count = 0
+        for family_id in {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }:
+            original = self.scapular_closure_families[family_id]
+            signature = original["movementSignature"]
+            prime_actions = {
+                item if isinstance(item, str) else item["action"]
+                for item in signature["primeActions"]
+            }
+            expected_forbidden = self.foundation.action_ids - prime_actions
+            self.assertEqual(
+                set(signature["forbiddenPrimeActions"]),
+                expected_forbidden,
+            )
+            self.assertEqual(
+                prime_actions | set(signature["forbiddenPrimeActions"]),
+                self.foundation.action_ids,
+            )
+            for action in signature["forbiddenPrimeActions"]:
+                family = copy.deepcopy(original)
+                family["exercises"][0]["additionalPrimeActions"] = [action]
+                with self.subTest(family=family_id, action=action):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        f"declares forbidden prime action {re.escape(action)}",
+                    )
+                mutation_count += 1
+        self.assertEqual(mutation_count, 125)
+
+    def test_scapular_closure_required_roles_are_removed_and_demoted_directly(
+        self,
+    ) -> None:
+        removal_count = 0
+        demotion_count = 0
+        lower_role = {"primary": "secondary", "secondary": "stabilizer"}
+        for family_id in {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }:
+            original = self.scapular_closure_families[family_id]
+            for requirement_index, requirement in enumerate(
+                original["musclePolicy"]["requirements"]
+            ):
+                candidate = requirement["anyOf"][0]
+                family = copy.deepcopy(original)
+                family["exercises"][0]["involvement"] = [
+                    item
+                    for item in family["exercises"][0]["involvement"]
+                    if item["muscle"] != candidate
+                ]
+                with self.subTest(
+                    family=family_id,
+                    requirement=requirement_index,
+                    mutation="remove",
+                ):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        (
+                            f"fails muscle requirement {requirement_index}"
+                            "|requires at least one primary muscle"
+                        ),
+                    )
+                removal_count += 1
+
+                minimum_role = requirement["minimumRole"]
+                if minimum_role == "stabilizer":
+                    continue
+                family = copy.deepcopy(original)
+                demoted_role = lower_role[minimum_role]
+                allowed = family["musclePolicy"]["allowedByRole"][
+                    demoted_role
+                ]
+                if candidate not in allowed:
+                    allowed.append(candidate)
+                next(
+                    item
+                    for item in family["exercises"][0]["involvement"]
+                    if item["muscle"] == candidate
+                )["role"] = demoted_role
+                with self.subTest(
+                    family=family_id,
+                    requirement=requirement_index,
+                    mutation="demote",
+                ):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        (
+                            f"fails muscle requirement {requirement_index}"
+                            "|requires at least one primary muscle"
+                        ),
+                    )
+                demotion_count += 1
+        self.assertEqual(removal_count, 34)
+        self.assertEqual(demotion_count, 12)
+
+    def test_scapular_closure_allowed_roles_are_removed_directly(self) -> None:
+        mutation_count = 0
+        for family_id in {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }:
+            original = self.scapular_closure_families[family_id]
+            assignments = {
+                item["muscle"]: item["role"]
+                for item in original["exercises"][0]["involvement"]
+            }
+            allowed = original["musclePolicy"]["allowedByRole"]
+            self.assertEqual(
+                set(assignments),
+                {muscle for muscles in allowed.values() for muscle in muscles},
+            )
+            for role, muscles in allowed.items():
+                for muscle in muscles:
+                    family = copy.deepcopy(original)
+                    family["musclePolicy"]["allowedByRole"][role].remove(
+                        muscle
+                    )
+                    with self.subTest(
+                        family=family_id,
+                        muscle=muscle,
+                        role=role,
+                    ):
+                        self.assert_scapular_closure_family_fails(
+                            family,
+                            (
+                                "cannot be satisfied by the family's allowed "
+                                "role matrix|does not allow "
+                                f"{re.escape(muscle)} as {role}"
+                            ),
+                        )
+                    mutation_count += 1
+        self.assertEqual(mutation_count, 38)
+
+    def test_scapular_closure_stability_providers_are_exact_and_direct(
+        self,
+    ) -> None:
+        expected = {
+            "standing-band-scapular-retraction": {
+                "scapula": {
+                    "trapeziusMiddle", "trapeziusLower", "trapeziusUpper",
+                    "serratus",
+                },
+                "shoulder": {"externalRotators"},
+                "elbow": {"triceps"},
+                "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
+                "hand": {"fingerFlexors"},
+                "spine": {"abs", "obliques", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "lumbarExtensors"},
+            },
+            "standing-band-scapular-depression": {
+                "scapula": {"trapeziusLower", "serratus"},
+                "shoulder": {"externalRotators"},
+                "elbow": {"triceps"},
+                "wrist": {"extensorCarpiRadialis", "fingerFlexors"},
+                "hand": {"fingerFlexors"},
+                "spine": {"abs", "obliques", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "lumbarExtensors"},
+            },
+            "standing-low-cable-upright-row": {
+                "shoulder": {
+                    "deltoidLateral", "deltoidAnterior", "supraspinatus",
+                    "bicepsBrachii", "deltoidPosterior", "externalRotators",
+                    "subscapularis",
+                },
+                "scapula": {
+                    "serratus", "trapeziusUpper", "trapeziusLower",
+                    "trapeziusMiddle",
+                },
+                "elbow": {
+                    "bicepsBrachii", "brachialis", "brachioradialis",
+                },
+                "forearm": {"bicepsBrachii", "brachioradialis"},
+                "wrist": {"fingerFlexors", "extensorCarpiRadialis"},
+                "hand": {"fingerFlexors"},
+                "spine": {"abs", "obliques", "lumbarExtensors"},
+                "pelvis": {"abs", "obliques", "lumbarExtensors"},
+            },
+        }
+        mutation_count = 0
+        for family_id in {
+            "scapular-retraction", "scapular-depression", "upright-row"
+        }:
+            original = self.scapular_closure_families[family_id]
+            exercise = original["exercises"][0]
+            assigned = {
+                item["muscle"] for item in exercise["involvement"]
+            }
+            demands = original["movementSignature"]["stabilityDemands"]
+            actual = {
+                region: {
+                    muscle_id
+                    for muscle_id in assigned
+                    if region in self.foundation.profile_by_muscle[
+                        muscle_id
+                    ]["stabilizes"]
+                }
+                for region in demands
+            }
+            self.assertEqual(actual, expected[exercise["catalogID"]])
+            for region, providers in actual.items():
+                family = copy.deepcopy(original)
+                family["exercises"][0]["involvement"] = [
+                    item
+                    for item in family["exercises"][0]["involvement"]
+                    if item["muscle"] not in providers
+                ]
+                with self.subTest(family=family_id, demand=region):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        (
+                            f"no assigned muscle capable of stabilizing "
+                            f"{region}|fails muscle requirement|requires at "
+                            "least one primary muscle|fails prime action"
+                        ),
+                    )
+                mutation_count += 1
+        self.assertEqual(mutation_count, 22)
+
+    def test_scapular_elevation_coupled_owner_contract_is_exact(self) -> None:
+        family = self.scapular_closure_families["scapular-elevation"]
+        signature = family["movementSignature"]
+        self.assertEqual(
+            family["fixed"],
+            {
+                "mechanic": "isolation",
+                "pattern": None,
+                "direction": None,
+                "planes": ["frontal"],
+            },
+        )
+        self.assertEqual(
+            family["allowed"],
+            {
+                "equipment": ["dumbbell", "other"],
+                "modalities": ["dynamicStrength"],
+                "trackingModes": ["reps"],
+                "loadModes": ["external", "nonComparable"],
+                "lateralities": ["unilateral", "bilateral"],
+            },
+        )
+        self.assertEqual(
+            signature["planeBasisActions"], ["scapula.elevation"]
+        )
+        self.assertEqual(
+            signature["primeActions"],
+            ["scapula.elevation", "scapula.upwardRotation"],
+        )
+        self.assertEqual(
+            set(signature["forbiddenPrimeActions"]),
+            self.foundation.action_ids - set(signature["primeActions"]),
+        )
+        self.assertEqual(
+            signature["stabilityDemands"],
+            ["scapula", "shoulder", "elbow", "spine", "pelvis"],
+        )
+        self.assertNotIn("scapula.downwardRotation", signature["primeActions"])
+        self.assertFalse(
+            (
+                catalog.FAMILIES_ROOT / "scapular-upward-rotation.json"
+            ).exists()
+        )
+        self.assertFalse(
+            (
+                catalog.FAMILIES_ROOT / "scapular-downward-rotation.json"
+            ).exists()
+        )
+
+    def test_scapular_elevation_variants_and_grip_boundary_are_exact(
+        self,
+    ) -> None:
+        family = self.scapular_closure_families["scapular-elevation"]
+        by_id = {
+            exercise["catalogID"]: exercise
+            for exercise in family["exercises"]
+        }
+        expected_variants = {
+            "single-arm-dumbbell-shrug": {
+                "kineticChain": "open",
+                "bodyPosition": "standing",
+                "torsoSupport": "none",
+                "contralateralSupport": "none",
+                "scapularTranslation": "free",
+                "upperArmPosition": "atSide",
+                "humerothoracicElevationDegrees": 0,
+                "elevationPlane": "notApplicable",
+                "humeralRotation": "neutral",
+                "elbowMotion": "angleHeld",
+                "elbowPosture": "extended",
+                "forearmMotion": "angleHeld",
+                "forearmOrientation": "neutral",
+                "handTask": "staticImplementHold",
+                "resistanceGeometry": "gravityLoadedDumbbell",
+                "humerothoracicAngleControl": "none",
+                "craniocervicothoracicStabilization": "none",
+                "shrugHeightTarget": "none",
+                "topHoldSeconds": 0,
+                "wristGuide": "none",
+                "fixedPath": False,
+                "lowerBodyContribution": "none",
+                "neckContribution": "none",
+            },
+            "bilateral-30-degree-stabilization-shrug": {
+                "kineticChain": "open",
+                "bodyPosition": "standing",
+                "torsoSupport": "none",
+                "contralateralSupport": "none",
+                "scapularTranslation": "free",
+                "upperArmPosition": "abducted30",
+                "humerothoracicElevationDegrees": 30,
+                "elevationPlane": "frontal",
+                "humeralRotation": "notReported",
+                "elbowMotion": "angleHeld",
+                "elbowPosture": "extended",
+                "forearmMotion": "angleHeld",
+                "forearmOrientation": "notReported",
+                "handTask": "none",
+                "resistanceGeometry": "armSegmentGravity",
+                "humerothoracicAngleControl": "digitalInclinometer",
+                "craniocervicothoracicStabilization": (
+                    "investigatorManual"
+                ),
+                "shrugHeightTarget": "individualMaximumTargetBars",
+                "topHoldSeconds": 5,
+                "wristGuide": "radialBordersAgainstPlasticGuides",
+                "fixedPath": False,
+                "lowerBodyContribution": "none",
+                "neckContribution": "none",
+            },
+        }
+        expected_roles = {
+            "single-arm-dumbbell-shrug": {
+                "levatorScapulae": "primary",
+                "trapeziusUpper": "primary",
+                "serratus": "secondary",
+                "externalRotators": "stabilizer",
+                "triceps": "stabilizer",
+                "extensorCarpiRadialis": "stabilizer",
+                "fingerFlexors": "stabilizer",
+                "abs": "stabilizer",
+                "obliques": "stabilizer",
+                "lumbarExtensors": "stabilizer",
+            },
+            "bilateral-30-degree-stabilization-shrug": {
+                "levatorScapulae": "primary",
+                "trapeziusUpper": "primary",
+                "serratus": "secondary",
+                "trapeziusLower": "secondary",
+                "externalRotators": "stabilizer",
+                "triceps": "stabilizer",
+                "deltoidLateral": "stabilizer",
+                "supraspinatus": "stabilizer",
+                "abs": "stabilizer",
+                "obliques": "stabilizer",
+                "lumbarExtensors": "stabilizer",
+            },
+        }
+        axes = {axis["id"]: axis for axis in family["variantAxes"]}
+        self.assertEqual(set(axes), set(next(iter(expected_variants.values()))))
+        for catalog_id, exercise in by_id.items():
+            self.assertEqual(exercise["variant"], expected_variants[catalog_id])
+            self.assertEqual(
+                {
+                    item["muscle"]: item["role"]
+                    for item in exercise["involvement"]
+                },
+                expected_roles[catalog_id],
+            )
+            self.assertEqual(exercise["additionalPrimeActions"], [])
+        self.assertEqual(
+            by_id["single-arm-dumbbell-shrug"][
+                "additionalStabilityDemands"
+            ],
+            ["wrist", "hand"],
+        )
+        self.assertEqual(
+            by_id["bilateral-30-degree-stabilization-shrug"][
+                "additionalStabilityDemands"
+            ],
+            [],
+        )
+        lee = by_id["bilateral-30-degree-stabilization-shrug"]
+        self.assertEqual(lee["reps"], 2)
+        self.assertEqual(lee["variant"]["topHoldSeconds"], 5)
+        self.assertIn("hold the top position for five seconds", lee["movementDefinition"])
+        self.assertIn("Perform two source-prescribed trials", lee["movementDefinition"])
+        self.assertIn(
+            "measured immediately after this condition, not a continuously "
+            "tracked dynamic angle",
+            lee["movementDefinition"],
+        )
+        lee_muscles = set(expected_roles["bilateral-30-degree-stabilization-shrug"])
+        self.assertTrue(
+            {"extensorCarpiRadialis", "fingerFlexors"}.isdisjoint(lee_muscles)
+        )
+
+    def test_scapular_elevation_mutates_every_axis_and_domain_directly(
+        self,
+    ) -> None:
+        original = self.scapular_closure_families["scapular-elevation"]
+        domains = {
+            "equipment": ("equipment", catalog.EQUIPMENT),
+            "laterality": ("lateralities", catalog.LATERALITIES),
+            "modality": ("modalities", catalog.MODALITIES),
+            "trackingMode": ("trackingModes", catalog.TRACKING_MODES),
+            "loadMode": ("loadModes", catalog.LOAD_MODES),
+        }
+        mutation_count = 0
+        for exercise_index, exercise in enumerate(original["exercises"]):
+            for axis in original["variantAxes"]:
+                family = copy.deepcopy(original)
+                axis_id = axis["id"]
+                if axis["valueType"] == "enum":
+                    family["exercises"][exercise_index]["variant"][
+                        axis_id
+                    ] = "mutated"
+                    error = re.escape(
+                        f"variant.{axis_id} has disallowed value 'mutated'"
+                    )
+                elif axis["valueType"] == "number":
+                    family["exercises"][exercise_index]["variant"][
+                        axis_id
+                    ] = axis["maximum"] + 1
+                    error = re.escape(
+                        f"variant.{axis_id} exceeds {axis['maximum']}"
+                    )
+                elif axis["valueType"] == "boolean":
+                    family["exercises"][exercise_index]["variant"][
+                        axis_id
+                    ] = not axis["fixedValue"]
+                    error = re.escape(
+                        f"variant.{axis_id} must equal fixed value "
+                        f"{axis['fixedValue']!r}"
+                    )
+                else:
+                    self.fail(f"unexpected axis type {axis['valueType']}")
+                with self.subTest(
+                    exercise=exercise["catalogID"], axis=axis_id
+                ):
+                    self.assert_scapular_closure_family_fails(family, error)
+                mutation_count += 1
+
+            for field, (allowed_key, domain) in domains.items():
+                family = copy.deepcopy(original)
+                alternatives = domain - set(original["allowed"][allowed_key])
+                value = sorted(alternatives)[0] if alternatives else "mutated"
+                family["exercises"][exercise_index][field] = value
+                with self.subTest(
+                    exercise=exercise["catalogID"], field=field
+                ):
+                    self.assert_scapular_closure_family_fails(
+                        family,
+                        re.escape(f"selects disallowed {allowed_key}: {value}"),
+                    )
+                mutation_count += 1
+        self.assertEqual(mutation_count, 56)
+
+    def test_scapular_elevation_rules_mutate_every_consequence_directly(
+        self,
+    ) -> None:
+        family = self.scapular_closure_families["scapular-elevation"]
+        by_equipment = {
+            exercise["equipment"]: exercise
+            for exercise in family["exercises"]
+        }
+        consequence_count = 0
+        for rule in family["exerciseRules"]:
+            exercise = by_equipment[rule["when"]["value"]]
+            for assertion in rule["then"]:
+                mutated = copy.deepcopy(exercise)
+                field = assertion["field"]
+                if field.startswith("variant."):
+                    axis_id = field.removeprefix("variant.")
+                    axis = next(
+                        item
+                        for item in family["variantAxes"]
+                        if item["id"] == axis_id
+                    )
+                    if axis["valueType"] == "number":
+                        alternatives = {
+                            candidate["variant"][axis_id]
+                            for candidate in family["exercises"]
+                        } - {assertion["value"]}
+                    else:
+                        alternatives = set(axis["allowedValues"]) - {
+                            assertion["value"]
+                        }
+                    mutated["variant"][axis_id] = next(iter(alternatives))
+                else:
+                    allowed_key = {
+                        "laterality": "lateralities",
+                        "loadMode": "loadModes",
+                    }[field]
+                    alternatives = set(family["allowed"][allowed_key]) - {
+                        assertion["value"]
+                    }
+                    mutated[field] = next(iter(alternatives))
+                with self.subTest(rule=rule["id"], field=field):
+                    with self.assertRaisesRegex(
+                        catalog.ValidationFailure,
+                        re.escape(
+                            f"violates exercise rule {rule['id']}: {field} "
+                            f"must equal {assertion['value']!r}"
+                        ),
+                    ):
+                        catalog.validate_exercise_rule_matches(
+                            mutated, [rule], "mutated elevation"
+                        )
+                consequence_count += 1
+
+            for requirement in rule["requireMuscleRequirements"]:
+                mutated = copy.deepcopy(exercise)
+                candidates = set(requirement["anyOf"])
+                mutated["involvement"] = [
+                    item
+                    for item in mutated["involvement"]
+                    if item["muscle"] not in candidates
+                ]
+                with self.subTest(rule=rule["id"], muscles=candidates):
+                    with self.assertRaisesRegex(
+                        catalog.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog.validate_exercise_rule_matches(
+                            mutated, [rule], "mutated elevation"
+                        )
+                consequence_count += 1
+
+            for region in rule["requireAdditionalStabilityDemands"]:
+                mutated = copy.deepcopy(exercise)
+                mutated["additionalStabilityDemands"].remove(region)
+                with self.subTest(rule=rule["id"], region=region):
+                    with self.assertRaisesRegex(
+                        catalog.ValidationFailure,
+                        f"violates exercise rule {rule['id']}",
+                    ):
+                        catalog.validate_exercise_rule_matches(
+                            mutated, [rule], "mutated elevation"
+                        )
+                consequence_count += 1
+        self.assertEqual(consequence_count, 34)
+
+    def test_scapular_closure_evidence_scopes_preserve_limitations(self) -> None:
+        sources = {
+            source["id"]: source["scope"]
+            for source in self.foundation.evidence["sources"]
+        }
+        retraction = self.scapular_closure_families[
+            "scapular-retraction"
+        ]
+        depression = self.scapular_closure_families[
+            "scapular-depression"
+        ]
+        upright = self.scapular_closure_families["upright-row"]
+        self.assertEqual(
+            retraction["exercises"][0]["evidenceRefs"],
+            ["mccabe-2007-below-90-scapular-exercises"],
+        )
+        self.assertIn(
+            "cools-2004-isokinetic-scapular-rotators",
+            retraction["evidenceRefs"],
+        )
+        self.assertIn(
+            "supplemental role evidence only",
+            sources["cools-2004-isokinetic-scapular-rotators"],
+        )
+        self.assertIn(
+            "not the active one-way band-retraction fixture",
+            sources["cools-2004-isokinetic-scapular-rotators"],
+        )
+        mccabe_scope = sources["mccabe-2007-below-90-scapular-exercises"]
+        self.assertIn("did not measure three-dimensional scapular kinematics", mccabe_scope)
+        self.assertIn("pectoralis minor", mccabe_scope)
+        self.assertNotIn(
+            "pectoralisMinor",
+            {
+                item["muscle"]
+                for item in depression["exercises"][0]["involvement"]
+            },
+        )
+        lee_scope = sources["lee-2016-stabilization-shrug-upward-rotation"]
+        self.assertIn("performed two bilateral shrug trials", lee_scope)
+        self.assertIn("maximum-height target for five seconds", lee_scope)
+        self.assertIn(
+            "measured immediately after each exercise condition rather than "
+            "continuously through the repetition",
+            lee_scope,
+        )
+        self.assertIn("not a dynamic angle trace", lee_scope)
+        self.assertIn("coupled elevation-plus-upward-rotation variant", lee_scope)
+        self.assertIn("a pure or separately owned upward-rotation family", lee_scope)
+        lorenzetti_scope = sources[
+            "lorenzetti-2017-pulling-exercise-kinematics"
+        ]
+        self.assertIn("mixed sagittal-plus-frontal shoulder path", lorenzetti_scope)
+        self.assertIn("does not establish numeric humeral components", lorenzetti_scope)
+        self.assertIn("scapular actions, or muscle rankings", lorenzetti_scope)
+        self.assertIn(
+            "raw cross-channel amplitudes do not rank muscles",
+            sources["mcallister-2013-upright-row-grip-width"],
+        )
+        self.assertIn(
+            "cannot independently assign upright-row roles",
+            sources["eldridge-2024-loaded-scapular-elevation"],
+        )
+        self.assertEqual(
+            upright["exercises"][0]["evidenceRefs"],
+            ["lorenzetti-2017-pulling-exercise-kinematics"],
+        )
+
+    def test_upright_row_runtime_classification_and_closure_counts_are_exact(
+        self,
+    ) -> None:
+        records = catalog.compile_runtime_catalog(self.real_families)
+        by_id = {record["catalogID"]: record for record in records}
+        upright = by_id["standing-low-cable-upright-row"]
+        self.assertEqual(len(self.real_families), 51)
+        self.assertEqual(len(records), 128)
+        self.assertEqual(len(self.foundation.evidence_ids), 146)
+        self.assertEqual(
+            {
+                key: upright[key]
+                for key in (
+                    "familyID", "mechanic", "pattern", "direction", "planes",
+                    "equipment", "laterality", "modality", "trackingMode",
+                    "loadMode",
+                )
+            },
+            {
+                "familyID": "upright-row",
+                "mechanic": "compound",
+                "pattern": "pull",
+                "direction": "vertical",
+                "planes": ["sagittal", "frontal"],
+                "equipment": "cable",
+                "laterality": "bilateral",
+                "modality": "dynamicStrength",
+                "trackingMode": "reps",
+                "loadMode": "external",
+            },
+        )
+        primes = set(
+            self.scapular_closure_families["upright-row"][
+                "movementSignature"
+            ]["primeActions"]
+        )
+        self.assertEqual(
+            primes,
+            {
+                "shoulder.flexion",
+                "shoulder.abduction",
+                "scapula.upwardRotation",
+                "scapula.posteriorTilt",
+                "elbow.flexion",
+            },
+        )
+        self.assertTrue(
+            {
+                "scapula.elevation",
+                "scapula.retraction",
+                "shoulder.internalRotation",
+                "shoulder.externalRotation",
+            }.isdisjoint(primes)
         )
 
     def test_lumbar_taxonomy_split_migrates_each_active_role_exactly(self) -> None:
@@ -13032,16 +14196,16 @@ class CatalogFoundationTests(unittest.TestCase):
             ["fixture-barbell-horizontal-press: reps 30 is outside recommended 5...15"],
         )
 
-    def test_runtime_projection_is_exactly_48_families_and_124_exercises(
+    def test_runtime_projection_is_exactly_51_families_and_128_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 124)
+        self.assertEqual(len(records), 128)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 48)
+        self.assertEqual(len({record["familyID"] for record in records}), 51)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -13329,7 +14493,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 124)
+            self.assertEqual(len(emitted), 128)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

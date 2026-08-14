@@ -1,7 +1,8 @@
 # Batch 1 — shoulder-action boundary review
 
-Status: integrated review record. Seven narrow families are approved for
-activation; two candidates remain evidence-gated proposals.
+Status: integrated historical review record. The original pass activated seven
+narrow families; later evidence review also activated `scapular-retraction`
+and `upright-row` under the bounded contracts summarized below.
 
 ## Outcome
 
@@ -14,8 +15,8 @@ activation; two candidates remain evidence-gated proposals.
 | `shoulder-abduction-raise` | Activate narrowly | Frontal humeral elevation with the elbow angle held and no upright-row elbow flexion |
 | `shoulder-external-rotation` | Activate narrowly | Isolated glenohumeral external rotation, not a reverse fly, face pull, or Cuban press |
 | `shoulder-internal-rotation` | Activate narrowly | Isolated glenohumeral internal rotation, not a fly, pullover, or diagnostic test |
-| `scapular-retraction` | Defer | Direct loaded scapular motion and a reproducible non-row fixture are not yet established |
-| `upright-row` | Defer | Direct loaded kinematics do not yet establish its scapular action and humeral path |
+| `scapular-retraction` | Activated in the scapular-mechanics closure | McCabe's unilateral band fixture holds the shoulder and elbow angles while the scapula retracts; Cools supplies reciprocal-machine role context only |
+| `upright-row` | Activated in the scapular-mechanics closure | Lorenzetti's low-cable fixture supports a bounded mixed flexion-abduction path with elbow flexion; coupled scapular actions are explicitly triangulated and caveated |
 
 Activation does not mean that every familiar exercise name is admitted. Each
 contract starts with the smallest roster directly supported by a reviewed
@@ -63,14 +64,15 @@ Support contact also does not automatically pin the posterior scapulae.
   retraction; the reverse fly holds the elbow angle and does not inherit
   retraction from the row.
 - Reverse fly versus scapular retraction: humeral motion owns the reverse fly;
-  a future retraction family must hold shoulder and elbow angles while the
+  the active retraction family holds shoulder and elbow angles while the
   scapulae translate.
 - Front raise versus press: a raise holds the elbow angle; vertical pressing
   extends it. An incline press also combines shoulder components that a strict
   sagittal raise forbids.
-- Lateral raise versus upright row: both candidates abduct the shoulder, but
-  only the upright row dynamically flexes the elbow. The unresolved upright-row
-  scapular signature cannot be copied into the lateral raise.
+- Lateral raise versus upright row: both abduct the shoulder, but only the
+  upright row dynamically flexes the elbow and follows its reviewed mixed
+  sagittal-frontal corridor. Its coupled scapular signature cannot be copied
+  into the lateral raise.
 - Straight-arm extension versus pull: the isolation family holds the elbow
   angle and forbids scapular retraction; vertical pulls and rows require elbow
   flexion and their own scapular actions.

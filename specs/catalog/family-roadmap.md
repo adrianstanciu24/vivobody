@@ -5,15 +5,18 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 48 reviewed families are active, containing 124 exercises.
+- 51 reviewed families are active, containing 128 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 140 registered evidence sources.
-- Batch 1 resolved nine candidates into seven active families and two evidence
-  holds.
+  44 joint actions, and 146 registered evidence sources.
+- Batch 1 initially resolved nine candidates into seven active families and two
+  evidence holds; later primary-source reviews activated both held families.
 - Batch 2 resolved nine candidates into eight active families and one explicit
   task-definition hold.
-- Batch 3 resolved nine candidates into four active families, four standalone
-  evidence holds, and one deferred branch of an existing family.
+- Batch 3 initially resolved nine candidates into four active families, four
+  standalone evidence holds, and one deferred branch of an existing family.
+  Later review activated scapular depression, assigned upward-rotation
+  ownership to `scapular-elevation`, and retired downward rotation as
+  intentionally non-standalone.
 - Batch 4 resolved five candidates into four active families and one explicit
   evidence hold.
 - Batch 5 resolved five discovery candidates into four active families and two
@@ -25,13 +28,11 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- 12 work items remain unresolved, all family or branch items—the deferred
-  `diagonal-pull`, `scapular-retraction`, `upright-row`, and
-  generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
-  `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
-  `landmine-press` holds; and the deferred closed-chain branch of
-  `vertical-press`; the Batch-4 `hip-flexion` hold; and the Batch-5
-  `hip-hinge` hold; and the `dynamic-lunge` discovery hold.
+- Seven work items remain unresolved, all family or branch items: the deferred
+  `diagonal-pull` and generic `grip` candidates; the Batch-3
+  `landmine-press` hold and closed-chain branch of `vertical-press`; the
+  Batch-4 `hip-flexion` hold; and the Batch-5 `hip-hinge` and `dynamic-lunge`
+  holds.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -66,7 +67,10 @@ batch siblings.
 | `wrist-radial-deviation` | 1 |
 | `wrist-ulnar-deviation` | 1 |
 | `scapular-protraction` | 1 |
-| `scapular-elevation` | 1 |
+| `scapular-retraction` | 1 |
+| `scapular-elevation` | 2 |
+| `scapular-depression` | 1 |
+| `upright-row` | 1 |
 | `dip` | 2 |
 | `push-press` | 1 |
 | `knee-extension` | 2 |
@@ -91,7 +95,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **124** |
+| **Total** | **128** |
 
 ## Foundation gates
 
@@ -222,17 +226,18 @@ split-deltoid, cuff, and trapezius work.
 5. `shoulder-abduction-raise`
 6. `shoulder-external-rotation`
 7. `shoulder-internal-rotation`
-8. `scapular-retraction` — deferred
-9. `upright-row` — deferred
+8. `scapular-retraction`
+9. `upright-row`
 
 The load-bearing contrasts are fly versus press, reverse fly versus
 shoulder-height row, reverse fly versus scapular retraction, abduction raise
 versus upright row, and shoulder-extension isolation versus row/pulldown.
-The first seven candidates activated with narrow rosters. Scapular retraction
-remains deferred until a loaded dynamic fixture separates retraction from
-coupled scapular and humeral actions. Upright row remains deferred until loaded
-kinematics establish its humeral path, axial rotation, endpoint, and scapular
-signature. Their proposal files record exact unlocks and negative boundaries.
+The first seven candidates activated with narrow rosters in the initial pass.
+Scapular retraction later activated only for the directly prescribed unilateral
+standing-band fixture with held shoulder and elbow angles. Upright row later
+activated only for the reviewed bilateral low-cable fixture through a bounded
+mixed-flexion/abduction adaptation that discloses the source's Euler and
+scapular limitations. Neither closure broadens a neighboring raise or row.
 
 ## Batch 2 — Arm and forearm actions (9)
 
@@ -258,26 +263,29 @@ task and its measurable contract; do not recreate the retired catch-all
 
 ## Batch 3 — Scapular/press frontier (9)
 
-Status: complete. Four candidates activated as narrow families, four remain
-evidence holds, and closed-chain vertical press was assigned to a deferred
-branch of the existing `vertical-press` family.
+Status: complete. The initial pass activated four narrow families and left four
+standalone evidence holds plus one deferred branch. Subsequent review activated
+scapular depression, assigned upward rotation to the active
+`scapular-elevation` owner, and retired downward rotation as intentionally
+non-standalone. Landmine press and the closed-chain vertical-press branch remain
+unresolved.
 
 1. `scapular-protraction`
 2. `scapular-elevation`
-3. `scapular-depression` — deferred
-4. `scapular-upward-rotation` — deferred as a standalone family
-5. `scapular-downward-rotation` — deferred as a standalone family
+3. `scapular-depression`
+4. `scapular-upward-rotation` — owner-resolved in `scapular-elevation`
+5. `scapular-downward-rotation` — intentionally non-standalone
 6. `dip`
 7. `landmine-press` — deferred
 8. `closed-chain-vertical-press` — merged into `vertical-press`; branch deferred
 9. `leg-driven-overhead-press` — activated as `push-press`
 
-The activated scapular contracts are deliberately narrow: one reviewed supine
-dumbbell punch for protraction and one reviewed single-arm dumbbell shrug for
-elevation with coupled upward rotation. EMG alone did not create scapular prime
-actions. Depression lacks direct loaded dynamic evidence, and neither rotation
-candidate yet has a clean standalone fixture rather than a coupled arm or shrug
-task.
+The activated scapular contracts remain deliberately narrow: one reviewed
+supine dumbbell punch for protraction, the exact elevation fixtures that own
+their coupled upward rotation, and one unilateral standing-band depression
+fixture. EMG alone did not create scapular prime actions. Upward rotation stays
+with its reviewed elevation owner instead of duplicating the contract;
+downward rotation is intentionally non-standalone rather than an evidence hold.
 
 Dip activated only for parallel bars and rings. Its concentric signature is
 shoulder flexion from the extended bottom plus elbow extension; unmeasured
@@ -415,7 +423,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current 12-item count.
+new item in the current seven-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -464,18 +472,13 @@ an upper-body/trunk-lift endpoint, not a segmental lumbar angle. The evidence
 registry now admits canonical DOI, PMCID, or PMID routes with deterministic
 priority, strict formatting, and cross-source uniqueness.
 
-## Evidence holds
+## Remaining unresolved items
 
 `diagonal-pull` remains deferred. Its joint-action signature does not
 distinguish it from vertical pull, while public sources do not provide the
 human-relative geometry or condition-matched muscle hierarchy needed to make
 geometry the boundary. Resume it only through the tracked measurement protocol;
 do not let it trigger speculative migrations across active pull/row families.
-
-`scapular-retraction` and `upright-row` are resolved Batch-1 holds rather than
-unreviewed future-batch candidates. Their tracked proposals define the direct
-motion or geometry evidence required to resume them. Neither hold should be
-filled by EMG-based action inference or by copying a neighboring family.
 
 Generic `grip` is a resolved Batch-2 hold. The taxonomy now distinguishes
 dynamic finger flexion/extension from a static implement hold, but the product
@@ -502,12 +505,11 @@ Batch 5 also leaves `dynamic-lunge` as a discovery hold created when the old
 reviewed transition, impact, deceleration, and support-phase contract. Walking
 lunges may instead belong to locomotion and remain intentionally undecided.
 
-Batch 3 leaves four standalone evidence holds: `scapular-depression`,
-`scapular-upward-rotation`, `scapular-downward-rotation`, and
-`landmine-press`. The first three require direct loaded motion evidence for a
-truthful standalone action rather than EMG or a coupled-task inference.
-Landmine press requires athlete-relative joint geometry and a defensible
-loading model rather than classification from the implement angle.
+Batch 3 leaves one standalone evidence hold: `landmine-press`. It requires
+athlete-relative joint geometry and a defensible loading model rather than
+classification from the implement angle. Scapular depression is active;
+upward rotation is owner-resolved inside `scapular-elevation`; and downward
+rotation is intentionally non-standalone, not deferred.
 
 Closed-chain vertical press is not a fifth standalone hold. The candidate was
 merged into the scope of `vertical-press`, where its bodyweight branch remains

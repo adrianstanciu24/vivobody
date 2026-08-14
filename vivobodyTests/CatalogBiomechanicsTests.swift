@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 48 reviewed families compile to 124 exercises with stable
+//  product: 51 reviewed families compile to 128 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,8 +16,8 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 124)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 48)
+        #expect(CatalogData.records.count == 128)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 51)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
     }
@@ -208,6 +208,51 @@ struct CatalogBiomechanicsTests {
         )
         #expect(pallof.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
         #expect(pallof.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
+
+        let retraction = try #require(
+            CatalogData.record(forExerciseNamed: "Standing Band Scapular Retraction")
+        )
+        #expect(retraction.familyID == "scapular-retraction")
+        #expect(retraction.planes == [.transverse])
+        #expect(retraction.muscleInvolvement.role(for: .trapeziusMiddle) == .primary)
+        #expect(retraction.muscleInvolvement.role(for: .trapeziusLower) == .secondary)
+        #expect(retraction.muscleInvolvement.role(for: .rhomboids) == nil)
+
+        let depression = try #require(
+            CatalogData.record(forExerciseNamed: "Standing Band Scapular Depression")
+        )
+        #expect(depression.familyID == "scapular-depression")
+        #expect(depression.planes == [.frontal])
+        #expect(depression.muscleInvolvement.role(for: .trapeziusLower) == .primary)
+        #expect(depression.muscleInvolvement.role(for: .serratus) == .stabilizer)
+        #expect(depression.muscleInvolvement.role(for: .pectoralisMinor) == nil)
+
+        let stabilizationShrug = try #require(
+            CatalogData.record(forExerciseNamed: "Bilateral 30-Degree Stabilization Shrug")
+        )
+        #expect(stabilizationShrug.familyID == "scapular-elevation")
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .trapeziusUpper) == .primary)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .levatorScapulae) == .primary)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .serratus) == .secondary)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .trapeziusLower) == .secondary)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .deltoidLateral) == .stabilizer)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .supraspinatus) == .stabilizer)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .fingerFlexors) == nil)
+        #expect(stabilizationShrug.muscleInvolvement.role(for: .extensorCarpiRadialis) == nil)
+
+        let uprightRow = try #require(
+            CatalogData.record(forExerciseNamed: "Standing Low-Cable Upright Row")
+        )
+        #expect(uprightRow.familyID == "upright-row")
+        #expect(uprightRow.mechanic == .compound)
+        #expect(uprightRow.pattern == .pull)
+        #expect(uprightRow.direction == .vertical)
+        #expect(uprightRow.planes == [.sagittal, .frontal])
+        #expect(uprightRow.muscleInvolvement.role(for: .deltoidLateral) == .primary)
+        #expect(uprightRow.muscleInvolvement.role(for: .deltoidAnterior) == .secondary)
+        #expect(uprightRow.muscleInvolvement.role(for: .supraspinatus) == .secondary)
+        #expect(uprightRow.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
+        #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
     }
 
     private static func normalized(_ value: String) -> String {

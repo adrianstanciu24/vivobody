@@ -332,6 +332,54 @@ struct MuscleDevelopmentTests {
         #expect(raiseNodes["Pectoralis_Major_Sternocostal_R"] == nil)
     }
 
+    @Test func scapularMechanicsCreditMoversWithoutPromotingStabilizers() {
+        let retraction = session(
+            at: day(0),
+            [lift("Standing Band Scapular Retraction", .back, sets: 4, reps: 5, weight: 0)]
+        )
+        let retractionNodes = MuscleDevelopment.nodeIntensities(
+            from: [retraction],
+            now: day(0)
+        )
+        let middleTrap = retractionNodes["Trapezius_Middle_L"] ?? 0
+        let lowerTrap = retractionNodes["Trapezius_Lower_L"] ?? 0
+        #expect(middleTrap > 0)
+        #expect(lowerTrap > 0)
+        #expect(lowerTrap < middleTrap)
+        #expect(retractionNodes["Trapezius_Upper_L"] == nil)
+        #expect(retractionNodes["Serratus_Anterior_L"] == nil)
+        #expect(retractionNodes["Rhomboideus_Major_L"] == nil)
+
+        let depression = session(
+            at: day(0),
+            [lift("Standing Band Scapular Depression", .back, sets: 4, reps: 5, weight: 0)]
+        )
+        let depressionNodes = MuscleDevelopment.nodeIntensities(
+            from: [depression],
+            now: day(0)
+        )
+        #expect((depressionNodes["Trapezius_Lower_L"] ?? 0) > 0)
+        #expect(depressionNodes["Serratus_Anterior_L"] == nil)
+        #expect(depressionNodes["Pectoralis_Minor_L"] == nil)
+
+        let uprightRow = session(
+            at: day(0),
+            [lift("Standing Low-Cable Upright Row", .shoulders, sets: 4, reps: 8, weight: 30)]
+        )
+        let uprightNodes = MuscleDevelopment.nodeIntensities(
+            from: [uprightRow],
+            now: day(0)
+        )
+        let lateralDeltoid = uprightNodes["Deltoid_Lateral_L"] ?? 0
+        let anteriorDeltoid = uprightNodes["Deltoid_Anterior_L"] ?? 0
+        #expect(lateralDeltoid > 0)
+        #expect(anteriorDeltoid > 0)
+        #expect(anteriorDeltoid < lateralDeltoid)
+        #expect((uprightNodes["Trapezius_Upper_L"] ?? 0) > 0)
+        #expect((uprightNodes["Trapezius_Lower_L"] ?? 0) > 0)
+        #expect(uprightNodes["Trapezius_Middle_L"] == nil)
+    }
+
     @Test func gluteMaxGluteMedAndTFLPaintOnlyWhenVolumeIsCredited() {
         let extensionSession = session(
             at: day(0),

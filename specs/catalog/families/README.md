@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Forty-eight reviewed family files containing 124 exercises are currently
+Fifty-one reviewed family files containing 128 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-140-source foundation. Each uses a coverage batch whose exercises
+146-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -16,10 +16,12 @@ control, free and fixed external paths, and its pinned bodyweight setup.
 Shoulder-horizontal-abduction row uses six reviewed exercises to cover four
 equipment classes, three torso relationships, bilateral and unilateral
 control, free and fixed paths, and linked versus independent machine levers.
-The Batch-1 shoulder families intentionally begin much narrower: 17 exercises
-total across seven contracts. `scapular-retraction` and `upright-row` remain
-tracked proposals because their dynamic action boundaries are not grounded
-well enough for validator-loaded records.
+The Batch-1 shoulder families initially began much narrower: 17 exercises
+total across seven contracts. Later primary-source closures activated one
+strict band scapular-retraction fixture and one bounded low-cable upright-row
+fixture. Retraction keeps the glenohumeral and elbow angles held; upright row
+uses mixed shoulder flexion/abduction plus elbow flexion without inventing
+scapular retraction, elevation, or humeral axial rotation as prime actions.
 
 Batch 2 adds fourteen exercises across `elbow-flexion`, `elbow-extension`,
 conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist
@@ -27,14 +29,18 @@ actions. Generic `grip` remains deferred: dynamic finger closing, isometric
 support, hanging, and pinch are different biomechanical tasks, not variants of
 one cardinal joint action.
 
-Batch 3 adds five exercises across `scapular-protraction`,
-`scapular-elevation`, `dip`, and `push-press`. Scapular depression and
-standalone upward/downward rotation remain evidence holds rather than being
-inferred from muscle activity or copied out of a coupled movement. Landmine
-press remains deferred until human-relative joint geometry, rather than bar
-angle alone, supports a contract. Closed-chain vertical press belongs as a
-future branch of `vertical-press`, but that branch remains deferred until
-direct dynamic evidence supports its bodyweight-loading and action contract.
+Batch 3 initially added five exercises across `scapular-protraction`,
+`scapular-elevation`, `dip`, and `push-press`. Later review activated the exact
+standing-band scapular-depression fixture and resolved upward rotation inside
+`scapular-elevation`, bringing the batch-owned active roster to seven
+exercises across five family contracts. Downward rotation is intentionally not
+a standalone family: the reviewed foundation has no clean training-defining
+fixture that should exist independently of its coupled task. It is retired as
+a standalone candidate, not deferred. Landmine press remains deferred until
+human-relative joint geometry, rather than bar angle alone, supports a
+contract. Closed-chain vertical press belongs as a future branch of
+`vertical-press`, but that branch remains deferred until direct dynamic
+evidence supports its bodyweight-loading and action contract.
 
 Batch 4 adds seven exercises across `knee-extension`, `knee-flexion`,
 `hip-extension`, and `ankle-plantarflexion`. The rosters preserve the exact
@@ -237,15 +243,15 @@ technique supports it; EMG magnitude alone cannot create an action.
 Batch-3 scapular isolations apply that evidence rule literally. The reviewed
 supine scapular punch admits protraction because the technique prescribes the
 loaded scapular excursion while dynamic shoulder and elbow actions are
-forbidden. The reviewed single-arm shrug admits elevation plus its measured
-coupled upward rotation; it is not rewritten as pure elevation merely to make
-the family name simpler. The same one-subject trace contains smaller
-model-specific scapular abduction/adduction and winging coordinates. Those are
-recorded as three-dimensional coupling, not relabeled as shoulder abduction,
-protraction/retraction, or tilt and not promoted to prime actions without a
-matching taxonomy action and work attribution. Neither contract pre-approves
-depression, standalone rotation, push-up-plus, overhead shrug, or another
-apparatus or posture.
+forbidden. The elevation contract owns upward rotation rather than creating a
+duplicate standalone family; its reviewed records retain their exact coupled
+actions instead of being rewritten as pure elevation. The exact standing-band
+depression fixture is a separate action contract and does not generalize to
+dips, press-ups, hangs, or pulldowns. Smaller model-specific scapular
+abduction/adduction and winging coordinates remain disclosed three-dimensional
+couplings, not relabeled protraction/retraction or tilt. Downward rotation is
+intentionally non-standalone, while push-up-plus, overhead shrugs, and other
+apparatus or postures still require their own review.
 
 Support and path axes name different mechanical facts. `bodyweightApparatus`
 identifies the reviewed hand-support apparatus and `handSupportConstraint`

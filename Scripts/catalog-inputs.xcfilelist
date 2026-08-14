@@ -30,8 +30,10 @@ $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
+$(SRCROOT)/specs/catalog/families/scapular-depression.json
 $(SRCROOT)/specs/catalog/families/scapular-elevation.json
 $(SRCROOT)/specs/catalog/families/scapular-protraction.json
+$(SRCROOT)/specs/catalog/families/scapular-retraction.json
 $(SRCROOT)/specs/catalog/families/shoulder-abduction-raise.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-isolation.json
 $(SRCROOT)/specs/catalog/families/shoulder-extension-row.json
@@ -46,6 +48,7 @@ $(SRCROOT)/specs/catalog/families/spine-rotation.json
 $(SRCROOT)/specs/catalog/families/split-stance-squat.json
 $(SRCROOT)/specs/catalog/families/step-up.json
 $(SRCROOT)/specs/catalog/families/suitcase-carry.json
+$(SRCROOT)/specs/catalog/families/upright-row.json
 $(SRCROOT)/specs/catalog/families/vertical-press.json
 $(SRCROOT)/specs/catalog/families/vertical-pull.json
 $(SRCROOT)/specs/catalog/families/wrist-extension.json

@@ -1,0 +1,427 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "scapular-depression",
+  "name": "Scapular Depression",
+  "definition": "A strict open-chain scapular isolation whose concentric phase depresses one scapula against overhead elastic resistance while the humerus remains beside the torso and the elbow remains extended. The initial contract admits only McCabe et al.'s directly prescribed unilateral Theraband fixture. Lower trapezius is the sole mover because it is the only measured muscle in that experiment that can produce depression; the larger measured serratus activity is treated as scapular stabilization, not relabeled as depression. Pectoralis minor was not measured and is not inferred into the role roster. The source measured EMG rather than three-dimensional scapular kinematics, so dips, press-ups, weight-relief raises, scapular pull-ups, straight-arm pulldowns, passive hangs, and other resistance geometries remain outside this narrow contract.",
+  "evidenceRefs": [
+    "mccabe-2007-below-90-scapular-exercises"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "frontal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "scapula.depression"
+    ],
+    "primeActions": [
+      "scapula.depression"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "trapeziusLower"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "serratus",
+        "externalRotators",
+        "triceps",
+        "extensorCarpiRadialis",
+        "fingerFlexors",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the band-holding hand moves freely rather than remaining fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The gross body position used by the reviewed unilateral depression fixture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface supports the torso during the repetition."
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether the non-working side braces against an external support."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "free"
+      ],
+      "description": "Whether posterior support constrains scapular motion along the thorax."
+    },
+    {
+      "id": "upperArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "atSide"
+      ],
+      "description": "The maintained humerothoracic position, with the arm beside the torso rather than moving at the shoulder."
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The neutral humeral orientation held in the photographed setup."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether elbow motion contributes to the repetition."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extended"
+      ],
+      "description": "The extended elbow posture held throughout the scapular excursion."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar rotation contributes to the repetition."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The neutral forearm orientation used by the photographed fixture."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the band without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "bandAnchor",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "overhead"
+      ],
+      "description": "The overhead anchor shown in the source photograph, which stretches the band as the scapula depresses."
+    },
+    {
+      "id": "bandStartTension",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "justTaut"
+      ],
+      "description": "The source-prescribed elastic tension at the beginning of the repetition."
+    },
+    {
+      "id": "resistancePrescription",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "subjectAdjustedModerateFiveRepEffort"
+      ],
+      "description": "The source's subjective band selection: moderate effort while retaining correct form for five repetitions."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "overheadElasticResistanceOpposesDepression"
+      ],
+      "description": "Overhead elastic resistance lengthens as the scapula depresses while the arm remains beside the torso."
+    },
+    {
+      "id": "concentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 2,
+      "maximum": 2,
+      "description": "The source-prescribed concentric duration."
+    },
+    {
+      "id": "eccentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 2,
+      "maximum": 2,
+      "description": "The source-prescribed eccentric duration."
+    },
+    {
+      "id": "interRepRestSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 5,
+      "maximum": 5,
+      "description": "The rest interval separating the five analyzed repetitions."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    },
+    {
+      "id": "neckContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether deliberate cervical motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 5
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-band-scapular-depression",
+      "name": "Standing Band Scapular Depression",
+      "aliases": [
+        "Band Shoulder Depression",
+        "Unilateral Band Scapular Depression"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 72,
+      "involvement": [
+        { "muscle": "trapeziusLower", "role": "primary" },
+        { "muscle": "serratus", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "triceps", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "contralateralSupport": "none",
+        "scapularTranslation": "free",
+        "upperArmPosition": "atSide",
+        "humeralRotation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "bandAnchor": "overhead",
+        "bandStartTension": "justTaut",
+        "resistancePrescription": "subjectAdjustedModerateFiveRepEffort",
+        "resistanceGeometry": "overheadElasticResistanceOpposesDepression",
+        "concentricSeconds": 2,
+        "eccentricSeconds": 2,
+        "interRepRestSeconds": 5,
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "neckContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mccabe-2007-below-90-scapular-exercises"
+      ],
+      "movementDefinition": "Stand tall holding the overhead-anchored band beside the working thigh with the elbow extended and the band just taut. Lower the shoulder girdle by depressing the scapula against the band for two seconds, then return for two seconds without bending the elbow, moving the glenohumeral joint, leaning the trunk, or moving the neck. Rest five seconds between repetitions."
+    }
+  ]
+}

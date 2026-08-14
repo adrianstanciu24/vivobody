@@ -1,82 +1,121 @@
-# Upright-row contract discovery
+# Upright-row activation
 
-Status: deferred. No validator-loaded family or exercise is activated by this
-document.
+Status: activated as the bounded `upright-row` family with one directly
+reviewed low-cable exercise.
 
 ## Decision
 
-Keep the upright row as its own candidate family, but do not activate it from
-the presently reviewed evidence.
+Activate a narrow bilateral cable upright-row contract. The family is a
+compound vertical pull whose defining dynamic actions are elbow flexion and a
+catalog-authored mixture of shoulder flexion and abduction. Scapular upward
+rotation and posterior tilt remain coupled elevation actions. The first roster
+contains only Lorenzetti et al.'s standing low-cable, straight-bar topology.
 
-The movement is not a lateral-raise variant merely because both elevate the
-upper arm. A strict raise holds the elbow angle and remains an isolation
-exercise; an upright row materially flexes the elbow while the upper arm
-elevates and is therefore compound. It also does not belong to either active
-row family: those families require shoulder extension or horizontal abduction
-plus scapular retraction, whereas an upright row begins with the arm by the
-side and elevates it. A vertical press reverses the elbow action by requiring
-extension.
+This is deliberately not a lateral-raise, row, shrug, press, or high-pull
+variant:
 
-The available upright-row study establishes grip-dependent muscle excitation,
-but not the dynamic three-dimensional path needed to fix the family contract.
-Activating a frontal-plane shoulder-abduction signature, scapular elevation,
-or a terminal upper-arm angle from the exercise name would be a guess.
+- unlike an angle-held raise, the elbow flexes materially;
+- unlike the active horizontal-abduction and shoulder-extension rows, the
+  upper arm elevates from the side and scapular retraction is forbidden as a
+  deliberate prime action;
+- unlike a shrug, shoulder elevation and elbow flexion are required while
+  scapular elevation is not authored as a prime action;
+- unlike a press, the elbow flexes rather than extends; and
+- unlike a high pull, deliberate lower-body propulsion is forbidden.
 
-## Evidence reviewed
+The family is a bounded catalog adaptation, not a claim that one experiment
+measured every authored coordinate. Lorenzetti supplies the exact exercise
+topology and observed multiplanar shoulder motion. General arm-elevation
+kinematics supply the unavoidable scapular coupling, with the transfer and its
+limits stated explicitly in the family definition.
 
-The candidate exercise-specific source is:
+## Primary evidence and scope
 
-- **McAllister et al. (2013), “Effect of grip width on
-  electromyographic activity during the upright row,”** DOI
-  `10.1519/JSC.0b013e31824f23ad`, PMID `22362088`. Sixteen
-  resistance-trained men performed two repetitions at one common absolute
-  load under grips of 50%, 100%, and 200% of biacromial breadth. Increasing
-  grip width increased concentric lateral- and posterior-deltoid excitation;
-  several eccentric deltoid, trapezius, and biceps comparisons also changed,
-  with less biceps involvement at the widest grip. This is direct evidence
-  that grip width is load-bearing variant metadata. It does not establish
-  joint actions, scapular angular change, humeral axial rotation, pull target,
-  or one muscle-role hierarchy for every width.
+### Lorenzetti et al. 2017
 
-The evidence registry should use the future ID
-`mcallister-2013-upright-row-grip-width` only if an upright-row family or
-exercise actually cites it. This proposal deliberately does not register an
-otherwise unused source.
+`lorenzetti-2017-pulling-exercise-kinematics` is the exercise-defining source:
 
-The already registered anatomy sources
-`ackland-2008-shoulder-moment-arms`, `holzbaur-2005-upper-extremity`, and
-`seth-2019-shoulder-work` can challenge a proposed muscle/action assignment.
-They are not upright-row experiments. Likewise,
-`ludewig-2009-multiplanar-humeral-elevation` directly documents coordinated
-shoulder-complex motion during unloaded flexion and abduction, but it cannot
-by itself substitute for loaded upright-row kinematics.
+- 15 healthy adults performed standing upright rows at 10% and 25% of body
+  weight on an adjustable low-cable station;
+- the reviewed setup used a straight bar, feet approximately shoulder-width
+  apart, slightly flexed knees, an upright/core-engaged torso, and a vertical
+  pull with elbows slightly above the hands;
+- the pull ended when the elbows reached shoulder height and returned slowly;
+  and
+- three-dimensional motion capture reported substantial shoulder excursion in
+  both sagittal and frontal coordinates and directly documented nontrivial
+  spinal behavior.
 
-Surface EMG is not used as a joint-action detector. In particular, posterior
-deltoid excitation does not permit assigning it as a dynamic shoulder-
-abduction secondary under the current anatomy profile, and upper-trapezius
-excitation does not distinguish scapular elevation from upward rotation or
-stabilization.
+The source does not justify numeric humerothoracic start or end angles. Its
+shoulder coordinates use the Rab-style XYZ/Cardan decomposition. Near 90
+degrees of abduction that sequence approaches gimbal lock, so sagittal and
+axial components cease to have a unique anatomical interpretation. The
+contract therefore records a qualitative mixed flexion-abduction corridor,
+uses the directly prescribed elbow-height endpoint, marks humeral rotation
+`nonstandardized`, and assigns no axial-rotation prime action. The reported
+spinal behavior likewise requires `spineMotion: nonstandardized`; an upright
+or core-engaged instruction is not evidence that the spine remained fixed.
 
-## Candidate classification, not an activated contract
+### Coupled scapular motion
 
-The following fields are likely but remain conditional on the geometry gate:
+`ludewig-2009-multiplanar-humeral-elevation` directly observed scapular upward
+rotation and posterior tilt during sagittal flexion and coronal abduction.
+Those two coupled actions are therefore retained across the family's mixed
+elevation corridor without assigning a fixed scapulohumeral ratio.
+
+`eldridge-2024-loaded-scapular-elevation` directly studied externally loaded
+arm elevation. It supports preserving upward rotation when resistance is
+added, but its load-related changes were small and mostly near the measurement
+error. It did not measure this upright-row fixture and does not directly
+measure posterior tilt. Posterior tilt remains the disclosed transfer from
+Ludewig rather than a loaded upright-row result.
+
+`seth-2019-shoulder-work` supplies a complementary loaded modeling boundary:
+the scapulothoracic model was checked against kinematics and surface EMG during
+unloaded and 2 kg flexion and abduction, and supports categorical dynamic
+deltoid, upper-trapezius, and serratus contributions. Its single participant
+does not establish population magnitudes or a role ranking for an upright
+row.
+
+### McAllister et al. 2013
+
+`mcallister-2013-upright-row-grip-width` directly measured surface EMG during
+straight-bar barbell upright rows in 16 resistance-trained men at 50%, 100%,
+and 200% of biacromial breadth. It establishes upright-row recruitment of the
+anterior, lateral, and posterior deltoids, upper and middle trapezius, and
+biceps, and shows that grip width can change within-muscle excitation.
+
+It does **not**:
+
+- measure the activated cable exercise;
+- establish joint or scapular actions;
+- compare one muscle's normalized contribution with another;
+- justify a different role hierarchy for an unquantified cable grip; or
+- permit posterior-deltoid excitation to become a shoulder-extension prime or
+  middle-trapezius excitation to become a scapular-retraction prime.
+
+The cable record therefore preserves its source-shown but unquantified grip
+instead of importing McAllister's three barbell thresholds.
+
+## Activated contract
+
+The fixed classification is:
 
 ```json
 {
   "id": "upright-row",
-  "name": "Upright Row",
   "fixed": {
     "mechanic": "compound",
     "pattern": "pull",
     "direction": "vertical",
-    "planes": ["frontal"]
+    "planes": ["sagittal", "frontal"]
   },
   "groupPolicy": {
     "default": "shoulders",
     "allowed": ["shoulders"]
   },
   "allowed": {
-    "equipment": ["barbell"],
+    "equipment": ["cable"],
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
     "loadModes": ["external"],
@@ -85,156 +124,141 @@ The following fields are likely but remain conditional on the geometry gate:
 }
 ```
 
-`vertical` describes the principal implement travel, not an anatomical plane.
-`frontal` would be valid only if the reviewed protocol establishes shoulder
-abduction as the shoulder basis action without a meaningful sagittal flexion
-component. If grip width changes the upper arm into a scapular or mixed
-corridor, the family may need multiple shoulder basis actions, narrower grip-
-specific ownership, or a split. The catalog must not call that corridor an
-“oblique plane”; the only planes remain sagittal, frontal, and transverse.
+`vertical` describes the principal bar travel and does not collapse the two
+anatomical shoulder planes into an invented oblique plane.
 
-## Action gate
+The movement signature is:
 
-Two concentric actions are mechanically characteristic but still require the
-full protocol to pin their range:
+```json
+{
+  "planeBasisActions": [
+    "shoulder.flexion",
+    "shoulder.abduction"
+  ],
+  "primeActions": [
+    "shoulder.flexion",
+    "shoulder.abduction",
+    "scapula.upwardRotation",
+    "scapula.posteriorTilt",
+    "elbow.flexion"
+  ],
+  "stabilityDemands": [
+    "shoulder",
+    "scapula",
+    "elbow",
+    "forearm",
+    "wrist",
+    "hand",
+    "spine",
+    "pelvis"
+  ]
+}
+```
 
-1. `shoulder.abduction`; and
-2. `elbow.flexion`.
+The full forbidden-action complement makes all other actions unavailable as
+deliberate primes. Of particular importance:
 
-The scapular signature is unresolved:
+- `shoulder.internalRotation` and `shoulder.externalRotation` are forbidden
+  because the Euler decomposition cannot resolve a deliberate axial action;
+- `scapula.retraction` is forbidden because neither a row name nor middle-
+  trapezius EMG establishes retraction;
+- `scapula.elevation` is forbidden because neither upper-trapezius EMG nor the
+  small load-related elevation change in a different arm-elevation task makes
+  it training-defining here; and
+- every spinal and lower-body action is forbidden so nonstandardized posture
+  cannot broaden into a high pull.
 
-- normal arm elevation uses coordinated upward rotation and posterior tilt,
-  but unloaded elevation cannot prove the same family-wide loaded upright-row
-  action set;
-- upper-trapezius EMG cannot decide whether `scapula.elevation`,
-  `scapula.upwardRotation`, both, or primarily stabilization should be
-  authored; and
-- neither a high elbow position nor the word “row” proves
-  `scapula.retraction`.
+Forbidding a prime action does not assert that its coordinate was identically
+zero. It states that the action is not a deliberate, volume-bearing definition
+of this family.
 
-No family JSON should be written until the review chooses the scapular prime
-actions. Omitting a known coupled action merely to pass validation would be as
-misleading as inventing one.
+## Muscle-role policy
 
-Once the positive signature is settled, the first boundary review should
-consider forbidding these as deliberate concentric prime actions:
+The exact hierarchy is:
 
-- `shoulder.extension` and `shoulder.horizontalAbduction`, which belong to
-  the active row families;
-- `shoulder.flexion`, if the measured path really is pure frontal abduction;
-- `scapula.retraction`, unless direct kinematics establish it;
-- `elbow.extension`, which belongs to pressing; and
-- spinal, hip, knee, and ankle propulsion, which would turn the record into a
-  high-pull or cheating variant.
-
-Humeral internal or external rotation must not be forbidden until it is
-measured. A pronated hand on a bar is forearm orientation, not proof of
-glenohumeral internal rotation.
-
-## Candidate muscle policy
-
-These assignments are supportable if shoulder abduction and elbow flexion are
-confirmed:
-
-| Candidate role | Muscle | Reason and limit |
-|---|---|---|
-| Primary | `deltoidLateral` | Principal shoulder-abduction training emphasis; anatomical moment arms and grip-width EMG support involvement without supplying a numeric contribution. |
-| Secondary | `bicepsBrachii`, `brachialis`, `brachioradialis` | The three separately represented elbow flexors produce the required action. Grip width may change excitation, but does not remove the action. |
-| Secondary | `supraspinatus` | Anatomically capable shoulder abductor; exact angle-dependent contribution remains categorical. |
-| Optional secondary | `deltoidAnterior` | Anatomically capable of abduction, with contribution dependent on the measured elevation corridor. |
-| Stabilizer | `deltoidPosterior` | McAllister records excitation, but the current profile does not make it a shoulder abductor; do not promote EMG into a false action. |
-| Stabilizers | `externalRotators`, `subscapularis` | Glenohumeral control, not evidence of a deliberate rotation prime action. |
-| Stabilizers | `fingerFlexors`, `extensorCarpiRadialis` | Static implement hold plus wrist control, without recreating a generic forearm region or dynamic grip action. |
-| Stabilizers | `abs`, `obliques`, `lumbarExtensors` | Available only with declared spinal or pelvic stability demands. |
-
-The roles of `trapeziusUpper`, `trapeziusLower`, and `serratus` remain blocked
-on the scapular-action decision. If upward rotation is required, capable
-upward rotators become dynamic contributors. If elevation is also required,
-that changes the upper-trapezius contract. They must not be assigned from EMG
-rank while leaving the action that explains the role undeclared.
-
-## Required geometry vocabulary
-
-An eventual contract should reuse the raise vocabulary where the meaning is
-identical:
-
-- `kineticChain`: `open`;
-- `bodyPosition`: initially `standing`;
-- `torsoSupport`: `none`;
-- `scapularTranslation`: `free`;
-- `elevationPath`: only the measured torso-relative upper-arm corridor;
-- `humerothoracicStartElevationDegrees`: expected arm-at-side zero, but pin it
-  from the reviewed protocol;
-- `humerothoracicEndElevationDegrees`: unresolved and not inferable from bar
-  height or an exercise illustration;
-- `elbowMotion`: `flexes`;
-- `humeralRotation`: an independently measured value, never inferred from
-  `gripOrientation`;
-- `gripOrientation`: expected `pronated` for the first straight-bar roster;
-- `relativeGripWidth`: `narrow|shoulderWidth|wide`, with the reviewed fixtures
-  explicitly mapped to 50%, 100%, and 200% of biacromial breadth;
-- `pullTarget`: unresolved until the protocol identifies the terminal bar/body
-  relationship;
-- `lowerBodyContribution`: `none`;
-- `contralateralSupport`: `none`; and
-- `interRepSupport`: `none` unless the reviewed setup says otherwise.
-
-Do not add `fixedPath` or machine vocabulary to a barbell-only first contract.
-Cable, dumbbell, kettlebell, EZ-bar, Smith, and purpose-built machine upright
-rows require their own apparatus/path review rather than name-based cloning.
-
-## Narrow future roster
-
-If the full McAllister protocol resolves the geometry gates, the maximum
-initial roster should be its three straight-bar conditions:
-
-1. `narrow-grip-barbell-upright-row` — 50% biacromial breadth;
-2. `shoulder-width-barbell-upright-row` — 100% biacromial breadth; and
-3. `wide-grip-barbell-upright-row` — 200% biacromial breadth.
-
-These percentages anchor experimental fixtures; they are not biological
-thresholds for every future implement. Muscle roles should remain categorical
-unless the action contract itself changes. Grip-width EMG differences do not
-create continuous involvement weights.
-
-Any conditional rules must have both matching and contrasting exercises in
-this roster. Likely rules include bilateral grip-width presence and the
-straight-bar pronated setup, but constants are better expressed as single-
-value axes when every record shares them; an always-true exercise rule would
-fail the established contrast requirement.
-
-## Cross-family boundaries
-
-| Neighbor | Upright-row distinction |
+| Role | Regions |
 |---|---|
-| `shoulder-abduction-raise` | Both may abduct the shoulder; the raise holds the elbow angle, while the upright row materially flexes it. |
-| `vertical-press` | The upright row flexes the elbow and pulls the implement upward; the press extends the elbow and pushes. |
-| `shoulder-horizontal-abduction-row` | The active row begins from an already elevated upper arm and horizontally abducts with retraction; the candidate upright row elevates from the side. An endpoint near shoulder height does not make the actions equivalent. |
-| `shoulder-extension-row` | The active row extends the shoulder toward the torso and retracts the scapula; the upright row elevates the upper arm. |
-| Future shrug | A shrug can elevate the scapula without required shoulder abduction and elbow flexion. |
-| Future high pull | A high pull adds deliberate hip, knee, or ankle propulsion; the strict upright row forbids lower-body drive. |
-| Future face pull | A face pull uses horizontal abduction, external rotation, and retraction rather than arm-at-side abduction. |
+| Primary | `deltoidLateral` |
+| Secondary | `deltoidAnterior`, `supraspinatus`, `bicepsBrachii`, `brachialis`, `brachioradialis`, `serratus`, `trapeziusUpper`, `trapeziusLower` |
+| Stabilizer | `deltoidPosterior`, `trapeziusMiddle`, `externalRotators`, `subscapularis`, `fingerFlexors`, `extensorCarpiRadialis`, `abs`, `obliques`, `lumbarExtensors` |
 
-## Activation gates
+Lateral deltoid owns the secure shoulder-abduction emphasis. Anterior deltoid
+serves the bounded flexion component, and supraspinatus serves abduction. The
+three represented elbow flexors serve the required elbow-flexion action.
+Serratus plus upper and lower trapezius serve the two coupled scapular actions.
 
-1. Obtain the full primary protocol, figures, or author-supplied methods for
-   the exact McAllister straight-bar setup. Record start angle, terminal upper-
-   arm elevation, pull target, upper-arm elevation corridor, and whether
-   humeral axial rotation was measured or controlled.
-2. Find direct loaded dynamic kinematics that can decide upward rotation,
-   posterior tilt, scapular elevation, and retraction. If no such evidence is
-   available, keep the family deferred rather than substituting upper-trapezius
-   EMG or unloaded elevation.
-3. Decide whether all three grip widths share one shoulder plane/action
-   signature. Split or narrow the roster if they do not.
-4. Register `mcallister-2013-upright-row-grip-width` only when the activated
-   family or exercises cite it, with a scope that states EMG and protocol
-   limits.
-5. Add the family contract, one mutation test per rule assertion, admitted-axis
-   coverage, and matching/contrasting fixtures for every conditional rule.
-6. Add boundary mutations proving that elbow-angle-held raises, elbow-extension
-   presses, retraction rows, shrugs, and lower-body-driven high pulls cannot
-   enter through `additionalPrimeActions` or permissive axes.
+Posterior deltoid and middle trapezius retain McAllister's recruitment signal
+without converting surface EMG into false extension or retraction actions.
+The two rotator-cuff regions stabilize the elevated humerus. Finger flexors
+retain the bar while extensor carpi radialis controls the wrist against the
+flexors' wrist moment. Abs, obliques, and lumbar extensors serve the declared
+spine and pelvis demands. The lumbar-extensor role remains textually visible
+without painting a substitute body-model surface.
 
-Until those gates are met, the correct catalog result is no upright-row
-exercise rather than a precise-looking record built from unmeasured geometry.
+## Reviewed exercise and geometry
+
+The initial roster contains only
+`standing-low-cable-upright-row`. Its required geometry is:
+
+- `kineticChain: open`;
+- `bodyPosition: standing` and `torsoSupport: none`;
+- `scapularTranslation: free`;
+- `elevationPath: mixedFlexionAbductionCatalogAdaptation`;
+- `endpointCriterion: elbowsAtShoulderHeight`;
+- `elbowMotion: flexes` and
+  `elbowHandRelationship: elbowsSlightlyAboveHands`;
+- `humeralRotation: nonstandardized`;
+- `gripOrientation: pronated` and
+  `gripWidth: sourceShownNotQuantified`;
+- `handleType: straightBar` and `handTask: staticImplementHold`;
+- `resistanceGeometry: lowCableVerticalPull` and `fixedPath: false`;
+- `spineMotion: nonstandardized`;
+- `kneeSetup: slightlyFlexed`; and
+- `lowerBodyContribution: none`.
+
+No numeric shoulder-angle, pull-to-body landmark, fixed humeral rotation, or
+scapular-retraction/elevation field is inferred. Cable direction alone does
+not make the implement path mechanically fixed.
+
+## Boundaries and deferred variants
+
+This activation does not admit McAllister's three barbell conditions. Barbell,
+dumbbell, kettlebell, EZ-bar, Smith-machine, selectorized-machine, unilateral,
+and intentionally leg-driven variants require direct topology review before
+entry. A future grip-width expansion must preserve separate apparatus evidence
+and cannot treat 50%, 100%, and 200% of biacromial breadth as universal
+biological thresholds.
+
+Neighbor boundaries remain exact:
+
+| Neighbor | Required distinction |
+|---|---|
+| `shoulder-abduction-raise` | Holds the elbow angle instead of flexing it. |
+| `shoulder-flexion-raise` | Holds the elbow angle and uses a pure sagittal basis. |
+| `shoulder-horizontal-abduction-row` | Begins elevated, horizontally abducts, and retracts. |
+| `shoulder-extension-row` | Extends the shoulder toward the torso and retracts. |
+| `scapular-elevation` | Elevates the scapula without required shoulder elevation and elbow flexion. |
+| `vertical-press` | Extends the elbow while moving the load away. |
+| Future high pull | Adds deliberate lower-body propulsion. |
+
+## Validation plan
+
+The activation batch must add mutation coverage that:
+
+1. pins the exact family and one-record roster;
+2. asserts that the five prime actions plus the forbidden complement partition
+   all canonical actions exactly;
+3. removes or mutates each prime action and verifies direct rejection;
+4. attempts to add shoulder axial rotation, scapular retraction/elevation,
+   elbow extension, spinal motion, or lower-body propulsion as a prime action;
+5. mutates the mixed two-plane basis and fixed plane list;
+6. mutates every required role, stability demand, and one-record axis;
+7. proves the free cable path retains `fixedPath: false`;
+8. rejects angle-held raises, retraction rows, presses, shrugs, and high pulls
+   through both action and geometry mutations; and
+9. pins the runtime projection's family identity, two planes, classification,
+   complete role map, and absence of a substitute mesh for
+   `lumbarExtensors`.
+
+No new taxonomy region, joint action, condition, schema feature, or validator
+rule is required by this family.

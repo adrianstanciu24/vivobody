@@ -1,0 +1,454 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "scapular-retraction",
+  "name": "Scapular Retraction",
+  "definition": "A strict open-chain scapular isolation whose concentric phase retracts one scapula against anterior elastic resistance while the shoulder is held near 80 degrees of flexion and the elbow remains extended. The initial contract admits only McCabe et al.'s directly prescribed unilateral Theraband fixture: middle trapezius is primary by action specificity, lower trapezius is secondary, and the measured upper-trapezius and serratus activity is treated as scapular co-contraction rather than evidence that either produces retraction. The source measured EMG rather than three-dimensional scapular kinematics, so rows, reverse flies, pull-aparts, face pulls, prone raises, cable variants, and every fixture with dynamic glenohumeral or elbow motion remain outside this narrow contract.",
+  "evidenceRefs": [
+    "mccabe-2007-below-90-scapular-exercises",
+    "cools-2004-isokinetic-scapular-rotators"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "scapula.retraction"
+    ],
+    "primeActions": [
+      "scapula.retraction"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "scapula",
+      "shoulder",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "trapeziusMiddle"
+      ],
+      "secondary": [
+        "trapeziusLower"
+      ],
+      "stabilizer": [
+        "trapeziusUpper",
+        "serratus",
+        "externalRotators",
+        "triceps",
+        "extensorCarpiRadialis",
+        "fingerFlexors",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "Whether the band-holding hand moves freely rather than remaining fixed to the environment."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The gross body position used by the reviewed unilateral retraction fixture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface supports the torso during the repetition."
+    },
+    {
+      "id": "contralateralSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether the non-working side braces against an external support."
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "free"
+      ],
+      "description": "Whether posterior support constrains scapular motion along the thorax."
+    },
+    {
+      "id": "humerothoracicElevationDegrees",
+      "valueType": "number",
+      "required": true,
+      "minimum": 80,
+      "maximum": 80,
+      "description": "The prescribed 80-degree shoulder-flexion position maintained without a dynamic glenohumeral action."
+    },
+    {
+      "id": "elevationPlane",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "sagittal"
+      ],
+      "description": "The forward-flexion plane shown for the exact reviewed setup."
+    },
+    {
+      "id": "humeralRotation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The thumb-up neutral humeral orientation held in the reviewed setup."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether elbow motion contributes to the repetition."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extended"
+      ],
+      "description": "The extended elbow posture held throughout the scapular excursion."
+    },
+    {
+      "id": "forearmMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "angleHeld"
+      ],
+      "description": "Whether radioulnar rotation contributes to the repetition."
+    },
+    {
+      "id": "forearmOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "neutral"
+      ],
+      "description": "The thumb-up forearm orientation used by the photographed fixture."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "staticImplementHold"
+      ],
+      "description": "The fingers hold the band without deliberate opening or closing as the repetition."
+    },
+    {
+      "id": "bandAnchor",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "anteriorBelowHand"
+      ],
+      "description": "The anterior low anchor shown in the source photograph, which stretches the band as the scapula retracts."
+    },
+    {
+      "id": "bandStartTension",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "justTaut"
+      ],
+      "description": "The source-prescribed elastic tension at the beginning of the repetition."
+    },
+    {
+      "id": "resistancePrescription",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "subjectAdjustedModerateFiveRepEffort"
+      ],
+      "description": "The source's subjective band selection: moderate effort while retaining correct form for five repetitions."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "anteriorElasticResistanceOpposesRetraction"
+      ],
+      "description": "Anterior elastic resistance lengthens as the scapula retracts while the shoulder and elbow postures remain fixed."
+    },
+    {
+      "id": "concentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 2,
+      "maximum": 2,
+      "description": "The source-prescribed concentric duration."
+    },
+    {
+      "id": "eccentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 2,
+      "maximum": 2,
+      "description": "The source-prescribed eccentric duration."
+    },
+    {
+      "id": "interRepRestSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 5,
+      "maximum": 5,
+      "description": "The rest interval separating the five analyzed repetitions."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external load path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether hip, knee, ankle, or foot motion contributes to the repetition."
+    },
+    {
+      "id": "neckContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether deliberate cervical motion contributes to the repetition."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 5
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "standing-band-scapular-retraction",
+      "name": "Standing Band Scapular Retraction",
+      "aliases": [
+        "Band Scapular Retraction",
+        "Unilateral Band Scapular Retraction"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 72,
+      "involvement": [
+        { "muscle": "trapeziusMiddle", "role": "primary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "serratus", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "triceps", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "contralateralSupport": "none",
+        "scapularTranslation": "free",
+        "humerothoracicElevationDegrees": 80,
+        "elevationPlane": "sagittal",
+        "humeralRotation": "neutral",
+        "elbowMotion": "angleHeld",
+        "elbowPosture": "extended",
+        "forearmMotion": "angleHeld",
+        "forearmOrientation": "neutral",
+        "handTask": "staticImplementHold",
+        "bandAnchor": "anteriorBelowHand",
+        "bandStartTension": "justTaut",
+        "resistancePrescription": "subjectAdjustedModerateFiveRepEffort",
+        "resistanceGeometry": "anteriorElasticResistanceOpposesRetraction",
+        "concentricSeconds": 2,
+        "eccentricSeconds": 2,
+        "interRepRestSeconds": 5,
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "neckContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "mccabe-2007-below-90-scapular-exercises"
+      ],
+      "movementDefinition": "Stand facing the low anterior band anchor and hold the working arm near 80 degrees of forward flexion with the elbow extended and the band just taut. Draw the scapula posteriorly toward the spine against the band for two seconds, then return for two seconds without bending the elbow, dynamically moving the glenohumeral joint, elevating the shoulder, turning the trunk, or moving the neck. Rest five seconds between repetitions."
+    }
+  ]
+}
