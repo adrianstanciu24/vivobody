@@ -12,6 +12,7 @@ $(SRCROOT)/specs/catalog/families/anti-rotation.json
 $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/chest-fly.json
 $(SRCROOT)/specs/catalog/families/decline-press.json
+$(SRCROOT)/specs/catalog/families/diagonal-pull.json
 $(SRCROOT)/specs/catalog/families/dip.json
 $(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json

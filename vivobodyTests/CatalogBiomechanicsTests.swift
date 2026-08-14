@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 55 reviewed families compile to 134 exercises with stable
+//  product: 56 reviewed families compile to 135 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,10 +16,11 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 134)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 55)
+        #expect(CatalogData.records.count == 135)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 56)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
+        #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -253,6 +254,26 @@ struct CatalogBiomechanicsTests {
         #expect(uprightRow.muscleInvolvement.role(for: .supraspinatus) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
+
+        let diagonalPull = try #require(
+            CatalogData.record(forExerciseNamed: "Seated 45-Degree Cable Pulldown")
+        )
+        #expect(diagonalPull.familyID == "diagonal-pull")
+        #expect(diagonalPull.mechanic == .compound)
+        #expect(diagonalPull.pattern == .pull)
+        #expect(diagonalPull.direction == .diagonal)
+        #expect(diagonalPull.planes == [.sagittal])
+        #expect(diagonalPull.loadMode == .external)
+        #expect(diagonalPull.defaultWeight == 35)
+        #expect(diagonalPull.defaultWeightKg == 15)
+        #expect(diagonalPull.muscleInvolvement.role(for: .lats) == .primary)
+        #expect(diagonalPull.muscleInvolvement.role(for: .teresMajor) == .secondary)
+        #expect(diagonalPull.muscleInvolvement.role(for: .deltoidPosterior) == .secondary)
+        #expect(diagonalPull.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
+        #expect(diagonalPull.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
+        #expect(diagonalPull.muscleInvolvement.role(for: .rhomboids) == .stabilizer)
+        #expect(diagonalPull.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
+        #expect(diagonalPull.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
 
         let landmine = try #require(
             CatalogData.record(forExerciseNamed: "Standing Single-Arm Landmine Press Power Test")

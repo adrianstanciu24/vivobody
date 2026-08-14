@@ -14,12 +14,11 @@ shoulder height whose concentric phase combines:
 3. elbow flexion; and
 4. torso and lower-body resistance without deliberate propulsion.
 
-The family is intentionally narrower than the everyday phrase “high row.” An
-overhead-start commercial lever machine may be a diagonal-pull candidate, but
-its torso-relative path and humeral actions must be measured; neither an
-elevated pivot nor the product name proves shoulder adduction and extension.
-`proposals/diagonal-pull.md` records that unresolved candidate, which may still
-route to a horizontal row family. Conversely, the exercise that Youdas et al.
+The family is intentionally narrower than the everyday phrase “high row.” The
+active `diagonal-pull` owner is Lorenzetti's measured seated 45-degree cable
+pulldown, not a commercial lever machine inferred from its product name.
+Unreviewed lever high rows may still route to a horizontal row family after
+their actual geometry is measured. Conversely, the exercise that Youdas et al.
 call a “horizontal abduction row” keeps the elbow extended. Despite that
 paper-specific name, it is mechanically a reverse fly and cannot satisfy this
 compound family’s fixed `elbow.flexion` action.
@@ -500,7 +499,8 @@ later convenience alias cannot silently collide with another family.
 | Dumbbell reverse fly or reverse pec deck | Exclude | Elbow angle remains essentially fixed; future shoulder-horizontal-abduction isolation family. |
 | Rope face pull with deliberate external rotation | Exclude | Adds a forbidden shoulder external-rotation prime action. A face-height row without deliberate rotation is routed by its actual path, not its name. |
 | 60-degree flared cable row | Defer | Directly studied but mechanically mixed under the current family-wide exact-plane model. |
-| Overhead-start plate-loaded “high row” | Defer; candidate pending geometry review | `proposals/diagonal-pull.md` must first establish a distinct torso-relative path and humeral actions; ownership is not settled. |
+| Seated 45-degree cable pulldown | Exclude; owned by `diagonal-pull` | Its source-exact sagittal start-to-chest path is not the transverse flared-row signature. |
+| Overhead-start plate-loaded “high row” | Defer outside current owners | Commercial naming does not establish equivalence to the measured diagonal cable fixture. |
 | Upright row | Exclude | Vertical/frontal shoulder-abduction and scapular-elevation signature. |
 | T-bar, landmine, or pivoting high row | Defer | A room-space pivot arc does not establish diagonal torso-relative travel or shoulder adduction; route only after direct path review. |
 | One-arm dumbbell rear-delt row | Defer | Valid candidate, but requires a reviewed free-weight support branch beyond the compact initial roster. |

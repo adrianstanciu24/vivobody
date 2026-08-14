@@ -5,7 +5,7 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 55 reviewed families are active, containing 134 exercises.
+- 56 reviewed families are active, containing 135 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
   44 joint actions, and 152 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
@@ -32,8 +32,9 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- Two work items remain unresolved: the deferred `diagonal-pull` and generic
-  `grip` candidates. Both Batch-3 nonstandard press branches are now closed.
+- One work item remains unresolved: the generic `grip` candidate.
+  `diagonal-pull` is active as one source-exact seated 45-degree cable fixture,
+  and both Batch-3 nonstandard press branches are closed.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -50,6 +51,7 @@ batch siblings.
 | `decline-press` | 4 |
 | `vertical-press` | 11 |
 | `vertical-pull` | 13 |
+| `diagonal-pull` | 1 |
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
 | `shoulder-extension-isolation` | 3 |
@@ -100,7 +102,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **134** |
+| **Total** | **135** |
 
 ## Foundation gates
 
@@ -435,7 +437,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current two-item count.
+new item in the current one-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -486,11 +488,14 @@ priority, strict formatting, and cross-source uniqueness.
 
 ## Remaining unresolved items
 
-`diagonal-pull` remains deferred. Its joint-action signature does not
-distinguish it from vertical pull, while public sources do not provide the
-human-relative geometry or condition-matched muscle hierarchy needed to make
-geometry the boundary. Resume it only through the tracked measurement protocol;
-do not let it trigger speculative migrations across active pull/row families.
+`diagonal-pull` is closed and active through Lorenzetti's directly measured
+seated 45-degree cable pulldown. Its source-prescribed extended-arm start,
+chest-contact endpoint, primarily sagittal shoulder behavior, and cable force
+tracking establish the exact geometry without inferring a commercial lever
+machine from its name. The family authors shoulder extension plus elbow
+flexion only; scapular motion, shoulder adduction, axial rotation, and numeric
+humeral angles remain unclaimed. Commercial lever high rows still require
+model-specific review and do not inherit this record's ownership.
 
 Generic `grip` remains the Batch-2 task-definition hold. The taxonomy now
 distinguishes dynamic finger flexion/extension from a static implement hold,

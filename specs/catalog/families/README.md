@@ -1,7 +1,7 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-five reviewed family files containing 134 exercises are currently
+Fifty-six reviewed family files containing 135 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
@@ -22,6 +22,10 @@ strict band scapular-retraction fixture and one bounded low-cable upright-row
 fixture. Retraction keeps the glenohumeral and elbow angles held; upright row
 uses mixed shoulder flexion/abduction plus elbow flexion without inventing
 scapular retraction, elevation, or humeral axial rotation as prime actions.
+The independently resolved `diagonal-pull` family adds one source-exact seated
+45-degree cable pulldown. It preserves Lorenzetti's start-to-chest fixture as a
+primarily sagittal shoulder-extension pull, not a generic commercial high-row
+class, and authors no unmeasured shoulder-adduction or scapular prime action.
 
 Batch 2 adds fourteen exercises across `elbow-flexion`, `elbow-extension`,
 conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist

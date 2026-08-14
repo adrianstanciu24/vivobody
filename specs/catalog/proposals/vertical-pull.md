@@ -15,14 +15,14 @@ scapula retracts without deliberate trunk or lower-body propulsion.
 The family should cover front/scapular-path variants using pronated, neutral,
 or supinated grips. It should not absorb every exercise that begins with the
 hands overhead. Straight-arm pulldowns, scapular pull-ups, flared
-horizontal-abduction high rows, diagonal high-row machines, behind-neck
+horizontal-abduction high rows, the measured seated 45-degree cable pulldown,
+unreviewed commercial lever high rows, behind-neck
 pulldowns, kipping or butterfly pull-ups, muscle-ups, and band-assisted
 pull-ups cross a joint-action, path, propulsion, transition, or load-semantics
 boundary. Flared high rows hand off to the active
-`shoulder-horizontal-abduction-row`. The overhead-start lever-high-row
-candidate is reviewed in `proposals/diagonal-pull.md`; it remains unactivated
-until torso-relative path geometry can distinguish it from this family without
-relying on its product name.
+`shoulder-horizontal-abduction-row`. The Lorenzetti 45-degree cable fixture
+routes to active `diagonal-pull`. Commercial lever high rows remain excluded:
+their product name does not prove equivalence to that measured path.
 
 `vertical` remains the app-facing principal resistance/body-travel direction;
 it is not an anatomical plane. The accepted front/scapular corridor combines
@@ -273,7 +273,8 @@ separate in `kineticChain`.
 | Seated cable pulldown variants | Own | Open-chain version of the same accepted front/scapular signature. |
 | Bilateral or unilateral lever pulldown | Own | Same signature with a guided resistance path. |
 | Flared high row to the upper chest | Exclude | Shoulder horizontal abduction dominates; ownership belongs to the active `shoulder-horizontal-abduction-row`. |
-| Overhead-start lever high-row machine | Defer | `proposals/diagonal-pull.md` must establish a distinct torso-relative path and humeral actions; the product name does not prove diagonal ownership. |
+| Seated 45-degree cable pulldown | Exclude; owned by `diagonal-pull` | Lorenzetti directly measured its source-defined start-to-chest path and primarily sagittal shoulder behavior. |
+| Overhead-start lever high-row machine | Defer outside both active owners | The product name does not establish equivalence to the measured cable fixture or this overhead-adduction family. |
 | Half-kneeling or tall-kneeling cable pulldown | Defer | Adds support, pelvis, and possible unilateral trunk-control combinations not covered by the initial seated rule. |
 | Behind-neck pulldown | Defer | Distinct humeral path and mobility demand; front-only is a scope boundary, not a claim that the exercise is universally unsafe. |
 | Straight-arm pulldown or machine pullover | Exclude | No elbow-flexion signature; belongs to a shoulder-extension isolation family. |

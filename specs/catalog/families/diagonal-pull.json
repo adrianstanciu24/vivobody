@@ -1,0 +1,503 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "diagonal-pull",
+  "name": "Diagonal Pull",
+  "definition": "A strict bilateral seated cable pull whose reviewed start places the extended arms on the source-prescribed 45-degree line and whose concentric path brings a wide straight bar to the chest through primarily sagittal shoulder extension and elbow flexion. Lorenzetti directly measured this exact Technogym Ercolina Rehab fixture with 22-camera three-dimensional motion capture, an inline load cell, and cable markers: the 45-degree pulldown produced the largest sagittal shoulder range of the four compared pulling exercises. The source did not define the 45-degree instruction in an anatomical coordinate system, isolate scapular motion, record EMG, or standardize the observed spinal excursion as absent. The catalog therefore preserves the source-defined start and chest-contact endpoint without publishing a humeral angle, authors no shoulder-adduction or scapular prime action, treats the scapula and trunk as stability demands, and labels the muscle hierarchy as mechanics-derived rather than directly measured. Vertical overhead pulldowns, horizontal rows, flared rear-delt rows, straight-arm pulldowns, commercial lever high rows, rotational diagonal patterns, and any version using deliberate trunk or lower-body propulsion remain outside this contract.",
+  "evidenceRefs": [
+    "lorenzetti-2017-pulling-exercise-kinematics",
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "lehman-2004-seated-row-activation"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "back",
+    "allowed": [
+      "back"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "cable"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.extension"
+    ],
+    "primeActions": [
+      {
+        "action": "shoulder.extension",
+        "condition": "fromFlexedPosition"
+      },
+      "elbow.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "forearm",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "lats"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "teresMajor"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "deltoidPosterior"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "bicepsBrachii"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "brachioradialis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "trapeziusMiddle"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "lats"
+      ],
+      "secondary": [
+        "teresMajor",
+        "deltoidPosterior",
+        "bicepsBrachii",
+        "brachialis",
+        "brachioradialis"
+      ],
+      "stabilizer": [
+        "trapeziusMiddle",
+        "trapeziusLower",
+        "rhomboids",
+        "externalRotators",
+        "subscapularis",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight bar moves freely while the seated athlete remains externally supported only by the bench and floor.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body position.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "seatSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The flat bench used by the reviewed cable fixture.",
+      "allowedValues": [
+        "flatBench"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-shown bilateral foot contact; no thigh restraint was used.",
+      "allowedValues": [
+        "floor"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "No backrest or chest pad directly supported the torso.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "scapularTranslation",
+      "valueType": "enum",
+      "required": true,
+      "description": "No posterior support blocks scapular translation; the study did not resolve a scapular action.",
+      "allowedValues": [
+        "free"
+      ]
+    },
+    {
+      "id": "machineType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed adjustable cable-pulley apparatus.",
+      "allowedValues": [
+        "adjustableCablePulley"
+      ]
+    },
+    {
+      "id": "handleType",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bilateral bar shown and prescribed by the source.",
+      "allowedValues": [
+        "straightBar"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-shown overhand grip maintained throughout the repetition.",
+      "allowedValues": [
+        "pronated"
+      ]
+    },
+    {
+      "id": "relativeGripWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study describes the grip as wider than shoulder width without publishing a numeric spacing.",
+      "allowedValues": [
+        "widerThanShoulderWidth"
+      ]
+    },
+    {
+      "id": "startArmPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-prescribed 45-degree extended-arm start is preserved as a fixture label because the paper does not define that value in an anatomical coordinate system.",
+      "allowedValues": [
+        "sourcePrescribedFortyFiveDegrees"
+      ]
+    },
+    {
+      "id": "pullPath",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed high-anterior start-to-chest path that defines this diagonal branch.",
+      "allowedValues": [
+        "fortyFiveDegreeStartToChest"
+      ]
+    },
+    {
+      "id": "endpointCriterion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-required terminal bar contact.",
+      "allowedValues": [
+        "barTouchesChest"
+      ]
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The elbow action during the pull to the chest.",
+      "allowedValues": [
+        "flexes"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source cued a straight back and engaged core but measured nonzero spinal behavior rather than a position-held spine.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "headPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source instructed the athlete to keep the head straight.",
+      "allowedValues": [
+        "straightCued"
+      ]
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "description": "The hands statically retain the bar while the shoulder and elbow create the repetition.",
+      "allowedValues": [
+        "staticImplementHold"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "description": "The cable fixes the force line but does not constrain the bar to a rail or lever arc.",
+      "fixedValue": false
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether hip, knee, or ankle drive contributes to the concentric pull.",
+      "allowedValues": [
+        "none"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 6,
+      "maximum": 15
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-45-degree-cable-pulldown",
+      "name": "Seated 45-Degree Cable Pulldown",
+      "aliases": [
+        "45-Degree Lat Pulldown",
+        "Diagonal Cable Pulldown"
+      ],
+      "equipment": "cable",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 35,
+      "defaultWeightKg": 15,
+      "reps": 8,
+      "searchPriority": 82,
+      "involvement": [
+        {
+          "muscle": "lats",
+          "role": "primary"
+        },
+        {
+          "muscle": "teresMajor",
+          "role": "secondary"
+        },
+        {
+          "muscle": "deltoidPosterior",
+          "role": "secondary"
+        },
+        {
+          "muscle": "bicepsBrachii",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "brachioradialis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "trapeziusMiddle",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusLower",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "rhomboids",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "seatSurface": "flatBench",
+        "footSupport": "floor",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "machineType": "adjustableCablePulley",
+        "handleType": "straightBar",
+        "gripOrientation": "pronated",
+        "relativeGripWidth": "widerThanShoulderWidth",
+        "startArmPosition": "sourcePrescribedFortyFiveDegrees",
+        "pullPath": "fortyFiveDegreeStartToChest",
+        "endpointCriterion": "barTouchesChest",
+        "elbowMotion": "flexes",
+        "spineMotion": "nonstandardized",
+        "headPosition": "straightCued",
+        "handTask": "staticImplementHold",
+        "fixedPath": false,
+        "lowerBodyContribution": "none"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lorenzetti-2017-pulling-exercise-kinematics"
+      ],
+      "movementDefinition": "Sit on a flat bench facing the reviewed high cable with both feet on the floor and no thigh restraint. Take a wider-than-shoulder-width pronated grip on the straight bar and begin with the elbows extended and the arms on the source-prescribed 45-degree line. Keep the head straight and the core engaged, then pull the bar to touch the chest by extending the shoulders and flexing the elbows. Allow the scapulae to move naturally without prescribing retraction or rotation as a separate action, and return slowly to the same 45-degree start without adding shoulder adduction or axial rotation, leaning to propel the bar, or using the lower body. The source tested both 10% and 25% of bodyweight; replace the representative 35 lb/15 kg seed with the actual selected cable load."
+    }
+  ]
+}

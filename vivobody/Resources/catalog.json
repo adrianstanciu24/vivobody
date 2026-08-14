@@ -821,6 +821,95 @@
     ]
   },
   {
+    "familyID": "diagonal-pull",
+    "catalogID": "seated-45-degree-cable-pulldown",
+    "name": "Seated 45-Degree Cable Pulldown",
+    "group": "back",
+    "defaultWeight": 35,
+    "defaultWeightKg": 15,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "cable",
+    "mechanic": "compound",
+    "pattern": "pull",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "45-Degree Lat Pulldown",
+      "Diagonal Cable Pulldown"
+    ],
+    "searchPriority": 82,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "movementDefinition": "Sit on a flat bench facing the reviewed high cable with both feet on the floor and no thigh restraint. Take a wider-than-shoulder-width pronated grip on the straight bar and begin with the elbows extended and the arms on the source-prescribed 45-degree line. Keep the head straight and the core engaged, then pull the bar to touch the chest by extending the shoulders and flexing the elbows. Allow the scapulae to move naturally without prescribing retraction or rotation as a separate action, and return slowly to the same 45-degree start without adding shoulder adduction or axial rotation, leaning to propel the bar, or using the lower body. The source tested both 10% and 25% of bodyweight; replace the representative 35 lb/15 kg seed with the actual selected cable load.",
+    "involvement": [
+      {
+        "muscle": "lats",
+        "role": "primary"
+      },
+      {
+        "muscle": "teresMajor",
+        "role": "secondary"
+      },
+      {
+        "muscle": "deltoidPosterior",
+        "role": "secondary"
+      },
+      {
+        "muscle": "bicepsBrachii",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "brachioradialis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusMiddle",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "rhomboids",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "dip",
     "catalogID": "bar-dip",
     "name": "Bar Dip",

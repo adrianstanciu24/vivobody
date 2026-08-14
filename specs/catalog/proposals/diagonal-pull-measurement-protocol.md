@@ -1,12 +1,14 @@
-# Diagonal-pull activation measurement protocol
+# Lever-high-row measurement protocol
 
-Status: required evidence protocol; not validator input.
+Status: archived protocol for a possible future lever record; not validator
+input.
 
-This protocol is the concrete unlock for the deferred `diagonal-pull`
-candidate. It exists because public product photographs, exploded parts
-drawings, and a historical patent do not provide calibrated human-relative
-endpoints or joint kinematics. Do not activate the family or populate numeric
-axes from those materials.
+The active `diagonal-pull` family uses Lorenzetti's directly measured seated
+45-degree cable fixture. This protocol remains the concrete evidence gate for
+any future commercial lever-high-row record because product photographs,
+exploded parts drawings, and a historical patent do not provide calibrated
+human-relative endpoints or joint kinematics. Passing it would not by itself
+prove equivalence to the active cable family.
 
 ## Questions the capture must answer
 
@@ -126,14 +128,15 @@ The tracked measurement artifact must contain:
 Do not copy a mean into JSON without retaining its distribution, uncertainty,
 and derivation.
 
-## Activation decision
+## Future lever-record decision
 
-Activate `diagonal-pull` only when all of these are true:
+Admit a commercial lever record only when all of these are true:
 
 - the candidate's reviewed path is separated from the neighboring fixture
   distributions by more than the measurement uncertainty;
 - the separation survives realistic body-size and seat-setting variation;
-- the measured shoulder actions support adduction plus conditioned extension;
+- the measured shoulder actions either match the active conditioned-extension
+  plus elbow-flexion signature or identify a separately reviewed owner;
 - the reviewed `upperArmPath` and scapular policy are encoded without visual
   inference; and
 - bilateral and unilateral records either agree within the declared tolerance
@@ -141,20 +144,21 @@ Activate `diagonal-pull` only when all of these are true:
   family band.
 
 If the candidate overlaps vertical pull or an existing row family, route it to
-that family or keep it deferred. Do not create a degree cutoff merely to
-preserve the proposed family.
+that family or leave the record unauthored. Do not create a degree cutoff merely
+to force it into active `diagonal-pull`.
 
-Muscle-role activation is a separate gate. Condition-matched force/EMG evidence
+Muscle-role admission is a separate gate. Condition-matched force/EMG evidence
 must resolve the disputed lats, rhomboid, middle-trapezius, teres-major, and
 sternocostal-pectoralis hierarchy. Surface-EMG magnitude alone must not be used
 as a cross-muscle primary/secondary ranking, and scapular retraction must not be
 inferred from retractor excitation.
 
-## Catalog work after the evidence passes
+## Catalog work after a lever fixture passes
 
 Only after acceptance of the measurement artifact:
 
-1. add the candidate family and its reviewed records;
+1. decide whether the reviewed record truthfully joins `diagonal-pull` or needs
+   another existing/new owner;
 2. add defensible `pullInclinationDegrees` and `sagittalPathDirection` values or
    reviewed proxies to every affected pull/row record;
 3. migrate shared pull path vocabulary atomically;

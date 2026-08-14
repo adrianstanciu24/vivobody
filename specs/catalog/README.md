@@ -340,6 +340,12 @@ declare more than one. The runtime stores those plane components in canonical
 does not apply the retired rule that classified every compound press as
 sagittal.
 
+Direction still requires an athlete-relative reviewed fixture. The active
+`diagonal-pull` record preserves Lorenzetti's source-defined 45-degree
+extended-arm start and chest-contact endpoint without converting the label into
+a universal numeric angle band. A room-space cable angle or commercial “high
+row” name cannot establish diagonal ownership by itself.
+
 ## Validation
 
 Run from the repository root:
@@ -363,4 +369,4 @@ exactly 44 joint actions, all muscles have evidence-backed action profiles,
 family prime actions have capable movers, and stability demands have capable
 assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
 as non-trainable scene surfaces rather than lumbar proxies. The runtime
-projection is pinned to exactly 55 active families and 134 exercises.
+projection is pinned to exactly 56 active families and 135 exercises.

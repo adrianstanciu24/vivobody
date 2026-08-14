@@ -253,6 +253,19 @@ struct AntagonistBalanceTests {
         expectEqual(board.pair("vertical-push-pull")?.leftSets, 0)
     }
 
+    @Test func diagonalPullCountsBroadlyWithoutInventingDirectionalAncestry() {
+        let board = [
+            session(at: day(1), [
+                lift("Seated 45-Degree Cable Pulldown", .back, sets: 3),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        expectEqual(board.pair("push-pull")?.leftSets, 0)
+        expectEqual(board.pair("push-pull")?.rightSets, 3)
+        expectEqual(board.pair("horizontal-push-pull")?.rightSets, 0)
+        expectEqual(board.pair("vertical-push-pull")?.rightSets, 0)
+    }
+
     @Test func hipAndLowerLegPairsKeepGradedMuscleCredit() {
         let board = [
             session(at: day(1), [
