@@ -134,7 +134,7 @@ struct MuscleMappingTests {
         ]))
     }
 
-    @Test func catalogCoverageLeavesOnlySevenExplicitFoundationHolds() {
+    @Test func catalogCoverageLeavesOnlySixExplicitFoundationHolds() {
         let targeted = Set(CatalogData.records.flatMap(\.involvement).map(\.muscle))
         let untargeted = Set(Muscle.allCases).subtracting(targeted)
 
@@ -143,7 +143,6 @@ struct MuscleMappingTests {
             .fibularisLongusBrevis,
             .fibularisTertius,
             .flexorHallucisLongus,
-            .iliopsoas,
             .pectineus,
             .toeExtensors,
         ]))
