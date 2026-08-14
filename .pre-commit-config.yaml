@@ -1,0 +1,96 @@
+# .pre-commit-config.yaml
+# vivobody
+#
+# Git hook gates that catch failures before Scripts/check.sh has to. The
+# commit stage runs file hygiene, SwiftFormat on staged Swift files, and the
+# fast architecture, source-size, documentation, and catalog guardrails
+# scoped to the files they protect. The push stage runs the Python guardrail
+# suites and the VivoKit snapshot contract tests. Scripts/check.sh remains
+# the canonical validator; these hooks only move the same failures earlier.
+#
+# One-time setup per clone:
+#
+#   brew install pre-commit swiftformat
+#   pre-commit install
+#
+# Run every hook against the full tree with:
+#
+#   pre-commit run --all-files
+#   pre-commit run --all-files --hook-stage pre-push
+#
+
+minimum_pre_commit_version: "3.2.0"
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-json
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+
+  - repo: local
+    hooks:
+      # Commit stage: fast gates, scoped to the files that can break them.
+      # Matches the formatting boundary enforced by Scripts/check.sh:
+      # vivobody/, vivobodyWidgets/, and VivoKit/Sources/ only.
+      - id: swiftformat
+        name: SwiftFormat
+        entry: Scripts/swiftformat-hook.sh
+        language: system
+        files: '^(vivobody/|vivobodyWidgets/|VivoKit/Sources/).*\.swift$'
+        require_serial: true
+
+      - id: check-architecture
+        name: Architecture boundaries
+        entry: /usr/bin/python3 Scripts/check_architecture.py
+        language: system
+        pass_filenames: false
+        files: '\.swift$'
+
+      - id: check-source-sizes
+        name: Source-size ratchet
+        entry: /usr/bin/python3 Scripts/check_source_sizes.py
+        language: system
+        pass_filenames: false
+        files: '\.swift$'
+
+      - id: check-documentation
+        name: Documentation knowledge map
+        entry: /usr/bin/python3 Scripts/check_documentation.py
+        language: system
+        pass_filenames: false
+        files: '\.md$'
+
+      - id: check-catalog-parity
+        name: Generated catalog parity
+        entry: /usr/bin/python3 Scripts/catalog.py --check
+        language: system
+        pass_filenames: false
+        files: >-
+          ^(specs/catalog/|Scripts/catalog\.py
+          |Scripts/catalog-inputs\.xcfilelist
+          |vivobody/Resources/catalog\.json)
+
+      # Push stage: contract tests that are cheap but not instant.
+      - id: guardrail-tests
+        name: Guardrail unit tests
+        entry: /usr/bin/python3 -m unittest discover -s Scripts/tests
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+
+      - id: vivokit-tests
+        name: VivoKit snapshot contract tests
+        entry: swift test --package-path VivoKit
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

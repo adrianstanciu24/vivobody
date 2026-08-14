@@ -81,6 +81,10 @@ swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/
 # Check Swift formatting without modifying files
 swiftformat --dryrun vivobody/ vivobodyWidgets/ VivoKit/Sources/
 
+# One-time Git hook setup: fast guardrails on commit, contract tests on push
+# (brew install pre-commit)
+pre-commit install
+
 # Manual maintenance report (not scheduled)
 /usr/bin/python3 Scripts/quality_scan.py --output .verify/quality-scan.md
 

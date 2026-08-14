@@ -31,6 +31,26 @@ xcodebuild -scheme vivobody \
   -destination 'generic/platform=iOS Simulator' build
 ```
 
+## Pre-commit hooks
+
+The checked-in `.pre-commit-config.yaml` moves the fast gates earlier than
+`Scripts/check.sh`. Install once per clone:
+
+```bash
+brew install pre-commit swiftformat
+pre-commit install
+```
+
+The commit stage checks file hygiene, formats staged Swift files under
+`vivobody/`, `vivobodyWidgets/`, and `VivoKit/Sources/` with SwiftFormat
+(matching the `Scripts/check.sh` formatting boundary), and runs the
+architecture, source-size, documentation, and catalog-parity guardrails
+scoped to the files that can break them. The push stage runs the Python
+guardrail suites and the VivoKit snapshot contract tests. Hooks never replace
+`Scripts/check.sh`; they surface the same failures earlier. Run the full tree
+manually with `pre-commit run --all-files`, adding `--hook-stage pre-push`
+for the push stage.
+
 ## UI verification with Baguette
 
 For every UI-affecting change, run `Scripts/verify.sh` and inspect both the
