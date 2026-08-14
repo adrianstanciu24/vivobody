@@ -463,6 +463,55 @@ struct MuscleDevelopmentTests {
         #expect(externalNodes.isEmpty)
     }
 
+    @Test func hipAndLocomotionBoundariesCreditMoversWithoutPromotingStabilizers() {
+        let hipFlexion = session(
+            at: day(0),
+            [lift("Bodyweight Active Straight-Leg Raise", .legs, sets: 4, reps: 10, weight: 0)]
+        )
+        let flexionState = MuscleDevelopment.simulate(from: [hipFlexion], now: day(0))
+        let flexionNodes = MuscleDevelopment.nodeIntensities(from: [hipFlexion], now: day(0))
+        #expect(flexionState.adaptation(.iliopsoas) > 0)
+        #expect(flexionState.adaptation(.rectusFemoris) > 0)
+        #expect(flexionState.adaptation(.rectusFemoris) < flexionState.adaptation(.iliopsoas))
+        #expect(flexionState.adaptation(.abs) == 0)
+        #expect(flexionState.adaptation(.obliques) == 0)
+        #expect((flexionNodes["Psoas_Major_L"] ?? 0) > 0)
+        #expect((flexionNodes["Iliacus_L"] ?? 0) > 0)
+
+        let goodMorning = session(
+            at: day(0),
+            [lift("25% Body-Mass Barbell Good Morning", .legs, sets: 4, reps: 8, weight: 45)]
+        )
+        let hingeState = MuscleDevelopment.simulate(from: [goodMorning], now: day(0))
+        let hingeNodes = MuscleDevelopment.nodeIntensities(from: [goodMorning], now: day(0))
+        #expect(hingeState.adaptation(.medialHamstrings) > 0)
+        #expect(hingeState.adaptation(.gluteMax) > 0)
+        #expect(hingeState.adaptation(.lumbarExtensors) > 0)
+        #expect(hingeState.adaptation(.bicepsFemoris) == 0)
+        #expect((hingeNodes["Semitendinosus_L"] ?? 0) > 0)
+        #expect((hingeNodes["Gluteus_Maximus_L"] ?? 0) > 0)
+        #expect(hingeNodes["Biceps_femoris_L"] == nil)
+        #expect(hingeNodes["Quadratus_Lumborum_L"] == nil)
+
+        for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
+            let lunge = session(
+                at: day(0),
+                [lift(name, .legs, sets: 4, reps: 5, weight: 0)]
+            )
+            let state = MuscleDevelopment.simulate(from: [lunge], now: day(0))
+            let nodes = MuscleDevelopment.nodeIntensities(from: [lunge], now: day(0))
+            #expect(state.adaptation(.vasti) > 0)
+            #expect(state.adaptation(.gluteMax) > 0)
+            #expect(state.adaptation(.rectusFemoris) > 0)
+            #expect(state.adaptation(.gastrocnemius) > 0)
+            #expect(state.adaptation(.soleus) > 0)
+            #expect(state.adaptation(.medialHamstrings) == 0)
+            #expect((nodes["Vastus_Lateralis_L"] ?? 0) > 0)
+            #expect((nodes["Gluteus_Maximus_L"] ?? 0) > 0)
+            #expect(nodes["Semitendinosus_L"] == nil)
+        }
+    }
+
     // MARK: - Colour mapping
 
     @Test(arguments: [BodyModelTheme.dark, .light])

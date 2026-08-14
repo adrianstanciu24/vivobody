@@ -1,0 +1,344 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-flexion",
+  "name": "Hip Flexion Isolation",
+  "definition": "A narrow unilateral open-chain bodyweight task in which a straight working leg rises from a supine, table-supported start to the athlete's active hip-flexion end range and then returns under control. The reviewed protocol directly measured psoas major, rectus femoris, rectus abdominis, external oblique, and the combined internal-oblique/transversus-abdominis site across the concentric, end-range, and eccentric phases. Iliopsoas is primary and rectus femoris secondary; the visible iliopsoas region necessarily combines the directly measured psoas major with an unseparated iliacus mesh. Abs and obliques receive conservative trunk-and-pelvis stability credit. The study does not establish one numeric hip endpoint, a standardized cadence or hold duration, or a zero-motion pelvis or spine, so those details are not invented. Tensor fasciae latae, sartorius, and the adductors receive no role merely from general hip-flexor capability. Loaded raises, standing marches, hanging or captain-chair raises, knee raises, sit-ups, V-ups, machine or cable flexion, and any movement that deliberately adds spinal, pelvic, or knee motion remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "okubo-2021-end-range-active-straight-leg-raise"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.flexion"
+    ],
+    "primeActions": [
+      "hip.flexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "iliopsoas"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "iliopsoas"
+      ],
+      "secondary": [
+        "rectusFemoris"
+      ],
+      "stabilizer": [
+        "abs",
+        "obliques"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the working lower limb moves freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The table supporting the torso during the reviewed active straight-leg raise.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The table supporting the pelvis; support does not establish that pelvic motion was eliminated.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Pelvic motion during the reviewed active straight-leg raise was not standardized as absent or numerically bounded.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Spinal motion during the reviewed active straight-leg raise was not standardized as absent or numerically bounded.",
+      "allowedValues": [
+        "nonstandardized"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action producing the concentric repetition.",
+      "allowedValues": [
+        "flexes"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The participant-specific active end range used by the reviewed protocol; no universal degree endpoint is inferred.",
+      "allowedValues": [
+        "activeEndRange"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate knee motion contributes to the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The straight working-knee posture maintained during the active straight-leg raise without inventing a numeric angle.",
+      "allowedValues": [
+        "extended"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The segment whose pelvis-relative motion defines the repetition.",
+      "allowedValues": [
+        "thigh"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where an external resistance implement contacts the athlete; this bodyweight fixture has no external interface.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "How resistance is created in the reviewed fixture.",
+      "allowedValues": [
+        "limbSegmentGravity"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; the unsupported moving limb follows no fixed external path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the named isolated hip action.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "bodyweight-active-straight-leg-raise",
+      "name": "Bodyweight Active Straight-Leg Raise",
+      "aliases": [
+        "Active Straight-Leg Raise",
+        "Supine Straight-Leg Raise"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 68,
+      "involvement": [
+        {
+          "muscle": "iliopsoas",
+          "role": "primary"
+        },
+        {
+          "muscle": "rectusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "table",
+        "pelvisSupport": "table",
+        "pelvisMotion": "nonstandardized",
+        "spineMotion": "nonstandardized",
+        "hipMotion": "flexes",
+        "rangeOfMotion": "activeEndRange",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "extended",
+        "movingSegment": "thigh",
+        "loadInterface": "none",
+        "resistanceGeometry": "limbSegmentGravity",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "arnold-2010-lower-limb",
+        "okubo-2021-end-range-active-straight-leg-raise"
+      ],
+      "movementDefinition": "Lie supine with the torso and pelvis supported on a table and both legs extended. Keep the nonworking leg supported and the working knee straight. Raise the working leg by flexing the hip until reaching your active end range, then lower it under control. Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion."
+    }
+  ]
+}

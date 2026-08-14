@@ -1,46 +1,45 @@
 # Batch 5 — hip-pattern compound review
 
-Status: mixed final outcome. `hip-thrust-bridge` is active with one barbell hip
-thrust plus one barbell glute bridge. `hip-hinge` is deferred: the
-direct Romanian-deadlift kinematics show material knee excursion, so the
-existing `positionHeld` vocabulary cannot encode the desired strict static-
-knee boundary. Neither review surveys every exercise commonly given these
-names.
+Status: final. `hip-hinge` is active with one barbell good morning, and
+`hip-thrust-bridge` is active with one barbell hip thrust plus one barbell
+glute bridge. The hinge activation follows Schellenberg et al.'s directly
+measured good-morning fixture; it does not revive the rejected static-knee
+Romanian-deadlift draft. Neither review surveys every exercise commonly given
+these names.
 
 ## Outcome
 
 | Candidate | Decision | Initial roster |
 |---|---|---:|
-| `hip-hinge` | Defer — material knee excursion conflicts with the proposed contract | 0 |
+| `hip-hinge` | Activate the exact Schellenberg good-morning fixture | 1 |
 | `hip-thrust-bridge` | Activate after shared Batch-5 integration gates pass | 2 |
 
-The active contract uses the post-Batch-4 52-region taxonomy. Its roster is the
-smallest set that exercises the reviewed mechanical boundary without treating
-equipment substitutions as facts.
+The active contracts use the current split taxonomy. Their three-record roster
+is the smallest set that exercises the reviewed mechanical boundaries without
+treating equipment substitutions as facts.
 
 ## Boundary matrix
 
 | Boundary | `hip-hinge` | `hip-thrust-bridge` | Outside owner |
 |---|---|---|---|
-| Main proximal motion | Pelvis and torso rotate together over planted feet | Loaded pelvis rises between planted feet and an upper-torso anchor | `hip-extension` moves the femur relative to a supported, held pelvis |
-| Knee behavior | Intended: slightly flexed and materially held; no reviewed fixture yet satisfies it | Knee extension accompanies hip extension | Squat, lunge, step-up, and knee-extension-heavy floor pulls |
-| Spine claim | Intended: position-held; deferred with the family | Pelvic-trunk excursion was variable and is explicitly nonstandardized | Deliberate spinal extension belongs to a future spine family |
-| Inter-repetition support | Intended: none; no active fixture | Plates return to the floor in the reviewed full-range fixtures | Floor pulls require a separately reviewed branch |
-| Initial load | Candidate free barbell in the hands | Free padded barbell across the pelvis | Smith, lever machine, band, dumbbell, cable, and bodyweight branches are deferred |
-| Initial stance | Candidate symmetric bilateral | Symmetric bilateral | Unilateral and staggered variants require separate stability review |
+| Main proximal motion | Pelvis and torso hinge over planted feet, then extend together | Loaded pelvis rises between planted feet and an upper-torso anchor | `hip-extension` moves the femur relative to a supported, held pelvis |
+| Knee behavior | Small measured excursion is disclosed but does not define the task | Knee extension accompanies hip extension | Squat, lunge, step-up, and knee-extension-heavy floor pulls |
+| Spine claim | Measured segmental excursion makes `spine.extension` an explicit prime | Pelvic-trunk excursion was variable and is explicitly nonstandardized | A position-held spine cannot be inferred from a posture cue |
+| Inter-repetition support | None; the bar remains on the athlete for eight repetitions | Plates return to the floor in the reviewed full-range fixtures | Floor pulls require a separately reviewed branch |
+| Initial load | Free barbell across the posterior shoulder/upper-back surface at 25% of body mass | Free padded barbell across the pelvis | Smith, lever machine, band, dumbbell, cable, and bodyweight branches are deferred |
+| Initial stance | Symmetric, shoulder-width, and slightly externally turned | Symmetric bilateral | Unilateral and staggered variants require separate stability review |
 
 This makes family membership depend on segment and joint behavior rather than
 the word “deadlift,” “bridge,” or “glute.”
 
 ## Shared Batch-5 vocabulary
 
-The active thrust/bridge contract reuses the Batch-5 axis names wherever the
-underlying fact is the same. The deferred hinge notes preserve the same
-candidate spellings for a future resolvable contract:
+The active contracts reuse the Batch-5 axis names wherever the underlying fact
+is the same:
 
 - `stanceConfiguration: symmetricBilateral` describes topology, while the
-  separate `stanceWidth` axis records the directly reviewed hip-width RDL and
-  shoulder-width thrust/bridge setups;
+  separate `stanceWidth` axis records the directly reviewed shoulder-width
+  good-morning and thrust/bridge setups;
 - `rangeOfMotion` names a reviewed endpoint convention rather than an
   unmeasured universal joint angle;
 - `interRepSupport` says whether an external surface supports the load between
@@ -52,74 +51,75 @@ The active contract also retains Batch 4's `movingSegment` spelling and sets
 it to `pelvis`; it does not invent a thrust-specific synonym for the externally
 loaded proximal segment that rises relative to the planted lower limbs.
 
-`kineticChain: closed` is lower-limb-relative in the active family: the feet
+`kineticChain: closed` is lower-limb-relative in both active families: the feet
 are the fixed distal contacts while the pelvis and proximal segments move. It
 says nothing about whether the external barbell path is fixed. `fixedPath`
-retains the existing external-load definition and is `false` for both active
-fixtures. A future hinge should reuse those meanings if its evidence gate is
-resolved.
+retains the existing external-load definition and is `false` for all three
+active fixtures.
 
-## Family 1: `hip-hinge` — deferred
+## Family 1: `hip-hinge`
 
-### Intended contract
+### Exact fixture and action boundary
 
-The intended contract would use `hip.extension` as its only prime and plane-
-basis action. The knees would start slightly flexed and show no material joint
-excursion, while the spine remained position-held. That is the desired boundary
-from a squat or floor pull. The reviewed Romanian-deadlift fixtures do not meet
-it, so no family JSON or exercise record activates.
+Schellenberg et al. directly measured a bilateral barbell good morning using a
+12-camera motion-capture system, force plates, 55 body markers, 22 additional
+spinal markers, and two bar markers. Thirteen experienced trainees performed
+eight repetitions with additional barbell load equal to 25 percent of body
+mass. The standardized setup used shoulder-width feet with a slight natural
+toe-out, a free bar across the posterior shoulder and upper-back surface, a
+comfortable hand position, no external torso support, and the same normal
+self-selected speed during descent and ascent. The bar remained on the athlete
+between repetitions.
 
-The rejected draft fixture was a bilateral hip-width, shoulder-width double-
-overhand barbell Romanian deadlift with no floor reset. It is not an approved
-roster record, alias set, seed, or role envelope.
+The family uses `hip.extension` as its sagittal plane-basis action and declares
+both `hip.extension` and `spine.extension` as primes. Schellenberg et al.
+reported 58.4 +/- 10.0 degrees of hip range, 16.8 +/- 4.7 degrees of
+pelvis-lumbar range, and 8.9 +/- 3.8 degrees of lumbar-thoracic range during the
+good morning. The instruction to preserve a natural spine therefore cannot be
+encoded as `positionHeld`: measured segmental motion is material and reverses
+during the ascent.
 
-Any future role decision must remain deliberately regional. Coratella et al.
-directly measured semitendinosus, biceps femoris, gluteus maximus, gluteus
-medius, longissimus, and iliocostalis in trained bodybuilders. Romanian
-deadlift produced greater semitendinosus excitation than the stiff-leg
-condition, while the stiff-leg condition produced greater glute-max
-excitation. That makes the visible `medialHamstrings` region a candidate
-primary and `gluteMax` a candidate secondary, but EMG does not repair the
-missing motion contract.
-Semimembranosus was not separately measured; it shares the same authored hip-
-extension capability and the body asset intentionally combines it with
-semitendinosus in `medialHamstrings`, so this remains a visible-region credit
-rather than a claim that the two muscles had equal EMG amplitude.
+The measured knee range was 7.8 +/- 5.5 degrees, with maximum knee flexion of
+5.3 +/- 6.7 degrees. That small but nonzero excursion is recorded as
+`measuredSmallNondefiningExcursion`; it is neither falsely called held nor
+promoted to `knee.extension`. The family remains mechanically distinct from a
+squat or floor pull because knee motion is not a training-defining action and
+the load never returns to an external support. No net knee moment or technique
+label is used as a substitute for an angular prime action.
 
-The experiment measured biceps femoris, but the scene has one unsplit
-biceps-femoris mesh. The catalog cannot truthfully give the whole region the
-long head's hip-extension action because the same mesh includes the
-monoarticular short head. It therefore receives only held-knee stabilizer
-credit if a fixture later activates. `gluteMed` and `lumbarExtensors` remain
-candidate directly measured pelvis/hip and spine-control roles. Static bar
-control would use the established loaded-grip `fingerFlexors` and
-`extensorCarpiRadialis` convention without adding dynamic finger or wrist prime
-actions.
+The source uses both “upper trapezius” in its method summary and “rear
+deltoid” in its standardized instruction. The contract therefore records the
+placement conservatively as `posteriorShoulderUpperBack` rather than claiming
+a more precise contact site that the paper itself does not resolve.
 
-### Activation blocker
+### Role policy and limitations
 
-Coratella et al. introduce Romanian and stiff-leg deadlifts as isometric-knee
-variations and distinguish the Romanian version by a slightly flexed knee, but
-their technique paragraph says participants finished by fully extending both
-knees and hips. Lee et al. prescribed approximately 15 degrees of knee flexion,
-required floor contact, and reported 33.86 ± 12.59 degrees of knee flexion.
-Lyons et al. then directly measured about 33 degrees of knee range of motion in
-participants' typical Romanian-deadlift technique at 50 percent one-repetition
-maximum. That is material excursion, not measurement noise.
+`medialHamstrings`, `gluteMax`, and `lumbarExtensors` are non-ranked
+co-primaries. The first two satisfy the explicit hip-extension action and the
+third satisfies the explicit spine-extension action. This categorical policy
+comes from the measured action topology plus the registered lower-limb and
+lumbar anatomy profiles. Schellenberg et al. did not collect EMG, so the
+contract does not claim that these three regions had equal activation or rank
+their relative contribution.
 
-The shared catalog meaning of `positionHeld` is no material joint excursion;
-it cannot be locally weakened to mean merely “do not squat much.” Adding
-`knee.extension` would accurately describe the reviewed fixtures but would
-erase the intended strict hinge/squat boundary unless a reviewed quantitative
-band and muscle policy represented it. Net knee moment or muscle activity
-cannot by itself prove angular knee extension. The family therefore remains
-absent until one of two evidence paths succeeds:
+The scene's `bicepsFemoris` region combines the biarticular long head and
+monoarticular short head. It therefore receives knee-control stabilizer credit
+only; the contract does not project a whole-region hip-extension prime from
+the long head. `gluteMed`, `abs`, and `obliques` provide conservative pelvis
+and trunk control. `gastrocnemius` and `soleus` cover the materially planted
+knee, ankle, and foot demands without creating an ankle prime. The free bar
+also makes shoulder, scapular, elbow, wrist, and hand control material, covered
+by the established `externalRotators`, `trapeziusUpper`, `brachialis`,
+`fingerFlexors`, and `extensorCarpiRadialis` stabilizer convention. These are
+mechanics- and anatomy-derived assignments, not condition-matched EMG claims.
 
-1. direct condition-matched kinematics establish a reproducible, materially
-   held-knee RDL fixture with no floor reset; or
-2. a reviewed small-knee-extension hinge branch defines a quantitative motion
-   band, proves why that band remains distinct from squat/floor-pull mechanics,
-   and supports the corresponding knee-extensor role policy.
+The source prescribes a body-mass-relative external barbell load, while the
+runtime seed is a fixed mass. The study cohort averaged 80.1 kilograms, so the
+record uses a representative 45-pound / 20-kilogram seed, approximately 25
+percent of that mean, and explicitly instructs the athlete to replace it with
+25 percent of their own body mass. `loadMode` remains `external`; the seed is
+product initialization rather than a bodyweight fraction or a
+`nonComparable` load.
 
 ### Explicit exclusions and deferrals
 
@@ -129,7 +129,7 @@ absent until one of two evidence paths succeeds:
 | Hex/trap-bar deadlift | Defer | Handle geometry and knee-extensor demand move it toward the squat boundary. |
 | Stiff-leg deadlift | Defer | Extended-knee posture and floor relationship require their own role and range review. |
 | Deficit or step RDL | Defer | Coratella measured it, but the elevated range materially changed posterior-chain excitation. |
-| Good morning | Defer | Posterior-shoulder load placement and measured lumbar excursion need their own rules. |
+| Romanian deadlift | Defer | Reviewed fixtures show material knee excursion, and floor/no-floor conventions vary; none is silently generalized from the good morning. |
 | Dumbbell, kettlebell, cable, Smith RDL | Defer | No reviewed source establishes equivalence to the active barbell path and grip contract. |
 | Single-leg or staggered RDL | Defer | Pelvic and frontal/transverse stability demands differ. |
 | Kettlebell swing | Exclude | Ballistic power and deliberate momentum are not the reviewed controlled dynamic-strength task. |
@@ -218,9 +218,34 @@ from that incidental steadying contact.
 
 ## Evidence metadata
 
-The active thrust/bridge family requires the final two IDs below. The first
-three are reviewed hold evidence and must not be registered merely because
-they were reviewed; unused registry entries fail evidence-coverage validation.
+The active families require the Schellenberg, Brazil, and Kennedy IDs below.
+The Coratella, Lee, and Lyons studies remain reviewed adverse or boundary
+evidence for excluded Romanian and stiff-leg variants; they must not be
+registered merely because they were reviewed, because unused registry entries
+fail evidence-coverage validation.
+
+### `schellenberg-2013-deadlift-goodmorning-kinematics`
+
+- Source type: `experimentalKinematicsKineticsStudy`
+- Title: *Kinetic and kinematic differences between deadlifts and
+  goodmornings*
+- Authors: Florian Schellenberg; Julia Lindorfer; Renate List; William R.
+  Taylor; Silvio Lorenzetti
+- Year: 2013
+- DOI: `10.1186/2052-1847-5-27`
+- PMID: `24314057`
+- PMCID: `PMC3878967`
+- URL: `https://doi.org/10.1186/2052-1847-5-27`
+- Scope: Nine male and four female experienced trainees performed eight good
+  mornings with external barbell load equal to 25 percent of body mass.
+  Twelve-camera three-dimensional motion capture, force plates, 55 body
+  markers, 22 additional spinal markers, and two bar markers quantified hip,
+  knee, pelvis-lumbar, and lumbar-thoracic motion. The fixture directly
+  supports the active bilateral standing topology, small but nonzero knee
+  excursion, material segmental spine excursion, no inter-repetition support,
+  free external bar path, and exact load and repetition prescription. It did
+  not collect EMG, did not compare equipment substitutions, and does not prove
+  that the anatomy-derived co-primary regions had equal or ranked activation.
 
 ### `coratella-2022-romanian-step-stiff-leg-deadlift`
 
@@ -259,7 +284,7 @@ they were reviewed; unused registry entries fail evidence-coverage validation.
   three-dimensional motion, ground reaction force, joint kinetics, and rectus
   femoris, biceps femoris, and gluteus-maximus EMG were collected. It directly
   supports the hip-dominant versus knee-extension-heavy floor-pull boundary;
-  its floor-touch instruction is not evidence for the active no-floor-reset
+  its floor-touch instruction is not evidence for the active good-morning
   geometry or a static numeric knee angle.
 
 ### `lyons-2026-conventional-romanian-deadlift`
@@ -324,27 +349,40 @@ they were reviewed; unused registry entries fail evidence-coverage validation.
 
 ## Activation and mutation gates
 
-1. Register the exact Brazil and Kennedy evidence entries and reference each
-   at least once; leave the three hinge hold sources out of the registry.
-2. Validate the exact two-record thrust/bridge roster plus global name/alias
-   uniqueness, and prove `hip-hinge.json` remains absent.
-3. Pin the 42-action thrust/bridge forbidden complement.
-4. Mutate every thrust/bridge required muscle assignment independently and
-   prove rejection.
-5. Prove every thrust/bridge discrete axis value appears in the authored roster.
-6. Mutate each hip-thrust/bridge JSON rule assertion and required/absent field
+1. Register the exact Schellenberg, Brazil, and Kennedy evidence entries and
+   reference each at least once; leave the three rejected Romanian/stiff-leg
+   review sources out of the registry.
+2. Validate the exact one-record hinge and two-record thrust/bridge rosters plus
+   global catalog-ID, name, and alias uniqueness.
+3. Pin the exact 42-action forbidden complement for each family and prove the
+   hinge has exactly `hip.extension` plus `spine.extension` as primes, with no
+   knee prime.
+4. Mutate every required muscle assignment in both families independently and
+   prove rejection, including each of the hinge's three non-ranked
+   co-primaries and the stabilizer-only biceps-femoris region.
+5. Prove every required discrete axis value appears in the authored rosters;
+   directly mutate each one-record hinge invariant and require a specific
+   diagnostic.
+6. Pin the hinge's exact 25-percent-body-mass external-load prescription,
+   representative 45-pound / 20-kilogram seed, eight repetitions, bilateral
+   shoulder-width slightly toe-out stance,
+   posterior-shoulder/upper-back placement, no inter-repetition support, and
+   free path.
+7. Prove hinge knee motion remains
+   `measuredSmallNondefiningExcursion`, spine motion remains
+   `extendsWithMeasuredSegmentalExcursion`, and neither can be rewritten as
+   `positionHeld`.
+8. Mutate each hip-thrust/bridge JSON rule assertion and required/absent field
    independently; each rule must also retain a contrasting exercise.
-7. Prove the 90/115 knee endpoints cannot swap and no intermediate numeric
-   value enters without a new reviewed rule branch.
-8. Pin the hinge evidence hold: no active family may substitute “training
-   intent” for the shared no-material-excursion meaning of `positionHeld`.
-9. Prove hip thrust/bridge requires knee extension but rejects every ankle and
+9. Prove the 90/115 thrust/bridge knee endpoints cannot swap and no intermediate
+   numeric value enters without a new reviewed rule branch.
+10. Prove hip thrust/bridge requires knee extension but rejects every ankle and
    spine action as a prime.
-10. Keep the explicit `spineMotion: nonstandardized` and `ankleMotion:
+11. Keep the explicit `spineMotion: nonstandardized` and `ankleMotion:
     nonstandardized` disclosures; do not rewrite either to `positionHeld`
     merely for vocabulary symmetry.
-11. Confirm the shared Batch-5 spellings for `stanceConfiguration`,
+12. Confirm the shared Batch-5 spellings for `stanceConfiguration`,
     `rangeOfMotion`, `interRepSupport`, `footContact`, and `loadPlacement` in
     the families README.
-12. Run the catalog validator, full Python catalog suite, `git diff --check`,
+13. Run the catalog validator, full Python catalog suite, `git diff --check`,
     and the required generic iOS simulator build after shared integration.

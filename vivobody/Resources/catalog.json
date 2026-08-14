@@ -974,6 +974,148 @@
     ]
   },
   {
+    "familyID": "dynamic-lunge",
+    "catalogID": "bodyweight-forward-lunge",
+    "name": "Bodyweight Forward Lunge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Forward Lunge"
+    ],
+    "searchPriority": 88,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Step forward with the selected lead foot, land with the whole foot in contact, and lower under control for three seconds to full self-selected depth. Keep the lead foot planted, then extend the lead hip and knee and move the lead ankle from its dorsiflexed bottom position toward standing over two seconds. Step the lead foot back to the bilateral start to complete the repetition. Finish the set on the selected side, then repeat with the other lead leg.",
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "dynamic-lunge",
+    "catalogID": "bodyweight-reverse-lunge",
+    "name": "Bodyweight Reverse Lunge",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Reverse Lunge"
+    ],
+    "searchPriority": 87,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Keep the selected front foot planted and step the contralateral foot backward. After the rear foot lands, lower under control for three seconds to full self-selected depth without moving the selected front foot. Extend the selected front hip and knee and move its ankle from the dorsiflexed bottom position toward standing over two seconds, then bring the rear foot forward to the bilateral start. Finish the set with the same selected front leg, then repeat on the other side.",
+    "involvement": [
+      {
+        "muscle": "vasti",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "secondary"
+      },
+      {
+        "muscle": "soleus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "elbow-extension",
     "catalogID": "single-arm-supinated-cable-triceps-pushdown",
     "name": "Single-Arm Supinated Cable Triceps Pushdown",
@@ -1796,6 +1938,135 @@
       },
       {
         "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-flexion",
+    "catalogID": "bodyweight-active-straight-leg-raise",
+    "name": "Bodyweight Active Straight-Leg Raise",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Active Straight-Leg Raise",
+      "Supine Straight-Leg Raise"
+    ],
+    "searchPriority": 68,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Lie supine with the torso and pelvis supported on a table and both legs extended. Keep the nonworking leg supported and the working knee straight. Raise the working leg by flexing the hip until reaching your active end range, then lower it under control. Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion.",
+    "involvement": [
+      {
+        "muscle": "iliopsoas",
+        "role": "primary"
+      },
+      {
+        "muscle": "rectusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-hinge",
+    "catalogID": "barbell-good-morning-25-percent-body-mass",
+    "name": "25% Body-Mass Barbell Good Morning",
+    "group": "legs",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 8,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Barbell Good Morning at 25% Body Mass",
+      "25% Bodyweight Good Morning"
+    ],
+    "searchPriority": 76,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "external",
+    "movementDefinition": "Stand upright with the feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the posterior shoulder and upper-back surface in a comfortable hand position, keep the head aligned with the spine, brace the trunk, and keep both feet planted. Replace the representative 45-pound or 20-kilogram seed with external barbell load equal to 25 percent of your body mass. Hinge to the deepest position that preserves the reviewed natural-spine technique, then return to standing by extending the hips and spine at the same normal speed used for the descent. Keep the knees near straight while allowing the small nondefining excursion measured in the reviewed fixture, and retain the bar on the body between all eight repetitions.",
+    "involvement": [
+      {
+        "muscle": "medialHamstrings",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "primary"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "primary"
+      },
+      {
+        "muscle": "bicepsFemoris",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "brachialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
         "role": "stabilizer"
       }
     ]

@@ -1,17 +1,17 @@
 # Batch 4 — hip isolation review
 
-Status: mixed outcome. `hip-extension` is active after the reviewed 52-region
-lower-body taxonomy migration. `hip-flexion` remains an evidence hold: the
-available studies establish muscle activity and load sensitivity,
-but no reviewed condition-matched source proves the proposed dynamic
-femur-relative-to-position-held-pelvis isolation contract.
+Status: resolved. `hip-extension` and `hip-flexion` are active after the
+reviewed 52-region lower-body taxonomy migration. The hip-flexion decision
+does not revive the earlier position-held-pelvis proposal. It activates the
+narrower Okubo active-straight-leg-raise topology and preserves pelvic and
+spinal motion as `nonstandardized`.
 
 ## Outcome
 
 | Candidate | Decision | Initial roster |
 |---|---|---:|
 | `hip-extension` | Active | 1 |
-| `hip-flexion` | Defer | 0 |
+| `hip-flexion` | Active | 1 |
 
 This review intentionally does not use bridge, thrust, hinge, sit-up, hanging
 leg-raise, or knee-raise records to make the two narrow families appear more
@@ -42,31 +42,34 @@ cannot inherit long-head hip extension without also falsely assigning it to
 the short head represented by the same mesh. Those are deliberate visible-
 taxonomy under-credits, not reasons to restore the retired aggregates.
 
-## Shared lower-body isolation vocabulary
+## Lower-body isolation vocabulary
 
-The hip-extension contract uses the lower-body spellings agreed with the
-knee/ankle isolation review:
+Both contracts use the lower-body spellings agreed with the knee/ankle
+isolation review, while preserving the different facts established by their
+sources:
 
-| Axis | Active value | Meaning |
-|---|---|---|
-| `kineticChain` | `open` | The distal limb is free rather than fixed to the environment. |
-| `bodyPosition` | `prone` | Whole-body posture. |
-| `torsoSupport` | `table` | Actual external torso support. |
-| `pelvisSupport` | `table` | Actual external pelvis support; this does not itself prove zero pelvic motion. |
-| `pelvisMotion` | `positionHeld` | The pelvis does not deliberately create the repetition. |
-| `spineMotion` | `positionHeld` | The spine does not deliberately create the repetition. |
-| `hipMotion` | `extends` | The dynamic family action. |
-| `kneeMotion` | `positionHeld` | Knee posture is held while the hip moves. |
-| `kneeFlexionDegrees` | `90` | Reviewed bent-knee posture. |
-| `movingSegment` | `thigh` | Pelvis-relative femoral motion defines the repetition. |
-| `loadInterface` | `none` | No external resistance implement contacts the athlete. |
-| `resistanceGeometry` | `limbSegmentGravity` | The unsupported limb segment supplies resistance. |
-| `fixedPath` | `false` | No rail or lever constrains an external load path. |
-| `lowerBodyContribution` | `isolatedJointMotion` | Another lower-body joint does not propel the repetition. |
+| Axis | Hip extension | Hip flexion | Meaning |
+|---|---|---|---|
+| `kineticChain` | `open` | `open` | The distal limb is free rather than fixed to the environment. |
+| `bodyPosition` | `prone` | `supine` | Whole-body posture. |
+| `torsoSupport` | `table` | `table` | Actual external torso support. |
+| `pelvisSupport` | `table` | `table` | Actual external pelvis support; this does not itself prove zero pelvic motion. |
+| `pelvisMotion` | `positionHeld` | `nonstandardized` | The extension technique holds the pelvis; the ASLR source does not establish a zero-motion pelvis. |
+| `spineMotion` | `positionHeld` | `nonstandardized` | The extension technique holds the spine; the ASLR source does not establish a zero-motion spine. |
+| `hipMotion` | `extends` | `flexes` | The dynamic family action. |
+| `rangeOfMotion` | numeric reviewed endpoints | `activeEndRange` | Only the extension source supports universal numeric authoring targets. |
+| `kneeMotion` | `positionHeld` | `positionHeld` | Knee posture is held while the hip moves. |
+| `kneePosture` | reviewed 90-degree value | `extended` | The directly reviewed working-knee posture. |
+| `movingSegment` | `thigh` | `thigh` | Pelvis-relative femoral motion defines the repetition. |
+| `loadInterface` | `none` | `none` | No external resistance implement contacts the athlete. |
+| `resistanceGeometry` | `limbSegmentGravity` | `limbSegmentGravity` | The unsupported limb segment supplies resistance. |
+| `fixedPath` | `false` | `false` | No rail or lever constrains an external load path. |
+| `lowerBodyContribution` | `isolatedJointMotion` | `isolatedJointMotion` | Another lower-body joint does not propel the repetition. |
 
 Support and motion are deliberately separate facts. A torso or pelvis resting
 on a table does not automatically prove that the pelvis and spine remained
-still; the position-held axes state the reviewed technique boundary.
+still. The extension source supports its position-held technique boundary;
+the hip-flexion contract instead records both motions as nonstandardized.
 
 ## Family 1: `hip-extension`
 
@@ -183,149 +186,147 @@ biceps-femoris taxonomy limitation without inventing an equipment survey.
   categorical roles, not other apparatus, external loading, bilateral
   variants, or a zero-pelvic-motion claim.
 
-## Family 2: `hip-flexion` — deferred
+## Family 2: `hip-flexion`
 
-### Proposed boundary
+### Contract boundary
 
-The candidate family would require the femur to flex relative to a
-position-held pelvis while the spine and knee posture remain held. The family
-would be open-chain, sagittal, isolation work with `hip.flexion` as its only
-prime action. It would exclude sit-ups and V-ups (spine/trunk motion), hanging
-or captain-chair leg raises (suspended support and different pelvic demand),
-standing marches (stance-leg and balance demands), knee raises (different
-rectus-femoris length), and machine or cable fixtures whose exact pelvis
-restraint and resistance geometry have not been reviewed.
+The active family is a unilateral supine active straight-leg raise from the
+table-supported start to the participant's active end range. The working knee
+remains extended, and no external implement is used. Its only prime and
+plane-basis action is `hip.flexion`; every other current action is forbidden.
+It uses `mechanic: isolation`, `pattern: null`, `direction: null`, and
+`planes: [sagittal]`.
 
-That is the contract the catalog wants. The current primary studies do not yet
-prove it.
+This is deliberately not the previously proposed position-held-pelvis family.
+Okubo et al. measured the moving hip and segmented the repetition through
+concentric, end-range, and eccentric phases, but did not establish a universal
+numeric endpoint, a standardized cadence or end-range duration, or zero
+pelvic and spinal motion. The active contract therefore records
+`pelvisMotion: nonstandardized` and `spineMotion: nonstandardized`. Those
+values preserve uncertainty; they do not promote either region to a deliberate
+prime action.
 
-### What the primary studies establish
+This excludes:
 
-Lewis et al. modeled prone hip extension and supine straight-leg hip flexion
-across joint angles and compared predictions with static midpoint EMG in five
-subjects. In the supine task, iliopsoas activity exceeded rectus femoris and
-tensor fasciae latae. The study supports anatomy and position-sensitive load,
-but the experimental validation is a static hold rather than the proposed
-dynamic repetition.
+- sit-ups and V-ups, which deliberately add spinal or trunk motion;
+- hanging and captain-chair raises, whose suspended support and pelvic demands
+  are different;
+- knee raises, which change the reviewed rectus-femoris length condition;
+- standing marches, which add stance-leg and balance demands;
+- loaded, cable, and machine flexion, whose load and restraint geometries were
+  not studied; and
+- any record with an authored numeric endpoint, cadence, or hold duration.
 
-Hu et al. used fine-wire psoas and iliacus EMG plus surface rectus-femoris and
-adductor-longus EMG during unilateral active straight-leg raises, with and
-without a subject-specific ankle load that increased the leg's static hip
-moment by 50 percent. All four muscles increased activity with load. Psoas was
-also active during the contralateral raise, however, supporting a bilateral
-spinal-stabilization interpretation; the paper also states that initial trunk
-position was not controlled and frontal deviations of the raised leg were not
-recorded.
+### Direct evidence and role policy
 
-Yamane et al. directly measured psoas and iliacus with fine-wire electrodes
-and rectus femoris, sartorius, adductor longus, and tensor fasciae latae with
-surface electrodes during straight-leg raises to 30, 45, and 60 degrees. At
-60 degrees, psoas and iliacus activity was significantly greater than at the
-shallower angles. This is strong range-dependent muscle evidence. Its
-limitations explicitly say anterior/posterior pelvic movement was not limited,
-muscle activity with hip motion alone was not recorded, and participants with
-less than 60 degrees of passive range were excluded.
+Okubo et al. collected fine-wire psoas-major EMG plus surface EMG from rectus
+femoris, rectus abdominis, external oblique, and a combined internal-oblique/
+transversus-abdominis site during active straight-leg raises to end range.
+The analysis covered concentric, end-range, and eccentric phases in data from
+nine healthy men. Psoas-major activation was greatest late in the concentric
+phase, at end range, and early in the eccentric phase, and exceeded rectus
+femoris at the high-flexion portion of the task. The abdominal panel was also
+active around the late concentric and end-range portions. This supports the
+narrow topology and a conservative categorical role hierarchy; it does not
+turn surface or fine-wire amplitude into numeric volume shares.
 
-Elia et al. videotaped bilateral supine hip flexion and found that clinicians
-experienced in stabilization training could reduce pelvic movement when
-trying to cocontract trunk muscles. No participant eliminated pelvic movement.
-The study verifies that pelvic motion is a load-bearing boundary, but it did
-not measure the hip-flexor role panel needed to activate a family.
+The exact active role envelope is:
 
-Taken together, these sources prove that a straight-leg raise is not a free
-synonym for isolated hip flexion. Good hip-flexor EMG does not prove that the
-femur moved relative to a held pelvis, and a stabilization instruction does
-not prove zero pelvic motion.
+```json
+{
+  "requirements": [
+    { "anyOf": ["iliopsoas"], "minimumRole": "primary" },
+    { "anyOf": ["rectusFemoris"], "minimumRole": "secondary" },
+    { "anyOf": ["abs"], "minimumRole": "stabilizer" },
+    { "anyOf": ["obliques"], "minimumRole": "stabilizer" }
+  ],
+  "allowedByRole": {
+    "primary": ["iliopsoas"],
+    "secondary": ["rectusFemoris"],
+    "stabilizer": ["abs", "obliques"]
+  }
+}
+```
 
-### Activation gate
+The body model's visible `iliopsoas` region combines psoas major and iliacus.
+Okubo directly measured psoas major, not iliacus; the primary label therefore
+means the combined visible region carries the directly supported psoas role,
+not that the study separately ranked both constituent muscles. The anatomy
+foundation independently supports both constituents as hip flexors.
 
-Do not create `families/hip-flexion.json` until a reviewed condition-matched
-primary source, or a defensible combination of sources on the same fixture,
-establishes all of the following:
+Rectus femoris remains secondary rather than absent. Abs and obliques receive
+stabilizer-only credit, which conservatively covers the declared spine and
+pelvis demands without labeling their measured activity as deliberate spinal
+motion. Iliopsoas and rectus femoris cover hip and knee stability. No
+additional provider is needed for the exact `hip|pelvis|knee|spine` envelope.
 
-1. dynamic femoral flexion relative to the pelvis, with sagittal pelvic and
-   spinal motion measured or externally constrained and verified;
-2. the exact knee posture and hip range used by the fixture;
-3. enough individual-muscle evidence to assign `iliopsoas`, `rectusFemoris`,
-   and any admitted `sartorius|tensorFasciaeLatae` roles without using the
-   retired aggregate; admitting `adductorLongusBrevis` or `pectineus` as a
-   flexor additionally requires a reviewed hip-position condition in the
-   central action vocabulary;
-4. an implement/support/resistance geometry that maps to a real exercise a
-   user can reproduce; and
-5. honest load semantics—a measured external load or reviewed bodyweight
-   fraction, not a guessed fraction of total body mass.
+Tensor fasciae latae, sartorius, and the adductor regions are excluded. Okubo
+did not measure them, and general anatomical hip-flexion capability is not a
+license to add them to this exact exercise. The exclusion also avoids
+fabricating a posture condition for position-sensitive adductor function.
 
-The first likely fixture is a unilateral supine straight-leg raise to a
-reviewed deep-flexion endpoint with an externally stabilized pelvis and a
-measured ankle-cuff load. That is a search target, not pre-approved roster
-content.
+### Exact initial roster
 
-### Reviewed hold evidence metadata
+| Catalog ID | Name and aliases | Geometry | Load semantics | Roles |
+|---|---|---|---|---|
+| `bodyweight-active-straight-leg-raise` | **Bodyweight Active Straight-Leg Raise**; `Active Straight-Leg Raise`, `Supine Straight-Leg Raise` | unilateral, supine table support, extended working knee, participant-specific active end range | bodyweight equipment, `nonComparable`, zero authored fraction; 10 reps | iliopsoas P, rectusFemoris S, abs St, obliques St |
 
-These sources are documented here for the next evidence pass. They should not
-be registered merely because they were reviewed: the evidence validator
-rejects registry entries unused by active anatomy or family contracts.
+The repetition reaches active end range and returns under control. It does not
+publish a degree endpoint, cadence, pause, or hold duration. The fixture has
+no external weight seed. Encoding a guessed fraction of total bodyweight
+would make the limb's mass and moment arm look comparable to a supported-body
+fraction, so the record remains explicitly `nonComparable`.
 
-#### `lewis-2009-hip-strengthening-forces`
+The one-record roster is intentional. It activates only the exact primary
+source topology and does not treat every exercise commonly called a leg raise
+as equivalent.
 
-- Source type: `peerReviewedMusculoskeletalModelAndEMGStudy`
-- Title: *Effect of position and alteration in synergist muscle force
-  contribution on hip forces when performing hip strengthening exercises*
-- Authors: Cara L. Lewis; Shirley A. Sahrmann; Daniel W. Moran
-- Year: 2009
-- DOI: `10.1016/j.clinbiomech.2008.09.006`
-- PMID: `19028000`
-- URL: `https://doi.org/10.1016/j.clinbiomech.2008.09.006`
+### Exact active evidence ID
 
-#### `hu-2011-weighted-active-straight-leg-raise`
+`okubo-2021-end-range-active-straight-leg-raise`
 
-- Source type: `intramuscularEMGAndKinematicStudy`
-- Title: *Is the psoas a hip flexor in the active straight leg raise?*
-- Authors: Hai Hu; Onno G. Meijer; Jaap H. van Dieën; Paul W. Hodges;
-  Sjoerd M. Bruijn; Rob L. Strijers; Prabath W. B. Nanayakkara; Barend J.
-  van Royen; Wen Hua Wu; Chun Xia
-- Year: 2011 (published online 2010)
-- DOI: `10.1007/s00586-010-1508-5`
-- PMID: `20625774`
-- URL: `https://doi.org/10.1007/s00586-010-1508-5`
+- Source type: `experimentalKinematicsEMGStudy`
+- Title: *Differential activation of psoas major and rectus femoris during
+  active straight leg raise to end range*
+- Authors: Yu Okubo; Koji Kaneoka; Kiyotaka Hasebe; Naoto Matsunaga;
+  Atsushi Imai; Paul W. Hodges
+- Year: 2021
+- DOI: `10.1016/j.jelekin.2021.102588`
+- PMID: `34455371`
+- URL: `https://doi.org/10.1016/j.jelekin.2021.102588`
+- Scope: Fine-wire psoas-major and surface rectus-femoris and abdominal EMG,
+  synchronized with hip kinematics, characterized concentric, end-range, and
+  eccentric phases of the unilateral active straight-leg raise to active end
+  range. The analyzable data were from nine healthy men. The source supports
+  this bodyweight topology and the categorical role envelope, not iliacus as
+  a separately measured site, a numeric universal endpoint, a standardized
+  cadence or end-range duration, an external load, or zero pelvis/spine
+  movement.
 
-#### `yamane-2019-straight-leg-raise-hip-flexors`
-
-- Source type: `intramuscularEMGStudy`
-- Title: *Understanding the Muscle Activity Pattern of the Hip Flexors during
-  Straight Leg Raising in Healthy Subjects*
-- Authors: Masahiro Yamane; Mitsuhiro Aoki; Yuji Sasaki; Hayato Kawaji
-- Year: 2019
-- DOI: `10.2490/prm.20190007`
-- PMID: `32789254`
-- URL: `https://doi.org/10.2490/prm.20190007`
-
-#### `elia-1996-dynamic-pelvic-stabilization-hip-flexion`
-
-- Source type: `kinematicTechniqueStudy`
-- Title: *Dynamic pelvic stabilization during hip flexion: a comparison
-  study*
-- Authors: D. S. Elia; R. W. Bohannon; D. Cameron; R. C. Albro
-- Year: 1996
-- DOI: `10.2519/jospt.1996.24.1.30`
-- PMID: `8807539`
-- URL: `https://doi.org/10.2519/jospt.1996.24.1.30`
+The earlier Lewis, Hu, Yamane, and Elia studies remain useful adverse context
+for position sensitivity, loading, and pelvic behavior. They are not needed
+to broaden the active family and should not be registered merely because they
+were reviewed.
 
 ## Activation checks
 
-Activation of `hip-extension` should add tests that prove:
+Activation of both families should add tests that prove:
 
-1. the exact one-record roster and global name/alias uniqueness;
-2. the complete 43-action forbidden complement;
+1. each exact one-record roster and global name/alias uniqueness;
+2. each complete 43-action forbidden complement;
 3. every admitted enum and boolean value is covered;
-4. numeric start, endpoint, and knee-posture values are pinned exactly;
+4. the hip-extension numeric start, endpoint, and knee-posture values are
+   pinned exactly, while hip-flexion has no numeric endpoint, cadence, or hold
+   duration to mutate;
 5. every required muscle-role assignment fails independently when removed or
    weakened;
 6. changing pelvis or spine motion, knee posture, resistance geometry, load
    semantics, laterality, or support fails validation;
-7. bridge/thrust, hinge, straight-knee, and externally loaded mutations cannot
-   enter through the active vocabulary;
-8. `bicepsFemoris` cannot be promoted to a dynamic hip-extensor role; and
-9. `hip-flexion` remains absent until its evidence gate is deliberately
-   resolved.
+7. bridge/thrust, hinge, straight-knee hip extension, loaded leg raises, knee
+   raises, and deliberately trunk-driven mutations cannot enter through the
+   active vocabularies;
+8. `bicepsFemoris` cannot be promoted to a dynamic hip-extensor role;
+9. `tensorFasciaeLatae`, `sartorius`, and all adductor regions cannot enter the
+   exact hip-flexion roster; and
+10. the hip-flexion contract keeps both `pelvisMotion` and `spineMotion`
+    `nonstandardized` and cannot be silently strengthened to `positionHeld`.

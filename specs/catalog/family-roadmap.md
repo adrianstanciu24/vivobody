@@ -5,9 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 51 reviewed families are active, containing 128 exercises.
+- 54 reviewed families are active, containing 132 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 146 registered evidence sources.
+  44 joint actions, and 149 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 resolved nine candidates into eight active families and one explicit
@@ -17,10 +17,13 @@ are discovery handles, not guaranteed final family IDs.
   Later review activated scapular depression, assigned upward-rotation
   ownership to `scapular-elevation`, and retired downward rotation as
   intentionally non-standalone.
-- Batch 4 resolved five candidates into four active families and one explicit
-  evidence hold.
-- Batch 5 resolved five discovery candidates into four active families and two
-  holds after splitting stationary split squats from dynamic lunges.
+- Batch 4 initially resolved five candidates into four active families and one
+  evidence hold; the held hip-flexion family later activated through an exact
+  active-straight-leg-raise fixture.
+- Batch 5 initially resolved five discovery candidates into four active
+  families and two holds after splitting stationary split squats from dynamic
+  lunges. Later review activated both the good-morning hinge owner and the
+  forward/reverse dynamic-lunge family.
 - Batch 6 resolved five taxonomy-sensitive candidates into five active
   single-exercise families after the hip-rotation anatomy and evidence gates
   closed atomically.
@@ -28,11 +31,9 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- Seven work items remain unresolved, all family or branch items: the deferred
-  `diagonal-pull` and generic `grip` candidates; the Batch-3
-  `landmine-press` hold and closed-chain branch of `vertical-press`; the
-  Batch-4 `hip-flexion` hold; and the Batch-5 `hip-hinge` and `dynamic-lunge`
-  holds.
+- Four work items remain unresolved, all family or branch items: the deferred
+  `diagonal-pull` and generic `grip` candidates, the Batch-3
+  `landmine-press` hold, and the closed-chain branch of `vertical-press`.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -76,11 +77,14 @@ batch siblings.
 | `knee-extension` | 2 |
 | `knee-flexion` | 2 |
 | `hip-extension` | 1 |
+| `hip-flexion` | 1 |
 | `ankle-plantarflexion` | 2 |
 | `bilateral-squat` | 2 |
+| `hip-hinge` | 1 |
 | `hip-thrust-bridge` | 2 |
 | `split-stance-squat` | 1 |
 | `step-up` | 1 |
+| `dynamic-lunge` | 2 |
 | `hip-abduction` | 1 |
 | `hip-adduction` | 1 |
 | `ankle-dorsiflexion` | 1 |
@@ -95,7 +99,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **128** |
+| **Total** | **132** |
 
 ## Foundation gates
 
@@ -303,67 +307,70 @@ bodyweight fixtures. Neither hold pre-approves new shared axis values.
 ## Batch 4 — Lower-body sagittal primitives (5)
 
 Status: complete. Four one-action isolation families activated after the
-52-region lower-body taxonomy migration; `hip-flexion` remains a direct-evidence
-hold.
+52-region lower-body taxonomy migration. The fifth later activated through an
+exact active-straight-leg-raise fixture without reviving the rejected
+position-held-pelvis proposal.
 
 1. `knee-extension`
 2. `knee-flexion`
 3. `hip-extension`
-4. `hip-flexion` — deferred
+4. `hip-flexion`
 5. `ankle-plantarflexion`
 
-The seven active records are deliberately narrow: two unilateral machine leg
+The eight active records are deliberately narrow: two unilateral machine leg
 extensions at reviewed 40- and 90-degree hip-flexion postures, two unilateral
 machine leg curls at reviewed 90- and 30-degree postures, one unsupported-limb
-prone-table bent-knee hip extension, and standing/seated unilateral machine calf
-raises at zero and 90 degrees of knee flexion. Posture-conditioned rules make
-rectus femoris primary only in the reclined leg extension and gastrocnemius
-primary only in the knee-extended calf raise. The ankle-unreported leg-curl
-fixtures do not fabricate gastrocnemius credit.
+prone-table bent-knee hip extension, one supine bodyweight active straight-leg
+raise, and standing/seated unilateral machine calf raises at zero and 90
+degrees of knee flexion. Posture-conditioned rules make rectus femoris primary
+only in the reclined leg extension and gastrocnemius primary only in the
+knee-extended calf raise. The ankle-unreported leg-curl fixtures do not
+fabricate gastrocnemius credit.
 
-`hip-flexion` remains deferred because the reviewed sources establish muscle
-activity and load sensitivity but do not prove the intended dynamic
-femur-relative-to-position-held-pelvis isolation contract. Sit-ups, hanging
-knee raises, and similar multi-segment tasks cannot fill that evidence gap by
-name. Resume only with condition-matched dynamic motion evidence and a reviewed
-external-load or limb-load model.
+The Okubo straight-leg-raise fixture establishes dynamic hip flexion from a
+supported supine start to active end range. Its working knee is held extended,
+but the study does not establish zero pelvis or spine excursion; both axes stay
+`nonstandardized`. Iliopsoas is primary, rectus femoris is secondary, and abs
+and obliques receive conservative stability credit. Loaded raises, standing
+marches, hanging or captain-chair raises, knee raises, sit-ups, and V-ups remain
+outside this isolation contract.
 
 ## Batch 5 — Lower-body compound sagittal patterns (5)
 
-Status: complete. Four candidates activated as narrow families. `hip-hinge`
-remains an explicit motion-evidence hold, while the former
-`split-stance-lunge` discovery handle split into active stationary
-`split-stance-squat` and an unresolved `dynamic-lunge` discovery hold.
+Status: complete. Five discovery candidates resolved into six narrow active
+families. The former `split-stance-lunge` handle split into the stationary
+`split-stance-squat` and dynamic step-and-return `dynamic-lunge` owners.
 
-1. `hip-hinge` — deferred
+1. `hip-hinge`
 2. `hip-thrust-bridge`
 3. `bilateral-squat`
 4. `split-stance-squat` — renamed from the discovery handle
    `split-stance-lunge`
 5. `step-up`
+6. `dynamic-lunge` — split from the discovery handle
 
-The six active records are deliberately narrow: parallel straight-bar back and
-front squats; barbell hip thrust and floor glute bridge; one stationary
+The nine active records are deliberately narrow: parallel straight-bar back
+and front squats; barbell hip thrust and floor glute bridge; one stationary
 approximately-leg-length barbell split squat using the study's 100-percent
-condition; and one exact 21-cm bodyweight forward
-stepping sequence. The latter includes the studied trail-foot return followed
-by lead-foot return and requires the same lead foot to be replaced before the
-next repetition. `split-stance-squat` keeps the coarse app-level `lunge`
-pattern, but its family ID names the stationary fixed-foot geometry and does
-not pre-authorize a dynamic lunge.
+condition; one exact 21-cm bodyweight forward stepping sequence; one barbell
+good morning at 25 percent of body mass; and Comfort et al.'s bodyweight
+forward and reverse step-and-return lunges.
 
-`dynamic-lunge` remains unresolved for forward and reverse step-and-return
-tasks, whose impact, deceleration, changing support, and return transitions are
-not stationary split-squat axes. Walking lunges may ultimately belong to a
-separate locomotion family; this hold does not decide that ownership.
+The good morning establishes the hinge owner without generalizing from the
+rejected Romanian-deadlift fixtures. It declares hip and spine extension as
+prime actions, explicitly records the measured spinal excursion, and preserves
+the small measured knee excursion as nondefining rather than falsely calling
+the knee held or promoting knee extension. Romanian, stiff-leg, conventional,
+sumo, trap-bar, deficit, floor-pull, and supported-back-extension variants
+remain outside the contract.
 
-`hip-hinge` did not activate. Reviewed Romanian-deadlift fixtures showed
-material knee excursion, so they cannot satisfy the shared
-`kneeMotion: positionHeld` meaning. Adding knee extension merely to force a
-record through would erase the intended hinge boundary. Leg press, walking
-lunges, knee-extension-heavy floor pulls, generic-height step-ups, and
-lateral/crossover step-ups remain explicit future decisions rather than
-automatic variants.
+Dynamic lunge owns the reviewed landing, deceleration, changing support, and
+return-to-bilateral-standing transitions for exact forward and reverse
+fixtures. `split-stance-squat` remains the fixed-foot owner. Walking and
+alternating lunges, external loads, fixed stride lengths, and continuous
+locomotion remain outside both contracts. Leg press, knee-extension-heavy floor
+pulls, generic-height step-ups, and lateral/crossover step-ups remain explicit
+future decisions rather than automatic variants.
 
 ## Batch 6 — Lower-body taxonomy-sensitive isolation (5)
 
@@ -423,7 +430,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current seven-item count.
+new item in the current four-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -480,30 +487,10 @@ human-relative geometry or condition-matched muscle hierarchy needed to make
 geometry the boundary. Resume it only through the tracked measurement protocol;
 do not let it trigger speculative migrations across active pull/row families.
 
-Generic `grip` is a resolved Batch-2 hold. The taxonomy now distinguishes
-dynamic finger flexion/extension from a static implement hold, but the product
-still needs separate decisions for crush, pinch, support, hanging, and dynamic
-closing tasks before any one of them becomes a family.
-
-Batch 4 leaves one evidence hold: `hip-flexion`. Available studies do not yet
-establish the proposed dynamic femur-relative-to-position-held-pelvis action
-boundary in a condition-matched isolation fixture. It must not be activated by
-borrowing sit-up or hanging-knee-raise evidence, which moves other segments and
-adds other prime actions.
-
-Batch 5 leaves one evidence hold: `hip-hinge`. The reviewed Romanian-deadlift
-fixtures show material knee excursion, so training intent cannot substitute
-for the shared no-material-excursion meaning of `positionHeld`. Resume only
-with a condition-matched no-floor-reset fixture that directly establishes a
-materially held knee, or with a reviewed small-knee-extension branch whose
-quantitative motion band and muscle policy preserve the squat/floor-pull
-boundary.
-
-Batch 5 also leaves `dynamic-lunge` as a discovery hold created when the old
-`split-stance-lunge` candidate was narrowed to stationary
-`split-stance-squat`. Forward and reverse step-and-return lunges require a
-reviewed transition, impact, deceleration, and support-phase contract. Walking
-lunges may instead belong to locomotion and remain intentionally undecided.
+Generic `grip` remains the Batch-2 task-definition hold. The taxonomy now
+distinguishes dynamic finger flexion/extension from a static implement hold,
+but the product still needs separate decisions for crush, pinch, support,
+hanging, and dynamic closing tasks before any one of them becomes a family.
 
 Batch 3 leaves one standalone evidence hold: `landmine-press`. It requires
 athlete-relative joint geometry and a defensible loading model rather than

@@ -1,0 +1,603 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "dynamic-lunge",
+  "name": "Dynamic Lunge",
+  "definition": "A bodyweight unilateral-emphasis compound repetition that begins in upright bilateral standing, transitions into an asymmetric sagittal lunge, and returns to the same bilateral start. The active roster owns Comfort et al.'s exact forward and reverse step-and-return fixtures. In the forward record, the selected lead foot steps onto a second force plate, lands, remains fully planted through self-selected depth, and steps back to the start. In the reverse record, the selected front foot remains planted while the contralateral foot steps backward, lands, and returns forward. Both use a three-second eccentric phase, a two-second concentric phase, crossed upper limbs, and lead-side hip extension, knee extension, and ankle plantarflexion during the ascent. The records credit the same conservative regional role envelope because the study measured lead-limb joint kinematics, kinetics, and ground-reaction forces rather than individual-muscle activity. Stationary split squats, walking or alternating lunges, external loads, fixed stride lengths, lateral or crossover paths, jumps, and continuous locomotion remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "comfort-2015-forward-reverse-lunge-kinetics"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "lunge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "bodyweight"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "knee.extension",
+      "ankle.plantarflexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "rectusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "vasti",
+        "gluteMax"
+      ],
+      "secondary": [
+        "rectusFemoris",
+        "gastrocnemius",
+        "soleus"
+      ],
+      "stabilizer": [
+        "medialHamstrings",
+        "bicepsFemoris",
+        "gluteMed",
+        "abs",
+        "obliques",
+        "lumbarExtensors"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "closedDuringLoadedPhase"
+      ],
+      "description": "The selected lead foot is fixed to the floor through the measured eccentric and concentric phases; its entry into that closed-chain phase is recorded separately by the foot-transition axes."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The gross posture at the bilateral start and return."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "Whether an external surface supports the torso."
+    },
+    {
+      "id": "trunkOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "upright"
+      ],
+      "description": "The source-prescribed gross upright posture; it is not a claim of measured zero lumbar excursion."
+    },
+    {
+      "id": "upperLimbPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "crossed"
+      ],
+      "description": "The source-prescribed crossed upper-extremity position without an implement or balance support."
+    },
+    {
+      "id": "startSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "bilateralStanding"
+      ],
+      "description": "Both active records start upright with both feet supporting the athlete before the step."
+    },
+    {
+      "id": "stepDirection",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "selectedLeadForward",
+        "contralateralRearward"
+      ],
+      "description": "Whether the selected lead foot steps forward or remains planted while the contralateral foot steps rearward."
+    },
+    {
+      "id": "selectedLeadFootTransition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "stepsForwardThenReturns",
+        "remainsPlantedThroughout"
+      ],
+      "description": "The selected front limb's complete support transition in the reviewed forward and reverse fixtures."
+    },
+    {
+      "id": "contralateralFootTransition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "remainsAtStartThenReceivesReturn",
+        "stepsRearwardThenReturns"
+      ],
+      "description": "The contralateral foot remains at the bilateral start during the forward step or supplies the rearward step in the reverse fixture."
+    },
+    {
+      "id": "landingFoot",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "selectedLead",
+        "contralateral"
+      ],
+      "description": "The foot whose contact with the second force plate starts the source-defined eccentric lunge phase."
+    },
+    {
+      "id": "selectedLeadFootContact",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "stepsThenWholeFootMaintained",
+        "maintainedOnStartPlate"
+      ],
+      "description": "The selected lead foot either lands fully and remains in contact or stays planted on the first plate throughout."
+    },
+    {
+      "id": "landingDemand",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "dynamicFootContact"
+      ],
+      "description": "Both fixtures include a source-defined foot-contact event and controlled eccentric phase before reversal."
+    },
+    {
+      "id": "depthCriterion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "fullSelfSelectedDepth"
+      ],
+      "description": "The source instructed full depth or as far down as possible rather than a fixed knee angle or ground-touch target."
+    },
+    {
+      "id": "returnTopology",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "returnToBilateralStart"
+      ],
+      "description": "The stepping foot returns so every repetition finishes in the same upright bilateral stance."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "nonstandardized"
+      ],
+      "description": "The gross trunk was upright, but segmental spinal motion was not reported as fixed or measured as zero."
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "nonstandardized"
+      ],
+      "description": "Pelvic control is material to the unilateral task, but the source does not authorize a zero-motion claim."
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extends"
+      ],
+      "description": "The selected lead hip returns from the measured flexed bottom through dynamic extension."
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extends"
+      ],
+      "description": "The selected lead knee returns from the measured flexed bottom through dynamic extension."
+    },
+    {
+      "id": "ankleMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "plantarflexes"
+      ],
+      "description": "The selected lead ankle reverses its bottom-position dorsiflexion toward the standing angle during ascent."
+    },
+    {
+      "id": "footMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "positionHeldDuringLoadedPhase"
+      ],
+      "description": "No deliberate toe motion, inversion, or eversion creates the loaded phase; whole-foot transitions are recorded separately."
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "The reviewed fixtures use only bodyweight with no external implement."
+    },
+    {
+      "id": "eccentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 3,
+      "maximum": 3,
+      "description": "The standardized source cadence from foot contact to maximum lead-knee flexion."
+    },
+    {
+      "id": "concentricSeconds",
+      "valueType": "number",
+      "required": true,
+      "minimum": 2,
+      "maximum": 2,
+      "description": "The standardized source cadence from maximum lead-knee flexion to stepping-foot lift-off."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "compoundHipKneeAnkleExtension"
+      ],
+      "description": "The selected lead limb uses the three authored extension actions during the concentric phase."
+    }
+  ],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 5,
+      "maximum": 15
+    }
+  },
+  "exerciseRules": [
+    {
+      "id": "forward-step-binds-selected-lead-landing-topology",
+      "description": "A selected-lead forward step requires the exact lead-foot landing and return topology from Comfort et al.",
+      "when": {
+        "field": "variant.stepDirection",
+        "operator": "equals",
+        "value": "selectedLeadForward"
+      },
+      "then": [
+        {
+          "field": "variant.selectedLeadFootTransition",
+          "value": "stepsForwardThenReturns"
+        },
+        {
+          "field": "variant.contralateralFootTransition",
+          "value": "remainsAtStartThenReceivesReturn"
+        },
+        {
+          "field": "variant.landingFoot",
+          "value": "selectedLead"
+        },
+        {
+          "field": "variant.selectedLeadFootContact",
+          "value": "stepsThenWholeFootMaintained"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    },
+    {
+      "id": "reverse-step-binds-planted-front-foot-topology",
+      "description": "A contralateral rearward step requires the selected front foot to remain planted while the rear foot lands and returns.",
+      "when": {
+        "field": "variant.stepDirection",
+        "operator": "equals",
+        "value": "contralateralRearward"
+      },
+      "then": [
+        {
+          "field": "variant.selectedLeadFootTransition",
+          "value": "remainsPlantedThroughout"
+        },
+        {
+          "field": "variant.contralateralFootTransition",
+          "value": "stepsRearwardThenReturns"
+        },
+        {
+          "field": "variant.landingFoot",
+          "value": "contralateral"
+        },
+        {
+          "field": "variant.selectedLeadFootContact",
+          "value": "maintainedOnStartPlate"
+        }
+      ],
+      "requirePresent": [],
+      "requireAbsent": []
+    }
+  ],
+  "exercises": [
+    {
+      "catalogID": "bodyweight-forward-lunge",
+      "name": "Bodyweight Forward Lunge",
+      "aliases": [
+        "Forward Lunge"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 88,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "bicepsFemoris", "role": "stabilizer" },
+        { "muscle": "gluteMed", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closedDuringLoadedPhase",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "trunkOrientation": "upright",
+        "upperLimbPosition": "crossed",
+        "startSupport": "bilateralStanding",
+        "stepDirection": "selectedLeadForward",
+        "selectedLeadFootTransition": "stepsForwardThenReturns",
+        "contralateralFootTransition": "remainsAtStartThenReceivesReturn",
+        "landingFoot": "selectedLead",
+        "selectedLeadFootContact": "stepsThenWholeFootMaintained",
+        "landingDemand": "dynamicFootContact",
+        "depthCriterion": "fullSelfSelectedDepth",
+        "returnTopology": "returnToBilateralStart",
+        "spineMotion": "nonstandardized",
+        "pelvisMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeldDuringLoadedPhase",
+        "loadPlacement": "none",
+        "eccentricSeconds": 3,
+        "concentricSeconds": 2,
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "comfort-2015-forward-reverse-lunge-kinetics"
+      ],
+      "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Step forward with the selected lead foot, land with the whole foot in contact, and lower under control for three seconds to full self-selected depth. Keep the lead foot planted, then extend the lead hip and knee and move the lead ankle from its dorsiflexed bottom position toward standing over two seconds. Step the lead foot back to the bilateral start to complete the repetition. Finish the set on the selected side, then repeat with the other lead leg."
+    },
+    {
+      "catalogID": "bodyweight-reverse-lunge",
+      "name": "Bodyweight Reverse Lunge",
+      "aliases": [
+        "Reverse Lunge"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 87,
+      "involvement": [
+        { "muscle": "vasti", "role": "primary" },
+        { "muscle": "gluteMax", "role": "primary" },
+        { "muscle": "rectusFemoris", "role": "secondary" },
+        { "muscle": "gastrocnemius", "role": "secondary" },
+        { "muscle": "soleus", "role": "secondary" },
+        { "muscle": "medialHamstrings", "role": "stabilizer" },
+        { "muscle": "bicepsFemoris", "role": "stabilizer" },
+        { "muscle": "gluteMed", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closedDuringLoadedPhase",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "trunkOrientation": "upright",
+        "upperLimbPosition": "crossed",
+        "startSupport": "bilateralStanding",
+        "stepDirection": "contralateralRearward",
+        "selectedLeadFootTransition": "remainsPlantedThroughout",
+        "contralateralFootTransition": "stepsRearwardThenReturns",
+        "landingFoot": "contralateral",
+        "selectedLeadFootContact": "maintainedOnStartPlate",
+        "landingDemand": "dynamicFootContact",
+        "depthCriterion": "fullSelfSelectedDepth",
+        "returnTopology": "returnToBilateralStart",
+        "spineMotion": "nonstandardized",
+        "pelvisMotion": "nonstandardized",
+        "hipMotion": "extends",
+        "kneeMotion": "extends",
+        "ankleMotion": "plantarflexes",
+        "footMotion": "positionHeldDuringLoadedPhase",
+        "loadPlacement": "none",
+        "eccentricSeconds": 3,
+        "concentricSeconds": 2,
+        "lowerBodyContribution": "compoundHipKneeAnkleExtension"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "comfort-2015-forward-reverse-lunge-kinetics"
+      ],
+      "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Keep the selected front foot planted and step the contralateral foot backward. After the rear foot lands, lower under control for three seconds to full self-selected depth without moving the selected front foot. Extend the selected front hip and knee and move its ankle from the dorsiflexed bottom position toward standing over two seconds, then bring the rear foot forward to the bilateral start. Finish the set with the same selected front leg, then repeat on the other side."
+    }
+  ]
+}

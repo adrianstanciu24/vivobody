@@ -286,8 +286,10 @@ struct AntagonistBalanceTests {
         let board = [
             session(at: day(1), [
                 lift("Barbell Back Squat", .legs, sets: 2),
-                lift("Barbell Hip Thrust", .legs, sets: 3),
+                lift("25% Body-Mass Barbell Good Morning", .legs, sets: 3),
                 lift("Barbell Split Squat", .legs, sets: 6),
+                lift("Bodyweight Forward Lunge", .legs, sets: 7),
+                lift("Bodyweight Reverse Lunge", .legs, sets: 8),
                 lift("Barbell Bench Press", .chest, sets: 7),
             ]),
         ].antagonistBalance(now: day(2))

@@ -1,19 +1,22 @@
-# Batch 5 stationary split-squat and step-up activation record
+# Batch 5 unilateral compound activation record
 
-Status: **two narrow contracts activated with registered evidence and
+Status: **three narrow contracts activated with registered evidence and
 contract/mutation tests**.
 
 This document records the decisions behind:
 
-- `families/split-stance-squat.json`; and
-- `families/step-up.json`.
+- `families/split-stance-squat.json`;
+- `families/step-up.json`; and
+- `families/dynamic-lunge.json`.
 
-Neither contract is a generic synonym bucket. The first owns one stationary,
-fixed-foot split squat. The second owns one exact forward stepping sequence.
-Forward, reverse, and walking lunges remain deferred because their step,
-landing, deceleration, and changing support phases are not small variant deltas
-from a stationary split squat. Likewise, a generic gym step-up cannot be
-inferred from one exact height and one exact foot-transition sequence.
+None of the contracts is a generic synonym bucket. The first owns one
+stationary, fixed-foot split squat. The second owns one exact raised-platform
+forward stepping sequence. The third owns Comfort et al.'s exact bodyweight
+forward and reverse step-and-return lunges. Walking or alternating lunges
+remain outside the active boundary because continuous locomotion and
+between-repetition support changes were not reviewed as small deltas from the
+two discrete lunge fixtures. Likewise, a generic gym step-up cannot be inferred
+from one exact height and one exact foot-transition sequence.
 
 ## Activation outcome
 
@@ -21,6 +24,7 @@ inferred from one exact height and one exact foot-transition sequence.
 |---|---|---|
 | `split-stance-squat` | `barbell-split-squat` | Stationary 10-RM barbell split squat, 100% leg-length stance, erect torso, lead thigh parallel |
 | `step-up` | `bodyweight-forward-step-up-21cm` | Bodyweight forward step onto 21-cm platform, brief bilateral top, trail foot then lead foot return to lower floor |
+| `dynamic-lunge` | `bodyweight-forward-lunge`; `bodyweight-reverse-lunge` | Upright, arms-crossed, bodyweight forward or reverse step-and-return lunge at full self-selected depth with 3-second descent and 2-second ascent |
 
 The roadmap candidate was called `split-stance-lunge`. The active ID is
 deliberately `split-stance-squat`: the reviewed exercise has fixed foot
@@ -31,21 +35,21 @@ comment groups split squats, step-ups, and walking lunges. The family ID names
 the distinguishing stationary geometry; the pattern remains the app's coarse
 asymmetric split-stance lower-body category.
 
-## Boundary between the two families
+## Boundary between the three families
 
-Both families use lead-side hip extension, knee extension, and ankle
+All three families use lead-side hip extension, knee extension, and ankle
 plantarflexion during the concentric task. They remain separate because their
 support topology differs materially:
 
-| Question | `split-stance-squat` | `step-up` |
-|---|---|---|
-| Lead-foot surface | Lower floor | Raised platform |
-| Trail-foot support | Forefoot remains on lower floor | Moves from lower floor to platform and back |
-| Loaded repetition start | Fixed split standing | Lead foot already raised, trail foot on lower floor |
-| Upper endpoint | Same fixed split stance | Brief bilateral standing on platform |
-| End of studied sequence | Same fixed split stance | Both feet on lower floor |
-| Inter-repetition transition | None | Same lead foot is replaced on platform |
-| Landing/deceleration branch | Absent | Controlled return is present; no dynamic lunge landing |
+| Question | `split-stance-squat` | `step-up` | `dynamic-lunge` |
+|---|---|---|---|
+| Lead-foot surface | Lower floor | Raised platform | Lower floor or second level force plate |
+| Trail-foot support | Forefoot remains on lower floor | Moves from lower floor to platform and back | Remains at start in forward lunge; steps rearward in reverse lunge |
+| Loaded repetition start | Fixed split standing | Lead foot already raised, trail foot on lower floor | Bilateral upright standing before a forward or rearward step |
+| Upper endpoint | Same fixed split stance | Brief bilateral standing on platform | Bilateral upright start position |
+| End of studied sequence | Same fixed split stance | Both feet on lower floor | Both feet returned to the bilateral start |
+| Inter-repetition transition | None | Same lead foot is replaced on platform | The stepping foot returns before the next repetition |
+| Landing/deceleration branch | Absent | Controlled platform return; no dynamic lunge landing | Present and topology-pinned for the forward and reverse fixtures |
 
 The step-up contract does not hide the final lead-foot step-down. Wang et al.'s
 full instruction sequence returns the non-dominant foot to the lower floor and
@@ -63,7 +67,7 @@ substituted for the active Wang fixture.
 
 ## Shared classification and axis vocabulary
 
-Both contracts stamp:
+All three contracts stamp:
 
 ```json
 {
@@ -79,7 +83,7 @@ plantarflexion remain family prime actions at other joints. `direction` stays
 `null`: the press/pull direction vocabulary is not a generic label for all
 vertical displacement.
 
-The two contracts share established or Batch-5 vocabulary where the meaning is
+The contracts share established or Batch-5 vocabulary where the meaning is
 actually the same:
 
 - `kineticChain`;
@@ -98,10 +102,20 @@ actually the same:
 axes. Their values differ because a fixed split stance and a raised-platform
 stepping sequence are not interchangeable setups.
 
-Neither contract declares `pelvisMotion`. The pelvis translates as the body
+The stationary and step-up contracts do not declare `pelvisMotion`. The pelvis
+translates as the body
 lowers, rises, and steps, but that translation does not independently create
 the repetition in the way a thrust or bridge deliberately moves the pelvis as
 the load-bearing segment. Pelvis control remains a stability demand.
+
+The dynamic-lunge contract records `pelvisMotion: nonstandardized` alongside
+`spineMotion: nonstandardized`. Comfort et al. prescribed upright posture but
+did not establish zero pelvis or spine excursion. Its source-specific axes also
+separate step direction, which foot lands, whether the selected lead foot
+steps or remains planted, the contralateral-foot transition, full
+self-selected depth, and return to bilateral standing. Exercise rules bind the
+forward and reverse values so a record cannot exchange their support topology
+while retaining the other fixture's name.
 
 The step-up deliberately omits `fixedPath`. The shared definition asks whether
 rails or a lever constrain an external load path. This bodyweight-only fixture
@@ -287,12 +301,58 @@ No generic `Step-Up` alias is owned. Both the name and only alias retain
 `21 cm`, because the contract does not admit arbitrary heights or the more
 common continuous lead-foot-on-platform gym repetition.
 
+## Dynamic-lunge evidence decisions
+
+### Two records, one exact step-and-return contract
+
+Comfort et al. tested forward and reverse lunges with the same participants,
+bodyweight loading, bilateral upright start, crossed-arm posture, cadence, full
+self-selected depth, lead-limb measurement model, and return endpoint. They
+therefore belong to one family. They are not aliases for one movement: the
+forward task makes the selected lead foot step, land with whole-foot contact,
+remain planted during the loaded phases, and return; the reverse task keeps the
+selected front foot planted while the contralateral foot steps backward,
+lands, and returns. Required topology axes plus reciprocal exercise rules make
+those differences contractual.
+
+The records prescribe completion on the selected side followed by the other
+side, matching the source's per-limb trials without turning the exercise into
+an alternating or walking lunge. Both begin and end in bilateral standing;
+neither owns a fixed split-stance start.
+
+### Action and muscle-role boundary
+
+Three-dimensional kinematics and force-plate kinetics establish sagittal
+lead-limb hip, knee, and ankle demand across the lowering and raising phases.
+The ascent is modeled as `hip.extension`, `knee.extension`, and
+`ankle.plantarflexion`; dorsiflexion at the bottom is the starting position for
+the authored plantarflexion action, not an additional dorsiflexion prime.
+
+Comfort et al. did not record EMG. Vasti and gluteus maximus are conservative
+co-primary mechanics-and-anatomy assignments for the defining knee- and
+hip-extension demands, not a measured ranking between muscles. Rectus femoris,
+gastrocnemius, and soleus receive secondary roles within their compatible
+action envelopes. The medial and lateral hamstrings, gluteus medius, abs,
+obliques, and lumbar extensors are stabilizers only; they satisfy the explicit
+spine, pelvis, hip, knee, ankle, and foot stability demands without receiving
+mover volume credit. The family does not infer a universal forward-versus-
+reverse role difference from the reported joint kinetics.
+
+### Load and unmeasured motion
+
+The source reports bodyweight movement, not an externally comparable load or
+an effective bodyweight fraction. Both records therefore use
+`loadMode: nonComparable`, zero entered weight, and zero bodyweight fraction.
+Upright posture is prescribed, while exact spine and pelvis motion is not;
+those axes remain `nonstandardized`. No fixed stride length or joint-angle
+depth is invented from the full self-selected-depth instruction.
+
 ## Explicit exclusions and future owners
 
 | Candidate | Initial decision | Reason or future owner |
 |---|---|---|
-| Forward lunge | Defer | Dynamic step, landing, deceleration, and return topology need a lunge contract. |
-| Reverse lunge | Defer | Rearward step and support transition are not reviewed by the stationary family. |
+| Bodyweight forward lunge | Activate in `dynamic-lunge` | Comfort directly reviews the selected lead-foot forward step, whole-foot landing, full-depth descent, and return to bilateral start. |
+| Bodyweight reverse lunge | Activate in `dynamic-lunge` | Comfort directly reviews the contralateral rearward step while the selected front foot remains planted, followed by return to bilateral start. |
 | Walking lunge | Defer | Alternating impact and locomotor transition are directly distinguished by Stastny. |
 | Rear-foot-elevated split squat | Defer | Rear support height materially changes support and joint geometry. |
 | Front-foot-elevated split squat | Defer | Raised lead foot without stepping is neither active family fixture. |
@@ -307,6 +367,8 @@ common continuous lead-foot-on-platform gym repetition.
 | Step-down | Exclude | Downward task with different prime phase and ownership. |
 | Continuous stairs or stair machine | Exclude | Locomotor/machine task, not a discrete reviewed repetition. |
 | Explosive step-up or jump | Exclude | Power/locomotion modality and flight/landing actions. |
+| Loaded, lateral, crossover, or jumping lunge | Exclude from `dynamic-lunge` | Comfort's active fixtures are unloaded sagittal step-and-return repetitions. |
+| Stationary lunge or split squat | Exclude from `dynamic-lunge` | Fixed feet and no landing remain owned by `split-stance-squat`. |
 
 ## Evidence entries required at activation
 
@@ -426,17 +488,52 @@ the unreported load implement/placement, different height, and different
 lead-foot transition prevent it from activating a loaded fixture or serving as
 exercise provenance for the 21-cm bodyweight record.
 
+### `comfort-2015-forward-reverse-lunge-kinetics`
+
+```json
+{
+  "id": "comfort-2015-forward-reverse-lunge-kinetics",
+  "sourceType": "experimentalKinematicsKineticsStudy",
+  "title": "Joint Kinetics and Kinematics During Common Lower Limb Rehabilitation Exercises",
+  "authors": [
+    "Paul Comfort",
+    "Paul A. Jones",
+    "Laura Constance Smith",
+    "Lee Herrington"
+  ],
+  "year": 2015,
+  "doi": "10.4085/1062-6050-50.9.05",
+  "pmid": "26418958",
+  "pmcid": "PMC4641539",
+  "url": "https://doi.org/10.4085/1062-6050-50.9.05"
+}
+```
+
+Registry scope: nine healthy men performed five bodyweight forward- and
+reverse-lunge repetitions on each limb from upright bilateral standing with
+the arms crossed, using a three-second eccentric and two-second concentric
+cadence. In the forward condition the selected lead foot stepped onto the
+second force plate, established whole-foot contact, descended to full
+self-selected depth, and returned to the start. In the reverse condition the
+contralateral foot stepped backward while the selected front foot remained
+planted, then returned. Three-dimensional motion capture and two force plates
+directly measured lead-limb hip, knee, and ankle angles, sagittal external
+moments, and foot contact/off phases. The source contains no EMG, fixed joint
+depth, external load, walking or alternating locomotion, lateral path, or jump;
+the active role hierarchy is therefore a conservative mechanics-and-anatomy
+assignment rather than a measured cross-muscle ranking.
+
 ## Activation and test gates
 
 Activation should land as one integration change with the rest of Batch 5 and
 must include all of the following:
 
-1. Register the four evidence entries above with the disclosed limitations.
+1. Register the five evidence entries above with the disclosed limitations.
 2. Rename the roadmap candidate from `split-stance-lunge` to
    `split-stance-squat` and record that family IDs name the stationary geometry
    while the Swift `lunge` pattern stays broader.
 3. Update shared axis documentation only for values actually admitted by the
-   two contracts; do not pre-author generic lunge or step-up values.
+   three contracts; do not pre-author generic lunge or step-up values.
 4. Assert exact fixed classification, allowed equipment/load modes, roster
    IDs, names, aliases, seeds, involvement, axes, and movement definitions.
 5. Assert that every admitted enum value appears in the authored roster and
@@ -457,7 +554,17 @@ must include all of the following:
 12. Keep the zero-rule families legal through required single-value axes; do
     not invent always-true exercise rules that cannot have contrasting roster
     fixtures.
-13. Run the catalog validator, focused Batch-5 tests, full Python catalog test
+13. Pin the two dynamic-lunge roster identities and exact source surface:
+    bodyweight-only non-comparable load, upright crossed-arm bilateral start,
+    three-second eccentric, two-second concentric, full self-selected depth,
+    and return to bilateral standing.
+14. Mutate every dynamic-lunge topology axis and both binding rules so the
+    forward record cannot inherit the planted-front-foot reverse path and the
+    reverse record cannot inherit the selected-lead landing path.
+15. Assert that both lunge records carry the exact three-action prime set and
+    conservative role envelope, while walking/alternating, stationary, loaded,
+    lateral, crossover, and jump variants remain absent.
+16. Run the catalog validator, focused Batch-5 tests, full Python catalog test
     suite, generated-output check, and iOS compile gate.
 
 ## Remaining blockers and deliberately unresolved decisions
@@ -469,9 +576,8 @@ must include all of the following:
   implement and placement are established from a primary source.
 - No effective bodyweight fraction is available for the exact Wang step-up;
   load-based analytics remain intentionally unavailable.
-- The stationary family does not authorize a dynamic lunge. A later family
-  needs direct evidence and explicit axes for step direction, landing,
-  deceleration, return topology, alternating sides, and between-repetition
-  support.
+- The two active dynamic-lunge records do not authorize walking or alternating
+  lunges. Continuous locomotion still needs direct fixture evidence and an
+  explicit between-repetition support contract.
 - The 21-cm task is a research-specific stepping sequence, not permission to
   rename the record to generic `Step-Up` after activation.

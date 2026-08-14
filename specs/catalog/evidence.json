@@ -2307,6 +2307,59 @@
       "pmcid": "PMC10953777",
       "url": "https://doi.org/10.1080/23335432.2024.2332212",
       "scope": "Fifty healthy adults performed dumbbell elevation in the scapular plane from thirty to one hundred twenty degrees under unloaded and individualized external-load conditions while three-dimensional motion capture measured scapular elevation and upward rotation. The study supports persistence of coupled upward rotation during loaded arm elevation and reports only small load-related changes. It did not measure posterior tilt, muscle activity, or an upright-row fixture, so it cannot independently assign upright-row roles, scapular elevation, or fixed coupling magnitudes."
+    },
+    {
+      "id": "okubo-2021-end-range-active-straight-leg-raise",
+      "sourceType": "experimentalKinematicsEMGStudy",
+      "title": "Differential Activation of Psoas Major and Rectus Femoris During Active Straight Leg Raise to End Range",
+      "authors": [
+        "Yu Okubo",
+        "Koji Kaneoka",
+        "Kiyotaka Hasebe",
+        "Naoto Matsunaga",
+        "Atsushi Imai",
+        "Paul W. Hodges"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jelekin.2021.102588",
+      "pmid": "34455371",
+      "url": "https://doi.org/10.1016/j.jelekin.2021.102588",
+      "scope": "Nine healthy men performed a supine active straight-leg raise through concentric motion to each participant's active end range, an end-range hold, and eccentric lowering. Fine-wire psoas-major EMG plus surface rectus-femoris, rectus-abdominis, external-oblique, and internal-oblique/transversus-abdominis EMG directly support psoas-dominant late-range hip-flexor participation, rectus-femoris participation, and abdominal control of trunk and pelvic movement. The study does not establish a universal endpoint angle, cadence, hold duration, external load, zero pelvic or spinal motion, iliacus-specific magnitude, or roles for sartorius, tensor fasciae latae, or adductors."
+    },
+    {
+      "id": "schellenberg-2013-deadlift-goodmorning-kinematics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Kinetic and Kinematic Differences Between Deadlifts and Goodmornings",
+      "authors": [
+        "Florian Schellenberg",
+        "Julia Lindorfer",
+        "Renate List",
+        "William R. Taylor",
+        "Silvio Lorenzetti"
+      ],
+      "year": 2013,
+      "doi": "10.1186/2052-1847-5-27",
+      "pmid": "24314057",
+      "pmcid": "PMC3878967",
+      "url": "https://doi.org/10.1186/2052-1847-5-27",
+      "scope": "Thirteen healthy participants performed eight barbell good-morning repetitions with an added load equal to twenty-five percent of body mass, shoulder-width slightly externally rotated feet, an upright start, equal self-selected lowering and raising speeds, deliberate core tension, and a cue to avoid lumbar flexion. Three-dimensional motion capture and force plates directly measured large hip excursion, material pelvis-lumbar and lumbar-thoracic excursion, and small nondefining knee motion. The procedure and standardized instruction differ between upper-trapezius and rear-deltoid bar-site wording, so the catalog preserves only a coarse posterior-shoulder/upper-back placement. The study did not measure EMG, prescribe universal segment angles, or authorize Romanian-deadlift, stiff-leg-deadlift, floor-pull, unilateral, or externally supported variants; muscle roles are conservative mechanics-and-anatomy assignments rather than measured rankings."
+    },
+    {
+      "id": "comfort-2015-forward-reverse-lunge-kinetics",
+      "sourceType": "experimentalKinematicsKineticsStudy",
+      "title": "Joint Kinetics and Kinematics During Common Lower Limb Rehabilitation Exercises",
+      "authors": [
+        "Paul Comfort",
+        "Paul A. Jones",
+        "Laura Constance Smith",
+        "Lee Herrington"
+      ],
+      "year": 2015,
+      "doi": "10.4085/1062-6050-50.9.05",
+      "pmid": "26418958",
+      "pmcid": "PMC4641539",
+      "url": "https://doi.org/10.4085/1062-6050-50.9.05",
+      "scope": "Nine healthy men performed five bodyweight forward- and reverse-lunge repetitions on each limb from an upright bilateral stance with the arms crossed, using a standardized three-second eccentric and two-second concentric cadence. In the forward condition the selected lead limb stepped onto a second force plate, descended to full self-selected depth with whole-foot contact, and returned to the start; in the reverse condition the contralateral limb stepped backward while the selected front foot remained planted, then returned. Three-dimensional motion capture and two force plates directly measured lead-limb hip, knee, and ankle angles and sagittal moments plus contact and foot-off phases. The study supports two discrete step-and-return records and their landing/support-transition distinction, not walking or alternating locomotion, external loading, a fixed depth angle, EMG-based cross-muscle ranking, lateral lunges, or jumping variants; the catalog's muscle hierarchy is conservative mechanics-and-anatomy interpretation."
     }
   ]
 }

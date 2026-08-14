@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 51 reviewed families compile to 128 exercises with stable
+//  product: 54 reviewed families compile to 132 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,8 +16,8 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 128)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 51)
+        #expect(CatalogData.records.count == 132)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 54)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
     }
@@ -253,6 +253,50 @@ struct CatalogBiomechanicsTests {
         #expect(uprightRow.muscleInvolvement.role(for: .supraspinatus) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
+
+        let hipFlexion = try #require(
+            CatalogData.record(forExerciseNamed: "Bodyweight Active Straight-Leg Raise")
+        )
+        #expect(hipFlexion.familyID == "hip-flexion")
+        #expect(hipFlexion.mechanic == .isolation)
+        #expect(hipFlexion.pattern == nil)
+        #expect(hipFlexion.planes == [.sagittal])
+        #expect(hipFlexion.loadMode == .nonComparable)
+        #expect(hipFlexion.muscleInvolvement.role(for: .iliopsoas) == .primary)
+        #expect(hipFlexion.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
+        #expect(hipFlexion.muscleInvolvement.role(for: .tensorFasciaeLatae) == nil)
+        #expect(hipFlexion.muscleInvolvement.role(for: .sartorius) == nil)
+
+        let goodMorning = try #require(
+            CatalogData.record(forExerciseNamed: "25% Body-Mass Barbell Good Morning")
+        )
+        #expect(goodMorning.familyID == "hip-hinge")
+        #expect(goodMorning.mechanic == .compound)
+        #expect(goodMorning.pattern == .hinge)
+        #expect(goodMorning.planes == [.sagittal])
+        #expect(goodMorning.loadMode == .external)
+        #expect(goodMorning.defaultWeight == 45)
+        #expect(goodMorning.defaultWeightKg == 20)
+        #expect(goodMorning.muscleInvolvement.role(for: .medialHamstrings) == .primary)
+        #expect(goodMorning.muscleInvolvement.role(for: .gluteMax) == .primary)
+        #expect(goodMorning.muscleInvolvement.role(for: .lumbarExtensors) == .primary)
+        #expect(goodMorning.muscleInvolvement.role(for: .bicepsFemoris) == .stabilizer)
+
+        for name in ["Bodyweight Forward Lunge", "Bodyweight Reverse Lunge"] {
+            let lunge = try #require(CatalogData.record(forExerciseNamed: name))
+            #expect(lunge.familyID == "dynamic-lunge")
+            #expect(lunge.mechanic == .compound)
+            #expect(lunge.pattern == .lunge)
+            #expect(lunge.planes == [.sagittal])
+            #expect(lunge.loadMode == .nonComparable)
+            #expect(lunge.laterality == .unilateral)
+            #expect(lunge.muscleInvolvement.role(for: .vasti) == .primary)
+            #expect(lunge.muscleInvolvement.role(for: .gluteMax) == .primary)
+            #expect(lunge.muscleInvolvement.role(for: .rectusFemoris) == .secondary)
+            #expect(lunge.muscleInvolvement.role(for: .gastrocnemius) == .secondary)
+            #expect(lunge.muscleInvolvement.role(for: .soleus) == .secondary)
+            #expect(lunge.muscleInvolvement.role(for: .medialHamstrings) == .stabilizer)
+        }
     }
 
     private static func normalized(_ value: String) -> String {

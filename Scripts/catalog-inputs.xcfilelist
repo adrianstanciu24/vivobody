@@ -13,6 +13,7 @@ $(SRCROOT)/specs/catalog/families/bilateral-squat.json
 $(SRCROOT)/specs/catalog/families/chest-fly.json
 $(SRCROOT)/specs/catalog/families/decline-press.json
 $(SRCROOT)/specs/catalog/families/dip.json
+$(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json
 $(SRCROOT)/specs/catalog/families/elbow-flexion.json
 $(SRCROOT)/specs/catalog/families/farmer-carry.json
@@ -22,6 +23,8 @@ $(SRCROOT)/specs/catalog/families/hip-abduction.json
 $(SRCROOT)/specs/catalog/families/hip-adduction.json
 $(SRCROOT)/specs/catalog/families/hip-extension.json
 $(SRCROOT)/specs/catalog/families/hip-external-rotation.json
+$(SRCROOT)/specs/catalog/families/hip-flexion.json
+$(SRCROOT)/specs/catalog/families/hip-hinge.json
 $(SRCROOT)/specs/catalog/families/hip-internal-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-thrust-bridge.json
 $(SRCROOT)/specs/catalog/families/horizontal-press.json

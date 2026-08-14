@@ -1,0 +1,501 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-hinge",
+  "name": "Hip Hinge",
+  "definition": "A bilateral unsupported closed-chain barbell good morning in which the athlete begins upright with a free bar across the posterior shoulder and upper-back surface, hinges to the deepest reviewed position that preserves the instructed natural spine technique, and returns to standing through combined hip and spinal extension. The initial roster is limited to Schellenberg et al.'s eight-repetition fixture with shoulder-width, slightly toe-out feet and external barbell load equal to 25 percent of body mass. Direct three-dimensional measurements showed a small but nonzero mean knee excursion, so the knee is neither called position-held nor promoted to a prime action. The same measurements showed material pelvis-lumbar and lumbar-thoracic excursion, so spinal extension is an explicit prime rather than being hidden behind a posture cue. Medial hamstrings, gluteus maximus, and lumbar extensors are non-ranked co-primary contributors. The visible biceps-femoris region receives only knee-control credit because its unsplit mesh cannot distinguish the hip-extending long head from the monoarticular short head. Romanian, stiff-leg, conventional, sumo, trap-bar, deficit, unilateral, staggered, dumbbell, cable, Smith, floor-pull, swing, and externally supported back-extension variants remain outside this contract.",
+  "evidenceRefs": [
+    "arnold-2010-lower-limb",
+    "christophy-2012-lumbar-spine",
+    "schellenberg-2013-deadlift-goodmorning-kinematics"
+  ],
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "bilateral"
+    ]
+  },
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 8
+    }
+  },
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "hinge",
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.extension"
+    ],
+    "primeActions": [
+      "hip.extension",
+      "spine.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "The feet remain fixed on the floor while the pelvis and torso move relative to the planted lower limbs.",
+      "allowedValues": [
+        "closed"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The gross posture at the upright start and endpoint.",
+      "allowedValues": [
+        "standing"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface supports the torso during the hinge.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed bilateral stance distributes the task symmetrically across both planted legs.",
+      "allowedValues": [
+        "symmetricBilateral"
+      ]
+    },
+    {
+      "id": "stanceWidth",
+      "valueType": "enum",
+      "required": true,
+      "description": "The standardized approximate spacing between the feet.",
+      "allowedValues": [
+        "shoulderWidth"
+      ]
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-prescribed natural slight outward divergence of both feet.",
+      "allowedValues": [
+        "slightNaturalToeOut"
+      ]
+    },
+    {
+      "id": "footContact",
+      "valueType": "enum",
+      "required": true,
+      "description": "Both feet remain continuously planted throughout every repetition.",
+      "allowedValues": [
+        "continuous"
+      ]
+    },
+    {
+      "id": "loadPlacement",
+      "valueType": "enum",
+      "required": true,
+      "description": "The deliberately coarse posterior shoulder and upper-back surface reconciles the source's upper-trapezius methods wording with its rear-deltoid standardized instruction.",
+      "allowedValues": [
+        "posteriorShoulderUpperBack"
+      ]
+    },
+    {
+      "id": "gripOrientation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study required a comfortable hand position but did not report a controlled forearm orientation.",
+      "allowedValues": [
+        "comfortableUnreported"
+      ]
+    },
+    {
+      "id": "externalLoadPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The study-normalized additional barbell load used for the reviewed good-morning set.",
+      "allowedValues": [
+        "twentyFivePercentBodyMass"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic concentric hip action during the return from the deepest hinge position.",
+      "allowedValues": [
+        "extends"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The measured pelvis-lumbar and lumbar-thoracic excursion reverses during the ascent and is represented honestly as dynamic spinal extension.",
+      "allowedValues": [
+        "extendsWithMeasuredSegmentalExcursion"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The measured knee range was small but nonzero and does not define the task; it is neither a position-held claim nor a knee-extension prime action.",
+      "allowedValues": [
+        "measuredSmallNondefiningExcursion"
+      ]
+    },
+    {
+      "id": "rangeOfMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed endpoint is maximum hip flexion while following the source's natural-spine technique instruction.",
+      "allowedValues": [
+        "maximumHipFlexionWithNaturalSpineTechnique"
+      ]
+    },
+    {
+      "id": "headPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The standardized instruction keeps the head in extension of the spine rather than looking independently forward.",
+      "allowedValues": [
+        "alignedWithSpine"
+      ]
+    },
+    {
+      "id": "tempo",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source standardized the descent and ascent to the same self-selected normal speed without publishing a numeric cadence.",
+      "allowedValues": [
+        "equalNormalDescentAscent"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "No rail, lever, or other mechanism constrains the free barbell path."
+    },
+    {
+      "id": "interRepSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The bar remains on the athlete and does not return to a floor, rack, or other support between repetitions.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Hip and spinal extension create the ascent while the directly measured small knee excursion remains nondefining.",
+      "allowedValues": [
+        "hipAndSpineExtensionWithSmallKneeExcursion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMax"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "bicepsFemoris"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "brachialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "medialHamstrings",
+        "gluteMax",
+        "lumbarExtensors"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "bicepsFemoris",
+        "gluteMed",
+        "gastrocnemius",
+        "soleus",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "externalRotators",
+        "trapeziusUpper",
+        "brachialis",
+        "abs",
+        "obliques"
+      ]
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "barbell-good-morning-25-percent-body-mass",
+      "name": "25% Body-Mass Barbell Good Morning",
+      "movementDefinition": "Stand upright with the feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the posterior shoulder and upper-back surface in a comfortable hand position, keep the head aligned with the spine, brace the trunk, and keep both feet planted. Replace the representative 45-pound or 20-kilogram seed with external barbell load equal to 25 percent of your body mass. Hinge to the deepest position that preserves the reviewed natural-spine technique, then return to standing by extending the hips and spine at the same normal speed used for the descent. Keep the knees near straight while allowing the small nondefining excursion measured in the reviewed fixture, and retain the bar on the body between all eight repetitions.",
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "symmetricBilateral",
+        "stanceWidth": "shoulderWidth",
+        "footOrientation": "slightNaturalToeOut",
+        "footContact": "continuous",
+        "loadPlacement": "posteriorShoulderUpperBack",
+        "gripOrientation": "comfortableUnreported",
+        "externalLoadPrescription": "twentyFivePercentBodyMass",
+        "hipMotion": "extends",
+        "spineMotion": "extendsWithMeasuredSegmentalExcursion",
+        "kneeMotion": "measuredSmallNondefiningExcursion",
+        "rangeOfMotion": "maximumHipFlexionWithNaturalSpineTechnique",
+        "headPosition": "alignedWithSpine",
+        "tempo": "equalNormalDescentAscent",
+        "fixedPath": false,
+        "interRepSupport": "none",
+        "lowerBodyContribution": "hipAndSpineExtensionWithSmallKneeExcursion"
+      },
+      "involvement": [
+        {
+          "muscle": "medialHamstrings",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMax",
+          "role": "primary"
+        },
+        {
+          "muscle": "lumbarExtensors",
+          "role": "primary"
+        },
+        {
+          "muscle": "bicepsFemoris",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gluteMed",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "gastrocnemius",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "soleus",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "fingerFlexors",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "externalRotators",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "trapeziusUpper",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "brachialis",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "abs",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "schellenberg-2013-deadlift-goodmorning-kinematics"
+      ],
+      "equipment": "barbell",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "laterality": "bilateral",
+      "aliases": [
+        "Barbell Good Morning at 25% Body Mass",
+        "25% Bodyweight Good Morning"
+      ],
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "bodyweightFraction": 0,
+      "reps": 8,
+      "searchPriority": 76
+    }
+  ]
+}

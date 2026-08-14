@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-one reviewed family files containing 128 exercises are currently
+Fifty-four reviewed family files containing 132 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-146-source foundation. Each uses a coverage batch whose exercises
+149-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -42,26 +42,25 @@ contract. Closed-chain vertical press belongs as a future branch of
 `vertical-press`, but that branch remains deferred until direct dynamic
 evidence supports its bodyweight-loading and action contract.
 
-Batch 4 adds seven exercises across `knee-extension`, `knee-flexion`,
-`hip-extension`, and `ankle-plantarflexion`. The rosters preserve the exact
-reviewed posture contrasts: reclined versus upright leg extension, seated
-versus prone leg curl, bent-knee prone-table hip extension, and straight- versus
-bent-knee machine calf raise. `hip-flexion` remains deferred because the
-available evidence does not establish the proposed dynamic
-femur-relative-to-position-held-pelvis isolation contract.
+Batch 4 adds eight exercises across `knee-extension`, `knee-flexion`,
+`hip-extension`, `hip-flexion`, and `ankle-plantarflexion`. The rosters preserve
+the exact reviewed posture contrasts: reclined versus upright leg extension,
+seated versus prone leg curl, bent-knee prone-table hip extension, straight-
+versus bent-knee machine calf raise, and one supine bodyweight active straight-
+leg raise to active end range. The hip-flexion fixture reports its pelvis and
+spine motion as nonstandardized rather than inventing position-held claims.
 
-Batch 5 adds six exercises across `bilateral-squat`, `hip-thrust-bridge`,
-`split-stance-squat`, and `step-up`. The active rosters are limited to two
-parallel straight-bar squats, two padded-barbell thrust/bridge fixtures, one
-stationary approximately-leg-length barbell split squat using the study's
-100-percent condition, and one complete 21-cm
-bodyweight forward stepping sequence. `hip-hinge` remains deferred because the
-reviewed Romanian-deadlift fixtures show material knee excursion and therefore
-cannot satisfy the shared `positionHeld` boundary. Narrowing the old
-`split-stance-lunge` discovery handle also leaves `dynamic-lunge` unresolved:
-forward/reverse step-and-return tasks need reviewed impact, deceleration,
-support-transition, and return semantics, while walking lunges may ultimately
-belong to locomotion.
+Batch 5 adds nine exercises across `bilateral-squat`, `hip-thrust-bridge`,
+`split-stance-squat`, `step-up`, `hip-hinge`, and `dynamic-lunge`. The rosters
+are limited to two parallel straight-bar squats, two padded-barbell
+thrust/bridge fixtures, one stationary approximately-leg-length barbell split
+squat using the study's 100-percent condition, one complete 21-cm bodyweight
+forward stepping sequence, one exact 25-percent-body-mass barbell good morning,
+and the reviewed bodyweight forward and reverse step-and-return lunges. The
+good morning declares dynamic hip and spinal extension while preserving its
+small measured knee excursion as nondefining. Dynamic lunge owns the reviewed
+landing, support-transition, deceleration, and return topology; stationary
+split squats and walking lunges remain outside it.
 
 Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`,
 `ankle-dorsiflexion`, `hip-internal-rotation`, and
