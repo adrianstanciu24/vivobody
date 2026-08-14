@@ -63,21 +63,21 @@ struct SwipePager<Content: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            let W = geo.size.width
-            let H = geo.size.height
-            let cardWidth = max(0, W - 2 * (peekWidth + spacing))
+            let containerWidth = geo.size.width
+            let containerHeight = geo.size.height
+            let cardWidth = max(0, containerWidth - 2 * (peekWidth + spacing))
             let stride = cardWidth + spacing
             let virtual = Double(selection) - Double(dragOffset) / Double(stride)
 
             HStack(spacing: spacing) {
                 ForEach(0 ..< count, id: \.self) { i in
-                    page(i, width: cardWidth, height: H)
+                    page(i, width: cardWidth, height: containerHeight)
                         .scaleEffect(reduceMotion ? 1.0 : scale(for: i, virtual: virtual))
                         .opacity(opacity(for: i, virtual: virtual))
                 }
             }
             .frame(width: cardWidth * CGFloat(count) + spacing * CGFloat(max(0, count - 1)), alignment: .leading)
-            .offset(x: (W - cardWidth) / 2 - CGFloat(selection) * stride + dragOffset)
+            .offset(x: (containerWidth - cardWidth) / 2 - CGFloat(selection) * stride + dragOffset)
             .contentShape(Rectangle())
             // simultaneousGesture (not gesture) so vertical drags can
             // also bubble up to an enclosing .sheet for swipe-down

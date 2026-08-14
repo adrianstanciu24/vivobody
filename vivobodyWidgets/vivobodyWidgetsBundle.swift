@@ -20,7 +20,7 @@ import VivoKit
 import WidgetKit
 
 @main
-struct vivobodyWidgetsBundle: WidgetBundle {
+struct VivobodyWidgetsBundle: WidgetBundle {
     var body: some Widget {
         UpNextWidget()
         SignatureWidget()

@@ -8,7 +8,7 @@
 
 import XCTest
 
-final class vivobodyUITestsLaunchTests: XCTestCase {
+final class VivobodyUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

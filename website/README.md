@@ -27,6 +27,20 @@ npm run format
 npm run format:check
 ```
 
+## Linting
+
+ESLint enforces the repository naming standard — camelCase for variables,
+functions, and parameters; PascalCase for classes and type-like
+declarations — across standalone scripts and the frontmatter and inline
+`<script>` blocks of `.astro` components:
+
+```bash
+npm run lint
+```
+
+The rule set lives in `eslint.config.mjs` and mirrors the Swift conventions
+documented in `../engineering/quality.md`.
+
 ## Refreshing the simulator demo
 
 The landing video is generated from deterministic app fixtures rather than
@@ -47,12 +61,12 @@ loop and poster to `website/public/video/`. Raw captures stay under the ignored
 
 Connect the existing `vivobody` GitHub repository with these settings:
 
-| Setting | Value |
-|---|---|
-| Production branch | `main` |
-| Root directory | `website` |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
+| Setting                | Value           |
+| ---------------------- | --------------- |
+| Production branch      | `main`          |
+| Root directory         | `website`       |
+| Build command          | `npm run build` |
+| Build output directory | `dist`          |
 
 Set the build watch include path to `website/*` so iOS-only commits do not
 trigger website deployments.

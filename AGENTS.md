@@ -51,6 +51,10 @@ Treat source as canonical for volatile facts:
   `// architecture: allow-direct-save -- <reason>` at the call site.
 - Use `SettingsKey` for UserDefaults keys and `WeightFormatter` for unit
   conversion at the UI boundary. Stored weight remains canonical pounds.
+- Follow one naming standard: PascalCase for types, lowerCamelCase for
+  functions, properties, and enum cases, with no underscores in Swift
+  identifiers. `Scripts/check_naming.py` enforces it for Swift and
+  `npm run lint` enforces it for website scripts.
 - Compose UI from `ScreenKit`, `PanelKit`, and `GlassStyle`; use 44pt-or-larger
   controls and stable accessibility identifiers on harness-critical controls.
 - Persist every workout interaction. Keep the rest timer first-class and
@@ -74,6 +78,9 @@ Scripts/check.sh
 
 # Fast architecture pass while iterating
 /usr/bin/python3 Scripts/check_architecture.py
+
+# Fast naming-convention pass while iterating
+/usr/bin/python3 Scripts/check_naming.py
 
 # Format Swift source files (brew install swiftformat)
 swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/

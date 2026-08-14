@@ -40,6 +40,11 @@ echo "▸ Testing source-size ratchet..."
   -s Scripts/tests \
   -p 'test_check_source_sizes.py'
 
+echo "▸ Testing naming-convention guardrails..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_check_naming.py'
+
 echo "▸ Testing manual quality scan..."
 /usr/bin/python3 -m unittest discover \
   -s Scripts/tests \
@@ -56,6 +61,9 @@ echo "▸ Checking repository architecture..."
 
 echo "▸ Checking source-size ratchet..."
 /usr/bin/python3 Scripts/check_source_sizes.py
+
+echo "▸ Checking Swift naming conventions..."
+/usr/bin/python3 Scripts/check_naming.py
 
 echo "▸ Checking Swift formatting..."
 if command -v swiftformat >/dev/null 2>&1; then

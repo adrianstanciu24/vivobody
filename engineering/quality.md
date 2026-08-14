@@ -37,6 +37,29 @@ decisions; it is the product constitution rather than a component catalog.
   competes with scrolling.
 - Pluralize unit copy from values rather than hardcoding a suffix.
 
+## Naming conventions
+
+Swift sources and website scripts share one casing standard, enforced
+mechanically rather than by review vigilance:
+
+- Types (`class`, `struct`, `enum`, `protocol`, `actor`, `typealias`,
+  `associatedtype`) use PascalCase: `WorkoutSessionController`,
+  `SnapshotEntry`.
+- Functions, properties, and enum cases use lowerCamelCase:
+  `restoreSession()`, `peekWidth`, `case bodyweightAdded`.
+- Acronyms follow the surrounding casing (`URL` inside a type name, `url`
+  inside a value name); underscores appear nowhere in Swift identifiers.
+- Operator and backticked function declarations (`static func ==`,
+  `` func `repeat` ``) are exempt because they carry no casing.
+
+`Scripts/check_naming.py` enforces the Swift side across app, widgets,
+VivoKit, and both test targets; it runs in `Scripts/check.sh` and the commit
+hooks, and comments, strings, and switch patterns are masked so only real
+declarations are judged. The website enforces the same standard through
+ESLint's `@typescript-eslint/naming-convention` (`npm run lint` in
+`website/`), which also covers frontmatter and inline `<script>` blocks in
+`.astro` components.
+
 ## Code as a map
 
 Every Swift file begins with a purpose header that says why the file exists.

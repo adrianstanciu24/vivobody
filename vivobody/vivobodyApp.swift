@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @main
-struct vivobodyApp: App {
+struct VivobodyApp: App {
     /// The SwiftData container. Holds every archived workout. The
     /// schema declares all @Model classes; cascade-delete
     /// relationships keep exercises and sets bound to their session.

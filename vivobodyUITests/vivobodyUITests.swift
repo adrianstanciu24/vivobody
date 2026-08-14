@@ -9,7 +9,7 @@
 
 import XCTest
 
-final class vivobodyUITests: XCTestCase {
+final class VivobodyUITests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
