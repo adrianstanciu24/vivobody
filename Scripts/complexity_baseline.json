@@ -1,0 +1,62 @@
+{
+  "files": {
+    "vivobody/App/DebugSeed.swift": {
+      "seedIfRequested": 12
+    },
+    "vivobody/App/WorkoutLiveActivityController.swift": {
+      "startUpdatePumpIfNeeded": 11
+    },
+    "vivobody/App/WorkoutSessionController.swift": {
+      "handle": 18
+    },
+    "vivobody/Components/Moments/PRCelebration.swift": {
+      "startSequence": 12
+    },
+    "vivobody/Models/Domain/CatalogData.swift": {
+      "validate": 43
+    },
+    "vivobody/Models/Insights/AnalyticsAccumulator.swift": {
+      "replay": 18
+    },
+    "vivobody/Models/Insights/AntagonistBalance.swift": {
+      "antagonistBalance": 23
+    },
+    "vivobody/Models/Insights/ArchiveOverview.swift": {
+      "archiveOverview": 11
+    },
+    "vivobody/Models/Insights/ConsistencyReport.swift": {
+      "consistency": 19
+    },
+    "vivobody/Models/Insights/ExerciseDominance.swift": {
+      "exerciseDominance": 23
+    },
+    "vivobody/Models/Insights/ExerciseProgress.swift": {
+      "progressByExercise": 13
+    },
+    "vivobody/Models/Insights/IntensityMix.swift": {
+      "intensityMix": 14,
+      "weeklyIntensity": 18
+    },
+    "vivobody/Models/Insights/MuscleMapReport.swift": {
+      "compute": 15
+    },
+    "vivobody/Models/Insights/MuscleVolume.swift": {
+      "muscleVolume": 14
+    },
+    "vivobody/Models/Insights/RepRangeMigration.swift": {
+      "repRangeMigration": 27
+    },
+    "vivobody/Models/Insights/SessionInsights.swift": {
+      "adherence": 11
+    },
+    "vivobody/Models/Insights/StrengthOutlook.swift": {
+      "compute": 17
+    },
+    "vivobody/Screens/ActiveWorkout/ActiveExerciseCard.swift": {
+      "handleSetToggle": 21
+    },
+    "vivobodyWidgets/WidgetChrome.swift": {
+      "heatmapFill": 11
+    }
+  }
+}

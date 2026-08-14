@@ -29,7 +29,9 @@ Treat source as canonical for volatile facts:
 - versions: `Shared.xcconfig` only;
 - exercise catalog: `specs/catalog/` projected by `Scripts/catalog.py`;
 - enforced architecture rules: `Scripts/check_architecture.py`;
-- source-size allowances: `Scripts/source_size_baseline.json`.
+- source-size allowances: `Scripts/source_size_baseline.json`;
+- complexity limit: `.swiftlint.yml`, with allowances in
+  `Scripts/complexity_baseline.json`.
 
 ## Hard rules
 
@@ -65,7 +67,8 @@ Treat source as canonical for volatile facts:
 - Route unified logging through `AppDiagnostics`. Events expose stable kinds
   and outcomes, never user-owned workout or HealthKit values.
 - New production Swift files stay within the source-size threshold; existing
-  oversized files may only shrink under the checked-in ratchet.
+  oversized files may only shrink under the checked-in ratchet. New functions
+  stay within the SwiftLint complexity limit under the same ratchet.
 - Preserve user changes in a dirty worktree. Do not edit unrelated files.
 
 ## Commands

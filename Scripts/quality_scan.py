@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "Scripts"))
 
 import check_architecture  # noqa: E402
+import check_complexity  # noqa: E402
 import check_documentation  # noqa: E402
 import check_source_sizes  # noqa: E402
 
@@ -158,6 +159,31 @@ def build_report(root: Path, today: date, stale_days: int) -> str:
         )]
         production_count = 0
         allowance_count = 0
+    complexity_baseline = root / "Scripts" / "complexity_baseline.json"
+    try:
+        complexity, complexity_measured, complexity_allowance_count = check_complexity.check(
+            root,
+            complexity_baseline,
+            root / ".swiftlint.yml",
+        )
+        complexity_detail = (
+            f"{len(complexity)} finding(s), {complexity_measured} function(s) "
+            f"over the limit, {complexity_allowance_count} allowances"
+        )
+        complexity_status = "FAIL" if complexity else "PASS"
+    except check_complexity.SwiftLintUnavailable as error:
+        complexity = []
+        complexity_detail = str(error)
+        complexity_status = "SKIP"
+    except (OSError, ValueError) as error:
+        complexity = [check_complexity.Violation(
+            "Scripts/complexity_baseline.json",
+            1,
+            "COMPLEX000",
+            str(error),
+        )]
+        complexity_detail = f"{len(complexity)} finding(s)"
+        complexity_status = "FAIL"
     stale = stale_knowledge_records(root, today, stale_days)
     orphans = orphaned_screen_candidates(root)
     duplicates = duplicated_ui_surface_candidates(root)
@@ -176,12 +202,13 @@ def build_report(root: Path, today: date, stale_days: int) -> str:
         f"| Documentation and local paths | {'PASS' if not documentation else 'FAIL'} | {len(documentation)} finding(s) |",
         f"| Architecture and forbidden imports | {'PASS' if not architecture else 'FAIL'} | {len(architecture)} finding(s) across {source_count} Swift files |",
         f"| Source-size ratchet | {'PASS' if not sizes else 'FAIL'} | {len(sizes)} finding(s), {production_count} production files, {allowance_count} allowances |",
+        f"| Complexity ratchet | {complexity_status} | {complexity_detail} |",
         "",
         "### Enforced findings",
         "",
     ]
     lines.extend(bullets(
-        (f"`{markdown_escape(item.diagnostic())}`" for item in [*documentation, *architecture, *sizes]),
+        (f"`{markdown_escape(item.diagnostic())}`" for item in [*documentation, *architecture, *sizes, *complexity]),
         "None.",
     ))
     lines.extend([

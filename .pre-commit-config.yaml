@@ -3,14 +3,15 @@
 #
 # Git hook gates that catch failures before Scripts/check.sh has to. The
 # commit stage runs file hygiene, SwiftFormat on staged Swift files, and the
-# fast architecture, source-size, documentation, and catalog guardrails
-# scoped to the files they protect. The push stage runs the Python guardrail
-# suites and the VivoKit snapshot contract tests. Scripts/check.sh remains
-# the canonical validator; these hooks only move the same failures earlier.
+# fast architecture, source-size, naming, complexity, documentation, and
+# catalog guardrails scoped to the files they protect. The push stage runs
+# the Python guardrail suites and the VivoKit snapshot contract tests.
+# Scripts/check.sh remains the canonical validator; these hooks only move the
+# same failures earlier.
 #
 # One-time setup per clone:
 #
-#   brew install pre-commit swiftformat
+#   brew install pre-commit swiftformat swiftlint
 #   pre-commit install
 #
 # Run every hook against the full tree with:
@@ -67,6 +68,13 @@ repos:
         language: system
         pass_filenames: false
         files: '\.swift$'
+
+      - id: check-complexity
+        name: Cyclomatic complexity ratchet (SwiftLint)
+        entry: /usr/bin/python3 Scripts/check_complexity.py
+        language: system
+        pass_filenames: false
+        files: '(\.swift|^\.swiftlint\.yml)$'
 
       - id: website-eslint
         name: Website naming conventions (ESLint)

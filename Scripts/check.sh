@@ -45,6 +45,11 @@ echo "▸ Testing naming-convention guardrails..."
   -s Scripts/tests \
   -p 'test_check_naming.py'
 
+echo "▸ Testing complexity guardrails..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_check_complexity.py'
+
 echo "▸ Testing manual quality scan..."
 /usr/bin/python3 -m unittest discover \
   -s Scripts/tests \
@@ -64,6 +69,9 @@ echo "▸ Checking source-size ratchet..."
 
 echo "▸ Checking Swift naming conventions..."
 /usr/bin/python3 Scripts/check_naming.py
+
+echo "▸ Checking cyclomatic complexity..."
+/usr/bin/python3 Scripts/check_complexity.py
 
 echo "▸ Checking Swift formatting..."
 if command -v swiftformat >/dev/null 2>&1; then

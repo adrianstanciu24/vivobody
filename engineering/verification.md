@@ -22,6 +22,7 @@ For a fast structural loop before compiling:
 /usr/bin/python3 Scripts/check_architecture.py
 /usr/bin/python3 Scripts/check_documentation.py
 /usr/bin/python3 Scripts/check_source_sizes.py
+/usr/bin/python3 Scripts/check_complexity.py
 ```
 
 To isolate a compiler failure:
@@ -37,19 +38,19 @@ The checked-in `.pre-commit-config.yaml` moves the fast gates earlier than
 `Scripts/check.sh`. Install once per clone:
 
 ```bash
-brew install pre-commit swiftformat
+brew install pre-commit swiftformat swiftlint
 pre-commit install
 ```
 
 The commit stage checks file hygiene, formats staged Swift files under
 `vivobody/`, `vivobodyWidgets/`, and `VivoKit/Sources/` with SwiftFormat
 (matching the `Scripts/check.sh` formatting boundary), and runs the
-architecture, source-size, documentation, and catalog-parity guardrails
-scoped to the files that can break them. The push stage runs the Python
-guardrail suites and the VivoKit snapshot contract tests. Hooks never replace
-`Scripts/check.sh`; they surface the same failures earlier. Run the full tree
-manually with `pre-commit run --all-files`, adding `--hook-stage pre-push`
-for the push stage.
+architecture, source-size, complexity, documentation, and catalog-parity
+guardrails scoped to the files that can break them. The push stage runs the
+Python guardrail suites and the VivoKit snapshot contract tests. Hooks never
+replace `Scripts/check.sh`; they surface the same failures earlier. Run the
+full tree manually with `pre-commit run --all-files`, adding
+`--hook-stage pre-push` for the push stage.
 
 ## UI verification with Baguette
 
@@ -164,9 +165,10 @@ Generate the unscheduled maintenance report with:
 /usr/bin/python3 Scripts/quality_scan.py --output .verify/quality-scan.md
 ```
 
-Documentation paths, architecture boundaries, and source-size growth are also
-enforced independently by `Scripts/check.sh`. Stale dates, orphaned screens,
-and repeated UI-surface expressions are deliberately report-only heuristics.
+Documentation paths, architecture boundaries, source-size growth, and function
+complexity are also enforced independently by `Scripts/check.sh`. Stale dates,
+orphaned screens, and repeated UI-surface expressions are deliberately
+report-only heuristics.
 Review several manual reports and tune false positives before scheduling it.
 
 The current pre-release store lives in `vivobodyTests/Fixtures/`. Contract tests

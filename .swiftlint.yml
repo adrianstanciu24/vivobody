@@ -1,0 +1,23 @@
+# SwiftLint configuration for vivobody.
+#
+# SwiftLint is used here as a metrics source, not as a style linter: SwiftFormat
+# owns formatting and Scripts/check_naming.py owns naming. Only the rules that
+# Scripts/check_complexity.py ratchets are enabled, so `swiftlint lint` from the
+# repository root reports exactly what the guardrail enforces.
+#
+# Known gap: cyclomatic_complexity covers function and initializer bodies only.
+# Computed properties, including `var body: some View`, are not measured; their
+# growth is bounded by the source-size ratchet instead.
+
+only_rules:
+  - cyclomatic_complexity
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+  ignores_case_statements: false
+
+included:
+  - vivobody
+  - vivobodyWidgets
+  - VivoKit/Sources

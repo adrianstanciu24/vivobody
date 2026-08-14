@@ -79,6 +79,23 @@ and further growth in existing oversized files. The checked-in baseline records
 today's debt rather than blessing it: splitting or shrinking a file requires
 lowering its allowance so the removed complexity cannot silently return.
 
+`Scripts/check_complexity.py` applies the same ratchet to cyclomatic
+complexity. SwiftLint's `cyclomatic_complexity` rule measures the code and
+`.swiftlint.yml` owns the limit; the script owns
+`Scripts/complexity_baseline.json`, so existing debt may shrink but not grow
+and new functions above the limit are rejected. Allowances are keyed by
+declaration name rather than line number, so moving a function or editing the
+code above it does not invalidate its entry. Run
+`Scripts/check_complexity.py --update` after a refactor to record the result.
+SwiftLint is a development dependency only; when it is not installed the check
+warns and skips rather than failing.
+
+The rule measures function and initializer bodies. Computed properties,
+including `var body: some View`, are not measured, so a large declarative view
+is bounded by the source-size ratchet instead. That split is deliberate: a
+branching state transition and a long view body carry different risk, and only
+the first is worth a complexity budget.
+
 `Scripts/quality_scan.py` combines enforced checks with report-only stale-doc,
 orphan-screen, and repeated-UI-surface heuristics. Run it manually and review
 the report under `.verify/`. Do not schedule it until several maintenance runs
