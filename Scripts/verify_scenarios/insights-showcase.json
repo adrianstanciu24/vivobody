@@ -1,0 +1,45 @@
+{
+  "name": "insights-showcase",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-insights-showcase"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "history",
+        "arguments": ["--pro"]
+      }
+    },
+    {
+      "wait": {
+        "identifierContains": "historySessionRow",
+        "role": "AXButton"
+      }
+    },
+    {
+      "openURL": "vivobody://insights"
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsSignatureSection"
+    },
+    {
+      "identifier": "insightsTrainingLoadSection"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

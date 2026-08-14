@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+#  check.sh
+#  vivobody
+#
+#  Canonical non-UI validation entry point. It proves the architecture
+#  guardrails themselves, checks repository boundaries and generated catalog
+#  parity, then compiles the complete app and widget graph for the simulator.
+#  Full build output lands in .verify/check-build.log; the terminal stays
+#  focused on actionable diagnostics.
+#
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+OUT_DIR="$ROOT/.verify"
+BUILD_LOG="$OUT_DIR/check-build.log"
+DIAGNOSTICS_LOG="$OUT_DIR/check-build-diagnostics.log"
+mkdir -p "$OUT_DIR"
+
+echo "▸ Testing architecture guardrails..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_check_architecture.py'
+
+echo "▸ Testing documentation guardrails..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_check_documentation.py'
+
+echo "▸ Testing semantic scenario harness..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_verify_scenario.py'
+
+echo "▸ Testing source-size ratchet..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_check_source_sizes.py'
+
+echo "▸ Testing manual quality scan..."
+/usr/bin/python3 -m unittest discover \
+  -s Scripts/tests \
+  -p 'test_quality_scan.py'
+
+echo "▸ Testing VivoKit snapshot contracts..."
+swift test --package-path VivoKit
+
+echo "▸ Checking persistence baseline integrity..."
+(cd vivobodyTests/Fixtures && shasum -a 256 -c SHA256SUMS)
+
+echo "▸ Checking repository architecture..."
+/usr/bin/python3 Scripts/check_architecture.py
+
+echo "▸ Checking source-size ratchet..."
+/usr/bin/python3 Scripts/check_source_sizes.py
+
+echo "▸ Checking repository knowledge map..."
+/usr/bin/python3 Scripts/check_documentation.py
+
+echo "▸ Checking generated exercise catalog..."
+/usr/bin/python3 Scripts/catalog.py --check
+
+echo "▸ Building vivobody..."
+if ! xcodebuild \
+  -scheme vivobody \
+  -destination 'generic/platform=iOS Simulator' \
+  build >"$BUILD_LOG" 2>&1; then
+  grep -E '(warning:|error:|BUILD SUCCEEDED|BUILD FAILED)' "$BUILD_LOG" \
+    | grep -v 'AppIntents.framework dependency' || tail -n 80 "$BUILD_LOG"
+  echo "error: xcodebuild failed; full log at $BUILD_LOG" >&2
+  exit 1
+fi
+
+grep -E '(warning:|error:)' "$BUILD_LOG" \
+  | grep -v 'AppIntents.framework dependency' >"$DIAGNOSTICS_LOG" || true
+if [[ -s "$DIAGNOSTICS_LOG" ]]; then
+  cat "$DIAGNOSTICS_LOG" >&2
+  echo "error: build completed with unexpected warnings; full log at $BUILD_LOG" >&2
+  exit 1
+fi
+
+echo "▸ Vivobody checks passed. Build log: $BUILD_LOG"

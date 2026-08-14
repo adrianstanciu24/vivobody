@@ -9,8 +9,8 @@
 //  uses, so editing a template feels identical to editing mid-set.
 //  Drag up to increase, down to decrease; haptic tick on every step;
 //  rubber-band at the range walls. Values bind straight to the @Model
-//  via @Bindable + modelContext.save() on change, so edits flow back
-//  to the parent list summary the instant a drag ends.
+//  via @Bindable + modelContext.saveOrRollback() on change, so edits
+//  flow back to the parent list summary the instant a drag ends.
 //
 //  Why scrubbers, not iOS Form Steppers: the active workout sets the
 //  app's visual + interaction language. The template editor has to

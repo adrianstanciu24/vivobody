@@ -158,6 +158,7 @@ struct BreathingTimer: View {
         .gesture(skipOrExtendGesture)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Rest timer")
+        .accessibilityIdentifier("restTimerOverlay")
         .accessibilityValue(accessibilityValue)
         .accessibilityAddTraits(.updatesFrequently)
         .accessibilityAction(named: hasFinished ? "Return to workout" : "Skip rest") { skipNow() }

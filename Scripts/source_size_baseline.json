@@ -1,0 +1,19 @@
+{
+  "threshold": 600,
+  "files": {
+    "vivobody/App/DebugSeed.swift": 768,
+    "vivobody/Components/Inputs/BareScrubber.swift": 918,
+    "vivobody/Models/Domain/ExerciseCatalog.swift": 829,
+    "vivobody/Models/Domain/WorkoutSession.swift": 633,
+    "vivobody/Models/Insights/SessionAnalytics.swift": 764,
+    "vivobody/Screens/ActiveWorkout/ActiveExerciseCard.swift": 642,
+    "vivobody/Screens/ActiveWorkout/ActiveExerciseCardSections.swift": 740,
+    "vivobody/Screens/Insights/SignatureSection.swift": 893,
+    "vivobody/Screens/Library/CustomExerciseEditorSheet.swift": 1454,
+    "vivobody/Screens/Library/ExerciseDetailSections.swift": 1292,
+    "vivobody/Screens/Library/ExerciseStrengthTrendCard.swift": 641,
+    "vivobody/Screens/Me/MeScreen.swift": 737,
+    "vivobody/Screens/Me/SettingsScreen.swift": 760,
+    "vivobody/Screens/Today/TodayScreenSections.swift": 818
+  }
+}

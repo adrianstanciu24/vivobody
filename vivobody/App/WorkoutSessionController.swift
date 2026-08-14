@@ -151,18 +151,23 @@ final class WorkoutSessionController {
             sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
         )
         descriptor.fetchLimit = 1
-        guard let session = try? context.fetch(descriptor).first else {
-            // No saved session means any surviving ActivityKit state is stale.
-            // This is harmless on ordinary no-session launches because `end`
-            // sees no activities.
-            WorkoutLiveActivityController.end(for: nil)
-            WidgetSnapshotWriter.writeActiveWorkout(in: context)
-            return
+        do {
+            guard let session = try context.fetch(descriptor).first else {
+                // No saved session means any surviving ActivityKit state is stale.
+                // This is harmless on ordinary no-session launches because `end`
+                // sees no activities.
+                AppDiagnostics.sessionTransition(kind: "restore", outcome: "none")
+                SessionSideEffects.restore(nil, in: context)
+                return
+            }
+            activeSession = session
+            isWorkoutExpanded = false
+            AppDiagnostics.sessionTransition(kind: "restore", outcome: "success")
+            SessionSideEffects.restore(session, in: context)
+        } catch {
+            AppDiagnostics.sessionTransitionFailed(kind: "restore", error: error)
+            SessionSideEffects.restore(nil, in: context)
         }
-        activeSession = session
-        isWorkoutExpanded = false
-        WorkoutLiveActivityController.start(for: session)
-        WidgetSnapshotWriter.writeActiveWorkout(in: context)
     }
 
     /// Resume a specific workout session by UUID, as handed to us by
@@ -179,6 +184,7 @@ final class WorkoutSessionController {
             guard activeSession.id == id else { return false }
             appState?.selectedTab = .today
             isWorkoutExpanded = true
+            AppDiagnostics.sessionTransition(kind: "resume", outcome: "success")
             return true
         }
         var descriptor = FetchDescriptor<WorkoutSession>(
@@ -191,6 +197,7 @@ final class WorkoutSessionController {
         activeSession = session
         appState?.selectedTab = .today
         isWorkoutExpanded = true
+        AppDiagnostics.sessionTransition(kind: "resume", outcome: "success")
         return true
     }
 
@@ -312,8 +319,10 @@ final class WorkoutSessionController {
             activeSession = session
             isWorkoutExpanded = true
             SessionSideEffects.handle(.started, session: session, in: context)
+            AppDiagnostics.sessionTransition(kind: "start", outcome: "success")
         } catch {
             lastSaveError = SaveErrorBox(error)
+            AppDiagnostics.sessionTransitionFailed(kind: "start", error: error)
         }
     }
 
@@ -321,11 +330,13 @@ final class WorkoutSessionController {
 
     func minimizeWorkout() {
         isWorkoutExpanded = false
+        AppDiagnostics.sessionTransition(kind: "minimize", outcome: "success")
     }
 
     func expandWorkout() {
         guard activeSession != nil else { return }
         isWorkoutExpanded = true
+        AppDiagnostics.sessionTransition(kind: "expand", outcome: "success")
     }
 
     /// Expand only if there's an active session. Used by the
@@ -361,11 +372,13 @@ final class WorkoutSessionController {
             } catch {
                 pendingDiscardSession = nil
                 lastSaveError = SaveErrorBox(error)
+                AppDiagnostics.sessionTransitionFailed(kind: "discard", error: error)
                 return
             }
         }
         pendingDiscardSession = nil
         activeSession = nil
+        AppDiagnostics.sessionTransition(kind: "discard", outcome: "success")
     }
 
     /// Called when the user fully exits the workout — either via the
@@ -383,11 +396,13 @@ final class WorkoutSessionController {
                     SessionSideEffects.handle(.discarded, session: session, in: context)
                 } catch {
                     lastSaveError = SaveErrorBox(error)
+                    AppDiagnostics.sessionTransitionFailed(kind: "discard", error: error)
                     return
                 }
             }
             activeSession = nil
             isWorkoutExpanded = false
+            AppDiagnostics.sessionTransition(kind: "discard", outcome: "success")
             return
         }
 
@@ -407,8 +422,10 @@ final class WorkoutSessionController {
             appState?.analytics.invalidate()
             activeSession = nil
             isWorkoutExpanded = false
+            AppDiagnostics.sessionTransition(kind: "archive", outcome: "success")
         } catch {
             lastSaveError = SaveErrorBox(error)
+            AppDiagnostics.sessionTransitionFailed(kind: "archive", error: error)
         }
     }
 
@@ -445,6 +462,7 @@ final class WorkoutSessionController {
     /// Each `IncomingAction` parser feeds into this; new deep links
     /// or widget intents add one case here.
     func handle(_ action: IncomingAction) {
+        AppDiagnostics.incomingActionReceived(kind: action.diagnosticKind)
         switch action {
         case .openTab(let tab):
             if tab == .insights {

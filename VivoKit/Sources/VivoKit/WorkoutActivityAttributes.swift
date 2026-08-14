@@ -6,6 +6,8 @@
 //  the Active Workout Live Activity.
 //
 
+#if os(iOS)
+
 import ActivityKit
 import Foundation
 
@@ -49,3 +51,5 @@ public struct WorkoutActivityAttributes: ActivityAttributes, Sendable {
         self.totalExercises = totalExercises
     }
 }
+
+#endif

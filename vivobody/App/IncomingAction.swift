@@ -31,6 +31,21 @@ enum IncomingAction: Equatable {
     case completeActiveSet
     /// Present the Vivobody Pro paywall (locked-widget tap).
     case showPaywall
+
+    /// Privacy-safe case name for diagnostics. Associated UUIDs and other
+    /// user-linked payloads deliberately never enter unified logs.
+    var diagnosticKind: String {
+        switch self {
+        case .openTab: "open_tab"
+        case .resumeWorkout: "resume_workout"
+        case .startTodaysWorkout: "start_today"
+        case .startTemplate: "start_template"
+        case .continueSession: "continue_session"
+        case .showExercise: "show_exercise"
+        case .completeActiveSet: "complete_active_set"
+        case .showPaywall: "show_paywall"
+        }
+    }
 }
 
 // MARK: - Parsers

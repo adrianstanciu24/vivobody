@@ -486,6 +486,7 @@ extension TodayScreen {
         .buttonStyle(.plain)
         .softElevation(radius: 14, y: 7, opacity: 0.35)
         .accessibilityLabel("Start \(template.name)")
+        .accessibilityIdentifier("scheduledWorkoutStartButton")
         .accessibilityHint("Scheduled for today")
     }
 
@@ -637,6 +638,7 @@ extension TodayScreen {
             showStartSheet = true
         }
         .softElevation(radius: 18, y: 10, opacity: 0.45)
+        .accessibilityIdentifier("todayStartWorkoutButton")
         .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
         .accessibilitySortPriority(100)
     }

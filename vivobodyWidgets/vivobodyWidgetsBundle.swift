@@ -51,21 +51,23 @@ struct SnapshotProvider<Snapshot: Codable>: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SnapshotEntry<Snapshot>) -> Void) {
-        completion(SnapshotEntry(date: Date(), snapshot: readSnapshot() ?? empty))
+        completion(SnapshotEntry(date: Date(), snapshot: readSnapshot()))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SnapshotEntry<Snapshot>>) -> Void) {
         let now = Date()
-        let entry = SnapshotEntry(date: now, snapshot: readSnapshot() ?? empty)
+        let entry = SnapshotEntry(date: now, snapshot: readSnapshot())
         let next = now.addingTimeInterval(refreshInterval)
         completion(Timeline(entries: [entry], policy: .after(next)))
     }
 
-    private func readSnapshot() -> Snapshot? {
-        guard
-            let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
-            let data = defaults.data(forKey: key)
-        else { return nil }
-        return WidgetSnapshotCodec.decode(Snapshot.self, from: data)
+    private func readSnapshot() -> Snapshot {
+        let data = UserDefaults(suiteName: WidgetShared.appGroup)?
+            .data(forKey: key)
+        return WidgetSnapshotCodec.decode(
+            Snapshot.self,
+            from: data,
+            fallback: empty
+        )
     }
 }

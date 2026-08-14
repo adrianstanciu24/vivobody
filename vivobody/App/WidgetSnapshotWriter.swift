@@ -103,7 +103,17 @@ enum WidgetSnapshotWriter {
             guard !Task.isCancelled else { return }
             let unit = WeightUnit.current
             mirrorPreferences(unit: unit)
-            write(activeWorkoutSnapshot(session: fetchActiveSession(in: context), unit: unit), key: WidgetShared.activeWorkoutSnapshotKey)
+            let didWrite = write(
+                activeWorkoutSnapshot(
+                    session: fetchActiveSession(in: context),
+                    unit: unit
+                ),
+                key: WidgetShared.activeWorkoutSnapshotKey
+            )
+            AppDiagnostics.snapshotWrite(
+                kind: "active_workout",
+                outcome: didWrite ? "success" : "failure"
+            )
             guard reload else { return }
             WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.activeWorkoutKind)
         }
@@ -168,11 +178,15 @@ enum WidgetSnapshotWriter {
             ),
         ]
 
-        guard publish(snapshots) else { return }
+        guard publish(snapshots) else {
+            AppDiagnostics.snapshotWrite(kind: "all", outcome: "failure")
+            return
+        }
         lastSnapshotFingerprint = snapshotFingerprint(
             revision: revision,
             now: now
         )
+        AppDiagnostics.snapshotWrite(kind: "all", outcome: "success")
 
         guard reload else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: WidgetShared.upNextKind)
@@ -462,12 +476,13 @@ enum WidgetSnapshotWriter {
 
     // MARK: - Persistence
 
-    private static func write<T: Codable>(_ snapshot: T, key: String) {
+    private static func write<T: Codable>(_ snapshot: T, key: String) -> Bool {
         guard
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
             let data = WidgetSnapshotCodec.encode(snapshot)
-        else { return }
+        else { return false }
         defaults.set(data, forKey: key)
+        return true
     }
 
     private static func encode<T: Codable>(_ snapshot: T) -> Data? {

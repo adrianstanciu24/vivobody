@@ -7,6 +7,7 @@
 //  All types are inside `#if DEBUG` and never ship in Release.
 //
 
+import VivoKit
 import Foundation
 import SwiftData
 
@@ -97,7 +98,11 @@ enum UITestSupport {
         deleteAll(ExerciseCatalogItem.self, in: context)
         deleteAll(BodyWeightEntry.self, in: context)
         ExerciseCatalogItem.clearBundledCatalogDeletions()
-        try? context.save()
+        let sharedDefaults = UserDefaults(suiteName: WidgetShared.appGroup)
+        sharedDefaults?.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
+        sharedDefaults?.removeObject(forKey: WidgetShared.completeSetRequestKey)
+        sharedDefaults?.removeObject(forKey: WidgetShared.startTemplateWorkoutRequestKey)
+        try? context.saveOrRollback()
     }
 
     static func seedIfRequested(in context: ModelContext) {
@@ -128,8 +133,20 @@ enum UITestSupport {
         if CommandLine.arguments.contains("--ui-test-insights-empty-instruments") {
             seedInsightsEmptyInstruments(in: context)
         }
+        if CommandLine.arguments.contains("--ui-test-insights-showcase") {
+            HistorySeeder.seedShowcase(into: context)
+        }
         if CommandLine.arguments.contains("--ui-test-scheduled-template") {
             seedScheduledTemplate(in: context)
+        }
+        // Seeds the same App Group mailbox value written by the widget intent.
+        // AppRoot then consumes it through IncomingActionParser on this launch,
+        // exercising the real app-side handoff and normal SwiftData start path.
+        if CommandLine.arguments.contains("--ui-test-widget-start-request") {
+            UserDefaults(suiteName: WidgetShared.appGroup)?.set(
+                Date().timeIntervalSince1970,
+                forKey: WidgetShared.startWorkoutRequestKey
+            )
         }
     }
 
@@ -151,7 +168,7 @@ enum UITestSupport {
         }
         let session = WorkoutSession(exercises: [exercise], restDuration: 90)
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Focused visual-verification fixture for the active bodyweight
@@ -176,7 +193,7 @@ enum UITestSupport {
             bodyweightAtStart: 180
         )
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Duration counterpart to the reps fixture above, used to verify
@@ -207,7 +224,7 @@ enum UITestSupport {
             bodyweightAtStart: 180
         )
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Completed custom, non-comparable resistance fixture for verifying
@@ -246,7 +263,7 @@ enum UITestSupport {
         }
         let session = WorkoutSession(exercises: [exercise], restDuration: 90)
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Active workout with the first two exercises linked as a
@@ -289,7 +306,7 @@ enum UITestSupport {
             restDuration: 90
         )
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// Active superset pairing a strength exercise with a power one —
@@ -324,7 +341,7 @@ enum UITestSupport {
             restDuration: 90
         )
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// One archived session with a linked pair + one straight exercise,
@@ -372,7 +389,7 @@ enum UITestSupport {
         )
         session.completedAt = completedAt
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// One archived point for verifying the Exercise Detail chart's
@@ -401,7 +418,7 @@ enum UITestSupport {
         )
         session.completedAt = completedAt
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// One archived conditioning workout for the Insights screen's
@@ -435,7 +452,7 @@ enum UITestSupport {
         )
         session.completedAt = completedAt
         context.insert(session)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     private static func seedScheduledTemplate(in context: ModelContext) {
@@ -456,7 +473,7 @@ enum UITestSupport {
         )
         template.scheduledWeekdays = [Calendar.current.component(.weekday, from: Date())]
         context.insert(template)
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     private static func deleteAll<T: PersistentModel>(_ model: T.Type, in context: ModelContext) {
@@ -527,7 +544,7 @@ enum HistorySeeder {
             session.completedAt = started.addingTimeInterval(40 * 60 + Double.random(in: 0...600))
             context.insert(session)
         }
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// A deliberately lopsided ~10-week training history engineered so
@@ -628,7 +645,7 @@ enum HistorySeeder {
         block([("Barbell Bent-Over Row", .back, 135)],
               startDaysAgo: 70, endDaysAgo: 28, count: 6, overload: 30, sets: 4, reps: 8)
 
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// A focused seed for the Today "PR-proximity" line on the Up Next
@@ -686,7 +703,7 @@ enum HistorySeeder {
         )
         template.exercises.append(templateExercise)
 
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     /// A small template library exercising every TemplateCard tier:
@@ -733,7 +750,7 @@ enum HistorySeeder {
         ]
         context.insert(core)
 
-        try? context.save()
+        try? context.saveOrRollback()
     }
 
     private static func templateExercise(for group: MuscleGroup, variant: Int) -> (name: String, weight: Double) {

@@ -80,9 +80,11 @@ struct InsightsScreen: View {
 
         insightSection(title: "Your signature", index: 0, locked: locked) {
             SignatureSection(signature: signature)
+                .accessibilityIdentifier("insightsSignatureSection")
         }
         insightSection(title: "Training load", index: 1, locked: locked) {
             TrainingLoadSection(report: core.load)
+                .accessibilityIdentifier("insightsTrainingLoadSection")
         }
         insightSection(title: "Strength composition", index: 2, locked: locked) {
             ExerciseDominanceSection(board: deep.dominance, split: deep.composition)
@@ -224,6 +226,7 @@ struct InsightsScreen: View {
                     .font(Typography.title)
                     .foregroundStyle(Ink.primary)
                     .multilineTextAlignment(.center)
+                    .accessibilityIdentifier("insightsEmptyState")
 
                 Text(
                     hasArchivedWorkout

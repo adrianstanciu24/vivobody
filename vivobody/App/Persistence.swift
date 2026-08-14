@@ -2,12 +2,13 @@
 //  Persistence.swift
 //  vivobody
 //
-//  The single current SwiftData schema and storage-health state for the
-//  pre-production app. There are no migration stages yet: development data is
-//  reset when the model changes. The in-memory fallback remains so a store
-//  failure produces an explicit warning instead of a launch crash.
+//  The single current, pre-release SwiftData schema, production container
+//  factory, and storage-health state. There is deliberately no VersionedSchema
+//  until the first public release establishes SchemaV1. Tests reopen a current
+//  store through the real app path; the recovery fallback remains intact.
 //
 
+import Foundation
 import SwiftData
 
 enum VivobodyStore {
@@ -22,6 +23,37 @@ enum VivobodyStore {
             ExerciseCatalogItem.self,
             BodyWeightEntry.self,
         ])
+    }
+
+    /// Creates the normal named container used by the app, including its
+    /// in-memory recovery configuration. Keep container construction here so
+    /// tests cannot accidentally validate a different schema or option set.
+    static func makeContainer(
+        named name: String,
+        isStoredInMemoryOnly: Bool
+    ) throws -> ModelContainer {
+        let schema = schema
+        let configuration = ModelConfiguration(
+            name,
+            schema: schema,
+            isStoredInMemoryOnly: isStoredInMemoryOnly
+        )
+        return try ModelContainer(for: schema, configurations: [configuration])
+    }
+
+    /// Opens an explicit on-disk store. The pre-release store contract copies
+    /// its checked-in baseline to a temporary URL, then reopens that copy
+    /// through the production schema without mutating the baseline.
+    static func makeContainer(at url: URL) throws -> ModelContainer {
+        let schema = schema
+        let configuration = ModelConfiguration(
+            "vivobody",
+            schema: schema,
+            url: url,
+            allowsSave: true,
+            cloudKitDatabase: .none
+        )
+        return try ModelContainer(for: schema, configurations: [configuration])
     }
 }
 

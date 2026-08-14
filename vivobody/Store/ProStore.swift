@@ -2,12 +2,12 @@
 //  ProStore.swift
 //  vivobody
 //
-//  The single StoreKit boundary. Owns the Pro entitlement (one
+//  The StoreKit purchase boundary. Owns the Pro entitlement (one
 //  non-consumable lifetime unlock), the purchase / restore flows,
-//  and the Transaction.updates listener. Every `import StoreKit` in
-//  the app lives in this file — the rest of the codebase reads
-//  `appState.pro.status` (or the ProStore environment object) and
-//  asks `requestUnlock()` to present the paywall.
+//  and the Transaction.updates listener. App-review prompting is the
+//  separate, narrowly scoped ReviewRequestController boundary; the
+//  rest of the codebase reads `appState.pro.status` (or the ProStore
+//  environment object) and asks `requestUnlock()` for the paywall.
 //
 //  Entitlement resolution is local-only: StoreKit 2 verifies the
 //  transaction JWS on device, so there is no server round-trip and

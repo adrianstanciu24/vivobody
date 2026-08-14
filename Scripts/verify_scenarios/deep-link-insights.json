@@ -1,0 +1,35 @@
+{
+  "name": "deep-link-insights",
+  "launch": {
+    "reset": true,
+    "tab": "today"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Today",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "openURL": "vivobody://insights"
+    }
+  ],
+  "required": [
+    {
+      "label": "Insights",
+      "role": "AXHeading"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "todayStartWorkoutButton"
+    }
+  ],
+  "requiredLogs": [
+    "event=incoming_action.received kind=open_tab"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

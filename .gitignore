@@ -1,6 +1,7 @@
 # Build artifacts
 build/
 DerivedData/
+VivoKit/.build/
 website/node_modules/
 website/dist/
 website/.astro/

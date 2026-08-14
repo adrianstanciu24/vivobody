@@ -8,6 +8,8 @@
 //  both targets.
 //
 
+#if canImport(UIKit)
+
 import SwiftUI
 import UIKit
 
@@ -235,3 +237,5 @@ public extension View {
             .tracking(0)
     }
 }
+
+#endif

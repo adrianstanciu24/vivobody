@@ -2,7 +2,8 @@
 //  vivobodyApp.swift
 //  vivobody
 //
-//  Created by Adrian Stanciu on 18.05.2026.
+//  App entry point. Creates the canonical SwiftData container with its
+//  recoverable in-memory fallback, then installs AppRoot into the main scene.
 //
 
 import SwiftUI
@@ -23,29 +24,26 @@ struct vivobodyApp: App {
     /// fail — in that case `body` presents a recovery view instead of
     /// crashing.
     private let container: ModelContainer? = {
-        let schema = VivobodyStore.schema
-        let config = ModelConfiguration(
-            "vivobody",
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
         do {
-            return try ModelContainer(
-                for: schema,
-                configurations: [config]
+            return try VivobodyStore.makeContainer(
+                named: "vivobody",
+                isStoredInMemoryOnly: false
             )
         } catch {
+            AppDiagnostics.storageFallbackAttempt(error: error)
             // A failed on-disk store open must not crash every launch.
             // Fall back to an in-memory store so the app stays usable;
             // the original store is left untouched on disk for recovery.
             StorageHealth.shared.didFallbackToInMemory = true
-            let fallback = ModelConfiguration(
-                "vivobody-fallback",
-                schema: schema,
-                isStoredInMemoryOnly: true
-            )
-            if let memory = try? ModelContainer(for: schema, configurations: [fallback]) {
+            do {
+                let memory = try VivobodyStore.makeContainer(
+                    named: "vivobody-fallback",
+                    isStoredInMemoryOnly: true
+                )
+                AppDiagnostics.storageFallbackSucceeded()
                 return memory
+            } catch {
+                AppDiagnostics.storageUnavailable(error: error)
             }
             // Even the in-memory fallback failed — return nil so the
             // app can show a recovery view instead of crash-to-black.

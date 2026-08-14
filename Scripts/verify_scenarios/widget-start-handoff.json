@@ -1,0 +1,27 @@
+{
+  "name": "widget-start-handoff",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-scheduled-template",
+      "--ui-test-widget-start-request"
+    ]
+  },
+  "steps": [],
+  "required": [
+    {
+      "identifier": "endWorkoutButton",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "activeWorkoutResumeBar"
+    }
+  ]
+}

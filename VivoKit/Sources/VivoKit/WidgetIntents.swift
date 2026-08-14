@@ -10,6 +10,7 @@
 
 import AppIntents
 import Foundation
+import VivoKitSnapshotCore
 
 public struct StartTodaysWorkoutIntent: AppIntent {
     public nonisolated static let title: LocalizedStringResource = "Start Workout"

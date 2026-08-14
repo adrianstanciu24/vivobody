@@ -9,6 +9,7 @@
 #   CAPTURE_ONLY=1 Scripts/verify.sh # capture the currently running app without rebuilding
 #   CLEAN_BUILD=1 Scripts/verify.sh  # discard the build cache before building
 #   RESET_STATE=0 Scripts/verify.sh  # preserve the simulator's app data
+#   SCENARIO=active-restoration Scripts/verify.sh
 #   SIMULATOR_NAME='iPhone 16e' Scripts/verify.sh
 #   SIMULATOR_OS=26.2 Scripts/verify.sh
 #
@@ -32,6 +33,12 @@ CAPTURE_ONLY="${CAPTURE_ONLY:-0}"
 CLEAN_BUILD="${CLEAN_BUILD:-0}"
 RESET_STATE="${RESET_STATE:-1}"
 READY_TIMEOUT="${READY_TIMEOUT:-15}"
+SCENARIO="${SCENARIO:-}"
+
+if [[ -n "$SCENARIO" && "$CAPTURE_ONLY" == "1" ]]; then
+  echo "error: SCENARIO cannot be combined with CAPTURE_ONLY=1" >&2
+  exit 1
+fi
 
 case "$TAB" in
   "")       EXPECTED_LABEL="Tab Bar" ;;
@@ -100,10 +107,27 @@ xcrun simctl boot "$UDID" 2>/dev/null || true
 xcrun simctl bootstatus "$UDID" -b >/dev/null
 
 if [[ "$CAPTURE_ONLY" != "1" ]]; then
-  echo "▸ Installing + launching $BUNDLE_ID..."
+  echo "▸ Installing $BUNDLE_ID..."
   xcrun simctl terminate "$UDID" "$BUNDLE_ID" 2>/dev/null || true
   xcrun simctl install "$UDID" "$APP_PATH"
 
+  if [[ -n "$SCENARIO" ]]; then
+    SCENARIO_OUT="$OUT_DIR/scenarios/$SCENARIO"
+    echo "▸ Running semantic scenario '$SCENARIO'..."
+    if python3 Scripts/verify_scenario.py \
+      --scenario "$SCENARIO" \
+      --udid "$UDID" \
+      --bundle-id "$BUNDLE_ID" \
+      --output-dir "$SCENARIO_OUT" \
+      --timeout "$READY_TIMEOUT"; then
+      exit 0
+    else
+      SCENARIO_STATUS=$?
+      exit "$SCENARIO_STATUS"
+    fi
+  fi
+
+  echo "▸ Launching $BUNDLE_ID..."
   APP_ARGS=()
   if [[ "$RESET_STATE" == "1" ]]; then
     APP_ARGS+=(--ui-test-reset)

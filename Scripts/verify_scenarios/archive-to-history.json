@@ -1,0 +1,60 @@
+{
+  "name": "archive-to-history",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-partial"]
+  },
+  "steps": [
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "endWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Save Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "history"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifierContains": "historySessionRow",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "activeWorkoutResumeBar"
+    },
+    {
+      "identifier": "activeWorkoutMiniBar"
+    }
+  ],
+  "requiredLogs": [
+    "event=session.transition kind=archive outcome=success"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

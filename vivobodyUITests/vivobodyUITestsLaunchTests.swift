@@ -2,7 +2,8 @@
 //  vivobodyUITestsLaunchTests.swift
 //  vivobodyUITests
 //
-//  Created by Adrian Stanciu on 18.05.2026.
+//  Launch-screen screenshot coverage across the target application's UI
+//  configurations. Workflow and accessibility coverage lives separately.
 //
 
 import XCTest

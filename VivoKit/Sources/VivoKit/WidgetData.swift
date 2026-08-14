@@ -71,13 +71,24 @@ public nonisolated enum WidgetSnapshotCodec {
         return try? JSONEncoder().encode(envelope)
     }
 
-    public static func decode<T: Codable>(_ type: T.Type, from data: Data) -> T? {
+    public static func decode<T: Codable>(_ type: T.Type, from data: Data?) -> T? {
+        guard let data else { return nil }
         if let envelope = try? JSONDecoder().decode(VersionedSnapshot<T>.self, from: data) {
             guard envelope.version == WidgetSnapshotVersion.current else { return nil }
             return envelope.payload
         }
         // Fall back to unversioned data (pre-versioning writes).
         return try? JSONDecoder().decode(T.self, from: data)
+    }
+
+    /// Widget-facing convenience that makes the empty-state behavior part of
+    /// the shared, unit-tested contract for missing or rejected payloads.
+    public static func decode<T: Codable>(
+        _ type: T.Type,
+        from data: Data?,
+        fallback: T
+    ) -> T {
+        decode(type, from: data) ?? fallback
     }
 }
 

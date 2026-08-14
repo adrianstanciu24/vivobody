@@ -66,13 +66,28 @@ enum HealthKitWorkoutService {
     /// whether workout sharing ended up authorized. Drives the
     /// Settings toggle: revert it to off when this is false.
     static func requestAuthorization() async -> Bool {
-        guard isAvailable else { return false }
+        guard isAvailable else {
+            AppDiagnostics.healthKitOutcome(
+                event: "authorization",
+                outcome: "unavailable"
+            )
+            return false
+        }
         do {
             try await store.requestAuthorization(toShare: shareTypes, read: [])
         } catch {
+            AppDiagnostics.healthKitFailed(
+                event: "authorization",
+                error: error
+            )
             return false
         }
-        return canWrite
+        let authorized = canWrite
+        AppDiagnostics.healthKitOutcome(
+            event: "authorization",
+            outcome: authorized ? "authorized" : "denied"
+        )
+        return authorized
     }
 
     /// Save one HKWorkout for a freshly archived session. No-ops
@@ -86,11 +101,23 @@ enum HealthKitWorkoutService {
     /// replaced with the real HKWorkout UUID; on failure it is cleared
     /// so a future retry can attempt the write again.
     static func saveWorkout(for session: WorkoutSession, in context: ModelContext) {
-        guard isEnabled, isAvailable, canWrite,
-              session.healthKitWorkoutUUID == nil,
-              session.completedAt != nil,
-              session.totalSets > 0
-        else { return }
+        guard isEnabled else { return }
+        guard isAvailable else {
+            AppDiagnostics.healthKitOutcome(event: "save", outcome: "unavailable")
+            return
+        }
+        guard canWrite else {
+            AppDiagnostics.healthKitOutcome(event: "save", outcome: "unauthorized")
+            return
+        }
+        guard session.healthKitWorkoutUUID == nil else {
+            AppDiagnostics.healthKitOutcome(event: "save", outcome: "already_saved")
+            return
+        }
+        guard session.completedAt != nil, session.totalSets > 0 else {
+            AppDiagnostics.healthKitOutcome(event: "save", outcome: "ineligible")
+            return
+        }
 
         let start = session.startedAt
         let end = session.completedAt ?? Date()
@@ -100,24 +127,41 @@ enum HealthKitWorkoutService {
         // relaunch can't create a duplicate HKWorkout.
         session.healthKitWorkoutUUID = UUID()
         do {
-            try context.save()
+            try persistSentinel(in: context)
         } catch {
             session.healthKitWorkoutUUID = nil
+            AppDiagnostics.healthKitFailed(event: "sentinel", error: error)
             return
         }
 
         Task {
             guard let workout = await build(start: start, end: end) else {
                 session.healthKitWorkoutUUID = nil
-                try? context.save()
+                do {
+                    try persistSentinel(in: context)
+                } catch {
+                    AppDiagnostics.healthKitFailed(event: "sentinel_clear", error: error)
+                }
                 return
             }
             session.healthKitWorkoutUUID = workout.uuid
-            try? context.save()
+            do {
+                try persistSentinel(in: context)
+                AppDiagnostics.healthKitOutcome(event: "save", outcome: "success")
+            } catch {
+                AppDiagnostics.healthKitFailed(event: "sentinel_finalize", error: error)
+            }
         }
     }
 
     // MARK: - Internals
+
+    /// Persist sentinel transitions without the app-wide rollback wrapper.
+    /// A failed clear must leave the in-memory UUID nil so this process can
+    /// retry; rolling back would restore the sentinel and suppress that retry.
+    private static func persistSentinel(in context: ModelContext) throws {
+        try context.save() // architecture: allow-direct-save -- sentinel failure semantics are handled locally
+    }
 
     /// Build and finish the workout with no associated samples — just
     /// the activity type and time span. Returns the saved HKWorkout,
@@ -131,6 +175,7 @@ enum HealthKitWorkoutService {
             try await builder.endCollection(at: end)
             return try await builder.finishWorkout()
         } catch {
+            AppDiagnostics.healthKitFailed(event: "save", error: error)
             return nil
         }
     }

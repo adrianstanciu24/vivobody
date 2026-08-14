@@ -2,7 +2,8 @@
 //  vivobodyTests.swift
 //  vivobodyTests
 //
-//  Created by Adrian Stanciu on 18.05.2026.
+//  Minimal Swift Testing discovery sentinel for the app test target. Focused
+//  domain and insight contracts live in the neighboring named test suites.
 //
 
 import Testing

@@ -3,7 +3,7 @@
 //  vivobody
 //
 //  Single fan-out point for workout session lifecycle events.
-//  Every start / update / archive / discard routes through here
+//  Every restore / start / update / archive / discard routes through here
 //  so adding a future subscriber (watch sync, Analytics, etc.) is
 //  one new line in one file, not a scattergun edit across AppState,
 //  AppRoot, and every active-workout screen.
@@ -28,6 +28,21 @@ enum SessionEvent {
 
 @MainActor
 enum SessionSideEffects {
+    /// Reconcile external active-workout presentation with the session that
+    /// survived relaunch. A missing session also clears any stale ActivityKit
+    /// state and publishes an empty active-workout widget snapshot.
+    static func restore(
+        _ session: WorkoutSession?,
+        in context: ModelContext
+    ) {
+        if let session {
+            WorkoutLiveActivityController.start(for: session)
+        } else {
+            WorkoutLiveActivityController.end(for: nil)
+        }
+        WidgetSnapshotWriter.writeActiveWorkout(in: context)
+    }
+
     static func handle(
         _ event: SessionEvent,
         session: WorkoutSession,

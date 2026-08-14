@@ -10,6 +10,8 @@
 //  hidden timeframe.
 //
 
+#if os(iOS)
+
 import CoreGraphics
 import Foundation
 import SwiftUI
@@ -292,3 +294,5 @@ public enum SignatureEmblemTuning {
         )
     }
 }
+
+#endif

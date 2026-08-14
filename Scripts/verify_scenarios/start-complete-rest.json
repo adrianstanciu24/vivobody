@@ -1,0 +1,47 @@
+{
+  "name": "start-complete-rest",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-scheduled-template"]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "scheduledWorkoutStartButton",
+          "role": "AXButton"
+        },
+        "direction": "up",
+        "maxSwipes": 4
+      }
+    },
+    {
+      "tap": {
+        "identifier": "scheduledWorkoutStartButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "completeSetButton",
+        "role": "AXButton",
+        "value": "not completed"
+      }
+    },
+    {
+      "tap": {
+        "label": "Personal record",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "restTimerOverlay",
+      "role": "AXGenericElement",
+      "valueRegex": "^[0-9]+ seconds remaining of"
+    }
+  ],
+  "forbidden": []
+}

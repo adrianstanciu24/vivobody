@@ -1,0 +1,40 @@
+{
+  "name": "active-restoration",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-partial"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "activeWorkoutResumeBar",
+      "role": "AXButton",
+      "labelContains": "Resume Workout"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "endWorkoutButton"
+    }
+  ],
+  "requiredLogs": [
+    "event=session.transition kind=restore outcome=success"
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "insights-empty",
+  "launch": {
+    "reset": true,
+    "tab": "history"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "No workouts yet",
+        "role": "AXStaticText"
+      }
+    },
+    {
+      "openURL": "vivobody://insights"
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsEmptyState",
+      "label": "No training logged yet",
+      "role": "AXStaticText"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsSignatureSection"
+    }
+  ]
+}
