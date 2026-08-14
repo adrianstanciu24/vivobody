@@ -12,13 +12,13 @@
 //  never needs explaining and nothing reads twice.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct RIRSelector: View {
     @Binding var value: Int
 
-    private let options = Array(0...5)
+    private let options = Array(0 ... 5)
 
     /// Chip / echo label for a stored RIR value. The top of the scale
     /// is open-ended ("5+") because RIR above 5 is indistinguishable
@@ -62,7 +62,7 @@ struct RIRSelector: View {
         // yield instead.
         .fixedSize(horizontal: false, vertical: true)
         .accessibilityRepresentation {
-            Slider(value: accessibilitySliderBinding, in: 0...5, step: 1) {
+            Slider(value: accessibilitySliderBinding, in: 0 ... 5, step: 1) {
                 Text("Reps in reserve")
             }
             .accessibilityValue(accessibilityValue)
@@ -74,17 +74,17 @@ struct RIRSelector: View {
     /// selected chip already says "2", the caption says what it means.
     private var caption: String {
         switch value {
-        case 0: return "to failure"
-        case 5: return "well short of failure"
-        default: return "left in the tank"
+        case 0: "to failure"
+        case 5: "well short of failure"
+        default: "left in the tank"
         }
     }
 
     private var accessibilityValue: String {
         switch value {
-        case 0: return "0, to failure"
-        case 5: return "5 or more reps in reserve"
-        default: return "\(value) reps in reserve"
+        case 0: "0, to failure"
+        case 5: "5 or more reps in reserve"
+        default: "\(value) reps in reserve"
         }
     }
 

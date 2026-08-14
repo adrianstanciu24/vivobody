@@ -9,8 +9,8 @@
 //  active set immediately; their owner persists once the scrub settles.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 extension ActiveExerciseCard {
     // MARK: - Derived

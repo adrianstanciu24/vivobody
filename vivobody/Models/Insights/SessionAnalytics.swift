@@ -11,20 +11,19 @@
 //  reports remain visible during refreshes.
 //
 
-import VivoKit
 import Foundation
 import Observation
 import SwiftData
 import SwiftUI
+import VivoKit
 
 @MainActor
 @Observable
 final class SessionAnalytics {
-
     /// Reports shared by Today, Me, Insights, and exercise-library
     /// surfaces. Every stored value is safe to cross back from the
     /// background worker.
-    nonisolated struct CoreReports: Sendable {
+    nonisolated struct CoreReports {
         let volume: [MuscleVolumeStat]
         let groupVolume: [MuscleGroup: Double]
         let development: MuscleDevelopment.State
@@ -75,7 +74,7 @@ final class SessionAnalytics {
     }
 
     /// Reports whose only app consumer is Insights.
-    nonisolated struct DeepReports: Sendable {
+    nonisolated struct DeepReports {
         let dominance: ExerciseDominanceBoard
         let intensity: IntensityMix
         let intensityWeeks: [IntensityWeek]
@@ -104,7 +103,7 @@ final class SessionAnalytics {
     /// One coherent Insights payload. Core and deep reports are
     /// published together only after both were built from the same
     /// fingerprint and accumulator.
-    nonisolated struct InsightsReports: Sendable {
+    nonisolated struct InsightsReports {
         let core: CoreReports
         let deep: DeepReports
     }
@@ -114,7 +113,7 @@ final class SessionAnalytics {
     /// app-side writer reuse the central replay instead of traversing
     /// the SwiftData archive and rebuilding consistency, signature,
     /// strength, and progress independently.
-    nonisolated struct WidgetReports: Sendable {
+    nonisolated struct WidgetReports {
         let consistency: ConsistencySnapshot
         let signature: SignatureSnapshot
         let strength: StrengthSnapshot
@@ -123,7 +122,7 @@ final class SessionAnalytics {
 
     /// Stable `.task(id:)` identity. The explicit revision changes on
     /// same-count/same-date archived-history corrections.
-    nonisolated struct RequestKey: Hashable, Sendable {
+    nonisolated struct RequestKey: Hashable {
         let sessionCount: Int
         let newestCompletion: TimeInterval
         let day: TimeInterval
@@ -140,51 +139,90 @@ final class SessionAnalytics {
     private(set) var exerciseHistorySummaries:
         [String: ExerciseHistorySummary] = [:]
 
-    var hasCoreReports: Bool { coreFingerprint != nil }
-    var hasInsightsReports: Bool { insightsReports != nil }
+    var hasCoreReports: Bool {
+        coreFingerprint != nil
+    }
+
+    var hasInsightsReports: Bool {
+        insightsReports != nil
+    }
+
     var hasExerciseHistorySummaries: Bool {
         exerciseHistoryFingerprint != nil
     }
 
-    // Compatibility accessors keep non-Insights screens focused on the
-    // report they consume. Deep access never starts computation; before
-    // the first requested result it returns a lightweight empty value.
-    var volume: [MuscleVolumeStat] { coreReports.volume }
-    var development: MuscleDevelopment.State { coreReports.development }
-    var muscleMap: MuscleMapReport { coreReports.muscleMap }
-    var strength: StrengthOutlookBoard { coreReports.strength }
-    var progress: [ExerciseProgress] { coreReports.progress }
-    var load: TrainingLoadReport { coreReports.load }
+    /// Compatibility accessors keep non-Insights screens focused on the
+    /// report they consume. Deep access never starts computation; before
+    /// the first requested result it returns a lightweight empty value.
+    var volume: [MuscleVolumeStat] {
+        coreReports.volume
+    }
+
+    var development: MuscleDevelopment.State {
+        coreReports.development
+    }
+
+    var muscleMap: MuscleMapReport {
+        coreReports.muscleMap
+    }
+
+    var strength: StrengthOutlookBoard {
+        coreReports.strength
+    }
+
+    var progress: [ExerciseProgress] {
+        coreReports.progress
+    }
+
+    var load: TrainingLoadReport {
+        coreReports.load
+    }
+
     var lastInstances: [String: LastExerciseInstance] {
         exerciseHistorySummaries.compactMapValues {
             $0.lastExerciseInstance
         }
     }
-    var overview: ArchiveOverview { coreReports.overview }
+
+    var overview: ArchiveOverview {
+        coreReports.overview
+    }
+
     /// IDs of sessions that set a strength PR when logged — badge
     /// membership for History rows and Today's calendar/last-workout.
-    var prSessionIDs: Set<UUID> { coreReports.overview.prSessionIDs }
+    var prSessionIDs: Set<UUID> {
+        coreReports.overview.prSessionIDs
+    }
+
     /// Cached ambient-forge temperature shared by every tab backdrop.
-    var forgeWarmth: Double { coreReports.overview.forgeWarmth }
+    var forgeWarmth: Double {
+        coreReports.overview.forgeWarmth
+    }
 
     var dominance: ExerciseDominanceBoard {
         deepReports?.dominance ?? Self.emptyDeepReports.dominance
     }
+
     var intensity: IntensityMix {
         deepReports?.intensity ?? Self.emptyDeepReports.intensity
     }
+
     var intensityWeeks: [IntensityWeek] {
         deepReports?.intensityWeeks ?? Self.emptyDeepReports.intensityWeeks
     }
+
     var migration: RepRangeMigrationReport {
         deepReports?.migration ?? Self.emptyDeepReports.migration
     }
+
     var composition: CompositionSplit {
         deepReports?.composition ?? Self.emptyDeepReports.composition
     }
+
     var symmetry: AntagonistBoard {
         deepReports?.symmetry ?? Self.emptyDeepReports.symmetry
     }
+
     var consistency: ConsistencyReport {
         deepReports?.consistency ?? Self.emptyDeepReports.consistency
     }
@@ -343,7 +381,8 @@ final class SessionAnalytics {
             if coreFingerprint == key,
                currentAccumulatorKey == key,
                let currentAccumulator,
-               let currentNow {
+               let currentNow
+            {
                 startDeepReports(
                     from: currentAccumulator,
                     core: coreReports,
@@ -514,9 +553,8 @@ final class SessionAnalytics {
             groupVolume: core.groupVolume,
             cadence: core.overview.averageWorkoutsPerWeek
         )
-        let signatureSnapshot: SignatureSnapshot
-        if signature.hasSignature {
-            signatureSnapshot = SignatureSnapshot(
+        let signatureSnapshot: SignatureSnapshot = if signature.hasSignature {
+            SignatureSnapshot(
                 petals: signature.petals.map {
                     SignaturePetalSnapshot(
                         group: $0.group.displayName,
@@ -530,7 +568,7 @@ final class SessionAnalytics {
                 verdictLine: signatureVerdict(signature)
             )
         } else {
-            signatureSnapshot = .empty
+            .empty
         }
 
         return WidgetReports(
@@ -609,7 +647,7 @@ final class SessionAnalytics {
 /// The only executor that performs report construction. Its inputs and
 /// outputs are fully Sendable; no SwiftData object can reach this actor.
 private actor AnalyticsWorker {
-    nonisolated struct CoreBuild: Sendable {
+    nonisolated struct CoreBuild {
         let accumulator: AnalyticsAccumulator
         let reports: SessionAnalytics.CoreReports
         let widgetReports: SessionAnalytics.WidgetReports
@@ -748,17 +786,6 @@ private actor AnalyticsWorker {
     }
 }
 
-// MARK: - Environment injection
-
-/// Lets views without direct AppState access (e.g. ExerciseDetailScreen
-/// presented from a NavigationLink) share the cached analytics.
-private struct SessionAnalyticsKey: EnvironmentKey {
-    static let defaultValue: SessionAnalytics? = nil
-}
-
 extension EnvironmentValues {
-    var sessionAnalytics: SessionAnalytics? {
-        get { self[SessionAnalyticsKey.self] }
-        set { self[SessionAnalyticsKey.self] = newValue }
-    }
+    @Entry var sessionAnalytics: SessionAnalytics? = nil
 }

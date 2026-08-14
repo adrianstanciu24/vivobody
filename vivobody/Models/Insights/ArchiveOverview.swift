@@ -15,7 +15,7 @@ import Foundation
 /// actually read: journey totals for Me, the streak, the month recap,
 /// the set of sessions that contained a strength PR at the moment it
 /// was logged, and the ambient forge temperature.
-nonisolated struct ArchiveOverview: Sendable {
+nonisolated struct ArchiveOverview {
     /// Lifetime archived-workout count.
     let totalWorkouts: Int
     /// Lifetime completed-set count (matches `WorkoutSession.totalSets`).
@@ -56,11 +56,10 @@ nonisolated enum ForgeWarmth {
     ) -> Double {
         let streakBoost = Swift.min(1.0, Double(streakDays(dates, now: now, calendar: calendar)) / 7.0)
         let days = daysSinceLast(dates, now: now, calendar: calendar)
-        let recency: Double
-        if let days {
-            recency = Swift.max(0.0, 1.0 - Double(days) / 5.0)
+        let recency: Double = if let days {
+            Swift.max(0.0, 1.0 - Double(days) / 5.0)
         } else {
-            recency = 0.0
+            0.0
         }
         let trainedTodayBoost = days == 0 ? 0.15 : 0.0
         return Swift.min(1.0, Swift.max(idle, 0.5 * recency + 0.5 * streakBoost + trainedTodayBoost))
@@ -166,24 +165,24 @@ nonisolated extension AnalyticsAccumulator {
 
             lifetimeTonnage = lifetimeTonnage.merging(sessionTonnage)
             if let done = session.completedAt, let monthInterval,
-               done >= monthInterval.start, done < monthInterval.end {
+               done >= monthInterval.start, done < monthInterval.end
+            {
                 monthWorkouts += 1
                 monthSets += sets
                 monthTonnage = monthTonnage.merging(sessionTonnage)
             }
         }
 
-        let monthPRs: Int
-        if let monthInterval {
-            monthPRs = progress.reduce(0) { acc, prog in
-                acc + prog.points.filter {
+        let monthPRs: Int = if let monthInterval {
+            progress.reduce(0) { acc, prog in
+                acc + prog.points.count(where: {
                     $0.isStrengthPR
                         && $0.date >= monthInterval.start
                         && $0.date < monthInterval.end
-                }.count
+                })
             }
         } else {
-            monthPRs = 0
+            0
         }
 
         let monthFormatter = DateFormatter()

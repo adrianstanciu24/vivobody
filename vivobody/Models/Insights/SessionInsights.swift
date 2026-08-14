@@ -43,8 +43,8 @@ extension WorkoutSession {
     var hasLoggedRIR: Bool {
         exercises.contains { ex in
             ex.modality == .dynamicStrength &&
-            ex.trackingMode == .reps &&
-            ex.sets.contains { $0.isAnalyticsEligible && $0.reps > 0 && $0.rirLogged }
+                ex.trackingMode == .reps &&
+                ex.sets.contains { $0.isAnalyticsEligible && $0.reps > 0 && $0.rirLogged }
         }
     }
 
@@ -55,10 +55,10 @@ extension WorkoutSession {
         exercises.reduce(0) { acc, ex in
             guard ex.modality == .dynamicStrength,
                   ex.trackingMode == .reps else { return acc }
-            return acc + ex.sets.filter {
+            return acc + ex.sets.count(where: {
                 $0.isAnalyticsEligible && $0.reps > 0 &&
-                $0.rirLogged && $0.repsInReserve <= 1
-            }.count
+                    $0.rirLogged && $0.repsInReserve <= 1
+            })
         }
     }
 }
@@ -153,9 +153,9 @@ extension WorkoutSession {
 /// "beat the plan". Only one axis is meaningful per mode.
 nonisolated struct ExerciseAdherence: Hashable {
     let isDuration: Bool
-    let weightDelta: Double          // lb, reps mode
-    let repsDelta: Int               // reps mode
-    let durationDelta: TimeInterval  // seconds, duration mode
+    let weightDelta: Double // lb, reps mode
+    let repsDelta: Int // reps mode
+    let durationDelta: TimeInterval // seconds, duration mode
 
     /// True when the achieved top set beat the plan on its meaningful
     /// axis.
@@ -207,14 +207,13 @@ extension WorkoutSession {
             guard let plan = plannedTop, plan.plannedWeight > 0 || plan.plannedReps > 0 else {
                 return nil
             }
-            let weightDelta: Double
-            if comparesLoad {
-                weightDelta = exercise.loadProfile.withinSnapshotLoadDelta(
+            let weightDelta: Double = if comparesLoad {
+                exercise.loadProfile.withinSnapshotLoadDelta(
                     actualLoggedWeight: top.weight,
                     plannedLoggedWeight: plan.plannedWeight
                 ) ?? 0
             } else {
-                weightDelta = 0
+                0
             }
             return ExerciseAdherence(
                 isDuration: false,

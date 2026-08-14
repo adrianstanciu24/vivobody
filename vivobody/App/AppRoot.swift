@@ -30,11 +30,11 @@
 //  single routing site.
 //
 
-import VivoKit
-import SwiftUI
-import SwiftData
-import Intents
 import CoreSpotlight
+import Intents
+import SwiftData
+import SwiftUI
+import VivoKit
 
 struct AppRoot: View {
     @State private var appState = AppState()
@@ -81,7 +81,8 @@ struct AppRoot: View {
             .background {
                 if workout.activeSession != nil,
                    !workout.isDiscardPending,
-                   !workout.isWorkoutExpanded {
+                   !workout.isWorkoutExpanded
+                {
                     RestExpiryTicker(workout: workout)
                 }
             }
@@ -107,17 +108,17 @@ struct AppRoot: View {
                 if workout.modelContext == nil {
                     workout.modelContext = modelContext
                 }
-#if DEBUG
-                UITestSupport.resetIfRequested(in: modelContext)
-#endif
+                #if DEBUG
+                    UITestSupport.resetIfRequested(in: modelContext)
+                #endif
                 let removedCatalogItemIDs = ExerciseCatalogItem
                     .synchronizeBundledCatalog(in: modelContext)
-#if DEBUG
-                UITestSupport.seedIfRequested(in: modelContext)
-                if let requestedTab = UITestSupport.requestedTab() {
-                    appState.selectedTab = requestedTab
-                }
-#endif
+                #if DEBUG
+                    UITestSupport.seedIfRequested(in: modelContext)
+                    if let requestedTab = UITestSupport.requestedTab() {
+                        appState.selectedTab = requestedTab
+                    }
+                #endif
                 workout.restoreActiveWorkoutIfNeeded()
                 consumeIncomingActions()
 
@@ -243,7 +244,8 @@ struct AppRoot: View {
         TabView(selection: $appState.selectedTab) {
             Tab(AppTab.today.label,
                 systemImage: AppTab.today.icon,
-                value: AppTab.today) {
+                value: AppTab.today)
+            {
                 NavigationStack {
                     TodayScreen(appState: appState)
                         .navigationTitle("Today")
@@ -252,7 +254,8 @@ struct AppRoot: View {
 
             Tab(AppTab.history.label,
                 systemImage: AppTab.history.icon,
-                value: AppTab.history) {
+                value: AppTab.history)
+            {
                 NavigationStack {
                     HistoryScreen(appState: appState)
                         .navigationTitle("History")
@@ -261,7 +264,8 @@ struct AppRoot: View {
 
             Tab(AppTab.library.label,
                 systemImage: AppTab.library.icon,
-                value: AppTab.library) {
+                value: AppTab.library)
+            {
                 NavigationStack {
                     LibraryScreen(appState: appState)
                         .navigationTitle("Library")
@@ -270,7 +274,8 @@ struct AppRoot: View {
 
             Tab(AppTab.insights.label,
                 systemImage: AppTab.insights.icon,
-                value: AppTab.insights) {
+                value: AppTab.insights)
+            {
                 NavigationStack {
                     InsightsScreen(appState: appState)
                         .navigationTitle("Insights")
@@ -279,7 +284,8 @@ struct AppRoot: View {
 
             Tab(AppTab.me.label,
                 systemImage: AppTab.me.icon,
-                value: AppTab.me) {
+                value: AppTab.me)
+            {
                 NavigationStack {
                     MeScreen(appState: appState)
                         .navigationTitle("Me")

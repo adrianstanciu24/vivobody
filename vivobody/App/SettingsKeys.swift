@@ -30,6 +30,7 @@ nonisolated enum SettingsKey {
         }
         return "settings.weightStep.custom.\(catalogItemID.uuidString)"
     }
+
     /// Stores `AppAppearance.rawValue`. Read via @AppStorage at the
     /// app root to drive `.preferredColorScheme`; "system" defers to
     /// the OS.
@@ -100,27 +101,31 @@ nonisolated enum BodyDriftSpeed: String, CaseIterable, Identifiable {
     case medium
     case high
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var label: String {
         switch self {
-        case .low:    return "Low"
-        case .medium: return "Medium"
-        case .high:   return "High"
+        case .low: "Low"
+        case .medium: "Medium"
+        case .high: "High"
         }
     }
 
     /// One full idle revolution takes this long.
     var secondsPerRevolution: Double {
         switch self {
-        case .low:    return 15
-        case .medium: return 7.5
-        case .high:   return 3.75
+        case .low: 15
+        case .medium: 7.5
+        case .high: 3.75
         }
     }
 
     /// Idle angular speed in radians/second, derived from the above.
-    var radiansPerSecond: Float { Float(2 * Double.pi / secondsPerRevolution) }
+    var radiansPerSecond: Float {
+        Float(2 * Double.pi / secondsPerRevolution)
+    }
 }
 
 /// The user's colour-scheme preference. `system` follows the OS;
@@ -131,21 +136,23 @@ nonisolated enum AppAppearance: String, CaseIterable, Identifiable {
     case light
     case dark
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var label: String {
         switch self {
-        case .system: return "System"
-        case .light:  return "Light"
-        case .dark:   return "Dark"
+        case .system: "System"
+        case .light: "Light"
+        case .dark: "Dark"
         }
     }
 
     var colorScheme: ColorScheme? {
         switch self {
-        case .system: return nil
-        case .light:  return .light
-        case .dark:   return .dark
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
         }
     }
 }

@@ -24,9 +24,9 @@
 //  sheet-over-sheet presentation conflict.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 /// What the user picked in the start sheet. The caller maps these to
 /// the matching AppState lifecycle calls.

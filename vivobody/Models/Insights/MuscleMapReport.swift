@@ -10,16 +10,21 @@
 
 import Foundation
 
-nonisolated enum MuscleEstimateConfidence: String, Sendable {
+nonisolated enum MuscleEstimateConfidence: String {
     case limited
     case moderate
     case high
 
-    var displayName: String { rawValue.capitalized }
+    var displayName: String {
+        rawValue.capitalized
+    }
 }
 
-nonisolated struct MuscleMapEntry: Identifiable, Sendable {
-    var id: Muscle { muscle }
+nonisolated struct MuscleMapEntry: Identifiable {
+    var id: Muscle {
+        muscle
+    }
+
     let muscle: Muscle
     let channels: MuscleMapChannels
     let band: MuscleDevelopmentBand
@@ -29,7 +34,7 @@ nonisolated struct MuscleMapEntry: Identifiable, Sendable {
     let confidence: MuscleEstimateConfidence?
 }
 
-nonisolated struct MuscleMapReport: Sendable {
+nonisolated struct MuscleMapReport {
     let entries: [MuscleMapEntry]
 
     @MainActor
@@ -63,7 +68,7 @@ nonisolated struct MuscleMapReport: Sendable {
         guard !isCancelled() else { return MuscleMapReport(entries: []) }
         let volumeByMuscle = Dictionary(uniqueKeysWithValues: volume.map { ($0.muscle, $0) })
         var exerciseCredit: [Muscle: [String: Double]] = [:]
-        let cutoff = now.addingTimeInterval(-90 * 86_400)
+        let cutoff = now.addingTimeInterval(-90 * 86400)
 
         sessionReplay: for session in accumulator.sessions {
             guard !isCancelled() else { return MuscleMapReport(entries: []) }
@@ -97,9 +102,9 @@ nonisolated struct MuscleMapReport: Sendable {
                 confidence = nil
             } else {
                 let coverage = Double(counts?.complete ?? 0) / Double(counts?.eligible ?? 1)
-                if (counts?.eligible ?? 0) >= 6 && coverage >= 0.8 {
+                if (counts?.eligible ?? 0) >= 6, coverage >= 0.8 {
                     confidence = .high
-                } else if (counts?.eligible ?? 0) >= 3 && coverage >= 0.4 {
+                } else if (counts?.eligible ?? 0) >= 3, coverage >= 0.4 {
                     confidence = .moderate
                 } else {
                     confidence = .limited

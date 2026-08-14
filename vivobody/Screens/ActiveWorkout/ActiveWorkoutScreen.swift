@@ -12,9 +12,9 @@
 //  to the next exercise.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct ActiveWorkoutScreen: View {
     @State private var session: WorkoutSession
@@ -66,7 +66,9 @@ struct ActiveWorkoutScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     init(
         session: WorkoutSession = .sample,
@@ -101,9 +103,9 @@ struct ActiveWorkoutScreen: View {
                     session: session,
                     onSessionUpdate: onSessionUpdate
                 )
-                    .transition(.opacity)
-                    .zIndex(10)
-                    .accessibilityHidden(session.pendingPRValue != nil)
+                .transition(.opacity)
+                .zIndex(10)
+                .accessibilityHidden(session.pendingPRValue != nil)
             }
 
             // Personal-record celebration. Sits at the highest zIndex
@@ -147,7 +149,7 @@ struct ActiveWorkoutScreen: View {
                     finishScrubbing(then: onDiscard)
                 }
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
         } message: {
             if session.totalSets > 0 {
                 Text("Save \(session.totalSets) logged set\(session.totalSets == 1 ? "" : "s") to History, or discard this workout.")
@@ -359,10 +361,14 @@ struct ActiveWorkoutScreen: View {
 
     // MARK: - Derived
 
-    private var isEmpty: Bool { session.orderedExercises.isEmpty }
+    private var isEmpty: Bool {
+        session.orderedExercises.isEmpty
+    }
+
     private var isBlockingOverlayPresented: Bool {
         session.isResting || session.pendingPRValue != nil
     }
+
     private var endWorkoutAlertTitle: String {
         session.totalSets > 0 ? "End this workout?" : "Discard this workout?"
     }

@@ -6,9 +6,9 @@
 //  from LibraryScreen.swift for file size management.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 // MARK: - Exercises content
 
@@ -41,7 +41,9 @@ struct LibraryExercisesContent: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var pendingDeleteItem: ExerciseCatalogItem? = nil
     @State private var saveError: SaveErrorBox? = nil
@@ -122,7 +124,7 @@ struct LibraryExercisesContent: View {
             items.filter(\.isFavorite)
         case .core:
             items.filter { $0.group == .core }
-        case .equipment(let equipment):
+        case let .equipment(equipment):
             items.filter { $0.equipment == equipment }
         }
     }
@@ -333,9 +335,9 @@ struct LibraryExercisesContent: View {
     /// Library context there's nothing to "pick into," so the
     /// detail's bottom CTA hides automatically. Extracted so both
     /// row tiers share one navigation site + one context menu.
-    private func rowLink<Content: View>(
+    private func rowLink(
         item: ExerciseCatalogItem,
-        @ViewBuilder label: () -> Content
+        @ViewBuilder label: () -> some View
     ) -> some View {
         NavigationLink {
             ExerciseDetailScreen(item: item, onPickAndDismiss: nil)
@@ -357,7 +359,7 @@ struct LibraryExercisesContent: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
-            if item.catalogID != nil && !item.isUserCreated {
+            if item.catalogID != nil, !item.isUserCreated {
                 Button {
                     customExerciseTarget = .duplicate(item)
                 } label: {
@@ -477,7 +479,7 @@ struct LibraryExercisesContent: View {
     /// wouldn't fill it; starring an existing one would.
     @ViewBuilder
     private var emptyState: some View {
-        if !isSearching && exerciseFilter == .favorites {
+        if !isSearching, exerciseFilter == .favorites {
             ContentUnavailableView {
                 Label("No favorite exercises yet", systemImage: "dumbbell")
             } description: {

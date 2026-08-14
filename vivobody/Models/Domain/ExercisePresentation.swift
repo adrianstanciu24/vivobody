@@ -15,26 +15,26 @@ extension ExerciseModality {
     /// User-facing noun for one duration-tracked effort.
     nonisolated var durationLabel: String {
         switch self {
-        case .isometricStrength: return "Hold"
-        case .conditioning: return "Interval"
-        case .dynamicStrength, .power, .mobility: return "Time"
+        case .isometricStrength: "Hold"
+        case .conditioning: "Interval"
+        case .dynamicStrength, .power, .mobility: "Time"
         }
     }
 
     nonisolated var durationLabelLowercased: String {
         switch self {
-        case .isometricStrength: return "hold"
-        case .conditioning: return "interval"
-        case .dynamicStrength, .power, .mobility: return "time"
+        case .isometricStrength: "hold"
+        case .conditioning: "interval"
+        case .dynamicStrength, .power, .mobility: "time"
         }
     }
 
     /// Natural plural for summaries whose timed sets have a range.
     nonisolated var durationCountLabel: String {
         switch self {
-        case .isometricStrength: return "holds"
-        case .conditioning: return "intervals"
-        case .dynamicStrength, .power, .mobility: return "timed sets"
+        case .isometricStrength: "holds"
+        case .conditioning: "intervals"
+        case .dynamicStrength, .power, .mobility: "timed sets"
         }
     }
 }

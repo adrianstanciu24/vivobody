@@ -11,9 +11,9 @@
 //  through SessionAnalytics' actor-backed pipeline.
 //
 
-import VivoKit
 import Foundation
 import SwiftData
+import VivoKit
 import WidgetKit
 
 @MainActor
@@ -21,7 +21,7 @@ enum WidgetSnapshotWriter {
     /// The app's central analytics coordinator. AppRoot wires it once
     /// before any production snapshot request; keeping a weak reference
     /// avoids giving this process-wide bridge ownership of AppState.
-    private static weak var analytics: SessionAnalytics?
+    private weak static var analytics: SessionAnalytics?
 
     /// Coalesces rapid successive `writeAll` calls (template edits,
     /// body-weight saves, archive changes) into a single deferred
@@ -476,7 +476,7 @@ enum WidgetSnapshotWriter {
 
     // MARK: - Persistence
 
-    private static func write<T: Codable>(_ snapshot: T, key: String) -> Bool {
+    private static func write(_ snapshot: some Codable, key: String) -> Bool {
         guard
             let defaults = UserDefaults(suiteName: WidgetShared.appGroup),
             let data = WidgetSnapshotCodec.encode(snapshot)
@@ -485,7 +485,7 @@ enum WidgetSnapshotWriter {
         return true
     }
 
-    private static func encode<T: Codable>(_ snapshot: T) -> Data? {
+    private static func encode(_ snapshot: some Codable) -> Data? {
         WidgetSnapshotCodec.encode(snapshot)
     }
 

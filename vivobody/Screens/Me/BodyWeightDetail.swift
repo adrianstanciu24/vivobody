@@ -15,10 +15,10 @@
 //  card stays in its empty state otherwise).
 //
 
-import VivoKit
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
+import VivoKit
 
 struct BodyWeightDetail: View {
     @Environment(\.modelContext) private var context
@@ -29,7 +29,9 @@ struct BodyWeightDetail: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var range: TimeRange = .all
     @State private var logTarget: BodyWeightLogTarget? = nil
@@ -41,22 +43,26 @@ struct BodyWeightDetail: View {
 
     enum TimeRange: String, CaseIterable, Identifiable {
         case oneMonth, threeMonths, sixMonths, all
-        var id: String { rawValue }
+        var id: String {
+            rawValue
+        }
+
         var label: String {
             switch self {
-            case .oneMonth:    return "1M"
-            case .threeMonths: return "3M"
-            case .sixMonths:   return "6M"
-            case .all:         return "All"
+            case .oneMonth: "1M"
+            case .threeMonths: "3M"
+            case .sixMonths: "6M"
+            case .all: "All"
             }
         }
+
         var cutoff: Date? {
             let cal = Calendar.current
             switch self {
-            case .oneMonth:    return cal.date(byAdding: .month, value: -1, to: Date())
+            case .oneMonth: return cal.date(byAdding: .month, value: -1, to: Date())
             case .threeMonths: return cal.date(byAdding: .month, value: -3, to: Date())
-            case .sixMonths:   return cal.date(byAdding: .month, value: -6, to: Date())
-            case .all:         return nil
+            case .sixMonths: return cal.date(byAdding: .month, value: -6, to: Date())
+            case .all: return nil
             }
         }
     }

@@ -18,9 +18,9 @@
 //  body-weight storage remains pounds at the scrubber boundary.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct OnboardingScreen: View {
     /// Raised when the user taps Start. AppRoot owns the
@@ -63,7 +63,6 @@ struct OnboardingScreen: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    @ViewBuilder
     var body: some View {
         if dynamicTypeSize.isAccessibilitySize {
             ScrollView {

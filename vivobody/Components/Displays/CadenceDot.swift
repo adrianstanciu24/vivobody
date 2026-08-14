@@ -12,8 +12,8 @@
 //      CadenceDot(isWorkout: true, isPR: true, ignitionOrder: 9)
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 /// A single cadence dot, in one of three states and no more:
 ///

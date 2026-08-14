@@ -12,8 +12,8 @@
 //  onContinue / onNotNow closures.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct HealthKitPrimingSheet: View {
     let onContinue: () -> Void

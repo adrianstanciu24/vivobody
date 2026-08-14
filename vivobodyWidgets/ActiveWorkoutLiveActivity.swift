@@ -7,10 +7,10 @@
 //  a rest-timer countdown when resting.
 //
 
-import VivoKit
 import ActivityKit
 import AppIntents
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 /// A countdown range that never traps: skip-to-zero pushes a rest
@@ -18,7 +18,7 @@ import WidgetKit
 /// ClosedRange requires lowerBound <= upperBound.
 private func restTimerRange(endingAt end: Date) -> ClosedRange<Date> {
     let now = Date()
-    return now...max(now, end)
+    return now ... max(now, end)
 }
 
 struct ActiveWorkoutLiveActivity: Widget {

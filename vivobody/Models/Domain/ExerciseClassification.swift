@@ -19,7 +19,7 @@ import Foundation
 /// exercises include this value in their history identity so changing a
 /// custom item from, for example, a loaded lift to a timed hold starts a
 /// new honest series instead of merging incompatible performances.
-nonisolated enum PerformanceSemanticKind: String, Codable, Hashable, Sendable {
+nonisolated enum PerformanceSemanticKind: String, Codable, Hashable {
     case dynamicLoadAndReps
     case powerLoadAndReps
     case isometricLoadAndDuration
@@ -33,9 +33,9 @@ nonisolated enum PerformanceSemanticKind: String, Codable, Hashable, Sendable {
              .powerLoadAndReps,
              .isometricLoadAndDuration,
              .isometricDuration:
-            return true
+            true
         case .unrankedReps, .unrankedDuration:
-            return false
+            false
         }
     }
 
@@ -44,9 +44,9 @@ nonisolated enum PerformanceSemanticKind: String, Codable, Hashable, Sendable {
         case .dynamicLoadAndReps,
              .powerLoadAndReps,
              .isometricLoadAndDuration:
-            return true
+            true
         case .isometricDuration, .unrankedReps, .unrankedDuration:
-            return false
+            false
         }
     }
 }
@@ -54,7 +54,7 @@ nonisolated enum PerformanceSemanticKind: String, Codable, Hashable, Sendable {
 /// The kind of physical work an exercise represents. Modality gates
 /// analytics that would otherwise fabricate strength volume or PRs for
 /// conditioning and mobility drills.
-nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
     case dynamicStrength
     case isometricStrength
     /// Explosive jumps, throws, catches, and Olympic-lift derivatives.
@@ -67,11 +67,11 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Send
 
     nonisolated var displayName: String {
         switch self {
-        case .dynamicStrength: return "Dynamic Strength"
-        case .isometricStrength: return "Isometric Strength"
-        case .power: return "Power / Ballistic"
-        case .conditioning: return "Conditioning"
-        case .mobility: return "Mobility"
+        case .dynamicStrength: "Dynamic Strength"
+        case .isometricStrength: "Isometric Strength"
+        case .power: "Power / Ballistic"
+        case .conditioning: "Conditioning"
+        case .mobility: "Mobility"
         }
     }
 
@@ -95,9 +95,9 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Send
     nonisolated func supportsStrengthPR(for trackingMode: TrackingMode) -> Bool {
         switch (self, trackingMode) {
         case (.dynamicStrength, .reps), (.isometricStrength, .duration):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
@@ -109,18 +109,18 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Send
         loadMode: ExerciseLoadMode
     ) -> PerformanceSemanticKind {
         switch (self, trackingMode, loadMode) {
-        case (.dynamicStrength, .reps, let mode) where mode.supportsLoadComparison:
-            return .dynamicLoadAndReps
+        case let (.dynamicStrength, .reps, mode) where mode.supportsLoadComparison:
+            .dynamicLoadAndReps
         case (.power, .reps, .external):
-            return .powerLoadAndReps
-        case (.isometricStrength, .duration, let mode) where mode.supportsLoadComparison:
-            return .isometricLoadAndDuration
+            .powerLoadAndReps
+        case let (.isometricStrength, .duration, mode) where mode.supportsLoadComparison:
+            .isometricLoadAndDuration
         case (.isometricStrength, .duration, .nonComparable):
-            return .isometricDuration
+            .isometricDuration
         case (_, .reps, _):
-            return .unrankedReps
+            .unrankedReps
         case (_, .duration, _):
-            return .unrankedDuration
+            .unrankedDuration
         }
     }
 
@@ -165,7 +165,7 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable, Send
 }
 
 /// The movement metadata for one exercise, resolved by name.
-nonisolated struct ExerciseClassification: Hashable, Sendable {
+nonisolated struct ExerciseClassification: Hashable {
     let equipment: Equipment
     let mechanic: Mechanic
     /// Optional — isolation work has no meaningful pattern.

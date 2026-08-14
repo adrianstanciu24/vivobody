@@ -24,9 +24,9 @@
 //  instantly across the app.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct SettingsScreen: View {
     /// SwiftData context — needed for the Reset Catalog action,
@@ -38,7 +38,9 @@ struct SettingsScreen: View {
     /// Pro row and the Apple Health gate.
     @Environment(ProStore.self) private var pro: ProStore?
 
-    private var isPro: Bool { pro?.isUnlocked == true }
+    private var isPro: Bool {
+        pro?.isUnlocked == true
+    }
 
     @AppStorage(SettingsKey.hapticsEnabled)
     private var hapticsEnabled: Bool = SettingsDefaults.hapticsEnabled
@@ -143,7 +145,6 @@ struct SettingsScreen: View {
     /// The one quiet Pro surface in Settings. Free → a tappable row
     /// that opens the paywall; owned → a static "Unlocked" row. No
     /// banners, no countdowns, nothing anywhere else.
-    @ViewBuilder
     private var proSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Vivobody Pro")
@@ -241,7 +242,7 @@ struct SettingsScreen: View {
                 )
                 Haptics.thunk()
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
         } message: {
             Text("Restores the \(bundledExerciseCount) bundled exercises. Any custom exercises and edits will be removed. Templates and workout history are not affected.")
         }
@@ -294,7 +295,9 @@ struct SettingsScreen: View {
 
     /// Reads the generated bundle instead of duplicating a count that drifts
     /// whenever the curated default roster changes.
-    private var bundledExerciseCount: Int { CatalogData.records.count }
+    private var bundledExerciseCount: Int {
+        CatalogData.records.count
+    }
 
     private var appearanceRow: some View {
         VStack(alignment: .leading, spacing: Space.md) {

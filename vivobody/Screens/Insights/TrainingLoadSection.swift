@@ -9,9 +9,9 @@
 //  keep the same bold hierarchy while stating baseline progress.
 //
 
-import VivoKit
-import SwiftUI
 import Charts
+import SwiftUI
+import VivoKit
 
 struct TrainingLoadSection: View {
     let report: TrainingLoadReport
@@ -72,10 +72,10 @@ struct TrainingLoadSection: View {
 
     private var statusTitle: String {
         switch report.verdict {
-        case .insufficient: return "Building your range"
-        case .low:          return "Below recent range"
-        case .productive:   return "Within recent range"
-        case .high:         return "Above recent range"
+        case .insufficient: "Building your range"
+        case .low: "Below recent range"
+        case .productive: "Within recent range"
+        case .high: "Above recent range"
         }
     }
 
@@ -217,7 +217,8 @@ struct TrainingLoadSection: View {
             Chart {
                 ForEach(report.points) { point in
                     if let lower = point.rangeLower,
-                       let upper = point.rangeUpper {
+                       let upper = point.rangeUpper
+                    {
                         AreaMark(
                             x: .value("Date", point.date),
                             yStart: .value("Range lower", lower),
@@ -376,10 +377,10 @@ struct TrainingLoadSection: View {
 
     private var statusColor: Color {
         switch report.verdict {
-        case .productive:   return Tint.primary
-        case .high:         return Ink.primary
-        case .low:          return Ink.secondary
-        case .insufficient: return Ink.primary
+        case .productive: Tint.primary
+        case .high: Ink.primary
+        case .low: Ink.secondary
+        case .insufficient: Ink.primary
         }
     }
 }

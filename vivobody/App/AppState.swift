@@ -12,30 +12,30 @@
 //  queried directly by views via @Query.
 //
 
-import SwiftUI
-import SwiftData
 import Observation
+import SwiftData
+import SwiftUI
 
 enum AppTab: String, CaseIterable, Hashable {
     case today, history, library, insights, me
 
     var label: String {
         switch self {
-        case .today:    return "Today"
-        case .history:  return "History"
-        case .library:  return "Library"
-        case .insights: return "Insights"
-        case .me:       return "Me"
+        case .today: "Today"
+        case .history: "History"
+        case .library: "Library"
+        case .insights: "Insights"
+        case .me: "Me"
         }
     }
 
     var icon: String {
         switch self {
-        case .today:    return "calendar"
-        case .history:  return "clock.arrow.circlepath"
-        case .library:  return "books.vertical.fill"
-        case .insights: return "chart.bar.fill"
-        case .me:       return "person.fill"
+        case .today: "calendar"
+        case .history: "clock.arrow.circlepath"
+        case .library: "books.vertical.fill"
+        case .insights: "chart.bar.fill"
+        case .me: "person.fill"
         }
     }
 }

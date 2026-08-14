@@ -46,7 +46,7 @@ enum BodyModelTheme {
 /// real signal that faded toward zero. Keeping this independent from
 /// intensity prevents "never trained" and "trained long ago" from
 /// collapsing into the same colour.
-nonisolated enum MuscleMapBaseline: Equatable, Sendable {
+nonisolated enum MuscleMapBaseline: Equatable {
     case noData
     case trained
 }
@@ -54,7 +54,7 @@ nonisolated enum MuscleMapBaseline: Equatable, Sendable {
 /// Renderer input shared by the chronic development and temporary
 /// exercise-anatomy maps. `intensity` is continuous in 0...1;
 /// labels and confidence are deliberately kept outside the colour.
-nonisolated struct MuscleMapChannels: Equatable, Sendable {
+nonisolated struct MuscleMapChannels: Equatable {
     var intensity: Double
     var baseline: MuscleMapBaseline
 
@@ -68,14 +68,16 @@ nonisolated struct MuscleMapChannels: Equatable, Sendable {
         self.init(intensity: adaptation, baseline: .trained)
     }
 
-    var adaptation: Double { intensity }
+    var adaptation: Double {
+        intensity
+    }
 
     static let noData = MuscleMapChannels(intensity: 0, baseline: .noData)
 }
 
 /// The five labels users see. Rendering remains continuous inside the
 /// four trained bands; the labels avoid false percentage precision.
-nonisolated enum MuscleDevelopmentBand: String, CaseIterable, Sendable {
+nonisolated enum MuscleDevelopmentBand: String, CaseIterable {
     case noData
     case low
     case building
@@ -84,21 +86,21 @@ nonisolated enum MuscleDevelopmentBand: String, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .noData: return "No history"
-        case .low: return "Low"
-        case .building: return "Building"
-        case .consistent: return "Consistent"
-        case .high: return "High"
+        case .noData: "No history"
+        case .low: "Low"
+        case .building: "Building"
+        case .consistent: "Consistent"
+        case .high: "High"
         }
     }
 
     var representativeIntensity: Double {
         switch self {
-        case .noData: return 0
-        case .low: return 0.125
-        case .building: return 0.375
-        case .consistent: return 0.625
-        case .high: return 0.875
+        case .noData: 0
+        case .low: 0.125
+        case .building: 0.375
+        case .consistent: 0.625
+        case .high: 0.875
         }
     }
 
@@ -114,7 +116,6 @@ nonisolated enum MuscleDevelopmentBand: String, CaseIterable, Sendable {
 }
 
 nonisolated enum MuscleColor {
-
     // MARK: - Tunables (gamma sRGB endpoints)
 
     /// Development ramp endpoints per theme. `a = 1` is a vivid,
@@ -141,14 +142,14 @@ nonisolated enum MuscleColor {
     /// the figure separates by sitting below the near-white page.
     private static func developed(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
         switch theme {
-        case .dark:  (r: 1.00, g: 0.48, b: 0.10)
+        case .dark: (r: 1.00, g: 0.48, b: 0.10)
         case .light: (r: 0.91, g: 0.36, b: 0.00)
         }
     }
 
     private static func undeveloped(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
         switch theme {
-        case .dark:  (r: 0.62, g: 0.54, b: 0.46)
+        case .dark: (r: 0.62, g: 0.54, b: 0.46)
         case .light: (r: 0.76, g: 0.66, b: 0.58)
         }
     }
@@ -157,7 +158,7 @@ nonisolated enum MuscleColor {
     /// logged development or no role in the inspected exercise.
     private static func noData(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
         switch theme {
-        case .dark:  (r: 0.43, g: 0.43, b: 0.46)
+        case .dark: (r: 0.43, g: 0.43, b: 0.46)
         case .light: (r: 0.61, g: 0.61, b: 0.64)
         }
     }
@@ -237,6 +238,11 @@ nonisolated enum MuscleColor {
         return clamp01(encoded)
     }
 
-    private static func lerp(_ x: Double, _ y: Double, _ t: Double) -> Double { x + (y - x) * t }
-    private static func clamp01(_ x: Double) -> Double { min(1, max(0, x)) }
+    private static func lerp(_ x: Double, _ y: Double, _ t: Double) -> Double {
+        x + (y - x) * t
+    }
+
+    private static func clamp01(_ x: Double) -> Double {
+        min(1, max(0, x))
+    }
 }

@@ -13,8 +13,8 @@
 //    • pending     — hollow numbered chip + dim weight · reps plan.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct SetSummaryRow: View {
     let index: Int
@@ -28,7 +28,9 @@ struct SetSummaryRow: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// Universal "set complete" green — not muscle-group specific
     /// because completion has a single semantic across all exercises.

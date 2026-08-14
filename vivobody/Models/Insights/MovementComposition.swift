@@ -23,14 +23,22 @@ import Foundation
 
 // MARK: - Split
 
-nonisolated struct CompositionSplit: Hashable, Sendable {
+nonisolated struct CompositionSplit: Hashable {
     let compoundSets: Int
     let isolationSets: Int
     let unclassifiedSets: Int
 
-    var classifiedTotal: Int { compoundSets + isolationSets }
-    var totalSets: Int { classifiedTotal + unclassifiedSets }
-    var hasData: Bool { classifiedTotal > 0 }
+    var classifiedTotal: Int {
+        compoundSets + isolationSets
+    }
+
+    var totalSets: Int {
+        classifiedTotal + unclassifiedSets
+    }
+
+    var hasData: Bool {
+        classifiedTotal > 0
+    }
 
     /// How much of the eligible strength work can support the visible
     /// compound/isolation read. Keeping this separate from the split
@@ -42,15 +50,17 @@ nonisolated struct CompositionSplit: Hashable, Sendable {
 
     /// A handful of sets can hint at allocation, but should not wear
     /// the same certainty as a settled four-week block.
-    var isEarlyRead: Bool { totalSets > 0 && totalSets < 6 }
+    var isEarlyRead: Bool {
+        totalSets > 0 && totalSets < 6
+    }
 
     /// Count of completed sets for a mechanic (compound/isolation).
     /// Unclassified is not a `Mechanic` case and is read directly off
     /// the struct.
     func count(_ m: Mechanic) -> Int {
         switch m {
-        case .compound:  return compoundSets
-        case .isolation: return isolationSets
+        case .compound: compoundSets
+        case .isolation: isolationSets
         }
     }
 
@@ -73,13 +83,13 @@ nonisolated struct CompositionSplit: Hashable, Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Compound-vs-isolation distribution of completed strength sets
     /// over the trailing `window` (default 4 weeks) as of `now`.
     /// Sets from exercises without a persisted or bundled-name
     /// classification are bucketed as unclassified and excluded.
     func compoundIsolationSplit(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date()
     ) -> CompositionSplit {
         AnalyticsAccumulator.history(
@@ -92,7 +102,7 @@ nonisolated extension AnalyticsAccumulator {
     /// Snapshot-backed movement split used by the background
     /// analytics worker.
     func compoundIsolationSplit(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> CompositionSplit {
@@ -104,7 +114,8 @@ nonisolated extension AnalyticsAccumulator {
             let date = session.date
             guard date > cutoff, date <= now else { continue }
             for replay in session.exercises
-            where replay.exercise.modality.supportsHardSetAnalytics {
+                where replay.exercise.modality.supportsHardSetAnalytics
+            {
                 guard !isCancelled() else { break sessionLoop }
                 let exercise = replay.exercise
                 let completed = exercise.completedHardSetCount
@@ -114,7 +125,7 @@ nonisolated extension AnalyticsAccumulator {
                     continue
                 }
                 switch mechanic {
-                case .compound:  compound += completed
+                case .compound: compound += completed
                 case .isolation: isolation += completed
                 }
             }

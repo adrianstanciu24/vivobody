@@ -9,9 +9,9 @@
 //  Records set in the last 30 days wear the accent.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct PersonalRecordsScreen: View {
     @Query(
@@ -26,7 +26,9 @@ struct PersonalRecordsScreen: View {
         WeightUnit(rawValue: weightUnitRaw) ?? .lb
     }
 
-    private var records: [ExerciseProgress] { completedSessions.personalRecords }
+    private var records: [ExerciseProgress] {
+        completedSessions.personalRecords
+    }
 
     var body: some View {
         ScrollView {
@@ -116,10 +118,11 @@ struct PRRow: View {
         case .duration:
             if point.performanceSemanticKind.comparesLoad,
                let load = point.loadMode.loggedLoadLabel(
-                    point.topWeight,
-                    unit: unit,
-                    includeUnit: false
-               ) {
+                   point.topWeight,
+                   unit: unit,
+                   includeUnit: false
+               )
+            {
                 return load
             }
             return DurationFormatter.string(point.topDuration)
@@ -136,9 +139,9 @@ struct PRRow: View {
         case .duration:
             guard point.performanceSemanticKind.comparesLoad,
                   point.loadMode.loggedLoadLabel(
-                    point.topWeight,
-                    unit: unit,
-                    includeUnit: false
+                      point.topWeight,
+                      unit: unit,
+                      includeUnit: false
                   ) != nil else { return nil }
             return "× \(DurationFormatter.string(point.topDuration))"
         }
@@ -168,9 +171,9 @@ struct PRRow: View {
             let time = DurationFormatter.string(point.topDuration)
             guard point.performanceSemanticKind.comparesLoad,
                   let load = point.loadMode.loggedLoadLabel(
-                    point.topWeight,
-                    unit: unit,
-                    includeUnit: true
+                      point.topWeight,
+                      unit: unit,
+                      includeUnit: true
                   ) else { return time }
             return "\(load) × \(time)"
         }

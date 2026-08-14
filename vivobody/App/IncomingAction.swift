@@ -10,9 +10,9 @@
 //  case + one parser line.
 //
 
-import VivoKit
 import CoreSpotlight
 import Foundation
+import VivoKit
 
 enum IncomingAction: Equatable {
     /// Switch to a tab (URL scheme, generic deep link).
@@ -54,7 +54,6 @@ enum IncomingAction: Equatable {
 /// `IncomingAction`. Returns nil when the signal is absent, stale, or
 /// malformed — the caller no-ops on nil.
 enum IncomingActionParser {
-
     // MARK: URL scheme
 
     /// `vivobody://today`, `vivobody://library`, `vivobody://insights`,
@@ -62,7 +61,7 @@ enum IncomingActionParser {
     static func from(url: URL) -> IncomingAction? {
         guard url.scheme == "vivobody" else { return nil }
         let route = [url.host, url.path]
-            .compactMap { $0 }
+            .compactMap(\.self)
             .joined(separator: "")
         switch route {
         case "today", "":
@@ -100,9 +99,9 @@ enum IncomingActionParser {
         let parts = uniqueID.split(separator: ":", maxSplits: 1).map(String.init)
         guard parts.count == 2, let uuid = UUID(uuidString: parts[1]) else { return nil }
         switch parts[0] {
-        case "template":  return .startTemplate(uuid)
-        case "exercise":  return .showExercise(uuid)
-        default:          return nil
+        case "template": return .startTemplate(uuid)
+        case "exercise": return .showExercise(uuid)
+        default: return nil
         }
     }
 

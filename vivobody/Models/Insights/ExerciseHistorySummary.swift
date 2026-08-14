@@ -14,7 +14,7 @@ import Foundation
 
 /// One logged set detached from SwiftData and safe to reuse as the
 /// starting prescription for a new workout draft.
-nonisolated struct ExerciseSetPrescription: Hashable, Sendable {
+nonisolated struct ExerciseSetPrescription: Hashable {
     let weight: Double
     let reps: Int
     let duration: TimeInterval
@@ -24,7 +24,7 @@ nonisolated struct ExerciseSetPrescription: Hashable, Sendable {
 /// `setPrescription` preserves the full archived set structure for a
 /// fresh start; `completedSetPrescription` is the safe source for
 /// overriding a saved template's working values.
-nonisolated struct ExerciseHistoryInstance: Hashable, Sendable {
+nonisolated struct ExerciseHistoryInstance: Hashable {
     let date: Date
     let performanceSignature: ExercisePerformanceSignature
     let setPrescription: [ExerciseSetPrescription]
@@ -46,7 +46,7 @@ nonisolated struct ExerciseHistoryInstance: Hashable, Sendable {
 /// identity. Bundled and name-only identities can outlive classification
 /// edits, so record bests are retained per semantic kind and latest
 /// prescriptions per exact performance signature.
-nonisolated struct ExerciseHistorySummary: Hashable, Sendable {
+nonisolated struct ExerciseHistorySummary: Hashable {
     let mostRecentInstance: ExerciseHistoryInstance
     let sessionCount: Int
     let latestPerformanceDate: Date
@@ -106,7 +106,7 @@ nonisolated struct ExerciseHistorySummary: Hashable, Sendable {
         estimatedOneRepMaxDates: [Date],
         allTimeBests: [PerformanceSemanticKind: StrengthPerformance],
         mostRecentInstancesBySignature:
-            [ExercisePerformanceSignature: ExerciseHistoryInstance]
+        [ExercisePerformanceSignature: ExerciseHistoryInstance]
     ) {
         self.mostRecentInstance = mostRecentInstance
         self.sessionCount = sessionCount
@@ -139,13 +139,15 @@ private nonisolated struct ExerciseHistoryBuilder {
             latestPerformanceDate = instance.date
         }
         if mostRecentInstance == nil
-            || mostRecentInstance!.date < instance.date {
+            || mostRecentInstance!.date < instance.date
+        {
             mostRecentInstance = instance
         }
 
         let signature = instance.performanceSignature
         if mostRecentInstancesBySignature[signature] == nil
-            || mostRecentInstancesBySignature[signature]!.date < instance.date {
+            || mostRecentInstancesBySignature[signature]!.date < instance.date
+        {
             mostRecentInstancesBySignature[signature] = instance
         }
 
@@ -169,7 +171,7 @@ private nonisolated struct ExerciseHistoryBuilder {
             sessionCount: sessionIDs.count,
             latestPerformanceDate: latestPerformanceDate,
             estimatedOneRepMaxDates:
-                estimatedOneRepMaxDatesBySessionID.values.sorted(),
+            estimatedOneRepMaxDatesBySessionID.values.sorted(),
             allTimeBests: allTimeBests,
             mostRecentInstancesBySignature: mostRecentInstancesBySignature
         )
@@ -214,18 +216,18 @@ nonisolated extension AnalyticsAccumulator {
                     bodyweightFraction: exercise.bodyweightFraction,
                     bodyweightAtSession: exercise.bodyweightAtSession,
                     effectiveRepresentativeLoad:
-                        exercise.performanceSemanticKind.comparesLoad
-                            ? exercise.effectiveLoad(
-                                loggedWeight: representative.weight
-                            )
-                            : nil
+                    exercise.performanceSemanticKind.comparesLoad
+                        ? exercise.effectiveLoad(
+                            loggedWeight: representative.weight
+                        )
+                        : nil
                 )
                 builders[exercise.historyKey, default: ExerciseHistoryBuilder()]
                     .add(
                         instance,
                         sessionID: replay.session.id,
                         hasEstimatedOneRepMax:
-                            exercise.bestEstimatedOneRepMaxSample != nil
+                        exercise.bestEstimatedOneRepMaxSample != nil
                     )
             }
         }

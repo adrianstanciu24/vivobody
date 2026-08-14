@@ -14,8 +14,8 @@
 //    • Release springs the rubber-band back to zero.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct NumberScrubber: View {
     @Binding var value: Double
@@ -41,7 +41,7 @@ struct NumberScrubber: View {
     var tickTone: Haptics.TickTone = .standard
     /// Called after a drag, cancellation, or accessibility adjustment has
     /// fully settled so persistence owners can flush coalesced writes.
-    var onScrubEnded: () -> Void = { }
+    var onScrubEnded: () -> Void = {}
 
     @State private var dragStartValue: Double = 0
     @State private var rubberOffset: CGFloat = 0

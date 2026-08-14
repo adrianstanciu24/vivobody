@@ -47,9 +47,9 @@ struct UpNext {
     /// pinned days) and a rest with no resolvable next both hide.
     var isPresentable: Bool {
         switch kind {
-        case .scheduled:                 return true
-        case .rest(_, let next, _, _):   return next != nil
-        case .unscheduled:               return false
+        case .scheduled: true
+        case let .rest(_, next, _, _): next != nil
+        case .unscheduled: false
         }
     }
 
@@ -71,8 +71,8 @@ struct UpNext {
             calendar.isDate(session.completedAt ?? session.startedAt, inSameDayAs: now)
         }
 
-        // Templates pinned to the weekday `offset` days from today,
-        // least-recently-used first so same-day picks rotate.
+        /// Templates pinned to the weekday `offset` days from today,
+        /// least-recently-used first so same-day picks rotate.
         func pinned(at offset: Int) -> [WorkoutTemplate] {
             guard let day = calendar.date(byAdding: .day, value: offset, to: today) else { return [] }
             let weekday = calendar.component(.weekday, from: day)
@@ -93,7 +93,7 @@ struct UpNext {
         // Offsets 1...7 cover every weekday exactly once, so a non-empty
         // schedule always resolves here.
         let reason: RestReason = trainedToday ? .doneToday : .offDay
-        for offset in 1...7 {
+        for offset in 1 ... 7 {
             let day = pinned(at: offset)
             if let next = day.first {
                 return UpNext(kind: .rest(reason: reason, next: next, daysUntil: offset, more: day.count - 1))
@@ -107,10 +107,10 @@ struct UpNext {
     /// oldest `lastUsedAt`, then Library order.
     private nonisolated static func rotationOrder(_ a: WorkoutTemplate, _ b: WorkoutTemplate) -> Bool {
         switch (a.lastUsedAt, b.lastUsedAt) {
-        case let (x?, y?):   return x < y
-        case (nil, .some):   return true
-        case (.some, nil):   return false
-        case (nil, nil):     return a.sortOrder < b.sortOrder
+        case let (x?, y?): x < y
+        case (nil, .some): true
+        case (.some, nil): false
+        case (nil, nil): a.sortOrder < b.sortOrder
         }
     }
 }

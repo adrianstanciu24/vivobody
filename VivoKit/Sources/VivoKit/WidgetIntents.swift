@@ -15,7 +15,9 @@ import VivoKitSnapshotCore
 public struct StartTodaysWorkoutIntent: AppIntent {
     public nonisolated static let title: LocalizedStringResource = "Start Workout"
     public nonisolated static let description = IntentDescription("Start the workout scheduled for today in vivobody.")
-    public nonisolated static var openAppWhenRun: Bool { true }
+    public nonisolated static var openAppWhenRun: Bool {
+        true
+    }
 
     public init() {}
 
@@ -29,7 +31,9 @@ public struct StartTodaysWorkoutIntent: AppIntent {
 public struct CompleteActiveSetIntent: AppIntent {
     public nonisolated static let title: LocalizedStringResource = "Complete Set"
     public nonisolated static let description = IntentDescription("Complete the current vivobody workout set.")
-    public nonisolated static var openAppWhenRun: Bool { true }
+    public nonisolated static var openAppWhenRun: Bool {
+        true
+    }
 
     public init() {}
 

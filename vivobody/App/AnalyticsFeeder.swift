@@ -10,9 +10,9 @@
 //  build-on-first-entry behavior. Renders nothing.
 //
 
-import SwiftUI
-import SwiftData
 import Foundation
+import SwiftData
+import SwiftUI
 
 struct AnalyticsFeeder: View {
     var appState: AppState

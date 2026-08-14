@@ -16,9 +16,9 @@
 //  layer ABOVE the panel, never as more of the same black.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct EditSetSheet: View {
     @Bindable var set: WorkoutSet
@@ -43,9 +43,17 @@ struct EditSetSheet: View {
 
     /// The set's tracking mode comes from its owning exercise —
     /// decides whether we edit reps or a timed effort.
-    private var mode: TrackingMode { self.set.exercise?.trackingMode ?? .reps }
-    private var modality: ExerciseModality { self.set.exercise?.modality ?? .dynamicStrength }
-    private var loadMode: ExerciseLoadMode { self.set.exercise?.loadMode ?? .external }
+    private var mode: TrackingMode {
+        self.set.exercise?.trackingMode ?? .reps
+    }
+
+    private var modality: ExerciseModality {
+        self.set.exercise?.modality ?? .dynamicStrength
+    }
+
+    private var loadMode: ExerciseLoadMode {
+        self.set.exercise?.loadMode ?? .external
+    }
 
     /// 1-based position of this set inside its exercise — the sheet
     /// names what it's editing ("Set 2 of 3") so a pip tap never
@@ -139,7 +147,7 @@ struct EditSetSheet: View {
                                 .accessibilityHidden(true)
                             BareScrubber(
                                 value: repsBinding,
-                                range: 1...30,
+                                range: 1 ... 30,
                                 step: 1,
                                 pointsPerStep: 16,
                                 fontSize: 46,

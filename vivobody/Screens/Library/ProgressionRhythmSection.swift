@@ -15,8 +15,8 @@
 //  work or when history holds fewer than two recorded increases.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 extension ExerciseDetailScreen {
     /// Cadence over this exercise's chronological progress series.
@@ -251,7 +251,7 @@ private struct ProgressionStaircase: View {
     /// Tint for the dotted "since last increase" lead-out.
     var tailTint: Color = Tint.complete
 
-    var now: Date = Date()
+    var now: Date = .init()
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var trace: CGFloat = 0
@@ -492,44 +492,44 @@ private struct LockedRhythmCover<Content: View>: View {
 // MARK: - Preview
 
 #if DEBUG
-#Preview("Load cadence") {
-    let day: TimeInterval = 86_400
-    let now = Date()
-    let cadence = ProgressionCadence(
-        baseline: .init(date: now.addingTimeInterval(-64 * day), load: 135),
-        increases: [
-            .init(date: now.addingTimeInterval(-55 * day), load: 140),
-            .init(date: now.addingTimeInterval(-46 * day), load: 145),
-            .init(date: now.addingTimeInterval(-34 * day), load: 150),
-            .init(date: now.addingTimeInterval(-27 * day), load: 155),
-            .init(date: now.addingTimeInterval(-13 * day), load: 160),
-        ],
-        medianGapDays: 9,
-        daysSinceLastIncrease: 13
-    )
-    let midCycle = ProgressionCadence(
-        baseline: .init(date: now.addingTimeInterval(-40 * day), load: 95),
-        increases: [
-            .init(date: now.addingTimeInterval(-31 * day), load: 100),
-            .init(date: now.addingTimeInterval(-22 * day), load: 105),
-            .init(date: now.addingTimeInterval(-12 * day), load: 110),
-            .init(date: now.addingTimeInterval(-4 * day), load: 115),
-        ],
-        medianGapDays: 9,
-        daysSinceLastIncrease: 4
-    )
-    return ScrollView {
-        VStack(spacing: Space.xxl) {
-            ProgressionRhythmCard(cadence: cadence, unit: .lb)
-            ProgressionRhythmCard(cadence: midCycle, unit: .lb)
-            LockedRhythmCover(action: {}) {
+    #Preview("Load cadence") {
+        let day: TimeInterval = 86400
+        let now = Date()
+        let cadence = ProgressionCadence(
+            baseline: .init(date: now.addingTimeInterval(-64 * day), load: 135),
+            increases: [
+                .init(date: now.addingTimeInterval(-55 * day), load: 140),
+                .init(date: now.addingTimeInterval(-46 * day), load: 145),
+                .init(date: now.addingTimeInterval(-34 * day), load: 150),
+                .init(date: now.addingTimeInterval(-27 * day), load: 155),
+                .init(date: now.addingTimeInterval(-13 * day), load: 160),
+            ],
+            medianGapDays: 9,
+            daysSinceLastIncrease: 13
+        )
+        let midCycle = ProgressionCadence(
+            baseline: .init(date: now.addingTimeInterval(-40 * day), load: 95),
+            increases: [
+                .init(date: now.addingTimeInterval(-31 * day), load: 100),
+                .init(date: now.addingTimeInterval(-22 * day), load: 105),
+                .init(date: now.addingTimeInterval(-12 * day), load: 110),
+                .init(date: now.addingTimeInterval(-4 * day), load: 115),
+            ],
+            medianGapDays: 9,
+            daysSinceLastIncrease: 4
+        )
+        return ScrollView {
+            VStack(spacing: Space.xxl) {
                 ProgressionRhythmCard(cadence: cadence, unit: .lb)
+                ProgressionRhythmCard(cadence: midCycle, unit: .lb)
+                LockedRhythmCover(action: {}) {
+                    ProgressionRhythmCard(cadence: cadence, unit: .lb)
+                }
             }
+            .padding(Space.gutter)
         }
-        .padding(Space.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black)
+        .preferredColorScheme(.dark)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.black)
-    .preferredColorScheme(.dark)
-}
 #endif

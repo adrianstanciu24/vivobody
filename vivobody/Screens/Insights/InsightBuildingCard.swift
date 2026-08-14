@@ -9,8 +9,8 @@
 //  not a loading spinner — nothing progresses until the user trains.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct InsightBuildingCard: View {
     let title: String
@@ -131,7 +131,7 @@ struct InsightBuildingCard: View {
             accessibilityProgress ?? progressLabel,
             detail,
         ]
-        .compactMap { $0 }
+        .compactMap(\.self)
         .joined(separator: " ")
     }
 }

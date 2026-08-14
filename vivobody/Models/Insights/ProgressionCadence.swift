@@ -43,11 +43,15 @@ struct ProgressionCadence: Hashable {
 
     /// All progression events, baseline first. Convenience for the
     /// rhythm-strip renderer.
-    var events: [Event] { [baseline] + increases }
+    var events: [Event] {
+        [baseline] + increases
+    }
 
     /// True when the current gap has outrun the usual rhythm — the
     /// lifter is past the point where they would typically add load.
-    var isPastUsualRhythm: Bool { daysSinceLastIncrease > medianGapDays }
+    var isPastUsualRhythm: Bool {
+        daysSinceLastIncrease > medianGapDays
+    }
 
     /// Minimum number of recorded increases before a cadence exists.
     /// One increase is a single data point, not a rhythm.

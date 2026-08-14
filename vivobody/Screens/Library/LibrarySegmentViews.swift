@@ -7,9 +7,9 @@
 //  management.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 // MARK: - Segmented control
 

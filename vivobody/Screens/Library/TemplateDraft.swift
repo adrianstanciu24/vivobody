@@ -281,7 +281,7 @@ extension ExerciseDraft {
         let weight = plannedWeight
         let reps = plannedReps
         let duration = plannedDuration
-        sets = (0..<count).map { _ in SetDraft(weight: weight, reps: reps, duration: duration) }
+        sets = (0 ..< count).map { _ in SetDraft(weight: weight, reps: reps, duration: duration) }
         isPerSet = true
     }
 

@@ -7,8 +7,8 @@
 //  PR helpers, and the date formatters used by the journal sections.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 extension TodayScreen {
     // MARK: - Derived
@@ -20,10 +20,10 @@ extension TodayScreen {
     var sortedTemplates: [WorkoutTemplate] {
         templates.sorted { lhs, rhs in
             switch (lhs.lastUsedAt, rhs.lastUsedAt) {
-            case let (l?, r?):       return l > r
-            case (.some, .none):     return true
-            case (.none, .some):     return false
-            case (.none, .none):     return lhs.sortOrder < rhs.sortOrder
+            case let (l?, r?): l > r
+            case (.some, .none): true
+            case (.none, .some): false
+            case (.none, .none): lhs.sortOrder < rhs.sortOrder
             }
         }
     }

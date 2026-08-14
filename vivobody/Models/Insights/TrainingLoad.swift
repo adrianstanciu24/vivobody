@@ -23,7 +23,7 @@ import Foundation
 
 // MARK: - Verdict
 
-nonisolated enum LoadVerdict: Hashable, Sendable {
+nonisolated enum LoadVerdict: Hashable {
     case insufficient
     /// Below the user's recent four-week range.
     case low
@@ -36,16 +36,18 @@ nonisolated enum LoadVerdict: Hashable, Sendable {
     /// Recent-range band for current ÷ four-week median load. Single
     /// source of truth — the report's absolute range and every gauge
     /// derive from these bounds.
-    static let recentRatioBand: ClosedRange<Double> = 0.8...1.3
+    static let recentRatioBand: ClosedRange<Double> = 0.8 ... 1.3
 
     /// Compatibility spelling for existing non-Insights consumers.
-    static var productiveRatioBand: ClosedRange<Double> { recentRatioBand }
+    static var productiveRatioBand: ClosedRange<Double> {
+        recentRatioBand
+    }
 
     static func from(ratio: Double) -> LoadVerdict {
         switch ratio {
-        case ..<recentRatioBand.lowerBound: return .low
-        case ...recentRatioBand.upperBound: return .productive
-        default:                            return .high
+        case ..<recentRatioBand.lowerBound: .low
+        case ...recentRatioBand.upperBound: .productive
+        default: .high
         }
     }
 }
@@ -53,8 +55,11 @@ nonisolated enum LoadVerdict: Hashable, Sendable {
 // MARK: - Trend and drivers
 
 /// One daily sample of the rolling seven-day load.
-nonisolated struct LoadPoint: Identifiable, Hashable, Sendable {
-    var id: Date { date }
+nonisolated struct LoadPoint: Identifiable, Hashable {
+    var id: Date {
+        date
+    }
+
     let date: Date
     let load: Double
     let productiveLower: Double?
@@ -62,18 +67,28 @@ nonisolated struct LoadPoint: Identifiable, Hashable, Sendable {
 
     /// Recent-range spellings used by current UI. Stored-property names
     /// remain stable for snapshots and existing callers.
-    var rangeLower: Double? { productiveLower }
-    var rangeUpper: Double? { productiveUpper }
+    var rangeLower: Double? {
+        productiveLower
+    }
+
+    var rangeUpper: Double? {
+        productiveUpper
+    }
 }
 
 /// Estimated hard sets completed on one calendar day — the per-day
 /// (not rolling) sample behind the Today readiness strip.
-nonisolated struct DayLoad: Identifiable, Hashable, Sendable {
-    var id: Date { date }
+nonisolated struct DayLoad: Identifiable, Hashable {
+    var id: Date {
+        date
+    }
+
     let date: Date
     let load: Double
 
-    var trained: Bool { load > 0 }
+    var trained: Bool {
+        load > 0
+    }
 
     /// Very short weekday symbol ("M", "T", …) for day-strip labels.
     func weekdayInitial(calendar: Calendar = .current) -> String {
@@ -84,12 +99,12 @@ nonisolated struct DayLoad: Identifiable, Hashable, Sendable {
     }
 }
 
-nonisolated struct LoadDriver: Hashable, Sendable {
+nonisolated struct LoadDriver: Hashable {
     let current: Double
     let usual: Double?
 }
 
-nonisolated struct TrainingLoadDrivers: Hashable, Sendable {
+nonisolated struct TrainingLoadDrivers: Hashable {
     let hardSets: LoadDriver
     let sessions: LoadDriver
     let heavySets: LoadDriver
@@ -103,7 +118,7 @@ nonisolated struct TrainingLoadDrivers: Hashable, Sendable {
 
 // MARK: - Report
 
-nonisolated struct TrainingLoadReport: Hashable, Sendable {
+nonisolated struct TrainingLoadReport: Hashable {
     /// Minimum observation span before the four-week comparison settles.
     static let baselineMinimumDays = 28
     /// At least three of the four prior weeks must contain qualifying work.
@@ -158,7 +173,9 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
         self.drivers = drivers
     }
 
-    var hasEnoughHistory: Bool { verdict != .insufficient }
+    var hasEnoughHistory: Bool {
+        verdict != .insufficient
+    }
 
     /// The best available position for compact visual gauges.
     var gaugeRatio: Double? {
@@ -168,11 +185,13 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
     var recentRange: ClosedRange<Double>? {
         guard let usualLoad else { return nil }
         let band = LoadVerdict.recentRatioBand
-        return (usualLoad * band.lowerBound)...(usualLoad * band.upperBound)
+        return (usualLoad * band.lowerBound) ... (usualLoad * band.upperBound)
     }
 
     /// Compatibility spelling for existing non-Insights consumers.
-    var productiveRange: ClosedRange<Double>? { recentRange }
+    var productiveRange: ClosedRange<Double>? {
+        recentRange
+    }
 
     var observedBaselineDays: Int {
         min(Self.baselineMinimumDays, max(0, daysLogged))
@@ -204,11 +223,13 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
     /// The recent band mapped onto the gauge track.
     static var gaugeRecentBand: ClosedRange<Double> {
         let band = LoadVerdict.recentRatioBand
-        return gaugePosition(forRatio: band.lowerBound)...gaugePosition(forRatio: band.upperBound)
+        return gaugePosition(forRatio: band.lowerBound) ... gaugePosition(forRatio: band.upperBound)
     }
 
     /// Compatibility spelling for existing non-Insights consumers.
-    static var gaugeProductiveBand: ClosedRange<Double> { gaugeRecentBand }
+    static var gaugeProductiveBand: ClosedRange<Double> {
+        gaugeRecentBand
+    }
 
     /// Marker position for the best available ratio; nil while no
     /// comparison exists at all.
@@ -220,7 +241,7 @@ nonisolated struct TrainingLoadReport: Hashable, Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Personal rolling workload report as of `now`.
     func trainingLoad(
         now: Date = Date(),
@@ -382,7 +403,8 @@ nonisolated extension AnalyticsAccumulator {
             guard !isCancelled() else { return [] }
             guard session.isCompleted,
                   session.date <= now,
-                  session.totalSetEquivalent > 0 else {
+                  session.totalSetEquivalent > 0
+            else {
                 continue
             }
             result.append(Measurement(
@@ -410,7 +432,7 @@ nonisolated extension AnalyticsAccumulator {
 
         var result: [LoadPoint] = []
         result.reserveCapacity(days + 1)
-        for offset in 0...days {
+        for offset in 0 ... days {
             guard !isCancelled() else { return [] }
             guard let day = calendar.date(byAdding: .day, value: offset, to: start) else {
                 continue
@@ -431,8 +453,8 @@ nonisolated extension AnalyticsAccumulator {
             guard !isCancelled() else { return [] }
             let age = calendar.dateComponents([.day], from: firstDay, to: day).day ?? 0
             let usual = age >= TrainingLoadReport.baselineMinimumDays
-                && previous.filter({ $0.load > 0 }).count
-                    >= TrainingLoadReport.requiredActiveBaselineWeeks
+                && previous.count(where: { $0.load > 0 })
+                >= TrainingLoadReport.requiredActiveBaselineWeeks
                 ? median(previous.map(\.load))
                 : nil
             result.append(LoadPoint(
@@ -453,7 +475,7 @@ nonisolated extension AnalyticsAccumulator {
     ) -> [DayLoad] {
         var result: [DayLoad] = []
         result.reserveCapacity(7)
-        for offset in (0..<7).reversed() {
+        for offset in (0 ..< 7).reversed() {
             guard !isCancelled() else { return [] }
             guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else {
                 continue
@@ -503,7 +525,7 @@ nonisolated extension AnalyticsAccumulator {
         }
         var result: [Window] = []
         result.reserveCapacity(4)
-        for offset in 1...4 {
+        for offset in 1 ... 4 {
             guard !isCancelled() else { return [] }
             guard
                 let end = calendar.date(byAdding: .day, value: -7 * (offset - 1), to: currentStart),
@@ -534,7 +556,7 @@ nonisolated extension AnalyticsAccumulator {
             guard !isCancelled() else {
                 return Window(load: 0, sessions: 0, heavySets: 0)
             }
-            guard measurement.date >= start && measurement.date < end else { continue }
+            guard measurement.date >= start, measurement.date < end else { continue }
             load += measurement.load
             sessions += 1
             heavySets += measurement.heavySets

@@ -18,7 +18,7 @@
 import Foundation
 
 /// Data-quality coverage used by the muscle-map confidence read.
-nonisolated struct AnalyticsMuscleQuality: Sendable {
+nonisolated struct AnalyticsMuscleQuality {
     var eligible: Int = 0
     var complete: Int = 0
 }
@@ -26,7 +26,7 @@ nonisolated struct AnalyticsMuscleQuality: Sendable {
 /// Display metadata from the first occurrence in the caller's input
 /// order. Some legacy APIs intentionally preserve that choice even
 /// though report events themselves are replayed chronologically.
-nonisolated struct AnalyticsExerciseMetadata: Sendable {
+nonisolated struct AnalyticsExerciseMetadata {
     let catalogID: String?
     let catalogItemID: UUID?
     let name: String
@@ -34,29 +34,37 @@ nonisolated struct AnalyticsExerciseMetadata: Sendable {
 }
 
 /// A single exercise with its hard-set pricing computed exactly once.
-nonisolated struct AnalyticsExerciseReplay: Sendable {
+nonisolated struct AnalyticsExerciseReplay {
     let exercise: AnalyticsExerciseSnapshot
     let setEquivalent: Double
     let byMuscle: [Muscle: Double]
 
-    nonisolated var name: String { exercise.name }
+    nonisolated var name: String {
+        exercise.name
+    }
+
     nonisolated var classification: ExerciseClassification? {
         exercise.classification
     }
 }
 
 /// One completed workout in chronological order.
-nonisolated struct AnalyticsSessionReplay: Sendable {
+nonisolated struct AnalyticsSessionReplay {
     let session: AnalyticsSessionSnapshot
     let exercises: [AnalyticsExerciseReplay]
     let totalSetEquivalent: Double
     let heavySets: Double
 
-    nonisolated var date: Date { session.date }
-    nonisolated var isCompleted: Bool { session.isCompleted }
+    nonisolated var date: Date {
+        session.date
+    }
+
+    nonisolated var isCompleted: Bool {
+        session.isCompleted
+    }
 }
 
-nonisolated struct AnalyticsAccumulator: Sendable {
+nonisolated struct AnalyticsAccumulator {
     let sessions: [AnalyticsSessionReplay]
     let muscleQuality: [Muscle: AnalyticsMuscleQuality]
     let exerciseMetadata: [String: AnalyticsExerciseMetadata]
@@ -154,11 +162,12 @@ nonisolated struct AnalyticsAccumulator: Sendable {
 
                 if pricesStimulus,
                    exercise.modality == .dynamicStrength,
-                   exercise.trackingMode == .reps {
+                   exercise.trackingMode == .reps
+                {
                     heavySets += Double(
-                        exercise.sets.filter {
-                            $0.isAnalyticsEligible && (1...5).contains($0.reps)
-                        }.count
+                        exercise.sets.count(where: {
+                            $0.isAnalyticsEligible && (1 ... 5).contains($0.reps)
+                        })
                     )
                 }
 

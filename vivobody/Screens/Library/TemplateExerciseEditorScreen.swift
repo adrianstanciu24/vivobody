@@ -18,9 +18,9 @@
 //  from workout-side editing.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct TemplateExerciseEditorScreen: View {
     @Bindable var exercise: TemplateExercise
@@ -32,7 +32,9 @@ struct TemplateExerciseEditorScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     var body: some View {
         ScrollView {
@@ -42,7 +44,7 @@ struct TemplateExerciseEditorScreen: View {
                 valueRow(label: "Sets") {
                     BareScrubber(
                         value: setsBinding,
-                        range: 1...12,
+                        range: 1 ... 12,
                         step: 1,
                         pointsPerStep: 18,
                         fontSize: 64,
@@ -58,7 +60,7 @@ struct TemplateExerciseEditorScreen: View {
                     valueRow(label: "Reps") {
                         BareScrubber(
                             value: repsBinding,
-                            range: 1...50,
+                            range: 1 ... 50,
                             step: 1,
                             pointsPerStep: 16,
                             fontSize: 64,
@@ -140,9 +142,9 @@ struct TemplateExerciseEditorScreen: View {
 
     /// A small sentence-case label above a bare scrubbing numeral.
     /// The numeral is the control; the label just names what it sets.
-    private func valueRow<S: View>(
+    private func valueRow(
         label: String,
-        @ViewBuilder scrubber: () -> S
+        @ViewBuilder scrubber: () -> some View
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(label)

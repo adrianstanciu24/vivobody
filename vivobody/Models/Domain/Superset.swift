@@ -37,6 +37,7 @@ extension TemplateExercise: nonisolated SupersetMember {}
 
 nonisolated enum SupersetGrouping {
     // MARK: ID-array core
+
     //
     // The algorithms operate on plain `[UUID?]` so both the @Model
     // types (via the SupersetMember wrappers below) and value-type
@@ -56,7 +57,7 @@ nonisolated enum SupersetGrouping {
             while j + 1 < ids.count, ids[j + 1] == id {
                 j += 1
             }
-            if j > i { runs.append(i...j) }
+            if j > i { runs.append(i ... j) }
             i = j + 1
         }
         return runs
@@ -78,7 +79,8 @@ nonisolated enum SupersetGrouping {
     /// `index`. Nil when the position sits outside every group.
     static func groupLetter(at index: Int, inIDs ids: [UUID?]) -> String? {
         for (groupIndex, run) in linkedRuns(inIDs: ids).enumerated()
-        where run.contains(index) {
+            where run.contains(index)
+        {
             return letter(for: groupIndex)
         }
         return nil
@@ -117,7 +119,7 @@ nonisolated enum SupersetGrouping {
             ids[index + 1] = id
         case (nil, let id?):
             ids[index] = id
-        case (let aID?, let bID?) where aID != bID:
+        case let (aID?, bID?) where aID != bID:
             for k in ids.indices where ids[k] == bID {
                 ids[k] = aID
             }
@@ -136,7 +138,7 @@ nonisolated enum SupersetGrouping {
         }
         var ids = ids
         let split = UUID()
-        for k in (index + 1)..<ids.count where ids[k] == id {
+        for k in (index + 1) ..< ids.count where ids[k] == id {
             ids[k] = split
         }
         return normalizing(ids)
@@ -162,7 +164,9 @@ nonisolated enum SupersetGrouping {
                 ids[i] = nil
             } else if usedIDs.contains(id) {
                 let fresh = UUID()
-                for k in i...j { ids[k] = fresh }
+                for k in i ... j {
+                    ids[k] = fresh
+                }
                 usedIDs.insert(fresh)
             } else {
                 usedIDs.insert(id)
@@ -283,7 +287,7 @@ extension WorkoutSession {
     /// Total rounds in the exercise's group — the longest member's
     /// set count (short members simply sit out the last rounds).
     func supersetRoundCount(of exercise: Exercise) -> Int {
-        supersetMembers(of: exercise).map { $0.orderedSets.count }.max() ?? 0
+        supersetMembers(of: exercise).map(\.orderedSets.count).max() ?? 0
     }
 
     /// Decide the choreography after a set just landed on `exercise`.
@@ -299,7 +303,7 @@ extension WorkoutSession {
         else { return nil }
 
         let myCompleted = completedSetCount(of: exercise)
-        let cycle = (1..<members.count).map { members[(myIndex + $0) % members.count] }
+        let cycle = (1 ..< members.count).map { members[(myIndex + $0) % members.count] }
 
         if let partner = cycle.first(where: { member in
             hasIncompleteSets(member) && completedSetCount(of: member) < myCompleted

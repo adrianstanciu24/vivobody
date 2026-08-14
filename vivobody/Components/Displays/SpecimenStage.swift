@@ -85,7 +85,7 @@ struct SpecimenStage: View {
             // Far-side ticks dim the way the far rim of a real disc
             // falls into shade.
             let tickCount = 24
-            for i in 0..<tickCount {
+            for i in 0 ..< tickCount {
                 let t = Double(i) / Double(tickCount) * 2 * .pi - rotation
                 let major = i % 6 == 0
                 let len: CGFloat = major ? 7 : 4
@@ -205,7 +205,7 @@ struct SilkscreenGraticule: View {
         let tickTop = window.minY + 8
         let marks = 12
         var ticks = Path()
-        for i in 0..<marks {
+        for i in 0 ..< marks {
             let azimuth = Double(i) / Double(marks) * 2 * .pi
             let x = center + CGFloat(screenOffset(of: azimuth)) * span
             let major = i % 3 == 0
@@ -248,10 +248,10 @@ struct SilkscreenGraticule: View {
         var facing = (-rotation).truncatingRemainder(dividingBy: turn)
         if facing < 0 { facing += turn }
         switch facing {
-        case (turn * 0.125)..<(turn * 0.375): return "L SIDE"
-        case (turn * 0.375)..<(turn * 0.625): return "BACK"
-        case (turn * 0.625)..<(turn * 0.875): return "R SIDE"
-        default:                              return "FRONT"
+        case (turn * 0.125) ..< (turn * 0.375): return "L SIDE"
+        case (turn * 0.375) ..< (turn * 0.625): return "BACK"
+        case (turn * 0.625) ..< (turn * 0.875): return "R SIDE"
+        default: return "FRONT"
         }
     }
 }

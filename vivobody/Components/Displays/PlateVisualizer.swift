@@ -15,8 +15,8 @@
 //      PlateVisualizer(weight: 100, unit: .kg)
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 // `WeightUnit` (lb / kg) lives in Models/WeightUnit.swift now so
 // every layer (formatter, scrubber, display) shares one source of
@@ -26,7 +26,9 @@ import SwiftUI
 struct LoadedPlate: Identifiable, Hashable {
     let weight: Double
     let copy: Int
-    var id: String { "\(weight)-\(copy)" }
+    var id: String {
+        "\(weight)-\(copy)"
+    }
 }
 
 enum PlateMath {
@@ -56,15 +58,25 @@ struct PlateVisualizer: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var plates: [Double] { availablePlates ?? unit.standardPlates }
-    private var perSide: Double { max(0, (weight - barWeight) / 2) }
+    private var plates: [Double] {
+        availablePlates ?? unit.standardPlates
+    }
+
+    private var perSide: Double {
+        max(0, (weight - barWeight) / 2)
+    }
 
     private var math: (plates: [LoadedPlate], achieved: Double) {
         PlateMath.load(perSide: perSide, available: plates)
     }
 
-    private var actualTotal: Double { barWeight + 2 * math.achieved }
-    private var isExact: Bool { abs(actualTotal - weight) < 0.01 }
+    private var actualTotal: Double {
+        barWeight + 2 * math.achieved
+    }
+
+    private var isExact: Bool {
+        abs(actualTotal - weight) < 0.01
+    }
 
     var body: some View {
         let m = math
@@ -273,35 +285,35 @@ private struct PlateAppearance {
 
     static func `for`(weight: Double, unit: WeightUnit) -> PlateAppearance {
         switch unit {
-        case .lb: return appearanceLB(weight: weight)
-        case .kg: return appearanceKG(weight: weight)
+        case .lb: appearanceLB(weight: weight)
+        case .kg: appearanceKG(weight: weight)
         }
     }
 
     private static func appearanceLB(weight: Double) -> PlateAppearance {
         switch weight {
-        case 45:   return .init(color: Color(red: 0.78, green: 0.20, blue: 0.20), width: 17, height: 118)
-        case 35:   return .init(color: Color(red: 0.28, green: 0.42, blue: 0.68), width: 15, height: 102)
-        case 25:   return .init(color: Color(red: 0.22, green: 0.55, blue: 0.32), width: 13, height: 85)
-        case 10:   return .init(color: Color(red: 0.72, green: 0.72, blue: 0.70), width: 10, height: 62)
-        case 5:    return .init(color: Color(red: 0.40, green: 0.62, blue: 0.78), width: 8,  height: 48)
-        case 2.5:  return .init(color: Color(red: 0.82, green: 0.32, blue: 0.30), width: 7,  height: 36)
-        case 1.25: return .init(color: Color(red: 0.62, green: 0.62, blue: 0.66), width: 6,  height: 28)
-        default:   return .init(color: Color.gray,                                   width: 8,  height: 44)
+        case 45: .init(color: Color(red: 0.78, green: 0.20, blue: 0.20), width: 17, height: 118)
+        case 35: .init(color: Color(red: 0.28, green: 0.42, blue: 0.68), width: 15, height: 102)
+        case 25: .init(color: Color(red: 0.22, green: 0.55, blue: 0.32), width: 13, height: 85)
+        case 10: .init(color: Color(red: 0.72, green: 0.72, blue: 0.70), width: 10, height: 62)
+        case 5: .init(color: Color(red: 0.40, green: 0.62, blue: 0.78), width: 8, height: 48)
+        case 2.5: .init(color: Color(red: 0.82, green: 0.32, blue: 0.30), width: 7, height: 36)
+        case 1.25: .init(color: Color(red: 0.62, green: 0.62, blue: 0.66), width: 6, height: 28)
+        default: .init(color: Color.gray, width: 8, height: 44)
         }
     }
 
     private static func appearanceKG(weight: Double) -> PlateAppearance {
         switch weight {
-        case 25:   return .init(color: Color(red: 0.78, green: 0.20, blue: 0.20), width: 17, height: 118)
-        case 20:   return .init(color: Color(red: 0.28, green: 0.42, blue: 0.68), width: 16, height: 112)
-        case 15:   return .init(color: Color(red: 0.88, green: 0.72, blue: 0.22), width: 15, height: 102)
-        case 10:   return .init(color: Color(red: 0.22, green: 0.55, blue: 0.32), width: 13, height: 85)
-        case 5:    return .init(color: Color(red: 0.72, green: 0.72, blue: 0.70), width: 10, height: 62)
-        case 2.5:  return .init(color: Color(red: 0.82, green: 0.32, blue: 0.30), width: 7,  height: 36)
-        case 1.25: return .init(color: Color(red: 0.62, green: 0.62, blue: 0.66), width: 6,  height: 28)
-        case 0.5:  return .init(color: Color(red: 0.50, green: 0.68, blue: 0.85), width: 5,  height: 22)
-        default:   return .init(color: Color.gray,                                   width: 8,  height: 44)
+        case 25: .init(color: Color(red: 0.78, green: 0.20, blue: 0.20), width: 17, height: 118)
+        case 20: .init(color: Color(red: 0.28, green: 0.42, blue: 0.68), width: 16, height: 112)
+        case 15: .init(color: Color(red: 0.88, green: 0.72, blue: 0.22), width: 15, height: 102)
+        case 10: .init(color: Color(red: 0.22, green: 0.55, blue: 0.32), width: 13, height: 85)
+        case 5: .init(color: Color(red: 0.72, green: 0.72, blue: 0.70), width: 10, height: 62)
+        case 2.5: .init(color: Color(red: 0.82, green: 0.32, blue: 0.30), width: 7, height: 36)
+        case 1.25: .init(color: Color(red: 0.62, green: 0.62, blue: 0.66), width: 6, height: 28)
+        case 0.5: .init(color: Color(red: 0.50, green: 0.68, blue: 0.85), width: 5, height: 22)
+        default: .init(color: Color.gray, width: 8, height: 44)
         }
     }
 }

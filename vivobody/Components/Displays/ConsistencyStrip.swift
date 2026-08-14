@@ -28,31 +28,37 @@
 //      ConsistencyStrip(workoutDates: dates, prDates: prs, weeks: 2)
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct ConsistencyStrip: View {
     let workoutDates: Set<Date>
     var prDates: Set<Date> = []
     /// How many trailing weeks the strip covers, the current one last.
     var weeks: Int = 2
-    var today: Date = Date()
+    var today: Date = .init()
 
-    private var calendar: Calendar { .current }
+    private var calendar: Calendar {
+        .current
+    }
 
-    private var todayStart: Date { calendar.startOfDay(for: today) }
+    private var todayStart: Date {
+        calendar.startOfDay(for: today)
+    }
 
-    private var days: Int { weeks * 7 }
+    private var days: Int {
+        weeks * 7
+    }
 
     /// Trailing days split a week to a row, oldest row first, today the
     /// last cell of the last row. Because each row steps a whole week,
     /// every column holds one weekday all the way down.
     private var rows: [[Date]] {
-        let all: [Date] = (0..<days).reversed().compactMap {
+        let all: [Date] = (0 ..< days).reversed().compactMap {
             calendar.date(byAdding: .day, value: -$0, to: todayStart)
         }
         return stride(from: 0, to: all.count, by: 7).map {
-            Array(all[$0..<min($0 + 7, all.count)])
+            Array(all[$0 ..< min($0 + 7, all.count)])
         }
     }
 
@@ -65,7 +71,7 @@ struct ConsistencyStrip: View {
     }
 
     private var sessionCount: Int {
-        rows.flatMap { $0 }.filter { workoutDays.contains($0) }.count
+        rows.flatMap(\.self).count(where: { workoutDays.contains($0) })
     }
 
     var body: some View {

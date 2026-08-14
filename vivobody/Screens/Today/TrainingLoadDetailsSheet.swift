@@ -9,8 +9,8 @@
 //  avoids recovery or injury claims; load is context, not a diagnosis.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct TrainingLoadDetailsSheet: View {
     let report: TrainingLoadReport
@@ -176,7 +176,7 @@ struct TrainingLoadDetailsSheet: View {
         guard report.recentDays.isEmpty else { return report.recentDays }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        return (0..<7).reversed().compactMap { offset in
+        return (0 ..< 7).reversed().compactMap { offset in
             calendar.date(byAdding: .day, value: -offset, to: today).map {
                 DayLoad(date: $0, load: 0)
             }
@@ -368,10 +368,10 @@ struct TrainingLoadDetailsSheet: View {
 
     // MARK: - Shared presentation
 
-    private func explainerSection<Content: View>(
+    private func explainerSection(
         number: String,
         title: String,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> some View
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.md) {
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
@@ -407,7 +407,7 @@ struct TrainingLoadDetailsSheet: View {
             points: [
                 LoadPoint(date: Date(), load: 17.5, productiveLower: 12, productiveUpper: 19.5)
             ],
-            recentDays: (0..<7).compactMap { offset in
+            recentDays: (0 ..< 7).compactMap { offset in
                 Calendar.current.date(byAdding: .day, value: offset - 6, to: Date()).map {
                     DayLoad(date: $0, load: [3, 0, 4, 0, 2.5, 5, 3][offset])
                 }

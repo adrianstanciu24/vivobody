@@ -24,8 +24,8 @@
 //  where the hero scale would overwhelm surrounding content.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct PrimaryButtonStyle: ButtonStyle {
     var accent: Color = Tint.primary

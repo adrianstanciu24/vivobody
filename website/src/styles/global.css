@@ -12,7 +12,8 @@
   --orange: #ff7300;
   --orange-bright: #ff8a2b;
   --orange-shadow: #b84d00;
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
   --page-width: 1240px;
   --gutter: clamp(20px, 4vw, 48px);
@@ -37,8 +38,7 @@ body {
   margin: 0;
   overflow-x: clip;
   background:
-    radial-gradient(circle at 12% 8%, rgba(255, 86, 0, 0.07), transparent 28rem),
-    var(--background);
+    radial-gradient(circle at 12% 8%, rgba(255, 86, 0, 0.07), transparent 28rem), var(--background);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 17px;
@@ -153,7 +153,9 @@ a {
   color: var(--ink-tertiary);
   font-size: 14px;
   font-weight: 600;
-  transition: color 180ms ease, background-color 180ms ease;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
 .site-nav a:hover,
@@ -175,7 +177,9 @@ a {
   color: var(--ink);
   font-size: 14px;
   font-weight: 650;
-  transition: background-color 180ms ease, border-color 180ms ease;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
 
 .header-cta:hover {
@@ -272,7 +276,9 @@ a {
   background: var(--orange);
   color: #050505;
   box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5);
-  transition: background-color 180ms ease, transform 180ms ease;
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
 }
 
 a.button-primary:hover {
@@ -393,7 +399,12 @@ a.button-primary:hover {
   width: 78%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 96, 0, 0.31), rgba(255, 68, 0, 0.08) 44%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 96, 0, 0.31),
+    rgba(255, 68, 0, 0.08) 44%,
+    transparent 70%
+  );
   filter: blur(18px);
   animation: glow-breathe 5.5s ease-in-out infinite;
 }
@@ -406,9 +417,7 @@ a.button-primary:hover {
   position: relative;
   isolation: isolate;
   aspect-ratio: 1350 / 2760;
-  filter:
-    drop-shadow(0 42px 40px rgba(0, 0, 0, 0.64))
-    drop-shadow(0 12px 16px rgba(0, 0, 0, 0.52));
+  filter: drop-shadow(0 42px 40px rgba(0, 0, 0, 0.64)) drop-shadow(0 12px 16px rgba(0, 0, 0, 0.52));
 }
 
 .phone-screen {
@@ -686,7 +695,9 @@ a.button-primary:hover {
   z-index: 5;
   pointer-events: none;
   border-radius: inherit;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), inset 0 -80px 120px rgba(0, 0, 0, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -80px 120px rgba(0, 0, 0, 0.34);
 }
 
 .chapter-phone {
@@ -864,7 +875,10 @@ a.button-primary:hover {
   border: 1px solid var(--edge);
   border-radius: var(--radius-card);
   background: var(--surface);
-  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
 }
 
 .native-grid li:hover {
@@ -962,7 +976,12 @@ a.button-primary:hover {
   left: 50%;
   width: 880px;
   height: 520px;
-  background: radial-gradient(ellipse, rgba(255, 83, 0, 0.22), rgba(255, 83, 0, 0.055) 44%, transparent 70%);
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 83, 0, 0.22),
+    rgba(255, 83, 0, 0.055) 44%,
+    transparent 70%
+  );
   filter: blur(15px);
   transform: translate(-50%, -50%);
 }
@@ -993,9 +1012,7 @@ a.button-primary:hover {
 
 .legal-page,
 .support-page {
-  background:
-    radial-gradient(circle at 50% 0, rgba(255, 82, 0, 0.09), transparent 32rem),
-    #000;
+  background: radial-gradient(circle at 50% 0, rgba(255, 82, 0, 0.09), transparent 32rem), #000;
 }
 
 .legal-article {
@@ -1027,8 +1044,7 @@ a.button-primary:hover {
   border: 1px solid rgba(255, 115, 0, 0.22);
   border-radius: 28px;
   background:
-    radial-gradient(circle at 10% 0, rgba(255, 115, 0, 0.1), transparent 50%),
-    var(--surface);
+    radial-gradient(circle at 10% 0, rgba(255, 115, 0, 0.1), transparent 50%), var(--surface);
 }
 
 .legal-summary > p {
@@ -1150,9 +1166,10 @@ a.button-primary:hover {
   border: 1px solid rgba(255, 115, 0, 0.26);
   border-radius: 30px;
   background:
-    radial-gradient(circle at 80% 5%, rgba(255, 115, 0, 0.19), transparent 50%),
-    var(--surface);
-  transition: border-color 180ms ease, transform 180ms ease;
+    radial-gradient(circle at 80% 5%, rgba(255, 115, 0, 0.19), transparent 50%), var(--surface);
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .support-contact-card:hover {
@@ -1236,7 +1253,9 @@ a.button-primary:hover {
   color: var(--orange);
   font-family: var(--font-mono);
   font-size: 20px;
-  transition: transform 180ms ease, background-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease;
 }
 
 .faq-list details[open] summary::after {
@@ -1913,9 +1932,7 @@ a.button-primary:hover {
   min-height: 620px;
   overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(255, 94, 0, 0.055), transparent 31rem),
-    #000;
+  background: radial-gradient(circle at 50% 48%, rgba(255, 94, 0, 0.055), transparent 31rem), #000;
 }
 
 .story-aura {
@@ -1926,11 +1943,18 @@ a.button-primary:hover {
   width: min(64vw, 850px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 103, 0, 0.19), rgba(255, 75, 0, 0.04) 42%, transparent 69%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 103, 0, 0.19),
+    rgba(255, 75, 0, 0.04) 42%,
+    transparent 69%
+  );
   filter: blur(30px);
   opacity: 0.72;
   transform: translate(-50%, -50%);
-  transition: opacity 700ms ease, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    opacity 700ms ease,
+    transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .landing-story[data-phase="rest"] .story-aura {
@@ -1984,9 +2008,7 @@ a.button-primary:hover {
 }
 
 .story-phone .phone-shell {
-  filter:
-    drop-shadow(0 44px 42px rgba(0, 0, 0, 0.68))
-    drop-shadow(0 12px 18px rgba(0, 0, 0, 0.54));
+  filter: drop-shadow(0 44px 42px rgba(0, 0, 0, 0.68)) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.54));
 }
 
 .story-media {

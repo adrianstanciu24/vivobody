@@ -7,8 +7,8 @@
 //  with the intensity legend. No headings or stat strips.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct ConsistencyWidget: Widget {
@@ -35,7 +35,9 @@ struct ConsistencyWidgetView: View {
 
     /// Pro-gated: the app mirrors the entitlement into the App Group;
     /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool { WidgetEntitlement.isPro }
+    private var isPro: Bool {
+        WidgetEntitlement.isPro
+    }
 
     var body: some View {
         Group {

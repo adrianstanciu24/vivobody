@@ -60,7 +60,6 @@ import AVFoundation
 
 @MainActor
 enum Sounds {
-
     enum Effect: String, CaseIterable {
         case click, commit, alert
         case finishExercise = "finish-exercise"
@@ -71,7 +70,9 @@ enum Sounds {
         case rir0 = "rir-0", rir1 = "rir-1", rir2 = "rir-2"
         case rir3 = "rir-3", rir4 = "rir-4", rir5 = "rir-5"
 
-        var resourceName: String { "sfx-\(rawValue)" }
+        var resourceName: String {
+            "sfx-\(rawValue)"
+        }
 
         /// Recordings play verbatim through their own player; the rest
         /// are synthesized .caf files sharing the round-robin pool.
@@ -156,7 +157,7 @@ enum Sounds {
     }
 
     private static func loadScrubBuffers(prefix: String) -> [AVAudioPCMBuffer] {
-        (1...6).compactMap { variant in
+        (1 ... 6).compactMap { variant in
             loadBuffer(named: "\(prefix)-\(variant)", extension: "caf")
         }
     }
@@ -187,7 +188,7 @@ enum Sounds {
 
             let e = AVAudioEngine()
             let format = buffers.values.first?.format
-            voices = (0..<voiceCount).map { _ in
+            voices = (0 ..< voiceCount).map { _ in
                 Voice(player: AVAudioPlayerNode(), varispeed: AVAudioUnitVarispeed())
             }
             for voice in voices {
@@ -258,9 +259,9 @@ enum Sounds {
         nextVoice = (nextVoice + 1) % voices.count
 
         let cents = Float(max(-1, min(1, pitch))) * 600
-            + (humanize ? Float.random(in: -20...20) : 0)
+            + (humanize ? Float.random(in: -20 ... 20) : 0)
         voice.varispeed.rate = powf(2, cents / 1200)
-        voice.player.volume = humanize ? powf(10, Float.random(in: -1...1) / 20) : 1
+        voice.player.volume = humanize ? powf(10, Float.random(in: -1 ... 1) / 20) : 1
 
         voice.player.scheduleBuffer(buffer, at: nil, options: .interrupts)
         if !voice.player.isPlaying { voice.player.play() }

@@ -16,9 +16,9 @@
 //  anywhere in the run, the way the system calendar does.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct ConsistencyScreen: View {
     @Query(
@@ -35,7 +35,9 @@ struct ConsistencyScreen: View {
         })
     }
 
-    private var streak: WorkoutStreak { completedSessions.workoutStreak }
+    private var streak: WorkoutStreak {
+        completedSessions.workoutStreak
+    }
 
     /// Month starts from the current month back to the month holding
     /// the first recorded session — the record stops where the record
@@ -48,7 +50,7 @@ struct ConsistencyScreen: View {
         let firstMonth = workoutDates.min()
             .flatMap { cal.dateInterval(of: .month, for: $0)?.start } ?? thisMonth
         let span = max(cal.dateComponents([.month], from: firstMonth, to: thisMonth).month ?? 0, 0)
-        return (0...span).compactMap {
+        return (0 ... span).compactMap {
             cal.date(byAdding: .month, value: -$0, to: thisMonth)
         }
     }

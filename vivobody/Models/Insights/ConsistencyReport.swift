@@ -24,7 +24,7 @@ import Foundation
 
 // MARK: - Heatmap day
 
-nonisolated struct ConsistencyDay: Hashable, Sendable {
+nonisolated struct ConsistencyDay: Hashable {
     let date: Date
     /// Completed sets logged that calendar day (summed across sessions).
     let sets: Int
@@ -38,7 +38,7 @@ nonisolated struct ConsistencyDay: Hashable, Sendable {
 
 // MARK: - Report
 
-nonisolated struct ConsistencyReport: Sendable {
+nonisolated struct ConsistencyReport {
     /// How many weeks of history the heatmap spans (~6 months).
     static let windowWeeks = 26
     /// Trailing window for the rhythm + effort rollups.
@@ -62,8 +62,14 @@ nonisolated struct ConsistencyReport: Sendable {
     let recentSessions: Int
     let daysTrainedInWindow: Int
 
-    var hasActivity: Bool { daysTrainedInWindow > 0 }
-    var hasRecentActivity: Bool { recentSessions > 0 }
+    var hasActivity: Bool {
+        daysTrainedInWindow > 0
+    }
+
+    var hasRecentActivity: Bool {
+        recentSessions > 0
+    }
+
     var rirCoverage: Double {
         guard rirEligibleSets > 0 else { return 0 }
         return Double(rirLoggedSets) / Double(rirEligibleSets)
@@ -73,11 +79,11 @@ nonisolated struct ConsistencyReport: Sendable {
     /// the thresholds directly.
     static func level(forSets sets: Int) -> Int {
         switch sets {
-        case ..<1:    return 0
-        case 1...5:   return 1
-        case 6...11:  return 2
-        case 12...17: return 3
-        default:      return 4
+        case ..<1: 0
+        case 1 ... 5: 1
+        case 6 ... 11: 2
+        case 12 ... 17: 3
+        default: 4
         }
     }
 }
@@ -85,7 +91,7 @@ nonisolated struct ConsistencyReport: Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Build the consistency report as of `now`.
     func consistency(now: Date = Date()) -> ConsistencyReport {
         AnalyticsAccumulator.history(
@@ -134,15 +140,15 @@ nonisolated extension AnalyticsAccumulator {
 
         var weeks: [[ConsistencyDay]] = []
         var daysTrained = 0
-        weekLoop: for w in 0..<ConsistencyReport.windowWeeks {
+        weekLoop: for w in 0 ..< ConsistencyReport.windowWeeks {
             guard !isCancelled() else { break }
             var column: [ConsistencyDay] = []
-            for d in 0..<7 {
+            for d in 0 ..< 7 {
                 guard !isCancelled() else { break weekLoop }
                 let date = calendar.date(byAdding: .day, value: w * 7 + d, to: gridStart) ?? gridStart
                 let sets = setsByDay[date] ?? 0
                 let inRange = date <= today
-                if inRange && sets > 0 { daysTrained += 1 }
+                if inRange, sets > 0 { daysTrained += 1 }
                 column.append(
                     ConsistencyDay(
                         date: date,
@@ -177,11 +183,13 @@ nonisolated extension AnalyticsAccumulator {
             guard date >= recentStart, date < recentEnd, date <= now else { continue }
             recentSessions += 1
             for replay in session.exercises
-            where replay.exercise.modality == .dynamicStrength
-                && replay.exercise.trackingMode == .reps {
+                where replay.exercise.modality == .dynamicStrength
+                && replay.exercise.trackingMode == .reps
+            {
                 guard !isCancelled() else { break recentSessionLoop }
                 for set in replay.exercise.sets
-                where set.isAnalyticsEligible && set.reps > 0 {
+                    where set.isAnalyticsEligible && set.reps > 0
+                {
                     guard !isCancelled() else { break recentSessionLoop }
                     rirEligibleSets += 1
                     if set.rirLogged {
@@ -197,7 +205,7 @@ nonisolated extension AnalyticsAccumulator {
             ? Double(rirSum) / Double(rirLoggedSets)
             : nil
 
-        let trainedWeekStarts: Set<Date> = Set<Date>(setsByDay.compactMap { entry in
+        let trainedWeekStarts = Set<Date>(setsByDay.compactMap { entry in
             let (day, sets) = entry
             guard sets > 0, day <= today else { return nil }
             return calendar.dateInterval(of: .weekOfYear, for: day)?.start

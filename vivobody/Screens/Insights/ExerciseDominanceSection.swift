@@ -11,8 +11,8 @@
 //  panel keeps exercise type from reading as another ranking row.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct ExerciseDominanceSection: View {
     let board: ExerciseDominanceBoard
@@ -31,7 +31,7 @@ struct ExerciseDominanceSection: View {
                 trailingIsInProgress: compositionIsBuilding
             )
 
-            if !board.hasAny && split.totalSets == 0 {
+            if !board.hasAny, split.totalSets == 0 {
                 InsightBuildingCard(
                     title: "Composition starts with your lifts",
                     detail: "Complete strength sets to reveal which lifts shape this four-week block and how the classified work is distributed.",
@@ -318,7 +318,6 @@ struct ExerciseDominanceSection: View {
         .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
     }
 
-    @ViewBuilder
     private var confidenceChip: some View {
         Text(confidenceLabel)
             .font(Typography.metricMicro)
@@ -397,11 +396,11 @@ struct ExerciseDominanceSection: View {
 
     private func allocationColor(rank: Int) -> Color {
         switch rank {
-        case 0: return Tint.primary
-        case 1: return Ink.primary.opacity(0.62)
-        case 2: return Ink.primary.opacity(0.46)
-        case 3: return Ink.primary.opacity(0.32)
-        default: return Ink.quaternary
+        case 0: Tint.primary
+        case 1: Ink.primary.opacity(0.62)
+        case 2: Ink.primary.opacity(0.46)
+        case 3: Ink.primary.opacity(0.32)
+        default: Ink.quaternary
         }
     }
 

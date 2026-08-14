@@ -32,7 +32,9 @@ import SwiftUI
 struct WebPage: Identifiable {
     let url: URL
 
-    var id: String { url.absoluteString }
+    var id: String {
+        url.absoluteString
+    }
 
     /// Fails for anything `SFSafariViewController` cannot open. The
     /// controller accepts only http and https and raises on other
@@ -67,14 +69,16 @@ struct SafariView: UIViewControllerRepresentable {
         return controller
     }
 
-    func updateUIViewController(_ controller: SFSafariViewController, context: Context) {
+    func updateUIViewController(_: SFSafariViewController, context: Context) {
         // The coordinator is created once but `dismiss` is a fresh
         // value each update, so refresh the closure instead of
         // capturing a stale one at creation.
         context.coordinator.onFinish = { dismiss() }
     }
 
-    func makeCoordinator() -> Coordinator { Coordinator() }
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 
     /// Bridges the Done button back into SwiftUI. Presented inside a
     /// SwiftUI sheet the controller is a child view controller, not a
@@ -83,7 +87,7 @@ struct SafariView: UIViewControllerRepresentable {
     final class Coordinator: NSObject, SFSafariViewControllerDelegate {
         var onFinish: () -> Void = {}
 
-        func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        func safariViewControllerDidFinish(_: SFSafariViewController) {
             onFinish()
         }
     }

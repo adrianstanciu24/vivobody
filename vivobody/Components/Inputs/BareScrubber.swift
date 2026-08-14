@@ -22,8 +22,8 @@
 //    • Release springs the rubber-band back to zero.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct BareScrubber: View {
     @Binding var value: Double
@@ -89,7 +89,7 @@ struct BareScrubber: View {
     /// Called once when a real interaction has fully settled. For a flick,
     /// this means the flywheel coast completed or was interrupted—not the
     /// earlier finger-up event. Callers use this to flush coalesced state.
-    var onScrubEnded: () -> Void = { }
+    var onScrubEnded: () -> Void = {}
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -216,83 +216,83 @@ struct BareScrubber: View {
 
     var body: some View {
         heroLayout
-        .overlay(alignment: .trailing) {
-            if showsRail {
-                GraduationRail(
-                    value: value,
-                    step: step,
-                    spacing: max(pointsPerStep, 7),
-                    visible: isDragging || isCoasting
-                )
-            }
-        }
-        .overlay(alignment: .top) {
-            if wallFlashEdge == .top { wallFlashLine }
-        }
-        .overlay(alignment: .bottom) {
-            if wallFlashEdge == .bottom { wallFlashLine }
-        }
-        .offset(y: rubberOffset + nudgeOffset)
-        .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
-        .animation(valueAnimation, value: value)
-        .animation(dragStateAnimation, value: isDragging)
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: showsScrubHint)
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: hasScrubbed)
-        .contentShape(Rectangle().inset(by: -hitSlop))
-        .gesture(scrubGesture)
-        .onChange(of: gestureActive) { _, active in
-            // A cancelled drag never reaches onEnded; without this
-            // sweep the next touch would inherit a stale anchor and
-            // teleport the value.
-            if !active, isDragging || axisClaim != .undecided {
-                axisClaim = .undecided
-                if isDragging {
-                    finishDrag()
-                    onScrubEnded()
+            .overlay(alignment: .trailing) {
+                if showsRail {
+                    GraduationRail(
+                        value: value,
+                        step: step,
+                        spacing: max(pointsPerStep, 7),
+                        visible: isDragging || isCoasting
+                    )
                 }
             }
-            if !active {
-                ignoresCurrentGesture = false
+            .overlay(alignment: .top) {
+                if wallFlashEdge == .top { wallFlashLine }
             }
-        }
-        .onAppear { if showsScrubHint, performsScrubNudge { startNudge() } }
-        .onChange(of: showsScrubHint) { _, active in
-            if active {
-                if performsScrubNudge { startNudge() }
-            } else {
-                // Leaving the active surface: abort any in-flight
-                // nudge so its tick never lands on an off-screen card.
+            .overlay(alignment: .bottom) {
+                if wallFlashEdge == .bottom { wallFlashLine }
+            }
+            .offset(y: rubberOffset + nudgeOffset)
+            .scaleEffect(reduceMotion ? 1.0 : (isDragging ? 1.04 : 1.0))
+            .animation(valueAnimation, value: value)
+            .animation(dragStateAnimation, value: isDragging)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: showsScrubHint)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: hasScrubbed)
+            .contentShape(Rectangle().inset(by: -hitSlop))
+            .gesture(scrubGesture)
+            .onChange(of: gestureActive) { _, active in
+                // A cancelled drag never reaches onEnded; without this
+                // sweep the next touch would inherit a stale anchor and
+                // teleport the value.
+                if !active, isDragging || axisClaim != .undecided {
+                    axisClaim = .undecided
+                    if isDragging {
+                        finishDrag()
+                        onScrubEnded()
+                    }
+                }
+                if !active {
+                    ignoresCurrentGesture = false
+                }
+            }
+            .onAppear { if showsScrubHint, performsScrubNudge { startNudge() } }
+            .onChange(of: showsScrubHint) { _, active in
+                if active {
+                    if performsScrubNudge { startNudge() }
+                } else {
+                    // Leaving the active surface: abort any in-flight
+                    // nudge so its tick never lands on an off-screen card.
+                    nudgeTask?.cancel()
+                    nudgeOffset = 0
+                }
+            }
+            .onChange(of: cancellationID) { _, _ in
+                // The owner changes this token only when it is already saving,
+                // archiving, or discarding the current in-memory state.
+                cancelActiveInteraction(notifyEnd: false)
+            }
+            .onChange(of: scenePhase) { oldPhase, phase in
+                guard oldPhase == .active, phase != .active else { return }
+                // Stop the producer before AppRoot's active→inactive save.
+                // No coast detent can then land after the forced save.
+                cancelActiveInteraction(notifyEnd: false)
+            }
+            .onDisappear {
                 nudgeTask?.cancel()
-                nudgeOffset = 0
+                cancelActiveInteraction()
             }
-        }
-        .onChange(of: cancellationID) { _, _ in
-            // The owner changes this token only when it is already saving,
-            // archiving, or discarding the current in-memory state.
-            cancelActiveInteraction(notifyEnd: false)
-        }
-        .onChange(of: scenePhase) { oldPhase, phase in
-            guard oldPhase == .active, phase != .active else { return }
-            // Stop the producer before AppRoot's active→inactive save.
-            // No coast detent can then land after the forced save.
-            cancelActiveInteraction(notifyEnd: false)
-        }
-        .onDisappear {
-            nudgeTask?.cancel()
-            cancelActiveInteraction()
-        }
-        // Give assistive technologies a real ranged control rather than a
-        // custom element that only looks adjustable. This supplies finite
-        // min/max/current values to the accessibility runtime (and avoids
-        // the `nan` value some inspectors emitted for the custom action).
-        .accessibilityRepresentation {
-            Slider(value: accessibilitySliderBinding, in: range, step: step) {
-                Text(accessibilityLabel ?? "Adjustable value")
+            // Give assistive technologies a real ranged control rather than a
+            // custom element that only looks adjustable. This supplies finite
+            // min/max/current values to the accessibility runtime (and avoids
+            // the `nan` value some inspectors emitted for the custom action).
+            .accessibilityRepresentation {
+                Slider(value: accessibilitySliderBinding, in: range, step: step) {
+                    Text(accessibilityLabel ?? "Adjustable value")
+                }
+                .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
+                .accessibilityHint("Swipe up or down to change")
             }
-            .accessibilityValue("\(formattedValue)\(unit.isEmpty ? "" : " \(unit)")")
-            .accessibilityHint("Swipe up or down to change")
-        }
-        .accessibilityRespondsToUserInteraction(true)
+            .accessibilityRespondsToUserInteraction(true)
     }
 
     // MARK: - Hero layout
@@ -321,7 +321,7 @@ struct BareScrubber: View {
 
     @ViewBuilder
     private var hintChevrons: some View {
-        if showsScrubHint && !hasScrubbed {
+        if showsScrubHint, !hasScrubbed {
             ScrubHintChevrons()
                 .transition(.opacity)
         }
@@ -630,7 +630,7 @@ struct BareScrubber: View {
                 }
             }
             var interval = 0.028
-            for _ in 0..<total {
+            for _ in 0 ..< total {
                 try? await Task.sleep(for: .seconds(interval))
                 if Task.isCancelled { return }
                 let next = value + direction * step
@@ -739,7 +739,9 @@ struct BareScrubber: View {
         }
     }
 
-    private var formattedValue: String { format(value) }
+    private var formattedValue: String {
+        format(value)
+    }
 
     private var accessibilitySliderBinding: Binding<Double> {
         Binding(
@@ -807,7 +809,7 @@ private struct GraduationRail: View {
             let fraction = CGFloat(stepsFromZero - Double(baseIndex))
             let reach = Int(midY / spacing) + 2
 
-            for offset in -reach...reach {
+            for offset in -reach ... reach {
                 let index = baseIndex + offset
                 // Marks ride WITH the finger: value up → strip up, so
                 // higher detents start below the needle and get pulled
@@ -839,42 +841,42 @@ private struct GraduationRail: View {
 }
 
 #if DEBUG
-// Regression canary for the fitsWidth feedback loop: a 3-digit kg
-// value at hero size, first-rendered inside the pager's card width.
-// The number must scale down to the gutter width and the full-width
-// bar below must hug the red container — if either pokes past the
-// border, the availableWidth measurement is leaking again.
-#Preview("Fits width · worst case") {
-    struct Harness: View {
-        @State private var weight: Double = 192.5
-        var body: some View {
-            VStack(alignment: .leading, spacing: Space.lg) {
-                BareScrubber(
-                    value: $weight,
-                    range: 0...275,
-                    step: 2.5,
-                    pointsPerStep: 8,
-                    fontSize: 104,
-                    unit: "kg",
-                    unitFontSize: 18,
-                    accessibilityLabel: "Weight",
-                    fitsWidth: true
-                )
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.orange.opacity(0.35))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
+    // Regression canary for the fitsWidth feedback loop: a 3-digit kg
+    // value at hero size, first-rendered inside the pager's card width.
+    // The number must scale down to the gutter width and the full-width
+    // bar below must hug the red container — if either pokes past the
+    // border, the availableWidth measurement is leaking again.
+    #Preview("Fits width · worst case") {
+        struct Harness: View {
+            @State private var weight: Double = 192.5
+            var body: some View {
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    BareScrubber(
+                        value: $weight,
+                        range: 0 ... 275,
+                        step: 2.5,
+                        pointsPerStep: 8,
+                        fontSize: 104,
+                        unit: "kg",
+                        unitFontSize: 18,
+                        accessibilityLabel: "Weight",
+                        fitsWidth: true
+                    )
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.orange.opacity(0.35))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                }
+                .padding(.horizontal, 20)
+                .frame(width: 334)
+                .border(Color.red.opacity(0.5))
             }
-            .padding(.horizontal, 20)
-            .frame(width: 334)
-            .border(Color.red.opacity(0.5))
         }
+        return Harness()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.ignoresSafeArea())
+            .preferredColorScheme(.dark)
     }
-    return Harness()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.ignoresSafeArea())
-        .preferredColorScheme(.dark)
-}
 #endif
 
 /// Animated up/down chevrons that bob in their respective directions

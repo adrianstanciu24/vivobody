@@ -37,7 +37,7 @@ nonisolated struct ReadinessLine: Hashable {
     }
 }
 
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// The readiness verdict as of `now`, or nil when nothing has been
     /// logged yet (cold start). Pass an already-computed load report
     /// (e.g. the `SessionAnalytics` cache) to skip the session replay.
@@ -46,7 +46,7 @@ extension Array where Element == WorkoutSession {
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> ReadinessLine? {
-        guard let last = compactMap({ $0.completedAt }).max() else { return nil }
+        guard let last = compactMap(\.completedAt).max() else { return nil }
 
         let days = calendar.dateComponents(
             [.day],
@@ -85,13 +85,13 @@ extension Array where Element == WorkoutSession {
     private static func formingLine(days: Int) -> ReadinessLine {
         switch days {
         case ..<2:
-            return ReadinessLine(lead: "One day's rest.", tail: "Ready when you are.")
-        case 2...3:
-            return ReadinessLine(lead: "Fresh — \(days) days' rest.", tail: "Good to go.")
-        case 4...6:
-            return ReadinessLine(lead: "\(days) days off.", tail: "Ease back in.")
+            ReadinessLine(lead: "One day's rest.", tail: "Ready when you are.")
+        case 2 ... 3:
+            ReadinessLine(lead: "Fresh — \(days) days' rest.", tail: "Good to go.")
+        case 4 ... 6:
+            ReadinessLine(lead: "\(days) days off.", tail: "Ease back in.")
         default:
-            return ReadinessLine(lead: "It's been \(days) days.", tail: "Welcome back.")
+            ReadinessLine(lead: "It's been \(days) days.", tail: "Welcome back.")
         }
     }
 }

@@ -75,6 +75,12 @@ Scripts/check.sh
 # Fast architecture pass while iterating
 /usr/bin/python3 Scripts/check_architecture.py
 
+# Format Swift source files (brew install swiftformat)
+swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/
+
+# Check Swift formatting without modifying files
+swiftformat --dryrun vivobody/ vivobodyWidgets/ VivoKit/Sources/
+
 # Manual maintenance report (not scheduled)
 /usr/bin/python3 Scripts/quality_scan.py --output .verify/quality-scan.md
 

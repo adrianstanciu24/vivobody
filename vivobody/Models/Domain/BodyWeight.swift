@@ -35,7 +35,7 @@ final class BodyWeightEntry: Identifiable {
 
 // MARK: - Collection helpers
 
-extension Array where Element == BodyWeightEntry {
+extension [BodyWeightEntry] {
     /// Entry whose date matches a given calendar day, when present.
     /// Used by the log sheet to detect that "today" already has a
     /// record so saving updates it instead of inserting a duplicate.

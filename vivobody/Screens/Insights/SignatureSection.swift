@@ -21,8 +21,8 @@
 //  emblem is its signature.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 private func signatureShareLabel(_ share: Double) -> String {
     guard share > 0 else { return "0%" }
@@ -110,7 +110,6 @@ struct SignatureSection: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-
 }
 
 /// The bloom's accessibility-text counterpart. It keeps the visual
@@ -189,7 +188,6 @@ private struct SignatureAccessibilitySpectrum: View {
         .padding(Space.xl)
         .contentCard()
     }
-
 }
 
 // MARK: - Training signature emblem
@@ -363,7 +361,7 @@ private struct TrainingSignatureView: View {
         )
         let leaf = SignatureEmblemTuning.petalPath(length: length, halfWidth: halfWidth)
 
-        for i in 0..<count {
+        for i in 0 ..< count {
             let angle = (Double(i) / Double(count)) * 2 * .pi - .pi / 2
             var transform = CGAffineTransform(translationX: center.x, y: center.y)
             transform = transform.rotated(by: angle)
@@ -695,7 +693,7 @@ private struct TrainingSignatureView: View {
         var sparks = context
         sparks.blendMode = .plusLighter
         let burn = 0.28
-        for index in 0..<6 {
+        for index in 0 ..< 6 {
             let seed = Double(index)
             let drift = animated ? time * (0.010 + seed * 0.002) : 0
             let angle = seed * 2.399963 + 0.35 + drift
@@ -880,13 +878,12 @@ private struct TrainingSignatureView: View {
             .filter { $0.volumeShare > 0 }
             .map { "\($0.group.displayName) \(signatureShareSpokenLabel($0.volumeShare))" }
             .joined(separator: ", ")
-        let volume: String
-        if !signature.hasSignature {
-            volume = "No signature data yet. Complete a strength set on an exercise with muscle targets to begin."
+        let volume = if !signature.hasSignature {
+            "No signature data yet. Complete a strength set on an exercise with muscle targets to begin."
         } else if signature.hasVolume {
-            volume = "All-time volume split: \(split). Balance \(Int((signature.balance * 100).rounded())) percent, with \(signature.trainedGroupCount) of 6 regions represented."
+            "All-time volume split: \(split). Balance \(Int((signature.balance * 100).rounded())) percent, with \(signature.trainedGroupCount) of 6 regions represented."
         } else {
-            volume = "No completed muscle-targeted strength work yet."
+            "No completed muscle-targeted strength work yet."
         }
         return "Training signature. \(volume) \(signature.identityLine). All-time average \(cadence) sessions per week. Dashed outlines show an even six-way split."
     }

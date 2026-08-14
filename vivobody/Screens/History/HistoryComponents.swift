@@ -10,9 +10,9 @@
 //  strip draws the same day.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 // MARK: - Weekly hero
 
@@ -99,7 +99,8 @@ struct WeeklyHero: View {
     var trendDelta: some View {
         if comparison.thisWeek.volumeAvailability == .complete,
            comparison.lastWeek.volumeAvailability == .complete,
-           comparison.lastWeek.volume > 0 {
+           comparison.lastWeek.volume > 0
+        {
             let pct = Int((comparison.volumeDelta / comparison.lastWeek.volume * 100).rounded())
             HStack(spacing: 3) {
                 Image(systemName: pct >= 0 ? "arrow.up.right" : "arrow.down.right")
@@ -155,11 +156,13 @@ struct WeekCadenceStrip: View {
     let workoutDays: Set<Date>
     let prDays: Set<Date>
 
-    var calendar: Calendar { .current }
+    var calendar: Calendar {
+        .current
+    }
 
     var weekDays: [Date] {
         guard let interval = calendar.dateInterval(of: .weekOfYear, for: Date()) else { return [] }
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: interval.start) }
+        return (0 ..< 7).compactMap { calendar.date(byAdding: .day, value: $0, to: interval.start) }
     }
 
     var body: some View {
@@ -306,7 +309,9 @@ struct SessionRow: View {
     let hasPR: Bool
     let prominent: Bool
 
-    var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
+    var muscleTags: [MuscleGroup] {
+        session.distinctMuscleGroupsInOrder
+    }
 
     var body: some View {
         HStack(alignment: .center, spacing: Space.lg) {
@@ -408,10 +413,10 @@ struct SessionRow: View {
 
     var workoutTitle: String {
         switch muscleTags.count {
-        case 0: return "Workout"
-        case 1: return "\(muscleTags[0].displayName) day"
-        case 2: return "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
-        default: return "Full body"
+        case 0: "Workout"
+        case 1: "\(muscleTags[0].displayName) day"
+        case 2: "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
+        default: "Full body"
         }
     }
 
@@ -510,8 +515,7 @@ struct HistoryDateGroup: Identifiable {
         }
 
         return buckets.map { bucket, bucketSessions in
-            let isRich: Bool
-            if case .today = bucket { isRich = true } else { isRich = false }
+            let isRich = if case .today = bucket { true } else { false }
             return HistoryDateGroup(
                 id: id(for: bucket),
                 title: title(for: bucket),
@@ -524,11 +528,11 @@ struct HistoryDateGroup: Identifiable {
 
     fileprivate static func id(for bucket: Bucket) -> String {
         switch bucket {
-        case .today: return "today"
-        case .yesterday: return "yesterday"
-        case .thisWeek: return "thisWeek"
-        case .lastWeek: return "lastWeek"
-        case .month(let date): return "month-\(Int(date.timeIntervalSince1970))"
+        case .today: "today"
+        case .yesterday: "yesterday"
+        case .thisWeek: "thisWeek"
+        case .lastWeek: "lastWeek"
+        case let .month(date): "month-\(Int(date.timeIntervalSince1970))"
         }
     }
 
@@ -538,7 +542,7 @@ struct HistoryDateGroup: Identifiable {
         case .yesterday: return "Yesterday"
         case .thisWeek: return "Earlier this week"
         case .lastWeek: return "Last week"
-        case .month(let date):
+        case let .month(date):
             let f = DateFormatter()
             f.dateFormat = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .year) ? "LLLL" : "LLLL yyyy"
             return f.string(from: date)

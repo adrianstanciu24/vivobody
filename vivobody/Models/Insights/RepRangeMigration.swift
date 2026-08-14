@@ -26,14 +26,14 @@ import Foundation
 
 // MARK: - Verdict
 
-nonisolated enum RepDriftVerdict: Hashable, Sendable {
+nonisolated enum RepDriftVerdict: Hashable {
     case towardStrength
     case stable
     case towardEndurance
 }
 
 /// How much evidence supports the fitted rep-range direction.
-nonisolated enum RepTrendConfidence: Hashable, Sendable {
+nonisolated enum RepTrendConfidence: Hashable {
     case insufficient
     case emerging
     case established
@@ -42,8 +42,11 @@ nonisolated enum RepTrendConfidence: Hashable, Sendable {
 // MARK: - Weekly point
 
 /// One week's average-reps sample on the migration curve.
-nonisolated struct RepRangePoint: Identifiable, Hashable, Sendable {
-    var id: Date { weekStart }
+nonisolated struct RepRangePoint: Identifiable, Hashable {
+    var id: Date {
+        weekStart
+    }
+
     /// Calendar week start (Sunday/Monday per current calendar) the
     /// bucket's sets fall into.
     let weekStart: Date
@@ -55,7 +58,7 @@ nonisolated struct RepRangePoint: Identifiable, Hashable, Sendable {
 
 // MARK: - Report
 
-nonisolated struct RepRangeMigrationReport: Sendable {
+nonisolated struct RepRangeMigrationReport {
     static let minimumTrendWeeks = 3
     static let minimumTrendSets = 12
     static let establishedTrendWeeks = 6
@@ -76,16 +79,20 @@ nonisolated struct RepRangeMigrationReport: Sendable {
     /// Completed sets represented by all weekly points.
     let totalSets: Int
     /// `true` once the minimum active-week and set-count floors are met.
-    var hasTrend: Bool { confidence != .insufficient }
+    var hasTrend: Bool {
+        confidence != .insufficient
+    }
 
     /// `true` when there's at least one weekly sample.
-    var hasData: Bool { !points.isEmpty }
+    var hasData: Bool {
+        !points.isEmpty
+    }
 }
 
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Average-reps-per-set trend over the trailing `weeks` (default
     /// 12) as of `now`. Buckets completed `.reps` sets by locale-aware
     /// calendar week, fits a set-weighted least-squares line, and
@@ -136,12 +143,13 @@ nonisolated extension AnalyticsAccumulator {
                 of: .weekOfYear,
                 for: date
             )?.start,
-                  validWeekStarts.contains(weekStart) else { continue }
+                validWeekStarts.contains(weekStart) else { continue }
 
             for replay in session.exercises {
                 guard !isCancelled() else { return cancelled }
                 guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps else {
+                      replay.exercise.trackingMode == .reps
+                else {
                     continue
                 }
                 for set in replay.exercise.sets {
@@ -175,15 +183,16 @@ nonisolated extension AnalyticsAccumulator {
         }
 
         let totalSets = points.reduce(0) { $0 + $1.sets }
-        let confidence: RepTrendConfidence
-        if points.count >= RepRangeMigrationReport.establishedTrendWeeks,
-           totalSets >= RepRangeMigrationReport.establishedTrendSets {
-            confidence = .established
+        let confidence: RepTrendConfidence = if points.count >= RepRangeMigrationReport.establishedTrendWeeks,
+                                                totalSets >= RepRangeMigrationReport.establishedTrendSets
+        {
+            .established
         } else if points.count >= RepRangeMigrationReport.minimumTrendWeeks,
-                  totalSets >= RepRangeMigrationReport.minimumTrendSets {
-            confidence = .emerging
+                  totalSets >= RepRangeMigrationReport.minimumTrendSets
+        {
+            .emerging
         } else {
-            confidence = .insufficient
+            .insufficient
         }
 
         // Thin samples retain their observed weekly averages but do
@@ -233,13 +242,12 @@ nonisolated extension AnalyticsAccumulator {
         }
         let slopePerWeek = den > 0 ? num / den : 0
 
-        let verdict: RepDriftVerdict
-        if slopePerWeek >= 0.1 {
-            verdict = .towardEndurance
+        let verdict: RepDriftVerdict = if slopePerWeek >= 0.1 {
+            .towardEndurance
         } else if slopePerWeek <= -0.1 {
-            verdict = .towardStrength
+            .towardStrength
         } else {
-            verdict = .stable
+            .stable
         }
 
         guard !isCancelled() else { return cancelled }

@@ -182,7 +182,8 @@ struct RotatableBodyModel: UIViewRepresentable {
         if let scnView = uiView.viewWithTag(Self.viewTag) as? SCNView {
             if context.coordinator.appliedChannels != channels
                 || context.coordinator.appliedTheme != theme,
-               let scene = scnView.scene {
+                let scene = scnView.scene
+            {
                 BodyModelScene.apply(channels: channels, theme: theme, to: scene)
                 context.coordinator.appliedChannels = channels
                 context.coordinator.appliedTheme = theme
@@ -194,7 +195,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         Coordinator()
     }
 
-    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+    static func dismantleUIView(_: UIView, coordinator: Coordinator) {
         coordinator.stopMotion()
     }
 

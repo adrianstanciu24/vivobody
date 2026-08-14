@@ -18,9 +18,9 @@
 //  the catalog with half-typed entries.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 enum CatalogEditorTarget: Identifiable {
     case create
@@ -32,9 +32,9 @@ enum CatalogEditorTarget: Identifiable {
 
     var id: String {
         switch self {
-        case .create:               return "create"
-        case .edit(let item):       return "edit-\(item.id)"
-        case .duplicate(let item):  return "duplicate-\(item.id)"
+        case .create: "create"
+        case let .edit(item): "edit-\(item.id)"
+        case let .duplicate(item): "duplicate-\(item.id)"
         }
     }
 }
@@ -46,7 +46,9 @@ private enum CatalogPicker: String, Identifiable {
     case movementPattern
     case loadMode
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 }
 
 private enum CatalogValidationAnchor: Hashable {
@@ -86,16 +88,18 @@ struct CustomExerciseEditorSheet: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     init(target: CatalogEditorTarget) {
         self.target = target
         switch target {
         case .create:
             _draft = State(initialValue: CatalogDraft.empty)
-        case .edit(let item):
+        case let .edit(item):
             _draft = State(initialValue: CatalogDraft(from: item))
-        case .duplicate(let item):
+        case let .duplicate(item):
             _draft = State(initialValue: CatalogDraft(
                 duplicating: item,
                 defaultWeight: item.defaultWeightSeed
@@ -113,22 +117,22 @@ struct CustomExerciseEditorSheet: View {
     /// load interpretation in place would merge an unrelated movement
     /// into the bundled exercise's history key.
     private var isBundledEdit: Bool {
-        guard case .edit(let item) = target else { return false }
+        guard case let .edit(item) = target else { return false }
         return item.catalogID != nil && !item.isUserCreated
     }
 
     /// The bundled exercise a duplicate draft was prefilled from.
     /// Drives the history-split note and the unique-name prefill.
     private var duplicateSource: ExerciseCatalogItem? {
-        guard case .duplicate(let item) = target else { return nil }
+        guard case let .duplicate(item) = target else { return nil }
         return item
     }
 
     private var editorTitle: String {
         if isBundledEdit { return "Exercise Defaults" }
         switch target {
-        case .create:    return "New Exercise"
-        case .edit:      return "Edit Exercise"
+        case .create: return "New Exercise"
+        case .edit: return "Edit Exercise"
         case .duplicate: return "Duplicate Exercise"
         }
     }
@@ -166,7 +170,7 @@ struct CustomExerciseEditorSheet: View {
     }
 
     private var editedItemID: UUID? {
-        guard case .edit(let item) = target else { return nil }
+        guard case let .edit(item) = target else { return nil }
         return item.id
     }
 
@@ -335,7 +339,8 @@ struct CustomExerciseEditorSheet: View {
                 .id(CatalogValidationAnchor.loadMode)
 
             if draft.loadMode == .bodyweightAdded
-                || draft.loadMode == .assistanceSubtracted {
+                || draft.loadMode == .assistanceSubtracted
+            {
                 bodyweightFractionField
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
@@ -397,7 +402,8 @@ struct CustomExerciseEditorSheet: View {
                 .accessibilityHidden(true)
 
             if showsValidationErrors,
-               draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+               draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            {
                 validationMessage("Enter an exercise name.")
             }
         }
@@ -421,7 +427,8 @@ struct CustomExerciseEditorSheet: View {
 
             if showsValidationErrors,
                draft.modality.requiresPrimaryMuscle,
-               !hasValidMuscleRoles {
+               !hasValidMuscleRoles
+            {
                 validationMessage("Choose a Primary muscle in the selected muscle group.")
             } else if showsValidationErrors, !hasValidMuscleRoles {
                 validationMessage("Choose at least one muscle.")
@@ -750,7 +757,8 @@ struct CustomExerciseEditorSheet: View {
 
             if showsValidationErrors,
                !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-               !hasUniqueSearchTerms {
+               !hasUniqueSearchTerms
+            {
                 validationMessage("Name and aliases must be unique across the exercise catalog.")
             }
         }
@@ -779,9 +787,9 @@ struct CustomExerciseEditorSheet: View {
 
     private var availableTrackingModes: [TrackingMode] {
         switch draft.modality {
-        case .dynamicStrength, .power: return [.reps]
-        case .isometricStrength: return [.duration]
-        case .conditioning, .mobility: return TrackingMode.allCases
+        case .dynamicStrength, .power: [.reps]
+        case .isometricStrength: [.duration]
+        case .conditioning, .mobility: TrackingMode.allCases
         }
     }
 
@@ -805,7 +813,7 @@ struct CustomExerciseEditorSheet: View {
             valueColumn(label: "Bodyweight carried") {
                 BareScrubber(
                     value: $draft.bodyweightFraction,
-                    range: 0...1,
+                    range: 0 ... 1,
                     step: 0.05,
                     pointsPerStep: 14,
                     fontSize: 40,
@@ -882,9 +890,9 @@ struct CustomExerciseEditorSheet: View {
     /// A small sentence-case label above a bare scrubbing numeral —
     /// the same composition the template editor uses, so the two
     /// editors read identically.
-    private func valueColumn<S: View>(
+    private func valueColumn(
         label: String,
-        @ViewBuilder scrubber: () -> S
+        @ViewBuilder scrubber: () -> some View
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             Text(label)
@@ -952,7 +960,7 @@ struct CustomExerciseEditorSheet: View {
             // heuristic would otherwise silently reset, say, a 5-rep
             // deadlift default.
             var sourceDefaultReps: Int? = nil
-            if case .duplicate(let source) = target {
+            if case let .duplicate(source) = target {
                 sourceDefaultReps = source.defaultReps
             }
             let item = ExerciseCatalogItem(
@@ -979,7 +987,7 @@ struct CustomExerciseEditorSheet: View {
             modelContext.insert(item)
             savedItem = item
 
-        case .edit(let item):
+        case let .edit(item):
             if isBundledEdit {
                 let weightChanged = draft.defaultWeight != item.defaultWeight
                 item.defaultWeight = draft.defaultWeight
@@ -1441,12 +1449,12 @@ struct CatalogDraft {
     }
 }
 
-extension String {
+private extension String {
     /// Whitespace-collapsed, lowercased comparison key shared by the
     /// editor's global name/alias uniqueness check and the duplicate
     /// name prefill, so a suggested "(Custom)" name is guaranteed to
     /// satisfy validation.
-    fileprivate var catalogSearchTermKey: String {
+    var catalogSearchTermKey: String {
         split(whereSeparator: \.isWhitespace)
             .joined(separator: " ")
             .lowercased()

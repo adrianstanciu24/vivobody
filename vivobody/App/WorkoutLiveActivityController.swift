@@ -9,9 +9,9 @@
 //  never fan out into a task per detent.
 //
 
-import VivoKit
 import ActivityKit
 import Foundation
+import VivoKit
 
 @MainActor
 enum WorkoutLiveActivityController {
@@ -184,7 +184,8 @@ enum WorkoutLiveActivityController {
 
             while !Task.isCancelled,
                   generation == deliveryGeneration,
-                  let state = queuedUpdateState {
+                  let state = queuedUpdateState
+            {
                 queuedUpdateState = nil
                 if lastDeliveredState == state { continue }
 

@@ -10,8 +10,8 @@
 //  surrounding spacing on `hasContent`.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct SessionIntensityLine: View {
     let session: WorkoutSession

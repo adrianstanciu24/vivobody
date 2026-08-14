@@ -30,7 +30,7 @@ import Foundation
 /// meshes (one region paints several `_L`/`_R` nodes) but finer than
 /// `MuscleGroup`. Stored as a raw string on exercises so the set can
 /// grow without a migration.
-nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum Muscle: String, Codable, Hashable, CaseIterable {
     // Chest
     case pectoralisMajorClavicular
     case pectoralisMajorSternocostal
@@ -103,64 +103,64 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .pectoralisMajorClavicular: return "Upper Chest"
-        case .pectoralisMajorSternocostal: return "Mid / Lower Chest"
-        case .pectoralisMinor: return "Pectoralis Minor"
-        case .serratus: return "Serratus"
-        case .lats: return "Lats"
-        case .trapeziusUpper: return "Upper Traps"
-        case .trapeziusMiddle: return "Middle Traps"
-        case .trapeziusLower: return "Lower Traps"
-        case .levatorScapulae: return "Levator Scapulae"
-        case .rhomboids: return "Rhomboids"
-        case .teresMajor: return "Teres Major"
-        case .quadratusLumborum: return "Quadratus Lumborum"
-        case .lumbarExtensors: return "Lumbar Extensors"
-        case .deltoidAnterior: return "Front Delts"
-        case .deltoidLateral: return "Side Delts"
-        case .deltoidPosterior: return "Rear Delts"
-        case .externalRotators: return "External Rotators"
-        case .subscapularis: return "Subscapularis"
-        case .supraspinatus: return "Supraspinatus"
-        case .bicepsBrachii: return "Biceps"
-        case .brachialis: return "Brachialis"
-        case .brachioradialis: return "Brachioradialis"
-        case .forearmPronators: return "Forearm Pronators"
-        case .supinator: return "Supinator"
-        case .flexorCarpiRadialis: return "Flexor Carpi Radialis"
-        case .flexorCarpiUlnaris: return "Flexor Carpi Ulnaris"
-        case .extensorCarpiRadialis: return "Radial Wrist Extensors"
-        case .extensorCarpiUlnaris: return "Extensor Carpi Ulnaris"
-        case .fingerFlexors: return "Finger Flexors"
-        case .fingerExtensors: return "Finger Extensors"
-        case .triceps: return "Triceps"
-        case .abs: return "Abs"
-        case .obliques: return "Obliques"
-        case .rectusFemoris: return "Rectus Femoris"
-        case .vasti: return "Vasti"
-        case .bicepsFemoris: return "Biceps Femoris"
-        case .medialHamstrings: return "Medial Hamstrings"
-        case .gluteMax: return "Glute Max"
-        case .gluteMed: return "Glute Med"
-        case .gluteMin: return "Glute Min"
-        case .tensorFasciaeLatae: return "TFL"
-        case .piriformis: return "Piriformis"
-        case .obturatorInternusGemelli: return "Obturator Internus + Gemelli"
-        case .obturatorExternus: return "Obturator Externus"
-        case .quadratusFemoris: return "Quadratus Femoris"
-        case .gastrocnemius: return "Gastrocnemius"
-        case .soleus: return "Soleus"
-        case .flexorHallucisLongus: return "Big-Toe Flexor"
-        case .adductorMagnus: return "Adductor Magnus"
-        case .adductorLongusBrevis: return "Adductor Longus / Brevis"
-        case .gracilis: return "Gracilis"
-        case .pectineus: return "Pectineus"
-        case .iliopsoas: return "Iliopsoas"
-        case .sartorius: return "Sartorius"
-        case .tibialisAnterior: return "Tibialis Anterior"
-        case .fibularisLongusBrevis: return "Fibularis Longus / Brevis"
-        case .fibularisTertius: return "Fibularis Tertius"
-        case .toeExtensors: return "Toe Extensors"
+        case .pectoralisMajorClavicular: "Upper Chest"
+        case .pectoralisMajorSternocostal: "Mid / Lower Chest"
+        case .pectoralisMinor: "Pectoralis Minor"
+        case .serratus: "Serratus"
+        case .lats: "Lats"
+        case .trapeziusUpper: "Upper Traps"
+        case .trapeziusMiddle: "Middle Traps"
+        case .trapeziusLower: "Lower Traps"
+        case .levatorScapulae: "Levator Scapulae"
+        case .rhomboids: "Rhomboids"
+        case .teresMajor: "Teres Major"
+        case .quadratusLumborum: "Quadratus Lumborum"
+        case .lumbarExtensors: "Lumbar Extensors"
+        case .deltoidAnterior: "Front Delts"
+        case .deltoidLateral: "Side Delts"
+        case .deltoidPosterior: "Rear Delts"
+        case .externalRotators: "External Rotators"
+        case .subscapularis: "Subscapularis"
+        case .supraspinatus: "Supraspinatus"
+        case .bicepsBrachii: "Biceps"
+        case .brachialis: "Brachialis"
+        case .brachioradialis: "Brachioradialis"
+        case .forearmPronators: "Forearm Pronators"
+        case .supinator: "Supinator"
+        case .flexorCarpiRadialis: "Flexor Carpi Radialis"
+        case .flexorCarpiUlnaris: "Flexor Carpi Ulnaris"
+        case .extensorCarpiRadialis: "Radial Wrist Extensors"
+        case .extensorCarpiUlnaris: "Extensor Carpi Ulnaris"
+        case .fingerFlexors: "Finger Flexors"
+        case .fingerExtensors: "Finger Extensors"
+        case .triceps: "Triceps"
+        case .abs: "Abs"
+        case .obliques: "Obliques"
+        case .rectusFemoris: "Rectus Femoris"
+        case .vasti: "Vasti"
+        case .bicepsFemoris: "Biceps Femoris"
+        case .medialHamstrings: "Medial Hamstrings"
+        case .gluteMax: "Glute Max"
+        case .gluteMed: "Glute Med"
+        case .gluteMin: "Glute Min"
+        case .tensorFasciaeLatae: "TFL"
+        case .piriformis: "Piriformis"
+        case .obturatorInternusGemelli: "Obturator Internus + Gemelli"
+        case .obturatorExternus: "Obturator Externus"
+        case .quadratusFemoris: "Quadratus Femoris"
+        case .gastrocnemius: "Gastrocnemius"
+        case .soleus: "Soleus"
+        case .flexorHallucisLongus: "Big-Toe Flexor"
+        case .adductorMagnus: "Adductor Magnus"
+        case .adductorLongusBrevis: "Adductor Longus / Brevis"
+        case .gracilis: "Gracilis"
+        case .pectineus: "Pectineus"
+        case .iliopsoas: "Iliopsoas"
+        case .sartorius: "Sartorius"
+        case .tibialisAnterior: "Tibialis Anterior"
+        case .fibularisLongusBrevis: "Fibularis Longus / Brevis"
+        case .fibularisTertius: "Fibularis Tertius"
+        case .toeExtensors: "Toe Extensors"
         }
     }
 
@@ -172,22 +172,22 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         switch self {
         case .pectoralisMajorClavicular, .pectoralisMajorSternocostal,
              .pectoralisMinor, .serratus:
-            return .chest
+            .chest
         case .lats, .trapeziusUpper, .trapeziusMiddle, .trapeziusLower,
              .levatorScapulae, .rhomboids, .teresMajor, .quadratusLumborum,
              .lumbarExtensors:
-            return .back
+            .back
         case .deltoidAnterior, .deltoidLateral, .deltoidPosterior,
              .externalRotators, .subscapularis, .supraspinatus:
-            return .shoulders
+            .shoulders
         case .bicepsBrachii, .brachialis, .brachioradialis,
              .forearmPronators, .supinator, .flexorCarpiRadialis,
              .flexorCarpiUlnaris, .extensorCarpiRadialis,
              .extensorCarpiUlnaris, .fingerFlexors, .fingerExtensors,
              .triceps:
-            return .arms
+            .arms
         case .abs, .obliques:
-            return .core
+            .core
         case .rectusFemoris, .vasti, .bicepsFemoris, .medialHamstrings,
              .gluteMax, .gluteMed, .gluteMin, .tensorFasciaeLatae,
              .piriformis, .obturatorInternusGemelli, .obturatorExternus,
@@ -196,126 +196,126 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
              .adductorLongusBrevis, .gracilis, .pectineus, .iliopsoas,
              .sartorius, .tibialisAnterior, .fibularisLongusBrevis,
              .fibularisTertius, .toeExtensors:
-            return .legs
+            .legs
         }
     }
 
     /// Mesh base-names (without the `_L`/`_R` suffix) this region
     /// covers in BodyModel.scn. Exact archive spelling — see file
     /// header.
-    nonisolated private var nodeBaseNames: [String] {
+    private nonisolated var nodeBaseNames: [String] {
         switch self {
         case .pectoralisMajorClavicular:
-            return ["Pectoralis_Major_Clavicular"]
+            ["Pectoralis_Major_Clavicular"]
         case .pectoralisMajorSternocostal:
-            return ["Pectoralis_Major_Sternocostal"]
+            ["Pectoralis_Major_Sternocostal"]
         case .pectoralisMinor:
-            return ["Pectoralis_Minor"]
+            ["Pectoralis_Minor"]
         case .serratus:
-            return ["Serratus_Anterior"]
+            ["Serratus_Anterior"]
         case .lats:
-            return ["Latissimus_Dorsi"]
+            ["Latissimus_Dorsi"]
         case .trapeziusUpper:
-            return ["Trapezius_Upper"]
+            ["Trapezius_Upper"]
         case .trapeziusMiddle:
-            return ["Trapezius_Middle"]
+            ["Trapezius_Middle"]
         case .trapeziusLower:
-            return ["Trapezius_Lower"]
+            ["Trapezius_Lower"]
         case .levatorScapulae:
-            return ["Levator_Scapulaes"]
+            ["Levator_Scapulaes"]
         case .rhomboids:
-            return ["Rhomboideus_Major", "Rhomboideus_Minor"]
+            ["Rhomboideus_Major", "Rhomboideus_Minor"]
         case .teresMajor:
-            return ["Teres_Major"]
+            ["Teres_Major"]
         case .quadratusLumborum:
-            return ["Quadratus_Lumborum"]
+            ["Quadratus_Lumborum"]
         case .lumbarExtensors:
-            return []
+            []
         case .deltoidAnterior:
-            return ["Deltoid_Anterior"]
+            ["Deltoid_Anterior"]
         case .deltoidLateral:
-            return ["Deltoid_Lateral"]
+            ["Deltoid_Lateral"]
         case .deltoidPosterior:
-            return ["Deltoid_Posterior"]
+            ["Deltoid_Posterior"]
         case .externalRotators:
-            return ["Teres_Minor", "Infraspinatus"]
+            ["Teres_Minor", "Infraspinatus"]
         case .subscapularis, .supraspinatus:
-            return []
+            []
         case .bicepsBrachii:
-            return ["Biceps"]
+            ["Biceps"]
         case .brachialis:
-            return ["Brachialis"]
+            ["Brachialis"]
         case .brachioradialis:
-            return ["Brachioradialis"]
+            ["Brachioradialis"]
         case .forearmPronators, .supinator:
-            return []
+            []
         case .flexorCarpiRadialis:
-            return ["Flexor_Carpi_Radialis"]
+            ["Flexor_Carpi_Radialis"]
         case .flexorCarpiUlnaris:
-            return ["Flexor_Carpi_Ulnaris"]
+            ["Flexor_Carpi_Ulnaris"]
         case .extensorCarpiRadialis:
-            return [
+            [
                 "Extensor_Carpi_Radialis_Longus",
                 "Extensor_Carpi_Radialis_Brevis",
             ]
         case .extensorCarpiUlnaris:
-            return ["Extensor_Carpi_Ulnaris"]
+            ["Extensor_Carpi_Ulnaris"]
         case .fingerFlexors:
-            return [
+            [
                 "Flexor_Digitorum_Superficialis",
                 "Flexor_Digitorum_Profundus",
             ]
         case .fingerExtensors:
-            return ["Extensor_Digitorum_Communis"]
+            ["Extensor_Digitorum_Communis"]
         case .triceps:
-            return ["Triceps"]
+            ["Triceps"]
         case .abs:
-            return ["Rectus_Abdomini"]
+            ["Rectus_Abdomini"]
         case .obliques:
-            return ["External_Oblique", "Internal_Oblique"]
+            ["External_Oblique", "Internal_Oblique"]
         case .rectusFemoris:
-            return ["Rectus_Femoris"]
+            ["Rectus_Femoris"]
         case .vasti:
-            return ["Vastus_Lateralis", "Vastus_Medialis", "Vastus_Intermedius"]
+            ["Vastus_Lateralis", "Vastus_Medialis", "Vastus_Intermedius"]
         case .bicepsFemoris:
-            return ["Biceps_femoris"]
+            ["Biceps_femoris"]
         case .medialHamstrings:
-            return ["Semitendinosus", "Semimembranosus"]
+            ["Semitendinosus", "Semimembranosus"]
         case .gluteMax:
-            return ["Gluteus_Maximus"]
+            ["Gluteus_Maximus"]
         case .gluteMed:
-            return ["Gluteus_Medius"]
+            ["Gluteus_Medius"]
         case .gluteMin, .piriformis, .obturatorInternusGemelli,
              .obturatorExternus, .quadratusFemoris:
-            return []
+            []
         case .tensorFasciaeLatae:
-            return ["Tensor_Fascia_Latae"]
+            ["Tensor_Fascia_Latae"]
         case .gastrocnemius:
-            return ["Gastrocnemius"]
+            ["Gastrocnemius"]
         case .soleus:
-            return ["Soleus"]
+            ["Soleus"]
         case .flexorHallucisLongus:
-            return ["Flexor_Hallucis_Longus"]
+            ["Flexor_Hallucis_Longus"]
         case .adductorMagnus:
-            return ["Adductor_Mangus"]
+            ["Adductor_Mangus"]
         case .adductorLongusBrevis:
-            return ["Adductor_Longus", "Adductor_Brevis"]
+            ["Adductor_Longus", "Adductor_Brevis"]
         case .gracilis:
-            return ["Gracilis"]
+            ["Gracilis"]
         case .pectineus:
-            return ["Pectineus"]
+            ["Pectineus"]
         case .iliopsoas:
-            return ["Psoas_Major", "Iliacus"]
+            ["Psoas_Major", "Iliacus"]
         case .sartorius:
-            return ["Sartorius"]
+            ["Sartorius"]
         case .tibialisAnterior:
-            return ["Tibialis_Anterior"]
+            ["Tibialis_Anterior"]
         case .fibularisLongusBrevis:
-            return ["Peroneus_Longus", "Peroneus_Brevis"]
+            ["Peroneus_Longus", "Peroneus_Brevis"]
         case .fibularisTertius:
-            return ["Peroneus_Tertius"]
+            ["Peroneus_Tertius"]
         case .toeExtensors:
-            return ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"]
+            ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"]
         }
     }
 
@@ -328,7 +328,9 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
 
     /// Whether BodyModel.scn can paint this region. Ten modeled
     /// regions have no corresponding surface mesh.
-    nonisolated var isVisualized: Bool { !nodeBaseNames.isEmpty }
+    nonisolated var isVisualized: Bool {
+        !nodeBaseNames.isEmpty
+    }
 }
 
 // MARK: - Muscle role
@@ -336,16 +338,16 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
 /// A muscle's categorical contribution to an exercise. Role is the
 /// authored fact; its anatomy emphasis and hard-set volume credit are
 /// deliberately independent projections.
-nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable {
     case primary
     case secondary
     case stabilizer
 
     nonisolated var displayName: String {
         switch self {
-        case .primary: return "Primary"
-        case .secondary: return "Secondary"
-        case .stabilizer: return "Stabilizer"
+        case .primary: "Primary"
+        case .secondary: "Secondary"
+        case .stabilizer: "Stabilizer"
         }
     }
 
@@ -354,9 +356,9 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
     /// not be consumed as development credit.
     nonisolated var snapshotValue: Double {
         switch self {
-        case .primary: return 1
-        case .secondary: return 0.5
-        case .stabilizer: return 0.2
+        case .primary: 1
+        case .secondary: 0.5
+        case .stabilizer: 0.2
         }
     }
 
@@ -364,9 +366,9 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
     /// that a stabilizer participates without claiming hard-set volume.
     nonisolated var anatomyIntensity: Double {
         switch self {
-        case .primary: return 1
-        case .secondary: return 0.5
-        case .stabilizer: return 0.2
+        case .primary: 1
+        case .secondary: 0.5
+        case .stabilizer: 0.2
         }
     }
 
@@ -374,9 +376,9 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
     /// Stabilization alone stays listed but earns no hypertrophy volume.
     nonisolated var volumeCredit: Double {
         switch self {
-        case .primary: return 1
-        case .secondary: return 0.5
-        case .stabilizer: return 0
+        case .primary: 1
+        case .secondary: 0.5
+        case .stabilizer: 0
         }
     }
 
@@ -403,7 +405,7 @@ nonisolated enum MuscleRole: String, Codable, Hashable, CaseIterable, Sendable {
 nonisolated extension Muscle {
     /// Ordered categorical muscle roles for one exercise.
     nonisolated struct Involvement {
-        nonisolated struct Contribution: Hashable, Sendable {
+        nonisolated struct Contribution: Hashable {
             let muscle: Muscle
             let role: MuscleRole
 
@@ -412,9 +414,17 @@ nonisolated extension Muscle {
                 self.role = role
             }
 
-            nonisolated var snapshotValue: Double { role.snapshotValue }
-            nonisolated var anatomyIntensity: Double { role.anatomyIntensity }
-            nonisolated var volumeCredit: Double { role.volumeCredit }
+            nonisolated var snapshotValue: Double {
+                role.snapshotValue
+            }
+
+            nonisolated var anatomyIntensity: Double {
+                role.anatomyIntensity
+            }
+
+            nonisolated var volumeCredit: Double {
+                role.volumeCredit
+            }
         }
 
         let contributions: [Contribution]
@@ -482,20 +492,33 @@ nonisolated extension Muscle {
             Dictionary(uniqueKeysWithValues: contributions.map { ($0.muscle, $0.volumeCredit) })
         }
 
-        func role(for muscle: Muscle) -> MuscleRole? { roles[muscle] }
-        func volumeCredit(for muscle: Muscle) -> Double { volumeCredits[muscle] ?? 0 }
+        func role(for muscle: Muscle) -> MuscleRole? {
+            roles[muscle]
+        }
+
+        func volumeCredit(for muscle: Muscle) -> Double {
+            volumeCredits[muscle] ?? 0
+        }
 
         var primary: [Muscle] {
             contributions.filter { $0.role == .primary }.map(\.muscle)
         }
+
         var secondary: [Muscle] {
             contributions.filter { $0.role == .secondary }.map(\.muscle)
         }
+
         var stabilizers: [Muscle] {
             contributions.filter { $0.role == .stabilizer }.map(\.muscle)
         }
-        var hasPrimary: Bool { contributions.contains { $0.role == .primary } }
-        var isEmpty: Bool { contributions.isEmpty }
+
+        var hasPrimary: Bool {
+            contributions.contains { $0.role == .primary }
+        }
+
+        var isEmpty: Bool {
+            contributions.isEmpty
+        }
     }
 
     /// Categorical muscle involvement for an exercise, resolved by name

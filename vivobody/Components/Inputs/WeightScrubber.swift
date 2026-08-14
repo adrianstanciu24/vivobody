@@ -57,7 +57,7 @@ struct WeightScrubber: View {
     var centersValue: Bool = false
     /// Forwarded to the concrete scrubber so callers can flush coalesced
     /// persistence after the interaction settles.
-    var onScrubEnded: () -> Void = { }
+    var onScrubEnded: () -> Void = {}
 
     enum Purpose {
         case strength
@@ -76,7 +76,6 @@ struct WeightScrubber: View {
         WeightUnit(rawValue: unitRaw) ?? .lb
     }
 
-    @ViewBuilder
     var body: some View {
         switch presentation {
         case .card:
@@ -136,7 +135,7 @@ struct WeightScrubber: View {
         }
         switch purpose {
         case .strength: return unit.strengthRange
-        case .body:     return unit.bodyWeightRange
+        case .body: return unit.bodyWeightRange
         }
     }
 
@@ -146,7 +145,7 @@ struct WeightScrubber: View {
         }
         switch purpose {
         case .strength: return unit.strengthStep
-        case .body:     return unit.bodyWeightStep
+        case .body: return unit.bodyWeightStep
         }
     }
 }

@@ -45,14 +45,20 @@ struct WeeklyComparison: Hashable {
     let lastWeek: WeeklyTotals
 
     /// Workout-count delta. Positive = more workouts than last week.
-    var workoutsDelta: Int { thisWeek.workouts - lastWeek.workouts }
+    var workoutsDelta: Int {
+        thisWeek.workouts - lastWeek.workouts
+    }
 
     /// Set-count delta.
-    var setsDelta: Int { thisWeek.sets - lastWeek.sets }
+    var setsDelta: Int {
+        thisWeek.sets - lastWeek.sets
+    }
 
     /// Volume delta in canonical lb. Caller routes through
     /// WeightFormatter for display in the user's unit.
-    var volumeDelta: Double { thisWeek.volume - lastWeek.volume }
+    var volumeDelta: Double {
+        thisWeek.volume - lastWeek.volume
+    }
 
     /// Convenience: was anything logged at all in either window?
     /// Empty state on the Me-tab card defers to this so a brand-new
@@ -64,7 +70,7 @@ struct WeeklyComparison: Hashable {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Slice the archive into the current and prior calendar weeks
     /// (relative to `now`) and roll each into a `WeeklyTotals`. Only
     /// archived sessions (with `completedAt != nil`) contribute —
@@ -107,7 +113,8 @@ extension Array where Element == WorkoutSession {
         calendar: Calendar = .current
     ) -> [WeeklyTotals] {
         guard weeks > 0,
-              let thisWeekRange = calendar.dateInterval(of: .weekOfYear, for: now) else {
+              let thisWeekRange = calendar.dateInterval(of: .weekOfYear, for: now)
+        else {
             return []
         }
 
@@ -122,7 +129,7 @@ extension Array where Element == WorkoutSession {
             ranges.append(range)
         }
 
-        var totals: [WeeklyTotals] = Array<WeeklyTotals>(repeating: WeeklyTotals.zero, count: ranges.count)
+        var totals = [WeeklyTotals](repeating: WeeklyTotals.zero, count: ranges.count)
         for session in self {
             guard let completed = session.completedAt else { continue }
             if let idx = ranges.firstIndex(where: { $0.contains(completed) }) {

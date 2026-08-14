@@ -1,106 +1,106 @@
 #if DEBUG
 //
-//  PlateVisualizerGallery.swift
-//  vivobody
+    //  PlateVisualizerGallery.swift
+    //  vivobody
 //
-//  Drag the scrubber, watch the plates arrange themselves on the bar.
-//  This is the gallery composition that proves the components compose.
+    //  Drag the scrubber, watch the plates arrange themselves on the bar.
+    //  This is the gallery composition that proves the components compose.
 //
 
-import VivoKit
-import SwiftUI
+    import SwiftUI
+    import VivoKit
 
-struct PlateVisualizerGallery: View {
-    @State private var weight: Double = 135
-    @State private var weightStep: Double = 5
+    struct PlateVisualizerGallery: View {
+        @State private var weight: Double = 135
+        @State private var weightStep: Double = 5
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.xxl) {
-            header
+        var body: some View {
+            VStack(alignment: .leading, spacing: Space.xxl) {
+                header
 
-            VStack(alignment: .leading, spacing: Space.md) {
-                Text("INCREMENT")
+                VStack(alignment: .leading, spacing: Space.md) {
+                    Text("INCREMENT")
+                        .font(Typography.metricMicro)
+                        .tracking(2)
+                        .foregroundStyle(.white.opacity(0.45))
+
+                    StepSelector(
+                        selection: $weightStep,
+                        options: [1.0, 2.5, 5.0]
+                    ) { value in
+                        value.truncatingRemainder(dividingBy: 1) == 0
+                            ? "\(Int(value)) lb"
+                            : String(format: "%.1f lb", value)
+                    }
+                }
+
+                NumberScrubber(
+                    value: $weight,
+                    range: 0 ... 600,
+                    step: weightStep,
+                    pointsPerStep: pointsPerStep(for: weightStep),
+                    unit: "lb",
+                    label: "weight"
+                )
+
+                Spacer().frame(height: 8)
+
+                PlateVisualizer(weight: weight, barWeight: 45, unit: .lb)
+                    .frame(maxWidth: .infinity)
+
+                Spacer()
+            }
+            .padding(.horizontal, Space.xl)
+            .padding(.top, Space.section)
+            .padding(.bottom, Space.xxl)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(Color.black.ignoresSafeArea())
+            .onAppear { Haptics.prepare() }
+        }
+
+        private var header: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("PLATE VISUALIZER")
                     .font(Typography.metricMicro)
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.45))
-
-                StepSelector(
-                    selection: $weightStep,
-                    options: [1.0, 2.5, 5.0]
-                ) { value in
-                    value.truncatingRemainder(dividingBy: 1) == 0
-                        ? "\(Int(value)) lb"
-                        : String(format: "%.1f lb", value)
-                }
+                Text("Load the bar.")
+                    .font(Typography.display)
+                    .foregroundStyle(.white)
+                Text("Scrub the weight — plates slide on and off symmetrically. Real colors, real sizes, real plate math.")
+                    .font(Typography.sectionLabel)
+                    .foregroundStyle(.white.opacity(0.45))
+                    .padding(.top, 2)
             }
-
-            NumberScrubber(
-                value: $weight,
-                range: 0...600,
-                step: weightStep,
-                pointsPerStep: pointsPerStep(for: weightStep),
-                unit: "lb",
-                label: "weight"
-            )
-
-            Spacer().frame(height: 8)
-
-            PlateVisualizer(weight: weight, barWeight: 45, unit: .lb)
-                .frame(maxWidth: .infinity)
-
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.horizontal, Space.xl)
-        .padding(.top, Space.section)
-        .padding(.bottom, Space.xxl)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+
+        private func pointsPerStep(for step: Double) -> CGFloat {
+            switch step {
+            case 1: 6
+            case 2.5: 10
+            default: 12
+            }
+        }
+    }
+
+    #Preview("Plate Visualizer") {
+        PlateVisualizerGallery()
+            .preferredColorScheme(.dark)
+    }
+
+    #Preview("Plate Visualizer — kg") {
+        VStack(spacing: Space.section) {
+            PlateVisualizer(weight: 20, barWeight: 20, unit: .kg)
+            PlateVisualizer(weight: 60, barWeight: 20, unit: .kg)
+            PlateVisualizer(weight: 100, barWeight: 20, unit: .kg)
+            PlateVisualizer(weight: 142.5, barWeight: 20, unit: .kg)
+            PlateVisualizer(weight: 180, barWeight: 20, unit: .kg)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black.ignoresSafeArea())
-        .onAppear { Haptics.prepare() }
-    }
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("PLATE VISUALIZER")
-                .font(Typography.metricMicro)
-                .tracking(2)
-                .foregroundStyle(.white.opacity(0.45))
-            Text("Load the bar.")
-                .font(Typography.display)
-                .foregroundStyle(.white)
-            Text("Scrub the weight — plates slide on and off symmetrically. Real colors, real sizes, real plate math.")
-                .font(Typography.sectionLabel)
-                .foregroundStyle(.white.opacity(0.45))
-                .padding(.top, 2)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func pointsPerStep(for step: Double) -> CGFloat {
-        switch step {
-        case 1: return 6
-        case 2.5: return 10
-        default: return 12
-        }
-    }
-}
-
-#Preview("Plate Visualizer") {
-    PlateVisualizerGallery()
         .preferredColorScheme(.dark)
-}
-
-#Preview("Plate Visualizer — kg") {
-    VStack(spacing: Space.section) {
-        PlateVisualizer(weight: 20, barWeight: 20, unit: .kg)
-        PlateVisualizer(weight: 60, barWeight: 20, unit: .kg)
-        PlateVisualizer(weight: 100, barWeight: 20, unit: .kg)
-        PlateVisualizer(weight: 142.5, barWeight: 20, unit: .kg)
-        PlateVisualizer(weight: 180, barWeight: 20, unit: .kg)
     }
-    .padding()
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.black.ignoresSafeArea())
-    .preferredColorScheme(.dark)
-}
 
 #endif

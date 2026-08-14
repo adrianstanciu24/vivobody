@@ -9,9 +9,9 @@
 //  keep the compact heatmap calendar-readable on every device.
 //
 
-import VivoKit
-import SwiftUI
 import Charts
+import SwiftUI
+import VivoKit
 
 struct ConsistencySection: View {
     let report: ConsistencyReport
@@ -241,9 +241,9 @@ struct ConsistencySection: View {
     }
 
     private var activeWeeksInWindow: Int {
-        report.weeks.filter { week in
+        report.weeks.count(where: { week in
             week.contains { $0.isInRange && $0.sets > 0 }
-        }.count
+        })
     }
 
     private func formatRIR(_ value: Double) -> String {
@@ -305,7 +305,7 @@ struct ConsistencySection: View {
     private func weeklySparkAccessibilityValue(
         _ weekly: [WeeklyVolumePoint]
     ) -> String {
-        let active = weekly.filter { $0.sets > 0 }.count
+        let active = weekly.count(where: { $0.sets > 0 })
         let latest = weekly.last?.sets ?? 0
         let peak = weekly.map(\.sets).max() ?? 0
         return "\(active) active \(active == 1 ? "week" : "weeks"). Last full week, \(setLabel(latest)). Peak week, \(setLabel(peak))."
@@ -325,7 +325,7 @@ struct ConsistencySection: View {
             Text("Less")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
-            ForEach(0...4, id: \.self) { level in
+            ForEach(0 ... 4, id: \.self) { level in
                 RoundedRectangle(cornerRadius: 2, style: .continuous)
                     .fill(heatmapFill(level: level))
                     .frame(width: 10, height: 10)
@@ -340,7 +340,10 @@ struct ConsistencySection: View {
 /// One bar of the weekly-volume sparkline: total completed sets in a
 /// given week of the heatmap window.
 private struct WeeklyVolumePoint: Identifiable {
-    var id: Int { week }
+    var id: Int {
+        week
+    }
+
     let week: Int
     let sets: Int
 }
@@ -349,11 +352,11 @@ private struct WeeklyVolumePoint: Identifiable {
 /// to the full accent on a big day.
 private func heatmapFill(level: Int) -> Color {
     switch level {
-    case 1:  return Tint.primary.opacity(0.30)
-    case 2:  return Tint.primary.opacity(0.55)
-    case 3:  return Tint.primary.opacity(0.78)
-    case 4:  return Tint.primary
-    default: return Surface.cardTint
+    case 1: Tint.primary.opacity(0.30)
+    case 2: Tint.primary.opacity(0.55)
+    case 3: Tint.primary.opacity(0.78)
+    case 4: Tint.primary
+    default: Surface.cardTint
     }
 }
 
@@ -370,8 +373,14 @@ private struct ConsistencyHeatmap: View {
     private let spacing: CGFloat = 3
     private let weekdayGutter: CGFloat = 14
     private let anchorGap: CGFloat = 4
-    private var rowCount: Int { max(weeks.map(\.count).max() ?? 0, 1) }
-    private var columnCount: Int { max(weeks.count, 1) }
+    private var rowCount: Int {
+        max(weeks.map(\.count).max() ?? 0, 1)
+    }
+
+    private var columnCount: Int {
+        max(weeks.count, 1)
+    }
+
     private var columns: [GridItem] {
         Array(
             repeating: GridItem(.flexible(minimum: 2), spacing: spacing),
@@ -384,7 +393,7 @@ private struct ConsistencyHeatmap: View {
             monthAnchorRow
 
             LazyVGrid(columns: columns, spacing: spacing) {
-                ForEach(0..<rowCount, id: \.self) { dayIndex in
+                ForEach(0 ..< rowCount, id: \.self) { dayIndex in
                     ForEach(weeks.indices, id: \.self) { weekIndex in
                         if weeks[weekIndex].indices.contains(dayIndex) {
                             dayCell(weeks[weekIndex][dayIndex])
@@ -440,7 +449,7 @@ private struct ConsistencyHeatmap: View {
                     / CGFloat(columnCount)
             )
 
-            ForEach(0..<rowCount, id: \.self) { index in
+            ForEach(0 ..< rowCount, id: \.self) { index in
                 Text(weekdayLabel(at: index))
                     .font(.system(size: 8, weight: .medium, design: .monospaced))
                     .foregroundStyle(Ink.tertiary)
@@ -476,14 +485,14 @@ private struct ConsistencyHeatmap: View {
     }
 
     private var accessibilitySummary: String {
-        let activeWeeks = weeks.filter { week in
+        let activeWeeks = weeks.count(where: { week in
             week.contains { $0.isInRange && $0.sets > 0 }
-        }.count
+        })
         let recentDays = weeks.suffix(4)
-            .flatMap { $0 }
-            .filter { $0.isInRange && $0.sets > 0 }
-            .count
-        let latest = weeks.flatMap { $0 }
+            .flatMap(\.self)
+            .count(where: { $0.isInRange && $0.sets > 0 })
+
+        let latest = weeks.flatMap(\.self)
             .filter { $0.isInRange && $0.sets > 0 }
             .max { $0.date < $1.date }
 
@@ -514,7 +523,10 @@ private struct ConsistencyHeatmap: View {
 }
 
 private struct HeatmapMonthAnchor: Identifiable {
-    var id: Int { weekIndex }
+    var id: Int {
+        weekIndex
+    }
+
     let weekIndex: Int
     let label: String
 }

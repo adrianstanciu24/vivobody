@@ -13,8 +13,8 @@
 //  "Remove measured max" (which returns the row to empty).
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct OneRepMaxEditorSheet: View {
     let initialValue: Double
@@ -28,7 +28,9 @@ struct OneRepMaxEditorSheet: View {
     /// Zero is the honest seed when no absolute effective load is
     /// available (for example, bodyweight has not been measured). It
     /// must never be persisted as a measured one-rep max.
-    private var canSave: Bool { draft.isFinite && draft > 0 }
+    private var canSave: Bool {
+        draft.isFinite && draft > 0
+    }
 
     init(
         initialValue: Double,

@@ -40,7 +40,9 @@ final class WorkoutSessionController {
 
     /// Lets AppRoot suppress the MiniBar while the retained draft is
     /// only waiting for the workout sheet to finish dismissing.
-    var isDiscardPending: Bool { pendingDiscardSession != nil }
+    var isDiscardPending: Bool {
+        pendingDiscardSession != nil
+    }
 
     /// Whether the ActiveWorkoutScreen is presented as a sheet.
     /// False = workout is "minimized" to the MiniBar pill. Independent
@@ -212,11 +214,10 @@ final class WorkoutSessionController {
             isWorkoutExpanded = true
             return
         }
-        let plan: [Exercise]
-        if let template, !template.orderedExercises.isEmpty {
-            plan = template.orderedExercises.map(Exercise.freshCopy(of:))
+        let plan: [Exercise] = if let template, !template.orderedExercises.isEmpty {
+            template.orderedExercises.map(Exercise.freshCopy(of:))
         } else {
-            plan = []
+            []
         }
         beginActiveWorkout(with: plan)
     }
@@ -268,7 +269,8 @@ final class WorkoutSessionController {
     /// background-built cache; before that is ready it performs one
     /// archive fetch rather than one fetch per exercise.
     private func resolvedExerciseHistory()
-        -> [String: ExerciseHistorySummary]? {
+        -> [String: ExerciseHistorySummary]?
+    {
         guard let context = modelContext else { return nil }
         return appState?.analytics.resolvedExerciseHistory(in: context)
     }
@@ -443,7 +445,7 @@ final class WorkoutSessionController {
         // Mirror the in-app superset choreography so the sheet opens
         // on the right station (no animation — this runs pre-present).
         switch outcome {
-        case .supersetPartner(let target), .supersetRoundRest(resume: let target):
+        case let .supersetPartner(target), let .supersetRoundRest(resume: target):
             if let idx = exercises.firstIndex(where: { $0.id == target.id }) {
                 session.activeExerciseIndex = idx
             }
@@ -464,7 +466,7 @@ final class WorkoutSessionController {
     func handle(_ action: IncomingAction) {
         AppDiagnostics.incomingActionReceived(kind: action.diagnosticKind)
         switch action {
-        case .openTab(let tab):
+        case let .openTab(tab):
             if tab == .insights {
                 appState?.presentInsights()
             } else {
@@ -492,7 +494,7 @@ final class WorkoutSessionController {
                 startTodaysWorkout(basedOn: sessions.first)
             }
 
-        case .startTemplate(let uuid):
+        case let .startTemplate(uuid):
             guard let context = modelContext, activeSession == nil else {
                 if activeSession != nil { isWorkoutExpanded = true }
                 return
@@ -508,10 +510,10 @@ final class WorkoutSessionController {
                 appState?.selectedTab = .library
             }
 
-        case .continueSession(let id):
+        case let .continueSession(id):
             continueWorkout(with: id)
 
-        case .showExercise(let uuid):
+        case let .showExercise(uuid):
             guard let context = modelContext else { return }
             var descriptor = FetchDescriptor<ExerciseCatalogItem>(
                 predicate: #Predicate { $0.id == uuid }

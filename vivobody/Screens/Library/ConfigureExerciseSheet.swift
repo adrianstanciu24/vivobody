@@ -16,8 +16,8 @@
 //  decides when (and whether) to write it through to SwiftData.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 /// What the configure sheet is operating on. Driven as an
 /// Identifiable so the builder can present it via `.sheet(item:)`.
@@ -29,8 +29,8 @@ enum ConfigureExerciseTarget: Identifiable {
 
     var id: String {
         switch self {
-        case .adding(let item):   return "add-\(item.id.uuidString)"
-        case .editing(let draft): return "edit-\(draft.id.uuidString)"
+        case let .adding(item): "add-\(item.id.uuidString)"
+        case let .editing(draft): "edit-\(draft.id.uuidString)"
         }
     }
 }
@@ -44,7 +44,9 @@ struct ConfigureExerciseSheet: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var sets: Int
     @State private var reps: Int
@@ -72,7 +74,7 @@ struct ConfigureExerciseSheet: View {
         self.target = target
         self.onCommit = onCommit
         switch target {
-        case .adding(let item):
+        case let .adding(item):
             name = item.name
             catalogItemID = item.id
             catalogID = item.catalogID
@@ -91,7 +93,7 @@ struct ConfigureExerciseSheet: View {
             isEditing = false
             draftID = UUID()
             originalDraft = nil
-        case .editing(let draft):
+        case let .editing(draft):
             name = draft.name
             catalogItemID = draft.catalogItemID
             catalogID = draft.catalogID
@@ -122,7 +124,7 @@ struct ConfigureExerciseSheet: View {
                     valueRow(label: "Sets") {
                         BareScrubber(
                             value: setsBinding,
-                            range: 1...12,
+                            range: 1 ... 12,
                             step: 1,
                             pointsPerStep: 18,
                             fontSize: 56,
@@ -138,7 +140,7 @@ struct ConfigureExerciseSheet: View {
                         valueRow(label: "Target reps") {
                             BareScrubber(
                                 value: repsBinding,
-                                range: 1...50,
+                                range: 1 ... 50,
                                 step: 1,
                                 pointsPerStep: 16,
                                 fontSize: 56,
@@ -215,9 +217,9 @@ struct ConfigureExerciseSheet: View {
 
     // MARK: - Value row
 
-    private func valueRow<S: View>(
+    private func valueRow(
         label: String,
-        @ViewBuilder scrubber: () -> S
+        @ViewBuilder scrubber: () -> some View
     ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text(label)

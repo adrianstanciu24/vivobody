@@ -27,9 +27,9 @@
 //  matching Library's house style.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct ExercisePickerSheet: View {
     let onPick: (ExerciseCatalogItem) -> Void
@@ -61,7 +61,9 @@ struct ExercisePickerSheet: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var query: String = ""
     @State private var editorTarget: CatalogEditorTarget?
@@ -182,7 +184,7 @@ struct ExercisePickerSheet: View {
             items.filter(\.isFavorite)
         case .core:
             items.filter { $0.group == .core }
-        case .equipment(let equipment):
+        case let .equipment(equipment):
             items.filter { $0.equipment == equipment }
         }
     }
@@ -368,7 +370,7 @@ struct ExercisePickerSheet: View {
                 Label("Edit", systemImage: "pencil")
             }
 
-            if item.catalogID != nil && !item.isUserCreated {
+            if item.catalogID != nil, !item.isUserCreated {
                 Button {
                     editorTarget = .duplicate(item)
                 } label: {

@@ -18,10 +18,7 @@ const links = [
     <nav class="site-nav" aria-label="Primary navigation">
       {
         links.map((link) => (
-          <a
-            href={link.href}
-            aria-current={currentPath === link.match ? "page" : undefined}
-          >
+          <a href={link.href} aria-current={currentPath === link.match ? "page" : undefined}>
             {link.label}
           </a>
         ))

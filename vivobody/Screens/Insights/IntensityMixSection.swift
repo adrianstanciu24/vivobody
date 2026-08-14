@@ -9,8 +9,8 @@
 //  section now stays focused on mix and direction.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct IntensityMixSection: View {
     let mix: IntensityMix
@@ -357,9 +357,9 @@ struct IntensityMixSection: View {
     private var trendLabel: String {
         guard migration.hasTrend else { return "Building trend" }
         switch migration.verdict {
-        case .towardStrength:  return "Lower-rep shift"
+        case .towardStrength: return "Lower-rep shift"
         case .towardEndurance: return "Higher-rep shift"
-        case .stable:          return "Stable range"
+        case .stable: return "Stable range"
         }
     }
 
@@ -462,9 +462,9 @@ struct IntensityMixSection: View {
     private func color(_ zone: IntensityZone) -> Color {
         if zone == accentZone { return Tint.primary }
         switch zone {
-        case .strength:    return Ink.secondary
+        case .strength: return Ink.secondary
         case .hypertrophy: return Ink.tertiary
-        case .endurance:   return Ink.quaternary
+        case .endurance: return Ink.quaternary
         }
     }
 }

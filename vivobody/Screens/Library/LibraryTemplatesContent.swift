@@ -7,9 +7,9 @@
 //  size management.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 // MARK: - Templates content
 
@@ -72,7 +72,7 @@ struct LibraryTemplatesContent: View {
             Button("Delete", role: .destructive) {
                 deleteTemplate(template)
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
         } message: { template in
             Text("\(template.name) · \(template.orderedExercises.count) exercises. This can't be undone.")
         }
@@ -415,7 +415,7 @@ private struct SetPipStrip: View {
         HStack(spacing: Space.sm) {
             ForEach(Array(cappedGroups.enumerated()), id: \.offset) { _, count in
                 HStack(spacing: 2.5) {
-                    ForEach(0..<count, id: \.self) { _ in
+                    ForEach(0 ..< count, id: \.self) { _ in
                         Capsule()
                             .fill(tint)
                             .frame(width: 3, height: 9)

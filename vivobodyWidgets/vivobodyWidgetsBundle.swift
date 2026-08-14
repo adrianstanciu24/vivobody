@@ -13,10 +13,10 @@
 //  Shared view primitives are in WidgetChrome.swift.
 //
 
-import VivoKit
 import ActivityKit
 import AppIntents
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 @main
@@ -46,15 +46,15 @@ struct SnapshotProvider<Snapshot: Codable>: TimelineProvider {
     let empty: Snapshot
     let refreshInterval: TimeInterval
 
-    func placeholder(in context: Context) -> SnapshotEntry<Snapshot> {
+    func placeholder(in _: Context) -> SnapshotEntry<Snapshot> {
         SnapshotEntry(date: Date(), snapshot: galleryPlaceholder)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SnapshotEntry<Snapshot>) -> Void) {
+    func getSnapshot(in _: Context, completion: @escaping (SnapshotEntry<Snapshot>) -> Void) {
         completion(SnapshotEntry(date: Date(), snapshot: readSnapshot()))
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<SnapshotEntry<Snapshot>>) -> Void) {
+    func getTimeline(in _: Context, completion: @escaping (Timeline<SnapshotEntry<Snapshot>>) -> Void) {
         let now = Date()
         let entry = SnapshotEntry(date: now, snapshot: readSnapshot())
         let next = now.addingTimeInterval(refreshInterval)

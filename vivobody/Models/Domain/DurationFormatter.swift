@@ -13,7 +13,6 @@
 import Foundation
 
 nonisolated enum DurationFormatter {
-
     // MARK: - String formatting
 
     /// Minutes:seconds with a two-digit seconds field — "0:45",
@@ -48,7 +47,7 @@ nonisolated enum DurationFormatter {
     /// briefest hold; 600s (10 min) covers long timed carries and
     /// extended planks. Lower bound is 5 (a 0-second hold is
     /// meaningless — weight, not time, is what's optional here).
-    static let scrubRange: ClosedRange<Double> = 5...600
+    static let scrubRange: ClosedRange<Double> = 5 ... 600
 
     /// Scrubber step, in seconds. 5s is the natural increment for
     /// holds — fine enough to dial in a plank, coarse enough that a

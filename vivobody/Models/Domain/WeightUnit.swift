@@ -25,21 +25,23 @@ import Foundation
 nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     case lb, kg
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     /// Short symbol shown next to displayed weight values.
     var symbol: String {
         switch self {
-        case .lb: return "lb"
-        case .kg: return "kg"
+        case .lb: "lb"
+        case .kg: "kg"
         }
     }
 
     /// Long-form name for accessibility + the Preferences chip.
     var displayName: String {
         switch self {
-        case .lb: return "Pounds"
-        case .kg: return "Kilograms"
+        case .lb: "Pounds"
+        case .kg: "Kilograms"
         }
     }
 
@@ -47,15 +49,15 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
 
     var standardBarWeight: Double {
         switch self {
-        case .lb: return 45
-        case .kg: return 20
+        case .lb: 45
+        case .kg: 20
         }
     }
 
     var standardPlates: [Double] {
         switch self {
-        case .lb: return [45, 35, 25, 10, 5, 2.5, 1.25]
-        case .kg: return [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
+        case .lb: [45, 35, 25, 10, 5, 2.5, 1.25]
+        case .kg: [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
         }
     }
 
@@ -67,8 +69,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// "minimum jump" values across gyms in each unit's region.
     var strengthStep: Double {
         switch self {
-        case .lb: return 5
-        case .kg: return 2.5
+        case .lb: 5
+        case .kg: 2.5
         }
     }
 
@@ -78,8 +80,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// 5 kg for big barbell moves — and the lb equivalents.
     var strengthStepOptions: [Double] {
         switch self {
-        case .lb: return [1, 2.5, 5, 10]
-        case .kg: return [1, 1.25, 2.5, 5]
+        case .lb: [1, 2.5, 5, 10]
+        case .kg: [1, 1.25, 2.5, 5]
         }
     }
 
@@ -100,8 +102,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// is 0 so unloaded bodyweight assistance exercises work too.
     var strengthRange: ClosedRange<Double> {
         switch self {
-        case .lb: return 0...600
-        case .kg: return 0...275
+        case .lb: 0 ... 600
+        case .kg: 0 ... 275
         }
     }
 
@@ -110,8 +112,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// (and kg users typically weigh themselves in 0.1 kg).
     var bodyWeightStep: Double {
         switch self {
-        case .lb: return 0.2
-        case .kg: return 0.1
+        case .lb: 0.2
+        case .kg: 0.1
         }
     }
 
@@ -121,8 +123,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// first-time setup faster without turning the control into a keyboard.
     var bodyWeightStepOptions: [Double] {
         switch self {
-        case .lb: return [0.2, 0.5, 1]
-        case .kg: return [0.1, 0.5, 1]
+        case .lb: [0.2, 0.5, 1]
+        case .kg: [0.1, 0.5, 1]
         }
     }
 
@@ -130,8 +132,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// realistic adult; 500 lb (≈227 kg) covers the heaviest.
     var bodyWeightRange: ClosedRange<Double> {
         switch self {
-        case .lb: return 60...500
-        case .kg: return 27...230
+        case .lb: 60 ... 500
+        case .kg: 27 ... 230
         }
     }
 
@@ -141,8 +143,8 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
     /// and body weight, callers can override to 1 explicitly.
     var defaultFractionDigits: Int {
         switch self {
-        case .lb: return 0
-        case .kg: return 1
+        case .lb: 0
+        case .kg: 1
         }
     }
 
@@ -178,7 +180,7 @@ nonisolated enum WeightUnit: String, Hashable, CaseIterable, Identifiable {
 /// Conversion uses the international avoirdupois pound: exactly
 /// 0.45359237 kg. Apple's HealthKit uses the same constant.
 nonisolated extension WeightUnit {
-    static let lbPerKg: Double = 1.0 / 0.45359237   // ≈ 2.20462262
+    static let lbPerKg: Double = 1.0 / 0.45359237 // ≈ 2.20462262
     static let kgPerLb: Double = 0.45359237
 }
 

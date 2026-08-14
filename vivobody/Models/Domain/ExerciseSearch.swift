@@ -21,7 +21,6 @@
 import Foundation
 
 enum ExerciseSearch {
-
     /// Returns `items` filtered and sorted by relevance to `query`.
     /// An empty/whitespace query returns `items` unchanged in their
     /// original order — the caller is expected to group for browsing
@@ -72,7 +71,7 @@ enum ExerciseSearch {
         let aliasScore = item.aliases
             .compactMap { stringTier($0, token: token).map { $0 * 2 + 1 } }
             .min()
-        return [nameScore, aliasScore].compactMap({ $0 }).min()
+        return [nameScore, aliasScore].compactMap(\.self).min()
     }
 
     /// Tier (0-3) for one candidate string vs a normalized token.

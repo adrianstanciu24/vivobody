@@ -7,9 +7,9 @@
 //  and the consistency / last-workout journal sections.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 extension TodayScreen {
     // MARK: - Sections
@@ -29,17 +29,17 @@ extension TodayScreen {
             channels: state.nodeChannels,
             warmth: appState.analytics.forgeWarmth
         )
-            .padding(.horizontal, -Space.gutter)
-            .accessibilityElement()
-            .accessibilityLabel("Current training development body model")
-            .accessibilityValue("Muscle colour reflects your recent training development")
-            .accessibilityHint("Opens a text summary for each muscle group")
-            .accessibilityAction {
-                showMuscleMapDetails = true
-            }
-            .accessibilityAction(named: "Show muscle details") {
-                showMuscleMapDetails = true
-            }
+        .padding(.horizontal, -Space.gutter)
+        .accessibilityElement()
+        .accessibilityLabel("Current training development body model")
+        .accessibilityValue("Muscle colour reflects your recent training development")
+        .accessibilityHint("Opens a text summary for each muscle group")
+        .accessibilityAction {
+            showMuscleMapDetails = true
+        }
+        .accessibilityAction(named: "Show muscle details") {
+            showMuscleMapDetails = true
+        }
     }
 
     /// The always-visible key for the continuous development ramp.
@@ -117,7 +117,6 @@ extension TodayScreen {
         .accessibilityHint("Opens muscle details")
     }
 
-    @ViewBuilder
     private var developmentLegendBands: some View {
         LazyVGrid(
             columns: [
@@ -371,7 +370,8 @@ extension TodayScreen {
                 let reps = sets.map(\.reps)
                 let weights = sets.map(\.weight)
                 guard let loW = weights.min(), let hiW = weights.max(),
-                      let loR = reps.min(), let hiR = reps.max() else {
+                      let loR = reps.min(), let hiR = reps.max()
+                else {
                     return UpNextScheme(count: "\(sets.count) sets")
                 }
                 let count = loR == hiR ? "\(sets.count) × \(loR)" : "\(sets.count) × \(loR)–\(hiR)"
@@ -428,7 +428,7 @@ extension TodayScreen {
         weight: Double,
         loadMode: ExerciseLoadMode
     ) -> UpNextScheme {
-        return UpNextScheme(
+        UpNextScheme(
             count: count,
             load: loadMode.summaryLoadLabel(weight, unit: unit)
         )
@@ -441,13 +441,12 @@ extension TodayScreen {
         loadMode: ExerciseLoadMode,
         weights: [Double]
     ) -> UpNextScheme {
-        let load: String?
-        if let lower = weights.min(), let upper = weights.max() {
-            load = lower == upper
+        let load: String? = if let lower = weights.min(), let upper = weights.max() {
+            lower == upper
                 ? loadMode.summaryLoadLabel(lower, unit: unit)
                 : loadMode.summaryLoadRangeLabel(lower, upper, unit: unit)
         } else {
-            load = nil
+            nil
         }
         let details = ([modality.durationLabelLowercased] + (load.map { ["·", $0] } ?? []))
             .joined(separator: " ")
@@ -478,10 +477,10 @@ extension TodayScreen {
                     .foregroundStyle(Tint.primary)
                     .accessibilityHidden(true)
             }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, Space.xl)
-                .frame(minHeight: 50)
-                .coloredGlassControl(cornerRadius: Radius.pill)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Space.xl)
+            .frame(minHeight: 50)
+            .coloredGlassControl(cornerRadius: Radius.pill)
         }
         .buttonStyle(.plain)
         .softElevation(radius: 14, y: 7, opacity: 0.35)
@@ -492,9 +491,9 @@ extension TodayScreen {
 
     func upNextWhen(_ daysUntil: Int) -> String {
         switch daysUntil {
-        case 0:  return "Today"
-        case 1:  return "Tomorrow"
-        default: return "in \(daysUntil) days"
+        case 0: "Today"
+        case 1: "Tomorrow"
+        default: "in \(daysUntil) days"
         }
     }
 
@@ -805,13 +804,12 @@ extension TodayScreen {
     func lastWorkoutMeta(for session: WorkoutSession) -> String {
         let date = session.completedAt ?? session.startedAt
         let calendar = Calendar.current
-        let day: String
-        if calendar.isDateInToday(date) {
-            day = "Today"
+        let day: String = if calendar.isDateInToday(date) {
+            "Today"
         } else if calendar.isDateInYesterday(date) {
-            day = "Yesterday"
+            "Yesterday"
         } else {
-            day = Self.dayFormatter.string(from: date)
+            Self.dayFormatter.string(from: date)
         }
         return day + "  ·  " + Self.timeFormatter.string(from: date)
     }

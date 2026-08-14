@@ -122,7 +122,7 @@ enum SpotlightIndexer {
         let setCount = template.totalPlannedSets
         attributes.contentDescription =
             "\(exerciseCount) exercise\(exerciseCount == 1 ? "" : "s") · "
-            + "\(setCount) set\(setCount == 1 ? "" : "s")"
+                + "\(setCount) set\(setCount == 1 ? "" : "s")"
         var keywords = template.muscleGroups.map(\.displayName)
         keywords.append(contentsOf: template.orderedExercises.map(\.name))
         keywords.append(template.name)

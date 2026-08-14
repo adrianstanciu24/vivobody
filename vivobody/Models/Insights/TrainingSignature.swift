@@ -33,7 +33,9 @@ nonisolated struct SignaturePetal: Identifiable, Hashable {
     /// Fraction of the archive's total effective sets, `0…1`.
     let volumeShare: Double
 
-    var id: String { group.rawValue }
+    var id: String {
+        group.rawValue
+    }
 }
 
 // MARK: - Signature
@@ -79,7 +81,7 @@ nonisolated struct TrainingSignature {
 
         hasVolume = totalVolume > 0
         hasSignature = totalVolume > 0
-        trainedGroupCount = groupVolume.values.filter { $0 > 0 }.count
+        trainedGroupCount = groupVolume.values.count(where: { $0 > 0 })
         coverage = Double(trainedGroupCount) / Double(MuscleGroup.allCases.count)
 
         self.cadence = cadence.isFinite ? Swift.max(0, cadence) : 0
@@ -103,7 +105,8 @@ nonisolated struct TrainingSignature {
         let ranked = petals.sorted { $0.volumeShare > $1.volumeShare }
         if let top = ranked.first,
            top.volumeShare >= (1.0 / Double(MuscleGroup.allCases.count)) * Self.dominanceMargin,
-           (ranked.dropFirst().first?.volumeShare ?? 0) < top.volumeShare - 1e-9 {
+           (ranked.dropFirst().first?.volumeShare ?? 0) < top.volumeShare - 1e-9
+        {
             dominantGroup = top.group
         } else {
             dominantGroup = nil
@@ -116,21 +119,20 @@ nonisolated struct TrainingSignature {
     /// claim that the region received substantial work.
     var identityLine: String {
         guard hasSignature else { return "Awaiting training history" }
-        let focus: String
-        if let dominantGroup {
-            focus = "\(dominantGroup.displayName)-led"
+        let focus = if let dominantGroup {
+            "\(dominantGroup.displayName)-led"
         } else if trainedGroupCount == MuscleGroup.allCases.count,
-                  balance >= Self.evenBalanceThreshold {
-            focus = "Evenly spread"
+                  balance >= Self.evenBalanceThreshold
+        {
+            "Evenly spread"
         } else {
-            focus = "No single lead"
+            "No single lead"
         }
-        let span: String
-        switch trainedGroupCount {
-        case 6: span = "all 6 regions"
-        case 1: span = "1 region"
-        case 2...5: span = "\(trainedGroupCount) regions"
-        default: span = "no regions"
+        let span = switch trainedGroupCount {
+        case 6: "all 6 regions"
+        case 1: "1 region"
+        case 2 ... 5: "\(trainedGroupCount) regions"
+        default: "no regions"
         }
         return "\(focus) · \(span)"
     }
@@ -138,7 +140,7 @@ nonisolated struct TrainingSignature {
 
 // MARK: - Aggregation
 
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Build the lifetime training signature as of `now`.
     func trainingSignature(now: Date = Date()) -> TrainingSignature {
         let archived = filter { $0.completedAt != nil }

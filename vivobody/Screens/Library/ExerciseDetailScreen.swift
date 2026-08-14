@@ -43,10 +43,10 @@
 //  The rest of the screen still functions (CTA, edit/duplicate/delete).
 //
 
-import VivoKit
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
+import VivoKit
 
 struct ExerciseDetailScreen: View {
     /// The catalog item this screen is exploring. Held as a let —
@@ -88,7 +88,9 @@ struct ExerciseDetailScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
 
-    var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     var currentBodyweight: Double {
         bodyWeightEntries.first?.weight
@@ -140,12 +142,15 @@ struct ExerciseDetailScreen: View {
     /// `.reps` exercises — timed holds always plot duration.
     enum ChartMetric: String, CaseIterable, Identifiable {
         case weight, e1rm, volume
-        var id: String { rawValue }
+        var id: String {
+            rawValue
+        }
+
         var label: String {
             switch self {
-            case .weight: return "Load"
-            case .e1rm:   return "e1RM"
-            case .volume: return "Volume"
+            case .weight: "Load"
+            case .e1rm: "e1RM"
+            case .volume: "Volume"
             }
         }
     }
@@ -157,22 +162,26 @@ struct ExerciseDetailScreen: View {
     /// justify hoisting it out).
     enum TimeRange: String, CaseIterable, Identifiable {
         case oneMonth, threeMonths, sixMonths, all
-        var id: String { rawValue }
+        var id: String {
+            rawValue
+        }
+
         var label: String {
             switch self {
-            case .oneMonth:    return "1M"
-            case .threeMonths: return "3M"
-            case .sixMonths:   return "6M"
-            case .all:         return "All"
+            case .oneMonth: "1M"
+            case .threeMonths: "3M"
+            case .sixMonths: "6M"
+            case .all: "All"
             }
         }
+
         var cutoff: Date? {
             let cal = Calendar.current
             switch self {
-            case .oneMonth:    return cal.date(byAdding: .month, value: -1, to: Date())
+            case .oneMonth: return cal.date(byAdding: .month, value: -1, to: Date())
             case .threeMonths: return cal.date(byAdding: .month, value: -3, to: Date())
-            case .sixMonths:   return cal.date(byAdding: .month, value: -6, to: Date())
-            case .all:         return nil
+            case .sixMonths: return cal.date(byAdding: .month, value: -6, to: Date())
+            case .all: return nil
             }
         }
     }
@@ -320,7 +329,7 @@ struct ExerciseDetailScreen: View {
             Button("Delete", role: .destructive) {
                 deleteAndDismiss()
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
         } message: {
             Text("Removes the exercise from your catalog. Templates and history that already reference it stay intact.")
         }

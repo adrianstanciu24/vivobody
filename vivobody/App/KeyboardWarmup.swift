@@ -47,16 +47,16 @@ extension View {
 private func preloadKeyboard() {
     guard
         let window = UIApplication.shared
-            .connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first?
-            .windows
-            .first(where: { $0.isKeyWindow }) ?? UIApplication.shared
-            .connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first?
-            .windows
-            .first
+        .connectedScenes
+        .compactMap({ $0 as? UIWindowScene })
+        .first?
+        .windows
+        .first(where: { $0.isKeyWindow }) ?? UIApplication.shared
+        .connectedScenes
+        .compactMap({ $0 as? UIWindowScene })
+        .first?
+        .windows
+        .first
     else { return }
 
     let probe = UITextField(frame: .zero)

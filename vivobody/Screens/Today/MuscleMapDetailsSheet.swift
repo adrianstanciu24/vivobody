@@ -9,8 +9,8 @@
 //  borrowing another anatomical mesh.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct MuscleMapDetailsSheet: View {
     let report: MuscleMapReport

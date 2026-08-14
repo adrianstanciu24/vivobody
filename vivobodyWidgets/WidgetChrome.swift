@@ -7,13 +7,16 @@
 //  the four widget surfaces visually aligned without importing app UI.
 //
 
-import VivoKit
 import Charts
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct WidgetStat: Identifiable, Hashable {
-    var id: String { label }
+    var id: String {
+        label
+    }
+
     let value: String
     let unit: String?
     let label: String
@@ -64,11 +67,7 @@ struct WidgetStatStrip: View {
 }
 
 struct WidgetGlassPanel<Content: View>: View {
-    let content: Content
-
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
+    @ViewBuilder let content: Content
 
     var body: some View {
         content
@@ -134,7 +133,7 @@ struct ConsistencyHeatmapGrid: View {
 
     var body: some View {
         Grid(horizontalSpacing: cellSpacing, verticalSpacing: cellSpacing) {
-            ForEach(0..<7, id: \.self) { dayIndex in
+            ForEach(0 ..< 7, id: \.self) { dayIndex in
                 GridRow {
                     ForEach(weeks.indices, id: \.self) { weekIndex in
                         if weeks[weekIndex].indices.contains(dayIndex) {
@@ -220,7 +219,10 @@ struct WeeklyVolumeSparkline: View {
 }
 
 private struct WeeklyVolumePoint: Identifiable {
-    var id: Int { week }
+    var id: Int {
+        week
+    }
+
     let week: Int
     let sets: Int
 }
@@ -233,7 +235,7 @@ struct HeatmapLegend: View {
             Text("Less")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.tertiary)
-            ForEach(0...4, id: \.self) { level in
+            ForEach(0 ... 4, id: \.self) { level in
                 RoundedRectangle(cornerRadius: 2, style: .continuous)
                     .fill(fill(level))
                     .frame(width: 10, height: 10)
@@ -308,9 +310,9 @@ struct WidgetProLock: View {
     private var compact: Bool {
         switch family {
         case .accessoryCircular, .accessoryRectangular, .accessoryInline:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }
@@ -330,7 +332,7 @@ enum WidgetFormat {
 
     static func volumeValue(_ lb: Double) -> String {
         let display = SharedWeightFormatter.toDisplay(lb, unit: weightUnit)
-        if display >= 10_000 {
+        if display >= 10000 {
             let k = display / 1000
             return k.truncatingRemainder(dividingBy: 1) == 0
                 ? "\(Int(k))k"

@@ -90,7 +90,9 @@ struct MailComposeView: UIViewControllerRepresentable {
     /// False when no mail account is set up, or the Mail app has been
     /// removed. Presenting the composer anyway shows an empty sheet
     /// the user cannot send from, so check this first.
-    static var canSend: Bool { MFMailComposeViewController.canSendMail() }
+    static var canSend: Bool {
+        MFMailComposeViewController.canSendMail()
+    }
 
     func makeUIViewController(context: Context) -> MFMailComposeViewController {
         let controller = MFMailComposeViewController()
@@ -101,14 +103,16 @@ struct MailComposeView: UIViewControllerRepresentable {
         return controller
     }
 
-    func updateUIViewController(_ controller: MFMailComposeViewController, context: Context) {
+    func updateUIViewController(_: MFMailComposeViewController, context: Context) {
         // Same reasoning as SafariView: the coordinator is built once
         // while `dismiss` is refreshed every update, so re-bind the
         // closure instead of capturing a stale one.
         context.coordinator.onFinish = { dismiss() }
     }
 
-    func makeCoordinator() -> Coordinator { Coordinator() }
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 
     /// Sending and cancelling both land here. Presented inside a
     /// SwiftUI sheet the composer cannot dismiss itself, so the
@@ -117,9 +121,9 @@ struct MailComposeView: UIViewControllerRepresentable {
         var onFinish: () -> Void = {}
 
         func mailComposeController(
-            _ controller: MFMailComposeViewController,
-            didFinishWith result: MFMailComposeResult,
-            error: Error?
+            _: MFMailComposeViewController,
+            didFinishWith _: MFMailComposeResult,
+            error _: Error?
         ) {
             onFinish()
         }

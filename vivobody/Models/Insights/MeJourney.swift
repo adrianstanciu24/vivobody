@@ -23,7 +23,7 @@ import Foundation
 /// workout. Consecutive *days* would reset to 1 on every rest day,
 /// which is meaningless for strength training — weeks-in-a-row is how
 /// lifters actually think about showing up.
-nonisolated struct WorkoutStreak: Hashable, Sendable {
+nonisolated struct WorkoutStreak: Hashable {
     /// Weeks in a row ending at this week (or last week, so the
     /// streak doesn't read as broken before you've trained this week).
     let current: Int
@@ -49,9 +49,10 @@ nonisolated struct WorkoutStreak: Hashable, Sendable {
         // Longest run of consecutive weeks.
         var longest = 1
         var run = 1
-        for i in 1..<weekStarts.count {
+        for i in 1 ..< weekStarts.count {
             if let nextWeek = calendar.date(byAdding: .weekOfYear, value: 1, to: weekStarts[i - 1]),
-               calendar.isDate(nextWeek, inSameDayAs: weekStarts[i]) {
+               calendar.isDate(nextWeek, inSameDayAs: weekStarts[i])
+            {
                 run += 1
                 longest = Swift.max(longest, run)
             } else {
@@ -89,7 +90,7 @@ nonisolated struct WorkoutStreak: Hashable, Sendable {
 /// One lifetime-progress badge showing the user's standing against
 /// the next threshold. The progress value always matches the visible
 /// ratio, so "84 / 100" renders as 84% filled.
-nonisolated struct Milestone: Identifiable, Hashable, Sendable {
+nonisolated struct Milestone: Identifiable, Hashable {
     let id = UUID()
     let icon: String
     /// Silkscreen category legend — "Workouts", "Volume", "PRs".
@@ -107,7 +108,7 @@ nonisolated struct Milestone: Identifiable, Hashable, Sendable {
 // MARK: - Monthly recap
 
 /// The current calendar month's training recap.
-nonisolated struct MonthlyRecap: Hashable, Sendable {
+nonisolated struct MonthlyRecap: Hashable {
     /// Full month name, e.g. "June".
     let monthLabel: String
     let workouts: Int
@@ -117,7 +118,9 @@ nonisolated struct MonthlyRecap: Hashable, Sendable {
     /// New personal records set during this month.
     let prs: Int
 
-    var isEmpty: Bool { workouts == 0 }
+    var isEmpty: Bool {
+        workouts == 0
+    }
 }
 
 // MARK: - ExerciseProgress record helpers
@@ -132,13 +135,14 @@ nonisolated extension ExerciseProgress {
     }
 
     /// Date the standing record was set.
-    var recordDate: Date? { recordPoint?.date }
+    var recordDate: Date? {
+        recordPoint?.date
+    }
 }
 
 // MARK: - Journey aggregates
 
-extension Array where Element == WorkoutSession {
-
+extension [WorkoutSession] {
     /// Earliest completion across the archive — the first day of the
     /// user's logged training history.
     var trainingSince: Date? {
@@ -189,15 +193,14 @@ extension Array where Element == WorkoutSession {
             return done >= interval.start && done < interval.end
         }
 
-        let prs: Int
-        if let interval {
-            prs = progressByExercise.reduce(0) { acc, prog in
-                acc + prog.points.filter {
+        let prs: Int = if let interval {
+            progressByExercise.reduce(0) { acc, prog in
+                acc + prog.points.count(where: {
                     $0.isStrengthPR && $0.date >= interval.start && $0.date < interval.end
-                }.count
+                })
             }
         } else {
-            prs = 0
+            0
         }
 
         let tonnage = monthSessions.comparableTonnageSummary
@@ -222,7 +225,7 @@ extension Array where Element == WorkoutSession {
 
 // MARK: - Standing records
 
-nonisolated extension Array where Element == ExerciseProgress {
+nonisolated extension [ExerciseProgress] {
     /// Progress series ordered by the recency of their standing
     /// record — freshest achievements first. Works over any cached
     /// progress list (e.g. `SessionAnalytics.progress`) so screens
@@ -325,7 +328,7 @@ enum JourneyMilestones {
         unit: WeightUnit
     ) -> Milestone {
         let thresholds: [Double] = [100_000, 500_000, 1_000_000, 5_000_000]
-        // Compact display unit-aware: "100k", "1M", "5M".
+        /// Compact display unit-aware: "100k", "1M", "5M".
         func compact(_ lb: Double) -> String {
             let display = WeightFormatter.toDisplay(lb, unit: unit)
             if display >= 1_000_000 {

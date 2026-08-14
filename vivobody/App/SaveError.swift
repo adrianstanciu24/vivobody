@@ -18,8 +18,8 @@
 //  saves (seeders, catalog reset) may use `try? saveOrRollback()`.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 extension ModelContext {
     /// Save the context, rolling back to the last saved state on

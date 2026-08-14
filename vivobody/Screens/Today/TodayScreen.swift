@@ -16,9 +16,9 @@
 //  workout. The shell handles presentation.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct TodayScreen: View {
     @Bindable var appState: AppState
@@ -29,7 +29,9 @@ struct TodayScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// Recent archived sessions (a ~45-day window), most-recent
     /// first. Drives the consistency strip, its session count, and
@@ -45,7 +47,9 @@ struct TodayScreen: View {
     /// falls outside the recent window.
     @Query var latestSessions: [WorkoutSession]
 
-    var latestSession: WorkoutSession? { latestSessions.first }
+    var latestSession: WorkoutSession? {
+        latestSessions.first
+    }
 
     /// All saved templates. Sorted on-the-fly into a most-recently-
     /// used-first list for the chip strip; the raw @Query order
@@ -106,94 +110,94 @@ struct TodayScreen: View {
     var body: some View {
         let shouldReduceMotion = reduceMotion
         ScrollView {
-                    // The body leads — your trained figure is the hero
-                    // and the readout's subject. The readiness section
-                    // below draws how ready it is to train again; START
-                    // is the biggest, first-thing-you-reach target. The
-                    // calendar and last workout are the journal you
-                    // scroll down to once you've decided.
-                    //
-                    // The development model is replayed once per data
-                    // change (memoised in SessionAnalytics on AppState)
-                    // and every consumer (figure, readiness card, the
-                    // drill-down boards) derives from this single state.
-                    let modelState = appState.analytics.development
-                    let upNext = UpNext.compute(
-                        templates: templates,
-                        sessions: recentSessions,
-                        load: appState.analytics.load
+            // The body leads — your trained figure is the hero
+            // and the readout's subject. The readiness section
+            // below draws how ready it is to train again; START
+            // is the biggest, first-thing-you-reach target. The
+            // calendar and last workout are the journal you
+            // scroll down to once you've decided.
+            //
+            // The development model is replayed once per data
+            // change (memoised in SessionAnalytics on AppState)
+            // and every consumer (figure, readiness card, the
+            // drill-down boards) derives from this single state.
+            let modelState = appState.analytics.development
+            let upNext = UpNext.compute(
+                templates: templates,
+                sessions: recentSessions,
+                load: appState.analytics.load
+            )
+            let outlook = appState.analytics.strength
+            let load = appState.analytics.load
+            let readiness = latestSessions.readiness(load: load)
+            VStack(alignment: .leading, spacing: Space.section) {
+                // The figure and its caption read as one unit: the
+                // portrait, then the line decoding its colours sitting
+                // just beneath the feet (over the plain background, not
+                // over the model — the muscle detail made an overlaid
+                // caption unreadable).
+                VStack(spacing: Space.section) {
+                    bodyModelHero(
+                        height: bodyHeroHeight(),
+                        state: modelState
                     )
-                    let outlook = appState.analytics.strength
-                    let load = appState.analytics.load
-                    let readiness = latestSessions.readiness(load: load)
-                    VStack(alignment: .leading, spacing: Space.section) {
-                        // The figure and its caption read as one unit: the
-                        // portrait, then the line decoding its colours sitting
-                        // just beneath the feet (over the plain background, not
-                        // over the model — the muscle detail made an overlaid
-                        // caption unreadable).
-                        VStack(spacing: Space.section) {
-                            bodyModelHero(
-                                height: bodyHeroHeight(),
-                                state: modelState
-                            )
-                            figureCaption
-                        }
-                            // Depth: the figure settles back into the stage as
-                            // you scroll past it. Driven by .scrollTransition
-                            // (render-thread) rather than a scroll-offset
-                            // @State, so it never re-runs the body model's
-                            // channel computation per frame — that was what
-                            // made scrolling feel like slow motion.
-                            .scrollTransition(.interactive, axis: .vertical) { content, phase in
-                                content
-                                    .scaleEffect(
-                                        shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.07,
-                                        anchor: .top
-                                    )
-                                    .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
-                            }
-                            .settleIn(0)
+                    figureCaption
+                }
+                // Depth: the figure settles back into the stage as
+                // you scroll past it. Driven by .scrollTransition
+                // (render-thread) rather than a scroll-offset
+                // @State, so it never re-runs the body model's
+                // channel computation per frame — that was what
+                // made scrolling feel like slow motion.
+                .scrollTransition(.interactive, axis: .vertical) { content, phase in
+                    content
+                        .scaleEffect(
+                            shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.07,
+                            anchor: .top
+                        )
+                        .opacity(shouldReduceMotion ? 1 : 1 - abs(phase.value) * 0.30)
+                }
+                .settleIn(0)
 
-                        if let readiness {
-                            readinessSection(load, line: readiness).settleIn(1)
-                            SectionDivider().settleIn(2)
-                        }
-                        if upNext.isPresentable {
-                            upNextView(upNext, outlook: outlook).settleIn(3)
-                        }
-                        consistencySection.settleIn(5)
-                        SectionDivider().settleIn(6)
-                        lastWorkoutSection.settleIn(7)
-                    }
-                    .padding(.top, Space.xs)
-                    .padding(.bottom, Space.xxl)
+                if let readiness {
+                    readinessSection(load, line: readiness).settleIn(1)
+                    SectionDivider().settleIn(2)
                 }
-                .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
-                .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-                .scrollIndicators(.hidden)
-                .scrollEdgeEffectStyle(.soft, for: .bottom)
-                .safeAreaPadding(.bottom, Self.pinnedStartBarClearance)
-                // START is pinned in the native iOS 26 safe-area bar,
-                // never part of the scroll. The matching safe-area
-                // padding above reserves its occupied height so body
-                // copy never sits underneath the CTA or tab chrome.
-                .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
-                // Keep the content on the app's static, edge-to-edge
-                // faceplate. The body-model stage carries the hero's
-                // training-driven warmth without continuously animating
-                // the entire screen background.
-                .screenBackground()
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
-                    // Latch onto the LARGEST viewport height ever seen, not
-                    // the first. Native bottom chrome can make the container
-                    // report a transient, collapsed height during launch
-                    // layout; freezing that first value shrank the hero to a
-                    // thumbnail. Tracking the max ignores the transient (and
-                    // the on-scroll tab-bar minimize never shrinks the figure,
-                    // since the value only grows).
-                    if newHeight > heroHeight { heroHeight = newHeight }
+                if upNext.isPresentable {
+                    upNextView(upNext, outlook: outlook).settleIn(3)
                 }
+                consistencySection.settleIn(5)
+                SectionDivider().settleIn(6)
+                lastWorkoutSection.settleIn(7)
+            }
+            .padding(.top, Space.xs)
+            .padding(.bottom, Space.xxl)
+        }
+        .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
+        .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+        .scrollIndicators(.hidden)
+        .scrollEdgeEffectStyle(.soft, for: .bottom)
+        .safeAreaPadding(.bottom, Self.pinnedStartBarClearance)
+        // START is pinned in the native iOS 26 safe-area bar,
+        // never part of the scroll. The matching safe-area
+        // padding above reserves its occupied height so body
+        // copy never sits underneath the CTA or tab chrome.
+        .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
+        // Keep the content on the app's static, edge-to-edge
+        // faceplate. The body-model stage carries the hero's
+        // training-driven warmth without continuously animating
+        // the entire screen background.
+        .screenBackground()
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { newHeight in
+            // Latch onto the LARGEST viewport height ever seen, not
+            // the first. Native bottom chrome can make the container
+            // report a transient, collapsed height during launch
+            // layout; freezing that first value shrank the hero to a
+            // thumbnail. Tracking the max ignores the transient (and
+            // the on-scroll tab-bar minimize never shrinks the figure,
+            // since the value only grows).
+            if newHeight > heroHeight { heroHeight = newHeight }
+        }
         .onAppear {
             Haptics.prepare()
             // A soft "powered-on" tick as the screen settles in — the
@@ -239,7 +243,7 @@ struct TodayScreen: View {
             } else {
                 pendingStart = { showFreshExercisePicker = true }
             }
-        case .template(let template):
+        case let .template(template):
             pendingStart = { appState.workout.startWorkoutFromTemplate(template) }
         }
     }
@@ -262,7 +266,6 @@ struct TodayScreen: View {
     var usesAccessibilityLayout: Bool {
         dynamicTypeSize.isAccessibilitySize
     }
-
 }
 
 #Preview("Today") {

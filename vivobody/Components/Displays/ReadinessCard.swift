@@ -12,8 +12,8 @@
 //  shows a provisional marker from the active prior weeks available.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct ReadinessCard: View {
     let report: TrainingLoadReport
@@ -35,10 +35,10 @@ struct ReadinessCard: View {
     /// gauge marker is showing, or that the range is still forming.
     static func statusText(for report: TrainingLoadReport) -> String? {
         switch report.verdict {
-        case .insufficient: return "Building range"
-        case .low:          return "Low load"
-        case .productive:   return "Productive load"
-        case .high:         return "High load"
+        case .insufficient: "Building range"
+        case .low: "Low load"
+        case .productive: "Productive load"
+        case .high: "High load"
         }
     }
 
@@ -47,10 +47,10 @@ struct ReadinessCard: View {
     /// always agree.
     static func statusColor(for report: TrainingLoadReport) -> Color {
         switch report.verdict {
-        case .productive:   return Tint.primary
-        case .high:         return Tint.primary
-        case .low:          return Ink.secondary
-        case .insufficient: return Ink.primary
+        case .productive: Tint.primary
+        case .high: Tint.primary
+        case .low: Ink.secondary
+        case .insufficient: Ink.primary
         }
     }
 

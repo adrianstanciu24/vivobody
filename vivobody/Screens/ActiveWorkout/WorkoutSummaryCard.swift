@@ -25,8 +25,8 @@
 //  and complete (every set logged → Done appears, success haptic).
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct WorkoutSummaryCard: View {
     @Bindable var session: WorkoutSession
@@ -34,7 +34,9 @@ struct WorkoutSummaryCard: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// Optional dismiss callback from the parent shell. When provided
     /// and the workout is complete, the gold Done verb appears.
@@ -48,13 +50,14 @@ struct WorkoutSummaryCard: View {
     /// or success haptic. Reserved for non-celebratory review.
     var isHistorical: Bool = false
 
-    // Duration count-up state lives on `session` (not @State) so it
-    // survives view remounts — e.g. minimizing to the MiniBar and
-    // re-expanding.
+    /// Duration count-up state lives on `session` (not @State) so it
+    /// survives view remounts — e.g. minimizing to the MiniBar and
+    /// re-expanding.
     private var animatedMinutes: Double {
         get { session.summaryAnimatedMinutes }
         nonmutating set { session.summaryAnimatedMinutes = newValue }
     }
+
     private var didCelebrate: Bool {
         get { session.summaryDidCelebrate }
         nonmutating set { session.summaryDidCelebrate = newValue }
@@ -68,7 +71,9 @@ struct WorkoutSummaryCard: View {
         session.receiptTonnageSummary.availability
     }
 
-    private var isComplete: Bool { session.isAllComplete }
+    private var isComplete: Bool {
+        session.isAllComplete
+    }
 
     var body: some View {
         GeometryReader { geo in
@@ -112,7 +117,7 @@ struct WorkoutSummaryCard: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onChange(of: session.activeExerciseIndex, initial: true) { _, newIndex in
-            if !isHistorical && newIndex == session.orderedExercises.count {
+            if !isHistorical, newIndex == session.orderedExercises.count {
                 playEntrance()
             }
         }
@@ -225,7 +230,7 @@ struct WorkoutSummaryCard: View {
     // MARK: - Exercise list
 
     private var exerciseList: some View {
-        return VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(session.orderedExercises.enumerated()), id: \.element.id) { idx, exercise in
                 if idx > 0 {
                     // A linked seam wears the superset accent so the
@@ -323,7 +328,6 @@ struct WorkoutSummaryCard: View {
 
     // MARK: - Actions
 
-    @ViewBuilder
     private var actionArea: some View {
         VStack(spacing: Space.md) {
             if !isHistorical, let onAddExercise {
@@ -428,7 +432,7 @@ struct WorkoutSummaryCard: View {
                 set: { animatedMinutes = $0 }
             )
 
-            if isComplete && !didCelebrate {
+            if isComplete, !didCelebrate {
                 Haptics.success()
                 didCelebrate = true
             }
@@ -446,7 +450,7 @@ struct WorkoutSummaryCard: View {
         let stepNs = UInt64(1_000_000_000.0 / frameRate)
         let delta = target - start
 
-        for i in 1...steps {
+        for i in 1 ... steps {
             let t = Double(i) / Double(steps)
             let eased = 1 - pow(1 - t, 3) // ease-out cubic
             set(start + delta * eased)

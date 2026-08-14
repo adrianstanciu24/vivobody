@@ -11,9 +11,9 @@
 //  to the mirrored display unit here.
 //
 
-import VivoKit
 import Charts
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct StrengthWidget: Widget {
@@ -41,7 +41,9 @@ struct StrengthWidgetView: View {
 
     /// Pro-gated: the app mirrors the entitlement into the App Group;
     /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool { WidgetEntitlement.isPro }
+    private var isPro: Bool {
+        WidgetEntitlement.isPro
+    }
 
     var body: some View {
         Group {
@@ -190,7 +192,10 @@ struct StrengthWidgetView: View {
 }
 
 private struct E1RMChartPoint: Identifiable {
-    var id: Date { date }
+    var id: Date {
+        date
+    }
+
     let date: Date
     let value: Double
     let isPR: Bool

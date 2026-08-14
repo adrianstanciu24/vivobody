@@ -34,9 +34,9 @@
 //  advance) is untouched; only the surface around it changed.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct ActiveExerciseCard: View {
     let exercise: Exercise
@@ -60,7 +60,9 @@ struct ActiveExerciseCard: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// Holds the ID of the set whose completion animation is still
     /// playing. While set, the SetCompleteButton renders as complete
@@ -130,7 +132,7 @@ struct ActiveExerciseCard: View {
             Button("Delete", role: .destructive) {
                 deleteSet(setToDelete)
             }
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
         } message: { setToDelete in
             Text("\(exercise.setLabel(setToDelete, unit: unit)). This can't be undone.")
         }
@@ -384,7 +386,7 @@ struct ActiveExerciseCard: View {
             }
 
             switch outcome {
-            case .supersetPartner(let partner):
+            case let .supersetPartner(partner):
                 // Carry the user to the partner station — the app
                 // performs the swipe the superset asks for, with the
                 // same spring the pager uses, so the pairing teaches
@@ -407,13 +409,14 @@ struct ActiveExerciseCard: View {
                 }
                 Haptics.soft(playsSound: false)
 
-            case .supersetRoundRest(let resume):
+            case let .supersetRoundRest(resume):
                 // Reposition behind the rest overlay so its label and
                 // the card underneath already show the next round's
                 // station when the overlay lifts.
                 if let resumeIdx = session.orderedExercises
                     .firstIndex(where: { $0.id == resume.id }),
-                   resumeIdx != session.activeExerciseIndex {
+                    resumeIdx != session.activeExerciseIndex
+                {
                     session.activeExerciseIndex = resumeIdx
                 }
 
@@ -426,7 +429,8 @@ struct ActiveExerciseCard: View {
                 while nextIdx < exercises.count,
                       exercise.supersetID != nil,
                       exercises[nextIdx].supersetID == exercise.supersetID,
-                      exercises[nextIdx].orderedSets.allSatisfy(\.isCompleted) {
+                      exercises[nextIdx].orderedSets.allSatisfy(\.isCompleted)
+                {
                     nextIdx += 1
                 }
                 let cardCount = exercises.count + 1
@@ -530,7 +534,7 @@ struct ActiveExerciseCard: View {
         let inSessionPrior = exercise.sets.compactMap {
             exercise.strengthPerformance(for: $0)
         }
-        let priorBest = ([archivedPrior].compactMap { $0 } + inSessionPrior).reduce(
+        let priorBest = ([archivedPrior].compactMap(\.self) + inSessionPrior).reduce(
             nil as StrengthPerformance?
         ) { best, performance in
             guard let best else { return performance }

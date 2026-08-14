@@ -20,8 +20,8 @@
 //  set earns.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct PaywallSheet: View {
     let pro: ProStore
@@ -62,7 +62,7 @@ struct PaywallSheet: View {
             "Purchase didn't go through",
             isPresented: errorBinding
         ) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) {}
         } message: {
             Text(pro.purchaseError ?? "")
         }
@@ -100,9 +100,9 @@ struct PaywallSheet: View {
     private var contextNotice: String? {
         switch pro.paywallContext {
         case .general:
-            return nil
+            nil
         case .templateLimit:
-            return "You've reached the free tier's limit of \(ProGate.freeTemplateLimit) templates. Pro removes the cap."
+            "You've reached the free tier's limit of \(ProGate.freeTemplateLimit) templates. Pro removes the cap."
         }
     }
 

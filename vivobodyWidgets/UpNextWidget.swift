@@ -6,8 +6,8 @@
 //  workout or the next rest-day target.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct UpNextWidget: Widget {
@@ -79,11 +79,11 @@ struct UpNextWidgetView: View {
     private var title: String {
         switch snapshot.kind {
         case .scheduled:
-            return snapshot.templateName ?? "Workout"
+            snapshot.templateName ?? "Workout"
         case .rest:
-            return "Rest"
+            "Rest"
         case .unscheduled:
-            return "Start fresh"
+            "Start fresh"
         }
     }
 
@@ -101,9 +101,9 @@ struct UpNextWidgetView: View {
 
     private func dayLabel(_ days: Int) -> String {
         switch days {
-        case 1: return "tomorrow"
-        case 2...6: return "in \(days)d"
-        default: return "next week"
+        case 1: "tomorrow"
+        case 2 ... 6: "in \(days)d"
+        default: "next week"
         }
     }
 }

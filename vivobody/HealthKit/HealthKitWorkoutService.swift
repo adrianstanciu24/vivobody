@@ -38,7 +38,9 @@ enum HealthKitWorkoutService {
 
     /// Whether HealthKit exists on this device. False in the
     /// Simulator and on hardware without a Health database.
-    static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
+    static var isAvailable: Bool {
+        HKHealthStore.isHealthDataAvailable()
+    }
 
     /// Whether the system would actually present the authorization
     /// prompt on the next request. HealthKit only shows the sheet

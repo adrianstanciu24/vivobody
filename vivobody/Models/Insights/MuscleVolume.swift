@@ -41,7 +41,7 @@ import Foundation
 /// touch higher than textbook "direct set" landmarks because the
 /// count folds in synergist credit. Kept in one place so they can be
 /// calibrated without touching the UI.
-nonisolated struct VolumeLandmark: Hashable, Sendable {
+nonisolated struct VolumeLandmark: Hashable {
     var mev: Double
     var optimalHigh: Double
 
@@ -53,7 +53,7 @@ nonisolated struct VolumeLandmark: Hashable, Sendable {
 /// Where a muscle's weekly effective-set count lands relative to its
 /// landmark band. Drives both the colour of its bar and the summary
 /// counts.
-nonisolated enum VolumeZone: Hashable, Sendable {
+nonisolated enum VolumeZone: Hashable {
     /// No completed work in the window at all — fully rested / neglected.
     case untrained
     /// Worked, but below the minimum effective volume.
@@ -71,8 +71,11 @@ nonisolated enum VolumeZone: Hashable, Sendable {
 /// Signature, when it was last trained (over the whole archive, not
 /// just the current window), and the weekly landmark it's judged
 /// against.
-nonisolated struct MuscleVolumeStat: Identifiable, Hashable, Sendable {
-    var id: Muscle { muscle }
+nonisolated struct MuscleVolumeStat: Identifiable, Hashable {
+    var id: Muscle {
+        muscle
+    }
+
     let muscle: Muscle
     /// Effective sets in the caller-selected window (normally 7 days).
     let effectiveSets: Double
@@ -96,7 +99,7 @@ nonisolated struct MuscleVolumeStat: Identifiable, Hashable, Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Hard sets per muscle over a rolling `window` ending at `now`
     /// (default: the last 7 days). Every trainable muscle is
     /// returned — including ones with zero work, so neglect is
@@ -104,7 +107,7 @@ extension Array where Element == WorkoutSession {
     /// and the all-time totals scan the full archive, so a muscle
     /// untouched this week still reports how long it's been.
     func muscleVolume(
-        window: TimeInterval = 7 * 86_400,
+        window: TimeInterval = 7 * 86400,
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> [MuscleVolumeStat] {
@@ -124,7 +127,7 @@ nonisolated extension AnalyticsAccumulator {
     /// used by SessionAnalytics so development, load, and map reports do
     /// not each reprice the archive.
     func muscleVolume(
-        window: TimeInterval = 7 * 86_400,
+        window: TimeInterval = 7 * 86400,
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> [MuscleVolumeStat] {
@@ -167,15 +170,14 @@ nonisolated extension AnalyticsAccumulator {
         result.reserveCapacity(Muscle.allCases.count)
         for muscle in Muscle.allCases {
             guard !isCancelled() else { return [] }
-            let days: Int?
-            if let last = lastTrained[muscle] {
-                days = calendar.dateComponents(
+            let days: Int? = if let last = lastTrained[muscle] {
+                calendar.dateComponents(
                     [.day],
                     from: calendar.startOfDay(for: last),
                     to: calendar.startOfDay(for: now)
                 ).day
             } else {
-                days = nil
+                nil
             }
             result.append(MuscleVolumeStat(
                 muscle: muscle,
@@ -194,7 +196,7 @@ nonisolated extension AnalyticsAccumulator {
 /// Screen-level summary derived from a set of `MuscleVolumeStat`s:
 /// the zone tallies for the glance strip and the ranked neglect list
 /// for the headline insight.
-nonisolated struct MuscleVolumeSummary: Sendable {
+nonisolated struct MuscleVolumeSummary {
     let optimalCount: Int
     let underCount: Int
     let restingCount: Int
@@ -211,12 +213,12 @@ nonisolated struct MuscleVolumeSummary: Sendable {
     }
 }
 
-nonisolated extension Array where Element == MuscleVolumeStat {
+nonisolated extension [MuscleVolumeStat] {
     var summary: MuscleVolumeSummary {
-        let optimal = filter { $0.zone == .optimal }.count
-        let under = filter { $0.zone == .under }.count
-        let high = filter { $0.zone == .high }.count
-        let resting = filter { $0.zone == .untrained }.count
+        let optimal = count(where: { $0.zone == .optimal })
+        let under = count(where: { $0.zone == .under })
+        let high = count(where: { $0.zone == .high })
+        let resting = count(where: { $0.zone == .untrained })
 
         // Severity order: rested muscles first (by staleness, never
         // trained last on the date axis but most neglected), then
@@ -224,15 +226,15 @@ nonisolated extension Array where Element == MuscleVolumeStat {
         let neglected = filter { $0.zone == .untrained || $0.zone == .under }
             .sorted { lhs, rhs in
                 switch (lhs.zone, rhs.zone) {
-                case (.untrained, .under): return true
-                case (.under, .untrained): return false
+                case (.untrained, .under): true
+                case (.under, .untrained): false
                 case (.untrained, .untrained):
                     // Longer rest = more neglected; never-trained
                     // (nil) sorts as most neglected of all.
-                    return (lhs.daysSinceLastTrained ?? .max) > (rhs.daysSinceLastTrained ?? .max)
+                    (lhs.daysSinceLastTrained ?? .max) > (rhs.daysSinceLastTrained ?? .max)
                 default:
                     // Both under: fewer effective sets = more neglected.
-                    return lhs.effectiveSets < rhs.effectiveSets
+                    lhs.effectiveSets < rhs.effectiveSets
                 }
             }
 

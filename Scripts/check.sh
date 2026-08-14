@@ -57,6 +57,17 @@ echo "▸ Checking repository architecture..."
 echo "▸ Checking source-size ratchet..."
 /usr/bin/python3 Scripts/check_source_sizes.py
 
+echo "▸ Checking Swift formatting..."
+if command -v swiftformat >/dev/null 2>&1; then
+    if ! swiftformat --dryrun vivobody/ vivobodyWidgets/ VivoKit/Sources/ \
+        2>&1 | tail -1 | grep -q "^0/"; then
+        echo "error: SwiftFormat found formatting issues; run 'swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/' to fix" >&2
+        exit 1
+    fi
+else
+    echo "warning: swiftformat not installed; skipping Swift formatting check (brew install swiftformat)" >&2
+fi
+
 echo "▸ Checking repository knowledge map..."
 /usr/bin/python3 Scripts/check_documentation.py
 

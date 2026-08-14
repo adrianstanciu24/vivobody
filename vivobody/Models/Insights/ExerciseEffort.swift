@@ -45,8 +45,8 @@ nonisolated enum ProgressionVerdict: Hashable {
             guard let action = progressionAction(for: loadMode) else { return nil }
             return "Ready · \(action)"
         case .grind: return "Grinding · hold or deload"
-        case .push:  return "Pushing"
-        case .none:  return nil
+        case .push: return "Pushing"
+        case .none: return nil
         }
     }
 }
@@ -65,7 +65,7 @@ nonisolated struct ExerciseEffortSummary: Hashable {
     let verdict: ProgressionVerdict
 }
 
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Build an effort summary for one catalog exercise. Bundled IDs or
     /// the custom item's exact performance signature define the series;
     /// name-only rows are used only when no catalog identity exists.
@@ -86,7 +86,6 @@ extension Array where Element == WorkoutSession {
     private func effortSummary(
         matching matches: (Exercise) -> Bool
     ) -> ExerciseEffortSummary? {
-
         // Newest-first list of this lift's appearances. Duration
         // exercises are excluded — they carry no RIR.
         let instances: [(date: Date, exercise: Exercise)] = self.compactMap { session in
@@ -103,7 +102,7 @@ extension Array where Element == WorkoutSession {
         guard !instances.isEmpty else { return nil }
 
         let allLogged = instances
-            .flatMap { $0.exercise.sets }
+            .flatMap(\.exercise.sets)
             .filter { $0.isAnalyticsEligible && $0.reps > 0 && $0.rirLogged }
         guard allLogged.count >= 3 else { return nil }
         let lifetimeAvg = mean(allLogged.map(\.repsInReserve))

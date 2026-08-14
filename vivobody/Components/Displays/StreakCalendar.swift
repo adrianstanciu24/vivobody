@@ -12,13 +12,13 @@
 //      StreakCalendar(workoutDates: dates, month: date) // any month
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct StreakCalendar: View {
     let workoutDates: Set<Date>
     var prDates: Set<Date> = []
-    var month: Date = Date()
+    var month: Date = .init()
     var fillColor: Color = Tint.primary
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -27,7 +27,9 @@ struct StreakCalendar: View {
     private let dotSize: CGFloat = 36
     private let rowSpacing: CGFloat = 6
 
-    private var calendar: Calendar { .current }
+    private var calendar: Calendar {
+        .current
+    }
 
     private var monthStart: Date {
         calendar.dateInterval(of: .month, for: month)?.start ?? month
@@ -46,7 +48,7 @@ struct StreakCalendar: View {
     }
 
     private var monthSessionCount: Int {
-        workoutDays.filter { $0 >= monthStart && $0 < monthEnd }.count
+        workoutDays.count(where: { $0 >= monthStart && $0 < monthEnd })
     }
 
     private var monthLabel: String {
@@ -174,13 +176,13 @@ struct StreakCalendar: View {
         }
 
         var all: [DayCell] = []
-        for i in 0..<totalCells {
+        for i in 0 ..< totalCells {
             guard let d = calendar.date(byAdding: .day, value: i, to: gridStart) else { continue }
             let inMonth = d >= monthStart && d < monthEnd
             all.append(DayCell(date: d, isInMonth: inMonth))
         }
 
-        return stride(from: 0, to: all.count, by: 7).map { Array(all[$0..<min($0 + 7, all.count)]) }
+        return stride(from: 0, to: all.count, by: 7).map { Array(all[$0 ..< min($0 + 7, all.count)]) }
     }
 }
 
@@ -200,7 +202,9 @@ private struct DayDot: View {
     @State private var pulse = false
     @State private var overdrive = false
 
-    private var shouldPulse: Bool { isPR && !reduceMotion }
+    private var shouldPulse: Bool {
+        isPR && !reduceMotion
+    }
 
     var body: some View {
         ZStack {
@@ -226,14 +230,14 @@ private struct DayDot: View {
             radius: pulse ? 8 : 0
         )
         .onAppear {
-            if isWorkout && !reduceMotion { fireOverdrive() }
+            if isWorkout, !reduceMotion { fireOverdrive() }
             guard shouldPulse else { return }
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 pulse = true
             }
         }
         .onChange(of: isWorkout) { _, lit in
-            if lit && !reduceMotion { fireOverdrive() }
+            if lit, !reduceMotion { fireOverdrive() }
         }
         .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.75), value: isWorkout)
     }

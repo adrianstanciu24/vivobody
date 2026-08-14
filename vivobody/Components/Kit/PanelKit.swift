@@ -26,8 +26,8 @@
 //      machine-voice treatment for transient utterances.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 // MARK: - Silkscreen legend
 
@@ -259,7 +259,7 @@ struct SegmentLadder: View {
         let clamped = min(1, max(0, fraction))
         let lit = clamped <= 0 ? 0 : max(1, Int((clamped * Double(count)).rounded()))
         HStack(spacing: spacing) {
-            ForEach(0..<count, id: \.self) { index in
+            ForEach(0 ..< count, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 1)
                     .fill(index < lit ? tint : Surface.edge)
             }
@@ -287,7 +287,7 @@ struct SegmentGauge: View {
     var body: some View {
         let count = max(1, segments)
         HStack(spacing: spacing) {
-            ForEach(0..<count, id: \.self) { index in
+            ForEach(0 ..< count, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 1)
                     .fill(color(index, (Double(index) + 0.5) / Double(count)))
             }

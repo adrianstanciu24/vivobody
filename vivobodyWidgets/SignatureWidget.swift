@@ -6,8 +6,8 @@
 //  all-time training-identity bloom with a one-line verdict.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct SignatureWidget: Widget {
@@ -34,7 +34,9 @@ struct SignatureWidgetView: View {
 
     /// Pro-gated: the app mirrors the entitlement into the App Group;
     /// free renders the locked placeholder deep-linking to the paywall.
-    private var isPro: Bool { WidgetEntitlement.isPro }
+    private var isPro: Bool {
+        WidgetEntitlement.isPro
+    }
 
     var body: some View {
         Group {

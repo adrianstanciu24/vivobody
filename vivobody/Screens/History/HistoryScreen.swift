@@ -29,8 +29,8 @@
 //  of the workout, now as a permanent record.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct HistoryScreen: View {
     @Bindable var appState: AppState
@@ -65,7 +65,9 @@ struct HistoryContent: View {
     @AppStorage(SettingsKey.weightUnit)
     var unitRaw: String = SettingsDefaults.weightUnit
 
-    var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// The newest `limit` completed (archived) sessions, most-recent
     /// first. Mid-flight sessions are still un-inserted and therefore
@@ -113,7 +115,9 @@ struct HistoryContent: View {
         .screenBackground()
     }
 
-    var hasMoreSessions: Bool { sessions.count == limit }
+    var hasMoreSessions: Bool {
+        sessions.count == limit
+    }
 }
 
 #Preview {

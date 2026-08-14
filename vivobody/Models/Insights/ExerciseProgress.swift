@@ -24,12 +24,13 @@ import Foundation
 /// the Strength curve: they remain ordinary workout history, but cannot
 /// dominate a load-oriented outlook with endurance work.
 nonisolated enum EstimatedOneRepMaxPolicy {
-    static let eligibleReps = 1...12
+    static let eligibleReps = 1 ... 12
 
     static func estimate(effectiveLoad: Double, reps: Int) -> Double? {
         guard effectiveLoad.isFinite,
               effectiveLoad > 0,
-              eligibleReps.contains(reps) else {
+              eligibleReps.contains(reps)
+        else {
             return nil
         }
         return effectiveLoad * (1.0 + Double(reps) / 30.0)
@@ -40,7 +41,7 @@ nonisolated enum EstimatedOneRepMaxPolicy {
 /// It is kept separate from the representative top set because normal
 /// history records intentionally compare actual load first, while an
 /// e1RM curve must choose the set with the greatest estimate.
-nonisolated struct EstimatedOneRepMaxSample: Hashable, Sendable {
+nonisolated struct EstimatedOneRepMaxSample: Hashable {
     let value: Double
     let effectiveLoad: Double
     let reps: Int
@@ -49,7 +50,7 @@ nonisolated struct EstimatedOneRepMaxSample: Hashable, Sendable {
 /// One data point in an exercise's progress series — the best set
 /// completed in a given session, plus that session's total volume
 /// for the exercise.
-nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
+nonisolated struct ExerciseProgressPoint: Identifiable, Hashable {
     let id = UUID()
     let date: Date
     let topWeight: Double
@@ -105,7 +106,7 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
     /// falls, while bodyweight work includes its carried-bodyweight
     /// share. Non-comparable work deliberately has no value here.
     var effectiveTopLoad: Double? {
-        return ExerciseLoadProfile(
+        ExerciseLoadProfile(
             mode: loadMode,
             bodyweightFraction: bodyweightFraction
         ).effectiveLoad(
@@ -146,7 +147,9 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
     /// Scalar y/display value for the record performance. Record
     /// ordering itself uses `strengthPerformance`, including reps as
     /// the tie-breaker for equal dynamic loads.
-    var strengthPRMetric: Double? { strengthPerformance?.primaryMetric }
+    var strengthPRMetric: Double? {
+        strengthPerformance?.primaryMetric
+    }
 
     /// Estimated 1-rep max via the Epley formula. Surfaced as one
     /// of the chartable metrics on the detail screen — useful when
@@ -170,7 +173,7 @@ nonisolated struct ExerciseProgressPoint: Identifiable, Hashable, Sendable {
 
 /// Aggregated progress data for a single exercise across the user's
 /// entire archive.
-nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
+nonisolated struct ExerciseProgress: Identifiable, Hashable {
     var id: String {
         ExerciseIdentity.key(
             catalogID: catalogID,
@@ -179,6 +182,7 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
             performanceSignature: performanceSignature
         )
     }
+
     /// Stable bundled identity. Unlike the install-local catalog UUID,
     /// this survives Reset Exercise Catalog and reconnects old history
     /// to the freshly seeded item.
@@ -191,11 +195,15 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
     /// How this exercise is measured. Derived from its points (a
     /// single exercise has one consistent mode). Drives whether the
     /// progress UI reads weight or hold-time.
-    var trackingMode: TrackingMode { points.last?.trackingMode ?? .reps }
+    var trackingMode: TrackingMode {
+        points.last?.trackingMode ?? .reps
+    }
 
     /// The most recently logged intent wins defensively if a custom
     /// exercise was reclassified between sessions.
-    var modality: ExerciseModality { points.last?.modality ?? .dynamicStrength }
+    var modality: ExerciseModality {
+        points.last?.modality ?? .dynamicStrength
+    }
 
     var performanceSemanticKind: PerformanceSemanticKind {
         points.last?.performanceSemanticKind ?? .unrankedReps
@@ -213,7 +221,9 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
     /// The most recent point in the series. Used by the Me-tab row
     /// to surface "current top set" without the consumer having to
     /// know about sort order.
-    var latest: ExerciseProgressPoint? { points.last }
+    var latest: ExerciseProgressPoint? {
+        points.last
+    }
 
     /// Point with the greatest history load. Comparable movements use
     /// effective resistance; non-comparable movements retain raw input
@@ -296,19 +306,25 @@ nonisolated struct ExerciseProgress: Identifiable, Hashable, Sendable {
 }
 
 /// A detected progression stall on an exercise's primary metric.
-nonisolated struct PlateauStatus: Hashable, Sendable {
+nonisolated struct PlateauStatus: Hashable {
     /// Consecutive sessions since the last all-time high.
     let sessions: Int
     /// The complete standing performance preserves the tie-breaker and
     /// prevents loaded holds from being flattened into an ambiguous time.
     let performance: StrengthPerformance
 
-    var metric: Double { performance.primaryMetric }
+    var metric: Double {
+        performance.primaryMetric
+    }
+
     var metricKind: StrengthPerformanceMetricKind {
         performance.primaryMetricKind
     }
+
     /// Compatibility convenience for existing formatting call sites.
-    var isDuration: Bool { metricKind == .duration }
+    var isDuration: Bool {
+        metricKind == .duration
+    }
 }
 
 // MARK: - Last instance lookup
@@ -317,7 +333,7 @@ nonisolated struct PlateauStatus: Hashable, Sendable {
 /// Used by the ExercisePickerSheet rows to decorate each entry with
 /// fresh context ("LAST · 145 lb × 8 · 3d ago") instead of just the
 /// catalog's default values.
-nonisolated struct LastExerciseInstance: Hashable, Sendable {
+nonisolated struct LastExerciseInstance: Hashable {
     /// Weight (canonical lb) of the representative top set in the
     /// most recent session that included this exercise.
     let topWeight: Double
@@ -376,17 +392,17 @@ nonisolated struct LastExerciseInstance: Hashable, Sendable {
         case .duration:
             let time = DurationFormatter.string(topDuration)
             guard let load = loadMode.loggedLoadLabel(
-                    topWeight,
-                    unit: unit,
-                    includeUnit: false
-                  ) else { return time }
+                topWeight,
+                unit: unit,
+                includeUnit: false
+            ) else { return time }
             return "\(load) × \(time)"
         }
     }
 }
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Build a stable exercise-key → LastExerciseInstance lookup in one pass over
     /// the archive. Picker rows do O(1) lookups against this map
     /// instead of re-scanning history per row. SwiftData models are
@@ -431,7 +447,7 @@ enum RelativeDate {
         if calendar.isDateInYesterday(date) { return "yesterday" }
 
         let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date), to: calendar.startOfDay(for: now)).day ?? 0
-        if days < 0 { return "today" }            // Defensive — future-stamped data
+        if days < 0 { return "today" } // Defensive — future-stamped data
         if days < 14 { return "\(days)d ago" }
 
         let weeks = days / 7
@@ -444,7 +460,7 @@ enum RelativeDate {
 }
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Group archived sessions by stable exercise history key and produce
     /// a chronological progress series for each. Only sessions with at
     /// least one completed set for the exercise contribute. Only
@@ -546,29 +562,30 @@ nonisolated extension AnalyticsAccumulator {
         result.reserveCapacity(byKey.count)
         for (_, bucket) in byKey where bucket.points.count >= 2 {
             guard !isCancelled() else { return [] }
-                // Sort by date ASC then walk to mark records at the
-                // moment they were achieved — only when the exercise
-                // modality supports a strength record for its mode.
-                let sorted = bucket.points.sorted { $0.date < $1.date }
-                var runningBest: StrengthPerformance?
-                var flagged: [ExerciseProgressPoint] = []
-                flagged.reserveCapacity(sorted.count)
-                for var p in sorted {
-                    guard !isCancelled() else { return [] }
-                    if let performance = p.strengthPerformance,
-                       performance.advancement(over: runningBest) != nil {
-                        p.isStrengthPR = true
-                        runningBest = performance
-                    }
-                    flagged.append(p)
+            // Sort by date ASC then walk to mark records at the
+            // moment they were achieved — only when the exercise
+            // modality supports a strength record for its mode.
+            let sorted = bucket.points.sorted { $0.date < $1.date }
+            var runningBest: StrengthPerformance?
+            var flagged: [ExerciseProgressPoint] = []
+            flagged.reserveCapacity(sorted.count)
+            for var p in sorted {
+                guard !isCancelled() else { return [] }
+                if let performance = p.strengthPerformance,
+                   performance.advancement(over: runningBest) != nil
+                {
+                    p.isStrengthPR = true
+                    runningBest = performance
                 }
-                result.append(ExerciseProgress(
-                    catalogID: bucket.catalogID,
-                    catalogItemID: bucket.catalogItemID,
-                    name: bucket.name,
-                    group: bucket.group,
-                    points: flagged
-                ))
+                flagged.append(p)
+            }
+            result.append(ExerciseProgress(
+                catalogID: bucket.catalogID,
+                catalogItemID: bucket.catalogItemID,
+                name: bucket.name,
+                group: bucket.group,
+                points: flagged
+            ))
         }
 
         guard !isCancelled() else { return [] }

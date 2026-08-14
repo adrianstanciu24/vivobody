@@ -7,10 +7,10 @@
 //  focused on composition and state.
 //
 
-import VivoKit
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
+import VivoKit
 
 extension ExerciseDetailScreen {
     // MARK: - Hero
@@ -519,7 +519,8 @@ extension ExerciseDetailScreen {
                 // a number so the latest state reads at a glance. Sits
                 // on top of a PR dot without conflict when they coincide.
                 if let lastPoint = plottable.last,
-                   let lastValue = chartValue(for: lastPoint) {
+                   let lastValue = chartValue(for: lastPoint)
+                {
                     PointMark(
                         x: .value("Date", lastPoint.date),
                         y: .value(chartMetricAccessibilityName, lastValue)
@@ -565,7 +566,7 @@ extension ExerciseDetailScreen {
         }
         switch effectiveChartMetric {
         case .weight: return "Load"
-        case .e1rm:   return "Estimated one-rep max"
+        case .e1rm: return "Estimated one-rep max"
         case .volume: return "Volume"
         }
     }
@@ -583,10 +584,10 @@ extension ExerciseDetailScreen {
     }
 
     private func chartAccessibilityValue(_ value: Double) -> String {
-        if item.trackingMode == .duration && !item.performanceSemanticKind.comparesLoad {
+        if item.trackingMode == .duration, !item.performanceSemanticKind.comparesLoad {
             return DurationFormatter.string(value)
         }
-        let formatted = value.formatted(.number.precision(.fractionLength(0...1)))
+        let formatted = value.formatted(.number.precision(.fractionLength(0 ... 1)))
         return "\(formatted) \(unit.symbol)"
     }
 
@@ -594,7 +595,7 @@ extension ExerciseDetailScreen {
         ZStack {
             GhostCard(padding: Space.lg) {
                 VStack(spacing: 0) {
-                    ForEach(0..<4, id: \.self) { index in
+                    ForEach(0 ..< 4, id: \.self) { index in
                         GhostBar(height: 1, cornerRadius: 0, opacity: 0.06)
                         if index < 3 { Spacer() }
                     }
@@ -708,10 +709,10 @@ extension ExerciseDetailScreen {
 
     func verdictColor(_ verdict: ProgressionVerdict) -> Color {
         switch verdict {
-        case .ready: return Tint.complete
-        case .grind: return Tint.danger
-        case .push:  return Ink.tertiary
-        case .none:  return Ink.tertiary
+        case .ready: Tint.complete
+        case .grind: Tint.danger
+        case .push: Ink.tertiary
+        case .none: Ink.tertiary
         }
     }
 
@@ -920,16 +921,18 @@ extension ExerciseDetailScreen {
         case .duration:
             let time = DurationFormatter.string(row.topDuration)
             guard let load = row.loadMode.summaryLoadLabel(
-                    row.topWeight,
-                    unit: unit
-                  ) else { return time }
+                row.topWeight,
+                unit: unit
+            ) else { return time }
             return "\(load) × \(time)"
         }
     }
 
     /// Stable lookup key matching `lastInstanceByExercise()` and
     /// `progressByExercise()`.
-    var historyKey: String { item.historyKey }
+    var historyKey: String {
+        item.historyKey
+    }
 
     /// All progress points for this exercise across history. Nil
     /// when the user has fewer than 2 sessions (matches the
@@ -971,7 +974,7 @@ extension ExerciseDetailScreen {
     var effectiveLoadDetail: EffectiveLoadDetail? {
         guard hasHistory else { return nil }
         guard item.loadMode == .bodyweightAdded
-                || item.loadMode == .assistanceSubtracted else { return nil }
+            || item.loadMode == .assistanceSubtracted else { return nil }
 
         if let point = progress?.recordPoint ?? progress?.latest {
             return EffectiveLoadDetail(
@@ -998,7 +1001,7 @@ extension ExerciseDetailScreen {
         completedSessions.reduce(0) { acc, session in
             acc + (session.orderedExercises.contains(where: {
                 $0.matchesCatalogItem(item)
-                && $0.sets.contains(where: \.isAnalyticsEligible)
+                    && $0.sets.contains(where: \.isAnalyticsEligible)
             }) ? 1 : 0)
         }
     }
@@ -1007,7 +1010,9 @@ extension ExerciseDetailScreen {
     /// from `progress != nil` which requires >=2 sessions — the
     /// chart hides on 0 or 1 sessions, but the recent-sessions
     /// table can still surface a single instance.
-    var hasHistory: Bool { lastInstance != nil }
+    var hasHistory: Bool {
+        lastInstance != nil
+    }
 
     /// Latest 5 sessions for this exercise (newest first), with
     /// top set + total completed-set count + PR flag computed.
@@ -1186,7 +1191,8 @@ extension ExerciseDetailScreen {
             points = points.filter { $0.date >= cutoff }
         }
         if effectiveChartMetric == .weight,
-           item.performanceSemanticKind.comparesLoad {
+           item.performanceSemanticKind.comparesLoad
+        {
             // Never relabel raw added load or machine assistance as an
             // absolute resistance when the historical bodyweight is absent.
             points = points.filter { $0.effectiveTopLoad != nil }
@@ -1245,7 +1251,7 @@ extension ExerciseDetailScreen {
         case .weight:
             guard let historyLoad = point.historyTopLoad else { return nil }
             return WeightFormatter.toDisplay(historyLoad, unit: unit)
-        case .e1rm:   return WeightFormatter.toDisplay(point.estimated1RM, unit: unit)
+        case .e1rm: return WeightFormatter.toDisplay(point.estimated1RM, unit: unit)
         case .volume:
             guard point.comparableTonnageAvailability == .complete else { return nil }
             return WeightFormatter.toDisplay(point.totalVolume, unit: unit)

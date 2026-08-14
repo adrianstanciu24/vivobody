@@ -15,8 +15,8 @@
 //      .frame(height: 420)
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct SwipePager<Content: View>: View {
     @Binding var selection: Int
@@ -70,7 +70,7 @@ struct SwipePager<Content: View>: View {
             let virtual = Double(selection) - Double(dragOffset) / Double(stride)
 
             HStack(spacing: spacing) {
-                ForEach(0..<count, id: \.self) { i in
+                ForEach(0 ..< count, id: \.self) { i in
                     page(i, width: cardWidth, height: H)
                         .scaleEffect(reduceMotion ? 1.0 : scale(for: i, virtual: virtual))
                         .opacity(opacity(for: i, virtual: virtual))
@@ -156,7 +156,7 @@ struct SwipePager<Content: View>: View {
                 let isAtRightEdge = selection == count - 1 && raw < 0
                 let atEdge = isAtLeftEdge || isAtRightEdge
 
-                if atEdge && abs(raw) > 28 && !didEdgeHaptic {
+                if atEdge, abs(raw) > 28, !didEdgeHaptic {
                     Haptics.rigid(playsSound: false)
                     didEdgeHaptic = true
                 } else if !atEdge {
@@ -166,7 +166,7 @@ struct SwipePager<Content: View>: View {
                 // Crossing haptic — when the effective focus changes frames.
                 let effective = Double(selection) - Double(damped) / Double(stride)
                 let frame = Int(effective.rounded())
-                if frame != lastCrossedIndex && frame >= 0 && frame < count {
+                if frame != lastCrossedIndex, frame >= 0, frame < count {
                     Haptics.tick(playsSound: false)
                     lastCrossedIndex = frame
                 }
@@ -219,10 +219,10 @@ struct SwipePager<Content: View>: View {
 
     private func applyEdgeRubberBand(_ raw: CGFloat, stride: CGFloat) -> CGFloat {
         let range = stride * 0.5
-        if raw > 0 && selection == 0 {
+        if raw > 0, selection == 0 {
             return rubberBand(raw, range: range)
         }
-        if raw < 0 && selection == count - 1 {
+        if raw < 0, selection == count - 1 {
             return -rubberBand(-raw, range: range)
         }
         return raw
@@ -237,12 +237,12 @@ struct SwipePager<Content: View>: View {
 
     private func scale(for index: Int, virtual: Double) -> CGFloat {
         let distance = min(1.0, abs(Double(index) - virtual))
-        return CGFloat(1.0 - 0.08 * distance)   // 1.00 → 0.92
+        return CGFloat(1.0 - 0.08 * distance) // 1.00 → 0.92
     }
 
     private func opacity(for index: Int, virtual: Double) -> Double {
         let distance = min(1.0, abs(Double(index) - virtual))
-        return 1.0 - 0.45 * distance            // 1.00 → 0.55
+        return 1.0 - 0.45 * distance // 1.00 → 0.55
     }
 }
 
@@ -321,7 +321,8 @@ struct PageDots: View {
         var i = 0
         while i < count {
             if let run = linkedRuns.first(where: { $0.lowerBound == i }),
-               run.upperBound < count {
+               run.upperBound < count
+            {
                 result.append(Array(run))
                 i = run.upperBound + 1
             } else {

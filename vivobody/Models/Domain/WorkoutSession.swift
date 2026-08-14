@@ -10,13 +10,13 @@
 //  the workout so History queries can pick it up.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// Whether a comparable-tonnage subtotal represents all eligible work.
 /// Non-comparable and timed exercises are outside this accounting pool,
 /// so they do not make an otherwise complete summary partial.
-nonisolated enum ComparableTonnageAvailability: Hashable, Sendable {
+nonisolated enum ComparableTonnageAvailability: Hashable {
     case complete
     case partial
     case unavailable
@@ -25,7 +25,7 @@ nonisolated enum ComparableTonnageAvailability: Hashable, Sendable {
 /// Honest comparable tonnage for a workout or collection of workouts.
 /// `knownSubtotal` remains useful for partial data, while `availability`
 /// prevents callers from presenting that subtotal as the complete total.
-nonisolated struct ComparableTonnageSummary: Hashable, Sendable {
+nonisolated struct ComparableTonnageSummary: Hashable {
     let knownSubtotal: Double
     let availability: ComparableTonnageAvailability
 
@@ -87,6 +87,7 @@ final class WorkoutSession: Identifiable {
     var exercises: [Exercise] = []
 
     // MARK: - Runtime UI state
+
     //
     // These describe the active in-flight UI state (which exercise is
     // on screen, whether the rest timer is up, count-up animation
@@ -189,7 +190,8 @@ final class WorkoutSession: Identifiable {
         // prescription inherit — deliberate per-set programming
         // (pyramid / wave) keeps its own targets.
         for pending in ordered.dropFirst(index + 1)
-        where !pending.isCompleted && pending.sharesPlan(with: completed) {
+            where !pending.isCompleted && pending.sharesPlan(with: completed)
+        {
             pending.weight = completed.weight
             pending.reps = completed.reps
             pending.duration = completed.duration
@@ -203,9 +205,9 @@ final class WorkoutSession: Identifiable {
         // rounds (see Superset.swift).
         if let step = supersetStep(after: exercise) {
             switch step {
-            case .partner(let partner):
+            case let .partner(partner):
                 return .supersetPartner(partner)
-            case .roundComplete(let resume):
+            case let .roundComplete(resume):
                 beginRest()
                 return .supersetRoundRest(resume: resume)
             case .groupComplete:
@@ -481,12 +483,13 @@ extension Exercise {
 
         if performanceSemanticKind.comparesLoad,
            let leftMarker = loadProfile.withinSnapshotLoadMarker(
-                loggedWeight: lhs.weight
+               loggedWeight: lhs.weight
            ),
            let rightMarker = loadProfile.withinSnapshotLoadMarker(
-                loggedWeight: rhs.weight
+               loggedWeight: rhs.weight
            ),
-           leftMarker != rightMarker {
+           leftMarker != rightMarker
+        {
             return leftMarker < rightMarker
         }
 
@@ -544,9 +547,9 @@ extension Exercise {
 
         switch (modality, trackingMode) {
         case (.dynamicStrength, .reps):
-            return sets.filter { $0.isAnalyticsEligible && $0.reps > 0 }.count
+            return sets.count(where: { $0.isAnalyticsEligible && $0.reps > 0 })
         case (.isometricStrength, .duration):
-            return sets.filter { $0.isAnalyticsEligible && $0.duration > 0 }.count
+            return sets.count(where: { $0.isAnalyticsEligible && $0.duration > 0 })
         default:
             return 0
         }
@@ -623,7 +626,7 @@ extension Exercise {
     }
 }
 
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Completeness-aware comparable tonnage across the collection.
     var comparableTonnageSummary: ComparableTonnageSummary {
         reduce(.zero) { summary, session in

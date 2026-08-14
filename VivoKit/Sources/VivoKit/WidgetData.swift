@@ -66,12 +66,12 @@ public nonisolated enum WidgetSnapshotVersion {
 /// back to a raw decode for backward compatibility with data written
 /// before versioning was introduced.
 public nonisolated enum WidgetSnapshotCodec {
-    public static func encode<T: Codable>(_ value: T) -> Data? {
+    public static func encode(_ value: some Codable) -> Data? {
         let envelope = VersionedSnapshot(version: WidgetSnapshotVersion.current, payload: value)
         return try? JSONEncoder().encode(envelope)
     }
 
-    public static func decode<T: Codable>(_ type: T.Type, from data: Data?) -> T? {
+    public static func decode<T: Codable>(_: T.Type, from data: Data?) -> T? {
         guard let data else { return nil }
         if let envelope = try? JSONDecoder().decode(VersionedSnapshot<T>.self, from: data) {
             guard envelope.version == WidgetSnapshotVersion.current else { return nil }
@@ -144,7 +144,7 @@ public struct UpNextSnapshot: Codable, Hashable, Sendable {
         templateName: "Push Day",
         exerciseCount: 4,
         totalSets: 12,
-        totalVolume: 12_600,
+        totalVolume: 12600,
         easeOff: false,
         restReason: nil,
         nextTemplateName: nil,
@@ -173,7 +173,10 @@ public struct UpNextSnapshot: Codable, Hashable, Sendable {
 }
 
 public struct UpNextExerciseSnapshot: Codable, Hashable, Identifiable, Sendable {
-    public var id: String { name + setSpec }
+    public var id: String {
+        name + setSpec
+    }
+
     public var name: String
     public var setSpec: String
 
@@ -227,7 +230,10 @@ public struct ConsistencySnapshot: Codable, Hashable, Sendable {
 }
 
 public struct ConsistencyDaySnapshot: Codable, Hashable, Identifiable, Sendable {
-    public var id: String { date.timeIntervalSinceReferenceDate.description }
+    public var id: String {
+        date.timeIntervalSinceReferenceDate.description
+    }
+
     public var date: Date
     public var level: Int
     public var isInRange: Bool
@@ -292,7 +298,10 @@ public struct SignatureSnapshot: Codable, Hashable, Sendable {
 }
 
 public struct SignaturePetalSnapshot: Codable, Hashable, Identifiable, Sendable {
-    public var id: String { group }
+    public var id: String {
+        group
+    }
+
     public var group: String
     public var volumeShare: Double
 
@@ -370,7 +379,10 @@ public struct StrengthSnapshot: Codable, Hashable, Sendable {
 }
 
 public struct StrengthPointSnapshot: Codable, Hashable, Identifiable, Sendable {
-    public var id: String { date.timeIntervalSinceReferenceDate.description }
+    public var id: String {
+        date.timeIntervalSinceReferenceDate.description
+    }
+
     public var date: Date
     /// Estimated 1-rep max in canonical lb.
     public var e1RM: Double
@@ -437,7 +449,7 @@ public struct ActiveWorkoutSnapshot: Codable, Hashable, Sendable {
         isResting: true,
         restEndsAt: Date().addingTimeInterval(83),
         restDuration: 120,
-        totalVolume: 8_420,
+        totalVolume: 8420,
         totalSetsCompleted: 12
     )
 
@@ -484,8 +496,8 @@ public enum WidgetSampleData {
         let currentWeekStart = calendar.dateInterval(of: .weekOfYear, for: today)?.start ?? today
         let start = calendar.date(byAdding: .day, value: -7 * 25, to: currentWeekStart) ?? today
 
-        return (0..<26).map { week in
-            (0..<7).map { day in
+        return (0 ..< 26).map { week in
+            (0 ..< 7).map { day in
                 let date = calendar.date(byAdding: .day, value: week * 7 + day, to: start) ?? today
                 let level = active && date <= today && (week + day) % 3 == 0 ? ((week + day) % 4) + 1 : 0
                 return ConsistencyDaySnapshot(

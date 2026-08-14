@@ -28,9 +28,9 @@
 //      }
 //
 
-import VivoKit
 import SwiftUI
 import UIKit
+import VivoKit
 
 struct PRCelebration: View {
     @Binding var isPresented: Bool
@@ -111,7 +111,7 @@ struct PRCelebration: View {
 
     private var accessibilitySummary: String {
         [value + (unit.map { " \($0)" } ?? ""), detail]
-            .compactMap { $0 }
+            .compactMap(\.self)
             .joined(separator: ". ")
     }
 

@@ -16,8 +16,8 @@
 //      and just say `.glassCard()` / `.glassChip()`.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 extension View {
     /// Plain content surface — the translucent neutral fill of a card

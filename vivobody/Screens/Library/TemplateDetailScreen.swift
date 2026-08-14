@@ -25,9 +25,9 @@
 //  (swipe on its card), not here.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct TemplateDetailScreen: View {
     @Bindable var template: WorkoutTemplate
@@ -39,7 +39,9 @@ struct TemplateDetailScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var showPicker: Bool = false
     @State private var saveError: SaveErrorBox? = nil

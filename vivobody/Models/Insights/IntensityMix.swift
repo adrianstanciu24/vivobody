@@ -19,7 +19,7 @@ import Foundation
 
 // MARK: - Zone
 
-nonisolated enum IntensityZone: Hashable, CaseIterable, Sendable {
+nonisolated enum IntensityZone: Hashable, CaseIterable {
     case strength
     case hypertrophy
     case endurance
@@ -28,32 +28,32 @@ nonisolated enum IntensityZone: Hashable, CaseIterable, Sendable {
     /// by the caller (an unlogged set), but guard anyway.
     static func zone(forReps reps: Int) -> IntensityZone {
         switch reps {
-        case ...5:   return .strength
-        case 6...12: return .hypertrophy
-        default:     return .endurance
+        case ...5: .strength
+        case 6 ... 12: .hypertrophy
+        default: .endurance
         }
     }
 
     var label: String {
         switch self {
-        case .strength:    return "Low reps"
-        case .hypertrophy: return "Moderate reps"
-        case .endurance:   return "High reps"
+        case .strength: "Low reps"
+        case .hypertrophy: "Moderate reps"
+        case .endurance: "High reps"
         }
     }
 
     var repRange: String {
         switch self {
-        case .strength:    return "1–5"
-        case .hypertrophy: return "6–12"
-        case .endurance:   return "13+"
+        case .strength: "1–5"
+        case .hypertrophy: "6–12"
+        case .endurance: "13+"
         }
     }
 }
 
 // MARK: - Mix
 
-nonisolated struct IntensityMix: Hashable, Sendable {
+nonisolated struct IntensityMix: Hashable {
     /// Below this sample size the UI labels the distribution as an
     /// early read instead of presenting a tiny sample as settled.
     static let minimumClearSampleSets = 6
@@ -62,15 +62,23 @@ nonisolated struct IntensityMix: Hashable, Sendable {
     let hypertrophySets: Int
     let enduranceSets: Int
 
-    var total: Int { strengthSets + hypertrophySets + enduranceSets }
-    var hasData: Bool { total > 0 }
-    var hasSparseSample: Bool { hasData && total < Self.minimumClearSampleSets }
+    var total: Int {
+        strengthSets + hypertrophySets + enduranceSets
+    }
+
+    var hasData: Bool {
+        total > 0
+    }
+
+    var hasSparseSample: Bool {
+        hasData && total < Self.minimumClearSampleSets
+    }
 
     func count(_ zone: IntensityZone) -> Int {
         switch zone {
-        case .strength:    return strengthSets
-        case .hypertrophy: return hypertrophySets
-        case .endurance:   return enduranceSets
+        case .strength: strengthSets
+        case .hypertrophy: hypertrophySets
+        case .endurance: enduranceSets
         }
     }
 
@@ -94,21 +102,26 @@ nonisolated struct IntensityMix: Hashable, Sendable {
 /// week in the requested window, including zero-set weeks, so gaps are
 /// explicit and the horizontal scale never stretches sparse data. The
 /// current calendar week is marked as partial.
-nonisolated struct IntensityWeek: Identifiable, Hashable, Sendable {
-    var id: Date { weekStart }
+nonisolated struct IntensityWeek: Identifiable, Hashable {
+    var id: Date {
+        weekStart
+    }
+
     let weekStart: Date
     let strengthSets: Int
     let hypertrophySets: Int
     let enduranceSets: Int
     let isCurrentWeek: Bool
 
-    var total: Int { strengthSets + hypertrophySets + enduranceSets }
+    var total: Int {
+        strengthSets + hypertrophySets + enduranceSets
+    }
 
     func count(_ zone: IntensityZone) -> Int {
         switch zone {
-        case .strength:    return strengthSets
-        case .hypertrophy: return hypertrophySets
-        case .endurance:   return enduranceSets
+        case .strength: strengthSets
+        case .hypertrophy: hypertrophySets
+        case .endurance: enduranceSets
         }
     }
 }
@@ -119,7 +132,7 @@ nonisolated struct IntensityWeek: Identifiable, Hashable, Sendable {
 /// chart and regression. A 12-week request always means the current
 /// partial week plus the previous 11 calendar weeks — never 13 buckets
 /// caused by rounding an 84-day instant cutoff back to a week start.
-nonisolated struct RepRangeWeekWindow: Sendable {
+nonisolated struct RepRangeWeekWindow {
     let weekStarts: [Date]
     let start: Date
     let currentWeekStart: Date
@@ -138,11 +151,12 @@ nonisolated struct RepRangeWeekWindow: Sendable {
                   byAdding: .weekOfYear,
                   value: -(weeks - 1),
                   to: currentWeekStart
-              ) else {
+              )
+        else {
             return nil
         }
 
-        let starts = (0..<weeks).compactMap {
+        let starts = (0 ..< weeks).compactMap {
             calendar.date(byAdding: .weekOfYear, value: $0, to: start)
         }
         guard starts.count == weeks else { return nil }
@@ -157,11 +171,11 @@ nonisolated struct RepRangeWeekWindow: Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Rep-range distribution of completed `.reps` sets over the
     /// trailing `window` (default 28 days) as of `now`.
     func intensityMix(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date()
     ) -> IntensityMix {
         AnalyticsAccumulator.history(
@@ -182,7 +196,7 @@ nonisolated extension AnalyticsAccumulator {
     /// Snapshot-backed rep-range distribution used by the background
     /// analytics worker.
     func intensityMix(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> IntensityMix {
@@ -203,7 +217,8 @@ nonisolated extension AnalyticsAccumulator {
             for replay in session.exercises {
                 guard !isCancelled() else { return cancelled }
                 guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps else {
+                      replay.exercise.trackingMode == .reps
+                else {
                     continue
                 }
                 for set in replay.exercise.sets {
@@ -212,9 +227,9 @@ nonisolated extension AnalyticsAccumulator {
                         continue
                     }
                     switch IntensityZone.zone(forReps: set.reps) {
-                    case .strength:    strength += 1
+                    case .strength: strength += 1
                     case .hypertrophy: hypertrophy += 1
-                    case .endurance:   endurance += 1
+                    case .endurance: endurance += 1
                     }
                 }
             }
@@ -255,12 +270,13 @@ nonisolated extension AnalyticsAccumulator {
                 of: .weekOfYear,
                 for: date
             )?.start,
-                  validWeekStarts.contains(weekStart) else { continue }
+                validWeekStarts.contains(weekStart) else { continue }
 
             for replay in session.exercises {
                 guard !isCancelled() else { return [] }
                 guard replay.exercise.modality == .dynamicStrength,
-                      replay.exercise.trackingMode == .reps else {
+                      replay.exercise.trackingMode == .reps
+                else {
                     continue
                 }
                 for set in replay.exercise.sets {
@@ -270,9 +286,9 @@ nonisolated extension AnalyticsAccumulator {
                     }
                     var bucket = byWeek[weekStart] ?? (0, 0, 0)
                     switch IntensityZone.zone(forReps: set.reps) {
-                    case .strength:    bucket.strength += 1
+                    case .strength: bucket.strength += 1
                     case .hypertrophy: bucket.hypertrophy += 1
-                    case .endurance:   bucket.endurance += 1
+                    case .endurance: bucket.endurance += 1
                     }
                     byWeek[weekStart] = bucket
                 }

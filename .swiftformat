@@ -1,0 +1,13 @@
+# vivobody SwiftFormat configuration
+# https://github.com/nicklockwood/SwiftFormat
+#
+# Install: brew install swiftformat
+# Format:  swiftformat vivobody/ vivobodyWidgets/ VivoKit/Sources/
+# Check:   swiftformat --dryrun vivobody/ vivobodyWidgets/ VivoKit/Sources/
+
+--swiftversion 6.0
+--indent 4
+--header ignore
+--disable trailingCommas
+--disable redundantNilInit
+--disable redundantSelf

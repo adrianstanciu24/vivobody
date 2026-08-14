@@ -7,8 +7,8 @@
 //  make the high-value sizes quick to inspect during UI iteration.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 #Preview("Up Next Small", as: .systemSmall) {
@@ -46,7 +46,7 @@ import WidgetKit
             isResting: true,
             restEndsAt: Date().addingTimeInterval(83),
             restDuration: 120,
-            totalVolume: 8_420,
+            totalVolume: 8420,
             totalSetsCompleted: 12,
             isExerciseComplete: false
         )
@@ -65,7 +65,7 @@ import WidgetKit
             isResting: false,
             restEndsAt: nil,
             restDuration: 120,
-            totalVolume: 8_420,
+            totalVolume: 8420,
             totalSetsCompleted: 12,
             isExerciseComplete: false
         )
@@ -84,7 +84,7 @@ import WidgetKit
             isResting: false,
             restEndsAt: nil,
             restDuration: 120,
-            totalVolume: 3_414,
+            totalVolume: 3414,
             totalSetsCompleted: 10,
             isExerciseComplete: true
         )

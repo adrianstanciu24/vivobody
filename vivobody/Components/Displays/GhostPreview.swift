@@ -19,8 +19,8 @@
 //      the dashed rim is the cue that this is empty, not loading.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 /// A single placeholder line. `width == nil` stretches to fill the
 /// available width (useful for a sparkline-area placeholder); a

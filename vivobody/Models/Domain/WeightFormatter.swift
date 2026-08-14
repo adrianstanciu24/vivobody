@@ -18,15 +18,14 @@
 import Foundation
 
 enum WeightFormatter {
-
     // MARK: - Numeric conversion
 
     /// Convert a canonical pounds value to a value in the user's
     /// preferred unit, suitable for showing in a scrubber or label.
     nonisolated static func toDisplay(_ lb: Double, unit: WeightUnit) -> Double {
         switch unit {
-        case .lb: return lb
-        case .kg: return lb * WeightUnit.kgPerLb
+        case .lb: lb
+        case .kg: lb * WeightUnit.kgPerLb
         }
     }
 
@@ -34,8 +33,8 @@ enum WeightFormatter {
     /// in their unit) back to canonical lb for storage.
     nonisolated static func toCanonical(_ display: Double, unit: WeightUnit) -> Double {
         switch unit {
-        case .lb: return display
-        case .kg: return display * WeightUnit.lbPerKg
+        case .lb: display
+        case .kg: display * WeightUnit.lbPerKg
         }
     }
 
@@ -89,7 +88,7 @@ enum WeightFormatter {
     /// 1-unit mark is noise.
     static func volumeString(_ lb: Double, unit: WeightUnit) -> String {
         let display = toDisplay(lb, unit: unit)
-        if display >= 10_000 {
+        if display >= 10000 {
             let k = display / 1000
             let compact = k.truncatingRemainder(dividingBy: 1) == 0
                 ? "\(Int(k))k"
@@ -105,7 +104,7 @@ enum WeightFormatter {
     /// render the unit as a separate label.
     static func volumeValue(_ lb: Double, unit: WeightUnit) -> String {
         let display = toDisplay(lb, unit: unit)
-        if display >= 10_000 {
+        if display >= 10000 {
             let k = display / 1000
             return k.truncatingRemainder(dividingBy: 1) == 0
                 ? "\(Int(k))k"
@@ -117,7 +116,7 @@ enum WeightFormatter {
 
     // MARK: - Internals
 
-    nonisolated private static func formatValue(_ value: Double, digits: Int) -> String {
+    private nonisolated static func formatValue(_ value: Double, digits: Int) -> String {
         if digits == 0 {
             return "\(Int(value.rounded()))"
         }

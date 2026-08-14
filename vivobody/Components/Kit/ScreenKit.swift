@@ -21,8 +21,8 @@
 //  all type from `Typography`. No literals.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 // MARK: - Section header
 
@@ -179,7 +179,6 @@ struct StatStrip: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    @ViewBuilder
     var body: some View {
         if dynamicTypeSize.isAccessibilitySize {
             VStack(spacing: 0) {

@@ -23,9 +23,9 @@
 //      accent; incomplete sets dim with a hollow status pip.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct SessionDetailScreen: View {
     let session: WorkoutSession
@@ -33,7 +33,9 @@ struct SessionDetailScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     /// Every completed session that landed before (or up to and
     /// including) this one, in chronological order. Used to walk the
@@ -151,11 +153,11 @@ struct SessionDetailScreen: View {
     private var heroVolumeLabel: String {
         switch session.receiptTonnageSummary.availability {
         case .complete:
-            return sessionHasPR ? "Volume · personal record" : "Volume"
+            sessionHasPR ? "Volume · personal record" : "Volume"
         case .partial:
-            return "Known volume · total unavailable"
+            "Known volume · total unavailable"
         case .unavailable:
-            return "Volume unavailable"
+            "Volume unavailable"
         }
     }
 
@@ -205,16 +207,18 @@ struct SessionDetailScreen: View {
 
     // MARK: - Derived
 
-    private var muscleTags: [MuscleGroup] { session.distinctMuscleGroupsInOrder }
+    private var muscleTags: [MuscleGroup] {
+        session.distinctMuscleGroupsInOrder
+    }
 
     /// Same derivation HistoryScreen uses for its row title — keeps
     /// the voice consistent between the list and the detail.
     private var workoutTitle: String {
         switch muscleTags.count {
-        case 0: return "Workout"
-        case 1: return "\(muscleTags[0].displayName) day"
-        case 2: return "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
-        default: return "Full body"
+        case 0: "Workout"
+        case 1: "\(muscleTags[0].displayName) day"
+        case 2: "\(muscleTags[0].displayName) + \(muscleTags[1].displayName)"
+        default: "Full body"
         }
     }
 
@@ -234,12 +238,14 @@ struct SessionDetailScreen: View {
     private var topSetValue: String {
         let candidates = session.orderedExercises.flatMap { exercise in
             guard exercise.modality == .dynamicStrength,
-                  exercise.trackingMode == .reps else {
+                  exercise.trackingMode == .reps
+            else {
                 return [(Exercise, WorkoutSet, Double)]()
             }
             return exercise.sets.compactMap { set -> (Exercise, WorkoutSet, Double)? in
                 guard set.isAnalyticsEligible,
-                      let load = exercise.effectiveLoad(loggedWeight: set.weight) else {
+                      let load = exercise.effectiveLoad(loggedWeight: set.weight)
+                else {
                     return nil
                 }
                 return (exercise, set, load)
@@ -280,8 +286,9 @@ struct SessionDetailScreen: View {
         return result
     }
 
-    private var sessionHasPR: Bool { !prExerciseIDs.isEmpty }
-
+    private var sessionHasPR: Bool {
+        !prExerciseIDs.isEmpty
+    }
 }
 
 // MARK: - Per-exercise row
@@ -295,9 +302,13 @@ private struct ExerciseDetailRow: View {
     var adherence: ExerciseAdherence? = nil
     var showsContributionBar: Bool = false
 
-    private var mode: TrackingMode { exercise.trackingMode }
+    private var mode: TrackingMode {
+        exercise.trackingMode
+    }
 
-    private var orderedSets: [WorkoutSet] { exercise.orderedSets }
+    private var orderedSets: [WorkoutSet] {
+        exercise.orderedSets
+    }
 
     /// The exercise's standout completed set, singled out with the
     /// gold completion accent. The domain selector preserves load-mode

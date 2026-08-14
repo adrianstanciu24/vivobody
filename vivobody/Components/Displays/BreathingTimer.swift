@@ -23,9 +23,9 @@
 //      point fires Haptics.selection() so you feel it without looking.
 //
 
-import VivoKit
 import SwiftUI
 import UIKit
+import VivoKit
 
 struct BreathingTimer: View {
     let duration: TimeInterval
@@ -349,12 +349,12 @@ struct BreathingTimer: View {
 
                 let down = raw > threshold
                 let up = raw < -threshold
-                if down && !pastSkipThreshold {
+                if down, !pastSkipThreshold {
                     pastSkipThreshold = true
                     Haptics.selection(playsSound: false)
                 }
                 if !down { pastSkipThreshold = false }
-                if up && !pastExtendThreshold {
+                if up, !pastExtendThreshold {
                     pastExtendThreshold = true
                     Haptics.selection(playsSound: false)
                 }
@@ -395,7 +395,7 @@ struct BreathingTimer: View {
 
     private func handleSecondTick(_ remaining: Int) {
         guard remaining >= 0 else { return }
-        if remaining == 10 && !hasFiredWarning {
+        if remaining == 10, !hasFiredWarning {
             Haptics.breath()
             hasFiredWarning = true
         }

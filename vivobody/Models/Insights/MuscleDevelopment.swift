@@ -60,13 +60,12 @@ import CoreGraphics
 import Foundation
 
 nonisolated enum MuscleDevelopment {
-
     // MARK: - Tunable parameters
 
     /// Every rate and time-constant in one struct so the model can be
     /// calibrated (and swept in tests) without touching the math.
     /// Days are the time unit throughout; work is in hard sets.
-    struct Parameters: Sendable {
+    struct Parameters {
         /// Relaxation time-constant (days) of the weekly-volume
         /// estimate. Governs how fast the colour tracks a change in
         /// training volume and how gently it fades on a layoff.
@@ -84,7 +83,7 @@ nonisolated enum MuscleDevelopment {
 
     /// The hidden state evolved per muscle. Not colour — colour is
     /// derived from this (see `State.channels`).
-    struct Fiber: Sendable {
+    struct Fiber {
         /// Frequency-invariant estimate of recent effective sets per
         /// week. The colour driver, read through the landmark-
         /// normalised map.
@@ -105,7 +104,7 @@ nonisolated enum MuscleDevelopment {
     /// the last advance. Replaying a history produces one of these;
     /// screens compute it ONCE per data change and every consumer
     /// derives from the same value.
-    struct State: Sendable {
+    struct State {
         var fibers: [Muscle: Fiber] = [:]
         /// Wall-clock time the state was last advanced to.
         var lastUpdate: Date?
@@ -118,7 +117,7 @@ nonisolated enum MuscleDevelopment {
         /// Intensity for a weekly-volume estimate, `0...1` — the
         /// estimate as a plain fraction of the shared productive
         /// weekly target, so "consistently at target" reads as 1.0.
-        private func development(weeklyVolume: Double, for muscle: Muscle) -> Double {
+        private func development(weeklyVolume: Double, for _: Muscle) -> Double {
             guard weeklyVolume > 0 else { return 0 }
             return Swift.min(1, weeklyVolume / VolumeLandmark.default.optimalHigh)
         }
@@ -155,7 +154,9 @@ nonisolated enum MuscleDevelopment {
             var result: [String: Channels] = [:]
             for muscle in fibers.keys {
                 let ch = channels(muscle)
-                for node in muscle.nodeNames { result[node] = ch }
+                for node in muscle.nodeNames {
+                    result[node] = ch
+                }
             }
             return result
         }
@@ -233,7 +234,9 @@ nonisolated enum MuscleDevelopment {
         var result: [String: CGFloat] = [:]
         for (muscle, value) in state.intensities {
             let v = CGFloat(value)
-            for node in muscle.nodeNames { result[node] = v }
+            for node in muscle.nodeNames {
+                result[node] = v
+            }
         }
         return result
     }
@@ -260,7 +263,7 @@ nonisolated enum MuscleDevelopment {
     static func advance(_ state: inout State, to date: Date) {
         defer { state.lastUpdate = date }
         guard let last = state.lastUpdate else { return }
-        let dtDays = max(0, date.timeIntervalSince(last)) / 86_400
+        let dtDays = max(0, date.timeIntervalSince(last)) / 86400
         guard dtDays > 0 else { return }
 
         let factor = exp(-dtDays / state.parameters.tau)
@@ -279,7 +282,7 @@ nonisolated enum MuscleDevelopment {
     /// `date`.
     static func applyStimulus(
         _ stimulus: [Muscle: Double],
-        at date: Date,
+        at _: Date,
         to state: inout State
     ) {
         let scale = 7.0 / state.parameters.tau

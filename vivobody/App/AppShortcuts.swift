@@ -31,9 +31,9 @@
 //  AppShortcutsProvider must be registered from the app target.
 //
 
-import VivoKit
 import AppIntents
 import Foundation
+import VivoKit
 
 // MARK: - App Group payload
 
@@ -41,7 +41,7 @@ import Foundation
 /// the entity query (running in the system process) can enumerate the
 /// user's templates without touching SwiftData. Just enough to
 /// resolve and display each template.
-struct TemplateEntitySnapshot: Codable, Sendable, Hashable {
+struct TemplateEntitySnapshot: Codable, Hashable {
     let id: String
     let name: String
 }
@@ -64,11 +64,6 @@ struct WorkoutTemplateEntity: AppEntity {
     }
 
     static let defaultQuery = WorkoutTemplateQuery()
-
-    init(id: String, name: String) {
-        self.id = id
-        self.name = name
-    }
 }
 
 // MARK: - Entity query (App Group only, no SwiftData)
@@ -123,7 +118,9 @@ struct WorkoutTemplateQuery: EnumerableEntityQuery, EntityStringQuery {
 struct StartTemplateWorkoutIntent: AppIntent {
     nonisolated static let title: LocalizedStringResource = "Start Workout from Template"
     nonisolated static let description = IntentDescription("Start a vivobody workout from a saved template.")
-    nonisolated static var openAppWhenRun: Bool { true }
+    nonisolated static var openAppWhenRun: Bool {
+        true
+    }
 
     @Parameter(title: "Template")
     var template: WorkoutTemplateEntity

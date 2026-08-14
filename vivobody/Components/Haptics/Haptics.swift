@@ -28,7 +28,6 @@ import UIKit
 
 @MainActor
 enum Haptics {
-
     // MARK: - Cached generators
 
     private static let lightImpact = UIImpactFeedbackGenerator(style: .light)

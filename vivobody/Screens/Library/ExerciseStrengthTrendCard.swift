@@ -9,9 +9,9 @@
 //  verdict and the selected range of rep-adjusted e1RM history.
 //
 
-import VivoKit
-import SwiftUI
 import Charts
+import SwiftUI
+import VivoKit
 
 struct ExerciseStrengthTrendCard: View {
     let exerciseName: String
@@ -104,9 +104,8 @@ struct ExerciseStrengthTrendCard: View {
         )
         let latest = window.last
         let first = window.first ?? latest
-        let span: Int
-        if let first, let latest {
-            span = max(
+        let span: Int = if let first, let latest {
+            max(
                 0,
                 calendar.dateComponents(
                     [.day],
@@ -115,7 +114,7 @@ struct ExerciseStrengthTrendCard: View {
                 ).day ?? 0
             )
         } else {
-            span = 0
+            0
         }
         return ExerciseStrengthBuildingState(
             workouts: min(window.count, StrengthOutlookBoard.minPoints),
@@ -344,7 +343,7 @@ struct ExerciseStrengthTrendCard: View {
     private var rangePlaceholder: some View {
         ZStack {
             VStack(spacing: 0) {
-                ForEach(0..<3, id: \.self) { index in
+                ForEach(0 ..< 3, id: \.self) { index in
                     Rectangle()
                         .fill(Surface.edge)
                         .frame(height: 0.5)
@@ -391,58 +390,58 @@ struct ExerciseStrengthTrendCard: View {
 
     private func trendHeadline(_ trend: PRTrend) -> String {
         switch trend {
-        case .climbing: return "Strength is climbing"
-        case .plateaued: return "Holding steady"
-        case .slipping: return "Strength is trending down"
+        case .climbing: "Strength is climbing"
+        case .plateaued: "Holding steady"
+        case .slipping: "Strength is trending down"
         }
     }
 
     private func trendTitle(_ trend: PRTrend) -> String {
         switch trend {
-        case .climbing: return "Climbing"
-        case .plateaued: return "Holding steady"
-        case .slipping: return "Trending down"
+        case .climbing: "Climbing"
+        case .plateaued: "Holding steady"
+        case .slipping: "Trending down"
         }
     }
 
     private func trendSymbol(_ trend: PRTrend) -> String {
         switch trend {
-        case .climbing: return "arrow.up.right"
-        case .plateaued: return "arrow.right"
-        case .slipping: return "arrow.down.right"
+        case .climbing: "arrow.up.right"
+        case .plateaued: "arrow.right"
+        case .slipping: "arrow.down.right"
         }
     }
 
     private func trendColor(_ trend: PRTrend) -> Color {
         switch trend {
-        case .climbing: return Tint.primary
-        case .plateaued: return Ink.secondary
-        case .slipping: return Tint.danger
+        case .climbing: Tint.primary
+        case .plateaued: Ink.secondary
+        case .slipping: Tint.danger
         }
     }
 
     private func trendDetail(_ stat: StrengthOutlookStat) -> String {
-        let base: String
-        if stat.isRecentE1RMHigh {
-            base = "Your latest 1–12 rep set produced a new estimated-strength high."
+        let base = if stat.isRecentE1RMHigh {
+            "Your latest 1–12 rep set produced a new estimated-strength high."
         } else if stat.isLatestE1RMHigh {
-            base = "Your latest strength estimate remains your all-time e1RM high."
+            "Your latest strength estimate remains your all-time e1RM high."
         } else if let days = stat.daysToE1RMHigh {
-            base = "The established line meets your e1RM high in about \(days) \(days == 1 ? "day" : "days")."
+            "The established line meets your e1RM high in about \(days) \(days == 1 ? "day" : "days")."
         } else {
             switch stat.trend {
             case .climbing:
-                base = "Your recent strength estimates are moving up."
+                "Your recent strength estimates are moving up."
             case .plateaued:
-                base = "Your recent strength estimates are holding in a narrow range."
+                "Your recent strength estimates are holding in a narrow range."
             case .slipping:
-                base = "Your recent strength estimates are moving down."
+                "Your recent strength estimates are moving down."
             }
         }
 
         if let estimateDays = stat.daysSinceLastEstimate,
            let trainedDays = stat.daysSinceLastTrained,
-           trainedDays < estimateDays {
+           trainedDays < estimateDays
+        {
             return base + " Newer sets were outside 1–12 reps or lacked a comparable load."
         }
         return base
@@ -453,8 +452,8 @@ struct ExerciseStrengthTrendCard: View {
         switch days {
         case 0: return "Estimate today"
         case 1: return "Estimate 1d ago"
-        case 2..<14: return "Estimate \(days)d ago"
-        case 14..<70: return "Estimate \(days / 7)w ago"
+        case 2 ..< 14: return "Estimate \(days)d ago"
+        case 14 ..< 70: return "Estimate \(days / 7)w ago"
         default: return "Estimate \(days / 30)mo ago"
         }
     }
@@ -626,7 +625,7 @@ private struct ExerciseStrengthPlaceholderPath: Shape {
 
         var path = Path()
         path.move(to: first)
-        for index in 1..<points.count {
+        for index in 1 ..< points.count {
             let previous = points[index - 1]
             let next = points[index]
             let midpointX = (previous.x + next.x) / 2

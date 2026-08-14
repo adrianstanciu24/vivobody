@@ -15,7 +15,7 @@ enum WeekdayLabels {
     /// first weekday (e.g. [2,3,4,5,6,7,1] for a Monday-first locale).
     static func ordered(_ calendar: Calendar = .current) -> [Int] {
         let first = calendar.firstWeekday
-        return (0..<7).map { ((first - 1 + $0) % 7) + 1 }
+        return (0 ..< 7).map { ((first - 1 + $0) % 7) + 1 }
     }
 
     /// Single-letter symbol for a chip ("S", "M", …).

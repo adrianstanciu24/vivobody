@@ -17,10 +17,10 @@
 //  gate without touching StoreKit.
 //
 
-import VivoKit
 import Foundation
 import Observation
 import StoreKit
+import VivoKit
 import WidgetKit
 
 /// The two entitlement states. `pro` is a verified, unrevoked
@@ -104,35 +104,37 @@ final class ProStore {
     /// alert by PaywallSheet. `.userCancelled` never sets this.
     var purchaseError: String? = nil
 
-    var isUnlocked: Bool { status == .pro }
+    var isUnlocked: Bool {
+        status == .pro
+    }
 
     @ObservationIgnored private var updatesTask: Task<Void, Never>?
 
     #if DEBUG
-    /// DEBUG follows the production entitlement path: free until a
-    /// verified purchase exists. `--pro` is the sole explicit unlock
-    /// override for screenshots and gated-state tests; `--no-iap`
-    /// disables StoreKit and deliberately remains free. Both flags are
-    /// no-ops in Release.
-    @ObservationIgnored private let forcedPro = CommandLine.arguments.contains("--pro")
-    @ObservationIgnored private let storeKitDisabled = CommandLine.arguments.contains("--no-iap")
+        /// DEBUG follows the production entitlement path: free until a
+        /// verified purchase exists. `--pro` is the sole explicit unlock
+        /// override for screenshots and gated-state tests; `--no-iap`
+        /// disables StoreKit and deliberately remains free. Both flags are
+        /// no-ops in Release.
+        @ObservationIgnored private let forcedPro = CommandLine.arguments.contains("--pro")
+        @ObservationIgnored private let storeKitDisabled = CommandLine.arguments.contains("--no-iap")
     #endif
 
     init() {
         let cachedUnlocked = UserDefaults.standard.bool(forKey: SettingsKey.proUnlockedCache)
         #if DEBUG
-        let shouldForcePro = CommandLine.arguments.contains("--pro")
-        let shouldDisableStoreKit = CommandLine.arguments.contains("--no-iap")
-        status = ProGate.launchStatus(
-            cachedUnlocked: cachedUnlocked,
-            forcedPro: shouldForcePro,
-            storeKitDisabled: shouldDisableStoreKit
-        )
+            let shouldForcePro = CommandLine.arguments.contains("--pro")
+            let shouldDisableStoreKit = CommandLine.arguments.contains("--no-iap")
+            status = ProGate.launchStatus(
+                cachedUnlocked: cachedUnlocked,
+                forcedPro: shouldForcePro,
+                storeKitDisabled: shouldDisableStoreKit
+            )
         #else
-        status = ProGate.launchStatus(cachedUnlocked: cachedUnlocked)
+            status = ProGate.launchStatus(cachedUnlocked: cachedUnlocked)
         #endif
         #if DEBUG
-        guard !storeKitDisabled else { return }
+            guard !storeKitDisabled else { return }
         #endif
         updatesTask = Task { [weak self] in
             await self?.listenForTransactionUpdates()
@@ -161,11 +163,11 @@ final class ProStore {
     /// overwrites the launch-time cache seed in both directions.
     func refreshEntitlements() async {
         #if DEBUG
-        guard !storeKitDisabled else { return }
+            guard !storeKitDisabled else { return }
         #endif
         var owned = false
         for await result in Transaction.currentEntitlements {
-            guard case .verified(let transaction) = result,
+            guard case let .verified(transaction) = result,
                   transaction.productID == Self.productID
             else { continue }
             owned = ProGate.status(
@@ -181,7 +183,7 @@ final class ProStore {
     /// after the paywall was dismissed.
     private func listenForTransactionUpdates() async {
         for await result in Transaction.updates {
-            guard case .verified(let transaction) = result else { continue }
+            guard case let .verified(transaction) = result else { continue }
             if transaction.productID == Self.productID {
                 setStatus(ProGate.status(
                     hasVerifiedPurchase: true,
@@ -194,7 +196,7 @@ final class ProStore {
 
     private func setStatus(_ new: ProStatus) {
         #if DEBUG
-        if forcedPro { return }
+            if forcedPro { return }
         #endif
         let changed = status != new
         status = new
@@ -216,7 +218,7 @@ final class ProStore {
     /// the whole session. A no-op once the product is loaded.
     func loadProductIfNeeded() async {
         #if DEBUG
-        guard !storeKitDisabled else { return }
+            guard !storeKitDisabled else { return }
         #endif
         guard product == nil else { return }
         product = try? await Product.products(for: [Self.productID]).first
@@ -227,10 +229,10 @@ final class ProStore {
 
     func purchase() async {
         #if DEBUG
-        if storeKitDisabled {
-            purchaseError = "In-app purchases are disabled for local testing (--no-iap)."
-            return
-        }
+            if storeKitDisabled {
+                purchaseError = "In-app purchases are disabled for local testing (--no-iap)."
+                return
+            }
         #endif
         await loadProductIfNeeded()
         guard let product else {
@@ -239,8 +241,8 @@ final class ProStore {
         }
         do {
             switch try await product.purchase() {
-            case .success(let verification):
-                guard case .verified(let transaction) = verification else {
+            case let .success(verification):
+                guard case let .verified(transaction) = verification else {
                     purchaseError = "Your purchase couldn't be verified. Try Restore Purchases."
                     return
                 }
@@ -264,10 +266,10 @@ final class ProStore {
     /// reachable from the paywall), then settle the entitlement.
     func restore() async {
         #if DEBUG
-        if storeKitDisabled {
-            purchaseError = "In-app purchases are disabled for local testing (--no-iap)."
-            return
-        }
+            if storeKitDisabled {
+                purchaseError = "In-app purchases are disabled for local testing (--no-iap)."
+                return
+            }
         #endif
         do {
             try await AppStore.sync()

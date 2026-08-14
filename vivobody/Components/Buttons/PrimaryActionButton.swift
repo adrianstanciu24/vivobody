@@ -21,8 +21,8 @@
 //      button reads as "the thing you want to do right now."
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct PrimaryActionButton: View {
     let title: String

@@ -9,26 +9,26 @@
 //  working; archive stamps completedAt so history queries can see it.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 // MARK: - Muscle group
 
 /// Stored as the raw value on `Exercise`; exposed as `Exercise.group`.
 /// Display name and accent color are derived per case — no need to
 /// persist them.
-nonisolated enum MuscleGroup: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum MuscleGroup: String, Codable, Hashable, CaseIterable {
     case chest, back, shoulders, legs, arms, core
 
     var displayName: String {
         switch self {
-        case .chest: return "Chest"
-        case .back: return "Back"
-        case .shoulders: return "Shoulders"
-        case .legs: return "Legs"
-        case .arms: return "Arms"
-        case .core: return "Core"
+        case .chest: "Chest"
+        case .back: "Back"
+        case .shoulders: "Shoulders"
+        case .legs: "Legs"
+        case .arms: "Arms"
+        case .core: "Core"
         }
     }
 
@@ -38,7 +38,9 @@ nonisolated enum MuscleGroup: String, Codable, Hashable, CaseIterable, Sendable 
     /// label, not a rainbow of dots. Kept as a property so existing
     /// call sites (dots, chips, calendar) compile while the screens
     /// migrate to text-only group labels.
-    var accent: Color { Ink.tertiary }
+    var accent: Color {
+        Ink.tertiary
+    }
 }
 
 // MARK: - Tracking mode
@@ -49,14 +51,14 @@ nonisolated enum MuscleGroup: String, Codable, Hashable, CaseIterable, Sendable 
 /// weight still optional (weighted plank, loaded carry). Stored as
 /// a raw value on the catalog item, the template exercise, and the
 /// session exercise so the enum can evolve without migrations.
-nonisolated enum TrackingMode: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum TrackingMode: String, Codable, Hashable, CaseIterable {
     case reps
     case duration
 
     var displayName: String {
         switch self {
-        case .reps:     return "Reps"
-        case .duration: return "Time"
+        case .reps: "Reps"
+        case .duration: "Time"
         }
     }
 }
@@ -240,7 +242,7 @@ final class Exercise: Identifiable {
         // Pre-populate the planned sets. They start uncompleted at
         // the plan's weight/reps/duration and get updated in-place as
         // the user adjusts the scrubbers and taps complete.
-        for i in 0..<plannedSets {
+        for i in 0 ..< plannedSets {
             let set = WorkoutSet(
                 weight: plannedWeight,
                 reps: plannedReps,
@@ -273,7 +275,9 @@ final class WorkoutSet: Identifiable {
     var isCompleted: Bool = false
 
     /// Shared eligibility gate for performance-oriented analytics.
-    var isAnalyticsEligible: Bool { isCompleted }
+    var isAnalyticsEligible: Bool {
+        isCompleted
+    }
 
     /// Reps in reserve — how many more reps the lifter felt they had
     /// left at the end of this set. The session-logged read on how
@@ -405,7 +409,8 @@ extension Exercise {
         sortOrder: Int
     ) -> Exercise {
         guard let prescription = summary?.mostRecentInstance.setPrescription,
-              !prescription.isEmpty else {
+              !prescription.isEmpty
+        else {
             return Exercise(from: item, sortOrder: sortOrder)
         }
 
@@ -484,10 +489,10 @@ extension Exercise {
 
     static func samplePlan() -> [Exercise] {
         let templates: [(name: String, group: MuscleGroup, sets: Int, reps: Int, weight: Double)] = [
-            ("Barbell Bench Press",    .chest,     3, 8, 135),
-            ("Barbell Bent-Over Row", .back,      3, 8, 115),
+            ("Barbell Bench Press", .chest, 3, 8, 135),
+            ("Barbell Bent-Over Row", .back, 3, 8, 115),
             ("Dumbbell Shoulder Press", .shoulders, 3, 8, 95),
-            ("Barbell Back Squat", .legs,      3, 8, 185),
+            ("Barbell Back Squat", .legs, 3, 8, 185),
         ]
         return templates.enumerated().map { i, t in
             Exercise(

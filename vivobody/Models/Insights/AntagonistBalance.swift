@@ -43,25 +43,25 @@ private nonisolated enum SymmetryMuscleBucket: Hashable {
 
     static func bucket(for muscle: Muscle) -> SymmetryMuscleBucket? {
         switch muscle {
-        case .bicepsBrachii, .brachialis: return .biceps
-        case .triceps: return .triceps
-        case .rectusFemoris, .vasti: return .quads
-        case .bicepsFemoris, .medialHamstrings: return .hamstrings
-        case .gluteMed: return .hipAbductors
+        case .bicepsBrachii, .brachialis: .biceps
+        case .triceps: .triceps
+        case .rectusFemoris, .vasti: .quads
+        case .bicepsFemoris, .medialHamstrings: .hamstrings
+        case .gluteMed: .hipAbductors
         case .adductorMagnus, .adductorLongusBrevis, .gracilis, .pectineus:
-            return .hipAdductors
-        case .gastrocnemius, .soleus, .flexorHallucisLongus: return .calves
+            .hipAdductors
+        case .gastrocnemius, .soleus, .flexorHallucisLongus: .calves
         case .tibialisAnterior, .fibularisLongusBrevis, .fibularisTertius,
              .toeExtensors:
-            return .shins
-        default: return nil
+            .shins
+        default: nil
         }
     }
 }
 
 // MARK: - Verdict
 
-nonisolated enum SymmetryVerdict: Hashable, Sendable {
+nonisolated enum SymmetryVerdict: Hashable {
     case noData
     case balanced
     case leftHeavy
@@ -72,14 +72,14 @@ nonisolated enum SymmetryVerdict: Hashable, Sendable {
 /// describe how the user chose to train: squat/hinge,
 /// bilateral/unilateral, and roster-limited lower-body region pairs.
 /// Descriptive pairs must not imply that 50/50 is a universal target.
-nonisolated enum AntagonistComparisonKind: Hashable, Sendable {
+nonisolated enum AntagonistComparisonKind: Hashable {
     case balance
     case distribution
 }
 
 // MARK: - Pair
 
-nonisolated struct AntagonistPair: Identifiable, Hashable, Sendable {
+nonisolated struct AntagonistPair: Identifiable, Hashable {
     /// Stable key (e.g. "push-pull"), also the SwiftUI identity.
     let id: String
     let leftLabel: String
@@ -107,15 +107,20 @@ nonisolated struct AntagonistPair: Identifiable, Hashable, Sendable {
         self.sampleSessions = sampleSessions
     }
 
-    var total: Double { leftSets + rightSets }
+    var total: Double {
+        leftSets + rightSets
+    }
 
     /// Fraction of the pair's work carried by the left side, `0...1`
     /// (0.5 is a perfect split).
-    var leftShare: Double { total > 0 ? leftSets / total : 0.5 }
+    var leftShare: Double {
+        total > 0 ? leftSets / total : 0.5
+    }
 
     var verdict: SymmetryVerdict {
         guard total >= AntagonistBoard.minSets,
-              sampleSessions >= AntagonistBoard.minimumSessions else {
+              sampleSessions >= AntagonistBoard.minimumSessions
+        else {
             return .noData
         }
         let share = leftShare
@@ -124,20 +129,35 @@ nonisolated struct AntagonistPair: Identifiable, Hashable, Sendable {
         return .balanced
     }
 
-    var hasMeaningfulWork: Bool { verdict != .noData }
-    var isBalanced: Bool { verdict == .balanced }
-    var isDescriptive: Bool { comparisonKind == .distribution }
+    var hasMeaningfulWork: Bool {
+        verdict != .noData
+    }
+
+    var isBalanced: Bool {
+        verdict == .balanced
+    }
+
+    var isDescriptive: Bool {
+        comparisonKind == .distribution
+    }
 
     /// Distance from a perfect split, `0` (even) … `0.5` (all one side).
-    var skew: Double { abs(leftShare - 0.5) }
+    var skew: Double {
+        abs(leftShare - 0.5)
+    }
 
-    var heavierLabel: String { leftShare >= 0.5 ? leftLabel : rightLabel }
-    var lighterLabel: String { leftShare >= 0.5 ? rightLabel : leftLabel }
+    var heavierLabel: String {
+        leftShare >= 0.5 ? leftLabel : rightLabel
+    }
+
+    var lighterLabel: String {
+        leftShare >= 0.5 ? rightLabel : leftLabel
+    }
 }
 
 // MARK: - Board
 
-nonisolated struct AntagonistBoard: Sendable {
+nonisolated struct AntagonistBoard {
     /// Window over which both sides accumulate work.
     static let windowDays = 28
     /// Within ±this share of 50/50 reads as balanced.
@@ -151,11 +171,14 @@ nonisolated struct AntagonistBoard: Sendable {
     /// directional balance, lower-body balance, then laterality.
     let pairs: [AntagonistPair]
 
-    var hasAny: Bool { pairs.contains { $0.hasMeaningfulWork } }
+    var hasAny: Bool {
+        pairs.contains { $0.hasMeaningfulWork }
+    }
+
     var imbalancedCount: Int {
-        pairs.lazy.filter {
+        pairs.lazy.count(where: {
             !$0.isDescriptive && $0.hasMeaningfulWork && !$0.isBalanced
-        }.count
+        })
     }
 
     /// The most lopsided pair — drives the headline.
@@ -165,13 +188,15 @@ nonisolated struct AntagonistBoard: Sendable {
         }.max { $0.skew < $1.skew }
     }
 
-    func pair(_ id: String) -> AntagonistPair? { pairs.first { $0.id == id } }
+    func pair(_ id: String) -> AntagonistPair? {
+        pairs.first { $0.id == id }
+    }
 }
 
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Effective-set split for each antagonist pair over the trailing
     /// 4 weeks as of `now`.
     func antagonistBalance(now: Date = Date()) -> AntagonistBoard {
@@ -187,7 +212,7 @@ nonisolated extension AnalyticsAccumulator {
         isCancelled: @Sendable () -> Bool = { false }
     ) -> AntagonistBoard {
         let cutoff = now.addingTimeInterval(
-            -Double(AntagonistBoard.windowDays) * 86_400
+            -Double(AntagonistBoard.windowDays) * 86400
         )
         var muscleSets: [SymmetryMuscleBucket: Double] = [:]
         var movementSets: [SymmetryMovementBucket: Double] = [:]
@@ -232,19 +257,18 @@ nonisolated extension AnalyticsAccumulator {
                 default:
                     break
                 }
-                let bucket: SymmetryMovementBucket?
-                switch (classification.pattern, classification.direction) {
-                case (.push, .horizontal): bucket = .horizontalPush
+                let bucket: SymmetryMovementBucket? = switch (classification.pattern, classification.direction) {
+                case (.push, .horizontal): .horizontalPush
                 // Incline and decline presses retain horizontal-press
                 // ancestry even though the catalog now records their
                 // more precise diagonal direction.
-                case (.push, .diagonal): bucket = .horizontalPush
-                case (.pull, .horizontal): bucket = .horizontalPull
-                case (.push, .vertical): bucket = .verticalPush
-                case (.pull, .vertical): bucket = .verticalPull
-                case (.squat, _): bucket = .squat
-                case (.hinge, _): bucket = .hinge
-                default: bucket = nil
+                case (.push, .diagonal): .horizontalPush
+                case (.pull, .horizontal): .horizontalPull
+                case (.push, .vertical): .verticalPush
+                case (.pull, .vertical): .verticalPull
+                case (.squat, _): .squat
+                case (.hinge, _): .hinge
+                default: nil
                 }
                 if let bucket {
                     movementSets[bucket, default: 0] += stimulus
@@ -254,8 +278,8 @@ nonisolated extension AnalyticsAccumulator {
 
                 let laterality: SymmetryMovementBucket =
                     classification.laterality == .bilateral
-                    ? .bilateral
-                    : .unilateral
+                        ? .bilateral
+                        : .unilateral
                 movementSets[laterality, default: 0] += stimulus
                 movementSessions[laterality, default: []]
                     .insert(session.session.id)

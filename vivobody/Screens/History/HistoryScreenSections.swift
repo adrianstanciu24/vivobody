@@ -8,9 +8,9 @@
 //  helpers and derived state live here.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 extension HistoryContent {
     // MARK: - Empty state
@@ -124,11 +124,13 @@ extension HistoryContent {
         var rirCount = 0
         for session in recentSessions {
             let date = session.completedAt ?? session.startedAt
-            guard date >= weekRange.start && date < weekRange.end else { continue }
+            guard date >= weekRange.start, date < weekRange.end else { continue }
             for exercise in session.exercises
-            where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps {
+                where exercise.modality == .dynamicStrength && exercise.trackingMode == .reps
+            {
                 for set in exercise.sets
-                where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged {
+                    where set.isAnalyticsEligible && set.reps > 0 && set.rirLogged
+                {
                     rirSum += set.repsInReserve
                     rirCount += 1
                 }
@@ -137,5 +139,4 @@ extension HistoryContent {
         guard rirCount > 0 else { return nil }
         return Double(rirSum) / Double(rirCount)
     }
-
 }

@@ -23,9 +23,9 @@
 //  cancelled sheet never pollutes the store.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct TemplateEditorScreen: View {
     let target: TemplateEditorTarget
@@ -37,7 +37,9 @@ struct TemplateEditorScreen: View {
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
 
     @State private var draft: TemplateDraft
 
@@ -61,7 +63,7 @@ struct TemplateEditorScreen: View {
         switch target {
         case .new:
             _draft = State(wrappedValue: TemplateDraft())
-        case .edit(let existing):
+        case let .edit(existing):
             var d = TemplateDraft()
             d.name = existing.name
             d.exercises = existing.orderedExercises.map { ExerciseDraft(from: $0) }
@@ -406,9 +408,9 @@ struct TemplateEditorScreen: View {
         var classified = updated
         if classified.classification == nil {
             switch configureTarget {
-            case .some(.adding(let item)):
+            case let .some(.adding(item)):
                 classified.classification = item.classification
-            case .some(.editing(let original)):
+            case let .some(.editing(original)):
                 classified.classification = original.classification
             case nil:
                 break
@@ -461,14 +463,14 @@ struct TemplateEditorScreen: View {
         var savedTemplate: WorkoutTemplate?
 
         switch target {
-        case .new(let sortOrder):
+        case let .new(sortOrder):
             let template = WorkoutTemplate(name: trimmedName, sortOrder: sortOrder)
             template.scheduledWeekdays = draft.scheduledWeekdays
             modelContext.insert(template)
             attachExercises(to: template)
             savedTemplate = template
 
-        case .edit(let existing):
+        case let .edit(existing):
             existing.name = trimmedName
             existing.scheduledWeekdays = draft.scheduledWeekdays
             // Replace exercises wholesale. TemplateExercises hold only
@@ -514,8 +516,8 @@ enum TemplateEditorTarget: Identifiable {
 
     var id: String {
         switch self {
-        case .new(let s):  return "new-\(s)"
-        case .edit(let t): return "edit-\(t.id.uuidString)"
+        case let .new(s): "new-\(s)"
+        case let .edit(t): "edit-\(t.id.uuidString)"
         }
     }
 }

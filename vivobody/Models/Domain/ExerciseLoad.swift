@@ -11,7 +11,7 @@
 import Foundation
 
 /// How an exercise's logged weight contributes to effective resistance.
-nonisolated enum ExerciseLoadMode: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum ExerciseLoadMode: String, Codable, Hashable, CaseIterable {
     /// Logged weight is the complete external resistance.
     case external
     /// A share of body weight plus any added external resistance.
@@ -23,14 +23,16 @@ nonisolated enum ExerciseLoadMode: String, Codable, Hashable, CaseIterable, Send
 
     nonisolated var displayName: String {
         switch self {
-        case .external: return "External Load"
-        case .bodyweightAdded: return "Bodyweight + Load"
-        case .assistanceSubtracted: return "Bodyweight − Assistance"
-        case .nonComparable: return "Non-comparable"
+        case .external: "External Load"
+        case .bodyweightAdded: "Bodyweight + Load"
+        case .assistanceSubtracted: "Bodyweight − Assistance"
+        case .nonComparable: "Non-comparable"
         }
     }
 
-    nonisolated var supportsLoadComparison: Bool { self != .nonComparable }
+    nonisolated var supportsLoadComparison: Bool {
+        self != .nonComparable
+    }
 
     /// User-facing label for the number they enter. The stored field is
     /// always canonical pounds, but its meaning differs materially by
@@ -38,10 +40,10 @@ nonisolated enum ExerciseLoadMode: String, Codable, Hashable, CaseIterable, Send
     /// generic “weight.”
     nonisolated var inputLabel: String {
         switch self {
-        case .external: return "Weight"
-        case .bodyweightAdded: return "Added load"
-        case .assistanceSubtracted: return "Assistance"
-        case .nonComparable: return "Resistance"
+        case .external: "Weight"
+        case .bodyweightAdded: "Added load"
+        case .assistanceSubtracted: "Assistance"
+        case .nonComparable: "Resistance"
         }
     }
 
@@ -73,15 +75,15 @@ nonisolated enum ExerciseLoadMode: String, Codable, Hashable, CaseIterable, Send
 
     nonisolated var inputOperatorSymbol: String {
         switch self {
-        case .assistanceSubtracted: return "−"
-        case .nonComparable: return "·"
-        case .external, .bodyweightAdded: return "+"
+        case .assistanceSubtracted: "−"
+        case .nonComparable: "·"
+        case .external, .bodyweightAdded: "+"
         }
     }
 }
 
 /// A snapshottable load interpretation for one exercise.
-nonisolated struct ExerciseLoadProfile: Hashable, Sendable {
+nonisolated struct ExerciseLoadProfile: Hashable {
     let mode: ExerciseLoadMode
     let bodyweightFraction: Double
 
@@ -176,13 +178,13 @@ nonisolated enum ExerciseLoad {
 
 /// How a valid performance advanced the standing record. The same value
 /// drives live celebration wording and chronological history flags.
-nonisolated enum StrengthRecordAdvancement: Hashable, Sendable {
+nonisolated enum StrengthRecordAdvancement: Hashable {
     case load
     case repetitions
     case duration
 }
 
-nonisolated enum StrengthPerformanceMetricKind: Hashable, Sendable {
+nonisolated enum StrengthPerformanceMetricKind: Hashable {
     case load
     case duration
 }
@@ -193,7 +195,7 @@ nonisolated enum StrengthPerformanceMetricKind: Hashable, Sendable {
 /// non-comparable isometrics compare duration alone. This deliberately
 /// avoids an estimated-1RM formula—the values are the load, reps, and
 /// time the user actually logged.
-nonisolated enum StrengthPerformance: Hashable, Sendable {
+nonisolated enum StrengthPerformance: Hashable {
     case dynamic(effectiveLoad: Double, reps: Int)
     case isometric(effectiveLoad: Double? = nil, duration: TimeInterval)
 
@@ -208,17 +210,17 @@ nonisolated enum StrengthPerformance: Hashable, Sendable {
     ) -> StrengthPerformance? {
         switch kind {
         case .dynamicLoadAndReps, .powerLoadAndReps:
-            return makeDynamic(effectiveLoad: effectiveLoad, reps: reps)
+            makeDynamic(effectiveLoad: effectiveLoad, reps: reps)
         case .isometricLoadAndDuration:
-            return makeIsometric(
+            makeIsometric(
                 effectiveLoad: effectiveLoad,
                 comparesLoad: true,
                 duration: duration
             )
         case .isometricDuration:
-            return makeIsometric(duration: duration)
+            makeIsometric(duration: duration)
         case .unrankedReps, .unrankedDuration:
-            return nil
+            nil
         }
     }
 
@@ -305,16 +307,16 @@ nonisolated enum StrengthPerformance: Hashable, Sendable {
     /// their tie-breaker. Duration-only isometrics remain time records.
     var primaryMetric: Double {
         switch self {
-        case let .dynamic(effectiveLoad, _): return effectiveLoad
-        case let .isometric(.some(effectiveLoad), _): return effectiveLoad
-        case let .isometric(nil, duration): return duration
+        case let .dynamic(effectiveLoad, _): effectiveLoad
+        case let .isometric(.some(effectiveLoad), _): effectiveLoad
+        case let .isometric(nil, duration): duration
         }
     }
 
     var primaryMetricKind: StrengthPerformanceMetricKind {
         switch self {
-        case .dynamic, .isometric(.some, _): return .load
-        case .isometric(nil, _): return .duration
+        case .dynamic, .isometric(.some, _): .load
+        case .isometric(nil, _): .duration
         }
     }
 

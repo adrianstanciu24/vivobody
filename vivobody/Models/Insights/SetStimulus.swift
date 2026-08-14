@@ -34,13 +34,12 @@
 import Foundation
 
 nonisolated enum SetStimulus {
-
     // MARK: - Tunable parameters
 
     /// The one knob of per-set crediting, kept in a struct so tests
     /// can sweep it and callers can thread a calibration through the
     /// shared replay without touching the math.
-    struct Parameters: Sendable {
+    struct Parameters {
         /// Multiplicative penalty per RIR step beyond 2. RIR 0–2 all
         /// count as full hard sets; each rep further in reserve costs
         /// 20%.
@@ -63,7 +62,7 @@ nonisolated enum SetStimulus {
     /// The two views of one exercise's priced work: the systemic
     /// total (training load) and the role-weighted per-muscle credit
     /// (volume bars, 3D body).
-    struct ExerciseCredit: Sendable {
+    struct ExerciseCredit {
         let setEquivalent: Double
         let byMuscle: [Muscle: Double]
     }

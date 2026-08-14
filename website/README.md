@@ -17,6 +17,16 @@ Create the production output with:
 npm run build
 ```
 
+## Formatting
+
+Prettier with `prettier-plugin-astro` keeps the markup, styles, and inline
+scripts consistent. Format all files or check without modifying:
+
+```bash
+npm run format
+npm run format:check
+```
+
 ## Refreshing the simulator demo
 
 The landing video is generated from deterministic app fixtures rather than

@@ -25,9 +25,9 @@
 //  BodyWeightDetail screen.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 /// What the sheet is being asked to do. The view branches on this
 /// to decide whether to seed the scrubber from the previous entry
@@ -38,8 +38,8 @@ enum BodyWeightLogTarget: Identifiable {
 
     var id: String {
         switch self {
-        case .create:        return "create"
-        case .edit(let e):   return "edit-\(e.id.uuidString)"
+        case .create: "create"
+        case let .edit(e): "edit-\(e.id.uuidString)"
         }
     }
 }
@@ -57,7 +57,7 @@ struct BodyWeightLogSheet: View {
     @Query(sort: \BodyWeightEntry.date, order: .reverse)
     private var entries: [BodyWeightEntry]
 
-    @State private var date: Date = Date()
+    @State private var date: Date = .init()
     @State private var weight: Double = 180
 
     /// True while a save is in flight — guards against double-tap
@@ -145,7 +145,7 @@ struct BodyWeightLogSheet: View {
             } else {
                 weight = 180
             }
-        case .edit(let entry):
+        case let .edit(entry):
             date = entry.date
             weight = entry.weight
         }
@@ -215,7 +215,7 @@ struct BodyWeightLogSheet: View {
             }
             performSave()
 
-        case .edit(let entry):
+        case let .edit(entry):
             if let existing = entries.entry(on: date), existing.id != entry.id {
                 // Date collision with another entry — confirm before
                 // overwriting it and deleting the one being edited.
@@ -234,7 +234,7 @@ struct BodyWeightLogSheet: View {
     /// edited.
     private func performMergeAndSave() {
         guard let existing = pendingMergeTarget,
-              case .edit(let entry) = target
+              case let .edit(entry) = target
         else { return }
         existing.weight = weight
         existing.date = date

@@ -12,20 +12,17 @@
 //  one persistent bottom control carries the purchase action.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct InsightsScreen: View {
     @Bindable var appState: AppState
 
-    init(appState: AppState) {
-        self.appState = appState
-    }
-
     var body: some View {
         Group {
             if !appState.analyticsArchiveHasSessions,
-               appState.analytics.hasCoreReports {
+               appState.analytics.hasCoreReports
+            {
                 emptyState(hasArchivedWorkout: false)
             } else if let reports = appState.analytics.insightsReports {
                 if !hasQualifyingData(reports) {
@@ -110,12 +107,12 @@ struct InsightsScreen: View {
     }
 
     @ViewBuilder
-    private func insightSection<Content: View>(
+    private func insightSection(
         title: String,
         index: Int,
         locked: Bool,
         isLast: Bool = false,
-        @ViewBuilder content: @escaping () -> Content
+        @ViewBuilder content: @escaping () -> some View
     ) -> some View {
         if locked {
             LockedInsightPreview(
@@ -264,7 +261,6 @@ struct InsightsScreen: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityHint("Your training history is being analyzed")
     }
-
 }
 
 // MARK: - Locked preview
@@ -308,7 +304,7 @@ private struct InsightEmptyMark: View {
                 endRadius: 90
             )
 
-            ForEach(0..<3, id: \.self) { index in
+            ForEach(0 ..< 3, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
                     .stroke(
                         index == 1

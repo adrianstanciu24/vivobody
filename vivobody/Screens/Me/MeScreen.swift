@@ -21,9 +21,9 @@
 //  button in the trailing toolbar slot.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct MeScreen: View {
     @Bindable var appState: AppState
@@ -35,9 +35,13 @@ struct MeScreen: View {
     /// without this screen faulting every exercise and set.
     @Query private var latestSessions: [WorkoutSession]
 
-    private var hasHistory: Bool { latestSessions.first != nil }
+    private var hasHistory: Bool {
+        latestSessions.first != nil
+    }
 
-    private var overview: ArchiveOverview { appState.analytics.overview }
+    private var overview: ArchiveOverview {
+        appState.analytics.overview
+    }
 
     init(appState: AppState) {
         self.appState = appState
@@ -79,7 +83,7 @@ struct MeScreen: View {
             // The overview lands one worker pass after launch; until
             // then a populated archive shows a quiet placeholder
             // instead of momentary zeroed odometers.
-            if hasHistory && !appState.analytics.hasCoreReports {
+            if hasHistory, !appState.analytics.hasCoreReports {
                 loadingState
             } else {
                 VStack(alignment: .leading, spacing: 0) {
@@ -149,7 +153,6 @@ struct MeScreen: View {
     /// the detail screen. The split keeps logging one tap when you
     /// have no data ("get started"), while populated users live in
     /// the detail screen where the same Log sheet is one tap away.
-    @ViewBuilder
     private var bodyWeightSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(
@@ -536,9 +539,13 @@ struct MeScreen: View {
 
     // MARK: - Derived
 
-    private var totalWorkouts: Int { overview.totalWorkouts }
+    private var totalWorkouts: Int {
+        overview.totalWorkouts
+    }
 
-    private var totalSets: Int { overview.totalSets }
+    private var totalSets: Int {
+        overview.totalSets
+    }
 
     private var hasStandingRecords: Bool {
         !appState.analytics.progress.standingRecords.isEmpty
@@ -549,7 +556,7 @@ struct MeScreen: View {
     /// is, by definition, a PR you hold). Drives the accented PR
     /// numeral in the lifetime odometer.
     private var personalRecords: Int {
-        appState.analytics.progress.lazy.filter { $0.recordDate != nil }.count
+        appState.analytics.progress.lazy.count(where: { $0.recordDate != nil })
     }
 
     private var lifetimeTonnage: ComparableTonnageSummary {
@@ -562,11 +569,11 @@ struct MeScreen: View {
     private var volumeLabel: String {
         switch lifetimeTonnage.availability {
         case .complete:
-            return WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit)
+            WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit)
         case .partial:
-            return "\(WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit))+"
+            "\(WeightFormatter.volumeValue(lifetimeTonnage.knownSubtotal, unit: weightUnit))+"
         case .unavailable:
-            return "—"
+            "—"
         }
     }
 
@@ -585,19 +592,19 @@ struct MeScreen: View {
     private func monthlyVolumeStat(_ recap: MonthlyRecap) -> Stat {
         switch recap.volumeAvailability {
         case .complete:
-            return Stat(
+            Stat(
                 value: WeightFormatter.volumeValue(recap.volume, unit: weightUnit),
                 unit: weightUnit.symbol,
                 label: "volume"
             )
         case .partial:
-            return Stat(
+            Stat(
                 value: "\(WeightFormatter.volumeValue(recap.volume, unit: weightUnit))+",
                 unit: weightUnit.symbol,
                 label: "known volume"
             )
         case .unavailable:
-            return Stat(value: "—", label: "volume unavailable")
+            Stat(value: "—", label: "volume unavailable")
         }
     }
 }

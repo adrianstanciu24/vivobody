@@ -15,8 +15,8 @@ import Foundation
 
 /// One fully curated exercise shipped in catalog.json. Optional values
 /// are optional by domain meaning, not to tolerate incomplete records.
-nonisolated struct CatalogRecord: Decodable, Sendable {
-    struct MuscleAssignment: Decodable, Sendable {
+nonisolated struct CatalogRecord: Decodable {
+    struct MuscleAssignment: Decodable {
         let muscle: Muscle
         let role: MuscleRole
     }
@@ -47,22 +47,66 @@ nonisolated struct CatalogRecord: Decodable, Sendable {
     let movementDefinition: String
     let involvement: [MuscleAssignment]
 
-    // Canonical projections used by persistent synchronization.
-    var muscleGroup: MuscleGroup { group }
-    var defaultWeightValue: Double { defaultWeight }
-    var defaultRepsValue: Int { reps }
-    var defaultWeightKgValue: Double? { defaultWeightKg }
-    var defaultDurationValue: TimeInterval { defaultDuration ?? 0 }
-    var trackingModeValue: TrackingMode { trackingMode }
-    var equipmentValue: Equipment { equipment }
-    var mechanicValue: Mechanic { mechanic }
-    var patternValue: MovementPattern? { pattern }
-    var directionValue: PushPullDirection? { direction }
-    var planeValues: [MovementPlane] { planes }
-    var lateralityValue: Laterality { laterality }
-    var aliasesValue: [String] { aliases }
-    var searchPriorityValue: Int { searchPriority ?? 0 }
-    var bodyweightFractionValue: Double { bodyweightFraction }
+    /// Canonical projections used by persistent synchronization.
+    var muscleGroup: MuscleGroup {
+        group
+    }
+
+    var defaultWeightValue: Double {
+        defaultWeight
+    }
+
+    var defaultRepsValue: Int {
+        reps
+    }
+
+    var defaultWeightKgValue: Double? {
+        defaultWeightKg
+    }
+
+    var defaultDurationValue: TimeInterval {
+        defaultDuration ?? 0
+    }
+
+    var trackingModeValue: TrackingMode {
+        trackingMode
+    }
+
+    var equipmentValue: Equipment {
+        equipment
+    }
+
+    var mechanicValue: Mechanic {
+        mechanic
+    }
+
+    var patternValue: MovementPattern? {
+        pattern
+    }
+
+    var directionValue: PushPullDirection? {
+        direction
+    }
+
+    var planeValues: [MovementPlane] {
+        planes
+    }
+
+    var lateralityValue: Laterality {
+        laterality
+    }
+
+    var aliasesValue: [String] {
+        aliases
+    }
+
+    var searchPriorityValue: Int {
+        searchPriority ?? 0
+    }
+
+    var bodyweightFractionValue: Double {
+        bodyweightFraction
+    }
 
     var muscleInvolvement: Muscle.Involvement {
         Muscle.Involvement(contributions: involvement.map {
@@ -205,10 +249,10 @@ nonisolated enum CatalogData {
             guard record.defaultWeight == 0 || record.defaultWeightKg != nil else {
                 throw ValidationError.missingKilogramDefault(record.catalogID)
             }
-            guard (0...100).contains(record.searchPriorityValue) else {
+            guard (0 ... 100).contains(record.searchPriorityValue) else {
                 throw ValidationError.invalidSearchPriority(record.catalogID)
             }
-            guard (0...1).contains(record.bodyweightFraction) else {
+            guard (0 ... 1).contains(record.bodyweightFraction) else {
                 throw ValidationError.invalidBodyweightFraction(record.catalogID)
             }
             if let kilograms = record.defaultWeightKg {
@@ -325,8 +369,8 @@ nonisolated enum CatalogData {
             return false
         }
         return value.unicodeScalars.allSatisfy { scalar in
-            (97...122).contains(scalar.value)
-                || (48...57).contains(scalar.value)
+            (97 ... 122).contains(scalar.value)
+                || (48 ... 57).contains(scalar.value)
                 || scalar.value == 45
         }
     }
@@ -361,32 +405,32 @@ nonisolated enum CatalogData {
 
         var description: String {
             switch self {
-            case .emptyCatalog: return "catalog contains no records"
-            case .invalidCatalogID(let id): return "invalid catalogID '\(id)'"
-            case .invalidFamilyID(let id): return "invalid familyID '\(id)'"
-            case .duplicateCatalogID(let id): return "duplicate catalogID '\(id)'"
-            case .emptyName(let id): return "record '\(id)' has an empty name"
-            case .duplicateName(let name): return "duplicate exercise name '\(name)'"
-            case .emptyMovementDefinition(let id): return "record '\(id)' has no movement definition"
-            case .invalidMovementDefinition(let id): return "record '\(id)' has a malformed movement definition"
-            case .invalidDefaults(let id): return "record '\(id)' has invalid weight/reps defaults"
-            case .invalidSearchPriority(let id): return "record '\(id)' has an invalid search priority"
-            case .invalidBodyweightFraction(let id): return "record '\(id)' has an invalid bodyweight fraction"
-            case .missingKilogramDefault(let id): return "record '\(id)' has a positive weight but no kilogram default"
-            case .invalidKilogramDefault(let id): return "record '\(id)' has an invalid kilogram default"
-            case .missingDuration(let id): return "duration record '\(id)' has no positive default duration"
-            case .invalidModalityTracking(let id): return "record '\(id)' has modality-incompatible tracking"
-            case .invalidLoadFraction(let id): return "record '\(id)' has load-mode-incompatible bodyweight fraction"
-            case .comparableBandLoad(let id): return "band record '\(id)' claims a comparable load"
-            case .invalidMechanicPattern(let id): return "record '\(id)' has mechanic-incompatible movement pattern"
-            case .emptyInvolvement(let id): return "record '\(id)' has no muscle involvement"
-            case .duplicateMuscle(let id): return "record '\(id)' assigns the same muscle more than once"
-            case .missingPrimary(let id): return "strength/power record '\(id)' has no primary muscle"
-            case .primaryGroupMismatch(let id): return "strength/power record '\(id)' group has no matching primary muscle"
-            case .invalidDirection(let id): return "record '\(id)' has inconsistent push/pull direction"
-            case .invalidPlanes(let id): return "record '\(id)' has invalid movement planes"
-            case .aliasConflictsWithName(let alias): return "alias '\(alias)' conflicts with a canonical name"
-            case .duplicateAlias(let alias): return "duplicate alias '\(alias)'"
+            case .emptyCatalog: "catalog contains no records"
+            case let .invalidCatalogID(id): "invalid catalogID '\(id)'"
+            case let .invalidFamilyID(id): "invalid familyID '\(id)'"
+            case let .duplicateCatalogID(id): "duplicate catalogID '\(id)'"
+            case let .emptyName(id): "record '\(id)' has an empty name"
+            case let .duplicateName(name): "duplicate exercise name '\(name)'"
+            case let .emptyMovementDefinition(id): "record '\(id)' has no movement definition"
+            case let .invalidMovementDefinition(id): "record '\(id)' has a malformed movement definition"
+            case let .invalidDefaults(id): "record '\(id)' has invalid weight/reps defaults"
+            case let .invalidSearchPriority(id): "record '\(id)' has an invalid search priority"
+            case let .invalidBodyweightFraction(id): "record '\(id)' has an invalid bodyweight fraction"
+            case let .missingKilogramDefault(id): "record '\(id)' has a positive weight but no kilogram default"
+            case let .invalidKilogramDefault(id): "record '\(id)' has an invalid kilogram default"
+            case let .missingDuration(id): "duration record '\(id)' has no positive default duration"
+            case let .invalidModalityTracking(id): "record '\(id)' has modality-incompatible tracking"
+            case let .invalidLoadFraction(id): "record '\(id)' has load-mode-incompatible bodyweight fraction"
+            case let .comparableBandLoad(id): "band record '\(id)' claims a comparable load"
+            case let .invalidMechanicPattern(id): "record '\(id)' has mechanic-incompatible movement pattern"
+            case let .emptyInvolvement(id): "record '\(id)' has no muscle involvement"
+            case let .duplicateMuscle(id): "record '\(id)' assigns the same muscle more than once"
+            case let .missingPrimary(id): "strength/power record '\(id)' has no primary muscle"
+            case let .primaryGroupMismatch(id): "strength/power record '\(id)' group has no matching primary muscle"
+            case let .invalidDirection(id): "record '\(id)' has inconsistent push/pull direction"
+            case let .invalidPlanes(id): "record '\(id)' has invalid movement planes"
+            case let .aliasConflictsWithName(alias): "alias '\(alias)' conflicts with a canonical name"
+            case let .duplicateAlias(alias): "duplicate alias '\(alias)'"
             }
         }
     }

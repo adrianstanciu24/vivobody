@@ -22,8 +22,11 @@ import Foundation
 
 /// One exercise's recent allocation: its identity, completed working
 /// set count, and share of all qualifying sets (`0…1`).
-nonisolated struct ExerciseDominanceStat: Identifiable, Hashable, Sendable {
-    var id: String { historyKey }
+nonisolated struct ExerciseDominanceStat: Identifiable, Hashable {
+    var id: String {
+        historyKey
+    }
+
     let historyKey: String
     /// The exercise name (original casing from first sighting).
     let name: String
@@ -35,31 +38,42 @@ nonisolated struct ExerciseDominanceStat: Identifiable, Hashable, Sendable {
 // MARK: - Board
 
 /// Ranked recent working-set allocation plus concentration reads.
-nonisolated struct ExerciseDominanceBoard: Sendable {
+nonisolated struct ExerciseDominanceBoard {
     /// All tracked exercises sorted by completed set count.
     let stats: [ExerciseDominanceStat]
     let totalSets: Int
 
     /// The single lift receiving the most recent sets.
-    var top: ExerciseDominanceStat? { stats.first }
+    var top: ExerciseDominanceStat? {
+        stats.first
+    }
+
     /// Share of qualifying sets held by the #1 lift, `0…1`.
-    var topShare: Double { top?.share ?? 0 }
+    var topShare: Double {
+        top?.share ?? 0
+    }
+
     /// Combined share of the top two lifts, `0…1`. The "are two
     /// lifts doing half the work?" headline read.
-    var topTwoShare: Double { stats.prefix(2).reduce(0) { $0 + $1.share } }
+    var topTwoShare: Double {
+        stats.prefix(2).reduce(0) { $0 + $1.share }
+    }
+
     /// Whether any qualifying strength sets have been logged.
-    var hasAny: Bool { !stats.isEmpty }
+    var hasAny: Bool {
+        !stats.isEmpty
+    }
 }
 
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Completed working-set share per exercise over the trailing
     /// `window`, ranked descending. Uses the same four-week default as
     /// the exercise-type split shown alongside it.
     func exerciseDominance(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date()
     ) -> ExerciseDominanceBoard {
         AnalyticsAccumulator.history(
@@ -72,7 +86,7 @@ nonisolated extension AnalyticsAccumulator {
     /// Snapshot-backed allocation used by the background analytics
     /// worker. No SwiftData model crosses into this computation.
     func exerciseDominance(
-        window: TimeInterval = 28 * 86_400,
+        window: TimeInterval = 28 * 86400,
         now: Date = Date(),
         isCancelled: @Sendable () -> Bool = { false }
     ) -> ExerciseDominanceBoard {

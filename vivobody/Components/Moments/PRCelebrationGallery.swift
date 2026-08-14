@@ -1,175 +1,175 @@
 #if DEBUG
 //
-//  PRCelebrationGallery.swift
-//  vivobody
+    //  PRCelebrationGallery.swift
+    //  vivobody
 //
-//  A faux "workout complete" surface lives behind the celebration so
-//  you can see how the overlay reads against real context. Three
-//  trigger buttons cover the common PR shapes: weight, reps, volume.
+    //  A faux "workout complete" surface lives behind the celebration so
+    //  you can see how the overlay reads against real context. Three
+    //  trigger buttons cover the common PR shapes: weight, reps, volume.
 //
 
-import VivoKit
-import SwiftUI
+    import SwiftUI
+    import VivoKit
 
-struct PRCelebrationGallery: View {
-    @State private var showWeightPR: Bool = false
-    @State private var showRepsPR: Bool = false
-    @State private var showVolumePR: Bool = false
+    struct PRCelebrationGallery: View {
+        @State private var showWeightPR: Bool = false
+        @State private var showRepsPR: Bool = false
+        @State private var showVolumePR: Bool = false
 
-    var body: some View {
-        ZStack {
-            // Background — looks like a post-workout summary screen
-            // so the celebration has something to overlay.
-            backdrop
+        var body: some View {
+            ZStack {
+                // Background — looks like a post-workout summary screen
+                // so the celebration has something to overlay.
+                backdrop
 
-            // Triggers
-            VStack(spacing: Space.lg) {
-                Spacer()
-                triggerButton(label: "Weight PR · 225 lb") {
-                    showWeightPR = true
+                // Triggers
+                VStack(spacing: Space.lg) {
+                    Spacer()
+                    triggerButton(label: "Weight PR · 225 lb") {
+                        showWeightPR = true
+                    }
+                    triggerButton(label: "Rep PR · 12 @ 185 lb") {
+                        showRepsPR = true
+                    }
+                    triggerButton(label: "Volume PR · 14,250 lb") {
+                        showVolumePR = true
+                    }
+                    Spacer().frame(height: 36)
                 }
-                triggerButton(label: "Rep PR · 12 @ 185 lb") {
-                    showRepsPR = true
-                }
-                triggerButton(label: "Volume PR · 14,250 lb") {
-                    showVolumePR = true
-                }
-                Spacer().frame(height: 36)
+                .padding(.horizontal, Space.gutter)
+
+                // The celebrations — three instances, only one fires at a time.
+                PRCelebration(
+                    isPresented: $showWeightPR,
+                    title: "Personal record",
+                    value: "225",
+                    unit: "lb",
+                    detail: "Bench press · 1RM"
+                )
+
+                PRCelebration(
+                    isPresented: $showRepsPR,
+                    title: "Personal record",
+                    value: "12",
+                    unit: "reps",
+                    detail: "Back squat · at 185 lb"
+                )
+
+                PRCelebration(
+                    isPresented: $showVolumePR,
+                    title: "Volume record",
+                    value: "14,250",
+                    unit: "lb",
+                    detail: "Total · Tuesday session"
+                )
             }
-            .padding(.horizontal, Space.gutter)
+            .background(Color.black.ignoresSafeArea())
+            .onAppear { Haptics.prepare() }
+        }
 
-            // The celebrations — three instances, only one fires at a time.
+        private var backdrop: some View {
+            VStack(alignment: .leading, spacing: Space.xxl) {
+                // Header strip
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("PR celebration")
+                        .sectionLabelStyle(0.55)
+                    Text("Earn it, then taste it.")
+                        .font(Typography.display)
+                        .foregroundStyle(.white)
+                    Text("Tap a button to fire the moment. Tap anywhere on the celebration to dismiss.")
+                        .font(Typography.body)
+                        .foregroundStyle(.white.opacity(0.55))
+                        .padding(.top, 2)
+                }
+                .padding(.horizontal, Space.gutter)
+                .padding(.top, Space.section)
+
+                // Faux summary stats
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    Text("Tuesday · 47 min · 8 sets")
+                        .sectionLabelStyle(0.55)
+
+                    HStack(spacing: Space.xl) {
+                        statBlock(value: "14,250", unit: "lb", label: "Volume")
+                        statBlock(value: "47", unit: "min", label: "Duration")
+                        statBlock(value: "3", unit: nil, label: "Exercises")
+                    }
+                }
+                .padding(.horizontal, Space.gutter)
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+
+        private func statBlock(value: String, unit: String?, label: String) -> some View {
+            VStack(alignment: .leading, spacing: Space.sm) {
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(value)
+                        .font(Typography.statValue)
+                        .foregroundStyle(.white.opacity(0.92))
+                    if let unit {
+                        Text(unit)
+                            .font(Typography.metricUnit)
+                            .foregroundStyle(.white.opacity(0.50))
+                    }
+                }
+                Text(label)
+                    .sectionLabelStyle(0.55)
+            }
+        }
+
+        private func triggerButton(label: String, action: @escaping () -> Void) -> some View {
+            Button(action: action) {
+                HStack {
+                    Text(label)
+                        .font(Typography.sectionLabel)
+                        .foregroundStyle(.white.opacity(0.90))
+                    Spacer()
+                    Image(systemName: "play.fill")
+                        .font(Typography.caption)
+                        .foregroundStyle(Tint.primary)
+                }
+                .padding(.horizontal, Space.xl)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity)
+                .glassChip(cornerRadius: Radius.chip)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    #Preview("PR Celebration") {
+        PRCelebrationGallery()
+            .preferredColorScheme(.dark)
+    }
+
+    #Preview("Celebration — solo") {
+        @Previewable @State var show = true
+        return ZStack {
+            Color.black.ignoresSafeArea()
             PRCelebration(
-                isPresented: $showWeightPR,
+                isPresented: $show,
+                title: "Personal record",
+                value: "315",
+                unit: "lb",
+                detail: "Deadlift · 1RM"
+            )
+        }
+        .preferredColorScheme(.dark)
+    }
+
+    #Preview("Celebration — frozen") {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            PRCelebrationFrozen(
                 title: "Personal record",
                 value: "225",
                 unit: "lb",
                 detail: "Bench press · 1RM"
             )
-
-            PRCelebration(
-                isPresented: $showRepsPR,
-                title: "Personal record",
-                value: "12",
-                unit: "reps",
-                detail: "Back squat · at 185 lb"
-            )
-
-            PRCelebration(
-                isPresented: $showVolumePR,
-                title: "Volume record",
-                value: "14,250",
-                unit: "lb",
-                detail: "Total · Tuesday session"
-            )
         }
-        .background(Color.black.ignoresSafeArea())
-        .onAppear { Haptics.prepare() }
-    }
-
-    private var backdrop: some View {
-        VStack(alignment: .leading, spacing: Space.xxl) {
-            // Header strip
-            VStack(alignment: .leading, spacing: 8) {
-                Text("PR celebration")
-                    .sectionLabelStyle(0.55)
-                Text("Earn it, then taste it.")
-                    .font(Typography.display)
-                    .foregroundStyle(.white)
-                Text("Tap a button to fire the moment. Tap anywhere on the celebration to dismiss.")
-                    .font(Typography.body)
-                    .foregroundStyle(.white.opacity(0.55))
-                    .padding(.top, 2)
-            }
-            .padding(.horizontal, Space.gutter)
-            .padding(.top, Space.section)
-
-            // Faux summary stats
-            VStack(alignment: .leading, spacing: Space.lg) {
-                Text("Tuesday · 47 min · 8 sets")
-                    .sectionLabelStyle(0.55)
-
-                HStack(spacing: Space.xl) {
-                    statBlock(value: "14,250", unit: "lb", label: "Volume")
-                    statBlock(value: "47", unit: "min", label: "Duration")
-                    statBlock(value: "3", unit: nil, label: "Exercises")
-                }
-            }
-            .padding(.horizontal, Space.gutter)
-
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-    }
-
-    private func statBlock(value: String, unit: String?, label: String) -> some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(value)
-                    .font(Typography.statValue)
-                    .foregroundStyle(.white.opacity(0.92))
-                if let unit {
-                    Text(unit)
-                        .font(Typography.metricUnit)
-                        .foregroundStyle(.white.opacity(0.50))
-                }
-            }
-            Text(label)
-                .sectionLabelStyle(0.55)
-        }
-    }
-
-    private func triggerButton(label: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Text(label)
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(.white.opacity(0.90))
-                Spacer()
-                Image(systemName: "play.fill")
-                    .font(Typography.caption)
-                    .foregroundStyle(Tint.primary)
-            }
-            .padding(.horizontal, Space.xl)
-            .padding(.vertical, 16)
-            .frame(maxWidth: .infinity)
-            .glassChip(cornerRadius: Radius.chip)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-#Preview("PR Celebration") {
-    PRCelebrationGallery()
         .preferredColorScheme(.dark)
-}
-
-#Preview("Celebration — solo") {
-    @Previewable @State var show = true
-    return ZStack {
-        Color.black.ignoresSafeArea()
-        PRCelebration(
-            isPresented: $show,
-            title: "Personal record",
-            value: "315",
-            unit: "lb",
-            detail: "Deadlift · 1RM"
-        )
     }
-    .preferredColorScheme(.dark)
-}
-
-#Preview("Celebration — frozen") {
-    ZStack {
-        Color.black.ignoresSafeArea()
-        PRCelebrationFrozen(
-            title: "Personal record",
-            value: "225",
-            unit: "lb",
-            detail: "Bench press · 1RM"
-        )
-    }
-    .preferredColorScheme(.dark)
-}
 
 #endif

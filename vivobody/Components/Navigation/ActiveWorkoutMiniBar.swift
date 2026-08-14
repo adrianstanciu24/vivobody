@@ -36,16 +36,16 @@
 //    about TabView, NavigationStack, fullScreenCover, or AppState.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct ActiveWorkoutMiniBar: View {
     @Bindable var session: WorkoutSession
     var onExpand: () -> Void
 
     private let completedGreen = Tint.success
-    private let restTint       = Tint.primary
-    private let readyTint      = Ink.secondary
+    private let restTint = Tint.primary
+    private let readyTint = Ink.secondary
 
     @Environment(\.tabViewBottomAccessoryPlacement) private var placement
 
@@ -55,7 +55,6 @@ struct ActiveWorkoutMiniBar: View {
         }
     }
 
-    @ViewBuilder
     private func barContent(now: Date) -> some View {
         Button(action: {
             Haptics.soft()
@@ -131,7 +130,7 @@ struct ActiveWorkoutMiniBar: View {
     /// Right-side state badge — switches between Rest countdown, Ready,
     /// or Tap to finish. Tinted to match its meaning.
     @ViewBuilder
-    private func statusBadge(now: Date) -> some View {
+    private func statusBadge(now _: Date) -> some View {
         if session.isAllComplete {
             badgeText("Tap to finish", tint: completedGreen)
         } else if session.isResting {
@@ -158,7 +157,8 @@ struct ActiveWorkoutMiniBar: View {
     private var displayExercise: Exercise? {
         let exercises = session.orderedExercises
         if session.activeExerciseIndex >= 0,
-           session.activeExerciseIndex < exercises.count {
+           session.activeExerciseIndex < exercises.count
+        {
             return exercises[session.activeExerciseIndex]
         }
         return exercises.last
@@ -247,7 +247,7 @@ private struct PulseDot: View {
     }
 
     private var animation: Animation? {
-        if isPulsing && !reduceMotion {
+        if isPulsing, !reduceMotion {
             return .easeInOut(duration: 1.4).repeatForever(autoreverses: true)
         } else if !reduceMotion {
             return .easeOut(duration: 0.3)

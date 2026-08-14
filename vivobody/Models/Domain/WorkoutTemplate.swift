@@ -14,8 +14,8 @@
 //  populated and `isCompleted` reset to false on every set).
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @Model
 final class WorkoutTemplate: Identifiable {
@@ -82,7 +82,9 @@ final class WorkoutTemplate: Identifiable {
     }
 
     /// Whether the user has pinned this template to any weekday.
-    var isScheduled: Bool { !scheduledWeekdays.isEmpty }
+    var isScheduled: Bool {
+        !scheduledWeekdays.isEmpty
+    }
 
     /// Whether this template is scheduled on the given `Calendar`
     /// weekday number (1 = Sunday … 7 = Saturday).
@@ -233,7 +235,9 @@ final class TemplateExercise: Identifiable {
 
     /// True when the user has populated explicit per-set rows. When
     /// false, the uniform fields are the source of truth.
-    var hasPerSetData: Bool { !sets.isEmpty }
+    var hasPerSetData: Bool {
+        !sets.isEmpty
+    }
 
     /// Effective set count — orderedSets count when per-set, else
     /// the uniform `plannedSets`. Used by template-level rollups.

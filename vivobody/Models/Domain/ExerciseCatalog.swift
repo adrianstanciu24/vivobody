@@ -26,7 +26,7 @@ import SwiftData
 /// chip strip at the top of the picker / Library. Stored as the raw
 /// value on `ExerciseCatalogItem` so the enum can evolve without
 /// migrations.
-nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
     case barbell
     case dumbbell
     case cable
@@ -39,15 +39,15 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
 
     nonisolated var displayName: String {
         switch self {
-        case .barbell:    return "Barbell"
-        case .dumbbell:   return "Dumbbell"
-        case .cable:      return "Cable"
-        case .machine:    return "Machine"
-        case .bodyweight: return "Bodyweight"
-        case .kettlebell: return "Kettlebell"
-        case .band:       return "Band"
-        case .gripTrainer: return "Grip Trainer"
-        case .other:      return "Other"
+        case .barbell: "Barbell"
+        case .dumbbell: "Dumbbell"
+        case .cable: "Cable"
+        case .machine: "Machine"
+        case .bodyweight: "Bodyweight"
+        case .kettlebell: "Kettlebell"
+        case .band: "Band"
+        case .gripTrainer: "Grip Trainer"
+        case .other: "Other"
         }
     }
 }
@@ -57,14 +57,14 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
 /// Compound (multi-joint) vs. isolation (single-joint). Affects
 /// PR-detection sensitivity and which patterns make sense — only
 /// compound lifts carry a `MovementPattern`.
-nonisolated enum Mechanic: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum Mechanic: String, Codable, Hashable, CaseIterable {
     case compound
     case isolation
 
     nonisolated var displayName: String {
         switch self {
-        case .compound:  return "Compound"
-        case .isolation: return "Isolation"
+        case .compound: "Compound"
+        case .isolation: "Isolation"
         }
     }
 }
@@ -75,26 +75,26 @@ nonisolated enum Mechanic: String, Codable, Hashable, CaseIterable, Sendable {
 /// lifts have a meaningful pattern; isolation work is left nil.
 /// Useful for programming-aware features (push/pull balance,
 /// session structure suggestions) we'll layer in later.
-nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable, Sendable {
-    case push     // bench, OHP, dips
-    case pull     // rows, pulldowns
-    case squat    // back squat, front squat, leg press
-    case hinge    // deadlift, RDL, good morning
-    case lunge    // split squat, step-up, walking lunge
-    case carry    // farmer's carry, suitcase, yoke
-    case core     // planks, leg raises, anti-rotation
+nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
+    case push // bench, OHP, dips
+    case pull // rows, pulldowns
+    case squat // back squat, front squat, leg press
+    case hinge // deadlift, RDL, good morning
+    case lunge // split squat, step-up, walking lunge
+    case carry // farmer's carry, suitcase, yoke
+    case core // planks, leg raises, anti-rotation
     case locomotion // gait, skips, and conditioning footwork
 
     nonisolated var displayName: String {
         switch self {
-        case .push:  return "Push"
-        case .pull:  return "Pull"
-        case .squat: return "Squat"
-        case .hinge: return "Hinge"
-        case .lunge: return "Lunge"
-        case .carry: return "Carry"
-        case .core:  return "Core"
-        case .locomotion: return "Locomotion"
+        case .push: "Push"
+        case .pull: "Pull"
+        case .squat: "Squat"
+        case .hinge: "Hinge"
+        case .lunge: "Lunge"
+        case .carry: "Carry"
+        case .core: "Core"
+        case .locomotion: "Locomotion"
         }
     }
 }
@@ -104,16 +104,16 @@ nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable, Senda
 /// Whether a push/pull moves the load primarily away from/toward the
 /// torso or overhead/down from overhead. Optional because it only has
 /// meaning for `.push` and `.pull` movement patterns.
-nonisolated enum PushPullDirection: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum PushPullDirection: String, Codable, Hashable, CaseIterable {
     case horizontal
     case vertical
     case diagonal
 
     nonisolated var displayName: String {
         switch self {
-        case .horizontal: return "Horizontal"
-        case .vertical:   return "Vertical"
-        case .diagonal:   return "Diagonal"
+        case .horizontal: "Horizontal"
+        case .vertical: "Vertical"
+        case .diagonal: "Diagonal"
         }
     }
 }
@@ -123,16 +123,16 @@ nonisolated enum PushPullDirection: String, Codable, Hashable, CaseIterable, Sen
 /// One cardinal anatomical plane in a family's reviewed action basis.
 /// Exercises can author multiple components; direction (including a
 /// diagonal push/pull) remains a separate classification dimension.
-nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable {
     case sagittal
     case frontal
     case transverse
 
     var displayName: String {
         switch self {
-        case .sagittal:   return "Sagittal"
-        case .frontal:    return "Frontal"
-        case .transverse: return "Transverse"
+        case .sagittal: "Sagittal"
+        case .frontal: "Frontal"
+        case .transverse: "Transverse"
         }
     }
 
@@ -150,14 +150,14 @@ nonisolated enum MovementPlane: String, Codable, Hashable, CaseIterable, Sendabl
 /// lunges) are logged/loaded per side, so this is the hook a future
 /// per-side logging or left/right balance feature reads. Bounded,
 /// trivially taggable on seeds and user-created entries alike.
-nonisolated enum Laterality: String, Codable, Hashable, CaseIterable, Sendable {
+nonisolated enum Laterality: String, Codable, Hashable, CaseIterable {
     case bilateral
     case unilateral
 
     var displayName: String {
         switch self {
-        case .bilateral:  return "Bilateral"
-        case .unilateral: return "Unilateral"
+        case .bilateral: "Bilateral"
+        case .unilateral: "Unilateral"
         }
     }
 }
@@ -351,7 +351,7 @@ final class ExerciseCatalogItem: Identifiable {
         get { patternRaw.flatMap(MovementPattern.init(rawValue:)) }
         set {
             patternRaw = newValue?.rawValue
-            if newValue != .push && newValue != .pull {
+            if newValue != .push, newValue != .pull {
                 directionRaw = nil
             }
         }
@@ -554,8 +554,9 @@ extension ExerciseCatalogItem {
 
         let base = Date()
         for (index, record) in CatalogData.records.enumerated()
-        where !retainedIDs.contains(record.catalogID)
-            && !hiddenIDs.contains(record.catalogID) {
+            where !retainedIDs.contains(record.catalogID)
+            && !hiddenIDs.contains(record.catalogID)
+        {
             context.insert(
                 ExerciseCatalogItem(
                     record: record,
@@ -645,7 +646,6 @@ extension ExerciseCatalogItem {
         movementDefinition = record.movementDefinition
         muscleInvolvementSnapshot = record.muscleInvolvement.snapshot
     }
-
 }
 
 // MARK: - Exercise identity
@@ -655,11 +655,11 @@ extension ExerciseCatalogItem {
 /// assisted movement, or changing how much bodyweight it carries, makes
 /// old loads physically non-interchangeable even when the broad record
 /// kind remains "load then reps".
-nonisolated struct ExercisePerformanceSignature: Hashable, Sendable {
+nonisolated struct ExercisePerformanceSignature: Hashable {
     /// One basis point keeps the key deterministic without embedding a
     /// floating-point description. The editor works in 5% increments,
     /// while this finer scale also preserves curated fractional values.
-    private static let fractionScale = 10_000.0
+    private static let fractionScale = 10000.0
 
     let modality: ExerciseModality
     let trackingMode: TrackingMode
@@ -753,7 +753,6 @@ extension ExerciseCatalogItem {
             performanceSignature: performanceSignature
         )
     }
-
 }
 
 extension Exercise {
@@ -813,7 +812,7 @@ extension TemplateExercise {
 
 // MARK: - Grouping helper
 
-extension Array where Element == ExerciseCatalogItem {
+extension [ExerciseCatalogItem] {
     /// Group catalog items by muscle group for the sectioned picker
     /// UI. Group order follows the MuscleGroup enum; items inside
     /// each group are sorted by createdAt (preserves seed order;

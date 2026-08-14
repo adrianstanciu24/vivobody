@@ -29,7 +29,7 @@ import Foundation
 
 // MARK: - Trend
 
-nonisolated enum PRTrend: Hashable, Sendable {
+nonisolated enum PRTrend: Hashable {
     case climbing
     case plateaued
     case slipping
@@ -37,19 +37,22 @@ nonisolated enum PRTrend: Hashable, Sendable {
 
 /// A minimum viable trend is still called out as an early read until it
 /// spans enough sessions and time to support a projected e1RM-high date.
-nonisolated enum StrengthTrendConfidence: Hashable, Sendable {
+nonisolated enum StrengthTrendConfidence: Hashable {
     case developing
     case established
 }
 
 // MARK: - Per-lift stat
 
-nonisolated struct StrengthOutlookStat: Identifiable, Hashable, Sendable {
+nonisolated struct StrengthOutlookStat: Identifiable, Hashable {
     /// The same stable identity used by `ExerciseProgress`: bundled
     /// catalog ID or the custom item's UUID plus full performance
     /// signature, with a normalized-name key only when neither exists.
     let historyKey: String
-    var id: String { historyKey }
+    var id: String {
+        historyKey
+    }
+
     let catalogID: String?
     let exercise: String
     let group: MuscleGroup
@@ -81,11 +84,15 @@ nonisolated struct StrengthOutlookStat: Identifiable, Hashable, Sendable {
 
     /// Compatibility for widget/report call sites. It now means a
     /// genuinely recent e1RM high, never merely "latest point is best."
-    var isFreshPR: Bool { isRecentE1RMHigh }
+    var isFreshPR: Bool {
+        isRecentE1RMHigh
+    }
 
     /// Compatibility for older summary call sites. Strength presents
     /// this as an e1RM-high estimate rather than a generic personal record.
-    var daysToPR: Int? { daysToE1RMHigh }
+    var daysToPR: Int? {
+        daysToE1RMHigh
+    }
 
     /// How close the latest estimate sits to the all-time best, `0...1`.
     var fractionOfBest: Double {
@@ -96,7 +103,7 @@ nonisolated struct StrengthOutlookStat: Identifiable, Hashable, Sendable {
 
 // MARK: - Board
 
-nonisolated struct StrengthOutlookBoard: Sendable {
+nonisolated struct StrengthOutlookBoard {
     /// A lift needs at least this many e1RM points to earn a trend.
     static let minPoints = 4
     /// Points must span at least two weeks; four workouts compressed
@@ -122,10 +129,21 @@ nonisolated struct StrengthOutlookBoard: Sendable {
     /// tie-breaker so the featured lift never changes arbitrarily.
     let stats: [StrengthOutlookStat]
 
-    var hasAny: Bool { !stats.isEmpty }
-    var climbingCount: Int { stats.lazy.filter { $0.trend == .climbing }.count }
-    var plateauedCount: Int { stats.lazy.filter { $0.trend == .plateaued }.count }
-    var slippingCount: Int { stats.lazy.filter { $0.trend == .slipping }.count }
+    var hasAny: Bool {
+        !stats.isEmpty
+    }
+
+    var climbingCount: Int {
+        stats.lazy.count(where: { $0.trend == .climbing })
+    }
+
+    var plateauedCount: Int {
+        stats.lazy.count(where: { $0.trend == .plateaued })
+    }
+
+    var slippingCount: Int {
+        stats.lazy.count(where: { $0.trend == .slipping })
+    }
 
     /// The actionable climbing lift with the soonest projected e1RM high.
     /// A high already set is an outcome, not a remaining forecast.
@@ -140,7 +158,9 @@ nonisolated struct StrengthOutlookBoard: Sendable {
 
     /// Compatibility for Today/widget call sites that still use the old
     /// generic PR vocabulary.
-    var nearestPR: StrengthOutlookStat? { nearestE1RMHigh }
+    var nearestPR: StrengthOutlookStat? {
+        nearestE1RMHigh
+    }
 
     func stat(forHistoryKey historyKey: String) -> StrengthOutlookStat? {
         stats.first { $0.historyKey == historyKey }
@@ -150,7 +170,7 @@ nonisolated struct StrengthOutlookBoard: Sendable {
 // MARK: - Aggregation
 
 @MainActor
-extension Array where Element == WorkoutSession {
+extension [WorkoutSession] {
     /// Fit a strength trend to every weighted lift in the archive and
     /// rank them by current strength outlook as of `now`.
     func strengthOutlook(
@@ -224,8 +244,8 @@ nonisolated extension StrengthOutlookBoard {
 
             // Recent-window least-squares fit on (days, e1RM).
             let t0 = window.first!.date
-            let xs = window.map { $0.date.timeIntervalSince(t0) / 86_400 }
-            let ys = window.map { $0.estimated1RM }
+            let xs = window.map { $0.date.timeIntervalSince(t0) / 86400 }
+            let ys = window.map(\.estimated1RM)
             let n = Double(xs.count)
             let meanX = xs.reduce(0, +) / n
             let meanY = ys.reduce(0, +) / n
@@ -263,16 +283,15 @@ nonisolated extension StrengthOutlookBoard {
             let confidence: StrengthTrendConfidence =
                 window.count >= StrengthOutlookBoard.establishedPoints
                     && spanDays >= StrengthOutlookBoard.establishedSpanDays
-                ? .established
-                : .developing
+                    ? .established
+                    : .developing
 
-            let trend: PRTrend
-            if slopePerWeek >= StrengthOutlookBoard.climbPerWeek {
-                trend = .climbing
+            let trend: PRTrend = if slopePerWeek >= StrengthOutlookBoard.climbPerWeek {
+                .climbing
             } else if slopePerWeek <= -StrengthOutlookBoard.climbPerWeek {
-                trend = .slipping
+                .slipping
             } else {
-                trend = .plateaued
+                .plateaued
             }
 
             // Absolute trend-line crossing, converted back to a remaining
@@ -282,13 +301,15 @@ nonisolated extension StrengthOutlookBoard {
             if trend == .climbing,
                confidence == .established,
                !isLatestE1RMHigh,
-               slopePerDay > 0 {
+               slopePerDay > 0
+            {
                 let crossingX = (bestE1RM - intercept) / slopePerDay
-                let crossingDate = t0.addingTimeInterval(crossingX * 86_400)
-                let remaining = crossingDate.timeIntervalSince(now) / 86_400
+                let crossingDate = t0.addingTimeInterval(crossingX * 86400)
+                let remaining = crossingDate.timeIntervalSince(now) / 86400
                 if remaining.isFinite,
                    remaining > 0,
-                   remaining <= Double(StrengthOutlookBoard.horizonDays) {
+                   remaining <= Double(StrengthOutlookBoard.horizonDays)
+                {
                     daysToE1RMHigh = Swift.max(1, Int(remaining.rounded(.up)))
                 }
             }
@@ -370,9 +391,9 @@ nonisolated extension StrengthOutlookBoard {
 
     private static func trendRank(_ trend: PRTrend) -> Int {
         switch trend {
-        case .climbing:  return 0
-        case .plateaued: return 1
-        case .slipping:  return 2
+        case .climbing: 0
+        case .plateaued: 1
+        case .slipping: 2
         }
     }
 

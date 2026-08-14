@@ -10,8 +10,8 @@
 //  descriptive — they never imply that a universal 50/50 target exists.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct SymmetrySection: View {
     let board: AntagonistBoard
@@ -198,7 +198,7 @@ struct SymmetrySection: View {
         HStack(spacing: Space.md) {
             BuildingSignalDot(size: 10)
             HStack(spacing: 3) {
-                ForEach(0..<buildingCount, id: \.self) { _ in
+                ForEach(0 ..< buildingCount, id: \.self) { _ in
                     Capsule()
                         .fill(Ink.primary.opacity(0.12))
                         .frame(width: 5, height: 24)
@@ -365,7 +365,9 @@ private struct ButterflyRow: View {
         return isHeavier ? Tint.primary : Ink.primary.opacity(0.25)
     }
 
-    private var leftIsHeavier: Bool { pair.leftShare > 0.5 }
+    private var leftIsHeavier: Bool {
+        pair.leftShare > 0.5
+    }
 
     private var leftLabelColor: Color {
         if pair.isBalanced { return Ink.primary }

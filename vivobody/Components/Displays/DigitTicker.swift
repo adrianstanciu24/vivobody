@@ -18,8 +18,8 @@
 //                  font: Typography.bigMetric)
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct DigitTicker: View {
     let value: Double
@@ -58,7 +58,7 @@ struct DigitTicker: View {
         let chars = Array(formattedString)
 
         HStack(spacing: 0) {
-            ForEach(0..<chars.count, id: \.self) { i in
+            ForEach(0 ..< chars.count, id: \.self) { i in
                 charSlot(char: chars[i], direction: direction)
             }
         }

@@ -9,9 +9,9 @@
 //  Settings > Action Button > Control.
 //
 
-import VivoKit
 import AppIntents
 import SwiftUI
+import VivoKit
 import WidgetKit
 
 struct StartWorkoutControl: ControlWidget {

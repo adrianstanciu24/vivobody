@@ -41,9 +41,9 @@ nonisolated enum SetSpecFormatter {
             let time = DurationFormatter.compact(duration)
             guard weight > 0,
                   let load = loadMode.loggedLoadLabel(
-                    weight,
-                    unit: unit,
-                    includeUnit: false
+                      weight,
+                      unit: unit,
+                      includeUnit: false
                   ) else { return time }
             return "\(load) x \(time)"
         }

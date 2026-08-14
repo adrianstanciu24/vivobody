@@ -15,7 +15,7 @@ import Foundation
 /// The complete input to one analytics generation. Input order is
 /// intentionally preserved here; AnalyticsAccumulator performs the one
 /// canonical chronological sort before any report construction.
-nonisolated struct AnalyticsSnapshot: Sendable {
+nonisolated struct AnalyticsSnapshot {
     let sessions: [AnalyticsSessionSnapshot]
 
     nonisolated init(sessions: [AnalyticsSessionSnapshot]) {
@@ -32,7 +32,7 @@ nonisolated struct AnalyticsSnapshot: Sendable {
 }
 
 /// One workout detached from SwiftData.
-nonisolated struct AnalyticsSessionSnapshot: Sendable {
+nonisolated struct AnalyticsSessionSnapshot {
     /// The persistent session identity, carried so archive-level
     /// reports (e.g. PR-session membership) can be joined back to the
     /// live rows a screen is showing.
@@ -42,8 +42,14 @@ nonisolated struct AnalyticsSessionSnapshot: Sendable {
     let bodyweightAtStart: Double
     let exercises: [AnalyticsExerciseSnapshot]
 
-    nonisolated var date: Date { completedAt ?? startedAt }
-    nonisolated var isCompleted: Bool { completedAt != nil }
+    nonisolated var date: Date {
+        completedAt ?? startedAt
+    }
+
+    nonisolated var isCompleted: Bool {
+        completedAt != nil
+    }
+
     nonisolated var totalCompletedSets: Int {
         exercises.reduce(0) { total, exercise in
             total + exercise.sets.lazy.filter(\.isCompleted).count
@@ -87,7 +93,7 @@ nonisolated struct AnalyticsSessionSnapshot: Sendable {
 /// One logged exercise detached from its model and owning session.
 /// Resolved identity, anatomy, and classification are captured here so
 /// background work never consults the mutable catalog or model graph.
-nonisolated struct AnalyticsExerciseSnapshot: Sendable {
+nonisolated struct AnalyticsExerciseSnapshot {
     let catalogID: String?
     let catalogItemID: UUID?
     let name: String
@@ -101,9 +107,18 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
     let volumeCredits: [Muscle: Double]
     let sets: [AnalyticsSetSnapshot]
 
-    nonisolated var loadMode: ExerciseLoadMode { loadProfile.mode }
-    nonisolated var bodyweightFraction: Double { loadProfile.bodyweightFraction }
-    nonisolated var loadBodyweight: Double { bodyweightAtSession }
+    nonisolated var loadMode: ExerciseLoadMode {
+        loadProfile.mode
+    }
+
+    nonisolated var bodyweightFraction: Double {
+        loadProfile.bodyweightFraction
+    }
+
+    nonisolated var loadBodyweight: Double {
+        bodyweightAtSession
+    }
+
     nonisolated var performanceSemanticKind: PerformanceSemanticKind {
         modality.performanceSemanticKind(
             for: trackingMode,
@@ -208,9 +223,10 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
         for set in sets where set.isAnalyticsEligible {
             guard let effectiveLoad = effectiveLoad(loggedWeight: set.weight),
                   let value = EstimatedOneRepMaxPolicy.estimate(
-                    effectiveLoad: effectiveLoad,
-                    reps: set.reps
-                  ) else {
+                      effectiveLoad: effectiveLoad,
+                      reps: set.reps
+                  )
+            else {
                 continue
             }
             let candidate = EstimatedOneRepMaxSample(
@@ -224,7 +240,8 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
             }
             if candidate.value > standing.value + 1e-9
                 || (abs(candidate.value - standing.value) <= 1e-9
-                    && candidate.reps < standing.reps) {
+                    && candidate.reps < standing.reps)
+            {
                 best = candidate
             }
         }
@@ -256,12 +273,13 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
 
         if performanceSemanticKind.comparesLoad,
            let leftMarker = loadProfile.withinSnapshotLoadMarker(
-                loggedWeight: lhs.weight
+               loggedWeight: lhs.weight
            ),
            let rightMarker = loadProfile.withinSnapshotLoadMarker(
-                loggedWeight: rhs.weight
+               loggedWeight: rhs.weight
            ),
-           leftMarker != rightMarker {
+           leftMarker != rightMarker
+        {
             return leftMarker < rightMarker
         }
 
@@ -279,15 +297,15 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
     nonisolated var completedHardSetCount: Int {
         switch (modality, trackingMode) {
         case (.dynamicStrength, .reps):
-            return sets.lazy.filter {
+            sets.lazy.count(where: {
                 $0.isAnalyticsEligible && $0.reps > 0
-            }.count
+            })
         case (.isometricStrength, .duration):
-            return sets.lazy.filter {
+            sets.lazy.count(where: {
                 $0.isAnalyticsEligible && $0.duration > 0
-            }.count
+            })
         default:
-            return 0
+            0
         }
     }
 
@@ -324,7 +342,7 @@ nonisolated struct AnalyticsExerciseSnapshot: Sendable {
 
 /// One logged set detached from SwiftData. Planned targets and model IDs
 /// are omitted because no SessionAnalytics report reads them.
-nonisolated struct AnalyticsSetSnapshot: Sendable {
+nonisolated struct AnalyticsSetSnapshot {
     let weight: Double
     let reps: Int
     let duration: TimeInterval
@@ -332,7 +350,9 @@ nonisolated struct AnalyticsSetSnapshot: Sendable {
     let repsInReserve: Int
     let rirLogged: Bool
 
-    nonisolated var isAnalyticsEligible: Bool { isCompleted }
+    nonisolated var isAnalyticsEligible: Bool {
+        isCompleted
+    }
 
     @MainActor
     init(_ set: WorkoutSet) {

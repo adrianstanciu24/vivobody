@@ -6,8 +6,8 @@
 //  recoverable in-memory fallback, then installs AppRoot into the main scene.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct vivobodyApp: App {
@@ -56,7 +56,7 @@ struct vivobodyApp: App {
             if let container {
                 AppRoot()
                     .warmUpKeyboardOnce()
-                    #if DEBUG
+                #if DEBUG
                     .task {
                         if CommandLine.arguments.contains("--seed-history") {
                             HistorySeeder.seed(into: container.mainContext)
@@ -68,7 +68,7 @@ struct vivobodyApp: App {
                             HistorySeeder.seedTemplates(into: container.mainContext)
                         }
                     }
-                    #endif
+                #endif
                     .modelContainer(container)
             } else {
                 StorageRecoveryView()

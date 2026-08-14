@@ -13,8 +13,8 @@
 //  other content chip — the glass stays on the floating controls layer.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct MilestoneBadge: View {
     let milestone: Milestone

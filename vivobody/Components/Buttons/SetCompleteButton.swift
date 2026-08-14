@@ -22,8 +22,8 @@
 //  darkening overlays, or stroke gradients are needed.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 enum SetIntensity {
     case standard
@@ -54,7 +54,10 @@ struct SetCompleteButton: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
-    private var unit: WeightUnit { WeightUnit(rawValue: unitRaw) ?? .lb }
+    private var unit: WeightUnit {
+        WeightUnit(rawValue: unitRaw) ?? .lb
+    }
+
     @State private var pressScale: CGFloat = 1
     @State private var numberScale: CGFloat = 1
     @State private var rippleId: Int = 0
@@ -130,8 +133,8 @@ struct SetCompleteButton: View {
         // fully tinted glass and checkmark in the same hue.
         return shape
             .fill(reduceTransparency
-                    ? (isComplete ? accent : liveAccent)
-                    : (isComplete ? accent.opacity(0.85) : liveAccent.opacity(0.85)))
+                ? (isComplete ? accent : liveAccent)
+                : (isComplete ? accent.opacity(0.85) : liveAccent.opacity(0.85)))
             .glassTinted(isComplete ? accent : nil, interactive: true, in: shape)
             // The full accent bloom belongs to the completed state;
             // idle gets a quieter ember.
@@ -285,7 +288,8 @@ struct SetCompleteButton: View {
                 // (c) the finger lifted inside the button.
                 if !dragCanceled,
                    !isFlick(value),
-                   isInside(value.location) {
+                   isInside(value.location)
+                {
                     fire(at: value.location)
                 }
             }
@@ -321,7 +325,7 @@ struct SetCompleteButton: View {
             // closing out a set.
             switch intensity {
             case .standard: Haptics.crescendo(sound: .commit)
-            case .peak:     Haptics.swell(sound: .finishExercise)
+            case .peak: Haptics.swell(sound: .finishExercise)
             }
         }
         ripplePoint = point
@@ -410,6 +414,7 @@ private struct StrokeDrawIn: ViewModifier, Animatable {
         get { progress }
         set { progress = newValue }
     }
+
     func body(content: Content) -> some View {
         content.mask(
             GeometryReader { geo in

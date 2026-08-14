@@ -8,8 +8,8 @@
 //  a soft gradient fill below it, and optional PR pips.
 //
 
-import VivoKit
 import SwiftUI
+import VivoKit
 
 struct MiniChart: View {
     let values: [Double]
@@ -64,7 +64,7 @@ struct MiniChart: View {
                 // PR pips — small solid dots on flagged points.
                 if !prIndices.isEmpty {
                     ForEach(Array(prIndices), id: \.self) { i in
-                        if i >= 0 && i < normalized.count {
+                        if i >= 0, i < normalized.count {
                             let stepX = stepX(width: w, count: normalized.count)
                             Circle()
                                 .fill(prColor)

@@ -34,31 +34,16 @@ const moments = [
 ];
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  currentPath="/"
-  bodyClass="home-minimal"
->
-  <section
-    class="landing-story"
-    data-story-root
-    data-phase="start"
-    aria-labelledby="landing-title"
-  >
-    <h1 id="landing-title" class="visually-hidden">
-      Focused workout tracking for iPhone
-    </h1>
+<BaseLayout title={title} description={description} currentPath="/" bodyClass="home-minimal">
+  <section class="landing-story" data-story-root data-phase="start" aria-labelledby="landing-title">
+    <h1 id="landing-title" class="visually-hidden">Focused workout tracking for iPhone</h1>
 
     <div class="story-aura" aria-hidden="true"></div>
 
     <div class="story-words" aria-hidden="true">
       {
         moments.map((moment, index) => (
-          <span
-            class:list={["story-word", { "is-active": index === 0 }]}
-            data-story-word={index}
-          >
+          <span class:list={["story-word", { "is-active": index === 0 }]} data-story-word={index}>
             {moment.word}
           </span>
         ))
@@ -169,17 +154,11 @@ const moments = [
         if (!(video instanceof HTMLVideoElement)) return;
 
         const time = Number.isFinite(video.currentTime) ? video.currentTime : 0;
-        const index = Math.min(
-          storyMoments.length - 1,
-          Math.floor(time / chapterDuration),
-        );
+        const index = Math.min(storyMoments.length - 1, Math.floor(time / chapterDuration));
         const progress = (time - index * chapterDuration) / chapterDuration;
 
         showMoment(index);
-        storyRoot.style.setProperty(
-          "--story-progress",
-          String(Math.min(1, Math.max(0, progress))),
-        );
+        storyRoot.style.setProperty("--story-progress", String(Math.min(1, Math.max(0, progress))));
       };
 
       const animateStory = () => {

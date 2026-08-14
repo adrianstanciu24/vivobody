@@ -9,9 +9,9 @@
 //  stored state.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 extension ActiveExerciseCard {
     // MARK: - Name + pips
@@ -75,7 +75,8 @@ extension ActiveExerciseCard {
         let exercises = session.orderedExercises
         let idx = exerciseIndex
         if idx + 1 < exercises.count,
-           !SupersetGrouping.isSeamLinked(at: idx, in: exercises) {
+           !SupersetGrouping.isSeamLinked(at: idx, in: exercises)
+        {
             Button {
                 linkWithNextExercise()
             } label: {
@@ -122,16 +123,16 @@ extension ActiveExerciseCard {
                             ? exercise.setLabel(set, unit: unit)
                             : nil
                     )
-                        .frame(minWidth: 44, minHeight: 44)
-                        .contentShape(Rectangle())
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("Set \(idx + 1)")
-                        .accessibilityValue(
-                            set.isCompleted
-                                ? "Completed, \(exercise.setLabel(set, unit: unit))"
-                                : (isActiveSet ? "Current" : "Pending")
-                        )
-                        .accessibilityAddTraits(isActiveSet ? .isSelected : [])
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Set \(idx + 1)")
+                    .accessibilityValue(
+                        set.isCompleted
+                            ? "Completed, \(exercise.setLabel(set, unit: unit))"
+                            : (isActiveSet ? "Current" : "Pending")
+                    )
+                    .accessibilityAddTraits(isActiveSet ? .isSelected : [])
                     // Completed sets tap to edit (long-press adds delete);
                     // pending sets can be removed when more than one exists.
                     if set.isCompleted {
@@ -263,14 +264,13 @@ extension ActiveExerciseCard {
 
     // MARK: - Hero
 
-    @ViewBuilder
     var heroBlock: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             exerciseConfigurationRow
 
             if session.activeSet(for: exercise) != nil {
                 switch exercise.trackingMode {
-                case .reps:     repsHero
+                case .reps: repsHero
                 case .duration: durationHero
                 }
             } else {
@@ -297,7 +297,8 @@ extension ActiveExerciseCard {
             }
 
             if session.activeSet(for: exercise) != nil,
-               exercise.trackingMode == .reps {
+               exercise.trackingMode == .reps
+            {
                 VStack(alignment: .leading, spacing: Space.sm) {
                     Text("STEP")
                         .panelLegend()
@@ -357,7 +358,7 @@ extension ActiveExerciseCard {
                     .accessibilityHidden(true)
                 BareScrubber(
                     value: repsBinding,
-                    range: 1...30,
+                    range: 1 ... 30,
                     step: 1,
                     pointsPerStep: 16,
                     fontSize: 46,
@@ -432,7 +433,7 @@ extension ActiveExerciseCard {
                     .accessibilityHidden(true)
                 BareScrubber(
                     value: repsBinding,
-                    range: 1...30,
+                    range: 1 ... 30,
                     step: 1,
                     pointsPerStep: 16,
                     fontSize: 46,
@@ -662,7 +663,7 @@ extension ActiveExerciseCard {
         let options = unit.strengthStepOptions
         let setStepperWidth = (Space.tapMin * 2) + 22
         let label = weightStep.formatted(
-            .number.precision(.fractionLength(0...2))
+            .number.precision(.fractionLength(0 ... 2))
         ) + " \(unit.symbol)"
         return Button {
             let idx = options.firstIndex(of: weightStep) ?? 0

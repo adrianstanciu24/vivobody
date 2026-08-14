@@ -8,10 +8,10 @@
 //  otherwise stick to a stale end time).
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
 import UIKit
+import VivoKit
 
 struct RestTimerOverlay: View {
     @Bindable var session: WorkoutSession

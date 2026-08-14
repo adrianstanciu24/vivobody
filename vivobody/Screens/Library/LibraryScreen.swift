@@ -42,9 +42,9 @@
 //  thumb.
 //
 
-import VivoKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import VivoKit
 
 struct LibraryScreen: View {
     @Bindable var appState: AppState
@@ -171,8 +171,8 @@ struct LibraryScreen: View {
 
     private var plusAccessibilityLabel: String {
         switch segment {
-        case .templates: return "New template"
-        case .exercises: return "Create custom exercise"
+        case .templates: "New template"
+        case .exercises: "Create custom exercise"
         }
     }
 
@@ -183,11 +183,10 @@ struct LibraryScreen: View {
     /// this search?" friction.
     private var searchPrompt: String {
         switch segment {
-        case .templates: return "Search templates"
-        case .exercises: return "Search exercises"
+        case .templates: "Search templates"
+        case .exercises: "Search exercises"
         }
     }
-
 }
 
 // MARK: - Segment enum
@@ -195,11 +194,14 @@ struct LibraryScreen: View {
 enum LibrarySegment: String, CaseIterable, Identifiable {
     case templates
     case exercises
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
+
     var label: String {
         switch self {
-        case .templates: return "Templates"
-        case .exercises: return "Exercises"
+        case .templates: "Templates"
+        case .exercises: "Exercises"
         }
     }
 }
