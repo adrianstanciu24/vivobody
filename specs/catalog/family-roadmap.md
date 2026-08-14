@@ -5,13 +5,14 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 56 reviewed families are active, containing 135 exercises.
+- 57 reviewed families are active, containing 136 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 152 registered evidence sources.
+  44 joint actions, and 154 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
-- Batch 2 resolved nine candidates into eight active families and one explicit
-  task-definition hold.
+- Batch 2 initially resolved nine candidates into eight active families and one
+  task-definition hold. The later product-taxonomy review rejected generic
+  `grip` as a family and activated the narrower `finger-flexion-grip` owner.
 - Batch 3 initially resolved nine candidates into four active families, four
   standalone evidence holds, and one deferred branch of an existing family.
   Later review activated scapular depression and landmine press, assigned
@@ -32,9 +33,10 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- One work item remains unresolved: the generic `grip` candidate.
-  `diagonal-pull` is active as one source-exact seated 45-degree cable fixture,
-  and both Batch-3 nonstandard press branches are closed.
+- No catalog-roadmap work item remains unresolved. `diagonal-pull` is active as
+  one source-exact seated 45-degree cable fixture, both Batch-3 nonstandard
+  press branches are closed, and the generic grip discovery handle is resolved
+  by explicit task ownership rather than a catch-all family.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -69,6 +71,7 @@ batch siblings.
 | `wrist-extension` | 1 |
 | `wrist-radial-deviation` | 1 |
 | `wrist-ulnar-deviation` | 1 |
+| `finger-flexion-grip` | 1 |
 | `scapular-protraction` | 1 |
 | `scapular-retraction` | 1 |
 | `scapular-elevation` | 2 |
@@ -102,7 +105,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **135** |
+| **Total** | **136** |
 
 ## Foundation gates
 
@@ -249,7 +252,9 @@ scapular limitations. Neither closure broadens a neighboring raise or row.
 ## Batch 2 — Arm and forearm actions (9)
 
 Status: complete. Eight candidates activated with narrow rosters after the
-distal taxonomy migration; generic grip remains a resolved design hold.
+distal taxonomy migration. The generic discovery handle was later rejected as
+one family and resolved through a narrow dynamic-finger-flexion owner plus
+explicit non-family boundaries for the other tasks.
 
 1. `elbow-flexion`
 2. `elbow-extension`
@@ -259,14 +264,14 @@ distal taxonomy migration; generic grip remains a resolved design hold.
 6. `wrist-extension`
 7. `wrist-radial-deviation`
 8. `wrist-ulnar-deviation`
-9. `grip` — deferred
+9. `grip` — resolved as `finger-flexion-grip` for dynamic closing only
 
 The activated contracts share explicit elbow/forearm/wrist posture, resistance
 geometry, hand-task, support, and free-path semantics. Generic grip did not
 activate because crush, pinch, dynamic closing, support grip, and hanging are
-different biomechanical tasks. Resume it only after choosing the first exact
-task and its measurable contract; do not recreate the retired catch-all
-`hand.grip` action.
+different biomechanical tasks. Dynamic closing now has its exact owner; the
+other tasks keep their explicit owners or product exclusions. Do not recreate
+the retired catch-all `hand.grip` action.
 
 ## Batch 3 — Scapular/press frontier (9)
 
@@ -437,7 +442,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current one-item count.
+remaining catalog-roadmap item.
 
 ## Batch 7 — Core and carry (8)
 
@@ -486,7 +491,7 @@ an upper-body/trunk-lift endpoint, not a segmental lumbar angle. The evidence
 registry now admits canonical DOI, PMCID, or PMID routes with deterministic
 priority, strict formatting, and cross-source uniqueness.
 
-## Remaining unresolved items
+## Resolved final discovery items
 
 `diagonal-pull` is closed and active through Lorenzetti's directly measured
 seated 45-degree cable pulldown. Its source-prescribed extended-arm start,
@@ -497,10 +502,14 @@ flexion only; scapular motion, shoulder adduction, axial rotation, and numeric
 humeral angles remain unclaimed. Commercial lever high rows still require
 model-specific review and do not inherit this record's ownership.
 
-Generic `grip` remains the Batch-2 task-definition hold. The taxonomy now
-distinguishes dynamic finger flexion/extension from a static implement hold,
-but the product still needs separate decisions for crush, pinch, support,
-hanging, and dynamic closing tasks before any one of them becomes a family.
+Generic `grip` is intentionally not a family. `finger-flexion-grip` owns only
+the reviewed 30 kg-rated repeated grip-trainer close, logged as unilateral reps
+with non-comparable resistance. Static support stays inside carries and the
+implement-owning lift; dynamometer squeezing remains assessment-only; pinch is
+unavailable until thumb and intrinsic-hand anatomy exists; hangs remain a
+closed-chain shoulder-body topology; and wrist rollers remain multi-action
+conditioning. These are product boundaries, not deferred variants of crush
+grip, so the roadmap has no residual grip hold.
 
 Batch 3 has no remaining hold. `landmine-press` is active as one bounded
 power-test family. Closed-chain vertical press is active only as the strict

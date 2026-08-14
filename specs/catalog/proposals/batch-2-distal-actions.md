@@ -1,9 +1,10 @@
 # Batch 2 — distal forearm, wrist, and grip contract discovery
 
-Status: integrated review record. The six anatomical rotation/wrist families
-are activated narrowly after the arm/forearm taxonomy migration and acceptance
-of the disclosed source-to-product adaptation. The generic `grip` candidate is
-rejected as presently named and remains deferred.
+Status: fully integrated review record. The six anatomical rotation/wrist
+families activated narrowly after the arm/forearm taxonomy migration and
+acceptance of the disclosed source-to-product adaptation. A later product-
+taxonomy review rejected generic `grip` as a family and activated only the
+reviewed dynamic-finger-flexion task as `finger-flexion-grip`.
 
 ## Outcome
 
@@ -15,11 +16,11 @@ rejected as presently named and remains deferred.
 | `wrist-extension` | Activated narrowly | 1 |
 | `wrist-radial-deviation` | Activated narrowly | 1 |
 | `wrist-ulnar-deviation` | Activated narrowly | 1 |
-| `grip` | Do not activate | 0 |
+| `grip` | Reject generic owner; activate `finger-flexion-grip` only | 1 |
 
-The resulting distal activation is deliberately only six exercises. It
-covers every admitted equipment and geometry value without treating every
-familiar forearm drill as already reviewed.
+The initial distal activation was deliberately only six exercises. The later
+grip decision adds one source-bounded dynamic close without treating every
+familiar grip task as a variant of it.
 
 ## Resolved foundation dependency: aggregate forearm shortcut removed
 
@@ -490,35 +491,39 @@ an always-true exercise rule.
 |---|---|---:|---:|---:|---|
 | `standing-dumbbell-wrist-ulnar-deviation` | Standing Dumbbell Ulnar Deviation | 5 lb / 2.5 kg | 10 | 75 | Szymanski 2004; Forman 2020; Garland 2018 |
 
-## Why generic `grip` remains deferred
+## Why generic `grip` was rejected and the narrow owner activated
 
 The candidate should not be activated merely by renaming `hand.grip`.
 
 | Common label | Mechanical reality | Ownership decision |
 |---|---|---|
-| Hand-gripper closing / crush repetitions | Dynamic multi-joint finger flexion against a closing implement | Future `finger-flexion-grip` candidate after direct fixture review |
+| Hand-gripper closing / crush repetitions | Dynamic multi-joint finger flexion against a closing implement | Active `finger-flexion-grip`, limited to Osawa's repeated 30 kg-rated trainer task |
 | Static dynamometer squeeze | Isometric assessment, normally not a catalog exercise | Exclude |
-| Plate pinch | Thumb opposition/adduction plus finger forces; not represented by the current muscle taxonomy | Defer pending intrinsic/thumb taxonomy |
+| Plate pinch | Thumb opposition/adduction plus finger forces; not represented by the current muscle taxonomy | Unavailable pending a future thumb/intrinsic taxonomy; not a residual grip-family hold |
 | Farmer/suitcase support grip | Isometric hand demand while locomotion/carry is the exercise | The active `farmer-carry` and `suitcase-carry` families explicitly resist `hand.fingerExtension`, so `fingerFlexors` is primary in the grip-defined bilateral family and secondary when anti-lateral-flexion defines the unilateral family |
 | Barbell/dumbbell support grip | Isometric hand demand while another joint action is the exercise | Keep `fingerFlexors` as a stabilizer in the owning family |
 | Dead hang / hangboard | Isometric finger/hand demand plus a closed-chain shoulder complex and bodyweight load | Separate hanging review; not a crush-grip variant |
 | Wrist roller | Alternating wrist motion, implement winding, and repeated hand repositioning | Separate compound/conditioning review |
 
-A future `finger-flexion-grip` contract would likely use
-`hand.fingerFlexion` as its sagittal basis action, `fingerFlexors` as primary,
-and `extensorCarpiRadialis` as a wrist stabilizer. It also needs an explicit
-`handGripper` equipment value rather than hiding the implement under `other`.
-It stays deferred until a primary loaded dynamic source establishes the exact
-gripper fixture, hand/wrist posture, tracking semantics, and role envelope.
-Osawa 2026 now supplies a genuinely dynamic loading task (a 30 kg grip trainer,
-3 sets of 30), but it does not report the implement's closure geometry,
-forearm/wrist posture, closure endpoint, or per-muscle role panel; its MMG site
-is explicitly a composite superficial flexor-pronator signal. It therefore
-resolves “does a loaded repeated-grip fixture exist?” but not the fields needed
-for a testable family contract. The simultaneous handgrip study remains useful
-for wrist-extensor stabilization only. Predeclare the future evidence ID
-`osawa-2026-repetitive-grip-mmg` (`10.3390/app16157379`) here, but do not
-register an unused source until the family is activation-ready.
+The active `finger-flexion-grip` contract uses `hand.fingerFlexion` as its
+sagittal basis action, `fingerFlexors` as primary, and
+`extensorCarpiRadialis` as a wrist stabilizer. Its explicit `gripTrainer`
+equipment value avoids hiding the product under `other`. Osawa 2026 supplies
+the loaded task: one 30 kg-rated grip trainer for three sets of thirty repeated
+grips. The record is unilateral at the product/logging level and tells the user
+to log the other hand separately. Because the study did not report trainer
+geometry, closure endpoint, cadence, wrist/forearm/elbow posture, or body
+position, each is pinned as `notReported` rather than completed by inference.
+The rating is not lifted mass, so load remains `nonComparable`, weight seeds
+remain zero, and the runtime cannot award tonnage or load PRs. The MMG site is
+explicitly a composite superficial flexor-pronator signal at the FDS landmark;
+it supports local repeated loading but not numerical muscle ranking. Di Domizio
+2008 separately supports ECR wrist control during gripping and does not turn
+the dynamic record into an isometric dynamometer exercise.
+
+This resolution closes the product taxonomy. It does not leave one umbrella
+grip backlog: support, hanging, pinch, assessment, and wrist-roller tasks have
+the owners or explicit product exclusions shown in the table above.
 
 ## Explicit exclusions and later expansion
 

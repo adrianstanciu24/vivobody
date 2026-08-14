@@ -5833,6 +5833,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "shoulder-internal-rotation",
             "elbow-flexion",
             "elbow-extension",
+            "finger-flexion-grip",
             "forearm-pronation",
             "forearm-supination",
             "wrist-flexion",
@@ -5879,7 +5880,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            135,
+            136,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7546,7 +7547,7 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("One work item remains unresolved", roadmap)
+        self.assertIn("No catalog-roadmap work item remains unresolved", roadmap)
         self.assertIn(
             "Sternocostal flexion from an extended start — complete",
             roadmap,
@@ -12228,7 +12229,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 152)
+        self.assertEqual(len(source_by_id), 154)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -12372,8 +12373,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 56)
-        self.assertEqual(len(self.foundation.evidence_ids), 152)
+        self.assertEqual(len(self.real_families), 57)
+        self.assertEqual(len(self.foundation.evidence_ids), 154)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -13621,7 +13622,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "56 reviewed families are active, containing 135 exercises",
+            "57 reviewed families are active, containing 136 exercises",
             roadmap,
         )
         self.assertIn(
@@ -13629,13 +13630,13 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "One work item remains unresolved",
+            "No catalog-roadmap work item remains unresolved",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **135** |", roadmap)
-        self.assertIn("Fifty-six reviewed family files", families_readme)
+        self.assertIn("| **Total** | **136** |", roadmap)
+        self.assertIn("Fifty-seven reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -14698,9 +14699,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 56)
-        self.assertEqual(len(records), 135)
-        self.assertEqual(len(self.foundation.evidence_ids), 152)
+        self.assertEqual(len(self.real_families), 57)
+        self.assertEqual(len(records), 136)
+        self.assertEqual(len(self.foundation.evidence_ids), 154)
         self.assertEqual(
             {
                 key: upright[key]
@@ -14821,17 +14822,233 @@ class CatalogFoundationTests(unittest.TestCase):
             ],
         )
 
-    def test_generic_grip_is_not_an_active_family(self) -> None:
+    def test_generic_grip_is_rejected_and_dynamic_closing_has_one_owner(
+        self,
+    ) -> None:
         active_ids = {family["id"] for family in self.real_families}
-        self.assertTrue(
-            {"grip", "finger-flexion-grip"}.isdisjoint(active_ids)
-        )
+        self.assertNotIn("grip", active_ids)
+        self.assertIn("finger-flexion-grip", active_ids)
         proposal = (
             catalog.SPEC_ROOT
             / "proposals"
             / "batch-2-distal-actions.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("generic `grip` remains deferred", proposal)
+        self.assertIn(
+            "Why generic `grip` was rejected and the narrow owner activated",
+            proposal,
+        )
+        self.assertIn(
+            "This resolution closes the product taxonomy",
+            proposal,
+        )
+
+    def test_finger_flexion_grip_contract_and_record_are_exact(self) -> None:
+        family = next(
+            family
+            for family in self.real_families
+            if family["id"] == "finger-flexion-grip"
+        )
+        self.assertEqual(
+            family["fixed"],
+            {
+                "mechanic": "isolation",
+                "pattern": None,
+                "direction": None,
+                "planes": ["sagittal"],
+            },
+        )
+        self.assertEqual(
+            family["allowed"],
+            {
+                "equipment": ["gripTrainer"],
+                "modalities": ["dynamicStrength"],
+                "trackingModes": ["reps"],
+                "loadModes": ["nonComparable"],
+                "lateralities": ["unilateral"],
+            },
+        )
+        signature = family["movementSignature"]
+        self.assertEqual(signature["planeBasisActions"], ["hand.fingerFlexion"])
+        self.assertEqual(signature["primeActions"], ["hand.fingerFlexion"])
+        self.assertEqual(signature["stabilityDemands"], ["hand", "wrist"])
+        self.assertEqual(
+            set(signature["forbiddenPrimeActions"]),
+            self.foundation.action_ids - {"hand.fingerFlexion"},
+        )
+        self.assertEqual(
+            family["musclePolicy"],
+            {
+                "requirements": [
+                    {"anyOf": ["fingerFlexors"], "minimumRole": "primary"},
+                    {
+                        "anyOf": ["extensorCarpiRadialis"],
+                        "minimumRole": "stabilizer",
+                    },
+                ],
+                "allowedByRole": {
+                    "primary": ["fingerFlexors"],
+                    "secondary": [],
+                    "stabilizer": ["extensorCarpiRadialis"],
+                },
+            },
+        )
+        self.assertEqual(len(family["exercises"]), 1)
+        exercise = family["exercises"][0]
+        self.assertEqual(
+            {
+                key: exercise[key]
+                for key in (
+                    "catalogID", "name", "aliases", "equipment",
+                    "laterality", "modality", "trackingMode", "loadMode",
+                    "bodyweightFraction", "defaultWeight", "reps",
+                    "searchPriority",
+                )
+            },
+            {
+                "catalogID": "repetitive-grip-trainer-close",
+                "name": "Repetitive Grip-Trainer Close",
+                "aliases": ["Dynamic Crush Grip", "Hand-Gripper Close"],
+                "equipment": "gripTrainer",
+                "laterality": "unilateral",
+                "modality": "dynamicStrength",
+                "trackingMode": "reps",
+                "loadMode": "nonComparable",
+                "bodyweightFraction": 0.0,
+                "defaultWeight": 0,
+                "reps": 30,
+                "searchPriority": 82,
+            },
+        )
+        self.assertEqual(
+            exercise["involvement"],
+            [
+                {"muscle": "fingerFlexors", "role": "primary"},
+                {"muscle": "extensorCarpiRadialis", "role": "stabilizer"},
+            ],
+        )
+        self.assertEqual(
+            exercise["variant"],
+            {
+                "kineticChain": "open",
+                "handTask": "repeatedPowerGripCycles",
+                "implementType": "gripTrainer",
+                "ratedResistanceKilograms": 30,
+                "trainerGeometry": "notReported",
+                "closureEndpoint": "notReported",
+                "cadence": "selfSelectedNotReported",
+                "wristPosture": "notReported",
+                "forearmPosture": "notReported",
+                "elbowPosture": "notReported",
+                "bodyPosition": "notReported",
+                "sourceSetCount": 3,
+            },
+        )
+        self.assertIn("the exercise is non-comparable", family["definition"])
+        self.assertIn("repeat with the other hand", exercise["movementDefinition"])
+
+    def test_finger_flexion_grip_mutates_every_boundary_directly(self) -> None:
+        original = next(
+            family
+            for family in self.real_families
+            if family["id"] == "finger-flexion-grip"
+        )
+        for action in original["movementSignature"]["forbiddenPrimeActions"]:
+            with self.subTest(kind="forbidden-action", action=action):
+                family = copy.deepcopy(original)
+                family["exercises"][0]["additionalPrimeActions"] = [action]
+                self.assert_family_fails(
+                    family,
+                    f"declares forbidden prime action {re.escape(action)}",
+                )
+
+        for muscle, role in (
+            ("fingerFlexors", "primary"),
+            ("extensorCarpiRadialis", "stabilizer"),
+        ):
+            with self.subTest(kind="remove-role", muscle=muscle):
+                family = copy.deepcopy(original)
+                family["exercises"][0]["involvement"] = [
+                    item
+                    for item in family["exercises"][0]["involvement"]
+                    if item["muscle"] != muscle
+                ]
+                self.assert_family_fails(
+                    family,
+                    "fails muscle requirement|requires at least one primary muscle",
+                )
+            if role == "primary":
+                with self.subTest(kind="demote-primary", muscle=muscle):
+                    family = copy.deepcopy(original)
+                    family["exercises"][0]["involvement"][0]["role"] = "secondary"
+                    self.assert_family_fails(
+                        family,
+                        "does not allow fingerFlexors as secondary",
+                    )
+
+        axis_by_id = {axis["id"]: axis for axis in original["variantAxes"]}
+        self.assertEqual(
+            set(axis_by_id),
+            {
+                "kineticChain", "handTask", "implementType",
+                "ratedResistanceKilograms", "trainerGeometry",
+                "closureEndpoint", "cadence", "wristPosture",
+                "forearmPosture", "elbowPosture", "bodyPosition",
+                "sourceSetCount",
+            },
+        )
+        for axis_id, axis in axis_by_id.items():
+            with self.subTest(kind="axis-domain", axis=axis_id):
+                family = copy.deepcopy(original)
+                if axis["valueType"] == "number":
+                    family["exercises"][0]["variant"][axis_id] = axis["maximum"] + 1
+                    expected = f"variant.{axis_id} exceeds {axis['maximum']}"
+                else:
+                    family["exercises"][0]["variant"][axis_id] = "bogus"
+                    expected = f"variant.{axis_id} has disallowed value 'bogus'"
+                self.assert_family_fails(family, re.escape(expected))
+
+        for field, value in (
+            ("equipment", "other"),
+            ("laterality", "bilateral"),
+            ("loadMode", "external"),
+            ("trackingMode", "duration"),
+        ):
+            with self.subTest(kind="classification", field=field):
+                family = copy.deepcopy(original)
+                family["exercises"][0][field] = value
+                self.assert_family_fails(family, f"selects disallowed .*: {value}")
+
+    def test_grip_sources_and_product_boundaries_are_pinned(self) -> None:
+        source_by_id = {
+            source["id"]: source for source in self.foundation.evidence["sources"]
+        }
+        osawa = source_by_id["osawa-2026-repetitive-grip-mmg"]
+        self.assertEqual(osawa["doi"], "10.3390/app16157379")
+        self.assertEqual(len(osawa["authors"]), 15)
+        for phrase in (
+            "three sets of thirty repeated grips",
+            "same absolute 30 kg-rated grip trainer",
+            "did not normalize resistance",
+            "or report trainer geometry",
+            "non-comparable product resistance",
+        ):
+            self.assertIn(phrase, osawa["scope"])
+        wrist = source_by_id["di-domizio-2008-handgrip-wrist-stabilization"]
+        self.assertEqual(wrist["doi"], "10.1123/jab.24.3.298")
+        self.assertEqual(wrist["pmid"], "18843160")
+        self.assertIn("categorical wrist-control role", wrist["scope"])
+
+        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
+            encoding="utf-8"
+        )
+        normalized_roadmap = " ".join(roadmap.split())
+        self.assertIn("No catalog-roadmap work item remains unresolved", normalized_roadmap)
+        self.assertIn("| `finger-flexion-grip` | 1 |", roadmap)
+        self.assertIn("| **Total** | **136** |", roadmap)
+        self.assertIn("Static support stays inside carries", normalized_roadmap)
+        self.assertIn("dynamometer squeezing remains assessment-only", normalized_roadmap)
+        self.assertIn("pinch is unavailable", normalized_roadmap)
+        self.assertIn("hangs remain a closed-chain shoulder-body topology", normalized_roadmap)
 
     def test_all_evidence_is_used_by_anatomy_or_a_family(self) -> None:
         catalog.validate_evidence_coverage(
@@ -15922,23 +16139,23 @@ class CatalogFoundationTests(unittest.TestCase):
         proposal = (
             catalog.SPEC_ROOT / "proposals" / "diagonal-pull.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("One work item remains unresolved", roadmap)
+        self.assertIn("No catalog-roadmap work item remains unresolved", roadmap)
         self.assertIn("| `diagonal-pull` | 1 |", roadmap)
-        self.assertIn("| **Total** | **135** |", roadmap)
+        self.assertIn("| **Total** | **136** |", roadmap)
         self.assertIn("Status: active as one bounded, source-exact cable fixture", proposal)
-        self.assertIn("generic `grip` candidate", roadmap)
+        self.assertIn("generic grip discovery handle is resolved", roadmap)
         self.assertNotIn("`diagonal-pull` remains deferred", roadmap)
 
-    def test_runtime_projection_is_exactly_56_families_and_135_exercises(
+    def test_runtime_projection_is_exactly_57_families_and_136_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 135)
+        self.assertEqual(len(records), 136)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 56)
+        self.assertEqual(len({record["familyID"] for record in records}), 57)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -16226,7 +16443,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 135)
+            self.assertEqual(len(emitted), 136)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

@@ -133,8 +133,9 @@ The integration suite must pin all of the following:
 8. analytics treatment as a diagonal pull: it belongs to broad push/pull
    reporting but does not silently enter the horizontal or vertical symmetry
    rows; and
-9. roadmap closure with generic grip as the only remaining unresolved work
-   item.
+9. roadmap closure with no unresolved work item: diagonal pull is active and
+   the later `finger-flexion-grip` decision rejects a generic grip family while
+   activating the reviewed dynamic grip-trainer close.
 
 ## Evidence
 

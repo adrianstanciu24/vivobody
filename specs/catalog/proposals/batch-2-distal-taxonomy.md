@@ -360,7 +360,7 @@ The split unlocks these contracts without anatomical aliases:
 | `wrist-extension` | `extensorCarpiRadialis|extensorCarpiUlnaris`, with `fingerExtensors` eligible only as reviewed secondary contributors |
 | `wrist-radial-deviation` | `flexorCarpiRadialis|extensorCarpiRadialis` |
 | `wrist-ulnar-deviation` | `flexorCarpiUlnaris|extensorCarpiUlnaris` |
-| `grip` | Do not activate as a generic family. A future `finger-flexion-grip` may use `hand.fingerFlexion` and `fingerFlexors`; pinch, static support, and hanging remain explicit separate decisions. |
+| `grip` | Do not activate as a generic family. The later `finger-flexion-grip` owner uses `hand.fingerFlexion` and `fingerFlexors` only for the reviewed dynamic grip-trainer close; pinch is unavailable without thumb/intrinsic anatomy, static support remains in the owning lift, and hanging remains a closed-chain shoulder-body topology. |
 
 A dynamic hand-gripper fixture would author `fingerFlexors` as primary.
 Wrist extensors, when required to hold wrist posture, remain stabilizers rather

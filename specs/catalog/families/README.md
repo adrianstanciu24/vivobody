@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-six reviewed family files containing 135 exercises are currently
+Fifty-seven reviewed family files containing 136 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-152-source foundation. Each uses a coverage batch whose exercises
+154-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -27,11 +27,14 @@ The independently resolved `diagonal-pull` family adds one source-exact seated
 primarily sagittal shoulder-extension pull, not a generic commercial high-row
 class, and authors no unmeasured shoulder-adduction or scapular prime action.
 
-Batch 2 adds fourteen exercises across `elbow-flexion`, `elbow-extension`,
+Batch 2 adds fifteen exercises across `elbow-flexion`, `elbow-extension`,
 conditioned `forearm-pronation|forearm-supination`, and the four cardinal wrist
-actions. Generic `grip` remains deferred: dynamic finger closing, isometric
-support, hanging, and pinch are different biomechanical tasks, not variants of
-one cardinal joint action.
+actions, plus the later `finger-flexion-grip` closure. Generic `grip` is
+intentionally not a family: one non-comparable grip-trainer record owns dynamic
+finger closing, while isometric support remains inside carries and implement-
+owning lifts, dynamometer squeezing remains assessment-only, hanging remains a
+closed-chain shoulder-body topology, and pinch remains unavailable until thumb
+and intrinsic-hand anatomy exists.
 
 Batch 3 initially added five exercises across `scapular-protraction`,
 `scapular-elevation`, `dip`, and `push-press`. Later reviews activated the exact

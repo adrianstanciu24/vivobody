@@ -1747,6 +1747,42 @@
     ]
   },
   {
+    "familyID": "finger-flexion-grip",
+    "catalogID": "repetitive-grip-trainer-close",
+    "name": "Repetitive Grip-Trainer Close",
+    "group": "arms",
+    "defaultWeight": 0,
+    "reps": 30,
+    "trackingMode": "reps",
+    "equipment": "gripTrainer",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Dynamic Crush Grip",
+      "Hand-Gripper Close"
+    ],
+    "searchPriority": 82,
+    "bodyweightFraction": 0.0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Use one 30 kg-rated grip trainer in one hand and complete 30 repeated grip cycles without assistance from the other hand. Close and release the fingers under control, but do not assume a handles-touching endpoint, fixed cadence, or prescribed wrist, forearm, elbow, or body posture: the reviewed study did not report those details. The source used three sets; log each set separately and repeat with the other hand. Enter no lifted weight because the trainer's rating is non-comparable product resistance.",
+    "involvement": [
+      {
+        "muscle": "fingerFlexors",
+        "role": "primary"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "forearm-pronation",
     "catalogID": "seated-dumbbell-forearm-pronation",
     "name": "Seated Dumbbell Forearm Pronation",

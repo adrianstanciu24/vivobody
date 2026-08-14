@@ -1,0 +1,290 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "finger-flexion-grip",
+  "name": "Dynamic Crush Grip",
+  "definition": "A local open-chain isolation whose training-defining phase repeatedly closes the fingers against a purpose-built grip trainer. This is not a generic grip family. The initial record owns only Osawa's three-by-thirty repeated-grip task with one 30 kg-rated trainer, represented one unilateral set at a time as a catalog adaptation. The rating is an implement resistance label rather than lifted mass, so the exercise is non-comparable and contributes no tonnage or load PR. The source did not report the trainer's handle or spring geometry, closure endpoint, cadence, wrist, forearm, elbow, or body posture; the contract preserves those limitations instead of inventing a standardized technique. Static support remains inside carries and implement-owning lifts; dynamometer squeezes remain assessments; pinch awaits thumb and intrinsic-hand anatomy; hangs belong to a closed-chain shoulder-body review; and wrist rollers remain multi-action conditioning.",
+  "evidenceRefs": [
+    "an-1983-index-finger-moment-arms",
+    "di-domizio-2008-handgrip-wrist-stabilization",
+    "mirakhorlo-2018-hand-wrist-model",
+    "osawa-2026-repetitive-grip-mmg"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "arms",
+    "allowed": [
+      "arms"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "gripTrainer"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hand.fingerFlexion"
+    ],
+    "primeActions": [
+      "hand.fingerFlexion"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hand",
+      "wrist"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "fingerFlexors"
+      ],
+      "secondary": [],
+      "stabilizer": [
+        "extensorCarpiRadialis"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "The gripper moves with the hand rather than fixing the distal segment to the environment."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "repeatedPowerGripCycles"
+      ],
+      "description": "The fingers repeatedly close and release a whole-hand trainer rather than maintain a static support or pinch task."
+    },
+    {
+      "id": "implementType",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "gripTrainer"
+      ],
+      "description": "The purpose-built implement named by the loading study; its handle and spring construction were not reported."
+    },
+    {
+      "id": "ratedResistanceKilograms",
+      "valueType": "number",
+      "required": true,
+      "minimum": 30,
+      "maximum": 30,
+      "description": "The manufacturer's 30 kg trainer rating used by every participant; it is not lifted mass or a participant-normalized force target."
+    },
+    {
+      "id": "trainerGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "The source did not identify torsion-spring, ring, ball, adjustable-handle, or other closure geometry."
+    },
+    {
+      "id": "closureEndpoint",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "The source did not state whether every repetition closed the handles together or used another endpoint."
+    },
+    {
+      "id": "cadence",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "selfSelectedNotReported"
+      ],
+      "description": "The source prescribed repetitions but did not report a metronome or phase timing."
+    },
+    {
+      "id": "wristPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "No wrist angle was reported; the family therefore claims wrist control without inventing neutral or extended positioning."
+    },
+    {
+      "id": "forearmPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "No pronation-supination posture was reported."
+    },
+    {
+      "id": "elbowPosture",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "No elbow angle or external support was reported."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "notReported"
+      ],
+      "description": "The study did not prescribe seated, standing, or supine positioning."
+    },
+    {
+      "id": "sourceSetCount",
+      "valueType": "number",
+      "required": true,
+      "minimum": 3,
+      "maximum": 3,
+      "description": "The loading protocol used three sets; the runtime record still represents one logged set at a time."
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 8,
+      "maximum": 30
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "repetitive-grip-trainer-close",
+      "name": "Repetitive Grip-Trainer Close",
+      "aliases": [
+        "Dynamic Crush Grip",
+        "Hand-Gripper Close"
+      ],
+      "equipment": "gripTrainer",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0.0,
+      "defaultWeight": 0,
+      "reps": 30,
+      "searchPriority": 82,
+      "involvement": [
+        {
+          "muscle": "fingerFlexors",
+          "role": "primary"
+        },
+        {
+          "muscle": "extensorCarpiRadialis",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "handTask": "repeatedPowerGripCycles",
+        "implementType": "gripTrainer",
+        "ratedResistanceKilograms": 30,
+        "trainerGeometry": "notReported",
+        "closureEndpoint": "notReported",
+        "cadence": "selfSelectedNotReported",
+        "wristPosture": "notReported",
+        "forearmPosture": "notReported",
+        "elbowPosture": "notReported",
+        "bodyPosition": "notReported",
+        "sourceSetCount": 3
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "osawa-2026-repetitive-grip-mmg"
+      ],
+      "movementDefinition": "Use one 30 kg-rated grip trainer in one hand and complete 30 repeated grip cycles without assistance from the other hand. Close and release the fingers under control, but do not assume a handles-touching endpoint, fixed cadence, or prescribed wrist, forearm, elbow, or body posture: the reviewed study did not report those details. The source used three sets; log each set separately and repeat with the other hand. Enter no lifted weight because the trainer's rating is non-comparable product resistance."
+    }
+  ]
+}

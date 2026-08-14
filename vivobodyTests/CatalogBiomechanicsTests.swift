@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 56 reviewed families compile to 135 exercises with stable
+//  product: 57 reviewed families compile to 136 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,11 +16,12 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 135)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 56)
+        #expect(CatalogData.records.count == 136)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 57)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
         #expect(CatalogData.record(forCatalogID: "seated-45-degree-cable-pulldown")?.familyID == "diagonal-pull")
+        #expect(CatalogData.record(forCatalogID: "repetitive-grip-trainer-close")?.familyID == "finger-flexion-grip")
     }
 
     @Test func stableIDsNamesAndAliasesAreGloballyUnique() {
@@ -274,6 +275,26 @@ struct CatalogBiomechanicsTests {
         #expect(diagonalPull.muscleInvolvement.role(for: .rhomboids) == .stabilizer)
         #expect(diagonalPull.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
         #expect(diagonalPull.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
+
+        let gripTrainer = try #require(
+            CatalogData.record(forExerciseNamed: "Repetitive Grip-Trainer Close")
+        )
+        #expect(gripTrainer.familyID == "finger-flexion-grip")
+        #expect(gripTrainer.mechanic == .isolation)
+        #expect(gripTrainer.pattern == nil)
+        #expect(gripTrainer.direction == nil)
+        #expect(gripTrainer.planes == [.sagittal])
+        #expect(gripTrainer.equipment == .gripTrainer)
+        #expect(gripTrainer.equipment.displayName == "Grip Trainer")
+        #expect(gripTrainer.laterality == .unilateral)
+        #expect(gripTrainer.modality == .dynamicStrength)
+        #expect(gripTrainer.trackingMode == .reps)
+        #expect(gripTrainer.loadMode == .nonComparable)
+        #expect(gripTrainer.defaultWeight == 0)
+        #expect(gripTrainer.reps == 30)
+        #expect(gripTrainer.muscleInvolvement.role(for: .fingerFlexors) == .primary)
+        #expect(gripTrainer.muscleInvolvement.role(for: .extensorCarpiRadialis) == .stabilizer)
+        #expect(gripTrainer.muscleInvolvement.contributions.count == 2)
 
         let landmine = try #require(
             CatalogData.record(forExerciseNamed: "Standing Single-Arm Landmine Press Power Test")

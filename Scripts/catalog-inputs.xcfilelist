@@ -18,6 +18,7 @@ $(SRCROOT)/specs/catalog/families/dynamic-lunge.json
 $(SRCROOT)/specs/catalog/families/elbow-extension.json
 $(SRCROOT)/specs/catalog/families/elbow-flexion.json
 $(SRCROOT)/specs/catalog/families/farmer-carry.json
+$(SRCROOT)/specs/catalog/families/finger-flexion-grip.json
 $(SRCROOT)/specs/catalog/families/forearm-pronation.json
 $(SRCROOT)/specs/catalog/families/forearm-supination.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json

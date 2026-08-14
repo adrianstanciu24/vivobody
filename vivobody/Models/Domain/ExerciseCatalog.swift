@@ -34,6 +34,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
     case bodyweight
     case kettlebell
     case band
+    case gripTrainer
     case other
 
     nonisolated var displayName: String {
@@ -45,6 +46,7 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable, Sendable {
         case .bodyweight: return "Bodyweight"
         case .kettlebell: return "Kettlebell"
         case .band:       return "Band"
+        case .gripTrainer: return "Grip Trainer"
         case .other:      return "Other"
         }
     }

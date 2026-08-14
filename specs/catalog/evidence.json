@@ -1214,6 +1214,47 @@
       "scope": "Surface EMG of FDP, FDS, FCR, and EDC in twenty-five climbers during maximal isometric dead-hangs using three climbing-specific grip positions. It supports loaded finger-flexor recruitment and wrist-muscle co-contraction in static support, but does not by itself admit a dynamic gripper, pinch, or generic grip family."
     },
     {
+      "id": "osawa-2026-repetitive-grip-mmg",
+      "sourceType": "experimentalMechanomyographyStudy",
+      "title": "Multidimensional Mechanomyographic Assessment of Post-Loading Responses in the Forearm Flexor-Pronator Muscles",
+      "authors": [
+        "Shin Osawa",
+        "Atsuyuki Inui",
+        "Yutaka Mifune",
+        "Kohei Yamaura",
+        "Issei Shinohara",
+        "Shunsaku Takigami",
+        "Yutaka Ehara",
+        "Daiji Nakabayashi",
+        "Takanobu Higashi",
+        "Ryota Wakamatsu",
+        "Ryohei Nako",
+        "Tomohiro Date",
+        "Kanto Nagai",
+        "Shinya Hayashi",
+        "Ryosuke Kuroda"
+      ],
+      "year": 2026,
+      "doi": "10.3390/app16157379",
+      "url": "https://doi.org/10.3390/app16157379",
+      "scope": "Eight healthy adults completed three sets of thirty repeated grips with the same absolute 30 kg-rated grip trainer on both evaluated forearms. Mechanomyography was recorded over the volar forearm at the flexor-digitorum-superficialis landmark before, immediately after, and twenty-four hours after loading; ultrasound shear-wave elastography measured the same region. The task directly supports a loaded repeated-grip fixture and local superficial flexor-pronator loading, but the small exploratory study did not normalize resistance, validate fatigue, isolate FDS from neighboring muscles, or report trainer geometry, closure endpoint, cadence, laterality order, wrist/forearm/elbow posture, or body position. The active record therefore treats the 30 kg rating as non-comparable product resistance and leaves every unreported posture or endpoint explicitly nonstandardized or not reported."
+    },
+    {
+      "id": "di-domizio-2008-handgrip-wrist-stabilization",
+      "sourceType": "experimentalEMGStudy",
+      "title": "Wrist Splint Effects on Muscle Activity and Force During a Handgrip Task",
+      "authors": [
+        "Jennifer Di Domizio",
+        "Jeremy P. M. Mogk",
+        "Peter J. Keir"
+      ],
+      "year": 2008,
+      "doi": "10.1123/jab.24.3.298",
+      "pmid": "18843160",
+      "url": "https://doi.org/10.1123/jab.24.3.298",
+      "scope": "Ten healthy adults performed twenty-four ten-second dynamometer grips across four efforts and neutral, thirty-degree-flexed, and thirty-degree-extended wrist postures, with and without a dorsal wrist splint, while surface EMG sampled six forearm muscles. Extensor carpi radialis activity during gripping and the posture/splint effects support its categorical wrist-control role against the finger flexors' wrist-flexion moment. This is isometric dynamometer evidence, not the active dynamic gripper fixture, a role-ranking oracle, or permission to standardize the active record's unreported wrist posture."
+    },
+    {
       "id": "haugstvedt-2001-forearm-rotation-moment-forces",
       "sourceType": "cadavericMomentArmStudy",
       "title": "A mechanical study of the moment-forces of the supinators and pronators of the forearm",
