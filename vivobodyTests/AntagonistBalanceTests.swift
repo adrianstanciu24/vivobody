@@ -201,6 +201,19 @@ struct AntagonistBalanceTests {
         expectEqual(board.pair("horizontal-push-pull")?.rightSets, 0)
     }
 
+    @Test func nonstandardPressBranchesKeepReviewedDirectionalOwnership() {
+        let board = [
+            session(at: day(1), [
+                lift("Standing Single-Arm Landmine Press Power Test", .shoulders, sets: 3),
+                lift("Wall-Supported Strict Handstand Push-Up", .shoulders, sets: 4),
+            ]),
+        ].antagonistBalance(now: day(2))
+
+        expectEqual(board.pair("push-pull")?.leftSets, 7)
+        expectEqual(board.pair("horizontal-push-pull")?.leftSets, 3)
+        expectEqual(board.pair("vertical-push-pull")?.leftSets, 4)
+    }
+
     @Test func directionsDoNotLeakIntoEachOther() {
         let horizontalOnly = [
             session(at: day(1), [

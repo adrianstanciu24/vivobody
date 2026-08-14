@@ -5,8 +5,8 @@ bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 54
-active families and their 132 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 55
+active families and their 134 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement definition
@@ -223,10 +223,10 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 54 family IDs and 132 exercise records; it is
+- The projection contains exactly 55 family IDs and 134 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
-- The evidence registry contains exactly 149 source identities, each referenced
+- The evidence registry contains exactly 152 source identities, each referenced
   by an active foundation, family, or exercise claim.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.

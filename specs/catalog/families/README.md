@@ -1,11 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Fifty-four reviewed family files containing 132 exercises are currently
+Fifty-five reviewed family files containing 134 exercises are currently
 active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
 hip-rotation, spine, anti-movement, and carry contracts listed in the family
 roadmap and validate against the current 58-region, 60-trainable-mesh-base,
-149-source foundation. Each uses a coverage batch whose exercises
+152-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -30,17 +30,16 @@ support, hanging, and pinch are different biomechanical tasks, not variants of
 one cardinal joint action.
 
 Batch 3 initially added five exercises across `scapular-protraction`,
-`scapular-elevation`, `dip`, and `push-press`. Later review activated the exact
-standing-band scapular-depression fixture and resolved upward rotation inside
-`scapular-elevation`, bringing the batch-owned active roster to seven
-exercises across five family contracts. Downward rotation is intentionally not
-a standalone family: the reviewed foundation has no clean training-defining
-fixture that should exist independently of its coupled task. It is retired as
-a standalone candidate, not deferred. Landmine press remains deferred until
-human-relative joint geometry, rather than bar angle alone, supports a
-contract. Closed-chain vertical press belongs as a future branch of
-`vertical-press`, but that branch remains deferred until direct dynamic
-evidence supports its bodyweight-loading and action contract.
+`scapular-elevation`, `dip`, and `push-press`. Later reviews activated the exact
+standing-band scapular-depression fixture, resolved upward rotation inside
+`scapular-elevation`, activated the bounded landmine power-test family, and
+added the strict wall-supported handstand push-up branch to `vertical-press`.
+Downward rotation is intentionally not a standalone family: the reviewed
+foundation has no clean training-defining fixture independent of its coupled
+task. The landmine record discloses that its human actions and no-leg-drive
+boundary are mechanics adaptations from a bar-end study; the handstand record
+discloses that its exact apparatus is directly reviewed while its dynamic
+action and mover policy transfer from vertical press.
 
 Batch 4 adds eight exercises across `knee-extension`, `knee-flexion`,
 `hip-extension`, `hip-flexion`, and `ankle-plantarflexion`. The rosters preserve

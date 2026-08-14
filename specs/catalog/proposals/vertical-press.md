@@ -6,15 +6,18 @@ research and boundary decisions that produced it.
 
 ## Implemented recommendation
 
-The active `vertical-press` family covers strict, open-chain presses performed
-with an upright torso and the implement travelling in front of the head or in
-the scapular path. The family can cover standing and seated front presses
-with free weights or a purpose-built shoulder-press machine.
+The active `vertical-press` family covers strict open-chain presses performed
+with an upright torso and one closed-chain branch: Li et al.'s exact
+wall-supported strict handstand push-up. Open-chain records move an implement
+in front of the head or in the scapular path; the closed-chain record moves the
+body between a fifteen-centimeter head target and full elbow-and-shoulder
+extension.
 
 The family should not absorb every exercise whose name contains “shoulder
-press.” Landmine presses, high-incline presses, rotating Arnold presses,
+press." Landmine presses, high-incline presses, rotating Arnold presses,
 behind-neck presses, and leg-driven push presses have different movement
-signatures or unresolved boundaries and should remain outside this contract.
+signatures and remain outside this contract. Pike, freestanding, parallettes,
+deficit, and kipping handstand-push-up variants also remain outside.
 
 ## Activated classification
 
@@ -34,10 +37,10 @@ The active contract implements this classification:
     "allowed": ["shoulders"]
   },
   "allowed": {
-    "equipment": ["barbell", "dumbbell", "kettlebell", "machine"],
+    "equipment": ["barbell", "dumbbell", "kettlebell", "machine", "bodyweight"],
     "modalities": ["dynamicStrength"],
     "trackingModes": ["reps"],
-    "loadModes": ["external"],
+    "loadModes": ["external", "nonComparable"],
     "lateralities": ["bilateral", "unilateral"]
   },
   "movementSignature": {
@@ -335,10 +338,22 @@ Free-weight and Smith setups use `bench` when externally supported.
   It supports representing supraspinatus, while remaining model evidence rather
   than a direct overhead-press muscle-role measurement.
 
+## Closed-chain branch
+
+Li et al. 2026 directly establish the inversion stand, wall distance, support
+width, head target, feet-only wall contact, strict-body validity rules, and
+forty-second maximum-repetition test. They do not measure joint, scapular, or
+muscle actions, and state that inverted push-up loading is difficult to
+quantify. The branch therefore uses `nonComparable` load semantics and
+transparently inherits this family's action and mover policy as a mechanics
+transfer. Kinoshita et al.'s progressive static-handstand EMG supplies only a
+stability envelope, not dynamic role ranking. Five repetitions are a product
+seed rather than a source prescription.
+
 ## Review status
 
-All eight discovery decisions were reviewed and accepted. The family contract
-and its ten-exercise coverage roster are now active validator input. Further
+All nine discovery decisions were reviewed and accepted. The family contract
+and its eleven-exercise coverage roster are now active validator input. Further
 exercises are additions only when they are independently useful catalog entries
 or introduce a newly reviewed contract branch; they are not generated merely
 to fill permutations:
@@ -356,3 +371,6 @@ to fill permutations:
    `kettlebellOrientation: standard`; `bottomUp` remains mechanically
    unrepresentable until a later stability review — enforced with a single-arm
    standing kettlebell representative.
+9. Admit only the exact strict wall-supported handstand push-up as a
+   closed-chain bodyweight branch, with source-owned fixture axes,
+   non-comparable loading, and disclosed action/role transfer — done.

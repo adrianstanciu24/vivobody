@@ -3,12 +3,14 @@
   "schemaVersion": 1,
   "id": "vertical-press",
   "name": "Vertical Press",
-  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. The resistance path is 75 to 90 degrees superior to horizontal, and the hips, knees, and ankles do not contribute to propulsion. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, and closed-chain bodyweight variants remain outside this family.",
+  "definition": "A shoulder-oriented compound press whose strict concentric phase elevates the humerus in a front or scapular path through shoulder flexion and abduction, scapular upward rotation and posterior tilt, and elbow extension. Open-chain presses move an external implement 75 to 90 degrees superior to horizontal; the reviewed closed-chain branch is a strict wall-supported handstand push-up that moves the body between a fifteen-centimeter head target and full elbow-and-shoulder extension. Li et al. directly establish its inversion-stand spacing, feet-only wall contact, forty-second maximum-repetition test, and no-waist-collapse or bent-leg validity rules, but do not measure joint, scapular, or muscle actions. The existing vertical-press signature and mover hierarchy are therefore an explicit mechanics transfer, while Kinoshita et al. support only the static handstand stability environment. The five-repetition product seed is not a source prescription. High-incline, landmine, rotating Arnold, behind-neck, leg-driven push-press or jerk, cable, pike, freestanding, parallettes, deficit, and kipping variants remain outside this family.",
   "evidenceRefs": [
     "ackland-2008-shoulder-moment-arms",
     "balsalobre-fernandez-2018-smith-military-press",
     "coratella-2022-overhead-press-variants",
     "ichihashi-2014-military-press-kinematics",
+    "kinoshita-2022-progressive-handstand-emg",
+    "li-2026-wall-handstand-push-up-test",
     "luczak-2013-dumbbell-press-inclinations",
     "padovan-2024-standing-overhead-press",
     "saeterbakken-2012-shoulder-press-core",
@@ -35,7 +37,8 @@
       "barbell",
       "dumbbell",
       "kettlebell",
-      "machine"
+      "machine",
+      "bodyweight"
     ],
     "modalities": [
       "dynamicStrength"
@@ -44,7 +47,8 @@
       "reps"
     ],
     "loadModes": [
-      "external"
+      "external",
+      "nonComparable"
     ],
     "lateralities": [
       "bilateral",
@@ -147,7 +151,13 @@
         "deltoidPosterior",
         "abs",
         "obliques",
-        "lumbarExtensors"
+        "lumbarExtensors",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "gluteMax",
+        "vasti",
+        "gastrocnemius",
+        "soleus"
       ]
     }
   },
@@ -158,17 +168,19 @@
       "required": true,
       "description": "Whether the distal segment moves freely or remains fixed.",
       "allowedValues": [
-        "open"
+        "open",
+        "closed"
       ]
     },
     {
       "id": "bodyPosition",
       "valueType": "enum",
       "required": true,
-      "description": "Whether the press is performed standing or seated.",
+      "description": "Whether the press is performed standing, seated, or inverted.",
       "allowedValues": [
         "standing",
-        "seated"
+        "seated",
+        "inverted"
       ]
     },
     {
@@ -250,8 +262,78 @@
       "required": true,
       "description": "The canonical humeral and implement path relative to the head.",
       "allowedValues": [
-        "frontScapular"
+        "frontScapular",
+        "invertedHeadLimited"
       ]
+    },
+    {
+      "id": "bodyweightApparatus",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed support apparatus for the closed-chain bodyweight branch.",
+      "allowedValues": [
+        "inversionStand"
+      ]
+    },
+    {
+      "id": "wallContact",
+      "valueType": "enum",
+      "required": false,
+      "description": "The permitted external contact during the strict inverted repetition.",
+      "allowedValues": [
+        "feetGentleOnly"
+      ]
+    },
+    {
+      "id": "handSupportWidth",
+      "valueType": "enum",
+      "required": false,
+      "description": "The source-defined inversion-stand width relative to shoulder breadth.",
+      "allowedValues": [
+        "twentyCentimetersWiderThanShoulders"
+      ]
+    },
+    {
+      "id": "wallDistanceCm",
+      "valueType": "number",
+      "required": false,
+      "minimum": 10,
+      "maximum": 10,
+      "description": "Distance from the inversion stand to the wall in the reviewed fixture."
+    },
+    {
+      "id": "headTargetHeightCm",
+      "valueType": "number",
+      "required": false,
+      "minimum": 15,
+      "maximum": 15,
+      "description": "Height of the source-defined head-contact sponge."
+    },
+    {
+      "id": "rangeBoundary",
+      "valueType": "enum",
+      "required": false,
+      "description": "The reviewed bottom and top validity boundary.",
+      "allowedValues": [
+        "headToSpongeThenFullElbowAndShoulderExtension"
+      ]
+    },
+    {
+      "id": "trunkAndLegStandard",
+      "valueType": "enum",
+      "required": false,
+      "description": "The source-defined strict-body validity standard.",
+      "allowedValues": [
+        "noWaistCollapseKneesExtended"
+      ]
+    },
+    {
+      "id": "sourceTestDurationSeconds",
+      "valueType": "number",
+      "required": false,
+      "minimum": 40,
+      "maximum": 40,
+      "description": "Duration of the source endurance test; the app records valid repetitions rather than a comparable external load."
     }
   ],
   "recommended": {
@@ -336,7 +418,7 @@
     },
     {
       "id": "unsupported-torso-is-upright-free-and-spine-stabilized",
-      "description": "A press without posterior torso support is upright, permits free scapular translation, and explicitly declares spinal stabilization whether standing or seated.",
+      "description": "A press without posterior torso support permits free scapular translation and explicitly declares spinal stabilization, including the reviewed inverted branch.",
       "when": {
         "field": "variant.torsoSupport",
         "operator": "equals",
@@ -533,6 +615,93 @@
       ],
       "requirePresent": [],
       "requireAbsent": []
+    },
+    {
+      "id": "bodyweight-fixture-is-strict-wall-supported-handstand-push-up",
+      "description": "The only reviewed bodyweight branch is the bilateral strict wall-supported handstand push-up with exact inversion-stand geometry, feet-only wall contact, and no kipping or body collapse.",
+      "when": {
+        "field": "equipment",
+        "operator": "equals",
+        "value": "bodyweight"
+      },
+      "then": [
+        { "field": "laterality", "value": "bilateral" },
+        { "field": "loadMode", "value": "nonComparable" },
+        { "field": "variant.kineticChain", "value": "closed" },
+        { "field": "variant.bodyPosition", "value": "inverted" },
+        { "field": "variant.torsoSupport", "value": "none" },
+        { "field": "variant.scapularTranslation", "value": "free" },
+        { "field": "variant.pressInclinationDegrees", "value": 90 },
+        { "field": "variant.gripOrientation", "value": "pronated" },
+        { "field": "variant.fixedPath", "value": false },
+        { "field": "variant.lowerBodyContribution", "value": "none" },
+        { "field": "variant.pressPath", "value": "invertedHeadLimited" },
+        { "field": "variant.bodyweightApparatus", "value": "inversionStand" },
+        { "field": "variant.wallContact", "value": "feetGentleOnly" },
+        { "field": "variant.handSupportWidth", "value": "twentyCentimetersWiderThanShoulders" },
+        { "field": "variant.wallDistanceCm", "value": 10 },
+        { "field": "variant.headTargetHeightCm", "value": 15 },
+        { "field": "variant.rangeBoundary", "value": "headToSpongeThenFullElbowAndShoulderExtension" },
+        { "field": "variant.trunkAndLegStandard", "value": "noWaistCollapseKneesExtended" },
+        { "field": "variant.sourceTestDurationSeconds", "value": 40 }
+      ],
+      "requirePresent": [
+        "variant.bodyweightApparatus",
+        "variant.wallContact",
+        "variant.handSupportWidth",
+        "variant.wallDistanceCm",
+        "variant.headTargetHeightCm",
+        "variant.rangeBoundary",
+        "variant.trunkAndLegStandard",
+        "variant.sourceTestDurationSeconds"
+      ],
+      "requireAbsent": [],
+      "requireMuscleRequirements": [
+        { "anyOf": ["fingerFlexors"], "minimumRole": "stabilizer" },
+        { "anyOf": ["extensorCarpiRadialis"], "minimumRole": "stabilizer" },
+        { "anyOf": ["abs"], "minimumRole": "stabilizer" },
+        { "anyOf": ["obliques"], "minimumRole": "stabilizer" },
+        { "anyOf": ["lumbarExtensors"], "minimumRole": "stabilizer" },
+        { "anyOf": ["gluteMax"], "minimumRole": "stabilizer" },
+        { "anyOf": ["vasti"], "minimumRole": "stabilizer" },
+        { "anyOf": ["gastrocnemius"], "minimumRole": "stabilizer" },
+        { "anyOf": ["soleus"], "minimumRole": "stabilizer" }
+      ],
+      "requireAdditionalStabilityDemands": [
+        "elbow",
+        "wrist",
+        "hand",
+        "spine",
+        "pelvis",
+        "hip",
+        "knee",
+        "ankle",
+        "foot"
+      ]
+    },
+    {
+      "id": "external-load-fixtures-omit-handstand-only-axes",
+      "description": "Open-chain external-load presses do not declare the exact wall-supported handstand fixture axes.",
+      "when": {
+        "field": "equipment",
+        "operator": "notEquals",
+        "value": "bodyweight"
+      },
+      "then": [
+        { "field": "variant.kineticChain", "value": "open" },
+        { "field": "loadMode", "value": "external" }
+      ],
+      "requirePresent": [],
+      "requireAbsent": [
+        "variant.bodyweightApparatus",
+        "variant.wallContact",
+        "variant.handSupportWidth",
+        "variant.wallDistanceCm",
+        "variant.headTargetHeightCm",
+        "variant.rangeBoundary",
+        "variant.trunkAndLegStandard",
+        "variant.sourceTestDurationSeconds"
+      ]
     }
   ],
   "exercises": [
@@ -1426,6 +1595,80 @@
         "ichihashi-2014-military-press-kinematics"
       ],
       "movementDefinition": "Adjust the seat so the neutral handles begin near shoulder height and sit with the pelvis and upper torso against the machine pad and the feet planted. Press both lever arms overhead along their converging front paths without pushing through the legs or lifting from the pad. Finish with the elbows extended without forcing the shoulders forward, then return the handles under control."
+    },
+    {
+      "catalogID": "wall-supported-strict-handstand-push-up",
+      "name": "Wall-Supported Strict Handstand Push-Up",
+      "aliases": [
+        "Strict Wall Handstand Push-Up",
+        "Wall Handstand Push-Up",
+        "Inversion-Stand Handstand Push-Up"
+      ],
+      "equipment": "bodyweight",
+      "laterality": "bilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 5,
+      "searchPriority": 84,
+      "involvement": [
+        { "muscle": "deltoidAnterior", "role": "primary" },
+        { "muscle": "deltoidLateral", "role": "secondary" },
+        { "muscle": "supraspinatus", "role": "secondary" },
+        { "muscle": "triceps", "role": "secondary" },
+        { "muscle": "serratus", "role": "secondary" },
+        { "muscle": "trapeziusUpper", "role": "secondary" },
+        { "muscle": "trapeziusLower", "role": "secondary" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "gluteMax", "role": "stabilizer" },
+        { "muscle": "vasti", "role": "stabilizer" },
+        { "muscle": "gastrocnemius", "role": "stabilizer" },
+        { "muscle": "soleus", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "closed",
+        "bodyPosition": "inverted",
+        "torsoSupport": "none",
+        "scapularTranslation": "free",
+        "pressInclinationDegrees": 90,
+        "gripOrientation": "pronated",
+        "fixedPath": false,
+        "lowerBodyContribution": "none",
+        "pressPath": "invertedHeadLimited",
+        "bodyweightApparatus": "inversionStand",
+        "wallContact": "feetGentleOnly",
+        "handSupportWidth": "twentyCentimetersWiderThanShoulders",
+        "wallDistanceCm": 10,
+        "headTargetHeightCm": 15,
+        "rangeBoundary": "headToSpongeThenFullElbowAndShoulderExtension",
+        "trunkAndLegStandard": "noWaistCollapseKneesExtended",
+        "sourceTestDurationSeconds": 40
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [
+        "elbow",
+        "wrist",
+        "hand",
+        "spine",
+        "pelvis",
+        "hip",
+        "knee",
+        "ankle",
+        "foot"
+      ],
+      "evidenceRefs": [
+        "kinoshita-2022-progressive-handstand-emg",
+        "li-2026-wall-handstand-push-up-test"
+      ],
+      "movementDefinition": "Place the inversion stand ten centimeters from a wall with its hand supports twenty centimeters wider than shoulder breadth and a fifteen-centimeter sponge centered beneath the head. Kick to inversion and let only the feet touch the wall gently. Lower until the head contacts the sponge, then press to full elbow and shoulder extension without collapsing at the waist, bending the knees, kipping, or using the wall for propulsion. The reviewed test counts maximum valid repetitions in forty seconds; five reps is only the catalog's editable starting seed. The source did not measure joint, scapular, or muscle actions, so this record transparently inherits the reviewed vertical-press mechanics and role policy rather than claiming direct dynamic action evidence."
     }
   ]
 }

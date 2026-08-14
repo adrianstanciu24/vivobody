@@ -48,6 +48,9 @@ class CatalogFoundationTests(unittest.TestCase):
         cls.vertical_press = catalog.load_json(
             catalog.FAMILIES_ROOT / "vertical-press.json"
         )
+        cls.landmine_press = catalog.load_json(
+            catalog.FAMILIES_ROOT / "landmine-press.json"
+        )
         cls.vertical_pull = catalog.load_json(
             catalog.FAMILIES_ROOT / "vertical-pull.json"
         )
@@ -219,6 +222,9 @@ class CatalogFoundationTests(unittest.TestCase):
 
     def vertical_press_copy(self) -> dict:
         return copy.deepcopy(self.vertical_press)
+
+    def landmine_press_copy(self) -> dict:
+        return copy.deepcopy(self.landmine_press)
 
     def vertical_pull_copy(self) -> dict:
         return copy.deepcopy(self.vertical_pull)
@@ -2985,6 +2991,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 "single-arm-standing-kettlebell-overhead-press",
                 "seated-smith-machine-overhead-press",
                 "machine-shoulder-press",
+                "wall-supported-strict-handstand-push-up",
             ],
         )
 
@@ -3054,6 +3061,14 @@ class CatalogFoundationTests(unittest.TestCase):
                     "machine", "bilateral", "seated", "machinePad",
                     "supportConstrained", 80, "neutral", True,
                     "convergingShoulderPress", None, (),
+                ),
+                "wall-supported-strict-handstand-push-up": (
+                    "bodyweight", "bilateral", "inverted", "none", "free",
+                    90, "pronated", False, None, None,
+                    (
+                        "elbow", "wrist", "hand", "spine", "pelvis",
+                        "hip", "knee", "ankle", "foot",
+                    ),
                 ),
             },
         )
@@ -5823,6 +5838,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "upright-row",
             "dip",
             "push-press",
+            "landmine-press",
             "knee-extension",
             "knee-flexion",
             "hip-extension",
@@ -5855,7 +5871,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            132,
+            134,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -7521,7 +7537,7 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("Four work items remain unresolved", roadmap)
+        self.assertIn("Two work items remain unresolved", roadmap)
         self.assertIn(
             "Sternocostal flexion from an extended start — complete",
             roadmap,
@@ -8205,10 +8221,15 @@ class CatalogFoundationTests(unittest.TestCase):
             with self.subTest(source=source_id):
                 self.assertIn(phrase, source_by_id[source_id]["scope"])
 
-    def test_batch3_deferred_candidates_remain_explicitly_gated(self) -> None:
+    def test_batch3_nonstandard_press_branches_are_closed_and_bounded(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
         self.assertTrue(
-            {"scapular-depression", "scapular-retraction"}.issubset(
+            {
+                "scapular-depression",
+                "scapular-retraction",
+                "landmine-press",
+                "vertical-press",
+            }.issubset(
                 active_ids
             )
         )
@@ -8217,7 +8238,6 @@ class CatalogFoundationTests(unittest.TestCase):
                 "scapular-upward-rotation",
                 "scapular-downward-rotation",
                 "closed-chain-vertical-press",
-                "landmine-press",
                 "leg-driven-overhead-press",
             }.isdisjoint(active_ids)
         )
@@ -8247,22 +8267,255 @@ class CatalogFoundationTests(unittest.TestCase):
             "`scapular-downward-rotation` | Resolved: no standalone family",
             scapular,
         )
+        self.assertIn("`closed-chain-vertical-press` | Active branch", dip)
+        self.assertIn("`landmine-press` | Activate", power)
         self.assertIn(
-            "`closed-chain-vertical-press` | Merge into `vertical-press`, "
-            "defer branch",
-            dip,
-        )
-        self.assertIn("`landmine-press` | Defer | 0", power)
-        self.assertIn(
-            "`leg-driven-overhead-press` | Resolve to and activate narrowly "
-            "as `push-press` | 1",
+            "`leg-driven-overhead-press` | Active as `push-press` | 1",
             power,
         )
 
         evidence_ids = {
             source["id"] for source in self.foundation.evidence["sources"]
         }
-        self.assertNotIn("zhao-2026-landmine-press-kinematics", evidence_ids)
+        self.assertTrue(
+            {
+                "zhao-2026-landmine-press-kinematics",
+                "li-2026-wall-handstand-push-up-test",
+                "kinoshita-2022-progressive-handstand-emg",
+            }.issubset(evidence_ids)
+        )
+
+    def test_landmine_press_contract_and_runtime_surface_are_exact(self) -> None:
+        family = self.landmine_press
+        exercise = family["exercises"][0]
+        self.assertEqual(
+            family["fixed"],
+            {
+                "mechanic": "compound",
+                "pattern": "push",
+                "direction": "diagonal",
+                "planes": ["sagittal"],
+            },
+        )
+        self.assertEqual(
+            family["movementSignature"]["primeActions"],
+            ["shoulder.flexion", "elbow.extension"],
+        )
+        self.assertEqual(
+            set(family["movementSignature"]["forbiddenPrimeActions"]),
+            self.foundation.action_ids
+            - {"shoulder.flexion", "elbow.extension"},
+        )
+        self.assertEqual(
+            {
+                key: exercise[key]
+                for key in (
+                    "catalogID", "name", "equipment", "laterality",
+                    "modality", "trackingMode", "loadMode",
+                    "defaultWeight", "defaultWeightKg", "reps",
+                )
+            },
+            {
+                "catalogID": "standing-single-arm-landmine-press-power-test",
+                "name": "Standing Single-Arm Landmine Press Power Test",
+                "equipment": "barbell",
+                "laterality": "unilateral",
+                "modality": "power",
+                "trackingMode": "reps",
+                "loadMode": "external",
+                "defaultWeight": 45,
+                "defaultWeightKg": 20,
+                "reps": 3,
+            },
+        )
+        self.assertEqual(
+            {
+                item["muscle"]: item["role"]
+                for item in exercise["involvement"]
+            },
+            {
+                "deltoidAnterior": "primary",
+                "triceps": "secondary",
+                "pectoralisMajorClavicular": "secondary",
+                "serratus": "stabilizer",
+                "trapeziusUpper": "stabilizer",
+                "trapeziusLower": "stabilizer",
+                "externalRotators": "stabilizer",
+                "subscapularis": "stabilizer",
+                "fingerFlexors": "stabilizer",
+                "extensorCarpiRadialis": "stabilizer",
+                "abs": "stabilizer",
+                "obliques": "stabilizer",
+                "lumbarExtensors": "stabilizer",
+                "gluteMed": "stabilizer",
+                "vasti": "stabilizer",
+                "gastrocnemius": "stabilizer",
+                "soleus": "stabilizer",
+            },
+        )
+        runtime = {
+            record["catalogID"]: record
+            for record in catalog.compile_runtime_catalog(self.real_families)
+        }[exercise["catalogID"]]
+        self.assertEqual(
+            {
+                key: runtime[key]
+                for key in (
+                    "familyID", "mechanic", "pattern", "direction", "planes",
+                    "modality", "loadMode", "defaultWeight", "defaultWeightKg",
+                )
+            },
+            {
+                "familyID": "landmine-press",
+                "mechanic": "compound",
+                "pattern": "push",
+                "direction": "diagonal",
+                "planes": ["sagittal"],
+                "modality": "power",
+                "loadMode": "external",
+                "defaultWeight": 45,
+                "defaultWeightKg": 20,
+            },
+        )
+
+    def test_landmine_press_mutates_every_axis_action_and_required_role(self) -> None:
+        original = self.landmine_press
+        for axis in original["variantAxes"]:
+            family = copy.deepcopy(original)
+            del family["exercises"][0]["variant"][axis["id"]]
+            with self.subTest(kind="axis", axis=axis["id"]):
+                self.assert_family_fails(
+                    family,
+                    f"is missing required axes: {re.escape(axis['id'])}",
+                )
+        for action in original["movementSignature"]["forbiddenPrimeActions"]:
+            family = copy.deepcopy(original)
+            family["exercises"][0]["additionalPrimeActions"] = [action]
+            with self.subTest(kind="action", action=action):
+                self.assert_family_fails(
+                    family,
+                    f"declares forbidden prime action {re.escape(action)}",
+                )
+        for index, requirement in enumerate(
+            original["musclePolicy"]["requirements"]
+        ):
+            candidate = requirement["anyOf"][0]
+            family = copy.deepcopy(original)
+            family["exercises"][0]["involvement"] = [
+                item
+                for item in family["exercises"][0]["involvement"]
+                if item["muscle"] != candidate
+            ]
+            with self.subTest(kind="role", muscle=candidate):
+                self.assert_family_fails(
+                    family,
+                    f"fails muscle requirement {index}|requires at least one primary muscle",
+                )
+
+    def test_wall_handstand_branch_is_exact_and_cannot_escape_its_rules(self) -> None:
+        family = self.vertical_press
+        exercise = next(
+            item for item in family["exercises"]
+            if item["catalogID"] == "wall-supported-strict-handstand-push-up"
+        )
+        self.assertEqual(
+            {
+                key: exercise[key]
+                for key in (
+                    "equipment", "laterality", "modality", "trackingMode",
+                    "loadMode", "defaultWeight", "reps",
+                )
+            },
+            {
+                "equipment": "bodyweight",
+                "laterality": "bilateral",
+                "modality": "dynamicStrength",
+                "trackingMode": "reps",
+                "loadMode": "nonComparable",
+                "defaultWeight": 0,
+                "reps": 5,
+            },
+        )
+        expected_variant = {
+            "kineticChain": "closed",
+            "bodyPosition": "inverted",
+            "torsoSupport": "none",
+            "scapularTranslation": "free",
+            "pressInclinationDegrees": 90,
+            "gripOrientation": "pronated",
+            "fixedPath": False,
+            "lowerBodyContribution": "none",
+            "pressPath": "invertedHeadLimited",
+            "bodyweightApparatus": "inversionStand",
+            "wallContact": "feetGentleOnly",
+            "handSupportWidth": "twentyCentimetersWiderThanShoulders",
+            "wallDistanceCm": 10,
+            "headTargetHeightCm": 15,
+            "rangeBoundary": "headToSpongeThenFullElbowAndShoulderExtension",
+            "trunkAndLegStandard": "noWaistCollapseKneesExtended",
+            "sourceTestDurationSeconds": 40,
+        }
+        self.assertEqual(exercise["variant"], expected_variant)
+        self.assertEqual(
+            set(exercise["additionalStabilityDemands"]),
+            {"elbow", "wrist", "hand", "spine", "pelvis", "hip", "knee", "ankle", "foot"},
+        )
+        bodyweight_axes = {
+            "bodyweightApparatus", "wallContact", "handSupportWidth",
+            "wallDistanceCm", "headTargetHeightCm", "rangeBoundary",
+            "trunkAndLegStandard", "sourceTestDurationSeconds",
+        }
+        for axis_id in bodyweight_axes:
+            mutated = self.vertical_press_copy()
+            target = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == exercise["catalogID"]
+            )
+            del target["variant"][axis_id]
+            with self.subTest(axis=axis_id):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation, "mutated vertical press")
+        required_stabilizers = {
+            "fingerFlexors", "extensorCarpiRadialis", "abs", "obliques",
+            "lumbarExtensors", "gluteMax", "vasti", "gastrocnemius", "soleus",
+        }
+        for muscle in required_stabilizers:
+            mutated = self.vertical_press_copy()
+            target = next(
+                item for item in mutated["exercises"]
+                if item["catalogID"] == exercise["catalogID"]
+            )
+            target["involvement"] = [
+                item for item in target["involvement"]
+                if item["muscle"] != muscle
+            ]
+            with self.subTest(stabilizer=muscle):
+                with self.assertRaises(catalog.ValidationFailure):
+                    catalog.validate_family(mutated, self.foundation, "mutated vertical press")
+        for external in family["exercises"][:-1]:
+            self.assertTrue(bodyweight_axes.isdisjoint(external["variant"]))
+        self.assertNotIn(
+            "closed-chain-vertical-press",
+            {item["id"] for item in self.real_families},
+        )
+
+    def test_nonstandard_press_evidence_limits_are_exactly_disclosed(self) -> None:
+        sources = {
+            source["id"]: source
+            for source in self.foundation.evidence["sources"]
+        }
+        self.assertIn(
+            "tracks bar endpoints rather than the athlete's torso",
+            sources["zhao-2026-landmine-press-kinematics"]["scope"],
+        )
+        self.assertIn(
+            "does not measure dynamic shoulder or scapular kinematics",
+            sources["li-2026-wall-handstand-push-up-test"]["scope"],
+        )
+        self.assertIn(
+            "does not establish dynamic handstand-push-up actions",
+            sources["kinoshita-2022-progressive-handstand-emg"]["scope"],
+        )
 
     def test_batch4_activates_exactly_four_lower_body_isolation_families(
         self,
@@ -11966,7 +12219,7 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 149)
+        self.assertEqual(len(source_by_id), 152)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
@@ -12110,8 +12363,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 54)
-        self.assertEqual(len(self.foundation.evidence_ids), 149)
+        self.assertEqual(len(self.real_families), 55)
+        self.assertEqual(len(self.foundation.evidence_ids), 152)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -13359,7 +13612,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "54 reviewed families are active, containing 132 exercises",
+            "55 reviewed families are active, containing 134 exercises",
             roadmap,
         )
         self.assertIn(
@@ -13367,13 +13620,13 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "Four work items remain unresolved, all family or branch items",
+            "Two work items remain unresolved",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **132** |", roadmap)
-        self.assertIn("Fifty-four reviewed family files", families_readme)
+        self.assertIn("| **Total** | **134** |", roadmap)
+        self.assertIn("Fifty-five reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -14433,9 +14686,9 @@ class CatalogFoundationTests(unittest.TestCase):
         records = catalog.compile_runtime_catalog(self.real_families)
         by_id = {record["catalogID"]: record for record in records}
         upright = by_id["standing-low-cable-upright-row"]
-        self.assertEqual(len(self.real_families), 54)
-        self.assertEqual(len(records), 132)
-        self.assertEqual(len(self.foundation.evidence_ids), 149)
+        self.assertEqual(len(self.real_families), 55)
+        self.assertEqual(len(records), 134)
+        self.assertEqual(len(self.foundation.evidence_ids), 152)
         self.assertEqual(
             {
                 key: upright[key]
@@ -15379,16 +15632,16 @@ class CatalogFoundationTests(unittest.TestCase):
             ["fixture-barbell-horizontal-press: reps 30 is outside recommended 5...15"],
         )
 
-    def test_runtime_projection_is_exactly_54_families_and_132_exercises(
+    def test_runtime_projection_is_exactly_55_families_and_134_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 132)
+        self.assertEqual(len(records), 134)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 54)
+        self.assertEqual(len({record["familyID"] for record in records}), 55)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
@@ -15676,7 +15929,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 132)
+            self.assertEqual(len(emitted), 134)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

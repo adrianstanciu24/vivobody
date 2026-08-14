@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 54 reviewed families compile to 132 exercises with stable
+//  product: 55 reviewed families compile to 134 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,8 +16,8 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 132)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 54)
+        #expect(CatalogData.records.count == 134)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 55)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
     }
@@ -253,6 +253,38 @@ struct CatalogBiomechanicsTests {
         #expect(uprightRow.muscleInvolvement.role(for: .supraspinatus) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .bicepsBrachii) == .secondary)
         #expect(uprightRow.muscleInvolvement.role(for: .trapeziusMiddle) == .stabilizer)
+
+        let landmine = try #require(
+            CatalogData.record(forExerciseNamed: "Standing Single-Arm Landmine Press Power Test")
+        )
+        #expect(landmine.familyID == "landmine-press")
+        #expect(landmine.mechanic == .compound)
+        #expect(landmine.pattern == .push)
+        #expect(landmine.direction == .diagonal)
+        #expect(landmine.planes == [.sagittal])
+        #expect(landmine.modality == .power)
+        #expect(landmine.loadMode == .external)
+        #expect(landmine.defaultWeight == 45)
+        #expect(landmine.defaultWeightKg == 20)
+        #expect(landmine.muscleInvolvement.role(for: .deltoidAnterior) == .primary)
+        #expect(landmine.muscleInvolvement.role(for: .triceps) == .secondary)
+        #expect(landmine.muscleInvolvement.role(for: .serratus) == .stabilizer)
+
+        let handstand = try #require(
+            CatalogData.record(forExerciseNamed: "Wall-Supported Strict Handstand Push-Up")
+        )
+        #expect(handstand.familyID == "vertical-press")
+        #expect(handstand.mechanic == .compound)
+        #expect(handstand.pattern == .push)
+        #expect(handstand.direction == .vertical)
+        #expect(handstand.planes == [.sagittal, .frontal])
+        #expect(handstand.equipment == .bodyweight)
+        #expect(handstand.loadMode == .nonComparable)
+        #expect(handstand.defaultWeight == 0)
+        #expect(handstand.muscleInvolvement.role(for: .deltoidAnterior) == .primary)
+        #expect(handstand.muscleInvolvement.role(for: .triceps) == .secondary)
+        #expect(handstand.muscleInvolvement.role(for: .fingerFlexors) == .stabilizer)
+        #expect(handstand.muscleInvolvement.role(for: .gluteMax) == .stabilizer)
 
         let hipFlexion = try #require(
             CatalogData.record(forExerciseNamed: "Bodyweight Active Straight-Leg Raise")

@@ -1,0 +1,495 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "landmine-press",
+  "name": "Landmine Press",
+  "definition": "A narrow unilateral standing split-stance press using an Olympic bar whose far end is fixed to a landmine pivot. The moving sleeve begins close to the working-side deltoid and follows the bar's constrained rotational arc while the shoulder flexes and the elbow extends. Zhao et al. directly establish the apparatus, right-arm left-foot-forward stance, total bar-plus-plate load accounting, twenty-to-thirty-five-kilogram test range, and three-repetition power-test topology. Their system tracks bar endpoints rather than human segments, so the sagittal shoulder-flexion model, diagonal push classification, strict no-leg-drive execution, mirrored left-arm prescription, and muscle hierarchy are disclosed catalog adaptations. No scapular prime action is inferred: serratus and the trapezius regions receive stability credit only. Half-kneeling, tall-kneeling, bilateral, two-hand, rotational, squat-to-press, explosive throw, Viking-press, free-bar, cable, machine, and torso-lean variants remain outside this contract.",
+  "evidenceRefs": [
+    "ackland-2008-shoulder-moment-arms",
+    "holzbaur-2005-upper-extremity",
+    "murray-1995-elbow-forearm-moment-arms",
+    "zhao-2026-landmine-press-kinematics"
+  ],
+  "fixed": {
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ]
+  },
+  "groupPolicy": {
+    "default": "shoulders",
+    "allowed": [
+      "shoulders"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "barbell"
+    ],
+    "modalities": [
+      "power"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "external"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "shoulder.flexion"
+    ],
+    "primeActions": [
+      "shoulder.flexion",
+      "elbow.extension"
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "shoulder",
+      "scapula",
+      "elbow",
+      "wrist",
+      "hand",
+      "spine",
+      "pelvis",
+      "hip",
+      "knee",
+      "ankle",
+      "foot"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "deltoidAnterior"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "triceps"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "pectoralisMajorClavicular"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "serratus"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusUpper"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "trapeziusLower"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "externalRotators"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "subscapularis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "fingerFlexors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "extensorCarpiRadialis"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "abs"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "lumbarExtensors"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "vasti"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "gastrocnemius"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "soleus"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "deltoidAnterior"
+      ],
+      "secondary": [
+        "triceps",
+        "pectoralisMajorClavicular"
+      ],
+      "stabilizer": [
+        "serratus",
+        "trapeziusUpper",
+        "trapeziusLower",
+        "externalRotators",
+        "subscapularis",
+        "fingerFlexors",
+        "extensorCarpiRadialis",
+        "abs",
+        "obliques",
+        "lumbarExtensors",
+        "gluteMed",
+        "vasti",
+        "gastrocnemius",
+        "soleus"
+      ]
+    }
+  },
+  "recommended": {
+    "defaultReps": {
+      "minimum": 3,
+      "maximum": 3
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "open"
+      ],
+      "description": "The hand and moving sleeve travel through space while the athlete remains standing."
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "standing"
+      ],
+      "description": "The directly reviewed whole-body posture."
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "none"
+      ],
+      "description": "No bench, pad, or external surface supports the torso."
+    },
+    {
+      "id": "stanceConfiguration",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "contralateralFootForwardSplit"
+      ],
+      "description": "The source's right-arm left-foot-forward stance is mirrored for the opposite arm as a disclosed catalog adaptation."
+    },
+    {
+      "id": "footOrientation",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "bothToesForward"
+      ],
+      "description": "The directly reviewed orientation of both feet."
+    },
+    {
+      "id": "workingSide",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "oneArmAtATime"
+      ],
+      "description": "One arm presses the moving sleeve per set."
+    },
+    {
+      "id": "trainingSidePrescription",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "bothSidesMirrored"
+      ],
+      "description": "The source directly tested the right arm; equal left-arm work is a product adaptation and is logged separately."
+    },
+    {
+      "id": "barbellConstraint",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "landminePivot"
+      ],
+      "description": "One end of the Olympic bar is fixed to a stationary pivot."
+    },
+    {
+      "id": "barStartPosition",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "movingSleeveNearDeltoid"
+      ],
+      "description": "The source-defined starting location of the moving bar end."
+    },
+    {
+      "id": "handTask",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "fullGripMovingSleeve"
+      ],
+      "description": "The working hand fully grips the moving end of the bar."
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "pivotedBarRotationalArc"
+      ],
+      "description": "The moving sleeve follows the constrained arc of the rigid bar around its fixed end."
+    },
+    {
+      "id": "loadAccounting",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "totalBarAndPlates"
+      ],
+      "description": "Users enter total system mass: the full bar plus every attached plate, matching Zhao's model."
+    },
+    {
+      "id": "pressDirection",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "diagonalCatalogAdaptation"
+      ],
+      "description": "The app-level diagonal push classification is a bounded interpretation of the observed pivot arc, not a measured torso-relative chord."
+    },
+    {
+      "id": "shoulderMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "flexesCatalogAdaptation"
+      ],
+      "description": "Shoulder flexion is the conservative mechanics-derived human action; the source did not track the humerus."
+    },
+    {
+      "id": "elbowMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "extendsCatalogAdaptation"
+      ],
+      "description": "Elbow extension is the conservative mechanics-derived press action; the source did not report elbow angles."
+    },
+    {
+      "id": "scapularMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "unmeasuredNoPrime"
+      ],
+      "description": "No scapular action is inferred from bar motion or stabilizer anatomy."
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "nonstandardized"
+      ],
+      "description": "The source did not track or numerically standardize trunk motion."
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "nonstandardized"
+      ],
+      "description": "The source did not track or numerically standardize pelvic motion."
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": true,
+      "description": "The landmine pivot constrains the external bar to a rotational arc."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "allowedValues": [
+        "noneCatalogAdaptation"
+      ],
+      "description": "The active record excludes deliberate hip, knee, or ankle propulsion; Zhao did not measure this strict boundary."
+    }
+  ],
+  "exerciseRules": [],
+  "exercises": [
+    {
+      "catalogID": "standing-single-arm-landmine-press-power-test",
+      "name": "Standing Single-Arm Landmine Press Power Test",
+      "aliases": [
+        "Split-Stance Landmine Press Test",
+        "Single-Arm Pivoted-Bar Press Test"
+      ],
+      "equipment": "barbell",
+      "laterality": "unilateral",
+      "modality": "power",
+      "trackingMode": "reps",
+      "loadMode": "external",
+      "bodyweightFraction": 0,
+      "defaultWeight": 45,
+      "defaultWeightKg": 20,
+      "reps": 3,
+      "searchPriority": 72,
+      "involvement": [
+        { "muscle": "deltoidAnterior", "role": "primary" },
+        { "muscle": "triceps", "role": "secondary" },
+        { "muscle": "pectoralisMajorClavicular", "role": "secondary" },
+        { "muscle": "serratus", "role": "stabilizer" },
+        { "muscle": "trapeziusUpper", "role": "stabilizer" },
+        { "muscle": "trapeziusLower", "role": "stabilizer" },
+        { "muscle": "externalRotators", "role": "stabilizer" },
+        { "muscle": "subscapularis", "role": "stabilizer" },
+        { "muscle": "fingerFlexors", "role": "stabilizer" },
+        { "muscle": "extensorCarpiRadialis", "role": "stabilizer" },
+        { "muscle": "abs", "role": "stabilizer" },
+        { "muscle": "obliques", "role": "stabilizer" },
+        { "muscle": "lumbarExtensors", "role": "stabilizer" },
+        { "muscle": "gluteMed", "role": "stabilizer" },
+        { "muscle": "vasti", "role": "stabilizer" },
+        { "muscle": "gastrocnemius", "role": "stabilizer" },
+        { "muscle": "soleus", "role": "stabilizer" }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "standing",
+        "torsoSupport": "none",
+        "stanceConfiguration": "contralateralFootForwardSplit",
+        "footOrientation": "bothToesForward",
+        "workingSide": "oneArmAtATime",
+        "trainingSidePrescription": "bothSidesMirrored",
+        "barbellConstraint": "landminePivot",
+        "barStartPosition": "movingSleeveNearDeltoid",
+        "handTask": "fullGripMovingSleeve",
+        "resistanceGeometry": "pivotedBarRotationalArc",
+        "loadAccounting": "totalBarAndPlates",
+        "pressDirection": "diagonalCatalogAdaptation",
+        "shoulderMotion": "flexesCatalogAdaptation",
+        "elbowMotion": "extendsCatalogAdaptation",
+        "scapularMotion": "unmeasuredNoPrime",
+        "spineMotion": "nonstandardized",
+        "pelvisMotion": "nonstandardized",
+        "fixedPath": true,
+        "lowerBodyContribution": "noneCatalogAdaptation"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "zhao-2026-landmine-press-kinematics"
+      ],
+      "movementDefinition": "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load. For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm. Fully grip the moving sleeve and begin with it close to the working-side deltoid. Without deliberately driving through the hips, knees, or ankles, press the sleeve through its pivoted arc to a controlled end range, then return it to the shoulder. Perform three power-focused repetitions, log the opposite side separately, and keep the trunk and pelvis controlled without treating them as measured position-held segments."
+    }
+  ]
+}

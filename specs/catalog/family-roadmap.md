@@ -5,18 +5,19 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 54 reviewed families are active, containing 132 exercises.
+- 55 reviewed families are active, containing 134 exercises.
 - The current foundation contains 58 muscle regions, 60 trainable mesh bases,
-  44 joint actions, and 149 registered evidence sources.
+  44 joint actions, and 152 registered evidence sources.
 - Batch 1 initially resolved nine candidates into seven active families and two
   evidence holds; later primary-source reviews activated both held families.
 - Batch 2 resolved nine candidates into eight active families and one explicit
   task-definition hold.
 - Batch 3 initially resolved nine candidates into four active families, four
   standalone evidence holds, and one deferred branch of an existing family.
-  Later review activated scapular depression, assigned upward-rotation
-  ownership to `scapular-elevation`, and retired downward rotation as
-  intentionally non-standalone.
+  Later review activated scapular depression and landmine press, assigned
+  upward-rotation ownership to `scapular-elevation`, activated the strict
+  closed-chain branch within `vertical-press`, and retired downward rotation
+  as intentionally non-standalone.
 - Batch 4 initially resolved five candidates into four active families and one
   evidence hold; the held hip-flexion family later activated through an exact
   active-straight-leg-raise fixture.
@@ -31,9 +32,8 @@ are discovery handles, not guaranteed final family IDs.
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- Four work items remain unresolved, all family or branch items: the deferred
-  `diagonal-pull` and generic `grip` candidates, the Batch-3
-  `landmine-press` hold, and the closed-chain branch of `vertical-press`.
+- Two work items remain unresolved: the deferred `diagonal-pull` and generic
+  `grip` candidates. Both Batch-3 nonstandard press branches are now closed.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -48,7 +48,7 @@ batch siblings.
 | `horizontal-press` | 12 |
 | `incline-press` | 4 |
 | `decline-press` | 4 |
-| `vertical-press` | 10 |
+| `vertical-press` | 11 |
 | `vertical-pull` | 13 |
 | `shoulder-extension-row` | 12 |
 | `shoulder-horizontal-abduction-row` | 6 |
@@ -74,6 +74,7 @@ batch siblings.
 | `upright-row` | 1 |
 | `dip` | 2 |
 | `push-press` | 1 |
+| `landmine-press` | 1 |
 | `knee-extension` | 2 |
 | `knee-flexion` | 2 |
 | `hip-extension` | 1 |
@@ -99,7 +100,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **132** |
+| **Total** | **134** |
 
 ## Foundation gates
 
@@ -269,10 +270,9 @@ task and its measurable contract; do not recreate the retired catch-all
 
 Status: complete. The initial pass activated four narrow families and left four
 standalone evidence holds plus one deferred branch. Subsequent review activated
-scapular depression, assigned upward rotation to the active
-`scapular-elevation` owner, and retired downward rotation as intentionally
-non-standalone. Landmine press and the closed-chain vertical-press branch remain
-unresolved.
+scapular depression and landmine press, assigned upward rotation to the active
+`scapular-elevation` owner, activated the strict wall-supported branch inside
+`vertical-press`, and retired downward rotation as intentionally non-standalone.
 
 1. `scapular-protraction`
 2. `scapular-elevation`
@@ -280,8 +280,9 @@ unresolved.
 4. `scapular-upward-rotation` — owner-resolved in `scapular-elevation`
 5. `scapular-downward-rotation` — intentionally non-standalone
 6. `dip`
-7. `landmine-press` — deferred
-8. `closed-chain-vertical-press` — merged into `vertical-press`; branch deferred
+7. `landmine-press` — activated as a bounded split-stance power-test family
+8. `closed-chain-vertical-press` — activated inside `vertical-press` as the
+   strict wall-supported handstand push-up branch
 9. `leg-driven-overhead-press` — activated as `push-press`
 
 The activated scapular contracts remain deliberately narrow: one reviewed
@@ -298,11 +299,15 @@ one-exercise barbell power family whose leg countermovement, triple extension,
 continuous foot contact, and no-redip standing reception distinguish it from
 strict press, thruster, push jerk, and split jerk.
 
-Landmine press remains blocked because implement travel does not establish the
-athlete-relative shoulder and scapular geometry. Closed-chain vertical press
-belongs conceptually inside `vertical-press`, but the branch remains blocked by
-the absence of direct dynamic action and loading evidence for its proposed
-bodyweight fixtures. Neither hold pre-approves new shared axis values.
+Landmine press is bounded to Zhao et al.'s unilateral split-stance pivoted-bar
+power test. Because the study tracks bar endpoints rather than human segments,
+the sagittal flexion model, diagonal classification, no-leg-drive execution,
+mirrored-side prescription, and muscle hierarchy are disclosed adaptations;
+no scapular prime is inferred. The closed-chain branch is bounded to Li et
+al.'s strict wall-supported handstand push-up test inside `vertical-press`.
+Its apparatus and validity rules are source-owned, while its action and role
+policy are an explicit mechanics transfer; static handstand EMG supplies only
+stability context.
 
 ## Batch 4 — Lower-body sagittal primitives (5)
 
@@ -430,7 +435,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current four-item count.
+new item in the current two-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -492,17 +497,12 @@ distinguishes dynamic finger flexion/extension from a static implement hold,
 but the product still needs separate decisions for crush, pinch, support,
 hanging, and dynamic closing tasks before any one of them becomes a family.
 
-Batch 3 leaves one standalone evidence hold: `landmine-press`. It requires
-athlete-relative joint geometry and a defensible loading model rather than
-classification from the implement angle. Scapular depression is active;
-upward rotation is owner-resolved inside `scapular-elevation`; and downward
-rotation is intentionally non-standalone, not deferred.
-
-Closed-chain vertical press is not a fifth standalone hold. The candidate was
-merged into the scope of `vertical-press`, where its bodyweight branch remains
-deferred until direct dynamic evidence supports the proposed action, scapular,
-and loading contract. Resuming it means reviewing that branch of the active
-family, not creating a parallel family ID.
+Batch 3 has no remaining hold. `landmine-press` is active as one bounded
+power-test family. Closed-chain vertical press is active only as the strict
+wall-supported handstand push-up branch of `vertical-press`, not as a parallel
+family ID. Scapular depression is active; upward rotation is owner-resolved
+inside `scapular-elevation`; and downward rotation is intentionally
+non-standalone rather than deferred.
 
 ## Multi-agent batch workflow
 

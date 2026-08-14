@@ -3259,6 +3259,103 @@
     ]
   },
   {
+    "familyID": "landmine-press",
+    "catalogID": "standing-single-arm-landmine-press-power-test",
+    "name": "Standing Single-Arm Landmine Press Power Test",
+    "group": "shoulders",
+    "defaultWeight": 45,
+    "defaultWeightKg": 20,
+    "reps": 3,
+    "trackingMode": "reps",
+    "equipment": "barbell",
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "diagonal",
+    "planes": [
+      "sagittal"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Split-Stance Landmine Press Test",
+      "Single-Arm Pivoted-Bar Press Test"
+    ],
+    "searchPriority": 72,
+    "bodyweightFraction": 0,
+    "modality": "power",
+    "loadMode": "external",
+    "movementDefinition": "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load. For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm. Fully grip the moving sleeve and begin with it close to the working-side deltoid. Without deliberately driving through the hips, knees, or ankles, press the sleeve through its pivoted arc to a controlled end range, then return it to the shoulder. Perform three power-focused repetitions, log the opposite side separately, and keep the trunk and pelvis controlled without treating them as measured position-held segments.",
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "pectoralisMajorClavicular",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMed",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "push-press",
     "catalogID": "barbell-push-press",
     "name": "Barbell Push Press",
@@ -7249,6 +7346,108 @@
       },
       {
         "muscle": "subscapularis",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "vertical-press",
+    "catalogID": "wall-supported-strict-handstand-push-up",
+    "name": "Wall-Supported Strict Handstand Push-Up",
+    "group": "shoulders",
+    "defaultWeight": 0,
+    "reps": 5,
+    "trackingMode": "reps",
+    "equipment": "bodyweight",
+    "mechanic": "compound",
+    "pattern": "push",
+    "direction": "vertical",
+    "planes": [
+      "sagittal",
+      "frontal"
+    ],
+    "laterality": "bilateral",
+    "aliases": [
+      "Strict Wall Handstand Push-Up",
+      "Wall Handstand Push-Up",
+      "Inversion-Stand Handstand Push-Up"
+    ],
+    "searchPriority": 84,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Place the inversion stand ten centimeters from a wall with its hand supports twenty centimeters wider than shoulder breadth and a fifteen-centimeter sponge centered beneath the head. Kick to inversion and let only the feet touch the wall gently. Lower until the head contacts the sponge, then press to full elbow and shoulder extension without collapsing at the waist, bending the knees, kipping, or using the wall for propulsion. The reviewed test counts maximum valid repetitions in forty seconds; five reps is only the catalog's editable starting seed. The source did not measure joint, scapular, or muscle actions, so this record transparently inherits the reviewed vertical-press mechanics and role policy rather than claiming direct dynamic action evidence.",
+    "involvement": [
+      {
+        "muscle": "deltoidAnterior",
+        "role": "primary"
+      },
+      {
+        "muscle": "deltoidLateral",
+        "role": "secondary"
+      },
+      {
+        "muscle": "supraspinatus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "triceps",
+        "role": "secondary"
+      },
+      {
+        "muscle": "serratus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusUpper",
+        "role": "secondary"
+      },
+      {
+        "muscle": "trapeziusLower",
+        "role": "secondary"
+      },
+      {
+        "muscle": "externalRotators",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "subscapularis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "fingerFlexors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "extensorCarpiRadialis",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "abs",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "lumbarExtensors",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gluteMax",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "vasti",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "gastrocnemius",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "soleus",
         "role": "stabilizer"
       }
     ]

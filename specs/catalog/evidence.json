@@ -2360,6 +2360,65 @@
       "pmcid": "PMC4641539",
       "url": "https://doi.org/10.4085/1062-6050-50.9.05",
       "scope": "Nine healthy men performed five bodyweight forward- and reverse-lunge repetitions on each limb from an upright bilateral stance with the arms crossed, using a standardized three-second eccentric and two-second concentric cadence. In the forward condition the selected lead limb stepped onto a second force plate, descended to full self-selected depth with whole-foot contact, and returned to the start; in the reverse condition the contralateral limb stepped backward while the selected front foot remained planted, then returned. Three-dimensional motion capture and two force plates directly measured lead-limb hip, knee, and ankle angles and sagittal moments plus contact and foot-off phases. The study supports two discrete step-and-return records and their landing/support-transition distinction, not walking or alternating locomotion, external loading, a fixed depth angle, EMG-based cross-muscle ranking, lateral lunges, or jumping variants; the catalog's muscle hierarchy is conservative mechanics-and-anatomy interpretation."
+    },
+    {
+      "id": "zhao-2026-landmine-press-kinematics",
+      "sourceType": "experimentalKinematicsStudy",
+      "title": "Landmine Press Kinematics Measured with an Enhanced YOLOv8 Model and Mathematical Modeling",
+      "authors": [
+        "Rui Zhao",
+        "Rong Cong",
+        "Ruijie Zhou",
+        "Kelong Lin",
+        "Jianke Yang",
+        "Tongchun Kui",
+        "Jiajin Zhang",
+        "Ran Wang",
+        "Rou Dong",
+        "Kaihua Zhang"
+      ],
+      "year": 2026,
+      "doi": "10.3390/s26041161",
+      "pmid": "41755100",
+      "pmcid": "PMC12944738",
+      "url": "https://doi.org/10.3390/s26041161",
+      "scope": "Twenty-four trained male collegiate athletes performed three right-arm standing landmine-press repetitions at each completed total bar-plus-plate load from twenty through thirty-five kilograms. The exact fixture used a fixed Olympic-bar pivot, a left-foot-forward split stance with both sets of toes forward, a full grip on the moving sleeve, and a start close to the deltoid. Synchronized frontal video and a GymAware transducer directly establish the pivot-constrained rotational arc, total-system load accounting, and three-repetition power-test topology. The simplified model assumes sagittal planar rotation and tracks bar endpoints rather than the athlete's torso, shoulder, elbow, or scapula; it therefore does not directly establish human joint angles, scapular actions, muscle roles, lower-body stillness, or bilateral equivalence. The catalog's diagonal-push classification, shoulder-flexion and elbow-extension actions, strict no-leg-drive boundary, mirrored left-arm prescription, and muscle hierarchy are explicitly bounded mechanics-and-anatomy adaptations rather than direct findings."
+    },
+    {
+      "id": "li-2026-wall-handstand-push-up-test",
+      "sourceType": "randomizedClinicalTrial",
+      "title": "Effects of Low-Load Blood Flow Restriction vs. High-Load Resistance Training on Upper-Body Strength in Male Collegiate Gymnasts: A Randomized Controlled Trial",
+      "authors": [
+        "Aojie Li",
+        "Jing Tang",
+        "Kaiqi Zheng",
+        "Jingyi Chen",
+        "Guangshun Wang",
+        "Daoguang Feng"
+      ],
+      "year": 2026,
+      "doi": "10.1016/j.jesf.2026.200456",
+      "pmid": "41732289",
+      "pmcid": "PMC12925195",
+      "url": "https://doi.org/10.1016/j.jesf.2026.200456",
+      "scope": "Thirty male collegiate gymnasts completed a reproducible strict handstand-push-up endurance test before and after a six-week trial. The test used an inversion stand placed ten centimeters from a wall and twenty centimeters wider than shoulder breadth, a fifteen-centimeter head-contact sponge, gentle foot-only wall contact, a straight waist and legs, head contact at the bottom, and full elbow and shoulder extension at the top while maximum valid repetitions were counted over forty seconds. The authors explicitly identify inverted-push-up load quantification as difficult and use Smith shoulder press as the load-quantifiable related training movement. The test directly establishes the wall-supported closed-chain task and strict no-kip/no-hip-or-knee-drive boundary; it does not measure dynamic shoulder or scapular kinematics, hand/head force fractions, or muscle activity. The catalog therefore uses non-comparable loading and transfers the existing vertical-press action and mover policy as a disclosed mechanics adaptation rather than a direct trial result."
+    },
+    {
+      "id": "kinoshita-2022-progressive-handstand-emg",
+      "sourceType": "experimentalIsometricEMGStudy",
+      "title": "Stepwise Increase of Upper Limb Muscle Activity Induced by Progressive 4 Positions of a Handstand Training",
+      "authors": [
+        "Kazuaki Kinoshita",
+        "Yuichi Hoshino",
+        "Naoko Yokota",
+        "Masashi Hashimoto",
+        "Yuichiro Nishizawa",
+        "Noriyuki Kida"
+      ],
+      "year": 2022,
+      "doi": "10.3233/IES-210169",
+      "url": "https://doi.org/10.3233/IES-210169",
+      "scope": "Upper-, middle-, and lower-trapezius, serratus-anterior, anterior- and middle-deltoid, infraspinatus, and latissimus-dorsi surface EMG was compared across ninety-degree, one-hundred-thirty-five-degree, elbow-stand, and full handstand support positions. Shoulder and scapular-stabilizer activity increased progressively, and upper/middle trapezius plus serratus activity was material in the full handstand. This static support study supports the importance of the inverted shoulder/scapular stability environment only; it does not establish dynamic handstand-push-up actions, triceps recruitment, regional role ranks, wall-contact effects, or changing load fractions."
     }
   ]
 }

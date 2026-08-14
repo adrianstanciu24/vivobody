@@ -378,6 +378,26 @@ struct MuscleDevelopmentTests {
         #expect((uprightNodes["Trapezius_Upper_L"] ?? 0) > 0)
         #expect((uprightNodes["Trapezius_Lower_L"] ?? 0) > 0)
         #expect(uprightNodes["Trapezius_Middle_L"] == nil)
+
+        let landmine = session(
+            at: day(0),
+            [lift("Standing Single-Arm Landmine Press Power Test", .shoulders, sets: 3, reps: 3, weight: 45)]
+        )
+        let landmineNodes = MuscleDevelopment.nodeIntensities(from: [landmine], now: day(0))
+        #expect((landmineNodes["Deltoid_Anterior_L"] ?? 0) > 0)
+        #expect((landmineNodes["Triceps_L"] ?? 0) > 0)
+        #expect(landmineNodes["Serratus_Anterior_L"] == nil)
+        #expect(landmineNodes["Gluteus_Medius_L"] == nil)
+
+        let handstand = session(
+            at: day(0),
+            [lift("Wall-Supported Strict Handstand Push-Up", .shoulders, sets: 3, reps: 5, weight: 0)]
+        )
+        let handstandNodes = MuscleDevelopment.nodeIntensities(from: [handstand], now: day(0))
+        #expect((handstandNodes["Deltoid_Anterior_L"] ?? 0) > 0)
+        #expect((handstandNodes["Triceps_L"] ?? 0) > 0)
+        #expect(handstandNodes["Flexor_Digitorum_Superficialis_L"] == nil)
+        #expect(handstandNodes["Gluteus_Maximus_L"] == nil)
     }
 
     @Test func gluteMaxGluteMedAndTFLPaintOnlyWhenVolumeIsCredited() {

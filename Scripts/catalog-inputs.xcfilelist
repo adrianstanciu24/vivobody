@@ -31,6 +31,7 @@ $(SRCROOT)/specs/catalog/families/horizontal-press.json
 $(SRCROOT)/specs/catalog/families/incline-press.json
 $(SRCROOT)/specs/catalog/families/knee-extension.json
 $(SRCROOT)/specs/catalog/families/knee-flexion.json
+$(SRCROOT)/specs/catalog/families/landmine-press.json
 $(SRCROOT)/specs/catalog/families/push-press.json
 $(SRCROOT)/specs/catalog/families/reverse-fly.json
 $(SRCROOT)/specs/catalog/families/scapular-depression.json
