@@ -451,6 +451,42 @@
       "appliesTo": [
         "forearm.supination"
       ]
+    },
+    {
+      "id": "atNeutralHipFlexion",
+      "displayName": "At neutral hip flexion",
+      "definition": "The hip is held at zero degrees of flexion while the reviewed rotation action is produced.",
+      "appliesTo": [
+        "hip.externalRotation"
+      ],
+      "variantConstraint": {
+        "axis": "hipFlexionDegrees",
+        "equals": 0
+      }
+    },
+    {
+      "id": "atThirtyDegreeHipFlexion",
+      "displayName": "At thirty degrees of hip flexion",
+      "definition": "The hip is supported at exactly thirty degrees of flexion while the reviewed rotation action is produced.",
+      "appliesTo": [
+        "hip.externalRotation"
+      ],
+      "variantConstraint": {
+        "axis": "hipFlexionDegrees",
+        "equals": 30
+      }
+    },
+    {
+      "id": "atNinetyDegreeHipFlexion",
+      "displayName": "At ninety degrees of hip flexion",
+      "definition": "The hip is held at exactly ninety degrees of flexion while the reviewed rotation action is produced.",
+      "appliesTo": [
+        "hip.internalRotation"
+      ],
+      "variantConstraint": {
+        "axis": "hipFlexionDegrees",
+        "equals": 90
+      }
     }
   ],
   "muscleProfiles": [
@@ -1020,37 +1056,69 @@
       "muscleID": "gluteMax",
       "produces": [
         "hip.extension",
-        "hip.externalRotation"
+        {
+          "action": "hip.externalRotation",
+          "condition": "atNeutralHipFlexion"
+        }
       ],
       "stabilizes": [
         "pelvis",
         "hip"
       ],
       "evidenceRefs": [
-        "arnold-2010-lower-limb"
+        "arnold-2010-lower-limb",
+        "delp-1999-hip-rotation-moment-arms"
       ],
-      "notes": "The pre-existing whole-region external-rotation capability requires a position-specific fiber review before the hip-external-rotation family activates; some modeled anterior fibers can change rotational moment direction in deep flexion. Batch 4 relies only on this region's hip-extension capability."
+      "notes": "The whole region retains external-rotation capability only at neutral hip flexion, where Delp found all six measured compartments externally directed. Anterior compartments change direction with flexion, so this aggregate cannot satisfy the active 30-degree external-rotation family."
     },
     {
       "muscleID": "gluteMed",
       "produces": [
-        "hip.abduction"
+        "hip.abduction",
+        {
+          "action": "hip.internalRotation",
+          "condition": "atNinetyDegreeHipFlexion"
+        }
       ],
       "stabilizes": [
         "pelvis",
         "hip"
       ],
       "evidenceRefs": [
-        "arnold-2010-lower-limb"
+        "arnold-2010-lower-limb",
+        "delp-1999-hip-rotation-moment-arms",
+        "peduzzi-de-castro-2021-hip-rotation-isometric"
       ],
-      "notes": "The scene has one gluteus-medius mesh while the modeled anterior, middle, and posterior paths have different rotational moment directions. The aggregate retains their shared abduction capability and does not advertise internal or external rotation."
+      "notes": "The scene has one gluteus-medius mesh while its compartments have different rotational directions at shallow flexion. Delp found all four measured compartments internally directed at 90 degrees; Peduzzi de Castro supplies condition-matched recruitment context. The aggregate therefore receives only that exact conditioned rotation capability, not unrestricted internal or external rotation."
+    },
+    {
+      "muscleID": "gluteMin",
+      "produces": [
+        "hip.abduction",
+        {
+          "action": "hip.internalRotation",
+          "condition": "atNinetyDegreeHipFlexion"
+        }
+      ],
+      "stabilizes": [
+        "pelvis",
+        "hip"
+      ],
+      "evidenceRefs": [
+        "beck-2000-gluteus-minimus",
+        "delp-1999-hip-rotation-moment-arms"
+      ],
+      "notes": "The distinct unvisualized region preserves gluteus minimus rather than proxying it onto gluteus medius. Delp found all three measured compartments internally directed at 90 degrees; shallower rotation directions remain fiber-dependent, so rotation is conditioned exactly."
     },
     {
       "muscleID": "tensorFasciaeLatae",
       "produces": [
         "hip.flexion",
         "hip.abduction",
-        "hip.internalRotation"
+        {
+          "action": "hip.internalRotation",
+          "condition": "atNinetyDegreeHipFlexion"
+        }
       ],
       "stabilizes": [
         "pelvis",
@@ -1058,9 +1126,83 @@
         "knee"
       ],
       "evidenceRefs": [
-        "arnold-2010-lower-limb"
+        "arnold-2010-lower-limb",
+        "peduzzi-de-castro-2021-hip-rotation-isometric"
       ],
-      "notes": "Tensor fasciae latae is the foundation's only currently authored unconditional hip-internal-rotation producer after the unsplit gluteus-medius region was conservatively limited to abduction. That is not permission to make TFL the sole primary: Batch 6 must pin hip position, re-review TFL capability for that range, and decide whether a position-conditioned unvisualized gluteus-minimus region is warranted before an internal-rotation family activates."
+      "notes": "Tensor fasciae latae receives internal-rotation capability only at the active family’s exact 90-degree posture. Condition-matched recruitment supports categorical participation, but not sole-primary status or unrestricted rotation across hip postures."
+    },
+    {
+      "muscleID": "piriformis",
+      "produces": [
+        {
+          "action": "hip.externalRotation",
+          "condition": "atThirtyDegreeHipFlexion"
+        },
+        {
+          "action": "hip.internalRotation",
+          "condition": "atNinetyDegreeHipFlexion"
+        }
+      ],
+      "stabilizes": [
+        "hip"
+      ],
+      "evidenceRefs": [
+        "delp-1999-hip-rotation-moment-arms",
+        "ito-2025-short-hip-external-rotator-torque"
+      ],
+      "notes": "Piriformis changes rotational direction with hip flexion. It receives the reviewed 30-degree external-rotation and 90-degree internal-rotation capabilities only, with no unconditional action and no proxy surface."
+    },
+    {
+      "muscleID": "obturatorInternusGemelli",
+      "produces": [
+        {
+          "action": "hip.externalRotation",
+          "condition": "atThirtyDegreeHipFlexion"
+        }
+      ],
+      "stabilizes": [
+        "hip"
+      ],
+      "evidenceRefs": [
+        "delp-1999-hip-rotation-moment-arms",
+        "ito-2025-short-hip-external-rotator-torque"
+      ],
+      "notes": "The aggregate follows the shared conjoined-tendon path of obturator internus and the superior and inferior gemelli. Delp measured obturator internus but not either gemellus; Ito directly modeled their combined tendon and supports the active 30-degree capability and categorical emphasis."
+    },
+    {
+      "muscleID": "obturatorExternus",
+      "produces": [
+        {
+          "action": "hip.externalRotation",
+          "condition": "atThirtyDegreeHipFlexion"
+        }
+      ],
+      "stabilizes": [
+        "hip"
+      ],
+      "evidenceRefs": [
+        "delp-1999-hip-rotation-moment-arms",
+        "ito-2025-short-hip-external-rotator-torque",
+        "vaarbakken-2015-quadratus-femoris-obturator-externus"
+      ],
+      "notes": "The unvisualized region receives only the reviewed 30-degree external-rotation capability. Its role is mechanics-derived; no active exercise source measured neural recruitment."
+    },
+    {
+      "muscleID": "quadratusFemoris",
+      "produces": [
+        {
+          "action": "hip.externalRotation",
+          "condition": "atThirtyDegreeHipFlexion"
+        }
+      ],
+      "stabilizes": [
+        "hip"
+      ],
+      "evidenceRefs": [
+        "delp-1999-hip-rotation-moment-arms",
+        "vaarbakken-2015-quadratus-femoris-obturator-externus"
+      ],
+      "notes": "Delp and Vaarbakken support categorical external-rotation capability, but Ito excluded quadratus femoris and cannot rank it. The active family’s secondary role is therefore a conservative mechanics-derived assignment rather than an Ito-derived numeric comparison."
     },
     {
       "muscleID": "gastrocnemius",

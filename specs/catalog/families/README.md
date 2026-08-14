@@ -1,14 +1,11 @@
 # Catalog families
 
 This directory contains one reviewed JSON source file per movement family.
-Forty-six reviewed family files are currently active: the three chest
-presses, vertical press and pull, both compound row families, nine narrow
-shoulder or scapular-action families, dip, push press, eight narrow
-elbow/forearm/wrist families, four lower-body isolation families, and four
-lower-body compound families, three Batch-6 lower-body isolations, four
-dynamic-spine families, three anti-movement families, and two carry families.
-Each
-uses a coverage batch whose exercises
+Forty-eight reviewed family files containing 124 exercises are currently
+active. They span the reviewed press, pull, row, shoulder, arm, lower-body,
+hip-rotation, spine, anti-movement, and carry contracts listed in the family
+roadmap and validate against the current 58-region, 60-trainable-mesh-base,
+140-source foundation. Each uses a coverage batch whose exercises
 collectively exercise every admitted discrete axis value without generating
 the Cartesian product. A continuous numeric
 range is instead gated by truthful fixtures plus in-range/out-of-range tests;
@@ -60,17 +57,19 @@ forward/reverse step-and-return tasks need reviewed impact, deceleration,
 support-transition, and return semantics, while walking lunges may ultimately
 belong to locomotion.
 
-Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`, and
-`ankle-dorsiflexion`. The hip families admit only their reviewed side-lying
+Batch 6 adds one exercise each across `hip-abduction`, `hip-adduction`,
+`ankle-dorsiflexion`, `hip-internal-rotation`, and
+`hip-external-rotation`. The first two hip families admit only their reviewed side-lying
 pressure-biofeedback abduction and supported standing-band adduction fixtures;
 the dorsiflexion family admits only unilateral seated band
 dorsiflexion against a foot-board anchor and an individualized physical stop.
-Hip internal and external rotation remain held: muscle rotation direction is
-position-dependent, the visible taxonomy omits load-bearing deep rotators,
-and the reviewed exercise evidence cannot yet support a truthful dynamic role
-policy. The active families do not use a visible muscle as a proxy for an
-absent region and do not turn anatomy-level capability into unmeasured
-exercise volume.
+Internal rotation admits only the seated 90-degree Lahuerta-Martín flywheel
+fixture. External rotation admits only the supine 30-degree FOHX
+therapist-held ankle-band fixture. Their action capabilities are conditioned
+on the exact hip-flexion postures, and their unvisualized exact regions remain
+text-and-analytics visible without painting a substitute body-model mesh.
+Neither contract turns anatomy-level capability into unmeasured exercise
+volume.
 
 Batch 7 adds nine exercises across `spine-flexion`, `spine-extension`,
 `spine-lateral-flexion`, `spine-rotation`,
@@ -399,8 +398,10 @@ preserves Jensen's directly reported bilateral setup without over-reading the
 less-specific EMG fixture.
 
 Exercise credit remains intentionally narrower than anatomy capability.
-Gluteus minimus has no taxonomy region or body-model surface, so the abduction
-record undercredits the complete abductor system instead of assigning a proxy.
+Gluteus minimus has an explicitly unvisualized taxonomy region but no
+body-model surface. The abduction record still omits it because capability
+alone does not establish exercise involvement; no visible region is assigned
+as a proxy.
 The adduction record does not infer adductor-magnus or pectineus volume from
 capability alone. Gracilis is secondary because it can produce the named hip
 action while controlling the held knee. Gluteus medius receives stabilizer
@@ -408,10 +409,18 @@ credit from its directly measured 18-percent-MVC bilateral excitation and its
 hip/pelvis control capability. Serner measured external oblique only, so
 assigning the combined `obliques` region explicitly includes an unmeasured
 internal-oblique portion of the body-model aggregation. Dorsiflexion does not
-infer fibularis-tertius or toe-extensor volume from their shared action. Hip
-rotation remains held until
-posture-conditioned capabilities and the unvisualized deep-rotator policy can
-be resolved atomically.
+infer fibularis-tertius or toe-extensor volume from their shared action.
+
+Hip rotation uses posture-conditioned capabilities rather than unconditional
+whole-muscle directions. The 90-degree internal-rotation fixture assigns
+gluteus medius and TFL as non-ranked co-primaries, unvisualized gluteus minimus
+as a mechanics-derived secondary, and obliques as stabilizers. The 30-degree
+external-rotation fixture assigns the unvisualized obturator-internus/gemelli
+region as primary, with unvisualized obturator externus, piriformis, and
+quadratus femoris as mechanics-derived secondaries. The FOHX protocol reports
+no numeric knee angle or exact band force, and its completed trial evaluates a
+multi-exercise program rather than the isolated record. No visible hip muscle
+receives proxy mover credit.
 
 Batch-7 dynamic-spine families keep direction and setup narrow. The curl-up's
 `trunkStartElevationDegrees: 0` and `trunkEndElevationDegrees: 30` are gross
@@ -421,10 +430,11 @@ shoulder pads as the load interface. Its held-pelvis instruction is labeled
 `positionHeldCatalogAdaptation` because the source did not measure pelvic
 kinematics. The same record prescribes separately logged work in both rotation
 directions; right-to-left is disclosed as a mirrored mechanics-and-training
-adaptation rather than a source-measured direction. The reviewed MedX
-extension fixture remains a hold: its range and cadence do not authorize
-arbitrary back-extension machines, and the visible taxonomy cannot yet credit
-the lumbar extensors it trains.
+adaptation rather than a source-measured direction. The reviewed MedX extension
+fixture is active only at its pinned range, cadence, and machine topology. It
+does not authorize arbitrary back-extension machines, and its explicitly
+unvisualized lumbar-extensor region remains text-and-analytics visible without
+painting a substitute surface.
 
 The anti-movement families make the resisted tendency explicit instead of
 inventing a dynamic repetition. Stable forearm plank resists spine extension,

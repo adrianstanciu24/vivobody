@@ -383,6 +383,38 @@ struct MuscleDevelopmentTests {
         #expect(lateralNodes["Serratus_Posterior_Superior_L"] == nil)
     }
 
+    @Test func hipRotationDevelopmentCreditsUnvisualizedRegionsWithoutProxyMeshes() {
+        let internalRotation = session(
+            at: day(0),
+            [lift("Seated Flywheel Hip Internal Rotation", .legs, sets: 3, reps: 7, weight: 0)]
+        )
+        let internalState = MuscleDevelopment.simulate(from: [internalRotation], now: day(0))
+        let internalNodes = MuscleDevelopment.nodeIntensities(from: [internalRotation], now: day(0))
+        #expect(internalState.adaptation(.gluteMed) > 0)
+        #expect(internalState.adaptation(.tensorFasciaeLatae) > 0)
+        #expect(internalState.adaptation(.gluteMin) > 0)
+        #expect(internalState.adaptation(.gluteMed) == internalState.adaptation(.tensorFasciaeLatae))
+        #expect(internalState.adaptation(.gluteMin) < internalState.adaptation(.gluteMed))
+        #expect(internalState.adaptation(.obliques) == 0)
+        #expect((internalNodes["Gluteus_Medius_L"] ?? 0) > 0)
+        #expect((internalNodes["Tensor_Fascia_Latae_L"] ?? 0) > 0)
+
+        let externalRotation = session(
+            at: day(0),
+            [lift("Therapist-Held Supine Band Hip External Rotation", .legs, sets: 3, reps: 10, weight: 0)]
+        )
+        let externalState = MuscleDevelopment.simulate(from: [externalRotation], now: day(0))
+        let externalNodes = MuscleDevelopment.nodeIntensities(from: [externalRotation], now: day(0))
+        #expect(externalState.adaptation(.obturatorInternusGemelli) > 0)
+        #expect(externalState.adaptation(.obturatorExternus) > 0)
+        #expect(externalState.adaptation(.piriformis) > 0)
+        #expect(externalState.adaptation(.quadratusFemoris) > 0)
+        #expect(externalState.adaptation(.obturatorExternus) < externalState.adaptation(.obturatorInternusGemelli))
+        #expect(externalState.adaptation(.obliques) == 0)
+        #expect(externalState.adaptation(.medialHamstrings) == 0)
+        #expect(externalNodes.isEmpty)
+    }
+
     // MARK: - Colour mapping
 
     @Test(arguments: [BodyModelTheme.dark, .light])

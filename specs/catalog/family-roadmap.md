@@ -5,7 +5,9 @@ are discovery handles, not guaranteed final family IDs.
 
 ## Current position
 
-- 46 reviewed families are active, containing 122 exercises.
+- 48 reviewed families are active, containing 124 exercises.
+- The current foundation contains 58 muscle regions, 60 trainable mesh bases,
+  44 joint actions, and 140 registered evidence sources.
 - Batch 1 resolved nine candidates into seven active families and two evidence
   holds.
 - Batch 2 resolved nine candidates into eight active families and one explicit
@@ -16,20 +18,20 @@ are discovery handles, not guaranteed final family IDs.
   evidence hold.
 - Batch 5 resolved five discovery candidates into four active families and two
   holds after splitting stationary split squats from dynamic lunges.
-- Batch 6 resolved five taxonomy-sensitive candidates into three active
-  families and two explicit hip-rotation foundation holds.
+- Batch 6 resolved five taxonomy-sensitive candidates into five active
+  single-exercise families after the hip-rotation anatomy and evidence gates
+  closed atomically.
 - Batch 7 now contains nine active families. Eight discovery candidates
   resolved through a carry split and the later lumbar closure; the carry
   candidate split into separate farmer and suitcase families, and the two
   lumbar holds activated after an atomic anatomy/evidence repair.
-- 14 work items remain unresolved, all family or branch items—the deferred
+- 12 work items remain unresolved, all family or branch items—the deferred
   `diagonal-pull`, `scapular-retraction`, `upright-row`, and
   generic `grip` candidates; the Batch-3 `scapular-depression`, standalone
   `scapular-upward-rotation`, standalone `scapular-downward-rotation`, and
   `landmine-press` holds; and the deferred closed-chain branch of
   `vertical-press`; the Batch-4 `hip-flexion` hold; and the Batch-5
-  `hip-hinge` hold; the `dynamic-lunge` discovery hold; and the Batch-6
-  `hip-internal-rotation` and `hip-external-rotation` holds.
+  `hip-hinge` hold; and the `dynamic-lunge` discovery hold.
 
 The target is **not** to preserve every candidate as a final family. A batch
 may prove that candidates should merge, split, become variants of an active
@@ -78,6 +80,8 @@ batch siblings.
 | `hip-abduction` | 1 |
 | `hip-adduction` | 1 |
 | `ankle-dorsiflexion` | 1 |
+| `hip-internal-rotation` | 1 |
+| `hip-external-rotation` | 1 |
 | `spine-flexion` | 1 |
 | `spine-extension` | 1 |
 | `spine-lateral-flexion` | 1 |
@@ -87,7 +91,7 @@ batch siblings.
 | `anti-rotation` | 1 |
 | `farmer-carry` | 1 |
 | `suitcase-carry` | 1 |
-| **Total** | **122** |
+| **Total** | **124** |
 
 ## Foundation gates
 
@@ -115,9 +119,12 @@ supinator, four carpal groups, finger flexors, and finger extensors. It also
 replaced the task-level `hand.grip` action with dynamic finger flexion and
 extension. That migration established 41 regions; Batch 4's later lower-body
 split brought that foundation to 52 regions while preserving 62 mesh bases.
-The later lumbar repair brings the current taxonomy to 53 regions and 60
-trainable mesh bases while retaining 44 actions. Every affected active family was migrated atomically
-rather than inheriting anatomy from a retired aggregate.
+The later lumbar repair brought the taxonomy to 53 regions and 60 trainable
+mesh bases. The Batch-6 hip-rotation migration added five explicitly
+unvisualized exact regions, bringing the current taxonomy to 58 regions while
+retaining the same 60 trainable mesh bases and 44 actions. Every affected
+active family was migrated atomically rather than inheriting anatomy from a
+retired aggregate.
 
 ### Sternocostal flexion from an extended start — complete
 
@@ -173,12 +180,14 @@ inferred from an ankle moment or calf excitation alone. Hip thrust/bridge
 instead uses `ankleMotion: nonstandardized`: its observed ankle excursion and
 variable negligible kinetics do not establish one universal prime action.
 
-Batch 6 adds narrow hip-abduction, hip-adduction, and ankle-dorsiflexion
-isolations without changing the then-current 52-region taxonomy or 44-action vocabulary.
-The two hip-rotation candidates remain held because muscle rotation direction
-changes with hip posture and the body model omits several load-bearing deep
-rotators. That position-sensitive gap is not solved by promoting the one
-currently visible producer or by treating surface EMG as a torque-direction
+Batch 6 first added narrow hip-abduction, hip-adduction, and
+ankle-dorsiflexion isolations without changing the then-current 52-region
+taxonomy or 44-action vocabulary. Its later hip-rotation closure added
+gluteus minimus and four exact short-rotator regions as explicitly
+unvisualized identities, conditioned rotation capability on 0, 30, or 90
+degrees of hip flexion, and activated one exact internal- and one exact
+external-rotation fixture. No visible muscle serves as a proxy for those
+unvisualized regions, and surface EMG is not treated as a torque-direction
 measurement.
 
 ### Resisted-action semantics — complete
@@ -350,75 +359,54 @@ automatic variants.
 
 ## Batch 6 — Lower-body taxonomy-sensitive isolation (5)
 
-Status: complete. Three candidates activated as deliberately narrow
-single-exercise families. Internal and external hip rotation remain explicit
-foundation and exercise-evidence holds.
+Status: complete. All five candidates activated as deliberately narrow
+single-exercise families. Internal and external hip rotation activated only
+after their posture-conditioned anatomy and exact-fixture evidence changed
+atomically.
 
 1. `hip-abduction`
 2. `hip-adduction`
 3. `ankle-dorsiflexion`
-4. `hip-internal-rotation` — deferred
-5. `hip-external-rotation` — deferred
+4. `hip-internal-rotation`
+5. `hip-external-rotation`
 
 The active roster contains one reviewed pressure-biofeedback side-lying
 cuff-weight hip-abduction fixture, one reviewed supported standing-band
-hip-adduction fixture, and one seated unilateral band ankle-dorsiflexion
-fixture whose foot returns to a board between repetitions. The abduction name
-and aliases state its PBU condition; no generic no-feedback alias is admitted.
-Those records do not generalize to machine or arbitrary-apparatus variants.
-Both band records use `nonComparable` load semantics. The dorsiflexion record
-does not generalize to a standing tibialis raise, dorsiflexion machine, blood-
-flow-restriction intervention, inversion, eversion, or toe-extension drill.
+hip-adduction fixture, one seated unilateral band ankle-dorsiflexion fixture,
+one seated 90-degree flywheel internal-rotation fixture, and one supine
+30-degree therapist-held band external-rotation fixture. The first three keep
+their original narrow boundaries. Gluteus minimus now has an explicitly
+unvisualized taxonomy identity, but the abduction record still omits it because
+capability alone does not establish exercise involvement; no visible region is
+assigned as a proxy.
 
-Hip-abduction volume remains conservatively limited to visible regions;
-gluteus minimus has no taxonomy region or body-model mesh and is not replaced
-with a proxy assignment. The hip-adduction record combines directly measured
-adductor longus/brevis, gluteus-medius, abdominal, and external-oblique
-evidence with one explicitly disclosed mechanics-derived gracilis secondary;
-it does not use the full foundation capability list as an exercise-role
-ranking. Jensen anchors both hands on stable support, and Serner's bilateral
-18-percent-MVC gluteus-medius result supports hip/pelvis stabilizer credit.
+The Lahuerta-Martín internal-rotation record preserves the 75-cm treatment
+table, held 90-degree hips and knees, suspended feet, crossed hands, neutral
+pelvis, bilateral ASIS belts, distal-femur belt, ankle-brace-to-flywheel cable,
+and source-reported device geometry. It assigns gluteus medius and TFL as
+non-ranked co-primaries, unvisualized gluteus minimus as a mechanics-derived
+secondary, and obliques as stabilizers. The flywheel study supplies the dynamic
+topology but measured no muscle activity, so condition-matched position and
+EMG sources bound the roles without claiming a numeric hierarchy.
 
-The adduction sources do not report the abducted start's sagittal coordinate
-or full three-dimensional path. The active fixture transparently standardizes
-the reported slight posterior endpoint as a posture held throughout, keeping
-hip adduction as the sole dynamic action without claiming direct source support
-for the adaptation. Gracilis is a mechanics-derived secondary, and the
-combined obliques highlight carries an explicit limitation: only external
-oblique was measured.
+The FOHX external-rotation record preserves the supine table, both hips at 30
+degrees over a wedge, source-shown but non-numeric knee flexion, therapist-
+stabilized working knee, therapist-held ankle band, and neutral-to-mid-
+available-range endpoint. It assigns unvisualized
+obturator-internus/gemelli as primary and unvisualized obturator externus,
+piriformis, and quadratus femoris as mechanics-derived secondaries. The
+protocol does not report exact band force or deep-muscle recruitment, and the
+completed trial evaluates the whole multi-exercise program rather than this
+record in isolation. No visible hip muscle receives proxy mover credit.
 
-Dorsiflexion remains grouped here because the Batch-4 foundation migration
-already replaced the old aggregate `shins` profile with exact anterior and
-lateral lower-leg regions, while the hip-rotation candidates still need a
-truthful policy for the unsplit gluteus-medius mesh and deep rotators. Internal
-and external rotation remain separate candidates because their fixed actions
-and muscle contracts differ; do not hide them behind a direction axis. Before
-`hip-internal-rotation` activates, resolve the fact that
-`tensorFasciaeLatae` is the only currently authored producer: the single
-gluteus-medius mesh cannot truthfully inherit its anterior fibers' rotation
-without also crediting oppositely acting fibers, and gluteus minimus has no
-scene mesh. Pin the family's hip-flexion range, re-review TFL for that posture,
-and decide whether a position-conditioned explicitly unvisualized
-gluteus-minimus region is warranted. Do not add a blanket `deepRotators`
-internal-rotation aggregate: those muscles do not share one direction across
-hip position. Do not let the validator's one-producer minimum force TFL to
-become the sole primary by default. Before
-`hip-external-rotation` activates, re-review the pre-existing whole-region
-`gluteMax -> hip.externalRotation` capability against hip position: modeled
-anterior fibers can change rotational direction in deep flexion, so the
-current unconditional spelling must not be copied into a family role without
-that positional audit. Both gates belong to their already-counted family
-candidates rather than adding roadmap items.
-
-The completed review confirmed those gates are load-bearing. Internal
-rotation needs position-conditioned action capabilities plus direct dynamic
-exercise evidence; it must not default to sole-primary TFL merely because TFL
-is the only currently authored producer. External rotation needs a truthful
-representation of the position-matched deep rotators and a narrowed glute-max
-capability before its dynamic fixture can carry exercise roles. The reviewed
-proposal records the exact atomic migration and keeps both JSON family files
-absent until all affected anatomy and active-family checks can change
-together.
+Internal and external rotation remain separate families because their fixed
+actions, exact postures, fixtures, and muscle contracts differ. The foundation
+does not add a blanket `deepRotators` aggregate: these muscles do not share one
+direction across hip position. Whole gluteus maximus retains external rotation
+only at neutral flexion and is not copied into the 30-degree family. The
+reviewed proposal records the complete atomic migration and the adverse source
+limits that prevent either active record from generalizing to another posture
+or apparatus.
 
 Generic `foot.toeFlexion` remains a valid action rather than being narrowed to
 great-toe flexion merely because flexor hallucis longus is its only currently
@@ -427,7 +415,7 @@ brevis, flexor-digitorum-brevis, and flexor-digiti-minimi-brevis surfaces.
 Before any toe-flexion family or exercise role activates, audit those meshes,
 add the truthful intrinsic regions, and decide the required joint/segment
 granularity. This is a foundation gate for a non-roadmapped candidate, not a
-new item in the current 14-item count.
+new item in the current 12-item count.
 
 ## Batch 7 — Core and carry (8)
 
@@ -513,16 +501,6 @@ Batch 5 also leaves `dynamic-lunge` as a discovery hold created when the old
 `split-stance-squat`. Forward and reverse step-and-return lunges require a
 reviewed transition, impact, deceleration, and support-phase contract. Walking
 lunges may instead belong to locomotion and remain intentionally undecided.
-
-Batch 6 leaves `hip-internal-rotation` and `hip-external-rotation` as explicit
-foundation holds. Hip-rotation moment direction changes with hip-flexion
-posture, while the current visible taxonomy omits gluteus minimus and the deep
-external rotators and still gives whole gluteus maximus an unconditional
-external-rotation capability. Internal rotation additionally lacks direct
-dynamic evidence for the proposed seated 90-degree fixture and must not make
-TFL the sole primary by validator default. Resolve the position conditions,
-muscle profiles, unvisualized-region policy, exercise geometry, and role
-evidence atomically before either family activates.
 
 Batch 3 leaves four standalone evidence holds: `scapular-depression`,
 `scapular-upward-rotation`, `scapular-downward-rotation`, and

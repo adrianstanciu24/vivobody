@@ -128,6 +128,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-abduction",
             "hip-adduction",
             "ankle-dorsiflexion",
+            "hip-internal-rotation",
+            "hip-external-rotation",
         }
         cls.batch6_families = {
             family["id"]: family
@@ -525,8 +527,8 @@ class CatalogFoundationTests(unittest.TestCase):
                 "mutated shoulder horizontal abduction row",
             )
 
-    def test_taxonomy_is_the_locked_53_region_clean_slate(self) -> None:
-        self.assertEqual(catalog.EXPECTED_MUSCLE_COUNT, 53)
+    def test_taxonomy_is_the_locked_58_region_clean_slate(self) -> None:
+        self.assertEqual(catalog.EXPECTED_MUSCLE_COUNT, 58)
         self.assertEqual(set(self.foundation.muscle_by_id), catalog.EXPECTED_MUSCLE_IDS)
         self.assertEqual(
             len(self.foundation.muscle_by_id),
@@ -536,6 +538,75 @@ class CatalogFoundationTests(unittest.TestCase):
             self.foundation.mesh_base_count,
             catalog.EXPECTED_MESH_BASE_COUNT,
         )
+
+    def test_hip_rotation_taxonomy_additions_and_unvisualized_set_are_exact(
+        self,
+    ) -> None:
+        expected_new = {
+            "gluteMin": (
+                "Glute Min",
+                "Gluteus Minimus",
+                "BodyModel.scn has no gluteus-minimus surface mesh.",
+            ),
+            "piriformis": (
+                "Piriformis",
+                "Piriformis",
+                "BodyModel.scn has no piriformis surface mesh.",
+            ),
+            "obturatorInternusGemelli": (
+                "Obturator Internus + Gemelli",
+                "Obturator Internus, Superior Gemellus, and Inferior Gemellus",
+                "BodyModel.scn has no obturator-internus or gemelli surface mesh.",
+            ),
+            "obturatorExternus": (
+                "Obturator Externus",
+                "Obturator Externus",
+                "BodyModel.scn has no obturator-externus surface mesh.",
+            ),
+            "quadratusFemoris": (
+                "Quadratus Femoris",
+                "Quadratus Femoris",
+                "BodyModel.scn has no quadratus-femoris surface mesh.",
+            ),
+        }
+        for muscle_id, (display, anatomical, reason) in expected_new.items():
+            with self.subTest(muscle=muscle_id):
+                muscle = self.foundation.muscle_by_id[muscle_id]
+                self.assertEqual(muscle["displayName"], display)
+                self.assertEqual(muscle["anatomicalName"], anatomical)
+                self.assertEqual(muscle["group"], "legs")
+                self.assertEqual(muscle["meshBaseNames"], [])
+                self.assertEqual(muscle["unvisualizedReason"], reason)
+
+        self.assertEqual(
+            {
+                muscle_id
+                for muscle_id, muscle in self.foundation.muscle_by_id.items()
+                if muscle["meshBaseNames"] == []
+            },
+            {
+                "lumbarExtensors",
+                "subscapularis",
+                "supraspinatus",
+                "forearmPronators",
+                "supinator",
+                *expected_new,
+            },
+        )
+
+        for muscle_id in expected_new:
+            taxonomy = copy.deepcopy(self.foundation.taxonomy)
+            muscle = next(
+                item
+                for item in taxonomy["muscles"]
+                if item["id"] == muscle_id
+            )
+            muscle["unvisualizedReason"] = ""
+            with self.subTest(muscle=muscle_id), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                "unvisualizedReason must be a non-empty string",
+            ):
+                catalog.validate_taxonomy(taxonomy)
 
     def test_non_trainable_scene_meshes_are_exactly_pinned(self) -> None:
         self.assertEqual(
@@ -899,7 +970,12 @@ class CatalogFoundationTests(unittest.TestCase):
 
         self.assertEqual(
             capabilities["gluteMed"],
-            frozenset({("hip.abduction", None)}),
+            frozenset(
+                {
+                    ("hip.abduction", None),
+                    ("hip.internalRotation", "atNinetyDegreeHipFlexion"),
+                }
+            ),
         )
         for muscle_id in ("adductorLongusBrevis", "pectineus"):
             with self.subTest(position_condition=muscle_id):
@@ -912,16 +988,16 @@ class CatalogFoundationTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn(
-            "re-review the pre-existing whole-region\n"
-            "`gluteMax -> hip.externalRotation` capability against hip position",
+            "Whole gluteus maximus retains external rotation\n"
+            "only at neutral flexion and is not copied into the 30-degree family",
             roadmap,
         )
         self.assertIn(
-            "position-specific fiber review",
+            "only at neutral hip flexion",
             self.foundation.profile_by_muscle["gluteMax"]["notes"],
         )
         self.assertIn(
-            "only currently authored",
+            "only at the active family’s exact 90-degree posture",
             self.foundation.profile_by_muscle[
                 "tensorFasciaeLatae"
             ]["notes"],
@@ -933,6 +1009,266 @@ class CatalogFoundationTests(unittest.TestCase):
             ]["notes"],
         )
         self.assertIn("Generic `foot.toeFlexion` remains", roadmap)
+
+    def test_hip_rotation_conditions_and_capabilities_are_exact(self) -> None:
+        conditions = {
+            item["id"]: item
+            for item in self.foundation.joint_actions["actionConditions"]
+        }
+        self.assertEqual(
+            {
+                condition_id: conditions[condition_id]
+                for condition_id in {
+                    "atNeutralHipFlexion",
+                    "atThirtyDegreeHipFlexion",
+                    "atNinetyDegreeHipFlexion",
+                }
+            },
+            {
+                "atNeutralHipFlexion": {
+                    "id": "atNeutralHipFlexion",
+                    "displayName": "At neutral hip flexion",
+                    "definition": (
+                        "The hip is held at zero degrees of flexion while the "
+                        "reviewed rotation action is produced."
+                    ),
+                    "appliesTo": ["hip.externalRotation"],
+                    "variantConstraint": {
+                        "axis": "hipFlexionDegrees",
+                        "equals": 0,
+                    },
+                },
+                "atThirtyDegreeHipFlexion": {
+                    "id": "atThirtyDegreeHipFlexion",
+                    "displayName": "At thirty degrees of hip flexion",
+                    "definition": (
+                        "The hip is supported at exactly thirty degrees of "
+                        "flexion while the reviewed rotation action is produced."
+                    ),
+                    "appliesTo": ["hip.externalRotation"],
+                    "variantConstraint": {
+                        "axis": "hipFlexionDegrees",
+                        "equals": 30,
+                    },
+                },
+                "atNinetyDegreeHipFlexion": {
+                    "id": "atNinetyDegreeHipFlexion",
+                    "displayName": "At ninety degrees of hip flexion",
+                    "definition": (
+                        "The hip is held at exactly ninety degrees of flexion "
+                        "while the reviewed rotation action is produced."
+                    ),
+                    "appliesTo": ["hip.internalRotation"],
+                    "variantConstraint": {
+                        "axis": "hipFlexionDegrees",
+                        "equals": 90,
+                    },
+                },
+            },
+        )
+        self.assertEqual(
+            self.foundation.condition_variant_constraints,
+            {
+                "atNeutralHipFlexion": ("hipFlexionDegrees", 0),
+                "atThirtyDegreeHipFlexion": ("hipFlexionDegrees", 30),
+                "atNinetyDegreeHipFlexion": ("hipFlexionDegrees", 90),
+            },
+        )
+
+        capabilities = self.foundation.capabilities_by_muscle
+        internal = ("hip.internalRotation", "atNinetyDegreeHipFlexion")
+        external = ("hip.externalRotation", "atThirtyDegreeHipFlexion")
+        for muscle_id in ("gluteMed", "tensorFasciaeLatae", "gluteMin"):
+            with self.subTest(muscle=muscle_id, action="internal"):
+                self.assertIn(internal, capabilities[muscle_id])
+                for condition in (None, "atNeutralHipFlexion", "atThirtyDegreeHipFlexion"):
+                    self.assertNotIn(
+                        ("hip.internalRotation", condition),
+                        capabilities[muscle_id],
+                    )
+
+        self.assertIn(
+            ("hip.externalRotation", "atNeutralHipFlexion"),
+            capabilities["gluteMax"],
+        )
+        for condition in (None, "atThirtyDegreeHipFlexion", "atNinetyDegreeHipFlexion"):
+            self.assertNotIn(
+                ("hip.externalRotation", condition),
+                capabilities["gluteMax"],
+            )
+
+        external_units = {
+            "piriformis",
+            "obturatorInternusGemelli",
+            "obturatorExternus",
+            "quadratusFemoris",
+        }
+        for muscle_id in external_units:
+            with self.subTest(muscle=muscle_id, action="external"):
+                self.assertIn(external, capabilities[muscle_id])
+                for condition in (None, "atNeutralHipFlexion", "atNinetyDegreeHipFlexion"):
+                    self.assertNotIn(
+                        ("hip.externalRotation", condition),
+                        capabilities[muscle_id],
+                    )
+
+    def test_hip_rotation_variant_constraint_schema_is_mutation_guarded(
+        self,
+    ) -> None:
+        mutations = (
+            ("not-object", [], r"variantConstraint must be an object"),
+            (
+                "missing-axis",
+                {"equals": 90},
+                r"variantConstraint is missing keys: axis",
+            ),
+            (
+                "unknown-key",
+                {"axis": "hipFlexionDegrees", "equals": 90, "units": "degrees"},
+                r"variantConstraint has unknown keys: units",
+            ),
+            (
+                "invalid-axis",
+                {"axis": "hip.flexionDegrees", "equals": 90},
+                r"variantConstraint\.axis is not a stable symbol ID",
+            ),
+            (
+                "empty-equals",
+                {"axis": "hipFlexionDegrees", "equals": ""},
+                r"variantConstraint\.equals must be a non-empty scalar",
+            ),
+        )
+        for label, constraint, message in mutations:
+            actions = copy.deepcopy(self.foundation.joint_actions)
+            condition = next(
+                item
+                for item in actions["actionConditions"]
+                if item["id"] == "atNinetyDegreeHipFlexion"
+            )
+            condition["variantConstraint"] = constraint
+            with self.subTest(mutation=label), self.assertRaisesRegex(
+                catalog.ValidationFailure,
+                message,
+            ):
+                catalog.validate_joint_actions(
+                    actions,
+                    set(self.foundation.muscle_by_id),
+                    self.foundation.evidence_ids,
+                )
+
+    def test_hip_rotation_condition_requires_the_pinned_exercise_variant(
+        self,
+    ) -> None:
+        for family_id, expected in (
+            ("hip-internal-rotation", 90),
+            ("hip-external-rotation", 30),
+        ):
+            original = self.batch6_families[family_id]
+            condition = original["movementSignature"]["primeActions"][0][
+                "condition"
+            ]
+            with self.subTest(family=family_id, mutation="missing-axis"):
+                family = copy.deepcopy(original)
+                family["variantAxes"] = [
+                    axis
+                    for axis in family["variantAxes"]
+                    if axis["id"] != "hipFlexionDegrees"
+                ]
+                family["exercises"][0]["variant"].pop("hipFlexionDegrees")
+                self.assert_batch6_family_fails(
+                    family,
+                    f"action condition {condition} requires variant axis hipFlexionDegrees",
+                )
+
+            with self.subTest(family=family_id, mutation="optional-axis"):
+                family = copy.deepcopy(original)
+                next(
+                    axis
+                    for axis in family["variantAxes"]
+                    if axis["id"] == "hipFlexionDegrees"
+                )["required"] = False
+                self.assert_batch6_family_fails(
+                    family,
+                    f"action condition {condition} requires hipFlexionDegrees to be required",
+                )
+
+            with self.subTest(family=family_id, mutation="unpinned-axis"):
+                family = copy.deepcopy(original)
+                axis = next(
+                    axis
+                    for axis in family["variantAxes"]
+                    if axis["id"] == "hipFlexionDegrees"
+                )
+                axis["minimum"] = expected - 1
+                self.assert_batch6_family_fails(
+                    family,
+                    f"requires numeric axis hipFlexionDegrees pinned to {expected}",
+                )
+
+            with self.subTest(family=family_id, mutation="wrong-record-value"):
+                family = copy.deepcopy(original)
+                family["exercises"][0]["variant"]["hipFlexionDegrees"] = (
+                    expected - 1
+                )
+                self.assert_batch6_family_fails(
+                    family,
+                    rf"requires variant\.hipFlexionDegrees == {expected}",
+                )
+
+    def test_rotation_families_reject_bare_and_wrong_posture_actions(self) -> None:
+        for family_id, action, wrong_condition in (
+            (
+                "hip-internal-rotation",
+                "hip.internalRotation",
+                "atThirtyDegreeHipFlexion",
+            ),
+            (
+                "hip-external-rotation",
+                "hip.externalRotation",
+                "atNinetyDegreeHipFlexion",
+            ),
+        ):
+            original = self.batch6_families[family_id]
+            family = copy.deepcopy(original)
+            family["movementSignature"]["primeActions"] = [action]
+            with self.subTest(family=family_id, mutation="bare"):
+                self.assert_batch6_family_fails(
+                    family,
+                    f"no primary/secondary muscle capable of {re.escape(action)}",
+                )
+
+            family = copy.deepcopy(original)
+            family["movementSignature"]["primeActions"][0][
+                "condition"
+            ] = wrong_condition
+            with self.subTest(family=family_id, mutation="wrong-posture"):
+                self.assert_batch6_family_fails(
+                    family,
+                    f"condition {wrong_condition} does not apply to {re.escape(action)}",
+                )
+
+        external = copy.deepcopy(
+            self.batch6_families["hip-external-rotation"]
+        )
+        external["movementSignature"]["primeActions"][0][
+            "condition"
+        ] = "atNeutralHipFlexion"
+        hip_flexion_axis = next(
+            axis
+            for axis in external["variantAxes"]
+            if axis["id"] == "hipFlexionDegrees"
+        )
+        hip_flexion_axis["minimum"] = 0
+        hip_flexion_axis["maximum"] = 0
+        external["exercises"][0]["variant"]["hipFlexionDegrees"] = 0
+        with self.subTest(
+            family="hip-external-rotation",
+            mutation="coordinated-neutral-posture",
+        ):
+            self.assert_batch6_family_fails(
+                external,
+                r"no primary/secondary muscle capable of hip\.externalRotation",
+            )
 
     def test_distal_unvisualized_regions_carry_exact_scene_reasons(self) -> None:
         expected_reasons = {
@@ -4950,6 +5286,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-abduction",
             "hip-adduction",
             "ankle-dorsiflexion",
+            "hip-internal-rotation",
+            "hip-external-rotation",
             "spine-flexion",
             "spine-extension",
             "spine-lateral-flexion",
@@ -4966,7 +5304,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(len(family["exercises"]) for family in self.real_families),
-            122,
+            124,
         )
 
     def test_every_discovered_real_family_validates_without_warnings(
@@ -5832,6 +6170,8 @@ class CatalogFoundationTests(unittest.TestCase):
             "hip-abduction",
             "hip-adduction",
             "ankle-dorsiflexion",
+            "hip-internal-rotation",
+            "hip-external-rotation",
             "spine-flexion",
             "spine-lateral-flexion",
             "anti-extension",
@@ -6608,7 +6948,7 @@ class CatalogFoundationTests(unittest.TestCase):
         foundation_readme = (
             catalog.SPEC_ROOT / "README.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("14 work items remain unresolved", roadmap)
+        self.assertIn("12 work items remain unresolved", roadmap)
         self.assertIn(
             "Sternocostal flexion from an extended start — complete",
             roadmap,
@@ -8168,7 +8508,7 @@ class CatalogFoundationTests(unittest.TestCase):
             proposal,
         )
         self.assertIn("`hip-flexion` — deferred", roadmap)
-        self.assertIn("14 work items remain unresolved", roadmap)
+        self.assertIn("12 work items remain unresolved", roadmap)
 
     def test_batch5_activates_exactly_four_compound_families(self) -> None:
         expected = {
@@ -9312,7 +9652,7 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "14 work items remain unresolved, all family or branch items",
+            "12 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("`dynamic-lunge` discovery hold", roadmap)
@@ -9532,10 +9872,106 @@ class CatalogFoundationTests(unittest.TestCase):
                 ],
                 "roster": "supported-standing-band-hip-adduction",
             },
+            "hip-internal-rotation": {
+                "name": "Hip Internal Rotation",
+                "plane": "transverse",
+                "action": {
+                    "action": "hip.internalRotation",
+                    "condition": "atNinetyDegreeHipFlexion",
+                },
+                "demands": ["hip", "pelvis", "knee", "spine"],
+                "policy": {
+                    "requirements": [
+                        {"anyOf": ["gluteMed"], "minimumRole": "primary"},
+                        {
+                            "anyOf": ["tensorFasciaeLatae"],
+                            "minimumRole": "primary",
+                        },
+                        {"anyOf": ["gluteMin"], "minimumRole": "secondary"},
+                        {"anyOf": ["obliques"], "minimumRole": "stabilizer"},
+                    ],
+                    "allowedByRole": {
+                        "primary": ["gluteMed", "tensorFasciaeLatae"],
+                        "secondary": ["gluteMin"],
+                        "stabilizer": ["obliques"],
+                    },
+                },
+                "allowed": {
+                    "equipment": ["other"],
+                    "modalities": ["dynamicStrength"],
+                    "trackingModes": ["reps"],
+                    "loadModes": ["nonComparable"],
+                    "lateralities": ["unilateral"],
+                },
+                "reps": {"minimum": 7, "maximum": 7},
+                "evidence": [
+                    "delp-1999-hip-rotation-moment-arms",
+                    "lahuerta-martin-2024-flywheel-hip-rotation",
+                    "peduzzi-de-castro-2021-hip-rotation-isometric",
+                ],
+                "roster": "seated-flywheel-hip-internal-rotation",
+            },
+            "hip-external-rotation": {
+                "name": "Hip External Rotation",
+                "plane": "transverse",
+                "action": {
+                    "action": "hip.externalRotation",
+                    "condition": "atThirtyDegreeHipFlexion",
+                },
+                "demands": ["hip", "pelvis", "knee", "spine"],
+                "policy": {
+                    "requirements": [
+                        {
+                            "anyOf": ["obturatorInternusGemelli"],
+                            "minimumRole": "primary",
+                        },
+                        {
+                            "anyOf": ["obturatorExternus"],
+                            "minimumRole": "secondary",
+                        },
+                        {"anyOf": ["piriformis"], "minimumRole": "secondary"},
+                        {
+                            "anyOf": ["quadratusFemoris"],
+                            "minimumRole": "secondary",
+                        },
+                        {"anyOf": ["obliques"], "minimumRole": "stabilizer"},
+                        {
+                            "anyOf": ["medialHamstrings"],
+                            "minimumRole": "stabilizer",
+                        },
+                    ],
+                    "allowedByRole": {
+                        "primary": ["obturatorInternusGemelli"],
+                        "secondary": [
+                            "obturatorExternus",
+                            "piriformis",
+                            "quadratusFemoris",
+                        ],
+                        "stabilizer": ["obliques", "medialHamstrings"],
+                    },
+                },
+                "allowed": {
+                    "equipment": ["band"],
+                    "modalities": ["dynamicStrength"],
+                    "trackingModes": ["reps"],
+                    "loadModes": ["nonComparable"],
+                    "lateralities": ["unilateral"],
+                },
+                "reps": {"minimum": 10, "maximum": 10},
+                "evidence": [
+                    "delp-1999-hip-rotation-moment-arms",
+                    "ito-2025-short-hip-external-rotator-torque",
+                    "vaarbakken-2015-quadratus-femoris-obturator-externus",
+                    "matthews-2017-fohx-protocol",
+                    "matthews-2020-fohx-trial",
+                ],
+                "roster": "therapist-held-supine-band-hip-external-rotation",
+            },
         }
-        self.assertEqual(set(self.batch6_families), {
-            "hip-abduction", "hip-adduction", "ankle-dorsiflexion"
-        })
+        self.assertEqual(
+            set(self.batch6_families),
+            {*expected_families, "ankle-dorsiflexion"},
+        )
         for family_id, expected in expected_families.items():
             family = self.batch6_families[family_id]
             with self.subTest(family=family_id):
@@ -9551,7 +9987,11 @@ class CatalogFoundationTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     family["movementSignature"]["planeBasisActions"],
-                    [expected["action"]],
+                    [
+                        expected["action"]["action"]
+                        if isinstance(expected["action"], dict)
+                        else expected["action"]
+                    ],
                 )
                 self.assertEqual(
                     family["movementSignature"]["primeActions"],
@@ -9686,6 +10126,99 @@ class CatalogFoundationTests(unittest.TestCase):
             self.assertEqual(exercise["additionalPrimeActions"], [])
             self.assertEqual(exercise["additionalStabilityDemands"], [])
 
+    def test_batch6_rotation_records_and_role_exclusions_are_exact(self) -> None:
+        expected = {
+            "hip-internal-rotation": {
+                "identity": (
+                    "seated-flywheel-hip-internal-rotation",
+                    "Seated Flywheel Hip Internal Rotation",
+                    [
+                        "Flywheel Hip Internal Rotation",
+                        "Seated Flywheel Internal Rotation",
+                    ],
+                ),
+                "setup": (
+                    "other", "unilateral", "dynamicStrength", "reps",
+                    "nonComparable", 0, 0, None, 7, 65,
+                ),
+                "roles": {
+                    "gluteMed": "primary",
+                    "tensorFasciaeLatae": "primary",
+                    "gluteMin": "secondary",
+                    "obliques": "stabilizer",
+                },
+                "evidence": ["lahuerta-martin-2024-flywheel-hip-rotation"],
+            },
+            "hip-external-rotation": {
+                "identity": (
+                    "therapist-held-supine-band-hip-external-rotation",
+                    "Therapist-Held Supine Band Hip External Rotation",
+                    [
+                        "Supine Band Hip External Rotation",
+                        "Therapist-Resisted Hip External Rotation",
+                    ],
+                ),
+                "setup": (
+                    "band", "unilateral", "dynamicStrength", "reps",
+                    "nonComparable", 0, 0, None, 10, 72,
+                ),
+                "roles": {
+                    "obturatorInternusGemelli": "primary",
+                    "obturatorExternus": "secondary",
+                    "piriformis": "secondary",
+                    "quadratusFemoris": "secondary",
+                    "obliques": "stabilizer",
+                    "medialHamstrings": "stabilizer",
+                },
+                "evidence": [
+                    "matthews-2017-fohx-protocol",
+                    "matthews-2020-fohx-trial",
+                ],
+            },
+        }
+        for family_id, contract in expected.items():
+            exercise = self.batch6_families[family_id]["exercises"][0]
+            with self.subTest(family=family_id):
+                self.assertEqual(
+                    (
+                        exercise["catalogID"],
+                        exercise["name"],
+                        exercise["aliases"],
+                    ),
+                    contract["identity"],
+                )
+                self.assertEqual(
+                    (
+                        exercise["equipment"], exercise["laterality"],
+                        exercise["modality"], exercise["trackingMode"],
+                        exercise["loadMode"], exercise["bodyweightFraction"],
+                        exercise["defaultWeight"],
+                        exercise.get("defaultWeightKg"), exercise["reps"],
+                        exercise["searchPriority"],
+                    ),
+                    contract["setup"],
+                )
+                self.assertEqual(
+                    {
+                        item["muscle"]: item["role"]
+                        for item in exercise["involvement"]
+                    },
+                    contract["roles"],
+                )
+                self.assertEqual(exercise["evidenceRefs"], contract["evidence"])
+                self.assertEqual(exercise["additionalPrimeActions"], [])
+                self.assertEqual(exercise["additionalStabilityDemands"], [])
+
+        external_muscles = {
+            item["muscle"]
+            for item in self.batch6_families["hip-external-rotation"][
+                "exercises"
+            ][0]["involvement"]
+        }
+        self.assertTrue(
+            {"sartorius", "gluteMax", "gluteMed"}.isdisjoint(external_muscles)
+        )
+
     def test_batch6_dorsiflexion_axes_and_boundaries_are_exact(self) -> None:
         family = self.batch6_families["ankle-dorsiflexion"]
         actual = {}
@@ -9787,6 +10320,68 @@ class CatalogFoundationTests(unittest.TestCase):
                 "fixedPath": ("boolean", False),
                 "lowerBodyContribution": enum("isolatedJointMotion"),
             },
+            "hip-internal-rotation": {
+                "kineticChain": enum("open"),
+                "bodyPosition": enum("seated"),
+                "seatSurface": enum("hydraulicTreatmentTable"),
+                "seatHeightCm": number(75),
+                "torsoSupport": enum("none"),
+                "handPosition": enum("crossedOnOppositeShoulders"),
+                "footSupport": enum("bothSuspended"),
+                "pelvisPosture": enum("neutral"),
+                "pelvisFixation": enum("bilateralASISBelts"),
+                "distalFemurFixation": enum("belt"),
+                "hipMotion": enum("internallyRotatesThenReturns"),
+                "hipFlexionDegrees": number(90),
+                "kneeMotion": enum("positionHeld"),
+                "kneeFlexionDegrees": number(90),
+                "movingSegment": enum("lowerLeg"),
+                "loadInterface": enum("ankleBraceAndCarabiner"),
+                "resistanceGeometry": enum(
+                    "ankleCableToRotaryAxisFlywheel"
+                ),
+                "flywheelModel": enum("conicPowerMove"),
+                "flywheelMount": enum("horizontalWallFixed"),
+                "flywheelHeightAboveFloorCm": number(7),
+                "flywheelMeanDiameterCm": number(7.5),
+                "flywheelAttachedLoadGrams": number(460),
+                "flywheelAxisDistanceCm": number(15),
+                "slidingFramePosition": enum("upperMiddle"),
+                "cableLengthSetting": enum("maximumActiveHipRotationRange"),
+                "concentricIntent": enum("asFastAsPossible"),
+                "eccentricIntent": enum(
+                    "counteractGeneratedFlywheelInertia"
+                ),
+                "fixedPath": ("boolean", False),
+                "lowerBodyContribution": enum("isolatedHipRotation"),
+            },
+            "hip-external-rotation": {
+                "kineticChain": enum("open"),
+                "bodyPosition": enum("supine"),
+                "torsoSupport": enum("table"),
+                "pelvisSupport": enum("table"),
+                "hipFlexionSupport": enum("wedgeUnderBothThighs"),
+                "contralateralLegPosture": enum(
+                    "hipAndKneeFlexedOverWedge"
+                ),
+                "pelvisMotion": enum("positionHeld"),
+                "spineMotion": enum("positionHeld"),
+                "hipMotion": enum("externallyRotates"),
+                "hipFlexionDegrees": number(30),
+                "hipStartRotation": enum("neutral"),
+                "hipEndRotation": enum("midAvailableExternalRotation"),
+                "kneeMotion": enum("positionHeld"),
+                "kneePosture": enum("flexedOverWedge"),
+                "kneeSupport": enum("therapistStabilized"),
+                "movingSegment": enum("lowerLeg"),
+                "loadInterface": enum("bandAtWorkingAnkle"),
+                "resistanceGeometry": enum(
+                    "therapistHeldAnkleBandOpposesExternalRotation"
+                ),
+                "loadPrescription": enum("approximatelyTenToTwelveRM"),
+                "fixedPath": ("boolean", False),
+                "lowerBodyContribution": enum("isolatedJointMotion"),
+            },
         }
         for family_id, expected_axes in expected.items():
             family = self.batch6_families[family_id]
@@ -9837,9 +10432,22 @@ class CatalogFoundationTests(unittest.TestCase):
                     family["exercises"][0]["variant"][axis["id"]] = (
                         axis["maximum"] + 1
                     )
-                    expected_error = re.escape(
-                        f"variant.{axis['id']} exceeds {axis['maximum']}"
-                    )
+                    if (
+                        axis["id"] == "hipFlexionDegrees"
+                        and family_id
+                        in {"hip-internal-rotation", "hip-external-rotation"}
+                    ):
+                        condition = original["movementSignature"][
+                            "primeActions"
+                        ][0]["condition"]
+                        expected_error = re.escape(
+                            f"action condition {condition} requires "
+                            f"variant.hipFlexionDegrees == {axis['maximum']}"
+                        )
+                    else:
+                        expected_error = re.escape(
+                            f"variant.{axis['id']} exceeds {axis['maximum']}"
+                        )
                 else:
                     self.fail(f"unexpected Batch-6 axis type {axis['valueType']}")
                 with self.subTest(family=family_id, axis=axis["id"]):
@@ -9863,12 +10471,15 @@ class CatalogFoundationTests(unittest.TestCase):
                         re.escape(f"selects disallowed {allowed_key}: {value}"),
                     )
                 mutation_count += 1
-        self.assertEqual(mutation_count, 68)
+        self.assertEqual(mutation_count, 128)
 
     def test_batch6_forbids_every_other_known_prime_action(self) -> None:
         mutation_count = 0
         for family_id, original in self.batch6_families.items():
-            own = set(original["movementSignature"]["primeActions"])
+            own = {
+                action if isinstance(action, str) else action["action"]
+                for action in original["movementSignature"]["primeActions"]
+            }
             expected = set(self.foundation.action_ids) - own
             self.assertEqual(
                 set(original["movementSignature"]["forbiddenPrimeActions"]),
@@ -9883,13 +10494,18 @@ class CatalogFoundationTests(unittest.TestCase):
                         f"declares forbidden prime action {re.escape(action)}",
                     )
                 mutation_count += 1
-        self.assertEqual(mutation_count, 129)
+        self.assertEqual(mutation_count, 215)
 
     def test_batch6_required_roles_are_removed_and_demoted_directly(self) -> None:
         primary_substitutes = {
             "hip-abduction": ("tensorFasciaeLatae", "gluteMed"),
             "hip-adduction": ("gracilis", "adductorLongusBrevis"),
             "ankle-dorsiflexion": ("fibularisTertius", "tibialisAnterior"),
+            "hip-internal-rotation": ("gluteMed", "tensorFasciaeLatae"),
+            "hip-external-rotation": (
+                "obturatorExternus",
+                "obturatorInternusGemelli",
+            ),
         }
         removal_count = 0
         demotion_count = 0
@@ -9912,7 +10528,12 @@ class CatalogFoundationTests(unittest.TestCase):
                     if item["muscle"] != candidate
                 ]
                 if role == "primary":
-                    substitute, _ = primary_substitutes[family_id]
+                    substitutes = primary_substitutes[family_id]
+                    substitute = next(
+                        muscle_id
+                        for muscle_id in substitutes
+                        if muscle_id != candidate
+                    )
                     substitute_item = next(
                         (
                             item for item in exercise["involvement"]
@@ -9955,7 +10576,12 @@ class CatalogFoundationTests(unittest.TestCase):
                     if item["muscle"] == candidate
                 )["role"] = demoted_role
                 if requirement["minimumRole"] == "primary":
-                    substitute, _ = primary_substitutes[family_id]
+                    substitutes = primary_substitutes[family_id]
+                    substitute = next(
+                        muscle_id
+                        for muscle_id in substitutes
+                        if muscle_id != candidate
+                    )
                     substitute_item = next(
                         (
                             item for item in exercise["involvement"]
@@ -9984,8 +10610,8 @@ class CatalogFoundationTests(unittest.TestCase):
                         f"fails muscle requirement {requirement_index}",
                     )
                 demotion_count += 1
-        self.assertEqual(removal_count, 8)
-        self.assertEqual(demotion_count, 5)
+        self.assertEqual(removal_count, 18)
+        self.assertEqual(demotion_count, 12)
 
     def test_batch6_stability_demands_have_exact_role_agnostic_providers(
         self,
@@ -10008,6 +10634,25 @@ class CatalogFoundationTests(unittest.TestCase):
             "seated-band-ankle-dorsiflexion": {
                 "ankle": {"tibialisAnterior"},
                 "foot": {"tibialisAnterior"},
+            },
+            "seated-flywheel-hip-internal-rotation": {
+                "hip": {
+                    "gluteMed", "tensorFasciaeLatae", "gluteMin",
+                },
+                "pelvis": {
+                    "gluteMed", "tensorFasciaeLatae", "gluteMin", "obliques",
+                },
+                "knee": {"tensorFasciaeLatae"},
+                "spine": {"obliques"},
+            },
+            "therapist-held-supine-band-hip-external-rotation": {
+                "hip": {
+                    "obturatorInternusGemelli", "obturatorExternus",
+                    "piriformis", "quadratusFemoris", "medialHamstrings",
+                },
+                "pelvis": {"obliques", "medialHamstrings"},
+                "knee": {"medialHamstrings"},
+                "spine": {"obliques"},
             },
         }
         for family in self.batch6_families.values():
@@ -10060,13 +10705,21 @@ class CatalogFoundationTests(unittest.TestCase):
         source_by_id = {
             source["id"]: source for source in self.foundation.evidence["sources"]
         }
-        self.assertEqual(len(source_by_id), 132)
+        self.assertEqual(len(source_by_id), 140)
         self.assertTrue(
             {
                 "mcbeth-2012-side-lying-hip-abduction",
                 "serner-2014-hip-adduction-exercises",
                 "jensen-2014-elastic-hip-adduction-training",
                 "kjeldsen-2019-dorsiflexor-training",
+                "delp-1999-hip-rotation-moment-arms",
+                "peduzzi-de-castro-2021-hip-rotation-isometric",
+                "lahuerta-martin-2024-flywheel-hip-rotation",
+                "beck-2000-gluteus-minimus",
+                "ito-2025-short-hip-external-rotator-torque",
+                "vaarbakken-2015-quadratus-femoris-obturator-externus",
+                "matthews-2017-fohx-protocol",
+                "matthews-2020-fohx-trial",
             }.issubset(source_by_id)
         )
         expected = {
@@ -10103,9 +10756,10 @@ class CatalogFoundationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         normalized = " ".join(proposal.split())
         self.assertIn(
-            "3D highlight and volume credit understate the full abductor system",
+            "3D highlight and volume credit understated the full abductor system",
             normalized,
         )
+        self.assertIn("still understate it today", normalized)
         self.assertIn(
             "Anatomy alone does not justify awarding adductor magnus or pectineus exercise volume",
             normalized,
@@ -10123,33 +10777,28 @@ class CatalogFoundationTests(unittest.TestCase):
             normalized,
         )
 
-    def test_batch6_rotation_candidates_remain_explicit_holds(self) -> None:
+    def test_batch6_rotation_candidates_are_active_and_evidence_backed(self) -> None:
         active_ids = {family["id"] for family in self.real_families}
-        held = {"hip-internal-rotation", "hip-external-rotation"}
-        self.assertTrue(held.isdisjoint(active_ids))
-        for family_id in held:
-            self.assertFalse((catalog.FAMILIES_ROOT / f"{family_id}.json").exists())
+        rotation_ids = {"hip-internal-rotation", "hip-external-rotation"}
+        self.assertTrue(rotation_ids <= active_ids)
+        for family_id in rotation_ids:
+            self.assertTrue((catalog.FAMILIES_ROOT / f"{family_id}.json").exists())
 
         proposal = (
             catalog.SPEC_ROOT / "proposals" / "batch-6-hip-rotation.md"
         ).read_text(encoding="utf-8")
-        roadmap = (catalog.SPEC_ROOT / "family-roadmap.md").read_text(
-            encoding="utf-8"
-        )
         normalized = " ".join(proposal.split())
-        self.assertIn("`hip-internal-rotation` | Defer | 0", normalized)
-        self.assertIn("`hip-external-rotation` | Defer | 0", normalized)
-        self.assertIn("TFL to carry the family", normalized)
         self.assertIn(
-            "Gluteus minimus, piriformis, obturators, gemelli, and quadratus femoris",
+            "`hip-internal-rotation` | Activate one exact 90-degree fixture | 1",
             normalized,
         )
-        self.assertIn("No `families/hip-internal-rotation.json` should exist", normalized)
-        self.assertIn("No `families/hip-external-rotation.json` should exist", normalized)
-        self.assertIn("14 work items remain unresolved, all family or branch items", roadmap)
         self.assertIn(
-            "Batch 7 now contains nine active families",
-            roadmap,
+            "`hip-external-rotation` | Activate one exact 30-degree fixture | 1",
+            normalized,
+        )
+        self.assertIn(
+            "exactly 58 taxonomy IDs and 60 trainable mesh bases",
+            normalized,
         )
 
         registered_ids = {
@@ -10159,12 +10808,13 @@ class CatalogFoundationTests(unittest.TestCase):
             {
                 "delp-1999-hip-rotation-moment-arms",
                 "peduzzi-de-castro-2021-hip-rotation-isometric",
-                "hirano-2025-hip-adductor-internal-rotation",
-                "ito-2025-short-hip-external-rotator-torque",
-                "chen-2018-seated-band-hip-external-rotation",
-                "morimoto-2018-piriformis-hip-movements",
+                "lahuerta-martin-2024-flywheel-hip-rotation",
                 "beck-2000-gluteus-minimus",
-            }.isdisjoint(registered_ids)
+                "ito-2025-short-hip-external-rotator-torque",
+                "vaarbakken-2015-quadratus-femoris-obturator-externus",
+                "matthews-2017-fohx-protocol",
+                "matthews-2020-fohx-trial",
+            } <= registered_ids
         )
 
     def test_batch7_activates_exactly_nine_families_and_nine_records(
@@ -10199,8 +10849,8 @@ class CatalogFoundationTests(unittest.TestCase):
             ),
             9,
         )
-        self.assertEqual(len(self.real_families), 46)
-        self.assertEqual(len(self.foundation.evidence_ids), 132)
+        self.assertEqual(len(self.real_families), 48)
+        self.assertEqual(len(self.foundation.evidence_ids), 140)
 
     def test_batch7_family_signatures_and_role_contracts_are_exact(
         self,
@@ -11448,7 +12098,7 @@ class CatalogFoundationTests(unittest.TestCase):
         normalized_proposal = " ".join(proposal.split())
 
         self.assertIn(
-            "46 reviewed families are active, containing 122 exercises",
+            "48 reviewed families are active, containing 124 exercises",
             roadmap,
         )
         self.assertIn(
@@ -11456,13 +12106,13 @@ class CatalogFoundationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn(
-            "14 work items remain unresolved, all family or branch items",
+            "12 work items remain unresolved, all family or branch items",
             roadmap,
         )
         self.assertIn("| `farmer-carry` | 1 |", roadmap)
         self.assertIn("| `suitcase-carry` | 1 |", roadmap)
-        self.assertIn("| **Total** | **122** |", roadmap)
-        self.assertIn("Forty-six reviewed family files", families_readme)
+        self.assertIn("| **Total** | **124** |", roadmap)
+        self.assertIn("Forty-eight reviewed family files", families_readme)
         self.assertIn("Batch 7 adds nine exercises", families_readme)
         self.assertIn(
             "`spine-extension` and `spine-lateral-flexion` are active", normalized_families_readme
@@ -12382,19 +13032,67 @@ class CatalogFoundationTests(unittest.TestCase):
             ["fixture-barbell-horizontal-press: reps 30 is outside recommended 5...15"],
         )
 
-    def test_runtime_projection_is_exactly_46_families_and_122_exercises(
+    def test_runtime_projection_is_exactly_48_families_and_124_exercises(
         self,
     ) -> None:
         records = catalog.compile_runtime_catalog(self.real_families)
-        self.assertEqual(len(records), 122)
+        self.assertEqual(len(records), 124)
         self.assertEqual(
             {record["familyID"] for record in records},
             {family["id"] for family in self.real_families},
         )
-        self.assertEqual(len({record["familyID"] for record in records}), 46)
+        self.assertEqual(len({record["familyID"] for record in records}), 48)
         self.assertEqual(
             records,
             catalog.compile_runtime_catalog(reversed(self.real_families)),
+        )
+
+        records_by_id = {record["catalogID"]: record for record in records}
+        self.assertEqual(
+            {
+                catalog_id: {
+                    "familyID": records_by_id[catalog_id]["familyID"],
+                    "planes": records_by_id[catalog_id]["planes"],
+                    "involvement": records_by_id[catalog_id]["involvement"],
+                }
+                for catalog_id in {
+                    "seated-flywheel-hip-internal-rotation",
+                    "therapist-held-supine-band-hip-external-rotation",
+                }
+            },
+            {
+                "seated-flywheel-hip-internal-rotation": {
+                    "familyID": "hip-internal-rotation",
+                    "planes": ["transverse"],
+                    "involvement": [
+                        {"muscle": "gluteMed", "role": "primary"},
+                        {
+                            "muscle": "tensorFasciaeLatae",
+                            "role": "primary",
+                        },
+                        {"muscle": "gluteMin", "role": "secondary"},
+                        {"muscle": "obliques", "role": "stabilizer"},
+                    ],
+                },
+                "therapist-held-supine-band-hip-external-rotation": {
+                    "familyID": "hip-external-rotation",
+                    "planes": ["transverse"],
+                    "involvement": [
+                        {
+                            "muscle": "obturatorInternusGemelli",
+                            "role": "primary",
+                        },
+                        {"muscle": "obturatorExternus", "role": "secondary"},
+                        {"muscle": "piriformis", "role": "secondary"},
+                        {"muscle": "quadratusFemoris", "role": "secondary"},
+                        {"muscle": "obliques", "role": "stabilizer"},
+                        {
+                            "muscle": "medialHamstrings",
+                            "role": "stabilizer",
+                        },
+                    ],
+                },
+            },
         )
 
         expected_identity_order = [
@@ -12631,7 +13329,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     0,
                 )
             emitted = json.loads(output.read_text(encoding="utf-8"))
-            self.assertEqual(len(emitted), 122)
+            self.assertEqual(len(emitted), 124)
             self.assertNotIn(
                 "fixture-horizontal-press",
                 {record["familyID"] for record in emitted},

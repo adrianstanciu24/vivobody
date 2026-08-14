@@ -365,6 +365,14 @@
       ]
     },
     {
+      "id": "gluteMin",
+      "displayName": "Glute Min",
+      "anatomicalName": "Gluteus Minimus",
+      "group": "legs",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no gluteus-minimus surface mesh."
+    },
+    {
       "id": "tensorFasciaeLatae",
       "displayName": "TFL",
       "anatomicalName": "Tensor Fasciae Latae",
@@ -372,6 +380,38 @@
       "meshBaseNames": [
         "Tensor_Fascia_Latae"
       ]
+    },
+    {
+      "id": "piriformis",
+      "displayName": "Piriformis",
+      "anatomicalName": "Piriformis",
+      "group": "legs",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no piriformis surface mesh."
+    },
+    {
+      "id": "obturatorInternusGemelli",
+      "displayName": "Obturator Internus + Gemelli",
+      "anatomicalName": "Obturator Internus, Superior Gemellus, and Inferior Gemellus",
+      "group": "legs",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no obturator-internus or gemelli surface mesh."
+    },
+    {
+      "id": "obturatorExternus",
+      "displayName": "Obturator Externus",
+      "anatomicalName": "Obturator Externus",
+      "group": "legs",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no obturator-externus surface mesh."
+    },
+    {
+      "id": "quadratusFemoris",
+      "displayName": "Quadratus Femoris",
+      "anatomicalName": "Quadratus Femoris",
+      "group": "legs",
+      "meshBaseNames": [],
+      "unvisualizedReason": "BodyModel.scn has no quadratus-femoris surface mesh."
     },
     {
       "id": "gastrocnemius",

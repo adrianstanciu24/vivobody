@@ -81,7 +81,12 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
     case medialHamstrings
     case gluteMax
     case gluteMed
+    case gluteMin
     case tensorFasciaeLatae
+    case piriformis
+    case obturatorInternusGemelli
+    case obturatorExternus
+    case quadratusFemoris
     case gastrocnemius
     case soleus
     case flexorHallucisLongus
@@ -137,7 +142,12 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .medialHamstrings: return "Medial Hamstrings"
         case .gluteMax: return "Glute Max"
         case .gluteMed: return "Glute Med"
+        case .gluteMin: return "Glute Min"
         case .tensorFasciaeLatae: return "TFL"
+        case .piriformis: return "Piriformis"
+        case .obturatorInternusGemelli: return "Obturator Internus + Gemelli"
+        case .obturatorExternus: return "Obturator Externus"
+        case .quadratusFemoris: return "Quadratus Femoris"
         case .gastrocnemius: return "Gastrocnemius"
         case .soleus: return "Soleus"
         case .flexorHallucisLongus: return "Big-Toe Flexor"
@@ -179,7 +189,9 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         case .abs, .obliques:
             return .core
         case .rectusFemoris, .vasti, .bicepsFemoris, .medialHamstrings,
-             .gluteMax, .gluteMed, .tensorFasciaeLatae, .gastrocnemius,
+             .gluteMax, .gluteMed, .gluteMin, .tensorFasciaeLatae,
+             .piriformis, .obturatorInternusGemelli, .obturatorExternus,
+             .quadratusFemoris, .gastrocnemius,
              .soleus, .flexorHallucisLongus, .adductorMagnus,
              .adductorLongusBrevis, .gracilis, .pectineus, .iliopsoas,
              .sartorius, .tibialisAnterior, .fibularisLongusBrevis,
@@ -273,6 +285,9 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
             return ["Gluteus_Maximus"]
         case .gluteMed:
             return ["Gluteus_Medius"]
+        case .gluteMin, .piriformis, .obturatorInternusGemelli,
+             .obturatorExternus, .quadratusFemoris:
+            return []
         case .tensorFasciaeLatae:
             return ["Tensor_Fascia_Latae"]
         case .gastrocnemius:
@@ -311,7 +326,7 @@ nonisolated enum Muscle: String, Codable, Hashable, CaseIterable, Sendable {
         nodeBaseNames.flatMap { ["\($0)_L", "\($0)_R"] }
     }
 
-    /// Whether BodyModel.scn can paint this region. Four modeled
+    /// Whether BodyModel.scn can paint this region. Ten modeled
     /// regions have no corresponding surface mesh.
     nonisolated var isVisualized: Bool { !nodeBaseNames.isEmpty }
 }

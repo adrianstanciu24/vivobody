@@ -5,8 +5,8 @@ bundled exercise catalog. The reviewed contracts in `specs/catalog/families/`
 are the canonical exercise source. `Scripts/catalog.py` validates those
 contracts against the taxonomy, joint-action, evidence, and family-schema
 foundations, then deterministically projects them into
-`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 46
-active families and their 122 reviewed exercises; the synthetic fixture and
+`vivobody/Resources/catalog.json`. The runtime catalog contains exactly the 48
+active families and their 124 reviewed exercises; the synthetic fixture and
 supplemental `--family` inputs are never emitted.
 
 ## Identity and movement definition
@@ -91,9 +91,16 @@ The rotator-cuff taxonomy is also explicit:
   until the body asset contains an appropriate mesh.
 
 There are no combined `glutes` or `teres` catalog values. The complete
-set of 53 exact runtime regions, including split upper-body, lower-body, and
-lumbar regions,
-contributors, is defined only by `specs/catalog/taxonomy.json`.
+set of 58 exact runtime regions, including split upper-body, lower-body, and
+lumbar contributors, and its 60 trainable mesh bases are defined only by
+`specs/catalog/taxonomy.json`.
+
+Hip rotation adds explicitly unvisualized `gluteMin`, `piriformis`,
+`obturatorInternusGemelli`, `obturatorExternus`, and `quadratusFemoris`
+regions. Obturator internus and the gemelli share one exact region because the
+reviewed exercise evidence and torque model report their conjoined tendon
+together; the other short rotators remain separate. Their exercise roles stay
+textually visible and feed analytics without painting a substitute 3D mesh.
 
 ## Modality and tracking
 
@@ -216,9 +223,11 @@ The bundled catalog must satisfy all of the following before shipping:
 
 - `python3 Scripts/catalog.py --check` validates every canonical source and
   proves the bundled runtime catalog is byte-for-byte compiler output.
-- The projection contains exactly 46 family IDs and 122 exercise records; it is
+- The projection contains exactly 48 family IDs and 124 exercise records; it is
   stable under family file discovery order and excludes the synthetic fixture
   and supplemental `--family` validation inputs.
+- The evidence registry contains exactly 140 source identities, each referenced
+  by an active foundation, family, or exercise claim.
 - Every required raw enum decodes without fallback.
 - Stable IDs, canonical names, and normalized aliases are unique.
 - Every muscle and role is recognized; obsolete aggregate regions are absent.

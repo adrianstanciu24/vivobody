@@ -3,7 +3,7 @@
 //  vivobodyTests
 //
 //  Guards the family-first runtime projection as one canonical data
-//  product: 46 reviewed families compile to 122 exercises with stable
+//  product: 48 reviewed families compile to 124 exercises with stable
 //  identities, multi-plane classification, exact muscle regions, and
 //  coherent modality/load semantics.
 //
@@ -16,8 +16,8 @@ import Testing
 struct CatalogBiomechanicsTests {
 
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
-        #expect(CatalogData.records.count == 122)
-        #expect(Set(CatalogData.records.map(\.familyID)).count == 46)
+        #expect(CatalogData.records.count == 124)
+        #expect(Set(CatalogData.records.map(\.familyID)).count == 48)
         #expect(CatalogData.record(forCatalogID: "barbell-bench-press")?.familyID == "horizontal-press")
         #expect(CatalogData.record(forCatalogID: "pull-up")?.familyID == "vertical-pull")
     }
@@ -183,6 +183,25 @@ struct CatalogBiomechanicsTests {
         #expect(hipAbduction.muscleInvolvement.role(for: .gluteMed) == .primary)
         #expect(hipAbduction.muscleInvolvement.role(for: .tensorFasciaeLatae) == .secondary)
         #expect(hipAbduction.muscleInvolvement.role(for: .gluteMax) == nil)
+
+        let internalRotation = try #require(
+            CatalogData.record(forExerciseNamed: "Seated Flywheel Hip Internal Rotation")
+        )
+        #expect(internalRotation.muscleInvolvement.role(for: .gluteMed) == .primary)
+        #expect(internalRotation.muscleInvolvement.role(for: .tensorFasciaeLatae) == .primary)
+        #expect(internalRotation.muscleInvolvement.role(for: .gluteMin) == .secondary)
+        #expect(internalRotation.muscleInvolvement.role(for: .gluteMax) == nil)
+
+        let externalRotation = try #require(
+            CatalogData.record(forExerciseNamed: "Therapist-Held Supine Band Hip External Rotation")
+        )
+        #expect(externalRotation.muscleInvolvement.role(for: .obturatorInternusGemelli) == .primary)
+        #expect(externalRotation.muscleInvolvement.role(for: .obturatorExternus) == .secondary)
+        #expect(externalRotation.muscleInvolvement.role(for: .piriformis) == .secondary)
+        #expect(externalRotation.muscleInvolvement.role(for: .quadratusFemoris) == .secondary)
+        #expect(externalRotation.muscleInvolvement.role(for: .gluteMax) == nil)
+        #expect(externalRotation.muscleInvolvement.role(for: .gluteMed) == nil)
+        #expect(externalRotation.muscleInvolvement.role(for: .sartorius) == nil)
 
         let pallof = try #require(
             CatalogData.record(forExerciseNamed: "Feet-Together Band Pallof Hold")

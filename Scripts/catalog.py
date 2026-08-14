@@ -4,7 +4,7 @@
 #  vivobody
 #
 #  Foundation validator and deterministic compiler for the family-first
-#  exercise catalog. It validates the canonical 53-region taxonomy,
+#  exercise catalog. It validates the canonical 58-region taxonomy,
 #  exact SceneKit mesh ownership, independent joint-action profiles, evidence
 #  references, and every reviewed movement-family contract. The exact-region
 #  taxonomy keeps action-divergent lower-body muscles separate wherever the
@@ -94,7 +94,12 @@ EXPECTED_MUSCLE_IDS = {
     "medialHamstrings",
     "gluteMax",
     "gluteMed",
+    "gluteMin",
     "tensorFasciaeLatae",
+    "piriformis",
+    "obturatorInternusGemelli",
+    "obturatorExternus",
+    "quadratusFemoris",
     "gastrocnemius",
     "soleus",
     "flexorHallucisLongus",
@@ -143,6 +148,11 @@ EXPECTED_SPLIT_MESHES = {
     "bicepsFemoris": ["Biceps_femoris"],
     "medialHamstrings": ["Semitendinosus", "Semimembranosus"],
     "gluteMed": ["Gluteus_Medius"],
+    "gluteMin": [],
+    "piriformis": [],
+    "obturatorInternusGemelli": [],
+    "obturatorExternus": [],
+    "quadratusFemoris": [],
     "gastrocnemius": ["Gastrocnemius"],
     "soleus": ["Soleus"],
     "flexorHallucisLongus": ["Flexor_Hallucis_Longus"],
@@ -209,6 +219,7 @@ class Foundation:
     action_ids: frozenset[str]
     plane_by_action: dict[str, str]
     condition_actions: dict[str, frozenset[str]]
+    condition_variant_constraints: dict[str, tuple[str, Any]]
     opposing_action_by_action: dict[str, str]
     region_ids: frozenset[str]
     evidence_ids: frozenset[str]
@@ -574,6 +585,7 @@ def validate_joint_actions(
     frozenset[str],
     dict[str, str],
     dict[str, frozenset[str]],
+    dict[str, tuple[str, Any]],
     dict[str, str],
     frozenset[str],
 ]:
@@ -673,12 +685,14 @@ def validate_joint_actions(
 
     conditions = require_list(data["actionConditions"], f"{context}.actionConditions", allow_empty=True)
     condition_actions: dict[str, frozenset[str]] = {}
+    condition_variant_constraints: dict[str, tuple[str, Any]] = {}
     for index, condition_value in enumerate(conditions):
         item_context = f"{context}.actionConditions[{index}]"
         require(isinstance(condition_value, dict), f"{item_context} must be an object")
         require_keys(
             condition_value,
             required={"id", "displayName", "definition", "appliesTo"},
+            optional={"variantConstraint"},
             context=item_context,
         )
         condition_id = require_non_empty_string(condition_value["id"], f"{item_context}.id")
@@ -691,6 +705,28 @@ def validate_joint_actions(
         unknown_actions = sorted(set(applies_to) - action_ids)
         require(not unknown_actions, f"{condition_id} applies to unknown actions: {', '.join(unknown_actions)}")
         condition_actions[condition_id] = frozenset(applies_to)
+        if "variantConstraint" in condition_value:
+            constraint = condition_value["variantConstraint"]
+            constraint_context = f"{item_context}.variantConstraint"
+            require(isinstance(constraint, dict), f"{constraint_context} must be an object")
+            require_keys(
+                constraint,
+                required={"axis", "equals"},
+                context=constraint_context,
+            )
+            axis_id = require_non_empty_string(
+                constraint["axis"], f"{constraint_context}.axis"
+            )
+            require(
+                SYMBOL_ID.fullmatch(axis_id) is not None,
+                f"{constraint_context}.axis is not a stable symbol ID: {axis_id}",
+            )
+            expected = constraint["equals"]
+            require(
+                type(expected) in {str, int, float, bool} and expected != "",
+                f"{constraint_context}.equals must be a non-empty scalar",
+            )
+            condition_variant_constraints[condition_id] = (axis_id, expected)
 
     profiles = require_list(data["muscleProfiles"], f"{context}.muscleProfiles")
     profile_by_muscle: dict[str, dict[str, Any]] = {}
@@ -766,6 +802,7 @@ def validate_joint_actions(
         frozenset(action_ids),
         plane_by_action,
         condition_actions,
+        condition_variant_constraints,
         opposing_action_by_action,
         region_ids,
     )
@@ -894,6 +931,7 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         action_ids,
         plane_by_action,
         condition_actions,
+        condition_variant_constraints,
         opposing_action_by_action,
         region_ids,
     ) = validate_joint_actions(
@@ -914,6 +952,7 @@ def validate_foundation(body_model_path: Path = BODY_MODEL_PATH) -> Foundation:
         action_ids=action_ids,
         plane_by_action=plane_by_action,
         condition_actions=condition_actions,
+        condition_variant_constraints=condition_variant_constraints,
         opposing_action_by_action=opposing_action_by_action,
         region_ids=region_ids,
         evidence_ids=evidence_ids,
@@ -1934,6 +1973,56 @@ def validate_family(data: dict[str, Any], foundation: Foundation, source: str = 
 
     requirements, allowed_by_role = validate_role_policy(data["musclePolicy"], foundation, f"{context}.musclePolicy")
     axes = validate_variant_axes(data["variantAxes"], f"{context}.variantAxes")
+    used_conditions = {
+        condition
+        for _, condition in roster_prime_actions | resisted_actions
+        if condition is not None
+    }
+    for condition_id in sorted(used_conditions):
+        constraint = foundation.condition_variant_constraints.get(condition_id)
+        if constraint is None:
+            continue
+        axis_id, expected = constraint
+        require(
+            axis_id in axes,
+            f"{context} action condition {condition_id} requires variant axis {axis_id}",
+        )
+        axis = axes[axis_id]
+        require(
+            axis["required"],
+            f"{context} action condition {condition_id} requires {axis_id} to be required",
+        )
+        if axis["valueType"] == "number":
+            require(
+                type(expected) in {int, float}
+                and axis.get("minimum") == expected
+                and axis.get("maximum") == expected,
+                f"{context} action condition {condition_id} requires numeric axis "
+                f"{axis_id} pinned to {expected!r}",
+            )
+        elif axis["valueType"] == "enum":
+            require(
+                type(expected) is str and axis.get("allowedValues") == [expected],
+                f"{context} action condition {condition_id} requires enum axis "
+                f"{axis_id} pinned to {expected!r}",
+            )
+        elif axis["valueType"] == "boolean":
+            require(
+                type(expected) is bool and axis.get("fixedValue") is expected,
+                f"{context} action condition {condition_id} requires boolean axis "
+                f"{axis_id} pinned to {expected!r}",
+            )
+        else:
+            fail(
+                f"{context} action condition {condition_id} cannot be pinned by "
+                f"string axis {axis_id}"
+            )
+        for exercise_index, exercise in enumerate(exercises):
+            require(
+                exercise.get("variant", {}).get(axis_id) == expected,
+                f"family {family_id} exercise[{exercise_index}] action condition "
+                f"{condition_id} requires variant.{axis_id} == {expected!r}",
+            )
     exercise_rules = validate_exercise_rules(
         data["exerciseRules"],
         axes,

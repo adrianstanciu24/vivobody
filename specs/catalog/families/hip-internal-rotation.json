@@ -1,0 +1,480 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-internal-rotation",
+  "name": "Hip Internal Rotation",
+  "definition": "A strict unilateral open-chain hip isolation performed seated on a 75-cm hydraulic treatment table with both hips and knees held at 90 degrees, both feet suspended, the hands crossed over the shoulders, and the pelvis neutral. Bilateral anterior-superior-iliac-spine belts prevent associated pelvic and spinal motion, a distal-femur belt prevents non-rotational hip motion, and an ankle brace connects the working lower leg to the directly reviewed rotary-axis flywheel cable. The concentric phase internally rotates the femur relative to the fixed pelvis as fast as possible; the return counteracts the generated flywheel inertia. Lahuerta-Martín directly anchors this dynamic fixture and its measured force, power, and velocity, but measures no muscle activity. Gluteus medius and TFL are non-ranked co-primary contributors: Delp found every measured gluteus-medius compartment internally directed at 90 degrees, and Peduzzi de Castro directly measured both regions during a condition-matched internal-rotation effort without establishing a cross-muscle magnitude hierarchy. The unvisualized gluteus-minimus region is a mechanics-derived secondary because all measured compartments share the 90-degree internal-rotation direction; it earns exact-region analytics without a 3D surface. Piriformis is capable at this posture but remains unassigned: Delp reports a materially smaller 90-degree internal-rotation moment arm than the gluteus-minimus compartments, and no condition-matched source measured its recruitment. Obliques receive mechanics-derived stabilizer credit for the explicitly held spine and pelvis under flywheel torque; this is control credit, not measured EMG or rotation volume. Whole gluteus maximus receives no mover credit because its unsplit fibers do not share one rotation direction at this posture. Neutral-flexion, prone, standing, band, cable-stack, selectorized-machine, manual-resistance, unsupported, mobility, gait, pivoting, stepping, squat-control, pelvis-rotation, and combined hip-motion variants remain outside this contract.",
+  "evidenceRefs": [
+    "delp-1999-hip-rotation-moment-arms",
+    "lahuerta-martin-2024-flywheel-hip-rotation",
+    "peduzzi-de-castro-2021-hip-rotation-isometric"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "other"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.internalRotation"
+    ],
+    "primeActions": [
+      {
+        "action": "hip.internalRotation",
+        "condition": "atNinetyDegreeHipFlexion"
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.externalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "gluteMed"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "tensorFasciaeLatae"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "gluteMin"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "gluteMed",
+        "tensorFasciaeLatae"
+      ],
+      "secondary": [
+        "gluteMin"
+      ],
+      "stabilizer": [
+        "obliques"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the cable-coupled lower leg moves freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "seated"
+      ]
+    },
+    {
+      "id": "seatSurface",
+      "valueType": "enum",
+      "required": true,
+      "description": "The adjustable support surface used by the reviewed fixture.",
+      "allowedValues": [
+        "hydraulicTreatmentTable"
+      ]
+    },
+    {
+      "id": "seatHeightCm",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed treatment-table height above the floor.",
+      "minimum": 75,
+      "maximum": 75
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether an external surface supports the torso during the repetition.",
+      "allowedValues": [
+        "none"
+      ]
+    },
+    {
+      "id": "handPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed upper-limb position used to prevent hand support or assistance.",
+      "allowedValues": [
+        "crossedOnOppositeShoulders"
+      ]
+    },
+    {
+      "id": "footSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether either foot contacts the floor or another support.",
+      "allowedValues": [
+        "bothSuspended"
+      ]
+    },
+    {
+      "id": "pelvisPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly instructed pelvic posture.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "pelvisFixation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-reported restraint preventing associated pelvic and spinal motion.",
+      "allowedValues": [
+        "bilateralASISBelts"
+      ]
+    },
+    {
+      "id": "distalFemurFixation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-reported restraint preventing unwanted non-rotational hip movement.",
+      "allowedValues": [
+        "belt"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action creating the concentric phase and its controlled return.",
+      "allowedValues": [
+        "internallyRotatesThenReturns"
+      ]
+    },
+    {
+      "id": "hipFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The held hip-flexion posture matching the conditioned prime action.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether knee motion contributes to the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneeFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The directly reviewed held knee-flexion posture.",
+      "minimum": 90,
+      "maximum": 90
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The segment whose transverse movement reflects femur rotation relative to the fixed pelvis.",
+      "allowedValues": [
+        "lowerLeg"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the flywheel cable connects to the working limb.",
+      "allowedValues": [
+        "ankleBraceAndCarabiner"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed cable-and-flywheel resistance arrangement.",
+      "allowedValues": [
+        "ankleCableToRotaryAxisFlywheel"
+      ]
+    },
+    {
+      "id": "flywheelModel",
+      "valueType": "enum",
+      "required": true,
+      "description": "The exact flywheel device used in the reviewed fixture.",
+      "allowedValues": [
+        "conicPowerMove"
+      ]
+    },
+    {
+      "id": "flywheelMount",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed device orientation and attachment surface.",
+      "allowedValues": [
+        "horizontalWallFixed"
+      ]
+    },
+    {
+      "id": "flywheelHeightAboveFloorCm",
+      "valueType": "number",
+      "required": true,
+      "description": "The reviewed flywheel height above the floor.",
+      "minimum": 7,
+      "maximum": 7
+    },
+    {
+      "id": "flywheelMeanDiameterCm",
+      "valueType": "number",
+      "required": true,
+      "description": "The reported mean flywheel diameter.",
+      "minimum": 7.5,
+      "maximum": 7.5
+    },
+    {
+      "id": "flywheelAttachedLoadGrams",
+      "valueType": "number",
+      "required": true,
+      "description": "The reported attached device load; it is setup metadata rather than a user-entered comparable weight.",
+      "minimum": 460,
+      "maximum": 460
+    },
+    {
+      "id": "flywheelAxisDistanceCm",
+      "valueType": "number",
+      "required": true,
+      "description": "The reported flywheel axis distance.",
+      "minimum": 15,
+      "maximum": 15
+    },
+    {
+      "id": "slidingFramePosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed position of the flywheel device's sliding frame.",
+      "allowedValues": [
+        "upperMiddle"
+      ]
+    },
+    {
+      "id": "cableLengthSetting",
+      "valueType": "enum",
+      "required": true,
+      "description": "How the examiner individualized cable length before the repetitions.",
+      "allowedValues": [
+        "maximumActiveHipRotationRange"
+      ]
+    },
+    {
+      "id": "concentricIntent",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly instructed effort during the concentric phase.",
+      "allowedValues": [
+        "asFastAsPossible"
+      ]
+    },
+    {
+      "id": "eccentricIntent",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly instructed control during the return phase.",
+      "allowedValues": [
+        "counteractGeneratedFlywheelInertia"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the lower-leg path; the cable supplies resistance without fixing the joint path."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the isolated hip rotation.",
+      "allowedValues": [
+        "isolatedHipRotation"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 7,
+      "maximum": 7
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "seated-flywheel-hip-internal-rotation",
+      "name": "Seated Flywheel Hip Internal Rotation",
+      "aliases": [
+        "Flywheel Hip Internal Rotation",
+        "Seated Flywheel Internal Rotation"
+      ],
+      "equipment": "other",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 7,
+      "searchPriority": 65,
+      "involvement": [
+        {
+          "muscle": "gluteMed",
+          "role": "primary"
+        },
+        {
+          "muscle": "tensorFasciaeLatae",
+          "role": "primary"
+        },
+        {
+          "muscle": "gluteMin",
+          "role": "secondary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "seated",
+        "seatSurface": "hydraulicTreatmentTable",
+        "seatHeightCm": 75,
+        "torsoSupport": "none",
+        "handPosition": "crossedOnOppositeShoulders",
+        "footSupport": "bothSuspended",
+        "pelvisPosture": "neutral",
+        "pelvisFixation": "bilateralASISBelts",
+        "distalFemurFixation": "belt",
+        "hipMotion": "internallyRotatesThenReturns",
+        "hipFlexionDegrees": 90,
+        "kneeMotion": "positionHeld",
+        "kneeFlexionDegrees": 90,
+        "movingSegment": "lowerLeg",
+        "loadInterface": "ankleBraceAndCarabiner",
+        "resistanceGeometry": "ankleCableToRotaryAxisFlywheel",
+        "flywheelModel": "conicPowerMove",
+        "flywheelMount": "horizontalWallFixed",
+        "flywheelHeightAboveFloorCm": 7,
+        "flywheelMeanDiameterCm": 7.5,
+        "flywheelAttachedLoadGrams": 460,
+        "flywheelAxisDistanceCm": 15,
+        "slidingFramePosition": "upperMiddle",
+        "cableLengthSetting": "maximumActiveHipRotationRange",
+        "concentricIntent": "asFastAsPossible",
+        "eccentricIntent": "counteractGeneratedFlywheelInertia",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedHipRotation"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "lahuerta-martin-2024-flywheel-hip-rotation"
+      ],
+      "movementDefinition": "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees flexed to 90 degrees, both feet suspended, the hands crossed over the opposite shoulders, and the pelvis neutral. Secure the working distal femur with one belt and the pelvis at both anterior superior iliac spines with two belts. Connect the working ankle brace to the Conic Power Move cable by carabiner, using the horizontally wall-fixed flywheel 7 cm above the floor, its upper-middle sliding-frame position, the reported 460-g attached load and 15-cm axis distance, and a cable length matched to the maximum active hip-rotation range. Internally rotate the working femur relative to the fixed pelvis as fast as possible, moving the lower leg outward, then return while counteracting the generated flywheel inertia. Keep the knee angle fixed and do not move the pelvis, spine, or thigh outside the hip-rotation path. After two sets of ten progressively harder warm-up repetitions, perform three progressive repetitions and seven high-intensity work repetitions, then repeat the reviewed setup for the other leg as a separately logged set."
+    }
+  ]
+}

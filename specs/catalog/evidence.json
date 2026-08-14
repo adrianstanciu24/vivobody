@@ -2056,6 +2056,156 @@
       "pmid": "18441751",
       "url": "https://doi.org/10.1243/09544119JEIM266",
       "scope": "Detailed fascicular dissection in six embalmed cadavers informed a quantitative force-equivalent model of quadratus lumborum. The model established possible lumbar extensor and lateral-bending moments, each no greater than ten percent of the corresponding erector-spinae and multifidus contribution. It supports both modest actions in the exact quadratus-lumborum capability profile, not an exercise role, a primary ranking, side-specific product credit, an in-vivo recruitment magnitude, or substitution for the substantially larger lumbar-extensor system."
+    },
+    {
+      "id": "delp-1999-hip-rotation-moment-arms",
+      "sourceType": "cadavericMomentArmStudy",
+      "title": "Variation of rotation moment arms with hip flexion",
+      "authors": [
+        "Scott L. Delp",
+        "William E. Hess",
+        "David S. Hungerford",
+        "Lynne C. Jones"
+      ],
+      "year": 1999,
+      "doi": "10.1016/s0021-9290(99)00032-9",
+      "pmid": "10327003",
+      "url": "https://doi.org/10.1016/s0021-9290(99)00032-9",
+      "scope": "Rotation moment arms for eighteen compartments across gluteus maximus, medius, and minimus plus iliopsoas, piriformis, quadratus femoris, obturator internus, and obturator externus at 0, 20, 45, 60, and 90 degrees of hip flexion in four cadaveric specimens, with comparison to a three-dimensional model. It directly supports posture-conditioned action directions and adverse whole-region aggregation boundaries. It did not measure either gemellus and does not establish exercise-specific recruitment, categorical roles, or contribution magnitudes."
+    },
+    {
+      "id": "peduzzi-de-castro-2021-hip-rotation-isometric",
+      "sourceType": "experimentalIsometricEMGStudy",
+      "title": "Activation of the gluteus maximus, gluteus medius and tensor fascia lata muscles during hip internal and external rotation exercises at three hip flexion postures",
+      "authors": [
+        "Marcelo Peduzzi de Castro",
+        "Heiliane de Brito Fontana",
+        "Marina Costa Fóes",
+        "Gilmar Moraes Santos",
+        "Caroline Ruschel",
+        "Helio Roesler"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jbmt.2021.05.011",
+      "pmid": "34391276",
+      "url": "https://doi.org/10.1016/j.jbmt.2021.05.011",
+      "scope": "Twenty-one participants performed maximal isometric internal- and external-rotation efforts at 0, 45, and 90 degrees of hip flexion while force and surface EMG from upper and lower gluteus maximus, gluteus medius, and tensor fasciae latae were recorded. It supports posture-sensitive recruitment and condition-matched internal-rotation participation at 90 degrees, not a dynamic fixture, deep-rotator policy, net torque direction for a whole muscle, or a numeric cross-muscle role ranking."
+    },
+    {
+      "id": "lahuerta-martin-2024-flywheel-hip-rotation",
+      "sourceType": "experimentalKineticsStudy",
+      "title": "Test-Retest and Inter-Rater Reliability of a Rotary Axis Encoder-Flywheel System for the Assessment of Hip Rotation Exercises",
+      "authors": [
+        "Silvia Lahuerta-Martín",
+        "Elena Esteban-Lozano",
+        "Sandra Jiménez-del-Barrio",
+        "Román Robles-Pérez",
+        "María Teresa Mingo-Gómez",
+        "Luis Ceballos-Laita",
+        "Ignacio Hernando-Garijo"
+      ],
+      "year": 2024,
+      "doi": "10.3390/app14010372",
+      "url": "https://doi.org/10.3390/app14010372",
+      "scope": "Twenty-nine physically active adults performed separate dynamic high-intensity hip internal- and external-rotation repetitions with a rotary-encoder flywheel while seated on a 75-centimeter table with both hips and knees at 90 degrees, feet suspended, hands crossed, pelvis neutral, an ankle brace connected to the cable, distal-femur restraint, and two belts across the anterior superior iliac spines. It directly supports the loadable dynamic fixture, resistance interface, repetition semantics, and non-comparable force and power boundary. It measured no muscle activity and does not establish individual-muscle roles."
+    },
+    {
+      "id": "beck-2000-gluteus-minimus",
+      "sourceType": "biomechanicalCadaverStudy",
+      "title": "The anatomy and function of the gluteus minimus muscle",
+      "authors": [
+        "Martin Beck",
+        "John B. Sledge",
+        "Emmanuel Gautier",
+        "Claudio F. Dora",
+        "Reinhold Ganz"
+      ],
+      "year": 2000,
+      "doi": "10.1302/0301-620x.82b3.10356",
+      "pmid": "10813169",
+      "url": "https://doi.org/10.1302/0301-620x.82b3.10356",
+      "scope": "Dissection of sixteen fresh-cadaver hips plus a plastic-bone mechanical model described gluteus-minimus attachments, capsular stabilization, abduction, and position- and fiber-dependent rotation. It supports a distinct unvisualized region and rejects unconditional aggregate rotation, not exercise-specific involvement or a categorical training-role ranking."
+    },
+    {
+      "id": "ito-2025-short-hip-external-rotator-torque",
+      "sourceType": "biomechanicalCadaverStudy",
+      "title": "Comparison of External Rotation Torque of Short External Rotator Muscles in Hip Flexion Position",
+      "authors": [
+        "Yoshiaki Ito",
+        "Daisuke Suzuki",
+        "Fumiya Kizawa",
+        "Arata Kanaizumi",
+        "Toshihito Hiraiwa",
+        "Takashi Tamura",
+        "Yoshiharu Kawaguchi",
+        "Satoshi Nagoya"
+      ],
+      "year": 2025,
+      "doi": "10.1002/jor.70005",
+      "pmid": "40524428",
+      "url": "https://doi.org/10.1002/jor.70005",
+      "scope": "Fifteen fresh-frozen hips informed PCSA-scaled muscle-string external-rotation torque estimates for piriformis, obturator internus, the obturator-internus and gemelli conjoined tendon, and obturator externus from 0 through 105 degrees of flexion. It supports position-specific deep-rotator capability and relative mechanical capacity at 30 degrees, not neural recruitment or an exercise role by itself. Quadratus femoris was explicitly excluded and receives no ranking from this source."
+    },
+    {
+      "id": "vaarbakken-2015-quadratus-femoris-obturator-externus",
+      "sourceType": "biomechanicalCadaverStudy",
+      "title": "Primary functions of the quadratus femoris and obturator externus muscles indicated from lengths and moment arms measured in mobilized cadavers",
+      "authors": [
+        "Kjartan Vaarbakken",
+        "Harald Steen",
+        "Gunnar Samuelsen",
+        "Hans A. Dahl",
+        "Trygve B. Leergaard",
+        "Britt Stuge"
+      ],
+      "year": 2015,
+      "doi": "10.1016/j.clinbiomech.2015.02.004",
+      "pmid": "25697090",
+      "url": "https://doi.org/10.1016/j.clinbiomech.2015.02.004",
+      "scope": "Wire paths simulating dissected quadratus femoris and obturator externus were measured in three mobilized cadaver hips at 15-degree flexion increments with rotation, abduction, adduction, and combined positions. Internal rotation lengthened both muscles and supports their possible external-rotation action, while the study's broader findings emphasize additional extension, flexion, and adduction functions. It does not measure exercise recruitment, rank quadratus femoris within the active band fixture, or license a single undifferentiated deep-rotator aggregate."
+    },
+    {
+      "id": "matthews-2017-fohx-protocol",
+      "sourceType": "randomizedTrialProtocol",
+      "title": "The Foot Orthoses versus Hip eXercises (FOHX) trial for patellofemoral pain: a protocol for a randomized clinical trial to determine if foot mobility is associated with better outcomes from foot orthoses",
+      "authors": [
+        "Mark Matthews",
+        "Michael Skovdal Rathleff",
+        "Andrew Claus",
+        "Tom McPoil",
+        "Robert Nee",
+        "Kay Crossley",
+        "Jessica Kasza",
+        "Sanjoy Paul",
+        "Rebecca Mellor",
+        "Bill Vicenzino"
+      ],
+      "year": 2017,
+      "doi": "10.1186/s13047-017-0186-5",
+      "pmid": "28138341",
+      "pmcid": "PMC5264284",
+      "url": "https://doi.org/10.1186/s13047-017-0186-5",
+      "scope": "The FOHX protocol specifies a progressive resisted hip-exercise program. Its external-rotation fixture is unilateral and supine with both hips supported at 30 degrees over a wedge, the knee stabilized by a therapist, an elastic band attached at the ankle and held by the therapist, and motion from neutral to the midpoint of available external rotation at an approximately 10-to-12-repetition-maximum resistance. It directly supports that topology and progression, not a deep-muscle role hierarchy, exact band force, generic self-anchored band work, or another hip-flexion posture."
+    },
+    {
+      "id": "matthews-2020-fohx-trial",
+      "sourceType": "randomizedClinicalTrial",
+      "title": "Does foot mobility affect the outcome in the management of patellofemoral pain with foot orthoses versus hip exercises? A randomised clinical trial",
+      "authors": [
+        "Mark Matthews",
+        "Michael Skovdal Rathleff",
+        "Andrew Claus",
+        "Tom McPoil",
+        "Robert Nee",
+        "Kay M. Crossley",
+        "Jessica Kasza",
+        "Bill T. Vicenzino"
+      ],
+      "year": 2020,
+      "doi": "10.1136/bjsports-2019-100935",
+      "pmid": "32217524",
+      "url": "https://doi.org/10.1136/bjsports-2019-100935",
+      "scope": "A two-site randomized clinical trial assigned 218 adults with patellofemoral pain to foot orthoses or the FOHX progressive resisted hip-exercise program, confirming implementation of the four-week, twelve-session program and assessing outcomes at twelve weeks. It supports program implementation and trainability, not an isolated causal effect of the external-rotation exercise, individual-muscle recruitment, a role hierarchy, or treatment advice for the general catalog user."
     }
   ]
 }

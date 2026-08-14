@@ -1749,6 +1749,102 @@
     ]
   },
   {
+    "familyID": "hip-external-rotation",
+    "catalogID": "therapist-held-supine-band-hip-external-rotation",
+    "name": "Therapist-Held Supine Band Hip External Rotation",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 10,
+    "trackingMode": "reps",
+    "equipment": "band",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Supine Band Hip External Rotation",
+      "Therapist-Resisted Hip External Rotation"
+    ],
+    "searchPriority": 72,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Lie supine on a treatment table with both thighs supported over the wedge so both hips remain at 30 degrees of flexion and both knees remain flexed. Secure the elastic band at the working ankle. The therapist stabilizes the working knee against the support and holds the other end of the band so it opposes external hip rotation. Keep the pelvis and spine still and begin with the working hip in neutral rotation. Move the working lower leg against the band until the hip reaches the middle of its available external-rotation range, then return to neutral under control without lifting or turning the working thigh. Complete the prescribed repetitions before changing sides.",
+    "involvement": [
+      {
+        "muscle": "obturatorInternusGemelli",
+        "role": "primary"
+      },
+      {
+        "muscle": "obturatorExternus",
+        "role": "secondary"
+      },
+      {
+        "muscle": "piriformis",
+        "role": "secondary"
+      },
+      {
+        "muscle": "quadratusFemoris",
+        "role": "secondary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      },
+      {
+        "muscle": "medialHamstrings",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
+    "familyID": "hip-internal-rotation",
+    "catalogID": "seated-flywheel-hip-internal-rotation",
+    "name": "Seated Flywheel Hip Internal Rotation",
+    "group": "legs",
+    "defaultWeight": 0,
+    "reps": 7,
+    "trackingMode": "reps",
+    "equipment": "other",
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ],
+    "laterality": "unilateral",
+    "aliases": [
+      "Flywheel Hip Internal Rotation",
+      "Seated Flywheel Internal Rotation"
+    ],
+    "searchPriority": 65,
+    "bodyweightFraction": 0,
+    "modality": "dynamicStrength",
+    "loadMode": "nonComparable",
+    "movementDefinition": "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees flexed to 90 degrees, both feet suspended, the hands crossed over the opposite shoulders, and the pelvis neutral. Secure the working distal femur with one belt and the pelvis at both anterior superior iliac spines with two belts. Connect the working ankle brace to the Conic Power Move cable by carabiner, using the horizontally wall-fixed flywheel 7 cm above the floor, its upper-middle sliding-frame position, the reported 460-g attached load and 15-cm axis distance, and a cable length matched to the maximum active hip-rotation range. Internally rotate the working femur relative to the fixed pelvis as fast as possible, moving the lower leg outward, then return while counteracting the generated flywheel inertia. Keep the knee angle fixed and do not move the pelvis, spine, or thigh outside the hip-rotation path. After two sets of ten progressively harder warm-up repetitions, perform three progressive repetitions and seven high-intensity work repetitions, then repeat the reviewed setup for the other leg as a separately logged set.",
+    "involvement": [
+      {
+        "muscle": "gluteMed",
+        "role": "primary"
+      },
+      {
+        "muscle": "tensorFasciaeLatae",
+        "role": "primary"
+      },
+      {
+        "muscle": "gluteMin",
+        "role": "secondary"
+      },
+      {
+        "muscle": "obliques",
+        "role": "stabilizer"
+      }
+    ]
+  },
+  {
     "familyID": "hip-thrust-bridge",
     "catalogID": "barbell-hip-thrust",
     "name": "Barbell Hip Thrust",

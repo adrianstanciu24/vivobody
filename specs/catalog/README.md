@@ -6,7 +6,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 
 ## Source files
 
-- `taxonomy.json` defines exactly 53 muscle regions, their coarse app group,
+- `taxonomy.json` defines exactly 58 muscle regions, their coarse app group,
   display names, and exactly 60 uniquely owned trainable `BodyModel.scn` mesh
   base names where the model has a truthful surface. The two posterior-serratus
   mesh bases are explicitly non-trainable rather than serving as lumbar-muscle
@@ -15,9 +15,9 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
   opposition map, and an independent anatomical capability map. It lets the
   validator challenge a family's muscle assignments rather than merely checking
   them against another list written in the same family file.
-- `evidence.json` tracks the primary musculoskeletal sources supporting those
-  capability profiles. A citation supports a rule; it does not turn EMG or a
-  model estimate into a universal numeric contribution.
+- `evidence.json` tracks exactly 140 primary musculoskeletal sources supporting
+  those capability profiles. A citation supports a rule; it does not turn EMG
+  or a model estimate into a universal numeric contribution.
 - `family.schema.json` documents the strict JSON shape for one family and its
   explicitly reviewed exercises.
 - `fixtures/valid-family.json` is synthetic validator input. It is never emitted
@@ -45,7 +45,7 @@ and is the sole writer of the bundled `vivobody/Resources/catalog.json`.
 The lower-body taxonomy intentionally creates more exact, sometimes clinical
 region labels such as `Vasti`, `Pectineus`, and `Fibularis Tertius`. The app
 must not flatten those back into false `Quads`, `Calves`, or `Hip Flexors`
-region identities. The runtime uses all 53 stable IDs, display names, groups,
+region identities. The runtime uses all 58 stable IDs, display names, groups,
 and mesh owners together; the six existing groups remain the coarse glanceable
 roll-up. `MuscleMappingTests` pins that runtime mapping. Product copy may provide
 contextual descriptions, but it must not create a second anatomical taxonomy.
@@ -357,11 +357,10 @@ validation inputs only and can never enter the runtime projection.
 
 The validator/compiler uses only Python's standard library. It decodes the binary
 SceneKit property list directly and proves every declared mesh has both `_L`
-and `_R` nodes, all 60 trainable mesh-base owners are unique, the taxonomy contains
-exactly its 53 canonical muscle regions, the capability map contains exactly
-44 joint actions, all muscles have evidence-backed action profiles, family
-prime actions have capable movers, and stability demands have capable assigned
-muscles. The two posterior-serratus mesh bases are explicitly pinned as
-non-trainable scene surfaces rather than lumbar proxies. The runtime projection
-is pinned to exactly 46 active families and 122
-exercises.
+and `_R` nodes, all 60 trainable mesh-base owners are unique, the taxonomy
+contains exactly its 58 canonical muscle regions, the capability map contains
+exactly 44 joint actions, all muscles have evidence-backed action profiles,
+family prime actions have capable movers, and stability demands have capable
+assigned muscles. The two posterior-serratus mesh bases are explicitly pinned
+as non-trainable scene surfaces rather than lumbar proxies. The runtime
+projection is pinned to exactly 48 active families and 124 exercises.

@@ -21,6 +21,8 @@ $(SRCROOT)/specs/catalog/families/forearm-supination.json
 $(SRCROOT)/specs/catalog/families/hip-abduction.json
 $(SRCROOT)/specs/catalog/families/hip-adduction.json
 $(SRCROOT)/specs/catalog/families/hip-extension.json
+$(SRCROOT)/specs/catalog/families/hip-external-rotation.json
+$(SRCROOT)/specs/catalog/families/hip-internal-rotation.json
 $(SRCROOT)/specs/catalog/families/hip-thrust-bridge.json
 $(SRCROOT)/specs/catalog/families/horizontal-press.json
 $(SRCROOT)/specs/catalog/families/incline-press.json

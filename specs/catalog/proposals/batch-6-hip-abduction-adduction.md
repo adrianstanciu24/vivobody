@@ -43,12 +43,15 @@ The roster deliberately excludes the paper's abduction-plus-external-rotation
 and clamshell conditions. Toes forward and `hipRotation: neutral` are
 load-bearing boundaries, not naming details.
 
-The current taxonomy has no gluteus-minimus region or body-model surface, and
+At Batch-6 activation the taxonomy had no gluteus-minimus region or body-model surface, and
 the unsplit gluteus-maximus profile conservatively omits abduction because its
 fiber regions do not share all actions. The active record does not proxy either
 structure through another visible region. The resulting 3D highlight and
-volume credit understate the full abductor system until a future atomic
-taxonomy/evidence review adds a truthful unvisualized policy.
+volume credit understated the full abductor system at activation and still
+understate it today. The later hip-rotation
+foundation added an exact unvisualized `gluteMin` region; this fixture still
+leaves it unassigned because anatomical capability alone does not establish an
+exercise-specific categorical role.
 
 ## Hip adduction
 
@@ -158,8 +161,8 @@ but has no DOI and is neither needed nor registered; no identifier is invented.
 6. Pin stability coverage by the authored muscles rather than external
    support or an invented proxy.
 7. Pin the metric cuff-weight seed and the zero/non-comparable band seed.
-8. Assert that hip-rotation families and their proposed posture-conditioned
-   taxonomy migration remain absent and separately held.
+8. Assert that the later hip-rotation activation does not retroactively assign
+   `gluteMin` here without exercise-specific role evidence.
 
 No family-schema, validator, joint-action, or taxonomy change is required for
 these two narrow activations.

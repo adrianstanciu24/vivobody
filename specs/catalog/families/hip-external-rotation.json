@@ -1,0 +1,431 @@
+{
+  "$schema": "../family.schema.json",
+  "schemaVersion": 1,
+  "id": "hip-external-rotation",
+  "name": "Hip External Rotation",
+  "definition": "A strict unilateral open-chain hip isolation performed supine on a treatment table with both hips flexed to 30 degrees over a wedge. A therapist stabilizes the working knee against the support and holds an elastic band attached at the working ankle while the lower leg moves through external hip rotation from neutral to the middle of the participant's available range. The pelvis and spine remain supported and do not create the repetition. The FOHX protocol directly reports this topology, approximately 10-to-12-repetition-maximum resistance, and three sets of ten; the completed trial supports only the whole multi-exercise hip program and does not isolate this record's outcome. Position-matched cadaveric torque evidence makes the obturator-internus/gemelli conjoined tendon primary and supports obturator externus and piriformis as mechanics-derived secondaries at 30 degrees. Quadratus femoris is also a mechanics-derived secondary: Delp supports its external-rotation direction, but Ito excluded it and therefore does not rank it against the three measured units. Obliques and medial hamstrings receive mechanics-derived stabilizer credit for the held spine, pelvis, and flexed knee under ankle-applied resistance; neither earns prime-action volume. All four mover regions are explicitly unvisualized because BodyModel.scn has no matching surfaces; no visible muscle receives proxy mover credit. Whole gluteus maximus, gluteus medius, and sartorius remain unassigned because capability does not establish exercise emphasis and their unsplit or multi-action anatomy does not justify a role here. Seated, side-lying, prone, clamshell, standing, cable, machine, self-anchored-band, combined-extension, and unassisted variants remain outside this contract.",
+  "evidenceRefs": [
+    "delp-1999-hip-rotation-moment-arms",
+    "ito-2025-short-hip-external-rotator-torque",
+    "vaarbakken-2015-quadratus-femoris-obturator-externus",
+    "matthews-2017-fohx-protocol",
+    "matthews-2020-fohx-trial"
+  ],
+  "fixed": {
+    "mechanic": "isolation",
+    "pattern": null,
+    "direction": null,
+    "planes": [
+      "transverse"
+    ]
+  },
+  "groupPolicy": {
+    "default": "legs",
+    "allowed": [
+      "legs"
+    ]
+  },
+  "allowed": {
+    "equipment": [
+      "band"
+    ],
+    "modalities": [
+      "dynamicStrength"
+    ],
+    "trackingModes": [
+      "reps"
+    ],
+    "loadModes": [
+      "nonComparable"
+    ],
+    "lateralities": [
+      "unilateral"
+    ]
+  },
+  "movementSignature": {
+    "planeBasisActions": [
+      "hip.externalRotation"
+    ],
+    "primeActions": [
+      {
+        "action": "hip.externalRotation",
+        "condition": "atThirtyDegreeHipFlexion"
+      }
+    ],
+    "forbiddenPrimeActions": [
+      "scapula.elevation",
+      "scapula.depression",
+      "scapula.protraction",
+      "scapula.retraction",
+      "scapula.upwardRotation",
+      "scapula.downwardRotation",
+      "scapula.anteriorTilt",
+      "scapula.posteriorTilt",
+      "shoulder.flexion",
+      "shoulder.extension",
+      "shoulder.abduction",
+      "shoulder.adduction",
+      "shoulder.horizontalAdduction",
+      "shoulder.horizontalAbduction",
+      "shoulder.internalRotation",
+      "shoulder.externalRotation",
+      "elbow.flexion",
+      "elbow.extension",
+      "forearm.pronation",
+      "forearm.supination",
+      "wrist.flexion",
+      "wrist.extension",
+      "wrist.radialDeviation",
+      "wrist.ulnarDeviation",
+      "hand.fingerFlexion",
+      "hand.fingerExtension",
+      "spine.flexion",
+      "spine.extension",
+      "spine.lateralFlexion",
+      "spine.rotation",
+      "hip.flexion",
+      "hip.extension",
+      "hip.abduction",
+      "hip.adduction",
+      "hip.internalRotation",
+      "knee.flexion",
+      "knee.extension",
+      "ankle.plantarflexion",
+      "ankle.dorsiflexion",
+      "ankle.inversion",
+      "ankle.eversion",
+      "foot.toeFlexion",
+      "foot.toeExtension"
+    ],
+    "stabilityDemands": [
+      "hip",
+      "pelvis",
+      "knee",
+      "spine"
+    ]
+  },
+  "musclePolicy": {
+    "requirements": [
+      {
+        "anyOf": [
+          "obturatorInternusGemelli"
+        ],
+        "minimumRole": "primary"
+      },
+      {
+        "anyOf": [
+          "obturatorExternus"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "piriformis"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "quadratusFemoris"
+        ],
+        "minimumRole": "secondary"
+      },
+      {
+        "anyOf": [
+          "obliques"
+        ],
+        "minimumRole": "stabilizer"
+      },
+      {
+        "anyOf": [
+          "medialHamstrings"
+        ],
+        "minimumRole": "stabilizer"
+      }
+    ],
+    "allowedByRole": {
+      "primary": [
+        "obturatorInternusGemelli"
+      ],
+      "secondary": [
+        "obturatorExternus",
+        "piriformis",
+        "quadratusFemoris"
+      ],
+      "stabilizer": [
+        "obliques",
+        "medialHamstrings"
+      ]
+    }
+  },
+  "variantAxes": [
+    {
+      "id": "kineticChain",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether the working lower limb moves freely rather than remaining fixed to the environment.",
+      "allowedValues": [
+        "open"
+      ]
+    },
+    {
+      "id": "bodyPosition",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed whole-body posture.",
+      "allowedValues": [
+        "supine"
+      ]
+    },
+    {
+      "id": "torsoSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface directly supporting the torso throughout the repetition.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "pelvisSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The surface directly supporting the pelvis while the femur rotates relative to it.",
+      "allowedValues": [
+        "table"
+      ]
+    },
+    {
+      "id": "hipFlexionSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed support holding both hips in their reported flexed posture.",
+      "allowedValues": [
+        "wedgeUnderBothThighs"
+      ]
+    },
+    {
+      "id": "contralateralLegPosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The nonworking limb posture preserved from the reviewed bilateral wedge setup.",
+      "allowedValues": [
+        "hipAndKneeFlexedOverWedge"
+      ]
+    },
+    {
+      "id": "pelvisMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate pelvic motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "spineMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether deliberate spinal motion creates the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "hipMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "The dynamic hip action producing the concentric repetition.",
+      "allowedValues": [
+        "externallyRotates"
+      ]
+    },
+    {
+      "id": "hipFlexionDegrees",
+      "valueType": "number",
+      "required": true,
+      "description": "The exact hip-flexion posture reported for the supine wedge fixture and matched by the conditioned prime action.",
+      "minimum": 30,
+      "maximum": 30
+    },
+    {
+      "id": "hipStartRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The reviewed starting rotation posture before the working lower leg moves.",
+      "allowedValues": [
+        "neutral"
+      ]
+    },
+    {
+      "id": "hipEndRotation",
+      "valueType": "enum",
+      "required": true,
+      "description": "The participant-specific endpoint reported by the protocol; no unsupported numeric rotation angle is inferred.",
+      "allowedValues": [
+        "midAvailableExternalRotation"
+      ]
+    },
+    {
+      "id": "kneeMotion",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether dynamic knee motion contributes to the repetition.",
+      "allowedValues": [
+        "positionHeld"
+      ]
+    },
+    {
+      "id": "kneePosture",
+      "valueType": "enum",
+      "required": true,
+      "description": "The source-shown flexed posture over the wedge; the protocol does not report a numeric knee angle.",
+      "allowedValues": [
+        "flexedOverWedge"
+      ]
+    },
+    {
+      "id": "kneeSupport",
+      "valueType": "enum",
+      "required": true,
+      "description": "The therapist contact preventing the working knee and thigh from substituting during the repetition.",
+      "allowedValues": [
+        "therapistStabilized"
+      ]
+    },
+    {
+      "id": "movingSegment",
+      "valueType": "enum",
+      "required": true,
+      "description": "The visible distal segment whose movement represents femur-on-pelvis external rotation.",
+      "allowedValues": [
+        "lowerLeg"
+      ]
+    },
+    {
+      "id": "loadInterface",
+      "valueType": "enum",
+      "required": true,
+      "description": "Where the elastic resistance attaches to the working limb.",
+      "allowedValues": [
+        "bandAtWorkingAnkle"
+      ]
+    },
+    {
+      "id": "resistanceGeometry",
+      "valueType": "enum",
+      "required": true,
+      "description": "The directly reviewed therapist-held band arrangement opposing external hip rotation without inventing a fixed environmental anchor.",
+      "allowedValues": [
+        "therapistHeldAnkleBandOpposesExternalRotation"
+      ]
+    },
+    {
+      "id": "loadPrescription",
+      "valueType": "enum",
+      "required": true,
+      "description": "The approximate elastic resistance magnitude prescribed by the reviewed FOHX protocol.",
+      "allowedValues": [
+        "approximatelyTenToTwelveRM"
+      ]
+    },
+    {
+      "id": "fixedPath",
+      "valueType": "boolean",
+      "required": true,
+      "fixedValue": false,
+      "description": "Whether rails or a lever constrain the external-load path; a therapist-held elastic band does not."
+    },
+    {
+      "id": "lowerBodyContribution",
+      "valueType": "enum",
+      "required": true,
+      "description": "Whether another lower-body joint propels the movement rather than the isolated hip action.",
+      "allowedValues": [
+        "isolatedJointMotion"
+      ]
+    }
+  ],
+  "exerciseRules": [],
+  "recommended": {
+    "defaultReps": {
+      "minimum": 10,
+      "maximum": 10
+    }
+  },
+  "exercises": [
+    {
+      "catalogID": "therapist-held-supine-band-hip-external-rotation",
+      "name": "Therapist-Held Supine Band Hip External Rotation",
+      "aliases": [
+        "Supine Band Hip External Rotation",
+        "Therapist-Resisted Hip External Rotation"
+      ],
+      "equipment": "band",
+      "laterality": "unilateral",
+      "modality": "dynamicStrength",
+      "trackingMode": "reps",
+      "loadMode": "nonComparable",
+      "bodyweightFraction": 0,
+      "defaultWeight": 0,
+      "reps": 10,
+      "searchPriority": 72,
+      "involvement": [
+        {
+          "muscle": "obturatorInternusGemelli",
+          "role": "primary"
+        },
+        {
+          "muscle": "obturatorExternus",
+          "role": "secondary"
+        },
+        {
+          "muscle": "piriformis",
+          "role": "secondary"
+        },
+        {
+          "muscle": "quadratusFemoris",
+          "role": "secondary"
+        },
+        {
+          "muscle": "obliques",
+          "role": "stabilizer"
+        },
+        {
+          "muscle": "medialHamstrings",
+          "role": "stabilizer"
+        }
+      ],
+      "variant": {
+        "kineticChain": "open",
+        "bodyPosition": "supine",
+        "torsoSupport": "table",
+        "pelvisSupport": "table",
+        "hipFlexionSupport": "wedgeUnderBothThighs",
+        "contralateralLegPosture": "hipAndKneeFlexedOverWedge",
+        "pelvisMotion": "positionHeld",
+        "spineMotion": "positionHeld",
+        "hipMotion": "externallyRotates",
+        "hipFlexionDegrees": 30,
+        "hipStartRotation": "neutral",
+        "hipEndRotation": "midAvailableExternalRotation",
+        "kneeMotion": "positionHeld",
+        "kneePosture": "flexedOverWedge",
+        "kneeSupport": "therapistStabilized",
+        "movingSegment": "lowerLeg",
+        "loadInterface": "bandAtWorkingAnkle",
+        "resistanceGeometry": "therapistHeldAnkleBandOpposesExternalRotation",
+        "loadPrescription": "approximatelyTenToTwelveRM",
+        "fixedPath": false,
+        "lowerBodyContribution": "isolatedJointMotion"
+      },
+      "additionalPrimeActions": [],
+      "additionalStabilityDemands": [],
+      "evidenceRefs": [
+        "matthews-2017-fohx-protocol",
+        "matthews-2020-fohx-trial"
+      ],
+      "movementDefinition": "Lie supine on a treatment table with both thighs supported over the wedge so both hips remain at 30 degrees of flexion and both knees remain flexed. Secure the elastic band at the working ankle. The therapist stabilizes the working knee against the support and holds the other end of the band so it opposes external hip rotation. Keep the pelvis and spine still and begin with the working hip in neutral rotation. Move the working lower leg against the band until the hip reaches the middle of its available external-rotation range, then return to neutral under control without lifting or turning the working thigh. Complete the prescribed repetitions before changing sides."
+    }
+  ]
+}

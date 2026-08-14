@@ -2,7 +2,7 @@
 //  MuscleMappingTests.swift
 //  vivobodyTests
 //
-//  Pins the complete 53-region catalog taxonomy at the runtime
+//  Pins the complete 58-region catalog taxonomy at the runtime
 //  boundary: stable IDs, display names, browse groups, exact SceneKit
 //  mesh ownership, catalog coverage, and categorical role projections.
 //
@@ -70,7 +70,12 @@ struct MuscleMappingTests {
         .init(muscle: .medialHamstrings, displayName: "Medial Hamstrings", group: .legs, meshBases: ["Semitendinosus", "Semimembranosus"]),
         .init(muscle: .gluteMax, displayName: "Glute Max", group: .legs, meshBases: ["Gluteus_Maximus"]),
         .init(muscle: .gluteMed, displayName: "Glute Med", group: .legs, meshBases: ["Gluteus_Medius"]),
+        .init(muscle: .gluteMin, displayName: "Glute Min", group: .legs, meshBases: []),
         .init(muscle: .tensorFasciaeLatae, displayName: "TFL", group: .legs, meshBases: ["Tensor_Fascia_Latae"]),
+        .init(muscle: .piriformis, displayName: "Piriformis", group: .legs, meshBases: []),
+        .init(muscle: .obturatorInternusGemelli, displayName: "Obturator Internus + Gemelli", group: .legs, meshBases: []),
+        .init(muscle: .obturatorExternus, displayName: "Obturator Externus", group: .legs, meshBases: []),
+        .init(muscle: .quadratusFemoris, displayName: "Quadratus Femoris", group: .legs, meshBases: []),
         .init(muscle: .gastrocnemius, displayName: "Gastrocnemius", group: .legs, meshBases: ["Gastrocnemius"]),
         .init(muscle: .soleus, displayName: "Soleus", group: .legs, meshBases: ["Soleus"]),
         .init(muscle: .flexorHallucisLongus, displayName: "Big-Toe Flexor", group: .legs, meshBases: ["Flexor_Hallucis_Longus"]),
@@ -86,7 +91,7 @@ struct MuscleMappingTests {
         .init(muscle: .toeExtensors, displayName: "Toe Extensors", group: .legs, meshBases: ["Extensor_Digitorum_Longus", "Extensor_Hallucis_Longus"]),
     ]
 
-    @Test func runtimeTaxonomyExactlyMatchesTheReviewed53Regions() {
+    @Test func runtimeTaxonomyExactlyMatchesTheReviewed58Regions() {
         let expectedIDs: Set<String> = [
             "pectoralisMajorClavicular", "pectoralisMajorSternocostal", "pectoralisMinor",
             "serratus", "lats", "trapeziusUpper", "trapeziusMiddle", "trapeziusLower",
@@ -97,14 +102,15 @@ struct MuscleMappingTests {
             "forearmPronators", "supinator", "flexorCarpiRadialis", "flexorCarpiUlnaris",
             "extensorCarpiRadialis", "extensorCarpiUlnaris", "fingerFlexors",
             "fingerExtensors", "triceps", "abs", "obliques", "rectusFemoris", "vasti",
-            "bicepsFemoris", "medialHamstrings", "gluteMax", "gluteMed",
-            "tensorFasciaeLatae", "gastrocnemius", "soleus", "flexorHallucisLongus",
+            "bicepsFemoris", "medialHamstrings", "gluteMax", "gluteMed", "gluteMin",
+            "tensorFasciaeLatae", "piriformis", "obturatorInternusGemelli",
+            "obturatorExternus", "quadratusFemoris", "gastrocnemius", "soleus", "flexorHallucisLongus",
             "adductorMagnus", "adductorLongusBrevis", "gracilis", "pectineus", "iliopsoas",
             "sartorius", "tibialisAnterior", "fibularisLongusBrevis", "fibularisTertius",
             "toeExtensors",
         ]
 
-        #expect(Self.taxonomy.count == 53)
+        #expect(Self.taxonomy.count == 58)
         #expect(Set(Muscle.allCases.map(\.rawValue)) == expectedIDs)
         #expect(Set(Self.taxonomy.map(\.muscle)) == Set(Muscle.allCases))
 
@@ -123,7 +129,8 @@ struct MuscleMappingTests {
         #expect(ownedNodes.count == 120)
         #expect(Set(Muscle.allCases.filter { !$0.isVisualized }) == Set([
             .subscapularis, .supraspinatus, .forearmPronators, .supinator,
-            .lumbarExtensors,
+            .lumbarExtensors, .gluteMin, .piriformis,
+            .obturatorInternusGemelli, .obturatorExternus, .quadratusFemoris,
         ]))
     }
 
@@ -212,6 +219,38 @@ struct MuscleMappingTests {
         #expect(lateral.volumeCredit(for: .lumbarExtensors) == 0)
         #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Inferior_L") == false)
         #expect(Muscle.allCases.flatMap(\.nodeNames).contains("Serratus_Posterior_Superior_L") == false)
+    }
+
+    @Test func hipRotationFamiliesRetainExactRolesWithoutProxyPainting() {
+        let internalRotation = Muscle.involvement(
+            forExerciseNamed: "Seated Flywheel Hip Internal Rotation"
+        )
+        #expect(internalRotation.role(for: .gluteMed) == .primary)
+        #expect(internalRotation.role(for: .tensorFasciaeLatae) == .primary)
+        #expect(internalRotation.role(for: .gluteMin) == .secondary)
+        #expect(internalRotation.role(for: .obliques) == .stabilizer)
+        #expect(internalRotation.volumeCredit(for: .gluteMin) == 0.5)
+        #expect(internalRotation.volumeCredit(for: .obliques) == 0)
+        #expect(internalRotation.anatomyNodeChannels["Gluteus_Medius_L"]?.intensity == 1)
+        #expect(internalRotation.anatomyNodeChannels["Tensor_Fascia_Latae_L"]?.intensity == 1)
+
+        let externalRotation = Muscle.involvement(
+            forExerciseNamed: "Therapist-Held Supine Band Hip External Rotation"
+        )
+        #expect(externalRotation.role(for: .obturatorInternusGemelli) == .primary)
+        #expect(externalRotation.role(for: .obturatorExternus) == .secondary)
+        #expect(externalRotation.role(for: .piriformis) == .secondary)
+        #expect(externalRotation.role(for: .quadratusFemoris) == .secondary)
+        #expect(externalRotation.role(for: .obliques) == .stabilizer)
+        #expect(externalRotation.role(for: .medialHamstrings) == .stabilizer)
+        #expect(externalRotation.volumeCredit(for: .obturatorInternusGemelli) == 1)
+        #expect(externalRotation.volumeCredit(for: .obturatorExternus) == 0.5)
+        #expect(externalRotation.volumeCredit(for: .obliques) == 0)
+        #expect(externalRotation.volumeCredit(for: .medialHamstrings) == 0)
+        #expect(externalRotation.anatomyNodeChannels["Obturator_Internus_L"] == nil)
+        #expect(externalRotation.anatomyNodeChannels["Piriformis_L"] == nil)
+        #expect(externalRotation.anatomyNodeChannels["Semitendinosus_L"]?.intensity == 0.2)
+        #expect(externalRotation.anatomyNodeChannels["External_Oblique_L"]?.intensity == 0.2)
     }
 
     @Test func unknownAndObsoleteSnapshotKeysDoNotInventAnatomy() {
