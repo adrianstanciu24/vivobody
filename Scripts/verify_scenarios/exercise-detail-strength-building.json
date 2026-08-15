@@ -1,0 +1,56 @@
+{
+  "name": "exercise-detail-strength-building",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Strength trend building"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Strength trend building"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "Strength trend building for Flat Dumbbell Fly"
+    },
+    {
+      "labelContains": "0 of 4 workouts and 0 of 14 days"
+    }
+  ],
+  "forbidden": []
+}

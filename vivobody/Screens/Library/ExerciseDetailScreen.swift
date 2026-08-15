@@ -204,7 +204,7 @@ struct ExerciseDetailScreen: View {
                 heroFigureSection
                 movementSection
                 instructionsLink
-                statsRow
+                bestHeroCard
                 if showsPerformanceRows {
                     performanceRows
                 }

@@ -4,9 +4,11 @@
 //
 //  The per-exercise estimated-strength instrument used by Exercise
 //  Detail's e1RM progress mode. Before four comparable workouts span
-//  two weeks it renders a bold dormant curve with honest sample/time
-//  progress. Once qualified, it presents the cached StrengthOutlook
-//  verdict and the selected range of rep-adjusted e1RM history.
+//  two weeks it renders a dormant readiness instrument: qualifying
+//  workouts fill slots on a flat baseline while a hairline track fills
+//  toward the required day span — never a fake curve. Once qualified,
+//  it presents the cached StrengthOutlook verdict and the selected
+//  range of rep-adjusted e1RM history.
 //
 
 import Charts
@@ -59,28 +61,12 @@ struct ExerciseStrengthTrendCard: View {
                 }
             }
 
-            Text("Four workouts make a curve")
-                .font(Typography.display)
-                .foregroundStyle(Ink.primary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            ExerciseStrengthCurvePlaceholder(
-                workouts: state.workouts,
-                spanDays: state.spanDays
+            DormantTrendSlots(
+                filledSlots: state.workouts,
+                slotCount: StrengthOutlookBoard.minPoints,
+                spanFraction: Double(state.spanDays)
+                    / Double(StrengthOutlookBoard.minimumSpanDays)
             )
-            .frame(height: 142)
-
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text(exerciseName)
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Text(state.guidance(exerciseName: exerciseName))
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
         }
         .padding(Space.xl)
         .contentCard()
@@ -496,145 +482,5 @@ private struct ExerciseStrengthBuildingState {
 
     func accessibilityLabel(exerciseName: String) -> String {
         "Strength trend building for \(exerciseName). \(workouts) of \(StrengthOutlookBoard.minPoints) workouts and \(spanDays) of \(StrengthOutlookBoard.minimumSpanDays) days. \(guidance(exerciseName: exerciseName))"
-    }
-}
-
-/// A dormant version of the populated e1RM chart. The dashed curve is
-/// future structure, never invented training data. Qualifying workouts
-/// light its four nodes while elapsed span reveals the connecting trace.
-private struct ExerciseStrengthCurvePlaceholder: View {
-    let workouts: Int
-    let spanDays: Int
-
-    private var revealedFraction: CGFloat {
-        let workoutProgress = CGFloat(workouts) / CGFloat(StrengthOutlookBoard.minPoints)
-        let dayProgress = CGFloat(spanDays) / CGFloat(StrengthOutlookBoard.minimumSpanDays)
-        return min(1, max(0, min(workoutProgress, dayProgress)))
-    }
-
-    var body: some View {
-        VStack(spacing: Space.xs) {
-            GeometryReader { proxy in
-                let points = ExerciseStrengthPlaceholderGeometry.points(in: proxy.size)
-
-                ZStack {
-                    VStack(spacing: 0) {
-                        placeholderRule
-                        Spacer()
-                        placeholderRule
-                        Spacer()
-                        placeholderRule
-                    }
-                    .padding(.vertical, 8)
-
-                    ExerciseStrengthPlaceholderPath()
-                        .stroke(
-                            Ink.primary.opacity(0.16),
-                            style: StrokeStyle(
-                                lineWidth: 2,
-                                lineCap: .round,
-                                lineJoin: .round,
-                                dash: [7, 7]
-                            )
-                        )
-
-                    if revealedFraction > 0 {
-                        ExerciseStrengthPlaceholderPath()
-                            .trim(from: 0, to: revealedFraction)
-                            .stroke(
-                                Tint.primary,
-                                style: StrokeStyle(
-                                    lineWidth: 3,
-                                    lineCap: .round,
-                                    lineJoin: .round
-                                )
-                            )
-                            .shadow(color: Tint.primary.opacity(0.55), radius: 8)
-                    }
-
-                    ForEach(points.indices, id: \.self) { index in
-                        let isFilled = index < workouts
-                        Circle()
-                            .fill(isFilled ? Tint.primary : Surface.cardTintBright)
-                            .frame(
-                                width: isFilled ? 13 : 10,
-                                height: isFilled ? 13 : 10
-                            )
-                            .overlay {
-                                Circle()
-                                    .stroke(
-                                        isFilled
-                                            ? Tint.primary.opacity(0.75)
-                                            : Surface.edgeBright,
-                                        lineWidth: 1
-                                    )
-                            }
-                            .shadow(
-                                color: isFilled ? Tint.primary.opacity(0.58) : .clear,
-                                radius: 7
-                            )
-                            .position(points[index])
-                    }
-                }
-            }
-
-            HStack {
-                Text("First estimate")
-                    .panelLegend()
-                Spacer()
-                Text("Trend ready")
-                    .panelLegend()
-            }
-        }
-        .accessibilityHidden(true)
-    }
-
-    private var placeholderRule: some View {
-        Rectangle()
-            .fill(Surface.edge)
-            .frame(height: 0.5)
-    }
-}
-
-private nonisolated enum ExerciseStrengthPlaceholderGeometry {
-    private static let normalizedPoints = [
-        CGPoint(x: 0.02, y: 0.76),
-        CGPoint(x: 0.34, y: 0.53),
-        CGPoint(x: 0.66, y: 0.62),
-        CGPoint(x: 0.98, y: 0.20),
-    ]
-
-    static func points(in size: CGSize) -> [CGPoint] {
-        let horizontalInset: CGFloat = 8
-        let verticalInset: CGFloat = 8
-        let width = max(0, size.width - horizontalInset * 2)
-        let height = max(0, size.height - verticalInset * 2)
-        return normalizedPoints.map { point in
-            CGPoint(
-                x: horizontalInset + point.x * width,
-                y: verticalInset + point.y * height
-            )
-        }
-    }
-}
-
-private struct ExerciseStrengthPlaceholderPath: Shape {
-    func path(in rect: CGRect) -> Path {
-        let points = ExerciseStrengthPlaceholderGeometry.points(in: rect.size)
-        guard let first = points.first else { return Path() }
-
-        var path = Path()
-        path.move(to: first)
-        for index in 1 ..< points.count {
-            let previous = points[index - 1]
-            let next = points[index]
-            let midpointX = (previous.x + next.x) / 2
-            path.addCurve(
-                to: next,
-                control1: CGPoint(x: midpointX, y: previous.y),
-                control2: CGPoint(x: midpointX, y: next.y)
-            )
-        }
-        return path
     }
 }

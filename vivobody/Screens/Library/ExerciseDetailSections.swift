@@ -17,18 +17,10 @@ extension ExerciseDetailScreen {
 
     var hero: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text(item.group.displayName)
-                .font(Typography.sectionLabel)
-                .foregroundStyle(Ink.tertiary)
-
             Text(item.name)
                 .font(Typography.display)
                 .foregroundStyle(Ink.primary)
                 .fixedSize(horizontal: false, vertical: true)
-
-            Text(metaLine)
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
 
             if hasStatusPill {
                 statusPill
@@ -157,38 +149,10 @@ extension ExerciseDetailScreen {
             .overlay(Capsule().stroke(accent ? Tint.primaryDim : Surface.edge, lineWidth: 1))
     }
 
-    /// Equipment alone — the Movement card under the hero figure now
-    /// owns pattern, mechanic, planes, and laterality, so repeating
-    /// the full classification sentence here would double it.
-    var metaLine: String {
-        item.equipment.displayName
-    }
-
     // MARK: - Stats row
 
-    /// Focal-first arrangement: the standing record gets a hero card
-    /// with the huge monospaced numeral (the screen's one editorial
-    /// moment), while Last and Times step back into supporting
-    /// half-width cards. Replaces the old flat three-up band where
-    /// every number competed at the same weight.
-    var statsRow: some View {
-        VStack(spacing: Space.sm) {
-            bestHeroCard
-            HStack(spacing: Space.sm) {
-                statCard(
-                    label: "Last",
-                    value: lastValueString,
-                    detail: lastDetailString
-                )
-                statCard(
-                    label: "Times",
-                    value: countString,
-                    detail: countDetailString
-                )
-            }
-        }
-    }
-
+    /// The standing record gets a hero card with the huge monospaced
+    /// numeral — the screen's one editorial moment.
     var bestHeroCard: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
             Text("Best set")
@@ -262,33 +226,6 @@ extension ExerciseDetailScreen {
         }
         guard let last = lastInstance else { return nil }
         return (last.topReps, last.topDuration, last.sessionDate)
-    }
-
-    func statCard(label: String, value: String, detail: String?) -> some View {
-        VStack(spacing: Space.sm) {
-            Text(value)
-                .font(Typography.statValue)
-                .foregroundStyle(Ink.primary)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-            Text(label)
-                .sectionLabelStyle(Opacity.soft)
-            if let detail {
-                Text(detail)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.quaternary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            } else {
-                Text(" ")
-                    .font(Typography.caption)
-            }
-        }
-        .padding(.vertical, Space.lg)
-        .frame(maxWidth: .infinity)
-        .contentCard()
-        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Performance rows
@@ -425,7 +362,13 @@ extension ExerciseDetailScreen {
                 chart
             }
 
-            if !isStrengthTrend || strengthTrendStat != nil {
+            // Range chips exist only when there is a chart to range.
+            // They stay for a range-narrowed placeholder (widening the
+            // range is the fix) but hide while no data exists at all.
+            let showsRangeChips = isStrengthTrend
+                ? strengthTrendStat != nil
+                : sessionCount >= 2
+            if showsRangeChips {
                 GlassEffectContainer(spacing: 8) {
                     HStack(spacing: 8) {
                         ForEach(TimeRange.allCases) { r in
@@ -467,7 +410,7 @@ extension ExerciseDetailScreen {
         let prIDs = prPointIDs(from: prog)
 
         if plottable.count < 2 {
-            chartPlaceholder
+            chartPlaceholder(plottable: plottable)
         } else {
             Chart {
                 ForEach(plottable) { point in
@@ -580,37 +523,87 @@ extension ExerciseDetailScreen {
         return "\(formatted) \(unit.symbol)"
     }
 
-    private var chartPlaceholder: some View {
-        ZStack {
-            GhostCard(padding: Space.lg) {
-                VStack(spacing: 0) {
-                    ForEach(0 ..< 4, id: \.self) { index in
-                        GhostBar(height: 1, cornerRadius: 0, opacity: 0.06)
-                        if index < 3 { Spacer() }
-                    }
-                }
-                .frame(height: 160)
-            }
-
-            VStack(spacing: Space.sm) {
-                Text("Not enough data yet")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.secondary)
-                Text(chartPlaceholderMessage)
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: 250)
-            }
-            .padding(.horizontal, Space.xl)
-        }
-        .frame(height: 200)
+    /// The dormant stand-in for `chart`: the live chart's card, grid,
+    /// and axis chrome with the point slots still waiting. One logged
+    /// session plots its real point with the baseline running out to
+    /// the slot the next session fills; zero sessions shows the first
+    /// slot breathing on an empty baseline. Text stays at legend level;
+    /// VoiceOver still gets the full guidance sentence.
+    private func chartPlaceholder(plottable: [ExerciseProgressPoint]) -> some View {
+        let inRangePoint = plottable.count == 1 ? plottable[0] : nil
+        let plottedValue = inRangePoint.flatMap { point in
+            chartValue(for: point).map(chartAccessibilityValue)
+        } ?? chartPlaceholderSinglePointValue.map(chartAccessibilityValue)
+        return DormantChartCard(
+            legend: chartPlaceholderLegend(plottableCount: plottable.count),
+            unitLabel: chartPlaceholderUnitLabel,
+            plottedValue: plottedValue,
+            showsNextSlot: sessionCount < 2
+        )
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Progress chart unavailable. \(chartPlaceholderMessage)")
     }
 
+    /// The one real value the dormant chart can plot before a trend
+    /// exists. `progressByExercise` deliberately waits for two sessions,
+    /// so a single session's representative top set comes from the
+    /// `lastInstance` fallback, the same source the estimated-1RM row
+    /// uses. Mirrored from `ExerciseProgressPoint.historyTopLoad`. A
+    /// session the selected range excludes stays unplotted, and Volume
+    /// has no honest single-set value (tonnage needs the full session),
+    /// so both keep the plain dormant baseline.
+    private var chartPlaceholderSinglePointValue: Double? {
+        guard singleSessionInRange, let last = lastInstance else { return nil }
+        if item.trackingMode == .duration {
+            if item.performanceSemanticKind.comparesLoad {
+                guard let effectiveLoad = last.effectiveTopLoad else { return nil }
+                return WeightFormatter.toDisplay(effectiveLoad, unit: unit)
+            }
+            return last.topDuration > 0 ? last.topDuration : nil
+        }
+        guard effectiveChartMetric == .weight else { return nil }
+        guard let load = last.effectiveTopLoad
+            ?? (last.loadMode == .nonComparable ? max(0, last.topWeight) : nil)
+        else { return nil }
+        return WeightFormatter.toDisplay(load, unit: unit)
+    }
+
+    /// True when the exercise's one logged session falls inside the
+    /// selected chart range.
+    private var singleSessionInRange: Bool {
+        guard sessionCount == 1, let last = lastInstance else { return false }
+        return range.cutoff.map { last.sessionDate >= $0 } ?? true
+    }
+
+    private func chartPlaceholderLegend(plottableCount: Int) -> String {
+        switch sessionCount {
+        case 0:
+            "Trend unlocks at 2 sessions"
+        case 1:
+            singleSessionInRange
+                ? "One more session draws the line"
+                : "No sessions in this range"
+        default:
+            plottableCount == 0
+                ? "No sessions in this range"
+                : "Only one session in this range"
+        }
+    }
+
+    /// Ghost unit glyph for the dormant y-axis. Pure duration work is
+    /// left blank: its live axis prints raw seconds, so any unit glyph
+    /// there would invent a scale the real chart does not have.
+    private var chartPlaceholderUnitLabel: String? {
+        if item.trackingMode == .duration,
+           !item.performanceSemanticKind.comparesLoad
+        {
+            return nil
+        }
+        return unit.symbol
+    }
+
     private var chartPlaceholderMessage: String {
-        if sessionCount < 2 {
+        if sessionCount == 0 || (sessionCount == 1 && singleSessionInRange) {
             return "Complete this exercise in another workout to draw its trend."
         }
         return "Choose a longer range or log another session."
@@ -1048,18 +1041,6 @@ extension ExerciseDetailScreen {
 
     // MARK: - Display strings (stats row)
 
-    /// "145 × 8" (in user's unit) when there's history; "—" otherwise.
-    /// Mode-aware via `LastExerciseInstance.metricLabel`.
-    var lastValueString: String {
-        guard let last = lastInstance else { return "—" }
-        return last.metricLabel(unit: unit)
-    }
-
-    var lastDetailString: String? {
-        guard let last = lastInstance else { return nil }
-        return RelativeDate.short(last.sessionDate)
-    }
-
     var bestValueString: String {
         guard let prog = progress else {
             // Progress requires >=2 sessions. If we have 1, surface
@@ -1155,15 +1136,6 @@ extension ExerciseDetailScreen {
         // evidence either. Keep the editor unsaveable until the user
         // enters the value they actually tested.
         return 0
-    }
-
-    var countString: String {
-        sessionCount > 0 ? "\(sessionCount)" : "—"
-    }
-
-    var countDetailString: String? {
-        guard sessionCount > 0 else { return nil }
-        return sessionCount == 1 ? "session" : "sessions"
     }
 
     // MARK: - Chart helpers
