@@ -84,6 +84,17 @@ else
     echo "warning: swiftformat not installed; skipping Swift formatting check (brew install swiftformat)" >&2
 fi
 
+echo "▸ Checking website dead code..."
+KNIP="$ROOT/website/node_modules/.bin/knip"
+if [[ -x "$KNIP" ]]; then
+    if ! (cd "$ROOT/website" && "$KNIP"); then
+        echo "error: knip found unused files, exports, or dependencies; run 'cd website && npm run lint:dead' for details" >&2
+        exit 1
+    fi
+else
+    echo "warning: website dependencies not installed; skipping dead-code check (cd website && npm install)" >&2
+fi
+
 echo "▸ Checking repository knowledge map..."
 /usr/bin/python3 Scripts/check_documentation.py
 

@@ -41,6 +41,20 @@ npm run lint
 The rule set lives in `eslint.config.mjs` and mirrors the Swift conventions
 documented in `../engineering/quality.md`.
 
+## Dead code
+
+[knip](https://knip.dev) detects unused files, exports, and dependencies
+across the site sources. It auto-detects the Astro project (entry
+`astro.config.mjs`, routes in `src/pages/`) and respects `.gitignore` to
+exclude generated output. The checked-in `knip.json` pins the schema:
+
+```bash
+npm run lint:dead
+```
+
+The same check runs in `Scripts/check.sh` and on every commit through the
+`website-knip` pre-commit hook.
+
 ## Refreshing the simulator demo
 
 The landing video is generated from deterministic app fixtures rather than
