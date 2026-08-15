@@ -473,7 +473,11 @@
       "evidenceRefs": [
         "coratella-2023-curl-handgrips"
       ],
-      "movementDefinition": "Stand facing a low cable while holding a straight bar with both forearms supinated. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then lower the bar under control without rotating the forearms."
+      "movementSteps": [
+        "Stand facing a low cable while holding a straight bar with both palms facing up.",
+        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+        "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
+      ]
     },
     {
       "catalogID": "neutral-rope-cable-curl",
@@ -550,7 +554,11 @@
         "coratella-2023-curl-handgrips",
         "kleiber-2015-elbow-flexion-hand-position"
       ],
-      "movementDefinition": "Stand facing a low cable while holding the rope ends with both forearms neutral. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then return under control without rotating the forearms."
+      "movementSteps": [
+        "Stand facing a low cable while holding the rope ends with both palms facing inward.",
+        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+        "Bend your elbows as far as you can, then return under control without turning your forearms."
+      ]
     },
     {
       "catalogID": "pronated-straight-bar-cable-curl",
@@ -627,7 +635,11 @@
         "coratella-2023-curl-handgrips",
         "kleiber-2015-elbow-flexion-hand-position"
       ],
-      "movementDefinition": "Stand facing a low cable while holding a straight bar with both forearms pronated. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then lower the bar under control without rotating the forearms."
+      "movementSteps": [
+        "Stand facing a low cable while holding a straight bar with both palms facing down.",
+        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+        "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
+      ]
     }
   ]
 }

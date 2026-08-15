@@ -448,7 +448,12 @@
       "evidenceRefs": [
         "mccabe-2007-below-90-scapular-exercises"
       ],
-      "movementDefinition": "Stand facing the low anterior band anchor and hold the working arm near 80 degrees of forward flexion with the elbow extended and the band just taut. Draw the scapula posteriorly toward the spine against the band for two seconds, then return for two seconds without bending the elbow, dynamically moving the glenohumeral joint, elevating the shoulder, turning the trunk, or moving the neck. Rest five seconds between repetitions."
+      "movementSteps": [
+        "Stand facing a low band anchor and hold your working arm almost straight ahead with your elbow straight and the band just taut.",
+        "Pull your working shoulder blade back toward your spine against the band for two seconds.",
+        "Return for two seconds without bending your elbow, moving your arm at the shoulder, shrugging, turning your torso, or moving your neck.",
+        "Rest five seconds between repetitions."
+      ]
     }
   ]
 }

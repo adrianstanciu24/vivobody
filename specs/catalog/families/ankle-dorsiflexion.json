@@ -291,7 +291,13 @@
       "evidenceRefs": [
         "kjeldsen-2019-dorsiflexor-training"
       ],
-      "movementDefinition": "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board. Set a physical stop at the working ankle's comfortable dorsiflexion limit. Begin from the self-selected resting position with the sole on the board and hold the selected knee posture still. Dorsiflex the ankle to lift the foot toward the shin until reaching the stop, without deliberately turning the foot inward or outward or extending the toes to create the repetition. Return under control until the sole touches the board, then repeat before changing sides."
+      "movementSteps": [
+        "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board.",
+        "Set a physical stop where the working foot reaches its comfortable lifted position.",
+        "Begin from the self-selected resting position with the sole on the board, and hold the selected knee posture still.",
+        "Lift the front of the foot toward the shin until it reaches the stop, without turning the foot inward or outward or lifting through the toes alone.",
+        "Return under control until the sole touches the board, then repeat before changing sides."
+      ]
     }
   ]
 }

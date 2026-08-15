@@ -445,7 +445,13 @@
         "juan-recio-2022-side-bridge-endurance",
         "cinarli-2025-anti-movement-training"
       ],
-      "movementDefinition": "Lie on one side and support the body on that forearm and elbow with the shoulder and elbow at the reviewed 90-degree angles. Extend both legs, place the top foot in front of the lower foot, place the free hand on the opposite shoulder, and lift into a straight line from shoulder through hip to feet. Hold the spine, pelvis, and hips still for the prescribed duration, then repeat on the other side without adding a hip dip, row, or leg movement."
+      "movementSteps": [
+        "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees.",
+        "Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
+        "Lift your body into a straight line from shoulder through hip to feet.",
+        "Hold your body still for the set time without dipping your hips or moving your arms or legs.",
+        "Repeat the hold on the other side."
+      ]
     }
   ]
 }

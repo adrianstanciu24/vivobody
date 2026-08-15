@@ -1521,7 +1521,7 @@ def validate_exercise(
         "catalogID", "name", "aliases", "equipment", "laterality", "modality",
         "trackingMode", "loadMode", "bodyweightFraction", "defaultWeight", "reps",
         "involvement", "variant", "additionalPrimeActions", "additionalStabilityDemands",
-        "evidenceRefs", "movementDefinition",
+        "evidenceRefs", "movementSteps",
     }
     optional_keys = {
         "groupOverride",
@@ -1746,8 +1746,31 @@ def validate_exercise(
     validate_variant(exercise["variant"], axes, f"{context}.variant")
     validate_exercise_rule_matches(exercise, exercise_rules, context)
     require_known_evidence(exercise["evidenceRefs"], foundation, f"{context}.evidenceRefs")
-    definition = require_non_empty_string(exercise["movementDefinition"], f"{context}.movementDefinition").strip()
-    require(len(definition) >= 24 and definition[0].isupper() and definition[-1] in ".!?", f"{context}.movementDefinition is malformed")
+    movement_steps = require_list(
+        exercise["movementSteps"],
+        f"{context}.movementSteps",
+    )
+    require(
+        2 <= len(movement_steps) <= 10,
+        f"{context}.movementSteps must contain 2...10 steps",
+    )
+    require_unique(movement_steps, f"{context}.movementSteps")
+    for step_index, raw_step in enumerate(movement_steps):
+        step_context = f"{context}.movementSteps[{step_index}]"
+        step = require_non_empty_string(raw_step, step_context).strip()
+        require(
+            step == raw_step
+            and
+            len(step) >= 12
+            and step[0].isupper()
+            and step[-1] in ".!?",
+            f"{step_context} is malformed",
+        )
+        words = re.findall(r"[a-z0-9]+", step.casefold())
+        require(
+            all(left != right for left, right in zip(words, words[1:])),
+            f"{step_context} repeats an adjacent word",
+        )
 
     warnings: list[str] = []
     recommended = family.get("recommended", {})
@@ -2191,7 +2214,7 @@ def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str
                     "bodyweightFraction": exercise["bodyweightFraction"],
                     "modality": exercise["modality"],
                     "loadMode": exercise["loadMode"],
-                    "movementDefinition": exercise["movementDefinition"],
+                    "movementSteps": exercise["movementSteps"],
                     "involvement": exercise["involvement"],
                 }
             )

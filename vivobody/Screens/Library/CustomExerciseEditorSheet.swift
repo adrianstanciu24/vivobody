@@ -362,10 +362,7 @@ struct CustomExerciseEditorSheet: View {
             Text(draft.name)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
-            Text(draft.movementDefinition)
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            ExerciseInstructionSummary(steps: draft.movementSteps)
             Text("Canonical mechanics, modality, load semantics, and muscle roles are locked so this exercise keeps one stable history identity.")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
@@ -980,7 +977,7 @@ struct CustomExerciseEditorSheet: View {
                 planes: draft.planes,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
-                movementDefinition: draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines),
+                movementSteps: draft.movementSteps,
                 muscleInvolvement: draft.muscleInvolvement,
                 isUserCreated: true
             )
@@ -1032,7 +1029,7 @@ struct CustomExerciseEditorSheet: View {
             item.planes = draft.planes
             item.laterality = draft.laterality
             item.aliases = parsedAliases
-            item.movementDefinition = draft.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
+            item.movementSteps = draft.movementSteps
             item.muscleInvolvementSnapshot = draft.muscleInvolvementSnapshot
             if performanceSemanticsChanged {
                 // A measured max belongs to the old load equation. Do
@@ -1272,7 +1269,7 @@ private struct CatalogChoiceSheet<Option: Hashable>: View {
 /// dismissed before Save.
 struct CatalogDraft {
     var name: String
-    var movementDefinition: String
+    var movementSteps: [String]
     var group: MuscleGroup
     var defaultWeight: Double
     var trackingMode: TrackingMode
@@ -1296,7 +1293,7 @@ struct CatalogDraft {
 
     static let empty = CatalogDraft(
         name: "",
-        movementDefinition: "",
+        movementSteps: [],
         group: .chest,
         defaultWeight: 0,
         trackingMode: .reps,
@@ -1316,7 +1313,7 @@ struct CatalogDraft {
 
     init(
         name: String,
-        movementDefinition: String,
+        movementSteps: [String],
         group: MuscleGroup,
         defaultWeight: Double,
         trackingMode: TrackingMode,
@@ -1334,7 +1331,7 @@ struct CatalogDraft {
         aliasesInput: String
     ) {
         self.name = name
-        self.movementDefinition = movementDefinition
+        self.movementSteps = movementSteps
         self.group = group
         self.defaultWeight = defaultWeight
         self.trackingMode = trackingMode
@@ -1354,7 +1351,7 @@ struct CatalogDraft {
 
     init(from item: ExerciseCatalogItem) {
         self.name = item.name
-        self.movementDefinition = item.movementDefinition
+        self.movementSteps = item.movementSteps
         self.group = item.group
         self.defaultWeight = item.defaultWeight
         self.trackingMode = item.trackingMode

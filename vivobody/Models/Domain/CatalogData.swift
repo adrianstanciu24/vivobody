@@ -44,7 +44,7 @@ nonisolated struct CatalogRecord: Decodable {
     let bodyweightFraction: Double
     let modality: ExerciseModality
     let loadMode: ExerciseLoadMode
-    let movementDefinition: String
+    let movementSteps: [String]
     let involvement: [MuscleAssignment]
 
     /// Canonical projections used by persistent synchronization.
@@ -221,28 +221,7 @@ nonisolated enum CatalogData {
                 throw ValidationError.duplicateCatalogID(record.catalogID)
             }
 
-            let definition = record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !definition.isEmpty else {
-                throw ValidationError.emptyMovementDefinition(record.catalogID)
-            }
-            let definitionWords = definition
-                .split(whereSeparator: \.isWhitespace)
-                .map {
-                    String($0)
-                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-                        .lowercased()
-                }
-                .filter { !$0.isEmpty }
-            let repeatsAdjacentWord = zip(definitionWords, definitionWords.dropFirst())
-                .contains { pair in pair.0 == pair.1 }
-            guard
-                definition.count >= 24,
-                definition.first?.isUppercase == true,
-                definition.last == "." || definition.last == "!" || definition.last == "?",
-                !repeatsAdjacentWord
-            else {
-                throw ValidationError.invalidMovementDefinition(record.catalogID)
-            }
+            try validateMovementSteps(record)
             guard record.defaultWeight >= 0, record.reps > 0 else {
                 throw ValidationError.invalidDefaults(record.catalogID)
             }
@@ -359,6 +338,38 @@ nonisolated enum CatalogData {
             .lowercased()
     }
 
+    private static func validateMovementSteps(_ record: CatalogRecord) throws {
+        guard
+            (2 ... 10).contains(record.movementSteps.count),
+            Set(record.movementSteps).count == record.movementSteps.count
+        else {
+            throw ValidationError.invalidMovementSteps(record.catalogID)
+        }
+
+        for step in record.movementSteps {
+            let trimmed = step.trimmingCharacters(in: .whitespacesAndNewlines)
+            let words = trimmed
+                .split(whereSeparator: \.isWhitespace)
+                .map {
+                    String($0)
+                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+                        .lowercased()
+                }
+                .filter { !$0.isEmpty }
+            let repeatsAdjacentWord = zip(words, words.dropFirst())
+                .contains { pair in pair.0 == pair.1 }
+            guard
+                trimmed == step,
+                trimmed.count >= 12,
+                trimmed.first?.isUppercase == true,
+                trimmed.last.map({ ".!?".contains($0) }) == true,
+                !repeatsAdjacentWord
+            else {
+                throw ValidationError.invalidMovementSteps(record.catalogID)
+            }
+        }
+    }
+
     private static func isStableCatalogID(_ value: String) -> Bool {
         guard
             !value.isEmpty,
@@ -382,8 +393,7 @@ nonisolated enum CatalogData {
         case duplicateCatalogID(String)
         case emptyName(String)
         case duplicateName(String)
-        case emptyMovementDefinition(String)
-        case invalidMovementDefinition(String)
+        case invalidMovementSteps(String)
         case invalidDefaults(String)
         case invalidSearchPriority(String)
         case invalidBodyweightFraction(String)
@@ -411,8 +421,7 @@ nonisolated enum CatalogData {
             case let .duplicateCatalogID(id): "duplicate catalogID '\(id)'"
             case let .emptyName(id): "record '\(id)' has an empty name"
             case let .duplicateName(name): "duplicate exercise name '\(name)'"
-            case let .emptyMovementDefinition(id): "record '\(id)' has no movement definition"
-            case let .invalidMovementDefinition(id): "record '\(id)' has a malformed movement definition"
+            case let .invalidMovementSteps(id): "record '\(id)' has malformed movement steps"
             case let .invalidDefaults(id): "record '\(id)' has invalid weight/reps defaults"
             case let .invalidSearchPriority(id): "record '\(id)' has an invalid search priority"
             case let .invalidBodyweightFraction(id): "record '\(id)' has an invalid bodyweight fraction"

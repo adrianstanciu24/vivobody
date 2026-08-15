@@ -495,7 +495,11 @@
         "cabral-2022-pectoralis-regions",
         "coratella-2020-bench-press-variations"
       ],
-      "movementDefinition": "Lie on a flat bench with the eyes beneath the racked bar and the feet planted. Lower the bar under control toward the lower chest, then press it upward through shoulder horizontal adduction and elbow extension."
+      "movementSteps": [
+        "Lie on a flat bench with the eyes beneath the racked bar and the feet planted.",
+        "Lower the bar under control toward the lower chest.",
+        "Press the bar upward until your elbows are straight."
+      ]
     },
     {
       "catalogID": "dumbbell-bench-press",
@@ -560,7 +564,11 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementDefinition": "Lie on a flat bench with one dumbbell beside each side of the chest. Press both dumbbells upward until the elbows are extended, then lower them under control while keeping the forearms beneath the loads."
+      "movementSteps": [
+        "Lie on a flat bench with one dumbbell beside each side of the chest.",
+        "Press both dumbbells upward until your elbows are straight.",
+        "Lower the dumbbells under control while keeping the forearms beneath the loads."
+      ]
     },
     {
       "catalogID": "neutral-grip-dumbbell-bench-press",
@@ -625,7 +633,11 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementDefinition": "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other. Keep the elbows closer to the torso, press to elbow extension, and lower under control without changing the neutral grip."
+      "movementSteps": [
+        "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other.",
+        "Keep your elbows closer to your torso and press until your arms are straight.",
+        "Lower the dumbbells under control while keeping your palms facing each other."
+      ]
     },
     {
       "catalogID": "smith-machine-bench-press",
@@ -687,7 +699,11 @@
         "schick-2010-smith-bench-press",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementDefinition": "Position a flat bench so the Smith bar descends toward the lower chest. Unrack the bar, lower it under control along the rails, then press to elbow extension without allowing the shoulders to lift from the bench."
+      "movementSteps": [
+        "Position a flat bench so the Smith bar descends toward the lower chest.",
+        "Unrack the bar and lower it under control along the rails.",
+        "Press until your elbows are straight without allowing your shoulders to lift from the bench."
+      ]
     },
     {
       "catalogID": "machine-chest-press",
@@ -748,7 +764,11 @@
       "evidenceRefs": [
         "coratella-2020-bench-press-variations"
       ],
-      "movementDefinition": "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path. Keep the torso against the pad, press the handles forward and slightly inward along the converging lever path to elbow extension, then return under control."
+      "movementSteps": [
+        "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path.",
+        "Keep your torso against the pad as you press the handles forward and slightly inward until your elbows are straight.",
+        "Return the handles under control."
+      ]
     },
     {
       "catalogID": "standing-cable-chest-press",
@@ -814,7 +834,11 @@
         "ackland-2008-shoulder-moment-arms",
         "seth-2019-shoulder-work"
       ],
-      "movementDefinition": "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward. Press both handles forward while allowing controlled scapular protraction, then return until the elbows pass slightly behind the torso without rotating the trunk."
+      "movementSteps": [
+        "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward.",
+        "Press both handles forward while allowing your shoulder blades to move naturally around your ribs.",
+        "Return until the elbows pass slightly behind the torso without rotating the trunk."
+      ]
     },
     {
       "catalogID": "single-arm-cable-chest-press",
@@ -880,7 +904,11 @@
         "ackland-2008-shoulder-moment-arms",
         "seth-2019-shoulder-work"
       ],
-      "movementDefinition": "Stand with one chest-height cable handle beside the working-side chest and the palm facing inward. Brace against cable-driven trunk rotation, press through elbow extension and scapular protraction, then return under control before changing sides."
+      "movementSteps": [
+        "Stand with one chest-height cable handle beside the working side of your chest and your palm facing inward.",
+        "Keep your torso from twisting as you press the handle forward and straighten your arm, allowing the working shoulder blade to move naturally.",
+        "Return under control before changing sides."
+      ]
     },
     {
       "catalogID": "single-arm-dumbbell-bench-press",
@@ -953,7 +981,11 @@
         "cabral-2022-pectoralis-regions",
         "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row"
       ],
-      "movementDefinition": "Lie on a flat bench with one dumbbell beside the working-side chest in a neutral grip. Keep the torso square against the unilateral load, press to elbow extension, and lower under control before changing sides."
+      "movementSteps": [
+        "Lie on a flat bench with one dumbbell beside the working side of your chest and your palm facing inward.",
+        "Keep your torso square against the weight on one side as you press until your arm is straight.",
+        "Lower the dumbbell under control before changing sides."
+      ]
     },
     {
       "catalogID": "push-up",
@@ -1019,7 +1051,11 @@
         "suprak-2013-pushup-scapula",
         "ebben-2011-pushup-load"
       ],
-      "movementDefinition": "Begin in a straight-body plank with the hands slightly wider than the shoulders. Lower the chest toward the floor, then press the body away while extending the elbows and allowing the shoulder blades to protract without losing trunk position."
+      "movementSteps": [
+        "Begin in a straight-body plank with the hands slightly wider than the shoulders.",
+        "Lower the chest toward the floor without losing trunk position.",
+        "Press your body away by straightening your elbows and letting your shoulder blades move naturally around your ribs."
+      ]
     },
     {
       "catalogID": "knee-push-up",
@@ -1084,7 +1120,11 @@
         "suprak-2013-pushup-scapula",
         "ebben-2011-pushup-load"
       ],
-      "movementDefinition": "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders. Lower the chest toward the floor, then press away through elbow extension and controlled scapular protraction."
+      "movementSteps": [
+        "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders.",
+        "Lower the chest toward the floor while maintaining that straight line.",
+        "Press away until your elbows are straight, letting your shoulder blades move naturally around your ribs."
+      ]
     },
     {
       "catalogID": "barbell-floor-press",
@@ -1145,7 +1185,11 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementDefinition": "Lie on the floor beneath a safely positioned bar with the knees bent. Lower the bar until the upper arms contact the floor without bouncing, pause briefly, then press upward to elbow extension."
+      "movementSteps": [
+        "Lie on the floor beneath a safely positioned bar with the knees bent.",
+        "Lower the bar until the upper arms contact the floor without bouncing.",
+        "Pause briefly, then press upward until your elbows are straight."
+      ]
     },
     {
       "catalogID": "dumbbell-floor-press",
@@ -1209,7 +1253,11 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementDefinition": "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent. Lower until the upper arms contact the floor without bouncing, then press both dumbbells upward to elbow extension."
+      "movementSteps": [
+        "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent.",
+        "Lower the dumbbells until the upper arms contact the floor without bouncing.",
+        "Press both dumbbells upward until your elbows are straight."
+      ]
     }
   ]
 }

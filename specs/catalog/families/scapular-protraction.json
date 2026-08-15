@@ -353,7 +353,11 @@
         "castelein-2016-serratus-pectoralis-minor-protraction",
         "intelangelo-2022-supine-scapular-punch"
       ],
-      "movementDefinition": "Lie supine with one dumbbell held vertically above the shoulder, the upper arm fixed at 90 degrees of forward elevation, and the elbow extended. Without bending the elbow or flexing the shoulder, reach the load toward the ceiling by moving the scapula anterolaterally around the thorax, then return under control without adding a press."
+      "movementSteps": [
+        "Lie on your back with one dumbbell held vertically above your shoulder, your upper arm pointing straight up, and your elbow straight.",
+        "Reach the dumbbell toward the ceiling by letting your shoulder blade slide forward around your ribs without bending your elbow or lifting the arm farther.",
+        "Return under control without adding a press."
+      ]
     }
   ]
 }

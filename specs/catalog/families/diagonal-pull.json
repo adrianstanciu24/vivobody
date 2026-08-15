@@ -497,7 +497,14 @@
       "evidenceRefs": [
         "lorenzetti-2017-pulling-exercise-kinematics"
       ],
-      "movementDefinition": "Sit on a flat bench facing the reviewed high cable with both feet on the floor and no thigh restraint. Take a wider-than-shoulder-width pronated grip on the straight bar and begin with the elbows extended and the arms on the source-prescribed 45-degree line. Keep the head straight and the core engaged, then pull the bar to touch the chest by extending the shoulders and flexing the elbows. Allow the scapulae to move naturally without prescribing retraction or rotation as a separate action, and return slowly to the same 45-degree start without adding shoulder adduction or axial rotation, leaning to propel the bar, or using the lower body. The source tested both 10% and 25% of bodyweight; replace the representative 35 lb/15 kg seed with the actual selected cable load."
+      "movementSteps": [
+        "Sit on a flat bench facing a high cable with both feet on the floor and no thigh restraint.",
+        "Hold the straight bar wider than shoulder width with your palms facing forward, straighten your elbows, and point your arms upward at about 45 degrees.",
+        "Keep your head straight and your core tight as you pull the bar to your chest, driving your elbows down and back.",
+        "Allow your shoulder blades to move naturally instead of deliberately pinching or rotating them.",
+        "Return slowly to the same 45-degree start without pulling your arms across your body, twisting, leaning to propel the bar, or using your lower body.",
+        "Log the cable weight you actually use rather than the suggested starting weight of 35 lb or 15 kg; this exercise was tested with weights equal to 10% and 25% of body weight."
+      ]
     }
   ]
 }

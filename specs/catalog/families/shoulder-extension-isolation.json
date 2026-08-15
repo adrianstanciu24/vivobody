@@ -417,7 +417,12 @@
         "marchetti-2011-barbell-pullover",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementDefinition": "Lie supine along a flat bench and hold a straight bar over the chest with a shoulder-width pronated grip and nearly extended elbows. Keeping the elbow angle fixed, lower the bar behind the head until the upper arms reach the reviewed overhead zone, then extend the shoulders to return the bar over the chest without turning the repetition into an elbow-extension movement."
+      "movementSteps": [
+        "Lie on your back along a flat bench and hold a straight bar over your chest with your palms facing forward and your elbows nearly straight.",
+        "Keep your elbow angle fixed as you lower the bar behind your head as far as you comfortably can.",
+        "Bring your arms back over your chest while keeping the same elbow angle.",
+        "Do not turn the movement into a triceps exercise by bending and straightening your elbows."
+      ]
     },
     {
       "catalogID": "shoulder-width-straight-arm-cable-pulldown",
@@ -495,7 +500,12 @@
         "holzbaur-2005-upper-extremity",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementDefinition": "Stand facing a high cable and hold a straight bar at shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows."
+      "movementSteps": [
+        "Stand facing a high cable and hold a straight bar at shoulder width with your palms facing down and your elbows nearly straight.",
+        "Begin with your hands overhead and brace your torso.",
+        "Keep your elbow angle fixed as you bring the bar down to your thighs.",
+        "Return overhead under control without rowing or bending your elbows."
+      ]
     },
     {
       "catalogID": "wide-grip-straight-arm-cable-pulldown",
@@ -573,7 +583,12 @@
         "holzbaur-2005-upper-extremity",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementDefinition": "Stand facing a high cable and hold a straight bar wider than shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows."
+      "movementSteps": [
+        "Stand facing a high cable and hold a straight bar wider than shoulder width with your palms facing down and your elbows nearly straight.",
+        "Begin with your hands overhead and brace your torso.",
+        "Keep your elbow angle fixed as you bring the bar down to your thighs.",
+        "Return overhead under control without rowing or bending your elbows."
+      ]
     }
   ]
 }

@@ -800,7 +800,13 @@
         "padovan-2024-standing-overhead-press",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Stand with the feet about hip-width apart and hold the bar at the upper chest with a pronated grip just outside shoulder width. Brace the trunk without leaning back, keep the hips and knees motionless, and press the bar overhead as the scapulae rotate upward. Move the head only enough to clear the bar, finish with the elbows extended and the bar balanced over the midfoot, then lower under control to the upper chest."
+      "movementSteps": [
+        "Stand with your feet about hip-width apart and hold the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "Brace your trunk without leaning back and keep your hips and knees motionless.",
+        "Press the bar overhead, letting your shoulder blades move naturally, and move your head only enough to clear the bar.",
+        "Finish with your elbows straight and the bar balanced over the middle of your feet.",
+        "Lower the bar under control to your upper chest."
+      ]
     },
     {
       "catalogID": "standing-dumbbell-overhead-press",
@@ -895,7 +901,13 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Brace the trunk and keep the hips and knees motionless. Press both dumbbells overhead along independent front-scapular paths without rotating the grips or leaning back, allowing the scapulae to rotate upward. Finish with the elbows extended and the loads balanced over the body, then lower under control to shoulder height."
+      "movementSteps": [
+        "Stand with your feet about hip-width apart and hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+        "Brace your trunk and keep your hips and knees motionless.",
+        "Press both dumbbells overhead along slightly forward paths without turning your hands or leaning back, and let your shoulder blades move naturally.",
+        "Finish with your elbows straight and the weights balanced over your body.",
+        "Lower the dumbbells under control to shoulder height."
+      ]
     },
     {
       "catalogID": "single-arm-standing-dumbbell-overhead-press",
@@ -991,7 +1003,13 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at the working-side shoulder with the palm facing forward and the elbow slightly forward of the torso. Brace the trunk, keep the pelvis level and the torso facing forward, and keep the hips and knees motionless. Press the dumbbell overhead along a front-scapular path without rotating the grip, leaning sideways or back, or twisting the torso, allowing the working scapula to rotate upward. Finish with the elbow extended and the load balanced over the body, then lower under control before changing sides."
+      "movementSteps": [
+        "Stand with your feet about hip-width apart and hold one dumbbell at the shoulder you are working, with your palm facing forward and your elbow slightly forward.",
+        "Brace your torso, keep your hips level and facing forward, and do not bend your hips or knees.",
+        "Press the dumbbell overhead on a slightly forward path without turning your hand, leaning sideways or back, or twisting, and let your shoulder blade move naturally.",
+        "Finish with your elbow straight and the weight balanced over your body.",
+        "Lower the dumbbell under control before changing sides."
+      ]
     },
     {
       "catalogID": "seated-dumbbell-overhead-press",
@@ -1072,7 +1090,13 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Set the bench backrest to about 85 degrees and sit with the pelvis and upper torso supported and the feet planted. Hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Press both dumbbells overhead along independent front-scapular paths without rotating the grips, pushing through the legs, or lifting the torso from the bench. Allow the scapulae to rotate upward even though the backrest limits their translation, finish with the elbows extended, and lower under control to shoulder height."
+      "movementSteps": [
+        "Set the bench backrest to about 85 degrees and sit with your pelvis and upper torso supported and your feet planted.",
+        "Hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+        "Press both dumbbells overhead along slightly forward paths without turning your hands, pushing through your legs, or lifting your torso from the bench.",
+        "Let your shoulder blades move as much as the backrest allows, and finish with your elbows straight.",
+        "Lower the dumbbells under control to shoulder height."
+      ]
     },
     {
       "catalogID": "seated-barbell-overhead-press",
@@ -1152,7 +1176,13 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Set a bench backrest to about 80 degrees inside a rack and sit with the pelvis and upper torso supported and the feet planted. Unrack the bar at the upper chest with a pronated grip just outside shoulder width. Press the bar overhead in front of the head without pushing through the legs or lifting the torso from the bench, allowing the scapulae to rotate upward. Finish with the elbows extended, then lower the bar under control to the upper chest."
+      "movementSteps": [
+        "Set a bench backrest to about 80 degrees inside a rack and sit with your pelvis and upper torso supported and your feet planted.",
+        "Unrack the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "Press the bar overhead in front of your head without pushing through your legs or lifting your torso from the bench, and let your shoulder blades move naturally.",
+        "Finish with your elbows straight.",
+        "Lower the bar under control to your upper chest."
+      ]
     },
     {
       "catalogID": "unsupported-seated-dumbbell-overhead-press",
@@ -1245,7 +1275,13 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementDefinition": "Sit upright on a flat bench without a backrest, plant the feet, and hold one dumbbell at each shoulder with the palms facing forward. Brace the trunk so the ribs stay stacked over the pelvis, then press both dumbbells overhead along independent front-scapular paths without leaning back, pushing through the legs, or rotating the grips. Finish with the elbows extended and lower under control to shoulder height."
+      "movementSteps": [
+        "Sit upright on a flat bench without a backrest, plant your feet, and hold one dumbbell at each shoulder with your palms facing forward.",
+        "Brace your trunk so your ribs stay stacked over your pelvis.",
+        "Press both dumbbells overhead along slightly forward paths without leaning back, pushing through your legs, or turning your hands.",
+        "Finish with your elbows straight.",
+        "Lower the dumbbells under control to shoulder height."
+      ]
     },
     {
       "catalogID": "single-arm-seated-dumbbell-overhead-press",
@@ -1339,7 +1375,13 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2012-shoulder-press-core"
       ],
-      "movementDefinition": "Set the bench backrest to about 75 degrees and sit with the upper torso and pelvis supported and the feet planted. Hold one dumbbell at the working-side shoulder with the palm facing inward. Press it overhead along a front-scapular path without rotating the grip, pushing through the legs, twisting, or leaning sideways, while keeping both sides of the pelvis in contact with the bench. Finish with the elbow extended, lower under control, and repeat on the other side."
+      "movementSteps": [
+        "Set the bench backrest to about 75 degrees and sit with your upper torso and pelvis supported and your feet planted.",
+        "Hold one dumbbell at the shoulder you are working with your palm facing inward.",
+        "Press the dumbbell overhead on a slightly forward path without turning your hand, pushing through your legs, twisting, or leaning sideways, while keeping both hips on the bench.",
+        "Finish with your elbow straight and lower under control.",
+        "Repeat on the other side."
+      ]
     },
     {
       "catalogID": "single-arm-standing-kettlebell-overhead-press",
@@ -1434,7 +1476,13 @@
         "ichihashi-2014-military-press-kinematics",
         "padovan-2024-standing-overhead-press"
       ],
-      "movementDefinition": "Stand with the feet about shoulder-width apart and rack one kettlebell at the working-side shoulder with a neutral wrist and the bell resting in the standard bell-down position against the forearm. Brace the trunk and keep the hips and knees motionless. Press the kettlebell overhead along a front-scapular path without letting it rotate bottom-up, leaning, or twisting. Finish with the elbow extended and the forearm vertical, then lower under control to the rack before changing sides."
+      "movementSteps": [
+        "Stand with your feet about shoulder-width apart and hold one kettlebell at your working shoulder with your wrist straight and the bell resting against your forearm.",
+        "Brace your trunk and keep your hips and knees motionless.",
+        "Press the kettlebell overhead on a slightly forward path without letting it flip upside down, leaning, or twisting.",
+        "Finish with your elbow straight and your forearm vertical.",
+        "Lower the kettlebell under control to the rack before changing sides."
+      ]
     },
     {
       "catalogID": "seated-smith-machine-overhead-press",
@@ -1514,7 +1562,13 @@
         "balsalobre-fernandez-2018-smith-military-press",
         "ichihashi-2014-military-press-kinematics"
       ],
-      "movementDefinition": "Place an upright bench under the Smith bar so the rails keep the bar in front of the head, set the backrest to about 85 degrees, and sit with the torso supported and feet planted. Unhook the bar at the upper chest with a pronated grip just outside shoulder width. Press along the rails without pushing through the legs or lifting from the bench, finish with the elbows extended, then lower under control and rehook securely."
+      "movementSteps": [
+        "Place an upright bench under the Smith bar so the rails keep the bar in front of your head, set the backrest to about 85 degrees, and sit with your torso supported and your feet planted.",
+        "Unhook the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "Press along the rails without pushing through your legs or lifting from the bench.",
+        "Finish with your elbows straight.",
+        "Lower the bar under control and rehook it securely."
+      ]
     },
     {
       "catalogID": "machine-shoulder-press",
@@ -1594,7 +1648,12 @@
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics"
       ],
-      "movementDefinition": "Adjust the seat so the neutral handles begin near shoulder height and sit with the pelvis and upper torso against the machine pad and the feet planted. Press both lever arms overhead along their converging front paths without pushing through the legs or lifting from the pad. Finish with the elbows extended without forcing the shoulders forward, then return the handles under control."
+      "movementSteps": [
+        "Adjust the seat so the handles begin near shoulder height with your palms facing each other, then sit against the machine pad with your feet planted.",
+        "Press both lever arms overhead along their converging front paths without pushing through your legs or lifting from the pad.",
+        "Finish with your elbows straight without forcing your shoulders forward.",
+        "Return the handles under control."
+      ]
     },
     {
       "catalogID": "wall-supported-strict-handstand-push-up",
@@ -1668,7 +1727,14 @@
         "kinoshita-2022-progressive-handstand-emg",
         "li-2026-wall-handstand-push-up-test"
       ],
-      "movementDefinition": "Place the inversion stand ten centimeters from a wall with its hand supports twenty centimeters wider than shoulder breadth and a fifteen-centimeter sponge centered beneath the head. Kick to inversion and let only the feet touch the wall gently. Lower until the head contacts the sponge, then press to full elbow and shoulder extension without collapsing at the waist, bending the knees, kipping, or using the wall for propulsion. The reviewed test counts maximum valid repetitions in forty seconds; five reps is only the catalog's editable starting seed. The source did not measure joint, scapular, or muscle actions, so this record transparently inherits the reviewed vertical-press mechanics and role policy rather than claiming direct dynamic action evidence."
+      "movementSteps": [
+        "Place the handstand supports 10 cm from a wall and 20 cm wider than your shoulders, with a 15 cm sponge centered beneath your head.",
+        "Kick up into a handstand and let only your feet touch the wall gently.",
+        "Lower until your head contacts the sponge.",
+        "Press until your arms are straight overhead without folding at your waist, bending your knees, swinging for momentum, or pushing off the wall.",
+        "Perform as many controlled repetitions as you can in 40 seconds; five repetitions is only a suggested starting target.",
+        "Count only repetitions that follow the setup and movement rules above."
+      ]
     }
   ]
 }

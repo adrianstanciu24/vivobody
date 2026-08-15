@@ -338,7 +338,12 @@
         "arnold-2010-lower-limb",
         "okubo-2021-end-range-active-straight-leg-raise"
       ],
-      "movementDefinition": "Lie supine with the torso and pelvis supported on a table and both legs extended. Keep the nonworking leg supported and the working knee straight. Raise the working leg by flexing the hip until reaching your active end range, then lower it under control. Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion."
+      "movementSteps": [
+        "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
+        "Keep the other leg supported and the working knee straight.",
+        "Raise the working leg as far as you can while keeping the knee straight, then lower it under control.",
+        "Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion."
+      ]
     }
   ]
 }

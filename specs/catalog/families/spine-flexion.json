@@ -260,7 +260,12 @@
       "evidenceRefs": [
         "ha-2020-curl-up-angle"
       ],
-      "movementDefinition": "Lie supine in a stable lower-body position with the pelvis held still. Begin with the trunk resting on the floor, then flex the spine to curl the head, shoulders, and upper trunk through the reviewed 30-degree range without using hip motion. Return to the supine start under control without turning the repetition into a full sit-up."
+      "movementSteps": [
+        "Lie on your back in a stable position with your hips held still.",
+        "Begin with your torso resting on the floor.",
+        "Curl your head, shoulders, and upper back about 30 degrees off the floor without lifting from your hips.",
+        "Lower to the starting position under control without turning the repetition into a full sit-up."
+      ]
     }
   ]
 }

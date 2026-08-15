@@ -531,7 +531,13 @@
       "evidenceRefs": [
         "lorenzetti-2017-pulling-exercise-kinematics"
       ],
-      "movementDefinition": "Stand at the reviewed low cable with the feet shoulder-width apart and the knees slightly flexed. Hold the straight bar with both hands in the source-shown overhand spacing, keep the torso upright, and engage the core. Pull the bar vertically while flexing the elbows and elevating the upper arms through the mixed flexion-abduction corridor, keeping the elbows slightly above the hands. Stop when the elbows reach shoulder height, then return slowly under control without shrugging as a separate action, retracting the scapulae, rotating the upper arms deliberately, leaning the torso, or adding lower-body drive."
+      "movementSteps": [
+        "Stand at a low cable with your feet shoulder-width apart and your knees slightly bent.",
+        "Hold the straight bar with the overhand hand spacing shown for the exercise, keep your torso upright, and brace your core.",
+        "Pull the bar straight up, bending your elbows and raising your upper arms out and slightly forward.",
+        "Keep your elbows slightly above your hands and stop when they reach shoulder height.",
+        "Lower the bar slowly without adding a shrug, pinching your shoulder blades together, turning your upper arms, leaning, or pushing with your legs."
+      ]
     }
   ]
 }

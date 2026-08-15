@@ -453,7 +453,14 @@
         "ellestad-2024-loaded-carry-muscle-activation",
         "mcgill-2013-one-two-hand-carry"
       ],
-      "movementDefinition": "Log the weight of the single dumbbell. Hold it at one side with the upper arm at the side, neutral humeral and forearm rotation, the palm facing the thigh, no straps or hooks, and the elbow held extended beside the torso. Walk continuously forward on a level surface for the prescribed duration while resisting the dumbbell's side-bending tendency without forcing the spine motionless. Log the other side as well; do not turn, march in place, walk backward, or lean deliberately to create repetitions."
+      "movementSteps": [
+        "Log the weight of the single dumbbell.",
+        "Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight.",
+        "Use no straps or hooks.",
+        "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
+        "Log the other side as well.",
+        "Do not turn, march in place, walk backward, or lean deliberately to create repetitions."
+      ]
     }
   ]
 }

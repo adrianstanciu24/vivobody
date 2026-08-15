@@ -6655,7 +6655,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "aliases",
                                 "variant",
                                 "evidenceRefs",
-                                "movementDefinition",
+                                "movementSteps",
                             )
                         }
                         for exercise in family["exercises"]
@@ -6670,7 +6670,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "49c4cd53963a26b15f1991cfb4024e3170f42534307b3e44021ea9eb269cbc11",
+            "8fedc12bfcf5ac05ac8fe84d3bf6989c2c846e127b4f9c7de83ad4d0daf3fc2d",
         )
 
     def test_batch2_forbids_every_other_known_prime_action(self) -> None:
@@ -7581,7 +7581,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "aliases",
                                 "variant",
                                 "evidenceRefs",
-                                "movementDefinition",
+                                "movementSteps",
                             )
                         }
                         for exercise in family["exercises"]
@@ -7596,7 +7596,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "da07e9c428c77ed6eddd5ede6456c88120d4a0ef76211a83e28db49562a1461e",
+            "e1b4e498589ab7b813ca7d74735f15dd1988c777028015aef821cb69f9324062",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -8756,7 +8756,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertTrue(exercise["movementDefinition"])
+                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
         self.assertEqual(actual, expected)
 
     def test_batch4_variant_axis_contracts_are_exact_and_fully_covered(
@@ -9711,7 +9711,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertTrue(exercise["movementDefinition"])
+                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
         self.assertEqual(actual, expected)
 
     def test_batch5_variant_axes_are_exact_and_rosters_cover_values(
@@ -10924,7 +10924,7 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertTrue(exercise["movementDefinition"])
+                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
         self.assertEqual(actual, expected)
 
     def test_late_lower_body_negative_topology_boundaries_are_pinned(
@@ -11002,9 +11002,9 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertEqual(hinge_exercise["defaultWeight"], 45)
         self.assertEqual(hinge_exercise["defaultWeightKg"], 20)
         self.assertIn(
-            "Replace the representative 45-pound or 20-kilogram seed with "
-            "external barbell load equal to 25 percent of your body mass",
-            hinge_exercise["movementDefinition"],
+            "Load the bar with 25 percent of your body weight; use 45 lb or "
+            "20 kg only if that matches your calculated weight",
+            " ".join(hinge_exercise["movementSteps"]),
         )
         hinge_names = " ".join(
             [hinge_exercise["name"], *hinge_exercise["aliases"]]
@@ -11188,8 +11188,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     source_exercises[catalog_id]["involvement"],
                 )
                 self.assertEqual(
-                    record["movementDefinition"],
-                    source_exercises[catalog_id]["movementDefinition"],
+                    record["movementSteps"],
+                    source_exercises[catalog_id]["movementSteps"],
                 )
                 self.assertNotIn("variant", record)
 
@@ -11312,15 +11312,15 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            exercise["movementDefinition"],
+            " ".join(exercise["movementSteps"]),
             "Sit comfortably with the working foot resting on a board beneath "
-            "an elastic band affixed to that board. Set a physical stop at the "
-            "working ankle's comfortable dorsiflexion limit. Begin from the "
-            "self-selected resting position with the sole on the board and hold "
-            "the selected knee posture still. Dorsiflex the ankle to lift the "
-            "foot toward the shin until reaching the stop, without deliberately "
-            "turning the foot inward or outward or extending the toes to create "
-            "the repetition. Return under control until the sole touches the "
+            "an elastic band affixed to that board. Set a physical stop where the "
+            "working foot reaches its comfortable lifted position. Begin from the "
+            "self-selected resting position with the sole on the board, and hold "
+            "the selected knee posture still. Lift the front of the foot toward "
+            "the shin until it reaches the stop, without turning the foot inward "
+            "or outward or lifting through the toes alone. Return under control "
+            "until the sole touches the "
             "board, then repeat before changing sides.",
         )
 
@@ -11577,16 +11577,16 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            abduction["movementDefinition"],
+            " ".join(abduction["movementSteps"]),
             "Lie on one side on a treatment table with the working leg on top, "
-            "the hip neutral in flexion-extension and axial rotation, the lower "
-            "leg flexed for stability, and a cuff weight secured just above the "
-            "working ankle. Place a pressure-biofeedback unit beneath the trunk, "
+            "both hips facing straight ahead, the lower leg bent for stability, "
+            "and a cuff weight secured just above the working ankle. Place a "
+            "pressure-biofeedback unit beneath your torso, "
             "inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a "
-            "horizontal contact band marks 35 degrees of abduction. Keep the "
+            "horizontal band marks the 35-degree stopping point. Keep the "
             "pelvis and spine still, the working knee straight, and the toes "
-            "pointing forward. Raise the straight top leg in the frontal plane "
-            "until it contacts the endpoint band, then lower it under control "
+            "pointing forward. Raise the straight top leg directly out to the side "
+            "until it contacts the stopping band. Lower the leg under control "
             "without rolling the pelvis or turning the toes upward.",
         )
         self.assertNotIn(
@@ -11633,17 +11633,16 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            adduction["movementDefinition"],
-            "Stand upright on the support leg while holding a stable external "
-            "support with both hands and secure an elastic band around the "
-            "working ankle from the side. Place the straight working leg in "
-            "maximal comfortable abduction with tension already in the band and "
-            "hold it at the same slight posterior hip posture used at the "
-            "endpoint. Keep the pelvis still, the working knee straight, and "
-            "both sets of toes pointing forward as you draw the working thigh "
-            "medially without swinging it farther backward, finishing one "
-            "foot-width lateral to and about half a foot-length behind the stance "
-            "foot. Return under control along the same strictly frontal path, "
+            " ".join(adduction["movementSteps"]),
+            "Stand upright on the support leg, hold a stable external "
+            "support with both hands, and secure an elastic band around the "
+            "working ankle from the side. Move the straight working leg as far "
+            "out to the side as is comfortable, keeping tension in the band and "
+            "the leg slightly behind you. Keep the pelvis still, the working "
+            "knee straight, and both sets of toes pointing forward. Pull the working leg "
+            "inward without swinging it farther backward, stopping about one "
+            "foot-width to the side and half a foot-length behind the stance "
+            "foot. Return under control along the same side-to-side path, "
             "then repeat before changing sides.",
         )
         for exercise in (abduction, adduction):
@@ -13347,96 +13346,74 @@ class CatalogFoundationTests(unittest.TestCase):
                     actual, expected_opponents[exercise["catalogID"]]
                 )
 
-    def test_batch7_movement_definitions_pin_reviewed_boundaries(self) -> None:
+    def test_batch7_movement_steps_pin_reviewed_boundaries(self) -> None:
         expected = {
-            "30-degree-curl-up": (
-                "Lie supine in a stable lower-body position with the pelvis held "
-                "still. Begin with the trunk resting on the floor, then flex the "
-                "spine to curl the head, shoulders, and upper trunk through the "
-                "reviewed 30-degree range without using hip motion. Return to the "
-                "supine start under control without turning the repetition into a "
-                "full sit-up."
-            ),
-            "medx-isolated-lumbar-extension": (
-                "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. "
-                "Tighten the thigh restraint, secure the distal-femur restraint just above the patella, "
-                "tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. "
-                "Apply extension force only to the posterior upper-torso resistance pad. From the machine's "
-                "72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree "
-                "full-extension reference, hold one second, then return for at least four seconds without "
-                "lifting or rotating the pelvis or driving with the hips."
-            ),
-            "fixed-leg-side-lying-lateral-trunk-lift": (
-                "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, "
-                "and have the crossed upper foot fixed securely without assuming a particular device. As a "
-                "catalog coaching standard beyond the measured source, hold the pelvis and hip still rather "
-                "than driving the lift from the hip. Laterally flex the spine to lift the upper body to the "
-                "30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. "
-                "Return to the side-lying start under control, then complete the same separately logged work "
-                "in the opposite lateral-flexion direction."
-            ),
-            "seated-machine-torso-twist": (
-                "Sit in a horizontal torso-twist machine with the feet behind the "
-                "ankle rollers, the shoulder pads in contact, "
-                "and both hands holding the separate handles at shoulder height. "
-                "Hold the pelvis against the seat and keep the hips and legs still. "
-                "For one logged direction, begin rotated left, drive the shoulder "
-                "pads from left to right in a controlled motion, stop at the largest "
-                "comfortable torso-rotation endpoint, and return to the left-rotated "
-                "start under control. Then reset the machine and perform the same "
-                "prescribed work from right to left as a separately logged direction. "
-                "The right-to-left direction is a mirrored training adaptation; do "
-                "not alternate directions within a repetition."
-            ),
-            "plank": (
-                "Set both forearms on a stable floor with the elbows below the "
-                "shoulders and the upper arms perpendicular to the floor, then "
-                "support the lower body on both feet. Hold the spine, pelvis, hips, "
-                "and knees in one neutral straight line for the prescribed duration "
-                "while resisting the tendency of the lower back to sag; do not turn "
-                "the hold into a crunch, hip lift, reach, or limb movement."
-            ),
-            "side-plank": (
-                "Lie on one side and support the body on that forearm and elbow with "
-                "the shoulder and elbow at the reviewed 90-degree angles. Extend "
-                "both legs, place the top foot in front of the lower foot, place the "
-                "free hand on the opposite shoulder, and lift into a straight line "
-                "from shoulder through hip to feet. Hold the spine, pelvis, and hips "
-                "still for the prescribed duration, then repeat on the other side "
-                "without adding a hip dip, row, or leg movement."
-            ),
-            "feet-together-band-pallof-hold": (
-                "Attach a band to a side pulley so its line of pull is horizontal, "
-                "stand side-on with the feet together on a stable floor, and hold "
-                "the handle in both hands at shoulder height. Extend both elbows so "
-                "the arms are perpendicular to the torso, choose a tension you can "
-                "control, and hold for the prescribed duration without letting the "
-                "spine or pelvis rotate. Repeat with the anchor on the other side; "
-                "do not turn the hold into a repeated press."
-            ),
-            "two-dumbbell-farmer-carry": (
-                "Log the weight of one dumbbell, not the combined pair. Hold one "
-                "equal-weight dumbbell in each hand with the upper arms at the "
-                "sides, neutral humeral and forearm rotation, palms facing the "
-                "thighs, no straps or hooks, and the elbows held extended beside "
-                "the torso. Walk continuously forward on a level surface for the "
-                "prescribed duration while keeping the shoulders controlled and "
-                "the trunk upright without turning, marching in place, or "
-                "converting the carry into another exercise."
-            ),
-            "single-dumbbell-suitcase-carry": (
-                "Log the weight of the single dumbbell. Hold it at one side with "
-                "the upper arm at the side, neutral humeral and forearm rotation, "
-                "the palm facing the thigh, no straps or hooks, and the elbow held "
-                "extended beside the torso. Walk continuously forward on a level "
-                "surface for the prescribed duration while resisting the dumbbell's "
-                "side-bending tendency without forcing the spine motionless. Log "
-                "the other side as well; do not turn, march in place, walk backward, "
-                "or lean deliberately to create repetitions."
-            ),
+            "30-degree-curl-up": [
+                "Lie on your back in a stable position with your hips held still.",
+                "Begin with your torso resting on the floor.",
+                "Curl your head, shoulders, and upper back about 30 degrees off the floor without lifting from your hips.",
+                "Lower to the starting position under control without turning the repetition into a full sit-up.",
+            ],
+            "medx-isolated-lumbar-extension": [
+                "Sit in the MedX lower-back machine with your thighs at a right angle to the seat.",
+                "Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
+                "Keep your upper hips against the rolling restraint and push only against the pad behind your upper torso.",
+                "Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
+                "Hold the upright position for one second.",
+                "Return for at least four seconds without lifting or turning your hips or pushing with your legs.",
+            ],
+            "fixed-leg-side-lying-lateral-trunk-lift": [
+                "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
+                "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
+                "Lift your upper body sideways until it is about 30 degrees off the floor.",
+                "Lower to the starting position under control.",
+                "Repeat on the other side and log it separately.",
+            ],
+            "seated-machine-torso-twist": [
+                "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
+                "Hold the pelvis against the seat and keep the hips and legs still.",
+                "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
+                "Turn as far as feels comfortable, then return to the left-facing start under control.",
+                "Reset the machine, repeat the same movement from right to left, and log that direction separately.",
+                "Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition.",
+            ],
+            "plank": [
+                "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
+                "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
+                "Hold this position for the set time without letting your lower back sag.",
+                "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement.",
+            ],
+            "side-plank": [
+                "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees.",
+                "Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
+                "Lift your body into a straight line from shoulder through hip to feet.",
+                "Hold your body still for the set time without dipping your hips or moving your arms or legs.",
+                "Repeat the hold on the other side.",
+            ],
+            "feet-together-band-pallof-hold": [
+                "Attach a band to a side pulley so its line of pull is horizontal, then stand side-on with the feet together on a stable floor and hold the handle in both hands at shoulder height.",
+                "Straighten both elbows until your arms point directly forward, and choose a tension you can control.",
+                "Hold for the set time without letting your torso or hips turn, and do not repeatedly press your arms in and out.",
+                "Repeat with the anchor on the other side.",
+            ],
+            "two-dumbbell-farmer-carry": [
+                "Log the weight of one dumbbell, not the combined pair.",
+                "Hold one equal-weight dumbbell in each hand without straps or hooks.",
+                "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
+                "Walk continuously forward on a level surface for the set time while keeping your shoulders controlled and your torso upright.",
+                "Avoid turning, marching in place, or converting the carry into another exercise.",
+            ],
+            "single-dumbbell-suitcase-carry": [
+                "Log the weight of the single dumbbell.",
+                "Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight.",
+                "Use no straps or hooks.",
+                "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
+                "Log the other side as well.",
+                "Do not turn, march in place, walk backward, or lean deliberately to create repetitions.",
+            ],
         }
         actual = {
-            exercise["catalogID"]: exercise["movementDefinition"]
+            exercise["catalogID"]: exercise["movementSteps"]
             for family in self.batch7_families.values()
             for exercise in family["exercises"]
         }
@@ -14464,12 +14441,12 @@ class CatalogFoundationTests(unittest.TestCase):
         lee = by_id["bilateral-30-degree-stabilization-shrug"]
         self.assertEqual(lee["reps"], 2)
         self.assertEqual(lee["variant"]["topHoldSeconds"], 5)
-        self.assertIn("hold the top position for five seconds", lee["movementDefinition"])
-        self.assertIn("Perform two source-prescribed trials", lee["movementDefinition"])
+        instructions = " ".join(lee["movementSteps"])
+        self.assertIn("hold the top position for five seconds", instructions)
+        self.assertIn("Perform two attempts", instructions)
         self.assertIn(
-            "measured immediately after this condition, not a continuously "
-            "tracked dynamic angle",
-            lee["movementDefinition"],
+            "shoulder-blade angle measured immediately after each hold",
+            instructions,
         )
         lee_muscles = set(expected_roles["bilateral-30-degree-stabilization-shrug"])
         self.assertTrue(
@@ -14944,7 +14921,7 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertIn("the exercise is non-comparable", family["definition"])
-        self.assertIn("repeat with the other hand", exercise["movementDefinition"])
+        self.assertIn("repeat with the other hand", " ".join(exercise["movementSteps"]))
 
     def test_finger_flexion_grip_mutates_every_boundary_directly(self) -> None:
         original = next(
@@ -15981,8 +15958,9 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn("source-prescribed 45-degree line", family["definition"])
         self.assertIn("did not define the 45-degree instruction", family["definition"])
         self.assertIn("authors no shoulder-adduction or scapular prime action", family["definition"])
-        self.assertIn("10% and 25% of bodyweight", exercise["movementDefinition"])
-        self.assertIn("representative 35 lb/15 kg seed", exercise["movementDefinition"])
+        instructions = " ".join(exercise["movementSteps"])
+        self.assertIn("10% and 25% of body weight", instructions)
+        self.assertIn("suggested starting weight of 35 lb or 15 kg", instructions)
 
     def test_diagonal_pull_roles_axes_actions_and_boundaries_are_mutation_gated(
         self,
@@ -16267,6 +16245,20 @@ class CatalogFoundationTests(unittest.TestCase):
             ["transverse"],
         )
 
+    def test_movement_steps_use_plain_english(self) -> None:
+        jargon = re.compile(
+            r"\b(?:supine|prone|pronated|supinated|humeral|sagittal|"
+            r"dorsiflex\w*|plantarflex\w*|scapulae?|scapular|protract\w*|"
+            r"retract\w*|adduct\w*|abduct\w*|glenohumeral|patella|"
+            r"distal[ -]femur|unilateral|bilateral)\b",
+            re.IGNORECASE,
+        )
+        for family in self.real_families:
+            for exercise in family["exercises"]:
+                instructions = " ".join(exercise["movementSteps"])
+                with self.subTest(catalog_id=exercise["catalogID"]):
+                    self.assertIsNone(jargon.search(instructions))
+
     def test_runtime_projection_applies_group_override_and_optionals_exactly(
         self,
     ) -> None:
@@ -16287,7 +16279,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "reps", "trackingMode", "equipment", "mechanic", "pattern",
             "direction", "planes", "laterality", "aliases",
             "bodyweightFraction", "modality", "loadMode",
-            "movementDefinition", "involvement",
+            "movementSteps", "involvement",
         }
         optional_keys = {"defaultWeightKg", "defaultDuration", "searchPriority"}
         for family in self.real_families:

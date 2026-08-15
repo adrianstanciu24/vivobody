@@ -379,7 +379,10 @@ struct BiomechanicsDomainTests {
             bodyweightFraction: bodyweightFraction,
             modality: modality,
             loadMode: loadMode,
-            movementDefinition: "A complete test movement definition.",
+            movementSteps: [
+                "Set up the complete test movement in its required position.",
+                "Perform the complete test movement under control.",
+            ],
             involvement: involvement
         )
     }

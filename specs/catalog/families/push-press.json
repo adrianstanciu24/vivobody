@@ -489,7 +489,14 @@
         "lake-2014-push-press-power",
         "soriano-2024-push-press-jerk"
       ],
-      "movementDefinition": "Stand with the feet about hip-width apart and hold a straight barbell in the front rack with a pronated grip just outside shoulder width. Brace the trunk and make an upright push-press countermovement by flexing the hips and knees while keeping both feet in contact with the floor. Immediately extend the hips, knees, and ankles to propel the bar upward, then press it in front of the head to overhead lockout as the scapulae rotate upward. Finish standing with the elbows extended without dipping under the bar, then lower the bar under control to the front rack."
+      "movementSteps": [
+        "Stand with your feet about hip-width apart and hold a straight barbell across the front of your shoulders with an overhand grip just outside shoulder width.",
+        "Brace your torso and make a quick, shallow dip by bending your hips and knees while keeping both feet on the floor.",
+        "Immediately drive through your feet and straighten your hips and knees to send the bar upward.",
+        "Press the bar in front of your head until your arms are straight overhead, allowing your shoulder blades to move naturally.",
+        "Finish standing with your elbows straight without dipping under the bar.",
+        "Lower the bar under control to the front rack."
+      ]
     }
   ]
 }

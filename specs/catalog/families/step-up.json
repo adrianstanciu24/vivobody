@@ -444,7 +444,14 @@
       "evidenceRefs": [
         "wang-2003-forward-lateral-step-up-biomechanics"
       ],
-      "movementDefinition": "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor. Shift onto the lead leg without pushing or hopping from the trail leg. Extend the lead hip and knee and move the lead ankle from its dorsiflexed lower position toward the standing angle until the trail foot reaches the platform beside the lead foot. Pause briefly in bilateral standing. Shift back onto the lead leg, return the trail foot to the lower floor, then step the lead foot down beside it to complete the repetition. Replace the same lead foot fully on the platform before the next repetition, and switch lead sides after the set."
+      "movementSteps": [
+        "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor.",
+        "Shift onto the lead leg without pushing or hopping from the trail leg.",
+        "Push through the lead foot and straighten that hip and knee until the other foot reaches the platform beside it.",
+        "Pause briefly with both feet on the platform.",
+        "Shift back onto the lead leg, return the trail foot to the lower floor, and step the lead foot down beside it to complete the repetition.",
+        "Replace the same lead foot fully on the platform before the next repetition, and switch lead sides after the set."
+      ]
     }
   ]
 }

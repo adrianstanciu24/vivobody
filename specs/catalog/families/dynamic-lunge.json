@@ -536,7 +536,14 @@
       "evidenceRefs": [
         "comfort-2015-forward-reverse-lunge-kinetics"
       ],
-      "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Step forward with the selected lead foot, land with the whole foot in contact, and lower under control for three seconds to full self-selected depth. Keep the lead foot planted, then extend the lead hip and knee and move the lead ankle from its dorsiflexed bottom position toward standing over two seconds. Step the lead foot back to the bilateral start to complete the repetition. Finish the set on the selected side, then repeat with the other lead leg."
+      "movementSteps": [
+        "Stand upright with both feet supporting you and cross your arms over your upper body.",
+        "Step forward with the selected lead foot and land with the whole foot in contact.",
+        "Lower under control for three seconds to your full self-selected depth.",
+        "Keep the lead foot planted as you straighten the lead hip and knee and rise toward standing over two seconds.",
+        "Step the lead foot back beside the other foot to complete the repetition.",
+        "Finish the set on the selected side, then repeat with the other lead leg."
+      ]
     },
     {
       "catalogID": "bodyweight-reverse-lunge",
@@ -597,7 +604,14 @@
       "evidenceRefs": [
         "comfort-2015-forward-reverse-lunge-kinetics"
       ],
-      "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Keep the selected front foot planted and step the contralateral foot backward. After the rear foot lands, lower under control for three seconds to full self-selected depth without moving the selected front foot. Extend the selected front hip and knee and move its ankle from the dorsiflexed bottom position toward standing over two seconds, then bring the rear foot forward to the bilateral start. Finish the set with the same selected front leg, then repeat on the other side."
+      "movementSteps": [
+        "Stand upright with both feet supporting you and cross your arms over your upper body.",
+        "Keep the selected front foot planted and step the opposite foot backward.",
+        "After the rear foot lands, lower under control for three seconds to your full self-selected depth without moving the selected front foot.",
+        "Straighten the selected front hip and knee and rise toward standing over two seconds.",
+        "Bring the rear foot forward beside the front foot.",
+        "Finish the set with the same selected front leg, then repeat on the other side."
+      ]
     }
   ]
 }

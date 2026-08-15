@@ -419,7 +419,12 @@
         "hecker-2021-deltoid-flexion-abduction",
         "larsen-2025-cable-dumbbell-lateral-raise"
       ],
-      "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly out to the side in the frontal plane from the side to shoulder height without shrugging, leaning, or using lower-body drive, then lower it under control."
+      "movementSteps": [
+        "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
+        "Raise your upper arm directly out to the side until it reaches shoulder height.",
+        "Avoid shrugging, leaning, or using lower-body drive.",
+        "Lower the dumbbell under control."
+      ]
     },
     {
       "catalogID": "single-arm-cable-lateral-raise",
@@ -509,7 +514,12 @@
         "hecker-2021-deltoid-flexion-abduction",
         "larsen-2025-cable-dumbbell-lateral-raise"
       ],
-      "movementDefinition": "Stand upright holding one cable handle with the pulley aligned approximately with the working hand in the arm-at-side start. Keep the humerus neutrally rotated and the elbow nearly extended while raising the upper arm directly out to the side in the frontal plane to shoulder height, then lower it without shrugging, leaning, or using lower-body drive."
+      "movementSteps": [
+        "Stand upright holding one cable handle with the pulley aligned approximately with your working hand in the arm-at-side start.",
+        "Keep your palm facing your body and your elbow nearly straight.",
+        "Raise your upper arm directly out to the side until it reaches shoulder height.",
+        "Lower the handle under control without shrugging, leaning, or using lower-body drive."
+      ]
     }
   ]
 }

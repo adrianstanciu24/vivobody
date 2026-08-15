@@ -380,7 +380,11 @@
         "lauver-2016-bench-angle",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementDefinition": "Set the bench backrest to 30 degrees and lie with the feet planted and eyes below the racked bar. Lower the bar under control toward the upper chest, then press upward through shoulder flexion, horizontal adduction, and elbow extension without lifting the shoulders from the bench."
+      "movementSteps": [
+        "Set the bench backrest to 30 degrees and lie with the feet planted and the eyes below the racked bar.",
+        "Lower the bar under control toward the upper chest.",
+        "Press the bar upward until your elbows are straight without lifting your shoulders from the bench."
+      ]
     },
     {
       "catalogID": "incline-dumbbell-bench-press",
@@ -444,7 +448,11 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementDefinition": "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower under control without letting the upper arms drift into a vertical shoulder-press path."
+      "movementSteps": [
+        "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line.",
+        "Keep each forearm beneath its dumbbell as you press upward and slightly inward until your elbows are straight.",
+        "Lower the dumbbells under control without letting the upper arms drift into a vertical shoulder-press path."
+      ]
     },
     {
       "catalogID": "incline-smith-machine-bench-press",
@@ -505,7 +513,11 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementDefinition": "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported."
+      "movementSteps": [
+        "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward.",
+        "Lower the bar along the rails under control.",
+        "Press until your elbows are straight while keeping your torso and shoulders supported."
+      ]
     },
     {
       "catalogID": "incline-machine-chest-press",
@@ -566,7 +578,11 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementDefinition": "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and upward to elbow extension, then return under control."
+      "movementSteps": [
+        "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press.",
+        "Keep your torso against the pad as you press the handles forward and upward until your elbows are straight.",
+        "Return the handles under control."
+      ]
     }
   ]
 }

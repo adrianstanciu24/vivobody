@@ -300,7 +300,11 @@
         "dark-2007-shoulder-rotation-recruitment",
         "ginn-2017-subscapularis-internal-rotation"
       ],
-      "movementDefinition": "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen, and return under control without moving the elbow, protracting the shoulder blade, or turning the torso."
+      "movementSteps": [
+        "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+        "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach.",
+        "Return under control without moving the elbow, reaching the shoulder blade forward, or turning your torso."
+      ]
     },
     {
       "catalogID": "standing-band-shoulder-internal-rotation",
@@ -346,7 +350,11 @@
         "ginn-2017-subscapularis-internal-rotation",
         "hintermeister-1998-elastic-shoulder-rehabilitation"
       ],
-      "movementDefinition": "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen against the band, and return without moving the elbow, protracting the shoulder blade, or turning the torso."
+      "movementSteps": [
+        "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+        "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach against the band.",
+        "Return without moving the elbow, reaching the shoulder blade forward, or turning your torso."
+      ]
     }
   ]
 }

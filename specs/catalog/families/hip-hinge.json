@@ -397,7 +397,14 @@
     {
       "catalogID": "barbell-good-morning-25-percent-body-mass",
       "name": "25% Body-Mass Barbell Good Morning",
-      "movementDefinition": "Stand upright with the feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the posterior shoulder and upper-back surface in a comfortable hand position, keep the head aligned with the spine, brace the trunk, and keep both feet planted. Replace the representative 45-pound or 20-kilogram seed with external barbell load equal to 25 percent of your body mass. Hinge to the deepest position that preserves the reviewed natural-spine technique, then return to standing by extending the hips and spine at the same normal speed used for the descent. Keep the knees near straight while allowing the small nondefining excursion measured in the reviewed fixture, and retain the bar on the body between all eight repetitions.",
+      "movementSteps": [
+        "Stand upright with your feet approximately shoulder-width apart and naturally turned slightly outward.",
+        "Place a free bar securely across the back of your shoulders and upper back in a comfortable hand position.",
+        "Keep your head aligned with your spine, brace your trunk, and keep both feet planted.",
+        "Load the bar with 25 percent of your body weight; use 45 lb or 20 kg only if that matches your calculated weight.",
+        "Push your hips backward as far as you can while keeping a natural back position and allowing only a small bend in the knees.",
+        "Straighten your hips and return to standing at the same controlled speed used for the descent, keeping the bar on your body for all eight repetitions."
+      ],
       "variant": {
         "kineticChain": "closed",
         "bodyPosition": "standing",

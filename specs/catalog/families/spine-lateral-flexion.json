@@ -327,7 +327,13 @@
         "andersson-1996-quadratus-lumborum-emg",
         "phillips-2008-quadratus-lumborum-biomechanics"
       ],
-      "movementDefinition": "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, and have the crossed upper foot fixed securely without assuming a particular device. As a catalog coaching standard beyond the measured source, hold the pelvis and hip still rather than driving the lift from the hip. Laterally flex the spine to lift the upper body to the 30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. Return to the side-lying start under control, then complete the same separately logged work in the opposite lateral-flexion direction."
+      "movementSteps": [
+        "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
+        "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
+        "Lift your upper body sideways until it is about 30 degrees off the floor.",
+        "Lower to the starting position under control.",
+        "Repeat on the other side and log it separately."
+      ]
     }
   ]
 }

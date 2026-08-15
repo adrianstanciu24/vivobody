@@ -171,7 +171,10 @@
       "evidenceRefs": [
         "ackland-2008-shoulder-moment-arms"
       ],
-      "movementDefinition": "Press a supported bar away from the torso through shoulder horizontal adduction and elbow extension."
+      "movementSteps": [
+        "Set up beneath the supported bar with the prescribed grip and body position.",
+        "Press the bar away from the torso through shoulder horizontal adduction and elbow extension."
+      ]
     }
   ]
 }

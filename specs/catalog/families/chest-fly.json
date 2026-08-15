@@ -380,7 +380,11 @@
         "bergquist-2018-band-free-weight-fly",
         "welsch-2005-dumbbell-fly"
       ],
-      "movementDefinition": "Lie supine on a flat bench with one dumbbell over each shoulder, palms facing each other, and the elbows held in a fixed slight bend. Lower the upper arms outward at shoulder height, then horizontally adduct them to bring the dumbbells back over the chest without pressing, bending the elbows, or deliberately protracting the scapulae."
+      "movementSteps": [
+        "Lie on your back on a flat bench with one dumbbell over each shoulder, your palms facing each other, and your elbows held in a fixed slight bend.",
+        "Lower the upper arms outward at shoulder height.",
+        "Sweep your upper arms together until the dumbbells meet over your chest without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
+      ]
     },
     {
       "catalogID": "standing-band-fly",
@@ -458,7 +462,11 @@
         "holzbaur-2005-upper-extremity",
         "bergquist-2018-band-free-weight-fly"
       ],
-      "movementDefinition": "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, palms facing inward, and the elbows in a fixed slight bend. Brace the trunk and horizontally adduct the upper arms until the hands meet in front of the chest, then return under control without pressing, bending the elbows, or turning scapular protraction into the prime action."
+      "movementSteps": [
+        "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, the palms facing inward, and the elbows in a fixed slight bend.",
+        "Brace your torso and sweep your upper arms together until your hands meet in front of your chest.",
+        "Return under control without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
+      ]
     }
   ]
 }

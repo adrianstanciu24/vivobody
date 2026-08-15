@@ -382,7 +382,11 @@
         "parry-2012-dumbbell-shoulder-elevation",
         "hecker-2021-deltoid-flexion-abduction"
       ],
-      "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly forward from the side to shoulder height without bending the elbow, shrugging, leaning, or using lower-body drive, then lower it under control."
+      "movementSteps": [
+        "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
+        "Raise the upper arm directly forward from the side to shoulder height without bending the elbow, shrugging, leaning, or using lower-body drive.",
+        "Lower the arm under control."
+      ]
     }
   ]
 }

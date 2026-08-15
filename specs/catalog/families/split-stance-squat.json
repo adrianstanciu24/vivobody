@@ -489,7 +489,14 @@
       "evidenceRefs": [
         "song-2023-split-squat-step-length"
       ],
-      "movementDefinition": "Place a barbell securely across the upper back and hold it with both hands in a pronated grip. Take a fixed sagittal split stance approximately equal to your greater-trochanter-to-lateral-malleolus leg length, with the lead foot flat and the trail forefoot on the floor; the reviewed study did not report a precise foot landmark for this taped condition. Keep the torso erect and both foot contacts fixed. Lower until the lead thigh is approximately parallel to the floor, then extend the lead hip and knee and move the lead ankle from its bottom-position dorsiflexion toward the split-standing angle. Finish in the same split stance without stepping between repetitions."
+      "movementSteps": [
+        "Place a barbell securely across your upper back and hold it with both palms facing forward.",
+        "Take a split stance about as long as the distance from the outside of your hip to the outside of your ankle, with your front foot flat and the ball of your rear foot on the floor.",
+        "Keep that stance length throughout the set, using a comfortable position for each foot.",
+        "Keep your torso erect and both foot contacts fixed as you lower until your lead thigh is approximately parallel to the floor.",
+        "Push through your front foot and straighten the front hip and knee to rise back to the split stance.",
+        "Finish in the same split stance without stepping between repetitions."
+      ]
     }
   ]
 }

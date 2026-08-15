@@ -17,6 +17,8 @@
 //    • Figure  — the staged anatomy model in a card under the hero text;
 //                primary/secondary/stabilizer roles use distinct visual
 //                intensities without changing development calculations
+//    • Steps   — a dedicated, numbered how-to screen built from the
+//                catalog's authored movement instructions
 //    • Stats   — a focal Best-set card (huge monospaced record numeral)
 //                over supporting Last / Times half-cards
 //    • Load    — Bodyweight/assistance-only effective-load breakdown,
@@ -196,6 +198,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 heroFigureSection
+                instructionsLink
                 statsRow
                 if showsPerformanceRows {
                     performanceRows

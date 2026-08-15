@@ -568,7 +568,11 @@
         "castelein-2016-scapular-muscles-shrug",
         "seth-2019-shoulder-work"
       ],
-      "movementDefinition": "Stand tall holding one dumbbell beside the torso with the elbow extended and the thumb pointing forward. Elevate the working scapula toward the ear while keeping the humerus at the side and allowing its measured upward rotation, then lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+      "movementSteps": [
+        "Stand tall holding one dumbbell beside your body with your elbow straight and your thumb pointing forward.",
+        "Shrug the working shoulder blade toward your ear while keeping your upper arm at your side.",
+        "Lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+      ]
     },
     {
       "catalogID": "bilateral-30-degree-stabilization-shrug",
@@ -629,7 +633,14 @@
       "evidenceRefs": [
         "lee-2016-stabilization-shrug-upward-rotation"
       ],
-      "movementDefinition": "Stand with the feet shoulder-width apart and both arms held at 30 degrees of frontal-plane abduction. Lightly contact the radial borders of the wrists against the plastic guides, use the inclinometer to retain the arm angle, and have a partner stabilize the chin and upper thorax. Shrug both scapulae to the individual maximum-height target bars, hold the top position for five seconds, then lower slowly without bending the elbows, moving the neck or trunk, or adding external load. Perform two source-prescribed trials. The catalog's upward-rotation action reflects the greater angle measured immediately after this condition, not a continuously tracked dynamic angle."
+      "movementSteps": [
+        "Stand with your feet shoulder-width apart and both arms raised 30 degrees out to the sides.",
+        "Lightly touch the thumb-side edges of your wrists against the plastic guides, use the angle gauge to keep your arms in place, and have a partner steady your chin and upper chest.",
+        "Shrug both shoulder blades to your personal maximum-height target bars, and hold the top position for five seconds.",
+        "Lower slowly without bending the elbows, moving the neck or trunk, or adding external load.",
+        "Perform two attempts.",
+        "Record the larger shoulder-blade angle measured immediately after each hold; do not try to track the angle while moving."
+      ]
     }
   ]
 }

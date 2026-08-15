@@ -316,7 +316,14 @@
       "evidenceRefs": [
         "fisher-2018-isolated-lumbar-extension"
       ],
-      "movementDefinition": "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. Tighten the thigh restraint, secure the distal-femur restraint just above the patella, tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. Apply extension force only to the posterior upper-torso resistance pad. From the machine's 72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree full-extension reference, hold one second, then return for at least four seconds without lifting or rotating the pelvis or driving with the hips."
+      "movementSteps": [
+        "Sit in the MedX lower-back machine with your thighs at a right angle to the seat.",
+        "Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
+        "Keep your upper hips against the rolling restraint and push only against the pad behind your upper torso.",
+        "Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
+        "Hold the upright position for one second.",
+        "Return for at least four seconds without lifting or turning your hips or pushing with your legs."
+      ]
     }
   ]
 }

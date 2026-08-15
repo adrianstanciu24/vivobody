@@ -335,7 +335,11 @@
         "dark-2007-shoulder-rotation-recruitment",
         "reinold-2004-shoulder-external-rotation"
       ],
-      "movementDefinition": "Stand side-on with the cable anchored across the body, hold the working upper arm beside the torso with the elbow flexed about 90 degrees, and rotate the forearm away from the abdomen. Return under control without moving the elbow, retracting the shoulder blade, or turning the torso."
+      "movementSteps": [
+        "Stand sideways to the cable, keep the working upper arm beside your body, and bend the elbow about 90 degrees.",
+        "Rotate the forearm away from the abdomen.",
+        "Return under control without moving the elbow, pinching the shoulder blade back, or turning your torso."
+      ]
     },
     {
       "catalogID": "standing-band-shoulder-external-rotation",
@@ -377,7 +381,11 @@
       "evidenceRefs": [
         "hintermeister-1998-elastic-shoulder-rehabilitation"
       ],
-      "movementDefinition": "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm away from the abdomen against the band, and return without moving the elbow, shoulder blade, or torso."
+      "movementSteps": [
+        "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso.",
+        "Keep the elbow bent about 90 degrees as you turn the forearm away from your stomach against the band.",
+        "Return without moving the elbow, shoulder blade, or torso."
+      ]
     },
     {
       "catalogID": "side-lying-dumbbell-shoulder-external-rotation",
@@ -420,7 +428,12 @@
       "evidenceRefs": [
         "reinold-2004-shoulder-external-rotation"
       ],
-      "movementDefinition": "Lie on the nonworking side on a flat bench with a towel roll between the working upper arm and torso, the elbow flexed about 90 degrees, and a dumbbell held above the abdomen. Rotate the forearm toward the ceiling and lower it under control without lifting the upper arm, rolling the torso, or retracting the shoulder blade."
+      "movementSteps": [
+        "Lie on the side you are not exercising, with a towel roll between your working upper arm and torso.",
+        "Bend the elbow about 90 degrees and hold a dumbbell above your stomach.",
+        "Rotate the forearm toward the ceiling.",
+        "Lower the dumbbell under control without lifting the upper arm, rolling your torso, or pinching the shoulder blade back."
+      ]
     }
   ]
 }

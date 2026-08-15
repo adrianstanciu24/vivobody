@@ -608,7 +608,11 @@
         "prinold-2016-pullup-scapular-kinematics",
         "youdas-2010-pullup-chinup"
       ],
-      "movementDefinition": "Hang from a fixed bar with a pronated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs, then lower under control to a full hang."
+      "movementSteps": [
+        "Hang from a fixed bar with your palms facing away, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+        "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs.",
+        "Lower under control to a full hang."
+      ]
     },
     {
       "catalogID": "chin-up",
@@ -662,7 +666,11 @@
         "doma-2013-chinup-lat-pulldown",
         "youdas-2010-pullup-chinup"
       ],
-      "movementDefinition": "Hang from a fixed bar with a supinated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive, then return under control to a full hang."
+      "movementSteps": [
+        "Hang from a fixed bar with your palms facing you, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+        "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive.",
+        "Return under control to a full hang."
+      ]
     },
     {
       "catalogID": "neutral-grip-pull-up",
@@ -714,7 +722,11 @@
         "doma-2013-chinup-lat-pulldown",
         "youdas-2010-pullup-chinup"
       ],
-      "movementDefinition": "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced. Pull the body upward by driving the elbows down until the chin clears the handles, keep the lower body motionless, and lower under control to a full hang."
+      "movementSteps": [
+        "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced.",
+        "Pull the body upward by driving the elbows down until the chin clears the handles, keeping the lower body motionless.",
+        "Lower under control to a full hang."
+      ]
     },
     {
       "catalogID": "wide-grip-pull-up",
@@ -768,7 +780,11 @@
         "prinold-2016-pullup-scapular-kinematics",
         "youdas-2010-pullup-chinup"
       ],
-      "movementDefinition": "Hang from a fixed bar with a pronated grip wider than the shoulders, straight elbows, and a braced trunk. Pull in the front/scapular path until the chin clears the bar without swinging or lower-body drive, then lower under control to a full hang."
+      "movementSteps": [
+        "Hang from a fixed bar with your palms facing away, your hands wider than shoulder width, your elbows straight, and your torso braced.",
+        "Pull your body upward until your chin clears the bar without swinging or pushing with your lower body.",
+        "Lower under control to a full hang."
+      ]
     },
     {
       "catalogID": "assisted-pull-up-machine",
@@ -820,7 +836,11 @@
       "evidenceRefs": [
         "hewit-2018-pullup-alternatives"
       ],
-      "movementDefinition": "Set the assistance load, kneel or stand on the machine platform, and take a pronated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control while the platform guides the body vertically."
+      "movementSteps": [
+        "Set the assistance load, kneel or stand on the machine platform, and hold the handles at shoulder width with your palms facing away and your elbows straight.",
+        "Pull until the chin clears the handles without kicking or leaning.",
+        "Lower under control while the platform guides the body vertically."
+      ]
     },
     {
       "catalogID": "assisted-chin-up-machine",
@@ -874,7 +894,11 @@
         "hewit-2018-pullup-alternatives",
         "youdas-2010-pullup-chinup"
       ],
-      "movementDefinition": "Set the assistance load, kneel or stand on the guided platform, and take a supinated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control to the starting position."
+      "movementSteps": [
+        "Set the assistance load, kneel or stand on the guided platform, and hold the handles at shoulder width with your palms facing you and your elbows straight.",
+        "Pull until the chin clears the handles without kicking or leaning.",
+        "Lower under control to the starting position."
+      ]
     },
     {
       "catalogID": "cable-lat-pulldown",
@@ -929,7 +953,11 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementDefinition": "Sit at a cable pulldown station with the thighs secured beneath the pad and take a medium pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head toward the upper chest by driving the elbows down, then return overhead under control."
+      "movementSteps": [
+        "Sit at a cable pulldown station with your thighs secured beneath the pad, and hold the bar with a medium-width grip and your palms facing forward.",
+        "Keep the trunk braced and nearly upright as you pull the bar in front of the head toward the upper chest by driving the elbows down.",
+        "Return overhead under control."
+      ]
     },
     {
       "catalogID": "close-grip-neutral-lat-pulldown",
@@ -980,7 +1008,11 @@
         "buonsenso-2025-lat-pulldown-grips",
         "lusk-2010-lat-pulldown-grip"
       ],
-      "movementDefinition": "Sit with the thighs secured beneath the pad and hold a close parallel-grip attachment with the palms facing each other. Keep the torso braced, drive the elbows down as the handle travels in front of the head toward the upper chest, and return overhead under control."
+      "movementSteps": [
+        "Sit with the thighs secured beneath the pad, and hold a close parallel-grip attachment with the palms facing each other.",
+        "Keep the torso braced, and drive the elbows down as the handle travels in front of the head toward the upper chest.",
+        "Return overhead under control."
+      ]
     },
     {
       "catalogID": "underhand-lat-pulldown",
@@ -1030,7 +1062,11 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementDefinition": "Sit with the thighs secured beneath the pad and take a shoulder-width supinated grip on the bar. Hold the trunk nearly upright, drive the elbows down and back as the bar travels in front of the head toward the upper chest, then return overhead under control."
+      "movementSteps": [
+        "Sit with your thighs secured beneath the pad, and hold the bar at shoulder width with your palms facing you.",
+        "Hold the trunk nearly upright, and drive the elbows down and back as the bar travels in front of the head toward the upper chest.",
+        "Return overhead under control."
+      ]
     },
     {
       "catalogID": "wide-grip-lat-pulldown",
@@ -1082,7 +1118,11 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementDefinition": "Sit with the thighs secured beneath the pad and take a wide pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest, then return overhead under control."
+      "movementSteps": [
+        "Sit with your thighs secured beneath the pad, and hold the bar wider than shoulder width with your palms facing forward.",
+        "Keep the trunk braced and nearly upright as you pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest.",
+        "Return overhead under control."
+      ]
     },
     {
       "catalogID": "single-arm-cable-lat-pulldown",
@@ -1134,7 +1174,11 @@
         "ackland-2008-shoulder-moment-arms",
         "buonsenso-2025-lat-pulldown-grips"
       ],
-      "movementDefinition": "Sit with the thighs secured beneath the pad and hold one high-cable handle in a neutral grip. Keep the shoulders and pelvis square, drive the working elbow down beside the ribs without rotating or leaning, then return the arm overhead under control."
+      "movementSteps": [
+        "Sit with your thighs secured beneath the pad, and hold one high-cable handle with your palm facing inward.",
+        "Keep the shoulders and pelvis square as you drive the working elbow down beside the ribs without rotating or leaning.",
+        "Return the arm overhead under control."
+      ]
     },
     {
       "catalogID": "machine-lat-pulldown",
@@ -1186,7 +1230,11 @@
         "ackland-2008-shoulder-moment-arms",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementDefinition": "Sit in the lever pulldown machine with the thighs secured beneath the pad and take the neutral handles overhead. Keep the torso braced, drive both elbows down as the levers follow their guided path, and return to full overhead reach under control."
+      "movementSteps": [
+        "Sit in the pulldown machine with your thighs secured beneath the pad, and hold the overhead handles with your palms facing each other.",
+        "Keep the torso braced, and drive both elbows down as the levers follow their guided path.",
+        "Return to full overhead reach under control."
+      ]
     },
     {
       "catalogID": "single-arm-machine-lat-pulldown",
@@ -1239,7 +1287,11 @@
         "ackland-2008-shoulder-moment-arms",
         "buonsenso-2025-lat-pulldown-grips"
       ],
-      "movementDefinition": "Sit in the independent-arm lever pulldown machine with the thighs secured and hold one neutral handle overhead. Keep the torso and pelvis square, drive the working elbow down without rotating or leaning, and return the lever overhead under control."
+      "movementSteps": [
+        "Sit in the single-arm pulldown machine with your thighs secured, and hold one overhead handle with your palm facing inward.",
+        "Keep the torso and pelvis square as you drive the working elbow down without rotating or leaning.",
+        "Return the lever overhead under control."
+      ]
     }
   ]
 }

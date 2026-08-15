@@ -345,7 +345,12 @@
         "arnold-2010-lower-limb",
         "jeon-2016-prone-table-hip-extension"
       ],
-      "movementDefinition": "Lie prone with the torso and pelvis supported on a table and the working thigh hanging beyond its edge. Hold the working knee at 90 degrees and begin with the hip at the reviewed 30-degree flexed position. Keep the pelvis and spine still while extending the hip until the thigh reaches the reviewed 5-degree extension endpoint, then lower the thigh under control without changing the knee angle or turning the repetition into spinal or pelvic motion."
+      "movementSteps": [
+        "Lie face down with your torso and pelvis supported on a table and your working thigh hanging beyond its edge.",
+        "Keep your working knee bent at 90 degrees and begin with your thigh angled 30 degrees downward.",
+        "Keep your pelvis and back still as you lift the thigh until it reaches 5 degrees behind your body.",
+        "Lower your thigh under control without changing the knee angle or moving through your back or pelvis."
+      ]
     }
   ]
 }

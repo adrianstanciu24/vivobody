@@ -425,7 +425,12 @@
         "larsen-2025-leg-extension-hip-flexion",
         "mitsuya-2023-leg-extension-hip-flexion"
       ],
-      "movementDefinition": "Sit in a unilateral knee-extension machine with the backrest reclined so the hip is held near 40 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control."
+      "movementSteps": [
+        "Sit in a single-leg knee-extension machine with the backrest reclined so your hip is bent near 40 degrees.",
+        "Align your knee with the machine's pivot and place the lower shin against the pad.",
+        "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
+        "Return under control."
+      ]
     },
     {
       "catalogID": "upright-unilateral-machine-leg-extension",
@@ -480,7 +485,12 @@
         "larsen-2025-leg-extension-hip-flexion",
         "mitsuya-2023-leg-extension-hip-flexion"
       ],
-      "movementDefinition": "Sit upright in a unilateral knee-extension machine with the hip held near 90 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control."
+      "movementSteps": [
+        "Sit upright in a single-leg knee-extension machine with your hip bent near 90 degrees.",
+        "Align your knee with the machine's pivot and place the lower shin against the pad.",
+        "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
+        "Return under control."
+      ]
     }
   ]
 }

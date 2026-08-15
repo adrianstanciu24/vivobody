@@ -24,7 +24,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board. Set a physical stop at the working ankle's comfortable dorsiflexion limit. Begin from the self-selected resting position with the sole on the board and hold the selected knee posture still. Dorsiflex the ankle to lift the foot toward the shin until reaching the stop, without deliberately turning the foot inward or outward or extending the toes to create the repetition. Return under control until the sole touches the board, then repeat before changing sides.",
+    "movementSteps": [
+      "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board.",
+      "Set a physical stop where the working foot reaches its comfortable lifted position.",
+      "Begin from the self-selected resting position with the sole on the board, and hold the selected knee posture still.",
+      "Lift the front of the foot toward the shin until it reaches the stop, without turning the foot inward or outward or lifting through the toes alone.",
+      "Return under control until the sole touches the board, then repeat before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "tibialisAnterior",
@@ -57,7 +63,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand in a unilateral calf-raise machine with the working forefoot neutral on the platform, the shoulder beneath the load pad, and the knee held extended. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without bending the knee or curling the toes.",
+    "movementSteps": [
+      "Stand in a single-leg calf-raise machine with the front of the working foot centered on the platform and your shoulder beneath the load pad.",
+      "Keep the working knee straight and hold your hips, back, knee, and foot steady.",
+      "Raise the heel as high as you can, then lower under control without bending the knee or curling the toes."
+    ],
     "involvement": [
       {
         "muscle": "gastrocnemius",
@@ -94,7 +104,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in a unilateral calf-raise machine with the working forefoot neutral on the platform, the distal thigh beneath the load pad, and the knee held near 90 degrees of flexion. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without extending the knee or curling the toes.",
+    "movementSteps": [
+      "Sit in a single-leg calf-raise machine with the front of the working foot centered on the platform and the lower thigh beneath the load pad.",
+      "Keep the working knee bent near 90 degrees and hold the hip, pelvis, back, knee, and foot still.",
+      "Raise the heel as high as you can, then lower under control without straightening the knee or curling the toes."
+    ],
     "involvement": [
       {
         "muscle": "soleus",
@@ -132,7 +146,12 @@
     "bodyweightFraction": 0,
     "modality": "isometricStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Set both forearms on a stable floor with the elbows below the shoulders and the upper arms perpendicular to the floor, then support the lower body on both feet. Hold the spine, pelvis, hips, and knees in one neutral straight line for the prescribed duration while resisting the tendency of the lower back to sag; do not turn the hold into a crunch, hip lift, reach, or limb movement.",
+    "movementSteps": [
+      "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
+      "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
+      "Hold this position for the set time without letting your lower back sag.",
+      "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement."
+    ],
     "involvement": [
       {
         "muscle": "abs",
@@ -194,7 +213,13 @@
     "bodyweightFraction": 0,
     "modality": "isometricStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie on one side and support the body on that forearm and elbow with the shoulder and elbow at the reviewed 90-degree angles. Extend both legs, place the top foot in front of the lower foot, place the free hand on the opposite shoulder, and lift into a straight line from shoulder through hip to feet. Hold the spine, pelvis, and hips still for the prescribed duration, then repeat on the other side without adding a hip dip, row, or leg movement.",
+    "movementSteps": [
+      "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees.",
+      "Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
+      "Lift your body into a straight line from shoulder through hip to feet.",
+      "Hold your body still for the set time without dipping your hips or moving your arms or legs.",
+      "Repeat the hold on the other side."
+    ],
     "involvement": [
       {
         "muscle": "obliques",
@@ -259,7 +284,12 @@
     "bodyweightFraction": 0,
     "modality": "isometricStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Attach a band to a side pulley so its line of pull is horizontal, stand side-on with the feet together on a stable floor, and hold the handle in both hands at shoulder height. Extend both elbows so the arms are perpendicular to the torso, choose a tension you can control, and hold for the prescribed duration without letting the spine or pelvis rotate. Repeat with the anchor on the other side; do not turn the hold into a repeated press.",
+    "movementSteps": [
+      "Attach a band to a side pulley so its line of pull is horizontal, then stand side-on with the feet together on a stable floor and hold the handle in both hands at shoulder height.",
+      "Straighten both elbows until your arms point directly forward, and choose a tension you can control.",
+      "Hold for the set time without letting your torso or hips turn, and do not repeatedly press your arms in and out.",
+      "Repeat with the anchor on the other side."
+    ],
     "involvement": [
       {
         "muscle": "obliques",
@@ -332,7 +362,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell resting securely across the upper back. Hold the bar with both hands in a pronated grip, brace the trunk, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a box, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while maintaining control of the free bar; the exact lumbar path is not standardized.",
+    "movementSteps": [
+      "Stand with your heels about hip-width apart and a straight barbell resting securely across your upper back.",
+      "Hold the bar with both hands in an overhand grip, brace your torso, and keep both feet planted.",
+      "Bend your hips and knees, letting your knees travel forward naturally, until your upper thighs are about parallel to the floor.",
+      "Drive through both feet and straighten your hips and knees to return to standing while keeping the bar controlled.",
+      "Do not sit on a box, bounce at the bottom, or deliberately round or arch your back to complete the repetition."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -417,7 +453,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell supported across the anterior deltoids and clavicles in a clean grip. Brace the trunk, keep the elbows lifted, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a support, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while keeping the free bar balanced on the front rack; the exact lumbar path is not standardized.",
+    "movementSteps": [
+      "Stand with your heels about hip-width apart and support a straight barbell across the front of your shoulders and collarbones in a clean grip.",
+      "Brace your trunk, keep your elbows lifted, and keep both feet planted.",
+      "Bend your hips and knees, letting your knees travel forward naturally, until your upper thighs are about parallel to the floor.",
+      "Drive through both feet and straighten your hips and knees to return to standing while keeping the bar balanced on the front of your shoulders.",
+      "Do not sit on a support, bounce at the bottom, or deliberately round or arch your back to complete the repetition."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -499,7 +541,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie supine on a flat bench with one dumbbell over each shoulder, palms facing each other, and the elbows held in a fixed slight bend. Lower the upper arms outward at shoulder height, then horizontally adduct them to bring the dumbbells back over the chest without pressing, bending the elbows, or deliberately protracting the scapulae.",
+    "movementSteps": [
+      "Lie on your back on a flat bench with one dumbbell over each shoulder, your palms facing each other, and your elbows held in a fixed slight bend.",
+      "Lower the upper arms outward at shoulder height.",
+      "Sweep your upper arms together until the dumbbells meet over your chest without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -560,7 +606,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, palms facing inward, and the elbows in a fixed slight bend. Brace the trunk and horizontally adduct the upper arms until the hands meet in front of the chest, then return under control without pressing, bending the elbows, or turning scapular protraction into the prime action.",
+    "movementSteps": [
+      "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, the palms facing inward, and the elbows in a fixed slight bend.",
+      "Brace your torso and sweep your upper arms together until your hands meet in front of your chest.",
+      "Return under control without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -629,7 +679,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Secure the legs on a bench declined 15 degrees and lie with the eyes below the racked bar. Lower the bar under control toward the lower-chest line, then press through shoulder horizontal adduction and elbow extension while keeping the torso and shoulders supported.",
+    "movementSteps": [
+      "Secure the legs on a bench declined 15 degrees, and lie with the eyes below the racked bar.",
+      "Lower the bar under control toward the lower-chest line.",
+      "Press the bar up until your elbows are straight while keeping your torso and shoulders supported."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -682,7 +736,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Secure the legs on a bench declined 15 degrees and begin with one dumbbell beside each lower-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower them under control without turning the repetition into a fly.",
+    "movementSteps": [
+      "Secure the legs on a bench declined 15 degrees, and begin with one dumbbell beside each lower-chest line.",
+      "Keep each forearm beneath its dumbbell, and press upward and slightly inward until your elbows are straight.",
+      "Lower the dumbbells under control without turning the repetition into a fly."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -739,7 +797,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set a decline bench to 15 degrees and position it so the Smith bar descends toward the lower chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported.",
+    "movementSteps": [
+      "Set a decline bench to 15 degrees, and position it so the Smith bar descends toward the lower chest without forcing the shoulders forward.",
+      "Lower the bar along the rails under control.",
+      "Press until your elbows are straight while keeping your torso and shoulders supported."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -792,7 +854,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Adjust the seat so the handles begin beside the lower chest and follow an approximately 15-degree downward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and inward to elbow extension, then return under control.",
+    "movementSteps": [
+      "Adjust the seat so the handles begin beside the lower chest and follow an approximately 15-degree downward path relative to a horizontal press.",
+      "Keep your torso against the pad, and press the handles forward and inward until your elbows are straight.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -845,7 +911,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit on a flat bench facing the reviewed high cable with both feet on the floor and no thigh restraint. Take a wider-than-shoulder-width pronated grip on the straight bar and begin with the elbows extended and the arms on the source-prescribed 45-degree line. Keep the head straight and the core engaged, then pull the bar to touch the chest by extending the shoulders and flexing the elbows. Allow the scapulae to move naturally without prescribing retraction or rotation as a separate action, and return slowly to the same 45-degree start without adding shoulder adduction or axial rotation, leaning to propel the bar, or using the lower body. The source tested both 10% and 25% of bodyweight; replace the representative 35 lb/15 kg seed with the actual selected cable load.",
+    "movementSteps": [
+      "Sit on a flat bench facing a high cable with both feet on the floor and no thigh restraint.",
+      "Hold the straight bar wider than shoulder width with your palms facing forward, straighten your elbows, and point your arms upward at about 45 degrees.",
+      "Keep your head straight and your core tight as you pull the bar to your chest, driving your elbows down and back.",
+      "Allow your shoulder blades to move naturally instead of deliberately pinching or rotating them.",
+      "Return slowly to the same 45-degree start without pulling your arms across your body, twisting, leaning to propel the bar, or using your lower body.",
+      "Log the cable weight you actually use rather than the suggested starting weight of 35 lb or 15 kg; this exercise was tested with weights equal to 10% and 25% of body weight."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -934,7 +1007,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Support the full body above fixed dip bars with no foot contact. Lower under control by flexing the elbows and allowing the shoulders to extend behind the torso only to a self-selected controlled depth. Press back up through shoulder flexion toward neutral and elbow extension without swinging, kicking, or forcing a scapular action that the reviewed trials did not measure.",
+    "movementSteps": [
+      "Support the full body above fixed dip bars with no foot contact.",
+      "Bend your elbows and lower under control only as far as feels comfortable, letting your upper arms move slightly behind your torso.",
+      "Press back up until your elbows are straight without swinging, kicking, or forcing your shoulder blades into a specific position."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -1006,7 +1083,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion toward neutral and elbow extension without kipping or using the legs.",
+    "movementSteps": [
+      "Support the full body above two independent rings with no foot contact.",
+      "Keep the rings controlled beside your torso as you bend your elbows and lower only as far as feels comfortable, letting your upper arms move slightly behind you.",
+      "Press back up until your elbows are straight without kipping or using your legs."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -1085,7 +1166,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Step forward with the selected lead foot, land with the whole foot in contact, and lower under control for three seconds to full self-selected depth. Keep the lead foot planted, then extend the lead hip and knee and move the lead ankle from its dorsiflexed bottom position toward standing over two seconds. Step the lead foot back to the bilateral start to complete the repetition. Finish the set on the selected side, then repeat with the other lead leg.",
+    "movementSteps": [
+      "Stand upright with both feet supporting you and cross your arms over your upper body.",
+      "Step forward with the selected lead foot and land with the whole foot in contact.",
+      "Lower under control for three seconds to your full self-selected depth.",
+      "Keep the lead foot planted as you straighten the lead hip and knee and rise toward standing over two seconds.",
+      "Step the lead foot back beside the other foot to complete the repetition.",
+      "Finish the set on the selected side, then repeat with the other lead leg."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -1156,7 +1244,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand upright with both feet supporting you and cross the arms over the upper body. Keep the selected front foot planted and step the contralateral foot backward. After the rear foot lands, lower under control for three seconds to full self-selected depth without moving the selected front foot. Extend the selected front hip and knee and move its ankle from the dorsiflexed bottom position toward standing over two seconds, then bring the rear foot forward to the bilateral start. Finish the set with the same selected front leg, then repeat on the other side.",
+    "movementSteps": [
+      "Stand upright with both feet supporting you and cross your arms over your upper body.",
+      "Keep the selected front foot planted and step the opposite foot backward.",
+      "After the rear foot lands, lower under control for three seconds to your full self-selected depth without moving the selected front foot.",
+      "Straighten the selected front hip and knee and rise toward standing over two seconds.",
+      "Bring the rear foot forward beside the front foot.",
+      "Finish the set with the same selected front leg, then repeat on the other side."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -1229,7 +1324,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand at a high cable and hold a single handle with the working forearm supinated. Keep the upper arm alongside the torso and the wrist neutral; extend the elbow from about 90 degrees to straight, then return under control without moving the shoulder or rotating the forearm.",
+    "movementSteps": [
+      "Stand at a high cable, and hold a single handle with the working palm facing up.",
+      "Keep the upper arm alongside your torso and the wrist straight as you straighten the elbow from about 90 degrees.",
+      "Return under control without moving the shoulder or rotating the forearm."
+    ],
     "involvement": [
       {
         "muscle": "triceps",
@@ -1286,7 +1385,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand at a high cable and hold a single handle with the working forearm pronated. Keep the upper arm alongside the torso and the wrist neutral; extend the elbow from about 90 degrees to straight, then return under control without moving the shoulder or rotating the forearm.",
+    "movementSteps": [
+      "Stand at a high cable, and hold a single handle with the working palm facing down.",
+      "Keep the upper arm alongside your torso and the wrist straight as you straighten the elbow from about 90 degrees.",
+      "Return under control without moving the shoulder or rotating the forearm."
+    ],
     "involvement": [
       {
         "muscle": "triceps",
@@ -1347,7 +1450,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with one arm held overhead and the forearm supinated while a cable opposes elbow extension. Keep the upper arm, wrist, torso, and lower body still; extend the elbow from about 90 degrees to straight, then return under control.",
+    "movementSteps": [
+      "Stand with one arm overhead and the palm facing up while the cable pulls against you.",
+      "Keep your upper arm, wrist, torso, and lower body still as you straighten the elbow from about 90 degrees.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "triceps",
@@ -1404,7 +1511,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright without back support and hold one dumbbell with a neutral forearm and the upper arm overhead. Keep the upper arm and torso still; flex the elbow to lower the dumbbell, then extend through the available range without rotating the forearm.",
+    "movementSteps": [
+      "Sit upright without back support, and hold one dumbbell overhead with your palm facing inward.",
+      "Keep your upper arm and torso still as you bend the elbow to lower the dumbbell.",
+      "Straighten the elbow as far as you can without turning the forearm."
+    ],
     "involvement": [
       {
         "muscle": "triceps",
@@ -1461,7 +1572,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie supine on a bench with one neutral-grip dumbbell held over the chest and the upper arm at 90 degrees of shoulder flexion. Hold the upper arm still, lower the dumbbell by flexing the elbow, then extend the elbow through the available range.",
+    "movementSteps": [
+      "Lie on your back on a bench with one dumbbell held over your chest, your palm facing inward, and your upper arm pointing straight up.",
+      "Hold your upper arm still, and bend the elbow to lower the dumbbell.",
+      "Straighten the elbow as far as you can."
+    ],
     "involvement": [
       {
         "muscle": "triceps",
@@ -1514,7 +1629,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand facing a low cable while holding a straight bar with both forearms supinated. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then lower the bar under control without rotating the forearms.",
+    "movementSteps": [
+      "Stand facing a low cable while holding a straight bar with both palms facing up.",
+      "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+      "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
+    ],
     "involvement": [
       {
         "muscle": "brachialis",
@@ -1575,7 +1694,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand facing a low cable while holding the rope ends with both forearms neutral. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then return under control without rotating the forearms.",
+    "movementSteps": [
+      "Stand facing a low cable while holding the rope ends with both palms facing inward.",
+      "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+      "Bend your elbows as far as you can, then return under control without turning your forearms."
+    ],
     "involvement": [
       {
         "muscle": "brachialis",
@@ -1636,7 +1759,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand facing a low cable while holding a straight bar with both forearms pronated. Keep the upper arms parallel to the torso, wrists neutral, and body still; flex the elbows through the available range, then lower the bar under control without rotating the forearms.",
+    "movementSteps": [
+      "Stand facing a low cable while holding a straight bar with both palms facing down.",
+      "Keep your upper arms beside your torso, your wrists straight, and your body still.",
+      "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
+    ],
     "involvement": [
       {
         "muscle": "brachialis",
@@ -1698,7 +1825,13 @@
     "bodyweightFraction": 0,
     "modality": "isometricStrength",
     "loadMode": "external",
-    "movementDefinition": "Log the weight of one dumbbell, not the combined pair. Hold one equal-weight dumbbell in each hand with the upper arms at the sides, neutral humeral and forearm rotation, palms facing the thighs, no straps or hooks, and the elbows held extended beside the torso. Walk continuously forward on a level surface for the prescribed duration while keeping the shoulders controlled and the trunk upright without turning, marching in place, or converting the carry into another exercise.",
+    "movementSteps": [
+      "Log the weight of one dumbbell, not the combined pair.",
+      "Hold one equal-weight dumbbell in each hand without straps or hooks.",
+      "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
+      "Walk continuously forward on a level surface for the set time while keeping your shoulders controlled and your torso upright.",
+      "Avoid turning, marching in place, or converting the carry into another exercise."
+    ],
     "involvement": [
       {
         "muscle": "fingerFlexors",
@@ -1770,7 +1903,13 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Use one 30 kg-rated grip trainer in one hand and complete 30 repeated grip cycles without assistance from the other hand. Close and release the fingers under control, but do not assume a handles-touching endpoint, fixed cadence, or prescribed wrist, forearm, elbow, or body posture: the reviewed study did not report those details. The source used three sets; log each set separately and repeat with the other hand. Enter no lifted weight because the trainer's rating is non-comparable product resistance.",
+    "movementSteps": [
+      "Hold one 30 kg-rated grip trainer in one hand without assistance from the other hand.",
+      "Close and release the fingers under control for 30 repeated grip cycles.",
+      "Close the handles only as far as you comfortably can, and use a steady pace and comfortable arm position.",
+      "Complete three sets, log each set separately, and repeat with the other hand.",
+      "Enter no lifted weight because the trainer's rating is non-comparable product resistance."
+    ],
     "involvement": [
       {
         "muscle": "fingerFlexors",
@@ -1804,7 +1943,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the working shoulder relaxed, the elbow flexed about 90 degrees, and the forearm supported on a table. Begin fully supinated while holding a plate-loaded dumbbell vertically, rotate only the forearm until the thumb points upward at neutral, and return under control without moving the wrist, elbow, shoulder, or torso.",
+    "movementSteps": [
+      "Sit with the working shoulder relaxed, the elbow bent about 90 degrees, and the forearm supported on a table.",
+      "Begin with the palm facing up while holding a plate-loaded dumbbell vertically.",
+      "Turn only the forearm until the thumb points upward.",
+      "Return under control without moving the wrist, elbow, shoulder, or torso."
+    ],
     "involvement": [
       {
         "muscle": "forearmPronators",
@@ -1854,7 +1998,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the working shoulder relaxed, the elbow flexed about 90 degrees, and the forearm supported on a table. Begin fully pronated while holding a plate-loaded dumbbell vertically, rotate only the forearm until the thumb points upward at neutral, and return under control without moving the wrist, elbow, shoulder, or torso.",
+    "movementSteps": [
+      "Sit with your working shoulder relaxed, your elbow bent about 90 degrees, and your forearm supported on a table.",
+      "Begin with your palm facing down while holding a plate-loaded dumbbell vertically.",
+      "Turn only your forearm until your thumb points upward.",
+      "Return under control without moving your wrist, elbow, shoulder, or torso."
+    ],
     "involvement": [
       {
         "muscle": "supinator",
@@ -1911,7 +2060,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on one side on a treatment table with the working leg on top, the hip neutral in flexion-extension and axial rotation, the lower leg flexed for stability, and a cuff weight secured just above the working ankle. Place a pressure-biofeedback unit beneath the trunk, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal contact band marks 35 degrees of abduction. Keep the pelvis and spine still, the working knee straight, and the toes pointing forward. Raise the straight top leg in the frontal plane until it contacts the endpoint band, then lower it under control without rolling the pelvis or turning the toes upward.",
+    "movementSteps": [
+      "Lie on one side on a treatment table with the working leg on top, both hips facing straight ahead, the lower leg bent for stability, and a cuff weight secured just above the working ankle.",
+      "Place a pressure-biofeedback unit beneath your torso, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal band marks the 35-degree stopping point.",
+      "Keep the pelvis and spine still, the working knee straight, and the toes pointing forward.",
+      "Raise the straight top leg directly out to the side until it contacts the stopping band.",
+      "Lower the leg under control without rolling the pelvis or turning the toes upward."
+    ],
     "involvement": [
       {
         "muscle": "gluteMed",
@@ -1947,7 +2102,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand upright on the support leg while holding a stable external support with both hands and secure an elastic band around the working ankle from the side. Place the straight working leg in maximal comfortable abduction with tension already in the band and hold it at the same slight posterior hip posture used at the endpoint. Keep the pelvis still, the working knee straight, and both sets of toes pointing forward as you draw the working thigh medially without swinging it farther backward, finishing one foot-width lateral to and about half a foot-length behind the stance foot. Return under control along the same strictly frontal path, then repeat before changing sides.",
+    "movementSteps": [
+      "Stand upright on the support leg, hold a stable external support with both hands, and secure an elastic band around the working ankle from the side.",
+      "Move the straight working leg as far out to the side as is comfortable, keeping tension in the band and the leg slightly behind you.",
+      "Keep the pelvis still, the working knee straight, and both sets of toes pointing forward.",
+      "Pull the working leg inward without swinging it farther backward, stopping about one foot-width to the side and half a foot-length behind the stance foot.",
+      "Return under control along the same side-to-side path, then repeat before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "adductorLongusBrevis",
@@ -1995,7 +2156,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie prone with the torso and pelvis supported on a table and the working thigh hanging beyond its edge. Hold the working knee at 90 degrees and begin with the hip at the reviewed 30-degree flexed position. Keep the pelvis and spine still while extending the hip until the thigh reaches the reviewed 5-degree extension endpoint, then lower the thigh under control without changing the knee angle or turning the repetition into spinal or pelvic motion.",
+    "movementSteps": [
+      "Lie face down with your torso and pelvis supported on a table and your working thigh hanging beyond its edge.",
+      "Keep your working knee bent at 90 degrees and begin with your thigh angled 30 degrees downward.",
+      "Keep your pelvis and back still as you lift the thigh until it reaches 5 degrees behind your body.",
+      "Lower your thigh under control without changing the knee angle or moving through your back or pelvis."
+    ],
     "involvement": [
       {
         "muscle": "gluteMax",
@@ -2039,7 +2205,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie supine on a treatment table with both thighs supported over the wedge so both hips remain at 30 degrees of flexion and both knees remain flexed. Secure the elastic band at the working ankle. The therapist stabilizes the working knee against the support and holds the other end of the band so it opposes external hip rotation. Keep the pelvis and spine still and begin with the working hip in neutral rotation. Move the working lower leg against the band until the hip reaches the middle of its available external-rotation range, then return to neutral under control without lifting or turning the working thigh. Complete the prescribed repetitions before changing sides.",
+    "movementSteps": [
+      "Lie on your back on a treatment table with both thighs supported over the wedge so your hips stay bent at 30 degrees and your knees stay bent.",
+      "Secure the elastic band at the working ankle.",
+      "Have the therapist hold the working knee against the support and pull the other end of the band against the movement.",
+      "Keep your pelvis and back still, and begin with the working thigh pointing straight ahead.",
+      "Move the working lower leg inward against the band until you reach the middle of your comfortable range.",
+      "Return to the straight-ahead position without lifting or turning the working thigh, and finish the set before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "obturatorInternusGemelli",
@@ -2091,7 +2264,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie supine with the torso and pelvis supported on a table and both legs extended. Keep the nonworking leg supported and the working knee straight. Raise the working leg by flexing the hip until reaching your active end range, then lower it under control. Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion.",
+    "movementSteps": [
+      "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
+      "Keep the other leg supported and the working knee straight.",
+      "Raise the working leg as far as you can while keeping the knee straight, then lower it under control.",
+      "Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion."
+    ],
     "involvement": [
       {
         "muscle": "iliopsoas",
@@ -2136,7 +2314,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand upright with the feet approximately shoulder-width apart and naturally turned slightly outward. Place a free bar securely across the posterior shoulder and upper-back surface in a comfortable hand position, keep the head aligned with the spine, brace the trunk, and keep both feet planted. Replace the representative 45-pound or 20-kilogram seed with external barbell load equal to 25 percent of your body mass. Hinge to the deepest position that preserves the reviewed natural-spine technique, then return to standing by extending the hips and spine at the same normal speed used for the descent. Keep the knees near straight while allowing the small nondefining excursion measured in the reviewed fixture, and retain the bar on the body between all eight repetitions.",
+    "movementSteps": [
+      "Stand upright with your feet approximately shoulder-width apart and naturally turned slightly outward.",
+      "Place a free bar securely across the back of your shoulders and upper back in a comfortable hand position.",
+      "Keep your head aligned with your spine, brace your trunk, and keep both feet planted.",
+      "Load the bar with 25 percent of your body weight; use 45 lb or 20 kg only if that matches your calculated weight.",
+      "Push your hips backward as far as you can while keeping a natural back position and allowing only a small bend in the knees.",
+      "Straighten your hips and return to standing at the same controlled speed used for the descent, keeping the bar on your body for all eight repetitions."
+    ],
     "involvement": [
       {
         "muscle": "medialHamstrings",
@@ -2220,7 +2405,15 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees flexed to 90 degrees, both feet suspended, the hands crossed over the opposite shoulders, and the pelvis neutral. Secure the working distal femur with one belt and the pelvis at both anterior superior iliac spines with two belts. Connect the working ankle brace to the Conic Power Move cable by carabiner, using the horizontally wall-fixed flywheel 7 cm above the floor, its upper-middle sliding-frame position, the reported 460-g attached load and 15-cm axis distance, and a cable length matched to the maximum active hip-rotation range. Internally rotate the working femur relative to the fixed pelvis as fast as possible, moving the lower leg outward, then return while counteracting the generated flywheel inertia. Keep the knee angle fixed and do not move the pelvis, spine, or thigh outside the hip-rotation path. After two sets of ten progressively harder warm-up repetitions, perform three progressive repetitions and seven high-intensity work repetitions, then repeat the reviewed setup for the other leg as a separately logged set.",
+    "movementSteps": [
+      "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees bent to 90 degrees, both feet hanging freely, your hands crossed over your shoulders, and your pelvis centered.",
+      "Secure the lower end of the working thigh with one belt and place two belts across the front points of your hip bones to hold your pelvis still.",
+      "Connect the working ankle brace to the Conic Power Move cable with a carabiner. Set the wall-mounted flywheel 7 cm above the floor in the upper-middle frame position, attach the 460 g load 15 cm from the center, and adjust the cable so your hip can move through its full comfortable range.",
+      "Turn the working thigh inward as fast as possible so the lower leg moves outward while the pelvis stays still.",
+      "Return while resisting the flywheel's pull, keeping the knee angle fixed and avoiding movement through the pelvis or back.",
+      "Complete two sets of ten progressively harder warm-up repetitions, then perform three progressive repetitions and seven high-intensity work repetitions.",
+      "Repeat the same setup for the other leg and log it as a separate set."
+    ],
     "involvement": [
       {
         "muscle": "gluteMed",
@@ -2265,7 +2458,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis. Plant the feet at shoulder width so the knees finish near 90 degrees, steady the bar with a supinated grip, and raise the pelvis until the hips reach neutral. Lower until the plates return to the floor without adding deliberate spinal extension or abduction.",
+    "movementSteps": [
+      "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis.",
+      "Plant your feet at shoulder width so your knees finish near 90 degrees, and steady the bar with your palms facing up.",
+      "Raise the pelvis until the hips reach neutral.",
+      "Lower until the plates return to the floor without arching your back or letting your knees drift outward."
+    ],
     "involvement": [
       {
         "muscle": "gluteMax",
@@ -2318,7 +2516,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie with the upper torso anchored on the floor, a padded barbell across the pelvis, and the feet shoulder-width apart with the reviewed flexed-knee setup. Steady the bar with a supinated grip and raise the pelvis until the hips reach neutral and the knees finish near 115 degrees of flexion. Lower until the plates return to the floor without shifting the upper torso or adding deliberate spinal extension or abduction.",
+    "movementSteps": [
+      "Lie with your upper back firmly on the floor, a padded barbell across your hips, your feet shoulder-width apart, and your knees bent near 115 degrees.",
+      "Steady the bar with your palms facing up.",
+      "Raise your pelvis until your body forms a straight line from shoulders to knees, with your knees bent near 115 degrees.",
+      "Lower until the plates return to the floor without shifting your upper torso, arching your back, or letting your knees drift outward."
+    ],
     "involvement": [
       {
         "muscle": "gluteMax",
@@ -2371,7 +2574,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on a flat bench with the eyes beneath the racked bar and the feet planted. Lower the bar under control toward the lower chest, then press it upward through shoulder horizontal adduction and elbow extension.",
+    "movementSteps": [
+      "Lie on a flat bench with the eyes beneath the racked bar and the feet planted.",
+      "Lower the bar under control toward the lower chest.",
+      "Press the bar upward until your elbows are straight."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2424,7 +2631,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on a flat bench with one dumbbell beside each side of the chest. Press both dumbbells upward until the elbows are extended, then lower them under control while keeping the forearms beneath the loads.",
+    "movementSteps": [
+      "Lie on a flat bench with one dumbbell beside each side of the chest.",
+      "Press both dumbbells upward until your elbows are straight.",
+      "Lower the dumbbells under control while keeping the forearms beneath the loads."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2481,7 +2692,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other. Keep the elbows closer to the torso, press to elbow extension, and lower under control without changing the neutral grip.",
+    "movementSteps": [
+      "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other.",
+      "Keep your elbows closer to your torso and press until your arms are straight.",
+      "Lower the dumbbells under control while keeping your palms facing each other."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2538,7 +2753,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Position a flat bench so the Smith bar descends toward the lower chest. Unrack the bar, lower it under control along the rails, then press to elbow extension without allowing the shoulders to lift from the bench.",
+    "movementSteps": [
+      "Position a flat bench so the Smith bar descends toward the lower chest.",
+      "Unrack the bar and lower it under control along the rails.",
+      "Press until your elbows are straight without allowing your shoulders to lift from the bench."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2591,7 +2810,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path. Keep the torso against the pad, press the handles forward and slightly inward along the converging lever path to elbow extension, then return under control.",
+    "movementSteps": [
+      "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path.",
+      "Keep your torso against the pad as you press the handles forward and slightly inward until your elbows are straight.",
+      "Return the handles under control."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2644,7 +2867,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward. Press both handles forward while allowing controlled scapular protraction, then return until the elbows pass slightly behind the torso without rotating the trunk.",
+    "movementSteps": [
+      "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward.",
+      "Press both handles forward while allowing your shoulder blades to move naturally around your ribs.",
+      "Return until the elbows pass slightly behind the torso without rotating the trunk."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2697,7 +2924,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with one chest-height cable handle beside the working-side chest and the palm facing inward. Brace against cable-driven trunk rotation, press through elbow extension and scapular protraction, then return under control before changing sides.",
+    "movementSteps": [
+      "Stand with one chest-height cable handle beside the working side of your chest and your palm facing inward.",
+      "Keep your torso from twisting as you press the handle forward and straighten your arm, allowing the working shoulder blade to move naturally.",
+      "Return under control before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2750,7 +2981,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on a flat bench with one dumbbell beside the working-side chest in a neutral grip. Keep the torso square against the unilateral load, press to elbow extension, and lower under control before changing sides.",
+    "movementSteps": [
+      "Lie on a flat bench with one dumbbell beside the working side of your chest and your palm facing inward.",
+      "Keep your torso square against the weight on one side as you press until your arm is straight.",
+      "Lower the dumbbell under control before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2810,7 +3045,11 @@
     "bodyweightFraction": 0.64,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Begin in a straight-body plank with the hands slightly wider than the shoulders. Lower the chest toward the floor, then press the body away while extending the elbows and allowing the shoulder blades to protract without losing trunk position.",
+    "movementSteps": [
+      "Begin in a straight-body plank with the hands slightly wider than the shoulders.",
+      "Lower the chest toward the floor without losing trunk position.",
+      "Press your body away by straightening your elbows and letting your shoulder blades move naturally around your ribs."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2862,7 +3101,11 @@
     "bodyweightFraction": 0.49,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders. Lower the chest toward the floor, then press away through elbow extension and controlled scapular protraction.",
+    "movementSteps": [
+      "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders.",
+      "Lower the chest toward the floor while maintaining that straight line.",
+      "Press away until your elbows are straight, letting your shoulder blades move naturally around your ribs."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2915,7 +3158,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on the floor beneath a safely positioned bar with the knees bent. Lower the bar until the upper arms contact the floor without bouncing, pause briefly, then press upward to elbow extension.",
+    "movementSteps": [
+      "Lie on the floor beneath a safely positioned bar with the knees bent.",
+      "Lower the bar until the upper arms contact the floor without bouncing.",
+      "Pause briefly, then press upward until your elbows are straight."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -2967,7 +3214,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent. Lower until the upper arms contact the floor without bouncing, then press both dumbbells upward to elbow extension.",
+    "movementSteps": [
+      "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent.",
+      "Lower the dumbbells until the upper arms contact the floor without bouncing.",
+      "Press both dumbbells upward until your elbows are straight."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -3025,7 +3276,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the bench backrest to 30 degrees and lie with the feet planted and eyes below the racked bar. Lower the bar under control toward the upper chest, then press upward through shoulder flexion, horizontal adduction, and elbow extension without lifting the shoulders from the bench.",
+    "movementSteps": [
+      "Set the bench backrest to 30 degrees and lie with the feet planted and the eyes below the racked bar.",
+      "Lower the bar under control toward the upper chest.",
+      "Press the bar upward until your elbows are straight without lifting your shoulders from the bench."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -3079,7 +3334,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower under control without letting the upper arms drift into a vertical shoulder-press path.",
+    "movementSteps": [
+      "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line.",
+      "Keep each forearm beneath its dumbbell as you press upward and slightly inward until your elbows are straight.",
+      "Lower the dumbbells under control without letting the upper arms drift into a vertical shoulder-press path."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -3137,7 +3396,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported.",
+    "movementSteps": [
+      "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward.",
+      "Lower the bar along the rails under control.",
+      "Press until your elbows are straight while keeping your torso and shoulders supported."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -3191,7 +3454,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and upward to elbow extension, then return under control.",
+    "movementSteps": [
+      "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press.",
+      "Keep your torso against the pad as you press the handles forward and upward until your elbows are straight.",
+      "Return the handles under control."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorClavicular",
@@ -3244,7 +3511,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in a unilateral knee-extension machine with the backrest reclined so the hip is held near 40 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control.",
+    "movementSteps": [
+      "Sit in a single-leg knee-extension machine with the backrest reclined so your hip is bent near 40 degrees.",
+      "Align your knee with the machine's pivot and place the lower shin against the pad.",
+      "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -3281,7 +3553,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright in a unilateral knee-extension machine with the hip held near 90 degrees of flexion, the knee aligned to the lever axis, and the distal shin against the pad. Keep the pelvis, spine, hip, ankle, and foot still; extend the knee from the reviewed flexed start to full extension, then return under control.",
+    "movementSteps": [
+      "Sit upright in a single-leg knee-extension machine with your hip bent near 90 degrees.",
+      "Align your knee with the machine's pivot and place the lower shin against the pad.",
+      "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -3318,7 +3595,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in a unilateral leg-curl machine with the hip held near 90 degrees of flexion, the pelvis secured to the pad, the knee aligned to the lever axis, and the distal lower leg against the pad. Keep the pelvis, spine, hip, ankle, and foot still; flex the knee from full extension to approximately 90 degrees, then return under control.",
+    "movementSteps": [
+      "Sit in a single-leg curl machine with your hip bent near 90 degrees and your pelvis secured to the pad.",
+      "Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
+      "Keep your pelvis, back, hip, ankle, and foot still as you bend your knee from straight to approximately 90 degrees.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "medialHamstrings",
@@ -3363,7 +3645,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie prone in a unilateral leg-curl machine with the hip held near 30 degrees of flexion, the pelvis secured to the pad, the knee aligned to the lever axis, and the distal lower leg against the pad. Keep the pelvis, spine, hip, ankle, and foot still; flex the knee from full extension to approximately 90 degrees, then return under control.",
+    "movementSteps": [
+      "Lie face down in a single-leg curl machine with your hip bent near 30 degrees and your pelvis secured to the pad.",
+      "Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
+      "Keep your pelvis, back, hip, ankle, and foot still as you bend your knee from straight to approximately 90 degrees.",
+      "Return under control."
+    ],
     "involvement": [
       {
         "muscle": "medialHamstrings",
@@ -3408,7 +3695,14 @@
     "bodyweightFraction": 0,
     "modality": "power",
     "loadMode": "external",
-    "movementDefinition": "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load. For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm. Fully grip the moving sleeve and begin with it close to the working-side deltoid. Without deliberately driving through the hips, knees, or ankles, press the sleeve through its pivoted arc to a controlled end range, then return it to the shoulder. Perform three power-focused repetitions, log the opposite side separately, and keep the trunk and pelvis controlled without treating them as measured position-held segments.",
+    "movementSteps": [
+      "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load.",
+      "For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm.",
+      "Grip the moving end of the bar firmly and begin with it close to your working shoulder.",
+      "Press the sleeve through its pivoted arc to a controlled end range without deliberately driving through the hips, knees, or ankles, then return it to the shoulder.",
+      "Keep your torso and hips controlled throughout the movement.",
+      "Perform three power-focused repetitions and log the opposite side separately."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -3506,7 +3800,14 @@
     "bodyweightFraction": 0,
     "modality": "power",
     "loadMode": "external",
-    "movementDefinition": "Stand with the feet about hip-width apart and hold a straight barbell in the front rack with a pronated grip just outside shoulder width. Brace the trunk and make an upright push-press countermovement by flexing the hips and knees while keeping both feet in contact with the floor. Immediately extend the hips, knees, and ankles to propel the bar upward, then press it in front of the head to overhead lockout as the scapulae rotate upward. Finish standing with the elbows extended without dipping under the bar, then lower the bar under control to the front rack.",
+    "movementSteps": [
+      "Stand with your feet about hip-width apart and hold a straight barbell across the front of your shoulders with an overhand grip just outside shoulder width.",
+      "Brace your torso and make a quick, shallow dip by bending your hips and knees while keeping both feet on the floor.",
+      "Immediately drive through your feet and straighten your hips and knees to send the bar upward.",
+      "Press the bar in front of your head until your arms are straight overhead, allowing your shoulder blades to move naturally.",
+      "Finish standing with your elbows straight without dipping under the bar.",
+      "Lower the bar under control to the front rack."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -3608,7 +3909,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie prone on a bench with one dumbbell in each hand, palms facing inward, and the elbows held in a fixed slight bend. Horizontally abduct the upper arms at shoulder height until they align with the torso, keeping the scapulae controlled rather than deliberately retracting them, then lower under control without rowing, bending the elbows, or rotating the shoulders.",
+    "movementSteps": [
+      "Lie face down on a bench with one dumbbell in each hand, your palms facing inward, and your elbows held in a fixed slight bend.",
+      "Sweep your upper arms out at shoulder height until they line up with your torso, keeping your shoulder blades controlled instead of deliberately pinching them together.",
+      "Lower under control without rowing, bending the elbows, or rotating the shoulders."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -3665,7 +3970,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand upright holding an elastic band in front of the chest with the palms facing inward and the elbows in a fixed slight bend. Brace the trunk and horizontally abduct the upper arms at shoulder height to stretch the band, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or rotating the shoulders.",
+    "movementSteps": [
+      "Stand upright holding an elastic band in front of the chest with the palms facing inward and the elbows in a fixed slight bend.",
+      "Brace your torso and sweep your upper arms outward at shoulder height to stretch the band, keeping your shoulder blades controlled instead of deliberately pinching them together.",
+      "Return under control without rowing, bending the elbows, or rotating the shoulders."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -3727,7 +4036,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit facing the reverse-fly machine pad and hold the handles with the palms facing each other, upper arms at shoulder height, and elbows in a fixed slight bend. Follow the lever path to horizontally abduct the shoulders, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or adding shoulder rotation.",
+    "movementSteps": [
+      "Sit facing the reverse-fly machine pad, and hold the handles with the palms facing each other, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
+      "Follow the lever path to sweep your upper arms outward, keeping your shoulder blades controlled instead of deliberately pinching them together.",
+      "Return under control without rowing, bending the elbows, or adding shoulder rotation."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -3785,7 +4098,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit facing the reverse-fly machine pad and hold the horizontal handles with the palms facing down, upper arms at shoulder height, and elbows in a fixed slight bend. Follow the lever path to horizontally abduct the shoulders, keeping the scapulae controlled rather than deliberately retracting them, then return under control without rowing, bending the elbows, or deliberately externally rotating the shoulders.",
+    "movementSteps": [
+      "Sit facing the reverse-fly machine pad, and hold the horizontal handles with the palms facing down, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
+      "Follow the lever path to sweep your upper arms outward, keeping your shoulder blades controlled instead of deliberately pinching them together.",
+      "Return under control without rowing, changing the elbow bend, or deliberately turning your upper arms outward."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -3845,7 +4162,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand tall holding the overhead-anchored band beside the working thigh with the elbow extended and the band just taut. Lower the shoulder girdle by depressing the scapula against the band for two seconds, then return for two seconds without bending the elbow, moving the glenohumeral joint, leaning the trunk, or moving the neck. Rest five seconds between repetitions.",
+    "movementSteps": [
+      "Stand tall holding the overhead-anchored band beside the working thigh with your elbow straight and the band just taut.",
+      "Pull the working shoulder blade down against the band for two seconds without moving the arm.",
+      "Return for two seconds without bending your elbow, moving your arm at the shoulder, leaning your torso, or moving your neck.",
+      "Rest five seconds between repetitions."
+    ],
     "involvement": [
       {
         "muscle": "trapeziusLower",
@@ -3909,7 +4231,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand tall holding one dumbbell beside the torso with the elbow extended and the thumb pointing forward. Elevate the working scapula toward the ear while keeping the humerus at the side and allowing its measured upward rotation, then lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk.",
+    "movementSteps": [
+      "Stand tall holding one dumbbell beside your body with your elbow straight and your thumb pointing forward.",
+      "Shrug the working shoulder blade toward your ear while keeping your upper arm at your side.",
+      "Lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
+    ],
     "involvement": [
       {
         "muscle": "levatorScapulae",
@@ -3977,7 +4303,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand with the feet shoulder-width apart and both arms held at 30 degrees of frontal-plane abduction. Lightly contact the radial borders of the wrists against the plastic guides, use the inclinometer to retain the arm angle, and have a partner stabilize the chin and upper thorax. Shrug both scapulae to the individual maximum-height target bars, hold the top position for five seconds, then lower slowly without bending the elbows, moving the neck or trunk, or adding external load. Perform two source-prescribed trials. The catalog's upward-rotation action reflects the greater angle measured immediately after this condition, not a continuously tracked dynamic angle.",
+    "movementSteps": [
+      "Stand with your feet shoulder-width apart and both arms raised 30 degrees out to the sides.",
+      "Lightly touch the thumb-side edges of your wrists against the plastic guides, use the angle gauge to keep your arms in place, and have a partner steady your chin and upper chest.",
+      "Shrug both shoulder blades to your personal maximum-height target bars, and hold the top position for five seconds.",
+      "Lower slowly without bending the elbows, moving the neck or trunk, or adding external load.",
+      "Perform two attempts.",
+      "Record the larger shoulder-blade angle measured immediately after each hold; do not try to track the angle while moving."
+    ],
     "involvement": [
       {
         "muscle": "levatorScapulae",
@@ -4050,7 +4383,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie supine with one dumbbell held vertically above the shoulder, the upper arm fixed at 90 degrees of forward elevation, and the elbow extended. Without bending the elbow or flexing the shoulder, reach the load toward the ceiling by moving the scapula anterolaterally around the thorax, then return under control without adding a press.",
+    "movementSteps": [
+      "Lie on your back with one dumbbell held vertically above your shoulder, your upper arm pointing straight up, and your elbow straight.",
+      "Reach the dumbbell toward the ceiling by letting your shoulder blade slide forward around your ribs without bending your elbow or lifting the arm farther.",
+      "Return under control without adding a press."
+    ],
     "involvement": [
       {
         "muscle": "serratus",
@@ -4102,7 +4439,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand facing the low anterior band anchor and hold the working arm near 80 degrees of forward flexion with the elbow extended and the band just taut. Draw the scapula posteriorly toward the spine against the band for two seconds, then return for two seconds without bending the elbow, dynamically moving the glenohumeral joint, elevating the shoulder, turning the trunk, or moving the neck. Rest five seconds between repetitions.",
+    "movementSteps": [
+      "Stand facing a low band anchor and hold your working arm almost straight ahead with your elbow straight and the band just taut.",
+      "Pull your working shoulder blade back toward your spine against the band for two seconds.",
+      "Return for two seconds without bending your elbow, moving your arm at the shoulder, shrugging, turning your torso, or moving your neck.",
+      "Rest five seconds between repetitions."
+    ],
     "involvement": [
       {
         "muscle": "trapeziusMiddle",
@@ -4174,7 +4516,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly out to the side in the frontal plane from the side to shoulder height without shrugging, leaning, or using lower-body drive, then lower it under control.",
+    "movementSteps": [
+      "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
+      "Raise your upper arm directly out to the side until it reaches shoulder height.",
+      "Avoid shrugging, leaning, or using lower-body drive.",
+      "Lower the dumbbell under control."
+    ],
     "involvement": [
       {
         "muscle": "deltoidLateral",
@@ -4250,7 +4597,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand upright holding one cable handle with the pulley aligned approximately with the working hand in the arm-at-side start. Keep the humerus neutrally rotated and the elbow nearly extended while raising the upper arm directly out to the side in the frontal plane to shoulder height, then lower it without shrugging, leaning, or using lower-body drive.",
+    "movementSteps": [
+      "Stand upright holding one cable handle with the pulley aligned approximately with your working hand in the arm-at-side start.",
+      "Keep your palm facing your body and your elbow nearly straight.",
+      "Raise your upper arm directly out to the side until it reaches shoulder height.",
+      "Lower the handle under control without shrugging, leaning, or using lower-body drive."
+    ],
     "involvement": [
       {
         "muscle": "deltoidLateral",
@@ -4324,7 +4676,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie supine along a flat bench and hold a straight bar over the chest with a shoulder-width pronated grip and nearly extended elbows. Keeping the elbow angle fixed, lower the bar behind the head until the upper arms reach the reviewed overhead zone, then extend the shoulders to return the bar over the chest without turning the repetition into an elbow-extension movement.",
+    "movementSteps": [
+      "Lie on your back along a flat bench and hold a straight bar over your chest with your palms facing forward and your elbows nearly straight.",
+      "Keep your elbow angle fixed as you lower the bar behind your head as far as you comfortably can.",
+      "Bring your arms back over your chest while keeping the same elbow angle.",
+      "Do not turn the movement into a triceps exercise by bending and straightening your elbows."
+    ],
     "involvement": [
       {
         "muscle": "pectoralisMajorSternocostal",
@@ -4386,7 +4743,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand facing a high cable and hold a straight bar at shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows.",
+    "movementSteps": [
+      "Stand facing a high cable and hold a straight bar at shoulder width with your palms facing down and your elbows nearly straight.",
+      "Begin with your hands overhead and brace your torso.",
+      "Keep your elbow angle fixed as you bring the bar down to your thighs.",
+      "Return overhead under control without rowing or bending your elbows."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4452,7 +4814,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand facing a high cable and hold a straight bar wider than shoulder width with a pronated grip and nearly extended elbows. Begin with the hands in the reviewed overhead zone, brace the trunk, and keep the elbow angle fixed while extending the shoulders to bring the bar to the thighs; return overhead under control without rowing or bending the elbows.",
+    "movementSteps": [
+      "Stand facing a high cable and hold a straight bar wider than shoulder width with your palms facing down and your elbows nearly straight.",
+      "Begin with your hands overhead and brace your torso.",
+      "Keep your elbow angle fixed as you bring the bar down to your thighs.",
+      "Return overhead under control without rowing or bending your elbows."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4521,7 +4888,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand holding a barbell with a shoulder-width pronated grip, hinge at the hips until the torso is inclined, and brace without changing the torso angle. Pull the bar toward the lower ribs while the elbows travel back near the torso, then lower it under control.",
+    "movementSteps": [
+      "Stand holding a barbell at shoulder width with your palms facing back.",
+      "Hinge at your hips until your torso is inclined, then brace without changing the torso angle.",
+      "Pull the bar toward your lower ribs while your elbows travel back near your torso.",
+      "Lower the bar under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4602,7 +4974,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Hold a barbell with a shoulder-width supinated grip and maintain a strict hip hinge with the trunk braced. Keep the elbows tucked, pull the bar toward the lower torso without standing up, and lower it under control.",
+    "movementSteps": [
+      "Hold a barbell at shoulder width with your palms facing forward.",
+      "Maintain a strict hip hinge with your trunk braced.",
+      "Keep your elbows tucked as you pull the bar toward your lower torso without standing up.",
+      "Lower the bar under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4682,7 +5059,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set a barbell on the floor and take a shoulder-width pronated grip while holding a strict hip hinge. Pull the bar toward the lower ribs without extending the hips or spine, lower it to a complete floor reset, and rebrace before the next repetition.",
+    "movementSteps": [
+      "Set a barbell on the floor, hold it at shoulder width with your palms facing back, and bend forward from your hips.",
+      "Pull the bar toward your lower ribs without standing up or arching your back.",
+      "Lower the bar to a complete floor reset.",
+      "Rebrace before the next repetition."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4763,7 +5145,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Hold a dumbbell in each hand with the palms facing inward and establish a strict hip hinge. Pull both dumbbells toward the sides of the lower torso while keeping the elbows close, then lower them without changing the trunk angle.",
+    "movementSteps": [
+      "Hold a dumbbell in each hand with your palms facing inward.",
+      "Establish a strict hip hinge and hold your trunk angle steady.",
+      "Pull both dumbbells toward the sides of your lower torso while keeping your elbows close.",
+      "Lower the dumbbells without changing your trunk angle."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4844,7 +5231,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Place the opposite hand and knee on a bench while the working-side foot stays planted, then hold one dumbbell with a neutral grip. Keep the pelvis square, pull the elbow toward the hip without rotating the torso, and lower under control.",
+    "movementSteps": [
+      "Place your opposite hand and knee on a bench while the foot on your working side stays planted.",
+      "Hold one dumbbell with your palm facing inward and keep your hips level and facing forward.",
+      "Pull your working elbow toward your hip without rotating your torso.",
+      "Lower the dumbbell under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -4929,7 +5321,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie prone with the chest supported on an incline bench and hold two dumbbells with neutral grips. Let the shoulder blades move around the rib cage, pull the elbows toward the lower torso, and lower the dumbbells under control.",
+    "movementSteps": [
+      "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+      "Let your shoulder blades move around your rib cage.",
+      "Pull your elbows toward your lower torso.",
+      "Lower the dumbbells under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5002,7 +5399,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright at a low cable station holding a narrow neutral attachment, with the torso unsupported and braced. Pull the handle toward the lower ribs while keeping the elbows tucked, then return until the shoulder blades move forward under control.",
+    "movementSteps": [
+      "Sit upright at a low cable station holding a narrow parallel handle with your palms facing each other, and keep your torso steady without back support.",
+      "Pull the handle toward your lower ribs while keeping your elbows tucked.",
+      "Return the handle until your shoulder blades move forward under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5079,7 +5480,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright at a low cable station and hold one handle with a neutral grip. Brace the trunk and keep the pelvis square as the working elbow travels toward the hip, then return the arm forward without rotating the torso.",
+    "movementSteps": [
+      "Sit upright at a low cable station and hold one handle with your palm facing inward.",
+      "Brace your trunk and keep your pelvis square.",
+      "Pull your working elbow toward your hip.",
+      "Return your arm forward without rotating your torso."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5156,7 +5562,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit at a linked-arm lever-row machine with the chest against the pad and hold the handles with neutral grips. Allow normal scapular motion, drive the elbows toward the lower torso without lifting the chest from the pad, and return the linked lever under control.",
+    "movementSteps": [
+      "Sit at a linked-arm row machine with your chest against the pad and hold the handles with your palms facing each other.",
+      "Let your shoulder blades move naturally as you drive your elbows toward your lower ribs.",
+      "Keep your chest against the pad.",
+      "Return the linked lever under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5229,7 +5640,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit against the chest pad of an independent-arm lever-row machine and hold one handle with a neutral grip. Keep the pelvis and chest square, pull the working elbow toward the lower torso, and return the lever without twisting away from the pad.",
+    "movementSteps": [
+      "Sit against the chest pad of a single-arm row machine and hold one handle with your palm facing inward.",
+      "Keep your pelvis and chest square as you pull your working elbow toward your lower torso.",
+      "Return the lever without twisting away from the pad."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5306,7 +5721,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the Smith bar near knee height, take a shoulder-width pronated grip, and establish a strict hip hinge beneath the rail path. Pull the bar toward the lower ribs without changing the torso angle, then lower it along the rails under control.",
+    "movementSteps": [
+      "Set the Smith bar near knee height and hold it at shoulder width with your palms facing back.",
+      "Establish a strict hip hinge beneath the rail path.",
+      "Pull the bar toward your lower ribs without changing your torso angle.",
+      "Lower the bar along the rails under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5386,7 +5806,12 @@
     "bodyweightFraction": 0.73,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Lie beneath a fixed straight bar with a shoulder-width pronated grip, feet on the floor, and the body held approximately parallel to the floor. Keep a straight line from shoulders through heels, pull the chest toward the bar through a modest scapular upper-arm path, and lower under control.",
+    "movementSteps": [
+      "Lie beneath a fixed straight bar, hold it at shoulder width with your palms facing away from you, and keep your feet on the floor with your body nearly parallel to it.",
+      "Keep a straight line from your shoulders through your heels.",
+      "Pull your chest toward the bar while letting your shoulder blades move naturally.",
+      "Lower your body under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -5471,7 +5896,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand side-on with the cable anchored across the body, hold the working upper arm beside the torso with the elbow flexed about 90 degrees, and rotate the forearm away from the abdomen. Return under control without moving the elbow, retracting the shoulder blade, or turning the torso.",
+    "movementSteps": [
+      "Stand sideways to the cable, keep the working upper arm beside your body, and bend the elbow about 90 degrees.",
+      "Rotate the forearm away from the abdomen.",
+      "Return under control without moving the elbow, pinching the shoulder blade back, or turning your torso."
+    ],
     "involvement": [
       {
         "muscle": "externalRotators",
@@ -5515,7 +5944,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm away from the abdomen against the band, and return without moving the elbow, shoulder blade, or torso.",
+    "movementSteps": [
+      "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso.",
+      "Keep the elbow bent about 90 degrees as you turn the forearm away from your stomach against the band.",
+      "Return without moving the elbow, shoulder blade, or torso."
+    ],
     "involvement": [
       {
         "muscle": "externalRotators",
@@ -5560,7 +5993,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie on the nonworking side on a flat bench with a towel roll between the working upper arm and torso, the elbow flexed about 90 degrees, and a dumbbell held above the abdomen. Rotate the forearm toward the ceiling and lower it under control without lifting the upper arm, rolling the torso, or retracting the shoulder blade.",
+    "movementSteps": [
+      "Lie on the side you are not exercising, with a towel roll between your working upper arm and torso.",
+      "Bend the elbow about 90 degrees and hold a dumbbell above your stomach.",
+      "Rotate the forearm toward the ceiling.",
+      "Lower the dumbbell under control without lifting the upper arm, rolling your torso, or pinching the shoulder blade back."
+    ],
     "involvement": [
       {
         "muscle": "externalRotators",
@@ -5604,7 +6042,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand upright with one dumbbell beside the thigh, the humerus neutrally rotated, and the elbow held nearly extended. Raise the upper arm directly forward from the side to shoulder height without bending the elbow, shrugging, leaning, or using lower-body drive, then lower it under control.",
+    "movementSteps": [
+      "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
+      "Raise the upper arm directly forward from the side to shoulder height without bending the elbow, shrugging, leaning, or using lower-body drive.",
+      "Lower the arm under control."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -5681,7 +6123,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Hold a barbell with a wide pronated grip and maintain a strict hip hinge. Pull toward the upper chest while the elbows travel out at shoulder height, retract the shoulder blades without depressing them, and lower the bar without extending the hips or spine.",
+    "movementSteps": [
+      "Hold a barbell with a wide overhand grip and keep your body bent forward from the hips.",
+      "Pull toward the upper chest while the elbows travel out at shoulder height.",
+      "Pinch your shoulder blades together without pulling them down.",
+      "Lower the bar without standing up or arching your back."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -5758,7 +6205,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Lie prone with the chest supported on an incline bench and hold two dumbbells with neutral grips. Keep the forearms beneath the elbows as the upper arms travel out at shoulder height, retract the shoulder blades, and lower the dumbbells under control without lifting the chest.",
+    "movementSteps": [
+      "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+      "Keep the forearms beneath the elbows as the upper arms travel out at shoulder height.",
+      "Pinch your shoulder blades together, then lower the dumbbells under control without lifting your chest."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -5827,7 +6278,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright at a shoulder-height cable and hold a wide straight attachment with a pronated grip. Brace the unsupported torso, pull toward the upper chest with the elbows flared at shoulder height, retract the shoulder blades, and return under control.",
+    "movementSteps": [
+      "Sit upright at a shoulder-height cable and hold a wide straight attachment with your palms facing down.",
+      "Brace the unsupported torso as you pull toward the upper chest with the elbows flared at shoulder height.",
+      "Pinch your shoulder blades together, then return under control."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -5900,7 +6355,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright at a shoulder-height cable and hold one handle with a neutral grip. Keep the pelvis and torso square as the working elbow travels out and back at shoulder height, retract the working-side scapula, and return without rotating the trunk.",
+    "movementSteps": [
+      "Sit upright at a shoulder-height cable and hold one handle with your palm facing inward.",
+      "Keep the pelvis and torso square as the working elbow travels out and back at shoulder height.",
+      "Pull the working shoulder blade toward your spine, then return without turning your torso."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -5973,7 +6432,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit at a horizontal lever-row machine with the chest against the pad and take the wide pronated handles. Pull with both elbows out at shoulder height while allowing the shoulder blades to retract over the rib cage, then return the linked lever under control.",
+    "movementSteps": [
+      "Sit at a horizontal row machine with your chest against the pad and hold the wide handles with your palms facing down.",
+      "Pull with both elbows out at shoulder height while letting your shoulder blades pinch together naturally.",
+      "Return the linked lever under control."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -6042,7 +6505,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit against the chest pad of an independent-arm horizontal lever row and hold one neutral handle. Keep the pelvis and chest square while the working elbow travels out and back at shoulder height, retract the scapula, and return the lever without twisting.",
+    "movementSteps": [
+      "Sit against the chest pad of a single-arm horizontal row machine and hold one handle with your palm facing inward.",
+      "Keep the pelvis and chest square while the working elbow travels out and back at shoulder height.",
+      "Pull the working shoulder blade toward your spine, then return the handle without twisting."
+    ],
     "involvement": [
       {
         "muscle": "deltoidPosterior",
@@ -6115,7 +6582,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen, and return under control without moving the elbow, protracting the shoulder blade, or turning the torso.",
+    "movementSteps": [
+      "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+      "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach.",
+      "Return under control without moving the elbow, reaching the shoulder blade forward, or turning your torso."
+    ],
     "involvement": [
       {
         "muscle": "subscapularis",
@@ -6171,7 +6642,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso. Keep the elbow flexed about 90 degrees, rotate the forearm across the abdomen against the band, and return without moving the elbow, protracting the shoulder blade, or turning the torso.",
+    "movementSteps": [
+      "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+      "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach against the band.",
+      "Return without moving the elbow, reaching the shoulder blade forward, or turning your torso."
+    ],
     "involvement": [
       {
         "muscle": "subscapularis",
@@ -6228,7 +6703,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in the MedX lumbar-extension machine with the thighs perpendicular to the seat. Tighten the thigh restraint, secure the distal-femur restraint just above the patella, tighten the footboard, and maintain contact with the rolling upper-pelvis restraint. Apply extension force only to the posterior upper-torso resistance pad. From the machine's 72-degree full-lumbar-flexion reference, extend for at least two seconds to its 0-degree full-extension reference, hold one second, then return for at least four seconds without lifting or rotating the pelvis or driving with the hips.",
+    "movementSteps": [
+      "Sit in the MedX lower-back machine with your thighs at a right angle to the seat.",
+      "Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
+      "Keep your upper hips against the rolling restraint and push only against the pad behind your upper torso.",
+      "Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
+      "Hold the upright position for one second.",
+      "Return for at least four seconds without lifting or turning your hips or pushing with your legs."
+    ],
     "involvement": [
       {
         "muscle": "lumbarExtensors",
@@ -6260,7 +6742,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie supine in a stable lower-body position with the pelvis held still. Begin with the trunk resting on the floor, then flex the spine to curl the head, shoulders, and upper trunk through the reviewed 30-degree range without using hip motion. Return to the supine start under control without turning the repetition into a full sit-up.",
+    "movementSteps": [
+      "Lie on your back in a stable position with your hips held still.",
+      "Begin with your torso resting on the floor.",
+      "Curl your head, shoulders, and upper back about 30 degrees off the floor without lifting from your hips.",
+      "Lower to the starting position under control without turning the repetition into a full sit-up."
+    ],
     "involvement": [
       {
         "muscle": "abs",
@@ -6296,7 +6783,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Lie on one side with the trunk resting on the floor, cross the upper foot over the lower leg, and have the crossed upper foot fixed securely without assuming a particular device. As a catalog coaching standard beyond the measured source, hold the pelvis and hip still rather than driving the lift from the hip. Laterally flex the spine to lift the upper body to the 30-degree trunk-elevation endpoint; this is not a segmental lumbar-angle prescription. Return to the side-lying start under control, then complete the same separately logged work in the opposite lateral-flexion direction.",
+    "movementSteps": [
+      "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
+      "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
+      "Lift your upper body sideways until it is about 30 degrees off the floor.",
+      "Lower to the starting position under control.",
+      "Repeat on the other side and log it separately."
+    ],
     "involvement": [
       {
         "muscle": "obliques",
@@ -6340,7 +6833,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height. Hold the pelvis against the seat and keep the hips and legs still. For one logged direction, begin rotated left, drive the shoulder pads from left to right in a controlled motion, stop at the largest comfortable torso-rotation endpoint, and return to the left-rotated start under control. Then reset the machine and perform the same prescribed work from right to left as a separately logged direction. The right-to-left direction is a mirrored training adaptation; do not alternate directions within a repetition.",
+    "movementSteps": [
+      "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
+      "Hold the pelvis against the seat and keep the hips and legs still.",
+      "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
+      "Turn as far as feels comfortable, then return to the left-facing start under control.",
+      "Reset the machine, repeat the same movement from right to left, and log that direction separately.",
+      "Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition."
+    ],
     "involvement": [
       {
         "muscle": "obliques",
@@ -6372,7 +6872,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Place a barbell securely across the upper back and hold it with both hands in a pronated grip. Take a fixed sagittal split stance approximately equal to your greater-trochanter-to-lateral-malleolus leg length, with the lead foot flat and the trail forefoot on the floor; the reviewed study did not report a precise foot landmark for this taped condition. Keep the torso erect and both foot contacts fixed. Lower until the lead thigh is approximately parallel to the floor, then extend the lead hip and knee and move the lead ankle from its bottom-position dorsiflexion toward the split-standing angle. Finish in the same split stance without stepping between repetitions.",
+    "movementSteps": [
+      "Place a barbell securely across your upper back and hold it with both palms facing forward.",
+      "Take a split stance about as long as the distance from the outside of your hip to the outside of your ankle, with your front foot flat and the ball of your rear foot on the floor.",
+      "Keep that stance length throughout the set, using a comfortable position for each foot.",
+      "Keep your torso erect and both foot contacts fixed as you lower until your lead thigh is approximately parallel to the floor.",
+      "Push through your front foot and straighten the front hip and knee to rise back to the split stance.",
+      "Finish in the same split stance without stepping between repetitions."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -6463,7 +6970,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor. Shift onto the lead leg without pushing or hopping from the trail leg. Extend the lead hip and knee and move the lead ankle from its dorsiflexed lower position toward the standing angle until the trail foot reaches the platform beside the lead foot. Pause briefly in bilateral standing. Shift back onto the lead leg, return the trail foot to the lower floor, then step the lead foot down beside it to complete the repetition. Replace the same lead foot fully on the platform before the next repetition, and switch lead sides after the set.",
+    "movementSteps": [
+      "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor.",
+      "Shift onto the lead leg without pushing or hopping from the trail leg.",
+      "Push through the lead foot and straighten that hip and knee until the other foot reaches the platform beside it.",
+      "Pause briefly with both feet on the platform.",
+      "Shift back onto the lead leg, return the trail foot to the lower floor, and step the lead foot down beside it to complete the repetition.",
+      "Replace the same lead foot fully on the platform before the next repetition, and switch lead sides after the set."
+    ],
     "involvement": [
       {
         "muscle": "vasti",
@@ -6537,7 +7051,14 @@
     "bodyweightFraction": 0,
     "modality": "isometricStrength",
     "loadMode": "external",
-    "movementDefinition": "Log the weight of the single dumbbell. Hold it at one side with the upper arm at the side, neutral humeral and forearm rotation, the palm facing the thigh, no straps or hooks, and the elbow held extended beside the torso. Walk continuously forward on a level surface for the prescribed duration while resisting the dumbbell's side-bending tendency without forcing the spine motionless. Log the other side as well; do not turn, march in place, walk backward, or lean deliberately to create repetitions.",
+    "movementSteps": [
+      "Log the weight of the single dumbbell.",
+      "Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight.",
+      "Use no straps or hooks.",
+      "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
+      "Log the other side as well.",
+      "Do not turn, march in place, walk backward, or lean deliberately to create repetitions."
+    ],
     "involvement": [
       {
         "muscle": "obliques",
@@ -6615,7 +7136,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand at the reviewed low cable with the feet shoulder-width apart and the knees slightly flexed. Hold the straight bar with both hands in the source-shown overhand spacing, keep the torso upright, and engage the core. Pull the bar vertically while flexing the elbows and elevating the upper arms through the mixed flexion-abduction corridor, keeping the elbows slightly above the hands. Stop when the elbows reach shoulder height, then return slowly under control without shrugging as a separate action, retracting the scapulae, rotating the upper arms deliberately, leaning the torso, or adding lower-body drive.",
+    "movementSteps": [
+      "Stand at a low cable with your feet shoulder-width apart and your knees slightly bent.",
+      "Hold the straight bar with the overhand hand spacing shown for the exercise, keep your torso upright, and brace your core.",
+      "Pull the bar straight up, bending your elbows and raising your upper arms out and slightly forward.",
+      "Keep your elbows slightly above your hands and stop when they reach shoulder height.",
+      "Lower the bar slowly without adding a shrug, pinching your shoulder blades together, turning your upper arms, leaning, or pushing with your legs."
+    ],
     "involvement": [
       {
         "muscle": "deltoidLateral",
@@ -6719,7 +7246,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the feet about hip-width apart and hold the bar at the upper chest with a pronated grip just outside shoulder width. Brace the trunk without leaning back, keep the hips and knees motionless, and press the bar overhead as the scapulae rotate upward. Move the head only enough to clear the bar, finish with the elbows extended and the bar balanced over the midfoot, then lower under control to the upper chest.",
+    "movementSteps": [
+      "Stand with your feet about hip-width apart and hold the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+      "Brace your trunk without leaning back and keep your hips and knees motionless.",
+      "Press the bar overhead, letting your shoulder blades move naturally, and move your head only enough to clear the bar.",
+      "Finish with your elbows straight and the bar balanced over the middle of your feet.",
+      "Lower the bar under control to your upper chest."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -6802,7 +7335,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Brace the trunk and keep the hips and knees motionless. Press both dumbbells overhead along independent front-scapular paths without rotating the grips or leaning back, allowing the scapulae to rotate upward. Finish with the elbows extended and the loads balanced over the body, then lower under control to shoulder height.",
+    "movementSteps": [
+      "Stand with your feet about hip-width apart and hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+      "Brace your trunk and keep your hips and knees motionless.",
+      "Press both dumbbells overhead along slightly forward paths without turning your hands or leaning back, and let your shoulder blades move naturally.",
+      "Finish with your elbows straight and the weights balanced over your body.",
+      "Lower the dumbbells under control to shoulder height."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -6886,7 +7425,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the feet about hip-width apart and hold one dumbbell at the working-side shoulder with the palm facing forward and the elbow slightly forward of the torso. Brace the trunk, keep the pelvis level and the torso facing forward, and keep the hips and knees motionless. Press the dumbbell overhead along a front-scapular path without rotating the grip, leaning sideways or back, or twisting the torso, allowing the working scapula to rotate upward. Finish with the elbow extended and the load balanced over the body, then lower under control before changing sides.",
+    "movementSteps": [
+      "Stand with your feet about hip-width apart and hold one dumbbell at the shoulder you are working, with your palm facing forward and your elbow slightly forward.",
+      "Brace your torso, keep your hips level and facing forward, and do not bend your hips or knees.",
+      "Press the dumbbell overhead on a slightly forward path without turning your hand, leaning sideways or back, or twisting, and let your shoulder blade move naturally.",
+      "Finish with your elbow straight and the weight balanced over your body.",
+      "Lower the dumbbell under control before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -6969,7 +7514,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the bench backrest to about 85 degrees and sit with the pelvis and upper torso supported and the feet planted. Hold one dumbbell at each shoulder with the palms facing forward and the elbows slightly forward of the torso. Press both dumbbells overhead along independent front-scapular paths without rotating the grips, pushing through the legs, or lifting the torso from the bench. Allow the scapulae to rotate upward even though the backrest limits their translation, finish with the elbows extended, and lower under control to shoulder height.",
+    "movementSteps": [
+      "Set the bench backrest to about 85 degrees and sit with your pelvis and upper torso supported and your feet planted.",
+      "Hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+      "Press both dumbbells overhead along slightly forward paths without turning your hands, pushing through your legs, or lifting your torso from the bench.",
+      "Let your shoulder blades move as much as the backrest allows, and finish with your elbows straight.",
+      "Lower the dumbbells under control to shoulder height."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7040,7 +7591,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set a bench backrest to about 80 degrees inside a rack and sit with the pelvis and upper torso supported and the feet planted. Unrack the bar at the upper chest with a pronated grip just outside shoulder width. Press the bar overhead in front of the head without pushing through the legs or lifting the torso from the bench, allowing the scapulae to rotate upward. Finish with the elbows extended, then lower the bar under control to the upper chest.",
+    "movementSteps": [
+      "Set a bench backrest to about 80 degrees inside a rack and sit with your pelvis and upper torso supported and your feet planted.",
+      "Unrack the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+      "Press the bar overhead in front of your head without pushing through your legs or lifting your torso from the bench, and let your shoulder blades move naturally.",
+      "Finish with your elbows straight.",
+      "Lower the bar under control to your upper chest."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7111,7 +7668,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit upright on a flat bench without a backrest, plant the feet, and hold one dumbbell at each shoulder with the palms facing forward. Brace the trunk so the ribs stay stacked over the pelvis, then press both dumbbells overhead along independent front-scapular paths without leaning back, pushing through the legs, or rotating the grips. Finish with the elbows extended and lower under control to shoulder height.",
+    "movementSteps": [
+      "Sit upright on a flat bench without a backrest, plant your feet, and hold one dumbbell at each shoulder with your palms facing forward.",
+      "Brace your trunk so your ribs stay stacked over your pelvis.",
+      "Press both dumbbells overhead along slightly forward paths without leaning back, pushing through your legs, or turning your hands.",
+      "Finish with your elbows straight.",
+      "Lower the dumbbells under control to shoulder height."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7194,7 +7757,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Set the bench backrest to about 75 degrees and sit with the upper torso and pelvis supported and the feet planted. Hold one dumbbell at the working-side shoulder with the palm facing inward. Press it overhead along a front-scapular path without rotating the grip, pushing through the legs, twisting, or leaning sideways, while keeping both sides of the pelvis in contact with the bench. Finish with the elbow extended, lower under control, and repeat on the other side.",
+    "movementSteps": [
+      "Set the bench backrest to about 75 degrees and sit with your upper torso and pelvis supported and your feet planted.",
+      "Hold one dumbbell at the shoulder you are working with your palm facing inward.",
+      "Press the dumbbell overhead on a slightly forward path without turning your hand, pushing through your legs, twisting, or leaning sideways, while keeping both hips on the bench.",
+      "Finish with your elbow straight and lower under control.",
+      "Repeat on the other side."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7277,7 +7846,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand with the feet about shoulder-width apart and rack one kettlebell at the working-side shoulder with a neutral wrist and the bell resting in the standard bell-down position against the forearm. Brace the trunk and keep the hips and knees motionless. Press the kettlebell overhead along a front-scapular path without letting it rotate bottom-up, leaning, or twisting. Finish with the elbow extended and the forearm vertical, then lower under control to the rack before changing sides.",
+    "movementSteps": [
+      "Stand with your feet about shoulder-width apart and hold one kettlebell at your working shoulder with your wrist straight and the bell resting against your forearm.",
+      "Brace your trunk and keep your hips and knees motionless.",
+      "Press the kettlebell overhead on a slightly forward path without letting it flip upside down, leaning, or twisting.",
+      "Finish with your elbow straight and your forearm vertical.",
+      "Lower the kettlebell under control to the rack before changing sides."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7360,7 +7935,13 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Place an upright bench under the Smith bar so the rails keep the bar in front of the head, set the backrest to about 85 degrees, and sit with the torso supported and feet planted. Unhook the bar at the upper chest with a pronated grip just outside shoulder width. Press along the rails without pushing through the legs or lifting from the bench, finish with the elbows extended, then lower under control and rehook securely.",
+    "movementSteps": [
+      "Place an upright bench under the Smith bar so the rails keep the bar in front of your head, set the backrest to about 85 degrees, and sit with your torso supported and your feet planted.",
+      "Unhook the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+      "Press along the rails without pushing through your legs or lifting from the bench.",
+      "Finish with your elbows straight.",
+      "Lower the bar under control and rehook it securely."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7431,7 +8012,12 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Adjust the seat so the neutral handles begin near shoulder height and sit with the pelvis and upper torso against the machine pad and the feet planted. Press both lever arms overhead along their converging front paths without pushing through the legs or lifting from the pad. Finish with the elbows extended without forcing the shoulders forward, then return the handles under control.",
+    "movementSteps": [
+      "Adjust the seat so the handles begin near shoulder height with your palms facing each other, then sit against the machine pad with your feet planted.",
+      "Press both lever arms overhead along their converging front paths without pushing through your legs or lifting from the pad.",
+      "Finish with your elbows straight without forcing your shoulders forward.",
+      "Return the handles under control."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7501,7 +8087,14 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "nonComparable",
-    "movementDefinition": "Place the inversion stand ten centimeters from a wall with its hand supports twenty centimeters wider than shoulder breadth and a fifteen-centimeter sponge centered beneath the head. Kick to inversion and let only the feet touch the wall gently. Lower until the head contacts the sponge, then press to full elbow and shoulder extension without collapsing at the waist, bending the knees, kipping, or using the wall for propulsion. The reviewed test counts maximum valid repetitions in forty seconds; five reps is only the catalog's editable starting seed. The source did not measure joint, scapular, or muscle actions, so this record transparently inherits the reviewed vertical-press mechanics and role policy rather than claiming direct dynamic action evidence.",
+    "movementSteps": [
+      "Place the handstand supports 10 cm from a wall and 20 cm wider than your shoulders, with a 15 cm sponge centered beneath your head.",
+      "Kick up into a handstand and let only your feet touch the wall gently.",
+      "Lower until your head contacts the sponge.",
+      "Press until your arms are straight overhead without folding at your waist, bending your knees, swinging for momentum, or pushing off the wall.",
+      "Perform as many controlled repetitions as you can in 40 seconds; five repetitions is only a suggested starting target.",
+      "Count only repetitions that follow the setup and movement rules above."
+    ],
     "involvement": [
       {
         "muscle": "deltoidAnterior",
@@ -7603,7 +8196,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Hang from a fixed bar with a pronated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs, then lower under control to a full hang.",
+    "movementSteps": [
+      "Hang from a fixed bar with your palms facing away, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+      "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs.",
+      "Lower under control to a full hang."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -7681,7 +8278,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Hang from a fixed bar with a supinated shoulder-width grip, straight elbows, and a braced trunk. Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive, then return under control to a full hang.",
+    "movementSteps": [
+      "Hang from a fixed bar with your palms facing you, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+      "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive.",
+      "Return under control to a full hang."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -7762,7 +8363,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced. Pull the body upward by driving the elbows down until the chin clears the handles, keep the lower body motionless, and lower under control to a full hang.",
+    "movementSteps": [
+      "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced.",
+      "Pull the body upward by driving the elbows down until the chin clears the handles, keeping the lower body motionless.",
+      "Lower under control to a full hang."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -7839,7 +8444,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "bodyweightAdded",
-    "movementDefinition": "Hang from a fixed bar with a pronated grip wider than the shoulders, straight elbows, and a braced trunk. Pull in the front/scapular path until the chin clears the bar without swinging or lower-body drive, then lower under control to a full hang.",
+    "movementSteps": [
+      "Hang from a fixed bar with your palms facing away, your hands wider than shoulder width, your elbows straight, and your torso braced.",
+      "Pull your body upward until your chin clears the bar without swinging or pushing with your lower body.",
+      "Lower under control to a full hang."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -7925,7 +8534,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "assistanceSubtracted",
-    "movementDefinition": "Set the assistance load, kneel or stand on the machine platform, and take a pronated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control while the platform guides the body vertically.",
+    "movementSteps": [
+      "Set the assistance load, kneel or stand on the machine platform, and hold the handles at shoulder width with your palms facing away and your elbows straight.",
+      "Pull until the chin clears the handles without kicking or leaning.",
+      "Lower under control while the platform guides the body vertically."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -7999,7 +8612,11 @@
     "bodyweightFraction": 1,
     "modality": "dynamicStrength",
     "loadMode": "assistanceSubtracted",
-    "movementDefinition": "Set the assistance load, kneel or stand on the guided platform, and take a supinated shoulder-width grip with the elbows straight. Pull until the chin clears the handles without kicking or leaning, then lower under control to the starting position.",
+    "movementSteps": [
+      "Set the assistance load, kneel or stand on the guided platform, and hold the handles at shoulder width with your palms facing you and your elbows straight.",
+      "Pull until the chin clears the handles without kicking or leaning.",
+      "Lower under control to the starting position."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8078,7 +8695,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit at a cable pulldown station with the thighs secured beneath the pad and take a medium pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head toward the upper chest by driving the elbows down, then return overhead under control.",
+    "movementSteps": [
+      "Sit at a cable pulldown station with your thighs secured beneath the pad, and hold the bar with a medium-width grip and your palms facing forward.",
+      "Keep the trunk braced and nearly upright as you pull the bar in front of the head toward the upper chest by driving the elbows down.",
+      "Return overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8156,7 +8777,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the thighs secured beneath the pad and hold a close parallel-grip attachment with the palms facing each other. Keep the torso braced, drive the elbows down as the handle travels in front of the head toward the upper chest, and return overhead under control.",
+    "movementSteps": [
+      "Sit with the thighs secured beneath the pad, and hold a close parallel-grip attachment with the palms facing each other.",
+      "Keep the torso braced, and drive the elbows down as the handle travels in front of the head toward the upper chest.",
+      "Return overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8234,7 +8859,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the thighs secured beneath the pad and take a shoulder-width supinated grip on the bar. Hold the trunk nearly upright, drive the elbows down and back as the bar travels in front of the head toward the upper chest, then return overhead under control.",
+    "movementSteps": [
+      "Sit with your thighs secured beneath the pad, and hold the bar at shoulder width with your palms facing you.",
+      "Hold the trunk nearly upright, and drive the elbows down and back as the bar travels in front of the head toward the upper chest.",
+      "Return overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8308,7 +8937,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the thighs secured beneath the pad and take a wide pronated grip. Keep the trunk braced and nearly upright, pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest, then return overhead under control.",
+    "movementSteps": [
+      "Sit with your thighs secured beneath the pad, and hold the bar wider than shoulder width with your palms facing forward.",
+      "Keep the trunk braced and nearly upright as you pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest.",
+      "Return overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8382,7 +9015,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit with the thighs secured beneath the pad and hold one high-cable handle in a neutral grip. Keep the shoulders and pelvis square, drive the working elbow down beside the ribs without rotating or leaning, then return the arm overhead under control.",
+    "movementSteps": [
+      "Sit with your thighs secured beneath the pad, and hold one high-cable handle with your palm facing inward.",
+      "Keep the shoulders and pelvis square as you drive the working elbow down beside the ribs without rotating or leaning.",
+      "Return the arm overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8460,7 +9097,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in the lever pulldown machine with the thighs secured beneath the pad and take the neutral handles overhead. Keep the torso braced, drive both elbows down as the levers follow their guided path, and return to full overhead reach under control.",
+    "movementSteps": [
+      "Sit in the pulldown machine with your thighs secured beneath the pad, and hold the overhead handles with your palms facing each other.",
+      "Keep the torso braced, and drive both elbows down as the levers follow their guided path.",
+      "Return to full overhead reach under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8538,7 +9179,11 @@
     "bodyweightFraction": 0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit in the independent-arm lever pulldown machine with the thighs secured and hold one neutral handle overhead. Keep the torso and pelvis square, drive the working elbow down without rotating or leaning, and return the lever overhead under control.",
+    "movementSteps": [
+      "Sit in the single-arm pulldown machine with your thighs secured, and hold one overhead handle with your palm facing inward.",
+      "Keep the torso and pelvis square as you drive the working elbow down without rotating or leaning.",
+      "Return the lever overhead under control."
+    ],
     "involvement": [
       {
         "muscle": "lats",
@@ -8612,7 +9257,11 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit astride a flat bench with both pronated forearms supported and the wrists extending just beyond the edge. Hold a straight bar without opening the fingers, extend both wrists through the controlled available range, and lower under control without rotating the forearms or moving the elbows, shoulders, or torso.",
+    "movementSteps": [
+      "Sit astride a flat bench with both forearms supported, palms facing down, and your hands just beyond the edge.",
+      "Hold a straight bar without opening your fingers, and lift both hands as far as you can with control.",
+      "Lower under control without rotating the forearms or moving the elbows, shoulders, or torso."
+    ],
     "involvement": [
       {
         "muscle": "extensorCarpiRadialis",
@@ -8674,7 +9323,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Sit astride a flat bench with both supinated forearms supported and the wrists extending just beyond the edge. Hold a straight bar without opening the fingers, flex both wrists through the controlled available range, and lower under control without rotating the forearms or moving the elbows, shoulders, or torso.",
+    "movementSteps": [
+      "Sit astride a flat bench with both forearms supported, palms facing up, and your hands just beyond the edge.",
+      "Hold a straight bar without opening the fingers.",
+      "Curl both hands upward as far as you can with control.",
+      "Lower the bar under control without rotating the forearms or moving the elbows, shoulders, or torso."
+    ],
     "involvement": [
       {
         "muscle": "flexorCarpiRadialis",
@@ -8736,7 +9390,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand tall with the working arm beside the torso, the elbow extended, and the thumb pointing forward. Grip below the dumbbell's bottom collar with its shaft pointing ahead, raise the thumb side of the wrist through the controlled available range, and lower without rotating the forearm or moving the elbow, shoulder, or torso.",
+    "movementSteps": [
+      "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward.",
+      "Grip below the dumbbell's bottom collar with its shaft pointing ahead.",
+      "Raise the thumb side of your wrist through the controlled available range.",
+      "Lower under control without rotating your forearm or moving your elbow, shoulder, or torso."
+    ],
     "involvement": [
       {
         "muscle": "flexorCarpiRadialis",
@@ -8794,7 +9453,12 @@
     "bodyweightFraction": 0.0,
     "modality": "dynamicStrength",
     "loadMode": "external",
-    "movementDefinition": "Stand tall with the working arm beside the torso, the elbow extended, and the thumb pointing forward. Grip just above the dumbbell's bottom collar with its shaft pointing behind, raise the little-finger side of the wrist through the controlled available range, and lower without rotating the forearm or moving the elbow, shoulder, or torso.",
+    "movementSteps": [
+      "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward.",
+      "Grip just above the dumbbell's bottom collar with its shaft pointing behind.",
+      "Raise the little-finger side of the wrist through the controlled available range.",
+      "Lower without rotating the forearm or moving the elbow, shoulder, or torso."
+    ],
     "involvement": [
       {
         "muscle": "flexorCarpiUlnaris",

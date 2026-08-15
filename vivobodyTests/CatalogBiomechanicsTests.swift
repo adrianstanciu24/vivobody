@@ -46,22 +46,25 @@ struct CatalogBiomechanicsTests {
         }
     }
 
-    @Test func movementDefinitionsAreAuthoredAndComplete() {
+    @Test func movementStepsAreAuthoredAndComplete() {
         for record in CatalogData.records {
-            let definition = record.movementDefinition.trimmingCharacters(in: .whitespacesAndNewlines)
-            let words = definition
-                .split(whereSeparator: \.isWhitespace)
-                .map {
-                    String($0)
-                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-                        .lowercased()
-                }
-                .filter { !$0.isEmpty }
+            #expect((2 ... 10).contains(record.movementSteps.count))
+            for step in record.movementSteps {
+                let trimmed = step.trimmingCharacters(in: .whitespacesAndNewlines)
+                let words = trimmed
+                    .split(whereSeparator: \.isWhitespace)
+                    .map {
+                        String($0)
+                            .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+                            .lowercased()
+                    }
+                    .filter { !$0.isEmpty }
 
-            #expect(definition.count >= 24, "'\(record.name)' has an underspecified definition")
-            #expect(definition.first?.isUppercase == true)
-            #expect(definition.last == "." || definition.last == "!" || definition.last == "?")
-            #expect(!zip(words, words.dropFirst()).contains { left, right in left == right })
+                #expect(trimmed.count >= 12, "'\(record.name)' has an underspecified step")
+                #expect(trimmed.first?.isUppercase == true)
+                #expect(trimmed.last == "." || trimmed.last == "!" || trimmed.last == "?")
+                #expect(!zip(words, words.dropFirst()).contains { left, right in left == right })
+            }
         }
     }
 

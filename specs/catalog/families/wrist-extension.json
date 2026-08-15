@@ -368,7 +368,11 @@
         "forman-2020-dynamic-wrist-flexion-extension",
         "szymanski-2004-wrist-forearm-training"
       ],
-      "movementDefinition": "Sit astride a flat bench with both pronated forearms supported and the wrists extending just beyond the edge. Hold a straight bar without opening the fingers, extend both wrists through the controlled available range, and lower under control without rotating the forearms or moving the elbows, shoulders, or torso."
+      "movementSteps": [
+        "Sit astride a flat bench with both forearms supported, palms facing down, and your hands just beyond the edge.",
+        "Hold a straight bar without opening your fingers, and lift both hands as far as you can with control.",
+        "Lower under control without rotating the forearms or moving the elbows, shoulders, or torso."
+      ]
     }
   ]
 }

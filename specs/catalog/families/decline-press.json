@@ -376,7 +376,11 @@
         "lauver-2016-bench-angle",
         "saeterbakken-2017-bench-press-variations"
       ],
-      "movementDefinition": "Secure the legs on a bench declined 15 degrees and lie with the eyes below the racked bar. Lower the bar under control toward the lower-chest line, then press through shoulder horizontal adduction and elbow extension while keeping the torso and shoulders supported."
+      "movementSteps": [
+        "Secure the legs on a bench declined 15 degrees, and lie with the eyes below the racked bar.",
+        "Lower the bar under control toward the lower-chest line.",
+        "Press the bar up until your elbows are straight while keeping your torso and shoulders supported."
+      ]
     },
     {
       "catalogID": "decline-dumbbell-bench-press",
@@ -440,7 +444,11 @@
         "coratella-2020-bench-press-variations",
         "lee-2019-pectoralis-force-direction"
       ],
-      "movementDefinition": "Secure the legs on a bench declined 15 degrees and begin with one dumbbell beside each lower-chest line. Keep each forearm under its load, press the dumbbells upward and slightly inward to elbow extension, then lower them under control without turning the repetition into a fly."
+      "movementSteps": [
+        "Secure the legs on a bench declined 15 degrees, and begin with one dumbbell beside each lower-chest line.",
+        "Keep each forearm beneath its dumbbell, and press upward and slightly inward until your elbows are straight.",
+        "Lower the dumbbells under control without turning the repetition into a fly."
+      ]
     },
     {
       "catalogID": "decline-smith-machine-bench-press",
@@ -501,7 +509,11 @@
         "lauver-2016-bench-angle",
         "schick-2010-smith-bench-press"
       ],
-      "movementDefinition": "Set a decline bench to 15 degrees and position it so the Smith bar descends toward the lower chest without forcing the shoulders forward. Lower the bar along the rails under control, then press to elbow extension while keeping the torso and shoulders supported."
+      "movementSteps": [
+        "Set a decline bench to 15 degrees, and position it so the Smith bar descends toward the lower chest without forcing the shoulders forward.",
+        "Lower the bar along the rails under control.",
+        "Press until your elbows are straight while keeping your torso and shoulders supported."
+      ]
     },
     {
       "catalogID": "decline-machine-chest-press",
@@ -562,7 +574,11 @@
         "coratella-2020-bench-press-variations",
         "lee-2019-pectoralis-force-direction"
       ],
-      "movementDefinition": "Adjust the seat so the handles begin beside the lower chest and follow an approximately 15-degree downward path relative to a horizontal press. Keep the torso against the pad, press the handles forward and inward to elbow extension, then return under control."
+      "movementSteps": [
+        "Adjust the seat so the handles begin beside the lower chest and follow an approximately 15-degree downward path relative to a horizontal press.",
+        "Keep your torso against the pad, and press the handles forward and inward until your elbows are straight.",
+        "Return under control."
+      ]
     }
   ]
 }

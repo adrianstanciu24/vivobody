@@ -391,7 +391,11 @@
         "mckenzie-2022-dip-variations",
         "mckenzie-2022-bar-dip-fatigue"
       ],
-      "movementDefinition": "Support the full body above fixed dip bars with no foot contact. Lower under control by flexing the elbows and allowing the shoulders to extend behind the torso only to a self-selected controlled depth. Press back up through shoulder flexion toward neutral and elbow extension without swinging, kicking, or forcing a scapular action that the reviewed trials did not measure."
+      "movementSteps": [
+        "Support the full body above fixed dip bars with no foot contact.",
+        "Bend your elbows and lower under control only as far as feels comfortable, letting your upper arms move slightly behind your torso.",
+        "Press back up until your elbows are straight without swinging, kicking, or forcing your shoulder blades into a specific position."
+      ]
     },
     {
       "catalogID": "ring-dip",
@@ -480,7 +484,11 @@
         "da-silva-2022-ring-dip-pectoralis-rupture",
         "mckenzie-2022-dip-variations"
       ],
-      "movementDefinition": "Support the full body above two independent rings with no foot contact. Keep the rings controlled beside the torso, lower by flexing the elbows and allowing the shoulders to extend behind the torso to a self-selected controlled depth, then return through shoulder flexion toward neutral and elbow extension without kipping or using the legs."
+      "movementSteps": [
+        "Support the full body above two independent rings with no foot contact.",
+        "Keep the rings controlled beside your torso as you bend your elbows and lower only as far as feels comfortable, letting your upper arms move slightly behind you.",
+        "Press back up until your elbows are straight without kipping or using your legs."
+      ]
     }
   ]
 }

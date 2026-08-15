@@ -553,7 +553,12 @@
         "brazil-2021-barbell-hip-thrust",
         "kennedy-2024-hip-thrust-glute-bridge"
       ],
-      "movementDefinition": "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis. Plant the feet at shoulder width so the knees finish near 90 degrees, steady the bar with a supinated grip, and raise the pelvis until the hips reach neutral. Lower until the plates return to the floor without adding deliberate spinal extension or abduction."
+      "movementSteps": [
+        "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis.",
+        "Plant your feet at shoulder width so your knees finish near 90 degrees, and steady the bar with your palms facing up.",
+        "Raise the pelvis until the hips reach neutral.",
+        "Lower until the plates return to the floor without arching your back or letting your knees drift outward."
+      ]
     },
     {
       "catalogID": "barbell-glute-bridge",
@@ -629,7 +634,12 @@
       "evidenceRefs": [
         "kennedy-2024-hip-thrust-glute-bridge"
       ],
-      "movementDefinition": "Lie with the upper torso anchored on the floor, a padded barbell across the pelvis, and the feet shoulder-width apart with the reviewed flexed-knee setup. Steady the bar with a supinated grip and raise the pelvis until the hips reach neutral and the knees finish near 115 degrees of flexion. Lower until the plates return to the floor without shifting the upper torso or adding deliberate spinal extension or abduction."
+      "movementSteps": [
+        "Lie with your upper back firmly on the floor, a padded barbell across your hips, your feet shoulder-width apart, and your knees bent near 115 degrees.",
+        "Steady the bar with your palms facing up.",
+        "Raise your pelvis until your body forms a straight line from shoulders to knees, with your knees bent near 115 degrees.",
+        "Lower until the plates return to the floor without shifting your upper torso, arching your back, or letting your knees drift outward."
+      ]
     }
   ]
 }

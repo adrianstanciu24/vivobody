@@ -743,7 +743,7 @@
         "additionalPrimeActions",
         "additionalStabilityDemands",
         "evidenceRefs",
-        "movementDefinition"
+        "movementSteps"
       ],
       "properties": {
         "catalogID": {
@@ -833,8 +833,14 @@
         "evidenceRefs": {
           "$ref": "#/$defs/evidenceRefs"
         },
-        "movementDefinition": {
-          "$ref": "#/$defs/nonEmptyString"
+        "movementSteps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
         }
       }
     }

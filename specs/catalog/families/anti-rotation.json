@@ -479,7 +479,12 @@
         "juan-recio-2025-pallof-postural-challenge",
         "cinarli-2025-anti-movement-training"
       ],
-      "movementDefinition": "Attach a band to a side pulley so its line of pull is horizontal, stand side-on with the feet together on a stable floor, and hold the handle in both hands at shoulder height. Extend both elbows so the arms are perpendicular to the torso, choose a tension you can control, and hold for the prescribed duration without letting the spine or pelvis rotate. Repeat with the anchor on the other side; do not turn the hold into a repeated press."
+      "movementSteps": [
+        "Attach a band to a side pulley so its line of pull is horizontal, then stand side-on with the feet together on a stable floor and hold the handle in both hands at shoulder height.",
+        "Straighten both elbows until your arms point directly forward, and choose a tension you can control.",
+        "Hold for the set time without letting your torso or hips turn, and do not repeatedly press your arms in and out.",
+        "Repeat with the anchor on the other side."
+      ]
     }
   ]
 }

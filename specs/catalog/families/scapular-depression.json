@@ -421,7 +421,12 @@
       "evidenceRefs": [
         "mccabe-2007-below-90-scapular-exercises"
       ],
-      "movementDefinition": "Stand tall holding the overhead-anchored band beside the working thigh with the elbow extended and the band just taut. Lower the shoulder girdle by depressing the scapula against the band for two seconds, then return for two seconds without bending the elbow, moving the glenohumeral joint, leaning the trunk, or moving the neck. Rest five seconds between repetitions."
+      "movementSteps": [
+        "Stand tall holding the overhead-anchored band beside the working thigh with your elbow straight and the band just taut.",
+        "Pull the working shoulder blade down against the band for two seconds without moving the arm.",
+        "Return for two seconds without bending your elbow, moving your arm at the shoulder, leaning your torso, or moving your neck.",
+        "Rest five seconds between repetitions."
+      ]
     }
   ]
 }

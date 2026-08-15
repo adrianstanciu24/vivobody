@@ -489,7 +489,14 @@
       "evidenceRefs": [
         "zhao-2026-landmine-press-kinematics"
       ],
-      "movementDefinition": "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load. For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm. Fully grip the moving sleeve and begin with it close to the working-side deltoid. Without deliberately driving through the hips, knees, or ankles, press the sleeve through its pivoted arc to a controlled end range, then return it to the shoulder. Perform three power-focused repetitions, log the opposite side separately, and keep the trunk and pelvis controlled without treating them as measured position-held segments."
+      "movementSteps": [
+        "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load.",
+        "For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm.",
+        "Grip the moving end of the bar firmly and begin with it close to your working shoulder.",
+        "Press the sleeve through its pivoted arc to a controlled end range without deliberately driving through the hips, knees, or ankles, then return it to the shoulder.",
+        "Keep your torso and hips controlled throughout the movement.",
+        "Perform three power-focused repetitions and log the opposite side separately."
+      ]
     }
   ]
 }

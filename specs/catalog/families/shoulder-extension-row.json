@@ -863,7 +863,12 @@
         "garcia-jaen-2021-bent-over-row-posture",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Stand holding a barbell with a shoulder-width pronated grip, hinge at the hips until the torso is inclined, and brace without changing the torso angle. Pull the bar toward the lower ribs while the elbows travel back near the torso, then lower it under control."
+      "movementSteps": [
+        "Stand holding a barbell at shoulder width with your palms facing back.",
+        "Hinge at your hips until your torso is inclined, then brace without changing the torso angle.",
+        "Pull the bar toward your lower ribs while your elbows travel back near your torso.",
+        "Lower the bar under control."
+      ]
     },
     {
       "catalogID": "underhand-barbell-row",
@@ -921,7 +926,12 @@
         "ackland-2008-shoulder-moment-arms",
         "lehman-2004-seated-row-activation"
       ],
-      "movementDefinition": "Hold a barbell with a shoulder-width supinated grip and maintain a strict hip hinge with the trunk braced. Keep the elbows tucked, pull the bar toward the lower torso without standing up, and lower it under control."
+      "movementSteps": [
+        "Hold a barbell at shoulder width with your palms facing forward.",
+        "Maintain a strict hip hinge with your trunk braced.",
+        "Keep your elbows tucked as you pull the bar toward your lower torso without standing up.",
+        "Lower the bar under control."
+      ]
     },
     {
       "catalogID": "pendlay-row",
@@ -977,7 +987,12 @@
       "evidenceRefs": [
         "fenwick-2009-row-trunk-loading"
       ],
-      "movementDefinition": "Set a barbell on the floor and take a shoulder-width pronated grip while holding a strict hip hinge. Pull the bar toward the lower ribs without extending the hips or spine, lower it to a complete floor reset, and rebrace before the next repetition."
+      "movementSteps": [
+        "Set a barbell on the floor, hold it at shoulder width with your palms facing back, and bend forward from your hips.",
+        "Pull the bar toward your lower ribs without standing up or arching your back.",
+        "Lower the bar to a complete floor reset.",
+        "Rebrace before the next repetition."
+      ]
     },
     {
       "catalogID": "dumbbell-bent-over-row",
@@ -1034,7 +1049,12 @@
       "evidenceRefs": [
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Hold a dumbbell in each hand with the palms facing inward and establish a strict hip hinge. Pull both dumbbells toward the sides of the lower torso while keeping the elbows close, then lower them without changing the trunk angle."
+      "movementSteps": [
+        "Hold a dumbbell in each hand with your palms facing inward.",
+        "Establish a strict hip hinge and hold your trunk angle steady.",
+        "Pull both dumbbells toward the sides of your lower torso while keeping your elbows close.",
+        "Lower the dumbbells without changing your trunk angle."
+      ]
     },
     {
       "catalogID": "one-arm-dumbbell-row",
@@ -1092,7 +1112,12 @@
         "fenwick-2009-row-trunk-loading",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Place the opposite hand and knee on a bench while the working-side foot stays planted, then hold one dumbbell with a neutral grip. Keep the pelvis square, pull the elbow toward the hip without rotating the torso, and lower under control."
+      "movementSteps": [
+        "Place your opposite hand and knee on a bench while the foot on your working side stays planted.",
+        "Hold one dumbbell with your palm facing inward and keep your hips level and facing forward.",
+        "Pull your working elbow toward your hip without rotating your torso.",
+        "Lower the dumbbell under control."
+      ]
     },
     {
       "catalogID": "chest-supported-dumbbell-row",
@@ -1144,7 +1169,12 @@
         "garcia-jaen-2021-bent-over-row-posture",
         "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row"
       ],
-      "movementDefinition": "Lie prone with the chest supported on an incline bench and hold two dumbbells with neutral grips. Let the shoulder blades move around the rib cage, pull the elbows toward the lower torso, and lower the dumbbells under control."
+      "movementSteps": [
+        "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+        "Let your shoulder blades move around your rib cage.",
+        "Pull your elbows toward your lower torso.",
+        "Lower the dumbbells under control."
+      ]
     },
     {
       "catalogID": "seated-cable-row",
@@ -1201,7 +1231,11 @@
         "padovan-2026-seated-row-scapular-position",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit upright at a low cable station holding a narrow neutral attachment, with the torso unsupported and braced. Pull the handle toward the lower ribs while keeping the elbows tucked, then return until the shoulder blades move forward under control."
+      "movementSteps": [
+        "Sit upright at a low cable station holding a narrow parallel handle with your palms facing each other, and keep your torso steady without back support.",
+        "Pull the handle toward your lower ribs while keeping your elbows tucked.",
+        "Return the handle until your shoulder blades move forward under control."
+      ]
     },
     {
       "catalogID": "single-arm-seated-cable-row",
@@ -1256,7 +1290,12 @@
         "fenwick-2009-row-trunk-loading",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit upright at a low cable station and hold one handle with a neutral grip. Brace the trunk and keep the pelvis square as the working elbow travels toward the hip, then return the arm forward without rotating the torso."
+      "movementSteps": [
+        "Sit upright at a low cable station and hold one handle with your palm facing inward.",
+        "Brace your trunk and keep your pelvis square.",
+        "Pull your working elbow toward your hip.",
+        "Return your arm forward without rotating your torso."
+      ]
     },
     {
       "catalogID": "chest-supported-machine-row",
@@ -1310,7 +1349,12 @@
         "padovan-2026-seated-row-scapular-position",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit at a linked-arm lever-row machine with the chest against the pad and hold the handles with neutral grips. Allow normal scapular motion, drive the elbows toward the lower torso without lifting the chest from the pad, and return the linked lever under control."
+      "movementSteps": [
+        "Sit at a linked-arm row machine with your chest against the pad and hold the handles with your palms facing each other.",
+        "Let your shoulder blades move naturally as you drive your elbows toward your lower ribs.",
+        "Keep your chest against the pad.",
+        "Return the linked lever under control."
+      ]
     },
     {
       "catalogID": "single-arm-chest-supported-machine-row",
@@ -1365,7 +1409,11 @@
       "evidenceRefs": [
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementDefinition": "Sit against the chest pad of an independent-arm lever-row machine and hold one handle with a neutral grip. Keep the pelvis and chest square, pull the working elbow toward the lower torso, and return the lever without twisting away from the pad."
+      "movementSteps": [
+        "Sit against the chest pad of a single-arm row machine and hold one handle with your palm facing inward.",
+        "Keep your pelvis and chest square as you pull your working elbow toward your lower torso.",
+        "Return the lever without twisting away from the pad."
+      ]
     },
     {
       "catalogID": "smith-machine-bent-over-row",
@@ -1424,7 +1472,12 @@
         "ackland-2008-shoulder-moment-arms",
         "fenwick-2009-row-trunk-loading"
       ],
-      "movementDefinition": "Set the Smith bar near knee height, take a shoulder-width pronated grip, and establish a strict hip hinge beneath the rail path. Pull the bar toward the lower ribs without changing the torso angle, then lower it along the rails under control."
+      "movementSteps": [
+        "Set the Smith bar near knee height and hold it at shoulder width with your palms facing back.",
+        "Establish a strict hip hinge beneath the rail path.",
+        "Pull the bar toward your lower ribs without changing your torso angle.",
+        "Lower the bar along the rails under control."
+      ]
     },
     {
       "catalogID": "inverted-row",
@@ -1485,7 +1538,12 @@
         "youdas-2016-inverted-row",
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Lie beneath a fixed straight bar with a shoulder-width pronated grip, feet on the floor, and the body held approximately parallel to the floor. Keep a straight line from shoulders through heels, pull the chest toward the bar through a modest scapular upper-arm path, and lower under control."
+      "movementSteps": [
+        "Lie beneath a fixed straight bar, hold it at shoulder width with your palms facing away from you, and keep your feet on the floor with your body nearly parallel to it.",
+        "Keep a straight line from your shoulders through your heels.",
+        "Pull your chest toward the bar while letting your shoulder blades move naturally.",
+        "Lower your body under control."
+      ]
     }
   ]
 }

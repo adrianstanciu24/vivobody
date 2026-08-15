@@ -635,7 +635,12 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Hold a barbell with a wide pronated grip and maintain a strict hip hinge. Pull toward the upper chest while the elbows travel out at shoulder height, retract the shoulder blades without depressing them, and lower the bar without extending the hips or spine."
+      "movementSteps": [
+        "Hold a barbell with a wide overhand grip and keep your body bent forward from the hips.",
+        "Pull toward the upper chest while the elbows travel out at shoulder height.",
+        "Pinch your shoulder blades together without pulling them down.",
+        "Lower the bar without standing up or arching your back."
+      ]
     },
     {
       "catalogID": "chest-supported-dumbbell-rear-delt-row",
@@ -687,7 +692,11 @@
         "fennell-2016-shoulder-retractor-row",
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Lie prone with the chest supported on an incline bench and hold two dumbbells with neutral grips. Keep the forearms beneath the elbows as the upper arms travel out at shoulder height, retract the shoulder blades, and lower the dumbbells under control without lifting the chest."
+      "movementSteps": [
+        "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+        "Keep the forearms beneath the elbows as the upper arms travel out at shoulder height.",
+        "Pinch your shoulder blades together, then lower the dumbbells under control without lifting your chest."
+      ]
     },
     {
       "catalogID": "wide-grip-seated-cable-rear-delt-row",
@@ -743,7 +752,11 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Sit upright at a shoulder-height cable and hold a wide straight attachment with a pronated grip. Brace the unsupported torso, pull toward the upper chest with the elbows flared at shoulder height, retract the shoulder blades, and return under control."
+      "movementSteps": [
+        "Sit upright at a shoulder-height cable and hold a wide straight attachment with your palms facing down.",
+        "Brace the unsupported torso as you pull toward the upper chest with the elbows flared at shoulder height.",
+        "Pinch your shoulder blades together, then return under control."
+      ]
     },
     {
       "catalogID": "single-arm-seated-cable-rear-delt-row",
@@ -798,7 +811,11 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Sit upright at a shoulder-height cable and hold one handle with a neutral grip. Keep the pelvis and torso square as the working elbow travels out and back at shoulder height, retract the working-side scapula, and return without rotating the trunk."
+      "movementSteps": [
+        "Sit upright at a shoulder-height cable and hold one handle with your palm facing inward.",
+        "Keep the pelvis and torso square as the working elbow travels out and back at shoulder height.",
+        "Pull the working shoulder blade toward your spine, then return without turning your torso."
+      ]
     },
     {
       "catalogID": "chest-supported-machine-rear-delt-row",
@@ -851,7 +868,11 @@
       "evidenceRefs": [
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Sit at a horizontal lever-row machine with the chest against the pad and take the wide pronated handles. Pull with both elbows out at shoulder height while allowing the shoulder blades to retract over the rib cage, then return the linked lever under control."
+      "movementSteps": [
+        "Sit at a horizontal row machine with your chest against the pad and hold the wide handles with your palms facing down.",
+        "Pull with both elbows out at shoulder height while letting your shoulder blades pinch together naturally.",
+        "Return the linked lever under control."
+      ]
     },
     {
       "catalogID": "single-arm-chest-supported-machine-rear-delt-row",
@@ -906,7 +927,11 @@
       "evidenceRefs": [
         "youdas-2021-suspension-row"
       ],
-      "movementDefinition": "Sit against the chest pad of an independent-arm horizontal lever row and hold one neutral handle. Keep the pelvis and chest square while the working elbow travels out and back at shoulder height, retract the scapula, and return the lever without twisting."
+      "movementSteps": [
+        "Sit against the chest pad of a single-arm horizontal row machine and hold one handle with your palm facing inward.",
+        "Keep the pelvis and chest square while the working elbow travels out and back at shoulder height.",
+        "Pull the working shoulder blade toward your spine, then return the handle without twisting."
+      ]
     }
   ]
 }

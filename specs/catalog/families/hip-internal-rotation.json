@@ -474,7 +474,15 @@
       "evidenceRefs": [
         "lahuerta-martin-2024-flywheel-hip-rotation"
       ],
-      "movementDefinition": "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees flexed to 90 degrees, both feet suspended, the hands crossed over the opposite shoulders, and the pelvis neutral. Secure the working distal femur with one belt and the pelvis at both anterior superior iliac spines with two belts. Connect the working ankle brace to the Conic Power Move cable by carabiner, using the horizontally wall-fixed flywheel 7 cm above the floor, its upper-middle sliding-frame position, the reported 460-g attached load and 15-cm axis distance, and a cable length matched to the maximum active hip-rotation range. Internally rotate the working femur relative to the fixed pelvis as fast as possible, moving the lower leg outward, then return while counteracting the generated flywheel inertia. Keep the knee angle fixed and do not move the pelvis, spine, or thigh outside the hip-rotation path. After two sets of ten progressively harder warm-up repetitions, perform three progressive repetitions and seven high-intensity work repetitions, then repeat the reviewed setup for the other leg as a separately logged set."
+      "movementSteps": [
+        "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees bent to 90 degrees, both feet hanging freely, your hands crossed over your shoulders, and your pelvis centered.",
+        "Secure the lower end of the working thigh with one belt and place two belts across the front points of your hip bones to hold your pelvis still.",
+        "Connect the working ankle brace to the Conic Power Move cable with a carabiner. Set the wall-mounted flywheel 7 cm above the floor in the upper-middle frame position, attach the 460 g load 15 cm from the center, and adjust the cable so your hip can move through its full comfortable range.",
+        "Turn the working thigh inward as fast as possible so the lower leg moves outward while the pelvis stays still.",
+        "Return while resisting the flywheel's pull, keeping the knee angle fixed and avoiding movement through the pelvis or back.",
+        "Complete two sets of ten progressively harder warm-up repetitions, then perform three progressive repetitions and seven high-intensity work repetitions.",
+        "Repeat the same setup for the other leg and log it as a separate set."
+      ]
     }
   ]
 }

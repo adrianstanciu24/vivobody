@@ -531,7 +531,13 @@
         "sinclair-2022-back-squat-foot-angle",
         "yavuz-2015-front-back-squat-emg"
       ],
-      "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell resting securely across the upper back. Hold the bar with both hands in a pronated grip, brace the trunk, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a box, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while maintaining control of the free bar; the exact lumbar path is not standardized."
+      "movementSteps": [
+        "Stand with your heels about hip-width apart and a straight barbell resting securely across your upper back.",
+        "Hold the bar with both hands in an overhand grip, brace your torso, and keep both feet planted.",
+        "Bend your hips and knees, letting your knees travel forward naturally, until your upper thighs are about parallel to the floor.",
+        "Drive through both feet and straighten your hips and knees to return to standing while keeping the bar controlled.",
+        "Do not sit on a box, bounce at the bottom, or deliberately round or arch your back to complete the repetition."
+      ]
     },
     {
       "catalogID": "barbell-front-squat",
@@ -593,7 +599,13 @@
         "mccormick-2023-front-back-squat-bracing",
         "yavuz-2015-front-back-squat-emg"
       ],
-      "movementDefinition": "Stand with the heels about hip-width apart and a straight barbell supported across the anterior deltoids and clavicles in a clean grip. Brace the trunk, keep the elbows lifted, and keep both feet planted. Flex the hips and knees while allowing the ankles to dorsiflex until the upper thighs reach approximately parallel to the floor. Without sitting on a support, bouncing, or deliberately using spinal motion to create the repetition, extend the hips and knees and plantarflex the ankles back toward standing while keeping the free bar balanced on the front rack; the exact lumbar path is not standardized."
+      "movementSteps": [
+        "Stand with your heels about hip-width apart and support a straight barbell across the front of your shoulders and collarbones in a clean grip.",
+        "Brace your trunk, keep your elbows lifted, and keep both feet planted.",
+        "Bend your hips and knees, letting your knees travel forward naturally, until your upper thighs are about parallel to the floor.",
+        "Drive through both feet and straighten your hips and knees to return to standing while keeping the bar balanced on the front of your shoulders.",
+        "Do not sit on a support, bounce at the bottom, or deliberately round or arch your back to complete the repetition."
+      ]
     }
   ]
 }

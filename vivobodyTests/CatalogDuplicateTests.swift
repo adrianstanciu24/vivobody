@@ -41,7 +41,10 @@ struct CatalogDuplicateTests {
             planes: [.sagittal, .frontal],
             laterality: .bilateral,
             aliases: ["WPU"],
-            movementDefinition: "Hang from a bar with added load and pull the chin above it.",
+            movementSteps: [
+                "Hang from a bar with the added load secured and the elbows straight.",
+                "Pull until the chin clears the bar, then lower under control.",
+            ],
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .lats, role: .primary),
                 .init(muscle: .bicepsBrachii, role: .secondary),
@@ -72,7 +75,10 @@ struct CatalogDuplicateTests {
             planes: [.frontal],
             laterality: .unilateral,
             aliases: [],
-            movementDefinition: "Hold a straight line balanced on one forearm and the side of one foot.",
+            movementSteps: [
+                "Balance on one forearm and the side of one foot.",
+                "Hold the body in a straight line for the prescribed duration.",
+            ],
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .obliques, role: .primary),
                 .init(muscle: .gluteMed, role: .stabilizer),
@@ -95,7 +101,7 @@ struct CatalogDuplicateTests {
         #expect(draft.direction == source.direction)
         #expect(draft.planes == source.planes)
         #expect(draft.laterality == source.laterality)
-        #expect(draft.movementDefinition == source.movementDefinition)
+        #expect(draft.movementSteps == source.movementSteps)
         #expect(draft.muscleInvolvementSnapshot == source.muscleInvolvementSnapshot)
     }
 
@@ -181,7 +187,7 @@ struct CatalogDuplicateTests {
             planes: source.planes,
             laterality: source.laterality,
             aliases: [],
-            movementDefinition: source.movementDefinition,
+            movementSteps: source.movementSteps,
             muscleInvolvement: source.muscleInvolvement,
             isUserCreated: true
         )

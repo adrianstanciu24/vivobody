@@ -396,7 +396,12 @@
         "lehman-2005-stable-prone-bridge",
         "cinarli-2025-anti-movement-training"
       ],
-      "movementDefinition": "Set both forearms on a stable floor with the elbows below the shoulders and the upper arms perpendicular to the floor, then support the lower body on both feet. Hold the spine, pelvis, hips, and knees in one neutral straight line for the prescribed duration while resisting the tendency of the lower back to sag; do not turn the hold into a crunch, hip lift, reach, or limb movement."
+      "movementSteps": [
+        "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
+        "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
+        "Hold this position for the set time without letting your lower back sag.",
+        "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement."
+      ]
     }
   ]
 }

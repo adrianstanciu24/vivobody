@@ -425,7 +425,14 @@
         "matthews-2017-fohx-protocol",
         "matthews-2020-fohx-trial"
       ],
-      "movementDefinition": "Lie supine on a treatment table with both thighs supported over the wedge so both hips remain at 30 degrees of flexion and both knees remain flexed. Secure the elastic band at the working ankle. The therapist stabilizes the working knee against the support and holds the other end of the band so it opposes external hip rotation. Keep the pelvis and spine still and begin with the working hip in neutral rotation. Move the working lower leg against the band until the hip reaches the middle of its available external-rotation range, then return to neutral under control without lifting or turning the working thigh. Complete the prescribed repetitions before changing sides."
+      "movementSteps": [
+        "Lie on your back on a treatment table with both thighs supported over the wedge so your hips stay bent at 30 degrees and your knees stay bent.",
+        "Secure the elastic band at the working ankle.",
+        "Have the therapist hold the working knee against the support and pull the other end of the band against the movement.",
+        "Keep your pelvis and back still, and begin with the working thigh pointing straight ahead.",
+        "Move the working lower leg inward against the band until you reach the middle of your comfortable range.",
+        "Return to the straight-ahead position without lifting or turning the working thigh, and finish the set before changing sides."
+      ]
     }
   ]
 }

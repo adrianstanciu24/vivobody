@@ -487,7 +487,11 @@
       "evidenceRefs": [
         "kinoshita-2023-standing-seated-calf-raise"
       ],
-      "movementDefinition": "Stand in a unilateral calf-raise machine with the working forefoot neutral on the platform, the shoulder beneath the load pad, and the knee held extended. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without bending the knee or curling the toes."
+      "movementSteps": [
+        "Stand in a single-leg calf-raise machine with the front of the working foot centered on the platform and your shoulder beneath the load pad.",
+        "Keep the working knee straight and hold your hips, back, knee, and foot steady.",
+        "Raise the heel as high as you can, then lower under control without bending the knee or curling the toes."
+      ]
     },
     {
       "catalogID": "seated-unilateral-machine-calf-raise",
@@ -542,7 +546,11 @@
       "evidenceRefs": [
         "kinoshita-2023-standing-seated-calf-raise"
       ],
-      "movementDefinition": "Sit in a unilateral calf-raise machine with the working forefoot neutral on the platform, the distal thigh beneath the load pad, and the knee held near 90 degrees of flexion. Keep the hip, pelvis, spine, knee, and foot orientation still; raise the heel through ankle plantarflexion, then lower under control without extending the knee or curling the toes."
+      "movementSteps": [
+        "Sit in a single-leg calf-raise machine with the front of the working foot centered on the platform and the lower thigh beneath the load pad.",
+        "Keep the working knee bent near 90 degrees and hold the hip, pelvis, back, knee, and foot still.",
+        "Raise the heel as high as you can, then lower under control without straightening the knee or curling the toes."
+      ]
     }
   ]
 }

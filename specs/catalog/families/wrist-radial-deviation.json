@@ -342,7 +342,12 @@
         "forman-2020-dynamic-wrist-deviation",
         "szymanski-2004-wrist-forearm-training"
       ],
-      "movementDefinition": "Stand tall with the working arm beside the torso, the elbow extended, and the thumb pointing forward. Grip below the dumbbell's bottom collar with its shaft pointing ahead, raise the thumb side of the wrist through the controlled available range, and lower without rotating the forearm or moving the elbow, shoulder, or torso."
+      "movementSteps": [
+        "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward.",
+        "Grip below the dumbbell's bottom collar with its shaft pointing ahead.",
+        "Raise the thumb side of your wrist through the controlled available range.",
+        "Lower under control without rotating your forearm or moving your elbow, shoulder, or torso."
+      ]
     }
   ]
 }

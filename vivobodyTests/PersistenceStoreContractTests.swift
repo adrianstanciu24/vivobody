@@ -28,6 +28,10 @@ struct PersistenceStoreContractTests {
         static let bodyWeightID = UUID(uuidString: "80000000-0000-0000-0000-000000000001")!
         static let startedAt = Date(timeIntervalSince1970: 1_700_000_000)
         static let completedAt = Date(timeIntervalSince1970: 1_700_003_600)
+        static let movementSteps = [
+            "Set the cable near waist height and take the handle in one hand.",
+            "Pull the handle toward the ribs, then return it under control.",
+        ]
     }
 
     @Test func preReleaseBaselineReopensAndPreservesUserData() throws {
@@ -100,6 +104,7 @@ struct PersistenceStoreContractTests {
         #expect(custom.isUserCreated)
         #expect(custom.isFavorite)
         #expect(custom.oneRepMax == 275)
+        #expect(custom.movementSteps == Fixture.movementSteps)
 
         let weights = try context.fetch(FetchDescriptor<BodyWeightEntry>())
         let bodyWeight = try #require(weights.first { $0.id == Fixture.bodyWeightID })

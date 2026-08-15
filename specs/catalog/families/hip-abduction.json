@@ -372,7 +372,13 @@
       "evidenceRefs": [
         "mcbeth-2012-side-lying-hip-abduction"
       ],
-      "movementDefinition": "Lie on one side on a treatment table with the working leg on top, the hip neutral in flexion-extension and axial rotation, the lower leg flexed for stability, and a cuff weight secured just above the working ankle. Place a pressure-biofeedback unit beneath the trunk, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal contact band marks 35 degrees of abduction. Keep the pelvis and spine still, the working knee straight, and the toes pointing forward. Raise the straight top leg in the frontal plane until it contacts the endpoint band, then lower it under control without rolling the pelvis or turning the toes upward."
+      "movementSteps": [
+        "Lie on one side on a treatment table with the working leg on top, both hips facing straight ahead, the lower leg bent for stability, and a cuff weight secured just above the working ankle.",
+        "Place a pressure-biofeedback unit beneath your torso, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal band marks the 35-degree stopping point.",
+        "Keep the pelvis and spine still, the working knee straight, and the toes pointing forward.",
+        "Raise the straight top leg directly out to the side until it contacts the stopping band.",
+        "Lower the leg under control without rolling the pelvis or turning the toes upward."
+      ]
     }
   ]
 }

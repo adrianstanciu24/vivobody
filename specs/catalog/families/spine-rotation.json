@@ -272,7 +272,14 @@
         "vinstrup-2015-torso-twist",
         "stevens-2007-seated-axial-rotation"
       ],
-      "movementDefinition": "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height. Hold the pelvis against the seat and keep the hips and legs still. For one logged direction, begin rotated left, drive the shoulder pads from left to right in a controlled motion, stop at the largest comfortable torso-rotation endpoint, and return to the left-rotated start under control. Then reset the machine and perform the same prescribed work from right to left as a separately logged direction. The right-to-left direction is a mirrored training adaptation; do not alternate directions within a repetition."
+      "movementSteps": [
+        "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
+        "Hold the pelvis against the seat and keep the hips and legs still.",
+        "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
+        "Turn as far as feels comfortable, then return to the left-facing start under control.",
+        "Reset the machine, repeat the same movement from right to left, and log that direction separately.",
+        "Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition."
+      ]
     }
   ]
 }

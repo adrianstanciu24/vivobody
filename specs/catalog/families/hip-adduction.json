@@ -380,7 +380,13 @@
         "serner-2014-hip-adduction-exercises",
         "jensen-2014-elastic-hip-adduction-training"
       ],
-      "movementDefinition": "Stand upright on the support leg while holding a stable external support with both hands and secure an elastic band around the working ankle from the side. Place the straight working leg in maximal comfortable abduction with tension already in the band and hold it at the same slight posterior hip posture used at the endpoint. Keep the pelvis still, the working knee straight, and both sets of toes pointing forward as you draw the working thigh medially without swinging it farther backward, finishing one foot-width lateral to and about half a foot-length behind the stance foot. Return under control along the same strictly frontal path, then repeat before changing sides."
+      "movementSteps": [
+        "Stand upright on the support leg, hold a stable external support with both hands, and secure an elastic band around the working ankle from the side.",
+        "Move the straight working leg as far out to the side as is comfortable, keeping tension in the band and the leg slightly behind you.",
+        "Keep the pelvis still, the working knee straight, and both sets of toes pointing forward.",
+        "Pull the working leg inward without swinging it farther backward, stopping about one foot-width to the side and half a foot-length behind the stance foot.",
+        "Return under control along the same side-to-side path, then repeat before changing sides."
+      ]
     }
   ]
 }
