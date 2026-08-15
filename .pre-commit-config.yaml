@@ -83,6 +83,13 @@ repos:
         pass_filenames: false
         files: '^website/(src/|astro\.config\.mjs|eslint\.config\.mjs)'
 
+      - id: website-knip
+        name: Website dead code (knip)
+        entry: Scripts/knip-hook.sh
+        language: system
+        pass_filenames: false
+        files: '^website/(src/|knip\.json|package\.json|astro\.config\.mjs|tsconfig\.json)'
+
       - id: check-documentation
         name: Documentation knowledge map
         entry: /usr/bin/python3 Scripts/check_documentation.py
