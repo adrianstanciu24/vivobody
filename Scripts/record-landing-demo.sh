@@ -12,7 +12,8 @@ FFPROBE_BIN="${FFPROBE_BIN:-/opt/homebrew/bin/ffprobe}"
 BUNDLE_ID="astanciu.vivobody.app"
 CAPTURE_DIR="$ROOT_DIR/.verify/landing-video"
 RAW_DIR="$CAPTURE_DIR/raw"
-OUTPUT_DIR="$ROOT_DIR/website/public/video"
+WEBSITE_DIR="$ROOT_DIR/../vivobody.web"
+OUTPUT_DIR="$WEBSITE_DIR/public/video"
 OUTPUT_VIDEO="$OUTPUT_DIR/vivobody-demo.mp4"
 OUTPUT_POSTER="$OUTPUT_DIR/vivobody-demo-poster.jpg"
 LOGICAL_WIDTH=402
@@ -25,6 +26,12 @@ for required_binary in "$BAGUETTE_BIN" "$FFMPEG_BIN" "$FFPROBE_BIN" jq xcrun; do
     exit 1
   fi
 done
+
+if [[ ! -d "$WEBSITE_DIR/.git" ]]; then
+  echo "Expected the standalone website repo at $WEBSITE_DIR (sibling of this repo)." >&2
+  echo "Clone vivobody.web there before recording the landing demo." >&2
+  exit 1
+fi
 
 if [[ -n "${SIMULATOR_UDID:-}" ]]; then
   UDID="$SIMULATOR_UDID"

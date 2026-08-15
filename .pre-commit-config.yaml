@@ -76,13 +76,6 @@ repos:
         pass_filenames: false
         files: '(\.swift|^\.swiftlint\.yml)$'
 
-      - id: website-eslint
-        name: Website naming conventions (ESLint)
-        entry: Scripts/eslint-hook.sh
-        language: system
-        pass_filenames: false
-        files: '^website/(src/|astro\.config\.mjs|eslint\.config\.mjs)'
-
       - id: check-documentation
         name: Documentation knowledge map
         entry: /usr/bin/python3 Scripts/check_documentation.py

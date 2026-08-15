@@ -20,7 +20,7 @@ move. Expensive implementation work should also have an active plan under
 | [Family-first catalog roadmap](catalog/family-roadmap.md) | Complete roadmap; retained as catalog history | [reviewed families](catalog/families/), [proposal history](catalog/proposals/), [generated runtime catalog](../vivobody/Resources/catalog.json) | 2026-08-14 |
 | [Free + Pro lifetime unlock](free-with-pro-iap.md) | Implemented product design | [entitlement owner](../vivobody/Store/ProStore.swift), [purchase surface](../vivobody/Store/PaywallSheet.swift), [app state](../vivobody/App/AppState.swift), [widget fallback](../vivobodyWidgets/WidgetChrome.swift) | 2026-08-14 |
 | [HealthKit Tier A](healthkit-tier-a.md) | Implemented integration design | [HealthKit boundary](../vivobody/HealthKit/HealthKitWorkoutService.swift), [session fan-out](../vivobody/App/SessionSideEffects.swift), [settings surface](../vivobody/Screens/Me/SettingsScreen.swift) | 2026-08-14 |
-| [App Store Connect metadata](appstore-metadata.md) | Release artifact; recheck before submission | [shared version](../Shared.xcconfig), [app metadata](../vivobody/Info.plist), [privacy manifest](../vivobody/PrivacyInfo.xcprivacy), [public website](../website/) | 2026-08-14 |
+| [App Store Connect metadata](appstore-metadata.md) | Release artifact; recheck before submission | [shared version](../Shared.xcconfig), [app metadata](../vivobody/Info.plist), [privacy manifest](../vivobody/PrivacyInfo.xcprivacy), [public website](https://vivobody.app) | 2026-08-14 |
 
 ## Historical and superseded implementation records
 

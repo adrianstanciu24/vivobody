@@ -55,8 +55,7 @@ Treat source as canonical for volatile facts:
   conversion at the UI boundary. Stored weight remains canonical pounds.
 - Follow one naming standard: PascalCase for types, lowerCamelCase for
   functions, properties, and enum cases, with no underscores in Swift
-  identifiers. `Scripts/check_naming.py` enforces it for Swift and
-  `npm run lint` enforces it for website scripts.
+  identifiers. `Scripts/check_naming.py` enforces it for Swift.
 - Compose UI from `ScreenKit`, `PanelKit`, and `GlassStyle`; use 44pt-or-larger
   controls and stable accessibility identifiers on harness-critical controls.
 - Persist every workout interaction. Keep the rest timer first-class and

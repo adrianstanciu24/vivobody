@@ -2,9 +2,6 @@
 build/
 DerivedData/
 VivoKit/.build/
-website/node_modules/
-website/dist/
-website/.astro/
 
 # Verification artifacts (Scripts/verify.sh output)
 .verify/

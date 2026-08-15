@@ -39,8 +39,8 @@ decisions; it is the product constitution rather than a component catalog.
 
 ## Naming conventions
 
-Swift sources and website scripts share one casing standard, enforced
-mechanically rather than by review vigilance:
+Swift sources share one casing standard, enforced mechanically rather than
+by review vigilance:
 
 - Types (`class`, `struct`, `enum`, `protocol`, `actor`, `typealias`,
   `associatedtype`) use PascalCase: `WorkoutSessionController`,
@@ -55,10 +55,7 @@ mechanically rather than by review vigilance:
 `Scripts/check_naming.py` enforces the Swift side across app, widgets,
 VivoKit, and both test targets; it runs in `Scripts/check.sh` and the commit
 hooks, and comments, strings, and switch patterns are masked so only real
-declarations are judged. The website enforces the same standard through
-ESLint's `@typescript-eslint/naming-convention` (`npm run lint` in
-`website/`), which also covers frontmatter and inline `<script>` blocks in
-`.astro` components.
+declarations are judged.
 
 ## Code as a map
 
