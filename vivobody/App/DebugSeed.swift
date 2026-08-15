@@ -13,14 +13,14 @@ import VivoKit
 
 #if DEBUG
 
-    private func debugCatalogRecord(named name: String) -> CatalogRecord {
+    func debugCatalogRecord(named name: String) -> CatalogRecord {
         guard let record = CatalogData.record(forExerciseNamed: name) else {
             preconditionFailure("Debug seed references unknown catalog exercise: \(name)")
         }
         return record
     }
 
-    private func debugCatalogExercise(
+    func debugCatalogExercise(
         named name: String,
         plannedSets: Int,
         plannedReps: Int,

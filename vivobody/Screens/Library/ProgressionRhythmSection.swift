@@ -34,7 +34,7 @@ extension ExerciseDetailScreen {
             if pro?.isUnlocked == true {
                 rhythmSectionContent(cadence)
             } else {
-                LockedRhythmCover {
+                LockedProCover(title: "Load cadence") {
                     Haptics.soft()
                     isPaywallPresented = true
                 } content: {
@@ -460,35 +460,6 @@ private struct StaircaseArea: Shape {
     }
 }
 
-// MARK: - Locked cover
-
-/// Same frameless frosted treatment as the Insights tab's locked
-/// sections: the real content frozen beneath a blur, the whole area
-/// one button that opens the paywall. Accessibility sees only the
-/// locked section, never the numbers beneath it.
-private struct LockedRhythmCover<Content: View>: View {
-    let action: () -> Void
-    @ViewBuilder let content: () -> Content
-
-    @Environment(\.accessibilityReduceTransparency)
-    private var reduceTransparency
-
-    var body: some View {
-        Button(action: action) {
-            content()
-                .blur(radius: reduceTransparency ? 0 : 8)
-                .opacity(reduceTransparency ? 0 : 0.90)
-                .accessibilityHidden(true)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Load cadence, locked")
-        .accessibilityHint("Unlocks with Vivobody Pro")
-    }
-}
-
 // MARK: - Preview
 
 #if DEBUG
@@ -522,7 +493,7 @@ private struct LockedRhythmCover<Content: View>: View {
             VStack(spacing: Space.xxl) {
                 ProgressionRhythmCard(cadence: cadence, unit: .lb)
                 ProgressionRhythmCard(cadence: midCycle, unit: .lb)
-                LockedRhythmCover(action: {}) {
+                LockedProCover(title: "Load cadence", action: {}) {
                     ProgressionRhythmCard(cadence: cadence, unit: .lb)
                 }
             }

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Exercise Detail — Frequency &amp; Weekly Volume mockup</title>
+<style>
+  :root {
+    --bg: #000;
+    --card: rgba(255,255,255,0.055);
+    --card-bright: rgba(255,255,255,0.085);
+    --edge: rgba(255,255,255,0.10);
+    --edge-bright: rgba(255,255,255,0.18);
+    --ink-1: rgba(255,255,255,0.96);
+    --ink-2: rgba(255,255,255,0.74);
+    --ink-3: rgba(255,255,255,0.58);
+    --ink-4: rgba(255,255,255,0.48);
+    --accent: rgb(255,115,0);
+    --accent-dim: rgba(255,115,0,0.35);
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111;
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+    color: var(--ink-1);
+    display: flex;
+    gap: 40px;
+    padding: 48px;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .frame-wrap { display: flex; flex-direction: column; gap: 14px; }
+  .frame-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+  .phone {
+    width: 393px;
+    border-radius: 48px;
+    background: var(--bg);
+    border: 1px solid #2a2a2a;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .screen {
+    padding: 8px 20px 0 20px;
+    height: 880px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ---------- nav ---------- */
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    height: 44px; margin-bottom: 8px;
+  }
+  .nav .chev { color: var(--accent); font-size: 17px; }
+  .nav .icons { color: var(--ink-2); font-size: 15px; letter-spacing: 12px; }
+
+  /* ---------- hero ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 13px; font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 1.4px;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 34px; font-weight: 700; letter-spacing: 0.2px;
+    margin-bottom: 12px;
+  }
+  .pill {
+    display: inline-block;
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--accent-dim);
+    margin-bottom: 4px;
+  }
+  .pill.neutral { color: var(--ink-3); border-color: var(--edge); }
+
+  .stack > * + * { margin-top: 24px; }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--edge);
+    border-radius: 22px;
+    padding: 16px;
+  }
+  .card.bright { background: var(--card-bright); border-color: var(--edge-bright); }
+
+  .section-label {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.40);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 12px;
+  }
+
+  /* ---------- best hero card ---------- */
+  .best-line { display: flex; align-items: baseline; gap: 8px; }
+  .best-value {
+    font-family: var(--mono);
+    font-size: 56px; font-weight: 700;
+    color: var(--ink-1);
+    line-height: 1.05;
+  }
+  .best-unit { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--ink-3); }
+  .best-frag { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--ink-2); }
+  .best-date { font-size: 12px; font-weight: 500; color: var(--ink-4); margin-top: 6px; }
+
+  .hairline { height: 0.5px; background: var(--edge); margin: 14px 0 12px 0; }
+
+  /* NEW: frequency footer */
+  .freq { display: flex; }
+  .freq .cell { flex: 1; }
+  .freq .cell + .cell { border-left: 0.5px solid var(--edge); padding-left: 14px; }
+  .freq .f-label {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    color: var(--ink-4); letter-spacing: 0.04em; margin-bottom: 3px;
+  }
+  .freq .f-value {
+    font-family: var(--mono); font-size: 15px; font-weight: 600;
+    color: var(--ink-1);
+  }
+  .freq .f-value .muted { color: var(--ink-4); }
+
+  /* ---------- 1RM row ---------- */
+  .row-card {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .row-card .sub { font-size: 12px; font-weight: 500; color: var(--ink-4); margin-top: 3px; }
+  .row-card .value { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--ink-1); }
+  .row-card .chevron { color: var(--ink-4); font-size: 12px; margin-left: 10px; }
+
+  /* ---------- NEW: weekly volume card ---------- */
+  .vol-row { padding: 10px 0; }
+  .vol-row + .vol-row { border-top: 0.5px solid var(--edge); }
+  .vol-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+  .vol-muscle { font-size: 15px; font-weight: 600; color: var(--ink-2); }
+  .vol-muscle .role { font-weight: 500; font-size: 12px; color: var(--ink-4); }
+  .vol-contrib { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--accent); }
+  .vol-bar-line { display: flex; align-items: center; gap: 10px; }
+  .vol-bar {
+    position: relative; flex: 1; height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+  }
+  .vol-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.85);
+  }
+  .vol-fill.under { background: rgba(255,255,255,0.42); }
+  .vol-seg {
+    position: absolute; top: 0; bottom: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(255,115,0,0.45);
+  }
+  .vol-tick {
+    position: absolute; top: -3px; bottom: -3px; width: 1px;
+    background: rgba(255,255,255,0.25);
+  }
+  .vol-total {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    color: var(--ink-3); min-width: 30px; text-align: right;
+  }
+  .vol-caption {
+    font-size: 12px; font-weight: 500; color: var(--ink-4);
+    margin-top: 12px; line-height: 1.45;
+  }
+
+  /* ---------- locked state ---------- */
+  .locked-host { position: relative; }
+  .locked-content { filter: blur(8px); opacity: 0.9; pointer-events: none; }
+
+  /* ---------- bottom bar ---------- */
+  .bottom-bar {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 12px 20px 26px 20px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.92) 35%);
+  }
+  .unlock-pill {
+    display: flex; justify-content: center; gap: 6px;
+    font-size: 15px; font-weight: 600; color: #000;
+    background: var(--accent);
+    border-radius: 999px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 7px 14px rgba(255,115,0,0.42);
+  }
+  .cta {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 20px; font-weight: 600; color: #000;
+    background: var(--accent);
+    border-radius: 22px;
+    padding: 20px 24px;
+  }
+
+  /* chart ghost */
+  .ghost {
+    height: 120px; border-radius: 22px;
+    border: 1px dashed rgba(255,255,255,0.14);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+  .new-badge {
+    display: inline-block;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    color: #000; background: var(--accent);
+    border-radius: 4px; padding: 2px 6px;
+    vertical-align: 2px; margin-left: 8px;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ FRAME 1 · PRO ============ -->
+<div class="frame-wrap">
+  <div class="phone">
+    <div class="screen">
+      <div class="nav">
+        <span class="chev">‹</span>
+        <span class="icons">☆ ⋯</span>
+      </div>
+      <div class="stack">
+        <div>
+          <div class="eyebrow">DYNAMIC STRENGTH</div>
+          <h1>Bench Press</h1>
+          <span class="pill">Ready to add load</span>
+        </div>
+
+        <!-- Best-set hero card + NEW frequency footer -->
+        <div class="card bright">
+          <div class="section-label">Best set</div>
+          <div class="best-line">
+            <span class="best-value">225</span>
+            <span class="best-unit">lb</span>
+            <span class="best-frag">× 5</span>
+          </div>
+          <div class="best-date">Aug 12</div>
+          <div class="hairline"></div>
+          <div class="freq">
+            <div class="cell">
+              <div class="f-label">SESSIONS</div>
+              <div class="f-value">24</div>
+            </div>
+            <div class="cell">
+              <div class="f-label">PER WEEK</div>
+              <div class="f-value">2.1×</div>
+            </div>
+            <div class="cell">
+              <div class="f-label">LAST</div>
+              <div class="f-value">3d <span class="muted">ago</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- existing 1RM row, for context -->
+        <div class="card row-card">
+          <div>
+            <div class="section-label" style="margin-bottom:0">1RM</div>
+            <div class="sub">Tested</div>
+          </div>
+          <div style="display:flex;align-items:center">
+            <span class="value">265 lb</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+
+        <!-- NEW: weekly volume card -->
+        <div>
+          <div class="section-title">This week<span class="new-badge">NEW</span></div>
+          <div class="card">
+            <div class="vol-row" style="padding-top:2px">
+              <div class="vol-head">
+                <span class="vol-muscle">Chest <span class="role">· primary</span></span>
+                <span class="vol-contrib">+4.5</span>
+              </div>
+              <div class="vol-bar-line">
+                <div class="vol-bar">
+                  <div class="vol-fill" style="width:62.5%"></div>
+                  <div class="vol-seg" style="left:40%;width:22.5%"></div>
+                  <div class="vol-tick" style="left:40%"></div>
+                  <div class="vol-tick" style="left:90%"></div>
+                </div>
+                <span class="vol-total">12.5</span>
+              </div>
+            </div>
+            <div class="vol-row">
+              <div class="vol-head">
+                <span class="vol-muscle">Triceps <span class="role">· secondary</span></span>
+                <span class="vol-contrib">+2.5</span>
+              </div>
+              <div class="vol-bar-line">
+                <div class="vol-bar">
+                  <div class="vol-fill" style="width:47.5%"></div>
+                  <div class="vol-seg" style="left:35%;width:12.5%"></div>
+                  <div class="vol-tick" style="left:40%"></div>
+                  <div class="vol-tick" style="left:90%"></div>
+                </div>
+                <span class="vol-total">9.5</span>
+              </div>
+            </div>
+            <div class="vol-row" style="padding-bottom:2px">
+              <div class="vol-head">
+                <span class="vol-muscle">Front delts <span class="role">· secondary</span></span>
+                <span class="vol-contrib">+2.5</span>
+              </div>
+              <div class="vol-bar-line">
+                <div class="vol-bar">
+                  <div class="vol-fill under" style="width:32.5%"></div>
+                  <div class="vol-seg" style="left:20%;width:12.5%"></div>
+                  <div class="vol-tick" style="left:40%"></div>
+                  <div class="vol-tick" style="left:90%"></div>
+                </div>
+                <span class="vol-total">6.5</span>
+              </div>
+            </div>
+            <div class="vol-caption">
+              Hard sets from this exercise in the last 7 days. Bars show each
+              muscle's full week against its 8–18 productive band.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-bar">
+        <div class="cta"><span>Add to Workout</span><span>→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="frame-label">PRO — frequency footer in hero card · weekly volume card</div>
+</div>
+
+<!-- ============ FRAME 2 · FREE ============ -->
+<div class="frame-wrap">
+  <div class="phone">
+    <div class="screen">
+      <div class="nav">
+        <span class="chev">‹</span>
+        <span class="icons">☆ ⋯</span>
+      </div>
+      <div class="stack">
+        <div>
+          <div class="eyebrow">DYNAMIC STRENGTH</div>
+          <h1>Bench Press</h1>
+          <span class="pill">Ready to add load</span>
+        </div>
+
+        <div class="card bright">
+          <div class="section-label">Best set</div>
+          <div class="best-line">
+            <span class="best-value">225</span>
+            <span class="best-unit">lb</span>
+            <span class="best-frag">× 5</span>
+          </div>
+          <div class="best-date">Aug 12</div>
+          <div class="hairline"></div>
+          <div class="freq">
+            <div class="cell">
+              <div class="f-label">SESSIONS</div>
+              <div class="f-value">24</div>
+            </div>
+            <div class="cell">
+              <div class="f-label">PER WEEK</div>
+              <div class="f-value">2.1×</div>
+            </div>
+            <div class="cell">
+              <div class="f-label">LAST</div>
+              <div class="f-value">3d <span class="muted">ago</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card row-card">
+          <div>
+            <div class="section-label" style="margin-bottom:0">1RM</div>
+            <div class="sub">Tested</div>
+          </div>
+          <div style="display:flex;align-items:center">
+            <span class="value">265 lb</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+
+        <!-- NEW card, frozen for free tier -->
+        <div class="locked-host">
+          <div class="section-title">This week<span class="new-badge">NEW</span></div>
+          <div class="locked-content">
+            <div class="card">
+              <div class="vol-row" style="padding-top:2px">
+                <div class="vol-head">
+                  <span class="vol-muscle">Chest <span class="role">· primary</span></span>
+                  <span class="vol-contrib">+4.5</span>
+                </div>
+                <div class="vol-bar-line">
+                  <div class="vol-bar">
+                    <div class="vol-fill" style="width:62.5%"></div>
+                    <div class="vol-seg" style="left:40%;width:22.5%"></div>
+                  </div>
+                  <span class="vol-total">12.5</span>
+                </div>
+              </div>
+              <div class="vol-row">
+                <div class="vol-head">
+                  <span class="vol-muscle">Triceps <span class="role">· secondary</span></span>
+                  <span class="vol-contrib">+2.5</span>
+                </div>
+                <div class="vol-bar-line">
+                  <div class="vol-bar">
+                    <div class="vol-fill" style="width:47.5%"></div>
+                    <div class="vol-seg" style="left:35%;width:12.5%"></div>
+                  </div>
+                  <span class="vol-total">9.5</span>
+                </div>
+              </div>
+              <div class="vol-row" style="padding-bottom:2px">
+                <div class="vol-head">
+                  <span class="vol-muscle">Front delts <span class="role">· secondary</span></span>
+                  <span class="vol-contrib">+2.5</span>
+                </div>
+                <div class="vol-bar-line">
+                  <div class="vol-bar">
+                    <div class="vol-fill under" style="width:32.5%"></div>
+                    <div class="vol-seg" style="left:20%;width:12.5%"></div>
+                  </div>
+                  <span class="vol-total">6.5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-bar">
+        <div class="unlock-pill">Unlock Vivobody Pro · $24.99</div>
+        <div class="cta"><span>Add to Workout</span><span>→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="frame-label">FREE — footer stays free · volume card frozen (existing pattern)</div>
+</div>
+
+<!-- ============ FRAME 3 · EDGE: single old session ============ -->
+<div class="frame-wrap">
+  <div class="phone">
+    <div class="screen">
+      <div class="nav">
+        <span class="chev">‹</span>
+        <span class="icons">★ ⋯</span>
+      </div>
+      <div class="stack">
+        <div>
+          <div class="eyebrow">ISOMETRIC STRENGTH</div>
+          <h1>Dead Hang</h1>
+        </div>
+
+        <div class="card bright">
+          <div class="section-label">Best set</div>
+          <div class="best-line">
+            <span class="best-value">0:45</span>
+          </div>
+          <div class="best-date">Jul 26</div>
+          <div class="hairline"></div>
+          <div class="freq">
+            <div class="cell">
+              <div class="f-label">SESSIONS</div>
+              <div class="f-value">1</div>
+            </div>
+            <div class="cell">
+              <div class="f-label">PER WEEK</div>
+              <div class="f-value"><span class="muted">—</span></div>
+            </div>
+            <div class="cell">
+              <div class="f-label">LAST</div>
+              <div class="f-value">3w <span class="muted">ago</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ghost">TREND UNLOCKS AT 2 SESSIONS</div>
+
+        <div class="ghost" style="height:64px;padding:0 24px;text-align:center;line-height:1.5">“THIS WEEK” CARD HIDDEN —<br>NO WORK IN THE LAST 7 DAYS</div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="cta"><span>Add to Workout</span><span>→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="frame-label">EDGE — one session, outside the 7-day window</div>
+</div>
+
+</body>
+</html>

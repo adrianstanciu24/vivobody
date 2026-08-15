@@ -24,12 +24,15 @@
 //    • Steps   — a dedicated, numbered how-to screen built from the
 //                catalog's authored movement instructions
 //    • Stats   — a focal Best-set card (huge monospaced record numeral)
-//                over supporting Last / Times half-cards
+//                with a sessions / per-week / last-performed frequency
+//                footer behind a hairline
 //    • Load    — Bodyweight/assistance-only effective-load breakdown,
 //                using the historical workout snapshot behind the record
 //    • 1RM     — Dedicated, tappable tested-max row (dynamic strength
 //                only). Estimated strength belongs to the trend curve;
 //                this row stays an explicit user-entered measurement.
+//    • Week    — per-muscle hard-set contribution over the trailing 7
+//                days against each muscle's weekly band (Pro)
 //    • Rhythm  — median time between load increases + rhythm strip
 //                (Pro, comparable-load lifts with ≥2 increases)
 //    • Chart   — a bold estimated-strength trend instrument (including
@@ -208,6 +211,7 @@ struct ExerciseDetailScreen: View {
                 if showsPerformanceRows {
                     performanceRows
                 }
+                weeklyVolumeSection
                 if hasHistory || supportsEstimatedOneRepMax {
                     if pro?.isUnlocked ?? true {
                         chartSection

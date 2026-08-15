@@ -1,0 +1,83 @@
+{
+  "name": "exercise-detail-weekly-volume",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-weekly-volume",
+      "--pro"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "hard sets from this exercise"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "hard sets from this exercise"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "4 sessions"
+        },
+        "direction": "down"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "4 sessions"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "6.0 hard sets from this exercise this week"
+    },
+    {
+      "labelContains": "total this week, below the 8 to 18 productive band"
+    },
+    {
+      "labelContains": "4 sessions"
+    },
+    {
+      "labelContains": "1.6 per week"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "This week, locked"
+    }
+  ]
+}

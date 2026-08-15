@@ -115,6 +115,7 @@ struct AppRoot: View {
                     .synchronizeBundledCatalog(in: modelContext)
                 #if DEBUG
                     UITestSupport.seedIfRequested(in: modelContext)
+                    DebugWeeklyVolumeSeeder.seedIfRequested(in: modelContext)
                     if let requestedTab = UITestSupport.requestedTab() {
                         appState.selectedTab = requestedTab
                     }

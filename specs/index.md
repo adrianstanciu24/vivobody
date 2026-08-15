@@ -21,6 +21,7 @@ move. Expensive implementation work should also have an active plan under
 | [Free + Pro lifetime unlock](free-with-pro-iap.md) | Implemented product design | [entitlement owner](../vivobody/Store/ProStore.swift), [purchase surface](../vivobody/Store/PaywallSheet.swift), [app state](../vivobody/App/AppState.swift), [widget fallback](../vivobodyWidgets/WidgetChrome.swift) | 2026-08-14 |
 | [HealthKit Tier A](healthkit-tier-a.md) | Implemented integration design | [HealthKit boundary](../vivobody/HealthKit/HealthKitWorkoutService.swift), [session fan-out](../vivobody/App/SessionSideEffects.swift), [settings surface](../vivobody/Screens/Me/SettingsScreen.swift) | 2026-08-14 |
 | [App Store Connect metadata](appstore-metadata.md) | Release artifact; recheck before submission | [shared version](../Shared.xcconfig), [app metadata](../vivobody/Info.plist), [privacy manifest](../vivobody/PrivacyInfo.xcprivacy), [public website](https://vivobody.app) | 2026-08-14 |
+| [Exercise Detail frequency & weekly volume](exercise-detail-frequency-and-volume.md) | Implemented product design | [contribution model](../vivobody/Models/Insights/ExerciseVolumeContribution.swift), [frequency model](../vivobody/Models/Insights/ExerciseFrequency.swift), [hero card](../vivobody/Screens/Library/ExerciseBestHeroCard.swift), [this-week section](../vivobody/Screens/Library/ExerciseWeeklyVolumeSection.swift) | 2026-08-15 |
 
 ## Historical and superseded implementation records
 

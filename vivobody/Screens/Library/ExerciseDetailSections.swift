@@ -99,85 +99,6 @@ extension ExerciseDetailScreen {
         }
     }
 
-    // MARK: - Stats row
-
-    /// The standing record gets a hero card with the huge monospaced
-    /// numeral — the screen's one editorial moment.
-    var bestHeroCard: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Best set")
-                .sectionLabelStyle(Opacity.soft)
-
-            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text(bestValueString)
-                    .font(Typography.metricHero)
-                    .foregroundStyle(Ink.primary)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.45)
-                if showsBestUnit {
-                    Text(unit.symbol)
-                        .font(Typography.statValueCompact)
-                        .foregroundStyle(Ink.tertiary)
-                }
-                if let fragment = bestSetFragment {
-                    Text(fragment)
-                        .font(Typography.statValueCompact)
-                        .foregroundStyle(Ink.secondary)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                }
-                Spacer(minLength: 0)
-            }
-
-            Text(bestSetDate ?? " ")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.quaternary)
-        }
-        .padding(Space.lg)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentCard(bright: true)
-        .accessibilityElement(children: .combine)
-    }
-
-    /// Unit symbol rides beside the hero numeral only when the record
-    /// is an actual load — duration and unranked records have none.
-    var showsBestUnit: Bool {
-        item.performanceSemanticKind.comparesLoad && bestValueString != "—"
-    }
-
-    /// The record's reps/duration fragment ("× 8", "× 0:45"), kept
-    /// separate from the date so the hero card can set it at medium
-    /// scale next to the numeral instead of burying it in a caption.
-    var bestSetFragment: String? {
-        guard let source = bestRecordSource else { return nil }
-        switch item.performanceSemanticKind {
-        case .dynamicLoadAndReps, .powerLoadAndReps:
-            return "× \(source.reps)"
-        case .isometricLoadAndDuration:
-            return "× \(DurationFormatter.string(source.duration))"
-        case .isometricDuration, .unrankedReps, .unrankedDuration:
-            return nil
-        }
-    }
-
-    var bestSetDate: String? {
-        bestRecordSource.map { RelativeDate.short($0.date) }
-    }
-
-    /// Resolves the same record `bestValueString` describes, as raw
-    /// values: the progress-series record point when a trend exists,
-    /// else the single logged instance.
-    private var bestRecordSource: (reps: Int, duration: TimeInterval, date: Date)? {
-        if let prog = progress {
-            guard let best = bestDisplayPoint(in: prog) else { return nil }
-            return (best.topReps, best.topDuration, best.date)
-        }
-        guard let last = lastInstance else { return nil }
-        return (last.topReps, last.topDuration, last.sessionDate)
-    }
-
     // MARK: - Performance rows
 
     /// Effective resistance and 1RM belong together: the first explains
@@ -719,11 +640,12 @@ extension ExerciseDetailScreen {
     // MARK: - CTA
 
     /// The floating unlock pill shows only while something on this
-    /// screen is actually frozen: the progress chart or the rhythm
-    /// card. Free users with no history never see an unprompted CTA.
+    /// screen is actually frozen: the progress chart, the rhythm card,
+    /// or the this-week card. Free users with no history never see an
+    /// unprompted CTA.
     var showsUnlockControl: Bool {
         guard let pro, !pro.isUnlocked else { return false }
-        return hasHistory || progressionCadence != nil
+        return hasHistory || progressionCadence != nil || volumeContribution != nil
     }
 
     /// Same persistent pill as the Insights tab's unlock control, but

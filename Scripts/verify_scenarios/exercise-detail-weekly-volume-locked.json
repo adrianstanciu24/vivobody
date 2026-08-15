@@ -1,0 +1,63 @@
+{
+  "name": "exercise-detail-weekly-volume-locked",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-weekly-volume"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "This week, locked"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "This week, locked"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "This week, locked"
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "total this week,"
+    }
+  ]
+}
