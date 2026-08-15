@@ -1,0 +1,48 @@
+{
+  "name": "exercise-detail-hero",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Incline Barbell Bench Press"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Incline Barbell Bench Press"
+      }
+    },
+    {
+      "wait": {
+        "label": "DYNAMIC STRENGTH"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "DYNAMIC STRENGTH"
+    },
+    {
+      "label": "Incline Barbell Bench Press"
+    }
+  ],
+  "forbidden": []
+}

@@ -11,8 +11,8 @@
 //  to bundled exercises (a custom entry is already fully editable).
 //
 //  Surfaces (when data exists):
-//    • Hero    — muscle group accent + exercise name + metadata line,
-//                plus a plateau / load-mode-aware readiness status pill;
+//    • Hero    — orange modality eyebrow + exercise name, plus a
+//                plateau / load-mode-aware readiness status pill;
 //                the inline nav title stays hidden until this scrolls off
 //    • Figure  — the staged anatomy model in a card under the hero text;
 //                primary/secondary/stabilizer roles use distinct visual
