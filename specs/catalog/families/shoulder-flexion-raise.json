@@ -15,6 +15,7 @@
   ],
   "fixed": {
     "mechanic": "isolation",
+    "trainingRole": "push",
     "pattern": null,
     "direction": null,
     "planes": [

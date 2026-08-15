@@ -173,6 +173,7 @@ EQUIPMENT = {
     "kettlebell", "band", "gripTrainer", "other",
 }
 MECHANICS = {"compound", "isolation"}
+TRAINING_ROLES = {"push", "pull", "legs", "core", "other"}
 PATTERNS = {"push", "pull", "squat", "hinge", "lunge", "carry", "core", "locomotion"}
 DIRECTIONS = {"horizontal", "vertical", "diagonal"}
 CARDINAL_PLANES = {"sagittal", "frontal", "transverse"}
@@ -822,13 +823,18 @@ def validate_family_schema(data: dict[str, Any]) -> None:
     fixed_classification = definitions.get("fixedClassification", {})
     require(
         set(fixed_classification.get("required", []))
-        == {"mechanic", "pattern", "direction", "planes"},
+        == {"mechanic", "trainingRole", "pattern", "direction", "planes"},
         f"{context} fixedClassification required fields differ from validator contract",
     )
     fixed_properties = fixed_classification.get("properties", {})
+    training_role_values = fixed_properties.get("trainingRole", {}).get("enum")
     direction_values = fixed_properties.get("direction", {}).get("enum")
     planes_schema = fixed_properties.get("planes", {})
     plane_values = planes_schema.get("items", {}).get("enum")
+    require(
+        set(training_role_values or []) == TRAINING_ROLES,
+        f"{context} training-role enum differs from validator vocabulary",
+    )
     require(
         set(direction_values or []) == {*DIRECTIONS, None},
         f"{context} direction enum differs from validator vocabulary",
@@ -969,11 +975,13 @@ def require_known_evidence(refs: Any, foundation: Foundation, context: str) -> N
 
 def validate_fixed_classification(value: Any, context: str) -> None:
     require(isinstance(value, dict), f"{context} must be an object")
-    require_keys(value, required={"mechanic", "pattern", "direction", "planes"}, context=context)
+    require_keys(value, required={"mechanic", "trainingRole", "pattern", "direction", "planes"}, context=context)
     mechanic = value["mechanic"]
+    training_role = value["trainingRole"]
     pattern = value["pattern"]
     direction = value["direction"]
     require(mechanic in MECHANICS, f"{context}.mechanic is unknown: {mechanic}")
+    require(training_role in TRAINING_ROLES, f"{context}.trainingRole is unknown: {training_role}")
     require(pattern is None or pattern in PATTERNS, f"{context}.pattern is unknown: {pattern}")
     require(direction is None or direction in DIRECTIONS, f"{context}.direction is unknown: {direction}")
     planes = require_list(value["planes"], f"{context}.planes")
@@ -985,6 +993,8 @@ def validate_fixed_classification(value: Any, context: str) -> None:
         f"{context}.planes contains unknown values: {', '.join(unknown_planes)}",
     )
     require((mechanic == "compound") == (pattern is not None), f"{context} compound families require a pattern and isolation families require null")
+    if pattern in {"push", "pull"}:
+        require(training_role == pattern, f"{context} compound push/pull pattern must match trainingRole")
     is_push_pull = pattern in {"push", "pull"}
     require(is_push_pull == (direction is not None), f"{context} direction must exist exactly for push/pull families")
 
@@ -2198,6 +2208,7 @@ def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str
                 {
                     "equipment": exercise["equipment"],
                     "mechanic": fixed["mechanic"],
+                    "trainingRole": fixed["trainingRole"],
                     "pattern": fixed["pattern"],
                     "direction": fixed["direction"],
                     "planes": [

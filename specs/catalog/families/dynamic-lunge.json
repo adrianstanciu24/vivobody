@@ -10,6 +10,7 @@
   ],
   "fixed": {
     "mechanic": "compound",
+    "trainingRole": "legs",
     "pattern": "lunge",
     "direction": null,
     "planes": [

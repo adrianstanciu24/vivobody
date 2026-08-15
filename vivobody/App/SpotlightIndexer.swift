@@ -140,13 +140,17 @@ enum SpotlightIndexer {
         attributes.contentDescription = [
             item.group.displayName,
             item.equipment.displayName,
-            item.mechanic.displayName
-        ].joined(separator: " · ")
+            item.mechanic.displayName,
+            item.trainingRole?.displayName,
+        ].compactMap(\.self).joined(separator: " · ")
         var keywords: [String] = [item.name]
         keywords.append(contentsOf: item.aliases)
         keywords.append(item.group.displayName)
         keywords.append(item.equipment.displayName)
         keywords.append(item.mechanic.displayName)
+        if let trainingRole = item.trainingRole {
+            keywords.append(trainingRole.displayName)
+        }
         if let movementLabel = item.movementLabel {
             keywords.append(movementLabel)
         }

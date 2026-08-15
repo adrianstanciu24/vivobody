@@ -1,0 +1,64 @@
+{
+  "name": "insights-push-pull",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-insights-showcase", "--pro"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "openURL": "vivobody://insights"
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsTrainingBalanceSection"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalance-compound-push-pull"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsBalance-compound-push-pull",
+            "labelContains": "Compound Push"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsBalance-isolation-push-pull"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsBalance-isolation-push-pull",
+      "labelContains": "Isolation Push"
+    },
+    {
+      "identifier": "insightsTrainingBalanceSection"
+    }
+  ],
+  "forbidden": []
+}

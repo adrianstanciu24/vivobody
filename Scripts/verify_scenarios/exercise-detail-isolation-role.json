@@ -1,0 +1,52 @@
+{
+  "name": "exercise-detail-isolation-role",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Flat Dumbbell Fly"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Movement",
+      "valueContains": "push"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "isolation"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Movement",
+      "valueContains": "pattern"
+    }
+  ]
+}

@@ -157,22 +157,11 @@ extension ExerciseDetailScreen {
             .overlay(Capsule().stroke(accent ? Tint.primaryDim : Surface.edge, lineWidth: 1))
     }
 
-    /// Sentence-case classification line: equipment · pattern (when
-    /// compound) · mechanic · every authored plane · unilateral (only
-    /// when it is — bilateral is the unremarkable default, so we omit
-    /// it). Replaces the old chip strip with plain type, same vocabulary
-    /// as the catalog row meta.
+    /// Equipment alone — the Movement card under the hero figure now
+    /// owns pattern, mechanic, planes, and laterality, so repeating
+    /// the full classification sentence here would double it.
     var metaLine: String {
-        var parts = [item.equipment.displayName]
-        if item.mechanic == .compound, let movementLabel = item.movementLabel {
-            parts.append(movementLabel)
-        }
-        parts.append(item.mechanic.displayName)
-        parts.append(item.planes.map(\.displayName).joined(separator: " + "))
-        if item.laterality == .unilateral {
-            parts.append(item.laterality.displayName)
-        }
-        return parts.joined(separator: " · ")
+        item.equipment.displayName
     }
 
     // MARK: - Stats row

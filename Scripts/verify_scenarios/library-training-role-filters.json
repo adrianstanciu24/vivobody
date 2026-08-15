@@ -1,0 +1,82 @@
+{
+  "name": "library-training-role-filters",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPush"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Flat Dumbbell Fly"
+          },
+          {
+            "labelContains": "Decline Barbell Bench Press"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Seated 45-Degree Cable Pulldown"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "libraryExerciseFilterPull"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Seated 45-Degree Cable Pulldown"
+          },
+          {
+            "labelContains": "Standing Band Scapular Depression"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Flat Dumbbell Fly"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "libraryExerciseFilterPull",
+      "value": "Selected"
+    },
+    {
+      "labelContains": "Seated 45-Degree Cable Pulldown"
+    },
+    {
+      "labelContains": "Standing Band Scapular Depression"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Flat Dumbbell Fly"
+    }
+  ]
+}

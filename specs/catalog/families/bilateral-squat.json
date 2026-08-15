@@ -17,6 +17,7 @@
   ],
   "fixed": {
     "mechanic": "compound",
+    "trainingRole": "legs",
     "pattern": "squat",
     "direction": null,
     "planes": [

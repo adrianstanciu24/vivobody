@@ -15,7 +15,6 @@ import Testing
 
 @MainActor
 struct ExerciseSearchTests {
-
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     /// Lightweight in-memory catalog item — only name + aliases
@@ -76,6 +75,20 @@ struct ExerciseSearchTests {
         #expect(ranked.first?.name == "Barbell Back Squat")
     }
 
+    @Test func trainingRoleFiltersSpanCompoundAndIsolationWork() {
+        let catalog = bundledCatalog()
+        let push = catalog.filter { LibraryExerciseFilter.trainingRole(.push).matches($0) }
+        let pull = catalog.filter { LibraryExerciseFilter.trainingRole(.pull).matches($0) }
+
+        #expect(push.contains { $0.name == "Barbell Bench Press" && $0.mechanic == .compound })
+        #expect(push.contains { $0.name == "Flat Dumbbell Fly" && $0.mechanic == .isolation })
+        #expect(!push.contains { $0.name == "Supinated Straight-Bar Cable Curl" })
+
+        #expect(pull.contains { $0.name == "Barbell Bent-Over Row" && $0.mechanic == .compound })
+        #expect(pull.contains { $0.name == "Supinated Straight-Bar Cable Curl" && $0.mechanic == .isolation })
+        #expect(!pull.contains { $0.name == "Single-Arm Pronated Cable Triceps Pushdown" })
+    }
+
     @Test func exactCustomNameStillBeatsEditorialPriority() throws {
         let canonicalRecord = try #require(CatalogData.record(forCatalogID: "barbell-back-squat"))
         let canonical = ExerciseCatalogItem(record: canonicalRecord, createdAt: now)
@@ -89,8 +102,8 @@ struct ExerciseSearchTests {
 
     @Test func strongPrefixUsesDeterministicTiebreakAgainstWordExact() {
         let catalog = [
-            item("Lat Pulldown"),   // word-prefix "pull"
-            item("Pull-Up"),        // phrase-prefix / word-exact "pull"
+            item("Lat Pulldown"), // word-prefix "pull"
+            item("Pull-Up"), // phrase-prefix / word-exact "pull"
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "pull")
         #expect(ranked.first?.name == "Pull-Up")
@@ -101,8 +114,8 @@ struct ExerciseSearchTests {
         // "Overpull": "pull" sits mid-word, not a prefix, not a word ->
         // substring tier. Word-exact must rank higher.
         let catalog = [
-            item("Overpull"),              // substring-only "pull"
-            item("Cable Pull-Through"),    // word-exact "pull"
+            item("Overpull"), // substring-only "pull"
+            item("Cable Pull-Through"), // word-exact "pull"
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "pull")
         #expect(ranked.first?.name == "Cable Pull-Through")
@@ -112,8 +125,8 @@ struct ExerciseSearchTests {
         // "Pull-Up" matches by name prefix; an alias-only prefix match
         // on another item should rank lower even if it's shorter.
         let catalog = [
-            item("Scapular Pull-Up", aliases: ["Scapular Pull-up"]),  // alias prefix "pull"
-            item("Pull-Up"),                                     // name prefix "pull"
+            item("Scapular Pull-Up", aliases: ["Scapular Pull-up"]), // alias prefix "pull"
+            item("Pull-Up"), // name prefix "pull"
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "pull")
         #expect(ranked.first?.name == "Pull-Up")
@@ -133,8 +146,8 @@ struct ExerciseSearchTests {
     @Test func multiTokenKeepsOnlyItemsMatchingEveryToken() {
         let catalog = [
             item("Lat Pulldown", aliases: ["Lat Pulldown"]),
-            item("Lat Pushdown", aliases: ["Lat Pushdown"]),  // "lat" yes, "pull" no
-            item("Wide Pull Up"),                             // "pull" yes, "lat" no
+            item("Lat Pushdown", aliases: ["Lat Pushdown"]), // "lat" yes, "pull" no
+            item("Wide Pull Up"), // "pull" yes, "lat" no
         ]
         let ranked = ExerciseSearch.rank(items: catalog, query: "lat pull")
         #expect(names(ranked) == ["Lat Pulldown"])

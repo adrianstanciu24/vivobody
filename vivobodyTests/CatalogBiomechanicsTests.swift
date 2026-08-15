@@ -14,7 +14,6 @@ import Testing
 
 @MainActor
 struct CatalogBiomechanicsTests {
-
     @Test func canonicalFamilyAndExerciseCountsArePinned() {
         #expect(CatalogData.records.count == 136)
         #expect(Set(CatalogData.records.map(\.familyID)).count == 57)
@@ -32,7 +31,7 @@ struct CatalogBiomechanicsTests {
             #expect(Self.isStableID(record.familyID))
             #expect(Self.isStableID(record.catalogID))
             #expect(catalogIDs.insert(record.catalogID).inserted)
-            #expect((0...100).contains(record.searchPriorityValue))
+            #expect((0 ... 100).contains(record.searchPriorityValue))
 
             for term in [record.name] + record.aliases {
                 let normalizedTerm = Self.normalized(term)
@@ -105,6 +104,10 @@ struct CatalogBiomechanicsTests {
                 #expect(record.pattern == nil)
             }
 
+            if record.pattern == .push || record.pattern == .pull {
+                #expect(record.trainingRole.rawValue == record.pattern?.rawValue)
+            }
+
             let isPushPull = record.pattern == .push || record.pattern == .pull
             #expect((record.direction != nil) == isPushPull)
             #expect(!record.planes.isEmpty)
@@ -145,6 +148,20 @@ struct CatalogBiomechanicsTests {
         let pushPress = try #require(CatalogData.record(forExerciseNamed: "Barbell Push Press"))
         #expect(pushPress.direction == .vertical)
         #expect(pushPress.planes == [.sagittal, .frontal])
+    }
+
+    @Test func trainingRolesCoverCompoundAndIsolationProgrammingPlacement() throws {
+        let bench = try #require(CatalogData.record(forExerciseNamed: "Barbell Bench Press"))
+        let fly = try #require(CatalogData.record(forExerciseNamed: "Flat Dumbbell Fly"))
+        let curl = try #require(CatalogData.record(forExerciseNamed: "Supinated Straight-Bar Cable Curl"))
+        let reverseFly = try #require(CatalogData.record(forExerciseNamed: "Prone Dumbbell Reverse Fly"))
+        let legExtension = try #require(CatalogData.record(forExerciseNamed: "Upright Unilateral Machine Leg Extension"))
+
+        #expect(bench.trainingRole == .push)
+        #expect(fly.mechanic == .isolation && fly.trainingRole == .push)
+        #expect(curl.mechanic == .isolation && curl.trainingRole == .pull)
+        #expect(reverseFly.mechanic == .isolation && reverseFly.trainingRole == .pull)
+        #expect(legExtension.trainingRole == .legs)
     }
 
     @Test func highRiskAnatomyFixturesKeepExactRegions() throws {
@@ -392,8 +409,8 @@ struct CatalogBiomechanicsTests {
         else { return false }
 
         return value.unicodeScalars.allSatisfy { scalar in
-            (97...122).contains(scalar.value)
-                || (48...57).contains(scalar.value)
+            (97 ... 122).contains(scalar.value)
+                || (48 ... 57).contains(scalar.value)
                 || scalar.value == 45
         }
     }

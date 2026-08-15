@@ -12,11 +12,11 @@ import Testing
 
 @MainActor
 struct ExerciseClassificationSnapshotTests {
-
     private func customItem(
         name: String = "Landmine Arc",
         equipment: Equipment = .other,
         mechanic: Mechanic = .compound,
+        trainingRole: TrainingRole = .push,
         pattern: MovementPattern? = .push,
         direction: PushPullDirection? = .vertical,
         planes: [MovementPlane] = [.transverse],
@@ -28,6 +28,7 @@ struct ExerciseClassificationSnapshotTests {
             defaultWeight: 45,
             equipment: equipment,
             mechanic: mechanic,
+            trainingRole: trainingRole,
             pattern: pattern,
             direction: direction,
             planes: planes,
@@ -40,6 +41,7 @@ struct ExerciseClassificationSnapshotTests {
         let item = customItem(
             equipment: .cable,
             mechanic: .isolation,
+            trainingRole: .push,
             pattern: nil,
             direction: nil,
             planes: [.frontal],
@@ -53,6 +55,7 @@ struct ExerciseClassificationSnapshotTests {
         #expect(draft.classification == item.classification)
         #expect(templateExercise.classification == item.classification)
         #expect(exercise.classification == item.classification)
+        #expect(exercise.classification?.trainingRole == .push)
         #expect(exercise.classification?.pattern == nil)
         #expect(exercise.classification?.direction == nil)
     }
@@ -71,6 +74,7 @@ struct ExerciseClassificationSnapshotTests {
             defaultDuration: 45,
             equipment: .bodyweight,
             mechanic: .compound,
+            trainingRole: .core,
             pattern: .core,
             planes: [.sagittal],
             laterality: .bilateral
@@ -116,6 +120,7 @@ struct ExerciseClassificationSnapshotTests {
             name: "Bench Press",
             equipment: .cable,
             mechanic: .isolation,
+            trainingRole: .push,
             pattern: nil,
             direction: nil,
             planes: [.transverse],
@@ -127,6 +132,7 @@ struct ExerciseClassificationSnapshotTests {
         #expect(exercise.classification?.mechanic == .isolation)
         #expect(exercise.equipmentRaw == item.equipmentRaw)
         #expect(exercise.mechanicRaw == item.mechanicRaw)
+        #expect(exercise.trainingRoleRaw == item.trainingRoleRaw)
         #expect(exercise.patternRaw == item.patternRaw)
         #expect(exercise.directionRaw == item.directionRaw)
         #expect(exercise.planeRaws == item.planeRaws)
@@ -142,6 +148,7 @@ struct ExerciseClassificationSnapshotTests {
         #expect(copy.classification == source.classification)
         #expect(copy.equipmentRaw == source.equipmentRaw)
         #expect(copy.mechanicRaw == source.mechanicRaw)
+        #expect(copy.trainingRoleRaw == source.trainingRoleRaw)
         #expect(copy.patternRaw == source.patternRaw)
         #expect(copy.directionRaw == source.directionRaw)
         #expect(copy.planeRaws == source.planeRaws)
@@ -157,6 +164,7 @@ struct ExerciseClassificationSnapshotTests {
             defaultWeight: 95,
             equipment: .barbell,
             mechanic: .compound,
+            trainingRole: .push,
             pattern: .push,
             direction: .diagonal,
             planes: [.transverse, .sagittal],
@@ -224,6 +232,7 @@ struct ExerciseClassificationSnapshotTests {
 
         #expect(bundled.equipmentRaw == nil)
         #expect(bundled.classification?.mechanic == .compound)
+        #expect(bundled.classification?.trainingRole == .push)
         #expect(bundled.classification?.direction == .horizontal)
         #expect(unknown.classification == nil)
         #expect(bundledTemplate.classification?.mechanic == .compound)

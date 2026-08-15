@@ -1,0 +1,62 @@
+{
+  "name": "exercise-detail-movement",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Incline Barbell Bench Press"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Incline Barbell Bench Press"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Movement",
+      "valueContains": "diagonal push"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "compound"
+    },
+    {
+      "label": "Movement",
+      "valueContains": "sagittal and transverse planes"
+    }
+  ],
+  "forbidden": []
+}

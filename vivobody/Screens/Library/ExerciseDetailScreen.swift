@@ -17,6 +17,10 @@
 //    • Figure  — the staged anatomy model in a card under the hero text;
 //                primary/secondary/stabilizer roles use distinct visual
 //                intensities without changing development calculations
+//    • Movement — how the lift moves: a cardinal-plane glyph with the
+//                active planes lit beside pattern / mechanic / planes /
+//                laterality rows; absorbs the classification facts the
+//                hero meta line once carried (now equipment-only)
 //    • Steps   — a dedicated, numbered how-to screen built from the
 //                catalog's authored movement instructions
 //    • Stats   — a focal Best-set card (huge monospaced record numeral)
@@ -198,6 +202,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading, spacing: Space.xxl) {
                 hero
                 heroFigureSection
+                movementSection
                 instructionsLink
                 statsRow
                 if showsPerformanceRows {

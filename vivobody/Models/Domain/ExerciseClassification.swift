@@ -168,7 +168,10 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
 nonisolated struct ExerciseClassification: Hashable {
     let equipment: Equipment
     let mechanic: Mechanic
-    /// Optional — isolation work has no meaningful pattern.
+    /// Optional only for legacy or unknown snapshots; every current
+    /// catalog item has an authored programming placement.
+    let trainingRole: TrainingRole?
+    /// Optional — isolation work has no compound movement pattern.
     let pattern: MovementPattern?
     /// Optional — only push/pull patterns have a direction.
     let direction: PushPullDirection?
@@ -180,6 +183,7 @@ nonisolated struct ExerciseClassification: Hashable {
     nonisolated init(
         equipment: Equipment,
         mechanic: Mechanic,
+        trainingRole: TrainingRole? = nil,
         pattern: MovementPattern?,
         direction: PushPullDirection?,
         planes: [MovementPlane],
@@ -187,6 +191,7 @@ nonisolated struct ExerciseClassification: Hashable {
     ) {
         self.equipment = equipment
         self.mechanic = mechanic
+        self.trainingRole = trainingRole
         self.pattern = pattern
         self.direction = direction
         self.planes = MovementPlane.canonicalized(planes)
@@ -201,6 +206,7 @@ extension ExerciseClassification {
     nonisolated init?(
         equipmentRaw: String?,
         mechanicRaw: String?,
+        trainingRoleRaw: String? = nil,
         patternRaw: String?,
         directionRaw: String?,
         planeRaws: [String],
@@ -215,6 +221,14 @@ extension ExerciseClassification {
             let laterality = Laterality(rawValue: lateralityRaw)
         else {
             return nil
+        }
+
+        let trainingRole: TrainingRole?
+        if let trainingRoleRaw {
+            guard let value = TrainingRole(rawValue: trainingRoleRaw) else { return nil }
+            trainingRole = value
+        } else {
+            trainingRole = nil
         }
 
         let pattern: MovementPattern?
@@ -242,6 +256,7 @@ extension ExerciseClassification {
         self.init(
             equipment: equipment,
             mechanic: mechanic,
+            trainingRole: trainingRole,
             pattern: pattern,
             direction: direction,
             planes: planes,

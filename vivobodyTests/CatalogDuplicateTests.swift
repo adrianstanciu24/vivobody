@@ -16,7 +16,6 @@ import Testing
 
 @MainActor
 struct CatalogDuplicateTests {
-
     /// A bundled bodyweight-plus-load compound. Between this and the
     /// plank fixture, every field the draft carries holds a value that
     /// differs from `CatalogDraft.empty`, so a missing copy cannot
@@ -36,6 +35,7 @@ struct CatalogDuplicateTests {
             bodyweightFraction: 0.95,
             equipment: .bodyweight,
             mechanic: .compound,
+            trainingRole: .pull,
             pattern: .pull,
             direction: .vertical,
             planes: [.sagittal, .frontal],
@@ -70,6 +70,7 @@ struct CatalogDuplicateTests {
             defaultDuration: 30,
             equipment: .bodyweight,
             mechanic: .isolation,
+            trainingRole: .core,
             pattern: nil,
             direction: nil,
             planes: [.frontal],
@@ -97,6 +98,7 @@ struct CatalogDuplicateTests {
         #expect(draft.bodyweightFraction == source.bodyweightFraction)
         #expect(draft.equipment == source.equipment)
         #expect(draft.mechanic == source.mechanic)
+        #expect(draft.trainingRole == source.trainingRole)
         #expect(draft.pattern == source.pattern)
         #expect(draft.direction == source.direction)
         #expect(draft.planes == source.planes)
@@ -112,6 +114,7 @@ struct CatalogDuplicateTests {
         #expect(draft.trackingMode == .duration)
         #expect(draft.modality == .isometricStrength)
         #expect(draft.mechanic == .isolation)
+        #expect(draft.trainingRole == .core)
         #expect(draft.pattern == nil)
         #expect(draft.direction == nil)
         #expect(draft.planes == [.frontal])
@@ -182,6 +185,7 @@ struct CatalogDuplicateTests {
             defaultDuration: source.defaultDuration,
             equipment: source.equipment,
             mechanic: source.mechanic,
+            trainingRole: source.trainingRole,
             pattern: source.pattern,
             direction: source.direction,
             planes: source.planes,

@@ -5,9 +5,9 @@
 //  Training-balance instrument for opposing groups and movement
 //  patterns over the last four weeks. Meaningful comparisons lead as
 //  pair-relative butterfly beams; unfinished comparisons collapse into
-//  one building rail instead of a wall of empty rows. Squat/hinge,
-//  bilateral/unilateral, and roster-limited lower-body pairs stay
-//  descriptive — they never imply that a universal 50/50 target exists.
+//  one building rail instead of a wall of empty rows. Isolation push/pull,
+//  squat/hinge, bilateral/unilateral, and roster-limited lower-body pairs
+//  stay descriptive — they never imply that a universal 50/50 target exists.
 //
 
 import SwiftUI
@@ -25,6 +25,7 @@ struct SymmetrySection: View {
                     : "last 4 weeks",
                 trailingIsInProgress: buildingCount > 0
             )
+            .accessibilityIdentifier("insightsTrainingBalanceSection")
 
             Text("Opposing muscle groups and movement patterns, compared in effective sets. Each beam uses its own pair-relative scale.")
                 .font(Typography.caption)
@@ -216,14 +217,23 @@ struct SymmetrySection: View {
     private var groups: [SymmetryGroup] {
         let definitions: [(String, String, Set<String>)] = [
             (
-                "upper-body",
-                "Upper body",
+                "upper-body-compound",
+                "Upper body · compound",
                 [
-                    "push-pull",
+                    "compound-push-pull",
                     "horizontal-push-pull",
                     "vertical-push-pull",
-                    "bi-tri",
                 ]
+            ),
+            (
+                "upper-body-isolation",
+                "Upper body · isolation",
+                ["isolation-push-pull"]
+            ),
+            (
+                "upper-body-muscles",
+                "Upper body · muscle groups",
+                ["bi-tri"]
             ),
             (
                 "lower-body",
@@ -290,6 +300,7 @@ private struct ButterflyRow: View {
             butterfly
         }
         .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier("insightsBalance-\(pair.id)")
         .accessibilityLabel(Text(accessibilityText))
     }
 

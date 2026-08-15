@@ -196,6 +196,11 @@ or unavailable subtotal as a complete total.
 
 - `group` is the best browsing bucket, not a claim that no other region works.
 - `mechanic` describes single- versus multi-joint movement mechanics.
+- `trainingRole` describes conventional programming placement as
+  `push|pull|legs|core|other`. It applies to compound and isolation work, powers
+  cross-mechanic discovery filters, and is authored explicitly rather than
+  inferred from a joint action. For example, a lateral raise is `push` by PPL
+  placement even though shoulder abduction is not a literal pressing action.
 - `pattern` describes the dominant compound pattern. Locomotion has its own
   value; isolation records have no pattern.
 - `direction` exists only for push and pull patterns and uses
@@ -234,8 +239,9 @@ The bundled catalog must satisfy all of the following before shipping:
 - Stable IDs, canonical names, and normalized aliases are unique.
 - Every muscle and role is recognized; obsolete aggregate regions are absent.
 - Every strength and power exercise has a primary muscle.
-- Push/pull direction, isolation/pattern, modality/tracking, and load-mode
-  invariants hold.
+- Training-role vocabulary, compound push/pull role agreement, push/pull
+  direction, isolation/pattern, modality/tracking, and load-mode invariants
+  hold.
 - Every bundled band exercise uses `nonComparable` load semantics.
 - Explicit regression fixtures cover corrected high-risk records and the
   independent glute-max/glute-med mappings.

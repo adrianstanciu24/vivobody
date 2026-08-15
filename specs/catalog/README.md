@@ -217,9 +217,12 @@ relevant intrinsic meshes; current coverage is explicitly incomplete.
 
 Each family separates:
 
-- `fixed`: inherited mechanic, movement pattern, direction, and one or more
-  app-facing anatomical planes. The only plane values are `sagittal`,
-  `frontal`, and `transverse`.
+- `fixed`: inherited mechanic, training role, compound movement pattern,
+  direction, and one or more app-facing anatomical planes. `trainingRole` is
+  an authored programming convention (`push|pull|legs|core|other`) used for
+  cross-mechanic discovery and mechanic-separated analysis; it is not inferred
+  from anatomy or treated as a literal load direction. The only plane values
+  are `sagittal`, `frontal`, and `transverse`.
 - `allowed`: equipment, modality, tracking, load, and laterality choices an
   exercise may select.
 - `movementSignature`: prime and/or resisted joint actions, optional

@@ -1,0 +1,78 @@
+{
+  "name": "exercise-picker-training-role-filters",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Create Template"
+      }
+    },
+    {
+      "tap": {
+        "label": "Create Template"
+      }
+    },
+    {
+      "wait": {
+        "label": "Add exercise"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add exercise"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercisePickerFilterPush"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercisePickerFilterPush"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Flat Dumbbell Fly"
+          },
+          {
+            "labelContains": "Decline Barbell Bench Press"
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Seated 45-Degree Cable Pulldown"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercisePickerFilterPull"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exercisePickerFilterPull",
+      "value": "Selected"
+    },
+    {
+      "labelContains": "Seated 45-Degree Cable Pulldown"
+    },
+    {
+      "labelContains": "Standing Band Scapular Depression"
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Flat Dumbbell Fly"
+    }
+  ]
+}

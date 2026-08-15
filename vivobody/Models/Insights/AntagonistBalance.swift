@@ -3,11 +3,11 @@
 //  vivobody
 //
 //  The symmetry instrument for the Insights tab. It judges opposing
-//  muscles and movement patterns against each other: broad push/pull,
-//  directional push/pull, lower-body muscle pairs, squat/hinge,
-//  biceps/triceps, and bilateral/unilateral work.
+//  muscles and movement patterns against each other: mechanic-separated
+//  push/pull, directional compound push/pull, lower-body muscle pairs,
+//  squat/hinge, biceps/triceps, and bilateral/unilateral work.
 //
-//  All nine comparisons share the `SetStimulus` hard-set currency
+//  All comparisons share the `SetStimulus` hard-set currency
 //  over a 4-week window. Muscle comparisons retain role-based
 //  involvement credit; movement comparisons count each exercise's
 //  whole stimulus once.
@@ -22,8 +22,10 @@
 import Foundation
 
 private nonisolated enum SymmetryMovementBucket: Hashable {
-    case push
-    case pull
+    case compoundPush
+    case compoundPull
+    case isolationPush
+    case isolationPull
     case horizontalPush
     case horizontalPull
     case verticalPush
@@ -32,6 +34,38 @@ private nonisolated enum SymmetryMovementBucket: Hashable {
     case hinge
     case bilateral
     case unilateral
+
+    static func buckets(for classification: ExerciseClassification) -> [Self] {
+        var buckets = [
+            broadBucket(for: classification),
+            directionalBucket(for: classification),
+        ].compactMap(\.self)
+        buckets.append(classification.laterality == .bilateral ? .bilateral : .unilateral)
+        return buckets
+    }
+
+    private static func broadBucket(for classification: ExerciseClassification) -> Self? {
+        switch (classification.mechanic, classification.pattern, classification.trainingRole) {
+        case (.compound, .push, _): .compoundPush
+        case (.compound, .pull, _): .compoundPull
+        case (.isolation, _, .push): .isolationPush
+        case (.isolation, _, .pull): .isolationPull
+        default: nil
+        }
+    }
+
+    private static func directionalBucket(for classification: ExerciseClassification) -> Self? {
+        switch (classification.pattern, classification.direction) {
+        case (.push, .horizontal), (.push, .diagonal):
+            .horizontalPush
+        case (.pull, .horizontal): .horizontalPull
+        case (.push, .vertical): .verticalPush
+        case (.pull, .vertical): .verticalPull
+        case (.squat, _): .squat
+        case (.hinge, _): .hinge
+        default: nil
+        }
+    }
 }
 
 /// Glanceable comparison buckets aggregate exact regions using the
@@ -80,7 +114,7 @@ nonisolated enum AntagonistComparisonKind: Hashable {
 // MARK: - Pair
 
 nonisolated struct AntagonistPair: Identifiable, Hashable {
-    /// Stable key (e.g. "push-pull"), also the SwiftUI identity.
+    /// Stable key (e.g. "compound-push-pull"), also the SwiftUI identity.
     let id: String
     let leftLabel: String
     let rightLabel: String
@@ -245,44 +279,11 @@ nonisolated extension AnalyticsAccumulator {
                 guard let classification = exercise.classification else {
                     continue
                 }
-                switch classification.pattern {
-                case .push:
-                    movementSets[.push, default: 0] += stimulus
-                    movementSessions[.push, default: []]
-                        .insert(session.session.id)
-                case .pull:
-                    movementSets[.pull, default: 0] += stimulus
-                    movementSessions[.pull, default: []]
-                        .insert(session.session.id)
-                default:
-                    break
-                }
-                let bucket: SymmetryMovementBucket? = switch (classification.pattern, classification.direction) {
-                case (.push, .horizontal): .horizontalPush
-                // Incline and decline presses retain horizontal-press
-                // ancestry even though the catalog now records their
-                // more precise diagonal direction.
-                case (.push, .diagonal): .horizontalPush
-                case (.pull, .horizontal): .horizontalPull
-                case (.push, .vertical): .verticalPush
-                case (.pull, .vertical): .verticalPull
-                case (.squat, _): .squat
-                case (.hinge, _): .hinge
-                default: nil
-                }
-                if let bucket {
+                for bucket in SymmetryMovementBucket.buckets(for: classification) {
                     movementSets[bucket, default: 0] += stimulus
                     movementSessions[bucket, default: []]
                         .insert(session.session.id)
                 }
-
-                let laterality: SymmetryMovementBucket =
-                    classification.laterality == .bilateral
-                        ? .bilateral
-                        : .unilateral
-                movementSets[laterality, default: 0] += stimulus
-                movementSessions[laterality, default: []]
-                    .insert(session.session.id)
             }
         }
 
@@ -350,9 +351,9 @@ nonisolated extension AnalyticsAccumulator {
         // grouped Symmetry presentation.
         let pairs: [AntagonistPair] = [
             movementPair(
-                "push-pull",
-                "Push", .push,
-                "Pull", .pull
+                "compound-push-pull",
+                "Compound Push", .compoundPush,
+                "Compound Pull", .compoundPull
             ),
             movementPair(
                 "horizontal-push-pull",
@@ -363,6 +364,12 @@ nonisolated extension AnalyticsAccumulator {
                 "vertical-push-pull",
                 "Vertical Push", .verticalPush,
                 "Vertical Pull", .verticalPull
+            ),
+            movementPair(
+                "isolation-push-pull",
+                "Isolation Push", .isolationPush,
+                "Isolation Pull", .isolationPull,
+                kind: .distribution
             ),
             musclePair(
                 "bi-tri",

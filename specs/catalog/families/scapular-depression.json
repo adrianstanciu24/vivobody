@@ -9,6 +9,7 @@
   ],
   "fixed": {
     "mechanic": "isolation",
+    "trainingRole": "pull",
     "pattern": null,
     "direction": null,
     "planes": [

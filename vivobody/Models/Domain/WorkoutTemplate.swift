@@ -138,6 +138,7 @@ final class TemplateExercise: Identifiable {
     /// silently applying catalog-editor defaults.
     var equipmentRaw: String? = nil
     var mechanicRaw: String? = nil
+    var trainingRoleRaw: String? = nil
     var patternRaw: String? = nil
     var directionRaw: String? = nil
     /// Canonical one-or-more plane components copied at pick time.
@@ -220,6 +221,7 @@ final class TemplateExercise: Identifiable {
         ExerciseClassification(
             equipmentRaw: equipmentRaw,
             mechanicRaw: mechanicRaw,
+            trainingRoleRaw: trainingRoleRaw,
             patternRaw: patternRaw,
             directionRaw: directionRaw,
             planeRaws: planeRaws,
@@ -276,6 +278,7 @@ final class TemplateExercise: Identifiable {
         self.muscleInvolvementSnapshot = (muscleInvolvement ?? Muscle.involvement(forExerciseNamed: name)).snapshot
         self.equipmentRaw = classification?.equipment.rawValue
         self.mechanicRaw = classification?.mechanic.rawValue
+        self.trainingRoleRaw = classification?.trainingRole?.rawValue
         self.patternRaw = classification?.pattern?.rawValue
         self.directionRaw = classification?.direction?.rawValue
         self.planeRaws = classification?.planes.map(\.rawValue) ?? []

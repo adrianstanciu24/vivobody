@@ -177,16 +177,7 @@ struct ExercisePickerSheet: View {
     /// Catalog narrowed by the selected chip only (no text filter),
     /// shared by the grouped and search paths.
     private var scopedItems: [ExerciseCatalogItem] {
-        switch filter {
-        case .all:
-            items
-        case .favorites:
-            items.filter(\.isFavorite)
-        case .core:
-            items.filter { $0.group == .core }
-        case let .equipment(equipment):
-            items.filter { $0.equipment == equipment }
-        }
+        items.filter { filter.matches($0) }
     }
 
     /// Flat, relevance-ranked results for the active query — same
@@ -219,7 +210,7 @@ struct ExercisePickerSheet: View {
     // MARK: - Catalog filter strip
 
     /// Horizontal chip strip at the top of the picker. "All" +
-    /// Favorites + one chip per Equipment case. Wraps the existing
+    /// Favorites + Push/Pull + one chip per Equipment case. Wraps the existing
     /// list so users can narrow before scrolling. Favorites is always
     /// offered — with no stars set it lands on an empty state that
     /// teaches the long-press gesture. Hidden only for an empty catalog.
@@ -231,6 +222,8 @@ struct ExercisePickerSheet: View {
                     HStack(spacing: 8) {
                         filterChip(.all, label: "All")
                         filterChip(.favorites, label: "Favorites")
+                        filterChip(.trainingRole(.push), label: "Push")
+                        filterChip(.trainingRole(.pull), label: "Pull")
                         ForEach(Equipment.allCases, id: \.self) { e in
                             if availableEquipment.contains(e) {
                                 filterChip(.equipment(e), label: e.displayName)
@@ -276,6 +269,7 @@ struct ExercisePickerSheet: View {
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("exercisePickerFilter\(value.accessibilitySuffix)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
@@ -467,6 +461,9 @@ struct ExercisePickerSheet: View {
         if item.mechanic == .compound, let movementLabel = item.movementLabel {
             parts.append(movementLabel)
         } else if item.mechanic == .isolation {
+            if let trainingRole = item.trainingRole {
+                parts.append(trainingRole.displayName)
+            }
             parts.append("Isolation")
         }
         return parts.joined(separator: " · ")
@@ -503,6 +500,9 @@ struct ExercisePickerSheet: View {
         let trimmed = query.trimmingCharacters(in: .whitespaces)
         if !trimmed.isEmpty {
             return "No exercises match \"\(trimmed)\"."
+        }
+        if case let .trainingRole(role) = filter {
+            return "No \(role.displayName) exercises."
         }
         return "Your catalog is empty.\nTap below to add an exercise."
     }

@@ -14,7 +14,6 @@ import Testing
 
 @MainActor
 struct CatalogSyncTests {
-
     private func makeContext() throws -> ModelContext {
         let schema = VivobodyStore.schema
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
@@ -36,6 +35,7 @@ struct CatalogSyncTests {
             name: "My Custom Movement",
             group: .chest,
             defaultWeight: 45,
+            trainingRole: .pull,
             isUserCreated: true
         )
         context.insert(custom)
@@ -49,6 +49,7 @@ struct CatalogSyncTests {
         let remaining = try context.fetch(FetchDescriptor<ExerciseCatalogItem>())
         #expect(remaining.count == CatalogData.records.count + 1)
         #expect(remaining.contains { $0.id == custom.id })
+        #expect(custom.trainingRole == .pull)
         #expect(Set(remaining.compactMap(\.catalogID)).count == CatalogData.records.count)
     }
 
@@ -70,6 +71,7 @@ struct CatalogSyncTests {
         )
         bundled.name = "Temporary Development Name"
         bundled.group = .legs
+        bundled.trainingRole = .other
         bundled.defaultWeight = 222
         bundled.defaultWeightKg = 100
         bundled.defaultDuration = 17
@@ -93,6 +95,7 @@ struct CatalogSyncTests {
         #expect(bundled.name == authored.name)
         #expect(bundled.group == authored.group)
         #expect(bundled.familyID == authored.familyID)
+        #expect(bundled.trainingRole == authored.trainingRole)
         #expect(bundled.muscleInvolvementSnapshot == authored.muscleInvolvement.snapshot)
         #expect(bundled.defaultWeight == 222)
         #expect(bundled.defaultWeightKg == 100)

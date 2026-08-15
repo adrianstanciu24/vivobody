@@ -15,6 +15,7 @@
   ],
   "fixed": {
     "mechanic": "compound",
+    "trainingRole": "core",
     "pattern": "core",
     "direction": null,
     "planes": [

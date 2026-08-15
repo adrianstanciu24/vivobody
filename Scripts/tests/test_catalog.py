@@ -244,6 +244,19 @@ class CatalogFoundationTests(unittest.TestCase):
     def batch1_family_copy(self, family_id: str) -> dict:
         return copy.deepcopy(self.batch1_families[family_id])
 
+    def assert_fixed_equal(self, actual: dict, expected: dict) -> None:
+        """Keep historical biomechanics fixtures focused on their fields.
+
+        Training placement has its own exact whole-catalog contract test
+        because it is product taxonomy rather than biomechanics evidence.
+        """
+        without_training_role = {
+            key: value
+            for key, value in actual.items()
+            if key != "trainingRole"
+        }
+        self.assertEqual(without_training_role, expected)
+
     def assert_batch1_family_fails(
         self,
         family: dict,
@@ -487,6 +500,7 @@ class CatalogFoundationTests(unittest.TestCase):
         family = self.family_copy()
         family["fixed"] = {
             "mechanic": "isolation",
+            "trainingRole": "core",
             "pattern": None,
             "direction": None,
             "planes": ["sagittal"],
@@ -3996,7 +4010,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "shoulder extension row",
         )
         self.assertEqual(warnings, [])
-        self.assertEqual(
+        self.assert_fixed_equal(
             self.shoulder_extension_row["fixed"],
             {
                 "mechanic": "compound",
@@ -4619,7 +4633,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "shoulder horizontal abduction row",
         )
         self.assertEqual(warnings, [])
-        self.assertEqual(
+        self.assert_fixed_equal(
             self.shoulder_horizontal_abduction_row["fixed"],
             {
                 "mechanic": "compound",
@@ -5794,7 +5808,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     )
                     for action in family["movementSignature"]["primeActions"]
                 ]
-                self.assertEqual(family["fixed"], contract["fixed"])
+                self.assert_fixed_equal(family["fixed"], contract["fixed"])
                 self.assertEqual(
                     family["movementSignature"]["planeBasisActions"],
                     contract["basis"],
@@ -6465,7 +6479,7 @@ class CatalogFoundationTests(unittest.TestCase):
                     if isinstance(prime, dict)
                     else prime
                 )
-                self.assertEqual(
+                self.assert_fixed_equal(
                     family["fixed"],
                     {
                         "mechanic": "isolation",
@@ -7328,7 +7342,7 @@ class CatalogFoundationTests(unittest.TestCase):
         for family_id, contract in expected.items():
             with self.subTest(family=family_id):
                 family = self.batch3_families[family_id]
-                self.assertEqual(family["fixed"], contract["fixed"])
+                self.assert_fixed_equal(family["fixed"], contract["fixed"])
                 self.assertEqual(
                     family["movementSignature"]["planeBasisActions"],
                     contract["basis"],
@@ -8298,7 +8312,7 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_landmine_press_contract_and_runtime_surface_are_exact(self) -> None:
         family = self.landmine_press
         exercise = family["exercises"][0]
-        self.assertEqual(
+        self.assert_fixed_equal(
             family["fixed"],
             {
                 "mechanic": "compound",
@@ -8595,7 +8609,7 @@ class CatalogFoundationTests(unittest.TestCase):
         for family_id, contract in expected.items():
             with self.subTest(family=family_id):
                 family = self.batch4_families[family_id]
-                self.assertEqual(
+                self.assert_fixed_equal(
                     family["fixed"],
                     {
                         "mechanic": "isolation",
@@ -9545,7 +9559,7 @@ class CatalogFoundationTests(unittest.TestCase):
             family = self.batch5_families[family_id]
             with self.subTest(family=family_id):
                 self.assertEqual(family["name"], contract["name"])
-                self.assertEqual(family["fixed"], contract["fixed"])
+                self.assert_fixed_equal(family["fixed"], contract["fixed"])
                 self.assertEqual(
                     family["movementSignature"]["planeBasisActions"],
                     ["hip.extension"],
@@ -11196,7 +11210,7 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_batch6_dorsiflexion_contract_and_roster_are_exact(self) -> None:
         family = self.batch6_families["ankle-dorsiflexion"]
         self.assertEqual(family["name"], "Ankle Dorsiflexion")
-        self.assertEqual(
+        self.assert_fixed_equal(
             family["fixed"],
             {
                 "mechanic": "isolation",
@@ -11500,7 +11514,7 @@ class CatalogFoundationTests(unittest.TestCase):
             family = self.batch6_families[family_id]
             with self.subTest(family=family_id):
                 self.assertEqual(family["name"], expected["name"])
-                self.assertEqual(
+                self.assert_fixed_equal(
                     family["fixed"],
                     {
                         "mechanic": "isolation",
@@ -14279,7 +14293,7 @@ class CatalogFoundationTests(unittest.TestCase):
     def test_scapular_elevation_coupled_owner_contract_is_exact(self) -> None:
         family = self.scapular_closure_families["scapular-elevation"]
         signature = family["movementSignature"]
-        self.assertEqual(
+        self.assert_fixed_equal(
             family["fixed"],
             {
                 "mechanic": "isolation",
@@ -14825,7 +14839,7 @@ class CatalogFoundationTests(unittest.TestCase):
             for family in self.real_families
             if family["id"] == "finger-flexion-grip"
         )
-        self.assertEqual(
+        self.assert_fixed_equal(
             family["fixed"],
             {
                 "mechanic": "isolation",
@@ -15247,6 +15261,7 @@ class CatalogFoundationTests(unittest.TestCase):
         family = self.family_copy()
         family["fixed"] = {
             "mechanic": "isolation",
+            "trainingRole": "other",
             "pattern": None,
             "direction": None,
             "planes": ["sagittal"],
@@ -15850,7 +15865,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(family["id"], "diagonal-pull")
         self.assertEqual(family["name"], "Diagonal Pull")
-        self.assertEqual(
+        self.assert_fixed_equal(
             family["fixed"],
             {
                 "mechanic": "compound",
@@ -16259,6 +16274,53 @@ class CatalogFoundationTests(unittest.TestCase):
                 with self.subTest(catalog_id=exercise["catalogID"]):
                     self.assertIsNone(jargon.search(instructions))
 
+    def test_training_roles_are_authored_exactly_by_family(self) -> None:
+        expected = {
+            "push": {
+                "chest-fly", "decline-press", "dip", "elbow-extension",
+                "horizontal-press", "incline-press", "landmine-press",
+                "push-press", "scapular-protraction",
+                "shoulder-abduction-raise", "shoulder-flexion-raise",
+                "vertical-press",
+            },
+            "pull": {
+                "diagonal-pull", "elbow-flexion", "reverse-fly",
+                "scapular-depression", "scapular-elevation",
+                "scapular-retraction", "shoulder-extension-isolation",
+                "shoulder-extension-row", "shoulder-horizontal-abduction-row",
+                "upright-row", "vertical-pull",
+            },
+            "legs": {
+                "ankle-dorsiflexion", "ankle-plantarflexion",
+                "bilateral-squat", "dynamic-lunge", "hip-abduction",
+                "hip-adduction", "hip-extension", "hip-external-rotation",
+                "hip-flexion", "hip-hinge", "hip-internal-rotation",
+                "hip-thrust-bridge", "knee-extension", "knee-flexion",
+                "split-stance-squat", "step-up",
+            },
+            "core": {
+                "anti-extension", "anti-lateral-flexion", "anti-rotation",
+                "spine-extension", "spine-flexion", "spine-lateral-flexion",
+                "spine-rotation", "suitcase-carry",
+            },
+            "other": {
+                "farmer-carry", "finger-flexion-grip", "forearm-pronation",
+                "forearm-supination", "shoulder-external-rotation",
+                "shoulder-internal-rotation", "wrist-extension",
+                "wrist-flexion", "wrist-radial-deviation",
+                "wrist-ulnar-deviation",
+            },
+        }
+        actual = {
+            role: {
+                family["id"]
+                for family in self.real_families
+                if family["fixed"]["trainingRole"] == role
+            }
+            for role in catalog.TRAINING_ROLES
+        }
+        self.assertEqual(actual, expected)
+
     def test_runtime_projection_applies_group_override_and_optionals_exactly(
         self,
     ) -> None:
@@ -16276,7 +16338,7 @@ class CatalogFoundationTests(unittest.TestCase):
 
         base_keys = {
             "familyID", "catalogID", "name", "group", "defaultWeight",
-            "reps", "trackingMode", "equipment", "mechanic", "pattern",
+            "reps", "trackingMode", "equipment", "mechanic", "trainingRole", "pattern",
             "direction", "planes", "laterality", "aliases",
             "bodyweightFraction", "modality", "loadMode",
             "movementSteps", "involvement",

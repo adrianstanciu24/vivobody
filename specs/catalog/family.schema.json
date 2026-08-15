@@ -149,6 +149,7 @@
       "additionalProperties": false,
       "required": [
         "mechanic",
+        "trainingRole",
         "pattern",
         "direction",
         "planes"
@@ -159,6 +160,17 @@
           "enum": [
             "compound",
             "isolation"
+          ]
+        },
+        "trainingRole": {
+          "description": "Authored programming placement used for cross-mechanic discovery and mechanic-separated analysis; not an anatomical joint action.",
+          "type": "string",
+          "enum": [
+            "push",
+            "pull",
+            "legs",
+            "core",
+            "other"
           ]
         },
         "pattern": {

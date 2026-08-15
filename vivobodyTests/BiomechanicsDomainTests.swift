@@ -13,7 +13,6 @@ import Testing
 
 @MainActor
 struct BiomechanicsDomainTests {
-
     @Test func loadProfilesRespectResistancePolarity() {
         let external = ExerciseLoadProfile(mode: .external, bodyweightFraction: 0)
         #expect(external.effectiveLoad(loggedWeight: 80, bodyweight: 200) == 80)
@@ -290,6 +289,10 @@ struct BiomechanicsDomainTests {
             records: [record(mechanic: .compound, pattern: nil, direction: nil)]
         )
         expectValidationError(
+            .invalidTrainingRole("test"),
+            records: [record(trainingRole: .pull)]
+        )
+        expectValidationError(
             .invalidLoadFraction("test"),
             records: [record(bodyweightFraction: 0.5, loadMode: .external)]
         )
@@ -347,6 +350,7 @@ struct BiomechanicsDomainTests {
         defaultDuration: TimeInterval? = nil,
         equipment: Equipment = .barbell,
         mechanic: Mechanic = .compound,
+        trainingRole: TrainingRole = .push,
         pattern: MovementPattern? = .push,
         direction: PushPullDirection? = .horizontal,
         planes: [MovementPlane] = [.sagittal],
@@ -370,6 +374,7 @@ struct BiomechanicsDomainTests {
             defaultDuration: defaultDuration,
             equipment: equipment,
             mechanic: mechanic,
+            trainingRole: trainingRole,
             pattern: pattern,
             direction: direction,
             planes: planes,

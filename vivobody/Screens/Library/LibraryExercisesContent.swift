@@ -15,8 +15,9 @@ import VivoKit
 /// Exercises segment — browsable catalog. Tap an exercise row to
 /// push its detail screen (no commit CTA in this context). Long-
 /// press for Favorite / Edit / Delete via context menu. The filter
-/// strip offers equipment scopes plus prominent Favorites and Core
-/// shortcuts; favorited rows carry a star next to the name.
+/// strip offers training-role and equipment scopes plus prominent
+/// Favorites and Core shortcuts; favorited rows carry a star next
+/// to the name.
 struct LibraryExercisesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
@@ -115,18 +116,9 @@ struct LibraryExercisesContent: View {
 
     /// Catalog narrowed by the selected chip only (no text filter).
     /// Shared by the grouped browse path and the search-ranked path
-    /// so Core and equipment scopes behave identically in both modes.
+    /// so role, Core, and equipment scopes behave identically in both modes.
     private var scopedItems: [ExerciseCatalogItem] {
-        switch exerciseFilter {
-        case .all:
-            items
-        case .favorites:
-            items.filter(\.isFavorite)
-        case .core:
-            items.filter { $0.group == .core }
-        case let .equipment(equipment):
-            items.filter { $0.equipment == equipment }
-        }
+        items.filter { exerciseFilter.matches($0) }
     }
 
     /// Flat, relevance-ranked results for the active query. The chosen
@@ -165,6 +157,8 @@ struct LibraryExercisesContent: View {
                     HStack(spacing: Space.md) {
                         chip(.all, label: "All")
                         chip(.favorites, label: "Favorites")
+                        chip(.trainingRole(.push), label: "Push")
+                        chip(.trainingRole(.pull), label: "Pull")
                         if items.contains(where: { $0.group == .core }) {
                             chip(.core, label: "Core")
                         }
@@ -201,6 +195,7 @@ struct LibraryExercisesContent: View {
                 .coloredGlassControl(cornerRadius: Radius.pill, fill: isSelected ? Tint.inProgress : nil)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("libraryExerciseFilter\(filter.accessibilitySuffix)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
     }
@@ -467,6 +462,9 @@ struct LibraryExercisesContent: View {
         if item.mechanic == .compound, let movementLabel = item.movementLabel {
             parts.append(movementLabel)
         } else if item.mechanic == .isolation {
+            if let trainingRole = item.trainingRole {
+                parts.append(trainingRole.displayName)
+            }
             parts.append("Isolation")
         }
         return parts.joined(separator: " · ")
@@ -509,6 +507,8 @@ struct LibraryExercisesContent: View {
             return "Your catalog is empty."
         case .core:
             return "No Core exercises."
+        case let .trainingRole(role):
+            return "No \(role.displayName) exercises."
         case .equipment:
             return "No exercises for that equipment."
         }
@@ -540,12 +540,38 @@ struct LibraryExercisesContent: View {
 }
 
 /// Mutually-exclusive scopes for the Library exercise catalog and the
-/// exercise picker. Favorites and Core sit beside equipment filters as
-/// high-value shortcuts, while a single enum prevents contradictory
-/// chips being selected.
+/// exercise picker. Push, Pull, Favorites, and Core sit beside equipment
+/// filters as high-value shortcuts, while a single enum prevents
+/// contradictory chips being selected.
 enum LibraryExerciseFilter: Equatable {
     case all
     case favorites
     case core
+    case trainingRole(TrainingRole)
     case equipment(Equipment)
+
+    func matches(_ item: ExerciseCatalogItem) -> Bool {
+        switch self {
+        case .all:
+            true
+        case .favorites:
+            item.isFavorite
+        case .core:
+            item.group == .core
+        case let .trainingRole(role):
+            item.trainingRole == role
+        case let .equipment(equipment):
+            item.equipment == equipment
+        }
+    }
+
+    var accessibilitySuffix: String {
+        switch self {
+        case .all: "All"
+        case .favorites: "Favorites"
+        case .core: "Core"
+        case let .trainingRole(role): role.displayName
+        case let .equipment(equipment): equipment.displayName.replacingOccurrences(of: " ", with: "")
+        }
+    }
 }

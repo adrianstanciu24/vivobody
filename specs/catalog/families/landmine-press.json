@@ -12,6 +12,7 @@
   ],
   "fixed": {
     "mechanic": "compound",
+    "trainingRole": "push",
     "pattern": "push",
     "direction": "diagonal",
     "planes": [

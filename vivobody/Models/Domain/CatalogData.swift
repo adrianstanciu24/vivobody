@@ -32,6 +32,7 @@ nonisolated struct CatalogRecord: Decodable {
     let defaultDuration: TimeInterval?
     let equipment: Equipment
     let mechanic: Mechanic
+    let trainingRole: TrainingRole
     let pattern: MovementPattern?
     let direction: PushPullDirection?
     let planes: [MovementPlane]
@@ -80,6 +81,10 @@ nonisolated struct CatalogRecord: Decodable {
         mechanic
     }
 
+    var trainingRoleValue: TrainingRole {
+        trainingRole
+    }
+
     var patternValue: MovementPattern? {
         pattern
     }
@@ -118,6 +123,7 @@ nonisolated struct CatalogRecord: Decodable {
         ExerciseClassification(
             equipment: equipment,
             mechanic: mechanic,
+            trainingRole: trainingRole,
             pattern: pattern,
             direction: direction,
             planes: planes,
@@ -291,6 +297,8 @@ nonisolated enum CatalogData {
                 }
             }
 
+            try validateTrainingRole(record)
+
             let muscles = record.involvement.map(\.muscle)
             guard !muscles.isEmpty else {
                 throw ValidationError.emptyInvolvement(record.catalogID)
@@ -370,6 +378,13 @@ nonisolated enum CatalogData {
         }
     }
 
+    private static func validateTrainingRole(_ record: CatalogRecord) throws {
+        guard record.pattern == .push || record.pattern == .pull else { return }
+        guard record.pattern?.rawValue == record.trainingRole.rawValue else {
+            throw ValidationError.invalidTrainingRole(record.catalogID)
+        }
+    }
+
     private static func isStableCatalogID(_ value: String) -> Bool {
         guard
             !value.isEmpty,
@@ -404,6 +419,7 @@ nonisolated enum CatalogData {
         case invalidLoadFraction(String)
         case comparableBandLoad(String)
         case invalidMechanicPattern(String)
+        case invalidTrainingRole(String)
         case emptyInvolvement(String)
         case duplicateMuscle(String)
         case missingPrimary(String)
@@ -432,6 +448,7 @@ nonisolated enum CatalogData {
             case let .invalidLoadFraction(id): "record '\(id)' has load-mode-incompatible bodyweight fraction"
             case let .comparableBandLoad(id): "band record '\(id)' claims a comparable load"
             case let .invalidMechanicPattern(id): "record '\(id)' has mechanic-incompatible movement pattern"
+            case let .invalidTrainingRole(id): "record '\(id)' has a training role incompatible with its compound pattern"
             case let .emptyInvolvement(id): "record '\(id)' has no muscle involvement"
             case let .duplicateMuscle(id): "record '\(id)' assigns the same muscle more than once"
             case let .missingPrimary(id): "strength/power record '\(id)' has no primary muscle"

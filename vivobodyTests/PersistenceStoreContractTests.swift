@@ -73,6 +73,7 @@ struct PersistenceStoreContractTests {
         #expect(exercise.id == Fixture.workoutExerciseID)
         #expect(exercise.name == "Fixture Bench Press")
         #expect(exercise.catalogID == "barbell-bench-press")
+        #expect(exercise.trainingRoleRaw == nil)
         let set = try #require(exercise.orderedSets.first)
         #expect(set.id == Fixture.workoutSetID)
         #expect(set.weight == 225)
@@ -93,6 +94,7 @@ struct PersistenceStoreContractTests {
         let templateExercise = try #require(template.orderedExercises.first)
         #expect(templateExercise.id == Fixture.templateExerciseID)
         #expect(templateExercise.catalogID == "barbell-bench-press")
+        #expect(templateExercise.trainingRoleRaw == nil)
         let templateSet = try #require(templateExercise.orderedSets.first)
         #expect(templateSet.id == Fixture.templateSetID)
         #expect(templateSet.weight == 205)
@@ -104,6 +106,7 @@ struct PersistenceStoreContractTests {
         #expect(custom.isUserCreated)
         #expect(custom.isFavorite)
         #expect(custom.oneRepMax == 275)
+        #expect(custom.trainingRoleRaw == nil)
         #expect(custom.movementSteps == Fixture.movementSteps)
 
         let weights = try context.fetch(FetchDescriptor<BodyWeightEntry>())

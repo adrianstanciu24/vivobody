@@ -16,6 +16,7 @@
   ],
   "fixed": {
     "mechanic": "compound",
+    "trainingRole": "pull",
     "pattern": "pull",
     "direction": "horizontal",
     "planes": [

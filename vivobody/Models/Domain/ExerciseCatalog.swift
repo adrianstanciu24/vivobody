@@ -5,9 +5,9 @@
 //  Persistent catalog of lifts the user picks from when building a
 //  template or adding an exercise mid-workout. Stored as @Model so
 //  the user can extend it with custom entries — name + muscle group
-//  + equipment + mechanic + pattern + push/pull direction + aliases +
-//  categorical muscle roles + sensible defaults — and edit/delete them
-//  in place.
+//  + equipment + mechanic + training role + compound pattern + push/pull
+//  direction + aliases + categorical muscle roles + sensible defaults —
+//  and edit/delete them in place.
 //
 //  AppRoot reconciles bundled entries with the generated `catalog.json`
 //  (see `CatalogData`) on every launch, so ongoing exercise-authoring edits,
@@ -52,29 +52,11 @@ nonisolated enum Equipment: String, Codable, Hashable, CaseIterable {
     }
 }
 
-// MARK: - Mechanic
-
-/// Compound (multi-joint) vs. isolation (single-joint). Affects
-/// PR-detection sensitivity and which patterns make sense — only
-/// compound lifts carry a `MovementPattern`.
-nonisolated enum Mechanic: String, Codable, Hashable, CaseIterable {
-    case compound
-    case isolation
-
-    nonisolated var displayName: String {
-        switch self {
-        case .compound: "Compound"
-        case .isolation: "Isolation"
-        }
-    }
-}
-
 // MARK: - Movement pattern
 
-/// The primary motor pattern of the lift. Optional — only compound
-/// lifts have a meaningful pattern; isolation work is left nil.
-/// Useful for programming-aware features (push/pull balance,
-/// session structure suggestions) we'll layer in later.
+/// The dominant compound motor pattern. Isolation work is described by
+/// its joint action in the catalog and uses `TrainingRole` for PPL-style
+/// programming placement.
 nonisolated enum MovementPattern: String, Codable, Hashable, CaseIterable {
     case push // bench, OHP, dips
     case pull // rows, pulldowns
@@ -231,6 +213,10 @@ final class ExerciseCatalogItem: Identifiable {
     /// "Barbell Bench Press"-style entry is more likely compound than not.
     var mechanicRaw: String = Mechanic.compound.rawValue
 
+    /// Cross-mechanic programming placement. Optional storage preserves
+    /// the honest unknown state for pre-existing custom catalog rows.
+    var trainingRoleRaw: String? = nil
+
     /// Movement pattern (push/pull/squat/hinge/lunge/carry/core).
     /// Optional because isolation work doesn't have a meaningful
     /// pattern. Nil-when-isolation is a soft rule, not enforced in
@@ -347,6 +333,11 @@ final class ExerciseCatalogItem: Identifiable {
         }
     }
 
+    var trainingRole: TrainingRole? {
+        get { trainingRoleRaw.flatMap(TrainingRole.init(rawValue:)) }
+        set { trainingRoleRaw = newValue?.rawValue }
+    }
+
     var pattern: MovementPattern? {
         get { patternRaw.flatMap(MovementPattern.init(rawValue:)) }
         set {
@@ -412,6 +403,7 @@ final class ExerciseCatalogItem: Identifiable {
         ExerciseClassification(
             equipment: equipment,
             mechanic: mechanic,
+            trainingRole: trainingRole,
             pattern: pattern,
             direction: direction,
             planes: planes,
@@ -442,6 +434,7 @@ final class ExerciseCatalogItem: Identifiable {
         defaultDuration: TimeInterval = 0,
         equipment: Equipment = .barbell,
         mechanic: Mechanic = .compound,
+        trainingRole: TrainingRole? = nil,
         pattern: MovementPattern? = nil,
         direction: PushPullDirection? = nil,
         planes: [MovementPlane] = [.sagittal],
@@ -467,6 +460,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.defaultDuration = defaultDuration
         self.equipmentRaw = equipment.rawValue
         self.mechanicRaw = mechanic.rawValue
+        self.trainingRoleRaw = trainingRole?.rawValue
         self.patternRaw = (mechanic == .isolation) ? nil : pattern?.rawValue
         self.directionRaw = (mechanic == .compound && (pattern == .push || pattern == .pull))
             ? direction?.rawValue
@@ -505,6 +499,7 @@ extension ExerciseCatalogItem {
             defaultDuration: record.defaultDurationValue,
             equipment: record.equipmentValue,
             mechanic: record.mechanicValue,
+            trainingRole: record.trainingRoleValue,
             pattern: record.patternValue,
             direction: record.directionValue,
             planes: record.planeValues,
@@ -638,6 +633,7 @@ extension ExerciseCatalogItem {
         bodyweightFraction = record.bodyweightFraction
         equipment = record.equipment
         mechanic = record.mechanic
+        trainingRole = record.trainingRole
         pattern = record.pattern
         direction = record.direction
         planes = record.planes
