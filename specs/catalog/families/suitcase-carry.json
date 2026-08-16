@@ -454,14 +454,18 @@
         "ellestad-2024-loaded-carry-muscle-activation",
         "mcgill-2013-one-two-hand-carry"
       ],
-      "movementSteps": [
-        "Log the weight of the single dumbbell.",
-        "Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight.",
-        "Use no straps or hooks.",
-        "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
-        "Log the other side as well.",
-        "Do not turn, march in place, walk backward, or lean deliberately to create repetitions."
-      ]
+      "execution": {
+        "startingPosition": "Log the weight of the single dumbbell. Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight. Use no straps or hooks.",
+        "movement": "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
+        "endpoint": "Finish the walk when the set time ends while still upright.",
+        "controlledJoints": "Keep the carrying elbow straight and your wrist and grip closed around the handle.",
+        "supportAndPosture": "Stay upright without leaning away from the dumbbell. Do not turn, march in place, walk backward, or lean deliberately to create repetitions.",
+        "disqualifyingCompensations": [
+          "Leaning away from the dumbbell turns the carry into a supported side-lean.",
+          "Letting the dumbbell rest against the thigh turns the carry into a propped hold."
+        ],
+        "sideOrDirection": "Walk forward only, carrying the dumbbell on one side for the set time, then switch hands and log the other side as well."
+      }
     }
   ]
 }

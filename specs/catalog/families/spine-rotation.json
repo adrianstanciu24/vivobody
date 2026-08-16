@@ -273,14 +273,19 @@
         "vinstrup-2015-torso-twist",
         "stevens-2007-seated-axial-rotation"
       ],
-      "movementSteps": [
-        "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
-        "Hold the pelvis against the seat and keep the hips and legs still.",
-        "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
-        "Turn as far as feels comfortable, then return to the left-facing start under control.",
-        "Reset the machine, repeat the same movement from right to left, and log that direction separately.",
-        "Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition."
-      ]
+      "execution": {
+        "startingPosition": "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
+        "movement": "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
+        "endpoint": "Turn as far as feels comfortable.",
+        "returnPhase": "Return to the left-facing start under control.",
+        "controlledJoints": "Hold the pelvis against the seat and keep the hips and legs still.",
+        "supportAndPosture": "Stay seated with the shoulder pads in contact and both hands holding the handles.",
+        "disqualifyingCompensations": [
+          "Letting the pelvis rotate with the pads turns the torso twist into a whole-body spin.",
+          "Pushing with the legs or hips turns the torso twist into a lower-body heave."
+        ],
+        "sideOrDirection": "Reset the machine, repeat the same movement from right to left, and log that direction separately. Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition."
+      }
     }
   ]
 }

@@ -392,11 +392,18 @@
         "mckenzie-2022-dip-variations",
         "mckenzie-2022-bar-dip-fatigue"
       ],
-      "movementSteps": [
-        "Support the full body above fixed dip bars with no foot contact.",
-        "Bend your elbows and lower under control only as far as feels comfortable, letting your upper arms move slightly behind your torso.",
-        "Press back up until your elbows are straight without swinging, kicking, or forcing your shoulder blades into a specific position."
-      ]
+      "execution": {
+        "startingPosition": "Support the full body above fixed dip bars with no foot contact.",
+        "movement": "Bend your elbows and lower under control, letting your upper arms move slightly behind your torso.",
+        "endpoint": "End the descent only as far as feels comfortable.",
+        "returnPhase": "Press back up until your elbows are straight.",
+        "controlledJoints": "Do not swing, kick, or force your shoulder blades into a specific position.",
+        "supportAndPosture": "Hold your torso steady above the bars with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Swinging or kicking the legs turns the dip into a kipping dip.",
+          "Pushing through the feet turns the dip into an assisted dip."
+        ]
+      }
     },
     {
       "catalogID": "ring-dip",
@@ -485,11 +492,18 @@
         "da-silva-2022-ring-dip-pectoralis-rupture",
         "mckenzie-2022-dip-variations"
       ],
-      "movementSteps": [
-        "Support the full body above two independent rings with no foot contact.",
-        "Keep the rings controlled beside your torso as you bend your elbows and lower only as far as feels comfortable, letting your upper arms move slightly behind you.",
-        "Press back up until your elbows are straight without kipping or using your legs."
-      ]
+      "execution": {
+        "startingPosition": "Support the full body above two independent rings with no foot contact.",
+        "movement": "Bend your elbows and lower, letting your upper arms move slightly behind you.",
+        "endpoint": "End the descent only as far as feels comfortable.",
+        "returnPhase": "Press back up until your elbows are straight.",
+        "controlledJoints": "Keep the rings controlled beside your torso without kipping or using your legs.",
+        "supportAndPosture": "Hold your torso steady between the rings with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Kipping or driving with the legs turns the ring dip into a muscle-up attempt.",
+          "Letting the rings swing away from your torso turns the dip into an unstable support hold."
+        ]
+      }
     }
   ]
 }

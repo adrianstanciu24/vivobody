@@ -569,11 +569,20 @@
         "castelein-2016-scapular-muscles-shrug",
         "seth-2019-shoulder-work"
       ],
-      "movementSteps": [
-        "Stand tall holding one dumbbell beside your body with your elbow straight and your thumb pointing forward.",
-        "Shrug the working shoulder blade toward your ear while keeping your upper arm at your side.",
-        "Lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk."
-      ]
+      "execution": {
+        "startingPosition": "Stand tall holding one dumbbell beside your body with your elbow straight and your thumb pointing forward.",
+        "movement": "Shrug the working shoulder blade toward your ear.",
+        "endpoint": "End the lift with the shoulder blade as high as it comfortably goes.",
+        "returnPhase": "Lower under control without rolling the shoulder, bending the elbow, moving the neck, or leaning the trunk.",
+        "controlledJoints": "Keep your upper arm at your side and your elbow straight.",
+        "supportAndPosture": "Keep your trunk tall and still throughout the repetition.",
+        "disqualifyingCompensations": [
+          "Rolling the shoulder forward or back turns the shrug into a rolling shrug.",
+          "Bending the elbow to lift higher turns the shrug into an upright row.",
+          "Dipping the legs to heave the dumbbell turns the shrug into a leg-driven pull."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch the dumbbell to the other hand."
+      }
     },
     {
       "catalogID": "bilateral-30-degree-stabilization-shrug",
@@ -634,14 +643,19 @@
       "evidenceRefs": [
         "lee-2016-stabilization-shrug-upward-rotation"
       ],
-      "movementSteps": [
-        "Stand with your feet shoulder-width apart and both arms raised 30 degrees out to the sides.",
-        "Lightly touch the thumb-side edges of your wrists against the plastic guides, use the angle gauge to keep your arms in place, and have a partner steady your chin and upper chest.",
-        "Shrug both shoulder blades to your personal maximum-height target bars, and hold the top position for five seconds.",
-        "Lower slowly without bending the elbows, moving the neck or trunk, or adding external load.",
-        "Perform two attempts.",
-        "Record the larger shoulder-blade angle measured immediately after each hold; do not try to track the angle while moving."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet shoulder-width apart and both arms raised 30 degrees out to the sides. Lightly touch the thumb-side edges of your wrists against the plastic guides. Perform two attempts. Record the larger shoulder-blade angle measured immediately after each hold; do not try to track the angle while moving.",
+        "movement": "Shrug both shoulder blades to your personal maximum-height target bars.",
+        "endpoint": "Hold the top position for five seconds.",
+        "returnPhase": "Lower slowly without bending the elbows, moving the neck or trunk, or adding external load.",
+        "controlledJoints": "Use the angle gauge to keep your arms in place.",
+        "supportAndPosture": "Have a partner steady your chin and upper chest.",
+        "disqualifyingCompensations": [
+          "Bending the elbows to climb higher turns the shrug into an upright-row motion.",
+          "Adding external load turns the no-load stabilization shrug into a loaded shrug.",
+          "Dipping the legs to drive upward turns the shrug into a leg-driven pull."
+        ]
+      }
     }
   ]
 }

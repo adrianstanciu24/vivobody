@@ -345,12 +345,19 @@
         "fukunaga-2023-flexor-pronator-exercises",
         "szymanski-2004-wrist-forearm-training"
       ],
-      "movementSteps": [
-        "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward.",
-        "Grip just above the dumbbell's bottom collar with its shaft pointing behind.",
-        "Raise the little-finger side of the wrist through the controlled available range.",
-        "Lower without rotating the forearm or moving the elbow, shoulder, or torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward. Grip just above the dumbbell's bottom collar with its shaft pointing behind.",
+        "movement": "Raise the little-finger side of the wrist.",
+        "endpoint": "Stop at the end of your controlled available range.",
+        "returnPhase": "Lower without rotating the forearm or moving the elbow, shoulder, or torso.",
+        "controlledJoints": "Keep the forearm, elbow, shoulder, and torso still while the wrist moves.",
+        "supportAndPosture": "Stand tall with the working arm held beside your body.",
+        "disqualifyingCompensations": [
+          "Rotating the forearm turns the wrist deviation into a forearm rotation.",
+          "Bending the elbow or swinging the arm turns the wrist deviation into an arm swing."
+        ],
+        "sideOrDirection": "Finish the set with the working hand, then repeat with the other hand."
+      }
     }
   ]
 }

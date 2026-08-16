@@ -328,13 +328,20 @@
         "andersson-1996-quadratus-lumborum-emg",
         "phillips-2008-quadratus-lumborum-biomechanics"
       ],
-      "movementSteps": [
-        "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
-        "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
-        "Lift your upper body sideways until it is about 30 degrees off the floor.",
-        "Lower to the starting position under control.",
-        "Repeat on the other side and log it separately."
-      ]
+      "execution": {
+        "startingPosition": "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
+        "movement": "Lift your upper body sideways.",
+        "endpoint": "End the lift when your upper body is about 30 degrees off the floor.",
+        "returnPhase": "Lower to the starting position under control.",
+        "controlledJoints": "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
+        "supportAndPosture": "Rest your torso on the floor and keep the crossed top foot secured.",
+        "disqualifyingCompensations": [
+          "Pushing through the hip turns the trunk lift into a hip lift.",
+          "Lifting past 30 degrees turns the reviewed lift into a higher-range variant.",
+          "Adding a twist as you lift turns the side bend into a rotation."
+        ],
+        "sideOrDirection": "Repeat on the other side and log it separately."
+      }
     }
   ]
 }

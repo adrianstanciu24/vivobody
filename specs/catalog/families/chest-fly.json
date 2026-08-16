@@ -381,11 +381,18 @@
         "bergquist-2018-band-free-weight-fly",
         "welsch-2005-dumbbell-fly"
       ],
-      "movementSteps": [
-        "Lie on your back on a flat bench with one dumbbell over each shoulder, your palms facing each other, and your elbows held in a fixed slight bend.",
-        "Lower the upper arms outward at shoulder height.",
-        "Sweep your upper arms together until the dumbbells meet over your chest without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back on a flat bench with one dumbbell over each shoulder, your palms facing each other, and your elbows held in a fixed slight bend.",
+        "movement": "Lower the upper arms outward at shoulder height.",
+        "endpoint": "End with the upper arms lowered out to the sides at shoulder height.",
+        "returnPhase": "Sweep your upper arms together until the dumbbells meet over your chest without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward.",
+        "controlledJoints": "Hold your elbows in a fixed slight bend.",
+        "supportAndPosture": "Keep your back supported on the flat bench and your torso still.",
+        "disqualifyingCompensations": [
+          "Bending and straightening the elbows turns the fly into a dumbbell press.",
+          "Arching the back or lifting the hips to heave the dumbbells turns the fly into a full-body heave."
+        ]
+      }
     },
     {
       "catalogID": "standing-band-fly",
@@ -463,11 +470,18 @@
         "holzbaur-2005-upper-extremity",
         "bergquist-2018-band-free-weight-fly"
       ],
-      "movementSteps": [
-        "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, the palms facing inward, and the elbows in a fixed slight bend.",
-        "Brace your torso and sweep your upper arms together until your hands meet in front of your chest.",
-        "Return under control without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward."
-      ]
+      "execution": {
+        "startingPosition": "Stand between the anchored ends of an elastic band with the upper arms held at shoulder height, the palms facing inward, and the elbows in a fixed slight bend.",
+        "movement": "Sweep your upper arms together until your hands meet in front of your chest.",
+        "endpoint": "End the sweep when your hands meet in front of your chest.",
+        "returnPhase": "Return under control without pressing, changing the elbow bend, or deliberately reaching your shoulder blades forward.",
+        "controlledJoints": "Hold your elbows in a fixed slight bend.",
+        "supportAndPosture": "Brace your torso while standing between the anchored band ends.",
+        "disqualifyingCompensations": [
+          "Bending and straightening the elbows turns the fly into a band press.",
+          "Leaning or twisting the torso to swing the hands together turns the fly into a full-body heave."
+        ]
+      }
     }
   ]
 }

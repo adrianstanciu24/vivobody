@@ -498,14 +498,19 @@
       "evidenceRefs": [
         "lorenzetti-2017-pulling-exercise-kinematics"
       ],
-      "movementSteps": [
-        "Sit on a flat bench facing a high cable with both feet on the floor and no thigh restraint.",
-        "Hold the straight bar wider than shoulder width with your palms facing forward, straighten your elbows, and point your arms upward at about 45 degrees.",
-        "Keep your head straight and your core tight as you pull the bar to your chest, driving your elbows down and back.",
-        "Allow your shoulder blades to move naturally instead of deliberately pinching or rotating them.",
-        "Return slowly to the same 45-degree start without pulling your arms across your body, twisting, leaning to propel the bar, or using your lower body.",
-        "Log the cable weight you actually use rather than the suggested starting weight of 35 lb or 15 kg; this exercise was tested with weights equal to 10% and 25% of body weight."
-      ]
+      "execution": {
+        "startingPosition": "Sit on a flat bench facing a high cable with both feet on the floor and no thigh restraint. Hold the straight bar wider than shoulder width with your palms facing forward, straighten your elbows, and point your arms upward at about 45 degrees. Log the cable weight you actually use rather than the suggested starting weight of 35 lb or 15 kg; this exercise was tested with weights equal to 10% and 25% of body weight.",
+        "movement": "Pull the bar to your chest, driving your elbows down and back.",
+        "endpoint": "End the pull when the bar touches your chest.",
+        "returnPhase": "Return slowly to the same 45-degree start without pulling your arms across your body, twisting, leaning to propel the bar, or using your lower body.",
+        "controlledJoints": "Allow your shoulder blades to move naturally instead of deliberately pinching or rotating them.",
+        "supportAndPosture": "Keep your head straight and your core tight.",
+        "disqualifyingCompensations": [
+          "Twisting or leaning to propel the bar turns the diagonal pull into a full-body heave.",
+          "Pulling the bar horizontally toward the waist turns the diagonal pull into a seated row.",
+          "Starting with the arms pointing straight overhead turns the diagonal pull into a vertical pulldown."
+        ]
+      }
     }
   ]
 }

@@ -31,6 +31,21 @@ sys.path.insert(0, str(SCRIPTS_ROOT))
 import catalog  # noqa: E402
 
 
+def execution_texts(exercise: dict) -> list[str]:
+    """All user-facing execution strings in canonical reading order."""
+    execution = exercise["execution"]
+    texts: list[str] = []
+    for field in catalog.EXECUTION_FIELD_ORDER:
+        if field not in execution:
+            continue
+        value = execution[field]
+        if isinstance(value, list):
+            texts.extend(value)
+        else:
+            texts.append(value)
+    return texts
+
+
 class CatalogFoundationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -1834,6 +1849,154 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         self.assertEqual(warnings, [])
 
+    def duration_fixture(self) -> dict:
+        family = self.family_copy()
+        family["allowed"]["modalities"] = ["isometricStrength"]
+        family["allowed"]["trackingModes"] = ["duration"]
+        exercise = family["exercises"][0]
+        exercise["modality"] = "isometricStrength"
+        exercise["trackingMode"] = "duration"
+        exercise["defaultDuration"] = 30
+        exercise["execution"].pop("returnPhase")
+        return family
+
+    def test_execution_missing_required_field_fails(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"].pop("endpoint")
+        self.assert_family_fails(
+            family,
+            r"execution is missing keys: endpoint",
+        )
+
+    def test_execution_unknown_field_fails(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"]["notes"] = (
+            "Extra coaching notes that do not belong to the contract."
+        )
+        self.assert_family_fails(
+            family,
+            r"execution has unknown keys: notes",
+        )
+
+    def test_execution_empty_field_fails(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"]["movement"] = "Short."
+        self.assert_family_fails(
+            family,
+            r"execution\.movement is malformed",
+        )
+
+    def test_execution_field_repeating_adjacent_word_fails(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"]["movement"] = (
+            "Press the the bar away from the torso until both elbows are straight."
+        )
+        self.assert_family_fails(
+            family,
+            r"execution\.movement repeats an adjacent word",
+        )
+
+    def test_execution_empty_compensations_fail(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"]["disqualifyingCompensations"] = []
+        self.assert_family_fails(
+            family,
+            r"execution\.disqualifyingCompensations must not be empty",
+        )
+
+    def test_execution_duplicate_compensations_fail(self) -> None:
+        family = self.family_copy()
+        entry = family["exercises"][0]["execution"][
+            "disqualifyingCompensations"
+        ][0]
+        family["exercises"][0]["execution"]["disqualifyingCompensations"] = [
+            entry,
+            entry,
+        ]
+        self.assert_family_fails(
+            family,
+            r"execution\.disqualifyingCompensations contains duplicates",
+        )
+
+    def test_execution_malformed_compensation_entry_fails(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"][
+            "disqualifyingCompensations"
+        ].append("rushing the reps")
+        self.assert_family_fails(
+            family,
+            r"execution\.disqualifyingCompensations\[1\] is malformed",
+        )
+
+    def test_execution_return_phase_is_required_for_reps(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"].pop("returnPhase")
+        self.assert_family_fails(
+            family,
+            r"execution\.returnPhase is required for rep-tracked exercises",
+        )
+
+    def test_execution_return_phase_is_forbidden_for_duration(self) -> None:
+        family = self.duration_fixture()
+        warnings = catalog.validate_family(
+            family,
+            self.foundation,
+            "duration fixture",
+        )
+        self.assertEqual(warnings, [])
+        family["exercises"][0]["execution"]["returnPhase"] = (
+            "Lower the bar back to the starting position under control."
+        )
+        self.assert_family_fails(
+            family,
+            r"execution\.returnPhase is forbidden for duration-tracked exercises",
+        )
+
+    def test_execution_side_or_direction_is_forbidden_for_bilateral(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["execution"]["sideOrDirection"] = (
+            "Repeat the effort with the other side."
+        )
+        self.assert_family_fails(
+            family,
+            r"execution\.sideOrDirection is forbidden for symmetric bilateral exercises",
+        )
+
+    def test_execution_side_or_direction_is_required_for_unilateral(self) -> None:
+        family = self.family_copy()
+        family["exercises"][0]["laterality"] = "unilateral"
+        self.assert_family_fails(
+            family,
+            r"execution\.sideOrDirection is required for unilateral exercises and carries",
+        )
+        family["exercises"][0]["execution"]["sideOrDirection"] = (
+            "Repeat the effort with the other side."
+        )
+        warnings = catalog.validate_family(
+            family,
+            self.foundation,
+            "unilateral fixture",
+        )
+        self.assertEqual(warnings, [])
+
+    def test_execution_side_or_direction_is_required_for_carries(self) -> None:
+        family = self.duration_fixture()
+        family["fixed"]["pattern"] = "carry"
+        family["fixed"]["direction"] = None
+        self.assert_family_fails(
+            family,
+            r"execution\.sideOrDirection is required for unilateral exercises and carries",
+        )
+        family["exercises"][0]["execution"]["sideOrDirection"] = (
+            "Walk forward for the full distance without turning."
+        )
+        warnings = catalog.validate_family(
+            family,
+            self.foundation,
+            "carry fixture",
+        )
+        self.assertEqual(warnings, [])
+
     def test_batch1_external_loads_use_reviewed_metric_seed_detents(self) -> None:
         expected = {
             "flat-dumbbell-fly": 5,
@@ -3456,6 +3619,7 @@ class CatalogFoundationTests(unittest.TestCase):
         exercise = family["exercises"][0]
         exercise["equipment"] = "kettlebell"
         exercise["laterality"] = "unilateral"
+        exercise["execution"]["sideOrDirection"] = "Repeat with the other arm."
         exercise["variant"]["gripOrientation"] = "neutral"
         exercise["variant"]["kettlebellOrientation"] = "standard"
         warnings = catalog.validate_family(
@@ -6669,7 +6833,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "aliases",
                                 "variant",
                                 "evidenceRefs",
-                                "movementSteps",
+                                "execution",
                             )
                         }
                         for exercise in family["exercises"]
@@ -6684,7 +6848,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "8fedc12bfcf5ac05ac8fe84d3bf6989c2c846e127b4f9c7de83ad4d0daf3fc2d",
+            "8bd7a346b535ca846d6bbace9ab09b1c76ef26a8594d58248012b183ceebe76e",
         )
 
     def test_batch2_forbids_every_other_known_prime_action(self) -> None:
@@ -7595,7 +7759,7 @@ class CatalogFoundationTests(unittest.TestCase):
                                 "aliases",
                                 "variant",
                                 "evidenceRefs",
-                                "movementSteps",
+                                "execution",
                             )
                         }
                         for exercise in family["exercises"]
@@ -7610,7 +7774,7 @@ class CatalogFoundationTests(unittest.TestCase):
         ).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(encoded).hexdigest(),
-            "e1b4e498589ab7b813ca7d74735f15dd1988c777028015aef821cb69f9324062",
+            "c1e3d90c6cbb399521593d84fc15d016919ae6fe9621a3d074fb40c82d0deaf1",
         )
 
     def test_batch3_variant_axis_contracts_are_exact_and_covered(
@@ -8770,7 +8934,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
+                self.assertTrue(
+                    catalog.EXECUTION_REQUIRED_FIELDS
+                    <= exercise["execution"].keys()
+                )
         self.assertEqual(actual, expected)
 
     def test_batch4_variant_axis_contracts_are_exact_and_fully_covered(
@@ -9725,7 +9892,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
+                self.assertTrue(
+                    catalog.EXECUTION_REQUIRED_FIELDS
+                    <= exercise["execution"].keys()
+                )
         self.assertEqual(actual, expected)
 
     def test_batch5_variant_axes_are_exact_and_rosters_cover_values(
@@ -10938,7 +11108,10 @@ class CatalogFoundationTests(unittest.TestCase):
                 }
                 self.assertEqual(exercise["additionalPrimeActions"], [])
                 self.assertEqual(exercise["additionalStabilityDemands"], [])
-                self.assertGreaterEqual(len(exercise["movementSteps"]), 2)
+                self.assertTrue(
+                    catalog.EXECUTION_REQUIRED_FIELDS
+                    <= exercise["execution"].keys()
+                )
         self.assertEqual(actual, expected)
 
     def test_late_lower_body_negative_topology_boundaries_are_pinned(
@@ -11018,7 +11191,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn(
             "Load the bar with 25 percent of your body weight; use 45 lb or "
             "20 kg only if that matches your calculated weight",
-            " ".join(hinge_exercise["movementSteps"]),
+            hinge_exercise["execution"]["startingPosition"],
         )
         hinge_names = " ".join(
             [hinge_exercise["name"], *hinge_exercise["aliases"]]
@@ -11202,8 +11375,8 @@ class CatalogFoundationTests(unittest.TestCase):
                     source_exercises[catalog_id]["involvement"],
                 )
                 self.assertEqual(
-                    record["movementSteps"],
-                    source_exercises[catalog_id]["movementSteps"],
+                    record["execution"],
+                    source_exercises[catalog_id]["execution"],
                 )
                 self.assertNotIn("variant", record)
 
@@ -11326,16 +11499,22 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            " ".join(exercise["movementSteps"]),
+            " ".join(execution_texts(exercise)),
             "Sit comfortably with the working foot resting on a board beneath "
             "an elastic band affixed to that board. Set a physical stop where the "
             "working foot reaches its comfortable lifted position. Begin from the "
-            "self-selected resting position with the sole on the board, and hold "
-            "the selected knee posture still. Lift the front of the foot toward "
-            "the shin until it reaches the stop, without turning the foot inward "
-            "or outward or lifting through the toes alone. Return under control "
-            "until the sole touches the "
-            "board, then repeat before changing sides.",
+            "self-selected resting position with the sole on the board. Lift the "
+            "front of the foot toward the shin until it reaches the stop, without "
+            "turning the foot inward or outward or lifting through the toes "
+            "alone. End the lift when the foot reaches the physical stop. Return "
+            "under control until the sole touches the board. Hold the selected "
+            "knee posture still. Stay seated and supported by the seat while "
+            "only the working foot moves. Bending or straightening the knee to "
+            "swing the foot up turns the ankle lift into a leg swing. Turning "
+            "the foot inward or outward turns the ankle lift into a twisting "
+            "foot movement. Lifting through the toes alone turns the ankle lift "
+            "into a toe raise. Complete every repetition before changing sides, "
+            "then repeat with the other foot.",
         )
 
     def test_batch6_hip_contracts_and_rosters_are_exact(self) -> None:
@@ -11591,17 +11770,24 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            " ".join(abduction["movementSteps"]),
+            " ".join(execution_texts(abduction)),
             "Lie on one side on a treatment table with the working leg on top, "
             "both hips facing straight ahead, the lower leg bent for stability, "
             "and a cuff weight secured just above the working ankle. Place a "
-            "pressure-biofeedback unit beneath your torso, "
-            "inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a "
-            "horizontal band marks the 35-degree stopping point. Keep the "
-            "pelvis and spine still, the working knee straight, and the toes "
-            "pointing forward. Raise the straight top leg directly out to the side "
-            "until it contacts the stopping band. Lower the leg under control "
-            "without rolling the pelvis or turning the toes upward.",
+            "pressure-biofeedback unit beneath your torso, inflate it to "
+            "40 mmHg, and keep it between 35 and 45 mmHg while a horizontal "
+            "band marks the 35-degree stopping point. Raise the straight top "
+            "leg directly out to the side until it contacts the stopping band. "
+            "The top leg contacts the stopping band. Lower the leg under "
+            "control without rolling the pelvis or turning the toes upward. "
+            "Keep the pelvis and spine still, the working knee straight, and "
+            "the toes pointing forward. Stay lying on your side with the lower "
+            "leg bent for stability, and keep the pressure reading between 35 "
+            "and 45 mmHg. Rolling the pelvis backward turns the side-lying leg "
+            "raise into a trunk-assisted swing. Turning the toes upward turns "
+            "the side-lying leg raise into a hip-flexion lift. Bending the "
+            "working knee turns the side-lying leg raise into a clamshell. "
+            "Turn onto the other side and repeat with the other leg.",
         )
         self.assertNotIn(
             "Side-Lying Hip Abduction",
@@ -11647,17 +11833,22 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertEqual(
-            " ".join(adduction["movementSteps"]),
+            " ".join(execution_texts(adduction)),
             "Stand upright on the support leg, hold a stable external "
             "support with both hands, and secure an elastic band around the "
             "working ankle from the side. Move the straight working leg as far "
             "out to the side as is comfortable, keeping tension in the band and "
-            "the leg slightly behind you. Keep the pelvis still, the working "
-            "knee straight, and both sets of toes pointing forward. Pull the working leg "
-            "inward without swinging it farther backward, stopping about one "
-            "foot-width to the side and half a foot-length behind the stance "
-            "foot. Return under control along the same side-to-side path, "
-            "then repeat before changing sides.",
+            "the leg slightly behind you. Pull the working leg inward without "
+            "swinging it farther backward. Stop about one foot-width to the "
+            "side and half a foot-length behind the stance foot. Return under "
+            "control along the same side-to-side path. Keep the pelvis still, "
+            "the working knee straight, and both sets of toes pointing "
+            "forward. Hold the stable external support with both hands "
+            "throughout the set. Swinging the working leg backward turns the "
+            "pull into a hip-extension movement. Leaning the torso sideways "
+            "turns the pull into a trunk side-bend. Bending the working knee "
+            "turns the pull into a bent-knee sweep. Repeat on the same side "
+            "before changing sides.",
         )
         for exercise in (abduction, adduction):
             self.assertEqual(exercise["additionalPrimeActions"], [])
@@ -13360,74 +13551,125 @@ class CatalogFoundationTests(unittest.TestCase):
                     actual, expected_opponents[exercise["catalogID"]]
                 )
 
-    def test_batch7_movement_steps_pin_reviewed_boundaries(self) -> None:
+    def test_batch7_execution_pin_reviewed_boundaries(self) -> None:
         expected = {
-            "30-degree-curl-up": [
-                "Lie on your back in a stable position with your hips held still.",
-                "Begin with your torso resting on the floor.",
-                "Curl your head, shoulders, and upper back about 30 degrees off the floor without lifting from your hips.",
-                "Lower to the starting position under control without turning the repetition into a full sit-up.",
-            ],
-            "medx-isolated-lumbar-extension": [
-                "Sit in the MedX lower-back machine with your thighs at a right angle to the seat.",
-                "Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
-                "Keep your upper hips against the rolling restraint and push only against the pad behind your upper torso.",
-                "Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
-                "Hold the upright position for one second.",
-                "Return for at least four seconds without lifting or turning your hips or pushing with your legs.",
-            ],
-            "fixed-leg-side-lying-lateral-trunk-lift": [
-                "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
-                "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
-                "Lift your upper body sideways until it is about 30 degrees off the floor.",
-                "Lower to the starting position under control.",
-                "Repeat on the other side and log it separately.",
-            ],
-            "seated-machine-torso-twist": [
-                "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
-                "Hold the pelvis against the seat and keep the hips and legs still.",
-                "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
-                "Turn as far as feels comfortable, then return to the left-facing start under control.",
-                "Reset the machine, repeat the same movement from right to left, and log that direction separately.",
-                "Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition.",
-            ],
-            "plank": [
-                "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
-                "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
-                "Hold this position for the set time without letting your lower back sag.",
-                "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement.",
-            ],
-            "side-plank": [
-                "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees.",
-                "Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
-                "Lift your body into a straight line from shoulder through hip to feet.",
-                "Hold your body still for the set time without dipping your hips or moving your arms or legs.",
-                "Repeat the hold on the other side.",
-            ],
-            "feet-together-band-pallof-hold": [
-                "Attach a band to a side pulley so its line of pull is horizontal, then stand side-on with the feet together on a stable floor and hold the handle in both hands at shoulder height.",
-                "Straighten both elbows until your arms point directly forward, and choose a tension you can control.",
-                "Hold for the set time without letting your torso or hips turn, and do not repeatedly press your arms in and out.",
-                "Repeat with the anchor on the other side.",
-            ],
-            "two-dumbbell-farmer-carry": [
-                "Log the weight of one dumbbell, not the combined pair.",
-                "Hold one equal-weight dumbbell in each hand without straps or hooks.",
-                "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
-                "Walk continuously forward on a level surface for the set time while keeping your shoulders controlled and your torso upright.",
-                "Avoid turning, marching in place, or converting the carry into another exercise.",
-            ],
-            "single-dumbbell-suitcase-carry": [
-                "Log the weight of the single dumbbell.",
-                "Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight.",
-                "Use no straps or hooks.",
-                "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
-                "Log the other side as well.",
-                "Do not turn, march in place, walk backward, or lean deliberately to create repetitions.",
-            ],
+            "30-degree-curl-up": {
+                "startingPosition": "Lie on your back in a stable position with your hips held still. Begin with your torso resting on the floor.",
+                "movement": "Curl your head, shoulders, and upper back off the floor without lifting from your hips.",
+                "endpoint": "Stop when your upper back is about 30 degrees off the floor.",
+                "returnPhase": "Lower to the starting position under control without turning the repetition into a full sit-up.",
+                "controlledJoints": "Keep your hips and pelvis still throughout the curl.",
+                "supportAndPosture": "Stay supported on the floor with your hips held still.",
+                "disqualifyingCompensations": [
+                    "Lifting from the hips turns the curl-up into a full sit-up.",
+                    "Jerking the head and arms forward turns the controlled curl into a momentum swing.",
+                ],
+            },
+            "medx-isolated-lumbar-extension": {
+                "startingPosition": "Sit in the MedX lower-back machine with your thighs at a right angle to the seat. Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
+                "movement": "Push only against the pad behind your upper torso. Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
+                "endpoint": "Hold the upright position for one second.",
+                "returnPhase": "Return for at least four seconds.",
+                "controlledJoints": "Do not lift or turn your hips or push with your legs.",
+                "supportAndPosture": "Keep your upper hips against the rolling restraint.",
+                "disqualifyingCompensations": [
+                    "Pushing with the legs turns the isolated back extension into a leg-driven machine push.",
+                    "Lifting the hips off the rolling restraint turns the restrained extension into a hip-driven extension.",
+                    "Rushing the return turns the controlled extension into a momentum drop.",
+                ],
+            },
+            "fixed-leg-side-lying-lateral-trunk-lift": {
+                "startingPosition": "Lie on one side with your torso resting on the floor, cross your top foot over the lower leg, and secure that foot firmly.",
+                "movement": "Lift your upper body sideways.",
+                "endpoint": "End the lift when your upper body is about 30 degrees off the floor.",
+                "returnPhase": "Lower to the starting position under control.",
+                "controlledJoints": "Keep your hips still so the lift comes from your side rather than from pushing through the hip.",
+                "supportAndPosture": "Rest your torso on the floor and keep the crossed top foot secured.",
+                "disqualifyingCompensations": [
+                    "Pushing through the hip turns the trunk lift into a hip lift.",
+                    "Lifting past 30 degrees turns the reviewed lift into a higher-range variant.",
+                    "Adding a twist as you lift turns the side bend into a rotation.",
+                ],
+                "sideOrDirection": "Repeat on the other side and log it separately.",
+            },
+            "seated-machine-torso-twist": {
+                "startingPosition": "Sit in a horizontal torso-twist machine with the feet behind the ankle rollers, the shoulder pads in contact, and both hands holding the separate handles at shoulder height.",
+                "movement": "For one logged direction, begin rotated left and drive the shoulder pads from left to right in a controlled motion.",
+                "endpoint": "Turn as far as feels comfortable.",
+                "returnPhase": "Return to the left-facing start under control.",
+                "controlledJoints": "Hold the pelvis against the seat and keep the hips and legs still.",
+                "supportAndPosture": "Stay seated with the shoulder pads in contact and both hands holding the handles.",
+                "disqualifyingCompensations": [
+                    "Letting the pelvis rotate with the pads turns the torso twist into a whole-body spin.",
+                    "Pushing with the legs or hips turns the torso twist into a lower-body heave.",
+                ],
+                "sideOrDirection": "Reset the machine, repeat the same movement from right to left, and log that direction separately. Treat the right-to-left direction as a mirrored training adaptation and do not alternate directions within a repetition.",
+            },
+            "plank": {
+                "startingPosition": "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
+                "movement": "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
+                "endpoint": "Hold this position for the set time without letting your lower back sag.",
+                "controlledJoints": "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement.",
+                "supportAndPosture": "Support the hold on both forearms and both feet with your trunk braced.",
+                "disqualifyingCompensations": [
+                    "Letting the lower back sag turns the plank into an arched-back hold.",
+                    "Piking the hips upward turns the plank into a hip lift.",
+                    "Reaching or lifting a limb turns the plank into a moving-limb hold.",
+                ],
+            },
+            "side-plank": {
+                "startingPosition": "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees. Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
+                "movement": "Lift your body into a straight line from shoulder through hip to feet.",
+                "endpoint": "Hold the straight-line position for the set time.",
+                "controlledJoints": "Do not dip your hips or move your arms or legs during the hold.",
+                "supportAndPosture": "Support the hold on one forearm and both feet with your trunk braced.",
+                "disqualifyingCompensations": [
+                    "Letting the hips dip or sag turns the side plank into a bent-body hold.",
+                    "Rolling the torso forward or backward turns the side plank into an anti-rotation hold.",
+                ],
+                "sideOrDirection": "Repeat the hold on the other side.",
+            },
+            "feet-together-band-pallof-hold": {
+                "startingPosition": "Attach a band to a side pulley so its line of pull is horizontal. Hold the handle in both hands at shoulder height. Choose a tension you can control.",
+                "movement": "Straighten both elbows until your arms point directly forward.",
+                "endpoint": "Hold for the set time without letting your torso or hips turn.",
+                "controlledJoints": "Do not repeatedly press your arms in and out.",
+                "supportAndPosture": "Stand side-on with the feet together on a stable floor.",
+                "disqualifyingCompensations": [
+                    "Bending and straightening the elbows turns the hold into a dynamic press.",
+                    "Letting the torso or hips rotate turns the hold into a trunk-rotation drill.",
+                    "Widening or staggering the feet turns the feet-together hold into a different balance test.",
+                ],
+                "sideOrDirection": "Repeat with the anchor on the other side.",
+            },
+            "two-dumbbell-farmer-carry": {
+                "startingPosition": "Log the weight of one dumbbell, not the combined pair. Hold one equal-weight dumbbell in each hand without straps or hooks.",
+                "movement": "Walk continuously forward on a level surface.",
+                "endpoint": "Continue the forward walk for the full set time.",
+                "controlledJoints": "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
+                "supportAndPosture": "Keep your shoulders controlled and your torso upright.",
+                "disqualifyingCompensations": [
+                    "Marching in place turns the farmer carry into a stationary hold.",
+                    "Carrying a single dumbbell turns the farmer carry into a suitcase carry.",
+                    "Using straps or hooks turns the carry into a grip-assisted walk.",
+                ],
+                "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place.",
+            },
+            "single-dumbbell-suitcase-carry": {
+                "startingPosition": "Log the weight of the single dumbbell. Hold the dumbbell beside one thigh with your palm facing inward and your elbow straight. Use no straps or hooks.",
+                "movement": "Walk continuously forward on a level surface for the set time, staying upright without leaning away from the dumbbell.",
+                "endpoint": "Finish the walk when the set time ends while still upright.",
+                "controlledJoints": "Keep the carrying elbow straight and your wrist and grip closed around the handle.",
+                "supportAndPosture": "Stay upright without leaning away from the dumbbell. Do not turn, march in place, walk backward, or lean deliberately to create repetitions.",
+                "disqualifyingCompensations": [
+                    "Leaning away from the dumbbell turns the carry into a supported side-lean.",
+                    "Letting the dumbbell rest against the thigh turns the carry into a propped hold.",
+                ],
+                "sideOrDirection": "Walk forward only, carrying the dumbbell on one side for the set time, then switch hands and log the other side as well.",
+            },
         }
         actual = {
-            exercise["catalogID"]: exercise["movementSteps"]
+            exercise["catalogID"]: exercise["execution"]
             for family in self.batch7_families.values()
             for exercise in family["exercises"]
         }
@@ -14455,8 +14697,8 @@ class CatalogFoundationTests(unittest.TestCase):
         lee = by_id["bilateral-30-degree-stabilization-shrug"]
         self.assertEqual(lee["reps"], 2)
         self.assertEqual(lee["variant"]["topHoldSeconds"], 5)
-        instructions = " ".join(lee["movementSteps"])
-        self.assertIn("hold the top position for five seconds", instructions)
+        instructions = " ".join(execution_texts(lee))
+        self.assertIn("Hold the top position for five seconds", instructions)
         self.assertIn("Perform two attempts", instructions)
         self.assertIn(
             "shoulder-blade angle measured immediately after each hold",
@@ -14935,7 +15177,10 @@ class CatalogFoundationTests(unittest.TestCase):
             },
         )
         self.assertIn("the exercise is non-comparable", family["definition"])
-        self.assertIn("repeat with the other hand", " ".join(exercise["movementSteps"]))
+        self.assertIn(
+            "Repeat with the other hand",
+            " ".join(execution_texts(exercise)),
+        )
 
     def test_finger_flexion_grip_mutates_every_boundary_directly(self) -> None:
         original = next(
@@ -15973,7 +16218,7 @@ class CatalogFoundationTests(unittest.TestCase):
         self.assertIn("source-prescribed 45-degree line", family["definition"])
         self.assertIn("did not define the 45-degree instruction", family["definition"])
         self.assertIn("authors no shoulder-adduction or scapular prime action", family["definition"])
-        instructions = " ".join(exercise["movementSteps"])
+        instructions = " ".join(execution_texts(exercise))
         self.assertIn("10% and 25% of body weight", instructions)
         self.assertIn("suggested starting weight of 35 lb or 15 kg", instructions)
 
@@ -16260,7 +16505,7 @@ class CatalogFoundationTests(unittest.TestCase):
             ["transverse"],
         )
 
-    def test_movement_steps_use_plain_english(self) -> None:
+    def test_execution_fields_use_plain_english(self) -> None:
         jargon = re.compile(
             r"\b(?:supine|prone|pronated|supinated|humeral|sagittal|"
             r"dorsiflex\w*|plantarflex\w*|scapulae?|scapular|protract\w*|"
@@ -16270,7 +16515,7 @@ class CatalogFoundationTests(unittest.TestCase):
         )
         for family in self.real_families:
             for exercise in family["exercises"]:
-                instructions = " ".join(exercise["movementSteps"])
+                instructions = " ".join(execution_texts(exercise))
                 with self.subTest(catalog_id=exercise["catalogID"]):
                     self.assertIsNone(jargon.search(instructions))
 
@@ -16341,7 +16586,7 @@ class CatalogFoundationTests(unittest.TestCase):
             "reps", "trackingMode", "equipment", "mechanic", "trainingRole", "pattern",
             "direction", "planes", "laterality", "aliases",
             "bodyweightFraction", "modality", "loadMode",
-            "movementSteps", "involvement",
+            "execution", "involvement",
         }
         optional_keys = {"defaultWeightKg", "defaultDuration", "searchPriority"}
         for family in self.real_families:

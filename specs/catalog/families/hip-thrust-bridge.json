@@ -554,12 +554,19 @@
         "brazil-2021-barbell-hip-thrust",
         "kennedy-2024-hip-thrust-glute-bridge"
       ],
-      "movementSteps": [
-        "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis.",
-        "Plant your feet at shoulder width so your knees finish near 90 degrees, and steady the bar with your palms facing up.",
-        "Raise the pelvis until the hips reach neutral.",
-        "Lower until the plates return to the floor without arching your back or letting your knees drift outward."
-      ]
+      "execution": {
+        "startingPosition": "Sit with the upper back anchored against a 35.5-centimeter bench and a padded barbell across the pelvis. Plant your feet at shoulder width so your knees finish near 90 degrees, and steady the bar with your palms facing up.",
+        "movement": "Raise the pelvis.",
+        "endpoint": "End the lift when your hips reach neutral.",
+        "returnPhase": "Lower until the plates return to the floor without arching your back or letting your knees drift outward.",
+        "controlledJoints": "Keep both feet planted throughout the repetition.",
+        "supportAndPosture": "Anchor your upper back against the bench and brace your trunk.",
+        "disqualifyingCompensations": [
+          "Setting the feet so the knees finish far past 90 degrees turns the hip thrust into a glute bridge.",
+          "Letting the knees drift outward turns the hip thrust into a frog pump.",
+          "Arching the back to push past neutral turns the hip thrust into a back hyperextension."
+        ]
+      }
     },
     {
       "catalogID": "barbell-glute-bridge",
@@ -635,12 +642,19 @@
       "evidenceRefs": [
         "kennedy-2024-hip-thrust-glute-bridge"
       ],
-      "movementSteps": [
-        "Lie with your upper back firmly on the floor, a padded barbell across your hips, your feet shoulder-width apart, and your knees bent near 115 degrees.",
-        "Steady the bar with your palms facing up.",
-        "Raise your pelvis until your body forms a straight line from shoulders to knees, with your knees bent near 115 degrees.",
-        "Lower until the plates return to the floor without shifting your upper torso, arching your back, or letting your knees drift outward."
-      ]
+      "execution": {
+        "startingPosition": "Lie with your upper back firmly on the floor, a padded barbell across your hips, your feet shoulder-width apart, and your knees bent near 115 degrees. Steady the bar with your palms facing up.",
+        "movement": "Raise your pelvis.",
+        "endpoint": "End the lift when your body forms a straight line from shoulders to knees with your knees bent near 115 degrees.",
+        "returnPhase": "Lower until the plates return to the floor without shifting your upper torso, arching your back, or letting your knees drift outward.",
+        "controlledJoints": "Keep your upper back firmly on the floor and both feet planted.",
+        "supportAndPosture": "Support your upper back on the floor and brace your trunk.",
+        "disqualifyingCompensations": [
+          "Setting the feet so the knees finish near 90 degrees turns the glute bridge into a hip thrust.",
+          "Letting the knees drift outward turns the glute bridge into a frog pump.",
+          "Arching the back to push past a straight line turns the glute bridge into a back hyperextension."
+        ]
+      }
     }
   ]
 }

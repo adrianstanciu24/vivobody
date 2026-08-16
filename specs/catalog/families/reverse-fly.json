@@ -472,11 +472,18 @@
         "holzbaur-2005-upper-extremity",
         "bergquist-2018-band-free-weight-fly"
       ],
-      "movementSteps": [
-        "Lie face down on a bench with one dumbbell in each hand, your palms facing inward, and your elbows held in a fixed slight bend.",
-        "Sweep your upper arms out at shoulder height until they line up with your torso, keeping your shoulder blades controlled instead of deliberately pinching them together.",
-        "Lower under control without rowing, bending the elbows, or rotating the shoulders."
-      ]
+      "execution": {
+        "startingPosition": "Lie face down on a bench with one dumbbell in each hand, your palms facing inward, and your elbows held in a fixed slight bend.",
+        "movement": "Sweep your upper arms out at shoulder height.",
+        "endpoint": "Stop when your upper arms line up with your torso.",
+        "returnPhase": "Lower under control without rowing, bending the elbows, or rotating the shoulders.",
+        "controlledJoints": "Keep your elbows in a fixed slight bend and your shoulder blades controlled instead of deliberately pinching them together.",
+        "supportAndPosture": "Support your torso on the bench throughout the movement.",
+        "disqualifyingCompensations": [
+          "Rowing the dumbbells toward the torso turns the reverse fly into a row.",
+          "Pinching the shoulder blades together turns the reverse fly into a shoulder-blade squeeze."
+        ]
+      }
     },
     {
       "catalogID": "standing-band-reverse-fly",
@@ -552,11 +559,18 @@
         "holzbaur-2005-upper-extremity",
         "bergquist-2018-band-free-weight-fly"
       ],
-      "movementSteps": [
-        "Stand upright holding an elastic band in front of the chest with the palms facing inward and the elbows in a fixed slight bend.",
-        "Brace your torso and sweep your upper arms outward at shoulder height to stretch the band, keeping your shoulder blades controlled instead of deliberately pinching them together.",
-        "Return under control without rowing, bending the elbows, or rotating the shoulders."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright holding an elastic band in front of the chest with the palms facing inward and the elbows in a fixed slight bend.",
+        "movement": "Sweep your upper arms outward at shoulder height to stretch the band.",
+        "endpoint": "End the sweep with your upper arms in line with your torso.",
+        "returnPhase": "Return under control without rowing, bending the elbows, or rotating the shoulders.",
+        "controlledJoints": "Keep your elbows in a fixed slight bend and your shoulder blades controlled instead of deliberately pinching them together.",
+        "supportAndPosture": "Brace your torso throughout the sweep.",
+        "disqualifyingCompensations": [
+          "Rowing the band toward the chest turns the reverse fly into a row.",
+          "Leaning the torso back to stretch the band turns the reverse fly into a trunk-lean pull."
+        ]
+      }
     },
     {
       "catalogID": "neutral-grip-machine-reverse-fly",
@@ -628,11 +642,18 @@
         "holzbaur-2005-upper-extremity",
         "schoenfeld-2013-reverse-fly-hand-position"
       ],
-      "movementSteps": [
-        "Sit facing the reverse-fly machine pad, and hold the handles with the palms facing each other, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
-        "Follow the lever path to sweep your upper arms outward, keeping your shoulder blades controlled instead of deliberately pinching them together.",
-        "Return under control without rowing, bending the elbows, or adding shoulder rotation."
-      ]
+      "execution": {
+        "startingPosition": "Sit facing the reverse-fly machine pad, and hold the handles with the palms facing each other, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
+        "movement": "Follow the lever path to sweep your upper arms outward.",
+        "endpoint": "Finish with your upper arms in line with your torso.",
+        "returnPhase": "Return under control without rowing, bending the elbows, or adding shoulder rotation.",
+        "controlledJoints": "Keep your elbows in a fixed slight bend and your shoulder blades controlled instead of deliberately pinching them together.",
+        "supportAndPosture": "Keep your torso against the machine pad.",
+        "disqualifyingCompensations": [
+          "Rowing the handles toward the torso turns the reverse fly into a row.",
+          "Pinching the shoulder blades together turns the reverse fly into a shoulder-blade squeeze."
+        ]
+      }
     },
     {
       "catalogID": "pronated-grip-machine-reverse-fly",
@@ -704,11 +725,18 @@
         "holzbaur-2005-upper-extremity",
         "schoenfeld-2013-reverse-fly-hand-position"
       ],
-      "movementSteps": [
-        "Sit facing the reverse-fly machine pad, and hold the horizontal handles with the palms facing down, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
-        "Follow the lever path to sweep your upper arms outward, keeping your shoulder blades controlled instead of deliberately pinching them together.",
-        "Return under control without rowing, changing the elbow bend, or deliberately turning your upper arms outward."
-      ]
+      "execution": {
+        "startingPosition": "Sit facing the reverse-fly machine pad, and hold the horizontal handles with the palms facing down, the upper arms at shoulder height, and the elbows in a fixed slight bend.",
+        "movement": "Follow the lever path to sweep your upper arms outward.",
+        "endpoint": "Finish with your upper arms in line with your torso.",
+        "returnPhase": "Return under control without rowing, changing the elbow bend, or deliberately turning your upper arms outward.",
+        "controlledJoints": "Keep your elbows in a fixed slight bend and your shoulder blades controlled instead of deliberately pinching them together.",
+        "supportAndPosture": "Keep your torso against the machine pad.",
+        "disqualifyingCompensations": [
+          "Turning the upper arms outward during the sweep turns the reverse fly into a rotation drill.",
+          "Rowing the handles toward the torso turns the reverse fly into a row."
+        ]
+      }
     }
   ]
 }

@@ -636,12 +636,19 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Hold a barbell with a wide overhand grip and keep your body bent forward from the hips.",
-        "Pull toward the upper chest while the elbows travel out at shoulder height.",
-        "Pinch your shoulder blades together without pulling them down.",
-        "Lower the bar without standing up or arching your back."
-      ]
+      "execution": {
+        "startingPosition": "Hold a barbell with a wide overhand grip and keep your body bent forward from the hips.",
+        "movement": "Pull toward the upper chest while the elbows travel out at shoulder height.",
+        "endpoint": "End the pull when the bar reaches your upper chest.",
+        "returnPhase": "Lower the bar without standing up or arching your back.",
+        "controlledJoints": "Pinch your shoulder blades together without pulling them down.",
+        "supportAndPosture": "Brace your trunk to hold the forward-hinged position.",
+        "disqualifyingCompensations": [
+          "Rowing with the elbows tucked to your sides turns the rear-delt row into a lat row.",
+          "Standing up to swing the bar turns the row into a momentum row.",
+          "Pulling the shoulder blades down instead of together turns the rear-delt row into a low row."
+        ]
+      }
     },
     {
       "catalogID": "chest-supported-dumbbell-rear-delt-row",
@@ -693,11 +700,19 @@
         "fennell-2016-shoulder-retractor-row",
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
-        "Keep the forearms beneath the elbows as the upper arms travel out at shoulder height.",
-        "Pinch your shoulder blades together, then lower the dumbbells under control without lifting your chest."
-      ]
+      "execution": {
+        "startingPosition": "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+        "movement": "Row the dumbbells with your upper arms traveling out at shoulder height.",
+        "endpoint": "End the row with your shoulder blades pinched together.",
+        "returnPhase": "Lower the dumbbells under control without lifting your chest.",
+        "controlledJoints": "Keep the forearms beneath the elbows.",
+        "supportAndPosture": "Support your chest on the incline bench.",
+        "disqualifyingCompensations": [
+          "Lifting the chest off the bench to swing the dumbbells turns the row into a momentum row.",
+          "Rowing with the elbows tucked to your sides turns the rear-delt row into a lat row.",
+          "Shrugging the shoulders toward the ears turns the rear-delt row into a shrug."
+        ]
+      }
     },
     {
       "catalogID": "wide-grip-seated-cable-rear-delt-row",
@@ -753,11 +768,19 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Sit upright at a shoulder-height cable and hold a wide straight attachment with your palms facing down.",
-        "Brace the unsupported torso as you pull toward the upper chest with the elbows flared at shoulder height.",
-        "Pinch your shoulder blades together, then return under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright at a shoulder-height cable and hold a wide straight attachment with your palms facing down.",
+        "movement": "Pull toward the upper chest with the elbows flared at shoulder height.",
+        "endpoint": "End the pull with your shoulder blades pinched together.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your torso still and let only the arms and shoulder blades move.",
+        "supportAndPosture": "Brace the unsupported torso.",
+        "disqualifyingCompensations": [
+          "Leaning back to swing the attachment turns the row into a momentum row.",
+          "Rowing with the elbows tucked to your sides turns the rear-delt row into a lat row.",
+          "Pulling the attachment to your stomach turns the rear-delt row into a low row."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-seated-cable-rear-delt-row",
@@ -812,11 +835,19 @@
         "vasconcelos-2023-seated-row-abduction-angle",
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Sit upright at a shoulder-height cable and hold one handle with your palm facing inward.",
-        "Keep the pelvis and torso square as the working elbow travels out and back at shoulder height.",
-        "Pull the working shoulder blade toward your spine, then return without turning your torso."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright at a shoulder-height cable and hold one handle with your palm facing inward.",
+        "movement": "Pull with the working elbow traveling out and back at shoulder height.",
+        "endpoint": "End the pull with the working shoulder blade pulled toward your spine.",
+        "returnPhase": "Return without turning your torso.",
+        "controlledJoints": "Keep the pelvis and torso square.",
+        "supportAndPosture": "Sit upright and brace the unsupported torso.",
+        "disqualifyingCompensations": [
+          "Turning the torso to help the pull turns the row into a torso-rotation pull.",
+          "Rowing with the elbow tucked to your side turns the rear-delt row into a lat row."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "chest-supported-machine-rear-delt-row",
@@ -869,11 +900,18 @@
       "evidenceRefs": [
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Sit at a horizontal row machine with your chest against the pad and hold the wide handles with your palms facing down.",
-        "Pull with both elbows out at shoulder height while letting your shoulder blades pinch together naturally.",
-        "Return the linked lever under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit at a horizontal row machine with your chest against the pad and hold the wide handles with your palms facing down.",
+        "movement": "Pull with both elbows out at shoulder height while letting your shoulder blades pinch together naturally.",
+        "endpoint": "End the pull with both elbows at shoulder height.",
+        "returnPhase": "Return the linked lever under control.",
+        "controlledJoints": "Keep your chest still against the pad.",
+        "supportAndPosture": "Support your chest on the pad and sit tall.",
+        "disqualifyingCompensations": [
+          "Lifting the chest off the pad to swing the lever turns the row into a momentum row.",
+          "Rowing with the elbows tucked to your sides turns the rear-delt row into a lat row."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-chest-supported-machine-rear-delt-row",
@@ -928,11 +966,19 @@
       "evidenceRefs": [
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Sit against the chest pad of a single-arm horizontal row machine and hold one handle with your palm facing inward.",
-        "Keep the pelvis and chest square while the working elbow travels out and back at shoulder height.",
-        "Pull the working shoulder blade toward your spine, then return the handle without twisting."
-      ]
+      "execution": {
+        "startingPosition": "Sit against the chest pad of a single-arm horizontal row machine and hold one handle with your palm facing inward.",
+        "movement": "Pull with the working elbow traveling out and back at shoulder height.",
+        "endpoint": "End the pull with the working shoulder blade pulled toward your spine.",
+        "returnPhase": "Return the handle without twisting.",
+        "controlledJoints": "Keep the pelvis and chest square.",
+        "supportAndPosture": "Support your chest against the pad and sit tall.",
+        "disqualifyingCompensations": [
+          "Twisting the torso to help the pull turns the row into a torso-rotation pull.",
+          "Lifting the chest off the pad to swing the handle turns the row into a momentum row."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

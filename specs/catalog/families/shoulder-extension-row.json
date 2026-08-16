@@ -864,12 +864,19 @@
         "garcia-jaen-2021-bent-over-row-posture",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Stand holding a barbell at shoulder width with your palms facing back.",
-        "Hinge at your hips until your torso is inclined, then brace without changing the torso angle.",
-        "Pull the bar toward your lower ribs while your elbows travel back near your torso.",
-        "Lower the bar under control."
-      ]
+      "execution": {
+        "startingPosition": "Stand holding a barbell at shoulder width with your palms facing back. Hinge at your hips until your torso is inclined.",
+        "movement": "Pull the bar toward your lower ribs while your elbows travel back near your torso.",
+        "endpoint": "End the pull with the bar at your lower ribs.",
+        "returnPhase": "Lower the bar under control.",
+        "controlledJoints": "Keep your hips and knees still while only your arms pull.",
+        "supportAndPosture": "Brace your trunk without changing the torso angle.",
+        "disqualifyingCompensations": [
+          "Standing up during the pull turns the bent-over row into an upright row.",
+          "Resetting the bar on the floor between repetitions turns the continuous row into a dead-stop row.",
+          "Jerking the bar with the lower back turns the strict row into a momentum row."
+        ]
+      }
     },
     {
       "catalogID": "underhand-barbell-row",
@@ -927,12 +934,18 @@
         "ackland-2008-shoulder-moment-arms",
         "lehman-2004-seated-row-activation"
       ],
-      "movementSteps": [
-        "Hold a barbell at shoulder width with your palms facing forward.",
-        "Maintain a strict hip hinge with your trunk braced.",
-        "Keep your elbows tucked as you pull the bar toward your lower torso without standing up.",
-        "Lower the bar under control."
-      ]
+      "execution": {
+        "startingPosition": "Hold a barbell at shoulder width with your palms facing forward.",
+        "movement": "Pull the bar toward your lower torso.",
+        "endpoint": "End the pull with the bar at your lower torso.",
+        "returnPhase": "Lower the bar under control.",
+        "controlledJoints": "Keep your elbows tucked and do not stand up during the pull.",
+        "supportAndPosture": "Maintain a strict hip hinge with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Turning the palms away from facing forward turns the underhand row into an overhand row.",
+          "Standing up to heave the bar turns the strict hinged row into a momentum row."
+        ]
+      }
     },
     {
       "catalogID": "pendlay-row",
@@ -988,12 +1001,18 @@
       "evidenceRefs": [
         "fenwick-2009-row-trunk-loading"
       ],
-      "movementSteps": [
-        "Set a barbell on the floor, hold it at shoulder width with your palms facing back, and bend forward from your hips.",
-        "Pull the bar toward your lower ribs without standing up or arching your back.",
-        "Lower the bar to a complete floor reset.",
-        "Rebrace before the next repetition."
-      ]
+      "execution": {
+        "startingPosition": "Set a barbell on the floor and hold it at shoulder width with your palms facing back.",
+        "movement": "Pull the bar toward your lower ribs.",
+        "endpoint": "End the pull with the bar at your lower ribs.",
+        "returnPhase": "Lower the bar to a complete floor reset. Rebrace before the next repetition.",
+        "controlledJoints": "Do not stand up or arch your back during the pull.",
+        "supportAndPosture": "Bend forward from your hips and brace your trunk.",
+        "disqualifyingCompensations": [
+          "Keeping the bar floating between repetitions turns the Pendlay row into a continuous bent-over row.",
+          "Bouncing the bar off the floor turns the dead-stop reset into a momentum row."
+        ]
+      }
     },
     {
       "catalogID": "dumbbell-bent-over-row",
@@ -1050,12 +1069,18 @@
       "evidenceRefs": [
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Hold a dumbbell in each hand with your palms facing inward.",
-        "Establish a strict hip hinge and hold your trunk angle steady.",
-        "Pull both dumbbells toward the sides of your lower torso while keeping your elbows close.",
-        "Lower the dumbbells without changing your trunk angle."
-      ]
+      "execution": {
+        "startingPosition": "Hold a dumbbell in each hand with your palms facing inward. Establish a strict hip hinge.",
+        "movement": "Pull both dumbbells toward the sides of your lower torso.",
+        "endpoint": "End the pull with the dumbbells beside your lower torso.",
+        "returnPhase": "Lower the dumbbells without changing your trunk angle.",
+        "controlledJoints": "Keep your elbows close during the pull.",
+        "supportAndPosture": "Hold your trunk angle steady.",
+        "disqualifyingCompensations": [
+          "Rowing one dumbbell at a time turns the two-arm row into a one-arm row.",
+          "Standing up to swing the dumbbells turns the strict row into a momentum row."
+        ]
+      }
     },
     {
       "catalogID": "one-arm-dumbbell-row",
@@ -1113,12 +1138,19 @@
         "fenwick-2009-row-trunk-loading",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Place your opposite hand and knee on a bench while the foot on your working side stays planted.",
-        "Hold one dumbbell with your palm facing inward and keep your hips level and facing forward.",
-        "Pull your working elbow toward your hip without rotating your torso.",
-        "Lower the dumbbell under control."
-      ]
+      "execution": {
+        "startingPosition": "Place your opposite hand and knee on a bench while the foot on your working side stays planted. Hold one dumbbell with your palm facing inward.",
+        "movement": "Pull your working elbow toward your hip.",
+        "endpoint": "End the pull with the dumbbell beside your hip.",
+        "returnPhase": "Lower the dumbbell under control.",
+        "controlledJoints": "Do not rotate your torso during the pull.",
+        "supportAndPosture": "Keep your hips level and facing forward.",
+        "disqualifyingCompensations": [
+          "Twisting the torso to swing the dumbbell turns the strict one-arm row into a momentum row.",
+          "Lifting the supporting hand or knee off the bench turns the supported row into an unsupported hinge row."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
+      }
     },
     {
       "catalogID": "chest-supported-dumbbell-row",
@@ -1170,12 +1202,18 @@
         "garcia-jaen-2021-bent-over-row-posture",
         "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row"
       ],
-      "movementSteps": [
-        "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
-        "Let your shoulder blades move around your rib cage.",
-        "Pull your elbows toward your lower torso.",
-        "Lower the dumbbells under control."
-      ]
+      "execution": {
+        "startingPosition": "Lie face down with your chest supported on an incline bench and hold two dumbbells with your palms facing inward.",
+        "movement": "Pull your elbows toward your lower torso, letting your shoulder blades move around your rib cage.",
+        "endpoint": "End the pull with your elbows beside your lower torso.",
+        "returnPhase": "Lower the dumbbells under control.",
+        "controlledJoints": "Keep your legs and lower body still while your arms pull.",
+        "supportAndPosture": "Keep your chest supported on the incline bench.",
+        "disqualifyingCompensations": [
+          "Lifting the chest off the bench to heave the dumbbells turns the supported row into a momentum row.",
+          "Shrugging the shoulders toward the ears turns the row into a shrug."
+        ]
+      }
     },
     {
       "catalogID": "seated-cable-row",
@@ -1232,11 +1270,18 @@
         "padovan-2026-seated-row-scapular-position",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Sit upright at a low cable station holding a narrow parallel handle with your palms facing each other, and keep your torso steady without back support.",
-        "Pull the handle toward your lower ribs while keeping your elbows tucked.",
-        "Return the handle until your shoulder blades move forward under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright at a low cable station holding a narrow parallel handle with your palms facing each other.",
+        "movement": "Pull the handle toward your lower ribs.",
+        "endpoint": "End the pull with the handle at your lower ribs.",
+        "returnPhase": "Return the handle until your shoulder blades move forward under control.",
+        "controlledJoints": "Keep your elbows tucked.",
+        "supportAndPosture": "Keep your torso steady without back support.",
+        "disqualifyingCompensations": [
+          "Leaning back to swing the handle turns the strict seated row into a momentum row.",
+          "Rocking the torso back and forth turns the seated row into a rowing-machine stroke."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-seated-cable-row",
@@ -1291,12 +1336,19 @@
         "fenwick-2009-row-trunk-loading",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Sit upright at a low cable station and hold one handle with your palm facing inward.",
-        "Brace your trunk and keep your pelvis square.",
-        "Pull your working elbow toward your hip.",
-        "Return your arm forward without rotating your torso."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright at a low cable station and hold one handle with your palm facing inward.",
+        "movement": "Pull your working elbow toward your hip.",
+        "endpoint": "End the pull with your working elbow beside your hip.",
+        "returnPhase": "Return your arm forward without rotating your torso.",
+        "controlledJoints": "Do not rotate your torso during the pull or the return.",
+        "supportAndPosture": "Brace your trunk and keep your pelvis square.",
+        "disqualifyingCompensations": [
+          "Twisting the torso to drag the handle turns the one-arm row into a rotational pull.",
+          "Leaning away from the cable to move the weight turns the strict row into a momentum row."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
+      }
     },
     {
       "catalogID": "chest-supported-machine-row",
@@ -1350,12 +1402,18 @@
         "padovan-2026-seated-row-scapular-position",
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Sit at a linked-arm row machine with your chest against the pad and hold the handles with your palms facing each other.",
-        "Let your shoulder blades move naturally as you drive your elbows toward your lower ribs.",
-        "Keep your chest against the pad.",
-        "Return the linked lever under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit at a linked-arm row machine with your chest against the pad and hold the handles with your palms facing each other.",
+        "movement": "Let your shoulder blades move naturally as you drive your elbows toward your lower ribs.",
+        "endpoint": "End the pull with your elbows beside your lower ribs.",
+        "returnPhase": "Return the linked lever under control.",
+        "controlledJoints": "Keep your legs and torso still while the lever moves.",
+        "supportAndPosture": "Keep your chest against the pad.",
+        "disqualifyingCompensations": [
+          "Lifting the chest off the pad turns the supported machine row into an unsupported pull.",
+          "Pushing with the legs turns the strict machine row into a leg-assisted pull."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-chest-supported-machine-row",
@@ -1410,11 +1468,19 @@
       "evidenceRefs": [
         "saeterbakken-2015-unilateral-row-core"
       ],
-      "movementSteps": [
-        "Sit against the chest pad of a single-arm row machine and hold one handle with your palm facing inward.",
-        "Keep your pelvis and chest square as you pull your working elbow toward your lower torso.",
-        "Return the lever without twisting away from the pad."
-      ]
+      "execution": {
+        "startingPosition": "Sit against the chest pad of a single-arm row machine and hold one handle with your palm facing inward.",
+        "movement": "Pull your working elbow toward your lower torso.",
+        "endpoint": "End the pull with your working elbow beside your lower torso.",
+        "returnPhase": "Return the lever without twisting away from the pad.",
+        "controlledJoints": "Keep your free arm and legs still while one arm pulls.",
+        "supportAndPosture": "Keep your pelvis and chest square.",
+        "disqualifyingCompensations": [
+          "Twisting away from the pad turns the supported one-arm row into a rotational pull.",
+          "Lifting the chest off the pad turns the machine row into an unsupported pull."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then switch to the other arm."
+      }
     },
     {
       "catalogID": "smith-machine-bent-over-row",
@@ -1473,12 +1539,18 @@
         "ackland-2008-shoulder-moment-arms",
         "fenwick-2009-row-trunk-loading"
       ],
-      "movementSteps": [
-        "Set the Smith bar near knee height and hold it at shoulder width with your palms facing back.",
-        "Establish a strict hip hinge beneath the rail path.",
-        "Pull the bar toward your lower ribs without changing your torso angle.",
-        "Lower the bar along the rails under control."
-      ]
+      "execution": {
+        "startingPosition": "Set the Smith bar near knee height and hold it at shoulder width with your palms facing back.",
+        "movement": "Pull the bar toward your lower ribs.",
+        "endpoint": "End the pull with the bar at your lower ribs.",
+        "returnPhase": "Lower the bar along the rails under control.",
+        "controlledJoints": "Do not change your torso angle during the pull.",
+        "supportAndPosture": "Establish a strict hip hinge beneath the rail path.",
+        "disqualifyingCompensations": [
+          "Standing up during the pull turns the hinged Smith row into an upright pull.",
+          "Bouncing the bar between repetitions turns the strict row into a momentum row."
+        ]
+      }
     },
     {
       "catalogID": "inverted-row",
@@ -1539,12 +1611,18 @@
         "youdas-2016-inverted-row",
         "youdas-2021-suspension-row"
       ],
-      "movementSteps": [
-        "Lie beneath a fixed straight bar, hold it at shoulder width with your palms facing away from you, and keep your feet on the floor with your body nearly parallel to it.",
-        "Keep a straight line from your shoulders through your heels.",
-        "Pull your chest toward the bar while letting your shoulder blades move naturally.",
-        "Lower your body under control."
-      ]
+      "execution": {
+        "startingPosition": "Lie beneath a fixed straight bar, hold it at shoulder width with your palms facing away from you, and keep your feet on the floor with your body nearly parallel to it.",
+        "movement": "Pull your chest toward the bar while letting your shoulder blades move naturally.",
+        "endpoint": "End the pull with your chest at the bar.",
+        "returnPhase": "Lower your body under control.",
+        "controlledJoints": "Do not bend at the hips or knees during the pull.",
+        "supportAndPosture": "Keep a straight line from your shoulders through your heels.",
+        "disqualifyingCompensations": [
+          "Bending at the hips turns the straight-body row into a bent-hip hang.",
+          "Kicking with the legs turns the strict row into a momentum row."
+        ]
+      }
     }
   ]
 }

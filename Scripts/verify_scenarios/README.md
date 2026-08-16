@@ -30,6 +30,9 @@ framework chatter or user-owned values.
 - `tap`: require one visible match and tap its on-screen midpoint.
 - `scrollTo`: swipe in the declared direction until its semantic `selector`
   becomes visible; coordinates are derived from the application frame.
+- `swipe`: perform `count` blind swipes in the declared `direction` with no
+  selector. Use it to nudge content clear of the tab bar before tapping a
+  row that `scrollTo` leaves half-covered at the screen edge.
 - `assert`: poll `required` and `forbidden` selector arrays together.
 - `relaunch`: terminate and launch again with a new launch object. State is
   preserved unless `reset` is true.

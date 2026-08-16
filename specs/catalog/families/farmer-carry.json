@@ -443,13 +443,19 @@
         "mcgill-2013-one-two-hand-carry",
         "stastny-2015-farmers-walk-lower-limb"
       ],
-      "movementSteps": [
-        "Log the weight of one dumbbell, not the combined pair.",
-        "Hold one equal-weight dumbbell in each hand without straps or hooks.",
-        "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
-        "Walk continuously forward on a level surface for the set time while keeping your shoulders controlled and your torso upright.",
-        "Avoid turning, marching in place, or converting the carry into another exercise."
-      ]
+      "execution": {
+        "startingPosition": "Log the weight of one dumbbell, not the combined pair. Hold one equal-weight dumbbell in each hand without straps or hooks.",
+        "movement": "Walk continuously forward on a level surface.",
+        "endpoint": "Continue the forward walk for the full set time.",
+        "controlledJoints": "Keep your upper arms at your sides, your palms facing your thighs, and your elbows straight.",
+        "supportAndPosture": "Keep your shoulders controlled and your torso upright.",
+        "disqualifyingCompensations": [
+          "Marching in place turns the farmer carry into a stationary hold.",
+          "Carrying a single dumbbell turns the farmer carry into a suitcase carry.",
+          "Using straps or hooks turns the carry into a grip-assisted walk."
+        ],
+        "sideOrDirection": "Walk forward the whole time; avoid turning or marching in place."
+      }
     }
   ]
 }

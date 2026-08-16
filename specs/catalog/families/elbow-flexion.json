@@ -474,11 +474,19 @@
       "evidenceRefs": [
         "coratella-2023-curl-handgrips"
       ],
-      "movementSteps": [
-        "Stand facing a low cable while holding a straight bar with both palms facing up.",
-        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
-        "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing up.",
+        "movement": "Bend your elbows as far as you can.",
+        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
+        "returnPhase": "Lower the bar under control without turning your forearms.",
+        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
+        "supportAndPosture": "Keep your body still.",
+        "disqualifyingCompensations": [
+          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
+          "Leaning the torso backward turns the strict curl into a cheat curl.",
+          "Letting the palms turn away from facing up changes the palms-up curl into a different grip exercise."
+        ]
+      }
     },
     {
       "catalogID": "neutral-rope-cable-curl",
@@ -555,11 +563,19 @@
         "coratella-2023-curl-handgrips",
         "kleiber-2015-elbow-flexion-hand-position"
       ],
-      "movementSteps": [
-        "Stand facing a low cable while holding the rope ends with both palms facing inward.",
-        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
-        "Bend your elbows as far as you can, then return under control without turning your forearms."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a low cable while holding the rope ends with both palms facing inward.",
+        "movement": "Bend your elbows as far as you can.",
+        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
+        "returnPhase": "Return under control without turning your forearms.",
+        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
+        "supportAndPosture": "Keep your body still.",
+        "disqualifyingCompensations": [
+          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
+          "Leaning the torso backward turns the strict curl into a cheat curl.",
+          "Turning the palms away from facing each other changes the hammer curl into a different grip exercise."
+        ]
+      }
     },
     {
       "catalogID": "pronated-straight-bar-cable-curl",
@@ -636,11 +652,19 @@
         "coratella-2023-curl-handgrips",
         "kleiber-2015-elbow-flexion-hand-position"
       ],
-      "movementSteps": [
-        "Stand facing a low cable while holding a straight bar with both palms facing down.",
-        "Keep your upper arms beside your torso, your wrists straight, and your body still.",
-        "Bend your elbows as far as you can, then lower the bar under control without turning your forearms."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a low cable while holding a straight bar with both palms facing down.",
+        "movement": "Bend your elbows as far as you can.",
+        "endpoint": "End each repetition with your elbows bent as far as they comfortably go.",
+        "returnPhase": "Lower the bar under control without turning your forearms.",
+        "controlledJoints": "Keep your upper arms beside your torso and your wrists straight.",
+        "supportAndPosture": "Keep your body still.",
+        "disqualifyingCompensations": [
+          "Swinging the upper arms forward turns the strict curl into a shoulder swing.",
+          "Leaning the torso backward turns the strict curl into a cheat curl.",
+          "Letting the palms turn away from facing down changes the reverse curl into a different grip exercise."
+        ]
+      }
     }
   ]
 }

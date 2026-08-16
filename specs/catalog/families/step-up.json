@@ -445,14 +445,20 @@
       "evidenceRefs": [
         "wang-2003-forward-lateral-step-up-biomechanics"
       ],
-      "movementSteps": [
-        "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor.",
-        "Shift onto the lead leg without pushing or hopping from the trail leg.",
-        "Push through the lead foot and straighten that hip and knee until the other foot reaches the platform beside it.",
-        "Pause briefly with both feet on the platform.",
-        "Shift back onto the lead leg, return the trail foot to the lower floor, and step the lead foot down beside it to complete the repetition.",
-        "Replace the same lead foot fully on the platform before the next repetition, and switch lead sides after the set."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a platform exactly 21 centimeters above the lower floor with the lead foot placed fully on top and the trail foot on the lower floor.",
+        "movement": "Shift onto the lead leg. Push through the lead foot and straighten that hip and knee until the other foot reaches the platform beside it.",
+        "endpoint": "Pause briefly with both feet on the platform.",
+        "returnPhase": "Shift back onto the lead leg, return the trail foot to the lower floor, and step the lead foot down beside it to complete the repetition. Replace the same lead foot fully on the platform before the next repetition.",
+        "controlledJoints": "Do not push or hop from the trail leg.",
+        "supportAndPosture": "Stand upright and use no hand support for the step.",
+        "disqualifyingCompensations": [
+          "Pushing off or hopping from the trail leg turns the lead-leg step-up into a two-leg jump.",
+          "Leaving the lead foot on the platform between repetitions turns the full sequence into a continuous gym-style step-up.",
+          "Pulling on a rail for help turns the unsupported step-up into an assisted step."
+        ],
+        "sideOrDirection": "Switch lead sides after the set."
+      }
     }
   ]
 }

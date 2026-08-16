@@ -420,12 +420,20 @@
         "hecker-2021-deltoid-flexion-abduction",
         "larsen-2025-cable-dumbbell-lateral-raise"
       ],
-      "movementSteps": [
-        "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
-        "Raise your upper arm directly out to the side until it reaches shoulder height.",
-        "Avoid shrugging, leaning, or using lower-body drive.",
-        "Lower the dumbbell under control."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright with one dumbbell beside your thigh, your palm facing your body, and your elbow nearly straight.",
+        "movement": "Raise your upper arm directly out to the side.",
+        "endpoint": "Stop when your upper arm reaches shoulder height.",
+        "returnPhase": "Lower the dumbbell under control.",
+        "controlledJoints": "Keep your elbow nearly straight and your lower body still.",
+        "supportAndPosture": "Stand upright without external support. Avoid shrugging, leaning, or using lower-body drive.",
+        "disqualifyingCompensations": [
+          "Shrugging the shoulder turns the raise into a shrug.",
+          "Swinging the dumbbell with hip drive turns the strict raise into a momentum swing.",
+          "Raising the arm in front of the body turns the lateral raise into a front raise."
+        ],
+        "sideOrDirection": "Finish the set with the working arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "single-arm-cable-lateral-raise",
@@ -515,12 +523,20 @@
         "hecker-2021-deltoid-flexion-abduction",
         "larsen-2025-cable-dumbbell-lateral-raise"
       ],
-      "movementSteps": [
-        "Stand upright holding one cable handle with the pulley aligned approximately with your working hand in the arm-at-side start.",
-        "Keep your palm facing your body and your elbow nearly straight.",
-        "Raise your upper arm directly out to the side until it reaches shoulder height.",
-        "Lower the handle under control without shrugging, leaning, or using lower-body drive."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright holding one cable handle with the pulley aligned approximately with your working hand in the arm-at-side start.",
+        "movement": "Raise your upper arm directly out to the side.",
+        "endpoint": "Stop when your upper arm reaches shoulder height.",
+        "returnPhase": "Lower the handle under control without shrugging, leaning, or using lower-body drive.",
+        "controlledJoints": "Keep your palm facing your body and your elbow nearly straight.",
+        "supportAndPosture": "Stand upright without external support or leaning.",
+        "disqualifyingCompensations": [
+          "Shrugging the shoulder turns the raise into a shrug.",
+          "Swinging the handle with hip drive turns the strict raise into a momentum swing.",
+          "Raising the arm in front of the body turns the lateral raise into a front raise."
+        ],
+        "sideOrDirection": "Finish the set with the working arm, then repeat with the other arm."
+      }
     }
   ]
 }

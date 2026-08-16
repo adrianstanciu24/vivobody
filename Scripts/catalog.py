@@ -886,6 +886,29 @@ def validate_family_schema(data: dict[str, Any]) -> None:
         ],
         f"{context} movementSignature must require at least one prime or resisted action",
     )
+    exercise_schema = definitions.get("exercise", {})
+    exercise_required = set(exercise_schema.get("required", []))
+    require(
+        "execution" in exercise_required and "movementSteps" not in exercise_required,
+        f"{context} exercise required fields must name execution, not movementSteps",
+    )
+    execution_schema = definitions.get("executionInstructions", {})
+    require(
+        set(execution_schema.get("required", [])) == EXECUTION_REQUIRED_FIELDS,
+        f"{context} executionInstructions required fields differ from validator contract",
+    )
+    execution_properties = execution_schema.get("properties", {})
+    require(
+        set(execution_properties)
+        == EXECUTION_REQUIRED_FIELDS | EXECUTION_CONDITIONAL_FIELDS,
+        f"{context} executionInstructions properties differ from validator contract",
+    )
+    compensations_schema = execution_properties.get("disqualifyingCompensations", {})
+    require(
+        compensations_schema.get("minItems") == 1
+        and compensations_schema.get("uniqueItems") is True,
+        f"{context} disqualifyingCompensations must be a non-empty unique list",
+    )
     variant_axis = definitions.get("variantAxis", {})
     variant_axis_properties = variant_axis.get("properties", {})
     require(
@@ -1508,6 +1531,118 @@ def validate_exercise_rule_matches(
             )
 
 
+EXECUTION_TEXT_FIELDS = (
+    "startingPosition",
+    "movement",
+    "endpoint",
+    "returnPhase",
+    "controlledJoints",
+    "supportAndPosture",
+    "sideOrDirection",
+)
+
+EXECUTION_REQUIRED_FIELDS = {
+    "startingPosition",
+    "movement",
+    "endpoint",
+    "controlledJoints",
+    "supportAndPosture",
+    "disqualifyingCompensations",
+}
+
+EXECUTION_CONDITIONAL_FIELDS = {"returnPhase", "sideOrDirection"}
+
+# Canonical emission order for the runtime catalog; conditional fields sit
+# at their reading position and are omitted when absent.
+EXECUTION_FIELD_ORDER = (
+    "startingPosition",
+    "movement",
+    "endpoint",
+    "returnPhase",
+    "controlledJoints",
+    "supportAndPosture",
+    "disqualifyingCompensations",
+    "sideOrDirection",
+)
+
+
+def require_execution_text(value: Any, context: str) -> None:
+    text = require_non_empty_string(value, context).strip()
+    require(
+        text == value
+        and len(text) >= 12
+        and text[0].isupper()
+        and text[-1] in ".!?",
+        f"{context} is malformed",
+    )
+    words = re.findall(r"[a-z0-9]+", text.casefold())
+    require(
+        all(left != right for left, right in zip(words, words[1:])),
+        f"{context} repeats an adjacent word",
+    )
+
+
+def validate_execution(
+    execution: Any,
+    *,
+    tracking_mode: str,
+    laterality: str,
+    family_pattern: str | None,
+    context: str,
+) -> None:
+    require(isinstance(execution, dict), f"{context} must be an object")
+    require_keys(
+        execution,
+        required=EXECUTION_REQUIRED_FIELDS,
+        optional=EXECUTION_CONDITIONAL_FIELDS,
+        context=context,
+    )
+    for field in EXECUTION_TEXT_FIELDS:
+        if field in execution:
+            require_execution_text(execution[field], f"{context}.{field}")
+    compensations = require_list(
+        execution["disqualifyingCompensations"],
+        f"{context}.disqualifyingCompensations",
+    )
+    require_unique(compensations, f"{context}.disqualifyingCompensations")
+    for entry_index, entry in enumerate(compensations):
+        require_execution_text(
+            entry,
+            f"{context}.disqualifyingCompensations[{entry_index}]",
+        )
+
+    # Conditional presence is keyed on the declared tracking mode: every
+    # rep-tracked exercise returns to its starting position, while the
+    # duration-tracked roster (static holds and carries) has no return.
+    if tracking_mode == "reps":
+        require(
+            "returnPhase" in execution,
+            f"{context}.returnPhase is required for rep-tracked exercises",
+        )
+    else:
+        require(
+            "returnPhase" not in execution,
+            f"{context}.returnPhase is forbidden for duration-tracked exercises",
+        )
+
+    # Unilateral exercises must say which side works and when to switch;
+    # carries must state their travel direction even when bilateral.
+    # Symmetric bilateral non-carry movements have neither requirement.
+    requires_side_or_direction = (
+        laterality == "unilateral" or family_pattern == "carry"
+    )
+    if requires_side_or_direction:
+        require(
+            "sideOrDirection" in execution,
+            f"{context}.sideOrDirection is required for unilateral exercises and carries",
+        )
+    else:
+        require(
+            "sideOrDirection" not in execution,
+            f"{context}.sideOrDirection is forbidden for symmetric bilateral exercises",
+        )
+
+
 def validate_exercise(
     exercise: Any,
     *,
@@ -1531,7 +1666,7 @@ def validate_exercise(
         "catalogID", "name", "aliases", "equipment", "laterality", "modality",
         "trackingMode", "loadMode", "bodyweightFraction", "defaultWeight", "reps",
         "involvement", "variant", "additionalPrimeActions", "additionalStabilityDemands",
-        "evidenceRefs", "movementSteps",
+        "evidenceRefs", "execution",
     }
     optional_keys = {
         "groupOverride",
@@ -1756,31 +1891,13 @@ def validate_exercise(
     validate_variant(exercise["variant"], axes, f"{context}.variant")
     validate_exercise_rule_matches(exercise, exercise_rules, context)
     require_known_evidence(exercise["evidenceRefs"], foundation, f"{context}.evidenceRefs")
-    movement_steps = require_list(
-        exercise["movementSteps"],
-        f"{context}.movementSteps",
+    validate_execution(
+        exercise["execution"],
+        tracking_mode=tracking_mode,
+        laterality=exercise["laterality"],
+        family_pattern=family["fixed"]["pattern"],
+        context=f"{context}.execution",
     )
-    require(
-        2 <= len(movement_steps) <= 10,
-        f"{context}.movementSteps must contain 2...10 steps",
-    )
-    require_unique(movement_steps, f"{context}.movementSteps")
-    for step_index, raw_step in enumerate(movement_steps):
-        step_context = f"{context}.movementSteps[{step_index}]"
-        step = require_non_empty_string(raw_step, step_context).strip()
-        require(
-            step == raw_step
-            and
-            len(step) >= 12
-            and step[0].isupper()
-            and step[-1] in ".!?",
-            f"{step_context} is malformed",
-        )
-        words = re.findall(r"[a-z0-9]+", step.casefold())
-        require(
-            all(left != right for left, right in zip(words, words[1:])),
-            f"{step_context} repeats an adjacent word",
-        )
 
     warnings: list[str] = []
     recommended = family.get("recommended", {})
@@ -2225,7 +2342,11 @@ def compile_runtime_catalog(families: Iterable[dict[str, Any]]) -> list[dict[str
                     "bodyweightFraction": exercise["bodyweightFraction"],
                     "modality": exercise["modality"],
                     "loadMode": exercise["loadMode"],
-                    "movementSteps": exercise["movementSteps"],
+                    "execution": {
+                        key: exercise["execution"][key]
+                        for key in EXECUTION_FIELD_ORDER
+                        if key in exercise["execution"]
+                    },
                     "involvement": exercise["involvement"],
                 }
             )

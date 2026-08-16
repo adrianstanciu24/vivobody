@@ -422,12 +422,19 @@
       "evidenceRefs": [
         "mccabe-2007-below-90-scapular-exercises"
       ],
-      "movementSteps": [
-        "Stand tall holding the overhead-anchored band beside the working thigh with your elbow straight and the band just taut.",
-        "Pull the working shoulder blade down against the band for two seconds without moving the arm.",
-        "Return for two seconds without bending your elbow, moving your arm at the shoulder, leaning your torso, or moving your neck.",
-        "Rest five seconds between repetitions."
-      ]
+      "execution": {
+        "startingPosition": "Stand tall holding the overhead-anchored band beside the working thigh with your elbow straight and the band just taut.",
+        "movement": "Pull the working shoulder blade down against the band for two seconds without moving the arm.",
+        "endpoint": "Finish with the working shoulder blade pulled fully down.",
+        "returnPhase": "Return for two seconds without bending your elbow, moving your arm at the shoulder, leaning your torso, or moving your neck. Rest five seconds between repetitions.",
+        "controlledJoints": "Keep the elbow straight and hold the arm, neck, and lower body still.",
+        "supportAndPosture": "Stand tall without leaning your torso.",
+        "disqualifyingCompensations": [
+          "Bending the elbow turns the shoulder-blade pull-down into an arm pull-down.",
+          "Leaning the torso toward the band turns the pull-down into a trunk side-bend."
+        ],
+        "sideOrDirection": "Finish the set on the working side, then repeat with the other arm."
+      }
     }
   ]
 }

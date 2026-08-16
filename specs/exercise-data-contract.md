@@ -26,10 +26,14 @@ supplemental `--family` inputs are never emitted.
   under a different load equation. Bundled performance semantics are locked.
 - One record describes one movement. Alternatives, supersets, or slash-joined
   movements must be split or deleted.
-- `movementSteps` is an ordered array of directly authored setup, execution,
-  control, and safety instructions. Each bundled exercise provides at least two
-  complete steps, and the ordered steps distinguish the record from similarly
-  named variants without runtime sentence parsing.
+- `execution` is one directly authored object whose labeled fields separate
+  sequential phases from concurrent constraints: `startingPosition`,
+  `movement`, `endpoint`, `controlledJoints`, `supportAndPosture`, and a
+  non-empty `disqualifyingCompensations` array are always required;
+  `returnPhase` is required exactly for rep-tracked exercises;
+  `sideOrDirection` is required exactly for unilateral exercises and
+  carry-pattern families. The labeled fields distinguish the record from
+  similarly named variants without runtime sentence parsing.
 - Aliases are search synonyms only. Canonical names and aliases are unique after
   case-folding and whitespace normalization.
 

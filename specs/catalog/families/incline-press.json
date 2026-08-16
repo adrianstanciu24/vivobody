@@ -381,11 +381,19 @@
         "lauver-2016-bench-angle",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementSteps": [
-        "Set the bench backrest to 30 degrees and lie with the feet planted and the eyes below the racked bar.",
-        "Lower the bar under control toward the upper chest.",
-        "Press the bar upward until your elbows are straight without lifting your shoulders from the bench."
-      ]
+      "execution": {
+        "startingPosition": "Set the bench backrest to 30 degrees and lie with the feet planted and the eyes below the racked bar.",
+        "movement": "Lower the bar under control toward the upper chest.",
+        "endpoint": "End the lowering with the bar at your upper chest.",
+        "returnPhase": "Press the bar upward until your elbows are straight without lifting your shoulders from the bench.",
+        "controlledJoints": "Keep your feet planted and your shoulders against the bench.",
+        "supportAndPosture": "Support your back and shoulders on the bench with your feet planted.",
+        "disqualifyingCompensations": [
+          "Setting the bench flatter than 15 degrees turns the incline press into a flat bench press.",
+          "Setting the bench steeper than 45 degrees turns the incline press into a shoulder press.",
+          "Pressing one side of the bar faster than the other turns the barbell press into a seesaw press."
+        ]
+      }
     },
     {
       "catalogID": "incline-dumbbell-bench-press",
@@ -449,11 +457,18 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementSteps": [
-        "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line.",
-        "Keep each forearm beneath its dumbbell as you press upward and slightly inward until your elbows are straight.",
-        "Lower the dumbbells under control without letting the upper arms drift into a vertical shoulder-press path."
-      ]
+      "execution": {
+        "startingPosition": "Set the bench backrest to 30 degrees and lie with one dumbbell beside each upper-chest line.",
+        "movement": "Press the dumbbells upward and slightly inward.",
+        "endpoint": "End the press when your elbows are straight.",
+        "returnPhase": "Lower the dumbbells under control without letting the upper arms drift into a vertical shoulder-press path.",
+        "controlledJoints": "Keep each forearm beneath its dumbbell.",
+        "supportAndPosture": "Lie back with your torso supported on the inclined bench.",
+        "disqualifyingCompensations": [
+          "Letting the upper arms drift into a vertical path turns the incline press into a shoulder press.",
+          "Opening the arms wide with soft elbows turns the incline press into a chest fly."
+        ]
+      }
     },
     {
       "catalogID": "incline-smith-machine-bench-press",
@@ -514,11 +529,18 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementSteps": [
-        "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward.",
-        "Lower the bar along the rails under control.",
-        "Press until your elbows are straight while keeping your torso and shoulders supported."
-      ]
+      "execution": {
+        "startingPosition": "Set the bench backrest to 30 degrees and position it so the Smith bar descends toward the upper chest without forcing the shoulders forward.",
+        "movement": "Lower the bar along the rails under control.",
+        "endpoint": "End the lowering with the bar at your upper chest.",
+        "returnPhase": "Press until your elbows are straight while keeping your torso and shoulders supported.",
+        "controlledJoints": "Keep your shoulders against the bench throughout the set.",
+        "supportAndPosture": "Support your torso and shoulders on the inclined bench.",
+        "disqualifyingCompensations": [
+          "Positioning the bench so the bar descends toward the neck turns the incline press into a guillotine press.",
+          "Setting the bench steeper than 45 degrees turns the incline press into a shoulder press."
+        ]
+      }
     },
     {
       "catalogID": "incline-machine-chest-press",
@@ -579,11 +601,18 @@
         "cabral-2022-pectoralis-regions",
         "rodriguez-ridao-2020-bench-inclinations"
       ],
-      "movementSteps": [
-        "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press.",
-        "Keep your torso against the pad as you press the handles forward and upward until your elbows are straight.",
-        "Return the handles under control."
-      ]
+      "execution": {
+        "startingPosition": "Adjust the seat so the handles begin beside the upper chest and follow an approximately 30-degree upward path relative to a horizontal press.",
+        "movement": "Press the handles forward and upward.",
+        "endpoint": "End the press when your elbows are straight.",
+        "returnPhase": "Return the handles under control.",
+        "controlledJoints": "Keep your torso against the pad.",
+        "supportAndPosture": "Support your back and shoulders against the machine pad.",
+        "disqualifyingCompensations": [
+          "Setting the seat so the handles start below the chest turns the incline press into a flat machine press.",
+          "Lifting the torso off the pad to push the handles turns the machine press into an unsupported press."
+        ]
+      }
     }
   ]
 }

@@ -339,12 +339,19 @@
         "arnold-2010-lower-limb",
         "okubo-2021-end-range-active-straight-leg-raise"
       ],
-      "movementSteps": [
-        "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
-        "Keep the other leg supported and the working knee straight.",
-        "Raise the working leg as far as you can while keeping the knee straight, then lower it under control.",
-        "Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back with your torso and pelvis supported on a table and both legs straight.",
+        "movement": "Raise the working leg as far as you can while keeping the knee straight.",
+        "endpoint": "End the raise at the highest point you can reach with a straight knee.",
+        "returnPhase": "Lower the leg under control.",
+        "controlledJoints": "Keep the other leg supported and the working knee straight. Keep the effort centered on the working hip without deliberately adding spinal, pelvic, or knee motion.",
+        "supportAndPosture": "Let the table support your torso, pelvis, and resting leg.",
+        "disqualifyingCompensations": [
+          "Bending the working knee turns the straight-leg raise into a knee raise.",
+          "Rolling the pelvis backward to lift higher turns the hip raise into a sit-up."
+        ],
+        "sideOrDirection": "Finish the set with one leg, then repeat with the other leg."
+      }
     }
   ]
 }

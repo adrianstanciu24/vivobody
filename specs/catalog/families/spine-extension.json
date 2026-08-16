@@ -317,14 +317,19 @@
       "evidenceRefs": [
         "fisher-2018-isolated-lumbar-extension"
       ],
-      "movementSteps": [
-        "Sit in the MedX lower-back machine with your thighs at a right angle to the seat.",
-        "Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
-        "Keep your upper hips against the rolling restraint and push only against the pad behind your upper torso.",
-        "Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
-        "Hold the upright position for one second.",
-        "Return for at least four seconds without lifting or turning your hips or pushing with your legs."
-      ]
+      "execution": {
+        "startingPosition": "Sit in the MedX lower-back machine with your thighs at a right angle to the seat. Tighten the thigh restraint, secure the leg restraint just above your kneecaps, and tighten the footboard.",
+        "movement": "Push only against the pad behind your upper torso. Straighten your back for at least two seconds, moving from the machine's 72-degree curled-forward mark to its 0-degree upright mark.",
+        "endpoint": "Hold the upright position for one second.",
+        "returnPhase": "Return for at least four seconds.",
+        "controlledJoints": "Do not lift or turn your hips or push with your legs.",
+        "supportAndPosture": "Keep your upper hips against the rolling restraint.",
+        "disqualifyingCompensations": [
+          "Pushing with the legs turns the isolated back extension into a leg-driven machine push.",
+          "Lifting the hips off the rolling restraint turns the restrained extension into a hip-driven extension.",
+          "Rushing the return turns the controlled extension into a momentum drop."
+        ]
+      }
     }
   ]
 }

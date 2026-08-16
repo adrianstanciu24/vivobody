@@ -490,14 +490,20 @@
       "evidenceRefs": [
         "song-2023-split-squat-step-length"
       ],
-      "movementSteps": [
-        "Place a barbell securely across your upper back and hold it with both palms facing forward.",
-        "Take a split stance about as long as the distance from the outside of your hip to the outside of your ankle, with your front foot flat and the ball of your rear foot on the floor.",
-        "Keep that stance length throughout the set, using a comfortable position for each foot.",
-        "Keep your torso erect and both foot contacts fixed as you lower until your lead thigh is approximately parallel to the floor.",
-        "Push through your front foot and straighten the front hip and knee to rise back to the split stance.",
-        "Finish in the same split stance without stepping between repetitions."
-      ]
+      "execution": {
+        "startingPosition": "Place a barbell securely across your upper back and hold it with both palms facing forward. Take a split stance about as long as the distance from the outside of your hip to the outside of your ankle, with your front foot flat and the ball of your rear foot on the floor.",
+        "movement": "Lower until your lead thigh is approximately parallel to the floor.",
+        "endpoint": "Stop when your lead thigh is approximately parallel to the floor.",
+        "returnPhase": "Push through your front foot and straighten the front hip and knee to rise back to the split stance. Finish in the same split stance without stepping between repetitions.",
+        "controlledJoints": "Keep that stance length throughout the set, using a comfortable position for each foot. Keep both foot contacts fixed.",
+        "supportAndPosture": "Keep your torso erect with the bar held securely across your upper back.",
+        "disqualifyingCompensations": [
+          "Stepping between repetitions turns the split squat into a lunge.",
+          "Leaning the torso forward turns the split squat into a hinge.",
+          "Shortening the stance turns the split squat into a narrow squat."
+        ],
+        "sideOrDirection": "Complete every repetition with one leg forward, then switch to the other leg."
+      }
     }
   ]
 }

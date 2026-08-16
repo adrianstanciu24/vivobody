@@ -336,11 +336,20 @@
         "dark-2007-shoulder-rotation-recruitment",
         "reinold-2004-shoulder-external-rotation"
       ],
-      "movementSteps": [
-        "Stand sideways to the cable, keep the working upper arm beside your body, and bend the elbow about 90 degrees.",
-        "Rotate the forearm away from the abdomen.",
-        "Return under control without moving the elbow, pinching the shoulder blade back, or turning your torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand sideways to the cable, keep the working upper arm beside your body, and bend the elbow about 90 degrees.",
+        "movement": "Rotate the forearm away from the abdomen.",
+        "endpoint": "Stop when the forearm has turned away as far as it comfortably goes.",
+        "returnPhase": "Return under control without moving the elbow, pinching the shoulder blade back, or turning your torso.",
+        "controlledJoints": "Keep the working upper arm beside your body and the elbow bent about 90 degrees.",
+        "supportAndPosture": "Keep your torso still throughout the repetition.",
+        "disqualifyingCompensations": [
+          "Pinching the shoulder blade back turns the isolated rotation into a row-like squeeze.",
+          "Turning the torso to swing the forearm turns the isolated rotation into a trunk twist.",
+          "Lifting the upper arm away from the body turns the rotation into a raised-arm exercise."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "standing-band-shoulder-external-rotation",
@@ -382,11 +391,19 @@
       "evidenceRefs": [
         "hintermeister-1998-elastic-shoulder-rehabilitation"
       ],
-      "movementSteps": [
-        "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso.",
-        "Keep the elbow bent about 90 degrees as you turn the forearm away from your stomach against the band.",
-        "Return without moving the elbow, shoulder blade, or torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand side-on with the band anchored across the body and a towel roll between the working upper arm and torso.",
+        "movement": "Turn the forearm away from your stomach against the band.",
+        "endpoint": "Stop when the forearm has turned out as far as it comfortably goes.",
+        "returnPhase": "Return without moving the elbow, shoulder blade, or torso.",
+        "controlledJoints": "Keep the elbow bent about 90 degrees.",
+        "supportAndPosture": "Keep the towel roll between the working upper arm and torso.",
+        "disqualifyingCompensations": [
+          "Lifting the upper arm off the towel roll turns the isolated rotation into a raised-arm rotation.",
+          "Turning the torso to help the band turns the isolated rotation into a trunk twist."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "side-lying-dumbbell-shoulder-external-rotation",
@@ -429,12 +446,19 @@
       "evidenceRefs": [
         "reinold-2004-shoulder-external-rotation"
       ],
-      "movementSteps": [
-        "Lie on the side you are not exercising, with a towel roll between your working upper arm and torso.",
-        "Bend the elbow about 90 degrees and hold a dumbbell above your stomach.",
-        "Rotate the forearm toward the ceiling.",
-        "Lower the dumbbell under control without lifting the upper arm, rolling your torso, or pinching the shoulder blade back."
-      ]
+      "execution": {
+        "startingPosition": "Lie on the side you are not exercising, with a towel roll between your working upper arm and torso. Bend the elbow about 90 degrees and hold a dumbbell above your stomach.",
+        "movement": "Rotate the forearm toward the ceiling.",
+        "endpoint": "End the rotation with the forearm pointing toward the ceiling.",
+        "returnPhase": "Lower the dumbbell under control without lifting the upper arm, rolling your torso, or pinching the shoulder blade back.",
+        "controlledJoints": "Keep the upper arm on the towel roll and the elbow bent about 90 degrees.",
+        "supportAndPosture": "Rest your side on the bench and keep your torso still.",
+        "disqualifyingCompensations": [
+          "Rolling the torso backward turns the side-lying rotation into a trunk-assisted pull.",
+          "Lifting the upper arm off the towel roll turns the isolated rotation into a raised-arm movement."
+        ],
+        "sideOrDirection": "Switch to lying on your other side and repeat with the other arm."
+      }
     }
   ]
 }

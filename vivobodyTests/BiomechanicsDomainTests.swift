@@ -314,6 +314,38 @@ struct BiomechanicsDomainTests {
         )
     }
 
+    @Test func strictCatalogRejectsMalformedExecutionInstructions() {
+        // A text field that breaks the shared instruction rules fails.
+        expectValidationError(
+            .invalidExecution("test"),
+            records: [record(execution: validExecution(startingPosition: "too short"))]
+        )
+        // Compensations must be non-empty and unique.
+        expectValidationError(
+            .invalidExecution("test"),
+            records: [record(execution: validExecution(disqualifyingCompensations: []))]
+        )
+        expectValidationError(
+            .invalidExecution("test"),
+            records: [record(execution: validExecution(disqualifyingCompensations: [
+                "Rushing the test movement turns it into an uncontrolled swing.",
+                "Rushing the test movement turns it into an uncontrolled swing.",
+            ]))]
+        )
+        // A reps record must author a return phase.
+        expectValidationError(
+            .invalidExecution("test"),
+            records: [record(execution: validExecution(returnPhase: nil))]
+        )
+        // A bilateral non-carry record must not author side/direction notes.
+        expectValidationError(
+            .invalidExecution("test"),
+            records: [record(execution: validExecution(
+                sideOrDirection: "Repeat the test movement on the other side."
+            ))]
+        )
+    }
+
     @Test func strictCatalogAllowsZeroWeightWithoutMetricSeed() {
         do {
             try CatalogData.validate([
@@ -358,6 +390,7 @@ struct BiomechanicsDomainTests {
         bodyweightFraction: Double = 0,
         modality: ExerciseModality = .dynamicStrength,
         loadMode: ExerciseLoadMode = .external,
+        execution: ExecutionInstructions? = nil,
         involvement: [CatalogRecord.MuscleAssignment] = [
             .init(muscle: .pectoralisMajorSternocostal, role: .primary)
         ]
@@ -384,11 +417,36 @@ struct BiomechanicsDomainTests {
             bodyweightFraction: bodyweightFraction,
             modality: modality,
             loadMode: loadMode,
-            movementSteps: [
-                "Set up the complete test movement in its required position.",
-                "Perform the complete test movement under control.",
-            ],
+            execution: execution ?? validExecution(
+                returnPhase: trackingMode == .reps
+                    ? "Return to the starting position under control."
+                    : nil
+            ),
             involvement: involvement
+        )
+    }
+
+    private func validExecution(
+        startingPosition: String = "Set up the complete test movement in its required position.",
+        movement: String = "Perform the complete test movement under control.",
+        endpoint: String = "Finish the test movement at its reviewed end position.",
+        returnPhase: String? = "Return to the starting position under control.",
+        controlledJoints: String = "Keep the uninvolved joints still throughout the movement.",
+        supportAndPosture: String = "Keep the trunk braced and both feet planted.",
+        disqualifyingCompensations: [String] = [
+            "Rushing the test movement turns it into an uncontrolled swing."
+        ],
+        sideOrDirection: String? = nil
+    ) -> ExecutionInstructions {
+        ExecutionInstructions(
+            startingPosition: startingPosition,
+            movement: movement,
+            endpoint: endpoint,
+            returnPhase: returnPhase,
+            controlledJoints: controlledJoints,
+            supportAndPosture: supportAndPosture,
+            disqualifyingCompensations: disqualifyingCompensations,
+            sideOrDirection: sideOrDirection
         )
     }
 

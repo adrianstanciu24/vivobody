@@ -1,0 +1,122 @@
+{
+  "name": "exercise-execution-bilateral-reps",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Barbell Bench Press,"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Barbell Bench Press,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position",
+            "labelContains": "flat bench"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "Lower the bar under control"
+          },
+          {
+            "identifier": "exercise-execution-endpoint",
+            "labelContains": "lower chest"
+          },
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "Press the bar upward"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints",
+            "labelContains": "feet planted"
+          },
+          {
+            "identifier": "exercise-execution-support-posture"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "turns the bench press"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "exercise-execution-side-direction"
+          }
+        ]
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

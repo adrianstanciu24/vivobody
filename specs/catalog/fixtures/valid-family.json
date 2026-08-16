@@ -172,10 +172,17 @@
       "evidenceRefs": [
         "ackland-2008-shoulder-moment-arms"
       ],
-      "movementSteps": [
-        "Set up beneath the supported bar with the prescribed grip and body position.",
-        "Press the bar away from the torso through shoulder horizontal adduction and elbow extension."
-      ]
+      "execution": {
+        "startingPosition": "Set up beneath the supported bar with the prescribed grip and body position.",
+        "movement": "Press the bar away from the torso until both elbows are straight.",
+        "endpoint": "Finish with the bar held directly over the chest.",
+        "returnPhase": "Lower the bar back to the starting position under control.",
+        "controlledJoints": "Keep both wrists straight and the hips and legs still.",
+        "supportAndPosture": "Support the torso on the bench with both feet planted.",
+        "disqualifyingCompensations": [
+          "Heaving the torso or bouncing the bar turns the press into a different movement."
+        ]
+      }
     }
   ]
 }

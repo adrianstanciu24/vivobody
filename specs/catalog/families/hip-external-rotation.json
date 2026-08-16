@@ -426,14 +426,19 @@
         "matthews-2017-fohx-protocol",
         "matthews-2020-fohx-trial"
       ],
-      "movementSteps": [
-        "Lie on your back on a treatment table with both thighs supported over the wedge so your hips stay bent at 30 degrees and your knees stay bent.",
-        "Secure the elastic band at the working ankle.",
-        "Have the therapist hold the working knee against the support and pull the other end of the band against the movement.",
-        "Keep your pelvis and back still, and begin with the working thigh pointing straight ahead.",
-        "Move the working lower leg inward against the band until you reach the middle of your comfortable range.",
-        "Return to the straight-ahead position without lifting or turning the working thigh, and finish the set before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back on a treatment table with both thighs supported over the wedge so your hips stay bent at 30 degrees and your knees stay bent. Secure the elastic band at the working ankle. Have the therapist hold the working knee against the support and pull the other end of the band against the movement. Begin with the working thigh pointing straight ahead.",
+        "movement": "Move the working lower leg inward against the band.",
+        "endpoint": "Stop when you reach the middle of your comfortable range.",
+        "returnPhase": "Return to the straight-ahead position without lifting or turning the working thigh.",
+        "controlledJoints": "Keep the working thigh, knee, pelvis, and back still while the lower leg moves.",
+        "supportAndPosture": "Keep your pelvis and back still, supported by the table and the wedge.",
+        "disqualifyingCompensations": [
+          "Lifting or turning the working thigh turns the rotation into a hip swing.",
+          "Rolling the pelvis or back turns the rotation into a trunk roll."
+        ],
+        "sideOrDirection": "Finish the set on the working side before changing sides."
+      }
     }
   ]
 }

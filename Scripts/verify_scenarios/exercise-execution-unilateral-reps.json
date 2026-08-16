@@ -1,0 +1,116 @@
+{
+  "name": "exercise-execution-unilateral-reps",
+  "launch": {
+    "reset": true,
+    "tab": "library"
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelRegex": "^Single-Arm Cable Lat Pulldown,"
+        },
+        "direction": "up",
+        "maxSwipes": 40
+      }
+    },
+    {
+      "tap": {
+        "labelRegex": "^Single-Arm Cable Lat Pulldown,"
+      }
+    },
+    {
+      "wait": {
+        "label": "Movement"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-how-to-perform"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-how-to-perform"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exercise-execution-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-starting-position"
+          },
+          {
+            "identifier": "exercise-execution-movement",
+            "labelContains": "Drive the working elbow down"
+          },
+          {
+            "identifier": "exercise-execution-endpoint"
+          },
+          {
+            "identifier": "exercise-execution-return",
+            "labelContains": "Return the arm overhead"
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-execution-compensations"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "exercise-execution-controlled-joints"
+          },
+          {
+            "identifier": "exercise-execution-support-posture"
+          },
+          {
+            "identifier": "exercise-execution-compensations",
+            "labelContains": "turns the"
+          },
+          {
+            "identifier": "exercise-execution-side-direction",
+            "labelContains": "repeat with the other arm"
+          }
+        ],
+        "forbidden": []
+      }
+    }
+  ],
+  "required": [],
+  "forbidden": []
+}

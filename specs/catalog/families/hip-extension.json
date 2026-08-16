@@ -346,12 +346,19 @@
         "arnold-2010-lower-limb",
         "jeon-2016-prone-table-hip-extension"
       ],
-      "movementSteps": [
-        "Lie face down with your torso and pelvis supported on a table and your working thigh hanging beyond its edge.",
-        "Keep your working knee bent at 90 degrees and begin with your thigh angled 30 degrees downward.",
-        "Keep your pelvis and back still as you lift the thigh until it reaches 5 degrees behind your body.",
-        "Lower your thigh under control without changing the knee angle or moving through your back or pelvis."
-      ]
+      "execution": {
+        "startingPosition": "Lie face down with your torso and pelvis supported on a table and your working thigh hanging beyond its edge. Begin with your thigh angled 30 degrees downward.",
+        "movement": "Lift the thigh until it reaches 5 degrees behind your body.",
+        "endpoint": "End the lift with the thigh 5 degrees behind your body.",
+        "returnPhase": "Lower your thigh under control without changing the knee angle or moving through your back or pelvis.",
+        "controlledJoints": "Keep your working knee bent at 90 degrees, and keep your pelvis and back still.",
+        "supportAndPosture": "Keep your torso and pelvis supported on the table throughout the set.",
+        "disqualifyingCompensations": [
+          "Straightening the working knee during the lift turns the bent-knee hip extension into a straight-leg raise.",
+          "Rocking the pelvis or arching the back turns the isolated hip extension into a spine-driven back extension."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other leg."
+      }
     }
   ]
 }
