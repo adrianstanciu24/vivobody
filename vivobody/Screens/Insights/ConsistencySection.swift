@@ -2,11 +2,15 @@
 //  ConsistencySection.swift
 //  vivobody
 //
-//  Training rhythm at two honest time scales: a four-week cadence and
-//  RIR-coverage read, then a six-month calendar with weekly set trend.
-//  The current streak sits between them because it reads the full
-//  archive rather than either fixed window. Month and weekday anchors
-//  keep the compact heatmap calendar-readable on every device.
+//  Training rhythm as one card led by the calendar, not by prose. A
+//  slim stat strip (weekly cadence, days trained, average RIR) tops the
+//  card, the weekly-sets sparkline draws the six-month volume trend in
+//  bold orange, and the contribution heatmap is the section's main
+//  instrument with month and weekday anchors. RIR coverage shrinks to
+//  one legend line on the sparkline; the week streak moves to the
+//  section header's trailing status. Before any workout exists, a
+//  dormant canvas holds the same geometry while the first four recent
+//  workouts collect.
 //
 
 import Charts
@@ -22,196 +26,63 @@ struct ConsistencySection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
                 title: "Consistency",
-                trailing: consistencyBuildingLabel,
-                trailingIsInProgress: consistencyIsBuilding
+                trailing: trailingStatus,
+                trailingIsInProgress: isBuilding
             )
 
             if !report.hasActivity {
-                InsightBuildingCard(
-                    title: "Your training rhythm starts here",
-                    detail: "Complete a workout to start collecting training days, weekly set volume, and your four-week cadence.",
-                    progress: 0,
-                    progressLabel: "0/\(settledRhythmWorkouts) RECENT WORKOUTS",
-                    accessibilityProgress: "0 of \(settledRhythmWorkouts) recent workouts"
+                DormantSlotsCanvas(
+                    slotCount: settledRhythmWorkouts,
+                    filledSlots: report.recentSessions,
+                    legend: "\(report.recentSessions)/\(settledRhythmWorkouts) recent workouts",
+                    accessibilityLabel: "Consistency signal building. \(report.recentSessions) of \(settledRhythmWorkouts) recent workouts completed. Complete a workout to start the training calendar."
                 )
+                .frame(height: InsightChartCanvas.hero)
+                .padding(Space.xl)
+                .contentCard()
             } else {
-                recentRhythmCard
-
-                if report.weekStreak > 0 {
-                    streakChip
-                }
-
                 calendarCard
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var consistencyIsBuilding: Bool {
-        !report.hasActivity || report.recentSessions < settledRhythmWorkouts
-    }
+    // MARK: - Header status
 
-    private var consistencyBuildingLabel: String? {
+    private var trailingStatus: String {
         if !report.hasActivity { return "waiting for first workout" }
-        if report.recentSessions == 0 { return "recent rhythm waiting" }
         if report.recentSessions < settledRhythmWorkouts {
             return "\(report.recentSessions)/\(settledRhythmWorkouts) workouts"
         }
-        return nil
-    }
-
-    // MARK: - Recent rhythm
-
-    private var recentRhythmCard: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            cardHeading("Recent rhythm", timeframe: "last 4 weeks")
-
-            if report.hasRecentActivity {
-                StatStrip(
-                    stats: [
-                        Stat(
-                            value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
-                            label: "Workouts / wk"
-                        ),
-                        Stat(
-                            value: "\(report.recentSessions)",
-                            label: report.recentSessions == 1 ? "Workout" : "Workouts"
-                        ),
-                        Stat(
-                            value: report.averageRIR.map(formatRIR) ?? "—",
-                            label: "Avg RIR"
-                        ),
-                    ],
-                    valueFont: Typography.statValue,
-                    edgeAligned: true
-                )
-                .padding(.vertical, Space.xs)
-
-                if report.recentSessions < settledRhythmWorkouts {
-                    rhythmBuildingStatus
-                }
-
-                rirCoverage
-            } else {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    HStack(spacing: Space.sm) {
-                        BuildingSignalDot(size: 10)
-                        Text("Recent rhythm waiting")
-                            .font(Typography.title)
-                            .foregroundStyle(Ink.primary)
-                    }
-                    Text("Your six-month calendar is still shown below.")
-                        .font(Typography.body)
-                        .foregroundStyle(Ink.secondary)
-                }
-            }
+        if report.weekStreak > 0 {
+            return "\(report.weekStreak)-week streak"
         }
-        .padding(Space.xl)
-        .contentCard()
+        return "last 6 months"
     }
 
-    private var rhythmBuildingStatus: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                BuildingSignalDot()
-                Text("Rhythm taking shape")
-                    .panelLegendType()
-                    .foregroundStyle(Tint.inProgress)
-                Spacer(minLength: Space.sm)
-                Text("\(report.recentSessions)/\(settledRhythmWorkouts) WORKOUTS")
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.secondary)
-                    .monospacedDigit()
-            }
-
-            SegmentLadder(
-                fraction: Double(report.recentSessions) / Double(settledRhythmWorkouts),
-                segments: 20,
-                tint: Tint.inProgress,
-                height: 5,
-                spacing: 3
-            )
-
-            Text(earlyReadText)
-                .font(Typography.caption)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(Space.md)
-        .contentChip(tint: Tint.inProgress.opacity(0.07))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Rhythm taking shape. \(report.recentSessions) of \(settledRhythmWorkouts) recent workouts. \(earlyReadText)")
+    private var isBuilding: Bool {
+        !report.hasActivity || report.recentSessions < settledRhythmWorkouts
     }
 
-    private var rirCoverage: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
-            HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text("Reps in reserve coverage")
-                    .panelLegend()
-                Spacer(minLength: Space.sm)
-                Text(rirCoverageLabel)
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.secondary)
-                    .monospacedDigit()
-            }
-
-            SegmentLadder(
-                fraction: report.rirCoverage,
-                segments: 20,
-                tint: Tint.primary,
-                height: 5,
-                spacing: 2
-            )
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(rirCoverageAccessibilityLabel)
-    }
-
-    private var rirCoverageLabel: String {
-        guard report.rirEligibleSets > 0 else { return "No eligible rep sets" }
-        return "\(report.rirLoggedSets) of \(report.rirEligibleSets) sets"
-    }
-
-    private var rirCoverageAccessibilityLabel: String {
-        guard report.rirEligibleSets > 0 else {
-            return "Reps in reserve coverage: no eligible rep sets in the last 4 weeks"
-        }
-        return "Reps in reserve logged on \(report.rirLoggedSets) of \(report.rirEligibleSets) eligible sets in the last 4 weeks"
-    }
-
-    private var earlyReadText: String {
-        "Keep logging through this four-week window; cadence settles after four workouts."
-    }
-
-    private var streakChip: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-            Text("Current week streak")
-                .font(Typography.body)
-                .foregroundStyle(Ink.secondary)
-            Spacer(minLength: Space.sm)
-            Text(weekLabel(report.weekStreak))
-                .font(Typography.metricInline)
-                .foregroundStyle(Ink.primary)
-                .monospacedDigit()
-        }
-        .padding(.horizontal, Space.lg)
-        .frame(minHeight: 52)
-        .contentChip()
-        .accessibilityElement(children: .combine)
-    }
-
-    // MARK: - Six-month calendar
+    // MARK: - Calendar card
 
     private var calendarCard: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            cardHeading("Training calendar", timeframe: "last 6 months")
-
             StatStrip(
                 stats: [
-                    Stat(value: "\(activeWeeksInWindow)", label: "Active weeks"),
-                    Stat(value: "\(report.daysTrainedInWindow)", label: "Days trained"),
+                    Stat(
+                        value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
+                        label: "Workouts / wk"
+                    ),
+                    Stat(
+                        value: "\(report.daysTrainedInWindow)",
+                        label: "Days trained"
+                    ),
+                    Stat(
+                        value: report.averageRIR.map(formatRIR) ?? "—",
+                        label: "Avg RIR"
+                    ),
                 ],
-                valueFont: Typography.statValue,
                 edgeAligned: true
             )
             .padding(.vertical, Space.xs)
@@ -229,36 +100,12 @@ struct ConsistencySection: View {
         .contentCard()
     }
 
-    private func cardHeading(_ title: String, timeframe: String) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-            Text(title)
-                .font(Typography.sectionHeading)
-                .foregroundStyle(Ink.primary)
-            Spacer(minLength: Space.sm)
-            Text(timeframe)
-                .panelLegend()
-        }
-    }
-
-    private var activeWeeksInWindow: Int {
-        report.weeks.count(where: { week in
-            week.contains { $0.isInRange && $0.sets > 0 }
-        })
-    }
-
-    private func formatRIR(_ value: Double) -> String {
-        String(format: "%.1f", value)
-    }
-
-    private func weekLabel(_ count: Int) -> String {
-        "\(count) \(count == 1 ? "week" : "weeks")"
-    }
-
     // MARK: - Sets-per-week sparkline
 
     /// Completed set count per week across the same six-month window
     /// as the heatmap. The current partial week is omitted so a week
-    /// in progress never looks like a sudden drop in training.
+    /// in progress never looks like a sudden drop in training. The
+    /// legend's trailing token doubles as the RIR-coverage read.
     private var weeklyVolumeSpark: some View {
         let weekly = report.weeks.dropLast().enumerated().map { index, column in
             WeeklyVolumePoint(
@@ -271,7 +118,7 @@ struct ConsistencySection: View {
                 Text("Weekly sets")
                     .panelLegend()
                 Spacer()
-                Text("Last full week · \(setLabel(weekly.last?.sets ?? 0))")
+                Text(rirCoverageToken)
                     .panelLegend()
             }
             Chart(weekly) { point in
@@ -296,10 +143,15 @@ struct ConsistencySection: View {
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
-            .frame(height: 48)
+            .frame(height: InsightChartCanvas.compact)
             .accessibilityLabel(Text("Completed sets per week over the last six months"))
             .accessibilityValue(weeklySparkAccessibilityValue(weekly))
         }
+    }
+
+    private var rirCoverageToken: String {
+        guard report.rirEligibleSets > 0 else { return "no RIR-eligible sets" }
+        return "RIR \(report.rirLoggedSets)/\(report.rirEligibleSets) sets"
     }
 
     private func weeklySparkAccessibilityValue(
@@ -313,6 +165,10 @@ struct ConsistencySection: View {
 
     private func setLabel(_ count: Int) -> String {
         "\(count) \(count == 1 ? "set" : "sets")"
+    }
+
+    private func formatRIR(_ value: Double) -> String {
+        String(format: "%.1f", value)
     }
 
     // MARK: - Heatmap legend
@@ -337,7 +193,7 @@ struct ConsistencySection: View {
     }
 }
 
-/// One bar of the weekly-volume sparkline: total completed sets in a
+/// One point of the weekly-volume sparkline: total completed sets in a
 /// given week of the heatmap window.
 private struct WeeklyVolumePoint: Identifiable {
     var id: Int {

@@ -64,13 +64,10 @@ struct SignatureSection: View {
             }
 
             if !signature.hasSignature {
-                InsightBuildingCard(
-                    title: "Your signature starts here",
-                    detail: "Complete a strength set on an exercise with muscle targets. The six regions will take shape as you train.",
-                    progress: 0,
-                    progressLabel: "FIRST MUSCLE-MAPPED SET",
-                    accessibilityProgress: "Waiting for the first muscle-mapped strength set"
-                )
+                Text("waiting for the first muscle-mapped set")
+                    .panelLegend()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, Space.sm)
             } else {
                 Text(signature.identityLine.uppercased())
                     .font(Typography.metricInline)

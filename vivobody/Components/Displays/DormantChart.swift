@@ -11,7 +11,7 @@
 //  the next session lands. Text stays at legend level so the instrument
 //  itself carries the meaning.
 //
-//  Three primitives:
+//  Four primitives:
 //    • DormantSlotDot   — one point slot: filled, next (breathing), or
 //      empty.
 //    • DormantBaseline  — the flat dotted rule slots sit on. Dotted
@@ -20,6 +20,9 @@
 //      with zero or one real points plotted.
 //    • DormantTrendSlots — the e1RM readiness instrument: required
 //      workouts as slots, required day span as a hairline track.
+//    • DormantSlotsCanvas — the general Insights placeholder: ghost
+//      grid, N qualification slots on the baseline, and an optional
+//      span track, sized by the caller to match its live chart.
 //
 
 import SwiftUI
@@ -96,6 +99,69 @@ private struct DormantBaselineShape: Shape {
     }
 }
 
+// MARK: - Shared ghost chrome
+
+/// One hairline plot rule with an optional ghost unit glyph above it.
+private struct DormantGridRule: View {
+    var label: String? = nil
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            if let label {
+                Text(label)
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.quaternary)
+            }
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 0.5)
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+/// Bare ticks where a live chart prints dates — axis chrome as
+/// silhouette, with no invented values.
+private struct DormantGhostAxis: View {
+    var body: some View {
+        HStack {
+            ghostTick
+            Spacer()
+            ghostTick
+            Spacer()
+            ghostTick
+        }
+        .padding(.top, 6)
+        .accessibilityHidden(true)
+    }
+
+    private var ghostTick: some View {
+        Rectangle()
+            .fill(Surface.edge)
+            .frame(width: 14, height: 1)
+    }
+}
+
+/// A second requirement (day span, active weeks) as a hairline fill
+/// track: the track is structure, the orange fill is real progress.
+private struct DormantSpanTrack: View {
+    let fraction: Double
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Surface.edge)
+                Capsule()
+                    .fill(Tint.primary)
+                    .frame(width: max(0, min(1, fraction)) * proxy.size.width)
+            }
+        }
+        .frame(height: 2)
+        .accessibilityHidden(true)
+    }
+}
+
 /// Load/Volume placeholder with the live chart's geometry: same card,
 /// same 200pt canvas, same hairline grid. Zero sessions shows the first
 /// slot breathing on an empty baseline; one session plots its real
@@ -130,29 +196,15 @@ struct DormantChartCard: View {
 
     private var plotArea: some View {
         VStack(spacing: 0) {
-            gridRule(label: unitLabel)
+            DormantGridRule(label: unitLabel)
             Spacer()
-            gridRule(label: nil)
+            DormantGridRule()
             Spacer()
-            gridRule(label: nil)
+            DormantGridRule()
             Spacer()
             slotBaseline
-            ghostDateAxis
+            DormantGhostAxis()
         }
-    }
-
-    private func gridRule(label: String?) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
-            if let label {
-                Text(label)
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(Ink.quaternary)
-            }
-            Rectangle()
-                .fill(Surface.edge)
-                .frame(height: 0.5)
-        }
-        .accessibilityHidden(true)
     }
 
     private var slotBaseline: some View {
@@ -175,26 +227,6 @@ struct DormantChartCard: View {
                 }
             }
         }
-    }
-
-    /// Bare ticks where the live chart prints dates — axis chrome as
-    /// silhouette, with no invented values.
-    private var ghostDateAxis: some View {
-        HStack {
-            ghostDateTick
-            Spacer()
-            ghostDateTick
-            Spacer()
-            ghostDateTick
-        }
-        .padding(.top, 6)
-        .accessibilityHidden(true)
-    }
-
-    private var ghostDateTick: some View {
-        Rectangle()
-            .fill(Surface.edge)
-            .frame(width: 14, height: 1)
     }
 }
 
@@ -238,16 +270,80 @@ struct DormantTrendSlots: View {
     }
 
     private var spanTrack: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Surface.edge)
-                Capsule()
-                    .fill(Tint.primary)
-                    .frame(width: max(0, min(1, spanFraction)) * proxy.size.width)
+        DormantSpanTrack(fraction: spanFraction)
+    }
+}
+
+/// The general dormant chart: the same ghost grid, dotted baseline, and
+/// ghost ticks a live Insights chart draws, with qualification progress
+/// encoded as slots. Filled slots are real logged evidence; the next
+/// empty slot breathes to show where the next session lands. An optional
+/// hairline span track carries a second requirement (days elapsed,
+/// active weeks) beneath the slots. Sections place this at the exact
+/// canvas height of their live chart — same card, same padding — so the
+/// empty state and the populated state read as one instrument at
+/// different fill levels, never as an error box or invented sample data.
+struct DormantSlotsCanvas: View {
+    /// Total qualification slots (required sets, workouts, or weeks).
+    let slotCount: Int
+    /// Slots already filled by real logged evidence.
+    let filledSlots: Int
+    /// Micro legend above the plot, e.g. "2/6 SETS · 9/28 DAYS".
+    var legend: String? = nil
+    /// Optional second requirement as a hairline fill track (0...1).
+    var spanFraction: Double? = nil
+    /// One consolidated VoiceOver summary of what this instrument needs.
+    let accessibilityLabel: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            if let legend {
+                Text(legend)
+                    .panelLegend()
+            }
+
+            VStack(spacing: 0) {
+                DormantGridRule()
+                Spacer()
+                DormantGridRule()
+                Spacer()
+                DormantGridRule()
+                Spacer()
+                slotsBaseline
+                DormantGhostAxis()
+                if let spanFraction {
+                    DormantSpanTrack(fraction: spanFraction)
+                        .padding(.top, Space.sm)
+                }
+            }
+            .frame(maxHeight: .infinity)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var clampedFilled: Int {
+        max(0, min(filledSlots, max(slotCount, 1)))
+    }
+
+    private var slotsBaseline: some View {
+        ZStack(alignment: .leading) {
+            DormantBaseline()
+                .padding(.horizontal, 5)
+            HStack(spacing: 0) {
+                ForEach(0 ..< max(slotCount, 1), id: \.self) { index in
+                    if index > 0 { Spacer() }
+                    DormantSlotDot(state: slotState(for: index))
+                }
             }
         }
-        .frame(height: 2)
+        .padding(.vertical, 2)
+    }
+
+    private func slotState(for index: Int) -> DormantSlotState {
+        if index < clampedFilled { return .filled }
+        return index == clampedFilled ? .next : .empty
     }
 }
 
@@ -274,6 +370,16 @@ struct DormantTrendSlots: View {
                 DormantTrendSlots(filledSlots: 4, slotCount: 4, spanFraction: 0.5)
                     .padding(Space.xl)
                     .contentCard()
+                DormantSlotsCanvas(
+                    slotCount: 6,
+                    filledSlots: 2,
+                    legend: "2/6 SETS · 9/28 DAYS",
+                    spanFraction: 0.3,
+                    accessibilityLabel: "2 of 6 sets and 9 of 28 days collected"
+                )
+                .frame(height: 180)
+                .padding(Space.xl)
+                .contentCard()
             }
             .padding(Space.xxl)
         }
