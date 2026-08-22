@@ -200,6 +200,24 @@ struct AppRoot: View {
                         },
                         onScrubEnded: {
                             workout.saveSettledScrub(for: session.id)
+                        },
+                        onReplaceExercise: { exerciseID, item in
+                            let result = workout.replacePendingExercise(
+                                sessionID: session.id,
+                                exerciseID: exerciseID,
+                                with: item
+                            )
+                            let error: SaveErrorBox?
+                            if result == .saveFailed {
+                                error = workout.lastSaveError
+                                workout.lastSaveError = nil
+                            } else {
+                                error = nil
+                            }
+                            return ExerciseSubstitutionCommit(
+                                result: result,
+                                saveError: error
+                            )
                         }
                     )
                     .presentationDetents([.large])

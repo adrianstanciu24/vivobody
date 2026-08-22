@@ -1,0 +1,58 @@
+{
+  "name": "replace-active-exercise-blocked",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-partial"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Replace exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseReplacementBlocked"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseReplacementBlocked"
+    },
+    {
+      "identifier": "confirmExerciseReplacement",
+      "role": "AXButton",
+      "enabled": false
+    },
+    {
+      "label": "Replacing Barbell Bench Press"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifierContains": "replacementCandidate-",
+      "visible": true
+    }
+  ]
+}

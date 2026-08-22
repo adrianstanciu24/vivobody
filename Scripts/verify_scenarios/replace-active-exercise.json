@@ -1,0 +1,100 @@
+{
+  "name": "replace-active-exercise",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-replaceable"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Replace exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseSubstitutionSheet"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "replacementEquipment-dumbbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "replacementCandidate-dumbbell-bench-press",
+        "role": "AXButton",
+        "value": "Selected"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "confirmExerciseReplacement",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Dumbbell Bench Press"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Dumbbell Bench Press"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Barbell Bench Press",
+      "visible": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

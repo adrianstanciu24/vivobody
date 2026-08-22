@@ -9,9 +9,9 @@
 //  widgets, HealthKit, notifications) routes through
 //  SessionSideEffects so adding a future subscriber is one line.
 //
-//  Also owns active-draft persistence boundaries: semantic interactions
-//  save immediately, while scrubber detents remain in memory until the
-//  gesture, coast, or scene ends.
+//  Also owns active-draft persistence boundaries: semantic interactions save
+//  immediately and pending-exercise replacement is atomic. Scrubber detents
+//  remain in memory until the gesture, coast, or scene ends.
 //
 //  Also the single dispatch site for IncomingAction — the unified
 //  enum that normalizes every external entry point (URL scheme,
@@ -21,6 +21,17 @@
 import SwiftData
 import SwiftUI
 import UIKit
+
+enum ExerciseReplacementBlockReason: Equatable {
+    case staleSession, exerciseNotFound
+    case exerciseAlreadyStarted, persistenceUnavailable
+}
+
+enum ExerciseReplacementResult: Equatable {
+    case replaced(newExerciseID: UUID)
+    case blocked(ExerciseReplacementBlockReason)
+    case saveFailed
+}
 
 @MainActor
 @Observable
@@ -106,6 +117,53 @@ final class WorkoutSessionController {
             lastSaveError = SaveErrorBox(error)
             return false
         }
+    }
+
+    /// Replace a pending row atomically, retaining only its structural session placement.
+    @discardableResult
+    func replacePendingExercise(
+        sessionID: UUID,
+        exerciseID: UUID,
+        with item: ExerciseCatalogItem
+    ) -> ExerciseReplacementResult {
+        guard pendingDiscardSession == nil,
+              let session = activeSession,
+              session.id == sessionID,
+              session.completedAt == nil
+        else { return .blocked(.staleSession) }
+        guard let context = modelContext else { return .blocked(.persistenceUnavailable) }
+        guard let sourceIndex = session.exercises.firstIndex(where: { $0.id == exerciseID })
+        else { return .blocked(.exerciseNotFound) }
+
+        let source = session.exercises[sourceIndex]
+        guard !source.sets.contains(where: \.isCompleted) else {
+            return .blocked(.exerciseAlreadyStarted)
+        }
+
+        let activeExerciseIndex = session.activeExerciseIndex
+        let history = resolvedExerciseHistory()?[item.historyKey]
+        let liveSetCount = source.orderedSets.count
+        let requestedSetCount = liveSetCount > 0 ? liveSetCount : source.plannedSets
+        let replacement = Exercise.replacement(
+            from: item,
+            history: history,
+            requestedSetCount: requestedSetCount,
+            sortOrder: source.sortOrder
+        )
+        replacement.supersetID = source.supersetID
+        session.exercises.remove(at: sourceIndex)
+        session.exercises.append(replacement)
+        session.activeExerciseIndex = activeExerciseIndex
+        context.delete(source)
+
+        guard persistActiveSessionChanges(for: sessionID, event: .updated) else {
+            session.exercises.removeAll { $0.id == replacement.id }
+            session.exercises.append(source)
+            session.activeExerciseIndex = activeExerciseIndex
+            context.rollback()
+            return .saveFailed
+        }
+        return .replaced(newExerciseID: replacement.id)
     }
 
     // MARK: - Rest expiry

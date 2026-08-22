@@ -401,6 +401,55 @@ extension WorkoutSession {
 /// sample plan. Every method returns fresh @Model instances that are
 /// not inserted into a context; callers attach them to a session.
 extension Exercise {
+    /// Build a replacement row for an active session without accepting the
+    /// source Exercise as input. Candidate metadata and working values can
+    /// therefore come only from the selected catalog item and its compatible
+    /// completed history; the controller separately restores session structure.
+    static func replacement(
+        from item: ExerciseCatalogItem,
+        history summary: ExerciseHistorySummary?,
+        requestedSetCount: Int,
+        sortOrder: Int
+    ) -> Exercise {
+        let exercise = Exercise(from: item, sortOrder: sortOrder)
+        let compatibleHistory = summary?.mostRecentInstance(
+            matching: item.performanceSignature
+        )?.completedSetPrescription ?? []
+        let fallback = ExerciseSetPrescription(
+            weight: item.defaultWeightSeed,
+            reps: item.defaultReps,
+            duration: item.defaultDuration
+        )
+        let first = compatibleHistory.first ?? fallback
+        // A replacement must remain actionable. Live relationship rows are
+        // authoritative at the controller boundary; this final floor also
+        // recovers malformed legacy exercises with no live or planned rows.
+        let setCount = max(1, requestedSetCount)
+
+        exercise.sets.removeAll()
+        exercise.plannedSets = setCount
+        exercise.plannedWeight = first.weight
+        exercise.plannedReps = first.reps
+        exercise.plannedDuration = first.duration
+        for index in 0 ..< setCount {
+            let seed = compatibleHistory.isEmpty
+                ? fallback
+                : compatibleHistory[min(index, compatibleHistory.count - 1)]
+            exercise.sets.append(
+                WorkoutSet(
+                    weight: seed.weight,
+                    reps: seed.reps,
+                    duration: seed.duration,
+                    sortOrder: index,
+                    plannedWeight: seed.weight,
+                    plannedReps: seed.reps,
+                    plannedDuration: seed.duration
+                )
+            )
+        }
+        return exercise
+    }
+
     /// Build a fresh exercise from a catalog selection. When the user
     /// has logged the same exercise before, mirror that most recent
     /// set structure and working values; otherwise use catalog
@@ -419,7 +468,7 @@ extension Exercise {
 
         let exercise = Exercise(from: item, sortOrder: sortOrder)
         exercise.sets.removeAll()
-        exercise.plannedSets = 0
+        exercise.plannedSets = prescription.count
         exercise.plannedReps = prescription[0].reps
         exercise.plannedWeight = prescription[0].weight
         exercise.plannedDuration = prescription[0].duration

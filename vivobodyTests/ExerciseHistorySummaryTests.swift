@@ -41,7 +41,7 @@ struct ExerciseHistorySummaryTests {
                 )
             )
         }
-        let date = baseDate.addingTimeInterval(daysAfterBase * 86_400)
+        let date = baseDate.addingTimeInterval(daysAfterBase * 86400)
         let session = WorkoutSession(exercises: [exercise], startedAt: date)
         session.completedAt = date
         return session
@@ -138,6 +138,7 @@ struct ExerciseHistorySummaryTests {
         )
 
         #expect(exercise.sortOrder == 4)
+        #expect(exercise.plannedSets == 2)
         #expect(exercise.orderedSets.count == 2)
         #expect(exercise.orderedSets[0].weight == 150)
         #expect(exercise.orderedSets[1].reps == 8)

@@ -106,6 +106,7 @@ import VivoKit
         }
 
         static func seedIfRequested(in context: ModelContext) {
+            seedExerciseSubstitutionIfRequested(in: context)
             if CommandLine.arguments.contains("--ui-test-active-partial") {
                 seedActivePartial(in: context)
             }
@@ -139,8 +140,7 @@ import VivoKit
             if CommandLine.arguments.contains("--ui-test-scheduled-template") {
                 seedScheduledTemplate(in: context)
             }
-            // Seeds the same App Group mailbox value written by the widget intent.
-            // AppRoot then consumes it through IncomingActionParser on this launch,
+            // Seeds the widget mailbox; AppRoot consumes it through IncomingActionParser,
             // exercising the real app-side handoff and normal SwiftData start path.
             if CommandLine.arguments.contains("--ui-test-widget-start-request") {
                 UserDefaults(suiteName: WidgetShared.appGroup)?.set(

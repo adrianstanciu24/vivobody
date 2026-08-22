@@ -1,0 +1,82 @@
+{
+  "name": "exercise-substitution-sheet",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-replaceable"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeExerciseOptionsButton",
+        "role": "AXPopUpButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Replace exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "exerciseSubstitutionSheet"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "replacementEquipment-dumbbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "replacementCandidate-dumbbell-bench-press",
+        "role": "AXButton",
+        "value": "Selected"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "exerciseSubstitutionSheet",
+      "label": "Replacing Barbell Bench Press",
+      "role": "AXHeading"
+    },
+    {
+      "identifier": "replacementEquipment-dumbbell",
+      "role": "AXButton",
+      "value": "Selected"
+    },
+    {
+      "identifier": "replacementCandidate-dumbbell-bench-press",
+      "role": "AXButton",
+      "value": "Selected",
+      "labelContains": "Changes equipment from barbell to dumbbell."
+    },
+    {
+      "identifier": "confirmExerciseReplacement",
+      "label": "Replace Barbell Bench Press with Dumbbell Bench Press",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "exerciseReplacementBlocked",
+      "visible": true
+    }
+  ]
+}

@@ -42,10 +42,10 @@ struct ActiveExerciseCard: View {
     let exercise: Exercise
     @Bindable var session: WorkoutSession
 
-    /// Production wiring routes all persistence through the session-
-    /// lifetime controller. Defaults keep standalone previews usable.
+    /// Production persistence routes through the session-lifetime controller.
     var onImmediateUpdate: (() -> Void)? = nil
     var onScrubEnded: (() -> Void)? = nil
+    var onReplaceRequested: (() -> Void)? = nil
     /// Parent-owned cancellation generation for archive/discard/minimize.
     var scrubCancellationID: Int = 0
 
@@ -115,8 +115,8 @@ struct ActiveExerciseCard: View {
             }
         }
         .contentShape(Rectangle())
-        .opacity(session.isAllComplete ? 0.45 : 1.0)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.6), value: session.isAllComplete)
+        .opacity(session.isAllComplete && !sets.isEmpty ? 0.45 : 1.0)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.6), value: session.isAllComplete && !sets.isEmpty)
         .sheet(item: $editingSet) { set in
             EditSetSheet(
                 set: set,

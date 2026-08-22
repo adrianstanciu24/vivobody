@@ -46,6 +46,8 @@ struct ActiveWorkoutScreen: View {
     /// and settled scrubs share the session lifetime. Nil in previews.
     private let onSessionUpdate: (() -> Void)?
     private let onScrubEnded: (() -> Void)?
+    private let onReplaceExercise:
+        ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)?
 
     /// Drives the discard confirmation alert.
     @State private var showDiscardConfirm: Bool = false
@@ -63,6 +65,11 @@ struct ActiveWorkoutScreen: View {
     /// separate empty-workout screen.
     @State private var showAddExercisePicker: Bool = false
 
+    /// Value snapshot for the nested replacement sheet. It deliberately
+    /// retains no live Exercise reference because a successful commit deletes
+    /// that model before the sheet finishes dismissing.
+    @State private var substitutionTarget: ExerciseSubstitutionTarget?
+
     @AppStorage(SettingsKey.weightUnit)
     private var unitRaw: String = SettingsDefaults.weightUnit
 
@@ -75,7 +82,9 @@ struct ActiveWorkoutScreen: View {
         onDismiss: (() -> Void)? = nil,
         onDiscard: (() -> Void)? = nil,
         onSessionUpdate: (() -> Void)? = nil,
-        onScrubEnded: (() -> Void)? = nil
+        onScrubEnded: (() -> Void)? = nil,
+        onReplaceExercise:
+        ((UUID, ExerciseCatalogItem) -> ExerciseSubstitutionCommit)? = nil
     ) {
         _session = State(wrappedValue: session)
         _showAddExercisePicker = State(
@@ -85,6 +94,7 @@ struct ActiveWorkoutScreen: View {
         self.onDiscard = onDiscard
         self.onSessionUpdate = onSessionUpdate
         self.onScrubEnded = onScrubEnded
+        self.onReplaceExercise = onReplaceExercise
     }
 
     var body: some View {
@@ -166,6 +176,13 @@ struct ActiveWorkoutScreen: View {
                 onPick: appendExercise
             )
         }
+        .sheet(item: $substitutionTarget) { target in
+            ExerciseSubstitutionSheet(
+                target: target,
+                onReplace: { item in replaceExercise(target, with: item) }
+            )
+            .id(target.id)
+        }
         .saveErrorAlert($saveError)
     }
 
@@ -244,12 +261,13 @@ struct ActiveWorkoutScreen: View {
                     HStack(spacing: Space.sm) {
                         workoutTitle
                         Spacer(minLength: Space.sm)
-                        if onDiscard != nil { discardButton }
                     }
                     if !isEmpty {
                         HStack(spacing: Space.sm) {
                             Spacer(minLength: Space.sm)
                             addButton
+                            exerciseOptionsButton
+                            if onDiscard != nil { discardButton }
                         }
                     }
                 }
@@ -258,6 +276,7 @@ struct ActiveWorkoutScreen: View {
                     workoutTitle
                     Spacer(minLength: Space.sm)
                     if !isEmpty { addButton }
+                    exerciseOptionsButton
                     if onDiscard != nil { discardButton }
                 }
             }
@@ -294,6 +313,39 @@ struct ActiveWorkoutScreen: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Add an exercise")
+    }
+
+    /// Exercise-scoped secondary actions sit with the workout chrome rather
+    /// than competing with the exercise name. The neutral glass pill matches
+    /// Add Exercise and preserves the existing 44pt semantic target.
+    @ViewBuilder
+    private var exerciseOptionsButton: some View {
+        if let exercise = activeExercise,
+           hasOptions(for: exercise)
+        {
+            let linked = session.isInSuperset(exercise)
+            Menu {
+                ExerciseOptionsMenuContent(
+                    exercise: exercise,
+                    session: session,
+                    onReplace: onReplaceExercise == nil
+                        ? nil
+                        : { beginReplacement(of: exercise) },
+                    onLinkWithNext: { linkWithNextExercise(exercise) },
+                    onUnlink: { unlinkFromSuperset(exercise) }
+                )
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(Typography.sectionHeading)
+                    .foregroundStyle(linked ? Tint.inProgress : Ink.secondary)
+                    .frame(width: 48, height: 32)
+                    .coloredGlassControl(cornerRadius: Radius.pill)
+                    .frame(minHeight: Space.tapMin)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel("Exercise options")
+            .accessibilityIdentifier("activeExerciseOptionsButton")
+        }
     }
 
     private var discardButton: some View {
@@ -338,8 +390,12 @@ struct ActiveWorkoutScreen: View {
                     session: session,
                     onImmediateUpdate: onSessionUpdate,
                     onScrubEnded: onScrubEnded,
+                    onReplaceRequested: onReplaceExercise == nil
+                        ? nil
+                        : { beginReplacement(of: exercises[i]) },
                     scrubCancellationID: scrubCancellationID
                 )
+                .id(exercises[i].id)
             } else {
                 WorkoutSummaryCard(
                     session: session,
@@ -366,6 +422,28 @@ struct ActiveWorkoutScreen: View {
         session.orderedExercises.isEmpty
     }
 
+    private var activeExercise: Exercise? {
+        let exercises = session.orderedExercises
+        guard exercises.indices.contains(session.activeExerciseIndex) else {
+            return nil
+        }
+        return exercises[session.activeExerciseIndex]
+    }
+
+    private func hasOptions(for exercise: Exercise) -> Bool {
+        onReplaceExercise != nil
+            || session.isInSuperset(exercise)
+            || canLinkWithNext(exercise)
+    }
+
+    private func canLinkWithNext(_ exercise: Exercise) -> Bool {
+        let exercises = session.orderedExercises
+        guard let index = exercises.firstIndex(where: { $0.id == exercise.id }),
+              index + 1 < exercises.count
+        else { return false }
+        return !SupersetGrouping.isSeamLinked(at: index, in: exercises)
+    }
+
     private var isBlockingOverlayPresented: Bool {
         session.isResting || session.pendingPRValue != nil
     }
@@ -382,6 +460,42 @@ struct ActiveWorkoutScreen: View {
         if isEmpty {
             finishScrubbing(then: onDiscard)
         }
+    }
+
+    private func beginReplacement(of exercise: Exercise) {
+        guard onReplaceExercise != nil else { return }
+        finishScrubbing()
+        showAddExercisePicker = false
+        substitutionTarget = ExerciseSubstitutionTarget(exercise)
+    }
+
+    private func replaceExercise(
+        _ target: ExerciseSubstitutionTarget,
+        with item: ExerciseCatalogItem
+    ) -> ExerciseSubstitutionCommit {
+        guard let onReplaceExercise else {
+            return ExerciseSubstitutionCommit(
+                result: .blocked(.persistenceUnavailable),
+                saveError: nil
+            )
+        }
+        return onReplaceExercise(target.id, item)
+    }
+
+    private func linkWithNextExercise(_ exercise: Exercise) {
+        let exercises = session.orderedExercises
+        guard let index = exercises.firstIndex(where: { $0.id == exercise.id }),
+              index + 1 < exercises.count
+        else { return }
+        SupersetGrouping.linkSeam(at: index, in: exercises)
+        saveActiveSessionChanges()
+        Haptics.soft()
+    }
+
+    private func unlinkFromSuperset(_ exercise: Exercise) {
+        SupersetGrouping.unlink(exercise, in: session.orderedExercises)
+        saveActiveSessionChanges()
+        Haptics.soft()
     }
 
     /// Invalidate all child coast tasks before a lifecycle transition. A

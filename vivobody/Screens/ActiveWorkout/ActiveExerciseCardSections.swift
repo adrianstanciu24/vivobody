@@ -17,93 +17,29 @@ extension ActiveExerciseCard {
     // MARK: - Name + pips
 
     var nameRow: some View {
-        HStack(alignment: .top, spacing: Space.sm) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                // The shared ribbon that couples linked cards: same volt
-                // tag ("Superset · A1" / "· A2") on every member, using
-                // the lifter-standard notation.
-                if let tag = session.supersetTag(for: exercise) {
-                    Text("Superset · \(tag)")
-                        .panelLegendType()
-                        .foregroundStyle(Tint.inProgress)
-                        .accessibilityLabel("Superset, position \(tag)")
-                }
-                Text(exercise.name)
-                    .font(Typography.display)
-                    .foregroundStyle(Ink.primary)
-                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
-                    .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityAddTraits(.isHeader)
+        VStack(alignment: .leading, spacing: Space.xs) {
+            // The shared ribbon that couples linked cards: same volt
+            // tag ("Superset · A1" / "· A2") on every member, using
+            // the lifter-standard notation.
+            if let tag = session.supersetTag(for: exercise) {
+                Text("Superset · \(tag)")
+                    .panelLegendType()
+                    .foregroundStyle(Tint.inProgress)
+                    .accessibilityLabel("Superset, position \(tag)")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-            // Long-press on the identity is the power-user shortcut to
-            // the same menu the chain glyph anchors visibly.
-            .contextMenu { supersetMenu }
-
-            supersetMenuButton
+            Text(exercise.name)
+                .font(Typography.display)
+                .foregroundStyle(Ink.primary)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 2)
+                .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 0.7 : 0.82)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
         }
-    }
-
-    /// The visible anchor for superset management — a chain glyph at
-    /// the card's top-trailing corner, one tap pops the menu. Dim when
-    /// unlinked (an invitation), volt when linked (matches the ribbon).
-    /// Hidden on the last card when unlinked: nothing to link with.
-    @ViewBuilder
-    var supersetMenuButton: some View {
-        let linked = session.isInSuperset(exercise)
-        if linked || exerciseIndex + 1 < session.orderedExercises.count {
-            Menu {
-                supersetMenu
-            } label: {
-                Image(systemName: "link")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(linked ? Tint.inProgress : Ink.quaternary)
-                    .frame(width: Space.tapMin, height: Space.tapMin)
-                    .contentShape(Rectangle())
-            }
-            .accessibilityLabel(linked ? "Superset options" : "Link as superset")
-        }
-    }
-
-    /// Long-press menu on the exercise name — mid-workout superset
-    /// management. Linking with the next exercise creates (or extends)
-    /// a group; a grouped exercise can step back out.
-    @ViewBuilder
-    var supersetMenu: some View {
-        let exercises = session.orderedExercises
-        let idx = exerciseIndex
-        if idx + 1 < exercises.count,
-           !SupersetGrouping.isSeamLinked(at: idx, in: exercises)
-        {
-            Button {
-                linkWithNextExercise()
-            } label: {
-                Label("Superset with \(exercises[idx + 1].name)", systemImage: "link")
-            }
-        }
-        if session.isInSuperset(exercise) {
-            Button {
-                unlinkFromSuperset()
-            } label: {
-                Label("Remove from superset", systemImage: "minus.circle")
-            }
-        }
-    }
-
-    func linkWithNextExercise() {
-        let exercises = session.orderedExercises
-        guard exerciseIndex + 1 < exercises.count else { return }
-        SupersetGrouping.linkSeam(at: exerciseIndex, in: exercises)
-        saveActiveSessionChanges()
-        Haptics.soft()
-    }
-
-    func unlinkFromSuperset() {
-        SupersetGrouping.unlink(exercise, in: session.orderedExercises)
-        saveActiveSessionChanges()
-        Haptics.soft()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        // The top bar owns the visible options pill; long-pressing the
+        // exercise identity remains the power-user shortcut to the same menu.
+        .contextMenu { exerciseMenu }
     }
 
     var setPips: some View {
@@ -268,7 +204,9 @@ extension ActiveExerciseCard {
         VStack(alignment: .leading, spacing: Space.sm) {
             exerciseConfigurationRow
 
-            if session.activeSet(for: exercise) != nil {
+            if sets.isEmpty {
+                emptyExerciseHero
+            } else if session.activeSet(for: exercise) != nil {
                 switch exercise.trackingMode {
                 case .reps: repsHero
                 case .duration: durationHero
@@ -557,80 +495,6 @@ extension ActiveExerciseCard {
         }
     }
 
-    /// Exercise finished — show the top set, locked in gold, static.
-    @ViewBuilder
-    var completedHero: some View {
-        let top = sets.last(where: { $0.isCompleted }) ?? sets.last
-        switch exercise.trackingMode {
-        case .reps:
-            completedRepsHero(top)
-        case .duration:
-            completedDurationHero(top)
-        }
-    }
-
-    func completedRepsHero(_ top: WorkoutSet?) -> some View {
-        let weightText = top.flatMap {
-            exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
-        } ?? "—"
-        let repsText = top.map { "\($0.reps)" } ?? "—"
-        return VStack(alignment: .leading, spacing: Space.sm) {
-            Text(weightText)
-                .font(.system(size: 104, weight: .bold))
-                .foregroundStyle(Tint.complete)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.35)
-            HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                Text("×")
-                    .font(Typography.statValue)
-                    .foregroundStyle(Ink.quaternary)
-                    .accessibilityHidden(true)
-                Text(repsText)
-                    .font(Typography.metricLg)
-                    .foregroundStyle(Tint.complete.opacity(Opacity.strong))
-                    .monospacedDigit()
-                Text("reps")
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
-            }
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    func completedDurationHero(_ top: WorkoutSet?) -> some View {
-        let timeText = top.map { DurationFormatter.string($0.duration) } ?? "—"
-        let loadText = top.flatMap {
-            exercise.loadMode.summaryLoadLabel($0.weight, unit: unit)
-        }
-        let accessibilityLoad = top.flatMap {
-            exercise.loadMode.accessibilityLoadDescription($0.weight, unit: unit)
-        }
-        return VStack(alignment: .leading, spacing: Space.sm) {
-            Text(exercise.modality.durationLabel)
-                .panelLegend()
-            Text(timeText)
-                .font(.system(size: 104, weight: .bold))
-                .foregroundStyle(Tint.complete)
-                .monospacedDigit()
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-            if let loadText {
-                HStack(alignment: .lastTextBaseline, spacing: Space.sm) {
-                    Text(loadText)
-                        .font(Typography.metricLg)
-                        .foregroundStyle(Tint.complete.opacity(Opacity.strong))
-                        .monospacedDigit()
-                }
-            }
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            "\(exercise.modality.durationLabel) \(timeText)"
-                + (accessibilityLoad.map { ", \($0)" } ?? "")
-        )
-    }
-
     // MARK: - RIR
 
     /// Reps-in-reserve pill — lit for dynamic-strength reps only, but
@@ -645,11 +509,13 @@ extension ActiveExerciseCard {
         if exercise.trackingMode == .reps {
             let isLive = exercise.modality == .dynamicStrength
                 && session.activeSet(for: exercise) != nil
-            RIRSelector(value: rirBinding)
-                .padding(.bottom, Space.md)
-                .opacity(isLive ? 1 : 0)
-                .allowsHitTesting(isLive)
-                .accessibilityHidden(!isLive)
+            if isLive {
+                RIRSelector(value: rirBinding)
+                    .padding(.bottom, Space.md)
+            } else {
+                RIRControlPlaceholder()
+                    .padding(.bottom, Space.md)
+            }
         }
     }
 
@@ -695,47 +561,14 @@ extension ActiveExerciseCard {
             }
         )
     }
+}
 
-    // MARK: - Action
+private struct RIRControlPlaceholder: View {
+    @ScaledMetric(relativeTo: .body) private var height: CGFloat = Space.rowMin + Space.md
 
-    @ViewBuilder
-    var actionArea: some View {
-        if let active = session.activeSet(for: exercise) {
-            let isLastSet = activeIndex == sets.count - 1
-            let durationAccessibilityLabel = "\(exercise.modality.durationLabel) \(DurationFormatter.string(active.duration))"
-                + (exercise.loadMode.accessibilityLoadDescription(active.weight, unit: unit)
-                    .map { ", \($0)" } ?? "")
-            SetCompleteButton(
-                reps: active.reps,
-                weight: active.weight,
-                loadMode: exercise.loadMode,
-                isComplete: pendingCompletionSetID == active.id,
-                intensity: isLastSet ? .peak : .standard,
-                title: completeTitle(isLastSet: isLastSet),
-                accessibilityLabelOverride: exercise.trackingMode == .duration
-                    ? durationAccessibilityLabel
-                    : nil,
-                onToggle: { handleSetToggle(active) }
-            )
-            .accessibilityIdentifier("completeSetButton")
-        } else {
-            // Panel discipline: the completion line occupies exactly
-            // the SetCompleteButton's 96pt slot, so finishing an
-            // exercise changes what's lit — never where things sit.
-            HStack(alignment: .firstTextBaseline) {
-                Text("Exercise complete")
-                    .font(Typography.title)
-                    .foregroundStyle(Tint.complete)
-                Spacer()
-                Text("Swipe for next  →")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(Ink.tertiary)
-            }
-            .frame(
-                minHeight: dynamicTypeSize.isAccessibilitySize ? 96 : 72,
-                idealHeight: 96,
-                maxHeight: dynamicTypeSize.isAccessibilitySize ? .infinity : 96
-            )
-        }
+    var body: some View {
+        Color.clear
+            .frame(height: height)
+            .accessibilityHidden(true)
     }
 }

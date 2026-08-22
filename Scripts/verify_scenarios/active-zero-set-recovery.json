@@ -1,0 +1,120 @@
+{
+  "name": "active-zero-set-recovery",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-zero-set"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "emptyExerciseState",
+            "label": "No sets",
+            "role": "AXHeading"
+          },
+          {
+            "identifier": "addFirstSetButton",
+            "label": "Add a set",
+            "role": "AXButton",
+            "enabled": true
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Exercise complete",
+            "visible": true
+          },
+          {
+            "label": "Reps in reserve",
+            "role": "AXSlider",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 3
+      }
+    },
+    {
+      "tap": {
+        "identifier": "addFirstSetButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "completeSetButton",
+          "role": "AXButton"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": ["--ui-test-active-zero-set"]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 3
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "emptyExerciseState",
+      "label": "No sets",
+      "role": "AXHeading"
+    },
+    {
+      "identifier": "addFirstSetButton",
+      "label": "Add a set",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "Exercise complete",
+      "visible": true
+    },
+    {
+      "label": "Reps in reserve",
+      "role": "AXSlider",
+      "visible": true
+    }
+  ]
+}
