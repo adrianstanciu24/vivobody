@@ -2,20 +2,14 @@
 //  StartWorkoutSheet.swift
 //  vivobody
 //
-//  The single entry point for beginning a workout. Presented from the
-//  pinned "+ Start" pill on the Today screen so the 3D body model can
-//  own the whole hero without start buttons crowding it.
+//  The single chooser for beginning a workout from Today. The pinned
+//  Start Workout action always presents it, keeping the body-model hero
+//  free of competing controls.
 //
-//  Lists every start path in priority order:
-//    1. Repeat last workout — the most common case, so it's the
-//       prominent orange CTA at the top (only when there's a session
-//       to repeat).
-//    2. Start from — Start fresh and every saved template share one
-//       outlined-tile shell so the start paths read as a single
-//       family of buttons rather than buttons-then-a-nav-list. When
-//       there's no session to repeat, Start fresh promotes itself to
-//       the prominent orange CTA so the sheet always has one anchor.
-//       Templates are most-recently-used first (the caller pre-sorts).
+//  One prominent action reflects the most relevant start path: today's
+//  scheduled plan first, otherwise Repeat Last, otherwise Start Fresh.
+//  Fresh, repeat, and remaining saved templates sit below as one neutral
+//  family. The featured scheduled template is never listed twice.
 //
 //  The sheet never starts the workout directly: it reports the chosen
 //  intent to the caller and dismisses itself. TodayScreen runs the
@@ -44,9 +38,25 @@ struct StartWorkoutSheet: View {
     /// Saved templates, pre-sorted most-recently-used first.
     let templates: [WorkoutTemplate]
 
+    /// Today's schedule-driven recommendation, when one is due. It becomes
+    /// the sheet's prominent action and is removed from the alternate list.
+    let scheduledTemplate: WorkoutTemplate?
+
     /// Reports the chosen start path back to the caller. The caller is
     /// expected to defer the actual start until this sheet dismisses.
     let onSelect: (StartIntent) -> Void
+
+    init(
+        lastSession: WorkoutSession?,
+        templates: [WorkoutTemplate],
+        scheduledTemplate: WorkoutTemplate? = nil,
+        onSelect: @escaping (StartIntent) -> Void
+    ) {
+        self.lastSession = lastSession
+        self.templates = templates
+        self.scheduledTemplate = scheduledTemplate
+        self.onSelect = onSelect
+    }
 
     @Environment(\.dismiss) private var dismiss
 
@@ -57,7 +67,9 @@ struct StartWorkoutSheet: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: Space.section) {
-                        if lastSession != nil {
+                        if let scheduledTemplate {
+                            scheduledSection(scheduledTemplate)
+                        } else if lastSession != nil {
                             repeatSection
                         }
                         startFromSection
@@ -85,6 +97,23 @@ struct StartWorkoutSheet: View {
 
     // MARK: - Sections
 
+    /// The plan due today is the sheet's one visual anchor. "Plan" is the
+    /// user's concept; the authored template name remains visible underneath.
+    private func scheduledSection(_ template: WorkoutTemplate) -> some View {
+        PrimaryActionButton(
+            title: "Start Today's Plan",
+            subtitle: template.name,
+            icon: nil,
+            inputLabels: ["Start Today's Plan", "Start Plan", "Start Workout"],
+            sound: .commit
+        ) {
+            select(.template(template))
+        }
+        .accessibilityLabel("Start today's plan, \(template.name)")
+        .accessibilityHint("Starts the workout scheduled for today")
+        .accessibilityIdentifier("scheduledWorkoutStartButton")
+    }
+
     /// The single prominent action: repeat the most recent workout.
     /// No "last time" header or plan summary — the CTA carries the
     /// meaning on its own.
@@ -95,17 +124,27 @@ struct StartWorkoutSheet: View {
         .accessibilityHint("Starts a workout matching your last session")
     }
 
-    /// Every other way to start, as one family of tiles. Start Fresh
-    /// leads; the saved templates follow. When there's no session to
-    /// repeat, Start Fresh promotes itself to the prominent orange CTA
-    /// so the sheet always has exactly one anchor.
+    /// Every remaining way to start, as one family of tiles. Without a
+    /// scheduled plan or history, Start Fresh promotes itself so the sheet
+    /// still has exactly one visual anchor.
     private var startFromSection: some View {
         VStack(alignment: .leading, spacing: Space.md) {
-            SectionHeader(title: lastSession == nil ? "Start from" : "Or start from")
+            SectionHeader(title: startFromTitle)
 
             GlassEffectContainer(spacing: Space.md) {
                 VStack(spacing: Space.md) {
-                    if lastSession == nil {
+                    if scheduledTemplate != nil, lastSession != nil {
+                        startTile(
+                            title: "Repeat Last Workout",
+                            icon: "arrow.counterclockwise",
+                            accessibility: "Repeat last workout"
+                        ) {
+                            select(.repeatLast)
+                        }
+                        .accessibilityHint("Starts a workout matching your last session")
+                    }
+
+                    if lastSession == nil, scheduledTemplate == nil {
                         PrimaryActionButton(title: "Start Fresh", icon: "plus", inputLabels: ["Start Fresh", "Fresh", "New Workout"]) {
                             select(.fresh)
                         }
@@ -114,7 +153,7 @@ struct StartWorkoutSheet: View {
                         startTile(
                             title: "Start Fresh",
                             icon: "plus",
-                            accessibility: "Start a fresh workout"
+                            accessibility: "Start Fresh"
                         ) {
                             select(.fresh)
                         }
@@ -122,7 +161,7 @@ struct StartWorkoutSheet: View {
                         .accessibilityInputLabels([Text("Start Fresh"), Text("Fresh"), Text("New Workout")])
                     }
 
-                    ForEach(templates, id: \.id) { template in
+                    ForEach(alternateTemplates, id: \.id) { template in
                         startTile(
                             title: template.name,
                             subtitle: templateSubtitle(template),
@@ -195,6 +234,16 @@ struct StartWorkoutSheet: View {
 
     // MARK: - Helpers
 
+    private var startFromTitle: String {
+        if scheduledTemplate != nil { return "Other options" }
+        return lastSession == nil ? "Start from" : "Or start from"
+    }
+
+    private var alternateTemplates: [WorkoutTemplate] {
+        guard let scheduledTemplate else { return templates }
+        return templates.filter { $0.id != scheduledTemplate.id }
+    }
+
     /// Reports the pick to the caller, then dismisses. The caller
     /// performs the actual start once this sheet is gone.
     private func select(_ intent: StartIntent) {
@@ -253,5 +302,15 @@ private func sampleTemplates() -> [WorkoutTemplate] {
 
 #Preview("No last session") {
     StartWorkoutSheet(lastSession: nil, templates: sampleTemplates()) { _ in }
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Today's plan") {
+    let templates = sampleTemplates()
+    StartWorkoutSheet(
+        lastSession: WorkoutSession(),
+        templates: templates,
+        scheduledTemplate: templates.first
+    ) { _ in }
         .preferredColorScheme(.dark)
 }

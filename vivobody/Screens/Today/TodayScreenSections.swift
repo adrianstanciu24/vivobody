@@ -3,8 +3,12 @@
 //  vivobody
 //
 //  Section view builders extracted from TodayScreen: the
-//  body-model hero + caption, the Up Next recommendation card,
-//  and the consistency / last-workout journal sections.
+//  body-model hero + compact key, the navigable Up Next preview,
+//  training-load drill-out, and completed-workout journal sections.
+//  The preview never starts a workout itself: the bottom safe-area bar
+//  owns the one primary action, while the chooser resolves scheduled and
+//  alternate starts. Journal builders are only composed when a completed
+//  session exists.
 //
 
 import SwiftData
@@ -42,20 +46,12 @@ extension TodayScreen {
         }
     }
 
-    /// The always-visible key for the continuous development ramp.
-    /// Five semantic labels make it glanceable without presenting a
-    /// noisy percentage as physiological precision.
+    /// Five semantic bands keep the development key glanceable without false precision.
     var figureCaption: some View {
         developmentLegend
     }
 
-    /// The readiness section: how ready you are to train again, drawn
-    /// rather than spoken — the labelled seven-day activity strip and
-    /// the personal load-range gauge, with the verdict as the header's
-    /// trailing note. The whole instrument opens a plain-language
-    /// decoder because neither the seven-day bars nor a personal range
-    /// should require fitness jargon to understand. The readiness
-    /// sentence survives as the combined element's VoiceOver value.
+    /// The seven-day load instrument opens its plain-language explanation.
     func readinessSection(_ report: TrainingLoadReport, line: ReadinessLine) -> some View {
         Button {
             Haptics.selection()
@@ -64,35 +60,20 @@ extension TodayScreen {
             VStack(alignment: .leading, spacing: Space.md) {
                 SectionHeader(
                     title: "Training Load",
-                    trailing: ReadinessCard.statusText(for: report),
-                    trailingIsInProgress: report.verdict == .insufficient
+                    trailing: ReadinessCard.scopeText
                 )
                 ReadinessCard(report: report, line: line)
-
-                HStack(spacing: Space.sm) {
-                    Text("How this reading works")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.secondary)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.quaternary)
-                        .accessibilityHidden(true)
-                }
-                .padding(.horizontal, Space.md)
-                .frame(minHeight: Space.tapMin)
             }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Training load. \(ReadinessCard.statusText(for: report) ?? "No reading yet").")
-        .accessibilityValue(line.phrase)
+        .accessibilityLabel("Training load")
+        .accessibilityValue(ReadinessCard.accessibilityValue(for: report, line: line))
         .accessibilityHint("Opens an explanation of your seven-day load and personal range")
     }
 
-    /// Compact placard; tapping opens the evidence and confidence for
-    /// each region while keeping confidence out of the colour itself.
+    /// Opens region evidence while keeping confidence out of the colour itself.
     var developmentLegend: some View {
         Button {
             showMuscleMapDetails = true
@@ -110,6 +91,8 @@ extension TodayScreen {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        // Keep this persistent key compact; VoiceOver retains the full legend.
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
             "Current training development legend. No history, low, building, consistent, and high"
@@ -117,27 +100,44 @@ extension TodayScreen {
         .accessibilityHint("Opens muscle details")
     }
 
+    @ViewBuilder
     private var developmentLegendBands: some View {
-        LazyVGrid(
-            columns: [
-                GridItem(
-                    .adaptive(minimum: usesAccessibilityLayout ? 140 : 54),
-                    spacing: Space.xs
-                ),
-            ],
-            spacing: Space.sm
-        ) {
-            ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
-                VStack(spacing: 4) {
-                    Circle()
-                        .fill(legendColor(for: band))
-                        .frame(width: 14, height: 14)
-                        .accessibilityHidden(true)
-                    Text(band.displayName)
-                        .font(usesAccessibilityLayout ? Typography.caption : Typography.micro)
-                        .foregroundStyle(Ink.tertiary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
+        if usesAccessibilityLayout {
+            VStack(spacing: Space.xs) {
+                HStack(spacing: 4) {
+                    ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                        RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                            .fill(legendColor(for: band))
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 8)
+                    }
+                }
+                HStack(alignment: .firstTextBaseline) {
+                    Text("No history")
+                    Spacer(minLength: Space.md)
+                    Text("High")
+                }
+                .font(Typography.caption)
+                .foregroundStyle(Ink.tertiary)
+            }
+            .accessibilityHidden(true)
+        } else {
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 54), spacing: Space.xs)],
+                spacing: Space.sm
+            ) {
+                ForEach(MuscleDevelopmentBand.allCases, id: \.rawValue) { band in
+                    VStack(spacing: 4) {
+                        Circle()
+                            .fill(legendColor(for: band))
+                            .frame(width: 14, height: 14)
+                            .accessibilityHidden(true)
+                        Text(band.displayName)
+                            .font(Typography.micro)
+                            .foregroundStyle(Ink.tertiary)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
@@ -156,18 +156,16 @@ extension TodayScreen {
 
     // MARK: - Up next
 
-    /// The schedule-driven recommendation: what's queued for today (one
-    /// tap to start) or the next workout the week holds. Hidden entirely
-    /// when no template is pinned to a weekday — the pinned START covers
-    /// the unplanned case.
+    /// What's queued for today or the next workout the week holds.
+    /// Hidden when no template is pinned; the generic CTA covers that day.
     @ViewBuilder
     func upNextView(_ upNext: UpNext, outlook: StrengthOutlookBoard) -> some View {
         switch upNext.kind {
         case let .scheduled(template, more, easeOff):
-            upNextSection(template: template, when: "Today", more: more, startable: true, easeOff: easeOff, outlook: outlook)
+            upNextSection(template: template, when: "Today", more: more, easeOff: easeOff, outlook: outlook)
         case let .rest(_, next, daysUntil, more):
             if let next {
-                upNextSection(template: next, when: upNextWhen(daysUntil), more: more, startable: false, easeOff: false, outlook: outlook)
+                upNextSection(template: next, when: upNextWhen(daysUntil), more: more, easeOff: false, outlook: outlook)
             }
         case .unscheduled:
             EmptyView()
@@ -177,90 +175,103 @@ extension TodayScreen {
     /// Rich preview card for the next scheduled workout. The card is
     /// deliberately quiet: hierarchy comes from type, whitespace, a
     /// compact muscle summary, and numbered exercise rows rather than
-    /// rules or decorative bars. Today's one-tap Start sits outside
-    /// the content surface so the preview and its action remain two
-    /// distinct objects.
+    /// rules or decorative bars. It drills into the template for deeper
+    /// inspection; the one pinned Today CTA owns starting.
     func upNextSection(
         template: WorkoutTemplate,
         when: String,
         more: Int,
-        startable: Bool,
         easeOff: Bool,
         outlook: StrengthOutlookBoard
     ) -> some View {
         let exercises = template.orderedExercises
-        let maxPreview = 5
+        let maxPreview = usesAccessibilityLayout ? 3 : 5
         let preview = Array(exercises.prefix(maxPreview))
-        let remaining = exercises.count - maxPreview
+        let remaining = exercises.count - preview.count
         return VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Up next", trailing: when)
 
-            VStack(alignment: .leading, spacing: Space.lg) {
-                VStack(alignment: .leading, spacing: Space.sm) {
-                    Text(template.name)
-                        .font(Typography.display)
-                        .foregroundStyle(Ink.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+            NavigationLink {
+                TemplateDetailScreen(template: template, appState: appState)
+            } label: {
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    VStack(alignment: .leading, spacing: Space.sm) {
+                        HStack(alignment: .firstTextBaseline, spacing: Space.md) {
+                            Text(template.name)
+                                .font(usesAccessibilityLayout ? Typography.title : Typography.display)
+                                .foregroundStyle(Ink.primary)
+                                .lineLimit(usesAccessibilityLayout ? nil : 2)
+                                .fixedSize(horizontal: false, vertical: true)
 
-                    Text(upNextMeta(template, more: more))
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.tertiary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                            Spacer(minLength: Space.sm)
 
-                    Text(upNextMuscleSummary(template))
-                        .panelLegend()
-                        .padding(.horizontal, Space.md)
-                        .padding(.vertical, Space.sm)
-                        .background(Surface.cardTintBright, in: Capsule())
-                }
+                            Image(systemName: "chevron.right")
+                                .font(Typography.sectionHeading)
+                                .foregroundStyle(Ink.quaternary)
+                                .accessibilityHidden(true)
+                        }
 
-                VStack(spacing: Space.md) {
-                    ForEach(Array(preview.enumerated()), id: \.element.id) { index, exercise in
-                        upNextExerciseRow(exercise, index: index + 1)
-                    }
-                    if remaining > 0 {
-                        Text("+\(remaining) more")
+                        Text(upNextMeta(template, more: more))
                             .font(Typography.caption)
                             .foregroundStyle(Ink.tertiary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 36)
-                    }
-                }
-
-                if let prLine = prProximityLine(for: template, in: outlook) {
-                    HStack(spacing: Space.sm) {
-                        Image(systemName: "trophy.fill")
-                            .font(Typography.caption)
-                            .foregroundStyle(Tint.primary)
-                        Text(prLine)
-                            .font(Typography.caption)
-                            .foregroundStyle(Tint.primary.opacity(0.9))
                             .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .accessibilityLabel(prLine)
-                }
 
-                if easeOff {
-                    HStack(spacing: Space.sm) {
-                        Image(systemName: "gauge.with.dots.needle.67percent")
-                            .font(Typography.caption)
-                            .foregroundStyle(Tint.primary)
-                            .accessibilityHidden(true)
-                        Text("High load, keep this session lighter")
-                            .font(Typography.caption)
-                            .foregroundStyle(Tint.primary.opacity(0.9))
+                        Text(upNextMuscleSummary(template))
+                            .panelLegend()
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, Space.md)
+                            .padding(.vertical, Space.sm)
+                            .background(
+                                Surface.cardTintBright,
+                                in: RoundedRectangle(cornerRadius: Radius.chip, style: .continuous)
+                            )
                     }
-                    .accessibilityLabel("High training load, keep this session lighter")
-                }
-            }
-            .padding(Space.lg)
-            .contentCard(bright: true)
 
-            if startable {
-                upNextStartButton(template: template)
+                    VStack(spacing: Space.md) {
+                        ForEach(Array(preview.enumerated()), id: \.element.id) { index, exercise in
+                            upNextExerciseRow(exercise, index: index + 1)
+                        }
+                        if remaining > 0 {
+                            Text("+\(remaining) more")
+                                .font(Typography.caption)
+                                .foregroundStyle(Ink.tertiary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, usesAccessibilityLayout ? 0 : 36)
+                        }
+                    }
+
+                    if let prLine = prProximityLine(for: template, in: outlook) {
+                        HStack(spacing: Space.sm) {
+                            Image(systemName: "trophy.fill")
+                                .font(Typography.caption)
+                                .foregroundStyle(Tint.primary)
+                            Text(prLine)
+                                .font(Typography.caption)
+                                .foregroundStyle(Tint.primary.opacity(0.9))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .accessibilityLabel(prLine)
+                    }
+
+                    if easeOff {
+                        HStack(spacing: Space.sm) {
+                            Image(systemName: "gauge.with.dots.needle.67percent")
+                                .font(Typography.caption)
+                                .foregroundStyle(Tint.primary)
+                                .accessibilityHidden(true)
+                            Text("High load, keep this session lighter")
+                                .font(Typography.caption)
+                                .foregroundStyle(Tint.primary.opacity(0.9))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .accessibilityLabel("High training load, keep this session lighter")
+                    }
+                }
+                .padding(Space.lg)
+                .contentCard(bright: true)
             }
+            .buttonStyle(.plain)
+            .accessibilityHint("Opens this workout template")
         }
     }
 
@@ -308,49 +319,64 @@ extension TodayScreen {
 
     /// One exercise in the Up Next preview. A quiet numbered marker
     /// gives the list visual rhythm without separators or set bars.
+    @ViewBuilder
     func upNextExerciseRow(_ exercise: TemplateExercise, index: Int) -> some View {
         let scheme = upNextScheme(exercise)
-        return HStack(alignment: .center, spacing: Space.sm) {
-            Text("\(index)")
-                .font(Typography.metricMicro)
-                .foregroundStyle(Ink.secondary)
-                .frame(width: 24, height: 24)
-                .background(Surface.cardTintBright, in: Circle())
-
-            Text(exercise.name)
-                .font(Typography.headline)
-                .foregroundStyle(Ink.primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-
-            Spacer(minLength: Space.sm)
-
+        let layout = usesAccessibilityLayout
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.sm))
+            : AnyLayout(HStackLayout(alignment: .center, spacing: Space.sm))
+        layout {
             HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                Text(scheme.count)
-                    .font(Typography.metricUnit)
-                    .foregroundStyle(Ink.tertiary)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                if let load = scheme.load {
-                    HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(load)
-                            .font(Typography.metricInline)
-                            .foregroundStyle(Ink.secondary)
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                        if let loadUnit = scheme.loadUnit {
-                            Text(loadUnit)
-                                .font(Typography.metricMicro)
-                                .foregroundStyle(Ink.tertiary)
-                        }
-                    }
-                }
+                Text("\(index)")
+                    .font(Typography.metricMicro)
+                    .foregroundStyle(Ink.secondary)
+                    .frame(width: 24, height: 24)
+                    .background(Surface.cardTintBright, in: Circle())
+
+                Text(exercise.name)
+                    .font(Typography.headline)
+                    .foregroundStyle(Ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+
+            if !usesAccessibilityLayout {
+                Spacer(minLength: Space.sm)
+            }
+
+            upNextSchemeReadout(scheme)
+                .padding(.leading, usesAccessibilityLayout ? 36 : 0)
         }
         .padding(.vertical, Space.sm)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(exercise.name), \(upNextSchemeAccessibility(scheme))")
+    }
+
+    private func upNextSchemeReadout(_ scheme: UpNextScheme) -> some View {
+        let layout = usesAccessibilityLayout
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Space.xs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Space.sm))
+        return layout {
+            Text(scheme.count)
+                .font(Typography.metricUnit)
+                .foregroundStyle(Ink.tertiary)
+                .monospacedDigit()
+                .fixedSize(horizontal: false, vertical: true)
+            if let load = scheme.load {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text(load)
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let loadUnit = scheme.loadUnit {
+                        Text(loadUnit)
+                            .font(Typography.metricMicro)
+                            .foregroundStyle(Ink.tertiary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+        }
     }
 
     /// The scheme readout, split into typographic parts so the row
@@ -460,35 +486,6 @@ extension TodayScreen {
         return parts.joined(separator: " ")
     }
 
-    /// Card-specific one-tap start. It floats beside the card rather
-    /// than becoming part of the content surface.
-    func upNextStartButton(template: WorkoutTemplate) -> some View {
-        Button {
-            Haptics.crescendo()
-            appState.workout.startWorkoutFromTemplate(template)
-        } label: {
-            HStack(spacing: Space.md) {
-                Text("Start this workout")
-                    .font(Typography.headline)
-                    .foregroundStyle(Tint.primary)
-                Spacer()
-                Image(systemName: "arrow.right")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Tint.primary)
-                    .accessibilityHidden(true)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, Space.xl)
-            .frame(minHeight: 50)
-            .coloredGlassControl(cornerRadius: Radius.pill)
-        }
-        .buttonStyle(.plain)
-        .softElevation(radius: 14, y: 7, opacity: 0.35)
-        .accessibilityLabel("Start \(template.name)")
-        .accessibilityIdentifier("scheduledWorkoutStartButton")
-        .accessibilityHint("Scheduled for today")
-    }
-
     func upNextWhen(_ daysUntil: Int) -> String {
         switch daysUntil {
         case 0: "Today"
@@ -535,25 +532,9 @@ extension TodayScreen {
         return "aeiou".contains(first) ? "an" : "a"
     }
 
-    /// The figure is the hero, so it takes nearly the whole first
-    /// viewport — its rendered scale is proportional to this height
-    /// (the SCNView's field of view binds to the taller axis), which
-    /// is why an earlier half-height value made the model read small.
-    /// START is pinned separately in a native safe-area bar. Because
-    /// `safeAreaBar` floats over the scroll view instead of reducing
-    /// the hero's initial layout height, the figure subtracts the CTA
-    /// clearance explicitly so the legend and next section do not sit
-    /// underneath the button. The persistent five-band legend needs a
-    /// second small clearance of its own. `heroHeight` is frozen on first layout
-    /// (see `body`), so the model holds a constant size as the large
-    /// title collapses on scroll rather than rescaling mid-gesture.
+    /// Frozen figure height with normal-size CTA and legend clearance.
     func bodyHeroHeight() -> CGFloat {
-        // `heroHeight` is latched from the scroll view's own geometry
-        // (see `onGeometryChange` in `body`). Until the first layout
-        // pass reports it the figure has no height and simply grows into
-        // place — masked by the section's fade-in — so we no longer need
-        // a `GeometryReader` wrapper (which was inflating the scroll
-        // content past the screen width and shifting every row right).
+        // Zero until the scroll geometry reports its stable maximum.
         let base = heroHeight
         guard base > 0 else { return 0 }
         if usesAccessibilityLayout {
@@ -569,15 +550,17 @@ extension TodayScreen {
 
     static let heroFraction: CGFloat = 0.98
     static let minimumHeroFraction: CGFloat = 0.68
-    /// Includes the legend itself plus the 24-point increase from the
-    /// old 8-point model-to-legend gap to the current 32-point gap.
+    /// Includes the legend and its model-to-legend gap.
     static let developmentLegendClearance: CGFloat = 88
 
-    /// Reserve the height occupied by the pinned primary CTA above the
-    /// floating tab bar. `safeAreaBar` provides native chrome placement;
-    /// this value keeps the hero and scroll content from being legible
-    /// underneath it.
+    /// Normal-size clearance for the pinned CTA and floating tab bar.
     static let pinnedStartBarClearance: CGFloat = 104
+
+    /// Accessibility typography can enlarge the pinned action, so the scroll
+    /// content reserves a taller exit at those sizes.
+    var pinnedStartBarScrollClearance: CGFloat {
+        usesAccessibilityLayout ? 160 : Self.pinnedStartBarClearance
+    }
 
     var consistencySection: some View {
         let streak = appState.analytics.overview.streak
@@ -621,141 +604,12 @@ extension TodayScreen {
         return "\(streak.current) \(streak.current == 1 ? "week" : "weeks") in a row"
     }
 
-    /// The primary target: a full-width START, the biggest and first-
-    /// thing-you-reach control on the screen (first principles — the
-    /// most likely next action is always the largest target). Tapping
-    /// raises the StartWorkoutSheet, so this one button covers every
-    /// way to begin: Repeat / Fresh / a saved template. A neutral soft
-    /// elevation lifts it off the black as the screen's clear anchor.
-    var startCTA: some View {
-        PrimaryActionButton(
-            title: "Start Workout",
-            icon: "chevron.up",
-            inputLabels: ["Start Workout", "Start", "Begin"],
-            sound: .commit
-        ) {
-            showStartSheet = true
-        }
-        .softElevation(radius: 18, y: 10, opacity: 0.45)
-        .accessibilityIdentifier("todayStartWorkoutButton")
-        .accessibilityHint("Repeat your last workout, start fresh, or pick a template")
-        .accessibilitySortPriority(100)
-    }
-
-    /// The running workout in the same slot START occupies, so a live
-    /// session never adds a bar: the CTA takes over as the resume
-    /// control (and the finish affordance once every set is logged),
-    /// which is why AppRoot suppresses the MiniBar pill on this tab.
-    /// The elapsed clock ticks in its own TimelineView so the per-second
-    /// update re-renders the button, not the screen.
-    func activeWorkoutCTA(_ session: WorkoutSession) -> some View {
-        TimelineView(.periodic(from: .now, by: 1.0)) { context in
-            PrimaryActionButton(
-                title: session.isAllComplete ? "Finish Workout" : "Resume Workout",
-                subtitle: activeWorkoutStatus(session, now: context.date),
-                icon: "chevron.up",
-                inputLabels: ["Resume Workout", "Resume", "Workout"]
-            ) {
-                appState.workout.expandWorkout()
-            }
-            .accessibilityIdentifier("activeWorkoutResumeBar")
-            .accessibilityHint(
-                session.isAllComplete
-                    ? "Opens the workout to finish and save it"
-                    : "Opens the workout you have in progress"
-            )
-        }
-        .softElevation(radius: 18, y: 10, opacity: 0.45)
-        .accessibilitySortPriority(100)
-    }
-
-    /// Elapsed time plus the one thing the workout is waiting on —
-    /// short enough to hold a single line at any text size, since the
-    /// pinned bar's height is reserved by `pinnedStartBarClearance`.
-    func activeWorkoutStatus(_ session: WorkoutSession, now: Date) -> String {
-        let elapsed = Self.elapsedText(session.startedAt, to: now)
-        if session.isAllComplete {
-            return "\(elapsed)  ·  All sets logged"
-        }
-        if session.isResting {
-            let remaining = max(0, Int(session.restRemaining.rounded(.up)))
-            return "\(elapsed)  ·  Rest \(Self.clockText(remaining))"
-        }
-        let exercises = session.orderedExercises
-        if exercises.indices.contains(session.activeExerciseIndex) {
-            let exercise = exercises[session.activeExerciseIndex]
-            if let next = session.activeSetIndex(for: exercise) {
-                return "\(elapsed)  ·  Set \(next + 1) of \(exercise.orderedSets.count)"
-            }
-        }
-        return elapsed
-    }
-
-    static func elapsedText(_ start: Date, to now: Date) -> String {
-        clockText(max(0, Int(now.timeIntervalSince(start))))
-    }
-
-    /// m:ss while a workout is under an hour, h:mm:ss once it isn't.
-    static func clockText(_ seconds: Int) -> String {
-        let hours = seconds / 3600
-        let minutes = (seconds % 3600) / 60
-        let secs = seconds % 60
-        if hours > 0 {
-            return String(format: "%d:%02d:%02d", hours, minutes, secs)
-        }
-        return String(format: "%d:%02d", minutes, secs)
-    }
-
-    /// The active workout as the bar should treat it: a draft that is
-    /// only waiting for the workout sheet to finish dismissing is
-    /// already gone as far as this screen is concerned.
-    var barSession: WorkoutSession? {
-        appState.workout.isDiscardPending ? nil : appState.workout.activeSession
-    }
-
-    /// START, pinned to the bottom via iOS 26's native safe-area bar.
-    /// No custom black tray — the system owns the bar chrome and the
-    /// button keeps the app's Liquid Glass CTA treatment. One bar, one
-    /// row: it carries either the start action or the running workout.
-    var pinnedStartBar: some View {
-        Group {
-            if let session = barSession {
-                activeWorkoutCTA(session)
-            } else {
-                startCTA
-            }
-        }
-        .padding(.horizontal, Space.gutter)
-        .padding(.top, Space.lg)
-        .padding(.bottom, Space.sm)
-        // Scrim: content scrolling beneath the pinned CTA fades
-        // into the background instead of reading at full strength
-        // through and around the button (section titles used to
-        // collide with the verb mid-scroll).
-        .background {
-            LinearGradient(
-                colors: [
-                    Surface.background.opacity(0),
-                    Surface.background.opacity(0.9),
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
-        }
-    }
-
+    @ViewBuilder
     var lastWorkoutSection: some View {
-        VStack(alignment: .leading, spacing: Space.md) {
-            if let session = latestSession {
+        if let session = latestSession {
+            VStack(alignment: .leading, spacing: Space.md) {
                 SectionHeader(title: "Last workout", trailing: lastWorkoutMeta(for: session))
                 lastWorkoutCard(for: session)
-            } else {
-                SectionHeader(title: "Last workout")
-                Text("Nothing logged yet — your first session lands here.")
-                    .font(Typography.body)
-                    .foregroundStyle(Ink.tertiary)
             }
         }
     }

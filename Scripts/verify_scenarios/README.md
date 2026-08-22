@@ -52,3 +52,25 @@ the element frame to intersect the application frame. `enabled` is optional.
 Tap selectors must resolve to exactly one visible element. Required selectors
 may match one or more elements. Ambiguous taps and malformed selectors fail
 with candidate paths and semantic values in `actions.log`.
+
+## Today action contract
+
+`today-actions` exercises the pinned start/active states and both chooser
+hierarchies in one deterministic run. Its Today taps are intentional uniqueness
+assertions: an accidental second matching action makes the scenario fail before
+interaction. The existing `start-complete-rest` flow chooses the featured plan
+and proves the scheduled start through set completion.
+
+- Empty, unscheduled Today exposes one generic `Start Workout`, with no
+  scheduled or active action and no empty Consistency / Last workout journal.
+- A due template keeps the same single `Start Workout` action. Its chooser
+  features `Start Today's Plan` first, then Fresh, Repeat, and other saved
+  templates without duplicating the featured plan.
+- An active workout wins over a simultaneously due template and exposes one
+  `Resume Workout` action, with no start action present;
+  the final relaunch also proves that restored state keeps the same hierarchy.
+
+`today-journal-accessibility` scrolls a fixed history seed to the compact
+Consistency journal and requires one exact two-week overview plus its detail
+drill-out. It forbids the former per-day `Rest` / `Trained` values so the
+fourteen visual dots cannot silently return as fourteen VoiceOver stops.

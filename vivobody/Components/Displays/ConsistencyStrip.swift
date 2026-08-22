@@ -23,6 +23,12 @@
 //  `ignitionOrder`, so on appear the embers light oldest-first —
 //  the two weeks catch fire left to right, today last.
 //
+//  VoiceOver receives the compact journal as one overview: exact
+//  attendance, trained dates, and record days in the same two-week
+//  scope. The adjacent Consistency detail screen owns day-by-day
+//  navigation, so fourteen decorative dots never become fourteen
+//  focus stops here.
+//
 //  Use:
 //      ConsistencyStrip(workoutDates: dates)
 //      ConsistencyStrip(workoutDates: dates, prDates: prs, weeks: 2)
@@ -70,8 +76,19 @@ struct ConsistencyStrip: View {
         Set(prDates.map { calendar.startOfDay(for: $0) })
     }
 
+    private var trainingDays: [Date] {
+        rows.flatMap(\.self).filter { workoutDays.contains($0) }
+    }
+
     private var sessionCount: Int {
-        rows.flatMap(\.self).count(where: { workoutDays.contains($0) })
+        guard let firstDay = rows.first?.first,
+              let lastDay = rows.last?.last,
+              let dayAfterLast = calendar.date(byAdding: .day, value: 1, to: lastDay)
+        else { return 0 }
+
+        return workoutDates.count(where: { date in
+            date >= firstDay && date < dayAfterLast
+        })
     }
 
     var body: some View {
@@ -89,6 +106,10 @@ struct ConsistencyStrip: View {
             }
             metadata
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Training consistency")
+        .accessibilityValue(accessibilitySummary)
+        .accessibilityIdentifier("todayConsistencyOverview")
     }
 
     /// Column labels taken from the current week, which every row above
@@ -120,19 +141,12 @@ struct ConsistencyStrip: View {
     private func cell(_ day: Date, ignitionOrder: Int) -> some View {
         let trained = workoutDays.contains(day)
         let isPR = prDays.contains(day)
-        let isToday = day == todayStart
         return CadenceDot(
             isWorkout: trained,
             isPR: isPR,
             ignitionOrder: ignitionOrder
         )
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(dayLabel(day, isToday: isToday))
-        .accessibilityValue(trained ? trainedValue(isPR: isPR) : "Rest")
-    }
-
-    private func trainedValue(isPR: Bool) -> String {
-        isPR ? "Trained, personal record" : "Trained"
+        .accessibilityHidden(true)
     }
 
     private var metadata: some View {
@@ -146,10 +160,7 @@ struct ConsistencyStrip: View {
                 .font(Typography.sectionLabel)
                 .foregroundStyle(Ink.secondary)
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            "\(sessionCount) \(sessionCount == 1 ? "session" : "sessions") in the last \(days) days"
-        )
+        .accessibilityHidden(true)
     }
 
     private func weekdayInitial(_ day: Date) -> String {
@@ -160,6 +171,17 @@ struct ConsistencyStrip: View {
 
     private func dayLabel(_ day: Date, isToday: Bool) -> String {
         isToday ? "Today" : Self.dayFormatter.string(from: day)
+    }
+
+    private var accessibilitySummary: String {
+        let count = "\(sessionCount) \(sessionCount == 1 ? "session" : "sessions") in the last \(days) days"
+        guard !trainingDays.isEmpty else { return count }
+
+        let dates = trainingDays.map { day in
+            let date = dayLabel(day, isToday: day == todayStart)
+            return prDays.contains(day) ? "\(date), personal record" : date
+        }
+        return "\(count). Training days: \(dates.joined(separator: "; "))"
     }
 
     private static let dayFormatter: DateFormatter = {
