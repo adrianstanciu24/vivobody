@@ -1,0 +1,93 @@
+{
+  "name": "insights-shape-drillouts",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-showcase", "--pro"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsExerciseMixLink",
+          "role": "AXButton"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsExerciseMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsExerciseMixInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "BackButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "insightsRepMixLink",
+          "role": "AXButton"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "swipe": {
+        "direction": "up",
+        "count": 1
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsRepMixLink",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsRepMixInstrument",
+        "role": "AXHeading"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsRepMixInstrument",
+      "role": "AXHeading"
+    },
+    {
+      "labelContains": "1–5 reps, 6–12 reps, 13+ reps"
+    },
+    {
+      "valueContains": "low reps"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

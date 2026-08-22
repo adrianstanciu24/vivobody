@@ -2,13 +2,11 @@
 //  ConsistencySection.swift
 //  vivobody
 //
-//  Training rhythm as one card led by the calendar, not by prose. A
-//  slim stat strip (weekly cadence, days trained, average RIR) tops the
-//  card, the weekly-sets sparkline draws the six-month volume trend in
-//  bold orange, and the contribution heatmap is the section's main
-//  instrument with month and weekday anchors. RIR coverage shrinks to
-//  one legend line on the sparkline; the week streak moves to the
-//  section header's trailing status. Before any workout exists, a
+//  Training rhythm as one card led by cadence and the calendar, not prose.
+//  Weekly cadence is the large readout; the contribution heatmap is the
+//  dominant instrument with month and weekday anchors, and the weekly-sets
+//  sparkline draws the six-month volume direction beneath it. Days trained
+//  and average RIR remain compact supporting reads. Before any workout exists, a
 //  dormant canvas holds the same geometry while the first four recent
 //  workouts collect.
 //
@@ -25,9 +23,10 @@ struct ConsistencySection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
-                title: "Consistency",
+                title: "Training rhythm",
                 trailing: trailingStatus,
-                trailingIsInProgress: isBuilding
+                trailingIsInProgress: isBuilding,
+                accessibilityIdentifier: "insightsRhythmInstrument"
             )
 
             if !report.hasActivity {
@@ -68,12 +67,32 @@ struct ConsistencySection: View {
 
     private var calendarCard: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
+            MetricView(
+                label: "Workouts / week",
+                value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
+                valueFont: Typography.metricLg,
+                accent: true,
+                accentColor: Tint.primaryText
+            )
+
+            ConsistencyHeatmap(
+                weeks: report.weeks,
+                daysTrained: report.daysTrainedInWindow
+            )
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+
+            heatmapLegend
+                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+
+            weeklyVolumeSpark
+                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+
+            Rectangle()
+                .fill(Surface.edge)
+                .frame(height: 0.5)
+
             StatStrip(
                 stats: [
-                    Stat(
-                        value: InsightsFormat.perWeekLabel(report.sessionsPerWeek),
-                        label: "Workouts / wk"
-                    ),
                     Stat(
                         value: "\(report.daysTrainedInWindow)",
                         label: "Days trained"
@@ -86,15 +105,6 @@ struct ConsistencySection: View {
                 edgeAligned: true
             )
             .padding(.vertical, Space.xs)
-
-            weeklyVolumeSpark
-
-            ConsistencyHeatmap(
-                weeks: report.weeks,
-                daysTrained: report.daysTrainedInWindow
-            )
-
-            heatmapLegend
         }
         .padding(Space.xl)
         .contentCard()
@@ -105,7 +115,7 @@ struct ConsistencySection: View {
     /// Completed set count per week across the same six-month window
     /// as the heatmap. The current partial week is omitted so a week
     /// in progress never looks like a sudden drop in training. The
-    /// legend's trailing token doubles as the RIR-coverage read.
+    /// trailing token doubles as the compact RIR-coverage read.
     private var weeklyVolumeSpark: some View {
         let weekly = report.weeks.dropLast().enumerated().map { index, column in
             WeeklyVolumePoint(
@@ -114,12 +124,22 @@ struct ConsistencySection: View {
             )
         }
         return VStack(alignment: .leading, spacing: Space.sm) {
-            HStack {
-                Text("Weekly sets")
-                    .panelLegend()
-                Spacer()
-                Text(rirCoverageToken)
-                    .panelLegend()
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    Text("Weekly sets")
+                        .panelLegend()
+                    Spacer()
+                    Text(rirCoverageToken)
+                        .panelLegend()
+                        .fixedSize(horizontal: true, vertical: false)
+                }
+
+                VStack(alignment: .leading, spacing: Space.xs) {
+                    Text("Weekly sets")
+                        .panelLegend()
+                    Text(rirCoverageToken)
+                        .panelLegend()
+                }
             }
             Chart(weekly) { point in
                 AreaMark(
@@ -150,8 +170,9 @@ struct ConsistencySection: View {
     }
 
     private var rirCoverageToken: String {
-        guard report.rirEligibleSets > 0 else { return "no RIR-eligible sets" }
-        return "RIR \(report.rirLoggedSets)/\(report.rirEligibleSets) sets"
+        guard report.rirEligibleSets > 0 else { return "RIR coverage —" }
+        let percent = Int((report.rirCoverage * 100).rounded())
+        return "RIR coverage \(percent)%"
     }
 
     private func weeklySparkAccessibilityValue(
@@ -331,6 +352,14 @@ private struct ConsistencyHeatmap: View {
                 ))
                 previousMonth = month
             }
+        }
+        // A six-month grid can begin during the last few days of a month.
+        // Suppress that partial-month label when the next anchor would sit
+        // beside it; all complete months remain visible and legible.
+        if anchors.count > 1,
+           anchors[1].weekIndex - anchors[0].weekIndex < 3
+        {
+            anchors.removeFirst()
         }
         return anchors
     }

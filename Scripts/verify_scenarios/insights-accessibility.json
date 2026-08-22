@@ -1,5 +1,5 @@
 {
-  "name": "insights-showcase",
+  "name": "insights-accessibility",
   "launch": {
     "reset": true,
     "tab": "insights",
@@ -10,32 +10,6 @@
       "wait": {
         "identifier": "insightsShapeInstrument",
         "role": "AXHeading"
-      }
-    },
-    {
-      "assert": {
-        "required": [
-          {
-            "identifier": "insightsModeShape",
-            "value": "Selected"
-          },
-          {
-            "identifier": "insightsExerciseMixLink",
-            "labelContains": "Other exercises",
-            "role": "AXButton"
-          },
-          {
-            "identifier": "insightsRepMixLink",
-            "labelContains": "Other rep ranges",
-            "role": "AXButton",
-            "visible": false
-          }
-        ],
-        "forbidden": [
-          {
-            "identifier": "insightsEmptyState"
-          }
-        ]
       }
     },
     {
@@ -79,17 +53,12 @@
   ],
   "required": [
     {
-      "identifier": "insightsShapeInstrument",
-      "role": "AXHeading"
-    },
-    {
       "identifier": "insightsModeShape",
       "value": "Selected"
     },
     {
-      "identifier": "insightsExerciseMixLink",
-      "labelContains": "Other exercises",
-      "role": "AXButton"
+      "identifier": "insightsShapeInstrument",
+      "role": "AXHeading"
     }
   ],
   "forbidden": [

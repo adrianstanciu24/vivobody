@@ -50,7 +50,8 @@ struct IntensityMixSection: View {
             SectionHeader(
                 title: "Rep ranges",
                 trailing: trailingStatus,
-                trailingIsInProgress: isBuilding
+                trailingIsInProgress: isBuilding,
+                accessibilityIdentifier: "insightsRepMixInstrument"
             )
 
             if !hasWeeklyData {

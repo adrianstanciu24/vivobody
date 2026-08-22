@@ -12,9 +12,9 @@
 //
 //  It deliberately carries the group-balance read the old tab spread
 //  across a separate roster — so this one mark answers "what's the
-//  shape of my training?" — anchored by cadence, all-six balance,
-//  coverage, and a concise visual legend. Every data-bearing channel
-//  is all-time; light and motion are material, not hidden metrics.
+//  shape of my training?" — anchored only by evenness and coverage.
+//  Cadence belongs to Rhythm. Every data-bearing channel is all-time;
+//  light and motion are material, not hidden metrics.
 //
 //  No anatomical body here on purpose: the rotatable 3D figure is
 //  Today's hero. Insights is the analytical counterpart, and the
@@ -24,20 +24,6 @@
 import SwiftUI
 import VivoKit
 
-private func signatureShareLabel(_ share: Double) -> String {
-    guard share > 0 else { return "0%" }
-    let percentage = share * 100
-    return percentage < 1 ? "<1%" : "\(Int(percentage.rounded()))%"
-}
-
-private func signatureShareSpokenLabel(_ share: Double) -> String {
-    guard share > 0 else { return "0 percent" }
-    let percentage = share * 100
-    return percentage < 1
-        ? "less than 1 percent"
-        : "\(Int(percentage.rounded())) percent"
-}
-
 struct SignatureSection: View {
     let signature: TrainingSignature
 
@@ -45,15 +31,12 @@ struct SignatureSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                SectionHeader(
-                    title: "Your signature",
-                    trailing: signature.hasSignature ? "All time" : "first signal",
-                    trailingIsInProgress: !signature.hasSignature
-                )
-                Text("the shape of your training")
-                    .panelLegend()
-            }
+            SectionHeader(
+                title: "Training shape",
+                trailing: signature.hasSignature ? "all time" : "first signal",
+                trailingIsInProgress: !signature.hasSignature,
+                accessibilityIdentifier: "insightsShapeInstrument"
+            )
 
             if dynamicTypeSize.isAccessibilitySize {
                 SignatureAccessibilitySpectrum(signature: signature)
@@ -69,19 +52,14 @@ struct SignatureSection: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, Space.sm)
             } else {
-                Text(signature.identityLine.uppercased())
-                    .font(Typography.metricInline)
-                    .foregroundStyle(Tint.primary)
-                    .tracking(1.4)
+                Text(focusLabel)
+                    .font(Typography.display)
+                    .foregroundStyle(Tint.primaryText)
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
 
                 StatStrip(
                     stats: [
-                        Stat(
-                            value: InsightsFormat.perWeekLabel(signature.cadence),
-                            label: "Workouts / week"
-                        ),
                         Stat(
                             value: signature.hasVolume
                                 ? "\(Int((signature.balance * 100).rounded()))"
@@ -98,92 +76,36 @@ struct SignatureSection: View {
                 )
                 .padding(.vertical, Space.xs)
 
-                Text("Larger petals mean more of your completed strength-set work went to that region. Axis percentages give the exact all-time split; the dashed bloom is an even six-way split.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, Space.lg)
+                HStack(spacing: Space.sm) {
+                    Capsule(style: .continuous)
+                        .stroke(
+                            Ink.primary.opacity(0.35),
+                            style: StrokeStyle(lineWidth: 1, dash: [3, 3])
+                        )
+                        .frame(width: 28, height: 8)
+                        .accessibilityHidden(true)
+                    Text("dashed = even six-way share")
+                        .panelLegend()
+                }
+                .frame(maxWidth: .infinity)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Dashed petals show an even six-way share")
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-}
 
-/// The bloom's accessibility-text counterpart. It keeps the visual
-/// signal strong — six luminous lifetime-share rails — while
-/// moving every label out of fixed Canvas coordinates so large type can
-/// wrap at its natural size.
-private struct SignatureAccessibilitySpectrum: View {
-    let signature: TrainingSignature
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Space.lg) {
-            ForEach(signature.petals) { petal in
-                VStack(alignment: .leading, spacing: Space.sm) {
-                    HStack(alignment: .firstTextBaseline, spacing: Space.md) {
-                        Text(petal.group.displayName)
-                            .font(Typography.sectionHeading)
-                            .foregroundStyle(
-                                petal.group == signature.dominantGroup
-                                    ? Tint.primary
-                                    : Ink.primary
-                            )
-                        Spacer(minLength: Space.sm)
-                        Text(signatureShareLabel(petal.volumeShare))
-                            .font(Typography.metricInline)
-                            .foregroundStyle(Ink.primary)
-                            .monospacedDigit()
-                    }
-
-                    GeometryReader { proxy in
-                        let scaleMaximum = 0.5
-                        let fill = max(0, min(1, petal.volumeShare / scaleMaximum))
-                        let marker = SignatureEmblemTuning.equalShare / scaleMaximum
-                        ZStack(alignment: .leading) {
-                            Capsule()
-                                .fill(Surface.cardTint)
-                            Capsule()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Tint.primary, Tint.primary.opacity(0.36)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .frame(
-                                    width: petal.volumeShare > 0
-                                        ? max(3, proxy.size.width * CGFloat(fill))
-                                        : 0
-                                )
-                                .shadow(color: Tint.primary.opacity(0.34), radius: 6)
-                            Path { path in
-                                let x = proxy.size.width * CGFloat(marker)
-                                path.move(to: CGPoint(x: x, y: 0))
-                                path.addLine(to: CGPoint(x: x, y: 12))
-                            }
-                            .stroke(
-                                Ink.primary.opacity(0.42),
-                                style: StrokeStyle(lineWidth: 1, dash: [2, 2])
-                            )
-                        }
-                    }
-                    .frame(height: 12)
-                    .accessibilityHidden(true)
-
-                    Text("\(signatureShareLabel(petal.volumeShare)) of all completed strength work")
-                        .font(Typography.caption)
-                        .foregroundStyle(Ink.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .accessibilityElement(children: .combine)
-            }
-
-            Text("The dashed marker is an even six-way share.")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.tertiary)
+    private var focusLabel: String {
+        guard signature.hasSignature else { return "Awaiting history" }
+        if let group = signature.dominantGroup {
+            return "\(group.displayName)-led"
         }
-        .padding(Space.xl)
-        .contentCard()
+        if signature.trainedGroupCount == MuscleGroup.allCases.count,
+           signature.balance >= TrainingSignature.evenBalanceThreshold
+        {
+            return "Evenly spread"
+        }
+        return "No single lead"
     }
 }
 
@@ -746,13 +668,13 @@ private struct TrainingSignatureView: View {
             let name = Text(petal.group.displayName.uppercased())
                 .font(Typography.micro)
                 .fontWeight(isDominant ? .bold : .medium)
-                .foregroundStyle(isDominant ? Tint.primary : Ink.tertiary)
+                .foregroundStyle(isDominant ? Tint.primaryText : Ink.tertiary)
             context.draw(name, at: CGPoint(x: labelPoint.x, y: labelPoint.y - 7), anchor: .center)
 
             guard petal.volumeShare > 0 else { continue }
             let numeral = Text(signatureShareLabel(petal.volumeShare))
                 .font(Typography.micro.monospacedDigit())
-                .foregroundStyle(isDominant ? Tint.primary.opacity(0.75) : Ink.secondary)
+                .foregroundStyle(isDominant ? Tint.primaryText : Ink.secondary)
             context.draw(numeral, at: CGPoint(x: labelPoint.x, y: labelPoint.y + 7), anchor: .center)
         }
     }
@@ -870,7 +792,6 @@ private struct TrainingSignatureView: View {
     }
 
     private var accessibilityText: String {
-        let cadence = String(format: "%.1f", signature.cadence)
         let split = signature.petals
             .filter { $0.volumeShare > 0 }
             .map { "\($0.group.displayName) \(signatureShareSpokenLabel($0.volumeShare))" }
@@ -882,6 +803,6 @@ private struct TrainingSignatureView: View {
         } else {
             "No completed muscle-targeted strength work yet."
         }
-        return "Training signature. \(volume) \(signature.identityLine). All-time average \(cadence) sessions per week. Dashed outlines show an even six-way split."
+        return "Training signature. \(volume) \(signature.identityLine). Dashed outlines show an even six-way split."
     }
 }

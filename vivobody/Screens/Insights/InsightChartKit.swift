@@ -61,6 +61,7 @@ enum InsightChartAxis {
                     )
                     .font(Typography.metricMicro)
                     .foregroundStyle(Ink.tertiary)
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                 }
             }
         }
@@ -78,6 +79,7 @@ enum InsightChartAxis {
                     Text(format(amount))
                         .font(Typography.metricMicro)
                         .foregroundStyle(Ink.tertiary)
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                 }
             }
         }
@@ -135,6 +137,7 @@ struct InsightChartLegend: View {
                 }
             }
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .accessibilityElement(children: .combine)
     }
 

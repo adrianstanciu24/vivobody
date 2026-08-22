@@ -23,6 +23,7 @@ move. Expensive implementation work should also have an active plan under
 | [App Store Connect metadata](appstore-metadata.md) | Release artifact; recheck before submission | [shared version](../Shared.xcconfig), [app metadata](../vivobody/Info.plist), [privacy manifest](../vivobody/PrivacyInfo.xcprivacy), [public website](https://vivobody.app) | 2026-08-14 |
 | [Exercise Detail frequency & weekly volume](exercise-detail-frequency-and-volume.md) | Implemented product design | [contribution model](../vivobody/Models/Insights/ExerciseVolumeContribution.swift), [frequency model](../vivobody/Models/Insights/ExerciseFrequency.swift), [hero card](../vivobody/Screens/Library/ExerciseBestHeroCard.swift), [this-week section](../vivobody/Screens/Library/ExerciseWeeklyVolumeSection.swift) | 2026-08-15 |
 | [Exercise comparison](exercise-comparison.md) | Implemented product design | [comparison model](../vivobody/Models/Domain/ExerciseComparison.swift), [comparison screen](../vivobody/Screens/Library/ExerciseComparisonScreen.swift), [entry point](../vivobody/Screens/Library/ExerciseDetailScreen.swift), [comparison tints](../vivobody/Models/Domain/MuscleColor.swift) | 2026-08-21 |
+| [Insights visual instruments](insights-visual-instruments.md) | Implemented product design | [Insights screen](../vivobody/Screens/Insights/InsightsScreen.swift), [completed execution plan](../engineering/plans/completed/2026-08-22-insights-visual-instruments.md) | 2026-08-22 |
 
 ## Historical and superseded implementation records
 

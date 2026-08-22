@@ -4,8 +4,8 @@
 //
 //  The personal workload lens as one bold instrument: the rolling
 //  seven-day line in orange against the user's own recent-range band,
-//  with the Below / Within / Above verdict carried by the endpoint dot
-//  and the section header's trailing word. A slim driver strip sits
+//  with the current seven-day value and Below / Within / Above verdict
+//  promoted to a large readout above the chart. A slim driver strip sits
 //  under the chart inside the same card. Before any qualifying work is
 //  logged, a dormant canvas fills the same geometry — baseline weeks as
 //  slots, baseline days as a span track — so the empty state is the
@@ -23,8 +23,9 @@ struct TrainingLoadSection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
                 title: "Training load",
-                trailing: trailingStatus,
-                trailingIsInProgress: isBuilding
+                trailing: report.points.isEmpty ? "waiting for sets" : "12-week view",
+                trailingIsInProgress: report.points.isEmpty,
+                accessibilityIdentifier: "insightsLoadInstrument"
             )
 
             if report.points.isEmpty {
@@ -40,6 +41,8 @@ struct TrainingLoadSection: View {
                 .contentCard()
             } else {
                 VStack(alignment: .leading, spacing: Space.lg) {
+                    loadReadout
+
                     InsightChartLegend(items: legendItems)
 
                     chart
@@ -50,10 +53,6 @@ struct TrainingLoadSection: View {
 
                     StatStrip(
                         stats: [
-                            Stat(
-                                value: format(report.drivers.hardSets.current),
-                                label: "Hard sets"
-                            ),
                             Stat(
                                 value: "\(Int(report.drivers.sessions.current.rounded()))",
                                 label: "Sessions"
@@ -73,20 +72,51 @@ struct TrainingLoadSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Header status
+    // MARK: - Current read
 
-    private var trailingStatus: String {
-        if report.points.isEmpty { return "waiting for sets" }
-        return switch report.verdict {
-        case .low: "below range"
-        case .productive: "within range"
-        case .high: "above range"
-        case .insufficient: "baseline building"
+    private var loadReadout: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .bottom, spacing: Space.xl) {
+                currentMetric
+                Spacer(minLength: Space.sm)
+                verdictReadout
+            }
+
+            VStack(alignment: .leading, spacing: Space.lg) {
+                currentMetric
+                verdictReadout
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var currentMetric: some View {
+        MetricView(
+            label: "Estimated hard sets · 7 days",
+            value: format(report.currentLoad),
+            valueFont: Typography.metricLg,
+            accent: true,
+            accentColor: Tint.primaryText
+        )
+    }
+
+    private var verdictReadout: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(verdictTitle)
+                .font(Typography.title)
+                .foregroundStyle(verdictTextColor)
+            Text(report.hasEnoughHistory ? "vs personal range" : "personal range forming")
+                .panelLegend()
         }
     }
 
-    private var isBuilding: Bool {
-        report.points.isEmpty || !report.hasEnoughHistory
+    private var verdictTitle: String {
+        switch report.verdict {
+        case .low: "Below range"
+        case .productive: "Within range"
+        case .high: "Above range"
+        case .insufficient: "Baseline building"
+        }
     }
 
     // MARK: - Baseline (dormant) state
@@ -159,6 +189,7 @@ struct TrainingLoadSection: View {
         }
         .chartXAxis {
             InsightChartAxis.dates(
+                desiredCount: usesDetailedChartDates ? 4 : 3,
                 density: usesDetailedChartDates ? .monthDay : .monthOnly
             )
         }
@@ -199,6 +230,15 @@ struct TrainingLoadSection: View {
     private var verdictColor: Color {
         switch report.verdict {
         case .productive: Tint.primary
+        case .high: Ink.primary
+        case .low: Ink.secondary
+        case .insufficient: Ink.primary
+        }
+    }
+
+    private var verdictTextColor: Color {
+        switch report.verdict {
+        case .productive: Tint.primaryText
         case .high: Ink.primary
         case .low: Ink.secondary
         case .insufficient: Ink.primary

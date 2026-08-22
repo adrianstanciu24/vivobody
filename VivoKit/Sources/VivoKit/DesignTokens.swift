@@ -22,6 +22,16 @@
             highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 1.0),
             highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 1.0)
         )
+        /// Brand-colored text needs a darker light-appearance endpoint than
+        /// filled controls and chart marks. This clears AA contrast on both
+        /// the grouped background and subtly tinted cards while preserving
+        /// the luminous orange used against black.
+        public static let primaryText = adaptiveColor(
+            dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 1.0),
+            light: UIColor(red: 0.65, green: 0.21, blue: 0.0, alpha: 1.0),
+            highContrastDark: UIColor(red: 1.0, green: 0.52, blue: 0.05, alpha: 1.0),
+            highContrastLight: UIColor(red: 0.56, green: 0.18, blue: 0.0, alpha: 1.0)
+        )
         public static let primaryDim = adaptiveColor(
             dark: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.35),
             light: UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.35),

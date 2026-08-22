@@ -1,17 +1,16 @@
 //
 //  ExerciseDominanceSection.swift
 //
-//  Recent strength composition as two bold stacked bars in one shared
-//  unit and timeframe. Exercise Allocation stacks the last four weeks
+//  Recent strength composition as two bold segmented rails in one shared
+//  unit and timeframe. Exercise Allocation divides the last four weeks
 //  of completed working sets per lift — the top lift wears the accent,
-//  the rest step down through gray — with a compact legend naming each
-//  slice. Exercise Type stacks the same sets between compound and
-//  isolation work. Both bars are Swift Charts; classification coverage
-//  is a header token, and before any strength work exists a dormant
-//  canvas holds the same geometry while the six-set sample collects.
+//  the rest step down through gray — with a clear legend naming each
+//  segment. Exercise Type divides those sets between compound, isolation,
+//  and unclassified work. Classification coverage is a header token, and
+//  before any strength work exists a dormant canvas holds the same geometry
+//  while the six-set sample collects.
 //
 
-import Charts
 import SwiftUI
 import VivoKit
 
@@ -28,7 +27,8 @@ struct ExerciseDominanceSection: View {
                 trailing: compositionIsBuilding
                     ? "\(compositionSetCount)/\(clearSampleSets) sets"
                     : "last 4 weeks",
-                trailingIsInProgress: compositionIsBuilding
+                trailingIsInProgress: compositionIsBuilding,
+                accessibilityIdentifier: "insightsExerciseMixInstrument"
             )
 
             if !board.hasAny, split.totalSets == 0 {
@@ -67,18 +67,15 @@ struct ExerciseDominanceSection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             cardHeading("Exercise allocation", trailing: setLabel(board.totalSets))
 
-            Chart(Array(rows.enumerated()), id: \.element.id) { index, row in
-                BarMark(
-                    x: .value("Sets", row.sets),
-                    y: .value("Allocation", "Working sets")
-                )
-                .foregroundStyle(allocationColor(rank: index))
-                .cornerRadius(3)
-            }
-            .chartXAxis(.hidden)
-            .chartYAxis(.hidden)
-            .frame(height: InsightChartCanvas.compact)
-            .accessibilityHidden(true)
+            segmentedShareBar(
+                Array(rows.enumerated()).map { index, row in
+                    ShareBarSegment(
+                        id: row.id,
+                        weight: row.sets,
+                        fill: allocationColor(rank: index)
+                    )
+                }
+            )
 
             allocationLegend
         }
@@ -104,7 +101,7 @@ struct ExerciseDominanceSection: View {
 
                     Text("\(Int((row.share * 100).rounded()))%")
                         .font(Typography.metricInline)
-                        .foregroundStyle(index == 0 ? Tint.primary : Ink.secondary)
+                        .foregroundStyle(index == 0 ? Tint.primaryText : Ink.secondary)
                         .monospacedDigit()
                 }
                 .frame(minHeight: 34)
@@ -119,20 +116,17 @@ struct ExerciseDominanceSection: View {
         VStack(alignment: .leading, spacing: Space.lg) {
             cardHeading("Exercise type", trailing: classificationToken)
 
-            Chart(typeSegments) { segment in
-                BarMark(
-                    x: .value("Sets", segment.sets),
-                    y: .value("Type", "Working sets")
-                )
-                .foregroundStyle(segment.fill)
-                .cornerRadius(3)
-            }
-            .chartXAxis(.hidden)
-            .chartYAxis(.hidden)
-            .frame(height: InsightChartCanvas.compact)
-            .accessibilityHidden(true)
+            segmentedShareBar(
+                typeSegments.map { segment in
+                    ShareBarSegment(
+                        id: segment.id,
+                        weight: segment.sets,
+                        fill: segment.fill
+                    )
+                }
+            )
 
-            InsightChartLegend(items: typeLegendItems)
+            typeLegend
         }
         .padding(Space.xl)
         .contentCard()
@@ -154,13 +148,29 @@ struct ExerciseDominanceSection: View {
         .filter { $0.sets > 0 }
     }
 
-    private var typeLegendItems: [InsightChartLegend.Item] {
-        typeSegments.map { segment in
-            InsightChartLegend.Item(
-                label: "\(segment.id.capitalized) \(Int((share(of: segment.sets) * 100).rounded()))%",
-                color: segment.fill,
-                swatch: .fill
-            )
+    private var typeLegend: some View {
+        VStack(spacing: 0) {
+            ForEach(typeSegments) { segment in
+                HStack(spacing: Space.sm) {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(segment.fill)
+                        .frame(width: 10, height: 10)
+                        .accessibilityHidden(true)
+
+                    Text(segment.id.capitalized)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+
+                    Spacer(minLength: Space.sm)
+
+                    Text("\(Int((share(of: segment.sets) * 100).rounded()))%")
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                }
+                .frame(minHeight: 34)
+                .accessibilityElement(children: .combine)
+            }
         }
     }
 
@@ -195,6 +205,30 @@ struct ExerciseDominanceSection: View {
         Text(trailing)
             .panelLegend()
             .lineLimit(1)
+    }
+
+    private func segmentedShareBar(_ segments: [ShareBarSegment]) -> some View {
+        let totalWeight = segments.reduce(0) { $0 + $1.weight }
+        let gapCount = max(0, segments.count - 1)
+
+        return GeometryReader { proxy in
+            let totalGap = Space.xs * CGFloat(gapCount)
+            let availableWidth = max(0, proxy.size.width - totalGap)
+
+            HStack(spacing: Space.xs) {
+                ForEach(segments) { segment in
+                    RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                        .fill(segment.fill)
+                        .frame(
+                            width: totalWeight > 0
+                                ? availableWidth * CGFloat(segment.weight) / CGFloat(totalWeight)
+                                : 0
+                        )
+                }
+            }
+        }
+        .frame(height: 36)
+        .accessibilityHidden(true)
     }
 
     // MARK: - Derived rows
@@ -290,5 +324,11 @@ private struct DominanceRow: Identifiable, Hashable {
 private struct TypeSegment: Identifiable {
     let id: String
     let sets: Int
+    let fill: Color
+}
+
+private struct ShareBarSegment: Identifiable {
+    let id: String
+    let weight: Int
     let fill: Color
 }

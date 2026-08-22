@@ -34,27 +34,57 @@ struct SectionHeader: View {
     let title: String
     var trailing: String? = nil
     var trailingIsInProgress: Bool = false
+    var accessibilityIdentifier: String? = nil
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(title)
-                .font(Typography.title)
-                .foregroundStyle(Ink.primary)
-                .textCase(nil)
-                .tracking(0)
-                .accessibilityAddTraits(.isHeader)
-            if let trailing {
-                Spacer(minLength: Space.sm)
-                HStack(spacing: Space.sm) {
-                    if trailingIsInProgress {
-                        BuildingSignalDot()
-                    }
-                    Text(trailing)
-                        .panelLegend()
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline) {
+                titleView
+                if trailing != nil {
+                    Spacer(minLength: Space.sm)
+                    trailingView
+                        .fixedSize(horizontal: true, vertical: false)
                 }
+            }
+
+            VStack(alignment: .leading, spacing: Space.xs) {
+                titleView
+                trailingView
             }
         }
         .padding(.top, Space.sm)
+    }
+
+    @ViewBuilder
+    private var trailingView: some View {
+        if let trailing {
+            HStack(spacing: Space.sm) {
+                if trailingIsInProgress {
+                    BuildingSignalDot()
+                }
+                Text(trailing)
+                    .panelLegend()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var titleView: some View {
+        if let accessibilityIdentifier {
+            styledTitle
+                .accessibilityIdentifier(accessibilityIdentifier)
+        } else {
+            styledTitle
+        }
+    }
+
+    private var styledTitle: some View {
+        Text(title)
+            .font(Typography.title)
+            .foregroundStyle(Ink.primary)
+            .textCase(nil)
+            .tracking(0)
+            .accessibilityAddTraits(.isHeader)
     }
 }
 
@@ -385,13 +415,14 @@ struct MetricView: View {
     var unit: String? = nil
     var valueFont: Font = Typography.metricHero
     var accent: Bool = false
+    var accentColor: Color = Tint.primary
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.xs) {
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text(value)
                     .font(valueFont)
-                    .foregroundStyle(accent ? Tint.primary : Ink.primary)
+                    .foregroundStyle(accent ? accentColor : Ink.primary)
                     .monospacedDigit()
                 if let unit {
                     Text(unit)
