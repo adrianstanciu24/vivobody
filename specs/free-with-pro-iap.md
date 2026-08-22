@@ -28,6 +28,7 @@ shows exactly what Pro adds using their own data.
 | Up Next widget, Start Workout control, Live Activity | ✅ | — |
 | **Insights tab** (signature, strength, dominance, intensity, rep trend, movement, rhythm, load, symmetry) | frozen blurred preview | ✅ |
 | Exercise progress charts (ExerciseDetailScreen chart sections) | locked; raw stats stay free | ✅ |
+| Exercise comparison (entered from Exercise Detail outside a live workout) | attempt-gated | ✅ |
 | Signature + Consistency widgets | locked placeholder | ✅ |
 | HealthKit sync | locked | ✅ |
 
@@ -120,7 +121,14 @@ resolved `isPro` flag to the App Group so widgets never touch StoreKit.
 - Chart sections get the same frozen-blur + unlock treatment; numeric stats
   (best set, last performed, PRs, totals) stay free.
 
-### 4. Widgets (`vivobodyWidgets`)
+### 4. Exercise comparison (`ExerciseDetailScreen`)
+- The comparison entry is attempt-gated: Pro users continue to the
+  comparison picker; free users see `PaywallSheet`.
+- `ExercisePickerPurpose.addToActiveWorkout` suppresses the entry row and
+  toolbar action. Comparison and its paywall can never interrupt a live
+  workout.
+
+### 5. Widgets (`vivobodyWidgets`)
 - `WidgetSnapshotWriter` adds `isPro: Bool` to the shared snapshot.
 - SignatureWidget + ConsistencyWidget render a static locked placeholder
   ("Unlock in Vivobody") when `isPro == false`. Tapping deep-links to the
@@ -128,11 +136,11 @@ resolved `isPro` flag to the App Group so widgets never touch StoreKit.
 - UpNextWidget, StartWorkoutControl, and the Live Activity are always free —
   they drive engagement, which drives conversion.
 
-### 5. HealthKit toggle (`SettingsScreen`)
+### 6. HealthKit toggle (`SettingsScreen`)
 - The Apple Health row shows a small lock glyph when `free`; tapping it
   presents PaywallSheet instead of toggling. Existing behavior when `pro`.
 
-### 6. Settings row (`SettingsScreen`)
+### 7. Settings row (`SettingsScreen`)
 - New section at the top: when `free`, a "Vivobody Pro" row → PaywallSheet.
   When `pro`, a quiet "Vivobody Pro · Unlocked" row with Restore hidden.
 - PaywallSheet always contains a **Restore Purchases** button
@@ -144,8 +152,9 @@ One screen, presented as a sheet. Matches the app's visual language:
 black, type-forward, single accent. Contents, top to bottom:
 
 1. Wordmark + "Pro" badge.
-2. The feature list as quiet rows (Insights, unlimited templates, progress
-   charts, widgets, Apple Health) — sentence case, no checkmark spam.
+2. The feature list as quiet rows (Insights, progress charts, exercise
+   comparison, unlimited templates, widgets, Apple Health) — sentence case,
+   no checkmark spam.
 3. Price pulled live from `Product.displayPrice` (never hardcoded).
 4. `PrimaryActionButton` — "Unlock Forever · $24.99".
 5. Restore Purchases (footnote-weight button).
@@ -169,7 +178,8 @@ silent.
   counts 4, 5, and 6 in both states.
 - `Scripts/verify.sh` states: Insights locked (blur + unlock card present in
   the accessibility tree), Insights unlocked (`--pro`), Settings Pro row,
-  template limit paywall.
+  template limit paywall, exercise comparison unlocked, and exercise
+  comparison locked, plus comparison absent from the live-workout add flow.
 - Sandbox test on device before submission (StoreKit config ≠ sandbox).
 
 ## App Store Connect checklist
@@ -192,6 +202,8 @@ silent.
 | `vivobody/Screens/Insights/InsightsScreen.swift` | Frozen-blur lock state + unlock card |
 | `vivobody/Screens/Library/LibraryScreen.swift` | 5-template gate in `handlePlus` (the single create path once templates exist) |
 | `vivobody/Screens/Library/ExerciseDetailSections.swift` | Chart section lock state |
+| `vivobody/Screens/Library/ExerciseDetailScreen.swift` | Exercise-comparison gate; active-workout suppression |
+| `vivobody/Screens/Library/ExerciseComparisonScreen.swift` | Pro comparison surface |
 | `vivobody/Screens/Me/SettingsScreen.swift` | Pro row + HealthKit row gate |
 | `vivobody/App/WidgetSnapshotWriter.swift` | `isPro` in shared snapshot |
 | `vivobodyWidgets/SignatureWidget.swift` | Locked placeholder |

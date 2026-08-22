@@ -2,11 +2,12 @@
 //  ExercisePickerSheet.swift
 //  vivobody
 //
-//  Modal browser for the exercise catalog. Presented from the
-//  TemplateEditorScreen ("Add Exercise") and from the active workout
-//  Summary card ("Add Exercise" mid-workout). Returns a single picked
-//  item via callback and dismisses; the caller decides what to do
-//  with it.
+//  Purpose-driven modal browser for the exercise catalog. The purpose
+//  keeps each caller's title, tap behavior, trailing affordance,
+//  accessibility hint, comparison availability, and exclusions together:
+//  workout flows explore detail before adding (with comparison suppressed
+//  during a live session), template editing adds immediately, and exercise
+//  comparison immediately chooses any exercise except its anchor.
 //
 //  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so
 //  users can extend it inline:
@@ -32,14 +33,16 @@ import SwiftUI
 import VivoKit
 
 struct ExercisePickerSheet: View {
+    let purpose: ExercisePickerPurpose
     let onPick: (ExerciseCatalogItem) -> Void
 
-    /// When true, tapping a row commits the pick immediately (lime
-    /// "+" affordance) and dismisses — used by the template builder,
-    /// where selection flows straight into the configure sheet. When
-    /// false (default), rows push to ExerciseDetailScreen and the
-    /// user commits from the detail CTA — the active-workout add path.
-    var picksOnTap: Bool = false
+    init(
+        purpose: ExercisePickerPurpose = .explore,
+        onPick: @escaping (ExerciseCatalogItem) -> Void
+    ) {
+        self.purpose = purpose
+        self.onPick = onPick
+    }
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -114,7 +117,7 @@ struct ExercisePickerSheet: View {
                 .contentMargins(.horizontal, Space.gutter, for: .scrollContent)
                 .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             }
-            .navigationTitle("Add Exercise")
+            .navigationTitle(purpose.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -174,10 +177,11 @@ struct ExercisePickerSheet: View {
         Set(lastInstanceLookup.keys)
     }
 
-    /// Catalog narrowed by the selected chip only (no text filter),
-    /// shared by the grouped and search paths.
+    /// Catalog narrowed by the selected chip and the caller's
+    /// exclusion (no text filter), shared by the grouped and search
+    /// paths.
     private var scopedItems: [ExerciseCatalogItem] {
-        items.filter { filter.matches($0) }
+        items.filter { $0.id != purpose.excludedItemID && filter.matches($0) }
     }
 
     /// Flat, relevance-ranked results for the active query — same
@@ -315,33 +319,35 @@ struct ExercisePickerSheet: View {
         let last = lastInstance(for: item)
 
         Group {
-            if picksOnTap {
-                // Direct-pick: tap commits and dismisses. The lime
-                // "+" glyph signals "adds straight to the template"
-                // rather than "drills into detail."
+            switch purpose {
+            case .addToTemplate, .compare:
+                // Direct selection is purpose-specific: templates use
+                // an add glyph, comparisons use a bidirectional arrow.
                 Button {
                     Haptics.soft()
                     onPick(item)
                     dismiss()
                 } label: {
-                    rowBody(item: item, last: last, trailingSymbol: "plus")
+                    rowBody(item: item, last: last, accessory: purpose.rowAccessory)
                 }
                 .buttonStyle(.plain)
-                .accessibilityHint("Adds this exercise to your template")
-            } else {
+                .accessibilityHint(purpose.directPickAccessibilityHint)
+
+            case .explore, .addToActiveWorkout:
                 // Row taps navigate to detail instead of immediately
                 // picking; the user commits via the "Add to Workout"
                 // CTA on the detail screen.
                 NavigationLink {
                     ExerciseDetailScreen(
                         item: item,
+                        allowsComparison: purpose.allowsComparison,
                         onPickAndDismiss: { picked in
                             onPick(picked)
                             dismiss()
                         }
                     )
                 } label: {
-                    rowBody(item: item, last: last, trailingSymbol: "chevron.right")
+                    rowBody(item: item, last: last, accessory: purpose.rowAccessory)
                 }
                 .buttonStyle(.plain)
             }
@@ -383,9 +389,14 @@ struct ExercisePickerSheet: View {
     private func rowBody(
         item: ExerciseCatalogItem,
         last: LastExerciseInstance?,
-        trailingSymbol: String
+        accessory: ExercisePickerRowAccessory
     ) -> some View {
-        let isAdd = trailingSymbol == "plus"
+        let isProminent = accessory != .disclosure
+        let accessoryColor: Color = switch accessory {
+        case .add: Tint.inProgress
+        case .compare: Ink.secondary
+        case .disclosure: Ink.quaternary
+        }
         return HStack(spacing: Space.md) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
@@ -415,9 +426,9 @@ struct ExercisePickerSheet: View {
             // facts, not prescriptions, so no invented numbers.
             rowRightSide(last: last)
 
-            Image(systemName: trailingSymbol)
-                .font(isAdd ? Typography.headline : Typography.caption)
-                .foregroundStyle(isAdd ? Tint.inProgress : Ink.quaternary)
+            Image(systemName: accessory.systemName)
+                .font(isProminent ? Typography.headline : Typography.caption)
+                .foregroundStyle(accessoryColor)
                 .accessibilityHidden(true)
         }
         .frame(minHeight: Space.rowMin)

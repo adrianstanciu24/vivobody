@@ -21,7 +21,10 @@ framework chatter or user-owned values.
 
 - `reset`: adds `--ui-test-reset` when true.
 - `tab`: adds `--verify-tab <tab>`.
-- `arguments`: additional deterministic debug launch arguments.
+- `arguments`: additional deterministic debug launch arguments. Pass
+  `--static-body` on any scenario that lands on a screen with the 3D body
+  model: the idle turntable starves the simulator's accessibility bridge
+  (polls return skeleton trees) and makes screenshots nondeterministic.
 
 ## Steps
 

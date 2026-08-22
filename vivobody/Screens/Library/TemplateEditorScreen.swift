@@ -9,7 +9,7 @@
 //
 //  Flow (first principles):
 //    1. Name the template — a single hairline-underlined field.
-//    2. "Add exercise" → ExercisePickerSheet in picks-on-tap mode:
+//    2. "Add exercise" → ExercisePickerSheet in template-add mode:
 //       selecting a row commits it immediately and dismisses.
 //    3. The pick flows into ConfigureExerciseSheet — a bottom sheet
 //       where Sets / Target reps / Weight are scrubbed as huge
@@ -102,11 +102,11 @@ struct TemplateEditorScreen: View {
             }
             .sheet(isPresented: $showPicker, onDismiss: presentConfigureForPendingPick) {
                 ExercisePickerSheet(
+                    purpose: .addToTemplate,
                     onPick: { item in
                         pendingPick = item
                         showPicker = false
-                    },
-                    picksOnTap: true
+                    }
                 )
             }
             .sheet(item: $configureTarget) { cfg in
