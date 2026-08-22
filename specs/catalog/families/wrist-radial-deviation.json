@@ -343,12 +343,20 @@
         "forman-2020-dynamic-wrist-deviation",
         "szymanski-2004-wrist-forearm-training"
       ],
-      "movementSteps": [
-        "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward.",
-        "Grip below the dumbbell's bottom collar with its shaft pointing ahead.",
-        "Raise the thumb side of your wrist through the controlled available range.",
-        "Lower under control without rotating your forearm or moving your elbow, shoulder, or torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand tall with your working arm beside your body, your elbow straight, and your thumb pointing forward. Grip below the dumbbell's bottom collar with its shaft pointing ahead.",
+        "movement": "Raise the thumb side of your wrist through the controlled available range.",
+        "endpoint": "End the lift at the top of the controlled available range.",
+        "returnPhase": "Lower under control without rotating your forearm or moving your elbow, shoulder, or torso.",
+        "controlledJoints": "Keep your elbow straight and your working arm beside your body.",
+        "supportAndPosture": "Stand tall and keep your torso still.",
+        "disqualifyingCompensations": [
+          "Bending the elbow to swing the dumbbell turns the wrist deviation into an arm curl.",
+          "Rotating the forearm during the lift turns the thumb-side deviation into a forearm rotation.",
+          "Gripping the dumbbell at its center turns the collar-offset lever into a plain dumbbell hold."
+        ],
+        "sideOrDirection": "Complete all repetitions on one side, then repeat with the other hand."
+      }
     }
   ]
 }

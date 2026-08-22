@@ -28,12 +28,10 @@ extension TodayScreen {
         }
     }
 
-    /// Calendar days in the recent window with at least one archived
-    /// session. Drives the ConsistencyStrip fills.
+    /// Archived session timestamps in the recent window. The strip normalizes
+    /// these into visual days while retaining an exact session count.
     var workoutDates: Set<Date> {
-        Set(recentSessions.map {
-            Calendar.current.startOfDay(for: $0.completedAt ?? $0.startedAt)
-        })
+        Set(recentSessions.map { $0.completedAt ?? $0.startedAt })
     }
 
     /// Calendar days on which a PR was set. Passed to ConsistencyStrip

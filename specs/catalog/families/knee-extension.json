@@ -426,12 +426,19 @@
         "larsen-2025-leg-extension-hip-flexion",
         "mitsuya-2023-leg-extension-hip-flexion"
       ],
-      "movementSteps": [
-        "Sit in a single-leg knee-extension machine with the backrest reclined so your hip is bent near 40 degrees.",
-        "Align your knee with the machine's pivot and place the lower shin against the pad.",
-        "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
-        "Return under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit in a single-leg knee-extension machine with the backrest reclined so your hip is bent near 40 degrees. Align your knee with the machine's pivot and place the lower shin against the pad.",
+        "movement": "Straighten the knee completely.",
+        "endpoint": "Finish with the knee completely straight.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your pelvis, back, hip, ankle, and foot still.",
+        "supportAndPosture": "Keep your back against the reclined machine pad and your pelvis on the seat.",
+        "disqualifyingCompensations": [
+          "Rocking the pelvis or arching the back to move the pad turns the leg extension into a trunk-driven heave.",
+          "Swinging the lower leg up with momentum turns the leg extension into a leg swing."
+        ],
+        "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
+      }
     },
     {
       "catalogID": "upright-unilateral-machine-leg-extension",
@@ -486,12 +493,19 @@
         "larsen-2025-leg-extension-hip-flexion",
         "mitsuya-2023-leg-extension-hip-flexion"
       ],
-      "movementSteps": [
-        "Sit upright in a single-leg knee-extension machine with your hip bent near 90 degrees.",
-        "Align your knee with the machine's pivot and place the lower shin against the pad.",
-        "Keep your pelvis, back, hip, ankle, and foot still as you straighten the knee completely.",
-        "Return under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright in a single-leg knee-extension machine with your hip bent near 90 degrees. Align your knee with the machine's pivot and place the lower shin against the pad.",
+        "movement": "Straighten the knee completely.",
+        "endpoint": "Finish with the knee completely straight.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your pelvis, back, hip, ankle, and foot still.",
+        "supportAndPosture": "Keep your back against the upright machine pad and your pelvis on the seat.",
+        "disqualifyingCompensations": [
+          "Rocking the pelvis or arching the back to move the pad turns the leg extension into a trunk-driven heave.",
+          "Swinging the lower leg up with momentum turns the leg extension into a leg swing."
+        ],
+        "sideOrDirection": "Complete the set with one leg, then repeat with the other leg."
+      }
     }
   ]
 }

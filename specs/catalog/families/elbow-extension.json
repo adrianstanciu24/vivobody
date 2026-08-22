@@ -690,11 +690,19 @@
         "villalba-2024-pushdown-forearm-position",
         "maeo-2023-overhead-neutral-elbow-extension"
       ],
-      "movementSteps": [
-        "Stand at a high cable, and hold a single handle with the working palm facing up.",
-        "Keep the upper arm alongside your torso and the wrist straight as you straighten the elbow from about 90 degrees.",
-        "Return under control without moving the shoulder or rotating the forearm."
-      ]
+      "execution": {
+        "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing up.",
+        "movement": "Straighten the elbow from about 90 degrees.",
+        "endpoint": "End the pushdown with your elbow fully straight.",
+        "returnPhase": "Return under control without moving the shoulder or rotating the forearm.",
+        "controlledJoints": "Keep the upper arm alongside your torso and the wrist straight.",
+        "supportAndPosture": "Stand upright with your feet planted and your trunk braced.",
+        "disqualifyingCompensations": [
+          "Letting the upper arm drift away from the torso turns the pushdown into an overhead extension.",
+          "Rotating the forearm during the push turns the palm-up pushdown into a palm-down pushdown."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "single-arm-pronated-cable-triceps-pushdown",
@@ -773,11 +781,19 @@
       "evidenceRefs": [
         "villalba-2024-pushdown-forearm-position"
       ],
-      "movementSteps": [
-        "Stand at a high cable, and hold a single handle with the working palm facing down.",
-        "Keep the upper arm alongside your torso and the wrist straight as you straighten the elbow from about 90 degrees.",
-        "Return under control without moving the shoulder or rotating the forearm."
-      ]
+      "execution": {
+        "startingPosition": "Stand at a high cable, and hold a single handle with the working palm facing down.",
+        "movement": "Straighten the elbow from about 90 degrees.",
+        "endpoint": "End the pushdown with your elbow fully straight.",
+        "returnPhase": "Return under control without moving the shoulder or rotating the forearm.",
+        "controlledJoints": "Keep the upper arm alongside your torso and the wrist straight.",
+        "supportAndPosture": "Stand upright with your feet planted and your trunk braced.",
+        "disqualifyingCompensations": [
+          "Letting the upper arm drift away from the torso turns the pushdown into an overhead extension.",
+          "Rotating the forearm during the push turns the palm-down pushdown into a palm-up pushdown."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "single-arm-overhead-cable-triceps-extension",
@@ -852,11 +868,19 @@
       "evidenceRefs": [
         "maeo-2023-overhead-neutral-elbow-extension"
       ],
-      "movementSteps": [
-        "Stand with one arm overhead and the palm facing up while the cable pulls against you.",
-        "Keep your upper arm, wrist, torso, and lower body still as you straighten the elbow from about 90 degrees.",
-        "Return under control."
-      ]
+      "execution": {
+        "startingPosition": "Stand with one arm overhead and the palm facing up while the cable pulls against you.",
+        "movement": "Straighten the elbow from about 90 degrees.",
+        "endpoint": "End the extension with your elbow fully straight.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your upper arm, wrist, torso, and lower body still.",
+        "supportAndPosture": "Stand upright with your feet planted and your trunk braced.",
+        "disqualifyingCompensations": [
+          "Dropping the upper arm to your side turns the overhead extension into a pushdown.",
+          "Arching the back to move the handle turns the overhead extension into a back-assisted press."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "seated-single-arm-overhead-dumbbell-triceps-extension",
@@ -931,11 +955,19 @@
       "evidenceRefs": [
         "alves-2018-triceps-shoulder-position"
       ],
-      "movementSteps": [
-        "Sit upright without back support, and hold one dumbbell overhead with your palm facing inward.",
-        "Keep your upper arm and torso still as you bend the elbow to lower the dumbbell.",
-        "Straighten the elbow as far as you can without turning the forearm."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright without back support, and hold one dumbbell overhead with your palm facing inward.",
+        "movement": "Bend the elbow to lower the dumbbell.",
+        "endpoint": "End the lowering with the dumbbell at the bottom of the repetition.",
+        "returnPhase": "Straighten the elbow as far as you can without turning the forearm.",
+        "controlledJoints": "Keep your upper arm and torso still.",
+        "supportAndPosture": "Support yourself on the seat with your trunk braced and no back support.",
+        "disqualifyingCompensations": [
+          "Dropping the upper arm to your side turns the overhead extension into a pushdown.",
+          "Turning the forearm while straightening turns the extension into a forearm rotation."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "single-arm-lying-dumbbell-triceps-extension",
@@ -1003,11 +1035,19 @@
       "evidenceRefs": [
         "alves-2018-triceps-shoulder-position"
       ],
-      "movementSteps": [
-        "Lie on your back on a bench with one dumbbell held over your chest, your palm facing inward, and your upper arm pointing straight up.",
-        "Hold your upper arm still, and bend the elbow to lower the dumbbell.",
-        "Straighten the elbow as far as you can."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back on a bench with one dumbbell held over your chest, your palm facing inward, and your upper arm pointing straight up.",
+        "movement": "Bend the elbow to lower the dumbbell.",
+        "endpoint": "End the lowering with the dumbbell at the bottom of the repetition.",
+        "returnPhase": "Straighten the elbow as far as you can.",
+        "controlledJoints": "Hold your upper arm still.",
+        "supportAndPosture": "Support your torso fully on the bench.",
+        "disqualifyingCompensations": [
+          "Letting the upper arm fall toward your torso turns the lying extension into a close-grip press.",
+          "Tilting the upper arm back overhead turns the lying extension into an overhead extension."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

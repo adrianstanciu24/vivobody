@@ -2,25 +2,44 @@
   "name": "insights-push-pull",
   "launch": {
     "reset": true,
-    "tab": "today",
+    "tab": "insights",
     "arguments": ["--ui-test-insights-showcase", "--pro"]
   },
   "steps": [
     {
       "wait": {
-        "identifier": "todayStartWorkoutButton",
-        "role": "AXButton"
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
       }
     },
     {
-      "openURL": "vivobody://insights"
+      "tap": {
+        "identifier": "insightsModeBalance"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceInstrument",
+        "role": "AXHeading"
+      }
     },
     {
       "scrollTo": {
         "selector": {
-          "identifier": "insightsTrainingBalanceSection"
+          "identifier": "insightsBalanceAllLink"
         },
         "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsBalanceAllLink"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceAllInstrument",
+        "role": "AXHeading"
       }
     },
     {
@@ -55,9 +74,6 @@
     {
       "identifier": "insightsBalance-isolation-push-pull",
       "labelContains": "Isolation Push"
-    },
-    {
-      "identifier": "insightsTrainingBalanceSection"
     }
   ],
   "forbidden": []

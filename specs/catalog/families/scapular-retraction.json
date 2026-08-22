@@ -449,12 +449,20 @@
       "evidenceRefs": [
         "mccabe-2007-below-90-scapular-exercises"
       ],
-      "movementSteps": [
-        "Stand facing a low band anchor and hold your working arm almost straight ahead with your elbow straight and the band just taut.",
-        "Pull your working shoulder blade back toward your spine against the band for two seconds.",
-        "Return for two seconds without bending your elbow, moving your arm at the shoulder, shrugging, turning your torso, or moving your neck.",
-        "Rest five seconds between repetitions."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a low band anchor and hold your working arm almost straight ahead with your elbow straight and the band just taut.",
+        "movement": "Pull your working shoulder blade back toward your spine against the band for two seconds.",
+        "endpoint": "End the pull when the shoulder blade has drawn fully toward the spine.",
+        "returnPhase": "Return for two seconds without bending your elbow, moving your arm at the shoulder, shrugging, turning your torso, or moving your neck. Rest five seconds between repetitions.",
+        "controlledJoints": "Keep your elbow straight and your shoulder, torso, and neck still.",
+        "supportAndPosture": "Stand upright facing the anchor with no support for your torso or your free arm.",
+        "disqualifyingCompensations": [
+          "Bending the elbow turns the shoulder-blade pull into a row.",
+          "Moving the arm at the shoulder turns the shoulder-blade pull into a reverse fly.",
+          "Shrugging the shoulder turns the shoulder-blade pull into a shrug."
+        ],
+        "sideOrDirection": "Complete the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

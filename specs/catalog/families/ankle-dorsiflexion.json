@@ -292,13 +292,20 @@
       "evidenceRefs": [
         "kjeldsen-2019-dorsiflexor-training"
       ],
-      "movementSteps": [
-        "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board.",
-        "Set a physical stop where the working foot reaches its comfortable lifted position.",
-        "Begin from the self-selected resting position with the sole on the board, and hold the selected knee posture still.",
-        "Lift the front of the foot toward the shin until it reaches the stop, without turning the foot inward or outward or lifting through the toes alone.",
-        "Return under control until the sole touches the board, then repeat before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Sit comfortably with the working foot resting on a board beneath an elastic band affixed to that board. Set a physical stop where the working foot reaches its comfortable lifted position. Begin from the self-selected resting position with the sole on the board.",
+        "movement": "Lift the front of the foot toward the shin until it reaches the stop, without turning the foot inward or outward or lifting through the toes alone.",
+        "endpoint": "End the lift when the foot reaches the physical stop.",
+        "returnPhase": "Return under control until the sole touches the board.",
+        "controlledJoints": "Hold the selected knee posture still.",
+        "supportAndPosture": "Stay seated and supported by the seat while only the working foot moves.",
+        "disqualifyingCompensations": [
+          "Bending or straightening the knee to swing the foot up turns the ankle lift into a leg swing.",
+          "Turning the foot inward or outward turns the ankle lift into a twisting foot movement.",
+          "Lifting through the toes alone turns the ankle lift into a toe raise."
+        ],
+        "sideOrDirection": "Complete every repetition before changing sides, then repeat with the other foot."
+      }
     }
   ]
 }

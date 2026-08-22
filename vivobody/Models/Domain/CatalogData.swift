@@ -5,8 +5,9 @@
 //  Strict decoder and validator for the bundled exercise catalog.
 //  catalog.json is deterministically compiled from specs/catalog
 //  by Scripts/catalog.py. It is a build-time contract: malformed
-//  enums, missing required biomechanics fields, duplicate stable IDs,
-//  or ambiguous names fail loudly rather than acquiring silent defaults.
+//  enums, missing required biomechanics fields, malformed structured
+//  execution instructions, duplicate stable IDs, or ambiguous names
+//  fail loudly rather than acquiring silent defaults.
 //
 
 import Foundation
@@ -45,7 +46,7 @@ nonisolated struct CatalogRecord: Decodable {
     let bodyweightFraction: Double
     let modality: ExerciseModality
     let loadMode: ExerciseLoadMode
-    let movementSteps: [String]
+    let execution: ExecutionInstructions
     let involvement: [MuscleAssignment]
 
     /// Canonical projections used by persistent synchronization.
@@ -227,7 +228,7 @@ nonisolated enum CatalogData {
                 throw ValidationError.duplicateCatalogID(record.catalogID)
             }
 
-            try validateMovementSteps(record)
+            try validateExecution(record)
             guard record.defaultWeight >= 0, record.reps > 0 else {
                 throw ValidationError.invalidDefaults(record.catalogID)
             }
@@ -346,36 +347,50 @@ nonisolated enum CatalogData {
             .lowercased()
     }
 
-    private static func validateMovementSteps(_ record: CatalogRecord) throws {
-        guard
-            (2 ... 10).contains(record.movementSteps.count),
-            Set(record.movementSteps).count == record.movementSteps.count
-        else {
-            throw ValidationError.invalidMovementSteps(record.catalogID)
-        }
+    private static func validateExecution(_ record: CatalogRecord) throws {
+        let execution = record.execution
+        let compensations = execution.disqualifyingCompensations
+        let texts = [
+            execution.startingPosition,
+            execution.movement,
+            execution.endpoint,
+            execution.controlledJoints,
+            execution.supportAndPosture,
+        ] + compensations + [execution.returnPhase, execution.sideOrDirection].compactMap(\.self)
 
-        for step in record.movementSteps {
-            let trimmed = step.trimmingCharacters(in: .whitespacesAndNewlines)
-            let words = trimmed
-                .split(whereSeparator: \.isWhitespace)
-                .map {
-                    String($0)
-                        .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-                        .lowercased()
-                }
-                .filter { !$0.isEmpty }
-            let repeatsAdjacentWord = zip(words, words.dropFirst())
-                .contains { pair in pair.0 == pair.1 }
-            guard
-                trimmed == step,
-                trimmed.count >= 12,
-                trimmed.first?.isUppercase == true,
-                trimmed.last.map({ ".!?".contains($0) }) == true,
-                !repeatsAdjacentWord
-            else {
-                throw ValidationError.invalidMovementSteps(record.catalogID)
-            }
+        let expectsReturnPhase = record.trackingMode == .reps
+        let expectsSideOrDirection = record.laterality == .unilateral || record.pattern == .carry
+        guard
+            !compensations.isEmpty,
+            Set(compensations).count == compensations.count,
+            texts.allSatisfy(isWellFormedInstruction),
+            (execution.returnPhase != nil) == expectsReturnPhase,
+            (execution.sideOrDirection != nil) == expectsSideOrDirection
+        else {
+            throw ValidationError.invalidExecution(record.catalogID)
         }
+    }
+
+    /// Shared prose rule for every instruction field: already trimmed,
+    /// at least twelve characters, sentence-cased, sentence-terminated,
+    /// and free of adjacent repeated words.
+    private static func isWellFormedInstruction(_ text: String) -> Bool {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let words = trimmed
+            .split(whereSeparator: \.isWhitespace)
+            .map {
+                String($0)
+                    .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+                    .lowercased()
+            }
+            .filter { !$0.isEmpty }
+        let repeatsAdjacentWord = zip(words, words.dropFirst())
+            .contains { pair in pair.0 == pair.1 }
+        return trimmed == text
+            && trimmed.count >= 12
+            && trimmed.first?.isUppercase == true
+            && trimmed.last.map { ".!?".contains($0) } == true
+            && !repeatsAdjacentWord
     }
 
     private static func validateTrainingRole(_ record: CatalogRecord) throws {
@@ -408,7 +423,7 @@ nonisolated enum CatalogData {
         case duplicateCatalogID(String)
         case emptyName(String)
         case duplicateName(String)
-        case invalidMovementSteps(String)
+        case invalidExecution(String)
         case invalidDefaults(String)
         case invalidSearchPriority(String)
         case invalidBodyweightFraction(String)
@@ -437,7 +452,7 @@ nonisolated enum CatalogData {
             case let .duplicateCatalogID(id): "duplicate catalogID '\(id)'"
             case let .emptyName(id): "record '\(id)' has an empty name"
             case let .duplicateName(name): "duplicate exercise name '\(name)'"
-            case let .invalidMovementSteps(id): "record '\(id)' has malformed movement steps"
+            case let .invalidExecution(id): "record '\(id)' has malformed execution instructions"
             case let .invalidDefaults(id): "record '\(id)' has invalid weight/reps defaults"
             case let .invalidSearchPriority(id): "record '\(id)' has an invalid search priority"
             case let .invalidBodyweightFraction(id): "record '\(id)' has an invalid bodyweight fraction"

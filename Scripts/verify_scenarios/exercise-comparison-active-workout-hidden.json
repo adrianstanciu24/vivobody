@@ -1,0 +1,74 @@
+{
+  "name": "exercise-comparison-active-workout-hidden",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": ["--ui-test-active-partial", "--no-iap", "--static-body"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Add an exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Add an exercise",
+        "role": "AXButton"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "wait": {
+        "label": "DYNAMIC STRENGTH"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "DYNAMIC STRENGTH"
+    },
+    {
+      "label": "Barbell Bench Press"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "exercise-compare",
+      "visible": true
+    },
+    {
+      "identifier": "exercise-compare",
+      "visible": false
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro",
+      "visible": true
+    }
+  ]
+}

@@ -2,9 +2,7 @@
 //  DebugSeed.swift
 //  vivobody
 //
-//  Debug-only seed data and UI-test support. Extracted from
-//  vivobodyApp.swift so the @main entry point reads at a glance.
-//  All types are inside `#if DEBUG` and never ship in Release.
+//  Debug-only seed data and UI-test support, isolated from @main and Release builds.
 //
 
 import Foundation
@@ -95,8 +93,10 @@ import VivoKit
             UserDefaults.standard.set(!shouldShowOnboarding, forKey: SettingsKey.onboardingCompleted)
             deleteAll(WorkoutSession.self, in: context)
             deleteAll(WorkoutTemplate.self, in: context)
-            deleteAll(ExerciseCatalogItem.self, in: context)
             deleteAll(BodyWeightEntry.self, in: context)
+            // Persist workout deletion before clearing its catalog dependencies.
+            try? context.saveOrRollback()
+            deleteAll(ExerciseCatalogItem.self, in: context)
             ExerciseCatalogItem.clearBundledCatalogDeletions()
             let sharedDefaults = UserDefaults(suiteName: WidgetShared.appGroup)
             sharedDefaults?.removeObject(forKey: WidgetShared.startWorkoutRequestKey)
@@ -134,7 +134,7 @@ import VivoKit
                 seedInsightsEmptyInstruments(in: context)
             }
             if CommandLine.arguments.contains("--ui-test-insights-showcase") {
-                HistorySeeder.seedShowcase(into: context)
+                InsightsShowcaseSeed.seed(in: context)
             }
             if CommandLine.arguments.contains("--ui-test-scheduled-template") {
                 seedScheduledTemplate(in: context)

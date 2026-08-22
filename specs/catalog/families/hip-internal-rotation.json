@@ -475,15 +475,19 @@
       "evidenceRefs": [
         "lahuerta-martin-2024-flywheel-hip-rotation"
       ],
-      "movementSteps": [
-        "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees bent to 90 degrees, both feet hanging freely, your hands crossed over your shoulders, and your pelvis centered.",
-        "Secure the lower end of the working thigh with one belt and place two belts across the front points of your hip bones to hold your pelvis still.",
-        "Connect the working ankle brace to the Conic Power Move cable with a carabiner. Set the wall-mounted flywheel 7 cm above the floor in the upper-middle frame position, attach the 460 g load 15 cm from the center, and adjust the cable so your hip can move through its full comfortable range.",
-        "Turn the working thigh inward as fast as possible so the lower leg moves outward while the pelvis stays still.",
-        "Return while resisting the flywheel's pull, keeping the knee angle fixed and avoiding movement through the pelvis or back.",
-        "Complete two sets of ten progressively harder warm-up repetitions, then perform three progressive repetitions and seven high-intensity work repetitions.",
-        "Repeat the same setup for the other leg and log it as a separate set."
-      ]
+      "execution": {
+        "startingPosition": "Sit on a hydraulic treatment table set 75 cm above the floor with both hips and knees bent to 90 degrees, both feet hanging freely, your hands crossed over your shoulders, and your pelvis centered. Secure the lower end of the working thigh with one belt and place two belts across the front points of your hip bones to hold your pelvis still. Connect the working ankle brace to the Conic Power Move cable with a carabiner. Set the wall-mounted flywheel 7 cm above the floor in the upper-middle frame position, attach the 460 g load 15 cm from the center, and adjust the cable so your hip can move through its full comfortable range. Complete two sets of ten progressively harder warm-up repetitions, then perform three progressive repetitions and seven high-intensity work repetitions.",
+        "movement": "Turn the working thigh inward as fast as possible so the lower leg moves outward.",
+        "endpoint": "Stop turning when the thigh reaches the end of its comfortable range.",
+        "returnPhase": "Return while resisting the flywheel's pull, keeping the knee angle fixed and avoiding movement through the pelvis or back.",
+        "controlledJoints": "Keep the pelvis still and hold the knee angle fixed.",
+        "supportAndPosture": "Stay seated with your hands crossed over your shoulders while the belts hold your pelvis and thigh in place.",
+        "disqualifyingCompensations": [
+          "Letting the pelvis twist with the thigh turns the hip rotation into a trunk twist.",
+          "Changing the knee angle to swing the lower leg turns the hip rotation into a knee-driven swing."
+        ],
+        "sideOrDirection": "Repeat the same setup for the other leg and log it as a separate set."
+      }
     }
   ]
 }

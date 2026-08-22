@@ -1,0 +1,52 @@
+{
+  "name": "insights-locked",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-showcase"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsLockedPreview",
+        "label": "Shape, locked",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeLoad"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsLockedPreview",
+        "label": "Load, locked",
+        "role": "AXButton"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsModeLoad",
+      "value": "Selected"
+    },
+    {
+      "identifier": "insightsUnlockButton",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "insightsLockedPreview",
+      "label": "Load, locked",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsLoadInstrument"
+    },
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

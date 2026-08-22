@@ -7,13 +7,24 @@
   },
   "steps": [
     {
-      "scrollTo": {
-        "selector": {
-          "identifier": "scheduledWorkoutStartButton",
-          "role": "AXButton"
-        },
-        "direction": "up",
-        "maxSwipes": 4
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "scheduledWorkoutStartButton",
+        "label": "Start today's plan, Scheduled Test",
+        "role": "AXButton"
       }
     },
     {

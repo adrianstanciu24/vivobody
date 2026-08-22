@@ -243,9 +243,9 @@ final class ExerciseCatalogItem: Identifiable {
     /// alongside `name` in the picker. Empty by default.
     var aliases: [String] = []
 
-    /// Ordered instructions; bundled records provide at least two while
-    /// manually created exercises may leave the array empty.
-    var movementSteps: [String] = []
+    /// Structured execution instructions. Bundled records provide the
+    /// full object; manually created exercises have none.
+    var execution: ExecutionInstructions? = nil
 
     /// Explicit categorical muscle roles authored for this item. The
     /// compact Double values encode role identity for snapshot
@@ -440,7 +440,7 @@ final class ExerciseCatalogItem: Identifiable {
         planes: [MovementPlane] = [.sagittal],
         laterality: Laterality = .bilateral,
         aliases: [String] = [],
-        movementSteps: [String] = [],
+        execution: ExecutionInstructions? = nil,
         muscleInvolvement: Muscle.Involvement? = nil,
         isUserCreated: Bool = false,
         createdAt: Date = Date()
@@ -470,7 +470,7 @@ final class ExerciseCatalogItem: Identifiable {
         self.planeRaws = resolvedPlanes.map(\.rawValue)
         self.lateralityRaw = laterality.rawValue
         self.aliases = aliases
-        self.movementSteps = movementSteps
+        self.execution = execution
         self.muscleInvolvementSnapshot = muscleInvolvement?.snapshot ?? [:]
         self.isUserCreated = isUserCreated
         self.createdAt = createdAt
@@ -505,7 +505,7 @@ extension ExerciseCatalogItem {
             planes: record.planeValues,
             laterality: record.lateralityValue,
             aliases: record.aliasesValue,
-            movementSteps: record.movementSteps,
+            execution: record.execution,
             muscleInvolvement: record.muscleInvolvement,
             isUserCreated: false,
             createdAt: createdAt
@@ -639,7 +639,7 @@ extension ExerciseCatalogItem {
         planes = record.planes
         laterality = record.laterality
         aliases = record.aliases
-        movementSteps = record.movementSteps
+        execution = record.execution
         muscleInvolvementSnapshot = record.muscleInvolvement.snapshot
     }
 }

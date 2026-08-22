@@ -261,12 +261,18 @@
       "evidenceRefs": [
         "ha-2020-curl-up-angle"
       ],
-      "movementSteps": [
-        "Lie on your back in a stable position with your hips held still.",
-        "Begin with your torso resting on the floor.",
-        "Curl your head, shoulders, and upper back about 30 degrees off the floor without lifting from your hips.",
-        "Lower to the starting position under control without turning the repetition into a full sit-up."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back in a stable position with your hips held still. Begin with your torso resting on the floor.",
+        "movement": "Curl your head, shoulders, and upper back off the floor without lifting from your hips.",
+        "endpoint": "Stop when your upper back is about 30 degrees off the floor.",
+        "returnPhase": "Lower to the starting position under control without turning the repetition into a full sit-up.",
+        "controlledJoints": "Keep your hips and pelvis still throughout the curl.",
+        "supportAndPosture": "Stay supported on the floor with your hips held still.",
+        "disqualifyingCompensations": [
+          "Lifting from the hips turns the curl-up into a full sit-up.",
+          "Jerking the head and arms forward turns the controlled curl into a momentum swing."
+        ]
+      }
     }
   ]
 }

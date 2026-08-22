@@ -1,0 +1,241 @@
+{
+  "name": "today-actions",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "scheduledWorkoutStartButton"
+          },
+          {
+            "identifier": "activeWorkoutResumeBar"
+          },
+          {
+            "identifier": "scheduledWorkoutOptionsButton"
+          }
+        ]
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "todayConsistencyOverview"
+          },
+          {
+            "label": "Consistency",
+            "role": "AXHeading"
+          },
+          {
+            "label": "Last workout",
+            "role": "AXHeading"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Start Fresh",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Start Fresh",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--ui-test-scheduled-template",
+          "--static-body"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "todayStartWorkoutButton",
+            "label": "Start Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "scheduledWorkoutStartButton"
+          },
+          {
+            "identifier": "activeWorkoutResumeBar"
+          },
+          {
+            "identifier": "scheduledWorkoutOptionsButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "todayStartWorkoutButton",
+        "label": "Start Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "scheduledWorkoutStartButton",
+        "label": "Start today's plan, Scheduled Test",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "label": "Start Fresh",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "label": "Start Fresh",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "Add Exercise",
+        "role": "AXGroup"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "today",
+        "arguments": [
+          "--ui-test-active-partial",
+          "--ui-test-scheduled-template",
+          "--static-body"
+        ]
+      }
+    },
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "activeWorkoutResumeBar",
+            "labelContains": "Resume Workout",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "scheduledWorkoutStartButton"
+          },
+          {
+            "identifier": "todayStartWorkoutButton"
+          },
+          {
+            "identifier": "scheduledWorkoutOptionsButton"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "labelContains": "Resume Workout",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "endWorkoutButton",
+        "role": "AXButton"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "today",
+        "arguments": [
+          "--static-body"
+        ]
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "activeWorkoutResumeBar",
+      "labelContains": "Resume Workout",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "scheduledWorkoutStartButton"
+    },
+    {
+      "identifier": "todayStartWorkoutButton"
+    },
+    {
+      "identifier": "scheduledWorkoutOptionsButton"
+    }
+  ]
+}

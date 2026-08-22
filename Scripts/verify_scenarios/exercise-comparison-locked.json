@@ -1,0 +1,69 @@
+{
+  "name": "exercise-comparison-locked",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--no-iap",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-compare"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-compare"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Unlock Vivobody Pro forever"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "Unlock Vivobody Pro forever"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "comparison-done"
+    },
+    {
+      "labelContains": "Compare With"
+    }
+  ]
+}

@@ -490,14 +490,19 @@
         "lake-2014-push-press-power",
         "soriano-2024-push-press-jerk"
       ],
-      "movementSteps": [
-        "Stand with your feet about hip-width apart and hold a straight barbell across the front of your shoulders with an overhand grip just outside shoulder width.",
-        "Brace your torso and make a quick, shallow dip by bending your hips and knees while keeping both feet on the floor.",
-        "Immediately drive through your feet and straighten your hips and knees to send the bar upward.",
-        "Press the bar in front of your head until your arms are straight overhead, allowing your shoulder blades to move naturally.",
-        "Finish standing with your elbows straight without dipping under the bar.",
-        "Lower the bar under control to the front rack."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet about hip-width apart and hold a straight barbell across the front of your shoulders with an overhand grip just outside shoulder width.",
+        "movement": "Make a quick, shallow dip by bending your hips and knees. Immediately drive through your feet and straighten your hips and knees to send the bar upward. Press the bar in front of your head until your arms are straight overhead, allowing your shoulder blades to move naturally.",
+        "endpoint": "Finish standing with your elbows straight without dipping under the bar.",
+        "returnPhase": "Lower the bar under control to the front rack.",
+        "controlledJoints": "Keep both feet on the floor during the dip and drive.",
+        "supportAndPosture": "Brace your torso.",
+        "disqualifyingCompensations": [
+          "Dipping under the bar to receive it turns the push press into a push jerk.",
+          "Squatting deeply before the drive turns the push press into a thruster.",
+          "Pressing the bar without the leg drive turns the push press into a strict overhead press."
+        ]
+      }
     }
   ]
 }

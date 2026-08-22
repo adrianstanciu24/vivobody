@@ -381,13 +381,20 @@
         "serner-2014-hip-adduction-exercises",
         "jensen-2014-elastic-hip-adduction-training"
       ],
-      "movementSteps": [
-        "Stand upright on the support leg, hold a stable external support with both hands, and secure an elastic band around the working ankle from the side.",
-        "Move the straight working leg as far out to the side as is comfortable, keeping tension in the band and the leg slightly behind you.",
-        "Keep the pelvis still, the working knee straight, and both sets of toes pointing forward.",
-        "Pull the working leg inward without swinging it farther backward, stopping about one foot-width to the side and half a foot-length behind the stance foot.",
-        "Return under control along the same side-to-side path, then repeat before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright on the support leg, hold a stable external support with both hands, and secure an elastic band around the working ankle from the side. Move the straight working leg as far out to the side as is comfortable, keeping tension in the band and the leg slightly behind you.",
+        "movement": "Pull the working leg inward without swinging it farther backward.",
+        "endpoint": "Stop about one foot-width to the side and half a foot-length behind the stance foot.",
+        "returnPhase": "Return under control along the same side-to-side path.",
+        "controlledJoints": "Keep the pelvis still, the working knee straight, and both sets of toes pointing forward.",
+        "supportAndPosture": "Hold the stable external support with both hands throughout the set.",
+        "disqualifyingCompensations": [
+          "Swinging the working leg backward turns the pull into a hip-extension movement.",
+          "Leaning the torso sideways turns the pull into a trunk side-bend.",
+          "Bending the working knee turns the pull into a bent-knee sweep."
+        ],
+        "sideOrDirection": "Repeat on the same side before changing sides."
+      }
     }
   ]
 }

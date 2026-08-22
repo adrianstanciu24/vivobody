@@ -371,12 +371,20 @@
         "murray-1995-elbow-forearm-moment-arms",
         "szymanski-2004-wrist-forearm-training"
       ],
-      "movementSteps": [
-        "Sit with your working shoulder relaxed, your elbow bent about 90 degrees, and your forearm supported on a table.",
-        "Begin with your palm facing down while holding a plate-loaded dumbbell vertically.",
-        "Turn only your forearm until your thumb points upward.",
-        "Return under control without moving your wrist, elbow, shoulder, or torso."
-      ]
+      "execution": {
+        "startingPosition": "Sit with your working shoulder relaxed, your elbow bent about 90 degrees, and your forearm supported on a table. Begin with your palm facing down while holding a plate-loaded dumbbell vertically.",
+        "movement": "Turn only your forearm.",
+        "endpoint": "End the turn when your thumb points upward.",
+        "returnPhase": "Return under control without moving your wrist, elbow, shoulder, or torso.",
+        "controlledJoints": "Hold your elbow at about 90 degrees and keep your wrist neutral.",
+        "supportAndPosture": "Support your forearm on the table while you sit tall.",
+        "disqualifyingCompensations": [
+          "Turning past the thumb-up position turns the partial rotation into a full-range rotation.",
+          "Moving the elbow instead of only the forearm turns the rotation into an elbow curl.",
+          "Lifting the forearm off the table turns the supported rotation into a free-arm rotation."
+        ],
+        "sideOrDirection": "Finish the set with one hand, then repeat with the other hand."
+      }
     }
   ]
 }

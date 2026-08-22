@@ -28,10 +28,18 @@ struct PersistenceStoreContractTests {
         static let bodyWeightID = UUID(uuidString: "80000000-0000-0000-0000-000000000001")!
         static let startedAt = Date(timeIntervalSince1970: 1_700_000_000)
         static let completedAt = Date(timeIntervalSince1970: 1_700_003_600)
-        static let movementSteps = [
-            "Set the cable near waist height and take the handle in one hand.",
-            "Pull the handle toward the ribs, then return it under control.",
-        ]
+        static let execution = ExecutionInstructions(
+            startingPosition: "Set the cable near waist height and take the handle in one hand.",
+            movement: "Pull the handle toward the ribs without rotating the torso.",
+            endpoint: "Finish the pull with the handle beside the ribs.",
+            returnPhase: "Return the handle under control until the arm is straight.",
+            controlledJoints: "Keep the torso still and the knees softly bent.",
+            supportAndPosture: "Keep the trunk braced and both feet planted.",
+            disqualifyingCompensations: [
+                "Twisting the torso turns the row into a rotational pull."
+            ],
+            sideOrDirection: nil
+        )
     }
 
     @Test func preReleaseBaselineReopensAndPreservesUserData() throws {
@@ -107,7 +115,7 @@ struct PersistenceStoreContractTests {
         #expect(custom.isFavorite)
         #expect(custom.oneRepMax == 275)
         #expect(custom.trainingRoleRaw == nil)
-        #expect(custom.movementSteps == Fixture.movementSteps)
+        #expect(custom.execution == Fixture.execution)
 
         let weights = try context.fetch(FetchDescriptor<BodyWeightEntry>())
         let bodyWeight = try #require(weights.first { $0.id == Fixture.bodyWeightID })

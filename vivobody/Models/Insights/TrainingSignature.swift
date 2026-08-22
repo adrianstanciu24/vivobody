@@ -12,9 +12,10 @@
 //    • All-time volume mix → the angular WIDTH of each of six
 //      petals and their REACH, one per muscle group: where your work
 //      has gone across the complete archive.
-//    • Lifetime cadence (average sessions per week) → the stat strip's
-//      per-week numeral. The bloom's lone orbiting satellite is purely
-//      ambient, so the mark carries life without hiding another metric.
+//    • Lifetime cadence (average sessions per week) remains part of the
+//      shared signature payload used by widget summaries. The Insights screen
+//      presents cadence in its Rhythm mode instead of beside the bloom. The
+//      bloom's lone orbiting satellite is purely ambient.
 //
 //  Pure value type built from the other models' outputs, so the
 //  mapping is deterministic and testable (see `TrainingSignatureTests`).
@@ -50,7 +51,7 @@ nonisolated struct TrainingSignature {
 
     /// Six petals, always in `MuscleGroup.allCases` order.
     let petals: [SignaturePetal]
-    /// Lifetime average sessions per week, shown beside the bloom.
+    /// Lifetime average sessions per week for shared summary consumers.
     let cadence: Double
     /// Evenness of the volume spread, `0…1` (1 = perfectly balanced
     /// across all six regions). Normalised entropy of the shares.

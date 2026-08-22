@@ -354,11 +354,19 @@
         "castelein-2016-serratus-pectoralis-minor-protraction",
         "intelangelo-2022-supine-scapular-punch"
       ],
-      "movementSteps": [
-        "Lie on your back with one dumbbell held vertically above your shoulder, your upper arm pointing straight up, and your elbow straight.",
-        "Reach the dumbbell toward the ceiling by letting your shoulder blade slide forward around your ribs without bending your elbow or lifting the arm farther.",
-        "Return under control without adding a press."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back with one dumbbell held vertically above your shoulder, your upper arm pointing straight up, and your elbow straight.",
+        "movement": "Reach the dumbbell toward the ceiling by letting your shoulder blade slide forward around your ribs.",
+        "endpoint": "End the reach when your shoulder blade has slid as far forward as it can.",
+        "returnPhase": "Return under control without adding a press.",
+        "controlledJoints": "Do not bend your elbow or lift the arm farther.",
+        "supportAndPosture": "Keep your back supported on the bench and your torso still.",
+        "disqualifyingCompensations": [
+          "Bending the elbow to move the dumbbell turns the punch into a chest press.",
+          "Lifting the whole arm higher turns the punch into a front raise."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

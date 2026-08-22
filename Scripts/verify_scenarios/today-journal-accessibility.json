@@ -1,0 +1,47 @@
+{
+  "name": "today-journal-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--seed-history",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "todayConsistencyOverview",
+          "label": "Training consistency",
+          "role": "AXGenericElement"
+        },
+        "direction": "up",
+        "maxSwipes": 6
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "todayConsistencyOverview",
+      "label": "Training consistency",
+      "role": "AXGenericElement",
+      "valueRegex": "^8 sessions in the last 14 days\\. Training days: .+"
+    },
+    {
+      "label": "View detail",
+      "role": "AXButton"
+    }
+  ],
+  "forbidden": [
+    {
+      "value": "Rest"
+    },
+    {
+      "value": "Trained"
+    },
+    {
+      "value": "Trained, personal record"
+    }
+  ]
+}

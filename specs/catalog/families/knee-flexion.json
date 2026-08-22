@@ -445,12 +445,19 @@
       "evidenceRefs": [
         "maeo-2021-seated-prone-leg-curl"
       ],
-      "movementSteps": [
-        "Sit in a single-leg curl machine with your hip bent near 90 degrees and your pelvis secured to the pad.",
-        "Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
-        "Keep your pelvis, back, hip, ankle, and foot still as you bend your knee from straight to approximately 90 degrees.",
-        "Return under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit in a single-leg curl machine with your hip bent near 90 degrees and your pelvis secured to the pad. Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
+        "movement": "Bend your knee from straight to approximately 90 degrees.",
+        "endpoint": "End the curl at approximately 90 degrees of knee bend.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your pelvis, back, hip, ankle, and foot still.",
+        "supportAndPosture": "Stay seated against the pad with your pelvis secured by the strap.",
+        "disqualifyingCompensations": [
+          "Swinging the lower leg with momentum turns the curl into a leg swing.",
+          "Lifting the pelvis off the pad turns the curl into a hip-driven pull."
+        ],
+        "sideOrDirection": "Complete the set on one leg, then repeat with the other leg."
+      }
     },
     {
       "catalogID": "prone-unilateral-machine-leg-curl",
@@ -513,12 +520,19 @@
       "evidenceRefs": [
         "maeo-2021-seated-prone-leg-curl"
       ],
-      "movementSteps": [
-        "Lie face down in a single-leg curl machine with your hip bent near 30 degrees and your pelvis secured to the pad.",
-        "Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
-        "Keep your pelvis, back, hip, ankle, and foot still as you bend your knee from straight to approximately 90 degrees.",
-        "Return under control."
-      ]
+      "execution": {
+        "startingPosition": "Lie face down in a single-leg curl machine with your hip bent near 30 degrees and your pelvis secured to the pad. Align your knee with the machine's pivot and place the lower part of your leg against the pad.",
+        "movement": "Bend your knee from straight to approximately 90 degrees.",
+        "endpoint": "End the curl at approximately 90 degrees of knee bend.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your pelvis, back, hip, ankle, and foot still.",
+        "supportAndPosture": "Stay face down against the pad with your pelvis secured by the strap.",
+        "disqualifyingCompensations": [
+          "Swinging the lower leg with momentum turns the curl into a leg swing.",
+          "Arching the back off the pad turns the curl into a hip-extension pull."
+        ],
+        "sideOrDirection": "Complete the set on one leg, then repeat with the other leg."
+      }
     }
   ]
 }

@@ -1,14 +1,14 @@
 //
 //  ExerciseDominanceSection.swift
 //
-//  Recent strength composition in one shared unit and timeframe.
-//  Exercise Allocation shows which lifts received completed working
-//  sets over the last four weeks; Exercise Type shows how those same
-//  classified sets split between compound and isolation work.
-//
-//  The allocation strip gives the whole mix at a glance, the compact
-//  ranked list names the top four plus Other, and a separate companion
-//  panel keeps exercise type from reading as another ranking row.
+//  Recent strength composition as two bold segmented rails in one shared
+//  unit and timeframe. Exercise Allocation divides the last four weeks
+//  of completed working sets per lift — the top lift wears the accent,
+//  the rest step down through gray — with a clear legend naming each
+//  segment. Exercise Type divides those sets between compound, isolation,
+//  and unclassified work. Classification coverage is a header token, and
+//  before any strength work exists a dormant canvas holds the same geometry
+//  while the six-set sample collects.
 //
 
 import SwiftUI
@@ -17,7 +17,6 @@ import VivoKit
 struct ExerciseDominanceSection: View {
     let board: ExerciseDominanceBoard
     let split: CompositionSplit
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let clearSampleSets = 6
 
@@ -28,17 +27,20 @@ struct ExerciseDominanceSection: View {
                 trailing: compositionIsBuilding
                     ? "\(compositionSetCount)/\(clearSampleSets) sets"
                     : "last 4 weeks",
-                trailingIsInProgress: compositionIsBuilding
+                trailingIsInProgress: compositionIsBuilding,
+                accessibilityIdentifier: "insightsExerciseMixInstrument"
             )
 
             if !board.hasAny, split.totalSets == 0 {
-                InsightBuildingCard(
-                    title: "Composition starts with your lifts",
-                    detail: "Complete strength sets to reveal which lifts shape this four-week block and how the classified work is distributed.",
-                    progress: 0,
-                    progressLabel: "0/\(clearSampleSets) STRENGTH SETS",
-                    accessibilityProgress: "0 of \(clearSampleSets) strength sets"
+                DormantSlotsCanvas(
+                    slotCount: clearSampleSets,
+                    filledSlots: 0,
+                    legend: "0/\(clearSampleSets) strength sets",
+                    accessibilityLabel: "Strength composition signal building. 0 of \(clearSampleSets) strength sets completed. Complete strength sets to reveal your exercise allocation and type mix."
                 )
+                .frame(height: InsightChartCanvas.hero)
+                .padding(Space.xl)
+                .contentCard()
             } else {
                 if board.hasAny {
                     allocationCard
@@ -62,296 +64,171 @@ struct ExerciseDominanceSection: View {
     // MARK: - Exercise allocation
 
     private var allocationCard: some View {
-        VStack(spacing: Space.lg) {
-            allocationHeading
+        VStack(alignment: .leading, spacing: Space.lg) {
+            cardHeading("Exercise allocation", trailing: setLabel(board.totalSets))
 
-            allocationStrip
+            segmentedShareBar(
+                Array(rows.enumerated()).map { index, row in
+                    ShareBarSegment(
+                        id: row.id,
+                        weight: row.sets,
+                        fill: allocationColor(rank: index)
+                    )
+                }
+            )
 
-            ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
-                rowView(for: row, rank: index)
-            }
+            allocationLegend
         }
         .padding(Space.xl)
         .contentCard()
     }
 
-    @ViewBuilder
-    private var allocationHeading: some View {
-        let sample = board.totalSets < clearSampleSets
-            ? "EARLY READ · \(setLabel(board.totalSets))"
-            : setLabel(board.totalSets)
-
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Exercise allocation")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text(sample)
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(board.totalSets < clearSampleSets ? Ink.secondary : Ink.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Exercise allocation")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Spacer(minLength: Space.sm)
-                Text(sample)
-                    .font(Typography.metricMicro)
-                    .foregroundStyle(board.totalSets < clearSampleSets ? Ink.secondary : Ink.tertiary)
-            }
-        }
-    }
-
-    private var allocationStrip: some View {
-        GeometryReader { proxy in
-            let populated = rows.filter { $0.share > 0 }
-            let spacing: CGFloat = 2
-            let gaps = spacing * CGFloat(max(0, populated.count - 1))
-            let availableWidth = max(0, proxy.size.width - gaps)
-
-            HStack(spacing: spacing) {
-                ForEach(Array(populated.enumerated()), id: \.element.id) { index, row in
-                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+    private var allocationLegend: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                HStack(spacing: Space.sm) {
+                    RoundedRectangle(cornerRadius: 2, style: .continuous)
                         .fill(allocationColor(rank: index))
-                        .frame(width: availableWidth * row.share)
+                        .frame(width: 10, height: 10)
+                        .accessibilityHidden(true)
+
+                    Text(row.name)
+                        .font(index == 0 ? Typography.sectionHeading : Typography.caption)
+                        .foregroundStyle(index == 0 ? Ink.primary : Ink.secondary)
+                        .lineLimit(1)
+
+                    Spacer(minLength: Space.sm)
+
+                    Text("\(Int((row.share * 100).rounded()))%")
+                        .font(Typography.metricInline)
+                        .foregroundStyle(index == 0 ? Tint.primaryText : Ink.secondary)
+                        .monospacedDigit()
                 }
+                .frame(minHeight: 34)
+                .accessibilityElement(children: .combine)
             }
         }
-        .frame(height: 14)
-        .clipShape(Capsule())
-        .accessibilityHidden(true)
-    }
-
-    private func rowView(for row: DominanceRow, rank: Int) -> some View {
-        HStack(alignment: .top, spacing: Space.sm) {
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(allocationColor(rank: rank))
-                .frame(width: 7, height: 28)
-                .accessibilityHidden(true)
-
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    rowName(row, rank: rank)
-                    HStack(spacing: Space.sm) {
-                        rowShare(row, rank: rank)
-                        rowSetCount(row)
-                    }
-                }
-            } else {
-                rowName(row, rank: rank)
-                Spacer(minLength: Space.xs)
-                rowShare(row, rank: rank)
-                rowSetCount(row)
-            }
-        }
-        .frame(minHeight: 34)
-        .accessibilityElement(children: .combine)
-    }
-
-    private func rowName(_ row: DominanceRow, rank: Int) -> some View {
-        Text(row.name)
-            .font(rank == 0 ? Typography.sectionHeading : Typography.caption)
-            .foregroundStyle(rank == 0 ? Ink.primary : Ink.secondary)
-            .lineLimit(2)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private func rowShare(_ row: DominanceRow, rank: Int) -> some View {
-        Text("\(Int((row.share * 100).rounded()))%")
-            .font(Typography.metricInline)
-            .foregroundStyle(rank == 0 ? Tint.primary : Ink.secondary)
-            .monospacedDigit()
-    }
-
-    private func rowSetCount(_ row: DominanceRow) -> some View {
-        Text(setLabel(row.sets))
-            .font(Typography.metricMicro)
-            .foregroundStyle(Ink.tertiary)
-            .monospacedDigit()
-            .frame(minWidth: 48, alignment: .trailing)
     }
 
     // MARK: - Exercise type
 
     private var exerciseTypeCard: some View {
-        let compound = allSetShare(split.compoundSets)
-        let isolation = allSetShare(split.isolationSets)
-        let unclassified = allSetShare(split.unclassifiedSets)
+        VStack(alignment: .leading, spacing: Space.lg) {
+            cardHeading("Exercise type", trailing: classificationToken)
 
-        return VStack(alignment: .leading, spacing: Space.lg) {
-            exerciseTypeHeading
-
-            GeometryReader { geo in
-                let populated = typeSegments.filter { $0.share > 0 }
-                let spacing: CGFloat = 2
-                let gaps = spacing * CGFloat(max(0, populated.count - 1))
-                let available = max(0, geo.size.width - gaps)
-
-                HStack(spacing: spacing) {
-                    ForEach(populated) { segment in
-                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                            .fill(segment.fill)
-                            .frame(width: available * segment.share)
-                            .shadow(
-                                color: segment.id == "compound"
-                                    ? Tint.primary.opacity(0.26)
-                                    : .clear,
-                                radius: 8
-                            )
-                    }
+            segmentedShareBar(
+                typeSegments.map { segment in
+                    ShareBarSegment(
+                        id: segment.id,
+                        weight: segment.sets,
+                        fill: segment.fill
+                    )
                 }
-            }
-            .frame(height: 16)
-            .clipShape(Capsule())
-            .accessibilityHidden(true)
+            )
 
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: Space.md) {
-                    typeStat(value: compound, label: "Compound", color: Tint.primary)
-                    typeStat(value: isolation, label: "Isolation", color: Ink.primary)
-                    if split.unclassifiedSets > 0 {
-                        typeStat(value: unclassified, label: "Unclassified", color: Ink.tertiary)
-                    }
-                }
-
-                VStack(spacing: Space.sm) {
-                    typeStat(value: compound, label: "Compound", color: Tint.primary)
-                    typeStat(value: isolation, label: "Isolation", color: Ink.primary)
-                    if split.unclassifiedSets > 0 {
-                        typeStat(value: unclassified, label: "Unclassified", color: Ink.tertiary)
-                    }
-                }
-            }
-
-            VStack(alignment: .leading, spacing: Space.xs) {
-                coverageHeading
-
-                GeometryReader { proxy in
-                    ZStack(alignment: .leading) {
-                        Capsule().fill(Surface.cardTint)
-                        Capsule()
-                            .fill(Tint.primary.opacity(0.72))
-                            .frame(width: proxy.size.width * split.classificationCoverage)
-                    }
-                }
-                .frame(height: 5)
-                .accessibilityHidden(true)
-            }
-
-            if !split.hasData {
-                Text("These sets came from custom exercises without type metadata, so no compound/isolation verdict is shown.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else if split.unclassifiedSets > 0 {
-                Text("Percentages include every eligible strength set; unclassified custom work stays visible instead of silently dropping out.")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            typeLegend
         }
         .padding(Space.xl)
         .contentCard()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(exerciseTypeAccessibilityLabel(
-            compound: compound,
-            isolation: isolation
-        ))
+        .accessibilityLabel(exerciseTypeAccessibilityLabel)
     }
 
-    @ViewBuilder
-    private var exerciseTypeHeading: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: Space.sm) {
-                Text("Exercise type")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                confidenceChip
-            }
-        } else {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Exercise type")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Spacer(minLength: Space.sm)
-                confidenceChip
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var coverageHeading: some View {
-        if dynamicTypeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Classification coverage")
-                Text("\(split.classifiedTotal) of \(split.totalSets) sets")
-                    .monospacedDigit()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .font(Typography.caption)
-            .foregroundStyle(Ink.secondary)
-        } else {
-            HStack {
-                Text("Classification coverage")
-                Spacer(minLength: Space.sm)
-                Text("\(split.classifiedTotal) of \(split.totalSets) sets")
-                    .monospacedDigit()
-            }
-            .font(Typography.caption)
-            .foregroundStyle(Ink.secondary)
-        }
-    }
-
-    private func typeStat(value: Double, label: String, color: Color) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-            Text("\(Int((value * 100).rounded()))%")
-                .font(Typography.statValue)
-                .foregroundStyle(color)
-                .monospacedDigit()
-                .fixedSize(horizontal: true, vertical: false)
-            Text(label)
-                .panelLegend()
-                .fixedSize(horizontal: true, vertical: false)
-        }
-        .frame(maxWidth: .infinity, minHeight: Space.tapMin, alignment: .leading)
-    }
-
-    private var confidenceChip: some View {
-        Text(confidenceLabel)
-            .font(Typography.metricMicro)
-            .foregroundStyle(split.isEarlyRead ? Ink.primary : Tint.primary)
-            .padding(.horizontal, Space.sm)
-            .padding(.vertical, Space.xs)
-            .background(
-                Capsule()
-                    .fill(
-                        split.isEarlyRead
-                            ? Ink.primary.opacity(0.10)
-                            : Tint.primary.opacity(0.14)
-                    )
-            )
-    }
-
-    private var confidenceLabel: String {
-        if split.isEarlyRead { return "EARLY READ · \(setLabel(split.totalSets))" }
-        if split.classificationCoverage < 0.6 {
-            return "LIMITED · \(Int((split.classificationCoverage * 100).rounded()))%"
-        }
-        return "\(Int((split.classificationCoverage * 100).rounded()))% CLASSIFIED"
-    }
-
-    private func allSetShare(_ count: Int) -> Double {
-        split.totalSets > 0 ? Double(count) / Double(split.totalSets) : 0
+    private var classificationToken: String {
+        if split.isEarlyRead { return "early read" }
+        return "\(Int((split.classificationCoverage * 100).rounded()))% classified"
     }
 
     private var typeSegments: [TypeSegment] {
         [
-            TypeSegment(id: "compound", share: allSetShare(split.compoundSets), fill: Tint.primary.opacity(0.9)),
-            TypeSegment(id: "isolation", share: allSetShare(split.isolationSets), fill: Ink.primary.opacity(0.48)),
-            TypeSegment(id: "unclassified", share: allSetShare(split.unclassifiedSets), fill: Ink.primary.opacity(0.14)),
+            TypeSegment(id: "compound", sets: split.compoundSets, fill: Tint.primary.opacity(0.9)),
+            TypeSegment(id: "isolation", sets: split.isolationSets, fill: Ink.primary.opacity(0.48)),
+            TypeSegment(id: "unclassified", sets: split.unclassifiedSets, fill: Ink.primary.opacity(0.14)),
         ]
+        .filter { $0.sets > 0 }
+    }
+
+    private var typeLegend: some View {
+        VStack(spacing: 0) {
+            ForEach(typeSegments) { segment in
+                HStack(spacing: Space.sm) {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(segment.fill)
+                        .frame(width: 10, height: 10)
+                        .accessibilityHidden(true)
+
+                    Text(segment.id.capitalized)
+                        .font(Typography.caption)
+                        .foregroundStyle(Ink.secondary)
+
+                    Spacer(minLength: Space.sm)
+
+                    Text("\(Int((share(of: segment.sets) * 100).rounded()))%")
+                        .font(Typography.metricInline)
+                        .foregroundStyle(Ink.secondary)
+                        .monospacedDigit()
+                }
+                .frame(minHeight: 34)
+                .accessibilityElement(children: .combine)
+            }
+        }
+    }
+
+    private func share(of count: Int) -> Double {
+        split.totalSets > 0 ? Double(count) / Double(split.totalSets) : 0
+    }
+
+    // MARK: - Shared pieces
+
+    private func cardHeading(_ title: String, trailing: String) -> some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline) {
+                headingTitle(title)
+                Spacer(minLength: Space.sm)
+                headingTrailing(trailing)
+            }
+
+            VStack(alignment: .leading, spacing: Space.xs) {
+                headingTitle(title)
+                headingTrailing(trailing)
+            }
+        }
+    }
+
+    private func headingTitle(_ title: String) -> some View {
+        Text(title)
+            .font(Typography.sectionHeading)
+            .foregroundStyle(Ink.primary)
+    }
+
+    private func headingTrailing(_ trailing: String) -> some View {
+        Text(trailing)
+            .panelLegend()
+            .lineLimit(1)
+    }
+
+    private func segmentedShareBar(_ segments: [ShareBarSegment]) -> some View {
+        let totalWeight = segments.reduce(0) { $0 + $1.weight }
+        let gapCount = max(0, segments.count - 1)
+
+        return GeometryReader { proxy in
+            let totalGap = Space.xs * CGFloat(gapCount)
+            let availableWidth = max(0, proxy.size.width - totalGap)
+
+            HStack(spacing: Space.xs) {
+                ForEach(segments) { segment in
+                    RoundedRectangle(cornerRadius: Radius.small, style: .continuous)
+                        .fill(segment.fill)
+                        .frame(
+                            width: totalWeight > 0
+                                ? availableWidth * CGFloat(segment.weight) / CGFloat(totalWeight)
+                                : 0
+                        )
+                }
+            }
+        }
+        .frame(height: 36)
+        .accessibilityHidden(true)
     }
 
     // MARK: - Derived rows
@@ -408,19 +285,18 @@ struct ExerciseDominanceSection: View {
         "\(count) set\(count == 1 ? "" : "s")"
     }
 
-    private func exerciseTypeAccessibilityLabel(
-        compound: Double,
-        isolation: Double
-    ) -> String {
+    private var exerciseTypeAccessibilityLabel: String {
+        let compound = Int((share(of: split.compoundSets) * 100).rounded())
+        let isolation = Int((share(of: split.isolationSets) * 100).rounded())
         var parts = [
             "Exercise type",
             confidenceAccessibilityLabel,
             "\(split.classifiedTotal) of \(split.totalSets) sets classified",
-            "compound \(Int((compound * 100).rounded())) percent",
-            "isolation \(Int((isolation * 100).rounded())) percent",
+            "compound \(compound) percent",
+            "isolation \(isolation) percent",
         ]
         if split.unclassifiedSets > 0 {
-            parts.append("unclassified \(Int((allSetShare(split.unclassifiedSets) * 100).rounded())) percent")
+            parts.append("unclassified \(Int((share(of: split.unclassifiedSets) * 100).rounded())) percent")
         }
         return parts.joined(separator: ", ")
     }
@@ -447,6 +323,12 @@ private struct DominanceRow: Identifiable, Hashable {
 
 private struct TypeSegment: Identifiable {
     let id: String
-    let share: Double
+    let sets: Int
+    let fill: Color
+}
+
+private struct ShareBarSegment: Identifiable {
+    let id: String
+    let weight: Int
     let fill: Color
 }

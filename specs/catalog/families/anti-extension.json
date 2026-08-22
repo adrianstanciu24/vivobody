@@ -397,12 +397,18 @@
         "lehman-2005-stable-prone-bridge",
         "cinarli-2025-anti-movement-training"
       ],
-      "movementSteps": [
-        "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
-        "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
-        "Hold this position for the set time without letting your lower back sag.",
-        "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement."
-      ]
+      "execution": {
+        "startingPosition": "Place both forearms on a stable floor with your elbows below your shoulders and your upper arms pointing straight down.",
+        "movement": "Support the lower body on both feet and align the spine, pelvis, hips, and knees in one neutral straight line.",
+        "endpoint": "Hold this position for the set time without letting your lower back sag.",
+        "controlledJoints": "Keep the hold still without turning it into a crunch, hip lift, reach, or limb movement.",
+        "supportAndPosture": "Support the hold on both forearms and both feet with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Letting the lower back sag turns the plank into an arched-back hold.",
+          "Piking the hips upward turns the plank into a hip lift.",
+          "Reaching or lifting a limb turns the plank into a moving-limb hold."
+        ]
+      }
     }
   ]
 }

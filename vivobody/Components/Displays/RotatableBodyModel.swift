@@ -14,7 +14,9 @@
 //  finger always wins: touching stops the drift dead, a flick coasts
 //  and bleeds off into the drift speed, and parking the model holds
 //  still for a grace period before the drift eases back in. Honors
-//  Reduce Motion by never self-moving.
+//  Reduce Motion by never self-moving; verification runs pass
+//  `--static-body` for the same stillness (deterministic screenshots
+//  and a responsive accessibility bridge on the simulator).
 //
 //  The pan recogniser is deliberately direction-locked to horizontal:
 //  a mostly-vertical drag fails the gesture so the enclosing
@@ -113,6 +115,15 @@ struct RotatableBodyModel: UIViewRepresentable {
 
     private var driftSpeed: BodyDriftSpeed {
         BodyDriftSpeed(rawValue: driftSpeedRaw) ?? .low
+    }
+
+    /// Verification runs pass `--static-body` to pin the turntable: a
+    /// constantly animating SceneKit stage starves the simulator's
+    /// accessibility bridge and makes scenario screenshots
+    /// nondeterministic. Mirrors the Reduce Motion guards in the
+    /// Coordinator, so the flag only ever suppresses self-motion.
+    static var isStaticBodyForced: Bool {
+        CommandLine.arguments.contains("--static-body")
     }
 
     /// The resolved scheme the scene renders for — materials and light
@@ -260,6 +271,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         /// moving on its own.
         func beginIdleDrift() {
             guard !UIAccessibility.isReduceMotionEnabled else { return }
+            guard !RotatableBodyModel.isStaticBodyForced else { return }
             targetVelocity = driftSpeed.radiansPerSecond * driftDirection
             startMotionLink()
         }
@@ -280,6 +292,7 @@ struct RotatableBodyModel: UIViewRepresentable {
         /// schedules the drift to ease back in after the grace period.
         private func release(flick: Float) {
             guard !UIAccessibility.isReduceMotionEnabled else { return }
+            guard !RotatableBodyModel.isStaticBodyForced else { return }
             if abs(flick) > Drift.flickThreshold {
                 driftDirection = flick > 0 ? 1 : -1
                 velocity = min(max(flick, -Drift.maxFlickVelocity), Drift.maxFlickVelocity)
@@ -291,6 +304,7 @@ struct RotatableBodyModel: UIViewRepresentable {
 
         private func scheduleDriftResume() {
             guard !UIAccessibility.isReduceMotionEnabled else { return }
+            guard !RotatableBodyModel.isStaticBodyForced else { return }
             resumeTask?.cancel()
             resumeTask = Task { [weak self] in
                 try? await Task.sleep(for: .seconds(Drift.resumeDelay))

@@ -285,13 +285,19 @@
       "evidenceRefs": [
         "osawa-2026-repetitive-grip-mmg"
       ],
-      "movementSteps": [
-        "Hold one 30 kg-rated grip trainer in one hand without assistance from the other hand.",
-        "Close and release the fingers under control for 30 repeated grip cycles.",
-        "Close the handles only as far as you comfortably can, and use a steady pace and comfortable arm position.",
-        "Complete three sets, log each set separately, and repeat with the other hand.",
-        "Enter no lifted weight because the trainer's rating is non-comparable product resistance."
-      ]
+      "execution": {
+        "startingPosition": "Hold one 30 kg-rated grip trainer in one hand without assistance from the other hand. Enter no lifted weight because the trainer's rating is non-comparable product resistance. Complete three sets and log each set separately.",
+        "movement": "Close the fingers under control for 30 repeated grip cycles. Use a steady pace.",
+        "endpoint": "Close the handles only as far as you comfortably can.",
+        "returnPhase": "Release the fingers under control.",
+        "controlledJoints": "Keep your wrist still and move only your fingers.",
+        "supportAndPosture": "Use a comfortable arm position.",
+        "disqualifyingCompensations": [
+          "Holding one long squeeze turns the repeated grip cycles into a static grip endurance hold.",
+          "Helping with the other hand turns the one-hand task into an assisted squeeze."
+        ],
+        "sideOrDirection": "Repeat with the other hand."
+      }
     }
   ]
 }

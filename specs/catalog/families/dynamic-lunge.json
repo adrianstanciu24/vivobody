@@ -537,14 +537,20 @@
       "evidenceRefs": [
         "comfort-2015-forward-reverse-lunge-kinetics"
       ],
-      "movementSteps": [
-        "Stand upright with both feet supporting you and cross your arms over your upper body.",
-        "Step forward with the selected lead foot and land with the whole foot in contact.",
-        "Lower under control for three seconds to your full self-selected depth.",
-        "Keep the lead foot planted as you straighten the lead hip and knee and rise toward standing over two seconds.",
-        "Step the lead foot back beside the other foot to complete the repetition.",
-        "Finish the set on the selected side, then repeat with the other lead leg."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
+        "movement": "Step forward with the selected lead foot and land with the whole foot in contact, then lower under control for three seconds.",
+        "endpoint": "Stop the descent at your full self-selected depth.",
+        "returnPhase": "Keep the lead foot planted as you straighten the lead hip and knee and rise toward standing over two seconds, then step the lead foot back beside the other foot to complete the repetition.",
+        "controlledJoints": "Keep the lead foot fully planted through the descent and rise.",
+        "supportAndPosture": "Stay upright with your arms crossed and no external support.",
+        "disqualifyingCompensations": [
+          "Pushing off the rear foot to stand turns the lunge into a rear-leg push-off.",
+          "Dropping straight down in place turns the step-and-return lunge into a stationary split squat.",
+          "Letting the lead heel lift turns the lunge into a toe-balanced stance."
+        ],
+        "sideOrDirection": "Finish the set on the selected side, then repeat with the other lead leg."
+      }
     },
     {
       "catalogID": "bodyweight-reverse-lunge",
@@ -605,14 +611,20 @@
       "evidenceRefs": [
         "comfort-2015-forward-reverse-lunge-kinetics"
       ],
-      "movementSteps": [
-        "Stand upright with both feet supporting you and cross your arms over your upper body.",
-        "Keep the selected front foot planted and step the opposite foot backward.",
-        "After the rear foot lands, lower under control for three seconds to your full self-selected depth without moving the selected front foot.",
-        "Straighten the selected front hip and knee and rise toward standing over two seconds.",
-        "Bring the rear foot forward beside the front foot.",
-        "Finish the set with the same selected front leg, then repeat on the other side."
-      ]
+      "execution": {
+        "startingPosition": "Stand upright with both feet supporting you and cross your arms over your upper body.",
+        "movement": "Keep the selected front foot planted and step the opposite foot backward. After the rear foot lands, lower under control for three seconds without moving the selected front foot.",
+        "endpoint": "Stop the descent at your full self-selected depth.",
+        "returnPhase": "Straighten the selected front hip and knee and rise toward standing over two seconds, then bring the rear foot forward beside the front foot.",
+        "controlledJoints": "Keep the selected front foot planted through the descent and rise.",
+        "supportAndPosture": "Stay upright with your arms crossed and no external support.",
+        "disqualifyingCompensations": [
+          "Pushing off the rear foot to stand turns the lunge into a rear-leg push-off.",
+          "Dropping straight down in place turns the step-and-return lunge into a stationary split squat.",
+          "Letting the front heel lift turns the lunge into a toe-balanced stance."
+        ],
+        "sideOrDirection": "Finish the set with the same selected front leg, then repeat on the other side."
+      }
     }
   ]
 }

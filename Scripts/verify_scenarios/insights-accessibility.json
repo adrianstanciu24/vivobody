@@ -1,0 +1,69 @@
+{
+  "name": "insights-accessibility",
+  "launch": {
+    "reset": true,
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-showcase", "--pro"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeLoad"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsLoadInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeRhythm"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsRhythmInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeBalance"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeShape"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "insightsModeShape",
+      "value": "Selected"
+    },
+    {
+      "identifier": "insightsShapeInstrument",
+      "role": "AXHeading"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "insightsEmptyState"
+    }
+  ]
+}

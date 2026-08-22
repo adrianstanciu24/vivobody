@@ -18,7 +18,7 @@ import Foundation
 /// dismissed before Save.
 struct CatalogDraft {
     var name: String
-    var movementSteps: [String]
+    var execution: ExecutionInstructions?
     var group: MuscleGroup
     var defaultWeight: Double
     var trackingMode: TrackingMode
@@ -43,7 +43,7 @@ struct CatalogDraft {
 
     static let empty = CatalogDraft(
         name: "",
-        movementSteps: [],
+        execution: nil,
         group: .chest,
         defaultWeight: 0,
         trackingMode: .reps,
@@ -64,7 +64,7 @@ struct CatalogDraft {
 
     init(
         name: String,
-        movementSteps: [String],
+        execution: ExecutionInstructions?,
         group: MuscleGroup,
         defaultWeight: Double,
         trackingMode: TrackingMode,
@@ -83,7 +83,7 @@ struct CatalogDraft {
         aliasesInput: String
     ) {
         self.name = name
-        self.movementSteps = movementSteps
+        self.execution = execution
         self.group = group
         self.defaultWeight = defaultWeight
         self.trackingMode = trackingMode
@@ -104,7 +104,7 @@ struct CatalogDraft {
 
     init(from item: ExerciseCatalogItem) {
         self.name = item.name
-        self.movementSteps = item.movementSteps
+        self.execution = item.execution
         self.group = item.group
         self.defaultWeight = item.defaultWeight
         self.trackingMode = item.trackingMode

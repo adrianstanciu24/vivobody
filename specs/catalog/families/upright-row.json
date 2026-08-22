@@ -532,13 +532,19 @@
       "evidenceRefs": [
         "lorenzetti-2017-pulling-exercise-kinematics"
       ],
-      "movementSteps": [
-        "Stand at a low cable with your feet shoulder-width apart and your knees slightly bent.",
-        "Hold the straight bar with the overhand hand spacing shown for the exercise, keep your torso upright, and brace your core.",
-        "Pull the bar straight up, bending your elbows and raising your upper arms out and slightly forward.",
-        "Keep your elbows slightly above your hands and stop when they reach shoulder height.",
-        "Lower the bar slowly without adding a shrug, pinching your shoulder blades together, turning your upper arms, leaning, or pushing with your legs."
-      ]
+      "execution": {
+        "startingPosition": "Stand at a low cable with your feet shoulder-width apart and your knees slightly bent. Hold the straight bar with the overhand hand spacing shown for the exercise.",
+        "movement": "Pull the bar straight up, bending your elbows and raising your upper arms out and slightly forward.",
+        "endpoint": "Stop when your elbows reach shoulder height.",
+        "returnPhase": "Lower the bar slowly without adding a shrug, pinching your shoulder blades together, turning your upper arms, leaning, or pushing with your legs.",
+        "controlledJoints": "Keep your elbows slightly above your hands.",
+        "supportAndPosture": "Keep your torso upright and brace your core.",
+        "disqualifyingCompensations": [
+          "Adding a shrug at the top turns the upright row into a shrug.",
+          "Pinching the shoulder blades together turns the upright row into a rear-delt row.",
+          "Pushing with your legs to move the bar turns the upright row into a high pull."
+        ]
+      }
     }
   ]
 }

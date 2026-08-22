@@ -131,6 +131,11 @@ struct PaywallSheet: View {
             )
             rowDivider
             featureRow(
+                title: "Exercise comparison",
+                detail: "Two exercises side by side — muscles, movement, and record eligibility"
+            )
+            rowDivider
+            featureRow(
                 title: "Unlimited templates",
                 detail: "The free tier includes up to \(ProGate.freeTemplateLimit); Pro removes the cap"
             )

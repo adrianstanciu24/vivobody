@@ -801,13 +801,18 @@
         "padovan-2024-standing-overhead-press",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Stand with your feet about hip-width apart and hold the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
-        "Brace your trunk without leaning back and keep your hips and knees motionless.",
-        "Press the bar overhead, letting your shoulder blades move naturally, and move your head only enough to clear the bar.",
-        "Finish with your elbows straight and the bar balanced over the middle of your feet.",
-        "Lower the bar under control to your upper chest."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet about hip-width apart and hold the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "movement": "Press the bar overhead, letting your shoulder blades move naturally, and move your head only enough to clear the bar.",
+        "endpoint": "Finish with your elbows straight and the bar balanced over the middle of your feet.",
+        "returnPhase": "Lower the bar under control to your upper chest.",
+        "controlledJoints": "Keep your hips and knees motionless.",
+        "supportAndPosture": "Brace your trunk without leaning back.",
+        "disqualifyingCompensations": [
+          "Driving through the hips or knees turns the strict press into a push press.",
+          "Leaning back turns the vertical press into an incline press."
+        ]
+      }
     },
     {
       "catalogID": "standing-dumbbell-overhead-press",
@@ -902,13 +907,18 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Stand with your feet about hip-width apart and hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
-        "Brace your trunk and keep your hips and knees motionless.",
-        "Press both dumbbells overhead along slightly forward paths without turning your hands or leaning back, and let your shoulder blades move naturally.",
-        "Finish with your elbows straight and the weights balanced over your body.",
-        "Lower the dumbbells under control to shoulder height."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet about hip-width apart and hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+        "movement": "Press both dumbbells overhead along slightly forward paths without turning your hands or leaning back, and let your shoulder blades move naturally.",
+        "endpoint": "Finish with your elbows straight and the weights balanced over your body.",
+        "returnPhase": "Lower the dumbbells under control to shoulder height.",
+        "controlledJoints": "Keep your hips and knees motionless and your hands unturned.",
+        "supportAndPosture": "Brace your trunk without leaning back.",
+        "disqualifyingCompensations": [
+          "Driving through the hips or knees turns the strict press into a push press.",
+          "Leaning back turns the vertical press into an incline press."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-standing-dumbbell-overhead-press",
@@ -1004,13 +1014,20 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Stand with your feet about hip-width apart and hold one dumbbell at the shoulder you are working, with your palm facing forward and your elbow slightly forward.",
-        "Brace your torso, keep your hips level and facing forward, and do not bend your hips or knees.",
-        "Press the dumbbell overhead on a slightly forward path without turning your hand, leaning sideways or back, or twisting, and let your shoulder blade move naturally.",
-        "Finish with your elbow straight and the weight balanced over your body.",
-        "Lower the dumbbell under control before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet about hip-width apart and hold one dumbbell at the shoulder you are working, with your palm facing forward and your elbow slightly forward.",
+        "movement": "Press the dumbbell overhead on a slightly forward path without turning your hand, leaning sideways or back, or twisting, and let your shoulder blade move naturally.",
+        "endpoint": "Finish with your elbow straight and the weight balanced over your body.",
+        "returnPhase": "Lower the dumbbell under control to the shoulder.",
+        "controlledJoints": "Keep your hips level and facing forward, and do not bend your hips or knees.",
+        "supportAndPosture": "Brace your torso without leaning sideways or back.",
+        "disqualifyingCompensations": [
+          "Driving through the hips or knees turns the strict press into a push press.",
+          "Leaning sideways turns the one-arm press into a side-bent push.",
+          "Twisting the torso turns the press into a rotational push."
+        ],
+        "sideOrDirection": "Finish the set on the working side before changing sides."
+      }
     },
     {
       "catalogID": "seated-dumbbell-overhead-press",
@@ -1091,13 +1108,18 @@
         "saeterbakken-2012-shoulder-press-core",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Set the bench backrest to about 85 degrees and sit with your pelvis and upper torso supported and your feet planted.",
-        "Hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
-        "Press both dumbbells overhead along slightly forward paths without turning your hands, pushing through your legs, or lifting your torso from the bench.",
-        "Let your shoulder blades move as much as the backrest allows, and finish with your elbows straight.",
-        "Lower the dumbbells under control to shoulder height."
-      ]
+      "execution": {
+        "startingPosition": "Set the bench backrest to about 85 degrees and sit with your pelvis and upper torso supported and your feet planted. Hold one dumbbell at each shoulder with your palms facing forward and your elbows slightly forward of your torso.",
+        "movement": "Press both dumbbells overhead along slightly forward paths without turning your hands, pushing through your legs, or lifting your torso from the bench.",
+        "endpoint": "Let your shoulder blades move as much as the backrest allows, and finish with your elbows straight.",
+        "returnPhase": "Lower the dumbbells under control to shoulder height.",
+        "controlledJoints": "Keep your hands unturned and your legs quiet.",
+        "supportAndPosture": "Keep your pelvis and upper torso supported on the bench with your feet planted.",
+        "disqualifyingCompensations": [
+          "Pushing through the legs turns the seated press into a leg-assisted press.",
+          "Lifting the torso off the bench turns the supported press into an unsupported press."
+        ]
+      }
     },
     {
       "catalogID": "seated-barbell-overhead-press",
@@ -1177,13 +1199,18 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Set a bench backrest to about 80 degrees inside a rack and sit with your pelvis and upper torso supported and your feet planted.",
-        "Unrack the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
-        "Press the bar overhead in front of your head without pushing through your legs or lifting your torso from the bench, and let your shoulder blades move naturally.",
-        "Finish with your elbows straight.",
-        "Lower the bar under control to your upper chest."
-      ]
+      "execution": {
+        "startingPosition": "Set a bench backrest to about 80 degrees inside a rack and sit with your pelvis and upper torso supported and your feet planted. Unrack the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "movement": "Press the bar overhead in front of your head without pushing through your legs or lifting your torso from the bench, and let your shoulder blades move naturally.",
+        "endpoint": "Finish with your elbows straight.",
+        "returnPhase": "Lower the bar under control to your upper chest.",
+        "controlledJoints": "Keep your legs quiet throughout the press.",
+        "supportAndPosture": "Keep your pelvis and upper torso supported on the bench with your feet planted.",
+        "disqualifyingCompensations": [
+          "Pushing through the legs turns the seated press into a leg-assisted press.",
+          "Lifting the torso off the bench turns the supported press into an unsupported press."
+        ]
+      }
     },
     {
       "catalogID": "unsupported-seated-dumbbell-overhead-press",
@@ -1276,13 +1303,18 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2013-shoulder-press-position"
       ],
-      "movementSteps": [
-        "Sit upright on a flat bench without a backrest, plant your feet, and hold one dumbbell at each shoulder with your palms facing forward.",
-        "Brace your trunk so your ribs stay stacked over your pelvis.",
-        "Press both dumbbells overhead along slightly forward paths without leaning back, pushing through your legs, or turning your hands.",
-        "Finish with your elbows straight.",
-        "Lower the dumbbells under control to shoulder height."
-      ]
+      "execution": {
+        "startingPosition": "Sit upright on a flat bench without a backrest, plant your feet, and hold one dumbbell at each shoulder with your palms facing forward.",
+        "movement": "Press both dumbbells overhead along slightly forward paths without leaning back, pushing through your legs, or turning your hands.",
+        "endpoint": "Finish with your elbows straight.",
+        "returnPhase": "Lower the dumbbells under control to shoulder height.",
+        "controlledJoints": "Keep your hands unturned and your legs quiet.",
+        "supportAndPosture": "Brace your trunk so your ribs stay stacked over your pelvis.",
+        "disqualifyingCompensations": [
+          "Leaning back turns the unsupported seated press into a reclined press.",
+          "Pushing through the legs turns the seated press into a leg-assisted press."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-seated-dumbbell-overhead-press",
@@ -1376,13 +1408,20 @@
         "ichihashi-2014-military-press-kinematics",
         "saeterbakken-2012-shoulder-press-core"
       ],
-      "movementSteps": [
-        "Set the bench backrest to about 75 degrees and sit with your upper torso and pelvis supported and your feet planted.",
-        "Hold one dumbbell at the shoulder you are working with your palm facing inward.",
-        "Press the dumbbell overhead on a slightly forward path without turning your hand, pushing through your legs, twisting, or leaning sideways, while keeping both hips on the bench.",
-        "Finish with your elbow straight and lower under control.",
-        "Repeat on the other side."
-      ]
+      "execution": {
+        "startingPosition": "Set the bench backrest to about 75 degrees and sit with your upper torso and pelvis supported and your feet planted. Hold one dumbbell at the shoulder you are working with your palm facing inward.",
+        "movement": "Press the dumbbell overhead on a slightly forward path without turning your hand, pushing through your legs, twisting, or leaning sideways, while keeping both hips on the bench.",
+        "endpoint": "Finish with your elbow straight.",
+        "returnPhase": "Lower the dumbbell under control to the shoulder.",
+        "controlledJoints": "Keep your hand unturned and your legs quiet.",
+        "supportAndPosture": "Keep your upper torso, pelvis, and both hips supported on the bench with your feet planted.",
+        "disqualifyingCompensations": [
+          "Leaning sideways turns the one-arm press into a side-bent push.",
+          "Twisting the torso turns the press into a rotational push.",
+          "Pushing through the legs turns the seated press into a leg-assisted press."
+        ],
+        "sideOrDirection": "Finish the set on the working side, then repeat on the other side."
+      }
     },
     {
       "catalogID": "single-arm-standing-kettlebell-overhead-press",
@@ -1477,13 +1516,20 @@
         "ichihashi-2014-military-press-kinematics",
         "padovan-2024-standing-overhead-press"
       ],
-      "movementSteps": [
-        "Stand with your feet about shoulder-width apart and hold one kettlebell at your working shoulder with your wrist straight and the bell resting against your forearm.",
-        "Brace your trunk and keep your hips and knees motionless.",
-        "Press the kettlebell overhead on a slightly forward path without letting it flip upside down, leaning, or twisting.",
-        "Finish with your elbow straight and your forearm vertical.",
-        "Lower the kettlebell under control to the rack before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Stand with your feet about shoulder-width apart and hold one kettlebell at your working shoulder with your wrist straight and the bell resting against your forearm.",
+        "movement": "Press the kettlebell overhead on a slightly forward path without letting it flip upside down, leaning, or twisting.",
+        "endpoint": "Finish with your elbow straight and your forearm vertical.",
+        "returnPhase": "Lower the kettlebell under control to the rack.",
+        "controlledJoints": "Keep your hips and knees motionless and your wrist straight.",
+        "supportAndPosture": "Brace your trunk without leaning or twisting.",
+        "disqualifyingCompensations": [
+          "Letting the bell flip upside down turns the standard press into a bottom-up press.",
+          "Driving through the hips or knees turns the strict press into a push press.",
+          "Leaning or twisting turns the one-arm press into a side-bent push."
+        ],
+        "sideOrDirection": "Finish the set on the working side before changing sides."
+      }
     },
     {
       "catalogID": "seated-smith-machine-overhead-press",
@@ -1563,13 +1609,18 @@
         "balsalobre-fernandez-2018-smith-military-press",
         "ichihashi-2014-military-press-kinematics"
       ],
-      "movementSteps": [
-        "Place an upright bench under the Smith bar so the rails keep the bar in front of your head, set the backrest to about 85 degrees, and sit with your torso supported and your feet planted.",
-        "Unhook the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
-        "Press along the rails without pushing through your legs or lifting from the bench.",
-        "Finish with your elbows straight.",
-        "Lower the bar under control and rehook it securely."
-      ]
+      "execution": {
+        "startingPosition": "Place an upright bench under the Smith bar so the rails keep the bar in front of your head, set the backrest to about 85 degrees, and sit with your torso supported and your feet planted. Unhook the bar at your upper chest with your palms facing forward and your hands just outside shoulder width.",
+        "movement": "Press along the rails without pushing through your legs or lifting from the bench.",
+        "endpoint": "Finish with your elbows straight.",
+        "returnPhase": "Lower the bar under control and rehook it securely.",
+        "controlledJoints": "Keep your legs quiet throughout the press.",
+        "supportAndPosture": "Keep your torso supported on the bench with your feet planted.",
+        "disqualifyingCompensations": [
+          "Pushing through the legs turns the seated press into a leg-assisted press.",
+          "Lifting the torso off the bench turns the supported press into an unsupported press."
+        ]
+      }
     },
     {
       "catalogID": "machine-shoulder-press",
@@ -1649,12 +1700,18 @@
         "coratella-2022-overhead-press-variants",
         "ichihashi-2014-military-press-kinematics"
       ],
-      "movementSteps": [
-        "Adjust the seat so the handles begin near shoulder height with your palms facing each other, then sit against the machine pad with your feet planted.",
-        "Press both lever arms overhead along their converging front paths without pushing through your legs or lifting from the pad.",
-        "Finish with your elbows straight without forcing your shoulders forward.",
-        "Return the handles under control."
-      ]
+      "execution": {
+        "startingPosition": "Adjust the seat so the handles begin near shoulder height with your palms facing each other, then sit against the machine pad with your feet planted.",
+        "movement": "Press both lever arms overhead along their converging front paths without pushing through your legs or lifting from the pad.",
+        "endpoint": "Finish with your elbows straight without forcing your shoulders forward.",
+        "returnPhase": "Return the handles under control.",
+        "controlledJoints": "Keep your legs quiet throughout the press.",
+        "supportAndPosture": "Keep your torso against the machine pad with your feet planted.",
+        "disqualifyingCompensations": [
+          "Pushing through the legs turns the seated press into a leg-assisted press.",
+          "Lifting the torso off the pad turns the supported press into an unsupported press."
+        ]
+      }
     },
     {
       "catalogID": "wall-supported-strict-handstand-push-up",
@@ -1728,14 +1785,19 @@
         "kinoshita-2022-progressive-handstand-emg",
         "li-2026-wall-handstand-push-up-test"
       ],
-      "movementSteps": [
-        "Place the handstand supports 10 cm from a wall and 20 cm wider than your shoulders, with a 15 cm sponge centered beneath your head.",
-        "Kick up into a handstand and let only your feet touch the wall gently.",
-        "Lower until your head contacts the sponge.",
-        "Press until your arms are straight overhead without folding at your waist, bending your knees, swinging for momentum, or pushing off the wall.",
-        "Perform as many controlled repetitions as you can in 40 seconds; five repetitions is only a suggested starting target.",
-        "Count only repetitions that follow the setup and movement rules above."
-      ]
+      "execution": {
+        "startingPosition": "Place the handstand supports 10 cm from a wall and 20 cm wider than your shoulders, with a 15 cm sponge centered beneath your head. Kick up into a handstand and let only your feet touch the wall gently.",
+        "movement": "Lower until your head contacts the sponge.",
+        "endpoint": "Press until your arms are straight overhead without folding at your waist, bending your knees, swinging for momentum, or pushing off the wall.",
+        "returnPhase": "Lower under control until your head contacts the sponge again.",
+        "controlledJoints": "Keep your knees straight and your waist firm throughout the repetition.",
+        "supportAndPosture": "Let only your feet touch the wall gently while you stay stacked over your hands. Perform as many controlled repetitions as you can in 40 seconds; five repetitions is only a suggested starting target. Count only repetitions that follow the setup and movement rules above.",
+        "disqualifyingCompensations": [
+          "Folding at the waist turns the strict handstand push-up into a pike push-up.",
+          "Bending the knees or swinging turns the strict repetition into a kipping push-up.",
+          "Pushing off the wall turns the wall-supported repetition into a wall-assisted climb."
+        ]
+      }
     }
   ]
 }

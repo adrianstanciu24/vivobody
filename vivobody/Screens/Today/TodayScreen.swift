@@ -2,13 +2,13 @@
 //  TodayScreen.swift
 //  vivobody
 //
-//  The app's home tab. Quiet, scannable, anchored by the big
-//  "Start Workout" call-to-action. Composes previously-built
+//  The app's home tab. Quiet, scannable, anchored by one dominant
+//  pinned workout action. Composes previously-built
 //  atoms into their first real screen home:
 //    • ConsistencyStrip — the rolling two weeks of workout embers,
 //      the glow ring pulsing on PR days
-//    • PrimaryActionButton — the START WORKOUT call-to-action, which
-//      becomes the resume/finish control while a workout is running
+//    • PrimaryActionButton — opens the workout chooser and becomes
+//      Resume / Finish while a workout is running
 //    • DigitTicker — used inside the LastWorkout stats strip
 //
 //  The screen reads AppState directly (workout dates, PR dates,
@@ -88,8 +88,7 @@ struct TodayScreen: View {
     /// title animation so it holds a constant size.
     @State var heroHeight: CGFloat = 0
 
-    /// Whether the start-workout sheet is presented (raised by the
-    /// pinned "+ Start" pill).
+    /// Whether the single start-workout chooser is presented.
     @State var showStartSheet = false
     @State var showMuscleMapDetails = false
     @State var showTrainingLoadDetails = false
@@ -109,27 +108,27 @@ struct TodayScreen: View {
 
     var body: some View {
         let shouldReduceMotion = reduceMotion
+        let upNext = UpNext.compute(
+            templates: templates,
+            sessions: recentSessions,
+            load: appState.analytics.load
+        )
+        let outlook = appState.analytics.strength
+        let load = appState.analytics.load
+        let readiness = latestSessions.readiness(load: load)
         ScrollView {
             // The body leads — your trained figure is the hero
-            // and the readout's subject. The readiness section
-            // below draws how ready it is to train again; START
-            // is the biggest, first-thing-you-reach target. The
-            // calendar and last workout are the journal you
-            // scroll down to once you've decided.
+            // and the readout's subject. Up Next then names the
+            // scheduled plan before its training-load context;
+            // the pinned primary action remains the biggest,
+            // first-thing-you-reach target. Completed-workout
+            // history follows only when there is history to show.
             //
             // The development model is replayed once per data
             // change (memoised in SessionAnalytics on AppState)
             // and every consumer (figure, readiness card, the
             // drill-down boards) derives from this single state.
             let modelState = appState.analytics.development
-            let upNext = UpNext.compute(
-                templates: templates,
-                sessions: recentSessions,
-                load: appState.analytics.load
-            )
-            let outlook = appState.analytics.strength
-            let load = appState.analytics.load
-            let readiness = latestSessions.readiness(load: load)
             VStack(alignment: .leading, spacing: Space.section) {
                 // The figure and its caption read as one unit: the
                 // portrait, then the line decoding its colours sitting
@@ -159,16 +158,21 @@ struct TodayScreen: View {
                 }
                 .settleIn(0)
 
-                if let readiness {
-                    readinessSection(load, line: readiness).settleIn(1)
-                    SectionDivider().settleIn(2)
-                }
                 if upNext.isPresentable {
-                    upNextView(upNext, outlook: outlook).settleIn(3)
+                    upNextView(upNext, outlook: outlook).settleIn(1)
                 }
-                consistencySection.settleIn(5)
-                SectionDivider().settleIn(6)
-                lastWorkoutSection.settleIn(7)
+                if let readiness {
+                    if upNext.isPresentable {
+                        SectionDivider().settleIn(2)
+                    }
+                    readinessSection(load, line: readiness).settleIn(3)
+                }
+                if latestSession != nil {
+                    SectionDivider().settleIn(4)
+                    consistencySection.settleIn(5)
+                    SectionDivider().settleIn(6)
+                    lastWorkoutSection.settleIn(7)
+                }
             }
             .padding(.top, Space.xs)
             .padding(.bottom, Space.xxl)
@@ -177,12 +181,14 @@ struct TodayScreen: View {
         .scrollBounceBehavior(.basedOnSize, axes: .vertical)
         .scrollIndicators(.hidden)
         .scrollEdgeEffectStyle(.soft, for: .bottom)
-        .safeAreaPadding(.bottom, Self.pinnedStartBarClearance)
+        .safeAreaPadding(.bottom, pinnedStartBarScrollClearance)
         // START is pinned in the native iOS 26 safe-area bar,
         // never part of the scroll. The matching safe-area
         // padding above reserves its occupied height so body
         // copy never sits underneath the CTA or tab chrome.
-        .safeAreaBar(edge: .bottom, spacing: 0) { pinnedStartBar }
+        .safeAreaBar(edge: .bottom, spacing: 0) {
+            pinnedStartBar
+        }
         // Keep the content on the app's static, edge-to-edge
         // faceplate. The body-model stage carries the hero's
         // training-driven warmth without continuously animating
@@ -208,6 +214,7 @@ struct TodayScreen: View {
             StartWorkoutSheet(
                 lastSession: latestSession,
                 templates: sortedTemplates,
+                scheduledTemplate: scheduledTemplate(in: upNext),
                 onSelect: queueStart
             )
         }

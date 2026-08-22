@@ -161,9 +161,10 @@ struct ActiveWorkoutScreen: View {
             isPresented: $showAddExercisePicker,
             onDismiss: discardIfStillEmpty
         ) {
-            ExercisePickerSheet { item in
-                appendExercise(from: item)
-            }
+            ExercisePickerSheet(
+                purpose: .addToActiveWorkout,
+                onPick: appendExercise
+            )
         }
         .saveErrorAlert($saveError)
     }

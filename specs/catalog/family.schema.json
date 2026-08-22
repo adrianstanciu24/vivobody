@@ -755,7 +755,7 @@
         "additionalPrimeActions",
         "additionalStabilityDemands",
         "evidenceRefs",
-        "movementSteps"
+        "execution"
       ],
       "properties": {
         "catalogID": {
@@ -845,14 +845,60 @@
         "evidenceRefs": {
           "$ref": "#/$defs/evidenceRefs"
         },
-        "movementSteps": {
+        "execution": {
+          "$ref": "#/$defs/executionInstructions"
+        }
+      }
+    },
+    "executionInstructions": {
+      "description": "Structured execution contract separating sequential phases from concurrent constraints. The compiler enforces two conditional fields against the exercise's declared trackingMode, laterality, and family pattern: returnPhase is required for rep-tracked exercises and forbidden for duration-tracked ones; sideOrDirection is required for unilateral exercises and carry-pattern families and forbidden otherwise.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startingPosition",
+        "movement",
+        "endpoint",
+        "controlledJoints",
+        "supportAndPosture",
+        "disqualifyingCompensations"
+      ],
+      "properties": {
+        "startingPosition": {
+          "description": "Setup, stance, grip, and load placement.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "movement": {
+          "description": "The intended movement.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "endpoint": {
+          "description": "Where the movement ends; for holds, the held position.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "returnPhase": {
+          "description": "How to return to the start; required exactly when trackingMode is reps.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "controlledJoints": {
+          "description": "Joints that must remain controlled or still.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "supportAndPosture": {
+          "description": "Support surfaces, bracing, and posture.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "disqualifyingCompensations": {
+          "description": "Each entry names a compensation and the exercise or pattern it turns the movement into.",
           "type": "array",
-          "minItems": 2,
-          "maxItems": 10,
+          "minItems": 1,
           "uniqueItems": true,
           "items": {
             "$ref": "#/$defs/nonEmptyString"
           }
+        },
+        "sideOrDirection": {
+          "description": "Side-switching or travel-direction requirement; required for unilateral exercises and carry-pattern families, forbidden otherwise.",
+          "$ref": "#/$defs/nonEmptyString"
         }
       }
     }

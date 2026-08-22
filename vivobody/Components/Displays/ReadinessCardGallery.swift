@@ -1,13 +1,13 @@
-#if DEBUG
 //
-    //  ReadinessCardGallery.swift
-    //  vivobody
+//  ReadinessCardGallery.swift
+//  vivobody
 //
-    //  Every voice the placard can wear: trained today at productive
-    //  load, a high week, a light week, and the forming period before
-    //  the personal range exists (provisional gauge marker).
+//  DEBUG gallery for Today's Training Load instrument: below, within,
+//  and above a stable personal range plus the provisional forming state.
+//  Dedicated previews exercise both appearances and Accessibility type.
 //
 
+#if DEBUG
     import SwiftUI
     import VivoKit
 
@@ -17,31 +17,59 @@
                 VStack(alignment: .leading, spacing: Space.xxl) {
                     header
 
-                    labelled("Trained today · productive") {
+                    labelled("Within range") {
                         ReadinessCard(
-                            report: Self.report(loads: [3, 0, 4, 0, 0, 5, 4], ratio: 1.0, verdict: .productive),
-                            line: ReadinessLine(lead: "Today's in the bank.", tail: "Recover well.")
+                            report: Self.report(
+                                loads: [3, 0, 4, 0, 0, 5, 4],
+                                comparisonRatio: 1,
+                                verdict: .productive
+                            ),
+                            line: ReadinessLine(
+                                lead: "Productive training load.",
+                                tail: "Keep the rhythm."
+                            )
                         )
                     }
 
-                    labelled("High load") {
+                    labelled("Above range") {
                         ReadinessCard(
-                            report: Self.report(loads: [5, 6, 0, 7, 6, 8, 0], ratio: 1.6, verdict: .high),
-                            line: ReadinessLine(lead: "Training load is high.", tail: "Keep today lighter.")
+                            report: Self.report(
+                                loads: [5, 6, 0, 7, 6, 8, 0],
+                                comparisonRatio: 1.6,
+                                verdict: .high
+                            ),
+                            line: ReadinessLine(
+                                lead: "Training load is high.",
+                                tail: "Keep today lighter."
+                            )
                         )
                     }
 
-                    labelled("Light week") {
+                    labelled("Below range") {
                         ReadinessCard(
-                            report: Self.report(loads: [0, 2, 0, 0, 0, 3, 0], ratio: 0.5, verdict: .low),
-                            line: ReadinessLine(lead: "Load is lighter lately.", tail: "Build when ready.")
+                            report: Self.report(
+                                loads: [0, 2, 0, 0, 0, 3, 0],
+                                comparisonRatio: 0.5,
+                                verdict: .low
+                            ),
+                            line: ReadinessLine(
+                                lead: "Load is lighter lately.",
+                                tail: "Build when ready."
+                            )
                         )
                     }
 
-                    labelled("Forming · no range yet") {
+                    labelled("Personal range forming") {
                         ReadinessCard(
-                            report: Self.report(loads: [0, 0, 4, 0, 3, 0, 0], ratio: 1.1, verdict: .insufficient),
-                            line: ReadinessLine(lead: "Fresh — 2 days' rest.", tail: "Good to go.")
+                            report: Self.report(
+                                loads: [0, 0, 4, 0, 3, 0, 0],
+                                comparisonRatio: 1.1,
+                                verdict: .insufficient
+                            ),
+                            line: ReadinessLine(
+                                lead: "Fresh — 2 days' rest.",
+                                tail: "Good to go."
+                            )
                         )
                     }
                 }
@@ -49,57 +77,70 @@
                 .padding(.top, Space.section)
                 .padding(.bottom, Space.xxl)
             }
-            .background(Color.black.ignoresSafeArea())
+            .screenBackground()
         }
 
         private var header: some View {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("READINESS CARD")
-                    .font(Typography.metricMicro)
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.45))
-                Text("The verdict, drawn.")
+            VStack(alignment: .leading, spacing: Space.sm) {
+                Text("Training load instrument")
+                    .panelLegend()
+                Text("Current versus your range")
                     .font(Typography.display)
-                    .foregroundStyle(.white)
-                Text("Seven days of work as bars, today in the verdict colour, and where the rolling week sits against your productive range.")
-                    .font(Typography.sectionLabel)
-                    .foregroundStyle(.white.opacity(0.45))
-                    .padding(.top, 2)
+                    .foregroundStyle(Ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("The qualitative read and one labelled scale lead. Daily history stays secondary.")
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
 
-        private func labelled(_ title: String, @ViewBuilder content: () -> some View) -> some View {
+        private func labelled(
+            _ title: String,
+            @ViewBuilder content: () -> some View
+        ) -> some View {
             VStack(alignment: .leading, spacing: Space.sm) {
-                Text(title.uppercased())
-                    .font(Typography.metricMicro)
-                    .tracking(2)
-                    .foregroundStyle(.white.opacity(0.35))
+                Text(title)
+                    .panelLegend()
                 content()
             }
         }
 
-        /// Fabricated report: `loads` are per-day hard-set equivalents,
-        /// oldest first and ending today.
-        private static func report(
+        /// Fabricated report: daily loads are oldest first and end today.
+        /// Stable fixtures derive their usual load from the supplied ratio,
+        /// keeping the displayed numbers, band, marker, and verdict coherent.
+        fileprivate static func report(
             loads: [Double],
-            ratio: Double,
+            comparisonRatio: Double,
             verdict: LoadVerdict
         ) -> TrainingLoadReport {
-            let calendar = Calendar.current
-            let today = calendar.startOfDay(for: Date())
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+            let today = calendar.date(
+                from: DateComponents(year: 2026, month: 8, day: 22)
+            )!
             let days = loads.enumerated().compactMap { index, load -> DayLoad? in
-                guard let date = calendar.date(byAdding: .day, value: index - (loads.count - 1), to: today) else {
-                    return nil
-                }
+                guard let date = calendar.date(
+                    byAdding: .day,
+                    value: index - (loads.count - 1),
+                    to: today
+                ) else { return nil }
                 return DayLoad(date: date, load: load)
             }
+            let current = loads.reduce(0, +)
+            let isForming = verdict == .insufficient
+            let usual = isForming || comparisonRatio <= 0
+                ? nil
+                : current / comparisonRatio
+
             return TrainingLoadReport(
-                currentLoad: loads.reduce(0, +),
-                usualLoad: verdict == .insufficient ? nil : 12,
-                ratio: verdict == .insufficient ? 0 : ratio,
-                provisionalRatio: verdict == .insufficient ? ratio : nil,
+                currentLoad: current,
+                usualLoad: usual,
+                ratio: isForming ? 0 : comparisonRatio,
+                provisionalRatio: isForming ? comparisonRatio : nil,
                 verdict: verdict,
-                daysLogged: verdict == .insufficient ? 10 : 60,
+                daysLogged: isForming ? 18 : 60,
+                activeBaselineWeeks: isForming ? 2 : 4,
                 points: [],
                 recentDays: days,
                 drivers: .empty
@@ -107,9 +148,31 @@
         }
     }
 
-    #Preview("Readiness Card") {
+    #Preview("Readiness Card · Dark") {
         ReadinessCardGallery()
             .preferredColorScheme(.dark)
     }
 
+    #Preview("Readiness Card · Light") {
+        ReadinessCardGallery()
+            .preferredColorScheme(.light)
+    }
+
+    #Preview("Readiness Card · Accessibility") {
+        ReadinessCard(
+            report: ReadinessCardGallery.report(
+                loads: [3, 0, 4, 0, 0, 5, 4],
+                comparisonRatio: 1,
+                verdict: .productive
+            ),
+            line: ReadinessLine(
+                lead: "Productive training load.",
+                tail: "Keep the rhythm."
+            )
+        )
+        .padding(Space.gutter)
+        .screenBackground()
+        .dynamicTypeSize(.accessibility3)
+        .preferredColorScheme(.dark)
+    }
 #endif

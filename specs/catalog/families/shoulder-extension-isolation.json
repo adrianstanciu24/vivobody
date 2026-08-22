@@ -418,12 +418,18 @@
         "marchetti-2011-barbell-pullover",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementSteps": [
-        "Lie on your back along a flat bench and hold a straight bar over your chest with your palms facing forward and your elbows nearly straight.",
-        "Keep your elbow angle fixed as you lower the bar behind your head as far as you comfortably can.",
-        "Bring your arms back over your chest while keeping the same elbow angle.",
-        "Do not turn the movement into a triceps exercise by bending and straightening your elbows."
-      ]
+      "execution": {
+        "startingPosition": "Lie on your back along a flat bench and hold a straight bar over your chest with your palms facing forward and your elbows nearly straight.",
+        "movement": "Lower the bar behind your head as far as you comfortably can.",
+        "endpoint": "The bar reaches its comfortable limit behind your head.",
+        "returnPhase": "Bring your arms back over your chest while keeping the same elbow angle.",
+        "controlledJoints": "Keep your elbow angle fixed.",
+        "supportAndPosture": "Keep your back on the flat bench and your torso still.",
+        "disqualifyingCompensations": [
+          "Do not turn the movement into a triceps exercise by bending and straightening your elbows.",
+          "Arching the back off the bench to move the bar turns the pullover into a backbend heave."
+        ]
+      }
     },
     {
       "catalogID": "shoulder-width-straight-arm-cable-pulldown",
@@ -501,12 +507,18 @@
         "holzbaur-2005-upper-extremity",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementSteps": [
-        "Stand facing a high cable and hold a straight bar at shoulder width with your palms facing down and your elbows nearly straight.",
-        "Begin with your hands overhead and brace your torso.",
-        "Keep your elbow angle fixed as you bring the bar down to your thighs.",
-        "Return overhead under control without rowing or bending your elbows."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a high cable and hold a straight bar at shoulder width with your palms facing down and your elbows nearly straight. Begin with your hands overhead.",
+        "movement": "Bring the bar down to your thighs.",
+        "endpoint": "The bar reaches your thighs.",
+        "returnPhase": "Return overhead under control without rowing or bending your elbows.",
+        "controlledJoints": "Keep your elbow angle fixed.",
+        "supportAndPosture": "Brace your torso while standing unsupported.",
+        "disqualifyingCompensations": [
+          "Rowing the bar down with bending elbows turns the straight-arm pulldown into a row.",
+          "Bending and straightening the elbows turns the straight-arm pulldown into a triceps pushdown."
+        ]
+      }
     },
     {
       "catalogID": "wide-grip-straight-arm-cable-pulldown",
@@ -584,12 +596,18 @@
         "holzbaur-2005-upper-extremity",
         "muyor-2022-pullover-straight-arm-pulldown"
       ],
-      "movementSteps": [
-        "Stand facing a high cable and hold a straight bar wider than shoulder width with your palms facing down and your elbows nearly straight.",
-        "Begin with your hands overhead and brace your torso.",
-        "Keep your elbow angle fixed as you bring the bar down to your thighs.",
-        "Return overhead under control without rowing or bending your elbows."
-      ]
+      "execution": {
+        "startingPosition": "Stand facing a high cable and hold a straight bar wider than shoulder width with your palms facing down and your elbows nearly straight. Begin with your hands overhead.",
+        "movement": "Bring the bar down to your thighs.",
+        "endpoint": "The bar reaches your thighs.",
+        "returnPhase": "Return overhead under control without rowing or bending your elbows.",
+        "controlledJoints": "Keep your elbow angle fixed.",
+        "supportAndPosture": "Brace your torso while standing unsupported.",
+        "disqualifyingCompensations": [
+          "Rowing the bar down with bending elbows turns the straight-arm pulldown into a row.",
+          "Bending and straightening the elbows turns the straight-arm pulldown into a triceps pushdown."
+        ]
+      }
     }
   ]
 }

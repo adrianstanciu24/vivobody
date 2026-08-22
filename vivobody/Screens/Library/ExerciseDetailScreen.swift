@@ -9,6 +9,13 @@
 //  quick Edit / Duplicate / Delete context menu. The toolbar menu
 //  here offers the same actions, with "Duplicate as Custom" limited
 //  to bundled exercises (a custom entry is already fully editable).
+//  Comparison is entered through the "Compare with another exercise"
+//  row beside the how-to drill-out (or the toolbar menu) and is
+//  Pro-gated at that entry: free users get the local paywall, Pro
+//  users get a "Compare With" picker that chains into the
+//  ExerciseComparisonScreen sheet. The active-workout add host
+//  suppresses that entry entirely so logging never opens comparison
+//  or a premium interruption mid-session.
 //
 //  Surfaces (when data exists):
 //    • Hero    — orange modality eyebrow + exercise name, plus a
@@ -63,6 +70,11 @@ struct ExerciseDetailScreen: View {
     /// sheet mutates the underlying record.
     let item: ExerciseCatalogItem
 
+    /// False only when this detail is hosted by the active-workout
+    /// add flow. Comparison is long-form catalog exploration and can
+    /// surface a Pro gate, so it stays outside the live session.
+    let allowsComparison: Bool
+
     /// Bundles the picker's `onPick(item)` + its own `dismiss()` into
     /// a single closure. Nil hides the bottom CTA entirely — useful
     /// when the detail is reached from a non-picking context (future
@@ -114,9 +126,11 @@ struct ExerciseDetailScreen: View {
 
     init(
         item: ExerciseCatalogItem,
+        allowsComparison: Bool = true,
         onPickAndDismiss: ((ExerciseCatalogItem) -> Void)?
     ) {
         self.item = item
+        self.allowsComparison = allowsComparison
         self.onPickAndDismiss = onPickAndDismiss
 
         var latestBodyweight = FetchDescriptor<BodyWeightEntry>(
@@ -129,6 +143,13 @@ struct ExerciseDetailScreen: View {
 
     @State private var editorTarget: CatalogEditorTarget?
     @State private var isConfirmingDelete: Bool = false
+    /// Comparison flow state: the "Compare With" picker, the row the
+    /// user tapped there, and the picked target once the picker sheet
+    /// has fully dismissed (chained in `onDismiss` so the comparison
+    /// sheet never presents over a dismissing sheet).
+    @State private var isPickingComparison: Bool = false
+    @State private var pendingComparisonTarget: ExerciseCatalogItem? = nil
+    @State private var comparisonTarget: ExerciseCatalogItem? = nil
     /// Local paywall presentation — this screen can live inside other
     /// sheets (Spotlight detail, exercise picker), where the app-root
     /// paywall sheet can't present on top.
@@ -207,6 +228,9 @@ struct ExerciseDetailScreen: View {
                 heroFigureSection
                 movementSection
                 instructionsLink
+                if allowsComparison {
+                    compareLink
+                }
                 bestHeroCard
                 if showsPerformanceRows {
                     performanceRows
@@ -273,6 +297,16 @@ struct ExerciseDetailScreen: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
+                    if allowsComparison {
+                        Button {
+                            startComparison()
+                        } label: {
+                            Label(
+                                "Compare with Another Exercise",
+                                systemImage: "arrow.left.arrow.right"
+                            )
+                        }
+                    }
                     Button {
                         editorTarget = .edit(item)
                     } label: {
@@ -312,6 +346,23 @@ struct ExerciseDetailScreen: View {
         .sheet(item: $editorTarget) { target in
             CustomExerciseEditorSheet(target: target)
         }
+        .sheet(
+            isPresented: $isPickingComparison,
+            onDismiss: openComparisonIfPicked
+        ) {
+            ExercisePickerSheet(
+                purpose: .compare(anchorID: item.id, anchorName: item.name),
+                onPick: { picked in
+                    pendingComparisonTarget = picked
+                }
+            )
+        }
+        .sheet(item: $comparisonTarget) { other in
+            NavigationStack {
+                ExerciseComparisonScreen(anchor: item, other: other)
+            }
+            .presentationDragIndicator(.visible)
+        }
         .sheet(isPresented: $isPaywallPresented) {
             if let pro {
                 PaywallSheet(pro: pro)
@@ -349,6 +400,30 @@ struct ExerciseDetailScreen: View {
     }
 
     // MARK: - Mutations
+
+    /// Entry to the Pro comparison flow. Free users get this screen's
+    /// local paywall sheet (the app-root sheet can't present over the
+    /// picker/Spotlight sheets this screen can live inside); Pro users
+    /// go straight to the "Compare With" picker. Called from both the
+    /// toolbar menu and the `compareLink` row (which lives in
+    /// ExerciseComparisonScreen.swift), so it stays internal.
+    func startComparison() {
+        guard allowsComparison else { return }
+        Haptics.soft()
+        if pro?.isUnlocked ?? true {
+            isPickingComparison = true
+        } else {
+            isPaywallPresented = true
+        }
+    }
+
+    /// The picker dismissed: a picked row chains into the comparison
+    /// sheet, a cancel leaves no trace.
+    private func openComparisonIfPicked() {
+        guard let pendingComparisonTarget else { return }
+        comparisonTarget = pendingComparisonTarget
+        self.pendingComparisonTarget = nil
+    }
 
     private func toggleFavorite() {
         item.isFavorite.toggle()

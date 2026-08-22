@@ -373,13 +373,20 @@
       "evidenceRefs": [
         "mcbeth-2012-side-lying-hip-abduction"
       ],
-      "movementSteps": [
-        "Lie on one side on a treatment table with the working leg on top, both hips facing straight ahead, the lower leg bent for stability, and a cuff weight secured just above the working ankle.",
-        "Place a pressure-biofeedback unit beneath your torso, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal band marks the 35-degree stopping point.",
-        "Keep the pelvis and spine still, the working knee straight, and the toes pointing forward.",
-        "Raise the straight top leg directly out to the side until it contacts the stopping band.",
-        "Lower the leg under control without rolling the pelvis or turning the toes upward."
-      ]
+      "execution": {
+        "startingPosition": "Lie on one side on a treatment table with the working leg on top, both hips facing straight ahead, the lower leg bent for stability, and a cuff weight secured just above the working ankle. Place a pressure-biofeedback unit beneath your torso, inflate it to 40 mmHg, and keep it between 35 and 45 mmHg while a horizontal band marks the 35-degree stopping point.",
+        "movement": "Raise the straight top leg directly out to the side until it contacts the stopping band.",
+        "endpoint": "The top leg contacts the stopping band.",
+        "returnPhase": "Lower the leg under control without rolling the pelvis or turning the toes upward.",
+        "controlledJoints": "Keep the pelvis and spine still, the working knee straight, and the toes pointing forward.",
+        "supportAndPosture": "Stay lying on your side with the lower leg bent for stability, and keep the pressure reading between 35 and 45 mmHg.",
+        "disqualifyingCompensations": [
+          "Rolling the pelvis backward turns the side-lying leg raise into a trunk-assisted swing.",
+          "Turning the toes upward turns the side-lying leg raise into a hip-flexion lift.",
+          "Bending the working knee turns the side-lying leg raise into a clamshell."
+        ],
+        "sideOrDirection": "Turn onto the other side and repeat with the other leg."
+      }
     }
   ]
 }

@@ -490,14 +490,19 @@
       "evidenceRefs": [
         "zhao-2026-landmine-press-kinematics"
       ],
-      "movementSteps": [
-        "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load.",
-        "For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm.",
-        "Grip the moving end of the bar firmly and begin with it close to your working shoulder.",
-        "Press the sleeve through its pivoted arc to a controlled end range without deliberately driving through the hips, knees, or ankles, then return it to the shoulder.",
-        "Keep your torso and hips controlled throughout the movement.",
-        "Perform three power-focused repetitions and log the opposite side separately."
-      ]
+      "execution": {
+        "startingPosition": "Fix one end of an Olympic bar in a landmine pivot and count the full bar plus every plate as the logged load. For the right arm, stand with the left foot forward and both sets of toes pointing ahead; mirror the stance for the left arm. Grip the moving end of the bar firmly and begin with it close to your working shoulder.",
+        "movement": "Press the sleeve through its pivoted arc.",
+        "endpoint": "Stop at a controlled end range.",
+        "returnPhase": "Return the bar to your shoulder.",
+        "controlledJoints": "Do not deliberately drive through the hips, knees, or ankles.",
+        "supportAndPosture": "Keep your torso and hips controlled throughout the movement.",
+        "disqualifyingCompensations": [
+          "Driving with the legs turns the landmine press into a push press.",
+          "Twisting the torso into the press turns it into a rotational landmine press."
+        ],
+        "sideOrDirection": "Perform three power-focused repetitions and log the opposite side separately."
+      }
     }
   ]
 }

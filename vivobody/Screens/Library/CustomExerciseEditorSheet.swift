@@ -364,7 +364,7 @@ struct CustomExerciseEditorSheet: View {
             Text(draft.name)
                 .font(Typography.title)
                 .foregroundStyle(Ink.primary)
-            ExerciseInstructionSummary(steps: draft.movementSteps)
+            if let execution = draft.execution { ExerciseInstructionSummary(execution: execution) }
             Text("Canonical mechanics, modality, load semantics, and muscle roles are locked so this exercise keeps one stable history identity.")
                 .font(Typography.caption)
                 .foregroundStyle(Ink.quaternary)
@@ -1000,7 +1000,7 @@ struct CustomExerciseEditorSheet: View {
                 planes: draft.planes,
                 laterality: draft.laterality,
                 aliases: parsedAliases,
-                movementSteps: draft.movementSteps,
+                execution: draft.execution,
                 muscleInvolvement: draft.muscleInvolvement,
                 isUserCreated: true
             )
@@ -1053,7 +1053,7 @@ struct CustomExerciseEditorSheet: View {
             item.planes = draft.planes
             item.laterality = draft.laterality
             item.aliases = parsedAliases
-            item.movementSteps = draft.movementSteps
+            item.execution = draft.execution
             item.muscleInvolvementSnapshot = draft.muscleInvolvementSnapshot
             if performanceSemanticsChanged {
                 // A measured max belongs to the old load equation. Do

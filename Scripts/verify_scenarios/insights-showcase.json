@@ -2,39 +2,94 @@
   "name": "insights-showcase",
   "launch": {
     "reset": true,
-    "tab": "today",
-    "arguments": ["--ui-test-insights-showcase"]
+    "tab": "insights",
+    "arguments": ["--ui-test-insights-showcase", "--pro"]
   },
   "steps": [
     {
       "wait": {
-        "identifier": "todayStartWorkoutButton",
-        "role": "AXButton"
+        "identifier": "insightsShapeInstrument",
+        "role": "AXHeading"
       }
     },
     {
-      "relaunch": {
-        "reset": false,
-        "tab": "history",
-        "arguments": ["--pro"]
+      "assert": {
+        "required": [
+          {
+            "identifier": "insightsModeShape",
+            "value": "Selected"
+          },
+          {
+            "identifier": "insightsExerciseMixLink",
+            "labelContains": "Other exercises",
+            "role": "AXButton"
+          },
+          {
+            "identifier": "insightsRepMixLink",
+            "labelContains": "Other rep ranges",
+            "role": "AXButton",
+            "visible": false
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "insightsEmptyState"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeLoad"
       }
     },
     {
       "wait": {
-        "identifierContains": "historySessionRow",
-        "role": "AXButton"
+        "identifier": "insightsLoadInstrument",
+        "role": "AXHeading"
       }
     },
     {
-      "openURL": "vivobody://insights"
+      "tap": {
+        "identifier": "insightsModeRhythm"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsRhythmInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeBalance"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "insightsBalanceInstrument",
+        "role": "AXHeading"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "insightsModeShape"
+      }
     }
   ],
   "required": [
     {
-      "identifier": "insightsSignatureSection"
+      "identifier": "insightsShapeInstrument",
+      "role": "AXHeading"
     },
     {
-      "identifier": "insightsTrainingLoadSection"
+      "identifier": "insightsModeShape",
+      "value": "Selected"
+    },
+    {
+      "identifier": "insightsExerciseMixLink",
+      "labelContains": "Other exercises",
+      "role": "AXButton"
     }
   ],
   "forbidden": [

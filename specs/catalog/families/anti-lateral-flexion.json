@@ -446,13 +446,18 @@
         "juan-recio-2022-side-bridge-endurance",
         "cinarli-2025-anti-movement-training"
       ],
-      "movementSteps": [
-        "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees.",
-        "Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
-        "Lift your body into a straight line from shoulder through hip to feet.",
-        "Hold your body still for the set time without dipping your hips or moving your arms or legs.",
-        "Repeat the hold on the other side."
-      ]
+      "execution": {
+        "startingPosition": "Lie on one side and support your body on that forearm, with both your shoulder and elbow at about 90 degrees. Straighten both legs, place the top foot in front of the lower foot, and place the free hand on the opposite shoulder.",
+        "movement": "Lift your body into a straight line from shoulder through hip to feet.",
+        "endpoint": "Hold the straight-line position for the set time.",
+        "controlledJoints": "Do not dip your hips or move your arms or legs during the hold.",
+        "supportAndPosture": "Support the hold on one forearm and both feet with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Letting the hips dip or sag turns the side plank into a bent-body hold.",
+          "Rolling the torso forward or backward turns the side plank into an anti-rotation hold."
+        ],
+        "sideOrDirection": "Repeat the hold on the other side."
+      }
     }
   ]
 }

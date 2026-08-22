@@ -496,11 +496,18 @@
         "cabral-2022-pectoralis-regions",
         "coratella-2020-bench-press-variations"
       ],
-      "movementSteps": [
-        "Lie on a flat bench with the eyes beneath the racked bar and the feet planted.",
-        "Lower the bar under control toward the lower chest.",
-        "Press the bar upward until your elbows are straight."
-      ]
+      "execution": {
+        "startingPosition": "Lie on a flat bench with the eyes beneath the racked bar and the feet planted.",
+        "movement": "Lower the bar under control toward the lower chest.",
+        "endpoint": "End the descent with the bar at the lower chest.",
+        "returnPhase": "Press the bar upward until your elbows are straight.",
+        "controlledJoints": "Keep your feet planted and your legs still during the press.",
+        "supportAndPosture": "Support your torso on the flat bench throughout the press.",
+        "disqualifyingCompensations": [
+          "Bouncing the bar off the chest turns the bench press into a rebound press.",
+          "Lifting the hips off the bench turns the bench press into an arched-bridge press."
+        ]
+      }
     },
     {
       "catalogID": "dumbbell-bench-press",
@@ -565,11 +572,18 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementSteps": [
-        "Lie on a flat bench with one dumbbell beside each side of the chest.",
-        "Press both dumbbells upward until your elbows are straight.",
-        "Lower the dumbbells under control while keeping the forearms beneath the loads."
-      ]
+      "execution": {
+        "startingPosition": "Lie on a flat bench with one dumbbell beside each side of the chest.",
+        "movement": "Press both dumbbells upward.",
+        "endpoint": "Finish the press with your elbows straight.",
+        "returnPhase": "Lower the dumbbells under control.",
+        "controlledJoints": "Keep the forearms beneath the loads.",
+        "supportAndPosture": "Support your torso on the flat bench throughout the press.",
+        "disqualifyingCompensations": [
+          "Bouncing the dumbbells off the chest turns the press into a rebound press.",
+          "Letting the dumbbells drift outward turns the press into a chest fly."
+        ]
+      }
     },
     {
       "catalogID": "neutral-grip-dumbbell-bench-press",
@@ -634,11 +648,18 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementSteps": [
-        "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other.",
-        "Keep your elbows closer to your torso and press until your arms are straight.",
-        "Lower the dumbbells under control while keeping your palms facing each other."
-      ]
+      "execution": {
+        "startingPosition": "Lie on a flat bench holding the dumbbells beside the chest with the palms facing each other.",
+        "movement": "Press until your arms are straight.",
+        "endpoint": "Finish the press with your arms straight.",
+        "returnPhase": "Lower the dumbbells under control.",
+        "controlledJoints": "Keep your elbows closer to your torso and your palms facing each other.",
+        "supportAndPosture": "Support your torso on the flat bench throughout the press.",
+        "disqualifyingCompensations": [
+          "Flaring the elbows wide turns the neutral-grip press into a wide-grip press.",
+          "Bouncing the dumbbells off the chest turns the press into a rebound press."
+        ]
+      }
     },
     {
       "catalogID": "smith-machine-bench-press",
@@ -700,11 +721,18 @@
         "schick-2010-smith-bench-press",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementSteps": [
-        "Position a flat bench so the Smith bar descends toward the lower chest.",
-        "Unrack the bar and lower it under control along the rails.",
-        "Press until your elbows are straight without allowing your shoulders to lift from the bench."
-      ]
+      "execution": {
+        "startingPosition": "Position a flat bench so the Smith bar descends toward the lower chest. Unrack the bar.",
+        "movement": "Lower the bar under control along the rails.",
+        "endpoint": "End the descent with the bar at the lower chest.",
+        "returnPhase": "Press until your elbows are straight.",
+        "controlledJoints": "Do not allow your shoulders to lift from the bench.",
+        "supportAndPosture": "Support your torso on the flat bench while the rails guide the bar.",
+        "disqualifyingCompensations": [
+          "Bouncing the bar off the chest turns the Smith press into a rebound press.",
+          "Lifting the hips off the bench turns the Smith press into an arched-bridge press."
+        ]
+      }
     },
     {
       "catalogID": "machine-chest-press",
@@ -765,11 +793,18 @@
       "evidenceRefs": [
         "coratella-2020-bench-press-variations"
       ],
-      "movementSteps": [
-        "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path.",
-        "Keep your torso against the pad as you press the handles forward and slightly inward until your elbows are straight.",
-        "Return the handles under control."
-      ]
+      "execution": {
+        "startingPosition": "Adjust the seat so the neutral-grip handles begin beside the mid-chest with the forearms aligned to the machine path.",
+        "movement": "Press the handles forward and slightly inward until your elbows are straight.",
+        "endpoint": "End the press with your elbows straight.",
+        "returnPhase": "Return the handles under control.",
+        "controlledJoints": "Keep your forearms aligned to the machine path.",
+        "supportAndPosture": "Keep your torso against the pad.",
+        "disqualifyingCompensations": [
+          "Lifting your torso off the pad turns the machine press into an unsupported press.",
+          "Bouncing the handles at the end of the path turns the press into a rebound press."
+        ]
+      }
     },
     {
       "catalogID": "standing-cable-chest-press",
@@ -835,11 +870,18 @@
         "ackland-2008-shoulder-moment-arms",
         "seth-2019-shoulder-work"
       ],
-      "movementSteps": [
-        "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward.",
-        "Press both handles forward while allowing your shoulder blades to move naturally around your ribs.",
-        "Return until the elbows pass slightly behind the torso without rotating the trunk."
-      ]
+      "execution": {
+        "startingPosition": "Stand between two chest-height cable handles in a stable staggered stance with the palms facing inward.",
+        "movement": "Press both handles forward while allowing your shoulder blades to move naturally around your ribs.",
+        "endpoint": "End the press with both elbows straight.",
+        "returnPhase": "Return until the elbows pass slightly behind the torso.",
+        "controlledJoints": "Do not rotate your trunk.",
+        "supportAndPosture": "Hold a stable staggered stance with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Rotating the trunk turns the cable press into a rotational press.",
+          "Stepping or lunging into the press turns it into a leg-driven shove."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-cable-chest-press",
@@ -905,11 +947,19 @@
         "ackland-2008-shoulder-moment-arms",
         "seth-2019-shoulder-work"
       ],
-      "movementSteps": [
-        "Stand with one chest-height cable handle beside the working side of your chest and your palm facing inward.",
-        "Keep your torso from twisting as you press the handle forward and straighten your arm, allowing the working shoulder blade to move naturally.",
-        "Return under control before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Stand with one chest-height cable handle beside the working side of your chest and your palm facing inward.",
+        "movement": "Press the handle forward and straighten your arm, allowing the working shoulder blade to move naturally.",
+        "endpoint": "End the press with your arm straight.",
+        "returnPhase": "Return under control.",
+        "controlledJoints": "Keep your torso from twisting.",
+        "supportAndPosture": "Stand tall with your trunk braced against the one-sided load.",
+        "disqualifyingCompensations": [
+          "Twisting the torso turns the single-arm press into a rotational press.",
+          "Pressing with both arms at once turns it into a two-arm cable press."
+        ],
+        "sideOrDirection": "Finish all repetitions on one side before changing sides."
+      }
     },
     {
       "catalogID": "single-arm-dumbbell-bench-press",
@@ -982,11 +1032,19 @@
         "cabral-2022-pectoralis-regions",
         "wattanaprakornkul-2011-rotator-cuff-bench-press-and-row"
       ],
-      "movementSteps": [
-        "Lie on a flat bench with one dumbbell beside the working side of your chest and your palm facing inward.",
-        "Keep your torso square against the weight on one side as you press until your arm is straight.",
-        "Lower the dumbbell under control before changing sides."
-      ]
+      "execution": {
+        "startingPosition": "Lie on a flat bench with one dumbbell beside the working side of your chest and your palm facing inward.",
+        "movement": "Press until your arm is straight.",
+        "endpoint": "End the press with your arm straight.",
+        "returnPhase": "Lower the dumbbell under control.",
+        "controlledJoints": "Keep your torso square against the weight on one side.",
+        "supportAndPosture": "Support your back and hips on the flat bench.",
+        "disqualifyingCompensations": [
+          "Twisting the torso turns the single-arm press into a rotational press.",
+          "Bouncing the dumbbell off the chest turns the press into a rebound press."
+        ],
+        "sideOrDirection": "Finish all repetitions on one side before changing sides."
+      }
     },
     {
       "catalogID": "push-up",
@@ -1052,11 +1110,18 @@
         "suprak-2013-pushup-scapula",
         "ebben-2011-pushup-load"
       ],
-      "movementSteps": [
-        "Begin in a straight-body plank with the hands slightly wider than the shoulders.",
-        "Lower the chest toward the floor without losing trunk position.",
-        "Press your body away by straightening your elbows and letting your shoulder blades move naturally around your ribs."
-      ]
+      "execution": {
+        "startingPosition": "Begin in a straight-body plank with the hands slightly wider than the shoulders.",
+        "movement": "Lower the chest toward the floor.",
+        "endpoint": "End the descent with your chest close to the floor.",
+        "returnPhase": "Press your body away by straightening your elbows and letting your shoulder blades move naturally around your ribs.",
+        "controlledJoints": "Do not lose trunk position.",
+        "supportAndPosture": "Support your body on your hands and toes with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Sagging the hips turns the push-up into a bent-body press.",
+          "Dropping to the knees turns the push-up into a knee push-up."
+        ]
+      }
     },
     {
       "catalogID": "knee-push-up",
@@ -1121,11 +1186,18 @@
         "suprak-2013-pushup-scapula",
         "ebben-2011-pushup-load"
       ],
-      "movementSteps": [
-        "Begin with the knees and hands supporting the body and maintain a straight line from the knees through the shoulders.",
-        "Lower the chest toward the floor while maintaining that straight line.",
-        "Press away until your elbows are straight, letting your shoulder blades move naturally around your ribs."
-      ]
+      "execution": {
+        "startingPosition": "Begin with the knees and hands supporting the body.",
+        "movement": "Lower the chest toward the floor.",
+        "endpoint": "End the descent with your chest close to the floor.",
+        "returnPhase": "Press away until your elbows are straight, letting your shoulder blades move naturally around your ribs.",
+        "controlledJoints": "Maintain a straight line from the knees through the shoulders.",
+        "supportAndPosture": "Support your body on your hands and knees with your trunk braced.",
+        "disqualifyingCompensations": [
+          "Sagging the hips turns the knee push-up into a bent-body press.",
+          "Lifting the knees off the floor turns the knee push-up into a full push-up."
+        ]
+      }
     },
     {
       "catalogID": "barbell-floor-press",
@@ -1186,11 +1258,18 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementSteps": [
-        "Lie on the floor beneath a safely positioned bar with the knees bent.",
-        "Lower the bar until the upper arms contact the floor without bouncing.",
-        "Pause briefly, then press upward until your elbows are straight."
-      ]
+      "execution": {
+        "startingPosition": "Lie on the floor beneath a safely positioned bar with the knees bent.",
+        "movement": "Lower the bar until the upper arms contact the floor without bouncing.",
+        "endpoint": "End the descent when your upper arms contact the floor.",
+        "returnPhase": "Pause briefly, then press upward until your elbows are straight.",
+        "controlledJoints": "Keep your knees bent with your feet planted on the floor.",
+        "supportAndPosture": "Support your back flat on the floor beneath the bar.",
+        "disqualifyingCompensations": [
+          "Bouncing the upper arms off the floor turns the floor press into a rebound press.",
+          "Lowering past floor contact turns the floor press into a full-range press."
+        ]
+      }
     },
     {
       "catalogID": "dumbbell-floor-press",
@@ -1254,11 +1333,18 @@
         "ackland-2008-shoulder-moment-arms",
         "cabral-2022-pectoralis-regions"
       ],
-      "movementSteps": [
-        "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent.",
-        "Lower the dumbbells until the upper arms contact the floor without bouncing.",
-        "Press both dumbbells upward until your elbows are straight."
-      ]
+      "execution": {
+        "startingPosition": "Lie on the floor with a dumbbell beside each side of the chest, the palms facing inward, and the knees bent.",
+        "movement": "Lower the dumbbells until the upper arms contact the floor without bouncing.",
+        "endpoint": "End the descent when your upper arms contact the floor.",
+        "returnPhase": "Press both dumbbells upward until your elbows are straight.",
+        "controlledJoints": "Keep your knees bent with your feet planted on the floor.",
+        "supportAndPosture": "Support your back flat on the floor.",
+        "disqualifyingCompensations": [
+          "Bouncing the upper arms off the floor turns the floor press into a rebound press.",
+          "Letting the dumbbells drift outward turns the press into a chest fly."
+        ]
+      }
     }
   ]
 }

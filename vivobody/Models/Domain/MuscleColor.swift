@@ -9,8 +9,9 @@
 //  The encoding
 //  ------------
 //  Colour carries one continuous intensity. The owning surface gives
-//  it meaning: chronic development on Today, or categorical muscle
-//  involvement on Exercise Detail. Those values never cross domains.
+//  it meaning: chronic development on Today, categorical muscle
+//  involvement on Exercise Detail, or one explicitly labeled side of
+//  Exercise Comparison. Those values never cross domains.
 //
 //    • adaptation → a TINT RAMP of the app's accent orange. A fully
 //      developed muscle wears a vivid, saturated ORANGE; as
@@ -19,6 +20,9 @@
 //      muscle. The ramp deepens by draining green/blue (raising
 //      chroma), NOT by crushing the value — crushing value is what
 //      turns orange into muddy brown, so the red channel stays high.
+//    • comparison identity → the same intensity encoding on a cool
+//      blue ramp for Exercise B. Separate figures and visible A/B
+//      labels keep hue from carrying comparison meaning by itself.
 //
 //  The endpoints are themed: faded trained tissue starts at a muted,
 //  desaturated clay/stone and sweeps toward vivid accent orange. A
@@ -51,16 +55,30 @@ nonisolated enum MuscleMapBaseline: Equatable {
     case trained
 }
 
+/// Which hue ramp a channel resolves through. The default `.accent`
+/// keeps every existing map on the brand-orange ramp; `.compare` gives
+/// the second exercise's independent anatomy view a cool blue identity.
+nonisolated enum MuscleMapTint: String, Equatable {
+    case accent
+    case compare
+}
+
 /// Renderer input shared by the chronic development and temporary
 /// exercise-anatomy maps. `intensity` is continuous in 0...1;
 /// labels and confidence are deliberately kept outside the colour.
 nonisolated struct MuscleMapChannels: Equatable {
     var intensity: Double
     var baseline: MuscleMapBaseline
+    var tint: MuscleMapTint
 
-    init(intensity: Double, baseline: MuscleMapBaseline = .trained) {
+    init(
+        intensity: Double,
+        baseline: MuscleMapBaseline = .trained,
+        tint: MuscleMapTint = .accent
+    ) {
         self.intensity = intensity
         self.baseline = baseline
+        self.tint = tint
     }
 
     /// Compatibility spelling for development-model callers.
@@ -140,26 +158,45 @@ nonisolated enum MuscleColor {
     /// Light page: faded `#C2A893` warm stone, developed `#E85C00`
     /// deep saturated orange — development DARKENS and saturates, so
     /// the figure separates by sitting below the near-white page.
-    private static func developed(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
-        switch theme {
-        case .dark: (r: 1.00, g: 0.48, b: 0.10)
-        case .light: (r: 0.91, g: 0.36, b: 0.00)
-        }
-    }
-
-    private static func undeveloped(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
-        switch theme {
-        case .dark: (r: 0.62, g: 0.54, b: 0.46)
-        case .light: (r: 0.76, g: 0.66, b: 0.58)
-        }
-    }
-
+    ///
     /// Neutral, deliberately non-orange baseline for muscles with no
     /// logged development or no role in the inspected exercise.
     private static func noData(for theme: BodyModelTheme) -> (r: Double, g: Double, b: Double) {
         switch theme {
         case .dark: (r: 0.43, g: 0.43, b: 0.46)
         case .light: (r: 0.61, g: 0.61, b: 0.64)
+        }
+    }
+
+    // MARK: - Comparison ramps
+
+    /// Ramp endpoints per tint. `.accent` is the established orange
+    /// development/anatomy ramp. `.compare` is a cool steel blue chosen
+    /// to sit opposite orange on the dark stage without colliding with
+    /// the neutral grays; on the light page it deepens like the accent
+    /// does. Comparison maps remain separate so one side's role never
+    /// hides the other's role on a merged figure.
+    private static func developed(
+        for theme: BodyModelTheme,
+        tint: MuscleMapTint
+    ) -> (r: Double, g: Double, b: Double) {
+        switch (tint, theme) {
+        case (.accent, .dark): (r: 1.00, g: 0.48, b: 0.10)
+        case (.accent, .light): (r: 0.91, g: 0.36, b: 0.00)
+        case (.compare, .dark): (r: 0.38, g: 0.62, b: 1.00)
+        case (.compare, .light): (r: 0.10, g: 0.36, b: 0.85)
+        }
+    }
+
+    private static func undeveloped(
+        for theme: BodyModelTheme,
+        tint: MuscleMapTint
+    ) -> (r: Double, g: Double, b: Double) {
+        switch (tint, theme) {
+        case (.accent, .dark): (r: 0.62, g: 0.54, b: 0.46)
+        case (.accent, .light): (r: 0.76, g: 0.66, b: 0.58)
+        case (.compare, .dark): (r: 0.44, g: 0.49, b: 0.57)
+        case (.compare, .light): (r: 0.64, g: 0.67, b: 0.72)
         }
     }
 
@@ -175,7 +212,7 @@ nonisolated enum MuscleColor {
     // MARK: - Mapping
 
     /// The render-ready colour for a muscle's channels, on the given
-    /// theme's ramp.
+    /// theme's ramp for the channel's tint.
     static func rgb(for channels: MuscleMapChannels, theme: BodyModelTheme) -> RGB {
         guard channels.baseline == .trained else {
             let c = noData(for: theme)
@@ -183,8 +220,8 @@ nonisolated enum MuscleColor {
         }
 
         let t = clamp01(channels.intensity)
-        let lo = oklab(undeveloped(for: theme))
-        let hi = oklab(developed(for: theme))
+        let lo = oklab(undeveloped(for: theme, tint: channels.tint))
+        let hi = oklab(developed(for: theme, tint: channels.tint))
         return rgb(fromOKLab: (
             l: lerp(lo.l, hi.l, t),
             a: lerp(lo.a, hi.a, t),

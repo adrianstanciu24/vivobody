@@ -301,11 +301,20 @@
         "dark-2007-shoulder-rotation-recruitment",
         "ginn-2017-subscapularis-internal-rotation"
       ],
-      "movementSteps": [
-        "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso.",
-        "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach.",
-        "Return under control without moving the elbow, reaching the shoulder blade forward, or turning your torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand side-on with the cable anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+        "movement": "Turn the forearm across your stomach.",
+        "endpoint": "End the rotation with your forearm pointing across your stomach.",
+        "returnPhase": "Return under control without moving the elbow, reaching the shoulder blade forward, or turning your torso.",
+        "controlledJoints": "Keep the elbow bent about 90 degrees.",
+        "supportAndPosture": "Stand tall with the towel roll holding your upper arm beside your torso.",
+        "disqualifyingCompensations": [
+          "Reaching the shoulder blade forward turns the rotation into a shoulder-blade reach.",
+          "Turning the torso to swing the forearm turns the rotation into a torso twist.",
+          "Lifting the upper arm off the towel roll turns the at-side rotation into a raised-arm rotation."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "standing-band-shoulder-internal-rotation",
@@ -351,11 +360,20 @@
         "ginn-2017-subscapularis-internal-rotation",
         "hintermeister-1998-elastic-shoulder-rehabilitation"
       ],
-      "movementSteps": [
-        "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso.",
-        "Keep the elbow bent about 90 degrees, and turn the forearm across your stomach against the band.",
-        "Return without moving the elbow, reaching the shoulder blade forward, or turning your torso."
-      ]
+      "execution": {
+        "startingPosition": "Stand side-on with the band anchored outside the working shoulder and a towel roll between the upper arm and torso.",
+        "movement": "Turn the forearm across your stomach against the band.",
+        "endpoint": "End the rotation with your forearm pointing across your stomach.",
+        "returnPhase": "Return without moving the elbow, reaching the shoulder blade forward, or turning your torso.",
+        "controlledJoints": "Keep the elbow bent about 90 degrees.",
+        "supportAndPosture": "Stand tall with the towel roll holding your upper arm beside your torso.",
+        "disqualifyingCompensations": [
+          "Reaching the shoulder blade forward turns the rotation into a shoulder-blade reach.",
+          "Turning the torso to swing the forearm turns the rotation into a torso twist.",
+          "Lifting the upper arm off the towel roll turns the at-side rotation into a raised-arm rotation."
+        ],
+        "sideOrDirection": "Finish the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

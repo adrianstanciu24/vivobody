@@ -1,0 +1,324 @@
+{
+  "name": "exercise-comparison",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--pro",
+      "--static-body"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercises",
+        "value": "Not selected"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Barbell Bench Press, Barbell · Horizontal Push"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "exercise-compare"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "exercise-compare"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Standing Band Fly, Band"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Standing Band Fly, Band"
+          }
+        ],
+        "forbidden": [
+          {
+            "label": "Barbell Bench Press, Barbell · Horizontal Push"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "labelContains": "Standing Band Fly, Band"
+      }
+    },
+    {
+      "wait": {
+        "label": "Comparing Barbell Bench Press with Standing Band Fly"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Comparing Barbell Bench Press with Standing Band Fly"
+          },
+          {
+            "identifier": "comparison-panel-muscles",
+            "value": "Selected"
+          },
+          {
+            "identifier": "comparison-stimulus"
+          },
+          {
+            "labelContains": "Training volume, Both Barbell Bench Press and Standing Band Fly can earn hard-set volume"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "comparison-setup"
+          },
+          {
+            "labelContains": "Unlock Vivobody Pro"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "Barbell Bench Press: full training-volume credit"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-muscles"
+          },
+          {
+            "labelContains": "Barbell Bench Press: full training-volume credit"
+          },
+          {
+            "labelContains": "Standing Band Fly:"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "comparison-anatomy-side-a"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-anatomy"
+          },
+          {
+            "identifier": "comparison-anatomy-side-a",
+            "value": "Selected"
+          },
+          {
+            "identifier": "comparison-anatomy-scope-volume",
+            "value": "Selected"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-anatomy-scope-all"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-anatomy-side-b"
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "labelContains": "All-involvement muscle map for Exercise B, Standing Band Fly"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-anatomy-scope-all",
+            "value": "Selected"
+          },
+          {
+            "identifier": "comparison-anatomy-side-b",
+            "value": "Selected"
+          },
+          {
+            "labelContains": "All-involvement muscle map for Exercise B, Standing Band Fly"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-panel-movement"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "comparison-movement"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-panel-movement",
+            "value": "Selected"
+          },
+          {
+            "labelContains": "Exercise A, Barbell Bench Press. Horizontal Push, Compound"
+          },
+          {
+            "labelContains": "Exercise B, Standing Band Fly. Push, Isolation"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "comparison-setup"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "comparison-direction-explanation"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-direction-explanation"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "resistance or travel direction"
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "identifier": "comparison-how-to-a"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-how-to-a"
+          },
+          {
+            "identifier": "comparison-how-to-b"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-panel-tracking"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "comparison-tracking"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "comparison-panel-tracking",
+            "value": "Selected"
+          },
+          {
+            "labelContains": "Records. Barbell Bench Press: Load × reps."
+          },
+          {
+            "labelContains": "Records. Standing Band Fly: No records."
+          }
+        ],
+        "forbidden": [
+          {
+            "labelContains": "Unlock Vivobody Pro"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-panel-muscles"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "comparison-stimulus"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Comparing Barbell Bench Press with Standing Band Fly"
+    },
+    {
+      "identifier": "comparison-panel-muscles",
+      "value": "Selected"
+    },
+    {
+      "identifier": "comparison-stimulus"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "comparison-setup"
+    },
+    {
+      "labelContains": "Unlock Vivobody Pro"
+    }
+  ]
+}

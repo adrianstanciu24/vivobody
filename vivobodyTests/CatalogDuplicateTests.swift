@@ -41,10 +41,18 @@ struct CatalogDuplicateTests {
             planes: [.sagittal, .frontal],
             laterality: .bilateral,
             aliases: ["WPU"],
-            movementSteps: [
-                "Hang from a bar with the added load secured and the elbows straight.",
-                "Pull until the chin clears the bar, then lower under control.",
-            ],
+            execution: ExecutionInstructions(
+                startingPosition: "Hang from a bar with the added load secured and the elbows straight.",
+                movement: "Pull your body upward until your chin clears the bar.",
+                endpoint: "Finish the pull with your chin above the bar.",
+                returnPhase: "Lower your body under control until the elbows are straight.",
+                controlledJoints: "Keep your legs still and avoid swinging throughout the pull.",
+                supportAndPosture: "Keep your trunk braced and your shoulders engaged.",
+                disqualifyingCompensations: [
+                    "Kipping the hips turns the pull-up into a swinging pull."
+                ],
+                sideOrDirection: nil
+            ),
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .lats, role: .primary),
                 .init(muscle: .bicepsBrachii, role: .secondary),
@@ -76,10 +84,18 @@ struct CatalogDuplicateTests {
             planes: [.frontal],
             laterality: .unilateral,
             aliases: [],
-            movementSteps: [
-                "Balance on one forearm and the side of one foot.",
-                "Hold the body in a straight line for the prescribed duration.",
-            ],
+            execution: ExecutionInstructions(
+                startingPosition: "Balance on one forearm and the side of one foot.",
+                movement: "Lift your hips until your body forms a straight line.",
+                endpoint: "Hold the straight-line position for the prescribed duration.",
+                returnPhase: nil,
+                controlledJoints: "Keep your hips stacked and do not let them dip.",
+                supportAndPosture: "Keep your trunk braced and your free arm relaxed.",
+                disqualifyingCompensations: [
+                    "Letting the hips sag turns the plank into a bent-body hold."
+                ],
+                sideOrDirection: "Repeat the hold on the other side."
+            ),
             muscleInvolvement: Muscle.Involvement(contributions: [
                 .init(muscle: .obliques, role: .primary),
                 .init(muscle: .gluteMed, role: .stabilizer),
@@ -103,7 +119,7 @@ struct CatalogDuplicateTests {
         #expect(draft.direction == source.direction)
         #expect(draft.planes == source.planes)
         #expect(draft.laterality == source.laterality)
-        #expect(draft.movementSteps == source.movementSteps)
+        #expect(draft.execution == source.execution)
         #expect(draft.muscleInvolvementSnapshot == source.muscleInvolvementSnapshot)
     }
 
@@ -191,7 +207,7 @@ struct CatalogDuplicateTests {
             planes: source.planes,
             laterality: source.laterality,
             aliases: [],
-            movementSteps: source.movementSteps,
+            execution: source.execution,
             muscleInvolvement: source.muscleInvolvement,
             isUserCreated: true
         )

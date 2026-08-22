@@ -45,11 +45,20 @@ struct CatalogBiomechanicsTests {
         }
     }
 
-    @Test func movementStepsAreAuthoredAndComplete() {
+    @Test func executionInstructionsAreAuthoredAndComplete() {
         for record in CatalogData.records {
-            #expect((2 ... 10).contains(record.movementSteps.count))
-            for step in record.movementSteps {
-                let trimmed = step.trimmingCharacters(in: .whitespacesAndNewlines)
+            let execution = record.execution
+            let texts = [
+                execution.startingPosition,
+                execution.movement,
+                execution.endpoint,
+                execution.controlledJoints,
+                execution.supportAndPosture,
+            ] + execution.disqualifyingCompensations
+                + [execution.returnPhase, execution.sideOrDirection].compactMap { $0 }
+
+            for text in texts {
+                let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
                 let words = trimmed
                     .split(whereSeparator: \.isWhitespace)
                     .map {
@@ -59,11 +68,23 @@ struct CatalogBiomechanicsTests {
                     }
                     .filter { !$0.isEmpty }
 
-                #expect(trimmed.count >= 12, "'\(record.name)' has an underspecified step")
+                #expect(trimmed == text)
+                #expect(trimmed.count >= 12, "'\(record.name)' has an underspecified instruction")
                 #expect(trimmed.first?.isUppercase == true)
                 #expect(trimmed.last == "." || trimmed.last == "!" || trimmed.last == "?")
                 #expect(!zip(words, words.dropFirst()).contains { left, right in left == right })
             }
+
+            #expect(!execution.disqualifyingCompensations.isEmpty)
+            #expect(
+                Set(execution.disqualifyingCompensations).count
+                    == execution.disqualifyingCompensations.count
+            )
+            #expect((execution.returnPhase != nil) == (record.trackingMode == .reps))
+            #expect(
+                (execution.sideOrDirection != nil)
+                    == (record.laterality == .unilateral || record.pattern == .carry)
+            )
         }
     }
 

@@ -609,11 +609,18 @@
         "prinold-2016-pullup-scapular-kinematics",
         "youdas-2010-pullup-chinup"
       ],
-      "movementSteps": [
-        "Hang from a fixed bar with your palms facing away, your hands shoulder-width apart, your elbows straight, and your torso braced.",
-        "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or using the hips or legs.",
-        "Lower under control to a full hang."
-      ]
+      "execution": {
+        "startingPosition": "Hang from a fixed bar with your palms facing away, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+        "movement": "Pull the body upward by driving the elbows down until the chin clears the bar.",
+        "endpoint": "The chin clears the bar.",
+        "returnPhase": "Lower under control to a full hang.",
+        "controlledJoints": "Do not swing or use the hips or legs.",
+        "supportAndPosture": "Keep your torso braced while hanging freely from the bar.",
+        "disqualifyingCompensations": [
+          "Swinging the hips or legs to gain momentum turns the strict pull-up into a kipping pull-up.",
+          "Stopping short of a full hang between repetitions turns the pull-up into a partial-range pull."
+        ]
+      }
     },
     {
       "catalogID": "chin-up",
@@ -667,11 +674,18 @@
         "doma-2013-chinup-lat-pulldown",
         "youdas-2010-pullup-chinup"
       ],
-      "movementSteps": [
-        "Hang from a fixed bar with your palms facing you, your hands shoulder-width apart, your elbows straight, and your torso braced.",
-        "Pull the body upward by driving the elbows down until the chin clears the bar, without swinging or lower-body drive.",
-        "Return under control to a full hang."
-      ]
+      "execution": {
+        "startingPosition": "Hang from a fixed bar with your palms facing you, your hands shoulder-width apart, your elbows straight, and your torso braced.",
+        "movement": "Pull the body upward by driving the elbows down until the chin clears the bar.",
+        "endpoint": "The chin clears the bar.",
+        "returnPhase": "Return under control to a full hang.",
+        "controlledJoints": "Do not swing or drive with the lower body.",
+        "supportAndPosture": "Keep your torso braced while hanging freely from the bar.",
+        "disqualifyingCompensations": [
+          "Swinging the hips or legs to gain momentum turns the strict chin-up into a kipping chin-up.",
+          "Stopping short of a full hang between repetitions turns the chin-up into a partial-range pull."
+        ]
+      }
     },
     {
       "catalogID": "neutral-grip-pull-up",
@@ -723,11 +737,18 @@
         "doma-2013-chinup-lat-pulldown",
         "youdas-2010-pullup-chinup"
       ],
-      "movementSteps": [
-        "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced.",
-        "Pull the body upward by driving the elbows down until the chin clears the handles, keeping the lower body motionless.",
-        "Lower under control to a full hang."
-      ]
+      "execution": {
+        "startingPosition": "Hang from parallel handles with the palms facing each other, straight elbows, and the trunk braced.",
+        "movement": "Pull the body upward by driving the elbows down until the chin clears the handles.",
+        "endpoint": "The chin clears the handles.",
+        "returnPhase": "Lower under control to a full hang.",
+        "controlledJoints": "Keep the lower body motionless.",
+        "supportAndPosture": "Keep the trunk braced while hanging from the parallel handles.",
+        "disqualifyingCompensations": [
+          "Swinging the hips or legs to gain momentum turns the strict pull-up into a kipping pull-up.",
+          "Stopping short of a full hang between repetitions turns the pull-up into a partial-range pull."
+        ]
+      }
     },
     {
       "catalogID": "wide-grip-pull-up",
@@ -781,11 +802,18 @@
         "prinold-2016-pullup-scapular-kinematics",
         "youdas-2010-pullup-chinup"
       ],
-      "movementSteps": [
-        "Hang from a fixed bar with your palms facing away, your hands wider than shoulder width, your elbows straight, and your torso braced.",
-        "Pull your body upward until your chin clears the bar without swinging or pushing with your lower body.",
-        "Lower under control to a full hang."
-      ]
+      "execution": {
+        "startingPosition": "Hang from a fixed bar with your palms facing away, your hands wider than shoulder width, your elbows straight, and your torso braced.",
+        "movement": "Pull your body upward until your chin clears the bar.",
+        "endpoint": "Your chin clears the bar.",
+        "returnPhase": "Lower under control to a full hang.",
+        "controlledJoints": "Do not swing or push with your lower body.",
+        "supportAndPosture": "Keep your torso braced while hanging freely from the bar.",
+        "disqualifyingCompensations": [
+          "Swinging the hips or legs to gain momentum turns the strict pull-up into a kipping pull-up.",
+          "Pulling the body up behind the head turns the wide pull-up into a behind-neck pull-up."
+        ]
+      }
     },
     {
       "catalogID": "assisted-pull-up-machine",
@@ -837,11 +865,18 @@
       "evidenceRefs": [
         "hewit-2018-pullup-alternatives"
       ],
-      "movementSteps": [
-        "Set the assistance load, kneel or stand on the machine platform, and hold the handles at shoulder width with your palms facing away and your elbows straight.",
-        "Pull until the chin clears the handles without kicking or leaning.",
-        "Lower under control while the platform guides the body vertically."
-      ]
+      "execution": {
+        "startingPosition": "Set the assistance load, kneel or stand on the machine platform, and hold the handles at shoulder width with your palms facing away and your elbows straight.",
+        "movement": "Pull until the chin clears the handles.",
+        "endpoint": "The chin clears the handles.",
+        "returnPhase": "Lower under control while the platform guides the body vertically.",
+        "controlledJoints": "Do not kick or lean during the pull.",
+        "supportAndPosture": "Rest your lower body on the guided platform and keep your torso steady.",
+        "disqualifyingCompensations": [
+          "Kicking against the platform turns the assisted pull-up into a leg-driven push.",
+          "Leaning the torso to swing upward turns the assisted pull-up into a swinging kip."
+        ]
+      }
     },
     {
       "catalogID": "assisted-chin-up-machine",
@@ -895,11 +930,18 @@
         "hewit-2018-pullup-alternatives",
         "youdas-2010-pullup-chinup"
       ],
-      "movementSteps": [
-        "Set the assistance load, kneel or stand on the guided platform, and hold the handles at shoulder width with your palms facing you and your elbows straight.",
-        "Pull until the chin clears the handles without kicking or leaning.",
-        "Lower under control to the starting position."
-      ]
+      "execution": {
+        "startingPosition": "Set the assistance load, kneel or stand on the guided platform, and hold the handles at shoulder width with your palms facing you and your elbows straight.",
+        "movement": "Pull until the chin clears the handles.",
+        "endpoint": "The chin clears the handles.",
+        "returnPhase": "Lower under control to the starting position.",
+        "controlledJoints": "Do not kick or lean during the pull.",
+        "supportAndPosture": "Rest your lower body on the guided platform and keep your torso steady.",
+        "disqualifyingCompensations": [
+          "Kicking against the platform turns the assisted chin-up into a leg-driven push.",
+          "Leaning the torso to swing upward turns the assisted chin-up into a swinging kip."
+        ]
+      }
     },
     {
       "catalogID": "cable-lat-pulldown",
@@ -954,11 +996,18 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementSteps": [
-        "Sit at a cable pulldown station with your thighs secured beneath the pad, and hold the bar with a medium-width grip and your palms facing forward.",
-        "Keep the trunk braced and nearly upright as you pull the bar in front of the head toward the upper chest by driving the elbows down.",
-        "Return overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit at a cable pulldown station with your thighs secured beneath the pad, and hold the bar with a medium-width grip and your palms facing forward.",
+        "movement": "Pull the bar in front of the head toward the upper chest by driving the elbows down.",
+        "endpoint": "The bar reaches the upper chest in front of the head.",
+        "returnPhase": "Return overhead under control.",
+        "controlledJoints": "Keep the lower body still beneath the secured thigh pad.",
+        "supportAndPosture": "Keep the trunk braced and nearly upright with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Leaning back and pulling the bar toward the waist turns the pulldown into a seated row.",
+          "Pulling the bar behind the neck turns the front pulldown into a behind-neck pulldown."
+        ]
+      }
     },
     {
       "catalogID": "close-grip-neutral-lat-pulldown",
@@ -1009,11 +1058,18 @@
         "buonsenso-2025-lat-pulldown-grips",
         "lusk-2010-lat-pulldown-grip"
       ],
-      "movementSteps": [
-        "Sit with the thighs secured beneath the pad, and hold a close parallel-grip attachment with the palms facing each other.",
-        "Keep the torso braced, and drive the elbows down as the handle travels in front of the head toward the upper chest.",
-        "Return overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit with the thighs secured beneath the pad, and hold a close parallel-grip attachment with the palms facing each other.",
+        "movement": "Drive the elbows down as the handle travels in front of the head toward the upper chest.",
+        "endpoint": "The handle reaches the upper chest in front of the head.",
+        "returnPhase": "Return overhead under control.",
+        "controlledJoints": "Keep the lower body still beneath the secured thigh pad.",
+        "supportAndPosture": "Keep the torso braced with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Leaning back and pulling the handle toward the waist turns the pulldown into a seated row.",
+          "Swinging the torso to start the pull turns the pulldown into a full-body heave."
+        ]
+      }
     },
     {
       "catalogID": "underhand-lat-pulldown",
@@ -1063,11 +1119,18 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementSteps": [
-        "Sit with your thighs secured beneath the pad, and hold the bar at shoulder width with your palms facing you.",
-        "Hold the trunk nearly upright, and drive the elbows down and back as the bar travels in front of the head toward the upper chest.",
-        "Return overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit with your thighs secured beneath the pad, and hold the bar at shoulder width with your palms facing you.",
+        "movement": "Drive the elbows down and back as the bar travels in front of the head toward the upper chest.",
+        "endpoint": "The bar reaches the upper chest in front of the head.",
+        "returnPhase": "Return overhead under control.",
+        "controlledJoints": "Keep the lower body still beneath the secured thigh pad.",
+        "supportAndPosture": "Hold the trunk nearly upright with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Leaning back and pulling the bar toward the waist turns the pulldown into a seated row.",
+          "Pulling the bar behind the neck turns the front pulldown into a behind-neck pulldown."
+        ]
+      }
     },
     {
       "catalogID": "wide-grip-lat-pulldown",
@@ -1119,11 +1182,18 @@
         "lusk-2010-lat-pulldown-grip",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementSteps": [
-        "Sit with your thighs secured beneath the pad, and hold the bar wider than shoulder width with your palms facing forward.",
-        "Keep the trunk braced and nearly upright as you pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest.",
-        "Return overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit with your thighs secured beneath the pad, and hold the bar wider than shoulder width with your palms facing forward.",
+        "movement": "Pull the bar in front of the head by driving the elbows down until the bar approaches the upper chest.",
+        "endpoint": "The bar approaches the upper chest.",
+        "returnPhase": "Return overhead under control.",
+        "controlledJoints": "Keep the lower body still beneath the secured thigh pad.",
+        "supportAndPosture": "Keep the trunk braced and nearly upright with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Leaning back and pulling the bar toward the waist turns the pulldown into a seated row.",
+          "Pulling the bar behind the neck turns the wide pulldown into a behind-neck pulldown."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-cable-lat-pulldown",
@@ -1175,11 +1245,19 @@
         "ackland-2008-shoulder-moment-arms",
         "buonsenso-2025-lat-pulldown-grips"
       ],
-      "movementSteps": [
-        "Sit with your thighs secured beneath the pad, and hold one high-cable handle with your palm facing inward.",
-        "Keep the shoulders and pelvis square as you drive the working elbow down beside the ribs without rotating or leaning.",
-        "Return the arm overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit with your thighs secured beneath the pad, and hold one high-cable handle with your palm facing inward.",
+        "movement": "Drive the working elbow down beside the ribs.",
+        "endpoint": "The working elbow finishes down beside the ribs.",
+        "returnPhase": "Return the arm overhead under control.",
+        "controlledJoints": "Do not rotate or lean during the pull.",
+        "supportAndPosture": "Keep the shoulders and pelvis square with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Rotating the torso to swing the elbow down turns the single-arm pulldown into a twisting row.",
+          "Leaning the torso toward or away from the cable turns the single-arm pulldown into a full-body heave."
+        ],
+        "sideOrDirection": "Complete the set with one arm, then repeat with the other arm."
+      }
     },
     {
       "catalogID": "machine-lat-pulldown",
@@ -1231,11 +1309,18 @@
         "ackland-2008-shoulder-moment-arms",
         "padovan-2024-lat-pulldown-front-back"
       ],
-      "movementSteps": [
-        "Sit in the pulldown machine with your thighs secured beneath the pad, and hold the overhead handles with your palms facing each other.",
-        "Keep the torso braced, and drive both elbows down as the levers follow their guided path.",
-        "Return to full overhead reach under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit in the pulldown machine with your thighs secured beneath the pad, and hold the overhead handles with your palms facing each other.",
+        "movement": "Drive both elbows down as the levers follow their guided path.",
+        "endpoint": "End the pull when both elbows are fully driven down.",
+        "returnPhase": "Return to full overhead reach under control.",
+        "controlledJoints": "Keep the lower body still beneath the secured thigh pad.",
+        "supportAndPosture": "Keep the torso braced with your thighs secured beneath the pad.",
+        "disqualifyingCompensations": [
+          "Leaning back to drag the levers down turns the machine pulldown into a seated row.",
+          "Rocking the torso to move the levers turns the machine pulldown into a full-body heave."
+        ]
+      }
     },
     {
       "catalogID": "single-arm-machine-lat-pulldown",
@@ -1288,11 +1373,19 @@
         "ackland-2008-shoulder-moment-arms",
         "buonsenso-2025-lat-pulldown-grips"
       ],
-      "movementSteps": [
-        "Sit in the single-arm pulldown machine with your thighs secured, and hold one overhead handle with your palm facing inward.",
-        "Keep the torso and pelvis square as you drive the working elbow down without rotating or leaning.",
-        "Return the lever overhead under control."
-      ]
+      "execution": {
+        "startingPosition": "Sit in the single-arm pulldown machine with your thighs secured, and hold one overhead handle with your palm facing inward.",
+        "movement": "Drive the working elbow down.",
+        "endpoint": "End the pull with the working elbow fully down.",
+        "returnPhase": "Return the lever overhead under control.",
+        "controlledJoints": "Do not rotate or lean during the pull.",
+        "supportAndPosture": "Keep the torso and pelvis square with your thighs secured.",
+        "disqualifyingCompensations": [
+          "Rotating the torso to swing the elbow down turns the single-arm pulldown into a twisting row.",
+          "Leaning the torso to move the lever turns the single-arm pulldown into a full-body heave."
+        ],
+        "sideOrDirection": "Complete the set with one arm, then repeat with the other arm."
+      }
     }
   ]
 }

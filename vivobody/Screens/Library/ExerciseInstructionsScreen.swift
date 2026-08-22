@@ -2,8 +2,8 @@
 //  ExerciseInstructionsScreen.swift
 //  vivobody
 //
-//  Presents an exercise's authored movement steps as a numbered,
-//  glanceable sequence reached from the exercise detail screen.
+//  Presents an exercise's authored execution instructions as labeled,
+//  glanceable sections reached from the exercise detail screen.
 //
 
 import SwiftUI
@@ -11,34 +11,67 @@ import VivoKit
 
 struct ExerciseInstructionsScreen: View {
     let exerciseName: String
-    let steps: [String]
+    let execution: ExecutionInstructions?
 
     init(item: ExerciseCatalogItem) {
         exerciseName = item.name
-        steps = item.movementSteps
+        execution = item.execution
     }
 
-    init(exerciseName: String, steps: [String]) {
+    init(exerciseName: String, execution: ExecutionInstructions) {
         self.exerciseName = exerciseName
-        self.steps = steps
+        self.execution = execution
     }
 
     var body: some View {
         ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: Space.section) {
-                VStack(alignment: .leading, spacing: Space.sm) {
-                    Text(exerciseName)
-                        .font(Typography.display)
-                        .foregroundStyle(Ink.primary)
-                        .fixedSize(horizontal: false, vertical: true)
+                Text(exerciseName)
+                    .font(Typography.display)
+                    .foregroundStyle(Ink.primary)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                    Text("\(steps.count) steps")
-                        .font(Typography.sectionLabel)
-                        .foregroundStyle(Ink.tertiary)
-                }
-
-                ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-                    instructionCard(number: index + 1, description: step)
+                if let execution {
+                    instructionSection(
+                        title: "Starting position",
+                        body: execution.startingPosition,
+                        identifier: "exercise-execution-starting-position"
+                    )
+                    instructionSection(
+                        title: "Movement",
+                        body: execution.movement,
+                        identifier: "exercise-execution-movement"
+                    )
+                    instructionSection(
+                        title: "Endpoint",
+                        body: execution.endpoint,
+                        identifier: "exercise-execution-endpoint"
+                    )
+                    if let returnPhase = execution.returnPhase {
+                        instructionSection(
+                            title: "Return",
+                            body: returnPhase,
+                            identifier: "exercise-execution-return"
+                        )
+                    }
+                    instructionSection(
+                        title: "Keep controlled",
+                        body: execution.controlledJoints,
+                        identifier: "exercise-execution-controlled-joints"
+                    )
+                    instructionSection(
+                        title: "Support and posture",
+                        body: execution.supportAndPosture,
+                        identifier: "exercise-execution-support-posture"
+                    )
+                    compensationsSection(execution.disqualifyingCompensations)
+                    if let sideOrDirection = execution.sideOrDirection {
+                        instructionSection(
+                            title: "Sides and direction",
+                            body: sideOrDirection,
+                            identifier: "exercise-execution-side-direction"
+                        )
+                    }
                 }
             }
             .padding(.top, Space.sm)
@@ -52,14 +85,18 @@ struct ExerciseInstructionsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private func instructionCard(number: Int, description: String) -> some View {
+    private func instructionSection(
+        title: String,
+        body: String,
+        identifier: String
+    ) -> some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            Text("Step \(number)")
+            Text(title)
                 .font(Typography.title)
                 .foregroundStyle(Tint.primary)
                 .accessibilityAddTraits(.isHeader)
 
-            Text(description)
+            Text(body)
                 .font(Typography.body)
                 .foregroundStyle(Ink.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -68,25 +105,109 @@ struct ExerciseInstructionsScreen: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentCard()
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier(identifier)
     }
-}
 
-/// Compact numbered copy used when bundled exercise identity is shown inside
-/// the editor rather than on the dedicated instruction screen.
-struct ExerciseInstructionSummary: View {
-    let steps: [String]
+    private func compensationsSection(_ compensations: [String]) -> some View {
+        VStack(alignment: .leading, spacing: Space.sm) {
+            HStack(spacing: Space.xs) {
+                PulsingWarningIcon()
 
-    var body: some View {
-        ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text("Step \(index + 1)")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Tint.primary)
-                Text(step)
+                Text("Compensations")
+            }
+            .font(Typography.title)
+            .foregroundStyle(Tint.primary)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Warning: Compensations")
+            .accessibilityAddTraits(.isHeader)
+
+            ForEach(compensations, id: \.self) { compensation in
+                Text(compensation)
                     .font(Typography.body)
                     .foregroundStyle(Ink.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+        .padding(Space.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentCard()
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("exercise-execution-compensations")
+    }
+}
+
+private struct PulsingWarningIcon: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isExpanded = false
+    @State private var animationTask: Task<Void, Never>?
+
+    var body: some View {
+        Image(systemName: "exclamationmark.triangle.fill")
+            .scaleEffect(reduceMotion ? 1 : (isExpanded ? 1.12 : 0.78))
+            .accessibilityHidden(true)
+            .onAppear(perform: startPulsing)
+            .onDisappear {
+                animationTask?.cancel()
+                animationTask = nil
+                isExpanded = false
+            }
+            .onChange(of: reduceMotion) { _, _ in startPulsing() }
+    }
+
+    private func startPulsing() {
+        animationTask?.cancel()
+        isExpanded = false
+        guard !reduceMotion else { return }
+
+        animationTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(16))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
+                isExpanded = true
+            }
+        }
+    }
+}
+
+/// Compact labeled copy used when bundled exercise identity is shown inside
+/// the editor rather than on the dedicated instruction screen.
+struct ExerciseInstructionSummary: View {
+    let execution: ExecutionInstructions
+
+    var body: some View {
+        summaryEntry(title: "Starting position", text: execution.startingPosition)
+        summaryEntry(title: "Movement", text: execution.movement)
+        summaryEntry(title: "Endpoint", text: execution.endpoint)
+        if let returnPhase = execution.returnPhase {
+            summaryEntry(title: "Return", text: returnPhase)
+        }
+        summaryEntry(title: "Keep controlled", text: execution.controlledJoints)
+        summaryEntry(title: "Support and posture", text: execution.supportAndPosture)
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text("Compensations")
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Tint.primary)
+            ForEach(execution.disqualifyingCompensations, id: \.self) { compensation in
+                Text(compensation)
+                    .font(Typography.body)
+                    .foregroundStyle(Ink.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        if let sideOrDirection = execution.sideOrDirection {
+            summaryEntry(title: "Sides and direction", text: sideOrDirection)
+        }
+    }
+
+    private func summaryEntry(title: String, text: String) -> some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(title)
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Tint.primary)
+            Text(text)
+                .font(Typography.body)
+                .foregroundStyle(Ink.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
@@ -94,9 +215,7 @@ struct ExerciseInstructionSummary: View {
 extension ExerciseDetailScreen {
     @ViewBuilder
     var instructionsLink: some View {
-        let steps = item.movementSteps
-
-        if !steps.isEmpty {
+        if item.execution != nil {
             NavigationLink {
                 ExerciseInstructionsScreen(item: item)
             } label: {
@@ -111,7 +230,7 @@ extension ExerciseDetailScreen {
                 }
             }
             .buttonStyle(.plain)
-            .accessibilityHint("Opens step-by-step instructions")
+            .accessibilityHint("Opens how-to-perform instructions")
             .accessibilityIdentifier("exercise-how-to-perform")
         }
     }
@@ -120,12 +239,20 @@ extension ExerciseDetailScreen {
 #Preview("Exercise instructions") {
     NavigationStack {
         ExerciseInstructionsScreen(
-            exerciseName: "Barbell Row",
-            steps: [
-                "Stand holding a barbell and establish a strict hip hinge.",
-                "Pull the bar toward the lower ribs without changing the torso angle.",
-                "Lower the bar under control.",
-            ]
+            exerciseName: "One-Arm Dumbbell Row",
+            execution: ExecutionInstructions(
+                startingPosition: "Place one hand and the same-side knee on a bench with the dumbbell hanging straight down.",
+                movement: "Pull the dumbbell toward the lower ribs without rotating the torso.",
+                endpoint: "Finish the pull with the dumbbell beside the ribs.",
+                returnPhase: "Lower the dumbbell under control until the arm is straight.",
+                controlledJoints: "Keep the torso still and the supporting arm locked throughout.",
+                supportAndPosture: "Keep the back flat and the head aligned with the spine.",
+                disqualifyingCompensations: [
+                    "Twisting the torso turns the row into a rotational pull.",
+                    "Jerking the dumbbell with the hips turns the row into a cheat pull.",
+                ],
+                sideOrDirection: "Repeat on the other side."
+            )
         )
     }
 }

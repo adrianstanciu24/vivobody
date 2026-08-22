@@ -488,11 +488,19 @@
       "evidenceRefs": [
         "kinoshita-2023-standing-seated-calf-raise"
       ],
-      "movementSteps": [
-        "Stand in a single-leg calf-raise machine with the front of the working foot centered on the platform and your shoulder beneath the load pad.",
-        "Keep the working knee straight and hold your hips, back, knee, and foot steady.",
-        "Raise the heel as high as you can, then lower under control without bending the knee or curling the toes."
-      ]
+      "execution": {
+        "startingPosition": "Stand in a single-leg calf-raise machine with the front of the working foot centered on the platform and your shoulder beneath the load pad.",
+        "movement": "Raise the heel as high as you can.",
+        "endpoint": "Finish at the highest heel position you can reach.",
+        "returnPhase": "Lower under control without bending the knee or curling the toes.",
+        "controlledJoints": "Keep the working knee straight and hold your hips, back, knee, and foot steady.",
+        "supportAndPosture": "Stand tall on the machine platform with the load pad resting on your shoulder.",
+        "disqualifyingCompensations": [
+          "Bending and straightening the knee turns the calf raise into a knee-driven bounce.",
+          "Curling the toes turns the calf raise into a toe-flexion exercise."
+        ],
+        "sideOrDirection": "Finish the set on the working side, then repeat with the other leg."
+      }
     },
     {
       "catalogID": "seated-unilateral-machine-calf-raise",
@@ -547,11 +555,19 @@
       "evidenceRefs": [
         "kinoshita-2023-standing-seated-calf-raise"
       ],
-      "movementSteps": [
-        "Sit in a single-leg calf-raise machine with the front of the working foot centered on the platform and the lower thigh beneath the load pad.",
-        "Keep the working knee bent near 90 degrees and hold the hip, pelvis, back, knee, and foot still.",
-        "Raise the heel as high as you can, then lower under control without straightening the knee or curling the toes."
-      ]
+      "execution": {
+        "startingPosition": "Sit in a single-leg calf-raise machine with the front of the working foot centered on the platform and the lower thigh beneath the load pad.",
+        "movement": "Raise the heel as high as you can.",
+        "endpoint": "Finish at the highest heel position you can reach.",
+        "returnPhase": "Lower under control without straightening the knee or curling the toes.",
+        "controlledJoints": "Keep the working knee bent near 90 degrees and hold the hip, pelvis, back, knee, and foot still.",
+        "supportAndPosture": "Sit tall on the machine seat with the load pad resting on your lower thigh.",
+        "disqualifyingCompensations": [
+          "Straightening the knee turns the seated calf raise into a standing-style raise.",
+          "Curling the toes turns the calf raise into a toe-flexion exercise."
+        ],
+        "sideOrDirection": "Finish the set on the working side, then repeat with the other leg."
+      }
     }
   ]
 }

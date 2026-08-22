@@ -615,6 +615,40 @@ class ScenarioRunner:
             f"{json.dumps(selector, sort_keys=True)} after {max_swipes} swipe(s)."
         )
 
+    def swipe(self, configuration: Mapping[str, Any]) -> None:
+        direction = configuration.get("direction", "up")
+        if direction not in {"up", "down"}:
+            raise ScenarioFailure("swipe.direction must be 'up' or 'down'.")
+        count = configuration.get("count", 1)
+        if not isinstance(count, int) or isinstance(count, bool) or count < 1:
+            raise ScenarioFailure("swipe.count must be a positive integer.")
+
+        for iteration in range(count):
+            tree = self.describe_tree()
+            start_x, start_y, end_x, end_y, width, height = swipe_points(tree, direction)
+            self.log(f"SWIPE {direction} ({iteration + 1}/{count})")
+            self.command([
+                self.baguette,
+                "swipe",
+                "--udid",
+                self.udid,
+                "--start-x",
+                f"{start_x:.3f}",
+                "--start-y",
+                f"{start_y:.3f}",
+                "--end-x",
+                f"{end_x:.3f}",
+                "--end-y",
+                f"{end_y:.3f}",
+                "--width",
+                f"{width:.3f}",
+                "--height",
+                f"{height:.3f}",
+                "--duration",
+                "0.75",
+            ])
+            time.sleep(POLL_INTERVAL)
+
     def run_step(self, index: int, step: Mapping[str, Any]) -> None:
         if len(step) != 1:
             raise ScenarioFailure(f"Step {index} must contain exactly one action.")
@@ -636,6 +670,10 @@ class ScenarioRunner:
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} scrollTo payload must be an object.")
             self.scroll_to(payload)
+        elif action == "swipe":
+            if not isinstance(payload, Mapping):
+                raise ScenarioFailure(f"Step {index} swipe payload must be an object.")
+            self.swipe(payload)
         elif action == "assert":
             if not isinstance(payload, Mapping):
                 raise ScenarioFailure(f"Step {index} assert payload must be an object.")
@@ -842,6 +880,20 @@ def validate_scenario_definition(scenario: Mapping[str, Any]) -> None:
             max_swipes = payload.get("maxSwipes", 6)
             if not isinstance(max_swipes, int) or isinstance(max_swipes, bool) or max_swipes < 1:
                 raise ScenarioFailure(f"Step {index} scrollTo.maxSwipes must be a positive integer.")
+        elif action == "swipe":
+            if not isinstance(payload, Mapping):
+                raise ScenarioFailure(f"Step {index} swipe payload must be an object.")
+            unknown_swipe = set(payload) - {"direction", "count"}
+            if unknown_swipe:
+                raise ScenarioFailure(
+                    f"Step {index} swipe has unsupported field(s): "
+                    f"{', '.join(sorted(unknown_swipe))}."
+                )
+            if payload.get("direction", "up") not in {"up", "down"}:
+                raise ScenarioFailure(f"Step {index} swipe.direction must be 'up' or 'down'.")
+            swipe_count = payload.get("count", 1)
+            if not isinstance(swipe_count, int) or isinstance(swipe_count, bool) or swipe_count < 1:
+                raise ScenarioFailure(f"Step {index} swipe.count must be a positive integer.")
         else:
             raise ScenarioFailure(f"Step {index} uses unsupported action {action!r}.")
 

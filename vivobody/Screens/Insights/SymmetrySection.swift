@@ -2,70 +2,44 @@
 //  SymmetrySection.swift
 //  vivobody
 //
-//  Training-balance instrument for opposing groups and movement
-//  patterns over the last four weeks. Meaningful comparisons lead as
-//  pair-relative butterfly beams; unfinished comparisons collapse into
-//  one building rail instead of a wall of empty rows. Isolation push/pull,
-//  squat/hinge, bilateral/unilateral, and roster-limited lower-body pairs
-//  stay descriptive — they never imply that a universal 50/50 target exists.
+//  Training-balance instrument for opposing groups and movement patterns
+//  over the last four weeks. The main Insights mode shows three priority
+//  pair-relative butterfly beams; a drill-out keeps the full qualified board.
+//  Unfinished comparisons collapse into one building rail instead of a wall
+//  of empty rows. Distribution-only pairs never imply a universal 50/50 target.
 //
 
 import SwiftUI
 import VivoKit
 
+enum SymmetryPresentation: Equatable {
+    case focus
+    case full
+
+    static let focusLimit = 3
+}
+
 struct SymmetrySection: View {
     let board: AntagonistBoard
+    let presentation: SymmetryPresentation
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.lg) {
             SectionHeader(
                 title: "Training balance",
-                trailing: buildingCount > 0
-                    ? "\(meaningfulPairs.count)/\(board.pairs.count) online"
-                    : "last 4 weeks",
-                trailingIsInProgress: buildingCount > 0
+                trailing: meaningfulPairs.isEmpty ? "building" : "last 4 weeks",
+                trailingIsInProgress: meaningfulPairs.isEmpty,
+                accessibilityIdentifier: presentation == .focus
+                    ? "insightsBalanceInstrument"
+                    : "insightsBalanceAllInstrument"
             )
-            .accessibilityIdentifier("insightsTrainingBalanceSection")
 
-            Text("Opposing muscle groups and movement patterns, compared in effective sets. Each beam uses its own pair-relative scale.")
-                .font(Typography.caption)
-                .foregroundStyle(Ink.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            if groups.isEmpty {
+            if meaningfulPairs.isEmpty {
                 buildingCard
+            } else if presentation == .focus {
+                focusCard
             } else {
-                VStack(alignment: .leading, spacing: 0) {
-                    balancePulse
-                        .padding(.bottom, Space.xl)
-
-                    ForEach(groups) { group in
-                        VStack(alignment: .leading, spacing: Space.lg) {
-                            Text(group.title)
-                                .panelLegend()
-                                .accessibilityAddTraits(.isHeader)
-
-                            VStack(spacing: Space.xl) {
-                                ForEach(group.pairs) { pair in
-                                    ButterflyRow(pair: pair)
-                                }
-                            }
-                        }
-
-                        if group.id != groups.last?.id {
-                            SectionDivider()
-                                .padding(.vertical, Space.xl)
-                        }
-                    }
-
-                    if buildingCount > 0 {
-                        SectionDivider()
-                            .padding(.vertical, Space.lg)
-                        buildingRail
-                    }
-                }
-                .padding(Space.xl)
-                .contentCard()
+                fullBoardCard
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -79,34 +53,74 @@ struct SymmetrySection: View {
         board.pairs.count - meaningfulPairs.count
     }
 
-    /// A visual ignition state: available comparisons orbit one strong
-    /// count instead of beginning with another dashboard stat strip.
-    private var balancePulse: some View {
-        HStack(alignment: .center, spacing: Space.lg) {
-            ZStack {
-                Circle()
-                    .fill(Tint.primary.opacity(0.11))
-                    .frame(width: 74, height: 74)
-                    .blur(radius: 2)
-                Circle()
-                    .stroke(Tint.primary.opacity(0.32), lineWidth: 1)
-                    .frame(width: 58, height: 58)
-                Text("\(meaningfulPairs.count)")
-                    .font(Typography.statValue)
-                    .foregroundStyle(Tint.primary)
-                    .monospacedDigit()
+    private var focusCard: some View {
+        VStack(spacing: Space.xl) {
+            ForEach(focusedPairs) { pair in
+                ButterflyRow(pair: pair)
             }
 
-            VStack(alignment: .leading, spacing: Space.xs) {
-                Text(meaningfulPairs.count == 1 ? "comparison online" : "comparisons online")
-                    .font(Typography.sectionHeading)
-                    .foregroundStyle(Ink.primary)
-                Text("Six effective sets across two workouts unlock each read")
-                    .font(Typography.caption)
-                    .foregroundStyle(Ink.tertiary)
+            if buildingCount > 0 {
+                SectionDivider()
+                buildingRail
             }
         }
-        .accessibilityElement(children: .combine)
+        .padding(Space.xl)
+        .contentCard()
+    }
+
+    private var fullBoardCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Each beam uses its own effective-set scale")
+                .panelLegend()
+                .padding(.bottom, Space.xl)
+
+            ForEach(groups) { group in
+                VStack(alignment: .leading, spacing: Space.lg) {
+                    Text(group.title)
+                        .panelLegend()
+                        .accessibilityAddTraits(.isHeader)
+
+                    VStack(spacing: Space.xl) {
+                        ForEach(group.pairs) { pair in
+                            ButterflyRow(pair: pair)
+                        }
+                    }
+                }
+
+                if group.id != groups.last?.id {
+                    SectionDivider()
+                        .padding(.vertical, Space.xl)
+                }
+            }
+
+            if buildingCount > 0 {
+                SectionDivider()
+                    .padding(.vertical, Space.lg)
+                buildingRail
+            }
+        }
+        .padding(Space.xl)
+        .contentCard()
+    }
+
+    /// Put actionable unevenness first, then even reads, then descriptive
+    /// distributions. Within each class the strongest visual difference leads.
+    private var focusedPairs: [AntagonistPair] {
+        Array(
+            meaningfulPairs.sorted { lhs, rhs in
+                let lhsRank = focusRank(lhs)
+                let rhsRank = focusRank(rhs)
+                if lhsRank != rhsRank { return lhsRank < rhsRank }
+                if lhs.skew != rhs.skew { return lhs.skew > rhs.skew }
+                return lhs.id < rhs.id
+            }
+            .prefix(SymmetryPresentation.focusLimit)
+        )
+    }
+
+    private func focusRank(_ pair: AntagonistPair) -> Int {
+        if pair.isDescriptive { return 2 }
+        return pair.isBalanced ? 1 : 0
     }
 
     private var buildingCard: some View {
@@ -128,7 +142,7 @@ struct SymmetrySection: View {
             if let leadingBuildingPair {
                 Text("Closest signal · \(leadingBuildingPair.leftLabel) / \(leadingBuildingPair.rightLabel)")
                     .panelLegendType()
-                    .foregroundStyle(Tint.inProgress)
+                    .foregroundStyle(Tint.primaryText)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
@@ -278,30 +292,44 @@ private struct ButterflyRow: View {
 
     private let barHeight: CGFloat = 22
     private let centerGap: CGFloat = 3
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.sm) {
-            ViewThatFits(in: .horizontal) {
-                HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
-                    pairLabel(pair.leftLabel, color: leftLabelColor, alignment: .leading)
-                    verdictLabel
-                    pairLabel(pair.rightLabel, color: rightLabelColor, alignment: .trailing)
-                }
-
-                VStack(alignment: .leading, spacing: Space.xs) {
-                    Text("\(pair.leftLabel) / \(pair.rightLabel)")
-                        .font(Typography.sectionHeading)
-                        .foregroundStyle(Ink.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    verdictLabel
-                }
-            }
+            pairHeader
 
             butterfly
         }
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("insightsBalance-\(pair.id)")
         .accessibilityLabel(Text(accessibilityText))
+    }
+
+    @ViewBuilder
+    private var pairHeader: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            stackedPairHeader
+        } else {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: Space.sm) {
+                    pairLabel(pair.leftLabel, color: leftLabelColor, alignment: .leading)
+                    verdictLabel(allowsWrapping: false)
+                    pairLabel(pair.rightLabel, color: rightLabelColor, alignment: .trailing)
+                }
+
+                stackedPairHeader
+            }
+        }
+    }
+
+    private var stackedPairHeader: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text("\(pair.leftLabel) / \(pair.rightLabel)")
+                .font(Typography.sectionHeading)
+                .foregroundStyle(Ink.primary)
+                .fixedSize(horizontal: false, vertical: true)
+            verdictLabel(allowsWrapping: true)
+        }
     }
 
     private var butterfly: some View {
@@ -324,12 +352,20 @@ private struct ButterflyRow: View {
                     ZStack(alignment: .trailing) {
                         track
                         wing(width: leftWidth, color: wingColor(isHeavier: leftIsHeavier))
-                        countLabel(pair.leftSets, alignment: .leading)
+                        countLabel(
+                            pair.leftSets,
+                            alignment: .leading,
+                            onFilledWing: leftIsHeavier || pair.isBalanced
+                        )
                     }
                     ZStack(alignment: .leading) {
                         track
                         wing(width: rightWidth, color: wingColor(isHeavier: !leftIsHeavier))
-                        countLabel(pair.rightSets, alignment: .trailing)
+                        countLabel(
+                            pair.rightSets,
+                            alignment: .trailing,
+                            onFilledWing: !leftIsHeavier || pair.isBalanced
+                        )
                     }
                 }
 
@@ -353,11 +389,16 @@ private struct ButterflyRow: View {
             .frame(width: width)
     }
 
-    private func countLabel(_ sets: Double, alignment: Alignment) -> some View {
+    private func countLabel(
+        _ sets: Double,
+        alignment: Alignment,
+        onFilledWing: Bool
+    ) -> some View {
         Text(InsightsFormat.setsLabel(sets))
             .font(Typography.metricMicro)
-            .foregroundStyle(Ink.secondary)
+            .foregroundStyle(onFilledWing ? Tint.onAccent : Ink.secondary)
             .monospacedDigit()
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .padding(.horizontal, Space.sm)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
     }
@@ -391,7 +432,7 @@ private struct ButterflyRow: View {
     }
 
     private var verdictColor: Color {
-        pair.isDescriptive ? Ink.secondary : Tint.primary
+        pair.isDescriptive ? Ink.secondary : Tint.primaryText
     }
 
     private var leanPercent: Int {
@@ -408,13 +449,15 @@ private struct ButterflyRow: View {
             : "\(leanPercent)% \(pair.heavierLabel.lowercased())"
     }
 
-    private var verdictLabel: some View {
+    private func verdictLabel(allowsWrapping: Bool) -> some View {
         Text(verdictText)
             .font(Typography.metricMicro)
             .foregroundStyle(verdictColor)
             .monospacedDigit()
-            .fixedSize(horizontal: true, vertical: false)
-            .frame(maxWidth: .infinity, alignment: .center)
+            .lineLimit(allowsWrapping ? nil : 1)
+            .fixedSize(horizontal: !allowsWrapping, vertical: allowsWrapping)
+            .frame(maxWidth: .infinity, alignment: allowsWrapping ? .leading : .center)
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     private func pairLabel(
