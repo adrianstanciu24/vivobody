@@ -86,7 +86,7 @@ struct SwipePager<Content: View>: View {
             // gates the pager so it only acts on horizontally-
             // dominant drags — vertical scrubs pass through cleanly.
             .simultaneousGesture(dragGesture(stride: stride))
-            .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.82), value: selection)
+            .animation(settleAnimation, value: selection)
             // A programmatic page change while the user's finger is
             // down would otherwise yank the content out from under the
             // drag (offset is a function of `selection`). Re-baseline
@@ -101,22 +101,21 @@ struct SwipePager<Content: View>: View {
         }
     }
 
-    /// Keep neighboring cards rendered as visual swipe cues while replacing
-    /// their accessibility representation with an empty view. The explicit
-    /// conditional is intentional: some accessibility runtimes continue to
-    /// expose descendants when `accessibilityHidden` receives a changing
-    /// Boolean on a transformed pager page.
-    @ViewBuilder
+    /// Keep every page mounted so its local interaction and entrance state
+    /// survives selection changes. Collapse and hide neighboring semantics so
+    /// only the selected page participates in accessibility.
     private func page(_ index: Int, width: CGFloat, height: CGFloat) -> some View {
-        if index == selection {
-            content(index)
-                .frame(width: width, height: height)
-        } else {
-            content(index)
-                .frame(width: width, height: height)
-                .accessibilityRepresentation { EmptyView() }
-                .accessibilityHidden(true)
-        }
+        content(index)
+            .frame(width: width, height: height)
+            // Collapsing an off-screen page before hiding it prevents SwiftUI
+            // from leaking its transformed descendants into the accessibility
+            // tree while preserving the rendered card's structural identity.
+            .accessibilityElement(children: index == selection ? .contain : .ignore)
+            .accessibilityHidden(index != selection)
+    }
+
+    private var settleAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.86)
     }
 
     // MARK: - Gesture
@@ -198,21 +197,27 @@ struct SwipePager<Content: View>: View {
 
                 let landed = target != selection
                 dragBase = 0
-                if reduceMotion {
-                    selection = target
-                    dragOffset = 0
-                } else {
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.82)) {
-                        selection = target
-                        dragOffset = 0
-                    }
-                }
+                settle(on: target, landed: landed)
                 if landed {
                     Haptics.soft(playsSound: false)
                 }
                 lastCrossedIndex = target
                 didEdgeHaptic = false
             }
+    }
+
+    private func settle(on target: Int, landed: Bool) {
+        if landed {
+            // Selection drives the pager's single settle animation. Avoid
+            // wrapping this write in a second spring: competing transactions
+            // produce a long, ghosted tail.
+            selection = target
+            dragOffset = 0
+        } else {
+            withAnimation(settleAnimation) {
+                dragOffset = 0
+            }
+        }
     }
 
     // MARK: - Rubber band
@@ -337,6 +342,6 @@ struct PageDots: View {
         Capsule()
             .fill(i == selection ? Ink.primary : Ink.quaternary)
             .frame(width: i == selection ? 22 : 6, height: 6)
-            .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.78), value: selection)
+            .animation(reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.86), value: selection)
     }
 }

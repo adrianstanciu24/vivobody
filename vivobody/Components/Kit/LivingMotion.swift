@@ -27,26 +27,34 @@ extension View {
     /// so the panel's layout is fixed from the first frame (panel
     /// discipline) and only its light arrives. Use on control surfaces
     /// (the active-workout card, the summary) where position is part
-    /// of the instrument's contract.
-    func powerOn(_ order: Int) -> some View {
-        modifier(PowerOnModifier(order: order))
+    /// of the instrument's contract. Pass `animated: false` to prelight a
+    /// mounted neighbor that must already be settled when it becomes active.
+    func powerOn(_ order: Int, animated: Bool = true) -> some View {
+        modifier(PowerOnModifier(order: order, animated: animated))
     }
 }
 
 private struct PowerOnModifier: ViewModifier {
     let order: Int
+    let animated: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var lit = false
+    @State private var lit: Bool
     @State private var flash = false
+
+    init(order: Int, animated: Bool) {
+        self.order = order
+        self.animated = animated
+        _lit = State(initialValue: !animated)
+    }
 
     func body(content: Content) -> some View {
         content
-            .opacity(lit ? 1 : 0)
-            .brightness(flash ? 0.16 : 0)
+            .opacity(!animated || lit ? 1 : 0)
+            .brightness(animated && flash ? 0.16 : 0)
             .onAppear {
                 guard !lit else { return }
-                if reduceMotion {
+                if reduceMotion || !animated {
                     lit = true
                     return
                 }

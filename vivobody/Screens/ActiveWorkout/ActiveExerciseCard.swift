@@ -153,15 +153,15 @@ struct ActiveExerciseCard: View {
     private func cardContent(expandsVertically: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             nameRow
-                .powerOn(0)
+                .powerOn(0, animated: isActive)
             setPips
                 .padding(.top, Space.md)
-                .powerOn(1)
+                .powerOn(1, animated: isActive)
 
             Spacer(minLength: Space.xl)
 
             heroBlock
-                .powerOn(2)
+                .powerOn(2, animated: isActive)
                 // One flexible gap above the hero; everything below it
                 // (RIR → last set → verb) holds a fixed rhythm so the
                 // interactive cluster sits low, in the thumb's arc,
@@ -169,10 +169,10 @@ struct ActiveExerciseCard: View {
                 .padding(.bottom, Space.xxl)
 
             rirControl
-                .powerOn(3)
+                .powerOn(3, animated: isActive)
             actionArea
                 .padding(.top, Space.md)
-                .powerOn(4)
+                .powerOn(4, animated: isActive)
         }
         .padding(.horizontal, Space.gutter)
         .frame(
