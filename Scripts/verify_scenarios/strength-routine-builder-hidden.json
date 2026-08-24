@@ -1,0 +1,61 @@
+{
+  "name": "strength-routine-builder-hidden",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--pro"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "label": "No templates yet"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Create Template",
+            "role": "AXButton"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "buildRoutineEntry"
+          },
+          {
+            "label": "Build Routine"
+          }
+        ]
+      }
+    },
+    {
+      "relaunch": {
+        "reset": true,
+        "tab": "library",
+        "arguments": ["--pro", "--seed-templates"]
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Lower Day B"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "Lower Day B"
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "buildRoutineEntry"
+    },
+    {
+      "label": "Build Routine"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

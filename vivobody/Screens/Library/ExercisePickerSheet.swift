@@ -9,12 +9,15 @@
 //  during a live session), template editing adds immediately, and exercise
 //  comparison immediately chooses any exercise except its anchor.
 //
-//  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so
-//  users can extend it inline:
+//  Catalog is SwiftData-backed (see ExerciseCatalogItem.swift), so general
+//  browsing purposes let users extend it inline:
 //    • Toolbar "+" — create a new custom exercise.
 //    • Long-press on any row — context menu with Favorite, Edit and
 //      Delete. Edit opens the same CustomExerciseEditorSheet in edit
 //      mode; Delete asks for confirmation, then removes the row.
+//
+//  Routine-planning purposes instead expose only compatible bundled strength
+//  records and suppress every catalog mutation affordance.
 //
 //  Favorited exercises carry a star next to their name, and the chip
 //  strip always offers a Favorites scope.
@@ -124,12 +127,14 @@ struct ExercisePickerSheet: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        editorTarget = .create
-                    } label: {
-                        Image(systemName: "plus")
+                    if purpose.allowsCatalogEditing {
+                        Button {
+                            editorTarget = .create
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                        .accessibilityLabel("Create custom exercise")
                     }
-                    .accessibilityLabel("Create custom exercise")
                 }
             }
             .searchable(text: $query, placement: .toolbar, prompt: Text("Search exercises"))
@@ -181,7 +186,16 @@ struct ExercisePickerSheet: View {
     /// exclusion (no text filter), shared by the grouped and search
     /// paths.
     private var scopedItems: [ExerciseCatalogItem] {
-        items.filter { $0.id != purpose.excludedItemID && filter.matches($0) }
+        items.filter { item in
+            guard !purpose.excludedItemIDs.contains(item.id), filter.matches(item) else {
+                return false
+            }
+            guard purpose.isRoutinePurpose else { return true }
+            guard let catalogID = item.catalogID else { return false }
+            return item.modality.supportsHardSetAnalytics
+                && purpose.allowsRoutineEquipment(item.equipment)
+                && purpose.allowsRoutineCatalogID(catalogID)
+        }
     }
 
     /// Flat, relevance-ranked results for the active query — same
@@ -320,7 +334,7 @@ struct ExercisePickerSheet: View {
 
         Group {
             switch purpose {
-            case .addToTemplate, .compare:
+            case .addToTemplate, .compare, .routineInclude, .routineAvoid, .routineSwap:
                 // Direct selection is purpose-specific: templates use
                 // an add glyph, comparisons use a bidirectional arrow.
                 Button {
@@ -352,36 +366,38 @@ struct ExercisePickerSheet: View {
                 .buttonStyle(.plain)
             }
         }
-        // Long-press still surfaces Favorite / Edit / Duplicate /
-        // Delete in both modes — that gesture is unchanged.
+        // General browsing keeps catalog actions available. Routine purposes
+        // intentionally expose an immutable bundled subset.
         .contextMenu {
-            Button {
-                toggleFavorite(item)
-            } label: {
-                Label(
-                    item.isFavorite ? "Unfavorite" : "Favorite",
-                    systemImage: item.isFavorite ? "star.slash" : "star"
-                )
-            }
-
-            Button {
-                editorTarget = .edit(item)
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-
-            if item.catalogID != nil, !item.isUserCreated {
+            if purpose.allowsCatalogEditing {
                 Button {
-                    editorTarget = .duplicate(item)
+                    toggleFavorite(item)
                 } label: {
-                    Label("Duplicate as Custom", systemImage: "plus.square.on.square")
+                    Label(
+                        item.isFavorite ? "Unfavorite" : "Favorite",
+                        systemImage: item.isFavorite ? "star.slash" : "star"
+                    )
                 }
-            }
 
-            Button(role: .destructive) {
-                pendingDeleteItem = item
-            } label: {
-                Label("Delete", systemImage: "trash")
+                Button {
+                    editorTarget = .edit(item)
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                }
+
+                if item.catalogID != nil, !item.isUserCreated {
+                    Button {
+                        editorTarget = .duplicate(item)
+                    } label: {
+                        Label("Duplicate as Custom", systemImage: "plus.square.on.square")
+                    }
+                }
+
+                Button(role: .destructive) {
+                    pendingDeleteItem = item
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
         }
     }
@@ -394,7 +410,7 @@ struct ExercisePickerSheet: View {
         let isProminent = accessory != .disclosure
         let accessoryColor: Color = switch accessory {
         case .add: Tint.inProgress
-        case .compare: Ink.secondary
+        case .compare, .swap: Ink.secondary
         case .disclosure: Ink.quaternary
         }
         return HStack(spacing: Space.md) {

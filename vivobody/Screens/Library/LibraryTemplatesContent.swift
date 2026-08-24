@@ -23,6 +23,7 @@ struct LibraryTemplatesContent: View {
     let searchText: String
     @Binding var segment: LibrarySegment
     @Binding var templateEditorTarget: TemplateEditorTarget?
+    let onCreateTemplate: () -> Void
 
     @Environment(\.modelContext) private var modelContext
 
@@ -154,17 +155,15 @@ struct LibraryTemplatesContent: View {
 
     // MARK: - Empty states
 
-    /// Type-forward empty state — a quiet heading, one line of
-    /// guidance, and the single lime action. No ghost, no card.
+    /// The empty state keeps one clear manual-creation action.
     private var emptyState: some View {
         ContentUnavailableView {
             Label("No templates yet", systemImage: "list.bullet.clipboard")
         } description: {
-            Text("Build a reusable workout — pick exercises, set target reps and weight. Start any time from here.")
+            Text("Create a reusable workout to get started.")
         } actions: {
             Button {
-                templateEditorTarget = .new(sortOrder: templates.count)
-                Haptics.soft()
+                onCreateTemplate()
             } label: {
                 Text("Create Template")
             }

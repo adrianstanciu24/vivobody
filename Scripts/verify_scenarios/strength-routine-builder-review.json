@@ -1,0 +1,86 @@
+{
+  "name": "strength-routine-builder-review",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--pro", "--ui-test-strength-routine-builder"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "strengthRoutineBuilder"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentBarbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentDumbbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentCable",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentMachine",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineBuild",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "strengthRoutineReview"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "strengthRoutineReview",
+      "labelContains": "Ready"
+    },
+    {
+      "identifier": "strengthRoutineDay2",
+      "value": "Selected"
+    },
+    {
+      "labelContains": "Monday, Full Body A, exercise 1 of 5",
+      "valueContains": "Unlocked"
+    },
+    {
+      "identifierContains": "strengthRoutineLock-",
+      "role": "AXButton",
+      "value": "Unlocked"
+    },
+    {
+      "identifierContains": "strengthRoutineSwap-",
+      "role": "AXButton"
+    },
+    {
+      "identifier": "strengthRoutineSave",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbidden": [
+    {
+      "identifier": "strengthRoutineGapStatus"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

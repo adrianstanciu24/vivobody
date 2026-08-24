@@ -12,9 +12,8 @@
 //  History / Library / Me). Matches Notes / Reminders / Music
 //  patterns where collections + items share one tab.
 //
-//  The create "+" is contextual and lives in the bottom toolbar:
-//    • Templates segment → opens the template builder → creates a
-//      blank template; user enters its detail to add exercises.
+//  The create "+" is contextual and lives in the top toolbar:
+//    • Templates segment → opens the manual template editor.
 //    • Exercises segment → opens CustomExerciseEditorSheet in
 //      .create mode → adds a new entry to the catalog.
 //
@@ -73,6 +72,17 @@ struct LibraryScreen: View {
     /// SwiftData on Save, so there are no stub rows to clean up.
     @State private var templateEditorTarget: TemplateEditorTarget? = nil
 
+    /// Automatic strength-routine planning stays compiled but hidden from the
+    /// product UI. DEBUG verification may open it directly so its behavior and
+    /// accessibility remain covered while the feature is not publicly exposed.
+    @State private var showsStrengthRoutineBuilder = {
+        #if DEBUG
+            UITestSupport.opensStrengthRoutineBuilder
+        #else
+            false
+        #endif
+    }()
+
     /// Custom-exercise editor sheet target. `.create` for the "+"
     /// toolbar on the Exercises segment; `.edit(item)` for context
     /// menu Edit on a row.
@@ -93,7 +103,8 @@ struct LibraryScreen: View {
                     appState: appState,
                     searchText: searchText,
                     segment: $segment,
-                    templateEditorTarget: $templateEditorTarget
+                    templateEditorTarget: $templateEditorTarget,
+                    onCreateTemplate: { presentNewTemplate() }
                 )
             case .exercises:
                 LibraryExercisesContent(
@@ -139,6 +150,9 @@ struct LibraryScreen: View {
         .sheet(item: $customExerciseTarget) { target in
             CustomExerciseEditorSheet(target: target)
         }
+        .sheet(isPresented: $showsStrengthRoutineBuilder) {
+            StrengthRoutineBuilderScreen(appState: appState)
+        }
     }
 
     // MARK: - Create action
@@ -152,21 +166,22 @@ struct LibraryScreen: View {
     private func handlePlus() {
         switch segment {
         case .templates:
-            let descriptor = FetchDescriptor<WorkoutTemplate>()
-            let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-            // The free tier includes ProGate.freeTemplateLimit
-            // templates; creating the next one presents the paywall
-            // instead of the editor. Existing templates always stay
-            // editable, startable, and deletable — only creation gates.
-            guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
-                appState.pro.requestUnlock(context: .templateLimit)
-                return
-            }
-            templateEditorTarget = .new(sortOrder: count)
-            Haptics.soft()
+            presentNewTemplate()
         case .exercises:
             customExerciseTarget = .create
         }
+    }
+
+    private func presentNewTemplate() {
+        let descriptor = FetchDescriptor<WorkoutTemplate>()
+        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+        // Manual creation keeps the existing one-template gate.
+        guard ProGate.canCreateTemplate(existingCount: count, status: appState.pro.status) else {
+            appState.pro.requestUnlock(context: .templateLimit)
+            return
+        }
+        templateEditorTarget = .new(sortOrder: count)
+        Haptics.soft()
     }
 
     private var plusAccessibilityLabel: String {

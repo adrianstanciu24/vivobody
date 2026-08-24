@@ -1,0 +1,152 @@
+{
+  "name": "strength-routine-builder",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--pro", "--ui-test-strength-routine-builder"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "strengthRoutineBuilder"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "strengthRoutineWeekdayMonday",
+            "value": "Selected"
+          },
+          {
+            "identifier": "strengthRoutineWeekdayWednesday",
+            "value": "Selected"
+          },
+          {
+            "identifier": "strengthRoutineWeekdayFriday",
+            "value": "Selected"
+          },
+          {
+            "identifier": "strengthRoutineBuild",
+            "role": "AXButton",
+            "enabled": true
+          },
+          {
+            "label": "BODYWEIGHT INCLUDED"
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "strengthRoutineEquipmentBodyweight"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentBarbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentDumbbell",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentCable",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineEquipmentMachine",
+        "role": "AXButton"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "identifier": "strengthRoutineBuild",
+            "role": "AXButton",
+            "enabled": true
+          }
+        ],
+        "forbidden": []
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineBuild",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "strengthRoutineReview"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "labelContains": "Weekly routine. 3 days, 15 exercises, about 45 minutes per day. Ready."
+          },
+          {
+            "identifier": "strengthRoutineDay2",
+            "value": "Selected"
+          },
+          {
+            "identifier": "strengthRoutineSave",
+            "role": "AXButton",
+            "enabled": true
+          }
+        ],
+        "forbidden": [
+          {
+            "identifier": "strengthRoutineGapStatus"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineSave",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Full Body A"
+      }
+    },
+    {
+      "relaunch": {
+        "reset": false,
+        "tab": "library",
+        "arguments": ["--pro"]
+      }
+    },
+    {
+      "wait": {
+        "labelContains": "Full Body A"
+      }
+    }
+  ],
+  "required": [
+    {
+      "labelContains": "Full Body A"
+    }
+  ],
+  "forbidden": [
+    {
+      "label": "No templates yet"
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

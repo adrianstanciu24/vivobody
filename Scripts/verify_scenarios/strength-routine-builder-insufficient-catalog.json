@@ -1,0 +1,46 @@
+{
+  "name": "strength-routine-builder-insufficient-catalog",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": ["--pro", "--ui-test-strength-routine-builder"]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "strengthRoutineBuilder"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "strengthRoutineBuild",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "strengthRoutineReview"
+      }
+    }
+  ],
+  "required": [
+    {
+      "identifier": "strengthRoutineGapStatus",
+      "role": "AXButton",
+      "labelContains": "plan issues"
+    },
+    {
+      "identifier": "strengthRoutineSave",
+      "role": "AXButton",
+      "enabled": false
+    }
+  ],
+  "forbidden": [
+    {
+      "labelContains": "Weekly routine. 3 days, 15 exercises, about 45 minutes per day. Ready."
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}

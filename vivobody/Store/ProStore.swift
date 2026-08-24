@@ -58,7 +58,20 @@ nonisolated enum ProGate {
     }
 
     static func canCreateTemplate(existingCount: Int, status: ProStatus) -> Bool {
-        status == .pro || existingCount < freeTemplateLimit
+        canCreateTemplates(existingCount: existingCount, adding: 1, status: status)
+    }
+
+    /// Batch form used by flows that create a complete multi-day routine in
+    /// one transaction. Capacity is checked for the whole request so a free
+    /// user never receives a partially saved week.
+    static func canCreateTemplates(
+        existingCount: Int,
+        adding requestedCount: Int,
+        status: ProStatus
+    ) -> Bool {
+        guard requestedCount >= 0 else { return false }
+        if status == .pro { return true }
+        return max(0, existingCount) + requestedCount <= freeTemplateLimit
     }
 }
 

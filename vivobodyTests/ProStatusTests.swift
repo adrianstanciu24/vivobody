@@ -12,7 +12,6 @@ import Testing
 @testable import vivobody
 
 struct ProStatusTests {
-
     // MARK: - Entitlement resolution
 
     @Test func noPurchaseResolvesFree() {
@@ -60,7 +59,7 @@ struct ProStatusTests {
     }
 
     @Test func freeUnderLimitCanCreate() {
-        for count in 0..<ProGate.freeTemplateLimit {
+        for count in 0 ..< ProGate.freeTemplateLimit {
             #expect(ProGate.canCreateTemplate(existingCount: count, status: .free))
         }
     }
@@ -78,5 +77,19 @@ struct ProStatusTests {
     @Test func proIsUnlimited() {
         #expect(ProGate.canCreateTemplate(existingCount: 5, status: .pro))
         #expect(ProGate.canCreateTemplate(existingCount: 500, status: .pro))
+    }
+
+    @Test func freeBatchMustFitBeforeAnyTemplateIsCreated() {
+        #expect(ProGate.canCreateTemplates(existingCount: 1, adding: 4, status: .free))
+        #expect(!ProGate.canCreateTemplates(existingCount: 2, adding: 4, status: .free))
+    }
+
+    @Test func emptyBatchNeedsNoCapacity() {
+        #expect(ProGate.canCreateTemplates(existingCount: 5, adding: 0, status: .free))
+        #expect(!ProGate.canCreateTemplates(existingCount: 0, adding: -1, status: .free))
+    }
+
+    @Test func proBatchIsUnlimited() {
+        #expect(ProGate.canCreateTemplates(existingCount: 500, adding: 500, status: .pro))
     }
 }
