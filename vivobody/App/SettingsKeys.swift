@@ -83,7 +83,7 @@ nonisolated enum SettingsKey {
 nonisolated enum SettingsDefaults {
     static let hapticsEnabled = true
     static let soundsEnabled = true
-    static let defaultRestSeconds = 60
+    static let defaultRestSeconds = 120
     static let weightUnit = WeightUnit.lb.rawValue
     static let appearance = AppAppearance.system.rawValue
     static let healthKitEnabled = false

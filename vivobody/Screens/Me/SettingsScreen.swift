@@ -98,7 +98,7 @@ struct SettingsScreen: View {
     /// Common rest values that cover the bulk of strength-training
     /// programs. Surfaced as a horizontal chip selector — picking a
     /// value is a single tap with no keyboard or sheet round-trip.
-    private let restOptions: [Int] = [30, 60, 90, 120, 180]
+    private let restOptions: [Int] = [180, 120, 90, 60, 30]
 
     var body: some View {
         ScrollView {
