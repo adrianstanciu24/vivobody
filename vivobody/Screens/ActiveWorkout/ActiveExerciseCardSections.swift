@@ -497,25 +497,43 @@ extension ActiveExerciseCard {
 
     // MARK: - RIR
 
-    /// Reps-in-reserve pill — lit for dynamic-strength reps only, but
-    /// the slot exists for EVERY reps-mode exercise. Panel discipline:
-    /// the control goes dark but HOLDS ITS PLACE, like a hardware
-    /// control whose lamp went out — the panel never reflows between
-    /// states, and never between exercises either, so swiping from a
-    /// strength card to a power card (plyometrics log no RIR) keeps
-    /// the hero cluster exactly where the thumb expects it.
+    var showsRIRControl: Bool {
+        exercise.trackingMode == .reps
+            && exercise.modality == .dynamicStrength
+            && session.activeSet(for: exercise) != nil
+    }
+
+    /// A flexible SwiftUI stage centers the available working controls
+    /// between the fixed identity and bottom action. When RIR is absent,
+    /// the remaining height is shared above and below the hero instead of
+    /// accumulating as one large gap.
+    func instrumentArea(expandsVertically: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            heroBlock
+                .powerOn(2, animated: isActive)
+
+            if showsRIRControl {
+                rirControl
+                    .padding(.top, Space.xxl)
+                    .powerOn(3, animated: isActive)
+            }
+        }
+        .padding(.vertical, Space.lg)
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: expandsVertically ? .infinity : nil,
+            alignment: .leading
+        )
+    }
+
+    /// Reps-in-reserve is actionable only for a live dynamic-strength
+    /// repetition set. Other modalities omit the control entirely so
+    /// the flexible layout can reclaim its space instead of presenting
+    /// a capability-shaped hole.
     @ViewBuilder
     var rirControl: some View {
-        if exercise.trackingMode == .reps {
-            let isLive = exercise.modality == .dynamicStrength
-                && session.activeSet(for: exercise) != nil
-            if isLive {
-                RIRSelector(value: rirBinding)
-                    .padding(.bottom, Space.md)
-            } else {
-                RIRControlPlaceholder()
-                    .padding(.bottom, Space.md)
-            }
+        if showsRIRControl {
+            RIRSelector(value: rirBinding)
         }
     }
 
@@ -560,15 +578,5 @@ extension ActiveExerciseCard {
                 saveActiveSessionChanges()
             }
         )
-    }
-}
-
-private struct RIRControlPlaceholder: View {
-    @ScaledMetric(relativeTo: .body) private var height: CGFloat = Space.rowMin + Space.md
-
-    var body: some View {
-        Color.clear
-            .frame(height: height)
-            .accessibilityHidden(true)
     }
 }

@@ -310,8 +310,8 @@ import VivoKit
         }
 
         /// Active superset pairing a strength exercise with a power one —
-        /// the partner logs reps but no RIR, so its card must hold the
-        /// same panel geometry with the RIR slot dark.
+        /// the partner logs reps but no RIR, so its card verifies that an
+        /// omitted capability leaves no empty control slot.
         private static func seedActiveSupersetPower(in context: ModelContext) {
             let existing = (try? context.fetch(FetchDescriptor<WorkoutSession>(
                 predicate: #Predicate { $0.completedAt == nil }

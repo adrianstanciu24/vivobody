@@ -20,9 +20,9 @@
 //    • The single biggest target on screen: a full-width verb
 //      button — "Complete set" / "Finish exercise" — wearing a dim
 //      volt tint so the live action is the panel's loudest surface.
-//      Everything from the hero down holds a fixed rhythm; the one
-//      flexible gap sits above the hero so the interactive cluster
-//      stays low, in the thumb's arc.
+//      A flexible middle stage centers the available controls between
+//      the fixed identity and thumb-reachable primary action, so an
+//      omitted capability rebalances space instead of leaving a hole.
 //
 //  Two accents, per the product principles: Volt for in-progress
 //  (the live action), gold for complete (a finished set, exercise,
@@ -158,21 +158,11 @@ struct ActiveExerciseCard: View {
                 .padding(.top, Space.md)
                 .powerOn(1, animated: isActive)
 
-            Spacer(minLength: Space.xl)
+            instrumentArea(expandsVertically: expandsVertically)
 
-            heroBlock
-                .powerOn(2, animated: isActive)
-                // One flexible gap above the hero; everything below it
-                // (RIR → last set → verb) holds a fixed rhythm so the
-                // interactive cluster sits low, in the thumb's arc,
-                // instead of floating mid-panel on tall screens.
-                .padding(.bottom, Space.xxl)
-
-            rirControl
-                .powerOn(3, animated: isActive)
             actionArea
                 .padding(.top, Space.md)
-                .powerOn(4, animated: isActive)
+                .powerOn(showsRIRControl ? 4 : 3, animated: isActive)
         }
         .padding(.horizontal, Space.gutter)
         .frame(
