@@ -2,9 +2,9 @@
 //  ActiveExerciseCard.swift
 //  vivobody
 //
-//  One page in the SwipePager — but no longer a "card." This is the
-//  instrument: a single exercise, full-bleed on black, built to be
-//  read from arm's length in half a second.
+//  One page in the SwipePager — an exercise instrument built to be
+//  read from arm's length in half a second. Identity, progress, and
+//  adjustable working-set controls stay full-bleed on black.
 //
 //  First-principles layout (top → bottom):
 //    • Exercise name (the page's identity).
@@ -14,9 +14,9 @@
 //      carrying its "60 × 8" (tap any lit lamp to edit, long-press
 //      for delete) — the set timeline and the old "Last …" caption
 //      merged into one strip.
-//    • The HERO: the working weight as a huge monospaced odometer
-//      you scrub with a vertical drag, with reps beneath it. The
-//      numbers are the interface; there is no chip around them.
+//    • Configuration, the working weight/reps hero, and effort share
+//      one aligned field, separated by quiet hairlines rather than a
+//      container. The numbers remain the interface, with no chip.
 //    • The single biggest target on screen: a full-width verb
 //      button — "Complete set" / "Finish exercise" — wearing a dim
 //      volt tint so the live action is the panel's loudest surface.

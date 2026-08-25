@@ -3,10 +3,9 @@
 //  vivobody
 //
 //  Section view builders for ActiveExerciseCard, extracted from the
-//  main file for readability: name + pips, hero (reps / duration /
-//  completed), RIR, and the last-set caption + action area. Members
-//  live on the ActiveExerciseCard extension and share the struct's
-//  stored state.
+//  main file for readability: name + pips, the open working-set
+//  instrument, RIR, and the action area. Members live on the
+//  ActiveExerciseCard extension and share the struct's stored state.
 //
 
 import SwiftData
@@ -201,8 +200,11 @@ extension ActiveExerciseCard {
     // MARK: - Hero
 
     var heroBlock: some View {
-        VStack(alignment: .leading, spacing: Space.sm) {
+        VStack(alignment: .leading, spacing: 0) {
             exerciseConfigurationRow
+
+            SectionDivider()
+                .padding(.vertical, Space.lg)
 
             if sets.isEmpty {
                 emptyExerciseHero
@@ -503,26 +505,28 @@ extension ActiveExerciseCard {
             && session.activeSet(for: exercise) != nil
     }
 
-    /// A flexible SwiftUI stage centers the available working controls
-    /// between the fixed identity and bottom action. When RIR is absent,
-    /// the remaining height is shared above and below the hero instead of
-    /// accumulating as one large gap.
+    /// One open instrument field aligns every working-set adjustment on black.
+    /// Quiet rules create configuration, readout, and effort zones without a
+    /// boxed group competing with the primary action. The flexible stage keeps
+    /// the available controls centered when a capability such as RIR is absent.
     func instrumentArea(expandsVertically: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             heroBlock
                 .powerOn(2, animated: isActive)
 
             if showsRIRControl {
+                SectionDivider()
+                    .padding(.vertical, Space.xl)
                 rirControl
-                    .padding(.top, Space.xxl)
                     .powerOn(3, animated: isActive)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, Space.lg)
         .frame(
             maxWidth: .infinity,
             maxHeight: expandsVertically ? .infinity : nil,
-            alignment: .leading
+            alignment: .center
         )
     }
 
