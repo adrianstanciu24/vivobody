@@ -69,7 +69,7 @@ nonisolated enum ExerciseModality: String, Codable, Hashable, CaseIterable {
         switch self {
         case .dynamicStrength: "Dynamic Strength"
         case .isometricStrength: "Isometric Strength"
-        case .power: "Power / Ballistic"
+        case .power: "Power / Explosive"
         case .conditioning: "Conditioning"
         case .mobility: "Mobility"
         }

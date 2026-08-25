@@ -11,6 +11,30 @@ import Testing
 
 @MainActor
 struct ExercisePresentationTests {
+    @Test func customExerciseAuthoringExposesEverySupportedModality() {
+        let choices = ExerciseModality.customExerciseChoices
+
+        #expect(choices == [
+            .dynamicStrength,
+            .isometricStrength,
+            .power,
+            .conditioning,
+            .mobility,
+        ])
+        #expect(choices.map(\.customExerciseChoiceName) == [
+            "Strength · Reps",
+            "Strength · Hold",
+            "Power / Explosive",
+            "Conditioning",
+            "Mobility",
+        ])
+        #expect(ExerciseModality.dynamicStrength.customExerciseTrackingModes == [.reps])
+        #expect(ExerciseModality.isometricStrength.customExerciseTrackingModes == [.duration])
+        #expect(ExerciseModality.power.customExerciseTrackingModes == [.reps])
+        #expect(ExerciseModality.conditioning.customExerciseTrackingModes == [.reps, .duration])
+        #expect(ExerciseModality.mobility.customExerciseTrackingModes == [.reps, .duration])
+    }
+
     @Test func durationTerminologyFollowsModality() {
         #expect(ExerciseModality.isometricStrength.durationLabel == "Hold")
         #expect(ExerciseModality.conditioning.durationLabel == "Interval")

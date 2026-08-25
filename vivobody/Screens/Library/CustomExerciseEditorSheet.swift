@@ -333,7 +333,7 @@ struct CustomExerciseEditorSheet: View {
         VStack(alignment: .leading, spacing: Space.md) {
             SectionHeader(title: "Logging defaults")
 
-            if availableTrackingModes.count > 1 {
+            if draft.modality.customExerciseTrackingModes.count > 1 {
                 trackingModeField
             }
 
@@ -446,8 +446,15 @@ struct CustomExerciseEditorSheet: View {
     // MARK: - Modality
 
     private var modalityField: some View {
-        pickerRow(title: "Modality", value: draft.modality.displayName) {
-            presentPicker(.modality)
+        VStack(alignment: .leading, spacing: Space.sm) {
+            pickerRow(title: "Exercise type", value: draft.modality.customExerciseChoiceName) { presentPicker(.modality) }
+
+            if draft.modality.customExerciseTrackingModes.count > 1 {
+                Text("Reps or Time. Not counted in strength stats or the 3D body.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Ink.quaternary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 
@@ -661,9 +668,9 @@ struct CustomExerciseEditorSheet: View {
 
         case .modality:
             CatalogChoiceSheet(
-                title: "Modality",
-                options: ExerciseModality.allCases,
-                label: { $0.displayName },
+                title: "Exercise Type",
+                options: ExerciseModality.customExerciseChoices,
+                label: { $0.customExerciseChoiceName },
                 isSelected: { draft.modality == $0 },
                 onSelect: applyModality
             )
@@ -799,17 +806,9 @@ struct CustomExerciseEditorSheet: View {
                     applyAnimatedSelection { draft.trackingMode = mode }
                 }
             ),
-            options: availableTrackingModes,
+            options: draft.modality.customExerciseTrackingModes,
             label: { $0.displayName }
         )
-    }
-
-    private var availableTrackingModes: [TrackingMode] {
-        switch draft.modality {
-        case .dynamicStrength, .power: [.reps]
-        case .isometricStrength: [.duration]
-        case .conditioning, .mobility: TrackingMode.allCases
-        }
     }
 
     private var loadModeField: some View {

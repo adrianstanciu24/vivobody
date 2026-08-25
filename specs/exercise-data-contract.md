@@ -128,6 +128,14 @@ textually visible and feed analytics without painting a substitute 3D mesh.
 - `mobility`: mobility, rehabilitation, or passive movement; excluded from
   strength and hypertrophy analytics.
 
+Custom-exercise authoring exposes every modality through
+`ExerciseModality.customExerciseChoices`; `customExerciseTrackingModes` owns
+their permitted measures. Dynamic strength and power are fixed to reps,
+isometric strength is fixed to duration, and conditioning and mobility let the
+user choose reps or duration. Conditioning and mobility remain visible in
+workouts and history while staying excluded from strength PRs, comparable
+tonnage, hypertrophy hard sets, and the 3D development model.
+
 `trackingMode` describes the entered measurement (`reps` or `duration`); it does
 not substitute for modality.
 

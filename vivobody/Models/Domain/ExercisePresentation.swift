@@ -2,16 +2,48 @@
 //  ExercisePresentation.swift
 //  vivobody
 //
-//  Shared presentation vocabulary for exercise modality and logged-load
-//  semantics. Duration is a hold only for isometric strength; conditioning
-//  uses intervals and other timed work uses neutral time terminology.
-//  Summary and accessibility helpers keep bodyweight, added load,
-//  assistance, and non-comparable resistance distinct at every UI boundary.
+//  Shared presentation vocabulary for exercise modality, custom-exercise
+//  authoring, and logged-load semantics. Duration is a hold only for
+//  isometric strength; conditioning uses intervals and other timed work uses
+//  neutral time terminology. Summary and accessibility helpers keep
+//  bodyweight, added load, assistance, and non-comparable resistance distinct
+//  at every UI boundary.
 //
 
 import Foundation
 
 extension ExerciseModality {
+    /// Custom authoring exposes every supported work type. This explicit
+    /// order remains a product surface rather than inheriting enum case order.
+    nonisolated static let customExerciseChoices: [Self] = [
+        .dynamicStrength,
+        .isometricStrength,
+        .power,
+        .conditioning,
+        .mobility,
+    ]
+
+    /// Fixed-measure choices include that measure; flexible work types rely
+    /// on the editor's separate Measure control.
+    nonisolated var customExerciseChoiceName: String {
+        switch self {
+        case .dynamicStrength: "Strength · Reps"
+        case .isometricStrength: "Strength · Hold"
+        case .power: displayName
+        case .conditioning, .mobility: displayName
+        }
+    }
+
+    /// Fixed strength measures avoid a redundant editor decision, while
+    /// conditioning and mobility keep both useful logging choices.
+    nonisolated var customExerciseTrackingModes: [TrackingMode] {
+        switch self {
+        case .dynamicStrength, .power: [.reps]
+        case .isometricStrength: [.duration]
+        case .conditioning, .mobility: TrackingMode.allCases
+        }
+    }
+
     /// User-facing noun for one duration-tracked effort.
     nonisolated var durationLabel: String {
         switch self {

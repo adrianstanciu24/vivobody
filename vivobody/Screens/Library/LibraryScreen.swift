@@ -86,7 +86,13 @@ struct LibraryScreen: View {
     /// Custom-exercise editor sheet target. `.create` for the "+"
     /// toolbar on the Exercises segment; `.edit(item)` for context
     /// menu Edit on a row.
-    @State private var customExerciseTarget: CatalogEditorTarget? = nil
+    @State private var customExerciseTarget: CatalogEditorTarget? = {
+        #if DEBUG
+            UITestSupport.opensCustomExerciseEditor ? .create : nil
+        #else
+            nil
+        #endif
+    }()
 
     var body: some View {
         // Each content view owns its own SwiftData query + filter

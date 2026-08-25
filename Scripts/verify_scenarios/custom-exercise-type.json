@@ -1,0 +1,101 @@
+{
+  "name": "custom-exercise-type",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-custom-exercise-editor",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Exercise type",
+          "value": "Strength · Reps"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "label": "Exercise type",
+        "value": "Strength · Reps"
+      }
+    },
+    {
+      "wait": {
+        "label": "Strength · Reps",
+        "value": "Selected"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Strength · Reps",
+            "value": "Selected"
+          },
+          {
+            "label": "Strength · Hold",
+            "value": "Not selected"
+          },
+          {
+            "label": "Power / Explosive",
+            "value": "Not selected"
+          },
+          {
+            "label": "Conditioning",
+            "value": "Not selected"
+          },
+          {
+            "label": "Mobility",
+            "value": "Not selected"
+          }
+        ]
+      }
+    },
+    {
+      "tap": {
+        "label": "Conditioning",
+        "value": "Not selected"
+      }
+    },
+    {
+      "wait": {
+        "label": "Exercise type",
+        "value": "Conditioning"
+      }
+    },
+    {
+      "assert": {
+        "required": [
+          {
+            "label": "Reps or Time. Not counted in strength stats or the 3D body."
+          }
+        ]
+      }
+    },
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Reps",
+          "value": "Selected"
+        },
+        "direction": "up"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Reps",
+      "value": "Selected"
+    },
+    {
+      "label": "Time",
+      "value": "Not selected"
+    }
+  ]
+}
