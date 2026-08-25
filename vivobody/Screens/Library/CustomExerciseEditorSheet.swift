@@ -699,7 +699,7 @@ struct CustomExerciseEditorSheet: View {
                 options: draft.equipment == .band
                     ? [ExerciseLoadMode.nonComparable]
                     : ExerciseLoadMode.allCases,
-                label: { $0.displayName },
+                label: { $0.customExerciseChoiceLabel },
                 isSelected: { draft.loadMode == $0 },
                 onSelect: applyLoadMode
             )
@@ -815,7 +815,7 @@ struct CustomExerciseEditorSheet: View {
         VStack(alignment: .leading, spacing: Space.sm) {
             pickerRow(
                 title: "Load interpretation",
-                value: draft.loadMode.displayName
+                value: draft.loadMode.customExerciseChoiceName
             ) {
                 presentPicker(.loadMode)
             }

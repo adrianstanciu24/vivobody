@@ -1,0 +1,53 @@
+{
+  "name": "custom-exercise-assistance",
+  "launch": {
+    "reset": true,
+    "tab": "library",
+    "arguments": [
+      "--ui-test-custom-exercise-editor",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "scrollTo": {
+        "selector": {
+          "label": "Load interpretation",
+          "value": "External Load"
+        },
+        "direction": "up"
+      }
+    },
+    {
+      "tap": {
+        "label": "Load interpretation",
+        "value": "External Load"
+      }
+    },
+    {
+      "wait": {
+        "label": "Assistance · Assisted pull-up/chin-up machine",
+        "value": "Not selected"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "External Load",
+      "value": "Selected"
+    },
+    {
+      "label": "Bodyweight + Load",
+      "value": "Not selected"
+    },
+    {
+      "label": "Assistance · Assisted pull-up/chin-up machine",
+      "value": "Not selected"
+    },
+    {
+      "label": "Non-comparable",
+      "value": "Not selected"
+    }
+  ]
+}

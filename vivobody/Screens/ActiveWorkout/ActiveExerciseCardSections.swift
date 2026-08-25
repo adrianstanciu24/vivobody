@@ -290,6 +290,7 @@ extension ActiveExerciseCard {
                 cancellationID: effectiveScrubCancellationID,
                 onScrubEnded: activeScrubDidEnd
             )
+            assistanceDirectionHint
 
             HStack(alignment: .center, spacing: Space.sm) {
                 Text("×")
@@ -493,7 +494,19 @@ extension ActiveExerciseCard {
                         onScrubEnded: activeScrubDidEnd
                     )
                 }
+                assistanceDirectionHint
             }
+        }
+    }
+
+    @ViewBuilder
+    var assistanceDirectionHint: some View {
+        if exercise.loadMode == .assistanceSubtracted {
+            Text("Less assistance = harder")
+                .font(Typography.caption)
+                .foregroundStyle(Ink.quaternary)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("assistanceDirectionHint")
         }
     }
 

@@ -162,6 +162,13 @@ working sets; exercise names never infer set intent.
   movement from load-based record and tonnage comparisons. A duration-tracked
   isometric may still compare duration within its own duration-only series.
 
+The custom editor presents `assistanceSubtracted` as **Assistance**, with an
+assisted pull-up/chin-up machine as its concrete example. During the workout,
+the entered machine setting remains visible as Assistance and carries the cue
+“Less assistance = harder.” The logged value affects effective-load progress
+comparisons, but does not scale the authored muscle-role and RIR inputs used by
+the 3D development model.
+
 `bodyweightFraction` is a coefficient used only by the two bodyweight load
 modes. It is zero for `external` and `nonComparable`. Reviewed band exercises
 may be bundled, but their resistance is always `nonComparable`: a color,

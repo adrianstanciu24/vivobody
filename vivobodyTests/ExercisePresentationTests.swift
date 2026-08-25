@@ -43,6 +43,17 @@ struct ExercisePresentationTests {
         #expect(ExerciseModality.power.durationLabel == "Time")
     }
 
+    @Test func customExerciseAssistanceUsesConcreteAuthoringCopy() {
+        let assistance = ExerciseLoadMode.assistanceSubtracted
+
+        #expect(assistance.customExerciseChoiceName == "Assistance")
+        #expect(
+            assistance.customExerciseChoiceLabel
+                == "Assistance · Assisted pull-up/chin-up machine"
+        )
+        #expect(ExerciseLoadMode.external.customExerciseChoiceLabel == "External Load")
+    }
+
     @Test func durationRecordCopyMatchesWhatWasActuallyRanked() {
         #expect(
             ExerciseLoadMode.external.durationRecordDetail(modality: .isometricStrength)

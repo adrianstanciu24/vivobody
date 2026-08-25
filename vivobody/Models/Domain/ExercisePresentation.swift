@@ -72,6 +72,23 @@ extension ExerciseModality {
 }
 
 extension ExerciseLoadMode {
+    /// The custom editor names the value the user enters. Assistance is
+    /// intentionally shorter than the underlying bodyweight subtraction.
+    nonisolated var customExerciseChoiceName: String {
+        self == .assistanceSubtracted ? "Assistance" : displayName
+    }
+
+    /// One concrete example keeps the uncommon Assistance choice legible
+    /// without turning the picker into a load-model explanation.
+    nonisolated var customExerciseChoiceLabel: String {
+        switch self {
+        case .assistanceSubtracted:
+            "Assistance · Assisted pull-up/chin-up machine"
+        case .external, .bodyweightAdded, .nonComparable:
+            customExerciseChoiceName
+        }
+    }
+
     /// Copy for a duration-record celebration. Comparable loaded
     /// isometrics rank duration only as the tie-breaker at the standing
     /// best load, so calling the result the all-time longest hold would

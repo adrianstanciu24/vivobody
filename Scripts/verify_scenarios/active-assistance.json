@@ -1,0 +1,57 @@
+{
+  "name": "active-assistance",
+  "launch": {
+    "reset": true,
+    "tab": "today",
+    "arguments": [
+      "--ui-test-active-assistance",
+      "-settings.appearance",
+      "dark"
+    ]
+  },
+  "steps": [
+    {
+      "wait": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "tap": {
+        "identifier": "activeWorkoutResumeBar",
+        "role": "AXButton"
+      }
+    },
+    {
+      "wait": {
+        "identifier": "assistanceDirectionHint",
+        "label": "Less assistance = harder"
+      }
+    }
+  ],
+  "required": [
+    {
+      "label": "Assisted Pull-Up Machine"
+    },
+    {
+      "label": "Assistance",
+      "valueContains": "50"
+    },
+    {
+      "identifier": "assistanceDirectionHint",
+      "label": "Less assistance = harder"
+    },
+    {
+      "label": "Reps",
+      "valueContains": "8"
+    },
+    {
+      "identifier": "completeSetButton",
+      "role": "AXButton",
+      "enabled": true
+    }
+  ],
+  "forbiddenLogs": [
+    "event=storage.open outcome=fallback_memory"
+  ]
+}
