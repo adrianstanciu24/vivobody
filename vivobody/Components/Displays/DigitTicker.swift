@@ -40,6 +40,10 @@ struct DigitTicker: View {
     var formatter: ((Double) -> String)? = nil
 
     @State private var previousValue: Double = .nan
+    /// Keeps the value already displayed at the end of a scrub from
+    /// retroactively rolling when animated changes are re-enabled in the
+    /// same render transaction as the final detent.
+    @State private var rollsWereEnabled: Bool = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -56,16 +60,31 @@ struct DigitTicker: View {
     var body: some View {
         let direction: RollDirection = (previousValue.isNaN || value >= previousValue) ? .up : .down
         let chars = Array(formattedString)
+        let animatesValueChange = rolls && rollsWereEnabled
 
         HStack(spacing: 0) {
             ForEach(0 ..< chars.count, id: \.self) { i in
                 charSlot(char: chars[i], direction: direction)
             }
         }
-        .animation(bodyAnimation, value: value)
-        .onAppear { previousValue = value }
+        .animation(animatesValueChange ? bodyAnimation : nil, value: value)
+        .transaction { transaction in
+            guard !animatesValueChange else { return }
+            // An identity transition alone does not neutralize an animation
+            // inherited by the outgoing glyph. Live scrub detents must replace
+            // digits in place instead of leaving overlapping roll frames.
+            transaction.animation = nil
+            transaction.disablesAnimations = true
+        }
+        .onAppear {
+            previousValue = value
+            rollsWereEnabled = rolls
+        }
         .onChange(of: value) { _, new in
             previousValue = new
+        }
+        .onChange(of: rolls) { _, enabled in
+            rollsWereEnabled = enabled
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(formattedString)

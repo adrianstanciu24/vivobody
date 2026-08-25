@@ -620,8 +620,8 @@ struct BareScrubber: View {
         cancelCoast()
         coastGeneration &+= 1
         let generation = coastGeneration
+        isCoasting = true
         coastTask = Task { @MainActor in
-            isCoasting = true
             defer {
                 if coastGeneration == generation {
                     coastTask = nil
